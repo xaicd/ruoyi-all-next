@@ -70,6 +70,9 @@ npm run quick-start -- --skip-check
 
 # 启用 root 初始化（需要仓库根已提供 docker/db 脚本）
 npm run quick-start -- --root-init
+
+# 启动前执行一次构建 + 核心路由/API 冒烟检查
+npm run quick-start -- --health-check
 ```
 
 补充：
@@ -77,6 +80,7 @@ npm run quick-start -- --root-init
 1. `npm run dev`：直接本地开发
 2. `npm run build && npm run start`：生产模式验证
 3. `npm run init:root`：手动触发仓库根初始化链路
+4. `npm run health-check`：一键构建并校验关键页面/API 可达性
 
 ## 7. 使用模板能力扩展新功能
 

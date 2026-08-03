@@ -7,6 +7,7 @@
   },
   "scripts": {
     "quick-start": "bash ./scripts/quick-start.sh",
+    "health-check": "bash ./scripts/health-check.sh",
     "init": "echo '[ruoyi-all-next] 本地最小启动无需基础设施初始化；如需接入仓库根初始化，请执行 npm run init:root'",
     "init:root": "bash ./scripts/run-root-npm.sh docker:dev:core && bash ./scripts/run-root-npm.sh db:init:force",
     "dev": "next dev -p 3100",

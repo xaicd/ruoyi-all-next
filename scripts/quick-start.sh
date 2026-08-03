@@ -8,6 +8,7 @@ REPO_ROOT="$(cd -- "$APP_ROOT/../.." && pwd)"
 SKIP_INIT=false
 SKIP_CHECK=false
 USE_ROOT_INIT=false
+RUN_HEALTH_CHECK=false
 
 for arg in "$@"; do
   case "$arg" in
@@ -16,7 +17,7 @@ for arg in "$@"; do
     --root-init) USE_ROOT_INIT=true ;;
     -h|--help)
       cat <<'EOF'
-用法：npm run quick-start -- [--skip-init] [--skip-check] [--root-init]
+    用法：npm run quick-start -- [--skip-init] [--skip-check] [--root-init] [--health-check]
 
 默认行为：
 1) 安装依赖（若未安装）
@@ -27,9 +28,11 @@ for arg in "$@"; do
   --skip-init   跳过初始化步骤（本地提示或 root-init）
   --skip-check  跳过治理检查
   --root-init   执行仓库根 docker/db 初始化
+  --health-check  启动前先执行一次构建+路由/API 冒烟检查
 EOF
       exit 0
       ;;
+    --health-check) RUN_HEALTH_CHECK=true ;;
     *)
       echo "[ruoyi-all-next] 未知参数: $arg"
       exit 2
@@ -69,5 +72,12 @@ else
   echo "[skip] 已跳过门禁检查"
 fi
 
-echo "[3/4] 启动开发服务器"
+if [[ "$RUN_HEALTH_CHECK" == true ]]; then
+  echo "[3/5] 执行健康检查"
+  npm run health-check
+else
+  echo "[3/5] 跳过健康检查"
+fi
+
+echo "[4/5] 启动开发服务器"
 npm run dev
