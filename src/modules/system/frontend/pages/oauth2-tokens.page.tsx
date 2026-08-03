@@ -1,0 +1,7 @@
+"use client"
+
+import { AdminListPageTemplate } from "@/frontend/templates/admin-list-page.template"
+
+export default function SystemOauth2TokensModulePage() {
+  return <AdminListPageTemplate title="OAuth2 令牌" endpoint="/api/admin/system/oauth2/tokens" />
+}

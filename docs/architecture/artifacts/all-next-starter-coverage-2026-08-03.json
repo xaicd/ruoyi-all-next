@@ -1,0 +1,358 @@
+{
+  "generatedAt": "2026-08-03T01:53:47.546Z",
+  "target": "apps/ruoyi-all-next/src",
+  "coverage": [
+    {
+      "key": "web",
+      "displayName": "web/apilog/encrypt/xss/swagger",
+      "status": "DONE",
+      "matchedSignals": [
+        "api-logs",
+        "swagger",
+        "encrypt",
+        "xss"
+      ],
+      "missingSignals": [],
+      "evidenceFiles": [
+        "apps/ruoyi-all-next/src/app/(admin)/admin/infra/api-logs/page.tsx",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/api-logs/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/configs/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/swagger/route.ts",
+        "apps/ruoyi-all-next/src/backend/constants/admin-menu.ts",
+        "apps/ruoyi-all-next/src/backend/constants/permissions.ts",
+        "apps/ruoyi-all-next/src/backend/lib/__tests__/web-protection-lib.test.ts",
+        "apps/ruoyi-all-next/src/backend/lib/web-crypto.ts",
+        "apps/ruoyi-all-next/src/backend/lib/web-swagger.ts",
+        "apps/ruoyi-all-next/src/backend/lib/web-xss.ts",
+        "apps/ruoyi-all-next/src/modules/infra/backend/services/__tests__/infra-services.test.ts",
+        "apps/ruoyi-all-next/src/modules/infra/backend/services/api-log.service.ts",
+        "apps/ruoyi-all-next/src/modules/infra/frontend/pages/api-logs.page.tsx"
+      ]
+    },
+    {
+      "key": "security",
+      "displayName": "security",
+      "status": "DONE",
+      "matchedSignals": [
+        "permission-guard",
+        "permissions",
+        "audit-log"
+      ],
+      "missingSignals": [],
+      "evidenceFiles": [
+        "apps/ruoyi-all-next/src/app/api/admin/bpm/process-definitions/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/bpm/tasks/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/crm/clues/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/crm/customers/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/crm/followups/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/erp/orders/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/erp/products/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/erp/stock-adjustments/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/api-error-logs/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/api-logs/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/codegen/export/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/codegen/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/configs/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/db-configs/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/file-configs/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/files/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/job-center/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/job-logs/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/redis/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/swagger/route.ts"
+      ]
+    },
+    {
+      "key": "mybatis",
+      "displayName": "mybatis/datasource/translate",
+      "status": "DONE",
+      "matchedSignals": [
+        "datasource",
+        "mapper",
+        "translate"
+      ],
+      "missingSignals": [],
+      "evidenceFiles": [
+        "apps/ruoyi-all-next/src/backend/lib/__tests__/starter-platform-lib.test.ts",
+        "apps/ruoyi-all-next/src/backend/lib/persistence-datasource.ts",
+        "apps/ruoyi-all-next/src/backend/lib/persistence-mapper.ts",
+        "apps/ruoyi-all-next/src/backend/lib/persistence-translate.ts",
+        "apps/ruoyi-all-next/src/backend/lib/platform-excel-dict.ts"
+      ]
+    },
+    {
+      "key": "redis",
+      "displayName": "redis/cache",
+      "status": "DONE",
+      "matchedSignals": [
+        "redis",
+        "cache"
+      ],
+      "missingSignals": [],
+      "evidenceFiles": [
+        "apps/ruoyi-all-next/src/app/(admin)/admin/infra/redis/page.tsx",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/redis/route.ts",
+        "apps/ruoyi-all-next/src/backend/constants/admin-menu.ts",
+        "apps/ruoyi-all-next/src/backend/constants/permissions.ts",
+        "apps/ruoyi-all-next/src/backend/lib/__tests__/starter-platform-lib.test.ts",
+        "apps/ruoyi-all-next/src/backend/lib/cache-store.ts",
+        "apps/ruoyi-all-next/src/backend/lib/platform-mq.ts",
+        "apps/ruoyi-all-next/src/backend/services/index.ts",
+        "apps/ruoyi-all-next/src/backend/services/infra-log-audit.test.ts",
+        "apps/ruoyi-all-next/src/backend/services/infra-redis.service.ts",
+        "apps/ruoyi-all-next/src/modules/infra/backend/services/index.ts",
+        "apps/ruoyi-all-next/src/modules/infra/backend/services/redis.service.ts",
+        "apps/ruoyi-all-next/src/modules/infra/frontend/pages/redis.page.tsx"
+      ]
+    },
+    {
+      "key": "protection",
+      "displayName": "idempotent/ratelimiter/lock/signature",
+      "status": "DONE",
+      "matchedSignals": [
+        "idempotent",
+        "rate",
+        "lock",
+        "signature"
+      ],
+      "missingSignals": [],
+      "evidenceFiles": [
+        "apps/ruoyi-all-next/src/app/(admin)/admin/system/operate-logs/page.tsx",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/codegen/export/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/codegen/export/template-engine-archive.test.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/codegen/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/configs/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/job-center/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/system/auth/captcha/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/system/operate-logs/export/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/system/operate-logs/route.ts",
+        "apps/ruoyi-all-next/src/backend/constants/admin-menu.ts",
+        "apps/ruoyi-all-next/src/backend/constants/permissions.ts",
+        "apps/ruoyi-all-next/src/backend/lib/__tests__/idempotent-lock-lib.test.ts",
+        "apps/ruoyi-all-next/src/backend/lib/__tests__/web-protection-lib.test.ts",
+        "apps/ruoyi-all-next/src/backend/lib/protection-idempotent.ts",
+        "apps/ruoyi-all-next/src/backend/lib/protection-lock.ts",
+        "apps/ruoyi-all-next/src/backend/lib/protection-signature.ts",
+        "apps/ruoyi-all-next/src/backend/services/__tests__/system-auth-oauth2.service.test.ts",
+        "apps/ruoyi-all-next/src/backend/services/__tests__/system-dict-notice-notify.service.test.ts",
+        "apps/ruoyi-all-next/src/backend/services/index.ts",
+        "apps/ruoyi-all-next/src/backend/services/infra-log-audit.test.ts"
+      ]
+    },
+    {
+      "key": "job",
+      "displayName": "job/quartz",
+      "status": "DONE",
+      "matchedSignals": [
+        "job-center",
+        "cron"
+      ],
+      "missingSignals": [],
+      "evidenceFiles": [
+        "apps/ruoyi-all-next/src/app/(admin)/admin/infra/job-center/page.tsx",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/job-center/route.ts",
+        "apps/ruoyi-all-next/src/backend/constants/admin-menu.ts",
+        "apps/ruoyi-all-next/src/backend/services/__tests__/infra-services.test.ts",
+        "apps/ruoyi-all-next/src/backend/services/index.ts",
+        "apps/ruoyi-all-next/src/backend/services/infra-job-center.service.ts",
+        "apps/ruoyi-all-next/src/backend/services/infra-log-audit.test.ts",
+        "apps/ruoyi-all-next/src/modules/infra/backend/services/__tests__/infra-services.test.ts",
+        "apps/ruoyi-all-next/src/modules/infra/backend/services/index.ts",
+        "apps/ruoyi-all-next/src/modules/infra/backend/services/job-center.service.ts",
+        "apps/ruoyi-all-next/src/modules/infra/frontend/pages/job-center.page.tsx"
+      ]
+    },
+    {
+      "key": "mq",
+      "displayName": "mq/rabbit/kafka",
+      "status": "DONE",
+      "matchedSignals": [
+        "mq",
+        "kafka",
+        "rabbit"
+      ],
+      "missingSignals": [],
+      "evidenceFiles": [
+        "apps/ruoyi-all-next/src/backend/lib/__tests__/starter-platform-lib.test.ts",
+        "apps/ruoyi-all-next/src/backend/lib/platform-mq.ts"
+      ]
+    },
+    {
+      "key": "websocket",
+      "displayName": "websocket",
+      "status": "DONE",
+      "matchedSignals": [
+        "websocket",
+        "ws"
+      ],
+      "missingSignals": [],
+      "evidenceFiles": [
+        "apps/ruoyi-all-next/src/app/api/admin/infra/codegen/route.ts",
+        "apps/ruoyi-all-next/src/backend/lib/__tests__/starter-platform-lib.test.ts",
+        "apps/ruoyi-all-next/src/backend/lib/platform-excel-dict.ts",
+        "apps/ruoyi-all-next/src/backend/lib/platform-websocket.ts",
+        "apps/ruoyi-all-next/src/backend/validators/infra.validator.ts",
+        "apps/ruoyi-all-next/src/modules/bpm/backend/services/process.service.ts",
+        "apps/ruoyi-all-next/src/modules/infra/backend/services/__tests__/template-engine.service.test.ts",
+        "apps/ruoyi-all-next/src/modules/infra/backend/services/template-engine-presets.ts",
+        "apps/ruoyi-all-next/src/modules/infra/backend/services/template-presets/index.ts",
+        "apps/ruoyi-all-next/src/modules/infra/backend/services/template-presets/next-react-admin-workflow-client.template.ts",
+        "apps/ruoyi-all-next/src/modules/infra/backend/services/template-presets/next-react-admin-workflow-route.template.ts",
+        "apps/ruoyi-all-next/src/modules/infra/backend/services/template-presets/next-react-admin-workflow-service.template.ts",
+        "apps/ruoyi-all-next/src/modules/infra/backend/services/template-presets/next-react-admin-workflow-validator.template.ts",
+        "apps/ruoyi-all-next/src/modules/infra/frontend/pages/template-engine.page.tsx",
+        "apps/ruoyi-all-next/src/modules/system/backend/services/auth.service.ts",
+        "apps/ruoyi-all-next/src/modules/system/backend/services/dept.service.ts",
+        "apps/ruoyi-all-next/src/modules/system/backend/services/login-log.service.ts",
+        "apps/ruoyi-all-next/src/modules/system/backend/services/menu.service.ts",
+        "apps/ruoyi-all-next/src/modules/system/backend/services/online-user.service.ts",
+        "apps/ruoyi-all-next/src/modules/system/backend/services/operate-log.service.ts"
+      ]
+    },
+    {
+      "key": "monitor",
+      "displayName": "monitor/metrics/tracer",
+      "status": "DONE",
+      "matchedSignals": [
+        "metrics",
+        "tracer",
+        "monitor"
+      ],
+      "missingSignals": [],
+      "evidenceFiles": [
+        "apps/ruoyi-all-next/src/app/api/admin/infra/redis/route.ts",
+        "apps/ruoyi-all-next/src/backend/lib/__tests__/starter-platform-lib.test.ts",
+        "apps/ruoyi-all-next/src/backend/lib/platform-monitor.ts",
+        "apps/ruoyi-all-next/src/backend/services/infra-log-audit.test.ts",
+        "apps/ruoyi-all-next/src/modules/infra/backend/services/redis.service.ts",
+        "apps/ruoyi-all-next/src/modules/infra/backend/services/template-presets/next-react-admin-domain-api-index.template.ts",
+        "apps/ruoyi-all-next/src/modules/infra/backend/services/template-presets/next-react-admin-report-page.template.ts"
+      ]
+    },
+    {
+      "key": "excel",
+      "displayName": "excel/dict",
+      "status": "DONE",
+      "matchedSignals": [
+        "excel",
+        "dict"
+      ],
+      "missingSignals": [],
+      "evidenceFiles": [
+        "apps/ruoyi-all-next/src/app/(admin)/admin/system/dicts/page.tsx",
+        "apps/ruoyi-all-next/src/app/api/admin/system/dicts/route.ts",
+        "apps/ruoyi-all-next/src/backend/constants/admin-menu.ts",
+        "apps/ruoyi-all-next/src/backend/constants/permissions.ts",
+        "apps/ruoyi-all-next/src/backend/lib/__tests__/starter-platform-lib.test.ts",
+        "apps/ruoyi-all-next/src/backend/lib/persistence-translate.ts",
+        "apps/ruoyi-all-next/src/backend/lib/platform-excel-dict.ts",
+        "apps/ruoyi-all-next/src/backend/services/__tests__/system-dict-notice-notify.service.test.ts",
+        "apps/ruoyi-all-next/src/backend/services/index.ts",
+        "apps/ruoyi-all-next/src/backend/services/system-dict.service.ts",
+        "apps/ruoyi-all-next/src/backend/services/system-log-audit.test.ts",
+        "apps/ruoyi-all-next/src/backend/validators/system.validator.ts",
+        "apps/ruoyi-all-next/src/modules/system/backend/services/__tests__/system-persistence-services.test.ts",
+        "apps/ruoyi-all-next/src/modules/system/backend/services/dict.service.ts",
+        "apps/ruoyi-all-next/src/modules/system/backend/services/index.ts",
+        "apps/ruoyi-all-next/src/modules/system/frontend/pages/dicts.page.tsx"
+      ]
+    },
+    {
+      "key": "biz-tenant",
+      "displayName": "biz-tenant",
+      "status": "DONE",
+      "matchedSignals": [
+        "tenant",
+        "tenant-package"
+      ],
+      "missingSignals": [],
+      "evidenceFiles": [
+        "apps/ruoyi-all-next/src/app/(admin)/admin/system/tenant-packages/page.tsx",
+        "apps/ruoyi-all-next/src/app/(admin)/admin/system/tenants/page.tsx",
+        "apps/ruoyi-all-next/src/app/api/admin/system/tenant-packages/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/system/tenants/assign-package/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/system/tenants/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/system/tenants/update-status/route.ts",
+        "apps/ruoyi-all-next/src/backend/constants/admin-menu.ts",
+        "apps/ruoyi-all-next/src/backend/constants/permissions.ts",
+        "apps/ruoyi-all-next/src/backend/lib/__tests__/starter-platform-lib.test.ts",
+        "apps/ruoyi-all-next/src/backend/lib/biz-tenant.ts",
+        "apps/ruoyi-all-next/src/backend/services/__tests__/system-tenant.service.test.ts",
+        "apps/ruoyi-all-next/src/backend/services/index.ts",
+        "apps/ruoyi-all-next/src/backend/services/system-log-audit.test.ts",
+        "apps/ruoyi-all-next/src/backend/services/system-tenant-package.service.ts",
+        "apps/ruoyi-all-next/src/backend/services/system-tenant.service.ts",
+        "apps/ruoyi-all-next/src/backend/validators/system.validator.ts",
+        "apps/ruoyi-all-next/src/modules/system/backend/services/__tests__/tenant-package.service.test.ts",
+        "apps/ruoyi-all-next/src/modules/system/backend/services/__tests__/tenant.service.test.ts",
+        "apps/ruoyi-all-next/src/modules/system/backend/services/index.ts",
+        "apps/ruoyi-all-next/src/modules/system/backend/services/tenant-package.service.ts"
+      ]
+    },
+    {
+      "key": "biz-data-permission",
+      "displayName": "biz-data-permission",
+      "status": "DONE",
+      "matchedSignals": [
+        "data-permission",
+        "scope",
+        "permission"
+      ],
+      "missingSignals": [],
+      "evidenceFiles": [
+        "apps/ruoyi-all-next/src/app/api/admin/bpm/process-definitions/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/bpm/tasks/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/crm/clues/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/crm/customers/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/crm/followups/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/erp/orders/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/erp/products/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/erp/stock-adjustments/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/api-error-logs/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/api-logs/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/codegen/export/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/codegen/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/configs/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/db-configs/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/file-configs/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/files/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/job-center/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/job-logs/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/redis/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/swagger/route.ts"
+      ]
+    },
+    {
+      "key": "biz-ip",
+      "displayName": "biz-ip",
+      "status": "DONE",
+      "matchedSignals": [
+        "ip",
+        "area"
+      ],
+      "missingSignals": [],
+      "evidenceFiles": [
+        "apps/ruoyi-all-next/src/app/(admin)/admin/system/ip-areas/page.tsx",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/codegen/export/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/codegen/export/template-engine-archive.test.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/codegen/export/template-engine-archive.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/infra/configs/route.ts",
+        "apps/ruoyi-all-next/src/app/api/admin/system/ip/areas/route.ts",
+        "apps/ruoyi-all-next/src/backend/constants/admin-menu.ts",
+        "apps/ruoyi-all-next/src/backend/constants/permissions.ts",
+        "apps/ruoyi-all-next/src/backend/lib/__tests__/starter-platform-lib.test.ts",
+        "apps/ruoyi-all-next/src/backend/lib/__tests__/web-protection-lib.test.ts",
+        "apps/ruoyi-all-next/src/backend/lib/biz-ip-area.ts",
+        "apps/ruoyi-all-next/src/backend/lib/web-crypto.ts",
+        "apps/ruoyi-all-next/src/backend/lib/web-swagger.ts",
+        "apps/ruoyi-all-next/src/backend/lib/web-xss.ts",
+        "apps/ruoyi-all-next/src/backend/services/__tests__/system-dict-notice-notify.service.test.ts",
+        "apps/ruoyi-all-next/src/backend/services/__tests__/system-notice-notify-persistence.test.ts",
+        "apps/ruoyi-all-next/src/backend/services/__tests__/system-sms-mail-social-persistence.test.ts",
+        "apps/ruoyi-all-next/src/backend/services/__tests__/system-sys5.service.test.ts",
+        "apps/ruoyi-all-next/src/backend/services/index.ts",
+        "apps/ruoyi-all-next/src/backend/services/system-ip-area.service.ts"
+      ]
+    }
+  ]
+}

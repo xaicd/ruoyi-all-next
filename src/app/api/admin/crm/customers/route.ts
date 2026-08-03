@@ -1,0 +1,22 @@
+import { NextResponse } from "next/server"
+import { crmPageQuerySchema } from "@/backend/validators/crm.validator"
+import { CrmService } from "@/backend/services/crm.service"
+import { PERMISSIONS } from "@/backend/constants/permissions"
+import { ensurePermission } from "@/backend/lib/permission-guard"
+
+export async function GET(request: Request) {
+  try {
+    ensurePermission(request, PERMISSIONS.CRM_CUSTOMER_VIEW)
+    const { searchParams } = new URL(request.url)
+    const input = crmPageQuerySchema.parse({
+      page: searchParams.get("page") ?? 1,
+      pageSize: searchParams.get("pageSize") ?? 20,
+      keyword: searchParams.get("keyword") ?? undefined,
+    })
+
+    const data = await CrmService.listCustomers(input)
+    return NextResponse.json({ success: true, data })
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error?.message ?? "查询失败" }, { status: 400 })
+  }
+}

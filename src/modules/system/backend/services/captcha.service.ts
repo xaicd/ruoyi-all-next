@@ -1,0 +1,66 @@
+import type { CaptchaVerifyInput } from "../../../../backend/validators/system.validator"
+import { domainLog } from "../../../../backend/lib/domain-log"
+import { ruoyiPrisma } from "../../../shared/backend/prisma"
+
+type CaptchaRecord = {
+  code: string
+  expiresAt: number
+}
+
+const CAPTCHA_TTL_MS = 5 * 60 * 1000
+
+function randomCode() {
+  return Math.floor(1000 + Math.random() * 9000).toString()
+}
+
+export class SystemCaptchaService {
+  static async generate() {
+    const captchaId = `cap-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    const code = randomCode()
+    const expiresAt = Date.now() + CAPTCHA_TTL_MS
+
+    await ruoyiPrisma.setting.upsert({
+      where: { key: `captcha:${captchaId}` },
+      create: { key: `captcha:${captchaId}`, value: { code, expiresAt } },
+      update: { value: { code, expiresAt } },
+    })
+
+    domainLog.event("system.captcha.generate", {
+      captchaId,
+      ttlSec: CAPTCHA_TTL_MS / 1000,
+    })
+
+    return {
+      captchaId,
+      imageBase64: Buffer.from(`CAPTCHA:${code}`).toString("base64"),
+      expiresAt: new Date(expiresAt).toISOString(),
+    }
+  }
+
+  static async verify(input: CaptchaVerifyInput) {
+    const row = await ruoyiPrisma.setting.findUnique({ where: { key: `captcha:${input.captchaId}` } })
+    const record = row?.value as CaptchaRecord | null
+    const now = Date.now()
+
+    domainLog.event("system.captcha.verify", {
+      captchaId: input.captchaId,
+      hasRecord: Boolean(record),
+    })
+
+    if (!record || record.expiresAt < now) {
+      await ruoyiPrisma.setting.deleteMany({ where: { key: { startsWith: `captcha:${input.captchaId}` } } })
+      throw new Error("验证码无效或已过期")
+    }
+
+    if (record.code.toLowerCase() !== input.code.toLowerCase()) {
+      throw new Error("验证码错误")
+    }
+
+    await ruoyiPrisma.setting.deleteMany({ where: { key: { startsWith: `captcha:${input.captchaId}` } } })
+    domainLog.audit("system.captcha.verify.success", {
+      captchaId: input.captchaId,
+    })
+
+    return { success: true }
+  }
+}

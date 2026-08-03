@@ -1,0 +1,104 @@
+import { z } from "zod"
+
+export const pageQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(100).default(20),
+  keyword: z.string().trim().max(50).optional(),
+})
+
+export const forceLogoutSchema = z.object({
+  sessionId: z.string().min(1, "sessionId 不能为空"),
+})
+
+export const loginSchema = z.object({
+  username: z.string().trim().min(1, "用户名不能为空"),
+  password: z.string().trim().min(1, "密码不能为空"),
+})
+
+export const captchaVerifySchema = z.object({
+  captchaId: z.string().trim().min(1, "captchaId 不能为空"),
+  code: z.string().trim().min(1, "验证码不能为空"),
+})
+
+export const oauth2OpenTokenSchema = z.object({
+  clientId: z.string().trim().min(1, "clientId 不能为空"),
+  clientSecret: z.string().trim().min(1, "clientSecret 不能为空"),
+  grantType: z.enum(["password", "client_credentials"]).default("password"),
+  username: z.string().trim().optional(),
+  password: z.string().trim().optional(),
+})
+
+export const oauth2UserInfoSchema = z.object({
+  accessToken: z.string().trim().min(1, "accessToken 不能为空"),
+})
+
+export const assignUserRoleSchema = z.object({
+  userId: z.string().trim().min(1, "userId 不能为空"),
+  roleIds: z.array(z.string().trim().min(1)).max(50),
+})
+
+export const assignRoleMenuSchema = z.object({
+  roleId: z.string().trim().min(1, "roleId 不能为空"),
+  menuIds: z.array(z.string().trim().min(1)).max(200),
+})
+
+export const updateTenantStatusSchema = z.object({
+  tenantId: z.string().trim().min(1, "tenantId 不能为空"),
+  status: z.enum(["ACTIVE", "DISABLED"]),
+})
+
+export const assignTenantPackageSchema = z.object({
+  tenantId: z.string().trim().min(1, "tenantId 不能为空"),
+  packageId: z.string().trim().min(1, "packageId 不能为空"),
+})
+
+export const createDictItemSchema = z.object({
+  dictType: z.string().trim().min(1, "dictType 不能为空"),
+  label: z.string().trim().min(1, "label 不能为空"),
+  value: z.string().trim().min(1, "value 不能为空"),
+  status: z.enum(["ACTIVE", "DISABLED"]).default("ACTIVE"),
+})
+
+export const createNoticeSchema = z.object({
+  title: z.string().trim().min(1, "title 不能为空"),
+  content: z.string().trim().min(1, "content 不能为空"),
+  type: z.enum(["INFO", "WARN", "ALERT"]).default("INFO"),
+})
+
+export const createNotifyTemplateSchema = z.object({
+  code: z.string().trim().min(1, "code 不能为空"),
+  name: z.string().trim().min(1, "name 不能为空"),
+  channel: z.enum(["SITE", "SMS", "MAIL"]).default("SITE"),
+  status: z.enum(["ACTIVE", "DISABLED"]).default("ACTIVE"),
+})
+
+export const createNotifyMessageSchema = z.object({
+  templateCode: z.string().trim().min(1, "templateCode 不能为空"),
+  receiver: z.string().trim().min(1, "receiver 不能为空"),
+  status: z.enum(["SUCCESS", "FAIL"]).default("SUCCESS"),
+})
+
+export const loginLogQuerySchema = pageQuerySchema.extend({
+  result: z.enum(["SUCCESS", "FAIL"]).optional(),
+})
+
+export const operateLogQuerySchema = pageQuerySchema.extend({
+  module: z.string().trim().max(100).optional(),
+})
+
+export type PageQueryInput = z.infer<typeof pageQuerySchema>
+export type ForceLogoutInput = z.infer<typeof forceLogoutSchema>
+export type AssignUserRoleInput = z.infer<typeof assignUserRoleSchema>
+export type AssignRoleMenuInput = z.infer<typeof assignRoleMenuSchema>
+export type LoginInput = z.infer<typeof loginSchema>
+export type CaptchaVerifyInput = z.infer<typeof captchaVerifySchema>
+export type Oauth2OpenTokenInput = z.infer<typeof oauth2OpenTokenSchema>
+export type Oauth2UserInfoInput = z.infer<typeof oauth2UserInfoSchema>
+export type UpdateTenantStatusInput = z.infer<typeof updateTenantStatusSchema>
+export type AssignTenantPackageInput = z.infer<typeof assignTenantPackageSchema>
+export type CreateDictItemInput = z.infer<typeof createDictItemSchema>
+export type CreateNoticeInput = z.infer<typeof createNoticeSchema>
+export type CreateNotifyTemplateInput = z.infer<typeof createNotifyTemplateSchema>
+export type CreateNotifyMessageInput = z.infer<typeof createNotifyMessageSchema>
+export type LoginLogQueryInput = z.infer<typeof loginLogQuerySchema>
+export type OperateLogQueryInput = z.infer<typeof operateLogQuerySchema>

@@ -1,0 +1,9 @@
+{
+  "moduleKebab": "wms",
+  "moduleLabel": "仓储",
+  "featureListKebab": "stock-items",
+  "featureListLabel": "库存",
+  "modulePermissionConst": "WMS_STOCK_ITEMS_VIEW",
+  "outputRoot": "apps/ruoyi/ruoyi-all-next",
+  "overwrite": false
+}
