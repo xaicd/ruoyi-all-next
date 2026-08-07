@@ -1,6 +1,6 @@
 import type { CreateSmsChannelInput, SystemModulePageQueryInput } from "../validators"
-import { domainLog } from "../../../../backend/lib/domain-log"
-import { ruoyiPrisma } from "../../../shared/backend/prisma"
+import { domainLog } from "@/modules/shared/backend/lib/domain-log"
+import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
 
 type SmsChannelItem = {
   id: string

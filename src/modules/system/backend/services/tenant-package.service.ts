@@ -1,6 +1,6 @@
-import type { PageQueryInput } from "../../../../backend/validators/system.validator"
-import { domainLog } from "../../../../backend/lib/domain-log"
-import { ruoyiPrisma } from "../../../shared/backend/prisma"
+import type { PageQueryInput } from "@/modules/system/backend/validators"
+import { domainLog } from "@/modules/shared/backend/lib/domain-log"
+import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
 
 type TenantPackageItem = {
   id: string

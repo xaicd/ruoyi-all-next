@@ -1,7 +1,7 @@
 export const nextReactAdminImPageTemplate = `"use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardHeader, CardTitle } from "@/modules/shared/frontend/components/ui/card"
+import { Badge } from "@/modules/shared/frontend/components/ui/badge"
 
 export default function AdminImPage() {
   return (

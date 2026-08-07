@@ -6,8 +6,8 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/sheet"
-import { Badge } from "@/components/ui/badge"
+} from "@/modules/shared/frontend/components/ui/sheet"
+import { Badge } from "@/modules/shared/frontend/components/ui/badge"
 
 interface {{entityName}}Detail {
   id: string

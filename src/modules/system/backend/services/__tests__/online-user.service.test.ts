@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest"
-import { ruoyiPrisma } from "../../../../shared/backend/prisma"
+import { ruoyiPrisma } from "../@/modules/shared/backend/prisma"
 import { SystemOnlineUserService } from "../online-user.service"
 
 describe("SystemOnlineUserService", () => {

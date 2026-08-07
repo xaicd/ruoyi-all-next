@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { ruoyiPrisma } from "../../../../shared/backend/prisma"
+import { ruoyiPrisma } from "../@/modules/shared/backend/prisma"
 import { MpAccountService } from "../account.service"
 import { MpFanService } from "../fan.service"
 import { MpMessageService } from "../message.service"

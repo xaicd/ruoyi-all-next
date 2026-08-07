@@ -4,7 +4,7 @@ import type {
   MemberLevelCreateInput,
   MemberPointAdjustInput,
 } from "../validators"
-import { domainLog } from "../../../../backend/lib/domain-log"
+import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 
 type MemberUser = {
   id: string

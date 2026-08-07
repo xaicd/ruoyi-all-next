@@ -1,8 +1,8 @@
 export const nextReactAdminWorkflowPageTemplate = `"use client"
 
 import { useMemo, useState } from "react"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/modules/shared/frontend/components/ui/badge"
+import { Button } from "@/modules/shared/frontend/components/ui/button"
 
 type WorkflowItem = {
   id: string

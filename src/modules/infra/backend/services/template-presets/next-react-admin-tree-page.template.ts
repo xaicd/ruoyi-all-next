@@ -1,7 +1,7 @@
 export const nextReactAdminTreePageTemplate = `"use client"
 
 import { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/modules/shared/frontend/components/ui/button"
 
 type TreeNode = {
   id: string

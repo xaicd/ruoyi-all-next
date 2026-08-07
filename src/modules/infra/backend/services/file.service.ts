@@ -1,5 +1,5 @@
-import type { InfraPageQueryInput } from "../../../../backend/validators/infra.validator"
-import { domainLog } from "../../../../backend/lib/domain-log"
+import type { InfraPageQueryInput } from "@/modules/infra/backend/validators"
+import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 import { readSettingList } from "./infra-setting-store"
 
 type InfraFileItem = {

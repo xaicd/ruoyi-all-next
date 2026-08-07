@@ -1,5 +1,5 @@
 import type { WmsCheckinInput, WmsPageQueryInput } from "../validators"
-import { domainLog } from "../../../../backend/lib/domain-log"
+import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 
 type WmsWarehouse = {
   id: string

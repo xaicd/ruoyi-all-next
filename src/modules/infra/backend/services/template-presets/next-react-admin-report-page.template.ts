@@ -1,6 +1,6 @@
 export const nextReactAdminReportPageTemplate = `"use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/modules/shared/frontend/components/ui/card"
 
 const metrics = [
   { label: "GMV", value: "¥1,286,320" },

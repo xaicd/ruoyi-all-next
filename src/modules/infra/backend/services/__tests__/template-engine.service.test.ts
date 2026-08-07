@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest"
-import { ruoyiPrisma } from "../../../../shared/backend/prisma"
+import { ruoyiPrisma } from "../@/modules/shared/backend/prisma"
 import { InfraTemplateEngineService } from "../template-engine.service"
 
 describe("InfraTemplateEngineService", () => {

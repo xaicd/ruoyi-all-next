@@ -1,9 +1,9 @@
 import CryptoJS from "crypto-js"
-import type { LoginInput } from "../../../../backend/validators/system.validator"
-import { domainLog } from "../../../../backend/lib/domain-log"
-import { ruoyiPrisma } from "../../../shared/backend/prisma"
-import { comparePasswordMD5 } from "@/lib/crypto"
-import { WILDCARD_PERMISSION } from "@/lib/rbac-registry/role-permissions"
+import type { LoginInput } from "@/modules/system/backend/validators"
+import { domainLog } from "@/modules/shared/backend/lib/domain-log"
+import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
+import { comparePasswordMD5 } from "@/modules/shared/backend/lib/crypto"
+import { WILDCARD_PERMISSION } from "@/modules/shared/backend/lib/rbac-registry/role-permissions"
 
 type MenuNode = {
   key: string

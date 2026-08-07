@@ -1,8 +1,8 @@
 import type {
   InfraPageQueryInput,
   TriggerJobInput,
-} from "../../../../backend/validators/infra.validator"
-import { domainLog } from "../../../../backend/lib/domain-log"
+} from "@/modules/infra/backend/validators"
+import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 import { readSettingList, writeSettingList } from "./infra-setting-store"
 
 type InfraJobItem = {

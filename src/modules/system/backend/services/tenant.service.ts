@@ -2,9 +2,9 @@ import type {
   AssignTenantPackageInput,
   PageQueryInput,
   UpdateTenantStatusInput,
-} from "../../../../backend/validators/system.validator"
-import { domainLog } from "../../../../backend/lib/domain-log"
-import { ruoyiPrisma } from "../../../shared/backend/prisma"
+} from "@/modules/system/backend/validators"
+import { domainLog } from "@/modules/shared/backend/lib/domain-log"
+import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
 
 type TenantItem = {
   id: string

@@ -1,9 +1,9 @@
 import type {
   BpmPageQueryInput,
   BpmTaskActionInput,
-} from "../../../../backend/validators/bpm.validator"
-import { domainLog } from "../../../../backend/lib/domain-log"
-import { ruoyiPrisma } from "../../../shared/backend/prisma"
+} from "@/modules/bpm/backend/validators"
+import { domainLog } from "@/modules/shared/backend/lib/domain-log"
+import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
 
 type ProcessDefinitionItem = {
   id: string

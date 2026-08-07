@@ -1,9 +1,9 @@
 import type {
   AssignRoleMenuInput,
   AssignUserRoleInput,
-} from "../../../../backend/validators/system.validator"
-import { domainLog } from "../../../../backend/lib/domain-log"
-import { ruoyiPrisma } from "../../../shared/backend/prisma"
+} from "@/modules/system/backend/validators"
+import { domainLog } from "@/modules/shared/backend/lib/domain-log"
+import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
 
 export class SystemPermissionService {
   static async assignUserRole(operatorId: string, input: AssignUserRoleInput) {

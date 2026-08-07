@@ -1,4 +1,4 @@
-import { ruoyiPrisma } from "../../../shared/backend/prisma"
+import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
 
 export async function readSettingList<T>(key: string): Promise<T[]> {
   const row = await ruoyiPrisma.setting.findUnique({ where: { key } })

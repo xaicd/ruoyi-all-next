@@ -1,5 +1,5 @@
 export const nextReactAdminTableColumnsTemplate = `import type { ColumnDef } from "@tanstack/react-table"
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@/modules/shared/frontend/components/ui/badge"
 
 export interface {{entityName}}TableRow {
   id: string

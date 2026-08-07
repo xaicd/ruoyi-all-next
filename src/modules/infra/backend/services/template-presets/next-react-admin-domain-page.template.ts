@@ -1,7 +1,7 @@
 export const nextReactAdminDomainPageTemplate = `"use client"
 
 import Link from "next/link"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/modules/shared/frontend/components/ui/card"
 
 const sections = [
   { title: "模块列表", href: "/admin/{{modulePath}}" },

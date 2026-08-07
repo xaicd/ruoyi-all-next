@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { ruoyiPrisma } from "../../../../shared/backend/prisma"
+import { ruoyiPrisma } from "../@/modules/shared/backend/prisma"
 import { SystemCaptchaService } from "../captcha.service"
 import { SystemDictService } from "../dict.service"
 import { SystemPermissionService } from "../permission.service"

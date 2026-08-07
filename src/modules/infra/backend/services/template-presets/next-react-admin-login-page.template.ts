@@ -2,9 +2,9 @@ export const nextReactAdminLoginPageTemplate = `"use client"
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardHeader, CardTitle } from "@/modules/shared/frontend/components/ui/card"
+import { Button } from "@/modules/shared/frontend/components/ui/button"
+import { Input } from "@/modules/shared/frontend/components/ui/input"
 
 export default function AdminLoginPage() {
   const router = useRouter()

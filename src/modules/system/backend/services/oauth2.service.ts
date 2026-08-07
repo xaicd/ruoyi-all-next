@@ -2,10 +2,10 @@ import type {
   Oauth2OpenTokenInput,
   Oauth2UserInfoInput,
   PageQueryInput,
-} from "../../../../backend/validators/system.validator"
-import { domainLog } from "../../../../backend/lib/domain-log"
-import { comparePasswordMD5 } from "@/lib/crypto"
-import { ruoyiPrisma } from "../../../shared/backend/prisma"
+} from "@/modules/system/backend/validators"
+import { domainLog } from "@/modules/shared/backend/lib/domain-log"
+import { comparePasswordMD5 } from "@/modules/shared/backend/lib/crypto"
+import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
 import { readSettingList, writeSettingList } from "./oauth2-setting-store"
 
 type Oauth2ClientItem = {

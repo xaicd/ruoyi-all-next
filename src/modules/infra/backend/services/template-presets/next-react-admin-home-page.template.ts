@@ -1,6 +1,6 @@
 export const nextReactAdminHomePageTemplate = `"use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/modules/shared/frontend/components/ui/card"
 
 const stats = [
   { label: "今日订单", value: "128" },

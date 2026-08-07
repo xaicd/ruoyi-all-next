@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest"
-import { ruoyiPrisma } from "../../../../shared/backend/prisma"
+import { ruoyiPrisma } from "../@/modules/shared/backend/prisma"
 import { InfraApiLogService } from "../api-log.service"
 import { InfraConfigService } from "../config.service"
 import { InfraJobCenterService } from "../job-center.service"

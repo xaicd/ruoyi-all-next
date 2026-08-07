@@ -1,7 +1,7 @@
 export const nextReactAdminPageTemplate = `"use client"
 
 import { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/modules/shared/frontend/components/ui/button"
 
 export default function {{entityName}}Page() {
   const [items, setItems] = useState<unknown[]>([])

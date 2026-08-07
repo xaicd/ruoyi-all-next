@@ -1,5 +1,5 @@
 import type { PayPageQueryInput, PayOrderCreateInput, PayRefundCreateInput } from "../validators"
-import { domainLog } from "../../../../backend/lib/domain-log"
+import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 
 type PayOrderStatus = "WAITING" | "SUCCESS" | "CLOSED" | "REFUNDING" | "REFUNDED"
 

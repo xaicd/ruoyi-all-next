@@ -1,5 +1,5 @@
 import type { MpPageQueryInput } from "../validators"
-import { domainLog } from "../../../../backend/lib/domain-log"
+import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 import { readSettingList } from "./mp-setting-store"
 import type { MpAccount } from "./types"
 

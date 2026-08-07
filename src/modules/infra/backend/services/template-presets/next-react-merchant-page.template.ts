@@ -1,7 +1,7 @@
 export const nextReactMerchantPageTemplate = `"use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/modules/shared/frontend/components/ui/button"
 
 export default function {{entityName}}MerchantPage() {
   const [keyword, setKeyword] = useState("")

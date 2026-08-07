@@ -1,6 +1,6 @@
 export const nextReactAdminErrorPageTemplate = `"use client"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/modules/shared/frontend/components/ui/button"
 
 interface AdminErrorPageProps {
   title?: string

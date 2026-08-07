@@ -1,5 +1,5 @@
-import { monitorRead } from "../../../../backend/lib/platform-monitor"
-import { domainLog } from "../../../../backend/lib/domain-log"
+import { monitorRead } from "@/modules/shared/backend/lib/platform-monitor"
+import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 import { readSettingList } from "./infra-setting-store"
 
 type InfraRedisMetric = {

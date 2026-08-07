@@ -1,8 +1,8 @@
 export const nextReactAdminFilterBarTemplate = `"use client"
 
 import { Search, RotateCcw } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/modules/shared/frontend/components/ui/button"
+import { Input } from "@/modules/shared/frontend/components/ui/input"
 
 interface {{entityName}}FilterBarProps {
   keyword: string

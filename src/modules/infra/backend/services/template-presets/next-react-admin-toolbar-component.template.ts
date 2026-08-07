@@ -1,6 +1,6 @@
 export const nextReactAdminToolbarComponentTemplate = `"use client"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/modules/shared/frontend/components/ui/button"
 
 interface {{entityName}}ToolbarProps {
   onCreate: () => void
