@@ -9,13 +9,13 @@ export async function GET(request: Request) {
     ensurePermission(request, PERMISSIONS.PAY_REFUND_VIEW)
     const { searchParams } = new URL(request.url)
     const input = payPageQuerySchema.parse({
-      page: searchParams.get("page") ?? 1,
-      pageSize: searchParams.get("pageSize") ?? 20,
+      page: searchParams.get("page") || 1,
+      pageSize: searchParams.get("pageSize") || 20,
     })
     const data = await PayService.listRefunds(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message ?? "查询失败" }, { status: 400 })
+    return NextResponse.json({ success: false, error: error?.message || "查询失败" }, { status: 400 })
   }
 }
 
@@ -27,6 +27,6 @@ export async function POST(request: Request) {
     const data = await PayService.createRefund(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message ?? "退款申请失�? }, { status: 400 })
+    return NextResponse.json({ success: false, error: error?.message || "退款申请失败" }, { status: 400 })
   }
 }

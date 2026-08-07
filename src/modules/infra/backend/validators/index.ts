@@ -16,6 +16,10 @@ export const infraJobOperateSchema = z.object({
   action: z.enum(["TRIGGER", "PAUSE", "RESUME"]),
 })
 
+// Aliases for backward compatibility
+export const updateConfigSchema = infraConfigUpdateSchema
+export const triggerJobSchema = infraJobOperateSchema
+
 export const infraCodegenExportSchema = z.object({
   tableId: z.string().trim().min(1),
   templateType: z.string().optional(),
