@@ -1,208 +1,221 @@
-import CryptoJS from "crypto-js"
+/**
+ * System Auth Service
+ *
+ * 登录/鉴权/权限信息
+ * 使用 Repository 模式，不直接依赖 Prisma Client
+ */
+
 import type { LoginInput } from "@/modules/system/backend/validators"
+import { SystemUserRepository } from "@/modules/system/backend/repositories/user.repository"
+import { SystemMenuRepository, type SystemMenuRow } from "@/modules/system/backend/repositories/menu.repository"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
-import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
-import { comparePasswordMD5 } from "@/modules/shared/backend/lib/crypto"
-import { WILDCARD_PERMISSION } from "@/modules/shared/backend/lib/rbac-registry/role-permissions"
 
-type MenuNode = {
-  key: string
-  name: string
-  path?: string
-  children?: MenuNode[]
+// === JWT 工具（轻量实现，不依赖外部库）===
+
+const JWT_SECRET = process.env.JWT_SECRET || "ruoyi-all-next-dev-secret-key-2026"
+const JWT_EXPIRES_IN = Number(process.env.JWT_EXPIRES_IN) || 86400 // 24h
+
+type TokenPayload = {
+  sub: string
+  username: string
+  permissions: string[]
+  roles: string[]
+  tenantId?: string
+  iat: number
+  exp: number
 }
 
-type MenuRow = {
+function base64UrlEncode(str: string): string {
+  return Buffer.from(str).toString("base64url")
+}
+
+function base64UrlDecode(str: string): string {
+  return Buffer.from(str, "base64url").toString()
+}
+
+function createHmacSignature(data: string, secret: string): string {
+  const crypto = require("crypto")
+  return crypto.createHmac("sha256", secret).update(data).digest("base64url")
+}
+
+function signToken(payload: Omit<TokenPayload, "iat" | "exp">): string {
+  const now = Math.floor(Date.now() / 1000)
+  const fullPayload: TokenPayload = {
+    ...payload,
+    iat: now,
+    exp: now + JWT_EXPIRES_IN,
+  }
+
+  const header = base64UrlEncode(JSON.stringify({ alg: "HS256", typ: "JWT" }))
+  const body = base64UrlEncode(JSON.stringify(fullPayload))
+  const signature = createHmacSignature(`${header}.${body}`, JWT_SECRET)
+
+  return `${header}.${body}.${signature}`
+}
+
+function verifyToken(token: string): TokenPayload {
+  const parts = token.split(".")
+  if (parts.length !== 3) throw new Error("Invalid token format")
+
+  const [header, body, signature] = parts
+  const expectedSig = createHmacSignature(`${header}.${body}`, JWT_SECRET)
+
+  if (signature !== expectedSig) {
+    throw new Error("Invalid token signature")
+  }
+
+  const payload: TokenPayload = JSON.parse(base64UrlDecode(body))
+  if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
+    throw new Error("Token expired")
+  }
+
+  return payload
+}
+
+// === 密码校验 ===
+
+function verifyPassword(inputPassword: string, storedHash: string): boolean {
+  // 存储格式: $2b$10$<base64_hash>
+  if (storedHash.startsWith("$2b$10$")) {
+    const storedBase64 = storedHash.replace("$2b$10$", "")
+    const inputBase64 = Buffer.from(inputPassword).toString("base64")
+    return storedBase64 === inputBase64
+  }
+  // 直接比较（开发模式 seed 数据）
+  return inputPassword === storedHash
+}
+
+// === 菜单树构建 ===
+
+type MenuTreeNode = {
   id: string
-  key: string
   name: string
-  parentId: string | null
   path: string | null
-  type: string
+  icon: string | null
+  permission: string | null
+  children: MenuTreeNode[]
 }
 
-function buildMenuTree(rows: MenuRow[]) {
-  const nodes = new Map(rows.map((row) => [row.id, { key: row.key, name: row.name, path: row.path ?? undefined, children: [] as MenuNode[] }]))
-  const roots: MenuNode[] = []
+function buildMenuTree(menus: SystemMenuRow[]): MenuTreeNode[] {
+  const map = new Map<string, MenuTreeNode>()
+  const roots: MenuTreeNode[] = []
 
-  for (const row of rows) {
-    const node = nodes.get(row.id)
-    if (!node) continue
-    if (row.parentId) {
-      const parent = nodes.get(row.parentId)
-      if (parent) {
-        parent.children?.push(node)
-      } else {
-        roots.push(node)
-      }
+  // 只取目录和菜单，不取按钮
+  const filtered = menus.filter((m) => m.type === "DIR" || m.type === "MENU")
+
+  for (const m of filtered) {
+    map.set(m.id, { id: m.id, name: m.name, path: m.path, icon: m.icon, permission: m.permission, children: [] })
+  }
+
+  for (const m of filtered) {
+    const node = map.get(m.id)!
+    if (m.parentId && map.has(m.parentId)) {
+      map.get(m.parentId)!.children.push(node)
     } else {
       roots.push(node)
     }
   }
 
-  const sort = (items: MenuNode[]) => {
-    items.sort((left, right) => left.name.localeCompare(right.name, "zh-CN"))
-    items.forEach((item) => {
-      if (item.children?.length) sort(item.children)
-    })
-  }
-  sort(roots)
   return roots
 }
 
-function verifyStoredPassword(password: string, storedHash: string, salt?: string | null) {
-  if (comparePasswordMD5(password, storedHash, salt ?? undefined)) return true
-  const md5Password = CryptoJS.MD5(password).toString()
-  return comparePasswordMD5(md5Password, storedHash, salt ?? undefined)
-}
+// === Service ===
 
 export class SystemAuthService {
+  /** 登录 */
   static async login(input: LoginInput) {
-    domainLog.event("system.auth.login", {
-      username: input.username,
-    })
+    domainLog.event("system.auth.login.attempt", { username: input.username })
 
-    const admin = await ruoyiPrisma.admin.findFirst({
-      where: {
-        OR: [{ username: input.username }, { phone: input.username }],
-      },
-      select: {
-        id: true,
-        username: true,
-        phone: true,
-        name: true,
-        password: true,
-        salt: true,
-        status: true,
-        role: true,
-      },
-    })
-
-    if (!admin) {
-      domainLog.audit("system.auth.login.fail", {
-        targetType: "ADMIN",
-        targetId: input.username,
-        reason: "not_found",
-      })
+    const user = await SystemUserRepository.findByUsername(input.username)
+    if (!user) {
+      domainLog.audit("system.auth.login.fail", { targetType: "USER", targetId: input.username, reason: "not_found" })
       throw new Error("用户名或密码错误")
     }
 
-    if (admin.status !== "ACTIVE") {
-      domainLog.audit("system.auth.login.fail", {
-        targetType: "ADMIN",
-        targetId: admin.id,
-        reason: "account_disabled",
-      })
+    if (user.status !== "ACTIVE") {
+      domainLog.audit("system.auth.login.fail", { targetType: "USER", targetId: user.id, reason: "disabled" })
       throw new Error("账号已禁用，请联系管理员")
     }
 
-    const isValid = verifyStoredPassword(input.password, admin.password, admin.salt)
-    if (!isValid) {
-      domainLog.audit("system.auth.login.fail", {
-        targetType: "ADMIN",
-        targetId: admin.id,
-        reason: "wrong_password",
-      })
+    const valid = verifyPassword(input.password, user.password)
+    if (!valid) {
+      domainLog.audit("system.auth.login.fail", { targetType: "USER", targetId: user.id, reason: "wrong_password" })
       throw new Error("用户名或密码错误")
     }
 
-    await ruoyiPrisma.admin.update({
-      where: { id: admin.id },
-      data: { lastLoginAt: new Date() },
+    // 获取权限码（从菜单中提取 BUTTON 类型的 permission）
+    const allMenus = await SystemMenuRepository.findAll({ status: "ACTIVE" })
+    const permissions = allMenus
+      .filter((m) => m.type === "BUTTON" && m.permission)
+      .map((m) => m.permission!)
+
+    // 签发 JWT
+    const token = signToken({
+      sub: user.id,
+      username: user.username,
+      permissions,
+      roles: ["admin"], // TODO: 从 user-role 关联表获取
+      tenantId: user.tenantId ?? undefined,
     })
 
-    domainLog.audit("system.auth.login.success", {
-      targetType: "ADMIN",
-      targetId: admin.id,
-      role: admin.role,
-    })
+    domainLog.audit("system.auth.login.success", { targetType: "USER", targetId: user.id })
 
     return {
-      token: `ruoyi-token-${admin.id}`,
+      token,
+      expiresIn: JWT_EXPIRES_IN,
       user: {
-        id: admin.id,
-        username: admin.username ?? admin.phone,
-        nickname: admin.name ?? admin.username ?? admin.phone,
+        id: user.id,
+        username: user.username,
+        nickname: user.nickname,
       },
     }
   }
 
+  /** 获取当前用户权限信息 */
   static async getPermissionInfo(userId: string) {
-    domainLog.event("system.auth.permission-info", { userId })
+    const user = await SystemUserRepository.findById(userId)
+    if (!user) throw new Error("用户不存在")
 
-    const admin = await ruoyiPrisma.admin.findUnique({
-      where: { id: userId },
-      select: { id: true, username: true, phone: true, name: true, role: true },
-    })
+    const allMenus = await SystemMenuRepository.findAll({ status: "ACTIVE" })
 
-    if (!admin) {
-      throw new Error("管理员不存在")
-    }
+    // 权限码
+    const permissions = allMenus
+      .filter((m) => m.type === "BUTTON" && m.permission)
+      .map((m) => m.permission!)
 
-    const roleAssignments = await ruoyiPrisma.adminRoleAssignment.findMany({
-      where: { adminId: userId, role: { status: "ACTIVE" } },
-      select: {
-        role: {
-          select: {
-            code: true,
-            name: true,
-            menuGrants: {
-              select: {
-                menu: {
-                  select: {
-                    id: true,
-                    key: true,
-                    name: true,
-                    parentId: true,
-                    path: true,
-                    type: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    })
+    // 菜单树
+    const menus = buildMenuTree(allMenus)
 
-    const roles = roleAssignments.map((assignment) => assignment.role.code)
-    const permissions = roleAssignments.flatMap((assignment) =>
-      assignment.role.menuGrants
-        .map((grant) => grant.menu)
-        .filter((menu) => menu.type === "MENU" && menu.path)
-        .map((menu) => menu.path),
-    )
-
-    const menuRows: MenuRow[] = roleAssignments.flatMap((assignment) =>
-      assignment.role.menuGrants
-        .map((grant) => grant.menu)
-        .filter((menu) => (menu.type === "DIRECTORY" || menu.type === "MENU") && menu.path !== null)
-        .map((menu) => ({
-          id: menu.id,
-          key: menu.key,
-          name: menu.name,
-          parentId: menu.parentId,
-          path: menu.path,
-          type: menu.type,
-        })),
-    )
-
-    const uniqueMenuRows = Array.from(new Map<string, MenuRow>(menuRows.map((row) => [row.id, row])).values())
-    const menus = buildMenuTree(uniqueMenuRows)
-
-    const effectivePermissions = admin.role === "PLATFORM_ADMIN"
-      ? [WILDCARD_PERMISSION]
-      : Array.from(new Set([...permissions, ...(admin.role === "PLATFORM_ADMIN" ? [WILDCARD_PERMISSION] : [])]))
+    domainLog.event("system.auth.permissionInfo", { userId })
 
     return {
       user: {
-        id: admin.id,
-        username: admin.username ?? admin.phone,
-        nickname: admin.name ?? admin.username ?? admin.phone,
+        id: user.id,
+        username: user.username,
+        nickname: user.nickname,
+        avatar: user.avatar,
       },
-      roles,
-      permissions: effectivePermissions,
+      roles: ["admin"], // TODO: 从 user-role 关联表获取
+      permissions,
       menus,
     }
+  }
+
+  /** 验证 token 并返回用户信息 */
+  static async verifyToken(token: string): Promise<TokenPayload> {
+    return verifyToken(token)
+  }
+
+  /** 刷新 token */
+  static async refreshToken(token: string) {
+    const payload = verifyToken(token)
+    const newToken = signToken({
+      sub: payload.sub,
+      username: payload.username,
+      permissions: payload.permissions,
+      roles: payload.roles,
+      tenantId: payload.tenantId,
+    })
+    return { token: newToken, expiresIn: JWT_EXPIRES_IN }
   }
 }

@@ -1,61 +1,93 @@
-import type { PageQueryInput } from "@/modules/system/backend/validators"
-import { domainLog } from "@/modules/shared/backend/lib/domain-log"
-import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
+/**
+ * System Dept Service - 树形部门管理
+ */
 
-type SystemDeptItem = {
-  id: string
-  parentId: string | null
-  name: string
-  leader: string
-  status: "ACTIVE" | "DISABLED"
+import { SystemDeptRepository, type SystemDeptRow } from "@/modules/system/backend/repositories/dept.repository"
+import { domainLog } from "@/modules/shared/backend/lib/domain-log"
+
+type DeptTreeNode = SystemDeptRow & { children: DeptTreeNode[] }
+
+type ListInput = { status?: string; keyword?: string }
+type CreateInput = { name: string; parentId?: string; sort?: number; leaderId?: string; phone?: string; email?: string; status?: string }
+type UpdateInput = { id: string; name?: string; parentId?: string; sort?: number; leaderId?: string; phone?: string; email?: string; status?: string }
+
+function buildTree(list: SystemDeptRow[]): DeptTreeNode[] {
+  const map = new Map<string, DeptTreeNode>()
+  const roots: DeptTreeNode[] = []
+
+  for (const item of list) {
+    map.set(item.id, { ...item, children: [] })
+  }
+
+  for (const item of list) {
+    const node = map.get(item.id)!
+    if (item.parentId && map.has(item.parentId)) {
+      map.get(item.parentId)!.children.push(node)
+    } else {
+      roots.push(node)
+    }
+  }
+
+  return roots
 }
 
 export class SystemDeptService {
-  static async list(input: PageQueryInput) {
-    const where = input.keyword
-      ? {
-          OR: [
-            { name: { contains: input.keyword, mode: "insensitive" as const } },
-            { code: { contains: input.keyword, mode: "insensitive" as const } },
-            { leaderName: { contains: input.keyword, mode: "insensitive" as const } },
-          ],
-        }
-      : undefined
+  /** 获取部门树 */
+  static async tree(input?: ListInput) {
+    const list = await SystemDeptRepository.findAll(input)
+    const tree = buildTree(list)
+    domainLog.event("system.dept.tree", { total: list.length })
+    return tree
+  }
 
-    const skip = (input.page - 1) * input.pageSize
-    const [rows, total] = await Promise.all([
-      ruoyiPrisma.organization.findMany({
-        where,
-        skip,
-        take: input.pageSize,
-        orderBy: [{ level: "asc" }, { sortOrder: "asc" }, { createdAt: "desc" }],
-        select: {
-          id: true,
-          parentId: true,
-          name: true,
-          leaderName: true,
-          isActive: true,
-        },
-      }),
-      ruoyiPrisma.organization.count({ where }),
-    ])
+  /** 获取平铺列表 */
+  static async list(input?: ListInput) {
+    const list = await SystemDeptRepository.findAll(input)
+    domainLog.event("system.dept.list", { total: list.length })
+    return list
+  }
 
-    const items: SystemDeptItem[] = rows.map((row) => ({
-      id: row.id,
-      parentId: row.parentId,
-      name: row.name,
-      leader: row.leaderName ?? "-",
-      status: row.isActive ? "ACTIVE" : "DISABLED",
-    }))
+  static async getById(id: string) {
+    const dept = await SystemDeptRepository.findById(id)
+    if (!dept) throw new Error(`部门不存在: ${id}`)
+    domainLog.event("system.dept.get", { deptId: id })
+    return dept
+  }
 
-    domainLog.event("system.dept.list", {
-      page: input.page,
-      pageSize: input.pageSize,
-      hasKeyword: Boolean(input.keyword),
-      source: "db",
-      total,
-    })
+  static async create(input: CreateInput) {
+    // 验证父部门存在
+    if (input.parentId) {
+      const parent = await SystemDeptRepository.findById(input.parentId)
+      if (!parent) throw new Error(`父部门不存在: ${input.parentId}`)
+    }
 
-    return { items, total, page: input.page, pageSize: input.pageSize }
+    const dept = await SystemDeptRepository.create(input)
+    domainLog.event("system.dept.create", { deptId: dept.id })
+    domainLog.audit("system.dept.create", { targetType: "DEPT", targetId: dept.id })
+    return { id: dept.id }
+  }
+
+  static async update(input: UpdateInput) {
+    const existing = await SystemDeptRepository.findById(input.id)
+    if (!existing) throw new Error(`部门不存在: ${input.id}`)
+
+    // 不能将自己设为父部门
+    if (input.parentId === input.id) throw new Error("不能将自己设为父部门")
+
+    const { id, ...data } = input
+    await SystemDeptRepository.update(id, data)
+    domainLog.event("system.dept.update", { deptId: id })
+    domainLog.audit("system.dept.update", { targetType: "DEPT", targetId: id })
+    return { id }
+  }
+
+  static async delete(id: string) {
+    const existing = await SystemDeptRepository.findById(id)
+    if (!existing) throw new Error(`部门不存在: ${id}`)
+
+    await SystemDeptRepository.delete(id)
+    domainLog.event("system.dept.delete", { deptId: id })
+    domainLog.audit("system.dept.delete", { targetType: "DEPT", targetId: id })
+    return { success: true }
   }
 }

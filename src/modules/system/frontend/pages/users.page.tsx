@@ -1,7 +1,451 @@
 "use client"
 
-import { AdminListPageTemplate } from "@/modules/shared/frontend/templates/admin-list-page.template"
+import { useState, useEffect, useCallback } from "react"
 
-export default function SystemUsersModulePage() {
-  return <AdminListPageTemplate title="用户管理" endpoint="/api/admin/system/users" />
+// === Types ===
+type SystemUser = {
+  id: string
+  username: string
+  nickname: string
+  phone: string | null
+  email: string | null
+  deptId: string | null
+  roleIds: string[]
+  status: string
+  remark: string | null
+  createdAt: string
+}
+
+type PageData = {
+  items: SystemUser[]
+  total: number
+  page: number
+  pageSize: number
+}
+
+// === API ===
+const API_BASE = "/api/v1/admin/system/users"
+
+async function fetchUsers(params: {
+  page: number
+  pageSize: number
+  keyword?: string
+  status?: string
+}): Promise<{ success: boolean; data?: PageData; error?: string }> {
+  const sp = new URLSearchParams()
+  sp.set("page", String(params.page))
+  sp.set("pageSize", String(params.pageSize))
+  if (params.keyword) sp.set("keyword", params.keyword)
+  if (params.status) sp.set("status", params.status)
+
+  const res = await fetch(`${API_BASE}?${sp.toString()}`)
+  return res.json()
+}
+
+async function createUser(data: Record<string, any>) {
+  const res = await fetch(API_BASE, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  })
+  return res.json()
+}
+
+async function updateUser(id: string, data: Record<string, any>) {
+  const res = await fetch(`${API_BASE}/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  })
+  return res.json()
+}
+
+async function deleteUser(id: string) {
+  const res = await fetch(`${API_BASE}/${id}`, { method: "DELETE" })
+  return res.json()
+}
+
+async function updateUserStatus(id: string, status: string) {
+  const res = await fetch(`${API_BASE}/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "updateStatus", status }),
+  })
+  return res.json()
+}
+
+// === Main Component ===
+export default function SystemUsersPage() {
+  const [data, setData] = useState<PageData>({ items: [], total: 0, page: 1, pageSize: 20 })
+  const [loading, setLoading] = useState(false)
+  const [keyword, setKeyword] = useState("")
+  const [statusFilter, setStatusFilter] = useState("")
+  const [page, setPage] = useState(1)
+  const [showForm, setShowForm] = useState(false)
+  const [editingUser, setEditingUser] = useState<SystemUser | null>(null)
+
+  const loadData = useCallback(async () => {
+    setLoading(true)
+    try {
+      const result = await fetchUsers({
+        page,
+        pageSize: 20,
+        keyword: keyword || undefined,
+        status: statusFilter || undefined,
+      })
+      if (result.success && result.data) {
+        setData(result.data)
+      }
+    } finally {
+      setLoading(false)
+    }
+  }, [page, keyword, statusFilter])
+
+  useEffect(() => {
+    loadData()
+  }, [loadData])
+
+  const handleSearch = () => {
+    setPage(1)
+    loadData()
+  }
+
+  const handleReset = () => {
+    setKeyword("")
+    setStatusFilter("")
+    setPage(1)
+  }
+
+  const handleCreate = () => {
+    setEditingUser(null)
+    setShowForm(true)
+  }
+
+  const handleEdit = (user: SystemUser) => {
+    setEditingUser(user)
+    setShowForm(true)
+  }
+
+  const handleDelete = async (user: SystemUser) => {
+    if (!confirm(`确认删除用户「${user.nickname}」？`)) return
+    const result = await deleteUser(user.id)
+    if (result.success) {
+      loadData()
+    } else {
+      alert(result.error || "删除失败")
+    }
+  }
+
+  const handleToggleStatus = async (user: SystemUser) => {
+    const newStatus = user.status === "ACTIVE" ? "DISABLED" : "ACTIVE"
+    const result = await updateUserStatus(user.id, newStatus)
+    if (result.success) {
+      loadData()
+    } else {
+      alert(result.error || "状态变更失败")
+    }
+  }
+
+  const handleFormSubmit = async (formData: Record<string, any>) => {
+    let result
+    if (editingUser) {
+      result = await updateUser(editingUser.id, formData)
+    } else {
+      result = await createUser(formData)
+    }
+    if (result.success) {
+      setShowForm(false)
+      loadData()
+    } else {
+      alert(result.error || "操作失败")
+    }
+  }
+
+  const totalPages = Math.ceil(data.total / data.pageSize)
+
+  return (
+    <div className="space-y-4">
+      {/* 页头 */}
+      <div className="flex items-center justify-between rounded-lg border bg-white p-4">
+        <div>
+          <h1 className="text-lg font-semibold text-slate-900">用户管理</h1>
+          <p className="mt-0.5 text-sm text-slate-500">管理系统用户账号、角色分配与状态</p>
+        </div>
+        <button
+          onClick={handleCreate}
+          className="h-9 rounded-md bg-blue-600 px-4 text-sm font-medium text-white hover:bg-blue-700"
+        >
+          新增用户
+        </button>
+      </div>
+
+      {/* 搜索栏 */}
+      <div className="rounded-lg border bg-white p-4">
+        <div className="flex flex-wrap items-center gap-3">
+          <input
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            placeholder="用户名 / 昵称 / 手机号"
+            className="h-9 w-56 rounded-md border px-3 text-sm"
+          />
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="h-9 rounded-md border px-3 text-sm"
+          >
+            <option value="">全部状态</option>
+            <option value="ACTIVE">启用</option>
+            <option value="DISABLED">禁用</option>
+          </select>
+          <button
+            onClick={handleSearch}
+            className="h-9 rounded-md bg-slate-900 px-4 text-sm text-white"
+          >
+            查询
+          </button>
+          <button
+            onClick={handleReset}
+            className="h-9 rounded-md border px-4 text-sm"
+          >
+            重置
+          </button>
+          <span className="ml-auto text-xs text-slate-400">
+            共 {data.total} 条
+          </span>
+        </div>
+      </div>
+
+      {/* 表格 */}
+      <div className="rounded-lg border bg-white">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b bg-slate-50 text-left text-xs font-medium text-slate-500">
+                <th className="px-4 py-3">用户名</th>
+                <th className="px-4 py-3">昵称</th>
+                <th className="px-4 py-3">手机号</th>
+                <th className="px-4 py-3">状态</th>
+                <th className="px-4 py-3">创建时间</th>
+                <th className="px-4 py-3 text-right">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr>
+                  <td colSpan={6} className="px-4 py-12 text-center text-slate-400">加载中...</td>
+                </tr>
+              ) : data.items.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-4 py-12 text-center text-slate-400">暂无数据</td>
+                </tr>
+              ) : (
+                data.items.map((user) => (
+                  <tr key={user.id} className="border-b last:border-0 hover:bg-slate-50">
+                    <td className="px-4 py-3 font-medium">{user.username}</td>
+                    <td className="px-4 py-3">{user.nickname}</td>
+                    <td className="px-4 py-3 text-slate-500">{user.phone || "-"}</td>
+                    <td className="px-4 py-3">
+                      <button
+                        onClick={() => handleToggleStatus(user)}
+                        className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
+                          user.status === "ACTIVE"
+                            ? "bg-green-50 text-green-700"
+                            : "bg-red-50 text-red-700"
+                        }`}
+                      >
+                        {user.status === "ACTIVE" ? "启用" : "禁用"}
+                      </button>
+                    </td>
+                    <td className="px-4 py-3 text-slate-500">
+                      {new Date(user.createdAt).toLocaleDateString("zh-CN")}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <button
+                        onClick={() => handleEdit(user)}
+                        className="mr-2 text-blue-600 hover:text-blue-800"
+                      >
+                        编辑
+                      </button>
+                      <button
+                        onClick={() => handleDelete(user)}
+                        className="text-red-600 hover:text-red-800"
+                      >
+                        删除
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* 分页 */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between border-t px-4 py-3">
+            <span className="text-xs text-slate-500">
+              第 {page} / {totalPages} 页
+            </span>
+            <div className="flex gap-1">
+              <button
+                disabled={page <= 1}
+                onClick={() => setPage((p) => p - 1)}
+                className="h-8 rounded border px-3 text-xs disabled:opacity-50"
+              >
+                上一页
+              </button>
+              <button
+                disabled={page >= totalPages}
+                onClick={() => setPage((p) => p + 1)}
+                className="h-8 rounded border px-3 text-xs disabled:opacity-50"
+              >
+                下一页
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 新增/编辑弹窗 */}
+      {showForm && (
+        <UserFormDialog
+          user={editingUser}
+          onSubmit={handleFormSubmit}
+          onClose={() => setShowForm(false)}
+        />
+      )}
+    </div>
+  )
+}
+
+// === Form Dialog ===
+function UserFormDialog({
+  user,
+  onSubmit,
+  onClose,
+}: {
+  user: SystemUser | null
+  onSubmit: (data: Record<string, any>) => void
+  onClose: () => void
+}) {
+  const [form, setForm] = useState({
+    username: user?.username ?? "",
+    nickname: user?.nickname ?? "",
+    phone: user?.phone ?? "",
+    email: user?.email ?? "",
+    password: "",
+    status: user?.status ?? "ACTIVE",
+    remark: user?.remark ?? "",
+  })
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const payload: Record<string, any> = { ...form }
+    if (user && !payload.password) {
+      delete payload.password
+    }
+    onSubmit(payload)
+  }
+
+  const update = (field: string, value: string) => {
+    setForm((prev) => ({ ...prev, [field]: value }))
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+        <h2 className="mb-4 text-base font-semibold">
+          {user ? "编辑用户" : "新增用户"}
+        </h2>
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <div>
+            <label className="mb-1 block text-xs text-slate-600">用户名 *</label>
+            <input
+              required
+              value={form.username}
+              onChange={(e) => update("username", e.target.value)}
+              className="h-9 w-full rounded-md border px-3 text-sm"
+              disabled={Boolean(user)}
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs text-slate-600">昵称 *</label>
+            <input
+              required
+              value={form.nickname}
+              onChange={(e) => update("nickname", e.target.value)}
+              className="h-9 w-full rounded-md border px-3 text-sm"
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="mb-1 block text-xs text-slate-600">手机号</label>
+              <input
+                value={form.phone}
+                onChange={(e) => update("phone", e.target.value)}
+                className="h-9 w-full rounded-md border px-3 text-sm"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs text-slate-600">邮箱</label>
+              <input
+                type="email"
+                value={form.email}
+                onChange={(e) => update("email", e.target.value)}
+                className="h-9 w-full rounded-md border px-3 text-sm"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="mb-1 block text-xs text-slate-600">
+              {user ? "新密码（留空不修改）" : "密码 *"}
+            </label>
+            <input
+              type="password"
+              required={!user}
+              value={form.password}
+              onChange={(e) => update("password", e.target.value)}
+              className="h-9 w-full rounded-md border px-3 text-sm"
+              placeholder={user ? "留空不修改" : "至少 6 位"}
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs text-slate-600">状态</label>
+            <select
+              value={form.status}
+              onChange={(e) => update("status", e.target.value)}
+              className="h-9 w-full rounded-md border px-3 text-sm"
+            >
+              <option value="ACTIVE">启用</option>
+              <option value="DISABLED">禁用</option>
+            </select>
+          </div>
+          <div>
+            <label className="mb-1 block text-xs text-slate-600">备注</label>
+            <input
+              value={form.remark}
+              onChange={(e) => update("remark", e.target.value)}
+              className="h-9 w-full rounded-md border px-3 text-sm"
+            />
+          </div>
+          <div className="flex justify-end gap-2 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="h-9 rounded-md border px-4 text-sm"
+            >
+              取消
+            </button>
+            <button
+              type="submit"
+              className="h-9 rounded-md bg-blue-600 px-4 text-sm text-white hover:bg-blue-700"
+            >
+              确认
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
 }

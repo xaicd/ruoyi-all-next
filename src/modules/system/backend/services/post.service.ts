@@ -1,60 +1,48 @@
-import type { PageQueryInput } from "@/modules/system/backend/validators"
+import { SystemPostRepository } from "@/modules/system/backend/repositories/post.repository"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
-import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
-
-type SystemPostItem = {
-  id: string
-  code: string
-  name: string
-  sort: number
-  status: "ACTIVE" | "DISABLED"
-}
 
 export class SystemPostService {
-  static async list(input: PageQueryInput) {
-    const where = input.keyword
-      ? {
-          OR: [
-            { name: { contains: input.keyword, mode: "insensitive" as const } },
-            { code: { contains: input.keyword, mode: "insensitive" as const } },
-          ],
-        }
-      : undefined
+  static async list(input: { page: number; pageSize: number; keyword?: string; status?: string }) {
+    const result = await SystemPostRepository.findList(input)
+    domainLog.event("system.post.list", { page: input.page, total: result.total })
+    return result
+  }
 
-    const skip = (input.page - 1) * input.pageSize
-    const [rows, total] = await Promise.all([
-      ruoyiPrisma.adminRole.findMany({
-        where,
-        skip,
-        take: input.pageSize,
-        orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
-        select: {
-          id: true,
-          code: true,
-          name: true,
-          sortOrder: true,
-          status: true,
-        },
-      }),
-      ruoyiPrisma.adminRole.count({ where }),
-    ])
+  static async getById(id: string) {
+    const post = await SystemPostRepository.findById(id)
+    if (!post) throw new Error(`岗位不存在: ${id}`)
+    return post
+  }
 
-    const items: SystemPostItem[] = rows.map((row) => ({
-      id: row.id,
-      code: row.code,
-      name: row.name,
-      sort: row.sortOrder,
-      status: row.status === "ACTIVE" ? "ACTIVE" : "DISABLED",
-    }))
+  static async create(input: { name: string; code: string; sort?: number; status?: string; remark?: string }) {
+    const existing = await SystemPostRepository.findByCode(input.code)
+    if (existing) throw new Error(`岗位编码已存在: ${input.code}`)
+    const post = await SystemPostRepository.create(input)
+    domainLog.event("system.post.create", { postId: post.id })
+    domainLog.audit("system.post.create", { targetType: "POST", targetId: post.id })
+    return { id: post.id }
+  }
 
-    domainLog.event("system.post.list", {
-      page: input.page,
-      pageSize: input.pageSize,
-      hasKeyword: Boolean(input.keyword),
-      source: "db",
-      total,
-    })
+  static async update(input: { id: string; name?: string; code?: string; sort?: number; status?: string; remark?: string }) {
+    const existing = await SystemPostRepository.findById(input.id)
+    if (!existing) throw new Error(`岗位不存在: ${input.id}`)
+    if (input.code && input.code !== existing.code) {
+      const conflict = await SystemPostRepository.findByCode(input.code)
+      if (conflict) throw new Error(`岗位编码已存在: ${input.code}`)
+    }
+    const { id, ...data } = input
+    await SystemPostRepository.update(id, data)
+    domainLog.event("system.post.update", { postId: id })
+    domainLog.audit("system.post.update", { targetType: "POST", targetId: id })
+    return { id }
+  }
 
-    return { items, total, page: input.page, pageSize: input.pageSize }
+  static async delete(id: string) {
+    const existing = await SystemPostRepository.findById(id)
+    if (!existing) throw new Error(`岗位不存在: ${id}`)
+    await SystemPostRepository.delete(id)
+    domainLog.event("system.post.delete", { postId: id })
+    domainLog.audit("system.post.delete", { targetType: "POST", targetId: id })
+    return { success: true }
   }
 }

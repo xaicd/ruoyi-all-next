@@ -1,65 +1,72 @@
-import type { PageQueryInput } from "@/modules/system/backend/validators"
-import { domainLog } from "@/modules/shared/backend/lib/domain-log"
-import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
+/**
+ * System Menu Service - 树形菜单管理
+ */
 
-type SystemMenuItem = {
-  id: string
-  parentId: string | null
-  name: string
-  path: string
-  permission: string
-  type: "DIR" | "MENU" | "BUTTON"
+import { SystemMenuRepository, type SystemMenuRow } from "@/modules/system/backend/repositories/menu.repository"
+import { domainLog } from "@/modules/shared/backend/lib/domain-log"
+
+type MenuTreeNode = SystemMenuRow & { children: MenuTreeNode[] }
+
+function buildTree(list: SystemMenuRow[]): MenuTreeNode[] {
+  const map = new Map<string, MenuTreeNode>()
+  const roots: MenuTreeNode[] = []
+  for (const item of list) map.set(item.id, { ...item, children: [] })
+  for (const item of list) {
+    const node = map.get(item.id)!
+    if (item.parentId && map.has(item.parentId)) {
+      map.get(item.parentId)!.children.push(node)
+    } else {
+      roots.push(node)
+    }
+  }
+  return roots
 }
 
 export class SystemMenuService {
-  static async list(input: PageQueryInput) {
-    const where = input.keyword
-      ? {
-          OR: [
-            { name: { contains: input.keyword, mode: "insensitive" as const } },
-            { path: { contains: input.keyword, mode: "insensitive" as const } },
-            { key: { contains: input.keyword, mode: "insensitive" as const } },
-            { permission: { contains: input.keyword, mode: "insensitive" as const } },
-          ],
-        }
-      : undefined
+  static async tree(params?: { status?: string }) {
+    const list = await SystemMenuRepository.findAll(params)
+    const tree = buildTree(list)
+    domainLog.event("system.menu.tree", { total: list.length })
+    return tree
+  }
 
-    const skip = (input.page - 1) * input.pageSize
-    const [rows, total] = await Promise.all([
-      ruoyiPrisma.adminMenu.findMany({
-        where,
-        skip,
-        take: input.pageSize,
-        orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
-        select: {
-          id: true,
-          parentId: true,
-          name: true,
-          path: true,
-          permission: true,
-          type: true,
-        },
-      }),
-      ruoyiPrisma.adminMenu.count({ where }),
-    ])
+  static async list(params?: { status?: string }) {
+    const list = await SystemMenuRepository.findAll(params)
+    domainLog.event("system.menu.list", { total: list.length })
+    return list
+  }
 
-    const items: SystemMenuItem[] = rows.map((row) => ({
-      id: row.id,
-      parentId: row.parentId,
-      name: row.name,
-      path: row.path ?? "",
-      permission: row.permission ?? "",
-      type: row.type === "DIRECTORY" ? "DIR" : row.type,
-    }))
+  static async getById(id: string) {
+    const menu = await SystemMenuRepository.findById(id)
+    if (!menu) throw new Error(`菜单不存在: ${id}`)
+    return menu
+  }
 
-    domainLog.event("system.menu.list", {
-      page: input.page,
-      pageSize: input.pageSize,
-      hasKeyword: Boolean(input.keyword),
-      source: "db",
-      total,
-    })
+  static async create(input: { name: string; type: string; parentId?: string; permission?: string; path?: string; component?: string; icon?: string; sort?: number; status?: string; visible?: boolean; keepAlive?: boolean }) {
+    const menu = await SystemMenuRepository.create(input)
+    domainLog.event("system.menu.create", { menuId: menu.id })
+    domainLog.audit("system.menu.create", { targetType: "MENU", targetId: menu.id })
+    return { id: menu.id }
+  }
 
-    return { items, total, page: input.page, pageSize: input.pageSize }
+  static async update(input: { id: string; name?: string; type?: string; parentId?: string; permission?: string; path?: string; component?: string; icon?: string; sort?: number; status?: string; visible?: boolean; keepAlive?: boolean }) {
+    const existing = await SystemMenuRepository.findById(input.id)
+    if (!existing) throw new Error(`菜单不存在: ${input.id}`)
+    if (input.parentId === input.id) throw new Error("不能将自己设为父菜单")
+
+    const { id, ...data } = input
+    await SystemMenuRepository.update(id, data)
+    domainLog.event("system.menu.update", { menuId: id })
+    domainLog.audit("system.menu.update", { targetType: "MENU", targetId: id })
+    return { id }
+  }
+
+  static async delete(id: string) {
+    const existing = await SystemMenuRepository.findById(id)
+    if (!existing) throw new Error(`菜单不存在: ${id}`)
+    await SystemMenuRepository.delete(id)
+    domainLog.event("system.menu.delete", { menuId: id })
+    domainLog.audit("system.menu.delete", { targetType: "MENU", targetId: id })
+    return { success: true }
   }
 }

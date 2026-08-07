@@ -1,0 +1,411 @@
+// ruoyi-all-next Prisma Schema
+// 用途：schema 定义 + migration 管理
+// 运行时查询由 Kysely 完成，Prisma 不用于 runtime query
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 默认 PostgreSQL，可通过 env 切换
+datasource db {
+  provider = env("DB_PROVIDER") // "postgresql" | "mysql" | "sqlserver" | "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// SYSTEM 域 - 核心表
+// ============================================================
+
+/// 系统用户
+model SystemUser {
+  id        String   @id @default(cuid())
+  username  String   @unique @db.VarChar(30)
+  nickname  String   @db.VarChar(30)
+  password  String   @db.VarChar(100)
+  phone     String?  @db.VarChar(20)
+  email     String?  @db.VarChar(50)
+  avatar    String?  @db.VarChar(500)
+  status    String   @default("ACTIVE") @db.VarChar(10) // ACTIVE | DISABLED
+  deptId    String?  @map("dept_id")
+  remark    String?  @db.VarChar(500)
+  loginIp   String?  @map("login_ip") @db.VarChar(50)
+  loginDate DateTime? @map("login_date")
+  tenantId  String?  @map("tenant_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  deleted   Boolean  @default(false)
+
+  // Relations
+  dept          SystemDept?          @relation(fields: [deptId], references: [id])
+  roleUsers     SystemUserRole[]
+  postUsers     SystemUserPost[]
+
+  @@map("system_user")
+  @@index([tenantId])
+  @@index([deptId])
+  @@index([status])
+}
+
+/// 角色
+model SystemRole {
+  id        String   @id @default(cuid())
+  name      String   @db.VarChar(30)
+  code      String   @unique @db.VarChar(100)
+  sort      Int      @default(0)
+  status    String   @default("ACTIVE") @db.VarChar(10)
+  remark    String?  @db.VarChar(500)
+  dataScope String   @default("ALL") @map("data_scope") @db.VarChar(20)
+  tenantId  String?  @map("tenant_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  deleted   Boolean  @default(false)
+
+  roleUsers SystemUserRole[]
+  roleMenus SystemRoleMenu[]
+
+  @@map("system_role")
+  @@index([tenantId])
+}
+
+/// 用户-角色关联
+model SystemUserRole {
+  id     String @id @default(cuid())
+  userId String @map("user_id")
+  roleId String @map("role_id")
+
+  user SystemUser @relation(fields: [userId], references: [id])
+  role SystemRole @relation(fields: [roleId], references: [id])
+
+  @@unique([userId, roleId])
+  @@map("system_user_role")
+}
+
+/// 菜单/权限
+model SystemMenu {
+  id         String   @id @default(cuid())
+  name       String   @db.VarChar(50)
+  permission String?  @db.VarChar(100)
+  type       String   @db.VarChar(10) // DIR | MENU | BUTTON
+  parentId   String?  @map("parent_id")
+  path       String?  @db.VarChar(200)
+  component  String?  @db.VarChar(200)
+  icon       String?  @db.VarChar(100)
+  sort       Int      @default(0)
+  status     String   @default("ACTIVE") @db.VarChar(10)
+  visible    Boolean  @default(true)
+  keepAlive  Boolean  @default(true) @map("keep_alive")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  deleted    Boolean  @default(false)
+
+  parent    SystemMenu?  @relation("MenuTree", fields: [parentId], references: [id])
+  children  SystemMenu[] @relation("MenuTree")
+  roleMenus SystemRoleMenu[]
+
+  @@map("system_menu")
+  @@index([parentId])
+}
+
+/// 角色-菜单关联
+model SystemRoleMenu {
+  id     String @id @default(cuid())
+  roleId String @map("role_id")
+  menuId String @map("menu_id")
+
+  role SystemRole @relation(fields: [roleId], references: [id])
+  menu SystemMenu @relation(fields: [menuId], references: [id])
+
+  @@unique([roleId, menuId])
+  @@map("system_role_menu")
+}
+
+/// 部门
+model SystemDept {
+  id       String  @id @default(cuid())
+  name     String  @db.VarChar(50)
+  parentId String? @map("parent_id")
+  sort     Int     @default(0)
+  leaderId String? @map("leader_id")
+  phone    String? @db.VarChar(20)
+  email    String? @db.VarChar(50)
+  status   String  @default("ACTIVE") @db.VarChar(10)
+  tenantId String? @map("tenant_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  deleted   Boolean  @default(false)
+
+  parent   SystemDept?  @relation("DeptTree", fields: [parentId], references: [id])
+  children SystemDept[] @relation("DeptTree")
+  users    SystemUser[]
+
+  @@map("system_dept")
+  @@index([parentId])
+  @@index([tenantId])
+}
+
+/// 岗位
+model SystemPost {
+  id        String   @id @default(cuid())
+  name      String   @db.VarChar(50)
+  code      String   @unique @db.VarChar(64)
+  sort      Int      @default(0)
+  status    String   @default("ACTIVE") @db.VarChar(10)
+  remark    String?  @db.VarChar(500)
+  tenantId  String?  @map("tenant_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  deleted   Boolean  @default(false)
+
+  postUsers SystemUserPost[]
+
+  @@map("system_post")
+  @@index([tenantId])
+}
+
+/// 用户-岗位关联
+model SystemUserPost {
+  id     String @id @default(cuid())
+  userId String @map("user_id")
+  postId String @map("post_id")
+
+  user SystemUser @relation(fields: [userId], references: [id])
+  post SystemPost @relation(fields: [postId], references: [id])
+
+  @@unique([userId, postId])
+  @@map("system_user_post")
+}
+
+/// 字典类型
+model SystemDictType {
+  id        String   @id @default(cuid())
+  name      String   @db.VarChar(100)
+  type      String   @unique @db.VarChar(100)
+  status    String   @default("ACTIVE") @db.VarChar(10)
+  remark    String?  @db.VarChar(500)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  deleted   Boolean  @default(false)
+
+  dictData SystemDictData[]
+
+  @@map("system_dict_type")
+}
+
+/// 字典数据
+model SystemDictData {
+  id         String   @id @default(cuid())
+  dictTypeId String   @map("dict_type_id")
+  label      String   @db.VarChar(100)
+  value      String   @db.VarChar(100)
+  sort       Int      @default(0)
+  status     String   @default("ACTIVE") @db.VarChar(10)
+  colorType  String?  @map("color_type") @db.VarChar(20)
+  remark     String?  @db.VarChar(500)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  deleted    Boolean  @default(false)
+
+  dictType SystemDictType @relation(fields: [dictTypeId], references: [id])
+
+  @@map("system_dict_data")
+  @@index([dictTypeId])
+}
+
+/// 租户
+model SystemTenant {
+  id          String   @id @default(cuid())
+  name        String   @db.VarChar(50)
+  contactName String?  @map("contact_name") @db.VarChar(30)
+  contactPhone String? @map("contact_phone") @db.VarChar(20)
+  domain      String?  @db.VarChar(100)
+  packageId   String?  @map("package_id")
+  status      String   @default("ACTIVE") @db.VarChar(10)
+  expireTime  DateTime? @map("expire_time")
+  accountCount Int     @default(0) @map("account_count")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  deleted     Boolean  @default(false)
+
+  @@map("system_tenant")
+}
+
+/// 通知公告
+model SystemNotice {
+  id        String   @id @default(cuid())
+  title     String   @db.VarChar(100)
+  content   String
+  type      String   @db.VarChar(10) // INFO | WARN | ALERT
+  status    String   @default("ACTIVE") @db.VarChar(10)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  deleted   Boolean  @default(false)
+
+  @@map("system_notice")
+}
+
+/// 登录日志
+model SystemLoginLog {
+  id        String   @id @default(cuid())
+  userId    String?  @map("user_id")
+  username  String   @db.VarChar(50)
+  userIp    String   @map("user_ip") @db.VarChar(50)
+  userAgent String?  @map("user_agent") @db.VarChar(500)
+  result    String   @db.VarChar(10) // SUCCESS | FAIL
+  remark    String?  @db.VarChar(500)
+  tenantId  String?  @map("tenant_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("system_login_log")
+  @@index([userId])
+  @@index([createdAt])
+}
+
+/// 操作日志
+model SystemOperateLog {
+  id            String   @id @default(cuid())
+  userId        String?  @map("user_id")
+  module        String   @db.VarChar(50)
+  name          String   @db.VarChar(100)
+  type          String   @db.VarChar(20) // CREATE | UPDATE | DELETE | EXPORT | IMPORT | OTHER
+  requestMethod String   @map("request_method") @db.VarChar(10)
+  requestUrl    String   @map("request_url") @db.VarChar(500)
+  content       String?
+  resultCode    Int      @default(0) @map("result_code")
+  duration      Int      @default(0) // 毫秒
+  userIp        String?  @map("user_ip") @db.VarChar(50)
+  tenantId      String?  @map("tenant_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@map("system_operate_log")
+  @@index([userId])
+  @@index([module])
+  @@index([createdAt])
+}
+
+// ============================================================
+// INFRA 域 - 基础设施表
+// ============================================================
+
+/// 系统配置
+model InfraConfig {
+  id        String   @id @default(cuid())
+  category  String   @default("DEFAULT") @db.VarChar(50)
+  name      String   @db.VarChar(100)
+  configKey String   @unique @map("config_key") @db.VarChar(100)
+  value     String   @db.VarChar(500)
+  visible   Boolean  @default(true)
+  remark    String?  @db.VarChar(500)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  deleted   Boolean  @default(false)
+
+  @@map("infra_config")
+}
+
+/// 定时任务
+model InfraJob {
+  id             String   @id @default(cuid())
+  name           String   @db.VarChar(100)
+  handlerName    String   @map("handler_name") @db.VarChar(200)
+  handlerParam   String?  @map("handler_param") @db.VarChar(500)
+  cronExpression String   @map("cron_expression") @db.VarChar(50)
+  retryCount     Int      @default(0) @map("retry_count")
+  retryInterval  Int      @default(0) @map("retry_interval")
+  status         String   @default("ACTIVE") @db.VarChar(10)
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  deleted        Boolean  @default(false)
+
+  logs InfraJobLog[]
+
+  @@map("infra_job")
+}
+
+/// 定时任务日志
+model InfraJobLog {
+  id          String   @id @default(cuid())
+  jobId       String   @map("job_id")
+  handlerName String   @map("handler_name") @db.VarChar(200)
+  beginTime   DateTime @map("begin_time")
+  endTime     DateTime? @map("end_time")
+  duration    Int      @default(0)
+  status      String   @db.VarChar(10) // SUCCESS | FAIL
+  result      String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  job InfraJob @relation(fields: [jobId], references: [id])
+
+  @@map("infra_job_log")
+  @@index([jobId])
+  @@index([createdAt])
+}
+
+/// API 访问日志
+model InfraApiAccessLog {
+  id            String   @id @default(cuid())
+  userId        String?  @map("user_id")
+  applicationName String @map("application_name") @db.VarChar(50)
+  requestMethod String   @map("request_method") @db.VarChar(10)
+  requestUrl    String   @map("request_url") @db.VarChar(500)
+  requestParams String?  @map("request_params")
+  responseBody  String?  @map("response_body")
+  resultCode    Int      @default(0) @map("result_code")
+  duration      Int      @default(0)
+  userIp        String?  @map("user_ip") @db.VarChar(50)
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@map("infra_api_access_log")
+  @@index([userId])
+  @@index([createdAt])
+}
+
+/// API 错误日志
+model InfraApiErrorLog {
+  id             String   @id @default(cuid())
+  userId         String?  @map("user_id")
+  applicationName String  @map("application_name") @db.VarChar(50)
+  requestMethod  String   @map("request_method") @db.VarChar(10)
+  requestUrl     String   @map("request_url") @db.VarChar(500)
+  requestParams  String?  @map("request_params")
+  exceptionName  String   @map("exception_name") @db.VarChar(200)
+  exceptionMessage String @map("exception_message")
+  exceptionStack String?  @map("exception_stack")
+  status         String   @default("UNPROCESSED") @db.VarChar(20)
+  userIp         String?  @map("user_ip") @db.VarChar(50)
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@map("infra_api_error_log")
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+/// 文件配置
+model InfraFileConfig {
+  id        String   @id @default(cuid())
+  name      String   @db.VarChar(100)
+  storage   String   @db.VarChar(20) // LOCAL | S3 | OSS | COS | MINIO
+  config    String   // JSON config
+  master    Boolean  @default(false)
+  remark    String?  @db.VarChar(500)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  deleted   Boolean  @default(false)
+
+  @@map("infra_file_config")
+}
+
+/// 文件
+model InfraFile {
+  id        String   @id @default(cuid())
+  configId  String   @map("config_id")
+  name      String?  @db.VarChar(200)
+  path      String   @db.VarChar(500)
+  url       String   @db.VarChar(1024)
+  type      String?  @db.VarChar(100) // MIME type
+  size      Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("infra_file")
+  @@index([configId])
+}
