@@ -2,11 +2,11 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/modules/shared/frontend/components/ui/button"
+import { Card } from "@/modules/shared/frontend/components/ui/card"
+import { Input } from "@/modules/shared/frontend/components/ui/input"
+import { Label } from "@/modules/shared/frontend/components/ui/label"
+import { Textarea } from "@/modules/shared/frontend/components/ui/textarea"
 
 type TemplateCategory = "CRUD" | "TREE" | "SINGLETON" | "WORKFLOW" | "DOMAIN" | "FOUNDATION"
 type TemplateType = "BACKEND" | "FRONTEND" | "API" | "SQL"

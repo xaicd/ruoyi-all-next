@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
-import { createDictItemSchema, pageQuerySchema } from "@/backend/validators/system.validator"
-import { SystemDictService } from "@/backend/services/system-dict.service"
-import { PERMISSIONS } from "@/backend/constants/permissions"
-import { ensurePermission } from "@/backend/lib/permission-guard"
+import { createDictItemSchema, pageQuerySchema } from "@/modules/system/backend/validators"
+import { SystemDictService } from "@/modules/system/backend/services/dict.service"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
 export async function GET(request: Request) {
   try {

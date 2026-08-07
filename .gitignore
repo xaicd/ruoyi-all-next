@@ -19,7 +19,7 @@
 
 # production
 /build
-
+.next-ruoyi
 # misc
 .DS_Store
 *.pem

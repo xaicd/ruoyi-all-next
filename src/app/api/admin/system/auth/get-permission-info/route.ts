@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
-import { SystemAuthService } from "@/backend/services/system-auth.service"
-import { ensurePermission } from "@/backend/lib/permission-guard"
-import { PERMISSIONS } from "@/backend/constants/permissions"
+import { SystemAuthService } from "@/modules/system/backend/services/auth.service"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 
 export async function GET(request: Request) {
   try {

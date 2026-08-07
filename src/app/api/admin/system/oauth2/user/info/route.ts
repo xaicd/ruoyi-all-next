@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
-import { oauth2UserInfoSchema } from "@/backend/validators/system.validator"
-import { SystemOauth2Service } from "@/backend/services/system-oauth2.service"
+import { oauth2UserInfoSchema } from "@/modules/system/backend/validators"
+import { SystemOauth2Service } from "@/modules/system/backend/services/oauth2.service"
 
 export async function GET(request: Request) {
   try {

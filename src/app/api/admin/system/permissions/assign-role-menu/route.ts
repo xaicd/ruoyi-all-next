@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
-import { assignRoleMenuSchema } from "@/backend/validators/system.validator"
-import { SystemPermissionService } from "@/backend/services/system-permission.service"
-import { PERMISSIONS } from "@/backend/constants/permissions"
-import { ensurePermission } from "@/backend/lib/permission-guard"
+import { assignRoleMenuSchema } from "@/modules/system/backend/validators"
+import { SystemPermissionService } from "@/modules/system/backend/services/permission.service"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
 export async function POST(request: Request) {
   try {

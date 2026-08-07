@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
-import { infraCodegenExportSchema } from "@/backend/validators/infra.validator"
+import { infraCodegenExportSchema } from "@/modules/infra/backend/validators"
 import { InfraTemplateEngineService } from "@/backend/services"
-import { PERMISSIONS } from "@/backend/constants/permissions"
-import { ensurePermission } from "@/backend/lib/permission-guard"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 import { buildTemplateEngineZipResponse } from "./template-engine-archive"
 
 export async function POST(request: Request) {

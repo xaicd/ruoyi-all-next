@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
-import { erpPageQuerySchema } from "@/backend/validators/erp.validator"
-import { ErpService } from "@/backend/services/erp.service"
-import { PERMISSIONS } from "@/backend/constants/permissions"
-import { ensurePermission } from "@/backend/lib/permission-guard"
+import { erpPageQuerySchema } from "@/modules/erp/backend/validators"
+import { ErpService } from "@/modules/erp/backend/services"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
 export async function GET(request: Request) {
   try {

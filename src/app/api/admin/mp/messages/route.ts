@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server"
-import { mpSendMessageSchema } from "@/backend/validators/mp.validator"
-import { MpService } from "@/backend/services/mp.service"
-import { PERMISSIONS } from "@/backend/constants/permissions"
-import { ensurePermission } from "@/backend/lib/permission-guard"
-import { writeAuditLog } from "@/backend/lib/audit-log"
+import { mpSendMessageSchema } from "@/modules/mp/backend/validators"
+import { MpService } from "@/modules/mp/backend/services"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
+import { writeAuditLog } from "@/modules/shared/backend/lib/audit-log"
 
 export async function POST(request: Request) {
   try {
@@ -22,6 +22,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message ?? "发送失败" }, { status: 400 })
+    return NextResponse.json({ success: false, error: error?.message ?? "发送失�? }, { status: 400 })
   }
 }

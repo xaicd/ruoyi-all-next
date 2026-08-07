@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
-import { mesPageQuerySchema } from "@/backend/validators/mes.validator"
-import { MesService } from "@/backend/services/mes.service"
-import { PERMISSIONS } from "@/backend/constants/permissions"
-import { ensurePermission } from "@/backend/lib/permission-guard"
+import { mesPageQuerySchema } from "@/modules/mes/backend/validators"
+import { MesService } from "@/modules/mes/backend/services"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
 export async function GET(request: Request) {
   try {

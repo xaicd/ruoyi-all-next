@@ -42,14 +42,15 @@
 2. Service 层：src/modules/<domain>/backend/services/**
 3. Validator 层：src/modules/<domain>/backend/validators/**
 4. Page 层：src/app/(admin)/admin/** + src/modules/<domain>/frontend/pages/**
-5. 基座层：src/backend/constants、src/backend/lib
+5. 基座层：src/modules/shared/backend/constants、src/modules/shared/backend/lib
 
 ### 3.2 目录约束
 
-1. 新增业务域必须优先落在 src/modules/<domain>/。
-2. src/backend/services/*.ts 与 src/backend/validators/*.ts 仅保留兼容门面与 re-export。
-3. 通用模板统一放 src/modules/shared/frontend/templates。
-4. src/frontend/templates 仅保留兼容桥接，不承载新增模板实现。
+1. 新增业务域必须落在 src/modules/<domain>/。
+2. 公共基座（constants/lib/templates）统一放 src/modules/shared/。
+3. src 下只允许两个顶层目录：app（Next.js路由）和 modules（全部业务+基座）。
+4. 禁止在 src 下新建 backend/、frontend/、components/、lib/ 等平铺目录。
+5. 通用模板统一放 src/modules/shared/frontend/templates。
 
 ## 4. 编码规范（强制）
 
@@ -133,12 +134,14 @@ CI 前置检查：
 1. database-compatibility：apps/ruoyi/ruoyi-all-next/docs/skills/ruoyi-all-next/database-compatibility.SKILL.md
 2. ui-framework-governance：apps/ruoyi/ruoyi-all-next/docs/skills/ruoyi-all-next/ui-framework-governance.SKILL.md
 3. microservice-evolution：apps/ruoyi/ruoyi-all-next/docs/skills/ruoyi-all-next/microservice-evolution.SKILL.md
+4. ui-ux-pro-max：.kiro/steering/ui-ux-pro-max/SKILL.md
 
 启用规则：
 
 1. 涉及数据库选型、兼容等级或迁移时，启用 database-compatibility。
-2. 涉及页面模板、组件结构或交互规范时，启用 ui-framework-governance。
+2. 涉及页面模板、组件结构或交互规范时，启用 ui-framework-governance + ui-ux-pro-max。
 3. 涉及域拆分、独立发布或阶段演进时，启用 microservice-evolution。
+4. 涉及 C 端页面、视觉设计、UX 交互或前端组件开发时，必须启用 ui-ux-pro-max。
 
 ## 7. 扫描与迁移节奏（证据驱动）
 

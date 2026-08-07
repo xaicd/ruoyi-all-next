@@ -1,6 +1,6 @@
 # ruoyi-all-next 全量能力同步矩阵（来自 ruoyi 目录）
 
-更新时间：2026-08-03
+更新时间：2026-08-06
 
 ## 1. 目标与口径
 
@@ -129,10 +129,10 @@
 | 域 | 关键能力 | 当前状态 | 备注 |
 |---|---|---|---|
 | bpm | 流程定义/审批流/任务中心/表单设计器 | PARTIAL | 已落地流程定义与待办任务骨架（API+Service+Page+Permission+Audit），待接真实流程引擎与实例流转 |
-| pay | 支付应用/支付单/退款单/回调通知 | PARTIAL | 主仓已有支付能力，但未抽象成 ruoyi-all-next 标准模块 |
-| report | 报表与大屏 | PARTIAL | 主仓有看板，需抽象成模板化模块 |
+| pay | 支付应用/支付单/退款单/回调通知 | PARTIAL | 已落地支付单/退款单骨架（API+Service+Validator+Page+Permission+Audit+Test），待接真实支付渠道与回调通知 |
+| report | 报表与大屏 | PARTIAL | 已落地数据大屏列表/导出骨架（API+Service+Validator+Page+Permission+Audit+Test），待接真实报表引擎与指标计算 |
 | mp | 公众号账号/粉丝/消息/模板消息/菜单/素材 | PARTIAL | 已落地账号/粉丝/消息发送骨架（API+Service+Page+Permission+Audit），待接真实微信渠道与模板消息引擎 |
-| member | 会员/等级/积分/分组/标签 | PARTIAL | 主仓有用户能力，会员中台未独立 |
+| member | 会员/等级/积分/分组/标签 | PARTIAL | 已落地会员列表/等级/积分调整骨架（API+Service+Validator+Page+Permission+Audit+Test），待接真实会员数据层 |
 
 ### 4.3 行业业务域（需完整覆盖）
 
@@ -143,8 +143,8 @@
 | erp | 进销存与经营台账 | PARTIAL | 已落地商品/订单/库存调整骨架（API+Service+Page+Permission+Audit），待接真实进销存台账与结算核对流程 |
 | wms | 仓储/出入库/库存作业 | PARTIAL | 已补齐最小骨架（API/Service/Validator/Page/Permission/Audit/Test），待扩展子模块 |
 | mes | 生产任务/工序执行 | PARTIAL | 已补齐最小骨架（API/Service/Validator/Page/Permission/Audit/Test），待扩展子模块 |
-| ai | 模型配置/对话与调用治理 | PARTIAL | 主仓有 AI 页面，未标准化治理域 |
-| iot | 设备/网关/数据上报/告警联动 | PARTIAL | 主仓有 IoT 页面，未形成统一 IoT 模块层 |
+| ai | 模型配置/对话与调用治理 | PARTIAL | 已落地模型管理/对话记录骨架（API+Service+Validator+Page+Permission+Audit+Test），待接真实推理引擎 |
+| iot | 设备/网关/数据上报/告警联动 | PARTIAL | 已落地设备管理/告警处理骨架（API+Service+Validator+Page+Permission+Audit+Test），待接真实设备接入层 |
 | im | 即时通讯/会话消息 | PARTIAL | 已补齐最小骨架（API/Service/Validator/Page/Permission/Audit/Test），待扩展子模块 |
 
 ## 5. 同步策略（必须执行，不可跳）

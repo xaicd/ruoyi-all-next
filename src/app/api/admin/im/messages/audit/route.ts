@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server"
-import { imMessageAuditSchema } from "@/backend/validators/im.validator"
-import { ImService } from "@/backend/services/im.service"
-import { PERMISSIONS } from "@/backend/constants/permissions"
-import { ensurePermission } from "@/backend/lib/permission-guard"
-import { writeAuditLog } from "@/backend/lib/audit-log"
+import { imMessageAuditSchema } from "@/modules/im/backend/validators"
+import { ImService } from "@/modules/im/backend/services"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
+import { writeAuditLog } from "@/modules/shared/backend/lib/audit-log"
 
 export async function POST(request: Request) {
   try {

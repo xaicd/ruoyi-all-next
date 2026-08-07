@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server"
-import { erpStockAdjustmentSchema } from "@/backend/validators/erp.validator"
-import { ErpService } from "@/backend/services/erp.service"
-import { PERMISSIONS } from "@/backend/constants/permissions"
-import { ensurePermission } from "@/backend/lib/permission-guard"
-import { writeAuditLog } from "@/backend/lib/audit-log"
+import { erpStockAdjustmentSchema } from "@/modules/erp/backend/validators"
+import { ErpService } from "@/modules/erp/backend/services"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
+import { writeAuditLog } from "@/modules/shared/backend/lib/audit-log"
 
 export async function POST(request: Request) {
   try {

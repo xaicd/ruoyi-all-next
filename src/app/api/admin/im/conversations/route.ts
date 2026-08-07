@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
-import { imPageQuerySchema } from "@/backend/validators/im.validator"
-import { ImService } from "@/backend/services/im.service"
-import { PERMISSIONS } from "@/backend/constants/permissions"
-import { ensurePermission } from "@/backend/lib/permission-guard"
+import { imPageQuerySchema } from "@/modules/im/backend/validators"
+import { ImService } from "@/modules/im/backend/services"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
 export async function GET(request: Request) {
   try {

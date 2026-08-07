@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
-import { operateLogQuerySchema } from "@/backend/validators/system.validator"
-import { SystemOperateLogService } from "@/backend/services/system-operate-log.service"
-import { PERMISSIONS } from "@/backend/constants/permissions"
-import { ensurePermission } from "@/backend/lib/permission-guard"
+import { operateLogQuerySchema } from "@/modules/system/backend/validators"
+import { SystemOperateLogService } from "@/modules/system/backend/services/operate-log.service"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
 /**
  * GET /api/admin/system/operate-logs

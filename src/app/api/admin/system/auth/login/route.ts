@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
-import { loginSchema } from "@/backend/validators/system.validator"
-import { SystemAuthService } from "@/backend/services/system-auth.service"
+import { loginSchema } from "@/modules/system/backend/validators"
+import { SystemAuthService } from "@/modules/system/backend/services/auth.service"
 
 export async function POST(request: Request) {
   try {

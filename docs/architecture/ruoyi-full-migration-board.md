@@ -51,11 +51,11 @@
 
 | 域 | 矩阵状态 | 后端规模(Cont/Serv/Map/DO/Enum) | 前端规模(Vue/API) | all-next 文件 | 缺口 |
 |---|---|---|---|---:|---|
-| iot | PARTIAL | 18/20/15/17/28 | 91/16 | 0 | api,service,validator,page,permission,logAudit,test |
-| ai | PARTIAL | 14/14/14/14/8 | 69/14 | 0 | api,service,validator,page,permission,logAudit,test |
-| member | PARTIAL | 20/12/11/11/2 | 32/10 | 0 | api,service,validator,page,permission,logAudit,test |
-| pay | PARTIAL | 19/12/14/14/10 | 23/11 | 0 | api,service,validator,page,permission,logAudit,test |
-| report | PARTIAL | 2/4/1/1/0 | 3/0 | 0 | api,service,validator,page,permission,logAudit,test |
+| iot | PARTIAL | 18/20/15/17/28 | 91/16 | 9 | 待接真实设备接入层与规则引擎 |
+| ai | PARTIAL | 14/14/14/14/8 | 69/14 | 8 | 待接真实推理引擎与模型调用治理 |
+| member | PARTIAL | 20/12/11/11/2 | 32/10 | 9 | 待接真实会员数据层与积分结算 |
+| pay | PARTIAL | 19/12/14/14/10 | 23/11 | 8 | 待接真实支付渠道与回调通知 |
+| report | PARTIAL | 2/4/1/1/0 | 3/0 | 7 | 待接真实报表引擎与指标计算 |
 
 执行动作:
 1. 先补文档映射: 能力边界 + 数据模型 + 权限模型

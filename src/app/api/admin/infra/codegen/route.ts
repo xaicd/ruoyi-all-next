@@ -3,11 +3,11 @@ import {
   infraCodegenPreviewSchema,
   infraCodegenTemplateSchema,
   infraPageQuerySchema,
-} from "@/backend/validators/infra.validator"
+} from "@/modules/infra/backend/validators"
 import { InfraCodegenService, InfraTemplateEngineService } from "@/backend/services"
-import { PERMISSIONS } from "@/backend/constants/permissions"
-import { ensurePermission } from "@/backend/lib/permission-guard"
-import { writeAuditLog } from "@/backend/lib/audit-log"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
+import { writeAuditLog } from "@/modules/shared/backend/lib/audit-log"
 
 export async function GET(request: Request) {
   try {

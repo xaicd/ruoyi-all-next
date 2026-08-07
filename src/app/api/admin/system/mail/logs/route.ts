@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
-import { systemModulePageQuerySchema } from "@/backend/validators/system-module.validator"
-import { SystemMailService } from "@/backend/services/system-mail.service"
-import { PERMISSIONS } from "@/backend/constants/permissions"
-import { ensurePermission } from "@/backend/lib/permission-guard"
+import { systemModulePageQuerySchema } from "@/modules/system/backend/validators"
+import { SystemMailService } from "@/modules/system/backend/services/mail.service"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
 export async function GET(request: Request) {
   try {

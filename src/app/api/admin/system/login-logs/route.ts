@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
-import { loginLogQuerySchema } from "@/backend/validators/system.validator"
-import { SystemLoginLogService } from "@/backend/services/system-login-log.service"
-import { PERMISSIONS } from "@/backend/constants/permissions"
-import { ensurePermission } from "@/backend/lib/permission-guard"
+import { loginLogQuerySchema } from "@/modules/system/backend/validators"
+import { SystemLoginLogService } from "@/modules/system/backend/services/login-log.service"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
 /**
  * GET /api/admin/system/login-logs

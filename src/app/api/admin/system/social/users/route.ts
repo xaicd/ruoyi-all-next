@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
-import { createSocialUserSchema, systemModulePageQuerySchema } from "@/backend/validators/system-module.validator"
-import { SystemSocialService } from "@/backend/services/system-social.service"
-import { PERMISSIONS } from "@/backend/constants/permissions"
-import { ensurePermission } from "@/backend/lib/permission-guard"
+import { createSocialUserSchema, systemModulePageQuerySchema } from "@/modules/system/backend/validators"
+import { SystemSocialService } from "@/modules/system/backend/services/social.service"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
 export async function GET(request: Request) {
   try {

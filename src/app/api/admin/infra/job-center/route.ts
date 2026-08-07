@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server"
-import { infraPageQuerySchema, triggerJobSchema } from "@/backend/validators/infra.validator"
-import { InfraJobCenterService } from "@/backend/services/infra-job-center.service"
-import { PERMISSIONS } from "@/backend/constants/permissions"
-import { ensurePermission } from "@/backend/lib/permission-guard"
-import { writeAuditLog } from "@/backend/lib/audit-log"
+import { infraPageQuerySchema, triggerJobSchema } from "@/modules/infra/backend/validators"
+import { InfraJobCenterService } from "@/modules/infra/backend/services/job-center.service"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
+import { writeAuditLog } from "@/modules/shared/backend/lib/audit-log"
 
 export async function GET(request: Request) {
   try {

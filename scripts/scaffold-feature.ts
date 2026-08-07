@@ -33,17 +33,17 @@ function parseArgs(argv: string[]): CliArgs {
     }
   }
 
-  const modulePath = args.get("--module") ?? "system/user"
-  const entityName = args.get("--entity") ?? "SystemUser"
-  const serviceName = args.get("--service") ?? `${entityName}Service`
-  const permissionUpdate = args.get("--permission-update") ?? "SYSTEM_USER_UPDATE"
-  const stack = args.get("--stack") ?? "next-react"
-  const templates = (args.get("--templates") ?? "")
+  const modulePath = args.get("--module")  "system/user"
+  const entityName = args.get("--entity")  "SystemUser"
+  const serviceName = args.get("--service")  `${entityName}Service`
+  const permissionUpdate = args.get("--permission-update")  "SYSTEM_USER_UPDATE"
+  const stack = args.get("--stack")  "next-react"
+  const templates = (args.get("--templates")  "")
     .split(",")
     .map((v) => v.trim())
     .filter(Boolean)
   const pack = args.get("--pack") as "service-pattern" | undefined
-  const outRoot = path.resolve(args.get("--out-root") ?? path.resolve(__dirname, ".."))
+  const outRoot = path.resolve(args.get("--out-root")  path.resolve(__dirname, ".."))
   const force = flags.has("--force")
 
   return {
@@ -70,7 +70,7 @@ function renderTemplate(content: string, variables: Vars) {
 function expandTemplateCodes(codes: string[], stack: string): string[] {
   const presetMap = new Map(
     DEFAULT_NEXT_REACT_TEMPLATE_PRESETS
-      .filter((item) => String(item.options?.stack ?? "") === stack)
+      .filter((item) => String(item.options?.stack  "") === stack)
       .map((item) => [item.code, item]),
   )
 
@@ -140,13 +140,13 @@ function main() {
   }
 
   const selected = DEFAULT_NEXT_REACT_TEMPLATE_PRESETS.filter(
-    (item) => expandedCodes.includes(item.code) && String(item.options?.stack ?? "") === cli.stack,
+    (item) => expandedCodes.includes(item.code) && String(item.options?.stack  "") === cli.stack,
   )
 
   const written: string[] = []
 
   for (const tpl of selected) {
-    const rawPath = String(tpl.options?.filePath ?? `templates/${tpl.code}.txt`)
+    const rawPath = String(tpl.options?.filePath  `templates/${tpl.code}.txt`)
     const relativePath = renderTemplate(rawPath, variables)
     const outputPath = path.resolve(cli.outRoot, relativePath)
 

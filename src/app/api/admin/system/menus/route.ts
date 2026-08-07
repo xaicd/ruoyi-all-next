@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
-import { pageQuerySchema } from "@/backend/validators/system.validator"
-import { SystemMenuService } from "@/backend/services/system-menu.service"
-import { PERMISSIONS } from "@/backend/constants/permissions"
-import { ensurePermission } from "@/backend/lib/permission-guard"
+import { pageQuerySchema } from "@/modules/system/backend/validators"
+import { SystemMenuService } from "@/modules/system/backend/services/menu.service"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
 export async function GET(request: Request) {
   try {

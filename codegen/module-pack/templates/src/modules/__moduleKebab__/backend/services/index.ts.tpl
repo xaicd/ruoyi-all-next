@@ -12,7 +12,7 @@ const MOCK_ITEMS: {{modulePascal}}{{featureListPascal}}[] = [
 
 export class {{modulePascal}}Service {
   static async list{{featureListPascal}}(input: {{modulePascal}}PageQueryInput) {
-    const keyword = input.keyword?.toLowerCase() ?? ""
+    const keyword = input.keyword?.toLowerCase()  ""
     const filtered = keyword ? MOCK_ITEMS.filter((item) => item.name.toLowerCase().includes(keyword)) : MOCK_ITEMS
     const start = (input.page - 1) * input.pageSize
     return {

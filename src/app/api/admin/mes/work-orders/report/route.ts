@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server"
-import { mesReportWorkSchema } from "@/backend/validators/mes.validator"
-import { MesService } from "@/backend/services/mes.service"
-import { PERMISSIONS } from "@/backend/constants/permissions"
-import { ensurePermission } from "@/backend/lib/permission-guard"
-import { writeAuditLog } from "@/backend/lib/audit-log"
+import { mesReportWorkSchema } from "@/modules/mes/backend/validators"
+import { MesService } from "@/modules/mes/backend/services"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
+import { writeAuditLog } from "@/modules/shared/backend/lib/audit-log"
 
 export async function POST(request: Request) {
   try {

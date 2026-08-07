@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
-import { wmsPageQuerySchema } from "@/backend/validators/wms.validator"
-import { WmsService } from "@/backend/services/wms.service"
-import { PERMISSIONS } from "@/backend/constants/permissions"
-import { ensurePermission } from "@/backend/lib/permission-guard"
+import { wmsPageQuerySchema } from "@/modules/wms/backend/validators"
+import { WmsService } from "@/modules/wms/backend/services"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
 export async function GET(request: Request) {
   try {

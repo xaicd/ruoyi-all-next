@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
-import { infraPageQuerySchema } from "@/backend/validators/infra.validator"
-import { InfraDbConfigService } from "@/backend/services/infra-db-config.service"
-import { PERMISSIONS } from "@/backend/constants/permissions"
-import { ensurePermission } from "@/backend/lib/permission-guard"
+import { infraPageQuerySchema } from "@/modules/infra/backend/validators"
+import { InfraDbConfigService } from "@/modules/infra/backend/services/db-config.service"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
 export async function GET(request: Request) {
   try {

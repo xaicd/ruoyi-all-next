@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server"
-import { crmFollowupSchema } from "@/backend/validators/crm.validator"
-import { CrmService } from "@/backend/services/crm.service"
-import { PERMISSIONS } from "@/backend/constants/permissions"
-import { ensurePermission } from "@/backend/lib/permission-guard"
-import { writeAuditLog } from "@/backend/lib/audit-log"
+import { crmFollowupSchema } from "@/modules/crm/backend/validators"
+import { CrmService } from "@/modules/crm/backend/services"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
+import { writeAuditLog } from "@/modules/shared/backend/lib/audit-log"
 
 export async function POST(request: Request) {
   try {

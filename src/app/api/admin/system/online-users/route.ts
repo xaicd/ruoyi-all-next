@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server"
-import { pageQuerySchema, forceLogoutSchema } from "@/backend/validators/system.validator"
-import { SystemOnlineUserService } from "@/backend/services/system-online-user.service"
-import { PERMISSIONS } from "@/backend/constants/permissions"
-import { ensurePermission } from "@/backend/lib/permission-guard"
-import { writeAuditLog } from "@/backend/lib/audit-log"
+import { pageQuerySchema, forceLogoutSchema } from "@/modules/system/backend/validators"
+import { SystemOnlineUserService } from "@/modules/system/backend/services/online-user.service"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
+import { writeAuditLog } from "@/modules/shared/backend/lib/audit-log"
 
 /**
  * GET /api/admin/system/online-users

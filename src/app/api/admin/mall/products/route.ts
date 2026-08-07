@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
-import { mallPageQuerySchema } from "@/backend/validators/mall.validator"
-import { MallService } from "@/backend/services/mall.service"
-import { PERMISSIONS } from "@/backend/constants/permissions"
-import { ensurePermission } from "@/backend/lib/permission-guard"
+import { mallPageQuerySchema } from "@/modules/mall/backend/validators"
+import { MallService } from "@/modules/mall/backend/services"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
 export async function GET(request: Request) {
   try {
