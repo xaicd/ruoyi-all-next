@@ -6,7 +6,9 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "quick-start": "bash ./scripts/quick-start.sh",
+    "quick-start": "node scripts/quick-start-runner.cjs",
+    "quick-start:docker": "docker compose -f deploy/docker-compose.local.yml up --build",
+    "quick-start:dev": "docker compose -f deploy/docker-compose.dev.yml up -d",
     "health-check": "bash ./scripts/health-check.sh",
     "init": "echo '[ruoyi-all-next] 本地最小启动无需基础设施初始化；如需接入仓库根初始化，请执行 npm run init:root'",
     "init:root": "bash ./scripts/run-root-npm.sh docker:dev:core && bash ./scripts/run-root-npm.sh db:init:force",
@@ -45,7 +47,10 @@
     "@types/pg": "^8.11.10",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.3",
     "prisma": "^6.13.0",
+    "tailwindcss": "^3.4.17",
     "tsx": "^4.20.3",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"

@@ -74,15 +74,10 @@ function verifyToken(token: string): TokenPayload {
 
 // === 密码校验 ===
 
-function verifyPassword(inputPassword: string, storedHash: string): boolean {
-  // 存储格式: $2b$10$<base64_hash>
-  if (storedHash.startsWith("$2b$10$")) {
-    const storedBase64 = storedHash.replace("$2b$10$", "")
-    const inputBase64 = Buffer.from(inputPassword).toString("base64")
-    return storedBase64 === inputBase64
-  }
-  // 直接比较（开发模式 seed 数据）
-  return inputPassword === storedHash
+import { verifyPassword as cryptoVerifyPassword, hashPassword, generateSalt } from "@/modules/shared/backend/lib/crypto"
+
+function verifyPasswordCheck(inputPassword: string, storedHash: string, salt: string): boolean {
+  return cryptoVerifyPassword(inputPassword, storedHash, salt)
 }
 
 // === 菜单树构建 ===
@@ -137,7 +132,7 @@ export class SystemAuthService {
       throw new Error("账号已禁用，请联系管理员")
     }
 
-    const valid = verifyPassword(input.password, user.password)
+    const valid = verifyPasswordCheck(input.password, user.password, user.salt)
     if (!valid) {
       domainLog.audit("system.auth.login.fail", { targetType: "USER", targetId: user.id, reason: "wrong_password" })
       throw new Error("用户名或密码错误")

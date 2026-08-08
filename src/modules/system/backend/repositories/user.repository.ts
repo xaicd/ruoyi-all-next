@@ -18,6 +18,7 @@ export type SystemUserRow = {
   username: string
   nickname: string
   password: string
+  salt: string
   phone: string | null
   email: string | null
   avatar: string | null
@@ -33,6 +34,7 @@ export type CreateUserData = {
   username: string
   nickname: string
   password: string
+  salt: string
   phone?: string
   email?: string
   deptId?: string
@@ -61,7 +63,8 @@ const MEMORY_STORE: SystemUserRow[] = [
     id: "1",
     username: "admin",
     nickname: "超级管理员",
-    password: "$2b$10$hashed_admin123",
+    password: "9486c0e4d342d7b250ac3b27d3f211aa",
+    salt: "a1b2c3d4e5f6g7h8",
     phone: "13800000001",
     email: "admin@ruoyi.local",
     avatar: null,
@@ -76,7 +79,8 @@ const MEMORY_STORE: SystemUserRow[] = [
     id: "2",
     username: "test",
     nickname: "测试用户",
-    password: "$2b$10$hashed_test123",
+    password: "9486c0e4d342d7b250ac3b27d3f211aa",
+    salt: "a1b2c3d4e5f6g7h8",
     phone: "13800000002",
     email: "test@ruoyi.local",
     avatar: null,
@@ -338,6 +342,7 @@ function createInMemory(data: CreateUserData): SystemUserRow {
     username: data.username,
     nickname: data.nickname,
     password: data.password,
+    salt: data.salt,
     phone: data.phone ?? null,
     email: data.email ?? null,
     avatar: null,
@@ -362,6 +367,7 @@ function updateInMemory(id: string, data: UpdateUserData): SystemUserRow {
     username: data.username ?? user.username,
     nickname: data.nickname ?? user.nickname,
     password: data.password ?? user.password,
+    salt: data.salt ?? user.salt,
     phone: data.phone !== undefined ? (data.phone ?? null) : user.phone,
     email: data.email !== undefined ? (data.email ?? null) : user.email,
     deptId: data.deptId !== undefined ? (data.deptId ?? null) : user.deptId,

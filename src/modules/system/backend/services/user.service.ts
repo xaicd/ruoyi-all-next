@@ -13,6 +13,7 @@ import type {
 } from "@/modules/system/backend/validators"
 import { SystemUserRepository } from "@/modules/system/backend/repositories/user.repository"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
+import { hashPassword, generateSalt } from "@/modules/shared/backend/lib/crypto"
 
 export class SystemUserService {
   /** 分页列表 */
@@ -58,13 +59,15 @@ export class SystemUserService {
       throw new Error(`用户名已存在: ${input.username}`)
     }
 
-    // 密码加密（生产环境应使用 bcrypt）
-    const hashedPassword = `$2b$10$${Buffer.from(input.password).toString("base64")}`
+    // 密码加密：双重 MD5 + Salt
+    const salt = generateSalt()
+    const hashedPassword = hashPassword(input.password, salt)
 
     const user = await SystemUserRepository.create({
       username: input.username,
       nickname: input.nickname,
       password: hashedPassword,
+      salt,
       phone: input.phone,
       email: input.email || undefined,
       deptId: input.deptId,
@@ -123,8 +126,9 @@ export class SystemUserService {
       throw new Error(`用户不存在: ${input.id}`)
     }
 
-    const hashedPassword = `$2b$10$${Buffer.from(input.password).toString("base64")}`
-    await SystemUserRepository.update(input.id, { password: hashedPassword })
+    const newSalt = generateSalt()
+    const hashedPassword = hashPassword(input.password, newSalt)
+    await SystemUserRepository.update(input.id, { password: hashedPassword, salt: newSalt })
 
     domainLog.event("system.user.resetPassword", { userId: input.id })
     domainLog.audit("system.user.resetPassword", {
