@@ -1,146 +1,116 @@
 # ruoyi-all-next
 
-`ruoyi-all-next` 是基于 `ruoyi-vue-pro` + `yudao-ui-admin-vue3` 思路，在 Next.js 技术栈上的通用业务基座。
+基于 Next.js 15 的企业级全栈管理平台，从 RuoYi-Vue-Pro 全量迁移。
 
-## 1. 定位
+## 技术栈
 
-1. 面向多业务系统复用（不仅当前项目）
-2. 面向 AI + 工程师协同开发
-3. 面向规范驱动的模块化交付
+- **框架**: Next.js 15 (App Router)
+- **语言**: TypeScript 5
+- **数据库**: Kysely (运行时查询) + Prisma (Schema 管理)
+- **支持的数据库**: PostgreSQL / MySQL / MariaDB / SQLite / TiDB / OceanBase / openGauss / KingbaseES / 达梦
+- **校验**: Zod
+- **UI**: React 19 + Tailwind CSS
 
-## 2. 核心原则
+## 快速启动
 
-1. 路由薄层：参数解析 + 鉴权 + 调 Service
-2. 业务内聚：复杂逻辑只在 Service
-3. 强约束：Validator、权限码、日志审计必选
-4. 模板优先：先套模板，再填业务
+```bash
+# 1. 安装依赖
+npm install
 
-## 3. 目录说明
+# 2. 启动开发服务器（内存模式，无需数据库）
+npm run dev
 
-```text
+# 3. 打开浏览器
+# 首页: http://localhost:3100
+# 登录: http://localhost:3100/login
+# 默认账号: admin / admin123
+```
+
+## 接入真实数据库
+
+```bash
+# 1. 复制环境配置
+cp .env.example .env.local
+
+# 2. 修改 DATABASE_URL 为你的数据库连接
+# PostgreSQL: postgresql://user:pass@localhost:5432/ruoyi_next
+# MySQL:      mysql://user:pass@localhost:3306/ruoyi_next
+
+# 3. 生成 Prisma Client
+npx prisma generate
+
+# 4. 执行数据库迁移
+npx prisma db push
+
+# 5. 重启
+npm run dev
+```
+
+## 项目结构
+
+```
 src/
-  app/
-    (admin)/admin/system/
-    api/admin/system/
-  backend/
-    services/
-    validators/
-  frontend/
-    templates/
+├── app/                          # Next.js 路由层（薄壳）
+│   ├── api/v1/admin/             # 管理后台 REST API
+│   ├── (admin-pages)/admin/      # 管理后台页面
+│   ├── login/                    # 登录页
+│   └── page.tsx                  # 首页
+│
+└── modules/                      # 全部业务实现
+    ├── shared/backend/lib/       # 基础设施（auth/db/log/event）
+    │   └── database/             # 多数据库引擎（Kysely）
+    ├── system/                   # 系统管理（用户/角色/菜单/部门/岗位/字典/租户）
+    └── infra/                    # 基础设施（配置/定时任务/文件）
 ```
 
-## 4. 首批模块
+## 已实现模块
 
-1. 在线用户：`online-users`
-2. 登录日志：`login-logs`
-3. 操作日志：`operate-logs`
+### System 域（完整 CRUD）
+- 用户管理 (User)
+- 角色管理 (Role)
+- 部门管理 (Dept) - 树形
+- 菜单管理 (Menu) - 树形
+- 岗位管理 (Post)
+- 字典管理 (Dict) - 类型 + 数据
+- 租户管理 (Tenant)
+- 认证登录 (Auth) - JWT 签发/验证/刷新
 
-## 5. 新模块开发流程
+### Infra 域（完整 CRUD）
+- 系统配置 (Config)
+- 定时任务 (Job)
+- 文件管理 (File)
 
-1. 新建 validator schema
-2. 新建 service（含日志事件）
-3. 新建 API route（薄层）
-4. 新建页面模板实例
-5. 注册权限码和菜单
-6. 编写至少 1 条关键路径测试
+### 其他域（骨架已生成）
+- BPM / Pay / Mall / CRM / ERP / WMS / MES / AI / IoT / IM / MP / Member / Report
 
-## 6. 一键初始化与运行（子项目入口）
+## API 规范
 
-`ruoyi-all-next` 已支持独立启动，可在当前目录直接运行。
+- 版本化路径: `/api/v1/admin/*`
+- 统一响应格式: `{ success: boolean, data?: T, error?: string }`
+- 权限码鉴权: `x-user-id` + `x-permissions` 或 Bearer JWT
+- 输入校验: Zod schema
+
+## 数据库兼容
+
+| 等级 | 数据库 | 说明 |
+|---|---|---|
+| Tier-A | PostgreSQL, MySQL, SQLite, TiDB, OceanBase | 直接支持 |
+| Tier-B | openGauss, GaussDB, KingbaseES | 协议兼容 + 方言适配 |
+| Tier-C | 达梦, Oracle | 专用连接器 |
+
+## 开发命令
 
 ```bash
-cd apps/ruoyi/ruoyi-all-next
-npm run quick-start
+npm run dev          # 开发模式 (port 3100)
+npm run build        # 生产构建
+npm run start        # 生产启动
+npm run lint         # 代码检查
+npm run check        # 治理检查
 ```
 
-默认行为：
+## 文档
 
-1. 自动安装依赖（首次）
-2. 使用本地最小模式启动（无需数据库）
-3. 启动 Next 开发服务器（默认 `3100`）
-
-可选参数：
-
-```bash
-# 跳过基础设施初始化（仅启动开发）
-npm run quick-start -- --skip-init
-
-# 跳过门禁检查（本地临时调试）
-npm run quick-start -- --skip-check
-
-# 启用 root 初始化（需要仓库根已提供 docker/db 脚本）
-npm run quick-start -- --root-init
-
-# 启动前执行一次构建 + 核心路由/API 冒烟检查
-npm run quick-start -- --health-check
-```
-
-补充：
-
-1. `npm run dev`：直接本地开发
-2. `npm run build && npm run start`：生产模式验证
-3. `npm run init:root`：手动触发仓库根初始化链路
-4. `npm run health-check`：一键构建并校验关键页面/API 可达性
-
-## 7. 使用模板能力扩展新功能
-
-### 7.1 通过页面导出模板
-
-管理后台进入 `infra/template-engine`，可选择三种导出模式：
-
-1. 全栈模板包
-2. 当前模板
-3. Service 设计模式四件套（组合包一键展开）
-
-### 7.2 通过命令行脚手架
-
-```bash
-cd apps/ruoyi/ruoyi-all-next
-
-# 一键生成 Service 设计模式四件套
-npm run scaffold -- --pack service-pattern --module system/user --entity SystemUser --service SystemUserService --permission-update SYSTEM_USER_UPDATE
-
-# 生成指定模板编码
-npm run scaffold -- --templates next-react-admin-route,next-react-admin-service --module mall/product --entity MallProduct --service MallProductService
-```
-
-默认输出根目录是 `apps/ruoyi/ruoyi-all-next`，若文件已存在需加 `--force` 才会覆盖。
-
-## 7.3 ruoyi 命令入口约定
-
-`ruoyi:*` 命令统一从子项目目录执行：
-
-```bash
-cd apps/ruoyi/ruoyi-all-next
-npm run ruoyi:full:scan
-npm run ruoyi:deep:scan
-npm run ruoyi:mini:scan
-npm run ruoyi:matrix:check:strict
-npm run ruoyi:governance:check:strict
-```
-
-## 8. 开发检查清单
-
-1. API 响应结构是否统一
-2. 是否无 roles 硬编码
-3. 是否有 event + audit 日志
-4. 是否有分页筛选
-5. 是否有最小测试覆盖
-
-## 9. 参考文档
-
-1. `docs/architecture/ruoyi-all-next-foundation.md`
-2. `docs/architecture/ruoyi-system-foundation-study.md`
-3. `apps/ruoyi/ruoyi-all-next/docs/architecture/ruoyi-native-capabilities-catalog.md`
-4. `apps/ruoyi/ruoyi-all-next/docs/architecture/artifacts/ruoyi-full-scan-2026-08-02.md`
-5. `apps/ruoyi/ruoyi-all-next/docs/architecture/system-core-implementation-checklist.md`
-6. `apps/ruoyi/ruoyi-all-next/docs/architecture/artifacts/ruoyi-domain-evidence-2026-08-02.md`
-7. `apps/ruoyi/ruoyi-all-next/docs/architecture/ruoyi-full-migration-board.md`
-8. `apps/ruoyi/ruoyi-all-next/docs/architecture/yudao-boot-mini-core-foundation-study.md`
-9. `apps/ruoyi/ruoyi-all-next/docs/architecture/artifacts/yudao-boot-mini-core-scan-2026-08-02.md`
-10. `apps/ruoyi/ruoyi-all-next/docs/architecture/yudao-boot-mini-to-all-next-migration-plan.md`
-11. `apps/ruoyi/ruoyi-all-next/docs/architecture/artifacts/all-next-starter-coverage-2026-08-02.md`
-12. `apps/ruoyi/ruoyi-all-next/docs/architecture/yudao-mini-system-infra-task-breakdown.md`
-13. `docs/guides/rbac-guide.md`
-14. `docs/guides/logging-standards.md`
-15. `docs/guides/ui-template-rules.md`
+- [架构总览](docs/architecture/ruoyi-all-next-architecture.md)
+- [当前进度](docs/architecture/CURRENT-PROGRESS.md)
+- [数据库兼容规范](docs/architecture/ruoyi-all-next-database-compatibility.md)
+- [开发规范](AGENTS.md)

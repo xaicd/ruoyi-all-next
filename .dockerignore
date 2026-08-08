@@ -1,0 +1,13 @@
+node_modules
+.next-ruoyi
+.git
+.gitignore
+.env.*
+!.env.example
+deploy
+docs
+scripts
+*.md
+.vscode
+.kiro
+coverage

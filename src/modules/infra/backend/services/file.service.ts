@@ -1,36 +1,38 @@
-import type { InfraPageQueryInput } from "@/modules/infra/backend/validators"
-import { domainLog } from "@/modules/shared/backend/lib/domain-log"
-import { readSettingList } from "./infra-setting-store"
+/**
+ * InfraFile Service - 文件管理
+ */
 
-type InfraFileItem = {
-  id: string
-  filename: string
-  storage: "LOCAL" | "S3"
-  sizeKb: number
-  url: string
-  uploadedAt: string
-}
+import { InfraFileRepository } from "@/modules/infra/backend/repositories/file.repository"
+import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 
 export class InfraFileService {
-  static async list(input: InfraPageQueryInput) {
-    domainLog.event("infra.file.list", {
-      page: input.page,
-      pageSize: input.pageSize,
-      hasKeyword: Boolean(input.keyword),
-    })
+  static async list(input: { page: number; pageSize: number; keyword?: string; type?: string }) {
+    const result = await InfraFileRepository.findList(input)
+    domainLog.event("infra.file.list", { page: input.page, total: result.total })
+    return result
+  }
 
-    const keyword = input.keyword?.toLowerCase() ?? ""
-    const files = await readSettingList<InfraFileItem>("infra.files")
-    const filtered = keyword
-      ? files.filter(
-          (item) =>
-            item.filename.toLowerCase().includes(keyword) ||
-            item.storage.toLowerCase().includes(keyword),
-        )
-      : files
+  static async getById(id: string) {
+    const file = await InfraFileRepository.findById(id)
+    if (!file) throw new Error(`文件不存在: ${id}`)
+    return file
+  }
 
-    const start = (input.page - 1) * input.pageSize
-    const items = filtered.slice(start, start + input.pageSize)
-    return { items, total: filtered.length, page: input.page, pageSize: input.pageSize }
+  /** 记录文件上传（实际上传逻辑由前端/中间件处理） */
+  static async recordUpload(input: { configId: string; name?: string; path: string; url: string; type?: string; size: number }) {
+    const file = await InfraFileRepository.create(input)
+    domainLog.event("infra.file.upload", { fileId: file.id, name: file.name, size: file.size })
+    domainLog.audit("infra.file.upload", { targetType: "FILE", targetId: file.id })
+    return file
+  }
+
+  static async delete(id: string) {
+    const file = await InfraFileRepository.findById(id)
+    if (!file) throw new Error(`文件不存在: ${id}`)
+    await InfraFileRepository.delete(id)
+    domainLog.event("infra.file.delete", { fileId: id, path: file.path })
+    domainLog.audit("infra.file.delete", { targetType: "FILE", targetId: id })
+    // TODO: 同步删除实际存储中的文件
+    return { success: true }
   }
 }

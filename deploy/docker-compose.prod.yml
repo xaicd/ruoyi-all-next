@@ -1,0 +1,157 @@
+# ============================================================
+# ruoyi-all-next - PROD 环境（Traefik + PostgreSQL + Redis）
+# 用途：生产部署，自动 HTTPS、负载均衡、健康检查
+# 启动：docker compose -f deploy/docker-compose.prod.yml --env-file deploy/.env.prod up -d
+# ============================================================
+
+services:
+  traefik:
+    image: traefik:v3.1
+    command:
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL:-admin@ruoyi.local}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+      # HTTP → HTTPS 重定向
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - traefik_certs:/letsencrypt
+    labels:
+      # Traefik Dashboard（可选）
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.${DOMAIN:-ruoyi.local}`)"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.entrypoints=websecure"
+      - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.dashboard.middlewares=auth"
+      - "traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_ADMIN:-admin:$$apr1$$xyz$$hash}"
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: "0.5"
+
+  app:
+    image: ${REGISTRY:-registry.local}/ruoyi-all-next:${TAG:-latest}
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    expose:
+      - "3100"
+    environment:
+      - NODE_ENV=production
+      - DB_DRIVER=postgresql
+      - DB_PROVIDER=postgresql
+      - DATABASE_URL=${DATABASE_URL:-postgresql://ruoyi:ruoyi123@postgres:5432/ruoyi_next?schema=public}
+      - DB_POOL_SIZE=${DB_POOL_SIZE:-30}
+      - DB_TIMEZONE=Asia/Shanghai
+      - JWT_SECRET=${JWT_SECRET:?JWT_SECRET is required}
+      - JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-86400}
+      - REDIS_URL=redis://:${REDIS_PASSWORD:-redis123}@redis:6379
+    labels:
+      - "traefik.enable=true"
+      # HTTP Router
+      - "traefik.http.routers.ruoyi.rule=Host(`${DOMAIN:-ruoyi.local}`)"
+      - "traefik.http.routers.ruoyi.entrypoints=websecure"
+      - "traefik.http.routers.ruoyi.tls.certresolver=letsencrypt"
+      - "traefik.http.services.ruoyi.loadbalancer.server.port=3100"
+      # 健康检查
+      - "traefik.http.services.ruoyi.loadbalancer.healthcheck.path=/api/v1/admin/system/auth/info"
+      - "traefik.http.services.ruoyi.loadbalancer.healthcheck.interval=30s"
+      # 中间件
+      - "traefik.http.routers.ruoyi.middlewares=compress,ratelimit"
+      - "traefik.http.middlewares.compress.compress=true"
+      - "traefik.http.middlewares.ratelimit.ratelimit.average=100"
+      - "traefik.http.middlewares.ratelimit.ratelimit.burst=50"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3100"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: always
+    deploy:
+      replicas: ${APP_REPLICAS:-2}
+      resources:
+        limits:
+          memory: 1G
+          cpus: "2.0"
+        reservations:
+          memory: 512M
+          cpus: "0.5"
+
+  postgres:
+    image: postgres:16-alpine
+    expose:
+      - "5432"
+    environment:
+      - POSTGRES_USER=${PG_USER:-ruoyi}
+      - POSTGRES_PASSWORD=${PG_PASSWORD:?PG_PASSWORD is required}
+      - POSTGRES_DB=${PG_DB:-ruoyi_next}
+    volumes:
+      - pg_data_prod:/var/lib/postgresql/data
+    command: >
+      postgres
+      -c max_connections=200
+      -c shared_buffers=256MB
+      -c effective_cache_size=768MB
+      -c work_mem=4MB
+      -c maintenance_work_mem=128MB
+      -c log_min_duration_statement=1000
+      -c timezone=Asia/Shanghai
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER:-ruoyi}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: "2.0"
+
+  redis:
+    image: redis:7-alpine
+    expose:
+      - "6379"
+    command: >
+      redis-server
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+      --appendonly yes
+      --requirepass ${REDIS_PASSWORD:-redis123}
+    volumes:
+      - redis_data_prod:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-redis123}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "1.0"
+
+volumes:
+  traefik_certs:
+  pg_data_prod:
+  redis_data_prod:

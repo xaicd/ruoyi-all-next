@@ -1,14 +1,10 @@
 /**
  * Kysely 多数据库客户端工厂
  *
- * 根据 DataSource 配置自动选择方言：
+ * 支持的驱动族：
  * - PostgreSQL 族（含 openGauss/KingbaseES）→ PostgresDialect
  * - MySQL 族（含 TiDB/OceanBase/MariaDB）→ MysqlDialect
- * - SQLite → SqliteDialect
- * - SQL Server → MssqlDialect
- * - Memory（开发模式）→ 内存 SQLite
- *
- * 国产 Tier-C 数据库（达梦/神通/GBase）通过专用 Dialect 适配器扩展
+ * - Memory（开发模式）→ DummyDriver（查询不执行，走内存 Repository）
  */
 
 import { Kysely, DummyDriver, SqliteAdapter, SqliteIntrospector, SqliteQueryCompiler } from "kysely"
@@ -34,16 +30,7 @@ async function createMysqlDialect(url: string) {
   })
 }
 
-async function createSqliteDialect() {
-  const { SqliteDialect } = await import("kysely")
-  const BetterSqlite3 = await import("better-sqlite3")
-  return new SqliteDialect({
-    database: new BetterSqlite3.default(":memory:"),
-  })
-}
-
 function createDummyDialect() {
-  // 用于无真实 DB 的开发模式，搭配内存 Repository
   return {
     createAdapter: () => new SqliteAdapter(),
     createDriver: () => new DummyDriver(),
@@ -53,7 +40,7 @@ function createDummyDialect() {
 }
 
 // === 驱动族映射 ===
-const DRIVER_FAMILY: Record<DatabaseDriver, "pg" | "mysql" | "sqlite" | "mssql" | "dummy"> = {
+const DRIVER_FAMILY: Record<DatabaseDriver, "pg" | "mysql" | "dummy"> = {
   postgresql: "pg",
   mysql: "mysql",
   mariadb: "mysql",
@@ -62,10 +49,10 @@ const DRIVER_FAMILY: Record<DatabaseDriver, "pg" | "mysql" | "sqlite" | "mssql" 
   opengauss: "pg",
   gaussdb: "pg",
   kingbase: "pg",
-  sqlserver: "mssql",
-  sqlite: "sqlite",
-  dm: "dummy",     // Tier-C: 需专用连接器
-  oracle: "dummy", // Tier-C: 需专用连接器
+  sqlserver: "dummy",  // TODO: 添加 MSSQL dialect
+  sqlite: "dummy",
+  dm: "dummy",
+  oracle: "dummy",
   memory: "dummy",
 }
 
@@ -74,8 +61,9 @@ let _kyselyInstance: Kysely<DB> | null = null
 
 /**
  * 获取 Kysely 数据库实例（单例）
- * 开发模式下如果没有真实 DB，使用 DummyDriver（查询不会执行）
- * 业务层应通过 Repository 访问数据，不直接调用此实例
+ *
+ * 内存模式下使用 DummyDriver（查询不执行），
+ * 业务数据通过 Repository 的内存实现提供。
  */
 export async function getKyselyDb(): Promise<Kysely<DB>> {
   if (_kyselyInstance) return _kyselyInstance
@@ -91,13 +79,6 @@ export async function getKyselyDb(): Promise<Kysely<DB>> {
       break
     case "mysql":
       dialect = await createMysqlDialect(config.url)
-      break
-    case "sqlite":
-      dialect = await createSqliteDialect()
-      break
-    case "mssql":
-      // TODO: 添加 MSSQL dialect
-      dialect = createDummyDialect()
       break
     default:
       dialect = createDummyDialect()

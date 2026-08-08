@@ -1,151 +1,55 @@
-import type {
-  AssignTenantPackageInput,
-  PageQueryInput,
-  UpdateTenantStatusInput,
-} from "@/modules/system/backend/validators"
-import { domainLog } from "@/modules/shared/backend/lib/domain-log"
-import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
+/**
+ * System Tenant Service - 租户管理
+ */
 
-type TenantItem = {
-  id: string
-  name: string
-  contactName: string
-  status: "ACTIVE" | "DISABLED"
-  packageId: string
-  expireAt: string
-}
+import { SystemTenantRepository } from "@/modules/system/backend/repositories/tenant.repository"
+import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 
 export class SystemTenantService {
-  static async list(input: PageQueryInput) {
-    const where = input.keyword
-      ? {
-          OR: [
-            { name: { contains: input.keyword, mode: "insensitive" as const } },
-            { tenantKey: { contains: input.keyword, mode: "insensitive" as const } },
-          ],
-        }
-      : undefined
-
-    const skip = (input.page - 1) * input.pageSize
-    const [rows, total] = await Promise.all([
-      ruoyiPrisma.tenant.findMany({
-        where,
-        skip,
-        take: input.pageSize,
-        orderBy: { createdAt: "desc" },
-        select: {
-          id: true,
-          name: true,
-          tenantKey: true,
-          status: true,
-          packageId: true,
-          expiresAt: true,
-        },
-      }),
-      ruoyiPrisma.tenant.count({ where }),
-    ])
-
-    domainLog.event("system.tenant.list", {
-      page: input.page,
-      pageSize: input.pageSize,
-      hasKeyword: Boolean(input.keyword),
-      source: "db",
-      total,
-    })
-
-    const items: TenantItem[] = rows.map((row) => ({
-      id: row.id,
-      name: row.name,
-      contactName: row.tenantKey,
-      status: row.status === "ACTIVE" ? "ACTIVE" : "DISABLED",
-      packageId: row.packageId ?? "",
-      expireAt: row.expiresAt?.toISOString() ?? "",
-    }))
-
-    return {
-      items,
-      total,
-      page: input.page,
-      pageSize: input.pageSize,
-    }
+  static async list(input: { page: number; pageSize: number; keyword?: string; status?: string }) {
+    const result = await SystemTenantRepository.findList(input)
+    domainLog.event("system.tenant.list", { page: input.page, total: result.total })
+    return result
   }
 
-  static async updateStatus(operatorId: string, input: UpdateTenantStatusInput) {
-    const exists = await ruoyiPrisma.tenant.findUnique({
-      where: { id: input.tenantId },
-      select: { id: true },
-    })
-    if (!exists) {
-      throw new Error("租户不存在")
-    }
-
-    const nextStatus = input.status === "ACTIVE" ? "ACTIVE" : "SUSPENDED"
-    const tenant = await ruoyiPrisma.tenant.update({
-      where: { id: input.tenantId },
-      data: { status: nextStatus },
-      select: {
-        id: true,
-        name: true,
-        tenantKey: true,
-        status: true,
-        packageId: true,
-        expiresAt: true,
-      },
-    })
-
-    domainLog.audit("system.tenant.update-status", {
-      operatorId,
-      tenantId: input.tenantId,
-      status: input.status,
-      source: "db",
-    })
-
-    return {
-      id: tenant.id,
-      name: tenant.name,
-      contactName: tenant.tenantKey,
-      status: tenant.status === "ACTIVE" ? "ACTIVE" : "DISABLED",
-      packageId: tenant.packageId ?? "",
-      expireAt: tenant.expiresAt?.toISOString() ?? "",
-    }
+  static async getById(id: string) {
+    const tenant = await SystemTenantRepository.findById(id)
+    if (!tenant) throw new Error(`租户不存在: ${id}`)
+    return tenant
   }
 
-  static async assignPackage(operatorId: string, input: AssignTenantPackageInput) {
-    const exists = await ruoyiPrisma.tenant.findUnique({
-      where: { id: input.tenantId },
-      select: { id: true },
-    })
-    if (!exists) {
-      throw new Error("租户不存在")
-    }
+  static async create(input: { name: string; contactName?: string; contactPhone?: string; domain?: string; packageId?: string; status?: string; expireTime?: string; accountCount?: number }) {
+    const tenant = await SystemTenantRepository.create(input)
+    domainLog.event("system.tenant.create", { tenantId: tenant.id })
+    domainLog.audit("system.tenant.create", { targetType: "TENANT", targetId: tenant.id })
+    return { id: tenant.id }
+  }
 
-    const tenant = await ruoyiPrisma.tenant.update({
-      where: { id: input.tenantId },
-      data: { packageId: input.packageId },
-      select: {
-        id: true,
-        name: true,
-        tenantKey: true,
-        status: true,
-        packageId: true,
-        expiresAt: true,
-      },
-    })
+  static async update(input: { id: string; name?: string; contactName?: string; contactPhone?: string; domain?: string; packageId?: string; status?: string; expireTime?: string; accountCount?: number }) {
+    const existing = await SystemTenantRepository.findById(input.id)
+    if (!existing) throw new Error(`租户不存在: ${input.id}`)
+    const { id, ...data } = input
+    await SystemTenantRepository.update(id, data)
+    domainLog.event("system.tenant.update", { tenantId: id })
+    domainLog.audit("system.tenant.update", { targetType: "TENANT", targetId: id })
+    return { id }
+  }
 
-    domainLog.audit("system.tenant.assign-package", {
-      operatorId,
-      tenantId: input.tenantId,
-      packageId: input.packageId,
-      source: "db",
-    })
+  static async delete(id: string) {
+    const existing = await SystemTenantRepository.findById(id)
+    if (!existing) throw new Error(`租户不存在: ${id}`)
+    await SystemTenantRepository.delete(id)
+    domainLog.event("system.tenant.delete", { tenantId: id })
+    domainLog.audit("system.tenant.delete", { targetType: "TENANT", targetId: id })
+    return { success: true }
+  }
 
-    return {
-      id: tenant.id,
-      name: tenant.name,
-      contactName: tenant.tenantKey,
-      status: tenant.status === "ACTIVE" ? "ACTIVE" : "DISABLED",
-      packageId: tenant.packageId ?? "",
-      expireAt: tenant.expiresAt?.toISOString() ?? "",
-    }
+  static async updateStatus(id: string, status: "ACTIVE" | "DISABLED") {
+    const existing = await SystemTenantRepository.findById(id)
+    if (!existing) throw new Error(`租户不存在: ${id}`)
+    await SystemTenantRepository.update(id, { status })
+    domainLog.event("system.tenant.updateStatus", { tenantId: id, status })
+    domainLog.audit("system.tenant.updateStatus", { targetType: "TENANT", targetId: id, newStatus: status })
+    return { success: true }
   }
 }

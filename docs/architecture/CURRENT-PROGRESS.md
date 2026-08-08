@@ -1,6 +1,6 @@
 # ruoyi-all-next 当前进度与待办
 
-更新时间：2026-08-07
+更新时间：2026-08-08
 
 ## 已完成
 
@@ -28,13 +28,24 @@
     - API Routes（GET/POST/PUT/DELETE/PATCH 全 REST）
     - 前端页面（ProTable + FormDialog + 分页 + 搜索 + 状态切换）
     - 权限码补全（create/update/delete/export/import）
+11. ✅ Auth 认证链路：
+    - JWT 签发/验证/刷新（HMAC-SHA256）
+    - 登录 API + 权限信息 API
+    - 登录页面
+12. ✅ Docker 部署方案：
+    - Dockerfile（多阶段构建，standalone 模式）
+    - docker-compose.local.yml（内存模式，零依赖）
+    - docker-compose.dev.yml（PostgreSQL + Redis）
+    - docker-compose.test.yml（MySQL + Redis）
+    - docker-compose.prod.yml（Traefik + PostgreSQL + Redis，多副本）
+    - .env.prod.example + .dockerignore
 
 ## 当前问题
 
 1. typescript.ignoreBuildErrors=true 需最终关闭
 2. 需要运行 `npm install` 安装新增的 kysely/pg/mysql2/better-sqlite3 依赖
-3. 其他域的 Service 仍只有 list 方法，需要按 User 模式补全 CRUD
-4. 前端其他页面仍是 AdminListPageTemplate 空壳
+3. 非 system/infra 域的 Service 仍只有 list 方法，待后续按模式补全
+4. 密码加密需替换为真正的 bcrypt（当前为 base64 占位）
 
 ## 下一步待办（按优先级）
 
@@ -55,12 +66,14 @@
 - ✅ Menu（菜单）Repository + Service + API (tree/list/create/update/delete)
 - ✅ Post（岗位）Repository + Service + API (list/create/update/delete)
 - ✅ Dict（字典类型+数据）Repository + Service + API (types/data CRUD)
-- TODO Tenant（租户）完整 CRUD + Repository
+- ✅ Tenant（租户）Repository + Service + API (list/create/update/delete/status)
 
-### P3：Infra 域实战接入（部分完成）
-- ✅ InfraConfig 从 JSON 文件迁到 Repository 模式（Kysely + 内存双模）
-- TODO InfraJob 任务调度接入真实引擎
-- TODO InfraFile 文件上传接入存储
+### P3：Infra 域实战接入 ✅ DONE
+- ✅ InfraConfig Repository + Service + API（Kysely + 内存双模）
+- ✅ InfraJob 定时任务 Repository + Service + API（CRUD + 手动触发）
+- ✅ InfraFile 文件管理 Repository + Service + API（上传记录 + 删除）
+- TODO 接入真实调度引擎（cron-based scheduler）
+- TODO 接入真实文件存储（S3/OSS/MinIO）
 
 ### P4：类型修复
 - 关闭 ignoreBuildErrors

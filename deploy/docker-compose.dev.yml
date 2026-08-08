@@ -1,0 +1,60 @@
+# ============================================================
+# ruoyi-all-next - DEV 环境（PostgreSQL + Redis）
+# 用途：团队开发联调，接真实数据库
+# 启动：docker compose -f deploy/docker-compose.dev.yml up -d
+# ============================================================
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    ports:
+      - "3100:3100"
+    environment:
+      - NODE_ENV=development
+      - DB_DRIVER=postgresql
+      - DB_PROVIDER=postgresql
+      - DATABASE_URL=postgresql://ruoyi:ruoyi123@postgres:5432/ruoyi_next?schema=public
+      - DB_POOL_SIZE=10
+      - JWT_SECRET=dev-team-secret-2026
+      - JWT_EXPIRES_IN=86400
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=ruoyi
+      - POSTGRES_PASSWORD=ruoyi123
+      - POSTGRES_DB=ruoyi_next
+    volumes:
+      - pg_data_dev:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ruoyi"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data_dev:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pg_data_dev:
+  redis_data_dev:
