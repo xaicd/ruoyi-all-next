@@ -6,46 +6,59 @@
 
 1. modules-first 架构重构完成
 2. 15 域全量代码生成（388 Controller → 1400+ 文件）
-3. 微服务治理基础设施 15 个组件就绪（service-bus/event-bus/trace/config/auth-gateway/rate-limiter/crypto/exception-analyzer/api-registry）
+3. 微服务治理基础设施 15 个组件就绪
 4. 多端 API 版本化（/api/v1/admin、/api/v1/app、/api/v1/open）
-5. 低代码引擎核心（CodegenEngine + SchemaReader + API route）
+5. 低代码引擎核心（CodegenEngine + SchemaReader + Preview API）
 6. Build 通过（typescript.ignoreBuildErrors=true 临时开启）
 7. ui-ux-pro-max 规范集成
-8. ✅ P0 目录结构调整全部完成：
-   - src/backend/ 和 src/lib/ 已删除
-   - src/app/(admin) 已重命名为 (admin-pages)
-   - 旧 api/admin/ 路由全部迁移到 api/v1/admin/
-9. ✅ 多数据库兼容架构（Kysely + Prisma 双引擎）：
-   - Prisma Schema 定义（system + infra 核心 20 张表）
-   - Kysely 多方言客户端工厂（PostgreSQL/MySQL/SQLite/内存）
-   - DataSource Manager（环境变量自动选择驱动）
-   - DB Schema 类型定义（与 Prisma model 同步）
-   - 支持 Tier-A/B/C 三级数据库兼容（含国产 DB）
-10. ✅ System User 完整 CRUD 实现：
-    - UserRepository（双模式：真实 DB / 内存 fallback）
-    - UserService（业务编排 + 日志审计）
-    - Validators（createUser/updateUser/deleteUser/resetPassword/userListQuery）
-    - API Routes（GET/POST/PUT/DELETE/PATCH 全 REST）
-    - 前端页面（ProTable + FormDialog + 分页 + 搜索 + 状态切换）
-    - 权限码补全（create/update/delete/export/import）
-11. ✅ Auth 认证链路：
-    - JWT 签发/验证/刷新（HMAC-SHA256）
-    - 登录 API + 权限信息 API
-    - 登录页面
-12. ✅ Docker 部署方案：
-    - Dockerfile（多阶段构建，standalone 模式）
-    - docker-compose.local.yml（内存模式，零依赖）
-    - docker-compose.dev.yml（PostgreSQL + Redis）
-    - docker-compose.test.yml（MySQL + Redis）
-    - docker-compose.prod.yml（Traefik + PostgreSQL + Redis，多副本）
-    - .env.prod.example + .dockerignore
+8. ✅ P0 目录结构调整全部完成
+9. ✅ 多数据库兼容架构（Kysely + Prisma 双引擎）
+10. ✅ System 域完整 CRUD：User/Role/Dept/Menu/Post/Dict/Tenant/TenantPackage
+11. ✅ Auth 认证链路：JWT + 双重 MD5+Salt 密码
+12. ✅ Docker 部署方案：4 环境 + Traefik
+13. ✅ 前端完整 Admin Layout：
+    - RuoYi 风格二级折叠侧边栏
+    - 7 个菜单分组（系统管理/认证安全/消息通知/基础设施/支付中心/CRM/系统监控）
+    - 顶栏面包屑 + 用户头像 + 退出
+    - 侧边栏折叠/展开
+    - Auth Guard 路由守卫
+14. ✅ 业务域扩展：
+    - Infra：Config/Job/File + 代码生成可视化
+    - Pay：订单/退款 列表+筛选
+    - CRM：客户管理 CRUD
+15. ✅ 对标 yudao-ui-admin-vue3 菜单层级
+16. ✅ 低代码引擎完整实现：
+    - 代码生成器：导入表 → 编辑列配置 → 预览 → 下载 ZIP
+    - Schema Reader：Prisma Schema 解析 + DB Introspection + Mock fallback
+    - Puck 页面构建器：拖拽式搭建（ProTable/Form/StatCard/Container/Button）
+    - 模板引擎：Handlebars 模板管理
+17. ✅ API Route 规范文档（docs/guides/api-route-conventions.md）
+18. ✅ 前端统一请求封装（request client + API 路径常量）
 
 ## 当前问题
 
 1. typescript.ignoreBuildErrors=true 需最终关闭
-2. 需要运行 `npm install` 安装新增的 kysely/pg/mysql2/better-sqlite3 依赖
-3. 非 system/infra 域的 Service 仍只有 list 方法，待后续按模式补全
-4. 密码加密需替换为真正的 bcrypt（当前为 base64 占位）
+2. 密码加密已改为双重 MD5 + Salt（对标 RuoYi 原版）
+3. 非 system/infra/pay 域的 Service 仍为旧骨架，待后续按模式补全
+4. 侧边栏 Logo 和用户信息待接入真实 auth state
+
+## 可访问页面清单
+
+| 路径 | 页面 | 状态 |
+|---|---|---|
+| / | 首页（着陆页） | ✅ |
+| /login | 登录页 | ✅ |
+| /admin/system/users | 用户管理 | ✅ CRUD |
+| /admin/system/roles | 角色管理 | ✅ CRUD |
+| /admin/system/menus | 菜单管理 | ✅ 树形 CRUD |
+| /admin/system/depts | 部门管理 | ✅ 树形 CRUD |
+| /admin/system/posts | 岗位管理 | ✅ CRUD |
+| /admin/system/dicts | 字典管理 | ✅ CRUD |
+| /admin/infra/configs | 系统配置 | ✅ CRUD |
+| /admin/infra/job-center | 定时任务 | ✅ CRUD + 手动触发 |
+| /admin/infra/files | 文件管理 | ✅ 列表 + 删除 |
+| /admin/pay/orders | 支付订单 | ✅ 列表 + 筛选 |
+| /admin/pay/refunds | 退款订单 | ✅ 列表 + 筛选 |
 
 ## 下一步待办（按优先级）
 

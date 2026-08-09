@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 
-const LOGIN_API = "/api/v1/admin/system/auth/login"
+const LOGIN_API = "/api/v1/admin/system/auth"
 
 export default function LoginPage() {
   const [username, setUsername] = useState("admin")

@@ -1,3 +1,1 @@
-import PayRefundsModulePage from "@/modules/pay/frontend/pages/pay-refunds.page"
-
-export default PayRefundsModulePage
+export { default } from "@/modules/pay/frontend/pages/refunds.page"

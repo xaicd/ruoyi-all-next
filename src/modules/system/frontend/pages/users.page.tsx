@@ -24,7 +24,7 @@ type PageData = {
 }
 
 // === API ===
-const API_BASE = "/api/v1/admin/system/users"
+import { request, API } from "@/modules/shared/frontend/lib/request"
 
 async function fetchUsers(params: {
   page: number
@@ -32,46 +32,23 @@ async function fetchUsers(params: {
   keyword?: string
   status?: string
 }): Promise<{ success: boolean; data?: PageData; error?: string }> {
-  const sp = new URLSearchParams()
-  sp.set("page", String(params.page))
-  sp.set("pageSize", String(params.pageSize))
-  if (params.keyword) sp.set("keyword", params.keyword)
-  if (params.status) sp.set("status", params.status)
-
-  const res = await fetch(`${API_BASE}?${sp.toString()}`)
-  return res.json()
+  return request.get(API.USERS, params)
 }
 
 async function createUser(data: Record<string, any>) {
-  const res = await fetch(API_BASE, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  })
-  return res.json()
+  return request.post(API.USERS, data)
 }
 
 async function updateUser(id: string, data: Record<string, any>) {
-  const res = await fetch(`${API_BASE}/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  })
-  return res.json()
+  return request.put(`${API.USERS}/${id}`, data)
 }
 
 async function deleteUser(id: string) {
-  const res = await fetch(`${API_BASE}/${id}`, { method: "DELETE" })
-  return res.json()
+  return request.delete(`${API.USERS}/${id}`)
 }
 
 async function updateUserStatus(id: string, status: string) {
-  const res = await fetch(`${API_BASE}/${id}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ action: "updateStatus", status }),
-  })
-  return res.json()
+  return request.patch(`${API.USERS}/${id}`, { action: "updateStatus", status })
 }
 
 // === Main Component ===
