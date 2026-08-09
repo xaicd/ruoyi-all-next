@@ -77,9 +77,9 @@
 - ✅ Menu Repository MEMORY_STORE 已接入种子数据（200 条）
 - ✅ DictType Repository MEMORY_STORE 已接入种子数据（208 条）
 - ✅ DictData Repository MEMORY_STORE 已接入种子数据（1036 条）
-- TODO 角色：超级管理员/普通角色/CRM管理员/租户管理员
-- TODO 用户：admin(超管)/test(普通)
-- TODO 写入方式：scripts/seed-data-from-ruoyi-sql.cjs 自动从 SQL 提取转换
+- ✅ Role Repository MEMORY_STORE 已接入种子数据（5 条：超管/普通/CRM/租户/测试）
+- ✅ User Repository MEMORY_STORE 已接入种子数据（2 条：admin/test）
+- ✅ 统一 seed-data 架构：所有 Repository → import from @/modules/shared/backend/seed-data
 
 ### P2：其他域全量 Service 补全（已有脚本自动化）
 - 运行 `node scripts/fix-routes-to-standard.cjs` 完成所有域 route 标准化
