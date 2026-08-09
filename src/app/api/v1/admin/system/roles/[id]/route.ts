@@ -59,10 +59,20 @@ export async function PATCH(request: Request, context: RouteContext) {
     ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_UPDATE)
     const { id } = await context.params
     const body = await request.json()
+
+    // 状态变更
     if (body.action === "updateStatus" && ["ACTIVE", "DISABLED"].includes(body.status)) {
       const data = await SystemRoleService.updateStatus(id, body.status)
       return NextResponse.json({ success: true, data })
     }
+
+    // 分配菜单
+    if (body.action === "assignMenus" && Array.isArray(body.menuIds)) {
+      const { PermissionService } = await import("@/modules/system/backend/services/permission.service")
+      const data = await PermissionService.assignRoleMenu({ roleId: id, menuIds: body.menuIds })
+      return NextResponse.json({ success: true, data })
+    }
+
     return NextResponse.json({ success: false, error: "未知操作" }, { status: 400 })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message }, { status: 400 })

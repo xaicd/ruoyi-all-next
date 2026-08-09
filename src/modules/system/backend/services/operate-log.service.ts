@@ -1,85 +1,32 @@
-import type { OperateLogQueryInput } from "@/modules/system/backend/validators"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
-import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
 
-type OperateLogItem = {
-  id: string
-  module: string
-  action: string
-  operator: string
-  createdAt: string
-}
+type OperateLogItem = { id: string; userId: string; module: string; name: string; type: string; requestMethod: string; requestUrl: string; duration: number; resultCode: number; userIp: string; createdAt: string }
 
-export class SystemOperateLogService {
-  static async list(input: OperateLogQueryInput) {
-    domainLog.event("system.operate-log.list", {
-      page: input.page,
-      pageSize: input.pageSize,
-      hasKeyword: Boolean(input.keyword),
-      module: input.module ?? "ALL",
-    })
+const MOCK_DATA: OperateLogItem[] = [
+  { id: "1", userId: "1", module: "system", name: "创建用户", type: "CREATE", requestMethod: "POST", requestUrl: "/api/v1/admin/system/users", duration: 45, resultCode: 0, userIp: "127.0.0.1", createdAt: "2026-08-07T10:30:00.000Z" },
+  { id: "2", userId: "1", module: "system", name: "修改角色", type: "UPDATE", requestMethod: "PUT", requestUrl: "/api/v1/admin/system/roles/1", duration: 32, resultCode: 0, userIp: "127.0.0.1", createdAt: "2026-08-07T09:15:00.000Z" },
+  { id: "3", userId: "2", module: "infra", name: "查询配置", type: "OTHER", requestMethod: "GET", requestUrl: "/api/v1/admin/infra/configs", duration: 12, resultCode: 0, userIp: "192.168.1.100", createdAt: "2026-08-06T14:00:00.000Z" },
+]
 
-    const keyword = input.keyword?.trim()
-    const where: Record<string, unknown> = {}
-
-    if (input.module) {
-      where.targetType = { contains: input.module, mode: "insensitive" }
-    }
-
-    if (keyword) {
-      where.OR = [
-        { adminName: { contains: keyword, mode: "insensitive" } },
-        { adminUsername: { contains: keyword, mode: "insensitive" } },
-        { action: { contains: keyword, mode: "insensitive" } },
-      ]
-    }
-
-    const skip = (input.page - 1) * input.pageSize
-    const [rows, total] = await Promise.all([
-      ruoyiPrisma.adminAuditLog.findMany({
-        where,
-        orderBy: [{ createdAt: "desc" }, { id: "desc" }],
-        skip,
-        take: input.pageSize,
-        select: {
-          id: true,
-          targetType: true,
-          action: true,
-          adminName: true,
-          adminUsername: true,
-          createdAt: true,
-        },
-      }),
-      ruoyiPrisma.adminAuditLog.count({ where }),
-    ])
-
-    const items: OperateLogItem[] = rows.map((row) => ({
-      id: row.id,
-      module: row.targetType,
-      action: row.action,
-      operator: row.adminName ?? row.adminUsername ?? "",
-      createdAt: row.createdAt.toISOString(),
-    }))
-
-    return { items, total, page: input.page, pageSize: input.pageSize }
+export class OperateLogService {
+  static async page(input: { page: number; pageSize: number; keyword?: string; module?: string }) {
+    let filtered = [...MOCK_DATA]
+    if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((l) => l.name.toLowerCase().includes(kw) || l.requestUrl.toLowerCase().includes(kw)) }
+    if (input.module) filtered = filtered.filter((l) => l.module === input.module)
+    filtered.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    const total = filtered.length
+    const start = (input.page - 1) * input.pageSize
+    domainLog.event("system.operateLog.page", { total })
+    return { items: filtered.slice(start, start + input.pageSize), total, page: input.page, pageSize: input.pageSize }
   }
 
-  static async exportCsv(input: OperateLogQueryInput) {
-    const listed = await this.list(input)
-    const header = "id,module,action,operator,createdAt"
-    const rows = listed.items.map((item) =>
-      [item.id, item.module, item.action, item.operator, item.createdAt].join(","),
-    )
+  static async get(id: string) {
+    return MOCK_DATA.find((l) => l.id === id) ?? null
+  }
 
-    domainLog.event("system.operate-log.export", {
-      total: listed.total,
-      module: input.module ?? "ALL",
-    })
-
-    return {
-      fileName: "operate-logs.csv",
-      contentType: "text/csv; charset=utf-8",
-      content: [header, ...rows].join("\n"),
-    }
+  static async delete(id: string) {
+    const idx = MOCK_DATA.findIndex((l) => l.id === id)
+    if (idx !== -1) MOCK_DATA.splice(idx, 1)
+    return { success: true }
   }
 }

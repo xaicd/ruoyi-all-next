@@ -1,0 +1,163 @@
+// Auto-generated
+export const SEED_DEPTS = [
+  {
+    "id": "100",
+    "name": "芋道源码",
+    "parentId": null,
+    "sort": 0,
+    "leaderId": "1",
+    "phone": "15888888888",
+    "email": "ry@qq.com",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "101",
+    "name": "深圳总公司",
+    "parentId": "100",
+    "sort": 1,
+    "leaderId": "104",
+    "phone": "15888888888",
+    "email": "ry@qq.com",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "102",
+    "name": "长沙分公司",
+    "parentId": "100",
+    "sort": 2,
+    "leaderId": null,
+    "phone": "15888888888",
+    "email": "ry@qq.com",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "103",
+    "name": "研发部门",
+    "parentId": "101",
+    "sort": 1,
+    "leaderId": "104",
+    "phone": "15888888888",
+    "email": "ry@qq.com",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "104",
+    "name": "市场部门",
+    "parentId": "101",
+    "sort": 2,
+    "leaderId": null,
+    "phone": "15888888888",
+    "email": "ry@qq.com",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "105",
+    "name": "测试部门",
+    "parentId": "101",
+    "sort": 3,
+    "leaderId": null,
+    "phone": "15888888888",
+    "email": "ry@qq.com",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "106",
+    "name": "财务部门",
+    "parentId": "101",
+    "sort": 4,
+    "leaderId": "103",
+    "phone": "15888888888",
+    "email": "ry@qq.com",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "107",
+    "name": "运维部门",
+    "parentId": "101",
+    "sort": 5,
+    "leaderId": "1",
+    "phone": "15888888888",
+    "email": "ry@qq.com",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "108",
+    "name": "市场部门",
+    "parentId": "102",
+    "sort": 1,
+    "leaderId": null,
+    "phone": "15888888888",
+    "email": "ry@qq.com",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "109",
+    "name": "财务部门",
+    "parentId": "102",
+    "sort": 2,
+    "leaderId": null,
+    "phone": "15888888888",
+    "email": "ry@qq.com",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "110",
+    "name": "新部门",
+    "parentId": null,
+    "sort": 1,
+    "leaderId": null,
+    "phone": null,
+    "email": null,
+    "status": "ACTIVE"
+  },
+  {
+    "id": "111",
+    "name": "顶级部门",
+    "parentId": null,
+    "sort": 1,
+    "leaderId": null,
+    "phone": null,
+    "email": null,
+    "status": "ACTIVE"
+  },
+  {
+    "id": "112",
+    "name": "产品部门",
+    "parentId": "101",
+    "sort": 100,
+    "leaderId": "1",
+    "phone": null,
+    "email": null,
+    "status": "DISABLED"
+  },
+  {
+    "id": "113",
+    "name": "支持部门",
+    "parentId": "102",
+    "sort": 3,
+    "leaderId": "104",
+    "phone": null,
+    "email": null,
+    "status": "DISABLED"
+  },
+  {
+    "id": "116",
+    "name": "某个子部门",
+    "parentId": null,
+    "sort": 1,
+    "leaderId": null,
+    "phone": null,
+    "email": null,
+    "status": "ACTIVE"
+  },
+  {
+    "id": "117",
+    "name": "某个子部门 2",
+    "parentId": null,
+    "sort": 2,
+    "leaderId": null,
+    "phone": null,
+    "email": null,
+    "status": "ACTIVE"
+  }
+]

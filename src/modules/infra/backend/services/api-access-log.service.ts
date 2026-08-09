@@ -1,59 +1,24 @@
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 
-// ============ Types ============
-
-export type ApiAccessLogItem = {
-  id: string
-  name: string
-  status: "ACTIVE" | "DISABLED"
-  createdAt: string
-}
-
-export type ApiAccessLogCreateInput = {
-  name: string
-  status?: "ACTIVE" | "DISABLED"
-}
-
-export type ApiAccessLogUpdateInput = {
-  id: string
-  name?: string
-  status?: "ACTIVE" | "DISABLED"
-}
-
-export type ApiAccessLogPageQuery = {
-  page: number
-  pageSize: number
-  keyword?: string
-}
-
-// ============ Mock Data ============
+type ApiAccessLogItem = { id: string; userId: string | null; requestMethod: string; requestUrl: string; duration: number; resultCode: number; userIp: string; createdAt: string }
 
 const MOCK_DATA: ApiAccessLogItem[] = [
-  { id: "api-access-log-001", name: "ApiAccessLog 示例1", status: "ACTIVE", createdAt: "2026-01-01T00:00:00.000Z" },
-  { id: "api-access-log-002", name: "ApiAccessLog 示例2", status: "ACTIVE", createdAt: "2026-02-01T00:00:00.000Z" },
+  { id: "1", userId: "1", requestMethod: "GET", requestUrl: "/api/v1/admin/system/users", duration: 23, resultCode: 200, userIp: "127.0.0.1", createdAt: "2026-08-07T10:30:00.000Z" },
+  { id: "2", userId: "1", requestMethod: "POST", requestUrl: "/api/v1/admin/system/users", duration: 45, resultCode: 201, userIp: "127.0.0.1", createdAt: "2026-08-07T10:31:00.000Z" },
+  { id: "3", userId: "2", requestMethod: "GET", requestUrl: "/api/v1/admin/infra/configs", duration: 12, resultCode: 200, userIp: "192.168.1.100", createdAt: "2026-08-06T14:00:00.000Z" },
 ]
 
-let nextId = 100
-
-// ============ Service ============
-
 export class ApiAccessLogService {
-  /** 分页查询 */
-  static async page(input: ApiAccessLogPageQuery) {
+  static async page(input: { page: number; pageSize: number; keyword?: string }) {
     let filtered = [...MOCK_DATA]
-    if (input.keyword) {
-      const kw = input.keyword.toLowerCase()
-      filtered = filtered.filter((item) => item.name.toLowerCase().includes(kw))
-    }
+    if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((l) => l.requestUrl.toLowerCase().includes(kw) || l.requestMethod.toLowerCase().includes(kw)) }
+    filtered.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    domainLog.event("infra.apiAccessLog.page", { total: filtered.length })
     const start = (input.page - 1) * input.pageSize
-    domainLog.event("infra.apiAccessLog.page", { page: input.page, total: filtered.length })
     return { items: filtered.slice(start, start + input.pageSize), total: filtered.length, page: input.page, pageSize: input.pageSize }
   }
-  /** 获取详情 */
-  static async get(id: string) {
-    const item = MOCK_DATA.find((d) => d.id === id)
-    if (!item) throw new Error("ApiAccessLog不存在")
-    domainLog.event("infra.apiAccessLog.get", { id })
-    return item
-  }
+  static async get(id: string) { return MOCK_DATA.find((l) => l.id === id) ?? null }
+  static async create(input: any) { return { id: "mock" } }
+  static async update(input: any) { return { id: input.id ?? "mock" } }
+  static async delete(id: string) { const idx = MOCK_DATA.findIndex((l) => l.id === id); if (idx !== -1) MOCK_DATA.splice(idx, 1); return { success: true } }
 }

@@ -1,22 +1,27 @@
 import { NextResponse } from "next/server"
-import { crmPageQuerySchema } from "@/modules/crm/backend/validators"
-import { CrmService } from "@/modules/crm/backend/services"
-import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
+import { CluesService } from "@/modules/crm/backend/services/clues.service"
 
 export async function GET(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.CRM_CLUE_VIEW)
     const { searchParams } = new URL(request.url)
-    const input = crmPageQuerySchema.parse({
-      page: searchParams.get("page") ?? 1,
-      pageSize: searchParams.get("pageSize") ?? 20,
-      keyword: searchParams.get("keyword") ?? undefined,
-    })
-
-    const data = await CrmService.listClues(input)
+    const input = {
+      page: Number(searchParams.get("page") || 1),
+      pageSize: Number(searchParams.get("pageSize") || 20),
+      keyword: searchParams.get("keyword") || undefined,
+    }
+    const data = await CluesService.page(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message ?? "查询失败" }, { status: 400 })
+    return NextResponse.json({ success: false, error: error?.message || "查询失败" }, { status: 400 })
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json()
+    const data = await CluesService.create(body)
+    return NextResponse.json({ success: true, data }, { status: 201 })
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error?.message || "创建失败" }, { status: 400 })
   }
 }

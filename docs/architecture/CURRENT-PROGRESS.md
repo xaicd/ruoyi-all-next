@@ -62,6 +62,42 @@
 
 ## 下一步待办（按优先级）
 
+### P1：关联关系功能（对标 RuoYi 原版）
+- ✅ 角色 → 菜单分配（Tree 勾选弹窗 + API）已完成
+- ✅ 用户 → 角色分配（多选 Checkbox）已完成
+- ✅ 用户 → 部门选择（下拉选择）已完成
+- TODO 租户 → 套餐分配（前端弹窗）
+- TODO 角色 → 数据权限配置
+
+### P0-HOTFIX：种子数据对齐原版
+- ✅ 从 ruoyi-vue-pro/sql 提取完整种子数据（scripts/seed-output/）
+- ✅ 生成 seed-data 模块（src/modules/shared/backend/seed-data/）
+- ✅ Post Repository MEMORY_STORE 已接入种子数据（4 条）
+- ✅ Dept Repository MEMORY_STORE 已接入种子数据（16 条）
+- ✅ Menu Repository MEMORY_STORE 已接入种子数据（200 条）
+- ✅ DictType Repository MEMORY_STORE 已接入种子数据（208 条）
+- ✅ DictData Repository MEMORY_STORE 已接入种子数据（1036 条）
+- TODO 角色：超级管理员/普通角色/CRM管理员/租户管理员
+- TODO 用户：admin(超管)/test(普通)
+- TODO 写入方式：scripts/seed-data-from-ruoyi-sql.cjs 自动从 SQL 提取转换
+
+### P2：其他域全量 Service 补全（已有脚本自动化）
+- 运行 `node scripts/fix-routes-to-standard.cjs` 完成所有域 route 标准化
+- 13 个业务域的 Service 需要按照 system/infra 模式补全
+
+### P3：前端统一改造
+- 所有页面使用 `request` client（已有示范）
+- 用户编辑弹窗加入角色多选 + 部门树选择
+
+### P4：低代码引擎完善
+- Puck 页面构建器更多物料
+- 页面保存到数据库 + 按路由渲染
+- 表单设计器（Formily 或自研）
+
+### P5：类型修复
+- 关闭 ignoreBuildErrors
+- 修复所有 TypeScript 类型错误
+
 ### P0：让项目能跑起来 ✅ DONE
 - ~~删除 src/backend/ 和 src/lib/~~
 - ~~重命名 src/app/(admin) → src/app/(admin-pages)~~

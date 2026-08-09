@@ -4,6 +4,7 @@
 
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
 import type { PageResult } from "@/modules/shared/backend/lib/database"
+import { SEED_DICT_TYPES, SEED_DICT_DATA } from "@/modules/shared/backend/seed-data"
 
 // === 字典类型 ===
 export type SystemDictTypeRow = { id: string; name: string; type: string; status: string; remark: string | null; createdAt: string; updatedAt: string }
@@ -13,21 +14,10 @@ export type CreateDictTypeData = { name: string; type: string; status?: string; 
 export type SystemDictDataRow = { id: string; dictTypeId: string; label: string; value: string; sort: number; status: string; colorType: string | null; remark: string | null; createdAt: string; updatedAt: string }
 export type CreateDictDataInput = { dictTypeId: string; label: string; value: string; sort?: number; status?: string; colorType?: string; remark?: string }
 
-// === 内存存储 ===
-const DICT_TYPES: SystemDictTypeRow[] = [
-  { id: "1", name: "用户性别", type: "system_user_sex", status: "ACTIVE", remark: null, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "2", name: "系统状态", type: "common_status", status: "ACTIVE", remark: null, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "3", name: "通知类型", type: "system_notice_type", status: "ACTIVE", remark: null, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-]
+// === 内存存储（从种子数据加载） ===
+const DICT_TYPES: SystemDictTypeRow[] = [...SEED_DICT_TYPES]
 
-const DICT_DATA: SystemDictDataRow[] = [
-  { id: "1", dictTypeId: "1", label: "男", value: "1", sort: 1, status: "ACTIVE", colorType: null, remark: null, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "2", dictTypeId: "1", label: "女", value: "2", sort: 2, status: "ACTIVE", colorType: null, remark: null, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "3", dictTypeId: "2", label: "启用", value: "ACTIVE", sort: 1, status: "ACTIVE", colorType: "success", remark: null, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "4", dictTypeId: "2", label: "禁用", value: "DISABLED", sort: 2, status: "ACTIVE", colorType: "danger", remark: null, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "5", dictTypeId: "3", label: "通知", value: "INFO", sort: 1, status: "ACTIVE", colorType: "info", remark: null, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "6", dictTypeId: "3", label: "公告", value: "WARN", sort: 2, status: "ACTIVE", colorType: "warning", remark: null, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-]
+const DICT_DATA: SystemDictDataRow[] = [...SEED_DICT_DATA]
 
 let typeIdSeq = 100
 let dataIdSeq = 100

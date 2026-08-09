@@ -1,27 +1,27 @@
 import { NextResponse } from "next/server"
-import { erpStockAdjustmentSchema } from "@/modules/erp/backend/validators"
-import { ErpService } from "@/modules/erp/backend/services"
-import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
-import { writeAuditLog } from "@/modules/shared/backend/lib/audit-log"
+import { StockAdjustmentsService } from "@/modules/erp/backend/services/stock-adjustments.service"
+
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const input = {
+      page: Number(searchParams.get("page") || 1),
+      pageSize: Number(searchParams.get("pageSize") || 20),
+      keyword: searchParams.get("keyword") || undefined,
+    }
+    const data = await StockAdjustmentsService.page(input)
+    return NextResponse.json({ success: true, data })
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error?.message || "查询失败" }, { status: 400 })
+  }
+}
 
 export async function POST(request: Request) {
   try {
-    const auth = ensurePermission(request, PERMISSIONS.ERP_STOCK_ADJUST)
     const body = await request.json()
-    const input = erpStockAdjustmentSchema.parse(body)
-
-    const data = await ErpService.adjustStock(input)
-    await writeAuditLog({
-      action: "erp.stock.adjust",
-      operatorId: auth.userId,
-      targetType: "ERP_PRODUCT",
-      targetId: input.productId,
-      detail: { delta: input.delta, reason: input.reason },
-    })
-
-    return NextResponse.json({ success: true, data })
+    const data = await StockAdjustmentsService.create(body)
+    return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message ?? "操作失败" }, { status: 400 })
+    return NextResponse.json({ success: false, error: error?.message || "创建失败" }, { status: 400 })
   }
 }

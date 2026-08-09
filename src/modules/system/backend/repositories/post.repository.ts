@@ -4,6 +4,7 @@
 
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
 import type { PageResult } from "@/modules/shared/backend/lib/database"
+import { SEED_POSTS } from "@/modules/shared/backend/seed-data"
 
 export type SystemPostRow = {
   id: string
@@ -20,12 +21,7 @@ export type CreatePostData = { name: string; code: string; sort?: number; status
 export type UpdatePostData = Partial<CreatePostData>
 export type PostListParams = { page: number; pageSize: number; keyword?: string; status?: string }
 
-const MEMORY_STORE: SystemPostRow[] = [
-  { id: "1", name: "董事长", code: "ceo", sort: 1, status: "ACTIVE", remark: null, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "2", name: "项目经理", code: "pm", sort: 2, status: "ACTIVE", remark: null, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "3", name: "人力资源", code: "hr", sort: 3, status: "ACTIVE", remark: null, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "4", name: "普通员工", code: "staff", sort: 4, status: "ACTIVE", remark: null, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-]
+const MEMORY_STORE: SystemPostRow[] = [...SEED_POSTS]
 let memoryIdSeq = 100
 
 export const SystemPostRepository = {

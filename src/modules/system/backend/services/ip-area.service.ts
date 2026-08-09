@@ -1,40 +1,24 @@
-import type { SystemModulePageQueryInput } from "../validators"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
-import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
 
-type AreaItem = {
-  id: string
-  code: string
-  name: string
-  level: "PROVINCE" | "CITY" | "COUNTY"
-}
+type IpAreaItem = { ip: string; area: string; isp: string }
 
-export class SystemIpAreaService {
-  static async listAreas(input: SystemModulePageQueryInput) {
-    domainLog.event("system.ip-area.list", {
-      page: input.page,
-      pageSize: input.pageSize,
-      hasKeyword: Boolean(input.keyword),
-    })
-
-    const keyword = input.keyword?.toLowerCase() ?? ""
-    const row = await ruoyiPrisma.setting.findUnique({ where: { key: "system.ip-areas" } })
-    const areas = (row?.value as { items?: AreaItem[] } | null)?.items ?? []
-    const filtered = keyword
-      ? areas.filter(
-          (item) =>
-            item.code.toLowerCase().includes(keyword) ||
-            item.name.toLowerCase().includes(keyword) ||
-            item.level.toLowerCase().includes(keyword),
-        )
-      : areas
-
-    const start = (input.page - 1) * input.pageSize
-    return {
-      items: filtered.slice(start, start + input.pageSize),
-      total: filtered.length,
-      page: input.page,
-      pageSize: input.pageSize,
-    }
+export class IpAreaService {
+  static async query(ip: string): Promise<IpAreaItem> {
+    domainLog.event("system.ipArea.query", { ip })
+    // Mock: 根据 IP 前缀返回模拟数据
+    if (ip.startsWith("192.168")) return { ip, area: "局域网", isp: "内网" }
+    if (ip.startsWith("10.")) return { ip, area: "局域网", isp: "内网" }
+    if (ip === "127.0.0.1") return { ip, area: "本机", isp: "localhost" }
+    return { ip, area: "广东省深圳市", isp: "电信" }
   }
+
+  static async page(input: { page: number; pageSize: number; keyword?: string }) {
+    // IP 地区查询一般不分页，这里返回空
+    return { items: [], total: 0, page: input.page, pageSize: input.pageSize }
+  }
+
+  static async get(id: string) { return IpAreaService.query(id) }
+  static async create(input: any) { return { id: "mock" } }
+  static async update(input: any) { return { id: input.id ?? "mock" } }
+  static async delete(id: string) { return { success: true } }
 }

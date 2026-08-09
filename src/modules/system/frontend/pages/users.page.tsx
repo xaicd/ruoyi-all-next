@@ -314,112 +314,120 @@ function UserFormDialog({
     password: "",
     status: user?.status ?? "ACTIVE",
     remark: user?.remark ?? "",
+    roleIds: [] as string[],
+    deptId: user?.deptId ?? "",
   })
+
+  // 加载角色和部门列表
+  const [roles, setRoles] = useState<{ id: string; name: string }[]>([])
+  const [depts, setDepts] = useState<{ id: string; name: string }[]>([])
+
+  useEffect(() => {
+    fetch("/api/v1/admin/system/roles?pageSize=100").then((r) => r.json()).then((res) => {
+      if (res.success) setRoles(res.data.items.map((r: any) => ({ id: r.id, name: r.name })))
+    })
+    fetch("/api/v1/admin/system/depts?mode=list").then((r) => r.json()).then((res) => {
+      if (res.success) setDepts(Array.isArray(res.data) ? res.data.map((d: any) => ({ id: d.id, name: d.name })) : [])
+    })
+  }, [])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const payload: Record<string, any> = { ...form }
-    if (user && !payload.password) {
-      delete payload.password
-    }
+    if (user && !payload.password) delete payload.password
+    if (!payload.deptId) delete payload.deptId
+    if (payload.roleIds.length === 0) delete payload.roleIds
     onSubmit(payload)
   }
 
-  const update = (field: string, value: string) => {
+  const update = (field: string, value: any) => {
     setForm((prev) => ({ ...prev, [field]: value }))
+  }
+
+  const toggleRole = (roleId: string) => {
+    setForm((prev) => ({
+      ...prev,
+      roleIds: prev.roleIds.includes(roleId)
+        ? prev.roleIds.filter((id) => id !== roleId)
+        : [...prev.roleIds, roleId],
+    }))
   }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+      <div className="w-full max-w-lg rounded-lg bg-white p-6 shadow-xl max-h-[85vh] overflow-y-auto">
         <h2 className="mb-4 text-base font-semibold">
           {user ? "编辑用户" : "新增用户"}
         </h2>
         <form onSubmit={handleSubmit} className="space-y-3">
-          <div>
-            <label className="mb-1 block text-xs text-slate-600">用户名 *</label>
-            <input
-              required
-              value={form.username}
-              onChange={(e) => update("username", e.target.value)}
-              className="h-9 w-full rounded-md border px-3 text-sm"
-              disabled={Boolean(user)}
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-xs text-slate-600">昵称 *</label>
-            <input
-              required
-              value={form.nickname}
-              onChange={(e) => update("nickname", e.target.value)}
-              className="h-9 w-full rounded-md border px-3 text-sm"
-            />
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="mb-1 block text-xs text-slate-600">用户名 *</label>
+              <input required value={form.username} onChange={(e) => update("username", e.target.value)} className="h-9 w-full rounded-md border px-3 text-sm" disabled={Boolean(user)} />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs text-slate-600">昵称 *</label>
+              <input required value={form.nickname} onChange={(e) => update("nickname", e.target.value)} className="h-9 w-full rounded-md border px-3 text-sm" />
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="mb-1 block text-xs text-slate-600">手机号</label>
-              <input
-                value={form.phone}
-                onChange={(e) => update("phone", e.target.value)}
-                className="h-9 w-full rounded-md border px-3 text-sm"
-              />
+              <input value={form.phone} onChange={(e) => update("phone", e.target.value)} className="h-9 w-full rounded-md border px-3 text-sm" />
             </div>
             <div>
               <label className="mb-1 block text-xs text-slate-600">邮箱</label>
-              <input
-                type="email"
-                value={form.email}
-                onChange={(e) => update("email", e.target.value)}
-                className="h-9 w-full rounded-md border px-3 text-sm"
-              />
+              <input type="email" value={form.email} onChange={(e) => update("email", e.target.value)} className="h-9 w-full rounded-md border px-3 text-sm" />
             </div>
           </div>
           <div>
-            <label className="mb-1 block text-xs text-slate-600">
-              {user ? "新密码（留空不修改）" : "密码 *"}
-            </label>
-            <input
-              type="password"
-              required={!user}
-              value={form.password}
-              onChange={(e) => update("password", e.target.value)}
-              className="h-9 w-full rounded-md border px-3 text-sm"
-              placeholder={user ? "留空不修改" : "至少 6 位"}
-            />
+            <label className="mb-1 block text-xs text-slate-600">{user ? "新密码（留空不修改）" : "密码 *"}</label>
+            <input type="password" required={!user} value={form.password} onChange={(e) => update("password", e.target.value)} className="h-9 w-full rounded-md border px-3 text-sm" placeholder={user ? "留空不修改" : "至少 6 位"} />
           </div>
+
+          {/* 部门选择 */}
           <div>
-            <label className="mb-1 block text-xs text-slate-600">状态</label>
-            <select
-              value={form.status}
-              onChange={(e) => update("status", e.target.value)}
-              className="h-9 w-full rounded-md border px-3 text-sm"
-            >
-              <option value="ACTIVE">启用</option>
-              <option value="DISABLED">禁用</option>
+            <label className="mb-1 block text-xs text-slate-600">所属部门</label>
+            <select value={form.deptId} onChange={(e) => update("deptId", e.target.value)} className="h-9 w-full rounded-md border px-3 text-sm">
+              <option value="">请选择部门</option>
+              {depts.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
             </select>
           </div>
+
+          {/* 角色分配 */}
           <div>
-            <label className="mb-1 block text-xs text-slate-600">备注</label>
-            <input
-              value={form.remark}
-              onChange={(e) => update("remark", e.target.value)}
-              className="h-9 w-full rounded-md border px-3 text-sm"
-            />
+            <label className="mb-1 block text-xs text-slate-600">分配角色</label>
+            <div className="rounded-md border p-2 max-h-32 overflow-y-auto">
+              {roles.length === 0 ? <p className="text-xs text-slate-400">加载中...</p> : (
+                <div className="grid grid-cols-2 gap-1">
+                  {roles.map((role) => (
+                    <label key={role.id} className="flex items-center gap-1.5 rounded px-1.5 py-1 hover:bg-slate-50 cursor-pointer">
+                      <input type="checkbox" checked={form.roleIds.includes(role.id)} onChange={() => toggleRole(role.id)} className="rounded" />
+                      <span className="text-xs">{role.name}</span>
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="mb-1 block text-xs text-slate-600">状态</label>
+              <select value={form.status} onChange={(e) => update("status", e.target.value)} className="h-9 w-full rounded-md border px-3 text-sm">
+                <option value="ACTIVE">启用</option>
+                <option value="DISABLED">禁用</option>
+              </select>
+            </div>
+            <div>
+              <label className="mb-1 block text-xs text-slate-600">备注</label>
+              <input value={form.remark} onChange={(e) => update("remark", e.target.value)} className="h-9 w-full rounded-md border px-3 text-sm" />
+            </div>
+          </div>
+
           <div className="flex justify-end gap-2 pt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="h-9 rounded-md border px-4 text-sm"
-            >
-              取消
-            </button>
-            <button
-              type="submit"
-              className="h-9 rounded-md bg-blue-600 px-4 text-sm text-white hover:bg-blue-700"
-            >
-              确认
-            </button>
+            <button type="button" onClick={onClose} className="h-9 rounded-md border px-4 text-sm">取消</button>
+            <button type="submit" className="h-9 rounded-md bg-blue-600 px-4 text-sm text-white hover:bg-blue-700">确认</button>
           </div>
         </form>
       </div>

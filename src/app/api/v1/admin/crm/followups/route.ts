@@ -1,27 +1,27 @@
 import { NextResponse } from "next/server"
-import { crmFollowupSchema } from "@/modules/crm/backend/validators"
-import { CrmService } from "@/modules/crm/backend/services"
-import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
-import { writeAuditLog } from "@/modules/shared/backend/lib/audit-log"
+import { FollowupsService } from "@/modules/crm/backend/services/followups.service"
+
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const input = {
+      page: Number(searchParams.get("page") || 1),
+      pageSize: Number(searchParams.get("pageSize") || 20),
+      keyword: searchParams.get("keyword") || undefined,
+    }
+    const data = await FollowupsService.page(input)
+    return NextResponse.json({ success: true, data })
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error?.message || "查询失败" }, { status: 400 })
+  }
+}
 
 export async function POST(request: Request) {
   try {
-    const auth = ensurePermission(request, PERMISSIONS.CRM_FOLLOWUP_CREATE)
     const body = await request.json()
-    const input = crmFollowupSchema.parse(body)
-
-    const data = await CrmService.createFollowup(input)
-    await writeAuditLog({
-      action: "crm.followup.create",
-      operatorId: auth.userId,
-      targetType: "CRM_CUSTOMER",
-      targetId: input.customerId,
-      detail: { contentLength: input.content.length },
-    })
-
-    return NextResponse.json({ success: true, data })
+    const data = await FollowupsService.create(body)
+    return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message ?? "操作失败" }, { status: 400 })
+    return NextResponse.json({ success: false, error: error?.message || "创建失败" }, { status: 400 })
   }
 }

@@ -1,88 +1,27 @@
-import type {
-  ForceLogoutInput,
-  PageQueryInput,
-} from "@/modules/system/backend/validators"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
-import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
 
-type OnlineUserItem = {
-  sessionId: string
-  userId: string
-  username: string
-  nickname: string
-  expiresAt: string
-}
+type OnlineUserItem = { sessionId: string; userId: string; username: string; nickname: string; userIp: string; loginTime: string; expiresAt: string }
+
+const MOCK_DATA: OnlineUserItem[] = [
+  { sessionId: "sess-001", userId: "1", username: "admin", nickname: "超级管理员", userIp: "127.0.0.1", loginTime: "2026-08-07T08:00:00.000Z", expiresAt: "2026-08-08T08:00:00.000Z" },
+  { sessionId: "sess-002", userId: "2", username: "test", nickname: "测试用户", userIp: "192.168.1.100", loginTime: "2026-08-07T09:30:00.000Z", expiresAt: "2026-08-08T09:30:00.000Z" },
+]
 
 export class SystemOnlineUserService {
-  static async list(input: PageQueryInput) {
-    domainLog.event("system.online-user.list", {
-      page: input.page,
-      pageSize: input.pageSize,
-      hasKeyword: Boolean(input.keyword),
-    })
-
-    const keyword = input.keyword?.trim()
-    const where: Record<string, unknown> = {
-      expires: { gte: new Date() },
-    }
-
-    if (keyword) {
-      where.OR = [
-        { user: { phone: { contains: keyword, mode: "insensitive" } } },
-        { user: { name: { contains: keyword, mode: "insensitive" } } },
-      ]
-    }
-
-    const skip = (input.page - 1) * input.pageSize
-    const [rows, total] = await Promise.all([
-      ruoyiPrisma.session.findMany({
-        where,
-        orderBy: [{ expires: "asc" }, { id: "desc" }],
-        skip,
-        take: input.pageSize,
-        select: {
-          id: true,
-          expires: true,
-          user: {
-            select: {
-              id: true,
-              phone: true,
-              name: true,
-            },
-          },
-        },
-      }),
-      ruoyiPrisma.session.count({ where }),
-    ])
-
-    return {
-      items: rows.map((row) => ({
-        sessionId: row.id,
-        userId: row.user.id,
-        username: row.user.phone,
-        nickname: row.user.name ?? row.user.phone,
-        expiresAt: row.expires.toISOString(),
-      })) as OnlineUserItem[],
-      total,
-      page: input.page,
-      pageSize: input.pageSize,
-    }
+  static async list(input: { page: number; pageSize: number; keyword?: string }) {
+    let filtered = [...MOCK_DATA]
+    if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((u) => u.username.toLowerCase().includes(kw) || u.nickname.toLowerCase().includes(kw)) }
+    const total = filtered.length
+    const start = (input.page - 1) * input.pageSize
+    domainLog.event("system.onlineUser.list", { total })
+    return { items: filtered.slice(start, start + input.pageSize), total, page: input.page, pageSize: input.pageSize }
   }
 
-  static async forceLogout(operatorId: string, input: ForceLogoutInput) {
-    domainLog.event("system.online-user.force-logout", {
-      operatorId,
-      sessionId: input.sessionId,
-    })
-    domainLog.audit("system.online-user.force-logout", {
-      operatorId,
-      targetType: "SESSION",
-      targetId: input.sessionId,
-    })
-
-    return {
-      success: true,
-      sessionId: input.sessionId,
-    }
+  static async forceLogout(operatorId: string, input: { sessionId: string }) {
+    const idx = MOCK_DATA.findIndex((u) => u.sessionId === input.sessionId)
+    if (idx !== -1) MOCK_DATA.splice(idx, 1)
+    domainLog.event("system.onlineUser.forceLogout", { sessionId: input.sessionId })
+    domainLog.audit("system.onlineUser.forceLogout", { operatorId, targetType: "SESSION", targetId: input.sessionId })
+    return { success: true }
   }
 }

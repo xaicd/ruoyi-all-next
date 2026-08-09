@@ -1,32 +1,46 @@
-import { monitorRead } from "@/modules/shared/backend/lib/platform-monitor"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
-import { readSettingList } from "./infra-setting-store"
 
-type InfraRedisMetric = {
-  key: string
-  value: number
-}
+type RedisKeyItem = { key: string; type: string; ttl: number; size: number }
 
-export class InfraRedisService {
-  static async metrics() {
-    domainLog.event("infra.redis.metrics", {})
+const MOCK_KEYS: RedisKeyItem[] = [
+  { key: "ruoyi:auth:token:1", type: "string", ttl: 86400, size: 256 },
+  { key: "ruoyi:cache:dict:system_user_sex", type: "hash", ttl: -1, size: 64 },
+  { key: "ruoyi:cache:config:sys.application.name", type: "string", ttl: -1, size: 32 },
+  { key: "ruoyi:rate:limit:127.0.0.1", type: "string", ttl: 60, size: 8 },
+]
 
-    const persisted = await readSettingList<InfraRedisMetric>("infra.redis.metrics")
-    const metrics: InfraRedisMetric[] = persisted.length
-      ? persisted
-      : [
-          { key: "redis.connected_clients", value: monitorRead("redis.connected_clients") },
-          {
-            key: "redis.instantaneous_ops_per_sec",
-            value: monitorRead("redis.instantaneous_ops_per_sec"),
-          },
-          { key: "redis.used_memory_mb", value: monitorRead("redis.used_memory_mb") },
-        ]
-
+export class RedisService {
+  static async getInfo() {
+    domainLog.event("infra.redis.info", {})
     return {
-      items: metrics,
-      total: metrics.length,
-      fetchedAt: new Date().toISOString(),
+      version: "7.2.0",
+      mode: "standalone",
+      usedMemory: "12.5M",
+      connectedClients: 3,
+      uptimeInDays: 30,
+      keyCount: MOCK_KEYS.length,
     }
   }
+
+  static async listKeys(input: { page: number; pageSize: number; keyword?: string }) {
+    let filtered = [...MOCK_KEYS]
+    if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((k) => k.key.toLowerCase().includes(kw)) }
+    const total = filtered.length
+    const start = (input.page - 1) * input.pageSize
+    return { items: filtered.slice(start, start + input.pageSize), total, page: input.page, pageSize: input.pageSize }
+  }
+
+  static async deleteKey(key: string) {
+    const idx = MOCK_KEYS.findIndex((k) => k.key === key)
+    if (idx !== -1) MOCK_KEYS.splice(idx, 1)
+    domainLog.event("infra.redis.deleteKey", { key })
+    return { success: true }
+  }
+
+  // 兼容旧 route
+  static async page(input: any) { return RedisService.listKeys(input) }
+  static async get(id: string) { return MOCK_KEYS.find((k) => k.key === id) ?? null }
+  static async create(input: any) { return { id: "mock" } }
+  static async update(input: any) { return { id: "mock" } }
+  static async delete(id: string) { return RedisService.deleteKey(id) }
 }

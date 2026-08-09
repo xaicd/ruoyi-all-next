@@ -3,6 +3,7 @@
  */
 
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
+import { SEED_DEPTS } from "@/modules/shared/backend/seed-data"
 
 export type SystemDeptRow = {
   id: string
@@ -30,15 +31,8 @@ export type CreateDeptData = {
 
 export type UpdateDeptData = Partial<CreateDeptData>
 
-// === 内存存储 ===
-const MEMORY_STORE: SystemDeptRow[] = [
-  { id: "100", name: "若依科技", parentId: null, sort: 0, leaderId: "1", phone: "13800000000", email: "ry@ruoyi.com", status: "ACTIVE", tenantId: "1", createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "101", name: "深圳总公司", parentId: "100", sort: 1, leaderId: "1", phone: null, email: null, status: "ACTIVE", tenantId: "1", createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "102", name: "长沙分公司", parentId: "100", sort: 2, leaderId: null, phone: null, email: null, status: "ACTIVE", tenantId: "1", createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "103", name: "研发部门", parentId: "101", sort: 1, leaderId: null, phone: null, email: null, status: "ACTIVE", tenantId: "1", createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "104", name: "市场部门", parentId: "101", sort: 2, leaderId: null, phone: null, email: null, status: "ACTIVE", tenantId: "1", createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "105", name: "测试部门", parentId: "101", sort: 3, leaderId: null, phone: null, email: null, status: "ACTIVE", tenantId: "1", createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-]
+// === 内存存储（对标 ruoyi-vue-pro 种子数据） ===
+const MEMORY_STORE: SystemDeptRow[] = [...SEED_DEPTS]
 
 let memoryIdSeq = 200
 

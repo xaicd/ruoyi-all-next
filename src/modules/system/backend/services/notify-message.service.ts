@@ -1,81 +1,21 @@
-import type { CreateNotifyMessageInput, PageQueryInput } from "@/modules/system/backend/validators"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
-import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
 
-type NotifyMessageItem = {
-  id: string
-  templateCode: string
-  receiver: string
-  status: "SUCCESS" | "FAIL"
-  sentAt: string
-}
+type NotifyMessageItem = { id: string; templateCode: string; templateName: string; channel: string; receiver: string; content: string; readStatus: boolean; createdAt: string }
 
-const SETTING_KEY = "system.notify.messages"
+const MOCK_DATA: NotifyMessageItem[] = [
+  { id: "1", templateCode: "user_register", templateName: "用户注册通知", channel: "SMS", receiver: "13800000001", content: "尊敬的admin，您已成功注册", readStatus: true, createdAt: "2026-01-15T10:00:00.000Z" },
+  { id: "2", templateCode: "order_paid", templateName: "订单支付通知", channel: "SITE", receiver: "admin", content: "订单ORD001已支付成功", readStatus: false, createdAt: "2026-08-06T14:00:00.000Z" },
+]
 
-function parseItems(value: unknown): NotifyMessageItem[] {
-  if (!Array.isArray(value)) {
-    return []
-  }
-
-  return value.filter((item): item is NotifyMessageItem => Boolean(item && typeof item === "object")) as NotifyMessageItem[]
-}
-
-export class SystemNotifyMessageService {
-  static async list(input: PageQueryInput) {
-    domainLog.event("system.notify-message.list", {
-      page: input.page,
-      pageSize: input.pageSize,
-      hasKeyword: Boolean(input.keyword),
-    })
-
-    const setting = await ruoyiPrisma.setting.findUnique({ where: { key: SETTING_KEY } })
-    const items = parseItems(setting?.value)
-    const keyword = input.keyword?.trim().toLowerCase() ?? ""
-    const filtered = keyword
-      ? items.filter(
-          (item) =>
-            item.templateCode.toLowerCase().includes(keyword) ||
-            item.receiver.toLowerCase().includes(keyword),
-        )
-      : items
-
+export class NotifyMessageService {
+  static async page(input: { page: number; pageSize: number; keyword?: string }) {
+    let filtered = [...MOCK_DATA]
+    if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((m) => m.content.toLowerCase().includes(kw) || m.templateName.toLowerCase().includes(kw)) }
+    filtered.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    domainLog.event("system.notifyMessage.page", { total: filtered.length })
     const start = (input.page - 1) * input.pageSize
-    return {
-      items: filtered.slice(start, start + input.pageSize),
-      total: filtered.length,
-      page: input.page,
-      pageSize: input.pageSize,
-    }
+    return { items: filtered.slice(start, start + input.pageSize), total: filtered.length, page: input.page, pageSize: input.pageSize }
   }
-
-  static async create(operatorId: string, input: CreateNotifyMessageInput) {
-    const setting = await ruoyiPrisma.setting.upsert({
-      where: { key: SETTING_KEY },
-      update: {},
-      create: { key: SETTING_KEY, value: [] },
-    })
-
-    const items = parseItems(setting.value)
-    const created: NotifyMessageItem = {
-      id: `nm-${Date.now()}`,
-      templateCode: input.templateCode,
-      receiver: input.receiver,
-      status: input.status,
-      sentAt: new Date().toISOString(),
-    }
-    const nextItems = [created, ...items]
-
-    await ruoyiPrisma.setting.update({
-      where: { key: SETTING_KEY },
-      data: { value: nextItems },
-    })
-
-    domainLog.audit("system.notify-message.create", {
-      operatorId,
-      templateCode: input.templateCode,
-      receiver: input.receiver,
-    })
-
-    return created
-  }
+  static async get(id: string) { return MOCK_DATA.find((m) => m.id === id) ?? null }
+  static async delete(id: string) { const idx = MOCK_DATA.findIndex((m) => m.id === id); if (idx !== -1) MOCK_DATA.splice(idx, 1); return { success: true } }
 }

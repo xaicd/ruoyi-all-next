@@ -43,6 +43,14 @@ export default function SystemRolesPage() {
     if (res.success) loadData(); else alert(res.error)
   }
 
+  const [showMenuAssign, setShowMenuAssign] = useState(false)
+  const [assigningRole, setAssigningRole] = useState<SystemRole | null>(null)
+
+  const handleAssignMenus = (role: SystemRole) => {
+    setAssigningRole(role)
+    setShowMenuAssign(true)
+  }
+
   const handleSubmit = async (formData: Record<string, any>) => {
     const res = editing
       ? await fetch(`${API}/${editing.id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData) }).then((r) => r.json())
@@ -87,6 +95,7 @@ export default function SystemRolesPage() {
                 <td className="px-4 py-3"><span className={`rounded-full px-2 py-0.5 text-xs font-medium ${role.status === "ACTIVE" ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}>{role.status === "ACTIVE" ? "启用" : "禁用"}</span></td>
                 <td className="px-4 py-3 text-xs text-slate-500">{role.dataScope}</td>
                 <td className="px-4 py-3 text-right">
+                  <button onClick={() => handleAssignMenus(role)} className="mr-2 text-green-600 hover:text-green-800">菜单</button>
                   <button onClick={() => { setEditing(role); setShowForm(true) }} className="mr-2 text-blue-600 hover:text-blue-800">编辑</button>
                   <button onClick={() => handleDelete(role)} className="text-red-600 hover:text-red-800">删除</button>
                 </td>
@@ -106,6 +115,7 @@ export default function SystemRolesPage() {
       </div>
 
       {showForm && <RoleFormDialog role={editing} onSubmit={handleSubmit} onClose={() => setShowForm(false)} />}
+      {showMenuAssign && assigningRole && <MenuAssignDialog role={assigningRole} onClose={() => setShowMenuAssign(false)} />}
     </div>
   )
 }
@@ -132,6 +142,113 @@ function RoleFormDialog({ role, onSubmit, onClose }: { role: SystemRole | null; 
             <button type="submit" className="h-9 rounded-md bg-blue-600 px-4 text-sm text-white hover:bg-blue-700">确认</button>
           </div>
         </form>
+      </div>
+    </div>
+  )
+}
+
+
+// === 菜单分配弹窗（Tree 勾选） ===
+function MenuAssignDialog({ role, onClose }: { role: SystemRole; onClose: () => void }) {
+  const [menuTree, setMenuTree] = useState<any[]>([])
+  const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set())
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+
+  useEffect(() => {
+    // 加载菜单树
+    fetch("/api/v1/admin/system/menus").then((r) => r.json()).then((res) => {
+      if (res.success) setMenuTree(res.data)
+      setLoading(false)
+    })
+    // TODO: 加载当前角色已分配的菜单
+  }, [])
+
+  const toggleCheck = (id: string, children: any[]) => {
+    const next = new Set(checkedIds)
+    if (next.has(id)) {
+      next.delete(id)
+      // 取消勾选时，也取消所有子节点
+      const removeChildren = (nodes: any[]) => {
+        for (const node of nodes) {
+          next.delete(node.id)
+          if (node.children?.length) removeChildren(node.children)
+        }
+      }
+      removeChildren(children)
+    } else {
+      next.add(id)
+    }
+    setCheckedIds(next)
+  }
+
+  const handleSelectAll = () => {
+    const all = new Set<string>()
+    const collect = (nodes: any[]) => { for (const n of nodes) { all.add(n.id); if (n.children?.length) collect(n.children) } }
+    collect(menuTree)
+    setCheckedIds(all)
+  }
+
+  const handleDeselectAll = () => setCheckedIds(new Set())
+
+  const handleSave = async () => {
+    setSaving(true)
+    try {
+      const res = await fetch(`${API}/${role.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "assignMenus", menuIds: Array.from(checkedIds) }),
+      }).then((r) => r.json())
+      if (res.success) { alert("菜单分配成功"); onClose() }
+      else alert(res.error)
+    } finally { setSaving(false) }
+  }
+
+  const renderTree = (nodes: any[], level: number) => (
+    <div className={level > 0 ? "ml-5" : ""}>
+      {nodes.map((node: any) => (
+        <div key={node.id} className="py-0.5">
+          <label className="flex items-center gap-2 rounded px-1 py-0.5 hover:bg-slate-50 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={checkedIds.has(node.id)}
+              onChange={() => toggleCheck(node.id, node.children || [])}
+              className="rounded"
+            />
+            <span className="text-xs">{node.name}</span>
+            {node.permission && <span className="text-[10px] text-slate-400">{node.permission}</span>}
+          </label>
+          {node.children?.length > 0 && renderTree(node.children, level + 1)}
+        </div>
+      ))}
+    </div>
+  )
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      <div className="w-full max-w-lg rounded-lg bg-white shadow-xl flex flex-col max-h-[80vh]">
+        <div className="flex items-center justify-between border-b px-5 py-4">
+          <div>
+            <h2 className="text-base font-semibold">分配菜单权限</h2>
+            <p className="mt-0.5 text-xs text-slate-500">角色：{role.name}（{role.code}）</p>
+          </div>
+          <div className="flex gap-2">
+            <button onClick={handleSelectAll} className="text-xs text-blue-600 hover:text-blue-800">全选</button>
+            <button onClick={handleDeselectAll} className="text-xs text-slate-500 hover:text-slate-700">全不选</button>
+          </div>
+        </div>
+        <div className="flex-1 overflow-y-auto px-5 py-3">
+          {loading ? <p className="py-8 text-center text-slate-400">加载中...</p>
+          : menuTree.length === 0 ? <p className="py-8 text-center text-slate-400">暂无菜单</p>
+          : renderTree(menuTree, 0)}
+        </div>
+        <div className="flex items-center justify-between border-t px-5 py-3">
+          <span className="text-xs text-slate-400">已选 {checkedIds.size} 项</span>
+          <div className="flex gap-2">
+            <button onClick={onClose} className="h-9 rounded-md border px-4 text-sm">取消</button>
+            <button onClick={handleSave} disabled={saving} className="h-9 rounded-md bg-blue-600 px-4 text-sm text-white hover:bg-blue-700 disabled:opacity-50">{saving ? "保存中..." : "确认分配"}</button>
+          </div>
+        </div>
       </div>
     </div>
   )

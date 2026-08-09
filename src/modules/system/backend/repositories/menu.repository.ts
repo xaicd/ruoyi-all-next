@@ -3,6 +3,7 @@
  */
 
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
+import { SEED_MENUS } from "@/modules/shared/backend/seed-data"
 
 export type SystemMenuRow = {
   id: string
@@ -37,20 +38,8 @@ export type CreateMenuData = {
 
 export type UpdateMenuData = Partial<CreateMenuData>
 
-// === 内存存储（对标 RuoYi 默认菜单） ===
-const MEMORY_STORE: SystemMenuRow[] = [
-  { id: "1", name: "系统管理", permission: null, type: "DIR", parentId: null, path: "/system", component: null, icon: "Setting", sort: 1, status: "ACTIVE", visible: true, keepAlive: true, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "2", name: "基础设施", permission: null, type: "DIR", parentId: null, path: "/infra", component: null, icon: "Monitor", sort: 2, status: "ACTIVE", visible: true, keepAlive: true, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "100", name: "用户管理", permission: "system:user:view", type: "MENU", parentId: "1", path: "user", component: "system/users", icon: "User", sort: 1, status: "ACTIVE", visible: true, keepAlive: true, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "101", name: "角色管理", permission: "system:role:view", type: "MENU", parentId: "1", path: "role", component: "system/roles", icon: "Peoples", sort: 2, status: "ACTIVE", visible: true, keepAlive: true, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "102", name: "菜单管理", permission: "system:menu:view", type: "MENU", parentId: "1", path: "menu", component: "system/menus", icon: "TreeTable", sort: 3, status: "ACTIVE", visible: true, keepAlive: true, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "103", name: "部门管理", permission: "system:dept:view", type: "MENU", parentId: "1", path: "dept", component: "system/depts", icon: "Tree", sort: 4, status: "ACTIVE", visible: true, keepAlive: true, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "104", name: "岗位管理", permission: "system:post:view", type: "MENU", parentId: "1", path: "post", component: "system/posts", icon: "Post", sort: 5, status: "ACTIVE", visible: true, keepAlive: true, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "105", name: "字典管理", permission: "system:dict:view", type: "MENU", parentId: "1", path: "dict", component: "system/dicts", icon: "Dict", sort: 6, status: "ACTIVE", visible: true, keepAlive: true, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "1001", name: "用户新增", permission: "system:user:create", type: "BUTTON", parentId: "100", path: null, component: null, icon: null, sort: 1, status: "ACTIVE", visible: true, keepAlive: true, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "1002", name: "用户修改", permission: "system:user:update", type: "BUTTON", parentId: "100", path: null, component: null, icon: null, sort: 2, status: "ACTIVE", visible: true, keepAlive: true, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "1003", name: "用户删除", permission: "system:user:delete", type: "BUTTON", parentId: "100", path: null, component: null, icon: null, sort: 3, status: "ACTIVE", visible: true, keepAlive: true, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-]
+// === 内存存储（对标 RuoYi 200 条完整菜单） ===
+const MEMORY_STORE: SystemMenuRow[] = [...SEED_MENUS]
 
 let memoryIdSeq = 5000
 
