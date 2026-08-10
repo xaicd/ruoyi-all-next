@@ -3,7 +3,7 @@
  */
 
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
-import { SEED_MENUS } from "@/modules/shared/backend/seed-data"
+import { SEED_MENUS } from "@prisma/data"
 
 export type SystemMenuRow = {
   id: string

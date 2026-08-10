@@ -1,11 +1,10 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { request, API } from "@/modules/shared/frontend/lib/request"
 
 type CrmCustomer = { id: string; name: string; phone: string | null; email: string | null; industry: string | null; level: string; status: string; dealStatus: string; ownerUserName: string | null; contactLastTime: string | null; createdAt: string }
 type PageData = { items: CrmCustomer[]; total: number; page: number; pageSize: number }
-
-const API = "/api/v1/admin/crm/customers"
 
 const levelColors: Record<string, string> = { A: "bg-red-50 text-red-700", B: "bg-orange-50 text-orange-700", C: "bg-blue-50 text-blue-700", D: "bg-slate-100 text-slate-600" }
 const dealLabels: Record<string, string> = { PENDING: "待跟进", DEALING: "跟进中", DONE: "已成交", LOST: "已流失" }
@@ -23,10 +22,7 @@ export default function CrmCustomersPage() {
   const loadData = useCallback(async () => {
     setLoading(true)
     try {
-      const sp = new URLSearchParams({ page: String(page), pageSize: "20" })
-      if (keyword) sp.set("keyword", keyword)
-      if (levelFilter) sp.set("level", levelFilter)
-      const res = await fetch(`${API}?${sp}`).then((r) => r.json())
+      const res = await request.get(API.CRM_CUSTOMERS, { page, pageSize: 20, keyword: keyword || undefined, level: levelFilter || undefined })
       if (res.success) setData(res.data)
     } finally { setLoading(false) }
   }, [page, keyword, levelFilter])
@@ -35,14 +31,14 @@ export default function CrmCustomersPage() {
 
   const handleSubmit = async (formData: Record<string, any>) => {
     const res = editing
-      ? await fetch(`${API}/${editing.id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData) }).then((r) => r.json())
-      : await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData) }).then((r) => r.json())
+      ? await request.put(`${API.CRM_CUSTOMERS}/${editing.id}`, formData)
+      : await request.post(API.CRM_CUSTOMERS, formData)
     if (res.success) { setShowForm(false); loadData() } else alert(res.error)
   }
 
   const handleDelete = async (customer: CrmCustomer) => {
     if (!confirm(`确认删除客户「${customer.name}」？`)) return
-    const res = await fetch(`${API}/${customer.id}`, { method: "DELETE" }).then((r) => r.json())
+    const res = await request.delete(`${API.CRM_CUSTOMERS}/${customer.id}`)
     if (res.success) loadData(); else alert(res.error)
   }
 

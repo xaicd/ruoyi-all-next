@@ -9,7 +9,7 @@ const MOCK_DATA: NoticeItem[] = [
 let nextId = 100
 
 export class NoticeService {
-  static async page(input: { page: number; pageSize: number; keyword?: string }) {
+  static async page(input: any) {
     let filtered = [...MOCK_DATA]
     if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((n) => n.title.toLowerCase().includes(kw)) }
     filtered.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
@@ -49,3 +49,6 @@ export class NoticeService {
     return { success: true }
   }
 }
+
+// Alias for index.ts re-export
+export { NoticeService as SystemNoticeService }

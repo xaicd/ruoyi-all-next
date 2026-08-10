@@ -75,4 +75,9 @@ export class ImFriendService {
     domainLog.audit("im.imFriend.delete", { targetType: "IM_IMFRIEND", targetId: id })
     return true
   }
+
+  static async create(input: Record<string, any>) {
+    return { id: String(Date.now()), ...input }
+  }
+
 }

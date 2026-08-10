@@ -4,7 +4,7 @@
 
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
 import type { PageResult } from "@/modules/shared/backend/lib/database"
-import { SEED_POSTS } from "@/modules/shared/backend/seed-data"
+import { SEED_POSTS } from "@prisma/data"
 
 export type SystemPostRow = {
   id: string

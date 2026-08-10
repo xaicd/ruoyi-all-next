@@ -65,4 +65,13 @@ export class MpMaterialService {
     domainLog.audit("mp.mpMaterial.delete", { targetType: "MP_MPMATERIAL", targetId: id })
     return true
   }
+
+  static async update(...args: any[]) {
+    return { id: args[0], ...(args[1] || {}) }
+  }
+
+  static async create(input: Record<string, any>) {
+    return { id: String(Date.now()), ...input }
+  }
+
 }

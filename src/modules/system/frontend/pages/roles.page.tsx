@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { request, API } from "@/modules/shared/frontend/lib/request"
 
 type SystemRole = {
   id: string
@@ -15,8 +16,6 @@ type SystemRole = {
 
 type PageData = { items: SystemRole[]; total: number; page: number; pageSize: number }
 
-const API = "/api/v1/admin/system/roles"
-
 export default function SystemRolesPage() {
   const [data, setData] = useState<PageData>({ items: [], total: 0, page: 1, pageSize: 20 })
   const [loading, setLoading] = useState(false)
@@ -28,9 +27,7 @@ export default function SystemRolesPage() {
   const loadData = useCallback(async () => {
     setLoading(true)
     try {
-      const sp = new URLSearchParams({ page: String(page), pageSize: "20" })
-      if (keyword) sp.set("keyword", keyword)
-      const res = await fetch(`${API}?${sp}`).then((r) => r.json())
+      const res = await request.get(API.ROLES, { page, pageSize: 20, keyword: keyword || undefined })
       if (res.success) setData(res.data)
     } finally { setLoading(false) }
   }, [page, keyword])
@@ -39,7 +36,7 @@ export default function SystemRolesPage() {
 
   const handleDelete = async (role: SystemRole) => {
     if (!confirm(`确认删除角色「${role.name}」？`)) return
-    const res = await fetch(`${API}/${role.id}`, { method: "DELETE" }).then((r) => r.json())
+    const res = await request.delete(`${API.ROLES}/${role.id}`)
     if (res.success) loadData(); else alert(res.error)
   }
 
@@ -53,8 +50,8 @@ export default function SystemRolesPage() {
 
   const handleSubmit = async (formData: Record<string, any>) => {
     const res = editing
-      ? await fetch(`${API}/${editing.id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData) }).then((r) => r.json())
-      : await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData) }).then((r) => r.json())
+      ? await request.put(`${API.ROLES}/${editing.id}`, formData)
+      : await request.post(API.ROLES, formData)
     if (res.success) { setShowForm(false); loadData() } else alert(res.error)
   }
 
@@ -157,7 +154,7 @@ function MenuAssignDialog({ role, onClose }: { role: SystemRole; onClose: () => 
 
   useEffect(() => {
     // 加载菜单树
-    fetch("/api/v1/admin/system/menus").then((r) => r.json()).then((res) => {
+    request.get(API.MENUS).then((res) => {
       if (res.success) setMenuTree(res.data)
       setLoading(false)
     })
@@ -194,11 +191,7 @@ function MenuAssignDialog({ role, onClose }: { role: SystemRole; onClose: () => 
   const handleSave = async () => {
     setSaving(true)
     try {
-      const res = await fetch(`${API}/${role.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "assignMenus", menuIds: Array.from(checkedIds) }),
-      }).then((r) => r.json())
+      const res = await request.patch(`${API.ROLES}/${role.id}`, { action: "assignMenus", menuIds: Array.from(checkedIds) })
       if (res.success) { alert("菜单分配成功"); onClose() }
       else alert(res.error)
     } finally { setSaving(false) }

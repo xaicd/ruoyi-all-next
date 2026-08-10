@@ -4,7 +4,7 @@
 
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
 import type { PageResult } from "@/modules/shared/backend/lib/database"
-import { SEED_DICT_TYPES, SEED_DICT_DATA } from "@/modules/shared/backend/seed-data"
+import { SEED_DICT_TYPES, SEED_DICT_DATA } from "@prisma/data"
 
 // === 字典类型 ===
 export type SystemDictTypeRow = { id: string; name: string; type: string; status: string; remark: string | null; createdAt: string; updatedAt: string }

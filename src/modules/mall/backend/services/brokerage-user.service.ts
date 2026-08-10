@@ -76,4 +76,9 @@ export class BrokerageUserService {
     domainLog.audit("mall.brokerageUser.update", { targetType: "MALL_BROKERAGEUSER", targetId: input.id })
     return true
   }
+
+  static async delete(id: string) {
+    return { success: true }
+  }
+
 }

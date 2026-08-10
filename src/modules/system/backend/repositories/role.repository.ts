@@ -5,7 +5,7 @@
 
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
 import type { PageResult } from "@/modules/shared/backend/lib/database"
-import { SEED_ROLES } from "@/modules/shared/backend/seed-data"
+import { SEED_ROLES } from "@prisma/data"
 
 export type SystemRoleRow = {
   id: string

@@ -2,7 +2,7 @@ import { SystemPostRepository } from "@/modules/system/backend/repositories/post
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 
 export class SystemPostService {
-  static async list(input: { page: number; pageSize: number; keyword?: string; status?: string }) {
+  static async list(input: any) {
     const result = await SystemPostRepository.findList(input)
     domainLog.event("system.post.list", { page: input.page, total: result.total })
     return result
@@ -14,7 +14,7 @@ export class SystemPostService {
     return post
   }
 
-  static async create(input: { name: string; code: string; sort?: number; status?: string; remark?: string }) {
+  static async create(input: any) {
     const existing = await SystemPostRepository.findByCode(input.code)
     if (existing) throw new Error(`岗位编码已存在: ${input.code}`)
     const post = await SystemPostRepository.create(input)

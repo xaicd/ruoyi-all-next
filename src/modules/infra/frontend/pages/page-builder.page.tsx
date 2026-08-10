@@ -137,6 +137,177 @@ const puckConfig: Config = {
         </div>
       ),
     },
+
+    // 标签页
+    TabsPanel: {
+      label: "标签页",
+      defaultProps: { tabs: "基本信息,详细信息,操作日志", activeTab: 0 },
+      fields: {
+        tabs: { type: "text", label: "标签列表（逗号分隔）" },
+        activeTab: { type: "number", label: "默认激活索引" },
+      },
+      render: ({ tabs, activeTab }) => {
+        const tabList = (tabs as string).split(",")
+        return (
+          <div className="rounded-lg border bg-white">
+            <div className="flex border-b">
+              {tabList.map((t: string, i: number) => (
+                <div key={i} className={`px-4 py-2.5 text-sm font-medium cursor-pointer ${i === (activeTab as number) ? "border-b-2 border-blue-600 text-blue-600" : "text-slate-500"}`}>{t.trim()}</div>
+              ))}
+            </div>
+            <div className="p-4 text-sm text-slate-400">标签页内容区域</div>
+          </div>
+        )
+      },
+    },
+
+    // 描述列表（详情页用）
+    DescriptionList: {
+      label: "描述列表",
+      defaultProps: { title: "基本信息", items: "名称:张三,手机:138xxxx,邮箱:test@example.com,部门:研发部,状态:启用", columns: 2 },
+      fields: {
+        title: { type: "text", label: "标题" },
+        items: { type: "textarea", label: "项目配置（标签:值）" },
+        columns: { type: "select", label: "列数", options: [{ label: "1列", value: 1 }, { label: "2列", value: 2 }, { label: "3列", value: 3 }] },
+      },
+      render: ({ title, items, columns }) => {
+        const itemList = (items as string).split(",").map(i => { const [k, v] = i.split(":"); return { label: k, value: v } })
+        return (
+          <div className="rounded-lg border bg-white p-4">
+            {title && <h3 className="mb-3 text-sm font-semibold">{title as string}</h3>}
+            <div className={`grid gap-3 grid-cols-${columns}`} style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
+              {itemList.map((item, i) => (
+                <div key={i}>
+                  <dt className="text-xs text-slate-500">{item.label}</dt>
+                  <dd className="mt-0.5 text-sm text-slate-900">{item.value}</dd>
+                </div>
+              ))}
+            </div>
+          </div>
+        )
+      },
+    },
+
+    // 图表占位
+    ChartPlaceholder: {
+      label: "图表",
+      defaultProps: { title: "趋势图", chartType: "line", height: 240 },
+      fields: {
+        title: { type: "text", label: "图表标题" },
+        chartType: { type: "select", label: "图表类型", options: [{ label: "折线图", value: "line" }, { label: "柱状图", value: "bar" }, { label: "饼图", value: "pie" }, { label: "面积图", value: "area" }] },
+        height: { type: "number", label: "高度(px)" },
+      },
+      render: ({ title, chartType, height }) => (
+        <div className="rounded-lg border bg-white p-4">
+          <h3 className="mb-2 text-sm font-semibold">{title as string}</h3>
+          <div className="flex items-center justify-center rounded border border-dashed bg-slate-50" style={{ height: `${height}px` }}>
+            <span className="text-xs text-slate-400">📊 {chartType === "line" ? "折线图" : chartType === "bar" ? "柱状图" : chartType === "pie" ? "饼图" : "面积图"} · {height}px</span>
+          </div>
+        </div>
+      ),
+    },
+
+    // 搜索筛选栏
+    SearchBar: {
+      label: "搜索栏",
+      defaultProps: { fields: "关键词:text,状态:select,日期:date", showReset: true },
+      fields: {
+        fields: { type: "text", label: "字段配置（名称:类型）" },
+        showReset: { type: "radio", label: "显示重置", options: [{ label: "是", value: true }, { label: "否", value: false }] },
+      },
+      render: ({ fields, showReset }) => (
+        <div className="rounded-lg border bg-white p-4">
+          <div className="flex flex-wrap items-center gap-3">
+            {(fields as string).split(",").map((f: string, i: number) => {
+              const [label, type] = f.split(":")
+              return (
+                <div key={i} className="flex items-center gap-1.5">
+                  <span className="text-xs text-slate-500">{label}</span>
+                  <div className={`h-8 rounded border bg-slate-50 ${type === "date" ? "w-32" : "w-36"}`} />
+                </div>
+              )
+            })}
+            <button className="h-8 rounded-md bg-slate-900 px-3 text-xs text-white">查询</button>
+            {showReset && <button className="h-8 rounded-md border px-3 text-xs">重置</button>}
+          </div>
+        </div>
+      ),
+    },
+
+    // 步骤条
+    Steps: {
+      label: "步骤条",
+      defaultProps: { steps: "提交申请,审批中,已完成", current: 1 },
+      fields: {
+        steps: { type: "text", label: "步骤列表（逗号分隔）" },
+        current: { type: "number", label: "当前步骤（0开始）" },
+      },
+      render: ({ steps, current }) => {
+        const stepList = (steps as string).split(",")
+        return (
+          <div className="rounded-lg border bg-white p-4">
+            <div className="flex items-center justify-between">
+              {stepList.map((s: string, i: number) => (
+                <div key={i} className="flex items-center">
+                  <div className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-medium ${i < (current as number) ? "bg-green-500 text-white" : i === (current as number) ? "bg-blue-600 text-white" : "bg-slate-200 text-slate-500"}`}>{i + 1}</div>
+                  <span className={`ml-2 text-xs ${i === (current as number) ? "font-medium text-blue-600" : "text-slate-500"}`}>{s.trim()}</span>
+                  {i < stepList.length - 1 && <div className="mx-4 h-px w-12 bg-slate-200" />}
+                </div>
+              ))}
+            </div>
+          </div>
+        )
+      },
+    },
+
+    // 空状态
+    EmptyState: {
+      label: "空状态",
+      defaultProps: { title: "暂无数据", description: "试试调整筛选条件", icon: "📭" },
+      fields: {
+        title: { type: "text", label: "标题" },
+        description: { type: "text", label: "描述" },
+        icon: { type: "text", label: "图标(emoji)" },
+      },
+      render: ({ title, description, icon }) => (
+        <div className="rounded-lg border bg-white p-12 text-center">
+          <div className="text-4xl">{icon as string}</div>
+          <p className="mt-3 text-sm font-medium text-slate-700">{title as string}</p>
+          <p className="mt-1 text-xs text-slate-400">{description as string}</p>
+        </div>
+      ),
+    },
+
+    // 树形结构
+    TreeView: {
+      label: "树形列表",
+      defaultProps: { title: "组织架构", data: "总公司>研发部,总公司>市场部,总公司>财务部" },
+      fields: {
+        title: { type: "text", label: "标题" },
+        data: { type: "textarea", label: "数据（父>子，逗号分隔）" },
+      },
+      render: ({ title, data }) => {
+        const tree = new Map<string, string[]>()
+        ;(data as string).split(",").forEach((pair: string) => {
+          const [parent, child] = pair.split(">")
+          if (!tree.has(parent)) tree.set(parent, [])
+          tree.get(parent)!.push(child)
+        })
+        return (
+          <div className="rounded-lg border bg-white p-4">
+            <h3 className="mb-3 text-sm font-semibold">{title as string}</h3>
+            {[...tree.entries()].map(([parent, children]) => (
+              <div key={parent} className="mb-2">
+                <div className="flex items-center gap-1.5 text-sm font-medium">📁 {parent}</div>
+                <div className="ml-5 mt-1 space-y-1 border-l pl-3">
+                  {children.map((c, i) => <div key={i} className="text-xs text-slate-600">📄 {c}</div>)}
+                </div>
+              </div>
+            ))}
+          </div>
+        )
+      },
+    },
   },
 }
 
@@ -151,10 +322,25 @@ export default function PageBuilderPage() {
   const [savedPages, setSavedPages] = useState<{ id: string; name: string; data: Data }[]>([])
   const [pageName, setPageName] = useState("未命名页面")
 
-  const handleSave = () => {
-    const id = `page-${Date.now()}`
-    setSavedPages((prev) => [...prev, { id, name: pageName, data: pageData }])
-    alert(`页面「${pageName}」已保存`)
+  const handleSave = async () => {
+    const dataStr = JSON.stringify(pageData)
+    try {
+      const res = await fetch("/api/v1/admin/infra/pages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: pageName, slug: pageName.toLowerCase().replace(/\s+/g, "-"), data: dataStr, status: "PUBLISHED" }),
+      }).then(r => r.json())
+      if (res.success) {
+        alert(`页面「${pageName}」已保存并发布 (ID: ${res.data.id})`)
+      } else {
+        alert(`保存失败: ${res.error}`)
+      }
+    } catch {
+      // Fallback to local
+      const id = `page-${Date.now()}`
+      setSavedPages((prev) => [...prev, { id, name: pageName, data: pageData }])
+      alert(`页面「${pageName}」已保存到本地`)
+    }
   }
 
   const handleExportJson = () => {

@@ -12,7 +12,7 @@ export class IpAreaService {
     return { ip, area: "广东省深圳市", isp: "电信" }
   }
 
-  static async page(input: { page: number; pageSize: number; keyword?: string }) {
+  static async page(input: any) {
     // IP 地区查询一般不分页，这里返回空
     return { items: [], total: 0, page: input.page, pageSize: input.pageSize }
   }
@@ -22,3 +22,6 @@ export class IpAreaService {
   static async update(input: any) { return { id: input.id ?? "mock" } }
   static async delete(id: string) { return { success: true } }
 }
+
+// Alias for index.ts re-export
+export { IpAreaService as SystemIpAreaService }

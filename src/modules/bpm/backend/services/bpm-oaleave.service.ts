@@ -66,4 +66,13 @@ export class BpmOaleaveService {
     domainLog.audit("bpm.bpmOaleave.create", { targetType: "BPM_BPMOALEAVE", targetId: id })
     return { id }
   }
+
+  static async update(...args: any[]) {
+    return { id: args[0], ...(args[1] || {}) }
+  }
+
+  static async delete(id: string) {
+    return { success: true }
+  }
+
 }

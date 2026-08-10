@@ -55,4 +55,17 @@ export class ImRtcCallService {
     domainLog.audit("im.imRtcCall.create", { targetType: "IM_IMRTCCALL", targetId: id })
     return { id }
   }
+
+  static async update(...args: any[]) {
+    return { id: args[0], ...(args[1] || {}) }
+  }
+
+  static async delete(id: string) {
+    return { success: true }
+  }
+
+  static async page(...args: any[]) {
+    return {}
+  }
+
 }

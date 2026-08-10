@@ -6,7 +6,7 @@ import { TenantPackageRepository } from "@/modules/system/backend/repositories/t
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 
 export class SystemTenantPackageService {
-  static async list(input: { page: number; pageSize: number; keyword?: string }) {
+  static async list(input: any) {
     const result = await TenantPackageRepository.findList(input)
     domainLog.event("system.tenantPackage.list", { total: result.total })
     return result
@@ -22,7 +22,7 @@ export class SystemTenantPackageService {
     return pkg
   }
 
-  static async create(input: { name: string; status?: string; menuIds?: string[]; remark?: string }) {
+  static async create(input: any) {
     const pkg = await TenantPackageRepository.create(input)
     domainLog.event("system.tenantPackage.create", { packageId: pkg.id })
     domainLog.audit("system.tenantPackage.create", { targetType: "TENANT_PACKAGE", targetId: pkg.id })

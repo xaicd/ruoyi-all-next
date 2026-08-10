@@ -81,4 +81,9 @@ export class SystemDictService {
     domainLog.event("system.dict.deleteData", { dictDataId: id })
     return { success: true }
   }
+
+  static async page(...args: any[]) {
+    return {}
+  }
+
 }

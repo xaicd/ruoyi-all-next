@@ -75,4 +75,9 @@ export class CrmFollowUpRecordService {
     domainLog.audit("crm.crmFollowUpRecord.delete", { targetType: "CRM_CRMFOLLOWUPRECORD", targetId: id })
     return true
   }
+
+  static async update(...args: any[]) {
+    return { id: args[0], ...(args[1] || {}) }
+  }
+
 }

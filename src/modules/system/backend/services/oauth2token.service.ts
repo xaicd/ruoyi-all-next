@@ -7,7 +7,7 @@ const MOCK_DATA: OAuth2TokenItem[] = [
 ]
 
 export class OAuth2TokenService {
-  static async page(input: { page: number; pageSize: number; keyword?: string }) {
+  static async page(input: any) {
     let filtered = [...MOCK_DATA]
     if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((t) => t.username.toLowerCase().includes(kw) || t.clientId.toLowerCase().includes(kw)) }
     domainLog.event("system.oauth2Token.page", { total: filtered.length })

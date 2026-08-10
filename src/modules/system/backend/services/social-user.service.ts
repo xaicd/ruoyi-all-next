@@ -9,7 +9,7 @@ const MOCK_DATA: SocialUserItem[] = [
 let nextId = 100
 
 export class SocialUserService {
-  static async page(input: { page: number; pageSize: number; keyword?: string }) {
+  static async page(input: any) {
     let filtered = [...MOCK_DATA]
     if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((u) => u.nickname.toLowerCase().includes(kw) || u.openId.toLowerCase().includes(kw)) }
     domainLog.event("system.socialUser.page", { total: filtered.length })

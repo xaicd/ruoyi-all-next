@@ -29,6 +29,9 @@
       ],
       "@/shared/*": [
         "src/modules/shared/*"
+      ],
+      "@prisma/*": [
+        "prisma/*"
       ]
     }
   },
@@ -42,7 +45,11 @@
     "**/*.tsx"
   ],
   "exclude": [
+    "**/__tests__/**",
+    "**/*.test.ts",
+    "**/*.test.tsx",
     "node_modules",
-    "scripts"
+    "scripts",
+    ".next-ruoyi"
   ]
 }

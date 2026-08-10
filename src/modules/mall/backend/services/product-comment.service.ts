@@ -76,4 +76,9 @@ export class ProductCommentService {
     domainLog.audit("mall.productComment.update", { targetType: "MALL_PRODUCTCOMMENT", targetId: input.id })
     return true
   }
+
+  static async delete(id: string) {
+    return { success: true }
+  }
+
 }

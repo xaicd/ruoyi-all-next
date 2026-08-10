@@ -1,11 +1,10 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { request, API } from "@/modules/shared/frontend/lib/request"
 
 type DictType = { id: string; name: string; type: string; status: string; remark: string | null; createdAt: string }
 type PageData = { items: DictType[]; total: number; page: number; pageSize: number }
-
-const API = "/api/v1/admin/system/dicts"
 
 export default function SystemDictsPage() {
   const [data, setData] = useState<PageData>({ items: [], total: 0, page: 1, pageSize: 20 })
@@ -18,9 +17,7 @@ export default function SystemDictsPage() {
   const loadData = useCallback(async () => {
     setLoading(true)
     try {
-      const sp = new URLSearchParams({ page: String(page), pageSize: "20" })
-      if (keyword) sp.set("keyword", keyword)
-      const res = await fetch(`${API}?${sp}`).then((r) => r.json())
+      const res = await request.get(API.DICTS, { page, pageSize: 20, keyword: keyword || undefined })
       if (res.success) setData(res.data)
     } finally { setLoading(false) }
   }, [page, keyword])
@@ -29,14 +26,14 @@ export default function SystemDictsPage() {
 
   const handleDelete = async (dict: DictType) => {
     if (!confirm(`确认删除字典「${dict.name}」？`)) return
-    const res = await fetch(`${API}/${dict.id}`, { method: "DELETE" }).then((r) => r.json())
+    const res = await request.delete(`${API.DICTS}/${dict.id}`)
     if (res.success) loadData(); else alert(res.error)
   }
 
   const handleSubmit = async (formData: Record<string, any>) => {
     const res = editing
-      ? await fetch(`${API}/${editing.id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData) }).then((r) => r.json())
-      : await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData) }).then((r) => r.json())
+      ? await request.put(`${API.DICTS}/${editing.id}`, formData)
+      : await request.post(API.DICTS, formData)
     if (res.success) { setShowForm(false); loadData() } else alert(res.error)
   }
 

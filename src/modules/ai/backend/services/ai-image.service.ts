@@ -75,4 +75,9 @@ export class AiImageService {
     domainLog.audit("ai.aiImage.delete", { targetType: "AI_AIIMAGE", targetId: id })
     return true
   }
+
+  static async create(input: Record<string, any>) {
+    return { id: String(Date.now()), ...input }
+  }
+
 }

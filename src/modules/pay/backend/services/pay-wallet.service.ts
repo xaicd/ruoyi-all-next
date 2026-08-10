@@ -66,4 +66,13 @@ export class PayWalletService {
     domainLog.audit("pay.payWallet.update", { targetType: "PAY_PAYWALLET", targetId: input.id })
     return true
   }
+
+  static async delete(id: string) {
+    return { success: true }
+  }
+
+  static async create(input: Record<string, any>) {
+    return { id: String(Date.now()), ...input }
+  }
+
 }

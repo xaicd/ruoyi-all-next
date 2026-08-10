@@ -1,11 +1,10 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { request, API } from "@/modules/shared/frontend/lib/request"
 
 type PayOrder = { id: string; merchantOrderId: string; subject: string; amount: number; status: string; channelCode: string; channelOrderNo: string | null; successTime: string | null; createdAt: string }
 type PageData = { items: PayOrder[]; total: number; page: number; pageSize: number }
-
-const API = "/api/v1/admin/pay/orders"
 
 const statusMap: Record<string, { label: string; color: string }> = {
   WAITING: { label: "待支付", color: "bg-yellow-50 text-yellow-700" },
@@ -28,10 +27,7 @@ export default function PayOrdersPage() {
   const loadData = useCallback(async () => {
     setLoading(true)
     try {
-      const sp = new URLSearchParams({ page: String(page), pageSize: "20" })
-      if (keyword) sp.set("keyword", keyword)
-      if (statusFilter) sp.set("status", statusFilter)
-      const res = await fetch(`${API}?${sp}`).then((r) => r.json())
+      const res = await request.get(API.PAY_ORDERS, { page, pageSize: 20, keyword: keyword || undefined, status: statusFilter || undefined })
       if (res.success) setData(res.data)
     } finally { setLoading(false) }
   }, [page, keyword, statusFilter])

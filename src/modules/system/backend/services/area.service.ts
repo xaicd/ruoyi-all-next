@@ -11,7 +11,7 @@ const MOCK_DATA: AreaItem[] = [
 let nextId = 100
 
 export class AreaService {
-  static async page(input: { page: number; pageSize: number; keyword?: string }) {
+  static async page(input: any) {
     let filtered = [...MOCK_DATA]
     if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((a) => a.name.toLowerCase().includes(kw)) }
     const total = filtered.length

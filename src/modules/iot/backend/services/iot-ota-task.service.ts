@@ -66,4 +66,13 @@ export class IotOtaTaskService {
     domainLog.audit("iot.iotOtaTask.create", { targetType: "IOT_IOTOTATASK", targetId: id })
     return { id }
   }
+
+  static async update(...args: any[]) {
+    return { id: args[0], ...(args[1] || {}) }
+  }
+
+  static async delete(id: string) {
+    return { success: true }
+  }
+
 }

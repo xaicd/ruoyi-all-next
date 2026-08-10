@@ -8,7 +8,7 @@ const MOCK_DATA: MailTemplateItem[] = [
 let nextId = 100
 
 export class MailTemplateService {
-  static async page(input: { page: number; pageSize: number; keyword?: string }) {
+  static async page(input: any) {
     let filtered = [...MOCK_DATA]
     if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((t) => t.name.toLowerCase().includes(kw) || t.code.toLowerCase().includes(kw)) }
     domainLog.event("system.mailTemplate.page", { total: filtered.length })

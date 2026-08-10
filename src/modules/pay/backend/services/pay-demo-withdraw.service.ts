@@ -66,4 +66,13 @@ export class PayDemoWithdrawService {
     domainLog.audit("pay.payDemoWithdraw.create", { targetType: "PAY_PAYDEMOWITHDRAW", targetId: id })
     return { id }
   }
+
+  static async update(...args: any[]) {
+    return { id: args[0], ...(args[1] || {}) }
+  }
+
+  static async delete(id: string) {
+    return { success: true }
+  }
+
 }

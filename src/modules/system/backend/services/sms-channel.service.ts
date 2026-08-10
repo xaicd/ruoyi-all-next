@@ -9,7 +9,7 @@ const MOCK_DATA: SmsChannelItem[] = [
 let nextId = 100
 
 export class SmsChannelService {
-  static async page(input: { page: number; pageSize: number; keyword?: string }) {
+  static async page(input: any) {
     let filtered = [...MOCK_DATA]
     if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((c) => c.name.toLowerCase().includes(kw) || c.code.toLowerCase().includes(kw)) }
     domainLog.event("system.smsChannel.page", { total: filtered.length })

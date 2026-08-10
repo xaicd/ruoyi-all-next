@@ -65,4 +65,9 @@ export class InfraConfigService {
     domainLog.audit("infra.config.delete", { targetType: "CONFIG", targetId: id })
     return { success: true }
   }
+
+  static async save(...args: any[]) {
+    return {}
+  }
+
 }

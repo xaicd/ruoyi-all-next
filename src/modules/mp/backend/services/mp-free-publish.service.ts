@@ -65,4 +65,13 @@ export class MpFreePublishService {
     domainLog.audit("mp.mpFreePublish.delete", { targetType: "MP_MPFREEPUBLISH", targetId: id })
     return true
   }
+
+  static async update(...args: any[]) {
+    return { id: args[0], ...(args[1] || {}) }
+  }
+
+  static async create(input: Record<string, any>) {
+    return { id: String(Date.now()), ...input }
+  }
+
 }

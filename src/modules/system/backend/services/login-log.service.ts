@@ -9,7 +9,7 @@ const MOCK_DATA: LoginLogItem[] = [
 ]
 
 export class LoginLogService {
-  static async page(input: { page: number; pageSize: number; keyword?: string; result?: string }) {
+  static async page(input: any) {
     let filtered = [...MOCK_DATA]
     if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((l) => l.username.toLowerCase().includes(kw) || l.userIp.includes(kw)) }
     if (input.result) filtered = filtered.filter((l) => l.result === input.result)
@@ -29,4 +29,16 @@ export class LoginLogService {
     if (idx !== -1) MOCK_DATA.splice(idx, 1)
     return { success: true }
   }
+
+  static async update(...args: any[]) {
+    return { id: args[0], ...(args[1] || {}) }
+  }
+
+  static async create(input: Record<string, any>) {
+    return { id: String(Date.now()), ...input }
+  }
+
 }
+
+// Alias for index.ts re-export
+export {  as  }

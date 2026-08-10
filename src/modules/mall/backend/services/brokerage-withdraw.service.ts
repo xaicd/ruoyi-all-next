@@ -56,4 +56,17 @@ export class BrokerageWithdrawService {
     domainLog.event("mall.brokerageWithdraw.get", { id })
     return item
   }
+
+  static async update(...args: any[]) {
+    return { id: args[0], ...(args[1] || {}) }
+  }
+
+  static async delete(id: string) {
+    return { success: true }
+  }
+
+  static async create(input: Record<string, any>) {
+    return { id: String(Date.now()), ...input }
+  }
+
 }

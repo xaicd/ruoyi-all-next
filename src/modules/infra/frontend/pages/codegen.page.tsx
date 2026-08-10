@@ -1,14 +1,13 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { request, API } from "@/modules/shared/frontend/lib/request"
 
 // === Types ===
 type CodegenTable = { id: string; tableName: string; tableComment: string; moduleName: string; className: string; template: string; scene: string; createdAt: string; updatedAt: string }
 type DbTable = { name: string; comment?: string; columns: any[] }
 type PageData = { items: CodegenTable[]; total: number; page: number; pageSize: number }
 type PreviewFile = { path: string; type: string; content: string }
-
-const API = "/api/v1/admin/infra/codegen"
 
 export default function InfraCodegenPage() {
   const [tab, setTab] = useState<"list" | "import">("list")
@@ -31,15 +30,13 @@ export default function InfraCodegenPage() {
   const loadList = useCallback(async () => {
     setLoading(true)
     try {
-      const sp = new URLSearchParams({ page: String(page), pageSize: "20" })
-      if (keyword) sp.set("keyword", keyword)
-      const res = await fetch(`${API}?${sp}`).then((r) => r.json())
+      const res = await request.get(API.CODEGEN, { page, pageSize: 20, keyword: keyword || undefined })
       if (res.success) setData(res.data)
     } finally { setLoading(false) }
   }, [page, keyword])
 
   const loadDbTables = async () => {
-    const res = await fetch(`${API}/tables`).then((r) => r.json())
+    const res = await request.get(`${API.CODEGEN}/tables`)
     if (res.success) {
       setDbTables(res.data.tables)
       setSourceMode(res.data.sourceMode)
@@ -53,7 +50,7 @@ export default function InfraCodegenPage() {
     if (selectedTables.length === 0) { alert("请选择要导入的表"); return }
     setImporting(true)
     try {
-      const res = await fetch(`${API}/import`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ tableNames: selectedTables }) }).then((r) => r.json())
+      const res = await request.post(`${API.CODEGEN}/import`, { tableNames: selectedTables })
       if (res.success) {
         alert(`导入成功: ${res.data.imported.length} 张表${res.data.skipped.length ? `，跳过 ${res.data.skipped.length} 张` : ""}`)
         setSelectedTables([])
@@ -65,7 +62,7 @@ export default function InfraCodegenPage() {
 
   // === 预览 ===
   const handlePreview = async (table: CodegenTable) => {
-    const res = await fetch(`${API}/preview`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ moduleName: table.moduleName, className: table.className, businessName: table.tableComment, template: table.template, scene: table.scene, tableName: table.tableName }) }).then((r) => r.json())
+    const res = await request.post(`${API.CODEGEN}/preview`, { moduleName: table.moduleName, className: table.className, businessName: table.tableComment, template: table.template, scene: table.scene, tableName: table.tableName })
     if (res.success) {
       setPreviewFiles(res.data)
       setPreviewActive(0)
@@ -73,9 +70,9 @@ export default function InfraCodegenPage() {
     } else { alert(res.error) }
   }
 
-  // === 下载 ===
+  // === 下载（需要 blob，保持原生 fetch） ===
   const handleDownload = async (table: CodegenTable) => {
-    const res = await fetch(`${API}/${table.id}/download`)
+    const res = await fetch(`${API.CODEGEN}/${table.id}/download`)
     if (res.ok) {
       const blob = await res.blob()
       const url = URL.createObjectURL(blob)
@@ -90,7 +87,7 @@ export default function InfraCodegenPage() {
   // === 删除 ===
   const handleDelete = async (table: CodegenTable) => {
     if (!confirm(`确认删除「${table.tableName}」的生成配置？`)) return
-    const res = await fetch(`${API}/${table.id}`, { method: "DELETE" }).then((r) => r.json())
+    const res = await request.delete(`${API.CODEGEN}/${table.id}`)
     if (res.success) loadList(); else alert(res.error)
   }
 

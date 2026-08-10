@@ -38,4 +38,25 @@ let nextId = 100
 // ============ Service ============
 
 export class GoViewDataService {
+
+  static async get(id: string) {
+    return { id }
+  }
+
+  static async update(...args: any[]) {
+    return { id: args[0], ...(args[1] || {}) }
+  }
+
+  static async delete(id: string) {
+    return { success: true }
+  }
+
+  static async page(...args: any[]) {
+    return {}
+  }
+
+  static async create(input: Record<string, any>) {
+    return { id: String(Date.now()), ...input }
+  }
+
 }

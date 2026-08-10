@@ -7,7 +7,7 @@ const MOCK_DATA: ApiErrorLogItem[] = [
 ]
 
 export class ApiErrorLogService {
-  static async page(input: { page: number; pageSize: number; keyword?: string; status?: string }) {
+  static async page(input: any) {
     let filtered = [...MOCK_DATA]
     if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((l) => l.exceptionMessage.toLowerCase().includes(kw) || l.requestUrl.toLowerCase().includes(kw)) }
     if (input.status) filtered = filtered.filter((l) => l.status === input.status)

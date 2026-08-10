@@ -3,7 +3,7 @@
  */
 
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
-import { SEED_DEPTS } from "@/modules/shared/backend/seed-data"
+import { SEED_DEPTS } from "@prisma/data"
 
 export type SystemDeptRow = {
   id: string

@@ -66,4 +66,13 @@ export class KeFuMessageService {
     domainLog.audit("mall.keFuMessage.update", { targetType: "MALL_KEFUMESSAGE", targetId: input.id })
     return true
   }
+
+  static async delete(id: string) {
+    return { success: true }
+  }
+
+  static async create(input: Record<string, any>) {
+    return { id: String(Date.now()), ...input }
+  }
+
 }

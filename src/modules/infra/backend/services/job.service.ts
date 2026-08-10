@@ -6,7 +6,7 @@ import { InfraJobRepository } from "@/modules/infra/backend/repositories/job.rep
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 
 export class InfraJobService {
-  static async list(input: { page: number; pageSize: number; keyword?: string; status?: string }) {
+  static async list(input: any) {
     const result = await InfraJobRepository.findList(input)
     domainLog.event("infra.job.list", { page: input.page, total: result.total })
     return result
@@ -18,7 +18,7 @@ export class InfraJobService {
     return job
   }
 
-  static async create(input: { name: string; handlerName: string; handlerParam?: string; cronExpression: string; retryCount?: number; retryInterval?: number; status?: string }) {
+  static async create(input: any) {
     const job = await InfraJobRepository.create(input)
     domainLog.event("infra.job.create", { jobId: job.id })
     domainLog.audit("infra.job.create", { targetType: "JOB", targetId: job.id })

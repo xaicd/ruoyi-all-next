@@ -7,7 +7,7 @@ const MOCK_DATA: MailLogItem[] = [
 ]
 
 export class MailLogService {
-  static async page(input: { page: number; pageSize: number; keyword?: string }) {
+  static async page(input: any) {
     let filtered = [...MOCK_DATA]
     if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((l) => l.toEmail.toLowerCase().includes(kw) || l.subject.toLowerCase().includes(kw)) }
     domainLog.event("system.mailLog.page", { total: filtered.length })
@@ -16,4 +16,13 @@ export class MailLogService {
   }
   static async get(id: string) { return MOCK_DATA.find((l) => l.id === id) ?? null }
   static async delete(id: string) { const idx = MOCK_DATA.findIndex((l) => l.id === id); if (idx !== -1) MOCK_DATA.splice(idx, 1); return { success: true } }
+
+  static async update(...args: any[]) {
+    return { id: args[0], ...(args[1] || {}) }
+  }
+
+  static async create(input: Record<string, any>) {
+    return { id: String(Date.now()), ...input }
+  }
+
 }

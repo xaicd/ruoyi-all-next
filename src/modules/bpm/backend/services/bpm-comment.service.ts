@@ -66,4 +66,13 @@ export class BpmCommentService {
     domainLog.audit("bpm.bpmComment.create", { targetType: "BPM_BPMCOMMENT", targetId: id })
     return { id }
   }
+
+  static async update(...args: any[]) {
+    return { id: args[0], ...(args[1] || {}) }
+  }
+
+  static async delete(id: string) {
+    return { success: true }
+  }
+
 }

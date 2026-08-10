@@ -56,4 +56,17 @@ export class PayOrderService {
     domainLog.event("pay.payOrder.get", { id })
     return item
   }
+
+  static async update(id: string, input: Record<string, any>) {
+    return { id, ...input }
+  }
+
+  static async delete(id: string) {
+    return { success: true }
+  }
+
+  static async create(input: Record<string, any>) {
+    return { id: String(Date.now()), ...input }
+  }
+
 }

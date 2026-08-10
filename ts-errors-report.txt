@@ -1,0 +1,32 @@
+TS2304/TS18004: 243 errors in 123 files
+
+3 errors: src/modules/system/backend/services/login-log.service.ts
+    Missing: id
+    Missing: input
+3 errors: src/modules/system/backend/services/operate-log.service.ts
+    Missing: id
+    Missing: input
+2 errors: src/modules/bpm/backend/services/bpm-comment.service.ts
+    Missing: id
+    Missing: input
+2 errors: src/modules/bpm/backend/services/bpm-oaleave.service.ts
+    Missing: id
+    Missing: input
+2 errors: src/modules/bpm/backend/services/bpm-process-definition.service.ts
+    Missing: id
+    Missing: input
+2 errors: src/modules/bpm/backend/services/bpm-process-instance-copy.service.ts
+    Missing: id
+    Missing: input
+2 errors: src/modules/bpm/backend/services/bpm-process-instance.service.ts
+    Missing: id
+    Missing: input
+2 errors: src/modules/bpm/backend/services/bpm-task.service.ts
+    Missing: id
+    Missing: input
+2 errors: src/modules/crm/backend/services/crm-contract-config.service.ts
+    Missing: id
+    Missing: input
+2 errors: src/modules/crm/backend/services/crm-customer-pool-config.service.ts
+    Missing: id
+    Missing: input

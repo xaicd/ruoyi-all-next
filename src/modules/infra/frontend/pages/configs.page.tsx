@@ -1,11 +1,10 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { request, API } from "@/modules/shared/frontend/lib/request"
 
 type InfraConfig = { id: string; category: string; name: string; configKey: string; value: string; visible: boolean; remark: string | null; createdAt: string }
 type PageData = { items: InfraConfig[]; total: number; page: number; pageSize: number }
-
-const API = "/api/v1/admin/infra/configs"
 
 export default function InfraConfigsPage() {
   const [data, setData] = useState<PageData>({ items: [], total: 0, page: 1, pageSize: 20 })
@@ -18,9 +17,7 @@ export default function InfraConfigsPage() {
   const loadData = useCallback(async () => {
     setLoading(true)
     try {
-      const sp = new URLSearchParams({ page: String(page), pageSize: "20" })
-      if (keyword) sp.set("keyword", keyword)
-      const res = await fetch(`${API}?${sp}`).then((r) => r.json())
+      const res = await request.get(API.CONFIGS, { page, pageSize: 20, keyword: keyword || undefined })
       if (res.success) setData(res.data)
     } finally { setLoading(false) }
   }, [page, keyword])
@@ -29,14 +26,14 @@ export default function InfraConfigsPage() {
 
   const handleDelete = async (config: InfraConfig) => {
     if (!confirm(`确认删除配置「${config.name}」？`)) return
-    const res = await fetch(`${API}/${config.id}`, { method: "DELETE" }).then((r) => r.json())
+    const res = await request.delete(`${API.CONFIGS}/${config.id}`)
     if (res.success) loadData(); else alert(res.error)
   }
 
   const handleSubmit = async (formData: Record<string, any>) => {
     const res = editing
-      ? await fetch(`${API}/${editing.id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData) }).then((r) => r.json())
-      : await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData) }).then((r) => r.json())
+      ? await request.put(`${API.CONFIGS}/${editing.id}`, formData)
+      : await request.post(API.CONFIGS, formData)
     if (res.success) { setShowForm(false); loadData() } else alert(res.error)
   }
 

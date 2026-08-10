@@ -66,4 +66,13 @@ export class MpUserService {
     domainLog.audit("mp.mpUser.update", { targetType: "MP_MPUSER", targetId: input.id })
     return true
   }
+
+  static async delete(id: string) {
+    return { success: true }
+  }
+
+  static async create(input: Record<string, any>) {
+    return { id: String(Date.now()), ...input }
+  }
+
 }

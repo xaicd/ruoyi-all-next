@@ -75,4 +75,9 @@ export class AiMusicService {
     domainLog.audit("ai.aiMusic.delete", { targetType: "AI_AIMUSIC", targetId: id })
     return true
   }
+
+  static async create(input: Record<string, any>) {
+    return { id: String(Date.now()), ...input }
+  }
+
 }

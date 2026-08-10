@@ -4,7 +4,7 @@ import { domainLog } from "@/modules/shared/backend/lib/domain-log"
  * Permission Service - 权限分配
  * 处理用户-角色分配、角色-菜单分配
  */
-export class PermissionService {
+export class SystemPermissionService {
   /** 分配用户角色 */
   static async assignUserRole(input: { userId: string; roleIds: string[] }) {
     domainLog.event("system.permission.assignUserRole", { userId: input.userId, roleCount: input.roleIds.length })

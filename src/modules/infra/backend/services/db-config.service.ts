@@ -9,7 +9,7 @@ const MOCK_DATA: DbConfigItem[] = [
 let nextId = 100
 
 export class DbConfigService {
-  static async page(input: { page: number; pageSize: number; keyword?: string }) {
+  static async page(input: any) {
     let filtered = [...MOCK_DATA]
     if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((c) => c.name.toLowerCase().includes(kw) || c.driver.toLowerCase().includes(kw)) }
     domainLog.event("infra.dbConfig.page", { total: filtered.length })

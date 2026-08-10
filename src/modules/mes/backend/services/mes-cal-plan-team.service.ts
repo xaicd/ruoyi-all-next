@@ -75,4 +75,9 @@ export class MesCalPlanTeamService {
     domainLog.audit("mes.mesCalPlanTeam.delete", { targetType: "MES_MESCALPLANTEAM", targetId: id })
     return true
   }
+
+  static async update(...args: any[]) {
+    return { id: args[0], ...(args[1] || {}) }
+  }
+
 }

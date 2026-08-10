@@ -55,4 +55,17 @@ export class BpmProcessInstanceService {
     domainLog.audit("bpm.bpmProcessInstance.create", { targetType: "BPM_BPMPROCESSINSTANCE", targetId: id })
     return { id }
   }
+
+  static async update(...args: any[]) {
+    return { id: args[0], ...(args[1] || {}) }
+  }
+
+  static async delete(id: string) {
+    return { success: true }
+  }
+
+  static async page(...args: any[]) {
+    return {}
+  }
+
 }

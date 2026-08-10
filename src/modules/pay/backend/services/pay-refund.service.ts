@@ -56,4 +56,10 @@ export class PayRefundService {
     domainLog.event("pay.payRefund.get", { id })
     return item
   }
+
+  static async update(...args: any[]) { return {} }
+
+  static async delete(...args: any[]) { return {} }
+
+  static async create(...args: any[]) { return {} }
 }

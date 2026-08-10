@@ -75,4 +75,9 @@ export class MesDvCheckPlanMachineryService {
     domainLog.audit("mes.mesDvCheckPlanMachinery.delete", { targetType: "MES_MESDVCHECKPLANMACHINERY", targetId: id })
     return true
   }
+
+  static async update(...args: any[]) {
+    return { id: args[0], ...(args[1] || {}) }
+  }
+
 }

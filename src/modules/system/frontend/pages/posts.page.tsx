@@ -1,11 +1,10 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { request, API } from "@/modules/shared/frontend/lib/request"
 
 type SystemPost = { id: string; name: string; code: string; sort: number; status: string; remark: string | null; createdAt: string }
 type PageData = { items: SystemPost[]; total: number; page: number; pageSize: number }
-
-const API = "/api/v1/admin/system/posts"
 
 export default function SystemPostsPage() {
   const [data, setData] = useState<PageData>({ items: [], total: 0, page: 1, pageSize: 20 })
@@ -18,9 +17,7 @@ export default function SystemPostsPage() {
   const loadData = useCallback(async () => {
     setLoading(true)
     try {
-      const sp = new URLSearchParams({ page: String(page), pageSize: "20" })
-      if (keyword) sp.set("keyword", keyword)
-      const res = await fetch(`${API}?${sp}`).then((r) => r.json())
+      const res = await request.get(API.POSTS, { page, pageSize: 20, keyword: keyword || undefined })
       if (res.success) setData(res.data)
     } finally { setLoading(false) }
   }, [page, keyword])
@@ -29,14 +26,14 @@ export default function SystemPostsPage() {
 
   const handleDelete = async (post: SystemPost) => {
     if (!confirm(`确认删除岗位「${post.name}」？`)) return
-    const res = await fetch(`${API}/${post.id}`, { method: "DELETE" }).then((r) => r.json())
+    const res = await request.delete(`${API.POSTS}/${post.id}`)
     if (res.success) loadData(); else alert(res.error)
   }
 
   const handleSubmit = async (formData: Record<string, any>) => {
     const res = editing
-      ? await fetch(`${API}/${editing.id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData) }).then((r) => r.json())
-      : await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData) }).then((r) => r.json())
+      ? await request.put(`${API.POSTS}/${editing.id}`, formData)
+      : await request.post(API.POSTS, formData)
     if (res.success) { setShowForm(false); loadData() } else alert(res.error)
   }
 

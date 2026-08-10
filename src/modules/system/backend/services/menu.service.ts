@@ -42,7 +42,7 @@ export class SystemMenuService {
     return menu
   }
 
-  static async create(input: { name: string; type: string; parentId?: string; permission?: string; path?: string; component?: string; icon?: string; sort?: number; status?: string; visible?: boolean; keepAlive?: boolean }) {
+  static async create(input: any) {
     const menu = await SystemMenuRepository.create(input)
     domainLog.event("system.menu.create", { menuId: menu.id })
     domainLog.audit("system.menu.create", { targetType: "MENU", targetId: menu.id })

@@ -1,8 +1,7 @@
 "use client"
 
 import { useState } from "react"
-
-const LOGIN_API = "/api/v1/admin/system/auth"
+import { request, API } from "@/modules/shared/frontend/lib/request"
 
 export default function LoginPage() {
   const [username, setUsername] = useState("admin")
@@ -16,12 +15,7 @@ export default function LoginPage() {
     setLoading(true)
 
     try {
-      const res = await fetch(LOGIN_API, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      })
-      const data = await res.json()
+      const data = await request.post(API.AUTH, { username, password }, { noAuth: true })
 
       if (data.success) {
         localStorage.setItem("ruoyi_token", data.data.token)

@@ -1,11 +1,10 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { request, API } from "@/modules/shared/frontend/lib/request"
 
 type InfraFile = { id: string; configId: string; name: string | null; path: string; url: string; type: string | null; size: number; createdAt: string }
 type PageData = { items: InfraFile[]; total: number; page: number; pageSize: number }
-
-const API = "/api/v1/admin/infra/files"
 
 function formatSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`
@@ -32,9 +31,7 @@ export default function InfraFilesPage() {
   const loadData = useCallback(async () => {
     setLoading(true)
     try {
-      const sp = new URLSearchParams({ page: String(page), pageSize: "20" })
-      if (keyword) sp.set("keyword", keyword)
-      const res = await fetch(`${API}?${sp}`).then((r) => r.json())
+      const res = await request.get(API.FILES, { page, pageSize: 20, keyword: keyword || undefined })
       if (res.success) setData(res.data)
     } finally { setLoading(false) }
   }, [page, keyword])
@@ -43,7 +40,7 @@ export default function InfraFilesPage() {
 
   const handleDelete = async (file: InfraFile) => {
     if (!confirm(`确认删除文件「${file.name || file.path}」？`)) return
-    const res = await fetch(`${API}/${file.id}`, { method: "DELETE" }).then((r) => r.json())
+    const res = await request.delete(`${API.FILES}/${file.id}`)
     if (res.success) loadData(); else alert(res.error)
   }
 

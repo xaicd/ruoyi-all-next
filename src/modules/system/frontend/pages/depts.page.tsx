@@ -1,10 +1,9 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { request, API } from "@/modules/shared/frontend/lib/request"
 
 type DeptNode = { id: string; name: string; parentId: string | null; sort: number; status: string; leaderId: string | null; phone: string | null; children: DeptNode[] }
-
-const API = "/api/v1/admin/system/depts"
 
 export default function SystemDeptsPage() {
   const [tree, setTree] = useState<DeptNode[]>([])
@@ -16,7 +15,7 @@ export default function SystemDeptsPage() {
   const loadData = useCallback(async () => {
     setLoading(true)
     try {
-      const res = await fetch(API).then((r) => r.json())
+      const res = await request.get(API.DEPTS)
       if (res.success) setTree(res.data)
     } finally { setLoading(false) }
   }, [])
@@ -28,14 +27,14 @@ export default function SystemDeptsPage() {
 
   const handleDelete = async (dept: DeptNode) => {
     if (!confirm(`确认删除部门「${dept.name}」？`)) return
-    const res = await fetch(`${API}/${dept.id}`, { method: "DELETE" }).then((r) => r.json())
+    const res = await request.delete(`${API.DEPTS}/${dept.id}`)
     if (res.success) loadData(); else alert(res.error)
   }
 
   const handleSubmit = async (formData: Record<string, any>) => {
     const res = editing
-      ? await fetch(`${API}/${editing.id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData) }).then((r) => r.json())
-      : await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData) }).then((r) => r.json())
+      ? await request.put(`${API.DEPTS}/${editing.id}`, formData)
+      : await request.post(API.DEPTS, formData)
     if (res.success) { setShowForm(false); loadData() } else alert(res.error)
   }
 

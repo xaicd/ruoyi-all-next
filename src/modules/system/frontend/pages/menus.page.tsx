@@ -1,10 +1,9 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { request, API } from "@/modules/shared/frontend/lib/request"
 
 type MenuNode = { id: string; name: string; type: string; permission: string | null; path: string | null; icon: string | null; sort: number; status: string; visible: boolean; children: MenuNode[] }
-
-const API = "/api/v1/admin/system/menus"
 
 export default function SystemMenusPage() {
   const [tree, setTree] = useState<MenuNode[]>([])
@@ -15,7 +14,7 @@ export default function SystemMenusPage() {
   const loadData = useCallback(async () => {
     setLoading(true)
     try {
-      const res = await fetch(API).then((r) => r.json())
+      const res = await request.get(API.MENUS)
       if (res.success) setTree(res.data)
     } finally { setLoading(false) }
   }, [])
@@ -24,14 +23,14 @@ export default function SystemMenusPage() {
 
   const handleDelete = async (menu: MenuNode) => {
     if (!confirm(`确认删除菜单「${menu.name}」？`)) return
-    const res = await fetch(`${API}/${menu.id}`, { method: "DELETE" }).then((r) => r.json())
+    const res = await request.delete(`${API.MENUS}/${menu.id}`)
     if (res.success) loadData(); else alert(res.error)
   }
 
   const handleSubmit = async (formData: Record<string, any>) => {
     const res = editing
-      ? await fetch(`${API}/${editing.id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData) }).then((r) => r.json())
-      : await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData) }).then((r) => r.json())
+      ? await request.put(`${API.MENUS}/${editing.id}`, formData)
+      : await request.post(API.MENUS, formData)
     if (res.success) { setShowForm(false); loadData() } else alert(res.error)
   }
 

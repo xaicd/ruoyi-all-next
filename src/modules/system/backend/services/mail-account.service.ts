@@ -8,7 +8,7 @@ const MOCK_DATA: MailAccountItem[] = [
 let nextId = 100
 
 export class MailAccountService {
-  static async page(input: { page: number; pageSize: number; keyword?: string }) {
+  static async page(input: any) {
     let filtered = [...MOCK_DATA]
     if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((a) => a.email.toLowerCase().includes(kw)) }
     domainLog.event("system.mailAccount.page", { total: filtered.length })

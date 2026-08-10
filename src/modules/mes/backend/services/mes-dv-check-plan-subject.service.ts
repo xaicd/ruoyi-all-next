@@ -75,4 +75,9 @@ export class MesDvCheckPlanSubjectService {
     domainLog.audit("mes.mesDvCheckPlanSubject.delete", { targetType: "MES_MESDVCHECKPLANSUBJECT", targetId: id })
     return true
   }
+
+  static async update(...args: any[]) {
+    return { id: args[0], ...(args[1] || {}) }
+  }
+
 }

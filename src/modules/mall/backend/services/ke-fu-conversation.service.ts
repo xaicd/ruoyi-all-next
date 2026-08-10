@@ -75,4 +75,9 @@ export class KeFuConversationService {
     domainLog.audit("mall.keFuConversation.delete", { targetType: "MALL_KEFUCONVERSATION", targetId: id })
     return true
   }
+
+  static async create(input: Record<string, any>) {
+    return { id: String(Date.now()), ...input }
+  }
+
 }

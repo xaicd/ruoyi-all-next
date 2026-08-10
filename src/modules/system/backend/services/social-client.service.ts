@@ -9,7 +9,7 @@ const MOCK_DATA: SocialClientItem[] = [
 let nextId = 100
 
 export class SocialClientService {
-  static async page(input: { page: number; pageSize: number; keyword?: string }) {
+  static async page(input: any) {
     let filtered = [...MOCK_DATA]
     if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((c) => c.name.toLowerCase().includes(kw) || c.socialType.toLowerCase().includes(kw)) }
     domainLog.event("system.socialClient.page", { total: filtered.length })

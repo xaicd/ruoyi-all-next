@@ -9,7 +9,7 @@ const MOCK_DATA: NotifyTemplateItem[] = [
 let nextId = 100
 
 export class NotifyTemplateService {
-  static async page(input: { page: number; pageSize: number; keyword?: string }) {
+  static async page(input: any) {
     let filtered = [...MOCK_DATA]
     if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((t) => t.name.toLowerCase().includes(kw) || t.code.toLowerCase().includes(kw)) }
     domainLog.event("system.notifyTemplate.page", { total: filtered.length })
@@ -21,3 +21,6 @@ export class NotifyTemplateService {
   static async update(input: any) { const idx = MOCK_DATA.findIndex((t) => t.id === input.id); if (idx === -1) throw new Error("通知模板不存在"); MOCK_DATA[idx] = { ...MOCK_DATA[idx], ...input }; return { id: input.id } }
   static async delete(id: string) { const idx = MOCK_DATA.findIndex((t) => t.id === id); if (idx === -1) throw new Error("通知模板不存在"); MOCK_DATA.splice(idx, 1); return { success: true } }
 }
+
+// Alias for index.ts re-export
+export {  as  }

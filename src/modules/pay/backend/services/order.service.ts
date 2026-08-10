@@ -6,7 +6,7 @@ import { PayOrderRepository } from "@/modules/pay/backend/repositories/order.rep
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 
 export class PayOrderService {
-  static async list(input: { page: number; pageSize: number; keyword?: string; status?: string; channelCode?: string }) {
+  static async list(input: any) {
     const result = await PayOrderRepository.findList(input)
     domainLog.event("pay.order.list", { page: input.page, total: result.total })
     return result

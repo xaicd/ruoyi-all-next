@@ -10,7 +10,7 @@
 
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
 import type { PageResult } from "@/modules/shared/backend/lib/database"
-import { SEED_USERS } from "@/modules/shared/backend/seed-data"
+import { SEED_USERS } from "@prisma/data"
 
 // === 数据结构 ===
 

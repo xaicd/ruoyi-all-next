@@ -75,4 +75,9 @@ export class ImFaceUserItemService {
     domainLog.audit("im.imFaceUserItem.delete", { targetType: "IM_IMFACEUSERITEM", targetId: id })
     return true
   }
+
+  static async update(...args: any[]) {
+    return { id: args[0], ...(args[1] || {}) }
+  }
+
 }

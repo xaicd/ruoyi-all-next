@@ -1,11 +1,10 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { request, API } from "@/modules/shared/frontend/lib/request"
 
 type PayRefund = { id: string; orderId: string; merchantOrderId: string; reason: string; amount: number; status: string; channelCode: string; channelRefundNo: string | null; successTime: string | null; createdAt: string }
 type PageData = { items: PayRefund[]; total: number; page: number; pageSize: number }
-
-const API = "/api/v1/admin/pay/refunds"
 
 const statusMap: Record<string, { label: string; color: string }> = {
   WAITING: { label: "退款中", color: "bg-yellow-50 text-yellow-700" },
@@ -26,9 +25,7 @@ export default function PayRefundsPage() {
   const loadData = useCallback(async () => {
     setLoading(true)
     try {
-      const sp = new URLSearchParams({ page: String(page), pageSize: "20" })
-      if (keyword) sp.set("keyword", keyword)
-      const res = await fetch(`${API}?${sp}`).then((r) => r.json())
+      const res = await request.get(API.PAY_REFUNDS, { page, pageSize: 20, keyword: keyword || undefined })
       if (res.success) setData(res.data)
     } finally { setLoading(false) }
   }, [page, keyword])

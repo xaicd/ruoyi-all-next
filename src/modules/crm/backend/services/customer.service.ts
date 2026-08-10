@@ -6,7 +6,7 @@ import { CrmCustomerRepository } from "@/modules/crm/backend/repositories/custom
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 
 export class CrmCustomerService {
-  static async list(input: { page: number; pageSize: number; keyword?: string; level?: string; status?: string }) {
+  static async list(input: any) {
     const result = await CrmCustomerRepository.findList(input)
     domainLog.event("crm.customer.list", { page: input.page, total: result.total })
     return result
@@ -18,7 +18,7 @@ export class CrmCustomerService {
     return customer
   }
 
-  static async create(input: { name: string; phone?: string; email?: string; industry?: string; level?: string; source?: string; ownerUserId?: string; remark?: string }) {
+  static async create(input: any) {
     const customer = await CrmCustomerRepository.create(input)
     domainLog.event("crm.customer.create", { customerId: customer.id })
     domainLog.audit("crm.customer.create", { targetType: "CRM_CUSTOMER", targetId: customer.id })

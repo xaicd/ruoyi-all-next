@@ -9,7 +9,7 @@ const MOCK_DATA: ApiAccessLogItem[] = [
 ]
 
 export class ApiAccessLogService {
-  static async page(input: { page: number; pageSize: number; keyword?: string }) {
+  static async page(input: any) {
     let filtered = [...MOCK_DATA]
     if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((l) => l.requestUrl.toLowerCase().includes(kw) || l.requestMethod.toLowerCase().includes(kw)) }
     filtered.sort((a, b) => b.createdAt.localeCompare(a.createdAt))

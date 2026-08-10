@@ -65,4 +65,13 @@ export class ImGroupManagerService {
     domainLog.audit("im.imGroupManager.delete", { targetType: "IM_IMGROUPMANAGER", targetId: id })
     return true
   }
+
+  static async update(...args: any[]) {
+    return { id: args[0], ...(args[1] || {}) }
+  }
+
+  static async create(input: Record<string, any>) {
+    return { id: String(Date.now()), ...input }
+  }
+
 }

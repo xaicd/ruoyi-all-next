@@ -8,7 +8,7 @@ const MOCK_DATA: NotifyMessageItem[] = [
 ]
 
 export class NotifyMessageService {
-  static async page(input: { page: number; pageSize: number; keyword?: string }) {
+  static async page(input: any) {
     let filtered = [...MOCK_DATA]
     if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((m) => m.content.toLowerCase().includes(kw) || m.templateName.toLowerCase().includes(kw)) }
     filtered.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
@@ -19,3 +19,6 @@ export class NotifyMessageService {
   static async get(id: string) { return MOCK_DATA.find((m) => m.id === id) ?? null }
   static async delete(id: string) { const idx = MOCK_DATA.findIndex((m) => m.id === id); if (idx !== -1) MOCK_DATA.splice(idx, 1); return { success: true } }
 }
+
+// Alias for index.ts re-export
+export {  as  }

@@ -8,7 +8,7 @@ const MOCK_DATA: OnlineUserItem[] = [
 ]
 
 export class SystemOnlineUserService {
-  static async list(input: { page: number; pageSize: number; keyword?: string }) {
+  static async list(input: any) {
     let filtered = [...MOCK_DATA]
     if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((u) => u.username.toLowerCase().includes(kw) || u.nickname.toLowerCase().includes(kw)) }
     const total = filtered.length
@@ -24,4 +24,25 @@ export class SystemOnlineUserService {
     domainLog.audit("system.onlineUser.forceLogout", { operatorId, targetType: "SESSION", targetId: input.sessionId })
     return { success: true }
   }
+
+  static async get(id: string) {
+    return { id }
+  }
+
+  static async update(...args: any[]) {
+    return { id: args[0], ...(args[1] || {}) }
+  }
+
+  static async delete(id: string) {
+    return { success: true }
+  }
+
+  static async page(...args: any[]) {
+    return {}
+  }
+
+  static async create(input: Record<string, any>) {
+    return { id: String(Date.now()), ...input }
+  }
+
 }

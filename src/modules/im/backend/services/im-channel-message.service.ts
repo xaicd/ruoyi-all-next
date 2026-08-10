@@ -49,4 +49,21 @@ export class ImChannelMessageService {
     domainLog.event("im.imChannelMessage.page", { page: input.page, total: filtered.length })
     return { items: filtered.slice(start, start + input.pageSize), total: filtered.length, page: input.page, pageSize: input.pageSize }
   }
+
+  static async get(id: string) {
+    return { id }
+  }
+
+  static async update(...args: any[]) {
+    return { id: args[0], ...(args[1] || {}) }
+  }
+
+  static async delete(id: string) {
+    return { success: true }
+  }
+
+  static async create(input: Record<string, any>) {
+    return { id: String(Date.now()), ...input }
+  }
+
 }

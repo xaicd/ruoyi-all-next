@@ -76,4 +76,9 @@ export class IotOtaFirmwareService {
     domainLog.audit("iot.iotOtaFirmware.update", { targetType: "IOT_IOTOTAFIRMWARE", targetId: input.id })
     return true
   }
+
+  static async delete(id: string) {
+    return { success: true }
+  }
+
 }

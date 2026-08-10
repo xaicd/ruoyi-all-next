@@ -6,7 +6,7 @@ import { InfraFileRepository } from "@/modules/infra/backend/repositories/file.r
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 
 export class InfraFileService {
-  static async list(input: { page: number; pageSize: number; keyword?: string; type?: string }) {
+  static async list(input: any) {
     const result = await InfraFileRepository.findList(input)
     domainLog.event("infra.file.list", { page: input.page, total: result.total })
     return result

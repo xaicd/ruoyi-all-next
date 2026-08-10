@@ -9,7 +9,7 @@ const MOCK_DATA: OAuth2ClientItem[] = [
 let nextId = 100
 
 export class OAuth2ClientService {
-  static async page(input: { page: number; pageSize: number; keyword?: string }) {
+  static async page(input: any) {
     let filtered = [...MOCK_DATA]
     if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((c) => c.name.toLowerCase().includes(kw) || c.clientId.toLowerCase().includes(kw)) }
     domainLog.event("system.oauth2Client.page", { total: filtered.length })

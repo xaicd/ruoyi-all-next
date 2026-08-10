@@ -1,11 +1,10 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { request, API } from "@/modules/shared/frontend/lib/request"
 
 type InfraJob = { id: string; name: string; handlerName: string; handlerParam: string | null; cronExpression: string; retryCount: number; status: string; createdAt: string }
 type PageData = { items: InfraJob[]; total: number; page: number; pageSize: number }
-
-const API = "/api/v1/admin/infra/jobs"
 
 export default function InfraJobCenterPage() {
   const [data, setData] = useState<PageData>({ items: [], total: 0, page: 1, pageSize: 20 })
@@ -18,9 +17,7 @@ export default function InfraJobCenterPage() {
   const loadData = useCallback(async () => {
     setLoading(true)
     try {
-      const sp = new URLSearchParams({ page: String(page), pageSize: "20" })
-      if (keyword) sp.set("keyword", keyword)
-      const res = await fetch(`${API}?${sp}`).then((r) => r.json())
+      const res = await request.get(API.JOBS, { page, pageSize: 20, keyword: keyword || undefined })
       if (res.success) setData(res.data)
     } finally { setLoading(false) }
   }, [page, keyword])
@@ -28,26 +25,26 @@ export default function InfraJobCenterPage() {
   useEffect(() => { loadData() }, [loadData])
 
   const handleTrigger = async (job: InfraJob) => {
-    const res = await fetch(`${API}/${job.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "trigger" }) }).then((r) => r.json())
+    const res = await request.patch(`${API.JOBS}/${job.id}`, { action: "trigger" })
     if (res.success) alert(res.data.message); else alert(res.error)
   }
 
   const handleToggleStatus = async (job: InfraJob) => {
     const newStatus = job.status === "ACTIVE" ? "DISABLED" : "ACTIVE"
-    const res = await fetch(`${API}/${job.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "updateStatus", status: newStatus }) }).then((r) => r.json())
+    const res = await request.patch(`${API.JOBS}/${job.id}`, { action: "updateStatus", status: newStatus })
     if (res.success) loadData(); else alert(res.error)
   }
 
   const handleDelete = async (job: InfraJob) => {
     if (!confirm(`确认删除任务「${job.name}」？`)) return
-    const res = await fetch(`${API}/${job.id}`, { method: "DELETE" }).then((r) => r.json())
+    const res = await request.delete(`${API.JOBS}/${job.id}`)
     if (res.success) loadData(); else alert(res.error)
   }
 
   const handleSubmit = async (formData: Record<string, any>) => {
     const res = editing
-      ? await fetch(`${API}/${editing.id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData) }).then((r) => r.json())
-      : await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData) }).then((r) => r.json())
+      ? await request.put(`${API.JOBS}/${editing.id}`, formData)
+      : await request.post(API.JOBS, formData)
     if (res.success) { setShowForm(false); loadData() } else alert(res.error)
   }
 
