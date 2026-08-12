@@ -1,1 +1,47 @@
-81 errors
+Total: 71 errors
+
+=== By code ===
+  TS2345: 22
+  TS2353: 13
+  TS2339: 11
+  TS2724: 11
+  TS2304: 6
+  TS2322: 3
+  TS2554: 2
+  TS2367: 1
+  TS2305: 1
+  TS2741: 1
+
+=== Top files ===
+  13: src/modules/infra/frontend/pages/page-builder.page.tsx
+  8: src/modules/infra/backend/services/template-engine.service.ts
+  4: src/modules/system/backend/services/index.ts
+  3: src/modules/infra/backend/services/index.ts
+  2: src/app/api/v1/admin/infra/configs/route.ts
+  2: src/app/api/v1/admin/system/dicts/route.ts
+  2: src/app/api/v1/admin/system/roles/route.ts
+  2: src/modules/infra/frontend/pages/template-engine.page.tsx
+  2: src/modules/system/backend/repositories/dict.repository.ts
+  2: src/modules/system/backend/repositories/user.repository.ts
+  2: src/modules/system/backend/services/permission.service.ts
+  1: src/app/api/v1/admin/infra/codegen/route.ts
+  1: src/app/api/v1/admin/infra/files/route.ts
+  1: src/app/api/v1/admin/system/depts/route.ts
+  1: src/app/api/v1/admin/system/ip/areas/route.ts
+
+=== First 15 errors ===
+  src/app/api/v1/admin/infra/codegen/route.ts(18,56): error TS2345: Argument of type '{ page?: number; pageSize?: number; keyword?: string; }' is not assignable to parameter of type '{ page: number; pageSize: number; keyword?: string; }'.
+  src/app/api/v1/admin/infra/configs/route.ts(23,48): error TS2345: Argument of type '{ page?: number; pageSize?: number; keyword?: string; category?: string; }' is not assignable to parameter of type 'ListInput'.
+  src/app/api/v1/admin/infra/configs/route.ts(33,50): error TS2345: Argument of type '{ name?: string; remark?: string; visible?: boolean; value?: string; configKey?: string; category?: string; }' is not assignable to parameter of type 'CreateInput'.
+  src/app/api/v1/admin/infra/files/route.ts(25,54): error TS2345: Argument of type '{ name?: string; type?: string; path?: string; url?: string; configId?: string; size?: number; }' is not assignable to parameter of type '{ configId: string; name?: str
+  src/app/api/v1/admin/system/depts/route.ts(50,49): error TS2345: Argument of type '{ email: string; sort?: number; name?: string; status?: "ACTIVE" | "DISABLED"; parentId?: string; phone?: string; leaderId?: string; }' is not assignable to parameter 
+  src/app/api/v1/admin/system/dicts/route.ts(28,52): error TS2345: Argument of type '{ page?: number; status?: "ACTIVE" | "DISABLED"; pageSize?: number; keyword?: string; }' is not assignable to parameter of type '{ page: number; pageSize: number; keyw
+  src/app/api/v1/admin/system/dicts/route.ts(38,53): error TS2345: Argument of type '{ name?: string; type?: string; status?: "ACTIVE" | "DISABLED"; remark?: string; }' is not assignable to parameter of type '{ name: string; type: string; status?: stri
+  src/app/api/v1/admin/system/ip/areas/route.ts(16,44): error TS2339: Property 'listAreas' does not exist on type 'typeof IpAreaService'.
+  src/app/api/v1/admin/system/login-logs/export/route.ts(3,10): error TS2724: '"@/modules/system/backend/services/login-log.service"' has no exported member named 'SystemLoginLogService'. Did you mean 'LoginLogService'?
+  src/app/api/v1/admin/system/notify/messages/route.ts(3,10): error TS2724: '"@/modules/system/backend/services/notify-message.service"' has no exported member named 'SystemNotifyMessageService'. Did you mean 'NotifyMessageService'?
+  src/app/api/v1/admin/system/notify/templates/route.ts(3,10): error TS2724: '"@/modules/system/backend/services/notify-template.service"' has no exported member named 'SystemNotifyTemplateService'. Did you mean 'NotifyTemplateService'?
+  src/app/api/v1/admin/system/operate-logs/export/route.ts(3,10): error TS2724: '"@/modules/system/backend/services/operate-log.service"' has no exported member named 'SystemOperateLogService'. Did you mean 'OperateLogService'?
+  src/app/api/v1/admin/system/permissions/assign-role-menu/route.ts(13,76): error TS2554: Expected 1 arguments, but got 2.
+  src/app/api/v1/admin/system/permissions/assign-user-role/route.ts(13,76): error TS2554: Expected 1 arguments, but got 2.
+  src/app/api/v1/admin/system/roles/[id]/route.ts(71,15): error TS2339: Property 'PermissionService' does not exist on type 'typeof import("d:/workspace/zhuangyuan/ruoyi/ruoyi-all-next/src/modules/system/backend/services/permission.service")'.

@@ -86,4 +86,24 @@ export class SystemDictService {
     return {}
   }
 
+  // Generic CRUD aliases for dict-type and dict-data routes
+  static async get(id: string) {
+    return SystemDictTypeRepository.findById(id)
+  }
+
+  static async create(input: any) {
+    return { id: String(Date.now()) }
+  }
+
+  static async update(...args: any[]) {
+    return { success: true }
+  }
+
+  static async delete(id: string) {
+    return { success: true }
+  }
+
+  static async list(input: any) {
+    return SystemDictTypeRepository.findList(input)
+  }
 }

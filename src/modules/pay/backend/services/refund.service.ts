@@ -18,8 +18,9 @@ export class PayRefundService {
     return refund
   }
 
-  static async update(id: string, input: Record<string, any>) {
-    return { id, ...input }
+  static async update(...args: any[]) {
+    const input = args.length === 1 ? args[0] : { id: args[0], ...args[1] }
+    return { id: input.id, ...input }
   }
 
   static async delete(id: string) {
