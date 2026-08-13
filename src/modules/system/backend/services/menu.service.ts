@@ -30,6 +30,14 @@ export class SystemMenuService {
     return tree
   }
 
+  static async treeByIds(menuIds: Iterable<string>) {
+    const allowedIds = new Set(menuIds)
+    const list = (await SystemMenuRepository.findAll({ status: "ACTIVE" })).filter((menu) => allowedIds.has(menu.id))
+    const tree = buildTree(list)
+    domainLog.event("system.menu.scopedTree", { total: list.length })
+    return tree
+  }
+
   static async list(params?: { status?: string }) {
     const list = await SystemMenuRepository.findAll(params)
     domainLog.event("system.menu.list", { total: list.length })

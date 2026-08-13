@@ -1,7 +1,7 @@
 "use client"
 
-import { AdminListPageTemplate } from "@/modules/shared/frontend/templates/admin-list-page.template"
+import { FeatureUnavailablePage } from "@/modules/shared/frontend/templates/feature-unavailable-page.template"
 
 export default function SocialClientPage() {
-  return <AdminListPageTemplate title="SocialClient管理" endpoint="/api/admin/system/social-client" />
+  return <FeatureUnavailablePage title="社交客户端" description="社交客户端的数据模型、第三方平台关联与授权闭环尚未迁移完成。" />
 }

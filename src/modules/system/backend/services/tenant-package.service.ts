@@ -11,6 +11,7 @@ async function requireGlobalMenus(menuIds: string[] | undefined): Promise<void> 
   for (const menuId of menuIds) {
     const menu = await SystemMenuRepository.findById(menuId)
     if (!menu) throw new Error(`菜单不存在: ${menuId}`)
+    if (menu.status !== "ACTIVE") throw new Error(`菜单已停用: ${menuId}`)
   }
 }
 

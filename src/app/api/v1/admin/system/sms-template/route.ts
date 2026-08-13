@@ -1,18 +1,13 @@
 import { NextResponse } from "next/server"
-import { SystemSmsService } from "@/modules/system/backend/services"
-import { systemModulePageQuerySchema } from "@/modules/system/backend/validators"
+import { getAuthErrorStatus, requireAdminAuth } from "@/modules/shared/backend/auth/guards"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 
 export async function GET(request: Request) {
   try {
-    const { searchParams } = new URL(request.url)
-    const input = systemModulePageQuerySchema.parse({
-      page: searchParams.get("page") ?? 1,
-      pageSize: searchParams.get("pageSize") ?? 20,
-      keyword: searchParams.get("keyword") ?? undefined,
-    })
-    const data = await SystemSmsService.listChannels(input)
-    return NextResponse.json({ success: true, data })
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message ?? "查询失败" }, { status: 400 })
+    requireAdminAuth(request, PERMISSIONS.SYSTEM_SMS_CHANNEL_VIEW)
+    return NextResponse.json({ success: false, error: "短信模板功能尚未实现" }, { status: 501 })
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "未授权"
+    return NextResponse.json({ success: false, error: message }, { status: getAuthErrorStatus(error) })
   }
 }

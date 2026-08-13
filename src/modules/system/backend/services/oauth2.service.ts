@@ -70,7 +70,7 @@ export class SystemOauth2Service {
 
     const start = (input.page - 1) * input.pageSize
     return {
-      items: filtered.slice(start, start + input.pageSize),
+      items: filtered.slice(start, start + input.pageSize).map(({ clientSecret: _clientSecret, ...client }) => client),
       total: filtered.length,
       page: input.page,
       pageSize: input.pageSize,
@@ -96,7 +96,7 @@ export class SystemOauth2Service {
 
     const start = (input.page - 1) * input.pageSize
     return {
-      items: filtered.slice(start, start + input.pageSize),
+      items: filtered.slice(start, start + input.pageSize).map(({ accessToken: _accessToken, refreshToken: _refreshToken, ...token }) => token),
       total: filtered.length,
       page: input.page,
       pageSize: input.pageSize,

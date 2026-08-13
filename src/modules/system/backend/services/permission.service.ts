@@ -5,13 +5,37 @@ import { SystemUserRepository } from "@/modules/system/backend/repositories/user
 import { SystemTenantRepository } from "@/modules/system/backend/repositories/tenant.repository"
 import { TenantPackageRepository } from "@/modules/system/backend/repositories/tenant-package.repository"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
-import { getCurrentTenantId, isPlatformContext } from "@/modules/shared/backend/lib/biz-tenant"
 
 type AssignUserRoleInput = { userId: string; roleIds: string[] }
 type AssignRoleMenuInput = { roleId: string; menuIds: string[] }
 
+const PLATFORM_CONTROL_MENU_NAMES = new Set(["租户管理", "租户套餐", "数据源配置", "OAuth 2.0", "令牌管理"])
+const PLATFORM_CONTROL_PERMISSION_PREFIXES = ["system:tenant", "system:oauth2", "infra:data-source-config"]
+
 function resolveInput<T>(operatorOrInput: string | T, possibleInput?: T): T {
   return (typeof operatorOrInput === "string" ? possibleInput : operatorOrInput) as T
+}
+
+function isPlatformControlMenu(menu: { name: string; permission: string | null }): boolean {
+  return PLATFORM_CONTROL_MENU_NAMES.has(menu.name)
+    || PLATFORM_CONTROL_PERMISSION_PREFIXES.some((prefix) => menu.permission?.startsWith(prefix))
+}
+
+async function tenantAssignableMenuIds(packageMenuIds: Iterable<string>): Promise<Set<string>> {
+  const activeMenus = await SystemMenuRepository.findAll({ status: "ACTIVE" })
+  const blockedIds = new Set(activeMenus.filter(isPlatformControlMenu).map((menu) => menu.id))
+  let changed = true
+  while (changed) {
+    changed = false
+    for (const menu of activeMenus) {
+      if (menu.parentId && blockedIds.has(menu.parentId) && !blockedIds.has(menu.id)) {
+        blockedIds.add(menu.id)
+        changed = true
+      }
+    }
+  }
+  const activeIds = new Set(activeMenus.map((menu) => menu.id))
+  return new Set([...packageMenuIds].filter((menuId) => activeIds.has(menuId) && !blockedIds.has(menuId)))
 }
 
 async function requireUserAndRoles(input: AssignUserRoleInput): Promise<void> {
@@ -21,6 +45,7 @@ async function requireUserAndRoles(input: AssignUserRoleInput): Promise<void> {
   for (const roleId of input.roleIds) {
     const role = await SystemRoleRepository.findById(roleId)
     if (!role) throw new Error(`角色不存在或不属于当前租户: ${roleId}`)
+    if (role.tenantId !== user.tenantId) throw new Error(`角色不属于用户所在租户: ${roleId}`)
   }
 }
 
@@ -36,7 +61,7 @@ async function resolveRolePackageMenuIds(roleId: string): Promise<{ role: Awaite
   if (!tenant.packageId) throw new Error("目标角色所属租户未分配套餐")
   const pkg = await TenantPackageRepository.findById(tenant.packageId)
   if (!pkg || pkg.status !== "ACTIVE") throw new Error("目标角色所属租户套餐不可用")
-  return { role, menuIds: new Set(pkg.menuIds) }
+  return { role, menuIds: await tenantAssignableMenuIds(pkg.menuIds) }
 }
 
 async function requireRoleAndMenus(input: AssignRoleMenuInput): Promise<void> {

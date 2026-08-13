@@ -24,6 +24,14 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const mode = searchParams.get("mode")
     const status = searchParams.get("status") || undefined
+    const roleId = searchParams.get("roleId")?.trim()
+
+    if (mode === "role-assign") {
+      if (!roleId) return NextResponse.json({ success: false, error: "roleId 不能为空" }, { status: 400 })
+      const { SystemPermissionService } = await import("@/modules/system/backend/services/permission.service")
+      const data = await SystemMenuService.treeByIds(await SystemPermissionService.getRoleAssignableMenuIds(roleId))
+      return NextResponse.json({ success: true, data })
+    }
 
     if (mode === "list") {
       const data = await SystemMenuService.list({ status })

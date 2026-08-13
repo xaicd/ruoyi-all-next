@@ -159,7 +159,7 @@ function MenuAssignDialog({ role, onClose }: { role: SystemRole; onClose: () => 
   useEffect(() => {
     let active = true
     Promise.all([
-      request.get<MenuNode[]>(API.MENUS),
+      request.get<MenuNode[]>(API.ROLE_ASSIGNABLE_MENUS, { roleId: role.id }),
       request.get<RoleMenuIdsResponse>(API.ROLE_MENU_IDS, { roleId: role.id }),
     ]).then(([menus, assigned]) => {
       if (!active) return
