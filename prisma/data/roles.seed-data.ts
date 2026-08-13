@@ -41,7 +41,7 @@ export const SEED_ROLES: SystemRoleRow[] = [
   {
     "id": "4",
     "name": "租户管理员",
-    "code": "tenant_admin",
+    "code": "tenant-admin-default",
     "sort": 0,
     "status": "ACTIVE",
     "dataScope": "ALL",

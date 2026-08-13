@@ -89,7 +89,7 @@ export default function SystemRolesPage() {
             : data.items.map((role) => (
               <tr key={role.id} className="border-b last:border-0 hover:bg-slate-50">
                 <td className="px-4 py-3 font-medium">{role.name}</td>
-                <td className="px-4 py-3 text-slate-500">{role.code}</td>
+                <td className="px-4 py-3"><code className="rounded bg-slate-100 px-2 py-1 text-xs text-slate-600">{role.code}</code></td>
                 <td className="px-4 py-3">{role.sort}</td>
                 <td className="px-4 py-3"><span className={`rounded-full px-2 py-0.5 text-xs font-medium ${role.status === "ACTIVE" ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}>{role.status === "ACTIVE" ? "启用" : "禁用"}</span></td>
                 <td className="px-4 py-3 text-xs text-slate-500">{role.dataScope}</td>

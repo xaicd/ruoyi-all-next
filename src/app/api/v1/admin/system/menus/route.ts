@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server"
 import { SystemMenuService } from "@/modules/system/backend/services/menu.service"
+import { isPlatformControlMenu } from "@/modules/system/backend/services/tenant-menu-scope.service"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 import { requirePlatformAdmin } from "@/modules/shared/backend/auth/guards"
+import { getPlatformRole } from "@/modules/shared/backend/lib/biz-tenant"
 import { z } from "zod"
 
 const createMenuSchema = z.object({
@@ -18,6 +20,20 @@ const createMenuSchema = z.object({
   visible: z.boolean().default(true),
   keepAlive: z.boolean().default(true),
 })
+
+type MenuTreeNode = {
+  name: string
+  permission: string | null
+  path: string | null
+  component: string | null
+  children: MenuTreeNode[]
+}
+
+function excludePlatformControlMenuTree(nodes: MenuTreeNode[]): MenuTreeNode[] {
+  return nodes
+    .filter((node) => !isPlatformControlMenu(node))
+    .map((node) => ({ ...node, children: excludePlatformControlMenuTree(node.children) }))
+}
 
 export async function GET(request: Request) {
   try {
@@ -41,13 +57,14 @@ export async function GET(request: Request) {
       return NextResponse.json({ success: true, data })
     }
 
-    ensurePermission(request, PERMISSIONS.SYSTEM_MENU_VIEW)
+    const auth = ensurePermission(request, PERMISSIONS.SYSTEM_MENU_VIEW)
+    const isPlatformAdmin = auth.roles.includes(getPlatformRole())
     if (mode === "list") {
       const data = await SystemMenuService.list({ status })
-      return NextResponse.json({ success: true, data })
+      return NextResponse.json({ success: true, data: isPlatformAdmin ? data : data.filter((menu) => !isPlatformControlMenu(menu)) })
     }
     const data = await SystemMenuService.tree({ status })
-    return NextResponse.json({ success: true, data })
+    return NextResponse.json({ success: true, data: isPlatformAdmin ? data : excludePlatformControlMenuTree(data) })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
   }

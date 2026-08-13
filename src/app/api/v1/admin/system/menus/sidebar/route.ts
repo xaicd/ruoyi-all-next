@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server"
 import { SystemMenuService } from "@/modules/system/backend/services/menu.service"
 import { SystemPermissionService } from "@/modules/system/backend/services/permission.service"
+import { isPlatformControlMenu } from "@/modules/system/backend/services/tenant-menu-scope.service"
 import { requireAdminAuth, getAuthErrorStatus } from "@/modules/shared/backend/auth/guards"
+import { getPlatformRole } from "@/modules/shared/backend/lib/biz-tenant"
 
 type MenuNode = {
   id: string
   name: string
+  permission: string | null
   type: string
   path: string | null
   component: string | null
@@ -39,9 +42,10 @@ function hrefFor(node: MenuNode): string | null {
   return (node.component && componentRoutes[node.component]) || (node.path?.startsWith("/") ? node.path : null)
 }
 
-function toSidebarItem(node: MenuNode, allowedMenuIds: Set<string>): SidebarItem | null {
+function toSidebarItem(node: MenuNode, allowedMenuIds: Set<string>, isPlatformAdmin: boolean): SidebarItem | null {
+  if (!isPlatformAdmin && isPlatformControlMenu(node)) return null
   if (!node.visible || node.type === "BUTTON") return null
-  const children = node.children.map((child) => toSidebarItem(child, allowedMenuIds)).filter((item): item is SidebarItem => item !== null)
+  const children = node.children.map((child) => toSidebarItem(child, allowedMenuIds, isPlatformAdmin)).filter((item): item is SidebarItem => item !== null)
   // 目录本身没有授权记录时，只要存在被授权的后代就保留，保证导航层级完整。
   if (!allowedMenuIds.has(node.id) && children.length === 0) return null
   return { id: node.id, href: hrefFor(node), label: node.name, icon: iconFor(node.icon, node.type), children }
@@ -56,10 +60,11 @@ export async function GET(request: Request) {
       SystemPermissionService.getEffectiveUserMenuIds(auth.userId),
     ])
     const allowedMenuIds = new Set(effectiveMenuIds)
+    const isPlatformAdmin = auth.roles.includes(getPlatformRole())
     const data: SidebarGroup[] = tree
       .filter((node) => node.type === "DIR" && node.visible)
       .map((node) => {
-        const item = toSidebarItem(node, allowedMenuIds)
+        const item = toSidebarItem(node, allowedMenuIds, isPlatformAdmin)
         return item ? { id: node.id, title: node.name, icon: iconFor(node.icon, node.type), children: item.children } : null
       })
       .filter((group): group is SidebarGroup => group !== null && group.children.length > 0)

@@ -26,6 +26,11 @@ function normalizeTenantCode(code: string): string {
   return code.trim().toLowerCase()
 }
 
+/** Deterministic, readable code for the automatically provisioned tenant admin role. */
+function tenantAdminRoleCode(tenantCode: string): string {
+  return `tenant-admin-${tenantCode}`
+}
+
 async function requireAvailableTenantCode(tenantCode: string, currentTenantId?: string): Promise<void> {
   const existing = await SystemTenantRepository.findByTenantCode(normalizeTenantCode(tenantCode))
   if (existing && existing.id !== currentTenantId) throw new Error(`租户编码已存在: ${tenantCode}`)
@@ -45,7 +50,7 @@ async function createInMemory(input: CreateTenantWithAdminInput): Promise<{ id: 
   return runWithTenantContext({ tenantId: tenant.id, endpoint: "admin", isPlatform: false }, async () => {
     const salt = generateSalt()
     const admin = await SystemUserRepository.create({ username: input.adminUsername, nickname: input.adminNickname, password: hashPassword(input.adminPassword, salt), salt, phone: input.adminPhone, email: input.adminEmail, tenantId: tenant.id })
-    const role = await SystemRoleRepository.create({ name: "租户管理员", code: `tenant_admin_${tenant.id}`, remark: "租户创建时自动初始化" })
+    const role = await SystemRoleRepository.create({ name: "租户管理员", code: tenantAdminRoleCode(tenant.tenantCode), remark: "租户创建时自动初始化" })
     const pkg = await TenantPackageRepository.findById(input.packageId)
     await SystemPermissionService.assignRoleMenu({ roleId: role.id, menuIds: pkg!.menuIds })
     await SystemPermissionService.assignUserRole({ userId: admin.id, roleIds: [role.id] })
@@ -71,7 +76,7 @@ async function createInDatabase(input: CreateTenantWithAdminInput): Promise<{ id
 
     await trx.insertInto("system_tenant").values({ id: tenantId, tenant_code: input.tenantCode, name: input.name, contact_name: input.contactName ?? null, contact_phone: input.contactPhone ?? null, domain: input.domain ?? null, package_id: input.packageId, status: input.status, expire_time: input.expireTime ? new Date(input.expireTime) : null, account_count: input.accountCount, created_at: now, updated_at: now, deleted: false }).execute()
     await trx.insertInto("system_user").values({ id: adminUserId, username: input.adminUsername, nickname: input.adminNickname, password: hashPassword(input.adminPassword, salt), salt, phone: input.adminPhone ?? null, email: input.adminEmail ?? null, avatar: null, status: "ACTIVE", dept_id: null, remark: "租户创建时自动初始化的管理员", login_ip: null, login_date: now, tenant_id: tenantId, created_at: now, updated_at: now, deleted: false }).execute()
-    await trx.insertInto("system_role").values({ id: roleId, name: "租户管理员", code: `tenant_admin_${tenantId}`, sort: 0, status: "ACTIVE", remark: "租户创建时自动初始化", data_scope: "ALL", tenant_id: tenantId, created_at: now, updated_at: now, deleted: false }).execute()
+    await trx.insertInto("system_role").values({ id: roleId, name: "租户管理员", code: tenantAdminRoleCode(input.tenantCode), sort: 0, status: "ACTIVE", remark: "租户创建时自动初始化", data_scope: "ALL", tenant_id: tenantId, created_at: now, updated_at: now, deleted: false }).execute()
     await trx.insertInto("system_user_role").values({ id: randomUUID(), user_id: adminUserId, role_id: roleId }).execute()
     if (safeMenuIds.size) await trx.insertInto("system_role_menu").values([...safeMenuIds].map((menuId) => ({ id: randomUUID(), role_id: roleId, menu_id: menuId }))).execute()
     return { id: tenantId, adminUserId }
