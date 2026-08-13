@@ -125,6 +125,7 @@ async function findByIdFromDb(id: string): Promise<SystemDeptRow | null> {
 async function createInDb(data: CreateDeptData): Promise<SystemDeptRow> {
   const db = await getKyselyDb()
   const row = await db.insertInto("system_dept").values({
+    id: crypto.randomUUID(),
     name: data.name,
     parent_id: data.parentId ?? null,
     sort: data.sort ?? 0,
@@ -133,9 +134,10 @@ async function createInDb(data: CreateDeptData): Promise<SystemDeptRow> {
     email: data.email ?? null,
     status: data.status ?? "ACTIVE",
     tenant_id: null,
+    created_at: new Date(),
     updated_at: new Date(),
     deleted: false,
-  }).returningAll().executeTakeFirstOrThrow()
+  } as any).returningAll().executeTakeFirstOrThrow()
   return mapDbRow(row)
 }
 

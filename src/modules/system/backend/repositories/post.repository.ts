@@ -99,7 +99,7 @@ async function findByCodeFromDb(code: string): Promise<SystemPostRow | null> {
 
 async function createInDb(data: CreatePostData): Promise<SystemPostRow> {
   const db = await getKyselyDb()
-  const row = await db.insertInto("system_post").values({ name: data.name, code: data.code, sort: data.sort ?? 0, status: data.status ?? "ACTIVE", remark: data.remark ?? null, tenant_id: null, updated_at: new Date(), deleted: false }).returningAll().executeTakeFirstOrThrow()
+  const row = await db.insertInto("system_post").values({ name: data.name, code: data.code, sort: data.sort ?? 0, status: data.status ?? "ACTIVE", remark: data.remark ?? null, tenant_id: null, updated_at: new Date(), deleted: false } as any).returningAll().executeTakeFirstOrThrow()
   return mapDbRow(row)
 }
 

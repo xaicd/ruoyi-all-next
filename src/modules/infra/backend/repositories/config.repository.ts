@@ -111,7 +111,7 @@ async function findByKeyFromDb(key: string): Promise<InfraConfigRow | null> {
 
 async function createInDb(data: CreateConfigData): Promise<InfraConfigRow> {
   const db = await getKyselyDb()
-  const row = await db.insertInto("infra_config").values({ category: data.category ?? "DEFAULT", name: data.name, config_key: data.configKey, value: data.value, visible: data.visible ?? true, remark: data.remark ?? null, updated_at: new Date(), deleted: false }).returningAll().executeTakeFirstOrThrow()
+  const row = await db.insertInto("infra_config").values({ category: data.category ?? "DEFAULT", name: data.name, config_key: data.configKey, value: data.value, visible: data.visible ?? true, remark: data.remark ?? null, updated_at: new Date(), deleted: false } as any).returningAll().executeTakeFirstOrThrow()
   return mapRow(row)
 }
 

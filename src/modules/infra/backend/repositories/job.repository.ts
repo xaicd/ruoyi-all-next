@@ -92,7 +92,7 @@ async function findByIdFromDb(id: string): Promise<InfraJobRow | null> {
 
 async function createInDb(data: CreateJobData): Promise<InfraJobRow> {
   const db = await getKyselyDb()
-  const row = await db.insertInto("infra_job").values({ name: data.name, handler_name: data.handlerName, handler_param: data.handlerParam ?? null, cron_expression: data.cronExpression, retry_count: data.retryCount ?? 0, retry_interval: data.retryInterval ?? 0, status: data.status ?? "ACTIVE", updated_at: new Date(), deleted: false }).returningAll().executeTakeFirstOrThrow()
+  const row = await db.insertInto("infra_job").values({ name: data.name, handler_name: data.handlerName, handler_param: data.handlerParam ?? null, cron_expression: data.cronExpression, retry_count: data.retryCount ?? 0, retry_interval: data.retryInterval ?? 0, status: data.status ?? "ACTIVE", updated_at: new Date(), deleted: false } as any).returningAll().executeTakeFirstOrThrow()
   return mapRow(row)
 }
 

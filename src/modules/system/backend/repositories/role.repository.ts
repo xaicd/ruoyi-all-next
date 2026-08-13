@@ -120,7 +120,7 @@ async function createInDb(data: CreateRoleData): Promise<SystemRoleRow> {
     tenant_id: null,
     updated_at: new Date(),
     deleted: false,
-  }).returningAll().executeTakeFirstOrThrow()
+  } as any).returningAll().executeTakeFirstOrThrow()
   return mapDbRow(row)
 }
 

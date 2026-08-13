@@ -144,7 +144,7 @@ async function createInDb(data: CreateMenuData): Promise<SystemMenuRow> {
     keep_alive: data.keepAlive ?? true,
     updated_at: new Date(),
     deleted: false,
-  }).returningAll().executeTakeFirstOrThrow()
+  } as any).returningAll().executeTakeFirstOrThrow()
   return mapDbRow(row)
 }
 

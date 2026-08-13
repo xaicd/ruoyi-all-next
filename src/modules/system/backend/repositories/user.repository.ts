@@ -215,7 +215,7 @@ async function createInDb(data: CreateUserData): Promise<SystemUserRow> {
       login_ip: "",
       login_date: now.toISOString(),
       deleted: false,
-    })
+    } as any)
     .returningAll()
     .executeTakeFirstOrThrow()
   return mapDbRow(row)

@@ -80,7 +80,7 @@ async function findByIdFromDb(id: string): Promise<InfraFileRow | null> {
 
 async function createInDb(data: CreateFileData): Promise<InfraFileRow> {
   const db = await getKyselyDb()
-  const row = await db.insertInto("infra_file").values({ config_id: data.configId, name: data.name ?? null, path: data.path, url: data.url, type: data.type ?? null, size: data.size }).returningAll().executeTakeFirstOrThrow()
+  const row = await db.insertInto("infra_file").values({ config_id: data.configId, name: data.name ?? null, path: data.path, url: data.url, type: data.type ?? null, size: data.size } as any).returningAll().executeTakeFirstOrThrow()
   return mapRow(row)
 }
 

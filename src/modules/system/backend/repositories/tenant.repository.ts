@@ -94,7 +94,7 @@ async function findByIdFromDb(id: string): Promise<SystemTenantRow | null> {
 
 async function createInDb(data: CreateTenantData): Promise<SystemTenantRow> {
   const db = await getKyselyDb()
-  const row = await db.insertInto("system_tenant").values({ name: data.name, contact_name: data.contactName ?? null, contact_phone: data.contactPhone ?? null, domain: data.domain ?? null, package_id: data.packageId ?? null, status: data.status ?? "ACTIVE", expire_time: data.expireTime ? new Date(data.expireTime) : null, account_count: data.accountCount ?? 0, updated_at: new Date(), deleted: false }).returningAll().executeTakeFirstOrThrow()
+  const row = await db.insertInto("system_tenant").values({ name: data.name, contact_name: data.contactName ?? null, contact_phone: data.contactPhone ?? null, domain: data.domain ?? null, package_id: data.packageId ?? null, status: data.status ?? "ACTIVE", expire_time: data.expireTime ? new Date(data.expireTime) : null, account_count: data.accountCount ?? 0, updated_at: new Date(), deleted: false } as any).returningAll().executeTakeFirstOrThrow()
   return mapRow(row)
 }
 
