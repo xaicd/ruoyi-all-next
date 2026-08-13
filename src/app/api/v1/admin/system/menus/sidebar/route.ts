@@ -51,12 +51,11 @@ function toSidebarItem(node: MenuNode, allowedMenuIds: Set<string>): SidebarItem
 export async function GET(request: Request) {
   try {
     const auth = requireAdminAuth(request)
-    const [tree, roleIds] = await Promise.all([
+    const [tree, effectiveMenuIds] = await Promise.all([
       SystemMenuService.tree({ status: "ACTIVE" }) as Promise<MenuNode[]>,
-      SystemPermissionService.getUserRoleIds(auth.userId),
+      SystemPermissionService.getEffectiveUserMenuIds(auth.userId),
     ])
-    const menuIdGroups = await Promise.all(roleIds.map((roleId) => SystemPermissionService.getRoleMenuIds(roleId)))
-    const allowedMenuIds = new Set(menuIdGroups.flat())
+    const allowedMenuIds = new Set(effectiveMenuIds)
     const data: SidebarGroup[] = tree
       .filter((node) => node.type === "DIR" && node.visible)
       .map((node) => {

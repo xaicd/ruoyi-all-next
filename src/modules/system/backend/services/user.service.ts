@@ -14,13 +14,25 @@ import type {
 import { SystemDeptRepository } from "@/modules/system/backend/repositories/dept.repository"
 import { SystemUserRepository } from "@/modules/system/backend/repositories/user.repository"
 import { SystemPermissionService } from "@/modules/system/backend/services/permission.service"
+import { SystemTenantRepository } from "@/modules/system/backend/repositories/tenant.repository"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
+import { getCurrentTenantId, isPlatformContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { hashPassword, generateSalt } from "@/modules/shared/backend/lib/crypto"
 
 async function requireCurrentTenantDept(deptId: string | undefined): Promise<void> {
   if (!deptId) return
   const dept = await SystemDeptRepository.findById(deptId)
   if (!dept) throw new Error(`部门不存在或不属于当前租户: ${deptId}`)
+}
+
+/** Enforce the tenant's purchased account capacity before adding a tenant user. */
+async function requireTenantAccountCapacity(): Promise<void> {
+  const tenantId = getCurrentTenantId()
+  if (!tenantId || isPlatformContext()) return
+  const tenant = await SystemTenantRepository.findById(tenantId)
+  if (!tenant || tenant.status !== "ACTIVE") throw new Error("当前租户不存在或已停用")
+  const currentCount = await SystemUserRepository.count({ tenantId })
+  if (currentCount >= tenant.accountCount) throw new Error("租户账号额度已用尽")
 }
 
 export class SystemUserService {
@@ -68,6 +80,7 @@ export class SystemUserService {
       throw new Error(`用户名已存在: ${input.username}`)
     }
     await requireCurrentTenantDept(input.deptId)
+    await requireTenantAccountCapacity()
 
     // 密码加密：双重 MD5 + Salt
     const salt = generateSalt()

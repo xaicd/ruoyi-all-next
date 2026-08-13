@@ -6,18 +6,20 @@
  */
 
 import type { LoginInput } from "@/modules/system/backend/validators"
-import { SystemUserRepository } from "@/modules/system/backend/repositories/user.repository"
+import { SystemUserRepository, type SystemUserRow } from "@/modules/system/backend/repositories/user.repository"
+import { SystemTenantRepository } from "@/modules/system/backend/repositories/tenant.repository"
+import { TenantPackageRepository } from "@/modules/system/backend/repositories/tenant-package.repository"
 import { SystemMenuRepository, type SystemMenuRow } from "@/modules/system/backend/repositories/menu.repository"
 import { SystemPermissionService } from "@/modules/system/backend/services/permission.service"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 import { issueJwt, verifyJwt, type JwtPayload } from "@/modules/shared/backend/auth/jwt"
-import { getPlatformRole, isPlatformUsername } from "@/modules/shared/backend/lib/biz-tenant"
+import { getPlatformRole, isPlatformUsername, runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 
 type TokenPayload = JwtPayload
 
 // === 密码校验 ===
 
-import { verifyPassword as cryptoVerifyPassword, hashPassword, generateSalt } from "@/modules/shared/backend/lib/crypto"
+import { verifyPassword as cryptoVerifyPassword } from "@/modules/shared/backend/lib/crypto"
 
 function verifyPasswordCheck(inputPassword: string, storedHash: string, salt: string): boolean {
   return cryptoVerifyPassword(inputPassword, storedHash, salt)
@@ -25,6 +27,30 @@ function verifyPasswordCheck(inputPassword: string, storedHash: string, salt: st
 
 function resolveLoginRoles(username: string): string[] {
   return isPlatformUsername(username) ? ["admin", getPlatformRole()] : ["admin"]
+}
+
+async function requireUsableTenant(user: SystemUserRow, isPlatform: boolean): Promise<void> {
+  if (isPlatform) return
+  if (!user.tenantId) throw new Error("账号未绑定租户")
+  const tenant = await SystemTenantRepository.findById(user.tenantId)
+  if (!tenant || tenant.status !== "ACTIVE") throw new Error("租户不存在或已停用")
+  if (tenant.expireTime && new Date(tenant.expireTime).getTime() <= Date.now()) throw new Error("租户已过期")
+  if (!tenant.packageId) throw new Error("租户未分配套餐")
+  const pkg = await TenantPackageRepository.findById(tenant.packageId)
+  if (!pkg || pkg.status !== "ACTIVE") throw new Error("租户套餐不可用")
+}
+
+async function getEffectivePermissions(user: SystemUserRow, roles: string[]): Promise<{ menuIds: Set<string>; permissions: string[] }> {
+  const isPlatform = roles.includes(getPlatformRole())
+  await requireUsableTenant(user, isPlatform)
+  const menuIds = new Set(await runWithTenantContext(
+    { tenantId: user.tenantId ?? undefined, actorId: user.id, endpoint: "admin", isPlatform },
+    () => SystemPermissionService.getEffectiveUserMenuIds(user.id),
+  ))
+  const permissions = (await SystemMenuRepository.findAll({ status: "ACTIVE" }))
+    .filter((menu) => menuIds.has(menu.id) && menu.permission)
+    .map((menu) => menu.permission!)
+  return { menuIds, permissions }
 }
 
 // === 菜单树构建 ===
@@ -85,13 +111,9 @@ export class SystemAuthService {
       throw new Error("用户名或密码错误")
     }
 
-    // RuoYi 的权限来自用户角色关联的菜单和按钮，不能给所有登录用户授予全局菜单权限。
-    const allowedMenuIds = new Set(await SystemPermissionService.getUserMenuIds(user.id))
-    const permissions = (await SystemMenuRepository.findAll({ status: "ACTIVE" }))
-      .filter((menu) => allowedMenuIds.has(menu.id) && menu.permission)
-      .map((menu) => menu.permission!)
-
     const roles = resolveLoginRoles(user.username)
+    const { permissions } = await getEffectivePermissions(user, roles)
+
     // Full RuoYi menu catalogs can contain thousands of button permissions. A platform
     // administrator is already explicitly authorized by role, so store one wildcard in
     // the JWT instead of an oversized Authorization header that proxies reject with 431.
@@ -128,14 +150,10 @@ export class SystemAuthService {
     const user = await SystemUserRepository.findById(userId)
     if (!user) throw new Error("用户不存在")
 
-    const allowedMenuIds = new Set(await SystemPermissionService.getUserMenuIds(user.id))
+    const roles = resolveLoginRoles(user.username)
+    const { menuIds, permissions } = await getEffectivePermissions(user, roles)
     const allowedMenus = (await SystemMenuRepository.findAll({ status: "ACTIVE" }))
-      .filter((menu) => allowedMenuIds.has(menu.id))
-
-    // RuoYi 的查询权限可能配置在菜单或按钮节点，两类节点均纳入权限信息。
-    const permissions = allowedMenus
-      .filter((menu) => menu.permission)
-      .map((menu) => menu.permission!)
+      .filter((menu) => menuIds.has(menu.id))
 
     // 菜单树
     const menus = buildMenuTree(allowedMenus)
@@ -149,7 +167,7 @@ export class SystemAuthService {
         nickname: user.nickname,
         avatar: user.avatar,
       },
-      roles: resolveLoginRoles(user.username),
+      roles,
       permissions,
       menus,
     }

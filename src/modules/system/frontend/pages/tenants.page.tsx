@@ -11,6 +11,7 @@ type Tenant = {
   contactPhone: string | null
   domain: string | null
   packageId: string | null
+  packageName?: string | null
   status: string
   expireTime: string | null
   accountCount: number
@@ -139,7 +140,7 @@ export default function SystemTenantsPage() {
                     <td className="px-4 py-3 font-medium">{t.name}</td>
                     <td className="px-4 py-3">{t.contactName || "-"}</td>
                     <td className="px-4 py-3 text-slate-500">{t.contactPhone || "-"}</td>
-                    <td className="px-4 py-3 text-slate-500">{t.packageId || "未分配"}</td>
+                    <td className="px-4 py-3 text-slate-500">{t.packageName || "未分配"}</td>
                     <td className="px-4 py-3">{t.accountCount}</td>
                     <td className="px-4 py-3 text-slate-500">{t.expireTime ? new Date(t.expireTime).toLocaleDateString("zh-CN") : "-"}</td>
                     <td className="px-4 py-3">
@@ -187,10 +188,23 @@ function TenantFormDialog({ tenant, onSubmit, onClose }: { tenant: Tenant | null
     contactName: tenant?.contactName ?? "",
     contactPhone: tenant?.contactPhone ?? "",
     domain: tenant?.domain ?? "",
+    packageId: tenant?.packageId ?? "",
     status: tenant?.status ?? "ACTIVE",
     expireTime: tenant?.expireTime ? tenant.expireTime.split("T")[0] : "",
-    accountCount: tenant?.accountCount ?? 0,
+    accountCount: tenant?.accountCount ?? 1,
+    adminUsername: "",
+    adminNickname: "",
+    adminPassword: "",
+    adminPhone: "",
+    adminEmail: "",
   })
+  const [packages, setPackages] = useState<TenantPackage[]>([])
+
+  useEffect(() => {
+    request.get(API.TENANT_PACKAGES, { page: 1, pageSize: 100 }).then((res) => {
+      if (res.success && res.data) setPackages(res.data.items || [])
+    })
+  }, [])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -198,6 +212,16 @@ function TenantFormDialog({ tenant, onSubmit, onClose }: { tenant: Tenant | null
     if (payload.expireTime) payload.expireTime = new Date(payload.expireTime).toISOString()
     else delete payload.expireTime
     if (!payload.domain) delete payload.domain
+    if (tenant) {
+      delete payload.adminUsername
+      delete payload.adminNickname
+      delete payload.adminPassword
+      delete payload.adminPhone
+      delete payload.adminEmail
+    } else {
+      if (!payload.adminPhone) delete payload.adminPhone
+      if (!payload.adminEmail) delete payload.adminEmail
+    }
     onSubmit(payload)
   }
 
@@ -231,7 +255,7 @@ function TenantFormDialog({ tenant, onSubmit, onClose }: { tenant: Tenant | null
           <div className="grid grid-cols-3 gap-3">
             <div>
               <label className="mb-1 block text-xs text-slate-600">账号额度</label>
-              <input type="number" min={0} value={form.accountCount} onChange={(e) => update("accountCount", Number(e.target.value))} className="h-9 w-full rounded-md border px-3 text-sm" />
+              <input type="number" min={1} value={form.accountCount} onChange={(e) => update("accountCount", Number(e.target.value))} className="h-9 w-full rounded-md border px-3 text-sm" />
             </div>
             <div>
               <label className="mb-1 block text-xs text-slate-600">过期时间</label>
@@ -245,6 +269,27 @@ function TenantFormDialog({ tenant, onSubmit, onClose }: { tenant: Tenant | null
               </select>
             </div>
           </div>
+          {!tenant && (
+            <>
+              <div>
+                <label className="mb-1 block text-xs text-slate-600">租户套餐 *</label>
+                <select required value={form.packageId} onChange={(e) => update("packageId", e.target.value)} className="h-9 w-full rounded-md border px-3 text-sm">
+                  <option value="">请选择可用套餐</option>
+                  {packages.filter((pkg) => pkg.status === "ACTIVE").map((pkg) => <option key={pkg.id} value={pkg.id}>{pkg.name}</option>)}
+                </select>
+              </div>
+              <div className="rounded-md border border-blue-100 bg-blue-50 p-3 text-xs text-blue-800">首次创建会自动建立该租户的管理员账号和专属管理员角色。</div>
+              <div className="grid grid-cols-2 gap-3">
+                <div><label className="mb-1 block text-xs text-slate-600">管理员账号 *</label><input required value={form.adminUsername} onChange={(e) => update("adminUsername", e.target.value)} className="h-9 w-full rounded-md border px-3 text-sm" placeholder="tenant_admin" /></div>
+                <div><label className="mb-1 block text-xs text-slate-600">管理员昵称 *</label><input required value={form.adminNickname} onChange={(e) => update("adminNickname", e.target.value)} className="h-9 w-full rounded-md border px-3 text-sm" placeholder="租户管理员" /></div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div><label className="mb-1 block text-xs text-slate-600">管理员密码 *</label><input required type="password" minLength={6} value={form.adminPassword} onChange={(e) => update("adminPassword", e.target.value)} className="h-9 w-full rounded-md border px-3 text-sm" /></div>
+                <div><label className="mb-1 block text-xs text-slate-600">管理员电话</label><input value={form.adminPhone} onChange={(e) => update("adminPhone", e.target.value)} className="h-9 w-full rounded-md border px-3 text-sm" /></div>
+              </div>
+              <div><label className="mb-1 block text-xs text-slate-600">管理员邮箱</label><input type="email" value={form.adminEmail} onChange={(e) => update("adminEmail", e.target.value)} className="h-9 w-full rounded-md border px-3 text-sm" /></div>
+            </>
+          )}
           <div className="flex justify-end gap-2 pt-2">
             <button type="button" onClick={onClose} className="h-9 rounded-md border px-4 text-sm">取消</button>
             <button type="submit" className="h-9 rounded-md bg-blue-600 px-4 text-sm text-white hover:bg-blue-700">确认</button>

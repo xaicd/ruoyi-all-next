@@ -260,6 +260,7 @@ model SystemTenantPackageMenu {
   menu      SystemMenu          @relation(fields: [menuId], references: [id], onDelete: Restrict)
 
   @@unique([packageId, menuId])
+  @@index([menuId])
   @@map("system_tenant_package_menu")
 }
 

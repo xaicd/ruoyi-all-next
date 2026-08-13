@@ -5,6 +5,7 @@
 
 import { randomUUID } from "node:crypto"
 import { getKyselyDb, hasRealDatabase, type PageResult } from "@/modules/shared/backend/lib/database"
+import { SEED_TENANT_PACKAGES } from "@prisma/data"
 
 export type TenantPackageRow = {
   id: string
@@ -19,11 +20,8 @@ export type TenantPackageRow = {
 export type CreateTenantPackageData = { name: string; status?: string; menuIds?: string[]; remark?: string }
 export type UpdateTenantPackageData = Partial<CreateTenantPackageData>
 
-const MEMORY_STORE: TenantPackageRow[] = [
-  { id: "1", name: "基础版", status: "ACTIVE", menuIds: ["1", "100", "101", "102", "103", "104", "105", "1001", "1002", "1003"], remark: "基础系统管理功能", createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "2", name: "专业版", status: "ACTIVE", menuIds: ["1", "2", "100", "101", "102", "103", "104", "105", "1001", "1002", "1003"], remark: "系统管理 + 基础设施", createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "3", name: "旗舰版", status: "ACTIVE", menuIds: [], remark: "全部功能（未配置菜单即为全部）", createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-]
+// 无数据库开发模式也使用由本地 RuoYi SQL 生成的同一套餐目录，禁止维护另一套手写数据。
+const MEMORY_STORE: TenantPackageRow[] = SEED_TENANT_PACKAGES.map((item) => ({ ...item, menuIds: [...item.menuIds] }))
 let memoryIdSeq = 100
 
 export const TenantPackageRepository = {

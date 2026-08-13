@@ -24,23 +24,28 @@ async function requireUserAndRoles(input: AssignUserRoleInput): Promise<void> {
   }
 }
 
-async function requireRoleAndMenus(input: AssignRoleMenuInput): Promise<void> {
-  const role = await SystemRoleRepository.findById(input.roleId)
-  if (!role) throw new Error(`角色不存在或不属于当前租户: ${input.roleId}`)
+async function resolveRolePackageMenuIds(roleId: string): Promise<{ role: Awaited<ReturnType<typeof SystemRoleRepository.findById>>; menuIds?: Set<string> }> {
+  const role = await SystemRoleRepository.findById(roleId)
+  if (!role) throw new Error(`角色不存在或不属于当前租户: ${roleId}`)
+  // Platform-global roles do not belong to a tenant package. Tenant roles must
+  // always be constrained by their own tenant, even when the operator is platform-admin.
+  if (!role.tenantId) return { role }
+  const tenant = await SystemTenantRepository.findById(role.tenantId)
+  if (!tenant || tenant.status !== "ACTIVE") throw new Error("目标角色所属租户不存在或已停用")
+  if (tenant.expireTime && new Date(tenant.expireTime).getTime() <= Date.now()) throw new Error("目标角色所属租户已过期")
+  if (!tenant.packageId) throw new Error("目标角色所属租户未分配套餐")
+  const pkg = await TenantPackageRepository.findById(tenant.packageId)
+  if (!pkg || pkg.status !== "ACTIVE") throw new Error("目标角色所属租户套餐不可用")
+  return { role, menuIds: new Set(pkg.menuIds) }
+}
 
-  const tenantId = getCurrentTenantId()
-  let allowedMenuIds: Set<string> | undefined
-  if (tenantId && !isPlatformContext()) {
-    const tenant = await SystemTenantRepository.findById(tenantId)
-    if (!tenant?.packageId) throw new Error("当前租户未分配套餐，不能配置角色菜单")
-    const pkg = await TenantPackageRepository.findById(tenant.packageId)
-    if (!pkg || pkg.status !== "ACTIVE") throw new Error("当前租户套餐不可用，不能配置角色菜单")
-    allowedMenuIds = new Set(pkg.menuIds)
-  }
+async function requireRoleAndMenus(input: AssignRoleMenuInput): Promise<void> {
+  const { menuIds: allowedMenuIds } = await resolveRolePackageMenuIds(input.roleId)
   for (const menuId of input.menuIds) {
     const menu = await SystemMenuRepository.findById(menuId)
     if (!menu) throw new Error(`菜单不存在: ${menuId}`)
-    if (allowedMenuIds && !allowedMenuIds.has(menuId)) throw new Error(`菜单不在当前租户套餐范围内: ${menuId}`)
+    if (menu.status !== "ACTIVE") throw new Error(`菜单已停用: ${menuId}`)
+    if (allowedMenuIds && !allowedMenuIds.has(menuId)) throw new Error(`菜单不在目标租户套餐范围内: ${menuId}`)
   }
 }
 
@@ -71,13 +76,27 @@ export class SystemPermissionService {
   }
 
   static async getRoleMenuIds(roleId: string): Promise<string[]> {
-    const role = await SystemRoleRepository.findById(roleId)
-    if (!role) throw new Error(`角色不存在或不属于当前租户: ${roleId}`)
-    return SystemPermissionRepository.findRoleMenuIds(roleId)
+    const { menuIds: allowedMenuIds } = await resolveRolePackageMenuIds(roleId)
+    const assignedMenuIds = await SystemPermissionRepository.findRoleMenuIds(roleId)
+    return allowedMenuIds ? assignedMenuIds.filter((menuId) => allowedMenuIds.has(menuId)) : assignedMenuIds
+  }
+
+  /** Candidate menu IDs for a role form. Tenant roles are limited to their active package. */
+  static async getRoleAssignableMenuIds(roleId: string): Promise<string[]> {
+    const { menuIds: allowedMenuIds } = await resolveRolePackageMenuIds(roleId)
+    if (allowedMenuIds) return [...allowedMenuIds]
+    return (await SystemMenuRepository.findAll({ status: "ACTIVE" })).map((menu) => menu.id)
   }
 
   /** 聚合用户所有角色的菜单，用于导航与资源权限判断。 */
   static async getUserMenuIds(userId: string): Promise<string[]> {
+    const roleIds = await SystemPermissionService.getUserRoleIds(userId)
+    const menuIdGroups = await Promise.all(roleIds.map((roleId) => SystemPermissionService.getRoleMenuIds(roleId)))
+    return [...new Set(menuIdGroups.flat())]
+  }
+
+  /** Final authorization boundary: role grants may never exceed the active tenant package. */
+  static async getEffectiveUserMenuIds(userId: string): Promise<string[]> {
     const roleIds = await SystemPermissionService.getUserRoleIds(userId)
     const menuIdGroups = await Promise.all(roleIds.map((roleId) => SystemPermissionService.getRoleMenuIds(roleId)))
     return [...new Set(menuIdGroups.flat())]

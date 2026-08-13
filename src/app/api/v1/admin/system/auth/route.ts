@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { loginSchema } from "@/modules/system/backend/validators"
 import { SystemAuthService } from "@/modules/system/backend/services/auth.service"
+import { getPlatformRole, runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 
 /**
  * POST /api/v1/admin/system/auth
@@ -28,7 +29,10 @@ export async function GET(request: Request) {
     if (!token) return NextResponse.json({ success: false, error: "未登录" }, { status: 401 })
 
     const payload = await SystemAuthService.verifyToken(token)
-    const data = await SystemAuthService.getPermissionInfo(payload.sub)
+    const data = await runWithTenantContext(
+      { tenantId: payload.tenantId, actorId: payload.sub, endpoint: "admin", isPlatform: payload.roles.includes(getPlatformRole()) },
+      () => SystemAuthService.getPermissionInfo(payload.sub),
+    )
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message ?? "获取失败" }, { status: 401 })
