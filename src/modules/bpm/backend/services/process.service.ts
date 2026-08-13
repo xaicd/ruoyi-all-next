@@ -146,7 +146,7 @@ export class BpmProcessService {
       throw new Error("任务不存在")
     }
 
-    const nextStatus = input.action === "approve" ? "APPROVED" : "REJECTED"
+    const nextStatus = input.action === "APPROVE" ? "APPROVED" : "REJECTED"
     const task = await ruoyiPrisma.approvalTask.update({
       where: { id: input.taskId },
       data: {

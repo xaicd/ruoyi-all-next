@@ -14,7 +14,7 @@ export async function GET(request: Request) {
       keyword: searchParams.get("keyword") ?? undefined,
     })
 
-    const data = await NotifyMessageService.list(input)
+    const data = await NotifyMessageService.page(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message ?? "查询失败" }, { status: 400 })
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     const body = await request.json()
     const input = createNotifyMessageSchema.parse(body)
 
-    const data = await NotifyMessageService.create(auth.userId, input)
+    const data = await NotifyMessageService.create(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message ?? "创建失败" }, { status: 400 })

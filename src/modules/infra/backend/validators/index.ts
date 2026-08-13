@@ -25,12 +25,17 @@ export const infraJobOperateSchema = z.object({
 export const triggerJobSchema = infraJobOperateSchema
 
 export const infraCodegenExportSchema = z.object({
-  tableId: z.string().trim().min(1),
+  tableId: z.string().trim().min(1).optional(),
   templateType: z.string().optional(),
+  stack: z.string().optional(),
+  templateCodes: z.array(z.string()).optional(),
+  variables: z.record(z.string(), z.any()).optional(),
+  includeDisabled: z.boolean().optional(),
 })
 
 export type InfraPageQueryInput = z.infer<typeof infraPageQuerySchema>
 export type InfraConfigUpdateInput = z.infer<typeof infraConfigUpdateSchema>
 export type UpdateConfigInput = z.infer<typeof updateConfigSchema>
 export type InfraJobOperateInput = z.infer<typeof infraJobOperateSchema>
+export type TriggerJobInput = z.infer<typeof triggerJobSchema>
 export type InfraCodegenExportInput = z.infer<typeof infraCodegenExportSchema>

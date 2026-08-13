@@ -68,8 +68,8 @@ export async function PATCH(request: Request, context: RouteContext) {
 
     // 分配菜单
     if (body.action === "assignMenus" && Array.isArray(body.menuIds)) {
-      const { PermissionService } = await import("@/modules/system/backend/services/permission.service")
-      const data = await PermissionService.assignRoleMenu({ roleId: id, menuIds: body.menuIds })
+      const { SystemPermissionService } = await import("@/modules/system/backend/services/permission.service")
+      const data = await SystemPermissionService.assignRoleMenu({ roleId: id, menuIds: body.menuIds })
       return NextResponse.json({ success: true, data })
     }
 

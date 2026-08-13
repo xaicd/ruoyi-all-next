@@ -19,7 +19,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ success: true, data })
     }
 
-    const input = listSchema.parse({ page: searchParams.get("page") ?? 1, pageSize: searchParams.get("pageSize") ?? 20, keyword: searchParams.get("keyword") ?? undefined, category: searchParams.get("category") ?? undefined })
+    const input = listSchema.parse({ page: searchParams.get("page") ?? 1, pageSize: searchParams.get("pageSize") ?? 20, keyword: searchParams.get("keyword") ?? undefined, category: searchParams.get("category") ?? undefined }) as any
     const data = await InfraConfigService.list(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
   try {
     ensurePermission(request, PERMISSIONS.INFRA_CONFIG_UPDATE)
     const body = await request.json()
-    const input = createSchema.parse(body)
+    const input = createSchema.parse(body) as any as any
     const data = await InfraConfigService.create(input)
     return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }

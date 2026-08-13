@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     const body = await request.json()
     const input = updateTenantStatusSchema.parse(body)
 
-    const data = await SystemTenantService.updateStatus(auth.userId, input)
+    const data = await SystemTenantService.updateStatus(input.tenantId, input.status)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message ?? "操作失败" }, { status: 400 })

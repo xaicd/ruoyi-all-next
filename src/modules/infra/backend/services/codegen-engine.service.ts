@@ -60,7 +60,7 @@ export type CodegenOutput = {
   /** 文件内容 */
   content: string
   /** 文件类型 */
-  type: "service" | "validator" | "route" | "page" | "component" | "test" | "type" | "repository"
+  type: "service" | "validator" | "route" | "page" | "component" | "test" | "type" | "repository" | "api"
 }
 
 // ============ Service ============

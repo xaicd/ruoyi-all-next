@@ -33,16 +33,16 @@ export class InfraJobCenterService {
   }
 
   static async trigger(input: TriggerJobInput) {
-    domainLog.event("infra.job.trigger", { jobId: input.jobId, action: input.action })
+    domainLog.event("infra.job.trigger", { jobId: input.id, action: input.action })
     const jobs = await readSettingList<InfraJobItem>("infra.jobs")
-    const target = jobs.find((item) => item.id === input.jobId)
+    const target = jobs.find((item) => item.id === input.id)
     if (!target) throw new Error("任务不存在")
 
     const next = jobs.map((item) =>
-      item.id === input.jobId
+      item.id === input.id
         ? {
             ...item,
-            status: input.action === "pause" ? "PAUSED" : "RUNNING",
+            status: input.action === "PAUSE" ? "PAUSED" : "RUNNING",
             updatedAt: new Date().toISOString(),
           }
         : item,
@@ -54,6 +54,6 @@ export class InfraJobCenterService {
       targetId: target.id,
       action: input.action,
     })
-    return { ...target, status: input.action === "pause" ? "PAUSED" : "RUNNING", action: input.action }
+    return { ...target, status: input.action === "PAUSE" ? "PAUSED" : "RUNNING", action: input.action }
   }
 }

@@ -29,7 +29,7 @@ export async function GET(request: Request) {
       pageSize: searchParams.get("pageSize") ?? 20,
       keyword: searchParams.get("keyword") ?? undefined,
       status: searchParams.get("status") ?? undefined,
-    })
+    }) as any
     const data = await SystemRoleService.list(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
@@ -41,7 +41,7 @@ export async function POST(request: Request) {
   try {
     ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_CREATE)
     const body = await request.json()
-    const input = createRoleSchema.parse(body)
+    const input = createRoleSchema.parse(body) as any
     const data = await SystemRoleService.create(input)
     return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error: any) {

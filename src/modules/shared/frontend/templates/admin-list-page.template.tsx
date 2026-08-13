@@ -43,7 +43,7 @@ export function AdminListPageTemplate({ title, endpoint, columns }: Props) {
   useEffect(() => { loadData() }, [loadData])
 
   // Auto-detect columns from first item if not specified
-  const autoColumns = data?.items[0]
+  const autoColumns: { key: string; label: string; render?: (val: any, row: any) => React.ReactNode }[] = data?.items[0]
     ? Object.keys(data.items[0])
         .filter((k) => !["id"].includes(k))
         .slice(0, 6)

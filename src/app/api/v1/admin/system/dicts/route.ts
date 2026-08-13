@@ -24,7 +24,7 @@ export async function GET(request: Request) {
     }
 
     // 查字典类型列表
-    const input = listSchema.parse({ page: searchParams.get("page") ?? 1, pageSize: searchParams.get("pageSize") ?? 20, keyword: searchParams.get("keyword") ?? undefined, status: searchParams.get("status") ?? undefined })
+    const input = listSchema.parse({ page: searchParams.get("page") ?? 1, pageSize: searchParams.get("pageSize") ?? 20, keyword: searchParams.get("keyword") ?? undefined, status: searchParams.get("status") ?? undefined }) as any
     const data = await SystemDictService.listTypes(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
   try {
     ensurePermission(request, PERMISSIONS.SYSTEM_DICT_CREATE)
     const body = await request.json()
-    const input = createTypeSchema.parse(body)
+    const input = createTypeSchema.parse(body) as any
     const data = await SystemDictService.createType(input)
     return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }

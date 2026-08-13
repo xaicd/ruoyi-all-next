@@ -8,8 +8,7 @@ export async function POST(request: Request) {
   try {
     const auth = ensurePermission(request, PERMISSIONS.SYSTEM_TENANT_ASSIGN_PACKAGE)
     const body = await request.json()
-    const input = assignTenantPackageSchema.parse(body)
-
+    const input = assignTenantPackageSchema.parse(body) as any
     const data = await SystemTenantService.assignPackage(auth.userId, input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {

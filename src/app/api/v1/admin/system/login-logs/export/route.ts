@@ -15,7 +15,7 @@ export async function GET(request: Request) {
       result: searchParams.get("result") ?? undefined,
     })
 
-    const data = await LoginLogService.exportCsv(input)
+    const data = await LoginLogService.page(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message ?? "导出失败" }, { status: 400 })

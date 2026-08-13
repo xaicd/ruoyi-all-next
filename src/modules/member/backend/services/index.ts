@@ -113,7 +113,7 @@ export class MemberService {
     if (exists) throw new Error("等级名称已存在")
 
     const id = `level-${Date.now()}`
-    const level: MemberLevel = { id, ...input }
+    const level = { id, ...input } as MemberLevel
     MOCK_LEVELS.push(level)
 
     domainLog.event("member.level.create", { levelId: id, name: input.name })

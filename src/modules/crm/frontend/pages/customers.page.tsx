@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { request, API } from "@/modules/shared/frontend/lib/request"
 
-type CrmCustomer = { id: string; name: string; phone: string | null; email: string | null; industry: string | null; level: string; status: string; dealStatus: string; ownerUserName: string | null; contactLastTime: string | null; createdAt: string }
+type CrmCustomer = { id: string; name: string; phone: string | null; email: string | null; industry: string | null; level: string; status: string; dealStatus: string; ownerUserName: string | null; contactLastTime: string | null; createdAt: string; remark?: string | null }
 type PageData = { items: CrmCustomer[]; total: number; page: number; pageSize: number }
 
 const levelColors: Record<string, string> = { A: "bg-red-50 text-red-700", B: "bg-orange-50 text-orange-700", C: "bg-blue-50 text-blue-700", D: "bg-slate-100 text-slate-600" }

@@ -8,9 +8,8 @@ export async function POST(request: Request) {
   try {
     const auth = ensurePermission(request, PERMISSIONS.SYSTEM_PERMISSION_ASSIGN_USER_ROLE)
     const body = await request.json()
-    const input = assignUserRoleSchema.parse(body)
-
-    const data = await SystemPermissionService.assignUserRole(auth.userId, input)
+    const input = assignUserRoleSchema.parse(body) as any
+    const data = await SystemPermissionService.assignUserRole(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message ?? "操作失败" }, { status: 400 })

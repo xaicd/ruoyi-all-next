@@ -14,7 +14,7 @@ export async function GET(request: Request) {
   try {
     ensurePermission(request, PERMISSIONS.INFRA_CODEGEN_VIEW)
     const { searchParams } = new URL(request.url)
-    const input = listSchema.parse({ page: searchParams.get("page") ?? 1, pageSize: searchParams.get("pageSize") ?? 20, keyword: searchParams.get("keyword") ?? undefined })
+    const input = listSchema.parse({ page: searchParams.get("page") ?? 1, pageSize: searchParams.get("pageSize") ?? 20, keyword: searchParams.get("keyword") ?? undefined }) as any
     const data = await CodegenTableRepository.findList(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }

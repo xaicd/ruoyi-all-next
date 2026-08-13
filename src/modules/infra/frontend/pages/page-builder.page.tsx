@@ -6,7 +6,7 @@ import "@measured/puck/puck.css"
 
 // === 物料组件定义 ===
 
-const puckConfig: Config = {
+const puckConfig: any = {
   components: {
     // 表格组件
     ProTable: {

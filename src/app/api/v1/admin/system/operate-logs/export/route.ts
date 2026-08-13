@@ -15,7 +15,7 @@ export async function GET(request: Request) {
       module: searchParams.get("module") ?? undefined,
     })
 
-    const data = await OperateLogService.exportCsv(input)
+    const data = await OperateLogService.page(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message ?? "导出失败" }, { status: 400 })

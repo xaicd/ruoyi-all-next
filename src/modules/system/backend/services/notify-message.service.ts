@@ -17,6 +17,7 @@ export class NotifyMessageService {
     return { items: filtered.slice(start, start + input.pageSize), total: filtered.length, page: input.page, pageSize: input.pageSize }
   }
   static async get(id: string) { return MOCK_DATA.find((m) => m.id === id) ?? null }
+  static async create(input: any) { const row: NotifyMessageItem = { id: String(Date.now()), templateCode: input.templateCode, templateName: input.templateCode, channel: "SITE", receiver: input.receiver, content: "", readStatus: false, createdAt: new Date().toISOString() }; MOCK_DATA.push(row); domainLog.event("system.notifyMessage.create", { id: row.id }); return { id: row.id } }
   static async delete(id: string) { const idx = MOCK_DATA.findIndex((m) => m.id === id); if (idx !== -1) MOCK_DATA.splice(idx, 1); return { success: true } }
 }
 

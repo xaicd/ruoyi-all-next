@@ -625,10 +625,10 @@ export default function InfraTemplateEnginePage() {
               <Button variant="outline" onClick={() => void handleExport()} disabled={exporting}>
                 {exporting ? "导出中..." : "导出模板包"}
               </Button>
-              <Button variant="secondary" onClick={handleDownload} disabled={!scaffoldResult}>
+              <Button variant="outline" onClick={handleDownload} disabled={!scaffoldResult}>
                 下载 JSON
               </Button>
-              <Button variant="secondary" onClick={() => void handleDownloadZip()} disabled={exporting}>
+              <Button variant="outline" onClick={() => void handleDownloadZip()} disabled={exporting}>
                 下载 ZIP
               </Button>
             </div>
