@@ -14,6 +14,7 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
     "db:seed": "tsx scripts/seed-postgresql.ts",
+    "catalog:sync:ruoyi": "node scripts/extract-seed-from-sql.cjs",
     "health-check": "bash ./scripts/health-check.sh",
     "init": "echo '[ruoyi-all-next] 本地最小启动无需基础设施初始化；如需接入仓库根初始化，请执行 npm run init:root'",
     "init:root": "bash ./scripts/run-root-npm.sh docker:dev:core && bash ./scripts/run-root-npm.sh db:init:force",

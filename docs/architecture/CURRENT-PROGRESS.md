@@ -74,7 +74,7 @@
 - ✅ 生成 seed-data 模块（src/modules/shared/backend/seed-data/）
 - ✅ Post Repository MEMORY_STORE 已接入种子数据（4 条）
 - ✅ Dept Repository MEMORY_STORE 已接入种子数据（16 条）
-- ✅ Menu Repository MEMORY_STORE 已接入种子数据（200 条）
+- ✅ Menu Repository MEMORY_STORE 已接入由 RuoYi SQL 全量生成的种子数据（1441 条）
 - ✅ DictType Repository MEMORY_STORE 已接入种子数据（208 条）
 - ✅ DictData Repository MEMORY_STORE 已接入种子数据（1036 条）
 - ✅ Role Repository MEMORY_STORE 已接入种子数据（5 条：超管/普通/CRM/租户/测试）

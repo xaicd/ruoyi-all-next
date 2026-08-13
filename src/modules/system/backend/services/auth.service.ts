@@ -92,6 +92,10 @@ export class SystemAuthService {
       .map((menu) => menu.permission!)
 
     const roles = resolveLoginRoles(user.username)
+    // Full RuoYi menu catalogs can contain thousands of button permissions. A platform
+    // administrator is already explicitly authorized by role, so store one wildcard in
+    // the JWT instead of an oversized Authorization header that proxies reject with 431.
+    const jwtPermissions = roles.includes(getPlatformRole()) ? ["*"] : permissions
     if (process.env.TENANT_MODE === "required" && !roles.includes(getPlatformRole()) && !user.tenantId) {
       throw new Error("账号未绑定租户")
     }
@@ -100,7 +104,7 @@ export class SystemAuthService {
     const { token, expiresIn } = issueJwt({
       sub: user.id,
       username: user.username,
-      permissions,
+      permissions: jwtPermissions,
       roles,
       tenantId: user.tenantId ?? undefined,
       type: "admin",

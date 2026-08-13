@@ -38,7 +38,7 @@ export type CreateMenuData = {
 
 export type UpdateMenuData = Partial<CreateMenuData>
 
-// === 内存存储（对标 RuoYi 200 条完整菜单） ===
+// === 内存存储（由 RuoYi 原始 SQL 全量生成） ===
 const MEMORY_STORE: SystemMenuRow[] = [...SEED_MENUS]
 
 let memoryIdSeq = 5000

@@ -23,12 +23,15 @@ export default function SystemTenantPackagesPage() {
   const [page, setPage] = useState(1)
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState<TenantPackage | null>(null)
+  const [loadError, setLoadError] = useState("")
 
   const loadData = useCallback(async () => {
     setLoading(true)
+    setLoadError("")
     try {
       const res = await request.get(API.TENANT_PACKAGES, { page, pageSize: 20, keyword: keyword || undefined })
       if (res.success) setData(res.data)
+      else setLoadError(res.error || "加载租户套餐失败")
     } finally { setLoading(false) }
   }, [page, keyword])
 
@@ -72,6 +75,7 @@ export default function SystemTenantPackagesPage() {
 
       {/* 表格 */}
       <div className="rounded-lg border bg-white">
+        {loadError && <div className="border-b border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">加载失败：{loadError}</div>}
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b bg-slate-50 text-left text-xs font-medium text-slate-500">

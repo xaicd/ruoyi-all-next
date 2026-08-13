@@ -35,7 +35,7 @@ export function requireAdminAuth(request: Request, requiredPermission?: Permissi
   const token = readBearerToken(request)
   if (!token) throw new AuthenticationError()
   const auth = toContext(token, "admin")
-  if (requiredPermission && !auth.permissions.includes(requiredPermission)) {
+  if (requiredPermission && !auth.permissions.includes(requiredPermission) && !auth.permissions.includes("*")) {
     throw new AuthorizationError(`缺少权限: ${requiredPermission}`)
   }
   return auth

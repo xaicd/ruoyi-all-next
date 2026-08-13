@@ -1,10 +1,7 @@
-// Auto-generated from ../../ruoyi-vue-pro/sql/mysql/ruoyi-vue-pro.sql
+// Auto-generated from ruoyi-vue-pro SQL
 // source sha256: 2dc660a101b0973095c8d2e3b618329639c3a2cda118a5184858b8044775fc56
-// RuoYi package menu_ids are expanded into system_tenant_package_menu at seed time.
 
-export type TenantPackageSeed = { id: string; name: string; status: "ACTIVE" | "DISABLED"; menuIds: string[]; remark: string | null; createdAt: string; updatedAt: string }
-
-export const SEED_TENANT_PACKAGES: TenantPackageSeed[] = [
+export const SEED_TENANT_PACKAGES = [
   {
     "id": "111",
     "name": "普通套餐",

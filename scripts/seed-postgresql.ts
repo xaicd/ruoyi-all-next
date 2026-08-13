@@ -65,7 +65,7 @@ async function main() {
     }
 
     await client.query(`INSERT INTO system_tenant (id, name, contact_name, contact_phone, domain, package_id, status, expire_time, account_count, created_at, updated_at, deleted) VALUES ('1','默认租户','管理员','13800000001',NULL,NULL,'ACTIVE','2030-12-31T23:59:59.000Z',999,'2026-01-01T00:00:00.000Z','2026-01-01T00:00:00.000Z',false) ON CONFLICT (id) DO NOTHING`)
-    await client.query(`INSERT INTO system_tenant (id, name, contact_name, contact_phone, domain, package_id, status, expire_time, account_count, created_at, updated_at, deleted) VALUES ('2','演示租户','张三','13900000001','demo.ruoyi.local','1','ACTIVE','2027-06-30T23:59:59.000Z',50,'2026-03-01T00:00:00.000Z','2026-03-01T00:00:00.000Z',false) ON CONFLICT (id) DO NOTHING`)
+    await client.query(`INSERT INTO system_tenant (id, name, contact_name, contact_phone, domain, package_id, status, expire_time, account_count, created_at, updated_at, deleted) VALUES ('2','演示租户','张三','13900000001','demo.ruoyi.local','111','ACTIVE','2027-06-30T23:59:59.000Z',50,'2026-03-01T00:00:00.000Z','2026-03-01T00:00:00.000Z',false) ON CONFLICT (id) DO UPDATE SET package_id = EXCLUDED.package_id, updated_at = EXCLUDED.updated_at, deleted = false`)
 
     for (const dept of SEED_DEPTS) {
       await client.query(`INSERT INTO system_dept (id, name, parent_id, sort, leader_id, phone, email, status, tenant_id, created_at, updated_at, deleted) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,false) ON CONFLICT (id) DO NOTHING`, [dept.id, dept.name, dept.parentId, dept.sort, dept.leaderId, dept.phone, dept.email, dept.status, dept.tenantId, dept.createdAt, dept.updatedAt])
@@ -103,12 +103,16 @@ async function main() {
     const adminResult = await client.query<{ id: string }>(`INSERT INTO "system_user" (id, username, nickname, password, salt, phone, email, avatar, status, dept_id, remark, tenant_id, created_at, updated_at, deleted) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'ACTIVE',$9,$10,$11,$12,$13,false) ON CONFLICT (username) DO UPDATE SET nickname = EXCLUDED.nickname, password = EXCLUDED.password, salt = EXCLUDED.salt, status = 'ACTIVE', deleted = false, updated_at = EXCLUDED.updated_at RETURNING id`, [randomUUID(), bootstrapUsername, "本地开发管理员", passwordHash(bootstrapPassword, bootstrapSalt), bootstrapSalt, templateUser.phone, templateUser.email, templateUser.avatar, templateUser.deptId, "本地环境专用管理员", templateUser.tenantId, templateUser.createdAt, new Date().toISOString()])
     const adminId = adminResult.rows[0].id
     for (const menu of insertableMenus()) {
-      await client.query(`INSERT INTO system_menu (id, name, permission, type, parent_id, path, component, icon, sort, status, visible, keep_alive, created_at, updated_at, deleted) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,false) ON CONFLICT (id) DO NOTHING`, [menu.id, menu.name, menu.permission, menu.type, menu.parentId, menu.path, menu.component, menu.icon, menu.sort, menu.status, menu.visible, menu.keepAlive, menu.createdAt, menu.updatedAt])
+      await client.query(`INSERT INTO system_menu (id, name, permission, type, parent_id, path, component, icon, sort, status, visible, keep_alive, created_at, updated_at, deleted) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,false) ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, permission = EXCLUDED.permission, type = EXCLUDED.type, parent_id = EXCLUDED.parent_id, path = EXCLUDED.path, component = EXCLUDED.component, icon = EXCLUDED.icon, sort = EXCLUDED.sort, status = EXCLUDED.status, visible = EXCLUDED.visible, keep_alive = EXCLUDED.keep_alive, updated_at = EXCLUDED.updated_at, deleted = false`, [menu.id, menu.name, menu.permission, menu.type, menu.parentId, menu.path, menu.component, menu.icon, menu.sort, menu.status, menu.visible, menu.keepAlive, menu.createdAt, menu.updatedAt])
     }
     for (const pkg of SEED_TENANT_PACKAGES) {
       await client.query(`DELETE FROM system_tenant_package_menu WHERE package_id = $1`, [pkg.id])
       for (const menuId of pkg.menuIds) await client.query(`INSERT INTO system_tenant_package_menu (id, package_id, menu_id) VALUES ($1,$2,$3) ON CONFLICT (package_id, menu_id) DO NOTHING`, [randomUUID(), pkg.id, menuId])
     }
+    // Historical all-next draft packages were not sourced from RuoYi. Keep rows for audit,
+    // but remove them from the catalog after the demo tenant is reassigned to package 111.
+    await client.query(`DELETE FROM system_tenant_package_menu WHERE package_id IN ('1', '2', '3')`)
+    await client.query(`UPDATE system_tenant_package SET deleted = true, updated_at = $1 WHERE id IN ('1', '2', '3')`, [new Date().toISOString()])
     const roleResult = await client.query<{ id: string }>(`SELECT id FROM system_role WHERE code = 'super_admin' LIMIT 1`)
     const platformRoleResult = await client.query<{ id: string }>(`SELECT id FROM system_role WHERE code = 'platform-admin' LIMIT 1`)
     const roleId = roleResult.rows[0]?.id

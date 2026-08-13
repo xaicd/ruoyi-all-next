@@ -41,9 +41,12 @@ export type RoleListParams = {
 
 // === 内存存储 ===
 function currentTenantId(): string | undefined {
+  // Platform control-plane users may own a tenant for bootstrap purposes while
+  // still needing to resolve both tenant-local and global role templates.
+  if (isPlatformContext()) return undefined
   const tenantId = getCurrentTenantId()
   if (tenantId) return tenantId
-  if (isTenantRequired() && !isPlatformContext()) throw new Error("角色数据访问缺少租户上下文")
+  if (isTenantRequired()) throw new Error("角色数据访问缺少租户上下文")
   return undefined
 }
 

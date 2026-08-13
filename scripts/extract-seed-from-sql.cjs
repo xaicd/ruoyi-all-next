@@ -3,6 +3,7 @@
  *
  * 提取表：
  * - system_menu（菜单树）
+ * - system_tenant_package（租户套餐及 menu_ids）
  * - system_dict_type + system_dict_data（字典）
  * - system_dept（部门树）
  * - system_post（岗位）
@@ -11,11 +12,14 @@
  * 输出: scripts/seed-output/ 目录下的 .ts 文件
  */
 
+const crypto = require("crypto")
 const fs = require("fs")
 const path = require("path")
 
 const SQL_FILE = path.resolve(__dirname, "../../ruoyi-vue-pro/sql/mysql/ruoyi-vue-pro.sql")
 const OUTPUT_DIR = path.resolve(__dirname, "seed-output")
+const RUNTIME_DATA_DIR = path.resolve(__dirname, "../prisma/data")
+const SOURCE_HASH = crypto.createHash("sha256").update(fs.readFileSync(SQL_FILE)).digest("hex")
 
 if (!fs.existsSync(SQL_FILE)) {
   console.error("SQL 文件不存在:", SQL_FILE)
@@ -93,32 +97,52 @@ function parseValues(str) {
 }
 
 // === 提取菜单 ===
+function isEnabled(value) {
+  return value === true || value === "1" || value === "b1" || value === "b'1'"
+}
+
 function extractMenus() {
   const rows = extractInserts("system_menu")
   console.log(`[MENU] 提取 ${rows.length} 条菜单`)
+  const output = rows
+    .filter((row) => row.deleted === false || row.deleted === "0" || row.deleted === "b0" || row.deleted === "b'0'")
+    .map((row) => ({
+      id: String(row.id),
+      name: row.name || "",
+      permission: row.permission || null,
+      type: row.type === "1" ? "DIR" : row.type === "2" ? "MENU" : "BUTTON",
+      parentId: row.parent_id && row.parent_id !== "0" ? String(row.parent_id) : null,
+      path: row.path || null,
+      component: row.component || null,
+      icon: row.icon || null,
+      sort: Number(row.sort) || 0,
+      status: row.status === "0" ? "ACTIVE" : "DISABLED",
+      visible: isEnabled(row.visible),
+      keepAlive: isEnabled(row.keep_alive),
+    }))
+  console.log(`[MENU] 有效菜单 ${output.length} 条（不截断）`)
 
-  // 只取未删除的
-  const activeMenus = rows.filter((r) => r.deleted === false || r.deleted === "0")
-  console.log(`[MENU] 有效菜单 ${activeMenus.length} 条`)
+  fs.writeFileSync(path.join(OUTPUT_DIR, "menus.seed.ts"), `// Auto-generated from ruoyi-vue-pro SQL\n// source sha256: ${SOURCE_HASH}\n// ${output.length} menus extracted\n\nexport const SEED_MENUS = ${JSON.stringify(output, null, 2)}\n`)
+  fs.writeFileSync(path.join(RUNTIME_DATA_DIR, "menus.seed-data.ts"), `// Auto-generated from ../../ruoyi-vue-pro/sql/mysql/ruoyi-vue-pro.sql\n// source sha256: ${SOURCE_HASH}\n// ${output.length} active RuoYi menus; do not edit manually.\nimport type { SystemMenuRow } from "@/modules/system/backend/repositories/menu.repository"\n\nexport const SEED_MENUS: SystemMenuRow[] = ${JSON.stringify(output.map((menu) => ({ ...menu, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" })), null, 2)}\n`)
+  console.log(`[MENU] 写入完整运行时菜单 prisma/data/menus.seed-data.ts`)
+}
 
-  const output = activeMenus.slice(0, 200).map((r) => ({
-    id: String(r.id),
-    name: r.name || "",
-    permission: r.permission || null,
-    type: r.type === "1" ? "DIR" : r.type === "2" ? "MENU" : "BUTTON",
-    parentId: r.parent_id && r.parent_id !== "0" ? String(r.parent_id) : null,
-    path: r.path || null,
-    component: r.component || null,
-    icon: r.icon || null,
-    sort: Number(r.sort) || 0,
-    status: r.status === "0" ? "ACTIVE" : "DISABLED",
-    visible: r.visible !== "1",
-    keepAlive: r.keep_alive !== "1",
-  }))
-
-  const content = `// Auto-generated from ruoyi-vue-pro SQL\n// ${output.length} menus extracted\n\nexport const SEED_MENUS = ${JSON.stringify(output, null, 2)}\n`
-  fs.writeFileSync(path.join(OUTPUT_DIR, "menus.seed.ts"), content)
-  console.log(`[MENU] 写入 seed-output/menus.seed.ts`)
+function extractTenantPackages() {
+  const rows = extractInserts("system_tenant_package")
+  const output = rows
+    .filter((row) => row.deleted === false || row.deleted === "0" || row.deleted === "b0" || row.deleted === "b'0'")
+    .map((row) => ({
+      id: String(row.id),
+      name: row.name || "",
+      status: row.status === "0" ? "ACTIVE" : "DISABLED",
+      menuIds: JSON.parse(row.menu_ids || "[]").map(String),
+      remark: row.remark || null,
+      createdAt: "2026-01-01T00:00:00.000Z",
+      updatedAt: "2026-01-01T00:00:00.000Z",
+    }))
+  fs.writeFileSync(path.join(OUTPUT_DIR, "tenant-packages.seed.ts"), `// Auto-generated from ruoyi-vue-pro SQL\n// source sha256: ${SOURCE_HASH}\n\nexport const SEED_TENANT_PACKAGES = ${JSON.stringify(output, null, 2)}\n`)
+  fs.writeFileSync(path.join(RUNTIME_DATA_DIR, "tenant-packages.seed-data.ts"), `// Auto-generated from ../../ruoyi-vue-pro/sql/mysql/ruoyi-vue-pro.sql\n// source sha256: ${SOURCE_HASH}\n// RuoYi package menu_ids are expanded into system_tenant_package_menu at seed time.\n\nexport type TenantPackageSeed = { id: string; name: string; status: "ACTIVE" | "DISABLED"; menuIds: string[]; remark: string | null; createdAt: string; updatedAt: string }\n\nexport const SEED_TENANT_PACKAGES: TenantPackageSeed[] = ${JSON.stringify(output, null, 2)}\n`)
+  console.log(`[TENANT_PACKAGE] 写入 ${output.length} 个 RuoYi 默认套餐`)
 }
 
 // === 提取字典类型 ===
@@ -207,6 +231,7 @@ function extractPosts() {
 // === Main ===
 console.log("=== 从 ruoyi-vue-pro SQL 提取种子数据 ===\n")
 extractMenus()
+extractTenantPackages()
 extractDictTypes()
 extractDictData()
 extractDepts()
