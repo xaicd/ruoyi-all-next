@@ -35,7 +35,7 @@ export class SystemPermissionService {
   // 兼容旧 route
   static async page(input: any) { return { items: [], total: 0, page: 1, pageSize: 20 } }
   static async get(id: string) { return null }
-  static async create(input: any) { return PermissionService.assignUserRole(input) }
-  static async update(input: any) { return PermissionService.assignRoleMenu(input) }
+  static async create(input: any) { return SystemPermissionService.assignUserRole(input) }
+  static async update(input: any) { return SystemPermissionService.assignRoleMenu(input) }
   static async delete(id: string) { return { success: true } }
 }

@@ -21,7 +21,4 @@ export class NotifyMessageService {
 }
 
 // Alias for index.ts re-export
-export {  as  }
-
-// Alias for index.ts re-export
 export { NotifyMessageService as SystemNotifyMessageService }
