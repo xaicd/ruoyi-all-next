@@ -210,10 +210,10 @@ async function createInDb(data: CreateUserData): Promise<SystemUserRow> {
       dept_id: data.deptId ?? null,
       remark: data.remark ?? null,
       tenant_id: data.tenantId ?? null,
-      created_at: now,
-      updated_at: now,
+      created_at: now.toISOString(),
+      updated_at: now.toISOString(),
       login_ip: "",
-      login_date: now,
+      login_date: now.toISOString(),
       deleted: false,
     })
     .returningAll()
