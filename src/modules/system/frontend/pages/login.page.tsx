@@ -3,9 +3,11 @@
 import { useState } from "react"
 import { request, API } from "@/modules/shared/frontend/lib/request"
 
-export default function LoginPage() {
-  const [username, setUsername] = useState("admin")
-  const [password, setPassword] = useState("admin123")
+type BootstrapCredentials = { username: string; password: string }
+
+export default function LoginPage({ bootstrapCredentials }: { bootstrapCredentials?: BootstrapCredentials }) {
+  const [username, setUsername] = useState(bootstrapCredentials?.username ?? "")
+  const [password, setPassword] = useState(bootstrapCredentials?.password ?? "")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
@@ -110,22 +112,24 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-6 rounded-lg border border-slate-200 bg-white p-4">
-            <p className="mb-2 text-xs font-medium text-slate-500">演示账号</p>
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-slate-600">admin / admin123</span>
-              <button
-                type="button"
-                onClick={() => { setUsername("admin"); setPassword("admin123") }}
-                className="text-xs text-blue-600 hover:text-blue-700"
-              >
-                一键填入
-              </button>
+          {bootstrapCredentials && (
+            <div className="mt-6 rounded-lg border border-amber-200 bg-amber-50 p-4">
+              <p className="mb-2 text-xs font-medium text-amber-800">本地开发账号（来自环境变量）</p>
+              <div className="flex items-center justify-between gap-3 text-sm">
+                <span className="break-all text-amber-900">{bootstrapCredentials.username} / {bootstrapCredentials.password}</span>
+                <button
+                  type="button"
+                  onClick={() => { setUsername(bootstrapCredentials.username); setPassword(bootstrapCredentials.password) }}
+                  className="shrink-0 text-xs text-blue-600 hover:text-blue-700"
+                >
+                  一键填入
+                </button>
+              </div>
             </div>
-          </div>
+          )}
 
           <p className="mt-6 text-center text-xs text-slate-400">
-            RuoYi All Next v0.1.0 · 内存演示模式
+            RuoYi All Next v0.1.0 · {bootstrapCredentials ? "本地开发环境" : "安全登录"}
           </p>
         </div>
       </div>

@@ -1,14 +1,14 @@
 // Seed data for SystemUser - matches ruoyi-vue-pro conventions
-// Password: admin123 → MD5(MD5(admin123) + salt) = 9486c0e4d342d7b250ac3b27d3f211aa
+// Memory-mode development password: RuoYi!Memory_2026#x9 (real PostgreSQL uses .env.local bootstrap credentials).
 import type { SystemUserRow } from "@/modules/system/backend/repositories/user.repository"
 
 export const SEED_USERS: SystemUserRow[] = [
   {
     "id": "1",
-    "username": "admin",
-    "nickname": "超级管理员",
-    "password": "9486c0e4d342d7b250ac3b27d3f211aa",
-    "salt": "a1b2c3d4e5f6g7h8",
+    "username": "local_operator",
+    "nickname": "本地管理员",
+    "password": "23c066a33776417f7202d73b77411f87",
+    "salt": "f9a3c7d1e5b8a2c6",
     "phone": "13800000001",
     "email": "admin@ruoyi.local",
     "avatar": null,
@@ -23,8 +23,8 @@ export const SEED_USERS: SystemUserRow[] = [
     "id": "2",
     "username": "test",
     "nickname": "测试用户",
-    "password": "9486c0e4d342d7b250ac3b27d3f211aa",
-    "salt": "a1b2c3d4e5f6g7h8",
+    "password": "23c066a33776417f7202d73b77411f87",
+    "salt": "f9a3c7d1e5b8a2c6",
     "phone": "13800000002",
     "email": "test@ruoyi.local",
     "avatar": null,

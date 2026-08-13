@@ -32,7 +32,7 @@ echo [STEP] Generating Prisma client, applying migrations, and seeding developme
 call npm run db:generate || goto :end
 call npm run db:migrate || goto :end
 call npm run db:seed || goto :end
-echo [OK] Infrastructure is ready; sign in with admin/admin123.
+echo [OK] Infrastructure is ready; use ADMIN_BOOTSTRAP_USERNAME and ADMIN_BOOTSTRAP_PASSWORD from .env.local.
 goto :end
 
 :app
@@ -73,8 +73,8 @@ goto :end
 :help
 echo Usage: start.bat [dev^|infra^|app^|docker^|memory^|status^|stop]
 echo.
-echo   dev     Default. Start PostgreSQL + Redis, run migrations, then run Next.js.
-echo   infra   Start PostgreSQL:5433 and Redis:6380, then run migrations.
+echo   dev     Default. Start PostgreSQL + Redis, migrate and seed the local bootstrap administrator, then run Next.js.
+echo   infra   Start PostgreSQL:5433 and Redis:6380, then migrate and seed the local bootstrap administrator.
 echo   app     Run Next.js only, using .env.local.
 echo   docker  Start infrastructure, migrate, then build and start the app container.
 echo   memory  Run Next.js with in-memory persistence and no Redis.

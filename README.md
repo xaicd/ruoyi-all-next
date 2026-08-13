@@ -23,7 +23,7 @@ npm run dev
 # 3. 打开浏览器
 # 首页: http://localhost:3100
 # 登录: http://localhost:3100/login
-# 默认账号: admin / admin123
+# 登录账号与密码：由 .env.local 的 ADMIN_BOOTSTRAP_USERNAME / ADMIN_BOOTSTRAP_PASSWORD 配置；禁止使用通用默认凭据。
 ```
 
 ## 统一启动脚本
@@ -74,11 +74,13 @@ npm run db:up
 
 # 3. `.env.local` 默认已指向 PostgreSQL `localhost:5433` 和 Redis `localhost:6380`；如有需要再修改连接变量
 
-# 4. 生成 Prisma Client 并执行版本化迁移
+# 4. 在 .env.local 设置唯一的 ADMIN_BOOTSTRAP_USERNAME、强 ADMIN_BOOTSTRAP_PASSWORD、ADMIN_BOOTSTRAP_SALT
+# 5. 生成 Prisma Client、执行迁移并初始化本地管理员
 npm run db:generate
 npm run db:migrate
+npm run db:seed
 
-# 5. 启动应用
+# 6. 启动应用
 npm run dev
 ```
 

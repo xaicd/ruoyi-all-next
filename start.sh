@@ -9,8 +9,8 @@ COMPOSE=(docker compose -f deploy/docker-compose.dev.yml)
 usage() {
   cat <<'EOF'
 Usage: ./start.sh [dev|infra|app|docker|memory|status|stop]
-  dev     Default. Start PostgreSQL + Redis, migrate, then run Next.js.
-  infra   Start PostgreSQL:5433 and Redis:6380, then run migrations.
+  dev     Default. Start PostgreSQL + Redis, migrate and seed the local bootstrap administrator, then run Next.js.
+  infra   Start PostgreSQL:5433 and Redis:6380, then migrate and seed the local bootstrap administrator.
   app     Run Next.js only, using .env.local.
   docker  Start infrastructure, migrate, then build and start the app container.
   memory  Run Next.js with in-memory persistence and no Redis.
@@ -20,7 +20,7 @@ EOF
 }
 
 require_tools() { command -v docker >/dev/null || { echo '[ERROR] Docker is required.' >&2; exit 1; }; command -v npm >/dev/null || { echo '[ERROR] Node.js and npm are required.' >&2; exit 1; }; }
-infra() { require_tools; echo '[STEP] Starting PostgreSQL (5433) and Redis (6380)...'; "${COMPOSE[@]}" up -d --wait postgres redis; echo '[STEP] Generating Prisma client, applying migrations, and seeding development access...'; npm run db:generate; npm run db:migrate; npm run db:seed; echo '[OK] Infrastructure is ready; sign in with admin/admin123.'; }
+infra() { require_tools; echo '[STEP] Starting PostgreSQL (5433) and Redis (6380)...'; "${COMPOSE[@]}" up -d --wait postgres redis; echo '[STEP] Generating Prisma client, applying migrations, and seeding development access...'; npm run db:generate; npm run db:migrate; npm run db:seed; echo '[OK] Infrastructure is ready; use ADMIN_BOOTSTRAP_USERNAME and ADMIN_BOOTSTRAP_PASSWORD from .env.local.'; }
 app() { command -v npm >/dev/null || { echo '[ERROR] Node.js and npm are required.' >&2; exit 1; }; echo '[INFO] Starting Next.js at http://localhost:3100'; exec npm run dev; }
 memory() { command -v npm >/dev/null || { echo '[ERROR] Node.js and npm are required.' >&2; exit 1; }; echo '[INFO] Starting in-memory mode at http://localhost:3100'; DB_DRIVER=memory DATABASE_URL=memory://ruoyi-all-next REDIS_URL= exec npm run dev; }
 

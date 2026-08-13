@@ -25,6 +25,7 @@ type PageData = {
 
 // === API ===
 import { request, API } from "@/modules/shared/frontend/lib/request"
+import { DepartmentTreeSelect } from "@/modules/system/frontend/components/department-tree-select"
 
 async function fetchUsers(params: {
   page: number
@@ -98,8 +99,13 @@ export default function SystemUsersPage() {
     setShowForm(true)
   }
 
-  const handleEdit = (user: SystemUser) => {
-    setEditingUser(user)
+  const handleEdit = async (user: SystemUser) => {
+    const result = await request.get<SystemUser>(`${API.USERS}/${user.id}`)
+    if (!result.success || !result.data) {
+      alert(result.error || "加载用户详情失败")
+      return
+    }
+    setEditingUser(result.data)
     setShowForm(true)
   }
 
@@ -314,21 +320,24 @@ function UserFormDialog({
     password: "",
     status: user?.status ?? "ACTIVE",
     remark: user?.remark ?? "",
-    roleIds: [] as string[],
+    roleIds: user?.roleIds ?? [],
     deptId: user?.deptId ?? "",
   })
 
-  // 加载角色和部门列表
   const [roles, setRoles] = useState<{ id: string; name: string }[]>([])
-  const [depts, setDepts] = useState<{ id: string; name: string }[]>([])
+  const [rolesLoading, setRolesLoading] = useState(true)
+  const [rolesError, setRolesError] = useState("")
 
   useEffect(() => {
-    fetch("/api/v1/admin/system/roles?pageSize=100").then((r) => r.json()).then((res) => {
-      if (res.success) setRoles(res.data.items.map((r: any) => ({ id: r.id, name: r.name })))
-    })
-    fetch("/api/v1/admin/system/depts?mode=list").then((r) => r.json()).then((res) => {
-      if (res.success) setDepts(Array.isArray(res.data) ? res.data.map((d: any) => ({ id: d.id, name: d.name })) : [])
-    })
+    let active = true
+    request.get<{ items: { id: string; name: string }[] }>(API.ROLES, { pageSize: 100, status: "ACTIVE" })
+      .then((result) => {
+        if (!active) return
+        if (result.success && result.data) setRoles(result.data.items.map((role) => ({ id: role.id, name: role.name })))
+        else setRolesError(result.error || "角色加载失败")
+      })
+      .finally(() => { if (active) setRolesLoading(false) })
+    return () => { active = false }
   }, [])
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -336,7 +345,6 @@ function UserFormDialog({
     const payload: Record<string, any> = { ...form }
     if (user && !payload.password) delete payload.password
     if (!payload.deptId) delete payload.deptId
-    if (payload.roleIds.length === 0) delete payload.roleIds
     onSubmit(payload)
   }
 
@@ -388,17 +396,14 @@ function UserFormDialog({
           {/* 部门选择 */}
           <div>
             <label className="mb-1 block text-xs text-slate-600">所属部门</label>
-            <select value={form.deptId} onChange={(e) => update("deptId", e.target.value)} className="h-9 w-full rounded-md border px-3 text-sm">
-              <option value="">请选择部门</option>
-              {depts.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
-            </select>
+            <DepartmentTreeSelect value={form.deptId} onChange={(value) => update("deptId", value)} activeOnly />
           </div>
 
           {/* 角色分配 */}
           <div>
             <label className="mb-1 block text-xs text-slate-600">分配角色</label>
             <div className="rounded-md border p-2 max-h-32 overflow-y-auto">
-              {roles.length === 0 ? <p className="text-xs text-slate-400">加载中...</p> : (
+              {rolesLoading ? <p className="text-xs text-slate-400">加载中...</p> : rolesError ? <p className="text-xs text-red-500">{rolesError}</p> : roles.length === 0 ? <p className="text-xs text-slate-400">暂无可分配角色</p> : (
                 <div className="grid grid-cols-2 gap-1">
                   {roles.map((role) => (
                     <label key={role.id} className="flex items-center gap-1.5 rounded px-1.5 py-1 hover:bg-slate-50 cursor-pointer">

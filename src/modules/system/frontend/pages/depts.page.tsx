@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { request, API } from "@/modules/shared/frontend/lib/request"
+import { DepartmentTreeSelect } from "@/modules/system/frontend/components/department-tree-select"
 
 type DeptNode = { id: string; name: string; parentId: string | null; sort: number; status: string; leaderId: string | null; phone: string | null; children: DeptNode[] }
 
@@ -51,7 +52,7 @@ export default function SystemDeptsPage() {
         : <DeptTree nodes={tree} onEdit={handleEdit} onDelete={handleDelete} onCreate={handleCreate} level={0} />}
       </div>
 
-      {showForm && <DeptFormDialog dept={editing} parentId={parentId} onSubmit={handleSubmit} onClose={() => setShowForm(false)} />}
+      {showForm && <DeptFormDialog dept={editing} parentId={parentId} tree={tree} onSubmit={handleSubmit} onClose={() => setShowForm(false)} />}
     </div>
   )
 }
@@ -77,7 +78,7 @@ function DeptTree({ nodes, onEdit, onDelete, onCreate, level }: { nodes: DeptNod
   )
 }
 
-function DeptFormDialog({ dept, parentId, onSubmit, onClose }: { dept: DeptNode | null; parentId?: string; onSubmit: (d: Record<string, any>) => void; onClose: () => void }) {
+function DeptFormDialog({ dept, parentId, tree, onSubmit, onClose }: { dept: DeptNode | null; parentId?: string; tree: DeptNode[]; onSubmit: (d: Record<string, any>) => void; onClose: () => void }) {
   const [form, setForm] = useState({ name: dept?.name ?? "", parentId: dept?.parentId ?? parentId ?? "", sort: String(dept?.sort ?? 0), phone: dept?.phone ?? "", status: dept?.status ?? "ACTIVE" })
   const update = (k: string, v: string) => setForm((p) => ({ ...p, [k]: v }))
 
@@ -87,7 +88,7 @@ function DeptFormDialog({ dept, parentId, onSubmit, onClose }: { dept: DeptNode 
         <h2 className="mb-4 text-base font-semibold">{dept ? "编辑部门" : "新增部门"}</h2>
         <form onSubmit={(e) => { e.preventDefault(); onSubmit({ ...form, sort: Number(form.sort), parentId: form.parentId || undefined }) }} className="space-y-3">
           <div><label className="mb-1 block text-xs text-slate-600">部门名称 *</label><input required value={form.name} onChange={(e) => update("name", e.target.value)} className="h-9 w-full rounded-md border px-3 text-sm" /></div>
-          <div><label className="mb-1 block text-xs text-slate-600">上级部门 ID</label><input value={form.parentId} onChange={(e) => update("parentId", e.target.value)} className="h-9 w-full rounded-md border px-3 text-sm" placeholder="留空为顶级" /></div>
+          <div><label className="mb-1 block text-xs text-slate-600">上级部门</label><DepartmentTreeSelect value={form.parentId} onChange={(value) => update("parentId", value)} tree={tree} excludeSubtreeId={dept?.id} placeholder="请选择上级部门（留空为顶级）" /></div>
           <div className="grid grid-cols-2 gap-3">
             <div><label className="mb-1 block text-xs text-slate-600">排序</label><input type="number" value={form.sort} onChange={(e) => update("sort", e.target.value)} className="h-9 w-full rounded-md border px-3 text-sm" /></div>
             <div><label className="mb-1 block text-xs text-slate-600">状态</label><select value={form.status} onChange={(e) => update("status", e.target.value)} className="h-9 w-full rounded-md border px-3 text-sm"><option value="ACTIVE">启用</option><option value="DISABLED">禁用</option></select></div>

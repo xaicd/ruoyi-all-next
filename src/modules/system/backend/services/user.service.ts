@@ -13,6 +13,7 @@ import type {
 } from "@/modules/system/backend/validators"
 import { SystemDeptRepository } from "@/modules/system/backend/repositories/dept.repository"
 import { SystemUserRepository } from "@/modules/system/backend/repositories/user.repository"
+import { SystemPermissionService } from "@/modules/system/backend/services/permission.service"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 import { hashPassword, generateSalt } from "@/modules/shared/backend/lib/crypto"
 
@@ -55,7 +56,8 @@ export class SystemUserService {
     domainLog.event("system.user.get", { userId: id })
 
     const { password, ...rest } = user
-    return rest
+    const roleIds = await SystemPermissionService.getUserRoleIds(id)
+    return { ...rest, roleIds }
   }
 
   /** 创建用户 */
@@ -82,6 +84,10 @@ export class SystemUserService {
       status: input.status,
       remark: input.remark,
     })
+
+    if (input.roleIds !== undefined) {
+      await SystemPermissionService.assignUserRole({ userId: user.id, roleIds: input.roleIds })
+    }
 
     domainLog.event("system.user.create", { userId: user.id, username: user.username })
     domainLog.audit("system.user.create", {
@@ -119,6 +125,10 @@ export class SystemUserService {
       status: input.status,
       remark: input.remark,
     })
+
+    if (input.roleIds !== undefined) {
+      await SystemPermissionService.assignUserRole({ userId: input.id, roleIds: input.roleIds })
+    }
 
     domainLog.event("system.user.update", { userId: input.id })
     domainLog.audit("system.user.update", {
