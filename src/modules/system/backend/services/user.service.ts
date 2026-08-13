@@ -11,9 +11,16 @@ import type {
   UpdateUserInput,
   UpdateUserPasswordInput,
 } from "@/modules/system/backend/validators"
+import { SystemDeptRepository } from "@/modules/system/backend/repositories/dept.repository"
 import { SystemUserRepository } from "@/modules/system/backend/repositories/user.repository"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 import { hashPassword, generateSalt } from "@/modules/shared/backend/lib/crypto"
+
+async function requireCurrentTenantDept(deptId: string | undefined): Promise<void> {
+  if (!deptId) return
+  const dept = await SystemDeptRepository.findById(deptId)
+  if (!dept) throw new Error(`部门不存在或不属于当前租户: ${deptId}`)
+}
 
 export class SystemUserService {
   /** 分页列表 */
@@ -58,6 +65,7 @@ export class SystemUserService {
     if (existing) {
       throw new Error(`用户名已存在: ${input.username}`)
     }
+    await requireCurrentTenantDept(input.deptId)
 
     // 密码加密：双重 MD5 + Salt
     const salt = generateSalt()
@@ -99,6 +107,8 @@ export class SystemUserService {
         throw new Error(`用户名已存在: ${input.username}`)
       }
     }
+
+    await requireCurrentTenantDept(input.deptId)
 
     await SystemUserRepository.update(input.id, {
       username: input.username,

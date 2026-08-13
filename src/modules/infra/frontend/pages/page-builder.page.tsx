@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { Puck, Render, type Config, type Data } from "@measured/puck"
-import "@measured/puck/puck.css"
+import { Puck, Render, type Data } from "@puckeditor/core"
+import "@puckeditor/core/puck.css"
 
 // === 物料组件定义 ===
 

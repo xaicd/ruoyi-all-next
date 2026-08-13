@@ -6,9 +6,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// 默认 PostgreSQL，可通过 env 切换
+// Prisma schema 与迁移默认使用 PostgreSQL。运行时驱动选择由 DB_DRIVER 管理；
+// MySQL 等异构数据库需要独立 schema 与迁移历史，不能动态切换 Prisma provider。
 datasource db {
-  provider = env("DB_PROVIDER") // "postgresql" | "mysql" | "sqlserver" | "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -22,6 +23,7 @@ model SystemUser {
   username  String   @unique @db.VarChar(30)
   nickname  String   @db.VarChar(30)
   password  String   @db.VarChar(100)
+  salt      String   @db.VarChar(100)
   phone     String?  @db.VarChar(20)
   email     String?  @db.VarChar(50)
   avatar    String?  @db.VarChar(500)
@@ -282,6 +284,48 @@ model SystemOperateLog {
   @@index([createdAt])
 }
 
+/// 兼容旧服务的管理员账户（逐步迁移至 SystemUser）
+model Admin {
+  id        String   @id
+  username  String   @unique @db.VarChar(100)
+  phone     String?  @unique @db.VarChar(20)
+  password  String   @db.VarChar(255)
+  salt      String?  @db.VarChar(100)
+  status    String   @default("ACTIVE") @db.VarChar(20)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("admin")
+}
+
+/// 通用 JSON 配置存储，供验证码与集成配置使用
+model Setting {
+  key       String   @id @db.VarChar(200)
+  value     Json
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("setting")
+}
+
+/// BPM 审批任务
+model ApprovalTask {
+  id            String    @id
+  bizType       String    @map("biz_type") @db.VarChar(100)
+  title         String?   @db.VarChar(500)
+  applicantName String?   @map("applicant_name") @db.VarChar(100)
+  status        String    @default("PENDING") @db.VarChar(20)
+  reviewedAt    DateTime? @map("reviewed_at")
+  reviewRemark  String?   @map("review_remark") @db.VarChar(1000)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  @@map("approval_task")
+  @@index([bizType])
+  @@index([status])
+  @@index([createdAt])
+}
+
 // ============================================================
 // INFRA 域 - 基础设施表
 // ============================================================
@@ -393,6 +437,24 @@ model InfraFileConfig {
   deleted   Boolean  @default(false)
 
   @@map("infra_file_config")
+}
+
+/// 数据源配置（平台全局，密码以密文保存）
+model InfraDataSourceConfig {
+  id                String   @id @default(cuid())
+  name              String   @db.VarChar(100)
+  driver            String   @db.VarChar(30)
+  url               String   @db.VarChar(1024)
+  username          String   @db.VarChar(255)
+  encryptedPassword String   @map("encrypted_password") @db.VarChar(2048)
+  remark            String?  @db.VarChar(500)
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  deleted           Boolean  @default(false)
+
+  @@map("infra_data_source_config")
+  @@index([name])
+  @@index([deleted])
 }
 
 /// 文件

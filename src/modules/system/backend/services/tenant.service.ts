@@ -6,6 +6,13 @@ import { SystemTenantRepository } from "@/modules/system/backend/repositories/te
 import { TenantPackageRepository } from "@/modules/system/backend/repositories/tenant-package.repository"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 
+async function requireActivePackage(packageId: string | undefined): Promise<void> {
+  if (!packageId) return
+  const pkg = await TenantPackageRepository.findById(packageId)
+  if (!pkg) throw new Error(`套餐不存在: ${packageId}`)
+  if (pkg.status !== "ACTIVE") throw new Error(`套餐已停用: ${pkg.name}`)
+}
+
 export class SystemTenantService {
   static async list(input: any) {
     const result = await SystemTenantRepository.findList(input)
@@ -20,6 +27,7 @@ export class SystemTenantService {
   }
 
   static async create(input: any) {
+    await requireActivePackage(input.packageId)
     const tenant = await SystemTenantRepository.create(input)
     domainLog.event("system.tenant.create", { tenantId: tenant.id })
     domainLog.audit("system.tenant.create", { targetType: "TENANT", targetId: tenant.id })
@@ -29,6 +37,7 @@ export class SystemTenantService {
   static async update(input: { id: string; name?: string; contactName?: string; contactPhone?: string; domain?: string; packageId?: string; status?: string; expireTime?: string; accountCount?: number }) {
     const existing = await SystemTenantRepository.findById(input.id)
     if (!existing) throw new Error(`租户不存在: ${input.id}`)
+    await requireActivePackage(input.packageId)
     const { id, ...data } = input
     await SystemTenantRepository.update(id, data)
     domainLog.event("system.tenant.update", { tenantId: id })

@@ -130,6 +130,8 @@ export const API = {
   MENUS: "/api/v1/admin/system/menus",
   POSTS: "/api/v1/admin/system/posts",
   DICTS: "/api/v1/admin/system/dicts",
+  ROLE_MENU_IDS: "/api/v1/admin/system/permissions/role-menus",
+  ASSIGN_ROLE_MENU: "/api/v1/admin/system/permissions/assign-role-menu",
   TENANTS: "/api/v1/admin/system/tenants",
   TENANT_PACKAGES: "/api/v1/admin/system/tenant-packages",
 
@@ -137,6 +139,7 @@ export const API = {
   CONFIGS: "/api/v1/admin/infra/configs",
   JOBS: "/api/v1/admin/infra/jobs",
   FILES: "/api/v1/admin/infra/files",
+  DATA_SOURCE_CONFIG: "/api/v1/admin/infra/data-source-config",
   CODEGEN: "/api/v1/admin/infra/codegen",
 
   // Pay

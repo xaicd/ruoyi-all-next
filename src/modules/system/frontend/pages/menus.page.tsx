@@ -45,8 +45,13 @@ function getAllIds(nodes: MenuNode[]): string[] {
 }
 
 export default function SystemMenusPage() {
+  return <SystemMenusPageContent key="ruoyi-menu-data-v2" />
+}
+
+function SystemMenusPageContent() {
   const [tree, setTree] = useState<MenuNode[]>([])
   const [loading, setLoading] = useState(false)
+  const [loadError, setLoadError] = useState<string | null>(null)
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState<MenuNode | null>(null)
   const [defaultParentId, setDefaultParentId] = useState<string | undefined>(undefined)
@@ -56,14 +61,20 @@ export default function SystemMenusPage() {
 
   const loadData = useCallback(async () => {
     setLoading(true)
+    setLoadError(null)
     try {
-      const res = await request.get(API.MENUS)
-      if (res.success) {
-        setTree(res.data)
-        // Default: expand top-level (DIR) nodes
-        const topIds = (res.data as MenuNode[]).filter(n => n.type === "DIR").map(n => n.id)
-        setExpandedIds(new Set(topIds))
+      const res = await request.get<MenuNode[]>(API.MENUS)
+      if (!res.success) {
+        setTree([])
+        setLoadError(res.error || "菜单数据加载失败")
+        return
       }
+
+      const data = res.data ?? []
+      setTree(data)
+      // Default: expand top-level (DIR) nodes
+      const topIds = data.filter(n => n.type === "DIR").map(n => n.id)
+      setExpandedIds(new Set(topIds))
     } finally { setLoading(false) }
   }, [])
 
@@ -133,7 +144,8 @@ export default function SystemMenusPage() {
             placeholder="菜单名称 / 权限码"
             className="h-9 w-64 rounded-md border px-3 text-sm"
           />
-          <button onClick={() => setKeyword("")} className="h-9 rounded-md border px-4 text-sm text-slate-500">重置</button>
+          <button onClick={() => { setKeyword(""); loadData() }} className="h-9 rounded-md border px-4 text-sm text-slate-500">重置</button>
+          <button onClick={loadData} className="h-9 rounded-md border px-4 text-sm text-slate-600">刷新数据</button>
           <button
             onClick={toggleExpandAll}
             className="h-9 rounded-md border px-4 text-sm text-slate-600"
@@ -160,6 +172,13 @@ export default function SystemMenusPage() {
           <tbody>
             {loading ? (
               <tr><td colSpan={6} className="px-4 py-12 text-center text-slate-400">加载中...</td></tr>
+            ) : loadError ? (
+              <tr>
+                <td colSpan={6} className="px-4 py-12 text-center">
+                  <p className="text-sm text-red-600">菜单加载失败：{loadError}</p>
+                  <button onClick={loadData} className="mt-2 text-xs text-blue-600 hover:text-blue-800">重新加载</button>
+                </td>
+              </tr>
             ) : filteredRows.length === 0 ? (
               <tr><td colSpan={6} className="px-4 py-12 text-center text-slate-400">暂无数据</td></tr>
             ) : (

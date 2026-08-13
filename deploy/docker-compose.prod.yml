@@ -52,8 +52,7 @@ services:
     environment:
       - NODE_ENV=production
       - DB_DRIVER=postgresql
-      - DB_PROVIDER=postgresql
-      - DATABASE_URL=${DATABASE_URL:-postgresql://ruoyi:ruoyi123@postgres:5432/ruoyi_next?schema=public}
+      - DATABASE_URL=${DATABASE_URL:?DATABASE_URL is required}
       - DB_POOL_SIZE=${DB_POOL_SIZE:-30}
       - DB_TIMEZONE=Asia/Shanghai
       - JWT_SECRET=${JWT_SECRET:?JWT_SECRET is required}

@@ -3,95 +3,17 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
+import { request } from "@/modules/shared/frontend/lib/request"
 
-type SidebarItem = { href: string; label: string; icon: string }
-type SidebarGroup = { title: string; icon: string; children: SidebarItem[] }
-
-// 静态兜底菜单（API 失败时使用）
-const STATIC_MENU_GROUPS: SidebarGroup[] = [
-  {
-    title: "系统管理",
-    icon: "⚙️",
-    children: [
-      { href: "/admin/system/users", label: "用户管理", icon: "👤" },
-      { href: "/admin/system/roles", label: "角色管理", icon: "🛡️" },
-      { href: "/admin/system/menus", label: "菜单管理", icon: "📋" },
-      { href: "/admin/system/depts", label: "部门管理", icon: "🏢" },
-      { href: "/admin/system/posts", label: "岗位管理", icon: "💼" },
-      { href: "/admin/system/dicts", label: "字典管理", icon: "📖" },
-      { href: "/admin/system/notices", label: "通知公告", icon: "📢" },
-      { href: "/admin/system/tenants", label: "租户管理", icon: "🏠" },
-      { href: "/admin/system/tenant-packages", label: "租户套餐", icon: "📦" },
-    ],
-  },
-  {
-    title: "认证安全",
-    icon: "🔐",
-    children: [
-      { href: "/admin/system/oauth2-clients", label: "OAuth2 客户端", icon: "🔑" },
-      { href: "/admin/system/oauth2-tokens", label: "令牌管理", icon: "🎫" },
-      { href: "/admin/system/social-users", label: "社交用户", icon: "🌐" },
-    ],
-  },
-  {
-    title: "消息通知",
-    icon: "📬",
-    children: [
-      { href: "/admin/system/sms-channels", label: "短信渠道", icon: "📱" },
-      { href: "/admin/system/sms-logs", label: "短信日志", icon: "📨" },
-      { href: "/admin/system/mail-accounts", label: "邮箱账号", icon: "✉️" },
-      { href: "/admin/system/mail-logs", label: "邮件日志", icon: "📧" },
-      { href: "/admin/system/notify-templates", label: "通知模板", icon: "📄" },
-      { href: "/admin/system/notify-messages", label: "通知记录", icon: "🔔" },
-    ],
-  },
-  {
-    title: "基础设施",
-    icon: "🔧",
-    children: [
-      { href: "/admin/infra/configs", label: "参数设置", icon: "⚙️" },
-      { href: "/admin/infra/job-center", label: "定时任务", icon: "⏰" },
-      { href: "/admin/infra/files", label: "文件管理", icon: "📁" },
-      { href: "/admin/infra/codegen", label: "代码生成", icon: "🛠️" },
-      { href: "/admin/infra/page-builder", label: "页面构建", icon: "🎨" },
-      { href: "/admin/infra/api-logs", label: "API 日志", icon: "📡" },
-      { href: "/admin/infra/api-error-logs", label: "错误日志", icon: "🐛" },
-      { href: "/admin/infra/db-configs", label: "数据源配置", icon: "🗄️" },
-    ],
-  },
-  {
-    title: "支付中心",
-    icon: "💰",
-    children: [
-      { href: "/admin/pay/orders", label: "支付订单", icon: "💳" },
-      { href: "/admin/pay/refunds", label: "退款订单", icon: "↩️" },
-    ],
-  },
-  {
-    title: "CRM 客户",
-    icon: "🤝",
-    children: [
-      { href: "/admin/crm/customers", label: "客户管理", icon: "👥" },
-      { href: "/admin/crm/clues", label: "线索管理", icon: "🎯" },
-    ],
-  },
-  {
-    title: "系统监控",
-    icon: "📊",
-    children: [
-      { href: "/admin/system/online-users", label: "在线用户", icon: "🟢" },
-      { href: "/admin/system/login-logs", label: "登录日志", icon: "📝" },
-      { href: "/admin/system/operate-logs", label: "操作日志", icon: "📊" },
-    ],
-  },
-]
+type SidebarItem = { id: string; href: string | null; label: string; icon: string; children: SidebarItem[] }
+type SidebarGroup = { id: string; title: string; icon: string; children: SidebarItem[] }
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const [collapsed, setCollapsed] = useState(false)
   const [username, setUsername] = useState("admin")
   const [authChecked, setAuthChecked] = useState(false)
-  const [menuGroups, setMenuGroups] = useState<SidebarGroup[]>(STATIC_MENU_GROUPS)
+  const [menuGroups, setMenuGroups] = useState<SidebarGroup[]>([])
 
   useEffect(() => {
     // Auth guard
@@ -126,15 +48,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     setAuthChecked(true)
 
-    // 动态加载菜单（从数据库）— 暂时禁用，待 componentToHref 映射完善后启用
-    // fetch("/api/v1/admin/system/menus/sidebar")
-    //   .then(r => r.json())
-    //   .then(res => {
-    //     if (res.success && res.data?.length > 0) {
-    //       setMenuGroups(res.data)
-    //     }
-    //   })
-    //   .catch(() => {})
+    // 左侧导航与菜单管理共用 system_menu 数据源，避免静态分组和授权树不一致。
+    request.get<SidebarGroup[]>("/api/v1/admin/system/menus/sidebar")
+      .then((res) => {
+        if (res.success) setMenuGroups(res.data ?? [])
+      })
+      .catch(() => setMenuGroups([]))
   }, [])
 
   if (!authChecked) {
@@ -160,9 +79,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           {!collapsed && <span className="ml-2.5 text-sm font-semibold text-slate-900 whitespace-nowrap">RuoYi Admin</span>}
         </div>
 
-        <nav className="flex-1 overflow-y-auto py-3 px-2">
+        <nav className="flex-1 overflow-y-auto px-2 py-3">
           {menuGroups.map((group) => (
-            <MenuGroup key={group.title} group={group} pathname={pathname} collapsed={collapsed} />
+            <MenuGroup key={group.id} group={group} pathname={pathname} collapsed={collapsed} />
           ))}
         </nav>
 
@@ -210,8 +129,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   )
 }
 
+function isActive(item: SidebarItem, pathname: string): boolean {
+  return Boolean(item.href && (pathname === item.href || pathname.startsWith(item.href + "/")))
+    || item.children.some((child) => isActive(child, pathname))
+}
+
 function MenuGroup({ group, pathname, collapsed }: { group: SidebarGroup; pathname: string; collapsed: boolean }) {
-  const hasActiveChild = group.children.some((item) => pathname === item.href || pathname.startsWith(item.href + "/"))
+  const hasActiveChild = group.children.some((item) => isActive(item, pathname))
   const [open, setOpen] = useState(hasActiveChild)
 
   useEffect(() => {
@@ -219,16 +143,12 @@ function MenuGroup({ group, pathname, collapsed }: { group: SidebarGroup; pathna
   }, [hasActiveChild])
 
   if (collapsed) {
+    const links = flattenLinks(group.children)
     return (
       <div className="mb-2">
-        {group.children.map((item) => {
-          const active = pathname === item.href || pathname.startsWith(item.href + "/")
-          return (
-            <Link key={item.href} href={item.href} title={item.label} className={`flex items-center justify-center rounded-lg py-2 mb-0.5 transition ${active ? "bg-blue-50 text-blue-700" : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"}`}>
-              <span className="text-base">{item.icon}</span>
-            </Link>
-          )
-        })}
+        {links.map((item) => (
+          <SidebarLink key={item.id} item={item} pathname={pathname} collapsed />
+        ))}
       </div>
     )
   }
@@ -237,44 +157,85 @@ function MenuGroup({ group, pathname, collapsed }: { group: SidebarGroup; pathna
     <div className="mb-1">
       <button
         onClick={() => setOpen(!open)}
-        className={`flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-sm transition ${hasActiveChild ? "text-slate-900 font-medium" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"}`}
+        className={`flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-sm transition ${hasActiveChild ? "font-medium text-slate-900" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"}`}
       >
-        <span className="text-base shrink-0">{group.icon}</span>
-        <span className="flex-1 text-left truncate">{group.title}</span>
-        <svg className={`h-3.5 w-3.5 text-slate-400 transition-transform ${open ? "rotate-90" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
+        <span className="shrink-0 text-base">{group.icon}</span>
+        <span className="flex-1 truncate text-left">{group.title}</span>
+        <Chevron open={open} />
       </button>
-      {open && (
-        <ul className="mt-0.5 ml-4 space-y-0.5 border-l border-slate-100 pl-2">
-          {group.children.map((item) => {
-            const active = pathname === item.href || pathname.startsWith(item.href + "/")
-            return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className={`flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-[13px] transition ${active ? "bg-blue-50 font-medium text-blue-700" : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"}`}
-                >
-                  <span className="text-sm shrink-0">{item.icon}</span>
-                  <span className="truncate">{item.label}</span>
-                </Link>
-              </li>
-            )
-          })}
-        </ul>
-      )}
+      {open && <MenuTreeItems items={group.children} pathname={pathname} level={1} />}
     </div>
   )
 }
 
+function MenuTreeItems({ items, pathname, level }: { items: SidebarItem[]; pathname: string; level: number }) {
+  return (
+    <ul className={`mt-0.5 space-y-0.5 ${level === 1 ? "ml-4 border-l border-slate-100 pl-2" : "ml-3 border-l border-slate-100 pl-2"}`}>
+      {items.map((item) => <MenuTreeItem key={item.id} item={item} pathname={pathname} level={level} />)}
+    </ul>
+  )
+}
+
+function MenuTreeItem({ item, pathname, level }: { item: SidebarItem; pathname: string; level: number }) {
+  const hasChildren = item.children.length > 0
+  const active = isActive(item, pathname)
+  const [open, setOpen] = useState(active)
+
+  useEffect(() => {
+    if (active) setOpen(true)
+  }, [active])
+
+  if (!hasChildren) {
+    return <li><SidebarLink item={item} pathname={pathname} /></li>
+  }
+
+  return (
+    <li>
+      <button
+        onClick={() => setOpen(!open)}
+        className={`flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-[13px] transition ${active ? "font-medium text-slate-900" : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"}`}
+      >
+        <span className="shrink-0 text-sm">{item.icon}</span>
+        <span className="flex-1 truncate text-left">{item.label}</span>
+        <Chevron open={open} />
+      </button>
+      {open && <MenuTreeItems items={item.children} pathname={pathname} level={level + 1} />}
+    </li>
+  )
+}
+
+function SidebarLink({ item, pathname, collapsed = false }: { item: SidebarItem; pathname: string; collapsed?: boolean }) {
+  const active = isActive(item, pathname)
+  const className = collapsed
+    ? `mb-0.5 flex items-center justify-center rounded-lg py-2 transition ${active ? "bg-blue-50 text-blue-700" : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"}`
+    : `flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-[13px] transition ${active ? "bg-blue-50 font-medium text-blue-700" : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"}`
+
+  if (!item.href) {
+    return <span title={`${item.label}（页面尚未实现）`} className={`${className} cursor-not-allowed opacity-50`}><span className="shrink-0 text-sm">{item.icon}</span>{!collapsed && <span className="truncate">{item.label}</span>}</span>
+  }
+
+  return <Link href={item.href} title={collapsed ? item.label : undefined} className={className}><span className="shrink-0 text-sm">{item.icon}</span>{!collapsed && <span className="truncate">{item.label}</span>}</Link>
+}
+
+function Chevron({ open }: { open: boolean }) {
+  return <svg className={`h-3.5 w-3.5 shrink-0 text-slate-400 transition-transform ${open ? "rotate-90" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+}
+
+function flattenLinks(items: SidebarItem[]): SidebarItem[] {
+  return items.flatMap((item) => item.href ? [item] : flattenLinks(item.children))
+}
+
 function getPageTitle(pathname: string, menuGroups: SidebarGroup[]): string {
-  // Dynamic: look up from current menu groups
-  for (const group of menuGroups) {
-    for (const item of group.children) {
-      if (pathname === item.href || pathname.startsWith(item.href + "/")) {
-        return item.label
-      }
+  const findTitle = (items: SidebarItem[]): string | undefined => {
+    for (const item of items) {
+      if (item.href && (pathname === item.href || pathname.startsWith(item.href + "/"))) return item.label
+      const childTitle = findTitle(item.children)
+      if (childTitle) return childTitle
     }
+  }
+  for (const group of menuGroups) {
+    const title = findTitle(group.children)
+    if (title) return title
   }
   return "管理后台"
 }

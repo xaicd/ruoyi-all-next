@@ -14,6 +14,7 @@ export interface SystemUserTable {
   username: string
   nickname: string
   password: string
+  salt: string
   phone: string | null
   email: string | null
   avatar: string | null
@@ -267,6 +268,19 @@ export interface InfraFileConfigTable {
   deleted: Generated<boolean>
 }
 
+export interface InfraDataSourceConfigTable {
+  id: string
+  name: string
+  driver: string
+  url: string
+  username: string
+  encrypted_password: string
+  remark: string | null
+  created_at: Generated<Date>
+  updated_at: Date
+  deleted: Generated<boolean>
+}
+
 export interface InfraFileTable {
   id: Generated<string>
   config_id: string
@@ -303,6 +317,7 @@ export interface DB {
   infra_job_log: InfraJobLogTable
   infra_api_access_log: InfraApiAccessLogTable
   infra_api_error_log: InfraApiErrorLogTable
+  infra_data_source_config: InfraDataSourceConfigTable
   infra_file_config: InfraFileConfigTable
   infra_file: InfraFileTable
 }

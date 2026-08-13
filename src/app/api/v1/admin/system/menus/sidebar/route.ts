@@ -1,21 +1,7 @@
 import { NextResponse } from "next/server"
 import { SystemMenuService } from "@/modules/system/backend/services/menu.service"
-
-/**
- * GET /api/v1/admin/system/menus/sidebar
- * 
- * 将数据库菜单树转换为 sidebar 格式，供 layout.tsx 动态加载
- * 只返回 DIR/MENU 类型（不含 BUTTON），并映射到前端路由
- */
-export async function GET() {
-  try {
-    const tree = await SystemMenuService.tree({ status: "ACTIVE" })
-    const sidebarGroups = convertToSidebar(tree)
-    return NextResponse.json({ success: true, data: sidebarGroups })
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
-  }
-}
+import { SystemPermissionService } from "@/modules/system/backend/services/permission.service"
+import { requireAdminAuth, getAuthErrorStatus } from "@/modules/shared/backend/auth/guards"
 
 type MenuNode = {
   id: string
@@ -24,109 +10,64 @@ type MenuNode = {
   path: string | null
   component: string | null
   icon: string | null
-  parentId: string | null
-  sort: number
+  visible: boolean
   children: MenuNode[]
 }
 
-type SidebarItem = { href: string; label: string; icon: string }
-type SidebarGroup = { title: string; icon: string; children: SidebarItem[] }
+type SidebarItem = { id: string; href: string | null; label: string; icon: string; children: SidebarItem[] }
+type SidebarGroup = { id: string; title: string; icon: string; children: SidebarItem[] }
 
-function componentToHref(component: string | null, path: string | null): string | null {
-  if (!component) return path ? (path.startsWith("/") ? path : "/admin/" + path) : null
-  
-  // Map component paths like "system/user/index" to "/admin/system/users"
-  // This is the standard ruoyi-vue-pro component → route mapping
-  const componentMap: Record<string, string> = {
-    // System
-    "system/user/index": "/admin/system/users",
-    "system/role/index": "/admin/system/roles",
-    "system/menu/index": "/admin/system/menus",
-    "system/dept/index": "/admin/system/depts",
-    "system/post/index": "/admin/system/posts",
-    "system/dict/index": "/admin/system/dicts",
-    "system/tenant/index": "/admin/system/tenants",
-    "system/tenantPackage/index": "/admin/system/tenant-packages",
-    "system/notice/index": "/admin/system/notices",
-    "system/loginlog/index": "/admin/system/login-logs",
-    "system/operatelog/index": "/admin/system/operate-logs",
-    "system/oauth2/client/index": "/admin/system/oauth2-clients",
-    "system/oauth2/token/index": "/admin/system/oauth2-tokens",
-    "system/sms/channel/index": "/admin/system/sms-channels",
-    "system/sms/log/index": "/admin/system/sms-logs",
-    "system/mail/account/index": "/admin/system/mail-accounts",
-    "system/mail/log/index": "/admin/system/mail-logs",
-    // Infra
-    "infra/config/index": "/admin/infra/configs",
-    "infra/job/index": "/admin/infra/job-center",
-    "infra/file/index": "/admin/infra/files",
-    "infra/codegen/index": "/admin/infra/codegen",
-    "infra/build/index": "/admin/infra/page-builder",
-    "infra/apiAccessLog/index": "/admin/infra/api-logs",
-    "infra/apiErrorLog/index": "/admin/infra/api-error-logs",
-    // Pay
-    "pay/order/index": "/admin/pay/orders",
-    "pay/refund/index": "/admin/pay/refunds",
-    // CRM
-    "crm/customer/index": "/admin/crm/customers",
-    "crm/clue/index": "/admin/crm/clues",
-    // Demo/codegen
-    "infra/testDemo/index": "/admin/infra/demo01contact",
-  }
-  
-  if (componentMap[component]) return componentMap[component]
-  
-  // Generic fallback: convert component path to href
-  // "system/user/index" → "/admin/system/user"
-  const parts = component.replace("/index", "").split("/")
-  return "/admin/" + parts.join("/")
+const componentRoutes: Record<string, string> = {
+  "system/user/index": "/admin/system/users", "system/role/index": "/admin/system/roles", "system/menu/index": "/admin/system/menus",
+  "system/dept/index": "/admin/system/depts", "system/post/index": "/admin/system/posts", "system/dict/index": "/admin/system/dicts",
+  "system/tenant/index": "/admin/system/tenants", "system/tenantPackage/index": "/admin/system/tenant-packages", "system/notice/index": "/admin/system/notices",
+  "system/loginlog/index": "/admin/system/login-logs", "system/operatelog/index": "/admin/system/operate-logs", "system/oauth2/client/index": "/admin/system/oauth2-clients",
+  "system/oauth2/token/index": "/admin/system/oauth2-tokens", "system/sms/channel/index": "/admin/system/sms-channels", "system/sms/log/index": "/admin/system/sms-logs",
+  "system/mail/account/index": "/admin/system/mail-accounts", "system/mail/log/index": "/admin/system/mail-logs", "infra/config/index": "/admin/infra/configs",
+  "infra/job/index": "/admin/infra/job-center", "infra/file/index": "/admin/infra/files", "infra/dataSourceConfig/index": "/admin/infra/db-configs", "infra/codegen/index": "/admin/infra/codegen",
+  "infra/build/index": "/admin/infra/page-builder", "infra/apiAccessLog/index": "/admin/infra/api-logs", "infra/apiErrorLog/index": "/admin/infra/api-error-logs",
+  "pay/order/index": "/admin/pay/orders", "pay/refund/index": "/admin/pay/refunds", "crm/customer/index": "/admin/crm/customers", "crm/clue/index": "/admin/crm/clues",
 }
 
-function getIconEmoji(icon: string | null, type: string): string {
-  if (!icon) return type === "DIR" ? "📁" : "📄"
-  
-  // Map common ep: and fa: icons to emojis
-  const iconMap: Record<string, string> = {
-    "ep:tools": "⚙️", "ep:monitor": "🔧", "ep:avatar": "👤", "ep:user": "🛡️",
-    "ep:menu": "📋", "fa:address-card": "🏢", "fa:address-book-o": "💼",
-    "ep:collection": "📖", "ep:takeaway-box": "📢", "fa:road": "🏠",
-    "fa:key": "🔑", "fa:tasks": "⏰", "ep:upload-filled": "📁",
-    "ep:document-copy": "🛠️", "fa:fighter-jet": "🌐", "ep:message": "📱",
-    "fa:stack-exchange": "📨", "ep:connection": "✉️", "ep:coffee-cup": "☕",
-    "fa:reddit-square": "🔴", "ep:aim": "🎯", "ep:setting": "⚙️",
-  }
-  
-  return iconMap[icon] || (type === "DIR" ? "📁" : "📄")
+function iconFor(icon: string | null, type: string): string {
+  const icons: Record<string, string> = { "ep:tools": "⚙️", "ep:monitor": "🔧", "ep:avatar": "👤", "ep:user": "🛡️", "ep:menu": "📋", "fa:address-card": "🏢", "fa:address-book-o": "💼", "ep:collection": "📖", "ep:takeaway-box": "📢", "fa:road": "🏠", "fa:key": "🔑", "fa:tasks": "⏰", "ep:upload-filled": "📁", "ep:document-copy": "🛠️", "fa:fighter-jet": "🌐", "ep:message": "📱", "fa:stack-exchange": "📨", "ep:connection": "✉️", "ep:coffee-cup": "☕", "fa:reddit-square": "🔴", "ep:aim": "🎯", "ep:setting": "⚙️" }
+  return (icon && icons[icon]) || (type === "DIR" ? "📁" : "📄")
 }
 
-function convertToSidebar(tree: MenuNode[]): SidebarGroup[] {
-  const groups: SidebarGroup[] = []
-  
-  for (const dir of tree) {
-    if (dir.type !== "DIR") continue
-    
-    const children: SidebarItem[] = []
-    
-    for (const menu of dir.children || []) {
-      if (menu.type !== "MENU") continue
-      const href = componentToHref(menu.component, menu.path)
-      if (!href) continue
-      
-      children.push({
-        href,
-        label: menu.name,
-        icon: getIconEmoji(menu.icon, "MENU"),
+function hrefFor(node: MenuNode): string | null {
+  if (node.type !== "MENU") return null
+  return (node.component && componentRoutes[node.component]) || (node.path?.startsWith("/") ? node.path : null)
+}
+
+function toSidebarItem(node: MenuNode, allowedMenuIds: Set<string>): SidebarItem | null {
+  if (!node.visible || node.type === "BUTTON") return null
+  const children = node.children.map((child) => toSidebarItem(child, allowedMenuIds)).filter((item): item is SidebarItem => item !== null)
+  // 目录本身没有授权记录时，只要存在被授权的后代就保留，保证导航层级完整。
+  if (!allowedMenuIds.has(node.id) && children.length === 0) return null
+  return { id: node.id, href: hrefFor(node), label: node.name, icon: iconFor(node.icon, node.type), children }
+}
+
+/** Returns the same active system_menu tree used by menu management, excluding only buttons and hidden entries. */
+export async function GET(request: Request) {
+  try {
+    const auth = requireAdminAuth(request)
+    const [tree, roleIds] = await Promise.all([
+      SystemMenuService.tree({ status: "ACTIVE" }) as Promise<MenuNode[]>,
+      SystemPermissionService.getUserRoleIds(auth.userId),
+    ])
+    const menuIdGroups = await Promise.all(roleIds.map((roleId) => SystemPermissionService.getRoleMenuIds(roleId)))
+    const allowedMenuIds = new Set(menuIdGroups.flat())
+    const data: SidebarGroup[] = tree
+      .filter((node) => node.type === "DIR" && node.visible)
+      .map((node) => {
+        const item = toSidebarItem(node, allowedMenuIds)
+        return item ? { id: node.id, title: node.name, icon: iconFor(node.icon, node.type), children: item.children } : null
       })
-    }
-    
-    if (children.length > 0) {
-      groups.push({
-        title: dir.name,
-        icon: getIconEmoji(dir.icon, "DIR"),
-        children,
-      })
-    }
+      .filter((group): group is SidebarGroup => group !== null && group.children.length > 0)
+    return NextResponse.json({ success: true, data })
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "菜单导航加载失败"
+    const status = message.includes("用户不存在") ? 401 : getAuthErrorStatus(error)
+    return NextResponse.json({ success: false, error: message }, { status })
   }
-  
-  return groups
 }

@@ -203,7 +203,7 @@ export const ADMIN_MENU: AdminMenuItem[] = [
         key: "infra-db-configs",
         label: "数据源配置",
         path: "/admin/infra/db-configs",
-        requiredPermission: PERMISSIONS.INFRA_DB_CONFIG_VIEW,
+        requiredPermission: PERMISSIONS.INFRA_DATA_SOURCE_CONFIG_QUERY,
       },
       {
         key: "infra-codegen",

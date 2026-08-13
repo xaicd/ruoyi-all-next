@@ -1,4 +1,9 @@
+import type { Prisma } from "@prisma/client"
 import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
+
+function listValue<T>(items: T[]): Prisma.InputJsonValue {
+  return { items: items as Prisma.InputJsonArray }
+}
 
 export async function readSettingList<T>(key: string, prefixes: string[] = []): Promise<T[]> {
   const candidates = [key, ...prefixes]
@@ -31,7 +36,7 @@ export async function readSettingList<T>(key: string, prefixes: string[] = []): 
 export async function writeSettingList<T>(key: string, items: T[]) {
   await ruoyiPrisma.setting.upsert({
     where: { key },
-    create: { key, value: { items } },
-    update: { value: { items } },
+    create: { key, value: listValue(items) },
+    update: { value: listValue(items) },
   })
 }

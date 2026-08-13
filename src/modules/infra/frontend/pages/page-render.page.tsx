@@ -1,12 +1,12 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Render, type Config, type Data } from "@measured/puck"
+import { type Data } from "@puckeditor/core"
 import { request } from "@/modules/shared/frontend/lib/request"
 
 // 复用 page-builder 的 puckConfig（物料定义）
 // 实际项目中应该抽到共享模块
-import "@measured/puck/puck.css"
+import "@puckeditor/core/puck.css"
 
 /**
  * 动态页面渲染器

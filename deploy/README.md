@@ -6,7 +6,7 @@
 |---|---|---|---|
 | **local** | docker-compose.local.yml | 内存 | 快速验证，零依赖 |
 | **dev** | docker-compose.dev.yml | PostgreSQL | 团队开发联调 |
-| **test** | docker-compose.test.yml | MySQL | QA 测试 |
+| **test** | docker-compose.test.yml | MySQL（运行时兼容验证；Prisma 迁移需先提供独立 MySQL schema） | QA 兼容性验证 |
 | **prod** | docker-compose.prod.yml | PostgreSQL + Nginx | 生产部署 |
 
 ## 快速启动
@@ -21,9 +21,13 @@ docker compose -f deploy/docker-compose.local.yml up --build
 ### Dev（PostgreSQL）
 
 ```bash
+# 仅启动默认 PostgreSQL：
+npm run db:up
+# 或启动完整开发联调环境：
 docker compose -f deploy/docker-compose.dev.yml up -d
-# 首次启动后执行数据库迁移：
-# docker compose -f deploy/docker-compose.dev.yml exec app npx prisma db push
+# 在宿主机执行版本化迁移：
+npm run db:generate
+npm run db:migrate
 ```
 
 ### Test（MySQL）
@@ -43,8 +47,9 @@ cp deploy/.env.prod.example deploy/.env.prod
 # 3. 启动
 docker compose -f deploy/docker-compose.prod.yml --env-file deploy/.env.prod up -d
 
-# 4. 首次迁移
-docker compose -f deploy/docker-compose.prod.yml exec app npx prisma db push
+# 4. 在宿主机执行一次版本化迁移（容器运行镜像不携带 Prisma CLI）
+npm run db:generate
+npm run db:migrate
 ```
 
 ## 常用运维命令

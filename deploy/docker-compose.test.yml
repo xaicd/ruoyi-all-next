@@ -14,7 +14,6 @@ services:
     environment:
       - NODE_ENV=production
       - DB_DRIVER=mysql
-      - DB_PROVIDER=mysql
       - DATABASE_URL=mysql://ruoyi:ruoyi123@mysql:3306/ruoyi_next
       - DB_POOL_SIZE=20
       - JWT_SECRET=${JWT_SECRET:-test-secret-change-me}

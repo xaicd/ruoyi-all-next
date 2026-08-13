@@ -8,6 +8,7 @@
 import type { LoginInput } from "@/modules/system/backend/validators"
 import { SystemUserRepository } from "@/modules/system/backend/repositories/user.repository"
 import { SystemMenuRepository, type SystemMenuRow } from "@/modules/system/backend/repositories/menu.repository"
+import { SystemPermissionService } from "@/modules/system/backend/services/permission.service"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 import { issueJwt, verifyJwt, type JwtPayload } from "@/modules/shared/backend/auth/jwt"
 import { getPlatformRole, isPlatformUsername } from "@/modules/shared/backend/lib/biz-tenant"
@@ -84,11 +85,11 @@ export class SystemAuthService {
       throw new Error("用户名或密码错误")
     }
 
-    // 获取权限码（从菜单中提取 BUTTON 类型的 permission）
-    const allMenus = await SystemMenuRepository.findAll({ status: "ACTIVE" })
-    const permissions = allMenus
-      .filter((m) => m.type === "BUTTON" && m.permission)
-      .map((m) => m.permission!)
+    // RuoYi 的权限来自用户角色关联的菜单和按钮，不能给所有登录用户授予全局菜单权限。
+    const allowedMenuIds = new Set(await SystemPermissionService.getUserMenuIds(user.id))
+    const permissions = (await SystemMenuRepository.findAll({ status: "ACTIVE" }))
+      .filter((menu) => allowedMenuIds.has(menu.id) && menu.permission)
+      .map((menu) => menu.permission!)
 
     const roles = resolveLoginRoles(user.username)
     if (process.env.TENANT_MODE === "required" && !roles.includes(getPlatformRole()) && !user.tenantId) {
@@ -123,15 +124,17 @@ export class SystemAuthService {
     const user = await SystemUserRepository.findById(userId)
     if (!user) throw new Error("用户不存在")
 
-    const allMenus = await SystemMenuRepository.findAll({ status: "ACTIVE" })
+    const allowedMenuIds = new Set(await SystemPermissionService.getUserMenuIds(user.id))
+    const allowedMenus = (await SystemMenuRepository.findAll({ status: "ACTIVE" }))
+      .filter((menu) => allowedMenuIds.has(menu.id))
 
-    // 权限码
-    const permissions = allMenus
-      .filter((m) => m.type === "BUTTON" && m.permission)
-      .map((m) => m.permission!)
+    // RuoYi 的查询权限可能配置在菜单或按钮节点，两类节点均纳入权限信息。
+    const permissions = allowedMenus
+      .filter((menu) => menu.permission)
+      .map((menu) => menu.permission!)
 
     // 菜单树
-    const menus = buildMenuTree(allMenus)
+    const menus = buildMenuTree(allowedMenus)
 
     domainLog.event("system.auth.permissionInfo", { userId })
 

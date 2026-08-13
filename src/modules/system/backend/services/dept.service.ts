@@ -3,6 +3,7 @@
  */
 
 import { SystemDeptRepository, type SystemDeptRow } from "@/modules/system/backend/repositories/dept.repository"
+import { SystemUserRepository } from "@/modules/system/backend/repositories/user.repository"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 
 type DeptTreeNode = SystemDeptRow & { children: DeptTreeNode[] }
@@ -31,6 +32,17 @@ function buildTree(list: SystemDeptRow[]): DeptTreeNode[] {
   return roots
 }
 
+async function validateReferences(input: { parentId?: string; leaderId?: string }): Promise<void> {
+  if (input.parentId) {
+    const parent = await SystemDeptRepository.findById(input.parentId)
+    if (!parent) throw new Error(`父部门不存在或不属于当前租户: ${input.parentId}`)
+  }
+  if (input.leaderId) {
+    const leader = await SystemUserRepository.findById(input.leaderId)
+    if (!leader) throw new Error(`部门负责人不存在或不属于当前租户: ${input.leaderId}`)
+  }
+}
+
 export class SystemDeptService {
   /** 获取部门树 */
   static async tree(input?: ListInput) {
@@ -55,12 +67,7 @@ export class SystemDeptService {
   }
 
   static async create(input: CreateInput) {
-    // 验证父部门存在
-    if (input.parentId) {
-      const parent = await SystemDeptRepository.findById(input.parentId)
-      if (!parent) throw new Error(`父部门不存在: ${input.parentId}`)
-    }
-
+    await validateReferences(input)
     const dept = await SystemDeptRepository.create(input)
     domainLog.event("system.dept.create", { deptId: dept.id })
     domainLog.audit("system.dept.create", { targetType: "DEPT", targetId: dept.id })
@@ -73,6 +80,7 @@ export class SystemDeptService {
 
     // 不能将自己设为父部门
     if (input.parentId === input.id) throw new Error("不能将自己设为父部门")
+    await validateReferences(input)
 
     const { id, ...data } = input
     await SystemDeptRepository.update(id, data)

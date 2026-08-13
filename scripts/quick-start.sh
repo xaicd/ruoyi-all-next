@@ -88,7 +88,6 @@ if [ ! -f ".env.local" ]; then
   cat > .env.local << 'EOF'
 # ruoyi-all-next 本地开发配置（自动生成）
 DB_DRIVER=memory
-DB_PROVIDER=sqlite
 DATABASE_URL=file:./dev.db
 JWT_SECRET=ruoyi-all-next-dev-secret-key-2026
 JWT_EXPIRES_IN=86400

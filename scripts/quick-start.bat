@@ -54,7 +54,6 @@ if not exist ".env.local" (
   (
     echo # ruoyi-all-next 本地开发配置
     echo DB_DRIVER=memory
-    echo DB_PROVIDER=sqlite
     echo DATABASE_URL=file:./dev.db
     echo JWT_SECRET=ruoyi-all-next-dev-secret-key-2026
     echo JWT_EXPIRES_IN=86400

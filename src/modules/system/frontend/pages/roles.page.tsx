@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { request, API } from "@/modules/shared/frontend/lib/request"
 
 type SystemRole = {
@@ -15,6 +15,8 @@ type SystemRole = {
 }
 
 type PageData = { items: SystemRole[]; total: number; page: number; pageSize: number }
+type MenuNode = { id: string; name: string; permission: string | null; children: MenuNode[] }
+type RoleMenuIdsResponse = { menuIds: string[] }
 
 export default function SystemRolesPage() {
   const [data, setData] = useState<PageData>({ items: [], total: 0, page: 1, pageSize: 20 })
@@ -112,7 +114,7 @@ export default function SystemRolesPage() {
       </div>
 
       {showForm && <RoleFormDialog role={editing} onSubmit={handleSubmit} onClose={() => setShowForm(false)} />}
-      {showMenuAssign && assigningRole && <MenuAssignDialog role={assigningRole} onClose={() => setShowMenuAssign(false)} />}
+      {showMenuAssign && assigningRole && <MenuAssignDialog key={`${assigningRole.id}-ruoyi-menu-permissions-v2`} role={assigningRole} onClose={() => setShowMenuAssign(false)} />}
     </div>
   )
 }
@@ -145,104 +147,127 @@ function RoleFormDialog({ role, onSubmit, onClose }: { role: SystemRole | null; 
 }
 
 
-// === 菜单分配弹窗（Tree 勾选） ===
+// === 菜单分配弹窗（参考 Yudao：回显、级联、半选节点、展开控制） ===
 function MenuAssignDialog({ role, onClose }: { role: SystemRole; onClose: () => void }) {
-  const [menuTree, setMenuTree] = useState<any[]>([])
+  const [menuTree, setMenuTree] = useState<MenuNode[]>([])
   const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set())
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
-    // 加载菜单树
-    request.get(API.MENUS).then((res) => {
-      if (res.success) setMenuTree(res.data)
-      setLoading(false)
-    })
-    // TODO: 加载当前角色已分配的菜单
-  }, [])
-
-  const toggleCheck = (id: string, children: any[]) => {
-    const next = new Set(checkedIds)
-    if (next.has(id)) {
-      next.delete(id)
-      // 取消勾选时，也取消所有子节点
-      const removeChildren = (nodes: any[]) => {
-        for (const node of nodes) {
-          next.delete(node.id)
-          if (node.children?.length) removeChildren(node.children)
-        }
+    let active = true
+    Promise.all([
+      request.get<MenuNode[]>(API.MENUS),
+      request.get<RoleMenuIdsResponse>(API.ROLE_MENU_IDS, { roleId: role.id }),
+    ]).then(([menus, assigned]) => {
+      if (!active) return
+      if (!menus.success) setLoadError(menus.error || "菜单树加载失败")
+      else if (!assigned.success) setLoadError(assigned.error || "角色菜单加载失败")
+      else {
+        const tree = menus.data ?? []
+        setMenuTree(tree)
+        setCheckedIds(new Set(assigned.data?.menuIds ?? []))
+        setExpandedIds(new Set(tree.map((node) => node.id)))
       }
-      removeChildren(children)
-    } else {
-      next.add(id)
-    }
-    setCheckedIds(next)
+    }).catch(() => active && setLoadError("菜单授权数据加载失败"))
+      .finally(() => active && setLoading(false))
+    return () => { active = false }
+  }, [role.id])
+
+  const descendantIds = (node: MenuNode): string[] => [node.id, ...node.children.flatMap(descendantIds)]
+  const allMenuIds = menuTree.flatMap(descendantIds)
+  const nodeState = (node: MenuNode): "checked" | "partial" | "empty" => {
+    const ids = descendantIds(node)
+    const selected = ids.filter((id) => checkedIds.has(id)).length
+    return selected === ids.length ? "checked" : selected > 0 ? "partial" : "empty"
   }
 
-  const handleSelectAll = () => {
-    const all = new Set<string>()
-    const collect = (nodes: any[]) => { for (const n of nodes) { all.add(n.id); if (n.children?.length) collect(n.children) } }
-    collect(menuTree)
-    setCheckedIds(all)
+  const toggleCheck = (node: MenuNode) => {
+    const ids = descendantIds(node)
+    setCheckedIds((current) => {
+      const next = new Set(current)
+      const shouldCheck = ids.some((id) => !next.has(id))
+      ids.forEach((id) => shouldCheck ? next.add(id) : next.delete(id))
+      return next
+    })
   }
 
+  const toggleExpanded = (id: string) => setExpandedIds((current) => {
+    const next = new Set(current)
+    next.has(id) ? next.delete(id) : next.add(id)
+    return next
+  })
+
+  const handleSelectAll = () => setCheckedIds(new Set(allMenuIds))
   const handleDeselectAll = () => setCheckedIds(new Set())
+  const handleExpandAll = () => setExpandedIds(new Set(allMenuIds))
+  const handleCollapseAll = () => setExpandedIds(new Set())
+
+  // Yudao 提交 checked + halfChecked；半选父级也保留，确保授权树路径完整。
+  const savedMenuIds = () => {
+    const ids = new Set(checkedIds)
+    const collectPartialParents = (nodes: MenuNode[]) => nodes.forEach((node) => {
+      if (nodeState(node) === "partial") ids.add(node.id)
+      collectPartialParents(node.children)
+    })
+    collectPartialParents(menuTree)
+    return Array.from(ids)
+  }
 
   const handleSave = async () => {
     setSaving(true)
     try {
-      const res = await request.patch(`${API.ROLES}/${role.id}`, { action: "assignMenus", menuIds: Array.from(checkedIds) })
-      if (res.success) { alert("菜单分配成功"); onClose() }
-      else alert(res.error)
+      const res = await request.post(API.ASSIGN_ROLE_MENU, { roleId: role.id, menuIds: savedMenuIds() })
+      if (res.success) { alert("菜单权限分配成功"); onClose() }
+      else alert(res.error || "菜单权限分配失败")
     } finally { setSaving(false) }
   }
 
-  const renderTree = (nodes: any[], level: number) => (
-    <div className={level > 0 ? "ml-5" : ""}>
-      {nodes.map((node: any) => (
-        <div key={node.id} className="py-0.5">
-          <label className="flex items-center gap-2 rounded px-1 py-0.5 hover:bg-slate-50 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={checkedIds.has(node.id)}
-              onChange={() => toggleCheck(node.id, node.children || [])}
-              className="rounded"
-            />
-            <span className="text-xs">{node.name}</span>
-            {node.permission && <span className="text-[10px] text-slate-400">{node.permission}</span>}
-          </label>
-          {node.children?.length > 0 && renderTree(node.children, level + 1)}
-        </div>
-      ))}
+  const renderTree = (nodes: MenuNode[], level = 0) => (
+    <div className={level > 0 ? "ml-5 border-l border-slate-100 pl-2" : ""}>
+      {nodes.map((node) => {
+        const hasChildren = node.children.length > 0
+        const state = nodeState(node)
+        return (
+          <div key={node.id} className="py-0.5">
+            <div className="flex items-center gap-1 rounded px-1 py-0.5 hover:bg-slate-50">
+              {hasChildren ? <button type="button" onClick={() => toggleExpanded(node.id)} className="w-4 text-[10px] text-slate-400">{expandedIds.has(node.id) ? "▼" : "▶"}</button> : <span className="w-4" />}
+              <TreeCheckbox state={state} onChange={() => toggleCheck(node)} />
+              <button type="button" onClick={() => toggleCheck(node)} className="flex min-w-0 flex-1 items-center gap-2 text-left">
+                <span className="truncate text-xs">{node.name}</span>
+                {node.permission && <span className="truncate text-[10px] text-slate-400">{node.permission}</span>}
+              </button>
+            </div>
+            {hasChildren && expandedIds.has(node.id) && renderTree(node.children, level + 1)}
+          </div>
+        )
+      })}
     </div>
   )
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="w-full max-w-lg rounded-lg bg-white shadow-xl flex flex-col max-h-[80vh]">
+      <div className="flex max-h-[80vh] w-full max-w-lg flex-col rounded-lg bg-white shadow-xl">
         <div className="flex items-center justify-between border-b px-5 py-4">
-          <div>
-            <h2 className="text-base font-semibold">分配菜单权限</h2>
-            <p className="mt-0.5 text-xs text-slate-500">角色：{role.name}（{role.code}）</p>
-          </div>
-          <div className="flex gap-2">
-            <button onClick={handleSelectAll} className="text-xs text-blue-600 hover:text-blue-800">全选</button>
-            <button onClick={handleDeselectAll} className="text-xs text-slate-500 hover:text-slate-700">全不选</button>
-          </div>
+          <div><h2 className="text-base font-semibold">分配菜单权限</h2><p className="mt-0.5 text-xs text-slate-500">角色：{role.name}（{role.code}）</p></div>
+          <div className="flex gap-2 text-xs"><button onClick={handleSelectAll} className="text-blue-600 hover:text-blue-800">全选</button><button onClick={handleDeselectAll} className="text-slate-500 hover:text-slate-700">全不选</button><button onClick={handleExpandAll} className="text-blue-600 hover:text-blue-800">展开</button><button onClick={handleCollapseAll} className="text-slate-500 hover:text-slate-700">折叠</button></div>
         </div>
         <div className="flex-1 overflow-y-auto px-5 py-3">
           {loading ? <p className="py-8 text-center text-slate-400">加载中...</p>
+          : loadError ? <p className="py-8 text-center text-red-600">{loadError}</p>
           : menuTree.length === 0 ? <p className="py-8 text-center text-slate-400">暂无菜单</p>
-          : renderTree(menuTree, 0)}
+          : renderTree(menuTree)}
         </div>
-        <div className="flex items-center justify-between border-t px-5 py-3">
-          <span className="text-xs text-slate-400">已选 {checkedIds.size} 项</span>
-          <div className="flex gap-2">
-            <button onClick={onClose} className="h-9 rounded-md border px-4 text-sm">取消</button>
-            <button onClick={handleSave} disabled={saving} className="h-9 rounded-md bg-blue-600 px-4 text-sm text-white hover:bg-blue-700 disabled:opacity-50">{saving ? "保存中..." : "确认分配"}</button>
-          </div>
-        </div>
+        <div className="flex items-center justify-between border-t px-5 py-3"><span className="text-xs text-slate-400">已选 {savedMenuIds().length} 项</span><div className="flex gap-2"><button onClick={onClose} className="h-9 rounded-md border px-4 text-sm">取消</button><button onClick={handleSave} disabled={saving || loading || Boolean(loadError)} className="h-9 rounded-md bg-blue-600 px-4 text-sm text-white hover:bg-blue-700 disabled:opacity-50">{saving ? "保存中..." : "确认分配"}</button></div></div>
       </div>
     </div>
   )
+}
+
+function TreeCheckbox({ state, onChange }: { state: "checked" | "partial" | "empty"; onChange: () => void }) {
+  const inputRef = useRef<HTMLInputElement>(null)
+  useEffect(() => { if (inputRef.current) inputRef.current.indeterminate = state === "partial" }, [state])
+  return <input ref={inputRef} type="checkbox" checked={state === "checked"} onChange={onChange} className="rounded" />
 }

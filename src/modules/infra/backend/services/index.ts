@@ -6,6 +6,6 @@ export { ApiErrorLogService as InfraApiErrorLogService } from "./api-error-log.s
 export { RedisService as InfraRedisService } from "./redis.service"
 export { InfraFileService } from "./file.service"
 export { InfraFileConfigService } from "./file-config.service"
-export { DbConfigService as InfraDbConfigService } from "./db-config.service"
+export { DataSourceConfigService } from "./data-source-config.service"
 export { InfraCodegenService } from "./codegen.service"
 export { InfraTemplateEngineService } from "./template-engine.service"

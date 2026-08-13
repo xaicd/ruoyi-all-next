@@ -6,7 +6,7 @@
 FROM node:20-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json* .npmrc ./
-RUN npm ci --legacy-peer-deps --omit=dev || npm install --legacy-peer-deps --omit=dev
+RUN npm ci --legacy-peer-deps || npm install --legacy-peer-deps
 
 # Stage 2: 构建
 FROM node:20-alpine AS builder
@@ -14,8 +14,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Prisma generate（如果有 schema）
-RUN npx prisma generate 2>/dev/null || true
+# Prisma Client is generated during the image build; migrations run separately before app replicas start.
+RUN npx prisma generate
 
 # Next.js build（standalone 模式）
 ENV NEXT_TELEMETRY_DISABLED=1

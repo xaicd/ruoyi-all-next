@@ -205,6 +205,7 @@ async function createInDb(data: CreateUserData): Promise<SystemUserRow> {
       username: data.username,
       nickname: data.nickname,
       password: data.password,
+      salt: data.salt,
       phone: data.phone ?? null,
       email: data.email ?? null,
       avatar: null,
@@ -229,6 +230,7 @@ async function updateInDb(id: string, data: UpdateUserData, tenantId?: string): 
   if (data.username !== undefined) updateData.username = data.username
   if (data.nickname !== undefined) updateData.nickname = data.nickname
   if (data.password !== undefined) updateData.password = data.password
+  if (data.salt !== undefined) updateData.salt = data.salt
   if (data.phone !== undefined) updateData.phone = data.phone
   if (data.email !== undefined) updateData.email = data.email
   if (data.deptId !== undefined) updateData.dept_id = data.deptId
@@ -263,7 +265,7 @@ function mapDbRow(row: any): SystemUserRow {
     username: row.username,
     nickname: row.nickname,
     password: row.password,
-    salt: row.salt ?? null,
+    salt: row.salt,
     phone: row.phone,
     email: row.email,
     avatar: row.avatar,
