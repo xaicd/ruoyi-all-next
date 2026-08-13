@@ -23,6 +23,7 @@ type Tenant = {
 }
 
 type TenantPackage = { id: string; name: string; status: string; accountLimit: number | null }
+type TenantSubscription = { id: string; packageId: string; packageName: string | null; effectiveAt: string; expireAt: string | null; accountLimit: number | null; status: string; changeType: string; remark: string | null; createdAt: string }
 
 type PageData = { items: Tenant[]; total: number; page: number; pageSize: number }
 
@@ -43,6 +44,7 @@ export default function SystemTenantsPage() {
   const [editingTenant, setEditingTenant] = useState<Tenant | null>(null)
   const [showAssignPkg, setShowAssignPkg] = useState(false)
   const [assignTarget, setAssignTarget] = useState<Tenant | null>(null)
+  const [historyTarget, setHistoryTarget] = useState<Tenant | null>(null)
 
   const loadData = useCallback(async () => {
     setLoading(true)
@@ -76,6 +78,7 @@ export default function SystemTenantsPage() {
   }
 
   const handleAssignPackage = (t: Tenant) => { setAssignTarget(t); setShowAssignPkg(true) }
+  const handleHistory = (t: Tenant) => setHistoryTarget(t)
 
   const handleFormSubmit = async (formData: Record<string, any>) => {
     let result
@@ -121,7 +124,7 @@ export default function SystemTenantsPage() {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[980px] text-sm">
             <thead><tr className="border-b border-slate-100 bg-slate-50/80 text-left text-xs font-medium text-slate-500"><th className="px-5 py-3">租户名称</th><th className="px-4 py-3">租户编码</th><th className="px-4 py-3">联系人</th><th className="px-4 py-3">联系电话</th><th className="px-4 py-3">套餐</th><th className="px-4 py-3">生效时间</th><th className="px-4 py-3 text-center">已用 / 席位</th><th className="px-4 py-3">过期时间</th><th className="px-4 py-3">状态</th><th className="px-5 py-3 text-right">操作</th></tr></thead>
-            <tbody>{loading ? <tr><td colSpan={10} className="px-4 py-14 text-center text-slate-400">加载中...</td></tr> : data.items.length === 0 ? <tr><td colSpan={10} className="px-4 py-14 text-center text-slate-400">暂无数据</td></tr> : data.items.map((t) => <tr key={t.id} className="border-b border-slate-100 last:border-0 transition hover:bg-blue-50/30"><td className="px-5 py-3.5 font-medium text-slate-800">{t.name}</td><td className="px-4 py-3.5"><code className="rounded bg-slate-100 px-2 py-1 text-xs text-slate-600">{t.tenantCode}</code></td><td className="px-4 py-3.5 text-slate-700">{t.contactName || "-"}</td><td className="px-4 py-3.5 text-slate-500">{t.contactPhone || "-"}</td><td className="px-4 py-3.5"><span className="rounded bg-blue-50 px-2 py-1 text-xs text-blue-700">{t.packageName || "未分配"}</span></td><td className="px-4 py-3.5 text-slate-500">{new Date(t.effectiveAt).toLocaleDateString("zh-CN")}</td><td className="px-4 py-3.5 text-center font-medium text-slate-700">{t.accountUsed} / {t.effectiveAccountLimit ?? "不限"}</td><td className="px-4 py-3.5 text-slate-500">{t.expireTime ? new Date(t.expireTime).toLocaleDateString("zh-CN") : "长期"}</td><td className="px-4 py-3.5"><button onClick={() => handleToggleStatus(t)} className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium transition ${t.status === "ACTIVE" ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100" : "bg-red-50 text-red-700 hover:bg-red-100"}`}>{t.status === "ACTIVE" ? "启用" : "禁用"}</button></td><td className="px-5 py-3.5 text-right"><div className="inline-flex gap-3 text-sm"><button onClick={() => handleAssignPackage(t)} className="text-violet-600 hover:text-violet-800">套餐</button><button onClick={() => handleEdit(t)} className="text-blue-600 hover:text-blue-800">编辑</button><button onClick={() => handleDelete(t)} className="text-red-500 hover:text-red-700">删除</button></div></td></tr>)}</tbody>
+            <tbody>{loading ? <tr><td colSpan={10} className="px-4 py-14 text-center text-slate-400">加载中...</td></tr> : data.items.length === 0 ? <tr><td colSpan={10} className="px-4 py-14 text-center text-slate-400">暂无数据</td></tr> : data.items.map((t) => <tr key={t.id} className="border-b border-slate-100 last:border-0 transition hover:bg-blue-50/30"><td className="px-5 py-3.5 font-medium text-slate-800">{t.name}</td><td className="px-4 py-3.5"><code className="rounded bg-slate-100 px-2 py-1 text-xs text-slate-600">{t.tenantCode}</code></td><td className="px-4 py-3.5 text-slate-700">{t.contactName || "-"}</td><td className="px-4 py-3.5 text-slate-500">{t.contactPhone || "-"}</td><td className="px-4 py-3.5"><span className="rounded bg-blue-50 px-2 py-1 text-xs text-blue-700">{t.packageName || "未分配"}</span></td><td className="px-4 py-3.5 text-slate-500">{new Date(t.effectiveAt).toLocaleDateString("zh-CN")}</td><td className="px-4 py-3.5 text-center font-medium text-slate-700">{t.accountUsed} / {t.effectiveAccountLimit ?? "不限"}</td><td className="px-4 py-3.5 text-slate-500">{t.expireTime ? new Date(t.expireTime).toLocaleDateString("zh-CN") : "长期"}</td><td className="px-4 py-3.5"><button onClick={() => handleToggleStatus(t)} className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium transition ${t.status === "ACTIVE" ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100" : "bg-red-50 text-red-700 hover:bg-red-100"}`}>{t.status === "ACTIVE" ? "启用" : "禁用"}</button></td><td className="px-5 py-3.5 text-right"><div className="inline-flex gap-3 text-sm"><button onClick={() => handleHistory(t)} className="text-slate-600 hover:text-slate-900">历史</button><button onClick={() => handleAssignPackage(t)} className="text-violet-600 hover:text-violet-800">套餐</button><button onClick={() => handleEdit(t)} className="text-blue-600 hover:text-blue-800">编辑</button><button onClick={() => handleDelete(t)} className="text-red-500 hover:text-red-700">删除</button></div></td></tr>)}</tbody>
           </table>
         </div>
         {totalPages > 1 && <div className="flex items-center justify-between border-t border-slate-100 px-5 py-3"><span className="text-xs text-slate-500">第 {page} / {totalPages} 页</span><div className="flex gap-2"><button disabled={page <= 1} onClick={() => setPage((p) => p - 1)} className="h-8 rounded-lg border border-slate-200 px-3 text-xs text-slate-600 disabled:cursor-not-allowed disabled:opacity-50">上一页</button><button disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)} className="h-8 rounded-lg border border-slate-200 px-3 text-xs text-slate-600 disabled:cursor-not-allowed disabled:opacity-50">下一页</button></div></div>}
@@ -132,6 +135,7 @@ export default function SystemTenantsPage() {
 
       {/* 分配套餐弹窗 */}
       {showAssignPkg && assignTarget && <AssignPackageDialog tenant={assignTarget} onSubmit={handleAssignSubmit} onClose={() => setShowAssignPkg(false)} />}
+      {historyTarget && <SubscriptionHistoryDialog tenant={historyTarget} onClose={() => setHistoryTarget(null)} />}
     </div>
   )
 }
@@ -258,6 +262,38 @@ function AssignPackageDialog({ tenant, onSubmit, onClose }: { tenant: Tenant; on
             </div>
           </form>
         )}
+      </div>
+    </div>
+  )
+}
+
+
+function SubscriptionHistoryDialog({ tenant, onClose }: { tenant: Tenant; onClose: () => void }) {
+  const [items, setItems] = useState<TenantSubscription[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
+
+  useEffect(() => {
+    let active = true
+    request.get<TenantSubscription[]>(`${API.TENANT_SUBSCRIPTIONS}/${tenant.id}/subscriptions`)
+      .then((result) => {
+        if (!active) return
+        if (result.success && result.data) setItems(result.data)
+        else setError(result.error || "加载订阅历史失败")
+      })
+      .finally(() => { if (active) setLoading(false) })
+    return () => { active = false }
+  }, [tenant.id])
+
+  const formatDate = (value: string | null) => value ? new Date(value).toLocaleDateString("zh-CN") : "长期"
+  const changeLabel: Record<string, string> = { CREATE: "创建", PACKAGE_CHANGE: "变更套餐", MANUAL: "人工调整", MIGRATION: "历史初始化" }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-4">
+      <div role="dialog" aria-modal="true" className="w-full max-w-3xl overflow-hidden rounded-xl bg-white shadow-2xl">
+        <header className="flex items-center justify-between border-b border-slate-100 px-5 py-4"><div><h2 className="text-base font-semibold text-slate-900">订阅历史</h2><p className="mt-1 text-sm text-slate-500">租户「{tenant.name}」的套餐、有效期与额度变更记录</p></div><button type="button" onClick={onClose} aria-label="关闭" className="h-8 w-8 rounded text-xl text-slate-400 hover:bg-slate-100 hover:text-slate-700">×</button></header>
+        <div className="max-h-[60vh] overflow-auto"><table className="w-full min-w-[700px] text-sm"><thead><tr className="border-b bg-slate-50 text-left text-xs text-slate-500"><th className="px-4 py-3">变更时间</th><th className="px-4 py-3">套餐</th><th className="px-4 py-3">有效期</th><th className="px-4 py-3">席位覆盖</th><th className="px-4 py-3">来源</th><th className="px-4 py-3">状态</th></tr></thead><tbody>{loading ? <tr><td colSpan={6} className="px-4 py-12 text-center text-slate-400">加载中...</td></tr> : error ? <tr><td colSpan={6} className="px-4 py-12 text-center text-red-600">{error}</td></tr> : items.length === 0 ? <tr><td colSpan={6} className="px-4 py-12 text-center text-slate-400">暂无订阅记录</td></tr> : items.map((item) => <tr key={item.id} className="border-b last:border-0"><td className="px-4 py-3 text-slate-500">{new Date(item.createdAt).toLocaleString("zh-CN")}</td><td className="px-4 py-3 font-medium text-slate-800">{item.packageName || item.packageId}</td><td className="px-4 py-3 text-slate-600">{formatDate(item.effectiveAt)} 至 {formatDate(item.expireAt)}</td><td className="px-4 py-3 text-slate-600">{item.accountLimit ?? "继承套餐"}</td><td className="px-4 py-3 text-slate-600">{changeLabel[item.changeType] || item.changeType}</td><td className="px-4 py-3"><span className={`rounded-full px-2 py-1 text-xs ${item.status === "ACTIVE" ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-600"}`}>{item.status === "ACTIVE" ? "当前有效" : "已替代"}</span></td></tr>)}</tbody></table></div>
+        <footer className="flex justify-end border-t border-slate-100 px-5 py-3"><button type="button" onClick={onClose} className="h-9 rounded-lg border border-slate-200 px-4 text-sm text-slate-700 hover:bg-slate-50">关闭</button></footer>
       </div>
     </div>
   )

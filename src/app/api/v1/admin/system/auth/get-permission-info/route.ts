@@ -5,7 +5,7 @@ import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 
 export async function GET(request: Request) {
   try {
-    const auth = ensurePermission(request, PERMISSIONS.SYSTEM_USER_VIEW)
+    const auth = await ensurePermission(request, PERMISSIONS.SYSTEM_USER_VIEW)
     const data = await SystemAuthService.getPermissionInfo(auth.userId)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {

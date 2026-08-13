@@ -17,7 +17,7 @@ const updateRoleSchema = z.object({
 
 export async function GET(request: Request, context: RouteContext) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_VIEW)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_VIEW)
     const { id } = await context.params
     const data = await SystemRoleService.getById(id)
     return NextResponse.json({ success: true, data })
@@ -29,7 +29,7 @@ export async function GET(request: Request, context: RouteContext) {
 
 export async function PUT(request: Request, context: RouteContext) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_UPDATE)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_UPDATE)
     const { id } = await context.params
     const body = await request.json()
     const input = updateRoleSchema.parse(body)
@@ -43,7 +43,7 @@ export async function PUT(request: Request, context: RouteContext) {
 
 export async function DELETE(request: Request, context: RouteContext) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_DELETE)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_DELETE)
     const { id } = await context.params
     const data = await SystemRoleService.delete(id)
     return NextResponse.json({ success: true, data })
@@ -56,7 +56,7 @@ export async function DELETE(request: Request, context: RouteContext) {
 
 export async function PATCH(request: Request, context: RouteContext) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_UPDATE)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_UPDATE)
     const { id } = await context.params
     const body = await request.json()
 

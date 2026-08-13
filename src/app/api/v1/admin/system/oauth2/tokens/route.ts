@@ -6,7 +6,7 @@ import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 
 export async function GET(request: Request) {
   try {
-    requirePlatformAdmin(request, PERMISSIONS.SYSTEM_OAUTH2_TOKEN_VIEW)
+    await requirePlatformAdmin(request, PERMISSIONS.SYSTEM_OAUTH2_TOKEN_VIEW)
     const { searchParams } = new URL(request.url)
     const input = pageQuerySchema.parse({
       page: searchParams.get("page") ?? 1,

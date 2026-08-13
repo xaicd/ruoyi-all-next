@@ -9,7 +9,7 @@ import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
  */
 export async function GET(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.INFRA_CODEGEN_VIEW)
+    await ensurePermission(request, PERMISSIONS.INFRA_CODEGEN_VIEW)
     const tables = await SchemaReaderService.listTables()
     const sourceMode = SchemaReaderService.getSourceMode()
     return NextResponse.json({ success: true, data: { tables, sourceMode } })

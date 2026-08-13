@@ -12,7 +12,7 @@ const listSchema = z.object({ page: z.coerce.number().int().min(1).default(1), p
  */
 export async function GET(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.INFRA_CODEGEN_VIEW)
+    await ensurePermission(request, PERMISSIONS.INFRA_CODEGEN_VIEW)
     const { searchParams } = new URL(request.url)
     const input = listSchema.parse({ page: searchParams.get("page") ?? 1, pageSize: searchParams.get("pageSize") ?? 20, keyword: searchParams.get("keyword") ?? undefined }) as any
     const data = await CodegenTableRepository.findList(input)
@@ -26,7 +26,7 @@ export async function GET(request: Request) {
  */
 export async function DELETE(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.INFRA_CODEGEN_UPDATE)
+    await ensurePermission(request, PERMISSIONS.INFRA_CODEGEN_UPDATE)
     const { searchParams } = new URL(request.url)
     const ids = (searchParams.get("ids") ?? "").split(",").filter(Boolean)
     if (ids.length === 0) return NextResponse.json({ success: false, error: "ids 不能为空" }, { status: 400 })

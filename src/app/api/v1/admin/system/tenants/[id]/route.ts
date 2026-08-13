@@ -14,7 +14,7 @@ function errorStatus(error: unknown, fallback = 400): number {
 
 export async function GET(request: Request, context: RouteContext) {
   try {
-    requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_VIEW)
+    await requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_VIEW)
     const { id } = await context.params
     const data = await SystemTenantService.getById(id)
     return NextResponse.json({ success: true, data })
@@ -23,7 +23,7 @@ export async function GET(request: Request, context: RouteContext) {
 
 export async function PUT(request: Request, context: RouteContext) {
   try {
-    requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_VIEW)
+    await requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_VIEW)
     const { id } = await context.params
     const input = updateSchema.parse(await request.json())
     const data = await SystemTenantService.update({ id, ...input })
@@ -33,7 +33,7 @@ export async function PUT(request: Request, context: RouteContext) {
 
 export async function DELETE(request: Request, context: RouteContext) {
   try {
-    requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_VIEW)
+    await requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_VIEW)
     const { id } = await context.params
     const data = await SystemTenantService.delete(id)
     return NextResponse.json({ success: true, data })
@@ -42,7 +42,7 @@ export async function DELETE(request: Request, context: RouteContext) {
 
 export async function PATCH(request: Request, context: RouteContext) {
   try {
-    requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_UPDATE_STATUS)
+    await requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_UPDATE_STATUS)
     const { id } = await context.params
     const body = await request.json()
     if (body.action !== "updateStatus" || !["ACTIVE", "DISABLED"].includes(body.status)) return NextResponse.json({ success: false, error: "未知操作" }, { status: 400 })

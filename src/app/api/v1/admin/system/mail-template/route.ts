@@ -4,7 +4,7 @@ import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 
 export async function GET(request: Request) {
   try {
-    requireAdminAuth(request, PERMISSIONS.SYSTEM_MAIL_ACCOUNT_VIEW)
+    await requireAdminAuth(request, PERMISSIONS.SYSTEM_MAIL_ACCOUNT_VIEW)
     return NextResponse.json({ success: false, error: "邮件模板功能尚未实现" }, { status: 501 })
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "未授权"

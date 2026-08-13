@@ -20,7 +20,7 @@ const createDeptSchema = z.object({
  */
 export async function GET(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_DEPT_VIEW)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_DEPT_VIEW)
     const { searchParams } = new URL(request.url)
     const mode = searchParams.get("mode") // tree | list
     const status = searchParams.get("status") || undefined
@@ -44,7 +44,7 @@ export async function GET(request: Request) {
  */
 export async function POST(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_DEPT_CREATE)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_DEPT_CREATE)
     const body = await request.json()
     const input = createDeptSchema.parse(body) as any
     const data = await SystemDeptService.create({ ...input, email: input.email || undefined })

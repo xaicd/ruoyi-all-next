@@ -7,7 +7,7 @@ import { writeAuditLog } from "@/modules/shared/backend/lib/audit-log"
 
 export async function POST(request: Request) {
   try {
-    const auth = ensurePermission(request, PERMISSIONS.IM_MESSAGE_AUDIT)
+    const auth = await ensurePermission(request, PERMISSIONS.IM_MESSAGE_AUDIT)
     const body = await request.json()
     const input = imMessageAuditSchema.parse(body)
 

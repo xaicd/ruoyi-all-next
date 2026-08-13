@@ -170,6 +170,30 @@ export class SystemTenantService {
     return enrichTenantEntitlements(tenant)
   }
 
+  static async getSubscriptionHistory(id: string) {
+    const tenant = await SystemTenantRepository.findById(id)
+    if (!tenant) throw new Error(`租户不存在: ${id}`)
+    if (!hasRealDatabase()) return []
+    const db = await getKyselyDb()
+    const [rows, packages] = await Promise.all([
+      db.selectFrom("system_tenant_subscription").selectAll().where("tenant_id", "=", id).orderBy("created_at", "desc").execute(),
+      TenantPackageRepository.findAll(),
+    ])
+    const packageNames = new Map(packages.map((pkg) => [pkg.id, pkg.name]))
+    return rows.map((row) => ({
+      id: row.id,
+      packageId: row.package_id,
+      packageName: packageNames.get(row.package_id) ?? null,
+      effectiveAt: row.effective_at instanceof Date ? row.effective_at.toISOString() : String(row.effective_at),
+      expireAt: row.expire_at instanceof Date ? row.expire_at.toISOString() : row.expire_at,
+      accountLimit: row.account_limit,
+      status: row.status,
+      changeType: row.change_type,
+      remark: row.remark,
+      createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : String(row.created_at),
+    }))
+  }
+
   static async create(input: CreateTenantWithAdminInput) {
     const normalizedInput = { ...input, tenantCode: normalizeTenantCode(input.tenantCode) }
     await requireAvailableTenantCode(normalizedInput.tenantCode)

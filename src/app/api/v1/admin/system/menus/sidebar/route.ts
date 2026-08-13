@@ -54,7 +54,7 @@ function toSidebarItem(node: MenuNode, allowedMenuIds: Set<string>, isPlatformAd
 /** Returns the same active system_menu tree used by menu management, excluding only buttons and hidden entries. */
 export async function GET(request: Request) {
   try {
-    const auth = requireAdminAuth(request)
+    const auth = await requireAdminAuth(request)
     const [tree, effectiveMenuIds] = await Promise.all([
       SystemMenuService.tree({ status: "ACTIVE" }) as Promise<MenuNode[]>,
       SystemPermissionService.getEffectiveUserMenuIds(auth.userId),

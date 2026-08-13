@@ -6,7 +6,7 @@ import { getAuthErrorStatus, requirePlatformAdmin } from "@/modules/shared/backe
 
 export async function POST(request: Request) {
   try {
-    requirePlatformAdmin(request, PERMISSIONS.INFRA_DATA_SOURCE_CONFIG_TEST)
+    await requirePlatformAdmin(request, PERMISSIONS.INFRA_DATA_SOURCE_CONFIG_TEST)
     const input = testDataSourceConnectionSchema.parse(await request.json())
     const data = await DataSourceConfigService.testConnection(input)
     return NextResponse.json({ success: true, data })

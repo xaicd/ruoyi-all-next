@@ -6,7 +6,7 @@ import { getAuthErrorStatus, requirePlatformAdmin } from "@/modules/shared/backe
 
 export async function POST(request: Request) {
   try {
-    requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_UPDATE_STATUS)
+    await requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_UPDATE_STATUS)
     const input = updateTenantStatusSchema.parse(await request.json())
     const data = await SystemTenantService.updateStatus(input.tenantId, input.status)
     return NextResponse.json({ success: true, data })

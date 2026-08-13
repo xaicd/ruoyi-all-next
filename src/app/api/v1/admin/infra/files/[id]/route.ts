@@ -7,7 +7,7 @@ type RouteContext = { params: Promise<{ id: string }> }
 
 export async function GET(request: Request, context: RouteContext) {
   try {
-    ensurePermission(request, PERMISSIONS.INFRA_FILE_VIEW)
+    await ensurePermission(request, PERMISSIONS.INFRA_FILE_VIEW)
     const { id } = await context.params
     const data = await InfraFileService.getById(id)
     return NextResponse.json({ success: true, data })
@@ -16,7 +16,7 @@ export async function GET(request: Request, context: RouteContext) {
 
 export async function DELETE(request: Request, context: RouteContext) {
   try {
-    ensurePermission(request, PERMISSIONS.INFRA_FILE_VIEW)
+    await ensurePermission(request, PERMISSIONS.INFRA_FILE_VIEW)
     const { id } = await context.params
     const data = await InfraFileService.delete(id)
     return NextResponse.json({ success: true, data })

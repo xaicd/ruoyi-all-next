@@ -6,7 +6,7 @@ import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
 export async function GET(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_IP_AREA_VIEW)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_IP_AREA_VIEW)
     const { searchParams } = new URL(request.url)
     const input = systemModulePageQuerySchema.parse({
       page: searchParams.get("page") ?? 1,

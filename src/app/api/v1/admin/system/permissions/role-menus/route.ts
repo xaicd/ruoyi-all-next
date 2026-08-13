@@ -6,7 +6,7 @@ import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 /** GET /api/v1/admin/system/permissions/role-menus?roleId=xxx */
 export async function GET(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_VIEW)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_VIEW)
     const roleId = new URL(request.url).searchParams.get("roleId")?.trim()
     if (!roleId) return NextResponse.json({ success: false, error: "roleId 不能为空" }, { status: 400 })
 

@@ -6,7 +6,7 @@ import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
 export async function POST(request: Request) {
   try {
-    const auth = ensurePermission(request, PERMISSIONS.SYSTEM_PERMISSION_ASSIGN_ROLE_MENU)
+    const auth = await ensurePermission(request, PERMISSIONS.SYSTEM_PERMISSION_ASSIGN_ROLE_MENU)
     const body = await request.json()
     const input = assignRoleMenuSchema.parse(body) as any
     const data = await SystemPermissionService.assignRoleMenu(input)

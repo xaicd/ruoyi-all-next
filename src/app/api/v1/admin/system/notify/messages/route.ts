@@ -6,7 +6,7 @@ import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
 export async function GET(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_NOTIFY_MESSAGE_VIEW)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_NOTIFY_MESSAGE_VIEW)
     const { searchParams } = new URL(request.url)
     const input = pageQuerySchema.parse({
       page: searchParams.get("page") ?? 1,
@@ -23,7 +23,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const auth = ensurePermission(request, PERMISSIONS.SYSTEM_NOTIFY_MESSAGE_CREATE)
+    const auth = await ensurePermission(request, PERMISSIONS.SYSTEM_NOTIFY_MESSAGE_CREATE)
     const body = await request.json()
     const input = createNotifyMessageSchema.parse(body)
 

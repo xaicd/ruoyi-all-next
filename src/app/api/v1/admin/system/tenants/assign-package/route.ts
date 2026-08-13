@@ -6,7 +6,7 @@ import { getAuthErrorStatus, requirePlatformAdmin } from "@/modules/shared/backe
 
 export async function POST(request: Request) {
   try {
-    const auth = requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_ASSIGN_PACKAGE)
+    const auth = await requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_ASSIGN_PACKAGE)
     const input = assignTenantPackageSchema.parse(await request.json()) as any
     const data = await SystemTenantService.assignPackage(auth.userId, input)
     return NextResponse.json({ success: true, data })

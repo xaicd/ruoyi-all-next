@@ -13,7 +13,7 @@ function errorStatus(error: unknown): number {
 
 export async function GET(request: Request) {
   try {
-    requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_VIEW)
+    await requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_VIEW)
     const { searchParams } = new URL(request.url)
     const input = listSchema.parse({ page: searchParams.get("page") ?? 1, pageSize: searchParams.get("pageSize") ?? 20, keyword: searchParams.get("keyword") ?? undefined, status: searchParams.get("status") ?? undefined })
     const data = await SystemTenantService.list(input)
@@ -23,7 +23,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_VIEW)
+    await requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_VIEW)
     const body = await request.json()
     const input = createTenantWithAdminSchema.parse(body)
     const data = await SystemTenantService.create(input)

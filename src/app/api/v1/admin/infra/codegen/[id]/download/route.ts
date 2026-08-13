@@ -14,7 +14,7 @@ type RouteContext = { params: Promise<{ id: string }> }
  */
 export async function GET(request: Request, context: RouteContext) {
   try {
-    ensurePermission(request, PERMISSIONS.INFRA_CODEGEN_VIEW)
+    await ensurePermission(request, PERMISSIONS.INFRA_CODEGEN_VIEW)
     const { id } = await context.params
 
     const table = await CodegenTableRepository.findById(id)

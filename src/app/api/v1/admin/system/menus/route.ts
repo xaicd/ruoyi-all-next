@@ -43,7 +43,7 @@ export async function GET(request: Request) {
     const roleId = searchParams.get("roleId")?.trim()
 
     if (mode === "role-assign") {
-      ensurePermission(request, PERMISSIONS.SYSTEM_PERMISSION_ASSIGN_ROLE_MENU)
+      await ensurePermission(request, PERMISSIONS.SYSTEM_PERMISSION_ASSIGN_ROLE_MENU)
       if (!roleId) return NextResponse.json({ success: false, error: "roleId 不能为空" }, { status: 400 })
       const { SystemPermissionService } = await import("@/modules/system/backend/services/permission.service")
       const data = await SystemMenuService.treeByIds(await SystemPermissionService.getRoleAssignableMenuIds(roleId))
@@ -51,13 +51,13 @@ export async function GET(request: Request) {
     }
 
     if (mode === "tenant-package") {
-      requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_PACKAGE_VIEW)
+      await requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_PACKAGE_VIEW)
       const { getTenantPackageCandidateMenuIds } = await import("@/modules/system/backend/services/tenant-menu-scope.service")
       const data = await SystemMenuService.treeByIds(await getTenantPackageCandidateMenuIds())
       return NextResponse.json({ success: true, data })
     }
 
-    const auth = ensurePermission(request, PERMISSIONS.SYSTEM_MENU_VIEW)
+    const auth = await ensurePermission(request, PERMISSIONS.SYSTEM_MENU_VIEW)
     const isPlatformAdmin = auth.roles.includes(getPlatformRole())
     if (mode === "list") {
       const data = await SystemMenuService.list({ status })
@@ -72,7 +72,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_MENU_CREATE)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_MENU_CREATE)
     const body = await request.json()
     const input = createMenuSchema.parse(body)
     const data = await SystemMenuService.create(input)

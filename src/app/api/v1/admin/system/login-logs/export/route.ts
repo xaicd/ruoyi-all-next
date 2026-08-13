@@ -6,7 +6,7 @@ import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
 export async function GET(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_LOGIN_LOG_EXPORT)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_LOGIN_LOG_EXPORT)
     const { searchParams } = new URL(request.url)
     const input = loginLogQuerySchema.parse({
       page: searchParams.get("page") ?? 1,

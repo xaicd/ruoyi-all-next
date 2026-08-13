@@ -13,7 +13,7 @@ const createTypeSchema = z.object({ name: z.string().trim().min(1).max(100), typ
  */
 export async function GET(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_DICT_VIEW)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_DICT_VIEW)
     const { searchParams } = new URL(request.url)
     const type = searchParams.get("type")
 
@@ -32,7 +32,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_DICT_CREATE)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_DICT_CREATE)
     const body = await request.json()
     const input = createTypeSchema.parse(body) as any
     const data = await SystemDictService.createType(input)

@@ -16,7 +16,7 @@ const importSchema = z.object({
  */
 export async function POST(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.INFRA_CODEGEN_UPDATE)
+    await ensurePermission(request, PERMISSIONS.INFRA_CODEGEN_UPDATE)
     const body = await request.json()
     const { tableNames } = importSchema.parse(body)
 

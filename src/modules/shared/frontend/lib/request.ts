@@ -135,6 +135,7 @@ export const API = {
   TENANT_PACKAGE_MENUS: "/api/v1/admin/system/menus?mode=tenant-package",
   ASSIGN_ROLE_MENU: "/api/v1/admin/system/permissions/assign-role-menu",
   TENANTS: "/api/v1/admin/system/tenants",
+  TENANT_SUBSCRIPTIONS: "/api/v1/admin/system/tenants",
   TENANT_PACKAGES: "/api/v1/admin/system/tenant-packages",
 
   // Infra

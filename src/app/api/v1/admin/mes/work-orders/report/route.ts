@@ -7,7 +7,7 @@ import { writeAuditLog } from "@/modules/shared/backend/lib/audit-log"
 
 export async function POST(request: Request) {
   try {
-    const auth = ensurePermission(request, PERMISSIONS.MES_WORK_ORDER_REPORT)
+    const auth = await ensurePermission(request, PERMISSIONS.MES_WORK_ORDER_REPORT)
     const body = await request.json()
     const input = mesReportWorkSchema.parse(body)
 

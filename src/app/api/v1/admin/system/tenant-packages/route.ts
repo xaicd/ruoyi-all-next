@@ -9,7 +9,7 @@ const createSchema = z.object({ name: z.string().trim().min(1).max(50), status: 
 
 export async function GET(request: Request) {
   try {
-    requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_PACKAGE_VIEW)
+    await requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_PACKAGE_VIEW)
     const { searchParams } = new URL(request.url)
     if (searchParams.get("all") === "true") return NextResponse.json({ success: true, data: await SystemTenantPackageService.getAll() })
     const input = listSchema.parse({ page: searchParams.get("page") ?? 1, pageSize: searchParams.get("pageSize") ?? 20, keyword: searchParams.get("keyword") ?? undefined })
@@ -19,7 +19,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_PACKAGE_VIEW)
+    await requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_PACKAGE_VIEW)
     const data = await SystemTenantPackageService.create(createSchema.parse(await request.json()))
     return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: getAuthErrorStatus(error) }) }

@@ -11,6 +11,7 @@ type SystemUser = {
   email: string | null
   deptId: string | null
   roleIds: string[]
+  postIds: string[]
   status: string
   remark: string | null
   createdAt: string
@@ -321,12 +322,16 @@ function UserFormDialog({
     status: user?.status ?? "ACTIVE",
     remark: user?.remark ?? "",
     roleIds: user?.roleIds ?? [],
+    postIds: user?.postIds ?? [],
     deptId: user?.deptId ?? "",
   })
 
   const [roles, setRoles] = useState<{ id: string; name: string }[]>([])
+  const [posts, setPosts] = useState<{ id: string; name: string; code: string }[]>([])
   const [rolesLoading, setRolesLoading] = useState(true)
+  const [postsLoading, setPostsLoading] = useState(true)
   const [rolesError, setRolesError] = useState("")
+  const [postsError, setPostsError] = useState("")
 
   useEffect(() => {
     let active = true
@@ -337,6 +342,13 @@ function UserFormDialog({
         else setRolesError(result.error || "角色加载失败")
       })
       .finally(() => { if (active) setRolesLoading(false) })
+    request.get<{ items: { id: string; name: string; code: string }[] }>(API.POSTS, { pageSize: 100, status: "ACTIVE" })
+      .then((result) => {
+        if (!active) return
+        if (result.success && result.data) setPosts(result.data.items.map((post) => ({ id: post.id, name: post.name, code: post.code })))
+        else setPostsError(result.error || "岗位加载失败")
+      })
+      .finally(() => { if (active) setPostsLoading(false) })
     return () => { active = false }
   }, [])
 
@@ -361,9 +373,18 @@ function UserFormDialog({
     }))
   }
 
+  const togglePost = (postId: string) => {
+    setForm((prev) => ({
+      ...prev,
+      postIds: prev.postIds.includes(postId)
+        ? prev.postIds.filter((id) => id !== postId)
+        : [...prev.postIds, postId],
+    }))
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="w-full max-w-lg rounded-lg bg-white p-6 shadow-xl max-h-[85vh] overflow-y-auto">
+      <div className="w-full max-w-2xl rounded-lg bg-white p-6 shadow-xl max-h-[85vh] overflow-y-auto">
         <h2 className="mb-4 text-base font-semibold">
           {user ? "编辑用户" : "新增用户"}
         </h2>
@@ -409,6 +430,23 @@ function UserFormDialog({
                     <label key={role.id} className="flex items-center gap-1.5 rounded px-1.5 py-1 hover:bg-slate-50 cursor-pointer">
                       <input type="checkbox" checked={form.roleIds.includes(role.id)} onChange={() => toggleRole(role.id)} className="rounded" />
                       <span className="text-xs">{role.name}</span>
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* 岗位分配 */}
+          <div>
+            <label className="mb-1 block text-xs text-slate-600">分配岗位</label>
+            <div className="rounded-md border p-2 max-h-32 overflow-y-auto">
+              {postsLoading ? <p className="text-xs text-slate-400">加载中...</p> : postsError ? <p className="text-xs text-red-500">{postsError}</p> : posts.length === 0 ? <p className="text-xs text-slate-400">暂无可分配岗位</p> : (
+                <div className="grid grid-cols-2 gap-1">
+                  {posts.map((post) => (
+                    <label key={post.id} className="flex items-center gap-1.5 rounded px-1.5 py-1 hover:bg-slate-50 cursor-pointer">
+                      <input type="checkbox" checked={form.postIds.includes(post.id)} onChange={() => togglePost(post.id)} className="rounded" />
+                      <span className="text-xs">{post.name}<span className="ml-1 text-slate-400">{post.code}</span></span>
                     </label>
                   ))}
                 </div>

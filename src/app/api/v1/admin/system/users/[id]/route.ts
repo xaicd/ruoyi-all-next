@@ -16,7 +16,7 @@ type RouteContext = { params: Promise<{ id: string }> }
  */
 export async function GET(request: Request, context: RouteContext) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_USER_VIEW)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_USER_VIEW)
     const { id } = await context.params
     const data = await SystemUserService.getById(id)
     return NextResponse.json({ success: true, data })
@@ -32,7 +32,7 @@ export async function GET(request: Request, context: RouteContext) {
  */
 export async function PUT(request: Request, context: RouteContext) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_USER_UPDATE)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_USER_UPDATE)
     const { id } = await context.params
     const body = await request.json()
     const input = updateUserSchema.parse({ ...body, id })
@@ -52,7 +52,7 @@ export async function PUT(request: Request, context: RouteContext) {
  */
 export async function DELETE(request: Request, context: RouteContext) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_USER_DELETE)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_USER_DELETE)
     const { id } = await context.params
 
     const data = await SystemUserService.delete(id)
@@ -76,7 +76,7 @@ export async function PATCH(request: Request, context: RouteContext) {
 
     // 密码重置
     if (body.action === "resetPassword") {
-      ensurePermission(request, PERMISSIONS.SYSTEM_USER_UPDATE)
+      await ensurePermission(request, PERMISSIONS.SYSTEM_USER_UPDATE)
       const input = updateUserPasswordSchema.parse({ id, password: body.password })
       const data = await SystemUserService.resetPassword(input)
       return NextResponse.json({ success: true, data })
@@ -84,7 +84,7 @@ export async function PATCH(request: Request, context: RouteContext) {
 
     // 状态变更
     if (body.action === "updateStatus") {
-      ensurePermission(request, PERMISSIONS.SYSTEM_USER_UPDATE)
+      await ensurePermission(request, PERMISSIONS.SYSTEM_USER_UPDATE)
       if (!["ACTIVE", "DISABLED"].includes(body.status)) {
         return NextResponse.json({ success: false, error: "无效状态值" }, { status: 400 })
       }

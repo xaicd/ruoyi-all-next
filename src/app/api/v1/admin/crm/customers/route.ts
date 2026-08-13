@@ -9,7 +9,7 @@ const createSchema = z.object({ name: z.string().trim().min(1).max(100), phone: 
 
 export async function GET(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.CRM_CUSTOMER_VIEW)
+    await ensurePermission(request, PERMISSIONS.CRM_CUSTOMER_VIEW)
     const { searchParams } = new URL(request.url)
     const input = listSchema.parse({ page: searchParams.get("page") ?? 1, pageSize: searchParams.get("pageSize") ?? 20, keyword: searchParams.get("keyword") ?? undefined, level: searchParams.get("level") ?? undefined, status: searchParams.get("status") ?? undefined })
     const data = await CrmCustomerService.list(input)
@@ -19,7 +19,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.CRM_CUSTOMER_VIEW)
+    await ensurePermission(request, PERMISSIONS.CRM_CUSTOMER_VIEW)
     const body = await request.json()
     const input = createSchema.parse(body)
     const data = await CrmCustomerService.create({ ...input, email: input.email || undefined })

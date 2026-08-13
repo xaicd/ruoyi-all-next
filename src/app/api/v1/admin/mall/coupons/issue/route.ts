@@ -6,7 +6,7 @@ import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
 export async function POST(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.MALL_COUPON_ISSUE)
+    await ensurePermission(request, PERMISSIONS.MALL_COUPON_ISSUE)
     const body = await request.json()
     const input = mallCouponIssueSchema.parse(body)
 

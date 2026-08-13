@@ -9,7 +9,7 @@ import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
  */
 export async function POST(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.INFRA_CODEGEN_VIEW)
+    await ensurePermission(request, PERMISSIONS.INFRA_CODEGEN_VIEW)
     const body = await request.json()
 
     const config = {

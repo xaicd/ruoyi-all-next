@@ -60,7 +60,7 @@ export const authGateway = {
 
   async authenticateAdmin(request: Request): Promise<AuthResult> {
     try {
-      return toResult(requireAdminAuth(request))
+      return toResult(await requireAdminAuth(request))
     } catch (error) {
       return rejected("admin", error)
     }

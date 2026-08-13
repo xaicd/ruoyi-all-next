@@ -8,7 +8,7 @@ const listSchema = z.object({ page: z.coerce.number().int().min(1).default(1), p
 
 export async function GET(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.PAY_REFUND_VIEW)
+    await ensurePermission(request, PERMISSIONS.PAY_REFUND_VIEW)
     const { searchParams } = new URL(request.url)
     const input = listSchema.parse({ page: searchParams.get("page") ?? 1, pageSize: searchParams.get("pageSize") ?? 20, keyword: searchParams.get("keyword") ?? undefined, status: searchParams.get("status") ?? undefined })
     const data = await PayRefundService.list(input)

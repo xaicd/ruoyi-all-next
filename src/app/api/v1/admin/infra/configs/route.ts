@@ -9,7 +9,7 @@ const createSchema = z.object({ name: z.string().trim().min(1).max(100), configK
 
 export async function GET(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.INFRA_CONFIG_VIEW)
+    await ensurePermission(request, PERMISSIONS.INFRA_CONFIG_VIEW)
     const { searchParams } = new URL(request.url)
 
     // 按 key 查单值
@@ -27,7 +27,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.INFRA_CONFIG_UPDATE)
+    await ensurePermission(request, PERMISSIONS.INFRA_CONFIG_UPDATE)
     const body = await request.json()
     const input = createSchema.parse(body) as any as any
     const data = await InfraConfigService.create(input)

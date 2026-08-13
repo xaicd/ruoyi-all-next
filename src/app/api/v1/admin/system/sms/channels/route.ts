@@ -6,7 +6,7 @@ import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
 export async function GET(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_SMS_CHANNEL_VIEW)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_SMS_CHANNEL_VIEW)
     const { searchParams } = new URL(request.url)
     const input = systemModulePageQuerySchema.parse({
       page: searchParams.get("page") ?? 1,
@@ -22,7 +22,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const auth = ensurePermission(request, PERMISSIONS.SYSTEM_SMS_CHANNEL_CREATE)
+    const auth = await ensurePermission(request, PERMISSIONS.SYSTEM_SMS_CHANNEL_CREATE)
     const body = await request.json()
     const input = createSmsChannelSchema.parse(body)
     const data = await SystemSmsService.createChannel(auth.userId, input)

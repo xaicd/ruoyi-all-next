@@ -6,7 +6,7 @@ import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
 export async function GET(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_MAIL_ACCOUNT_VIEW)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_MAIL_ACCOUNT_VIEW)
     const { searchParams } = new URL(request.url)
     const input = systemModulePageQuerySchema.parse({
       page: searchParams.get("page") ?? 1,
@@ -22,7 +22,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const auth = ensurePermission(request, PERMISSIONS.SYSTEM_MAIL_ACCOUNT_CREATE)
+    const auth = await ensurePermission(request, PERMISSIONS.SYSTEM_MAIL_ACCOUNT_CREATE)
     const body = await request.json()
     const input = createMailAccountSchema.parse(body)
     const data = await SystemMailService.createAccount(auth.userId, input)

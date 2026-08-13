@@ -12,7 +12,7 @@ type RouteContext = { params: Promise<{ id: string }> }
  */
 export async function GET(request: Request, context: RouteContext) {
   try {
-    ensurePermission(request, PERMISSIONS.INFRA_CODEGEN_VIEW)
+    await ensurePermission(request, PERMISSIONS.INFRA_CODEGEN_VIEW)
     const { id } = await context.params
     const data = await CodegenTableRepository.findById(id)
     if (!data) return NextResponse.json({ success: false, error: "表配置不存在" }, { status: 404 })
@@ -26,7 +26,7 @@ export async function GET(request: Request, context: RouteContext) {
  */
 export async function PUT(request: Request, context: RouteContext) {
   try {
-    ensurePermission(request, PERMISSIONS.INFRA_CODEGEN_UPDATE)
+    await ensurePermission(request, PERMISSIONS.INFRA_CODEGEN_UPDATE)
     const { id } = await context.params
     const body = await request.json()
     const data = await CodegenTableRepository.update(id, body)
@@ -40,7 +40,7 @@ export async function PUT(request: Request, context: RouteContext) {
  */
 export async function DELETE(request: Request, context: RouteContext) {
   try {
-    ensurePermission(request, PERMISSIONS.INFRA_CODEGEN_UPDATE)
+    await ensurePermission(request, PERMISSIONS.INFRA_CODEGEN_UPDATE)
     const { id } = await context.params
     await CodegenTableRepository.delete(id)
     return NextResponse.json({ success: true })

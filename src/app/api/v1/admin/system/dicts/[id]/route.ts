@@ -8,7 +8,7 @@ type RouteContext = { params: Promise<{ id: string }> }
 
 export async function GET(request: Request, context: RouteContext) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_DICT_VIEW)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_DICT_VIEW)
     const { id } = await context.params
     const data = await SystemDictService.getType(id)
     return NextResponse.json({ success: true, data })
@@ -17,7 +17,7 @@ export async function GET(request: Request, context: RouteContext) {
 
 export async function PUT(request: Request, context: RouteContext) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_DICT_CREATE)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_DICT_CREATE)
     const { id } = await context.params
     const body = await request.json()
     const input = z.object({ name: z.string().trim().min(1).max(100).optional(), type: z.string().trim().max(100).optional(), status: z.enum(["ACTIVE", "DISABLED"]).optional(), remark: z.string().trim().max(500).optional() }).parse(body)
@@ -28,7 +28,7 @@ export async function PUT(request: Request, context: RouteContext) {
 
 export async function DELETE(request: Request, context: RouteContext) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_DICT_CREATE)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_DICT_CREATE)
     const { id } = await context.params
     const data = await SystemDictService.deleteType(id)
     return NextResponse.json({ success: true, data })

@@ -11,7 +11,7 @@ function failure(error: unknown) {
 
 export async function GET(request: Request) {
   try {
-    requirePlatformAdmin(request, PERMISSIONS.INFRA_DATA_SOURCE_CONFIG_QUERY)
+    await requirePlatformAdmin(request, PERMISSIONS.INFRA_DATA_SOURCE_CONFIG_QUERY)
     const params = new URL(request.url).searchParams
     const id = params.get("id")
     const data = id
@@ -23,7 +23,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    requirePlatformAdmin(request, PERMISSIONS.INFRA_DATA_SOURCE_CONFIG_CREATE)
+    await requirePlatformAdmin(request, PERMISSIONS.INFRA_DATA_SOURCE_CONFIG_CREATE)
     const data = await DataSourceConfigService.create(createDataSourceConfigSchema.parse(await request.json()))
     return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error) { return failure(error) }
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
   try {
-    requirePlatformAdmin(request, PERMISSIONS.INFRA_DATA_SOURCE_CONFIG_UPDATE)
+    await requirePlatformAdmin(request, PERMISSIONS.INFRA_DATA_SOURCE_CONFIG_UPDATE)
     const data = await DataSourceConfigService.update(updateDataSourceConfigSchema.parse(await request.json()))
     return NextResponse.json({ success: true, data })
   } catch (error) { return failure(error) }
@@ -39,7 +39,7 @@ export async function PUT(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
-    requirePlatformAdmin(request, PERMISSIONS.INFRA_DATA_SOURCE_CONFIG_DELETE)
+    await requirePlatformAdmin(request, PERMISSIONS.INFRA_DATA_SOURCE_CONFIG_DELETE)
     const id = new URL(request.url).searchParams.get("id")
     if (!id) throw new Error("数据源 ID 不能为空")
     return NextResponse.json({ success: true, data: await DataSourceConfigService.delete(id) })

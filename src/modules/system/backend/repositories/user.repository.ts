@@ -61,6 +61,7 @@ export type UserListParams = {
 // === 内存存储 ===
 
 const MEMORY_STORE: SystemUserRow[] = [...SEED_USERS]
+const MEMORY_USER_POSTS = new Map<string, Set<string>>()
 
 let memoryIdSeq = 100
 
@@ -129,6 +130,32 @@ export const SystemUserRepository = {
     const tenantId = currentTenantId()
     if (hasRealDatabase()) return deleteInDb(id, tenantId)
     return deleteInMemory(id, tenantId)
+  },
+
+  /** 读取用户已分配的岗位。 */
+  async findPostIdsByUserId(userId: string): Promise<string[]> {
+    const user = await this.findById(userId)
+    if (!user) throw new Error(`用户不存在: ${userId}`)
+    if (!hasRealDatabase()) return [...(MEMORY_USER_POSTS.get(userId) ?? [])]
+    const db = await getKyselyDb()
+    const rows = await db.selectFrom("system_user_post").innerJoin("system_post", "system_post.id", "system_user_post.post_id").select("system_user_post.post_id").where("system_user_post.user_id", "=", userId).where("system_post.deleted", "=", false).execute()
+    return rows.map((row) => row.post_id)
+  },
+
+  /** Replaces user-post relations atomically in the active tenant scope. */
+  async replacePosts(userId: string, postIds: string[]): Promise<void> {
+    const user = await this.findById(userId)
+    if (!user) throw new Error(`用户不存在: ${userId}`)
+    const uniquePostIds = [...new Set(postIds)]
+    if (!hasRealDatabase()) {
+      MEMORY_USER_POSTS.set(userId, new Set(uniquePostIds))
+      return
+    }
+    const db = await getKyselyDb()
+    await db.transaction().execute(async (trx) => {
+      await trx.deleteFrom("system_user_post").where("user_id", "=", userId).execute()
+      if (uniquePostIds.length) await trx.insertInto("system_user_post").values(uniquePostIds.map((postId) => ({ id: crypto.randomUUID(), user_id: userId, post_id: postId }))).execute()
+    })
   },
 
   /** 统计 */
@@ -359,4 +386,5 @@ function deleteInMemory(id: string, tenantId?: string): void {
   const idx = MEMORY_STORE.findIndex((u) => u.id === id && (!tenantId || u.tenantId === tenantId))
   if (idx === -1) throw new Error(`用户不存在: ${id}`)
   MEMORY_STORE.splice(idx, 1)
+  MEMORY_USER_POSTS.delete(id)
 }

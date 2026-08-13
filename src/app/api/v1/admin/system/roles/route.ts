@@ -22,7 +22,7 @@ const createRoleSchema = z.object({
 
 export async function GET(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_VIEW)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_VIEW)
     const { searchParams } = new URL(request.url)
     const input = listQuerySchema.parse({
       page: searchParams.get("page") ?? 1,
@@ -39,7 +39,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_CREATE)
+    await ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_CREATE)
     const body = await request.json()
     const input = createRoleSchema.parse(body) as any
     const data = await SystemRoleService.create(input)

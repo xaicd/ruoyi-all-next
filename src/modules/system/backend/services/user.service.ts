@@ -12,6 +12,7 @@ import type {
   UpdateUserPasswordInput,
 } from "@/modules/system/backend/validators"
 import { SystemDeptRepository } from "@/modules/system/backend/repositories/dept.repository"
+import { SystemPostRepository } from "@/modules/system/backend/repositories/post.repository"
 import { SystemUserRepository } from "@/modules/system/backend/repositories/user.repository"
 import { SystemPermissionService } from "@/modules/system/backend/services/permission.service"
 import { TenantEntitlementService } from "@/modules/system/backend/services/tenant-entitlement.service"
@@ -19,11 +20,20 @@ import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 import { getCurrentTenantId, isPlatformContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { hashPassword, generateSalt } from "@/modules/shared/backend/lib/crypto"
 
-async function requireCurrentTenantDept(deptId: string | undefined): Promise<void> {
+async function requireCurrentTenantDept(deptId: string | undefined, expectedTenantId: string | null): Promise<void> {
   if (!deptId) return
   const dept = await SystemDeptRepository.findById(deptId)
-  if (!dept) throw new Error(`部门不存在或不属于当前租户: ${deptId}`)
+  if (!dept || dept.tenantId !== expectedTenantId) throw new Error(`部门不存在或不属于目标租户: ${deptId}`)
   if (dept.status !== "ACTIVE") throw new Error(`部门已停用: ${deptId}`)
+}
+
+async function requireCurrentTenantPosts(postIds: string[] | undefined, expectedTenantId: string | null): Promise<void> {
+  if (postIds === undefined) return
+  for (const postId of postIds) {
+    const post = await SystemPostRepository.findById(postId)
+    if (!post || post.tenantId !== expectedTenantId) throw new Error(`岗位不存在或不属于目标租户: ${postId}`)
+    if (post.status !== "ACTIVE") throw new Error(`岗位已停用: ${postId}`)
+  }
 }
 
 /** Enforce the resolved package-or-tenant seat limit before adding a tenant user. */
@@ -67,8 +77,11 @@ export class SystemUserService {
     domainLog.event("system.user.get", { userId: id })
 
     const { password, ...rest } = user
-    const roleIds = await SystemPermissionService.getUserRoleIds(id)
-    return { ...rest, roleIds }
+    const [roleIds, postIds] = await Promise.all([
+      SystemPermissionService.getUserRoleIds(id),
+      SystemUserRepository.findPostIdsByUserId(id),
+    ])
+    return { ...rest, roleIds, postIds }
   }
 
   /** 创建用户 */
@@ -78,7 +91,9 @@ export class SystemUserService {
     if (existing) {
       throw new Error(`用户名已存在: ${input.username}`)
     }
-    await requireCurrentTenantDept(input.deptId)
+    const targetTenantId = getCurrentTenantId() ?? null
+    await requireCurrentTenantDept(input.deptId, targetTenantId)
+    await requireCurrentTenantPosts(input.postIds, targetTenantId)
     await requireTenantAccountCapacity()
 
     // 密码加密：双重 MD5 + Salt
@@ -100,8 +115,11 @@ export class SystemUserService {
     if (input.roleIds !== undefined) {
       await SystemPermissionService.assignUserRole({ userId: user.id, roleIds: input.roleIds })
     }
+    if (input.postIds !== undefined) {
+      await SystemUserRepository.replacePosts(user.id, input.postIds)
+    }
 
-    domainLog.event("system.user.create", { userId: user.id, username: user.username })
+    domainLog.event("system.user.create", { userId: user.id, username: user.username, postCount: input.postIds?.length ?? 0 })
     domainLog.audit("system.user.create", {
       targetType: "USER",
       targetId: user.id,
@@ -126,7 +144,8 @@ export class SystemUserService {
       }
     }
 
-    await requireCurrentTenantDept(input.deptId)
+    await requireCurrentTenantDept(input.deptId, existing.tenantId)
+    await requireCurrentTenantPosts(input.postIds, existing.tenantId)
 
     await SystemUserRepository.update(input.id, {
       username: input.username,
@@ -141,8 +160,11 @@ export class SystemUserService {
     if (input.roleIds !== undefined) {
       await SystemPermissionService.assignUserRole({ userId: input.id, roleIds: input.roleIds })
     }
+    if (input.postIds !== undefined) {
+      await SystemUserRepository.replacePosts(input.id, input.postIds)
+    }
 
-    domainLog.event("system.user.update", { userId: input.id })
+    domainLog.event("system.user.update", { userId: input.id, postCount: input.postIds?.length })
     domainLog.audit("system.user.update", {
       targetType: "USER",
       targetId: input.id,

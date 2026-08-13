@@ -6,13 +6,13 @@ import type { AuthContext } from "../auth/context"
  * @deprecated Use requireAdminAuth directly in new routes. This adapter keeps
  * existing routes compatible while enforcing verified Bearer JWT authentication.
  */
-export function extractAuthContext(request: Request): AuthContext {
+export async function extractAuthContext(request: Request): Promise<AuthContext> {
   return requireAdminAuth(request)
 }
 
 /**
  * @deprecated Use requireAdminAuth(request, permission) in new routes.
  */
-export function ensurePermission(request: Request, requiredPermission: PermissionCode): AuthContext {
+export async function ensurePermission(request: Request, requiredPermission: PermissionCode): Promise<AuthContext> {
   return requireAdminAuth(request, requiredPermission)
 }

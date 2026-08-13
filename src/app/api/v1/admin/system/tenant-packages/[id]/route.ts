@@ -14,7 +14,7 @@ function errorStatus(error: unknown, fallback = 400): number {
 
 export async function GET(request: Request, context: RouteContext) {
   try {
-    requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_PACKAGE_VIEW)
+    await requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_PACKAGE_VIEW)
     const { id } = await context.params
     return NextResponse.json({ success: true, data: await SystemTenantPackageService.getById(id) })
   } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: errorStatus(error, error?.message?.includes("不存在") ? 404 : 400) }) }
@@ -22,7 +22,7 @@ export async function GET(request: Request, context: RouteContext) {
 
 export async function PUT(request: Request, context: RouteContext) {
   try {
-    requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_PACKAGE_VIEW)
+    await requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_PACKAGE_VIEW)
     const { id } = await context.params
     const data = await SystemTenantPackageService.update({ id, ...updateSchema.parse(await request.json()) })
     return NextResponse.json({ success: true, data })
@@ -31,7 +31,7 @@ export async function PUT(request: Request, context: RouteContext) {
 
 export async function DELETE(request: Request, context: RouteContext) {
   try {
-    requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_PACKAGE_VIEW)
+    await requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_PACKAGE_VIEW)
     const { id } = await context.params
     const data = await SystemTenantPackageService.delete(id)
     return NextResponse.json({ success: true, data })
