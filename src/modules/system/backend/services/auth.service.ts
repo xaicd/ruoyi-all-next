@@ -29,6 +29,13 @@ function resolveLoginRoles(username: string): string[] {
   return isPlatformUsername(username) ? ["admin", getPlatformRole()] : ["admin"]
 }
 
+async function resolveLoginTenantId(tenantCode: string | undefined): Promise<string | undefined> {
+  if (!tenantCode) return undefined
+  const tenant = await SystemTenantRepository.findByTenantCode(tenantCode)
+  if (!tenant) throw new Error("租户编码不存在")
+  return tenant.id
+}
+
 async function requireUsableTenant(user: SystemUserRow, isPlatform: boolean): Promise<void> {
   if (isPlatform) return
   if (!user.tenantId) throw new Error("账号未绑定租户")
@@ -94,7 +101,9 @@ export class SystemAuthService {
   static async login(input: LoginInput) {
     domainLog.event("system.auth.login.attempt", { username: input.username })
 
-    const user = await SystemUserRepository.findByUsername(input.username, input.tenantId)
+    const tenantId = await resolveLoginTenantId(input.tenantCode)
+    if (!tenantId && !isPlatformUsername(input.username)) throw new Error("租户账号登录必须填写租户标识")
+    const user = await SystemUserRepository.findByUsername(input.username, tenantId)
     if (!user) {
       domainLog.audit("system.auth.login.fail", { targetType: "USER", targetId: input.username, reason: "not_found" })
       throw new Error("用户名或密码错误")

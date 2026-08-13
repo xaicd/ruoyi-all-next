@@ -22,6 +22,15 @@ async function requireActivePackage(packageId: string | undefined): Promise<void
   if (pkg.status !== "ACTIVE") throw new Error(`套餐已停用: ${pkg.name}`)
 }
 
+function normalizeTenantCode(code: string): string {
+  return code.trim().toLowerCase()
+}
+
+async function requireAvailableTenantCode(tenantCode: string, currentTenantId?: string): Promise<void> {
+  const existing = await SystemTenantRepository.findByTenantCode(normalizeTenantCode(tenantCode))
+  if (existing && existing.id !== currentTenantId) throw new Error(`租户编码已存在: ${tenantCode}`)
+}
+
 async function enrichTenantPackageNames<T extends { packageId: string | null }>(value: T | T[]): Promise<(T & { packageName: string | null }) | Array<T & { packageName: string | null }>> {
   const packages = new Map((await TenantPackageRepository.findAll()).map((pkg) => [pkg.id, pkg.name]))
   const enrich = (tenant: T) => ({ ...tenant, packageName: tenant.packageId ? packages.get(tenant.packageId) ?? null : null })
@@ -60,7 +69,7 @@ async function createInDatabase(input: CreateTenantWithAdminInput): Promise<{ id
     const menuRows = await trx.selectFrom("system_tenant_package_menu").select("menu_id").where("package_id", "=", input.packageId).execute()
     const safeMenuIds = await getTenantAssignableMenuIds(menuRows.map((row) => row.menu_id))
 
-    await trx.insertInto("system_tenant").values({ id: tenantId, name: input.name, contact_name: input.contactName ?? null, contact_phone: input.contactPhone ?? null, domain: input.domain ?? null, package_id: input.packageId, status: input.status, expire_time: input.expireTime ? new Date(input.expireTime) : null, account_count: input.accountCount, created_at: now, updated_at: now, deleted: false }).execute()
+    await trx.insertInto("system_tenant").values({ id: tenantId, tenant_code: input.tenantCode, name: input.name, contact_name: input.contactName ?? null, contact_phone: input.contactPhone ?? null, domain: input.domain ?? null, package_id: input.packageId, status: input.status, expire_time: input.expireTime ? new Date(input.expireTime) : null, account_count: input.accountCount, created_at: now, updated_at: now, deleted: false }).execute()
     await trx.insertInto("system_user").values({ id: adminUserId, username: input.adminUsername, nickname: input.adminNickname, password: hashPassword(input.adminPassword, salt), salt, phone: input.adminPhone ?? null, email: input.adminEmail ?? null, avatar: null, status: "ACTIVE", dept_id: null, remark: "租户创建时自动初始化的管理员", login_ip: null, login_date: now, tenant_id: tenantId, created_at: now, updated_at: now, deleted: false }).execute()
     await trx.insertInto("system_role").values({ id: roleId, name: "租户管理员", code: `tenant_admin_${tenantId}`, sort: 0, status: "ACTIVE", remark: "租户创建时自动初始化", data_scope: "ALL", tenant_id: tenantId, created_at: now, updated_at: now, deleted: false }).execute()
     await trx.insertInto("system_user_role").values({ id: randomUUID(), user_id: adminUserId, role_id: roleId }).execute()
@@ -85,7 +94,9 @@ export class SystemTenantService {
 
   /** Creates a usable tenant and its first administrator as one database transaction. */
   static async create(input: CreateTenantWithAdminInput) {
-    const result = hasRealDatabase() ? await createInDatabase(input) : await createInMemory(input)
+    const normalizedInput = { ...input, tenantCode: normalizeTenantCode(input.tenantCode) }
+    await requireAvailableTenantCode(normalizedInput.tenantCode)
+    const result = hasRealDatabase() ? await createInDatabase(normalizedInput) : await createInMemory(normalizedInput)
     domainLog.event("system.tenant.create", { tenantId: result.id, adminUserId: result.adminUserId })
     domainLog.audit("system.tenant.create", { targetType: "TENANT", targetId: result.id, adminUserId: result.adminUserId })
     return result

@@ -217,6 +217,7 @@ model SystemDictData {
 /// 租户
 model SystemTenant {
   id           String               @id @default(cuid())
+  tenantCode   String               @unique @map("tenant_code") @db.VarChar(32)
   name         String               @db.VarChar(50)
   contactName  String?              @map("contact_name") @db.VarChar(30)
   contactPhone String?              @map("contact_phone") @db.VarChar(20)

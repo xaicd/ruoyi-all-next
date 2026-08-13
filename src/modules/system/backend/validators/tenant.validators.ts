@@ -12,7 +12,10 @@ export const assignTenantPackageSchema = z.object({
 })
 
 /** 创建租户时必须同时建立首个租户管理员，避免产生无法登录管理的孤立租户。 */
+export const tenantCodeSchema = z.string().trim().toLowerCase().min(2, "租户编码至少 2 位").max(32).regex(/^[a-z][a-z0-9-]*[a-z0-9]$/, "租户编码仅支持小写字母、数字和连字符，且必须以字母开头和结尾")
+
 export const createTenantWithAdminSchema = z.object({
+  tenantCode: tenantCodeSchema,
   name: z.string().trim().min(1, "租户名称不能为空").max(50),
   contactName: z.string().trim().max(30).optional(),
   contactPhone: z.string().trim().max(20).optional(),

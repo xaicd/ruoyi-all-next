@@ -134,6 +134,7 @@ export interface SystemDictDataTable {
 
 export interface SystemTenantTable {
   id: Generated<string>
+  tenant_code: string
   name: string
   contact_name: string | null
   contact_phone: string | null

@@ -8,6 +8,7 @@ type BootstrapCredentials = { username: string; password: string }
 export default function LoginPage({ bootstrapCredentials }: { bootstrapCredentials?: BootstrapCredentials }) {
   const [username, setUsername] = useState(bootstrapCredentials?.username ?? "")
   const [password, setPassword] = useState(bootstrapCredentials?.password ?? "")
+  const [tenantCode, setTenantCode] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
@@ -17,7 +18,7 @@ export default function LoginPage({ bootstrapCredentials }: { bootstrapCredentia
     setLoading(true)
 
     try {
-      const data = await request.post(API.AUTH, { username, password }, { noAuth: true })
+      const data = await request.post(API.AUTH, { username, password, tenantCode: tenantCode.trim().toLowerCase() || undefined }, { noAuth: true })
 
       if (data.success) {
         localStorage.setItem("ruoyi_token", data.data.token)
@@ -70,7 +71,7 @@ export default function LoginPage({ bootstrapCredentials }: { bootstrapCredentia
           <div className="mb-8">
             <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 text-sm font-bold text-white lg:hidden">R</div>
             <h2 className="text-2xl font-bold text-slate-900">登录管理后台</h2>
-            <p className="mt-1 text-sm text-slate-500">请输入您的账号和密码</p>
+            <p className="mt-1 text-sm text-slate-500">平台管理员可直接登录；租户账号请同时填写租户编码。</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-5">
@@ -89,6 +90,17 @@ export default function LoginPage({ bootstrapCredentials }: { bootstrapCredentia
                 required
                 className="h-11 w-full rounded-lg border border-slate-200 px-4 text-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
               />
+            </div>
+
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-slate-700">租户编码 <span className="font-normal text-slate-400">（租户账号必填）</span></label>
+              <input
+                value={tenantCode}
+                onChange={(e) => setTenantCode(e.target.value.toLowerCase())}
+                placeholder="例如 demo 或 cc-adm"
+                className="h-11 w-full rounded-lg border border-slate-200 px-4 text-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              />
+              <p className="mt-1 text-xs text-slate-400">平台管理员留空；只接受租户编码，不接受 UUID、数字 ID 或域名。</p>
             </div>
 
             <div>

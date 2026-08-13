@@ -4,8 +4,8 @@ import { z } from "zod"
 export const loginSchema = z.object({
   username: z.string().trim().min(1, "用户名不能为空"),
   password: z.string().trim().min(1, "密码不能为空"),
-  /** Required in TENANT_MODE=required unless the account is a platform operator. */
-  tenantId: z.string().trim().min(1, "tenantId 不能为空").optional(),
+  /** Required for tenant accounts; a normalized globally-unique tenantCode. */
+  tenantCode: z.string().trim().toLowerCase().min(2, "租户编码不能为空").max(32).regex(/^[a-z][a-z0-9-]*[a-z0-9]$/, "租户编码格式不正确").optional(),
 })
 
 export const captchaVerifySchema = z.object({
