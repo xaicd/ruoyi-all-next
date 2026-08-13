@@ -42,3 +42,6 @@ export class LoginLogService {
 
 // Alias for index.ts re-export
 export {  as  }
+
+// Alias for index.ts re-export
+export { LoginLogService as SystemLoginLogService }

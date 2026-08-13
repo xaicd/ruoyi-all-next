@@ -1,3 +1,2 @@
-import WmsMovementOrderPage from "@/modules/wms/frontend/pages/wms-movement-order.page"
+﻿export { default } from "@/modules/wms/frontend/pages/wms-movement-order.page"
 
-export default WmsMovementOrderPage

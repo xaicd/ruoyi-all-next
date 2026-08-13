@@ -1,9 +1,13 @@
 {
   "moduleKebab": "wms",
+  "modulePascal": "Wms",
+  "moduleCamel": "wms",
   "moduleLabel": "仓储",
   "featureListKebab": "stock-items",
+  "featureListPascal": "StockItems",
+  "featureCamel": "stockItems",
   "featureListLabel": "库存",
   "modulePermissionConst": "WMS_STOCK_ITEMS_VIEW",
-  "outputRoot": "apps/ruoyi/ruoyi-all-next",
+  "outputRoot": ".",
   "overwrite": false
 }

@@ -1,3 +1,2 @@
-import AiKnowledgeSegmentPage from "@/modules/ai/frontend/pages/ai-knowledge-segment.page"
+﻿export { default } from "@/modules/ai/frontend/pages/ai-knowledge-segment.page"
 
-export default AiKnowledgeSegmentPage

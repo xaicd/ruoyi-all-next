@@ -1,3 +1,1 @@
-import SmsTemplatePage from "@/modules/system/frontend/pages/sms-template.page"
-
-export default SmsTemplatePage
+export { default } from "@/modules/system/frontend/pages/sms-template.page"

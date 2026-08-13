@@ -1,3 +1,1 @@
-import SmsCallbackPage from "@/modules/system/frontend/pages/sms-callback.page"
-
-export default SmsCallbackPage
+export { default } from "@/modules/system/frontend/pages/sms-callback.page"

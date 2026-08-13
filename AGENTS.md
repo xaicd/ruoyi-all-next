@@ -263,3 +263,72 @@ CI 前置检查：
 10. apps/ruoyi/ruoyi-all-next/docs/guides/service-design-patterns.md
 11. apps/ruoyi/ruoyi-all-next/scripts/quick-start.sh
 12. apps/ruoyi/ruoyi-all-next/scripts/scaffold-feature.ts
+
+## 14. 代码生成器架构规范
+
+### 14.1 生成器入口
+
+- 引擎：`src/modules/infra/backend/services/codegen-engine.service.ts`
+- 前端页面：`/admin/infra/codegen`
+- API：`/api/v1/admin/infra/codegen`（导入表、预览、下载 ZIP）
+- 注入脚本：`scripts/inject-codegen-output.cjs`
+
+### 14.2 生成产物目录结构
+
+代码生成器对每张表输出以下文件，严格遵循 modules-first 分层：
+
+```
+src/modules/{domain}/
+├── backend/
+│   ├── types/{kebab}.types.ts        ← DO/VO/CreateInput/UpdateInput/PageQuery
+│   ├── validators/{kebab}.validator.ts ← Zod Schema (create/update/pageQuery)
+│   ├── services/{kebab}.service.ts    ← Service (CRUD + MOCK_DATA)
+│   └── services/__tests__/{kebab}.service.test.ts ← Vitest 测试
+├── frontend/
+│   ├── api/{kebab}.api.ts            ← 前端 API 封装 (page/get/create/update/delete)
+│   ├── components/{ClassName}Form.tsx ← 弹窗表单组件
+│   └── pages/{kebab}-list.page.tsx   ← 列表页 (搜索+表格+分页+CRUD)
+src/app/
+├── api/v1/admin/{domain}/{kebab}/route.ts       ← API Route (GET/POST/PUT/DELETE)
+└── (admin-pages)/admin/{domain}/{kebab}/page.tsx ← App Router 入口
+```
+
+### 14.3 路径约束（强制）
+
+1. 后端文件必须在 `modules/{domain}/backend/` 下，禁止放 `modules/{domain}/services/` 平铺。
+2. 前端文件必须在 `modules/{domain}/frontend/` 下，api/components/pages 三级分离。
+3. API Route 路径：`src/app/api/v1/admin/{domain}/{kebab}/route.ts`。
+4. App 页面入口：`src/app/(admin-pages)/admin/{domain}/{kebab}/page.tsx`。
+5. 类型 import 使用 `@/modules/{domain}/backend/` 前缀，禁止相对路径跨层。
+
+### 14.4 前端模板规范（对标 RuoYi Vue3）
+
+| 模板 | 职责 | 对标 Vue3 |
+|---|---|---|
+| `api/{kebab}.api.ts` | request 封装，暴露 page/get/create/update/delete | `src/api/system/user.ts` |
+| `components/{ClassName}Form.tsx` | 弹窗表单（新增/编辑复用） | `views/system/user/UserForm.vue` |
+| `pages/{kebab}-list.page.tsx` | 列表页（搜索+表格+分页） | `views/system/user/index.vue` |
+
+### 14.5 注入与加载流程
+
+```bash
+# 1. 在 /admin/infra/codegen 页面导入表 → 预览 → 下载 ZIP
+# 2. 解压到 tmp/ 目录
+# 3. 注入到项目（自动修正路径 + 跳过已存在文件）
+node scripts/inject-codegen-output.cjs tmp/codegen-{ClassName}
+# 4. Next.js hot reload 自动检测新文件 → 浏览器刷新可用
+# 5. 侧边栏动态加载：GET /api/v1/admin/system/menus/sidebar
+```
+
+### 14.6 生成器禁止项
+
+1. 禁止覆盖已有 Service/Repository/Page（inject 脚本会跳过 exists 文件）。
+2. 禁止生成 `modules/{domain}/services/` 路径（必须是 `backend/services/`）。
+3. 禁止前端页面直接 fetch，必须通过 `api/{kebab}.api.ts` 封装。
+4. 禁止生成不带 Zod Validator 的 API Route。
+
+### 14.7 种子数据位置
+
+- 种子数据统一放 `prisma/data/`，通过 `@prisma/data` alias import。
+- 各 Repository 通过 `import { SEED_XXX } from "@prisma/data"` 初始化 MEMORY_STORE。
+- 生成脚本：`scripts/inject-seed-to-repositories.cjs`。

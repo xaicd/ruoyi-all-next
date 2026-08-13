@@ -1,3 +1,1 @@
-import IotDevicesModulePage from "@/modules/iot/frontend/pages/iot-devices.page"
-
-export default IotDevicesModulePage
+export { default } from "@/modules/iot/frontend/pages/iot-devices.page"

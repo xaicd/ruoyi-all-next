@@ -1,27 +1,18 @@
 import { NextResponse } from "next/server"
-import { SocialClientService } from "@/modules/system/backend/services/social-client.service"
+import { SystemSocialService } from "@/modules/system/backend/services"
+import { systemModulePageQuerySchema } from "@/modules/system/backend/validators"
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
-    const input = {
-      page: Number(searchParams.get("page") || 1),
-      pageSize: Number(searchParams.get("pageSize") || 20),
-      keyword: searchParams.get("keyword") || undefined,
-    }
-    const data = await SocialClientService.page(input)
+    const input = systemModulePageQuerySchema.parse({
+      page: searchParams.get("page") ?? 1,
+      pageSize: searchParams.get("pageSize") ?? 20,
+      keyword: searchParams.get("keyword") ?? undefined,
+    })
+    const data = await SystemSocialService.listUsers(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message || "查询失败" }, { status: 400 })
-  }
-}
-
-export async function POST(request: Request) {
-  try {
-    const body = await request.json()
-    const data = await SocialClientService.create(body)
-    return NextResponse.json({ success: true, data }, { status: 201 })
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message || "创建失败" }, { status: 400 })
+    return NextResponse.json({ success: false, error: error?.message ?? "查询失败" }, { status: 400 })
   }
 }

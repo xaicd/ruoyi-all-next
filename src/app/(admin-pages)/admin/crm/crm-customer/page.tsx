@@ -1,3 +1,2 @@
-import CrmCustomerPage from "@/modules/crm/frontend/pages/crm-customer.page"
+﻿export { default } from "@/modules/crm/frontend/pages/crm-customer.page"
 
-export default CrmCustomerPage

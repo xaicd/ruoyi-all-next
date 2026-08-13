@@ -1,3 +1,2 @@
-import AiKnowledgePage from "@/modules/ai/frontend/pages/ai-knowledge.page"
+﻿export { default } from "@/modules/ai/frontend/pages/ai-knowledge.page"
 
-export default AiKnowledgePage

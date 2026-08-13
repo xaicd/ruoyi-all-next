@@ -1,3 +1,1 @@
-import AiChatsModulePage from "@/modules/ai/frontend/pages/ai-chats.page"
-
-export default AiChatsModulePage
+export { default } from "@/modules/ai/frontend/pages/ai-chats.page"

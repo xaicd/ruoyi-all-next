@@ -1,3 +1,2 @@
-import MesWmPackageLinePage from "@/modules/mes/frontend/pages/mes-wm-package-line.page"
+﻿export { default } from "@/modules/mes/frontend/pages/mes-wm-package-line.page"
 
-export default MesWmPackageLinePage

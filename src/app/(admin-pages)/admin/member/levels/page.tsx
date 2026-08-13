@@ -1,3 +1,1 @@
-import MemberLevelsModulePage from "@/modules/member/frontend/pages/member-levels.page"
-
-export default MemberLevelsModulePage
+export { default } from "@/modules/member/frontend/pages/member-levels.page"

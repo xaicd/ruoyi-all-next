@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { createNotifyTemplateSchema, pageQuerySchema } from "@/modules/system/backend/validators"
-import { SystemNotifyTemplateService } from "@/modules/system/backend/services/notify-template.service"
+import { NotifyTemplateService } from "@/modules/system/backend/services/notify-template.service"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
@@ -14,7 +14,7 @@ export async function GET(request: Request) {
       keyword: searchParams.get("keyword") ?? undefined,
     })
 
-    const data = await SystemNotifyTemplateService.list(input)
+    const data = await NotifyTemplateService.list(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message ?? "查询失败" }, { status: 400 })
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     const body = await request.json()
     const input = createNotifyTemplateSchema.parse(body)
 
-    const data = await SystemNotifyTemplateService.create(auth.userId, input)
+    const data = await NotifyTemplateService.create(auth.userId, input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message ?? "创建失败" }, { status: 400 })

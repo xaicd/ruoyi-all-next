@@ -1,3 +1,2 @@
-import ProductBrowseHistoryPage from "@/modules/mall/frontend/pages/product-browse-history.page"
+﻿export { default } from "@/modules/mall/frontend/pages/product-browse-history.page"
 
-export default ProductBrowseHistoryPage

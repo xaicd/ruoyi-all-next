@@ -1,36 +1,18 @@
 import { NextResponse } from "next/server"
-import { MailTemplateService } from "@/modules/system/backend/services/mail-template.service"
 
 type RouteContext = { params: Promise<{ id: string }> }
 
-export async function GET(request: Request, context: RouteContext) {
-  try {
-    const { id } = await context.params
-    const data = await MailTemplateService.get(id)
-    if (!data) return NextResponse.json({ success: false, error: "不存在" }, { status: 404 })
-    return NextResponse.json({ success: true, data })
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
-  }
+export async function GET(_request: Request, context: RouteContext) {
+  const { id } = await context.params
+  return NextResponse.json({ success: false, error: `邮件模板 ${id} 详情待实现` }, { status: 501 })
 }
 
-export async function PUT(request: Request, context: RouteContext) {
-  try {
-    const { id } = await context.params
-    const body = await request.json()
-    const data = await MailTemplateService.update({ ...body, id })
-    return NextResponse.json({ success: true, data })
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
-  }
+export async function PUT(_request: Request, context: RouteContext) {
+  const { id } = await context.params
+  return NextResponse.json({ success: false, error: `邮件模板 ${id} 更新待实现` }, { status: 501 })
 }
 
-export async function DELETE(request: Request, context: RouteContext) {
-  try {
-    const { id } = await context.params
-    const data = await MailTemplateService.delete(id)
-    return NextResponse.json({ success: true, data })
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
-  }
+export async function DELETE(_request: Request, context: RouteContext) {
+  const { id } = await context.params
+  return NextResponse.json({ success: false, error: `邮件模板 ${id} 删除待实现` }, { status: 501 })
 }

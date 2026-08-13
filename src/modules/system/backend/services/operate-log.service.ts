@@ -42,3 +42,6 @@ export class OperateLogService {
 
 // Alias for index.ts re-export
 export {  as  }
+
+// Alias for index.ts re-export
+export { OperateLogService as SystemOperateLogService }

@@ -4,7 +4,11 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
 
-const menuGroups = [
+type SidebarItem = { href: string; label: string; icon: string }
+type SidebarGroup = { title: string; icon: string; children: SidebarItem[] }
+
+// 静态兜底菜单（API 失败时使用）
+const STATIC_MENU_GROUPS: SidebarGroup[] = [
   {
     title: "系统管理",
     icon: "⚙️",
@@ -87,16 +91,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [collapsed, setCollapsed] = useState(false)
   const [username, setUsername] = useState("admin")
   const [authChecked, setAuthChecked] = useState(false)
+  const [menuGroups, setMenuGroups] = useState<SidebarGroup[]>(STATIC_MENU_GROUPS)
 
   useEffect(() => {
-    // Auth guard: 检查 token 是否存在
+    // Auth guard
     const token = localStorage.getItem("ruoyi_token")
-    if (!token) {
-      window.location.href = "/login"
-      return
-    }
+    if (!token) { window.location.href = "/login"; return }
 
-    // 解析 JWT 检查过期
     try {
       const parts = token.split(".")
       if (parts.length === 3) {
@@ -109,14 +110,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         }
       }
     } catch {
-      // token 解析失败，清理后跳转
       localStorage.removeItem("ruoyi_token")
       localStorage.removeItem("ruoyi_user")
       window.location.href = "/login"
       return
     }
 
-    // 读取用户信息
     try {
       const user = localStorage.getItem("ruoyi_user")
       if (user) {
@@ -126,9 +125,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     } catch {}
 
     setAuthChecked(true)
+
+    // 动态加载菜单（从数据库）— 暂时禁用，待 componentToHref 映射完善后启用
+    // fetch("/api/v1/admin/system/menus/sidebar")
+    //   .then(r => r.json())
+    //   .then(res => {
+    //     if (res.success && res.data?.length > 0) {
+    //       setMenuGroups(res.data)
+    //     }
+    //   })
+    //   .catch(() => {})
   }, [])
 
-  // 未通过 auth 检查时显示加载状态
   if (!authChecked) {
     return (
       <div className="flex h-screen items-center justify-center bg-slate-50">
@@ -147,20 +155,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <div className="flex h-screen overflow-hidden bg-slate-50">
       {/* Sidebar */}
       <aside className={`flex flex-col border-r bg-white transition-all duration-200 ${collapsed ? "w-16" : "w-60"}`}>
-        {/* Logo */}
         <div className="flex h-14 items-center border-b px-3">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 text-xs font-bold text-white">R</div>
           {!collapsed && <span className="ml-2.5 text-sm font-semibold text-slate-900 whitespace-nowrap">RuoYi Admin</span>}
         </div>
 
-        {/* Nav */}
         <nav className="flex-1 overflow-y-auto py-3 px-2">
           {menuGroups.map((group) => (
             <MenuGroup key={group.title} group={group} pathname={pathname} collapsed={collapsed} />
           ))}
         </nav>
 
-        {/* Collapse Toggle */}
         <div className="border-t px-2 py-2">
           <button
             onClick={() => setCollapsed(!collapsed)}
@@ -174,14 +179,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
       </aside>
 
-      {/* Main */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        {/* Top Bar */}
         <header className="flex h-14 items-center justify-between border-b bg-white px-6 shadow-sm">
           <div className="flex items-center gap-2 text-sm text-slate-500">
             <Link href="/" className="hover:text-blue-600">首页</Link>
             <span className="text-slate-300">/</span>
-            <span className="font-medium text-slate-700">{getPageTitle(pathname)}</span>
+            <span className="font-medium text-slate-700">{getPageTitle(pathname, menuGroups)}</span>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
@@ -199,7 +202,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
         </header>
 
-        {/* Content */}
         <main className="flex-1 overflow-y-auto p-6">
           {children}
         </main>
@@ -208,9 +210,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   )
 }
 
-function MenuGroup({ group, pathname, collapsed }: { group: typeof menuGroups[0]; pathname: string; collapsed: boolean }) {
+function MenuGroup({ group, pathname, collapsed }: { group: SidebarGroup; pathname: string; collapsed: boolean }) {
   const hasActiveChild = group.children.some((item) => pathname === item.href || pathname.startsWith(item.href + "/"))
   const [open, setOpen] = useState(hasActiveChild)
+
+  useEffect(() => {
+    if (hasActiveChild) setOpen(true)
+  }, [hasActiveChild])
 
   if (collapsed) {
     return (
@@ -261,41 +267,14 @@ function MenuGroup({ group, pathname, collapsed }: { group: typeof menuGroups[0]
   )
 }
 
-function getPageTitle(pathname: string): string {
-  const map: Record<string, string> = {
-    "/admin/system/users": "用户管理",
-    "/admin/system/roles": "角色管理",
-    "/admin/system/menus": "菜单管理",
-    "/admin/system/depts": "部门管理",
-    "/admin/system/posts": "岗位管理",
-    "/admin/system/dicts": "字典管理",
-    "/admin/system/tenants": "租户管理",
-    "/admin/system/tenant-packages": "租户套餐",
-    "/admin/system/notices": "通知公告",
-    "/admin/system/online-users": "在线用户",
-    "/admin/system/login-logs": "登录日志",
-    "/admin/system/operate-logs": "操作日志",
-    "/admin/system/oauth2-clients": "OAuth2 客户端",
-    "/admin/system/oauth2-tokens": "令牌管理",
-    "/admin/system/social-users": "社交用户",
-    "/admin/system/sms-channels": "短信渠道",
-    "/admin/system/sms-logs": "短信日志",
-    "/admin/system/mail-accounts": "邮箱账号",
-    "/admin/system/mail-logs": "邮件日志",
-    "/admin/system/notify-templates": "通知模板",
-    "/admin/system/notify-messages": "通知记录",
-    "/admin/infra/configs": "参数设置",
-    "/admin/infra/job-center": "定时任务",
-    "/admin/infra/files": "文件管理",
-    "/admin/infra/codegen": "代码生成",
-    "/admin/infra/page-builder": "页面构建",
-    "/admin/infra/api-logs": "API 日志",
-    "/admin/infra/api-error-logs": "错误日志",
-    "/admin/infra/db-configs": "数据源配置",
-    "/admin/pay/orders": "支付订单",
-    "/admin/pay/refunds": "退款订单",
-    "/admin/crm/customers": "客户管理",
-    "/admin/crm/clues": "线索管理",
+function getPageTitle(pathname: string, menuGroups: SidebarGroup[]): string {
+  // Dynamic: look up from current menu groups
+  for (const group of menuGroups) {
+    for (const item of group.children) {
+      if (pathname === item.href || pathname.startsWith(item.href + "/")) {
+        return item.label
+      }
+    }
   }
-  return map[pathname] || "管理后台"
+  return "管理后台"
 }

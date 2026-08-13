@@ -1,3 +1,2 @@
-import AiImagePage from "@/modules/ai/frontend/pages/ai-image.page"
+﻿export { default } from "@/modules/ai/frontend/pages/ai-image.page"
 
-export default AiImagePage

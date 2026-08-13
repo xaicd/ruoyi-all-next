@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { operateLogQuerySchema } from "@/modules/system/backend/validators"
-import { SystemOperateLogService } from "@/modules/system/backend/services/operate-log.service"
+import { OperateLogService } from "@/modules/system/backend/services/operate-log.service"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
@@ -15,7 +15,7 @@ export async function GET(request: Request) {
       module: searchParams.get("module") ?? undefined,
     })
 
-    const data = await SystemOperateLogService.exportCsv(input)
+    const data = await OperateLogService.exportCsv(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message ?? "导出失败" }, { status: 400 })

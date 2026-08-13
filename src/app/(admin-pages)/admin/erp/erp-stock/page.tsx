@@ -1,3 +1,2 @@
-import ErpStockPage from "@/modules/erp/frontend/pages/erp-stock.page"
+﻿export { default } from "@/modules/erp/frontend/pages/erp-stock.page"
 
-export default ErpStockPage

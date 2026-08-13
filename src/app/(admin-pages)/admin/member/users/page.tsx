@@ -1,3 +1,1 @@
-import MemberUsersModulePage from "@/modules/member/frontend/pages/member-users.page"
-
-export default MemberUsersModulePage
+export { default } from "@/modules/member/frontend/pages/member-users.page"

@@ -1,3 +1,1 @@
-import MailTemplatePage from "@/modules/system/frontend/pages/mail-template.page"
-
-export default MailTemplatePage
+export { default } from "@/modules/system/frontend/pages/mail-template.page"

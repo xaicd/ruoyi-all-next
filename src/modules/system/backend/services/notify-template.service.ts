@@ -24,3 +24,6 @@ export class NotifyTemplateService {
 
 // Alias for index.ts re-export
 export {  as  }
+
+// Alias for index.ts re-export
+export { NotifyTemplateService as SystemNotifyTemplateService }

@@ -180,3 +180,6 @@ export class SystemUserService {
     return { success: true }
   }
 }
+
+// Alias for codegen-generated routes
+export { SystemUserService as UserService }

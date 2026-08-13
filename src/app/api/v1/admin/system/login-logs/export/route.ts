@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { loginLogQuerySchema } from "@/modules/system/backend/validators"
-import { SystemLoginLogService } from "@/modules/system/backend/services/login-log.service"
+import { LoginLogService } from "@/modules/system/backend/services/login-log.service"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
@@ -15,7 +15,7 @@ export async function GET(request: Request) {
       result: searchParams.get("result") ?? undefined,
     })
 
-    const data = await SystemLoginLogService.exportCsv(input)
+    const data = await LoginLogService.exportCsv(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message ?? "导出失败" }, { status: 400 })
