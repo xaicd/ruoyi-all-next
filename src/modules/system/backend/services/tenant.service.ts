@@ -9,6 +9,7 @@ import { TenantPackageRepository } from "@/modules/system/backend/repositories/t
 import { SystemUserRepository } from "@/modules/system/backend/repositories/user.repository"
 import { SystemRoleRepository } from "@/modules/system/backend/repositories/role.repository"
 import { SystemPermissionService } from "@/modules/system/backend/services/permission.service"
+import { getTenantAssignableMenuIds } from "@/modules/system/backend/services/tenant-menu-scope.service"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 import { generateSalt, hashPassword } from "@/modules/shared/backend/lib/crypto"
 import { getKyselyDb, hasRealDatabase } from "@/modules/shared/backend/lib/database"
@@ -57,12 +58,13 @@ async function createInDatabase(input: CreateTenantWithAdminInput): Promise<{ id
     const now = new Date()
     const salt = generateSalt()
     const menuRows = await trx.selectFrom("system_tenant_package_menu").select("menu_id").where("package_id", "=", input.packageId).execute()
+    const safeMenuIds = await getTenantAssignableMenuIds(menuRows.map((row) => row.menu_id))
 
     await trx.insertInto("system_tenant").values({ id: tenantId, name: input.name, contact_name: input.contactName ?? null, contact_phone: input.contactPhone ?? null, domain: input.domain ?? null, package_id: input.packageId, status: input.status, expire_time: input.expireTime ? new Date(input.expireTime) : null, account_count: input.accountCount, created_at: now, updated_at: now, deleted: false }).execute()
     await trx.insertInto("system_user").values({ id: adminUserId, username: input.adminUsername, nickname: input.adminNickname, password: hashPassword(input.adminPassword, salt), salt, phone: input.adminPhone ?? null, email: input.adminEmail ?? null, avatar: null, status: "ACTIVE", dept_id: null, remark: "租户创建时自动初始化的管理员", login_ip: null, login_date: now, tenant_id: tenantId, created_at: now, updated_at: now, deleted: false }).execute()
     await trx.insertInto("system_role").values({ id: roleId, name: "租户管理员", code: `tenant_admin_${tenantId}`, sort: 0, status: "ACTIVE", remark: "租户创建时自动初始化", data_scope: "ALL", tenant_id: tenantId, created_at: now, updated_at: now, deleted: false }).execute()
     await trx.insertInto("system_user_role").values({ id: randomUUID(), user_id: adminUserId, role_id: roleId }).execute()
-    if (menuRows.length) await trx.insertInto("system_role_menu").values(menuRows.map((row) => ({ id: randomUUID(), role_id: roleId, menu_id: row.menu_id }))).execute()
+    if (safeMenuIds.size) await trx.insertInto("system_role_menu").values([...safeMenuIds].map((menuId) => ({ id: randomUUID(), role_id: roleId, menu_id: menuId }))).execute()
     return { id: tenantId, adminUserId }
   })
 }

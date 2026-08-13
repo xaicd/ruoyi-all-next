@@ -118,6 +118,13 @@ function SystemMenusPageContent() {
 
   // Flatten for table rendering
   const flatRows = flattenTree(tree, expandedIds)
+  const allRows = flattenTree(tree, new Set(getAllIds(tree)))
+  const blockedParentIds = new Set(editing
+    ? allRows.filter((row) => row.node.id === editing.id || row.parentIds.includes(editing.id)).map((row) => row.node.id)
+    : [])
+  const parentCandidates = allRows
+    .filter((row) => row.node.type !== "BUTTON" && !blockedParentIds.has(row.node.id))
+    .map((row) => ({ id: row.node.id, name: row.node.name, level: row.level }))
 
   // Filter by keyword if set
   const filteredRows = keyword
@@ -258,7 +265,7 @@ function SystemMenusPageContent() {
             <MenuForm
               menu={editing}
               defaultParentId={defaultParentId}
-              allMenus={flatRows.filter(r => r.node.type !== "BUTTON").map(r => ({ id: r.node.id, name: r.node.name, level: r.level }))}
+              allMenus={parentCandidates}
               onSubmit={handleSubmit}
               onClose={() => setShowForm(false)}
             />
@@ -303,7 +310,7 @@ function MenuForm({ menu, defaultParentId, allMenus, onSubmit, onClose }: {
       sort: Number(form.sort),
       status: form.status,
       visible: form.visible,
-      parentId: form.parentId || undefined,
+      parentId: form.parentId || null,
     })
   }
 

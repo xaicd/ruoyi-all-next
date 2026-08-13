@@ -26,7 +26,7 @@ export type CreateMenuData = {
   name: string
   permission?: string
   type: string
-  parentId?: string
+  parentId?: string | null
   path?: string
   component?: string
   icon?: string

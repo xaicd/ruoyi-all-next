@@ -98,7 +98,7 @@ export default function SystemTenantPackagesPage() {
                   <td className="px-4 py-3 font-medium">{pkg.name}</td>
                   <td className="px-4 py-3">
                     <span className="rounded-full bg-blue-50 px-2 py-0.5 text-xs text-blue-700">
-                      {pkg.menuIds.length === 0 ? "全部" : `${pkg.menuIds.length} 个`}
+                      {pkg.menuIds.length === 0 ? "未授权" : `${pkg.menuIds.length} 个`}
                     </span>
                   </td>
                   <td className="px-4 py-3">
@@ -147,7 +147,7 @@ function TenantPackageFormDialog({ pkg, onSubmit, onClose }: {
   const [expandAll, setExpandAll] = useState(false)
 
   useEffect(() => {
-    request.get(API.MENUS).then((res) => {
+    request.get(API.TENANT_PACKAGE_MENUS).then((res) => {
       if (res.success) setMenuTree(res.data)
       setLoading(false)
     })
@@ -236,7 +236,7 @@ function TenantPackageFormDialog({ pkg, onSubmit, onClose }: {
           {/* Menu Tree */}
           <div className="mx-5 mb-2 rounded-lg border flex-1 overflow-hidden flex flex-col">
             <div className="flex items-center justify-between border-b bg-slate-50 px-3 py-2">
-              <span className="text-xs font-medium text-slate-600">菜单权限 ({checkedIds.size} 项已选)</span>
+              <span className="text-xs font-medium text-slate-600">租户可授权菜单 ({checkedIds.size} 项已选)</span>
               <div className="flex gap-3 text-xs">
                 <button type="button" onClick={handleSelectAll} className="text-blue-600 hover:text-blue-800">全选</button>
                 <button type="button" onClick={handleDeselectAll} className="text-slate-500 hover:text-slate-700">全不选</button>

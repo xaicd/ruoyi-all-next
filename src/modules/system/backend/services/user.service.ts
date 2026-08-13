@@ -23,6 +23,7 @@ async function requireCurrentTenantDept(deptId: string | undefined): Promise<voi
   if (!deptId) return
   const dept = await SystemDeptRepository.findById(deptId)
   if (!dept) throw new Error(`部门不存在或不属于当前租户: ${deptId}`)
+  if (dept.status !== "ACTIVE") throw new Error(`部门已停用: ${deptId}`)
 }
 
 /** Enforce the tenant's purchased account capacity before adding a tenant user. */
@@ -75,7 +76,7 @@ export class SystemUserService {
   /** 创建用户 */
   static async create(input: CreateUserInput) {
     // 用户名唯一性检查
-    const existing = await SystemUserRepository.findByUsername(input.username)
+    const existing = await SystemUserRepository.findByUsernameInCurrentScope(input.username)
     if (existing) {
       throw new Error(`用户名已存在: ${input.username}`)
     }
@@ -121,7 +122,7 @@ export class SystemUserService {
 
     // 用户名唯一性检查
     if (input.username && input.username !== existing.username) {
-      const conflict = await SystemUserRepository.findByUsername(input.username)
+      const conflict = await SystemUserRepository.findByUsernameInCurrentScope(input.username)
       if (conflict) {
         throw new Error(`用户名已存在: ${input.username}`)
       }

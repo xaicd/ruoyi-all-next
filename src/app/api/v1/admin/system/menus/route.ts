@@ -2,12 +2,13 @@ import { NextResponse } from "next/server"
 import { SystemMenuService } from "@/modules/system/backend/services/menu.service"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
+import { requirePlatformAdmin } from "@/modules/shared/backend/auth/guards"
 import { z } from "zod"
 
 const createMenuSchema = z.object({
   name: z.string().trim().min(1).max(50),
   type: z.enum(["DIR", "MENU", "BUTTON"]),
-  parentId: z.string().trim().optional(),
+  parentId: z.string().trim().nullable().optional(),
   permission: z.string().trim().max(100).optional(),
   path: z.string().trim().max(200).optional(),
   component: z.string().trim().max(200).optional(),
@@ -20,19 +21,27 @@ const createMenuSchema = z.object({
 
 export async function GET(request: Request) {
   try {
-    ensurePermission(request, PERMISSIONS.SYSTEM_MENU_VIEW)
     const { searchParams } = new URL(request.url)
     const mode = searchParams.get("mode")
     const status = searchParams.get("status") || undefined
     const roleId = searchParams.get("roleId")?.trim()
 
     if (mode === "role-assign") {
+      ensurePermission(request, PERMISSIONS.SYSTEM_PERMISSION_ASSIGN_ROLE_MENU)
       if (!roleId) return NextResponse.json({ success: false, error: "roleId 不能为空" }, { status: 400 })
       const { SystemPermissionService } = await import("@/modules/system/backend/services/permission.service")
       const data = await SystemMenuService.treeByIds(await SystemPermissionService.getRoleAssignableMenuIds(roleId))
       return NextResponse.json({ success: true, data })
     }
 
+    if (mode === "tenant-package") {
+      requirePlatformAdmin(request, PERMISSIONS.SYSTEM_TENANT_PACKAGE_VIEW)
+      const { getTenantPackageCandidateMenuIds } = await import("@/modules/system/backend/services/tenant-menu-scope.service")
+      const data = await SystemMenuService.treeByIds(await getTenantPackageCandidateMenuIds())
+      return NextResponse.json({ success: true, data })
+    }
+
+    ensurePermission(request, PERMISSIONS.SYSTEM_MENU_VIEW)
     if (mode === "list") {
       const data = await SystemMenuService.list({ status })
       return NextResponse.json({ success: true, data })

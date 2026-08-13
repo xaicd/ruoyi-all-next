@@ -9,6 +9,7 @@ import { SEED_MENUS } from "../prisma/data/menus.seed-data"
 import { SEED_POSTS } from "../prisma/data/posts.seed-data"
 import { SEED_ROLES } from "../prisma/data/roles.seed-data"
 import { SEED_TENANT_PACKAGES } from "../prisma/data/tenant-packages.seed-data"
+import { TenantMenuScope } from "../src/modules/system/backend/services/tenant-menu-scope.service"
 import { SEED_USERS } from "../prisma/data/users.seed-data"
 
 function localEnvironment(): Record<string, string> {
@@ -105,9 +106,10 @@ async function main() {
     for (const menu of insertableMenus()) {
       await client.query(`INSERT INTO system_menu (id, name, permission, type, parent_id, path, component, icon, sort, status, visible, keep_alive, created_at, updated_at, deleted) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,false) ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, permission = EXCLUDED.permission, type = EXCLUDED.type, parent_id = EXCLUDED.parent_id, path = EXCLUDED.path, component = EXCLUDED.component, icon = EXCLUDED.icon, sort = EXCLUDED.sort, status = EXCLUDED.status, visible = EXCLUDED.visible, keep_alive = EXCLUDED.keep_alive, updated_at = EXCLUDED.updated_at, deleted = false`, [menu.id, menu.name, menu.permission, menu.type, menu.parentId, menu.path, menu.component, menu.icon, menu.sort, menu.status, menu.visible, menu.keepAlive, menu.createdAt, menu.updatedAt])
     }
+    const tenantMenuScope = new TenantMenuScope(SEED_MENUS)
     for (const pkg of SEED_TENANT_PACKAGES) {
       await client.query(`DELETE FROM system_tenant_package_menu WHERE package_id = $1`, [pkg.id])
-      for (const menuId of pkg.menuIds) await client.query(`INSERT INTO system_tenant_package_menu (id, package_id, menu_id) VALUES ($1,$2,$3) ON CONFLICT (package_id, menu_id) DO NOTHING`, [randomUUID(), pkg.id, menuId])
+      for (const menuId of tenantMenuScope.normalize(pkg.menuIds)) await client.query(`INSERT INTO system_tenant_package_menu (id, package_id, menu_id) VALUES ($1,$2,$3) ON CONFLICT (package_id, menu_id) DO NOTHING`, [randomUUID(), pkg.id, menuId])
     }
     // Historical all-next draft packages were not sourced from RuoYi. Keep rows for audit,
     // but remove them from the catalog after the demo tenant is reassigned to package 111.

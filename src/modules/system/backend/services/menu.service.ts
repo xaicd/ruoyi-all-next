@@ -22,6 +22,27 @@ function buildTree(list: SystemMenuRow[]): MenuTreeNode[] {
   return roots
 }
 
+async function validateParent(menuId: string | undefined, parentId: string | null | undefined, childType: string): Promise<void> {
+  if (parentId === undefined || parentId === null || parentId === "") return
+  if (parentId === menuId) throw new Error("不能将自己设为父菜单")
+
+  const parent = await SystemMenuRepository.findById(parentId)
+  if (!parent) throw new Error(`父菜单不存在: ${parentId}`)
+  if (parent.status !== "ACTIVE") throw new Error(`父菜单已停用: ${parentId}`)
+  if (parent.type === "BUTTON") throw new Error("按钮类型不能作为父菜单")
+  if (childType !== "DIR" && childType !== "MENU" && childType !== "BUTTON") throw new Error("菜单类型不合法")
+
+  const seen = new Set<string>()
+  let current: SystemMenuRow | null = parent
+  while (current) {
+    if (current.id === menuId) throw new Error("不能将菜单移动到自己的子菜单下")
+    if (seen.has(current.id)) throw new Error("菜单层级存在循环")
+    seen.add(current.id)
+    current = current.parentId ? await SystemMenuRepository.findById(current.parentId) : null
+    if (current === null) break
+  }
+}
+
 export class SystemMenuService {
   static async tree(params?: { status?: string }) {
     const list = await SystemMenuRepository.findAll(params)
@@ -51,16 +72,17 @@ export class SystemMenuService {
   }
 
   static async create(input: any) {
+    await validateParent(undefined, input.parentId, input.type)
     const menu = await SystemMenuRepository.create(input)
     domainLog.event("system.menu.create", { menuId: menu.id })
     domainLog.audit("system.menu.create", { targetType: "MENU", targetId: menu.id })
     return { id: menu.id }
   }
 
-  static async update(input: { id: string; name?: string; type?: string; parentId?: string; permission?: string; path?: string; component?: string; icon?: string; sort?: number; status?: string; visible?: boolean; keepAlive?: boolean }) {
+  static async update(input: { id: string; name?: string; type?: string; parentId?: string | null; permission?: string; path?: string; component?: string; icon?: string; sort?: number; status?: string; visible?: boolean; keepAlive?: boolean }) {
     const existing = await SystemMenuRepository.findById(input.id)
     if (!existing) throw new Error(`菜单不存在: ${input.id}`)
-    if (input.parentId === input.id) throw new Error("不能将自己设为父菜单")
+    await validateParent(input.id, input.parentId, input.type ?? existing.type)
 
     const { id, ...data } = input
     await SystemMenuRepository.update(id, data)

@@ -9,7 +9,7 @@ type RouteContext = { params: Promise<{ id: string }> }
 const updateMenuSchema = z.object({
   name: z.string().trim().min(1).max(50).optional(),
   type: z.enum(["DIR", "MENU", "BUTTON"]).optional(),
-  parentId: z.string().trim().optional(),
+  parentId: z.string().trim().nullable().optional(),
   permission: z.string().trim().max(100).optional(),
   path: z.string().trim().max(200).optional(),
   component: z.string().trim().max(200).optional(),

@@ -104,6 +104,11 @@ export const SystemUserRepository = {
     return MEMORY_STORE.find((u) => u.username === username && (!tenantId || u.tenantId === tenantId)) ?? null
   },
 
+  /** Business lookup scoped to the verified current tenant context. */
+  async findByUsernameInCurrentScope(username: string): Promise<SystemUserRow | null> {
+    return this.findByUsername(username, currentTenantId())
+  },
+
   /** 创建 */
   async create(data: CreateUserData): Promise<SystemUserRow> {
     const tenantId = currentTenantId()
