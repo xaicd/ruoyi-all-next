@@ -2,7 +2,10 @@ import { SystemMenuRepository } from "@/modules/system/backend/repositories/menu
 import { SystemPermissionRepository } from "@/modules/system/backend/repositories/permission.repository"
 import { SystemRoleRepository } from "@/modules/system/backend/repositories/role.repository"
 import { SystemUserRepository } from "@/modules/system/backend/repositories/user.repository"
+import { SystemTenantRepository } from "@/modules/system/backend/repositories/tenant.repository"
+import { TenantPackageRepository } from "@/modules/system/backend/repositories/tenant-package.repository"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
+import { getCurrentTenantId, isPlatformContext } from "@/modules/shared/backend/lib/biz-tenant"
 
 type AssignUserRoleInput = { userId: string; roleIds: string[] }
 type AssignRoleMenuInput = { roleId: string; menuIds: string[] }
@@ -25,9 +28,19 @@ async function requireRoleAndMenus(input: AssignRoleMenuInput): Promise<void> {
   const role = await SystemRoleRepository.findById(input.roleId)
   if (!role) throw new Error(`角色不存在或不属于当前租户: ${input.roleId}`)
 
+  const tenantId = getCurrentTenantId()
+  let allowedMenuIds: Set<string> | undefined
+  if (tenantId && !isPlatformContext()) {
+    const tenant = await SystemTenantRepository.findById(tenantId)
+    if (!tenant?.packageId) throw new Error("当前租户未分配套餐，不能配置角色菜单")
+    const pkg = await TenantPackageRepository.findById(tenant.packageId)
+    if (!pkg || pkg.status !== "ACTIVE") throw new Error("当前租户套餐不可用，不能配置角色菜单")
+    allowedMenuIds = new Set(pkg.menuIds)
+  }
   for (const menuId of input.menuIds) {
     const menu = await SystemMenuRepository.findById(menuId)
     if (!menu) throw new Error(`菜单不存在: ${menuId}`)
+    if (allowedMenuIds && !allowedMenuIds.has(menuId)) throw new Error(`菜单不在当前租户套餐范围内: ${menuId}`)
   }
 }
 
