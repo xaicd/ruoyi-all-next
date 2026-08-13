@@ -147,6 +147,22 @@ export interface SystemTenantTable {
   deleted: Generated<boolean>
 }
 
+export interface SystemTenantPackageTable {
+  id: string
+  name: string
+  status: string
+  remark: string | null
+  created_at: Generated<Date>
+  updated_at: Date
+  deleted: Generated<boolean>
+}
+
+export interface SystemTenantPackageMenuTable {
+  id: string
+  package_id: string
+  menu_id: string
+}
+
 export interface SystemNoticeTable {
   id: Generated<string>
   title: string
@@ -307,6 +323,8 @@ export interface DB {
   system_dict_type: SystemDictTypeTable
   system_dict_data: SystemDictDataTable
   system_tenant: SystemTenantTable
+  system_tenant_package: SystemTenantPackageTable
+  system_tenant_package_menu: SystemTenantPackageMenuTable
   system_notice: SystemNoticeTable
   system_login_log: SystemLoginLogTable
   system_operate_log: SystemOperateLogTable

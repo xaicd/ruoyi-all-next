@@ -100,9 +100,10 @@ model SystemMenu {
   updatedAt  DateTime @updatedAt @map("updated_at")
   deleted    Boolean  @default(false)
 
-  parent    SystemMenu?  @relation("MenuTree", fields: [parentId], references: [id])
-  children  SystemMenu[] @relation("MenuTree")
-  roleMenus SystemRoleMenu[]
+  parent       SystemMenu?              @relation("MenuTree", fields: [parentId], references: [id])
+  children     SystemMenu[]             @relation("MenuTree")
+  roleMenus    SystemRoleMenu[]
+  packageMenus SystemTenantPackageMenu[]
 
   @@map("system_menu")
   @@index([parentId])
@@ -215,20 +216,51 @@ model SystemDictData {
 
 /// 租户
 model SystemTenant {
-  id          String   @id @default(cuid())
-  name        String   @db.VarChar(50)
-  contactName String?  @map("contact_name") @db.VarChar(30)
-  contactPhone String? @map("contact_phone") @db.VarChar(20)
-  domain      String?  @db.VarChar(100)
-  packageId   String?  @map("package_id")
-  status      String   @default("ACTIVE") @db.VarChar(10)
-  expireTime  DateTime? @map("expire_time")
-  accountCount Int     @default(0) @map("account_count")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-  deleted     Boolean  @default(false)
+  id           String               @id @default(cuid())
+  name         String               @db.VarChar(50)
+  contactName  String?              @map("contact_name") @db.VarChar(30)
+  contactPhone String?              @map("contact_phone") @db.VarChar(20)
+  domain       String?              @db.VarChar(100)
+  packageId    String?              @map("package_id")
+  package      SystemTenantPackage? @relation(fields: [packageId], references: [id], onDelete: Restrict)
+  status       String               @default("ACTIVE") @db.VarChar(10)
+  expireTime   DateTime?            @map("expire_time")
+  accountCount Int                  @default(0) @map("account_count")
+  createdAt    DateTime             @default(now()) @map("created_at")
+  updatedAt    DateTime             @updatedAt @map("updated_at")
+  deleted      Boolean              @default(false)
 
   @@map("system_tenant")
+  @@index([packageId])
+}
+
+/// 平台全局租户套餐
+model SystemTenantPackage {
+  id          String                    @id @default(cuid())
+  name        String                    @unique @db.VarChar(50)
+  status      String                    @default("ACTIVE") @db.VarChar(10)
+  remark      String?                   @db.VarChar(500)
+  createdAt   DateTime                  @default(now()) @map("created_at")
+  updatedAt   DateTime                  @updatedAt @map("updated_at")
+  deleted     Boolean                   @default(false)
+
+  tenants     SystemTenant[]
+  packageMenus SystemTenantPackageMenu[]
+
+  @@map("system_tenant_package")
+  @@index([status])
+}
+
+/// 租户套餐可用菜单关联
+model SystemTenantPackageMenu {
+  id        String              @id @default(cuid())
+  packageId String              @map("package_id")
+  menuId    String              @map("menu_id")
+  package   SystemTenantPackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  menu      SystemMenu          @relation(fields: [menuId], references: [id], onDelete: Restrict)
+
+  @@unique([packageId, menuId])
+  @@map("system_tenant_package_menu")
 }
 
 /// 通知公告

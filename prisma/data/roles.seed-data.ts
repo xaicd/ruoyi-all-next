@@ -61,5 +61,17 @@ export const SEED_ROLES: SystemRoleRow[] = [
     "tenantId": "1",
     "createdAt": "2026-01-01T00:00:00.000Z",
     "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "6",
+    "name": "平台管理员",
+    "code": "platform-admin",
+    "sort": 0,
+    "status": "ACTIVE",
+    "dataScope": "ALL",
+    "remark": "租户与套餐控制面管理员",
+    "tenantId": null,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
   }
 ]

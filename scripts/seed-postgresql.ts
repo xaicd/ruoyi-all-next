@@ -8,6 +8,7 @@ import { SEED_DICT_TYPES } from "../prisma/data/dict-types.seed-data"
 import { SEED_MENUS } from "../prisma/data/menus.seed-data"
 import { SEED_POSTS } from "../prisma/data/posts.seed-data"
 import { SEED_ROLES } from "../prisma/data/roles.seed-data"
+import { SEED_TENANT_PACKAGES } from "../prisma/data/tenant-packages.seed-data"
 import { SEED_USERS } from "../prisma/data/users.seed-data"
 
 function localEnvironment(): Record<string, string> {
@@ -59,6 +60,10 @@ async function main() {
   try {
     await client.query("BEGIN")
 
+    for (const pkg of SEED_TENANT_PACKAGES) {
+      await client.query(`INSERT INTO system_tenant_package (id, name, status, remark, created_at, updated_at, deleted) VALUES ($1,$2,$3,$4,$5,$6,false) ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, status = EXCLUDED.status, remark = EXCLUDED.remark, updated_at = EXCLUDED.updated_at, deleted = false`, [pkg.id, pkg.name, pkg.status, pkg.remark, pkg.createdAt, pkg.updatedAt])
+    }
+
     await client.query(`INSERT INTO system_tenant (id, name, contact_name, contact_phone, domain, package_id, status, expire_time, account_count, created_at, updated_at, deleted) VALUES ('1','默认租户','管理员','13800000001',NULL,NULL,'ACTIVE','2030-12-31T23:59:59.000Z',999,'2026-01-01T00:00:00.000Z','2026-01-01T00:00:00.000Z',false) ON CONFLICT (id) DO NOTHING`)
     await client.query(`INSERT INTO system_tenant (id, name, contact_name, contact_phone, domain, package_id, status, expire_time, account_count, created_at, updated_at, deleted) VALUES ('2','演示租户','张三','13900000001','demo.ruoyi.local','1','ACTIVE','2027-06-30T23:59:59.000Z',50,'2026-03-01T00:00:00.000Z','2026-03-01T00:00:00.000Z',false) ON CONFLICT (id) DO NOTHING`)
 
@@ -97,14 +102,22 @@ async function main() {
     const templateUser = SEED_USERS[0]
     const adminResult = await client.query<{ id: string }>(`INSERT INTO "system_user" (id, username, nickname, password, salt, phone, email, avatar, status, dept_id, remark, tenant_id, created_at, updated_at, deleted) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'ACTIVE',$9,$10,$11,$12,$13,false) ON CONFLICT (username) DO UPDATE SET nickname = EXCLUDED.nickname, password = EXCLUDED.password, salt = EXCLUDED.salt, status = 'ACTIVE', deleted = false, updated_at = EXCLUDED.updated_at RETURNING id`, [randomUUID(), bootstrapUsername, "本地开发管理员", passwordHash(bootstrapPassword, bootstrapSalt), bootstrapSalt, templateUser.phone, templateUser.email, templateUser.avatar, templateUser.deptId, "本地环境专用管理员", templateUser.tenantId, templateUser.createdAt, new Date().toISOString()])
     const adminId = adminResult.rows[0].id
-    const roleResult = await client.query<{ id: string }>(`SELECT id FROM system_role WHERE code = 'super_admin' LIMIT 1`)
-    const roleId = roleResult.rows[0]?.id
-    if (!roleId) throw new Error("super_admin role was not seeded")
     for (const menu of insertableMenus()) {
       await client.query(`INSERT INTO system_menu (id, name, permission, type, parent_id, path, component, icon, sort, status, visible, keep_alive, created_at, updated_at, deleted) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,false) ON CONFLICT (id) DO NOTHING`, [menu.id, menu.name, menu.permission, menu.type, menu.parentId, menu.path, menu.component, menu.icon, menu.sort, menu.status, menu.visible, menu.keepAlive, menu.createdAt, menu.updatedAt])
     }
-    await client.query(`INSERT INTO system_user_role (id, user_id, role_id) VALUES ($1,$2,$3) ON CONFLICT (user_id, role_id) DO NOTHING`, [randomUUID(), adminId, roleId])
-    for (const menu of insertableMenus()) await client.query(`INSERT INTO system_role_menu (id, role_id, menu_id) VALUES ($1,$2,$3) ON CONFLICT (role_id, menu_id) DO NOTHING`, [randomUUID(), roleId, menu.id])
+    for (const pkg of SEED_TENANT_PACKAGES) {
+      await client.query(`DELETE FROM system_tenant_package_menu WHERE package_id = $1`, [pkg.id])
+      for (const menuId of pkg.menuIds) await client.query(`INSERT INTO system_tenant_package_menu (id, package_id, menu_id) VALUES ($1,$2,$3) ON CONFLICT (package_id, menu_id) DO NOTHING`, [randomUUID(), pkg.id, menuId])
+    }
+    const roleResult = await client.query<{ id: string }>(`SELECT id FROM system_role WHERE code = 'super_admin' LIMIT 1`)
+    const platformRoleResult = await client.query<{ id: string }>(`SELECT id FROM system_role WHERE code = 'platform-admin' LIMIT 1`)
+    const roleId = roleResult.rows[0]?.id
+    const platformRoleId = platformRoleResult.rows[0]?.id
+    if (!roleId || !platformRoleId) throw new Error("super_admin and platform-admin roles must be seeded")
+    for (const assignedRoleId of [roleId, platformRoleId]) {
+      await client.query(`INSERT INTO system_user_role (id, user_id, role_id) VALUES ($1,$2,$3) ON CONFLICT (user_id, role_id) DO NOTHING`, [randomUUID(), adminId, assignedRoleId])
+      for (const menu of insertableMenus()) await client.query(`INSERT INTO system_role_menu (id, role_id, menu_id) VALUES ($1,$2,$3) ON CONFLICT (role_id, menu_id) DO NOTHING`, [randomUUID(), assignedRoleId, menu.id])
+    }
     await client.query("COMMIT")
     console.log(`[seed] PostgreSQL catalog seeded: ${SEED_ROLES.length} roles, ${SEED_DEPTS.length} departments, ${SEED_POSTS.length} posts, ${SEED_DICT_TYPES.length} dictionary types, ${SEED_DICT_DATA.length} dictionary entries, and ${SEED_MENUS.length} menus.`)
   } catch (error) {
