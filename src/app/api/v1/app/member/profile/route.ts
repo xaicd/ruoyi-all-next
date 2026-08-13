@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { requireAppLogin } from "@/modules/shared/backend/lib/app-auth-guard"
+import { getAuthErrorStatus } from "@/modules/shared/backend/auth/guards"
 
 /**
  * 会员个人中心 - 需要登录

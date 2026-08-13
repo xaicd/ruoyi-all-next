@@ -1,3 +1,5 @@
+import { getTenantContext } from "./biz-tenant"
+
 type DomainEventRecord = {
   name: string
   payload?: Record<string, unknown>
@@ -19,10 +21,12 @@ const AUDIT_BUFFER: DomainAuditRecord[] = []
  */
 export const domainLog = {
   event(name: string, payload?: Record<string, unknown>) {
-    EVENT_BUFFER.push({ name, payload, createdAt: new Date().toISOString() })
+    const context = getTenantContext()
+    EVENT_BUFFER.push({ name, payload: { ...payload, tenantId: context?.tenantId }, createdAt: new Date().toISOString() })
   },
   audit(action: string, payload?: Record<string, unknown>) {
-    AUDIT_BUFFER.push({ action, payload, createdAt: new Date().toISOString() })
+    const context = getTenantContext()
+    AUDIT_BUFFER.push({ action, payload: { ...payload, tenantId: context?.tenantId, actorId: context?.actorId }, createdAt: new Date().toISOString() })
   },
 }
 

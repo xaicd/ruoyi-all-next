@@ -5,6 +5,7 @@
 
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
 import type { PageResult } from "@/modules/shared/backend/lib/database"
+import { getCurrentTenantId, isPlatformContext, isTenantRequired } from "@/modules/shared/backend/lib/biz-tenant"
 import { SEED_ROLES } from "@prisma/data"
 
 export type SystemRoleRow = {
@@ -39,45 +40,58 @@ export type RoleListParams = {
 }
 
 // === 内存存储 ===
+function currentTenantId(): string | undefined {
+  const tenantId = getCurrentTenantId()
+  if (tenantId) return tenantId
+  if (isTenantRequired() && !isPlatformContext()) throw new Error("角色数据访问缺少租户上下文")
+  return undefined
+}
+
 const MEMORY_STORE: SystemRoleRow[] = [...SEED_ROLES]
 
 let memoryIdSeq = 100
 
 export const SystemRoleRepository = {
   async findList(params: RoleListParams): Promise<PageResult<SystemRoleRow>> {
-    if (hasRealDatabase()) return findListFromDb(params)
-    return findListFromMemory(params)
+    const tenantId = currentTenantId()
+    if (hasRealDatabase()) return findListFromDb(params, tenantId)
+    return findListFromMemory(params, tenantId)
   },
 
   async findById(id: string): Promise<SystemRoleRow | null> {
-    if (hasRealDatabase()) return findByIdFromDb(id)
-    return MEMORY_STORE.find((r) => r.id === id) ?? null
+    const tenantId = currentTenantId()
+    if (hasRealDatabase()) return findByIdFromDb(id, tenantId)
+    return MEMORY_STORE.find((r) => r.id === id && (!tenantId || r.tenantId === tenantId)) ?? null
   },
 
   async findByCode(code: string): Promise<SystemRoleRow | null> {
-    if (hasRealDatabase()) return findByCodeFromDb(code)
-    return MEMORY_STORE.find((r) => r.code === code) ?? null
+    const tenantId = currentTenantId()
+    if (hasRealDatabase()) return findByCodeFromDb(code, tenantId)
+    return MEMORY_STORE.find((r) => r.code === code && (!tenantId || r.tenantId === tenantId)) ?? null
   },
 
   async create(data: CreateRoleData): Promise<SystemRoleRow> {
-    if (hasRealDatabase()) return createInDb(data)
-    return createInMemory(data)
+    const tenantId = currentTenantId()
+    if (hasRealDatabase()) return createInDb(data, tenantId)
+    return createInMemory(data, tenantId)
   },
 
   async update(id: string, data: UpdateRoleData): Promise<SystemRoleRow> {
-    if (hasRealDatabase()) return updateInDb(id, data)
-    return updateInMemory(id, data)
+    const tenantId = currentTenantId()
+    if (hasRealDatabase()) return updateInDb(id, data, tenantId)
+    return updateInMemory(id, data, tenantId)
   },
 
   async delete(id: string): Promise<void> {
-    if (hasRealDatabase()) return deleteInDb(id)
-    return deleteInMemory(id)
+    const tenantId = currentTenantId()
+    if (hasRealDatabase()) return deleteInDb(id, tenantId)
+    return deleteInMemory(id, tenantId)
   },
 }
 
 // === Kysely DB 实现 ===
 
-async function findListFromDb(params: RoleListParams): Promise<PageResult<SystemRoleRow>> {
+async function findListFromDb(params: RoleListParams, tenantId?: string): Promise<PageResult<SystemRoleRow>> {
   const db = await getKyselyDb()
   let query = db.selectFrom("system_role").where("deleted", "=", false)
 
@@ -86,6 +100,7 @@ async function findListFromDb(params: RoleListParams): Promise<PageResult<System
     query = query.where((eb) => eb.or([eb("name", "like", kw), eb("code", "like", kw)]))
   }
   if (params.status) query = query.where("status", "=", params.status)
+  if (tenantId) query = query.where("tenant_id", "=", tenantId)
 
   const countResult = await query.select((eb) => eb.fn.countAll<number>().as("count")).executeTakeFirst()
   const total = Number(countResult?.count ?? 0)
@@ -96,19 +111,23 @@ async function findListFromDb(params: RoleListParams): Promise<PageResult<System
   return { items: rows.map(mapDbRow), total, page: params.page, pageSize: params.pageSize }
 }
 
-async function findByIdFromDb(id: string): Promise<SystemRoleRow | null> {
+async function findByIdFromDb(id: string, tenantId?: string): Promise<SystemRoleRow | null> {
   const db = await getKyselyDb()
-  const row = await db.selectFrom("system_role").selectAll().where("id", "=", id).where("deleted", "=", false).executeTakeFirst()
+  let query = db.selectFrom("system_role").selectAll().where("id", "=", id).where("deleted", "=", false)
+  if (tenantId) query = query.where("tenant_id", "=", tenantId)
+  const row = await query.executeTakeFirst()
   return row ? mapDbRow(row) : null
 }
 
-async function findByCodeFromDb(code: string): Promise<SystemRoleRow | null> {
+async function findByCodeFromDb(code: string, tenantId?: string): Promise<SystemRoleRow | null> {
   const db = await getKyselyDb()
-  const row = await db.selectFrom("system_role").selectAll().where("code", "=", code).where("deleted", "=", false).executeTakeFirst()
+  let query = db.selectFrom("system_role").selectAll().where("code", "=", code).where("deleted", "=", false)
+  if (tenantId) query = query.where("tenant_id", "=", tenantId)
+  const row = await query.executeTakeFirst()
   return row ? mapDbRow(row) : null
 }
 
-async function createInDb(data: CreateRoleData): Promise<SystemRoleRow> {
+async function createInDb(data: CreateRoleData, tenantId?: string): Promise<SystemRoleRow> {
   const db = await getKyselyDb()
   const row = await db.insertInto("system_role").values({
     name: data.name,
@@ -117,14 +136,14 @@ async function createInDb(data: CreateRoleData): Promise<SystemRoleRow> {
     status: data.status ?? "ACTIVE",
     data_scope: data.dataScope ?? "ALL",
     remark: data.remark ?? null,
-    tenant_id: null,
+    tenant_id: tenantId ?? null,
     updated_at: new Date(),
     deleted: false,
   } as any).returningAll().executeTakeFirstOrThrow()
   return mapDbRow(row)
 }
 
-async function updateInDb(id: string, data: UpdateRoleData): Promise<SystemRoleRow> {
+async function updateInDb(id: string, data: UpdateRoleData, tenantId?: string): Promise<SystemRoleRow> {
   const db = await getKyselyDb()
   const updateData: Record<string, any> = { updated_at: new Date() }
   if (data.name !== undefined) updateData.name = data.name
@@ -134,13 +153,17 @@ async function updateInDb(id: string, data: UpdateRoleData): Promise<SystemRoleR
   if (data.dataScope !== undefined) updateData.data_scope = data.dataScope
   if (data.remark !== undefined) updateData.remark = data.remark
 
-  const row = await db.updateTable("system_role").set(updateData).where("id", "=", id).where("deleted", "=", false).returningAll().executeTakeFirstOrThrow()
+  let query = db.updateTable("system_role").set(updateData).where("id", "=", id).where("deleted", "=", false)
+  if (tenantId) query = query.where("tenant_id", "=", tenantId)
+  const row = await query.returningAll().executeTakeFirstOrThrow()
   return mapDbRow(row)
 }
 
-async function deleteInDb(id: string): Promise<void> {
+async function deleteInDb(id: string, tenantId?: string): Promise<void> {
   const db = await getKyselyDb()
-  await db.updateTable("system_role").set({ deleted: true, updated_at: new Date() }).where("id", "=", id).execute()
+  let query = db.updateTable("system_role").set({ deleted: true, updated_at: new Date() }).where("id", "=", id)
+  if (tenantId) query = query.where("tenant_id", "=", tenantId)
+  await query.execute()
 }
 
 function mapDbRow(row: any): SystemRoleRow {
@@ -160,8 +183,9 @@ function mapDbRow(row: any): SystemRoleRow {
 
 // === 内存实现 ===
 
-function findListFromMemory(params: RoleListParams): PageResult<SystemRoleRow> {
+function findListFromMemory(params: RoleListParams, tenantId?: string): PageResult<SystemRoleRow> {
   let filtered = [...MEMORY_STORE]
+  if (tenantId) filtered = filtered.filter((r) => r.tenantId === tenantId)
   if (params.keyword) {
     const kw = params.keyword.toLowerCase()
     filtered = filtered.filter((r) => r.name.toLowerCase().includes(kw) || r.code.toLowerCase().includes(kw))
@@ -174,7 +198,7 @@ function findListFromMemory(params: RoleListParams): PageResult<SystemRoleRow> {
   return { items: filtered.slice(start, start + params.pageSize), total, page: params.page, pageSize: params.pageSize }
 }
 
-function createInMemory(data: CreateRoleData): SystemRoleRow {
+function createInMemory(data: CreateRoleData, tenantId?: string): SystemRoleRow {
   const now = new Date().toISOString()
   const row: SystemRoleRow = {
     id: String(++memoryIdSeq),
@@ -184,7 +208,7 @@ function createInMemory(data: CreateRoleData): SystemRoleRow {
     status: data.status ?? "ACTIVE",
     dataScope: data.dataScope ?? "ALL",
     remark: data.remark ?? null,
-    tenantId: null,
+    tenantId: tenantId ?? null,
     createdAt: now,
     updatedAt: now,
   }
@@ -192,8 +216,8 @@ function createInMemory(data: CreateRoleData): SystemRoleRow {
   return row
 }
 
-function updateInMemory(id: string, data: UpdateRoleData): SystemRoleRow {
-  const idx = MEMORY_STORE.findIndex((r) => r.id === id)
+function updateInMemory(id: string, data: UpdateRoleData, tenantId?: string): SystemRoleRow {
+  const idx = MEMORY_STORE.findIndex((r) => r.id === id && (!tenantId || r.tenantId === tenantId))
   if (idx === -1) throw new Error(`角色不存在: ${id}`)
   const role = MEMORY_STORE[idx]
   const updated: SystemRoleRow = {
@@ -210,8 +234,8 @@ function updateInMemory(id: string, data: UpdateRoleData): SystemRoleRow {
   return updated
 }
 
-function deleteInMemory(id: string): void {
-  const idx = MEMORY_STORE.findIndex((r) => r.id === id)
+function deleteInMemory(id: string, tenantId?: string): void {
+  const idx = MEMORY_STORE.findIndex((r) => r.id === id && (!tenantId || r.tenantId === tenantId))
   if (idx === -1) throw new Error(`角色不存在: ${id}`)
   if (MEMORY_STORE[idx].code === "super_admin") throw new Error("不允许删除超级管理员角色")
   MEMORY_STORE.splice(idx, 1)

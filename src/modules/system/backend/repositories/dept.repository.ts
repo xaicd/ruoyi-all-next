@@ -3,6 +3,7 @@
  */
 
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
+import { getCurrentTenantId, isPlatformContext, isTenantRequired } from "@/modules/shared/backend/lib/biz-tenant"
 import { SEED_DEPTS } from "@prisma/data"
 
 export type SystemDeptRow = {
@@ -31,6 +32,13 @@ export type CreateDeptData = {
 
 export type UpdateDeptData = Partial<CreateDeptData>
 
+function currentTenantId(): string | undefined {
+  const tenantId = getCurrentTenantId()
+  if (tenantId) return tenantId
+  if (isTenantRequired() && !isPlatformContext()) throw new Error("部门数据访问缺少租户上下文")
+  return undefined
+}
+
 // === 内存存储（对标 ruoyi-vue-pro 种子数据） ===
 const MEMORY_STORE: SystemDeptRow[] = [...SEED_DEPTS]
 
@@ -39,67 +47,46 @@ let memoryIdSeq = 200
 export const SystemDeptRepository = {
   /** 获取全部部门列表（树形场景需要全量） */
   async findAll(params?: { status?: string; keyword?: string }): Promise<SystemDeptRow[]> {
-    if (hasRealDatabase()) return findAllFromDb(params)
-    let filtered = [...MEMORY_STORE]
+    const tenantId = currentTenantId()
+    if (hasRealDatabase()) return findAllFromDb(params, tenantId)
+    let filtered = MEMORY_STORE.filter((d) => !tenantId || d.tenantId === tenantId)
     if (params?.status) filtered = filtered.filter((d) => d.status === params.status)
-    if (params?.keyword) {
-      const kw = params.keyword.toLowerCase()
-      filtered = filtered.filter((d) => d.name.toLowerCase().includes(kw))
-    }
+    if (params?.keyword) filtered = filtered.filter((d) => d.name.toLowerCase().includes(params.keyword!.toLowerCase()))
     return filtered.sort((a, b) => a.sort - b.sort)
   },
 
   async findById(id: string): Promise<SystemDeptRow | null> {
-    if (hasRealDatabase()) return findByIdFromDb(id)
-    return MEMORY_STORE.find((d) => d.id === id) ?? null
+    const tenantId = currentTenantId()
+    if (hasRealDatabase()) return findByIdFromDb(id, tenantId)
+    return MEMORY_STORE.find((d) => d.id === id && (!tenantId || d.tenantId === tenantId)) ?? null
   },
 
   async create(data: CreateDeptData): Promise<SystemDeptRow> {
-    if (hasRealDatabase()) return createInDb(data)
+    const tenantId = currentTenantId()
+    if (hasRealDatabase()) return createInDb(data, tenantId)
     const now = new Date().toISOString()
-    const row: SystemDeptRow = {
-      id: String(++memoryIdSeq),
-      name: data.name,
-      parentId: data.parentId ?? null,
-      sort: data.sort ?? 0,
-      leaderId: data.leaderId ?? null,
-      phone: data.phone ?? null,
-      email: data.email ?? null,
-      status: data.status ?? "ACTIVE",
-      tenantId: null,
-      createdAt: now,
-      updatedAt: now,
-    }
+    const row: SystemDeptRow = { id: String(++memoryIdSeq), name: data.name, parentId: data.parentId ?? null, sort: data.sort ?? 0, leaderId: data.leaderId ?? null, phone: data.phone ?? null, email: data.email ?? null, status: data.status ?? "ACTIVE", tenantId: tenantId ?? null, createdAt: now, updatedAt: now }
     MEMORY_STORE.push(row)
     return row
   },
 
   async update(id: string, data: UpdateDeptData): Promise<SystemDeptRow> {
-    if (hasRealDatabase()) return updateInDb(id, data)
-    const idx = MEMORY_STORE.findIndex((d) => d.id === id)
+    const tenantId = currentTenantId()
+    if (hasRealDatabase()) return updateInDb(id, data, tenantId)
+    const idx = MEMORY_STORE.findIndex((d) => d.id === id && (!tenantId || d.tenantId === tenantId))
     if (idx === -1) throw new Error(`部门不存在: ${id}`)
     const dept = MEMORY_STORE[idx]
-    const updated: SystemDeptRow = {
-      ...dept,
-      name: data.name ?? dept.name,
-      parentId: data.parentId !== undefined ? (data.parentId ?? null) : dept.parentId,
-      sort: data.sort ?? dept.sort,
-      leaderId: data.leaderId !== undefined ? (data.leaderId ?? null) : dept.leaderId,
-      phone: data.phone !== undefined ? (data.phone ?? null) : dept.phone,
-      email: data.email !== undefined ? (data.email ?? null) : dept.email,
-      status: data.status ?? dept.status,
-      updatedAt: new Date().toISOString(),
-    }
+    const updated: SystemDeptRow = { ...dept, name: data.name ?? dept.name, parentId: data.parentId !== undefined ? (data.parentId ?? null) : dept.parentId, sort: data.sort ?? dept.sort, leaderId: data.leaderId !== undefined ? (data.leaderId ?? null) : dept.leaderId, phone: data.phone !== undefined ? (data.phone ?? null) : dept.phone, email: data.email !== undefined ? (data.email ?? null) : dept.email, status: data.status ?? dept.status, updatedAt: new Date().toISOString() }
     MEMORY_STORE[idx] = updated
     return updated
   },
 
   async delete(id: string): Promise<void> {
-    if (hasRealDatabase()) return deleteInDb(id)
-    // 检查是否有子部门
-    const hasChildren = MEMORY_STORE.some((d) => d.parentId === id)
+    const tenantId = currentTenantId()
+    if (hasRealDatabase()) return deleteInDb(id, tenantId)
+    const hasChildren = MEMORY_STORE.some((d) => d.parentId === id && (!tenantId || d.tenantId === tenantId))
     if (hasChildren) throw new Error("该部门下存在子部门，无法删除")
-    const idx = MEMORY_STORE.findIndex((d) => d.id === id)
+    const idx = MEMORY_STORE.findIndex((d) => d.id === id && (!tenantId || d.tenantId === tenantId))
     if (idx === -1) throw new Error(`部门不存在: ${id}`)
     MEMORY_STORE.splice(idx, 1)
   },
@@ -107,22 +94,25 @@ export const SystemDeptRepository = {
 
 // === Kysely 实现 ===
 
-async function findAllFromDb(params?: { status?: string; keyword?: string }): Promise<SystemDeptRow[]> {
+async function findAllFromDb(params: { status?: string; keyword?: string } | undefined, tenantId?: string): Promise<SystemDeptRow[]> {
   const db = await getKyselyDb()
   let query = db.selectFrom("system_dept").where("deleted", "=", false)
   if (params?.status) query = query.where("status", "=", params.status)
   if (params?.keyword) query = query.where("name", "like", `%${params.keyword}%`)
+  if (tenantId) query = query.where("tenant_id", "=", tenantId)
   const rows = await query.selectAll().orderBy("sort", "asc").execute()
   return rows.map(mapDbRow)
 }
 
-async function findByIdFromDb(id: string): Promise<SystemDeptRow | null> {
+async function findByIdFromDb(id: string, tenantId?: string): Promise<SystemDeptRow | null> {
   const db = await getKyselyDb()
-  const row = await db.selectFrom("system_dept").selectAll().where("id", "=", id).where("deleted", "=", false).executeTakeFirst()
+  let query = db.selectFrom("system_dept").selectAll().where("id", "=", id).where("deleted", "=", false)
+  if (tenantId) query = query.where("tenant_id", "=", tenantId)
+  const row = await query.executeTakeFirst()
   return row ? mapDbRow(row) : null
 }
 
-async function createInDb(data: CreateDeptData): Promise<SystemDeptRow> {
+async function createInDb(data: CreateDeptData, tenantId?: string): Promise<SystemDeptRow> {
   const db = await getKyselyDb()
   const row = await db.insertInto("system_dept").values({
     id: crypto.randomUUID(),
@@ -133,7 +123,7 @@ async function createInDb(data: CreateDeptData): Promise<SystemDeptRow> {
     phone: data.phone ?? null,
     email: data.email ?? null,
     status: data.status ?? "ACTIVE",
-    tenant_id: null,
+    tenant_id: tenantId ?? null,
     created_at: new Date(),
     updated_at: new Date(),
     deleted: false,
@@ -141,7 +131,7 @@ async function createInDb(data: CreateDeptData): Promise<SystemDeptRow> {
   return mapDbRow(row)
 }
 
-async function updateInDb(id: string, data: UpdateDeptData): Promise<SystemDeptRow> {
+async function updateInDb(id: string, data: UpdateDeptData, tenantId?: string): Promise<SystemDeptRow> {
   const db = await getKyselyDb()
   const updateData: Record<string, any> = { updated_at: new Date() }
   if (data.name !== undefined) updateData.name = data.name
@@ -152,16 +142,21 @@ async function updateInDb(id: string, data: UpdateDeptData): Promise<SystemDeptR
   if (data.email !== undefined) updateData.email = data.email
   if (data.status !== undefined) updateData.status = data.status
 
-  const row = await db.updateTable("system_dept").set(updateData).where("id", "=", id).where("deleted", "=", false).returningAll().executeTakeFirstOrThrow()
+  let query = db.updateTable("system_dept").set(updateData).where("id", "=", id).where("deleted", "=", false)
+  if (tenantId) query = query.where("tenant_id", "=", tenantId)
+  const row = await query.returningAll().executeTakeFirstOrThrow()
   return mapDbRow(row)
 }
 
-async function deleteInDb(id: string): Promise<void> {
+async function deleteInDb(id: string, tenantId?: string): Promise<void> {
   const db = await getKyselyDb()
-  // 检查子部门
-  const children = await db.selectFrom("system_dept").select("id").where("parent_id", "=", id).where("deleted", "=", false).execute()
+  let childrenQuery = db.selectFrom("system_dept").select("id").where("parent_id", "=", id).where("deleted", "=", false)
+  if (tenantId) childrenQuery = childrenQuery.where("tenant_id", "=", tenantId)
+  const children = await childrenQuery.execute()
   if (children.length > 0) throw new Error("该部门下存在子部门，无法删除")
-  await db.updateTable("system_dept").set({ deleted: true, updated_at: new Date() }).where("id", "=", id).execute()
+  let deleteQuery = db.updateTable("system_dept").set({ deleted: true, updated_at: new Date() }).where("id", "=", id)
+  if (tenantId) deleteQuery = deleteQuery.where("tenant_id", "=", tenantId)
+  await deleteQuery.execute()
 }
 
 function mapDbRow(row: any): SystemDeptRow {

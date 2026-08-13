@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { requireAppLogin } from "@/modules/shared/backend/lib/app-auth-guard"
+import { getAuthErrorStatus } from "@/modules/shared/backend/auth/guards"
 
 /**
  * 收银台 - 创建支付单
@@ -20,7 +21,7 @@ export async function POST(request: Request) {
       },
     })
   } catch (error: any) {
-    const status = error.message === "请先登录" ? 401 : 400
+    const status = getAuthErrorStatus(error)
     return NextResponse.json({ success: false, error: error?.message || "创建支付单失败" }, { status })
   }
 }

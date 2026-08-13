@@ -10,6 +10,7 @@
 
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
 import type { PageResult } from "@/modules/shared/backend/lib/database"
+import { getCurrentTenantId, isPlatformContext, isPlatformUsername, isTenantRequired } from "@/modules/shared/backend/lib/biz-tenant"
 import { SEED_USERS } from "@prisma/data"
 
 // === 数据结构 ===
@@ -67,65 +68,72 @@ function generateId(): string {
   return String(++memoryIdSeq)
 }
 
+/** Uses the verified request context. Explicit tenant IDs are only for pre-auth login lookup. */
+function currentTenantId(): string | undefined {
+  const tenantId = getCurrentTenantId()
+  if (tenantId) return tenantId
+  if (isTenantRequired() && !isPlatformContext()) throw new Error("用户数据访问缺少租户上下文")
+  return undefined
+}
+
 // === Repository 实现 ===
 
 export const SystemUserRepository = {
   /** 分页列表 */
   async findList(params: UserListParams): Promise<PageResult<SystemUserRow>> {
-    if (hasRealDatabase()) {
-      return findListFromDb(params)
-    }
-    return findListFromMemory(params)
+    const tenantId = currentTenantId()
+    const scopedParams = { ...params, tenantId: tenantId ?? params.tenantId }
+    if (hasRealDatabase()) return findListFromDb(scopedParams)
+    return findListFromMemory(scopedParams)
   },
 
   /** 按 ID 查找 */
   async findById(id: string): Promise<SystemUserRow | null> {
-    if (hasRealDatabase()) {
-      return findByIdFromDb(id)
-    }
-    return MEMORY_STORE.find((u) => u.id === id) ?? null
+    const tenantId = currentTenantId()
+    if (hasRealDatabase()) return findByIdFromDb(id, tenantId)
+    const row = MEMORY_STORE.find((u) => u.id === id && (!tenantId || u.tenantId === tenantId)) ?? null
+    return row
   },
 
-  /** 按用户名查找 */
-  async findByUsername(username: string): Promise<SystemUserRow | null> {
-    if (hasRealDatabase()) {
-      return findByUsernameFromDb(username)
+  /** Pre-auth login lookup. tenantId must come from the validated login request. */
+  async findByUsername(username: string, tenantId?: string): Promise<SystemUserRow | null> {
+    if (isTenantRequired() && !tenantId && !isPlatformContext() && !isPlatformUsername(username)) {
+      throw new Error("登录必须指定 tenantId")
     }
-    return MEMORY_STORE.find((u) => u.username === username) ?? null
+    if (hasRealDatabase()) return findByUsernameFromDb(username, tenantId)
+    return MEMORY_STORE.find((u) => u.username === username && (!tenantId || u.tenantId === tenantId)) ?? null
   },
 
   /** 创建 */
   async create(data: CreateUserData): Promise<SystemUserRow> {
-    if (hasRealDatabase()) {
-      return createInDb(data)
-    }
-    return createInMemory(data)
+    const tenantId = currentTenantId()
+    const scopedData = { ...data, tenantId: tenantId ?? data.tenantId }
+    if (hasRealDatabase()) return createInDb(scopedData)
+    return createInMemory(scopedData)
   },
 
   /** 更新 */
   async update(id: string, data: UpdateUserData): Promise<SystemUserRow> {
-    if (hasRealDatabase()) {
-      return updateInDb(id, data)
-    }
-    return updateInMemory(id, data)
+    const tenantId = currentTenantId()
+    if (hasRealDatabase()) return updateInDb(id, data, tenantId)
+    return updateInMemory(id, data, tenantId)
   },
 
   /** 删除（软删除） */
   async delete(id: string): Promise<void> {
-    if (hasRealDatabase()) {
-      return deleteInDb(id)
-    }
-    return deleteInMemory(id)
+    const tenantId = currentTenantId()
+    if (hasRealDatabase()) return deleteInDb(id, tenantId)
+    return deleteInMemory(id, tenantId)
   },
 
   /** 统计 */
   async count(params?: { status?: string; tenantId?: string }): Promise<number> {
-    if (hasRealDatabase()) {
-      return countFromDb(params)
-    }
+    const tenantId = currentTenantId()
+    const scopedParams = { ...params, tenantId: tenantId ?? params?.tenantId }
+    if (hasRealDatabase()) return countFromDb(scopedParams)
     let filtered = [...MEMORY_STORE]
-    if (params?.status) filtered = filtered.filter((u) => u.status === params.status)
-    if (params?.tenantId) filtered = filtered.filter((u) => u.tenantId === params.tenantId)
+    if (scopedParams.status) filtered = filtered.filter((u) => u.status === scopedParams.status)
+    if (scopedParams.tenantId) filtered = filtered.filter((u) => u.tenantId === scopedParams.tenantId)
     return filtered.length
   },
 }
@@ -171,25 +179,19 @@ async function findListFromDb(params: UserListParams): Promise<PageResult<System
   }
 }
 
-async function findByIdFromDb(id: string): Promise<SystemUserRow | null> {
+async function findByIdFromDb(id: string, tenantId?: string): Promise<SystemUserRow | null> {
   const db = await getKyselyDb()
-  const row = await db
-    .selectFrom("system_user")
-    .selectAll()
-    .where("id", "=", id)
-    .where("deleted", "=", false)
-    .executeTakeFirst()
+  let query = db.selectFrom("system_user").selectAll().where("id", "=", id).where("deleted", "=", false)
+  if (tenantId) query = query.where("tenant_id", "=", tenantId)
+  const row = await query.executeTakeFirst()
   return row ? mapDbRow(row) : null
 }
 
-async function findByUsernameFromDb(username: string): Promise<SystemUserRow | null> {
+async function findByUsernameFromDb(username: string, tenantId?: string): Promise<SystemUserRow | null> {
   const db = await getKyselyDb()
-  const row = await db
-    .selectFrom("system_user")
-    .selectAll()
-    .where("username", "=", username)
-    .where("deleted", "=", false)
-    .executeTakeFirst()
+  let query = db.selectFrom("system_user").selectAll().where("username", "=", username).where("deleted", "=", false)
+  if (tenantId) query = query.where("tenant_id", "=", tenantId)
+  const row = await query.executeTakeFirst()
   return row ? mapDbRow(row) : null
 }
 
@@ -221,7 +223,7 @@ async function createInDb(data: CreateUserData): Promise<SystemUserRow> {
   return mapDbRow(row)
 }
 
-async function updateInDb(id: string, data: UpdateUserData): Promise<SystemUserRow> {
+async function updateInDb(id: string, data: UpdateUserData, tenantId?: string): Promise<SystemUserRow> {
   const db = await getKyselyDb()
   const updateData: Record<string, any> = { updated_at: new Date() }
   if (data.username !== undefined) updateData.username = data.username
@@ -233,23 +235,17 @@ async function updateInDb(id: string, data: UpdateUserData): Promise<SystemUserR
   if (data.status !== undefined) updateData.status = data.status
   if (data.remark !== undefined) updateData.remark = data.remark
 
-  const row = await db
-    .updateTable("system_user")
-    .set(updateData)
-    .where("id", "=", id)
-    .where("deleted", "=", false)
-    .returningAll()
-    .executeTakeFirstOrThrow()
+  let query = db.updateTable("system_user").set(updateData).where("id", "=", id).where("deleted", "=", false)
+  if (tenantId) query = query.where("tenant_id", "=", tenantId)
+  const row = await query.returningAll().executeTakeFirstOrThrow()
   return mapDbRow(row)
 }
 
-async function deleteInDb(id: string): Promise<void> {
+async function deleteInDb(id: string, tenantId?: string): Promise<void> {
   const db = await getKyselyDb()
-  await db
-    .updateTable("system_user")
-    .set({ deleted: true, updated_at: new Date() })
-    .where("id", "=", id)
-    .execute()
+  let query = db.updateTable("system_user").set({ deleted: true, updated_at: new Date() }).where("id", "=", id)
+  if (tenantId) query = query.where("tenant_id", "=", tenantId)
+  await query.execute()
 }
 
 async function countFromDb(params?: { status?: string; tenantId?: string }): Promise<number> {
@@ -330,8 +326,8 @@ function createInMemory(data: CreateUserData): SystemUserRow {
   return row
 }
 
-function updateInMemory(id: string, data: UpdateUserData): SystemUserRow {
-  const idx = MEMORY_STORE.findIndex((u) => u.id === id)
+function updateInMemory(id: string, data: UpdateUserData, tenantId?: string): SystemUserRow {
+  const idx = MEMORY_STORE.findIndex((u) => u.id === id && (!tenantId || u.tenantId === tenantId))
   if (idx === -1) throw new Error(`用户不存在: ${id}`)
 
   const user = MEMORY_STORE[idx]
@@ -352,8 +348,8 @@ function updateInMemory(id: string, data: UpdateUserData): SystemUserRow {
   return updated
 }
 
-function deleteInMemory(id: string): void {
-  const idx = MEMORY_STORE.findIndex((u) => u.id === id)
+function deleteInMemory(id: string, tenantId?: string): void {
+  const idx = MEMORY_STORE.findIndex((u) => u.id === id && (!tenantId || u.tenantId === tenantId))
   if (idx === -1) throw new Error(`用户不存在: ${id}`)
   MEMORY_STORE.splice(idx, 1)
 }

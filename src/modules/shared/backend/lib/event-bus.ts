@@ -12,6 +12,8 @@
  * - 事件必须幂等处理（同一事件可能投递多次）
  */
 
+import { getTenantContext, isTenantRequired } from "./biz-tenant"
+
 // ============ Types ============
 
 export type DomainEvent = {
@@ -27,6 +29,8 @@ export type DomainEvent = {
   timestamp: string
   /** 关联追踪 ID */
   traceId?: string
+  /** Immutable owner scope copied from the verified execution context. */
+  tenantId?: string
 }
 
 export type EventHandler = (event: DomainEvent) => Promise<void>
@@ -69,9 +73,13 @@ export const eventBus = {
    *   payload: { orderId: "pay-001", amount: 9900 },
    * })
    */
-  async publish(event: Omit<DomainEvent, "eventId" | "timestamp">): Promise<string> {
+  async publish(event: Omit<DomainEvent, "eventId" | "timestamp" | "tenantId">): Promise<string> {
+    const context = getTenantContext()
+    if (isTenantRequired() && !context) throw new Error("发布租户事件缺少租户上下文")
     const fullEvent: DomainEvent = {
       ...event,
+      tenantId: context?.tenantId,
+      traceId: event.traceId ?? context?.traceId,
       eventId: generateEventId(),
       timestamp: new Date().toISOString(),
     }

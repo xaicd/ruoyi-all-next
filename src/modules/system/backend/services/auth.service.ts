@@ -9,68 +9,10 @@ import type { LoginInput } from "@/modules/system/backend/validators"
 import { SystemUserRepository } from "@/modules/system/backend/repositories/user.repository"
 import { SystemMenuRepository, type SystemMenuRow } from "@/modules/system/backend/repositories/menu.repository"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
+import { issueJwt, verifyJwt, type JwtPayload } from "@/modules/shared/backend/auth/jwt"
+import { getPlatformRole, isPlatformUsername } from "@/modules/shared/backend/lib/biz-tenant"
 
-// === JWT 工具（轻量实现，不依赖外部库）===
-
-const JWT_SECRET = process.env.JWT_SECRET || "ruoyi-all-next-dev-secret-key-2026"
-const JWT_EXPIRES_IN = Number(process.env.JWT_EXPIRES_IN) || 86400 // 24h
-
-type TokenPayload = {
-  sub: string
-  username: string
-  permissions: string[]
-  roles: string[]
-  tenantId?: string
-  iat: number
-  exp: number
-}
-
-function base64UrlEncode(str: string): string {
-  return Buffer.from(str).toString("base64url")
-}
-
-function base64UrlDecode(str: string): string {
-  return Buffer.from(str, "base64url").toString()
-}
-
-function createHmacSignature(data: string, secret: string): string {
-  const crypto = require("crypto")
-  return crypto.createHmac("sha256", secret).update(data).digest("base64url")
-}
-
-function signToken(payload: Omit<TokenPayload, "iat" | "exp">): string {
-  const now = Math.floor(Date.now() / 1000)
-  const fullPayload: TokenPayload = {
-    ...payload,
-    iat: now,
-    exp: now + JWT_EXPIRES_IN,
-  }
-
-  const header = base64UrlEncode(JSON.stringify({ alg: "HS256", typ: "JWT" }))
-  const body = base64UrlEncode(JSON.stringify(fullPayload))
-  const signature = createHmacSignature(`${header}.${body}`, JWT_SECRET)
-
-  return `${header}.${body}.${signature}`
-}
-
-function verifyToken(token: string): TokenPayload {
-  const parts = token.split(".")
-  if (parts.length !== 3) throw new Error("Invalid token format")
-
-  const [header, body, signature] = parts
-  const expectedSig = createHmacSignature(`${header}.${body}`, JWT_SECRET)
-
-  if (signature !== expectedSig) {
-    throw new Error("Invalid token signature")
-  }
-
-  const payload: TokenPayload = JSON.parse(base64UrlDecode(body))
-  if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
-    throw new Error("Token expired")
-  }
-
-  return payload
-}
+type TokenPayload = JwtPayload
 
 // === 密码校验 ===
 
@@ -78,6 +20,10 @@ import { verifyPassword as cryptoVerifyPassword, hashPassword, generateSalt } fr
 
 function verifyPasswordCheck(inputPassword: string, storedHash: string, salt: string): boolean {
   return cryptoVerifyPassword(inputPassword, storedHash, salt)
+}
+
+function resolveLoginRoles(username: string): string[] {
+  return isPlatformUsername(username) ? ["admin", getPlatformRole()] : ["admin"]
 }
 
 // === 菜单树构建 ===
@@ -121,7 +67,7 @@ export class SystemAuthService {
   static async login(input: LoginInput) {
     domainLog.event("system.auth.login.attempt", { username: input.username })
 
-    const user = await SystemUserRepository.findByUsername(input.username)
+    const user = await SystemUserRepository.findByUsername(input.username, input.tenantId)
     if (!user) {
       domainLog.audit("system.auth.login.fail", { targetType: "USER", targetId: input.username, reason: "not_found" })
       throw new Error("用户名或密码错误")
@@ -144,20 +90,26 @@ export class SystemAuthService {
       .filter((m) => m.type === "BUTTON" && m.permission)
       .map((m) => m.permission!)
 
+    const roles = resolveLoginRoles(user.username)
+    if (process.env.TENANT_MODE === "required" && !roles.includes(getPlatformRole()) && !user.tenantId) {
+      throw new Error("账号未绑定租户")
+    }
+
     // 签发 JWT
-    const token = signToken({
+    const { token, expiresIn } = issueJwt({
       sub: user.id,
       username: user.username,
       permissions,
-      roles: ["admin"], // TODO: 从 user-role 关联表获取
+      roles,
       tenantId: user.tenantId ?? undefined,
+      type: "admin",
     })
 
     domainLog.audit("system.auth.login.success", { targetType: "USER", targetId: user.id })
 
     return {
       token,
-      expiresIn: JWT_EXPIRES_IN,
+      expiresIn,
       user: {
         id: user.id,
         username: user.username,
@@ -190,7 +142,7 @@ export class SystemAuthService {
         nickname: user.nickname,
         avatar: user.avatar,
       },
-      roles: ["admin"], // TODO: 从 user-role 关联表获取
+      roles: resolveLoginRoles(user.username),
       permissions,
       menus,
     }
@@ -198,19 +150,20 @@ export class SystemAuthService {
 
   /** 验证 token 并返回用户信息 */
   static async verifyToken(token: string): Promise<TokenPayload> {
-    return verifyToken(token)
+    return verifyJwt(token, "admin")
   }
 
   /** 刷新 token */
   static async refreshToken(token: string) {
-    const payload = verifyToken(token)
-    const newToken = signToken({
+    const payload = verifyJwt(token, "admin")
+    const issued = issueJwt({
       sub: payload.sub,
       username: payload.username,
       permissions: payload.permissions,
       roles: payload.roles,
       tenantId: payload.tenantId,
+      type: "admin",
     })
-    return { token: newToken, expiresIn: JWT_EXPIRES_IN }
+    return issued
   }
 }
