@@ -3,8 +3,7 @@ import { getTenantAssignableMenuIds } from "@/modules/system/backend/services/te
 import { SystemPermissionRepository } from "@/modules/system/backend/repositories/permission.repository"
 import { SystemRoleRepository } from "@/modules/system/backend/repositories/role.repository"
 import { SystemUserRepository } from "@/modules/system/backend/repositories/user.repository"
-import { SystemTenantRepository } from "@/modules/system/backend/repositories/tenant.repository"
-import { TenantPackageRepository } from "@/modules/system/backend/repositories/tenant-package.repository"
+import { TenantEntitlementService } from "@/modules/system/backend/services/tenant-entitlement.service"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 
 type AssignUserRoleInput = { userId: string; roleIds: string[] }
@@ -31,13 +30,8 @@ async function resolveRolePackageMenuIds(roleId: string): Promise<{ role: Awaite
   // Platform-global roles do not belong to a tenant package. Tenant roles must
   // always be constrained by their own tenant, even when the operator is platform-admin.
   if (!role.tenantId) return { role }
-  const tenant = await SystemTenantRepository.findById(role.tenantId)
-  if (!tenant || tenant.status !== "ACTIVE") throw new Error("目标角色所属租户不存在或已停用")
-  if (tenant.expireTime && new Date(tenant.expireTime).getTime() <= Date.now()) throw new Error("目标角色所属租户已过期")
-  if (!tenant.packageId) throw new Error("目标角色所属租户未分配套餐")
-  const pkg = await TenantPackageRepository.findById(tenant.packageId)
-  if (!pkg || pkg.status !== "ACTIVE") throw new Error("目标角色所属租户套餐不可用")
-  return { role, menuIds: await getTenantAssignableMenuIds(pkg.menuIds) }
+  const entitlement = await TenantEntitlementService.resolve(role.tenantId)
+  return { role, menuIds: await getTenantAssignableMenuIds(entitlement.package.menuIds) }
 }
 
 async function requireRoleAndMenus(input: AssignRoleMenuInput): Promise<void> {

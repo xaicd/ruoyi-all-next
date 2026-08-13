@@ -141,8 +141,9 @@ export interface SystemTenantTable {
   domain: string | null
   package_id: string | null
   status: string
+  effective_at: Date
   expire_time: Date | null
-  account_count: number
+  account_limit: number | null
   created_at: Generated<Date>
   updated_at: Date
   deleted: Generated<boolean>
@@ -152,6 +153,7 @@ export interface SystemTenantPackageTable {
   id: string
   name: string
   status: string
+  account_limit: number | null
   remark: string | null
   created_at: Generated<Date>
   updated_at: Date
@@ -162,6 +164,20 @@ export interface SystemTenantPackageMenuTable {
   id: string
   package_id: string
   menu_id: string
+}
+
+export interface SystemTenantSubscriptionTable {
+  id: string
+  tenant_id: string
+  package_id: string
+  effective_at: Date
+  expire_at: Date | null
+  account_limit: number | null
+  status: string
+  change_type: string
+  remark: string | null
+  created_by: string | null
+  created_at: Generated<Date>
 }
 
 export interface SystemNoticeTable {
@@ -326,6 +342,7 @@ export interface DB {
   system_tenant: SystemTenantTable
   system_tenant_package: SystemTenantPackageTable
   system_tenant_package_menu: SystemTenantPackageMenuTable
+  system_tenant_subscription: SystemTenantSubscriptionTable
   system_notice: SystemNoticeTable
   system_login_log: SystemLoginLogTable
   system_operate_log: SystemOperateLogTable

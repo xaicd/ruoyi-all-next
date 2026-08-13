@@ -35,7 +35,7 @@ export class SystemTenantPackageService {
     return { id: pkg.id }
   }
 
-  static async update(input: { id: string; name?: string; status?: string; menuIds?: string[]; remark?: string }) {
+  static async update(input: { id: string; name?: string; status?: string; accountLimit?: number | null; menuIds?: string[]; remark?: string }) {
     const existing = await TenantPackageRepository.findById(input.id)
     if (!existing) throw new Error(`套餐不存在: ${input.id}`)
     const menuIds = await normalizeTenantPackageMenus(input.menuIds)

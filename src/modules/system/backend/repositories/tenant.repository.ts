@@ -15,19 +15,21 @@ export type SystemTenantRow = {
   domain: string | null
   packageId: string | null
   status: string
+  effectiveAt: string
   expireTime: string | null
-  accountCount: number
+  /** Explicit tenant seat override; null inherits the package default. */
+  accountLimit: number | null
   createdAt: string
   updatedAt: string
 }
 
-export type CreateTenantData = { tenantCode: string; name: string; contactName?: string; contactPhone?: string; domain?: string; packageId?: string; status?: string; expireTime?: string; accountCount?: number }
+export type CreateTenantData = { tenantCode: string; name: string; contactName?: string; contactPhone?: string; domain?: string; packageId?: string; status?: string; effectiveAt?: string; expireTime?: string | null; accountLimit?: number | null }
 export type UpdateTenantData = Partial<CreateTenantData>
 export type TenantListParams = { page: number; pageSize: number; keyword?: string; status?: string }
 
 const MEMORY_STORE: SystemTenantRow[] = [
-  { id: "1", tenantCode: "default", name: "默认租户", contactName: "管理员", contactPhone: "13800000001", domain: null, packageId: "111", status: "ACTIVE", expireTime: "2030-12-31T23:59:59.000Z", accountCount: 999, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "2", tenantCode: "demo", name: "演示租户", contactName: "张三", contactPhone: "13900000001", domain: "demo.ruoyi.local", packageId: "111", status: "ACTIVE", expireTime: "2027-06-30T23:59:59.000Z", accountCount: 50, createdAt: "2026-03-01T00:00:00.000Z", updatedAt: "2026-03-01T00:00:00.000Z" },
+  { id: "1", tenantCode: "default", name: "默认租户", contactName: "管理员", contactPhone: "13800000001", domain: null, packageId: "111", status: "ACTIVE", effectiveAt: "2026-01-01T00:00:00.000Z", expireTime: "2030-12-31T23:59:59.000Z", accountLimit: 999, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
+  { id: "2", tenantCode: "demo", name: "演示租户", contactName: "张三", contactPhone: "13900000001", domain: "demo.ruoyi.local", packageId: "111", status: "ACTIVE", effectiveAt: "2026-03-01T00:00:00.000Z", expireTime: "2027-06-30T23:59:59.000Z", accountLimit: 50, createdAt: "2026-03-01T00:00:00.000Z", updatedAt: "2026-03-01T00:00:00.000Z" },
 ]
 let memoryIdSeq = 100
 
@@ -59,7 +61,7 @@ export const SystemTenantRepository = {
   async create(data: CreateTenantData): Promise<SystemTenantRow> {
     if (hasRealDatabase()) return createInDb(data)
     const now = new Date().toISOString()
-    const row: SystemTenantRow = { id: String(++memoryIdSeq), tenantCode: data.tenantCode, name: data.name, contactName: data.contactName ?? null, contactPhone: data.contactPhone ?? null, domain: data.domain ?? null, packageId: data.packageId ?? null, status: data.status ?? "ACTIVE", expireTime: data.expireTime ?? null, accountCount: data.accountCount ?? 0, createdAt: now, updatedAt: now }
+    const row: SystemTenantRow = { id: String(++memoryIdSeq), tenantCode: data.tenantCode, name: data.name, contactName: data.contactName ?? null, contactPhone: data.contactPhone ?? null, domain: data.domain ?? null, packageId: data.packageId ?? null, status: data.status ?? "ACTIVE", effectiveAt: data.effectiveAt ?? now, expireTime: data.expireTime ?? null, accountLimit: data.accountLimit ?? null, createdAt: now, updatedAt: now }
     MEMORY_STORE.push(row)
     return row
   },
@@ -69,7 +71,7 @@ export const SystemTenantRepository = {
     const idx = MEMORY_STORE.findIndex((t) => t.id === id)
     if (idx === -1) throw new Error(`租户不存在: ${id}`)
     const tenant = MEMORY_STORE[idx]
-    const updated: SystemTenantRow = { ...tenant, tenantCode: data.tenantCode ?? tenant.tenantCode, name: data.name ?? tenant.name, contactName: data.contactName !== undefined ? (data.contactName ?? null) : tenant.contactName, contactPhone: data.contactPhone !== undefined ? (data.contactPhone ?? null) : tenant.contactPhone, domain: data.domain !== undefined ? (data.domain ?? null) : tenant.domain, packageId: data.packageId !== undefined ? (data.packageId ?? null) : tenant.packageId, status: data.status ?? tenant.status, expireTime: data.expireTime !== undefined ? (data.expireTime ?? null) : tenant.expireTime, accountCount: data.accountCount ?? tenant.accountCount, updatedAt: new Date().toISOString() }
+    const updated: SystemTenantRow = { ...tenant, tenantCode: data.tenantCode ?? tenant.tenantCode, name: data.name ?? tenant.name, contactName: data.contactName !== undefined ? (data.contactName ?? null) : tenant.contactName, contactPhone: data.contactPhone !== undefined ? (data.contactPhone ?? null) : tenant.contactPhone, domain: data.domain !== undefined ? (data.domain ?? null) : tenant.domain, packageId: data.packageId !== undefined ? (data.packageId ?? null) : tenant.packageId, status: data.status ?? tenant.status, effectiveAt: data.effectiveAt ?? tenant.effectiveAt, expireTime: data.expireTime !== undefined ? (data.expireTime ?? null) : tenant.expireTime, accountLimit: data.accountLimit !== undefined ? data.accountLimit : tenant.accountLimit, updatedAt: new Date().toISOString() }
     MEMORY_STORE[idx] = updated
     return updated
   },
@@ -111,7 +113,7 @@ async function findByTenantCodeFromDb(tenantCode: string): Promise<SystemTenantR
 async function createInDb(data: CreateTenantData): Promise<SystemTenantRow> {
   const db = await getKyselyDb()
   const now = new Date()
-  const row = await db.insertInto("system_tenant").values({ id: randomUUID(), tenant_code: data.tenantCode, name: data.name, contact_name: data.contactName ?? null, contact_phone: data.contactPhone ?? null, domain: data.domain ?? null, package_id: data.packageId ?? null, status: data.status ?? "ACTIVE", expire_time: data.expireTime ? new Date(data.expireTime) : null, account_count: data.accountCount ?? 0, created_at: now, updated_at: now, deleted: false } as any).returningAll().executeTakeFirstOrThrow()
+  const row = await db.insertInto("system_tenant").values({ id: randomUUID(), tenant_code: data.tenantCode, name: data.name, contact_name: data.contactName ?? null, contact_phone: data.contactPhone ?? null, domain: data.domain ?? null, package_id: data.packageId ?? null, status: data.status ?? "ACTIVE", effective_at: data.effectiveAt ? new Date(data.effectiveAt) : now, expire_time: data.expireTime ? new Date(data.expireTime) : null, account_limit: data.accountLimit ?? null, created_at: now, updated_at: now, deleted: false } as any).returningAll().executeTakeFirstOrThrow()
   return mapRow(row)
 }
 
@@ -125,8 +127,9 @@ async function updateInDb(id: string, data: UpdateTenantData): Promise<SystemTen
   if (data.domain !== undefined) u.domain = data.domain
   if (data.packageId !== undefined) u.package_id = data.packageId
   if (data.status !== undefined) u.status = data.status
+  if (data.effectiveAt !== undefined) u.effective_at = new Date(data.effectiveAt)
   if (data.expireTime !== undefined) u.expire_time = data.expireTime ? new Date(data.expireTime) : null
-  if (data.accountCount !== undefined) u.account_count = data.accountCount
+  if (data.accountLimit !== undefined) u.account_limit = data.accountLimit
   const row = await db.updateTable("system_tenant").set(u).where("id", "=", id).where("deleted", "=", false).returningAll().executeTakeFirstOrThrow()
   return mapRow(row)
 }
@@ -137,5 +140,5 @@ async function deleteInDb(id: string): Promise<void> {
 }
 
 function mapRow(row: any): SystemTenantRow {
-  return { id: row.id, tenantCode: row.tenant_code, name: row.name, contactName: row.contact_name, contactPhone: row.contact_phone, domain: row.domain, packageId: row.package_id, status: row.status, expireTime: row.expire_time instanceof Date ? row.expire_time.toISOString() : row.expire_time, accountCount: row.account_count, createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : String(row.created_at), updatedAt: row.updated_at instanceof Date ? row.updated_at.toISOString() : String(row.updated_at) }
+  return { id: row.id, tenantCode: row.tenant_code, name: row.name, contactName: row.contact_name, contactPhone: row.contact_phone, domain: row.domain, packageId: row.package_id, status: row.status, effectiveAt: row.effective_at instanceof Date ? row.effective_at.toISOString() : String(row.effective_at), expireTime: row.expire_time instanceof Date ? row.expire_time.toISOString() : row.expire_time, accountLimit: row.account_limit, createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : String(row.created_at), updatedAt: row.updated_at instanceof Date ? row.updated_at.toISOString() : String(row.updated_at) }
 }

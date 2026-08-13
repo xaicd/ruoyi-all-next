@@ -8,7 +8,7 @@
 import type { LoginInput } from "@/modules/system/backend/validators"
 import { SystemUserRepository, type SystemUserRow } from "@/modules/system/backend/repositories/user.repository"
 import { SystemTenantRepository } from "@/modules/system/backend/repositories/tenant.repository"
-import { TenantPackageRepository } from "@/modules/system/backend/repositories/tenant-package.repository"
+import { TenantEntitlementService } from "@/modules/system/backend/services/tenant-entitlement.service"
 import { SystemMenuRepository, type SystemMenuRow } from "@/modules/system/backend/repositories/menu.repository"
 import { SystemPermissionService } from "@/modules/system/backend/services/permission.service"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
@@ -39,12 +39,7 @@ async function resolveLoginTenantId(tenantCode: string | undefined): Promise<str
 async function requireUsableTenant(user: SystemUserRow, isPlatform: boolean): Promise<void> {
   if (isPlatform) return
   if (!user.tenantId) throw new Error("账号未绑定租户")
-  const tenant = await SystemTenantRepository.findById(user.tenantId)
-  if (!tenant || tenant.status !== "ACTIVE") throw new Error("租户不存在或已停用")
-  if (tenant.expireTime && new Date(tenant.expireTime).getTime() <= Date.now()) throw new Error("租户已过期")
-  if (!tenant.packageId) throw new Error("租户未分配套餐")
-  const pkg = await TenantPackageRepository.findById(tenant.packageId)
-  if (!pkg || pkg.status !== "ACTIVE") throw new Error("租户套餐不可用")
+  await TenantEntitlementService.resolve(user.tenantId)
 }
 
 async function getEffectivePermissions(user: SystemUserRow, roles: string[]): Promise<{ menuIds: Set<string>; permissions: string[] }> {
@@ -190,6 +185,9 @@ export class SystemAuthService {
   /** 刷新 token */
   static async refreshToken(token: string) {
     const payload = verifyJwt(token, "admin")
+    const user = await SystemUserRepository.findById(payload.sub)
+    if (!user) throw new Error("用户不存在")
+    await requireUsableTenant(user, payload.roles.includes(getPlatformRole()))
     const issued = issueJwt({
       sub: payload.sub,
       username: payload.username,

@@ -5,7 +5,7 @@ import { getAuthErrorStatus, requirePlatformAdmin } from "@/modules/shared/backe
 import { z } from "zod"
 
 type RouteContext = { params: Promise<{ id: string }> }
-const updateSchema = z.object({ name: z.string().trim().min(1).max(50).optional(), contactName: z.string().trim().max(30).optional(), contactPhone: z.string().trim().max(20).optional(), domain: z.string().trim().max(100).optional(), packageId: z.string().trim().optional(), status: z.enum(["ACTIVE", "DISABLED"]).optional(), expireTime: z.string().trim().optional(), accountCount: z.coerce.number().int().min(0).optional() })
+const updateSchema = z.object({ name: z.string().trim().min(1).max(50).optional(), contactName: z.string().trim().max(30).optional(), contactPhone: z.string().trim().max(20).optional(), domain: z.string().trim().max(100).optional(), packageId: z.string().trim().optional(), status: z.enum(["ACTIVE", "DISABLED"]).optional(), effectiveAt: z.string().datetime().optional(), expireTime: z.string().datetime().nullable().optional(), accountLimit: z.coerce.number().int().min(1).nullable().optional() })
 
 function errorStatus(error: unknown, fallback = 400): number {
   const status = getAuthErrorStatus(error)

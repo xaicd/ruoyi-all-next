@@ -7,6 +7,7 @@ type TenantPackage = {
   id: string
   name: string
   status: string
+  accountLimit: number | null
   menuIds: string[]
   remark: string | null
   createdAt: string
@@ -80,6 +81,7 @@ export default function SystemTenantPackagesPage() {
           <thead>
             <tr className="border-b bg-slate-50 text-left text-xs font-medium text-slate-500">
               <th className="px-4 py-3">套餐名称</th>
+              <th className="px-4 py-3">默认账号席位</th>
               <th className="px-4 py-3">菜单数量</th>
               <th className="px-4 py-3">状态</th>
               <th className="px-4 py-3">备注</th>
@@ -89,17 +91,16 @@ export default function SystemTenantPackagesPage() {
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={6} className="px-4 py-12 text-center text-slate-400">加载中...</td></tr>
+              <tr><td colSpan={7} className="px-4 py-12 text-center text-slate-400">加载中...</td></tr>
             ) : data.items.length === 0 ? (
-              <tr><td colSpan={6} className="px-4 py-12 text-center text-slate-400">暂无数据</td></tr>
+              <tr><td colSpan={7} className="px-4 py-12 text-center text-slate-400">暂无数据</td></tr>
             ) : (
               data.items.map((pkg) => (
                 <tr key={pkg.id} className="border-b last:border-0 hover:bg-slate-50">
                   <td className="px-4 py-3 font-medium">{pkg.name}</td>
+                  <td className="px-4 py-3"><span className="rounded bg-violet-50 px-2 py-1 text-xs text-violet-700">{pkg.accountLimit === null ? "不限" : `${pkg.accountLimit} 席`}</span></td>
                   <td className="px-4 py-3">
-                    <span className="rounded-full bg-blue-50 px-2 py-0.5 text-xs text-blue-700">
-                      {pkg.menuIds.length === 0 ? "未授权" : `${pkg.menuIds.length} 个`}
-                    </span>
+                    {pkg.menuIds.length === 0 ? "未授权" : `${pkg.menuIds.length} 个`}
                   </td>
                   <td className="px-4 py-3">
                     <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${pkg.status === "ACTIVE" ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}>
@@ -140,7 +141,7 @@ function TenantPackageFormDialog({ pkg, onSubmit, onClose }: {
   onSubmit: (d: Record<string, any>) => void
   onClose: () => void
 }) {
-  const [form, setForm] = useState({ name: pkg?.name ?? "", status: pkg?.status ?? "ACTIVE", remark: pkg?.remark ?? "" })
+  const [form, setForm] = useState({ name: pkg?.name ?? "", status: pkg?.status ?? "ACTIVE", accountLimit: pkg?.accountLimit?.toString() ?? "", remark: pkg?.remark ?? "" })
   const [menuTree, setMenuTree] = useState<MenuNode[]>([])
   const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set(pkg?.menuIds ?? []))
   const [loading, setLoading] = useState(true)
@@ -200,7 +201,7 @@ function TenantPackageFormDialog({ pkg, onSubmit, onClose }: {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onSubmit({ ...form, menuIds: Array.from(checkedIds) })
+    onSubmit({ ...form, accountLimit: form.accountLimit ? Number(form.accountLimit) : null, menuIds: Array.from(checkedIds) })
   }
 
   return (
@@ -220,11 +221,8 @@ function TenantPackageFormDialog({ pkg, onSubmit, onClose }: {
                 <input required value={form.name} onChange={(e) => setForm(p => ({ ...p, name: e.target.value }))} className="h-9 w-full rounded-md border px-3 text-sm" />
               </div>
               <div>
-                <label className="mb-1 block text-xs text-slate-600">状态</label>
-                <select value={form.status} onChange={(e) => setForm(p => ({ ...p, status: e.target.value }))} className="h-9 w-full rounded-md border px-3 text-sm">
-                  <option value="ACTIVE">启用</option>
-                  <option value="DISABLED">禁用</option>
-                </select>
+                <label className="mb-1 block text-xs text-slate-600">默认账号席位</label>
+                <input type="number" min={1} value={form.accountLimit} onChange={(e) => setForm(p => ({ ...p, accountLimit: e.target.value }))} placeholder="留空表示不限" className="h-9 w-full rounded-md border px-3 text-sm" />
               </div>
             </div>
             <div>

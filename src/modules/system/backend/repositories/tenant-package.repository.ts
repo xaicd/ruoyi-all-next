@@ -5,23 +5,26 @@
 
 import { randomUUID } from "node:crypto"
 import { getKyselyDb, hasRealDatabase, type PageResult } from "@/modules/shared/backend/lib/database"
+import { getTenantAssignableMenuIds } from "@/modules/system/backend/services/tenant-menu-scope.service"
 import { SEED_TENANT_PACKAGES } from "@prisma/data"
 
 export type TenantPackageRow = {
   id: string
   name: string
   status: string
+  /** Default seat limit; null means unlimited unless a tenant has an override. */
+  accountLimit: number | null
   menuIds: string[]
   remark: string | null
   createdAt: string
   updatedAt: string
 }
 
-export type CreateTenantPackageData = { name: string; status?: string; menuIds?: string[]; remark?: string }
+export type CreateTenantPackageData = { name: string; status?: string; accountLimit?: number | null; menuIds?: string[]; remark?: string }
 export type UpdateTenantPackageData = Partial<CreateTenantPackageData>
 
 // 无数据库开发模式也使用由本地 RuoYi SQL 生成的同一套餐目录，禁止维护另一套手写数据。
-const MEMORY_STORE: TenantPackageRow[] = SEED_TENANT_PACKAGES.map((item) => ({ ...item, menuIds: [...item.menuIds] }))
+const MEMORY_STORE: TenantPackageRow[] = SEED_TENANT_PACKAGES.map((item) => ({ ...item, accountLimit: null, menuIds: [...item.menuIds] }))
 let memoryIdSeq = 100
 
 export const TenantPackageRepository = {
@@ -47,7 +50,7 @@ export const TenantPackageRepository = {
   async create(data: CreateTenantPackageData): Promise<TenantPackageRow> {
     if (hasRealDatabase()) return createInDb(data)
     const now = new Date().toISOString()
-    const row: TenantPackageRow = { id: String(++memoryIdSeq), name: data.name, status: data.status ?? "ACTIVE", menuIds: uniqueIds(data.menuIds ?? []), remark: data.remark ?? null, createdAt: now, updatedAt: now }
+    const row: TenantPackageRow = { id: String(++memoryIdSeq), name: data.name, status: data.status ?? "ACTIVE", accountLimit: data.accountLimit ?? null, menuIds: uniqueIds(data.menuIds ?? []), remark: data.remark ?? null, createdAt: now, updatedAt: now }
     MEMORY_STORE.push(row)
     return row
   },
@@ -57,7 +60,7 @@ export const TenantPackageRepository = {
     const index = MEMORY_STORE.findIndex((item) => item.id === id)
     if (index === -1) throw new Error(`套餐不存在: ${id}`)
     const current = MEMORY_STORE[index]
-    const updated: TenantPackageRow = { ...current, name: data.name ?? current.name, status: data.status ?? current.status, menuIds: data.menuIds === undefined ? current.menuIds : uniqueIds(data.menuIds), remark: data.remark === undefined ? current.remark : data.remark ?? null, updatedAt: new Date().toISOString() }
+    const updated: TenantPackageRow = { ...current, name: data.name ?? current.name, status: data.status ?? current.status, accountLimit: data.accountLimit !== undefined ? data.accountLimit : current.accountLimit, menuIds: data.menuIds === undefined ? current.menuIds : uniqueIds(data.menuIds), remark: data.remark === undefined ? current.remark : data.remark ?? null, updatedAt: new Date().toISOString() }
     MEMORY_STORE[index] = updated
     return updated
   },
@@ -99,7 +102,7 @@ async function createInDb(data: CreateTenantPackageData): Promise<TenantPackageR
   const db = await getKyselyDb()
   const now = new Date()
   return db.transaction().execute(async (trx) => {
-    const row = await trx.insertInto("system_tenant_package").values({ id: randomUUID(), name: data.name, status: data.status ?? "ACTIVE", remark: data.remark ?? null, created_at: now, updated_at: now, deleted: false }).returningAll().executeTakeFirstOrThrow()
+    const row = await trx.insertInto("system_tenant_package").values({ id: randomUUID(), name: data.name, status: data.status ?? "ACTIVE", account_limit: data.accountLimit ?? null, remark: data.remark ?? null, created_at: now, updated_at: now, deleted: false }).returningAll().executeTakeFirstOrThrow()
     await replaceMenuIds(trx, row.id, data.menuIds ?? [])
     return mapRow(row, new Map([[row.id, uniqueIds(data.menuIds ?? [])]]))
   })
@@ -111,11 +114,16 @@ async function updateInDb(id: string, data: UpdateTenantPackageData): Promise<Te
     const updates: Record<string, unknown> = { updated_at: new Date() }
     if (data.name !== undefined) updates.name = data.name
     if (data.status !== undefined) updates.status = data.status
+    if (data.accountLimit !== undefined) updates.account_limit = data.accountLimit
     if (data.remark !== undefined) updates.remark = data.remark ?? null
     const row = await trx.updateTable("system_tenant_package").set(updates as any).where("id", "=", id).where("deleted", "=", false).returningAll().executeTakeFirst()
     if (!row) throw new Error(`套餐不存在: ${id}`)
-    if (data.menuIds !== undefined) await replaceMenuIds(trx, id, data.menuIds)
-    const menuIds = data.menuIds === undefined ? await menuIdsByPackageIds([id], trx) : new Map([[id, uniqueIds(data.menuIds)]])
+    const safeMenuIds = data.menuIds === undefined ? undefined : [...await getTenantAssignableMenuIds(data.menuIds)]
+    if (safeMenuIds !== undefined) {
+      await replaceMenuIds(trx, id, safeMenuIds)
+      await convergeTenantRoleMenus(trx, id, safeMenuIds)
+    }
+    const menuIds = safeMenuIds === undefined ? await menuIdsByPackageIds([id], trx) : new Map([[id, safeMenuIds]])
     return mapRow(row, menuIds)
   })
 }
@@ -126,6 +134,26 @@ async function deleteInDb(id: string): Promise<void> {
   if (Number(assigned?.count ?? 0) > 0) throw new Error("套餐已分配给租户，不能删除")
   const result = await db.updateTable("system_tenant_package").set({ deleted: true, updated_at: new Date() }).where("id", "=", id).where("deleted", "=", false).executeTakeFirst()
   if (Number(result.numUpdatedRows) === 0) throw new Error(`套餐不存在: ${id}`)
+}
+
+export async function convergeTenantRoleMenus(trx: any, packageId: string, safeMenuIds: string[], tenantIds?: string[]): Promise<void> {
+  let tenantQuery = trx.selectFrom("system_tenant").select(["id", "tenant_code"]).where("package_id", "=", packageId).where("deleted", "=", false)
+  if (tenantIds?.length) tenantQuery = tenantQuery.where("id", "in", tenantIds)
+  const tenants = await tenantQuery.execute()
+  if (!tenants.length) return
+  const resolvedTenantIds = tenants.map((tenant: { id: string }) => tenant.id)
+  const roles = await trx.selectFrom("system_role").select(["id", "tenant_id", "name", "code"]).where("tenant_id", "in", resolvedTenantIds).where("deleted", "=", false).execute()
+  const roleIds = roles.map((role: { id: string }) => role.id)
+  if (!roleIds.length) return
+
+  if (safeMenuIds.length) await trx.deleteFrom("system_role_menu").where("role_id", "in", roleIds).where("menu_id", "not in", safeMenuIds).execute()
+  else await trx.deleteFrom("system_role_menu").where("role_id", "in", roleIds).execute()
+
+  const tenantCodeById = new Map(tenants.map((tenant: { id: string; tenant_code: string }) => [tenant.id, tenant.tenant_code]))
+  const adminRoleIds = roles.filter((role: { tenant_id: string; name: string; code: string }) => role.name === "租户管理员" && role.code === `tenant-admin-${tenantCodeById.get(role.tenant_id)}`).map((role: { id: string }) => role.id)
+  if (!adminRoleIds.length) return
+  await trx.deleteFrom("system_role_menu").where("role_id", "in", adminRoleIds).execute()
+  if (safeMenuIds.length) await trx.insertInto("system_role_menu").values(adminRoleIds.flatMap((roleId: string) => safeMenuIds.map((menuId) => ({ id: randomUUID(), role_id: roleId, menu_id: menuId })))).execute()
 }
 
 async function replaceMenuIds(trx: Awaited<ReturnType<typeof getKyselyDb>>, packageId: string, menuIds: string[]): Promise<void> {
@@ -149,5 +177,5 @@ async function mapRows(rows: any[]): Promise<TenantPackageRow[]> {
 }
 
 function mapRow(row: any, menuIds: Map<string, string[]>): TenantPackageRow {
-  return { id: row.id, name: row.name, status: row.status, menuIds: menuIds.get(row.id) ?? [], remark: row.remark, createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : String(row.created_at), updatedAt: row.updated_at instanceof Date ? row.updated_at.toISOString() : String(row.updated_at) }
+  return { id: row.id, name: row.name, status: row.status, accountLimit: row.account_limit, menuIds: menuIds.get(row.id) ?? [], remark: row.remark, createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : String(row.created_at), updatedAt: row.updated_at instanceof Date ? row.updated_at.toISOString() : String(row.updated_at) }
 }

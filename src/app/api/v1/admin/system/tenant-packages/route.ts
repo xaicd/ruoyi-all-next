@@ -5,7 +5,7 @@ import { getAuthErrorStatus, requirePlatformAdmin } from "@/modules/shared/backe
 import { z } from "zod"
 
 const listSchema = z.object({ page: z.coerce.number().int().min(1).default(1), pageSize: z.coerce.number().int().min(1).max(100).default(20), keyword: z.string().trim().optional() })
-const createSchema = z.object({ name: z.string().trim().min(1).max(50), status: z.enum(["ACTIVE", "DISABLED"]).default("ACTIVE"), menuIds: z.array(z.string()).optional(), remark: z.string().trim().max(500).optional() })
+const createSchema = z.object({ name: z.string().trim().min(1).max(50), status: z.enum(["ACTIVE", "DISABLED"]).default("ACTIVE"), accountLimit: z.coerce.number().int().min(1, "默认账号席位至少为 1").nullable().optional(), menuIds: z.array(z.string()).optional(), remark: z.string().trim().max(500).optional() })
 
 export async function GET(request: Request) {
   try {

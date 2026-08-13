@@ -225,14 +225,38 @@ model SystemTenant {
   packageId    String?              @map("package_id")
   package      SystemTenantPackage? @relation(fields: [packageId], references: [id], onDelete: Restrict)
   status       String               @default("ACTIVE") @db.VarChar(10)
+  effectiveAt  DateTime             @map("effective_at")
   expireTime   DateTime?            @map("expire_time")
-  accountCount Int                  @default(0) @map("account_count")
+  accountLimit Int?                 @map("account_limit")
   createdAt    DateTime             @default(now()) @map("created_at")
   updatedAt    DateTime             @updatedAt @map("updated_at")
   deleted      Boolean              @default(false)
 
+  subscriptions SystemTenantSubscription[]
+
   @@map("system_tenant")
   @@index([packageId])
+}
+
+/// 租户订阅历史；当前有效权益同时保留在 SystemTenant 以便鉴权快速读取。
+model SystemTenantSubscription {
+  id           String              @id @default(cuid())
+  tenantId     String              @map("tenant_id")
+  packageId    String              @map("package_id")
+  effectiveAt  DateTime            @map("effective_at")
+  expireAt     DateTime?           @map("expire_at")
+  accountLimit Int?                @map("account_limit")
+  status       String              @default("ACTIVE") @db.VarChar(20)
+  changeType   String              @map("change_type") @db.VarChar(20)
+  remark       String?             @db.VarChar(500)
+  createdBy    String?             @map("created_by")
+  createdAt    DateTime            @default(now()) @map("created_at")
+  tenant       SystemTenant        @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  package      SystemTenantPackage @relation(fields: [packageId], references: [id], onDelete: Restrict)
+
+  @@index([tenantId, createdAt])
+  @@index([status])
+  @@map("system_tenant_subscription")
 }
 
 /// 平台全局租户套餐
@@ -240,12 +264,14 @@ model SystemTenantPackage {
   id          String                    @id @default(cuid())
   name        String                    @unique @db.VarChar(50)
   status      String                    @default("ACTIVE") @db.VarChar(10)
+  accountLimit Int?                     @map("account_limit")
   remark      String?                   @db.VarChar(500)
   createdAt   DateTime                  @default(now()) @map("created_at")
   updatedAt   DateTime                  @updatedAt @map("updated_at")
   deleted     Boolean                   @default(false)
 
-  tenants     SystemTenant[]
+  tenants      SystemTenant[]
+  subscriptions SystemTenantSubscription[]
   packageMenus SystemTenantPackageMenu[]
 
   @@map("system_tenant_package")
