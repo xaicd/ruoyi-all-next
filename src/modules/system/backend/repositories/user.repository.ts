@@ -199,6 +199,7 @@ async function createInDb(data: CreateUserData): Promise<SystemUserRow> {
   const row = await db
     .insertInto("system_user")
     .values({
+      id: crypto.randomUUID(),
       username: data.username,
       nickname: data.nickname,
       password: data.password,
@@ -209,7 +210,10 @@ async function createInDb(data: CreateUserData): Promise<SystemUserRow> {
       dept_id: data.deptId ?? null,
       remark: data.remark ?? null,
       tenant_id: data.tenantId ?? null,
+      created_at: now,
       updated_at: now,
+      login_ip: "",
+      login_date: now,
       deleted: false,
     })
     .returningAll()
@@ -263,6 +267,7 @@ function mapDbRow(row: any): SystemUserRow {
     username: row.username,
     nickname: row.nickname,
     password: row.password,
+    salt: row.salt ?? null,
     phone: row.phone,
     email: row.email,
     avatar: row.avatar,
