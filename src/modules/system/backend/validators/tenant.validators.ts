@@ -23,6 +23,7 @@ export const createTenantWithAdminSchema = z.object({
   packageId: z.string().trim().min(1, "请选择套餐"),
   status: z.enum(["ACTIVE", "DISABLED"]).default("ACTIVE"),
   effectiveAt: z.string().datetime().optional(),
+  // Omit expireTime to accept the server-side 10-year default; explicit null means long-term.
   expireTime: z.string().datetime().nullable().optional(),
   accountLimit: z.coerce.number().int().min(1, "账号席位至少为 1").nullable().optional(),
   adminUsername: z.string().trim().min(3, "管理员账号至少 3 位").max(30).regex(/^[A-Za-z0-9_-]+$/, "管理员账号仅支持字母、数字、下划线和连字符"),

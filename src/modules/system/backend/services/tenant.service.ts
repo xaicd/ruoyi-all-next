@@ -63,6 +63,12 @@ async function enrichTenantEntitlements<T extends { id: string; packageId: strin
   return Array.isArray(value) ? Promise.all(value.map(enrich)) : enrich(value)
 }
 
+function defaultExpireTime(effectiveAt: Date): Date {
+  const expireAt = new Date(effectiveAt)
+  expireAt.setUTCFullYear(expireAt.getUTCFullYear() + 10)
+  return expireAt
+}
+
 function validateSubscriptionWindow(effectiveAt: string, expireTime: string | null | undefined): void {
   if (Number.isNaN(new Date(effectiveAt).getTime())) throw new Error("生效时间格式无效")
   if (expireTime && new Date(effectiveAt).getTime() >= new Date(expireTime).getTime()) throw new Error("过期时间必须晚于生效时间")
@@ -73,8 +79,9 @@ async function createInMemory(input: CreateTenantWithAdminInput): Promise<{ id: 
   const duplicate = await SystemUserRepository.findByUsername(input.adminUsername)
   if (duplicate) throw new Error(`管理员账号已存在: ${input.adminUsername}`)
   const effectiveAt = input.effectiveAt ?? new Date().toISOString()
-  validateSubscriptionWindow(effectiveAt, input.expireTime)
-  const tenant = await SystemTenantRepository.create({ tenantCode: input.tenantCode, name: input.name, contactName: input.contactName, contactPhone: input.contactPhone, domain: input.domain, packageId: input.packageId, status: input.status, effectiveAt, expireTime: input.expireTime, accountLimit: input.accountLimit })
+  const expireTime = input.expireTime === undefined ? defaultExpireTime(new Date(effectiveAt)).toISOString() : input.expireTime
+  validateSubscriptionWindow(effectiveAt, expireTime)
+  const tenant = await SystemTenantRepository.create({ tenantCode: input.tenantCode, name: input.name, contactName: input.contactName, contactPhone: input.contactPhone, domain: input.domain, packageId: input.packageId, status: input.status, effectiveAt, expireTime, accountLimit: input.accountLimit })
   return runWithTenantContext({ tenantId: tenant.id, endpoint: "admin", isPlatform: false }, async () => {
     const salt = generateSalt()
     const admin = await SystemUserRepository.create({ username: input.adminUsername, nickname: input.adminNickname, password: hashPassword(input.adminPassword, salt), salt, phone: input.adminPhone, email: input.adminEmail, tenantId: tenant.id })
@@ -98,12 +105,13 @@ async function createInDatabase(input: CreateTenantWithAdminInput): Promise<{ id
     const roleId = randomUUID()
     const now = new Date()
     const effectiveAt = input.effectiveAt ? new Date(input.effectiveAt) : now
-    validateSubscriptionWindow(effectiveAt.toISOString(), input.expireTime)
+    const expireAt = input.expireTime === undefined ? defaultExpireTime(effectiveAt) : input.expireTime ? new Date(input.expireTime) : null
+    validateSubscriptionWindow(effectiveAt.toISOString(), expireAt?.toISOString())
     const salt = generateSalt()
     const menuRows = await trx.selectFrom("system_tenant_package_menu").select("menu_id").where("package_id", "=", input.packageId).execute()
     const safeMenuIds = await getTenantAssignableMenuIds(menuRows.map((row) => row.menu_id))
-    await trx.insertInto("system_tenant").values({ id: tenantId, tenant_code: input.tenantCode, name: input.name, contact_name: input.contactName ?? null, contact_phone: input.contactPhone ?? null, domain: input.domain ?? null, package_id: input.packageId, status: input.status, effective_at: effectiveAt, expire_time: input.expireTime ? new Date(input.expireTime) : null, account_limit: input.accountLimit ?? null, created_at: now, updated_at: now, deleted: false }).execute()
-    await trx.insertInto("system_tenant_subscription").values({ id: randomUUID(), tenant_id: tenantId, package_id: input.packageId, effective_at: effectiveAt, expire_at: input.expireTime ? new Date(input.expireTime) : null, account_limit: input.accountLimit ?? null, status: "ACTIVE", change_type: "CREATE", remark: "创建租户时初始化", created_by: null, created_at: now }).execute()
+    await trx.insertInto("system_tenant").values({ id: tenantId, tenant_code: input.tenantCode, name: input.name, contact_name: input.contactName ?? null, contact_phone: input.contactPhone ?? null, domain: input.domain ?? null, package_id: input.packageId, status: input.status, effective_at: effectiveAt, expire_time: expireAt, account_limit: input.accountLimit ?? null, created_at: now, updated_at: now, deleted: false }).execute()
+    await trx.insertInto("system_tenant_subscription").values({ id: randomUUID(), tenant_id: tenantId, package_id: input.packageId, effective_at: effectiveAt, expire_at: expireAt, account_limit: input.accountLimit ?? null, status: "ACTIVE", change_type: "CREATE", remark: "创建租户时初始化", created_by: null, created_at: now }).execute()
     await trx.insertInto("system_user").values({ id: adminUserId, username: input.adminUsername, nickname: input.adminNickname, password: hashPassword(input.adminPassword, salt), salt, phone: input.adminPhone ?? null, email: input.adminEmail ?? null, avatar: null, status: "ACTIVE", dept_id: null, remark: "租户创建时自动初始化的管理员", login_ip: null, login_date: now.toISOString(), tenant_id: tenantId, created_at: now, updated_at: now, deleted: false }).execute()
     await trx.insertInto("system_role").values({ id: roleId, name: "租户管理员", code: tenantAdminRoleCode(input.tenantCode), sort: 0, status: "ACTIVE", remark: "租户创建时自动初始化", data_scope: "ALL", tenant_id: tenantId, created_at: now, updated_at: now, deleted: false }).execute()
     await trx.insertInto("system_user_role").values({ id: randomUUID(), user_id: adminUserId, role_id: roleId }).execute()

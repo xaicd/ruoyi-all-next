@@ -26,6 +26,12 @@ type TenantPackage = { id: string; name: string; status: string; accountLimit: n
 
 type PageData = { items: Tenant[]; total: number; page: number; pageSize: number }
 
+function defaultTenantExpireDate(): string {
+  const date = new Date()
+  date.setFullYear(date.getFullYear() + 10)
+  return date.toISOString().split("T")[0]
+}
+
 // === Main Component ===
 export default function SystemTenantsPage() {
   const [data, setData] = useState<PageData>({ items: [], total: 0, page: 1, pageSize: 20 })
@@ -134,7 +140,7 @@ export default function SystemTenantsPage() {
 function TenantFormDialog({ tenant, onSubmit, onClose }: { tenant: Tenant | null; onSubmit: (data: Record<string, any>) => void; onClose: () => void }) {
   const [form, setForm] = useState({
     tenantCode: tenant?.tenantCode ?? "", name: tenant?.name ?? "", contactName: tenant?.contactName ?? "", contactPhone: tenant?.contactPhone ?? "", domain: tenant?.domain ?? "",
-    packageId: tenant?.packageId ?? "", status: tenant?.status ?? "ACTIVE", effectiveAt: tenant?.effectiveAt ? tenant.effectiveAt.split("T")[0] : "", expireTime: tenant?.expireTime ? tenant.expireTime.split("T")[0] : "",
+    packageId: tenant?.packageId ?? "", status: tenant?.status ?? "ACTIVE", effectiveAt: tenant?.effectiveAt ? tenant.effectiveAt.split("T")[0] : "", expireTime: tenant?.expireTime ? tenant.expireTime.split("T")[0] : defaultTenantExpireDate(),
     accountLimit: tenant?.accountLimit?.toString() ?? "", adminUsername: "", adminNickname: "", adminPassword: "", adminPhone: "", adminEmail: "",
   })
   const [packages, setPackages] = useState<TenantPackage[]>([])
@@ -174,7 +180,7 @@ function TenantFormDialog({ tenant, onSubmit, onClose }: { tenant: Tenant | null
                 <div><Label>绑定域名</Label><input value={form.domain} onChange={(e) => update("domain", e.target.value)} placeholder="demo.example.com（仅作业务域名）" className={fieldClass} /></div>
               </div>
             </Section>
-            <Section title="服务与套餐" description="套餐提供默认菜单和席位；留空租户席位覆盖时使用套餐默认值。">
+            <Section title="服务与套餐" description="新租户默认自生效日起 10 年到期；套餐提供默认菜单和席位，留空租户席位覆盖时使用套餐默认值。">
               <div className="grid gap-4 md:grid-cols-4">
                 <div><Label>生效时间</Label><input type="date" value={form.effectiveAt} onChange={(e) => update("effectiveAt", e.target.value)} className={fieldClass} /></div>
                 <div><Label>过期时间</Label><input type="date" value={form.expireTime} onChange={(e) => update("expireTime", e.target.value)} className={fieldClass} /></div>
