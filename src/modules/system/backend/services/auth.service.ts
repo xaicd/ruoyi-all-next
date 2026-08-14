@@ -14,6 +14,8 @@ import { SystemPermissionService } from "@/modules/system/backend/services/permi
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 import { issueJwt, verifyJwt, type JwtPayload } from "@/modules/shared/backend/auth/jwt"
 import { getPlatformRole, isPlatformUsername, runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
+import { isDependencyUnavailable } from "@/modules/shared/backend/http/api-error"
+import { writeStructuredLog } from "@/modules/shared/backend/lib/observability"
 
 type TokenPayload = JwtPayload
 
@@ -96,8 +98,11 @@ export class SystemAuthService {
   static async login(input: LoginInput) {
     domainLog.event("system.auth.login.attempt", { username: input.username })
 
+    let stage = "tenant_lookup"
+    try {
     const tenantId = await resolveLoginTenantId(input.tenantCode)
     if (!tenantId && !isPlatformUsername(input.username)) throw new Error("租户账号登录必须填写租户标识")
+    stage = "user_lookup"
     const user = await SystemUserRepository.findByUsername(input.username, tenantId)
     if (!user) {
       domainLog.audit("system.auth.login.fail", { targetType: "USER", targetId: input.username, reason: "not_found" })
@@ -115,6 +120,7 @@ export class SystemAuthService {
       throw new Error("用户名或密码错误")
     }
 
+    stage = "permission_load"
     const roles = resolveLoginRoles(user.username)
     const { permissions } = await getEffectivePermissions(user, roles)
 
@@ -146,6 +152,14 @@ export class SystemAuthService {
         username: user.username,
         nickname: user.nickname,
       },
+    }
+    } catch (error) {
+      if (isDependencyUnavailable(error)) {
+        const cause = error instanceof Error ? error : new Error("Unknown database dependency error")
+        domainLog.audit("system.auth.login.error", { targetType: "USER", targetId: input.username, reason: "dependency_unavailable", stage, errorCode: (cause as Error & { code?: string }).code })
+        writeStructuredLog("error", "system.auth.login.dependency_failed", { stage, username: input.username, errorCode: (cause as Error & { code?: string }).code, errorMessage: cause.message, stack: cause.stack })
+      }
+      throw error
     }
   }
 

@@ -25,7 +25,7 @@ export default function LoginPage({ bootstrapCredentials }: { bootstrapCredentia
         localStorage.setItem("ruoyi_user", JSON.stringify(data.data.user))
         window.location.href = "/admin/system/users"
       } else {
-        setError(data.error || "登录失败")
+        setError(data.error ? `${data.error}${data.code ? `（${data.code}）` : ""}` : "登录服务响应异常，请检查服务端日志")
       }
     } catch {
       setError("网络异常，请重试")

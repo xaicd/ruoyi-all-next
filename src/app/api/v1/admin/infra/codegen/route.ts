@@ -17,7 +17,7 @@ export const GET = withAdminRoute(async (request: Request) => {
     const data = await CodegenTableRepository.findList(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }
-}, { permission: PERMISSIONS.INFRA_CODEGEN_VIEW })
+}, { permission: PERMISSIONS.INFRA_CODEGEN_QUERY })
 
 /**
  * DELETE /api/v1/admin/infra/codegen?ids=1,2,3
@@ -31,4 +31,4 @@ export const DELETE = withAdminRoute(async (request: Request) => {
     await CodegenTableRepository.deleteByIds(ids)
     return NextResponse.json({ success: true, data: { deleted: ids.length } })
   } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }
-}, { permission: PERMISSIONS.INFRA_CODEGEN_UPDATE })
+}, { permission: PERMISSIONS.INFRA_CODEGEN_DELETE })

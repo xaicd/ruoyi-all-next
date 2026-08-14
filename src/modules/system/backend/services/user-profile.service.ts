@@ -33,11 +33,4 @@ export class UserProfileService {
     domainLog.audit("system.userProfile.updatePassword", { targetType: "USER", targetId: userId })
     return { success: true }
   }
-
-  // 兼容旧 route 格式
-  static async page(input: any) { return { items: [], total: 0, page: 1, pageSize: 20 } }
-  static async get(id: string) { return UserProfileService.getProfile(id) }
-  static async create(input: any) { return { id: "mock" } }
-  static async update(input: any) { return UserProfileService.updateProfile(input.id, input) }
-  static async delete(id: string) { return { success: true } }
 }

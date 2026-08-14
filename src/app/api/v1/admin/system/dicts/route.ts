@@ -27,7 +27,7 @@ export const GET = withAdminRoute(async (request, auth) => {
     const data = await SystemDictService.listTypes(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }
-}, { permission: PERMISSIONS.SYSTEM_DICT_VIEW })
+}, { permission: PERMISSIONS.SYSTEM_DICT_QUERY })
 
 export const POST = withAdminRoute(async (request, auth) => {
   try {

@@ -17,6 +17,7 @@ function walk(dir, files = []) {
 
 function protectionForMethod(source, method) {
   const escapedMethod = method.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+  if (new RegExp(`admin-route-manifest:\\s*dynamic-wrapper\\s+${escapedMethod}\\b`).test(source)) return "wrapper"
   if (new RegExp(`export\\s+const\\s+${escapedMethod}\\s*=\\s*withAdminRoute\\b`).test(source)) return "wrapper"
   if (new RegExp(`export\\s+(?:async\\s+)?function\\s+${escapedMethod}\\b`).test(source)) {
     return /requireAdminAuth|requirePlatformAdmin|ensurePermission/.test(source) ? "legacy-direct-guard" : "proxy-authenticated"

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-14T11:02:26.860Z",
-  "routeCount": 820,
-  "operationCount": 2005,
+  "generatedAt": "2026-08-14T11:39:39.308Z",
+  "routeCount": 818,
+  "operationCount": 1993,
   "routes": [
     {
       "path": "/api/v1/admin/ai/ai-api-key",
@@ -11667,10 +11667,6 @@
         {
           "method": "GET",
           "protection": "wrapper"
-        },
-        {
-          "method": "POST",
-          "protection": "proxy-authenticated"
         }
       ],
       "source": "src/app/api/v1/admin/system/login-logs/route.ts"
@@ -11681,14 +11677,6 @@
         {
           "method": "GET",
           "protection": "wrapper"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
         }
       ],
       "source": "src/app/api/v1/admin/system/login-logs/[id]/route.ts"
@@ -11760,7 +11748,7 @@
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         },
         {
           "method": "POST",
@@ -11872,7 +11860,7 @@
       "operations": [
         {
           "method": "POST",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/system/oauth2/open/token/route.ts"
@@ -11892,7 +11880,7 @@
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/system/oauth2/user/info/route.ts"
@@ -11935,10 +11923,6 @@
         {
           "method": "GET",
           "protection": "wrapper"
-        },
-        {
-          "method": "POST",
-          "protection": "proxy-authenticated"
         }
       ],
       "source": "src/app/api/v1/admin/system/operate-logs/route.ts"
@@ -11949,14 +11933,6 @@
         {
           "method": "GET",
           "protection": "wrapper"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
         }
       ],
       "source": "src/app/api/v1/admin/system/operate-logs/[id]/route.ts"
@@ -12074,28 +12050,10 @@
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/system/sms-callback/route.ts"
-    },
-    {
-      "path": "/api/v1/admin/system/sms-callback/[id]",
-      "operations": [
-        {
-          "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
-        }
-      ],
-      "source": "src/app/api/v1/admin/system/sms-callback/[id]/route.ts"
     },
     {
       "path": "/api/v1/admin/system/sms-template",
@@ -12294,32 +12252,14 @@
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "POST",
-          "protection": "proxy-authenticated"
-        }
-      ],
-      "source": "src/app/api/v1/admin/system/user-profile/route.ts"
-    },
-    {
-      "path": "/api/v1/admin/system/user-profile/[id]",
-      "operations": [
-        {
-          "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         },
         {
           "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         }
       ],
-      "source": "src/app/api/v1/admin/system/user-profile/[id]/route.ts"
+      "source": "src/app/api/v1/admin/system/user-profile/route.ts"
     },
     {
       "path": "/api/v1/admin/system/users",

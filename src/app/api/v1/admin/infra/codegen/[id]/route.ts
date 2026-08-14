@@ -17,7 +17,7 @@ export const GET = withAdminRoute(async (request: Request, _auth, context: Route
     if (!data) return NextResponse.json({ success: false, error: "表配置不存在" }, { status: 404 })
     return NextResponse.json({ success: true, data })
   } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }
-}, { permission: PERMISSIONS.INFRA_CODEGEN_VIEW })
+}, { permission: PERMISSIONS.INFRA_CODEGEN_QUERY })
 
 /**
  * PUT /api/v1/admin/infra/codegen/:id
@@ -42,4 +42,4 @@ export const DELETE = withAdminRoute(async (request: Request, _auth, context: Ro
     await CodegenTableRepository.delete(id)
     return NextResponse.json({ success: true })
   } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }
-}, { permission: PERMISSIONS.INFRA_CODEGEN_UPDATE })
+}, { permission: PERMISSIONS.INFRA_CODEGEN_DELETE })

@@ -17,13 +17,3 @@ export const GET = withAdminRoute(async (request: Request) => {
     return NextResponse.json({ success: false, error: error?.message || "查询失败" }, { status: 400 })
   }
 }, { permission: PERMISSIONS.SYSTEM_OPERATE_LOG_QUERY })
-
-export async function POST(request: Request) {
-  try {
-    const body = await request.json()
-    const data = await OperateLogService.create(body)
-    return NextResponse.json({ success: true, data }, { status: 201 })
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message || "创建失败" }, { status: 400 })
-  }
-}

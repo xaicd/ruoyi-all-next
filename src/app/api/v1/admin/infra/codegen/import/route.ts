@@ -61,7 +61,7 @@ export const POST = withAdminRoute(async (request: Request, _auth) => {
 
     return NextResponse.json({ success: true, data: { imported, skipped } })
   } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }
-}, { permission: PERMISSIONS.INFRA_CODEGEN_UPDATE })
+}, { permission: PERMISSIONS.INFRA_CODEGEN_CREATE })
 
 function inferModuleName(tableName: string): string {
   const prefixes = ["system", "infra", "pay", "mall", "crm", "erp", "bpm", "wms", "mes", "ai", "iot", "im", "mp", "member", "report"]

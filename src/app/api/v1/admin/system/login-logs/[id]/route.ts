@@ -5,7 +5,7 @@ import { LoginLogService } from "@/modules/system/backend/services/login-log.ser
 
 type RouteContext = { params: Promise<{ id: string }> }
 
-export const GET = withAdminRoute(async (request: Request, _auth, context: RouteContext) => {
+export const GET = withAdminRoute(async (_request, _auth, context: RouteContext) => {
   try {
     const { id } = await context.params
     const data = await LoginLogService.get(id)
@@ -15,24 +15,3 @@ export const GET = withAdminRoute(async (request: Request, _auth, context: Route
     return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
   }
 }, { permission: PERMISSIONS.SYSTEM_LOGIN_LOG_QUERY })
-
-export async function PUT(request: Request, context: RouteContext) {
-  try {
-    const { id } = await context.params
-    const body = await request.json()
-    const data = await LoginLogService.update({ ...body, id })
-    return NextResponse.json({ success: true, data })
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
-  }
-}
-
-export async function DELETE(request: Request, context: RouteContext) {
-  try {
-    const { id } = await context.params
-    const data = await LoginLogService.delete(id)
-    return NextResponse.json({ success: true, data })
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
-  }
-}

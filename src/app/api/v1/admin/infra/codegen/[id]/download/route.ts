@@ -57,4 +57,4 @@ export const GET = withAdminRoute(async (request: Request, _auth, context: Route
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
   }
-}, { permission: PERMISSIONS.INFRA_CODEGEN_VIEW })
+}, { permission: PERMISSIONS.INFRA_CODEGEN_DOWNLOAD })

@@ -12,7 +12,7 @@ export const GET = withAdminRoute(async (request, auth, context: RouteContext) =
     const data = await SystemDictService.getType(id)
     return NextResponse.json({ success: true, data })
   } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: error?.message?.includes("不存在") ? 404 : 400 }) }
-}, { permission: PERMISSIONS.SYSTEM_DICT_VIEW })
+}, { permission: PERMISSIONS.SYSTEM_DICT_QUERY })
 
 export const PUT = withAdminRoute(async (request, auth, context: RouteContext) => {
   try {
@@ -22,7 +22,7 @@ export const PUT = withAdminRoute(async (request, auth, context: RouteContext) =
     const data = await SystemDictService.updateType({ id, ...input })
     return NextResponse.json({ success: true, data })
   } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }
-}, { permission: PERMISSIONS.SYSTEM_DICT_CREATE })
+}, { permission: PERMISSIONS.SYSTEM_DICT_UPDATE })
 
 export const DELETE = withAdminRoute(async (request, auth, context: RouteContext) => {
   try {
@@ -30,4 +30,4 @@ export const DELETE = withAdminRoute(async (request, auth, context: RouteContext
     const data = await SystemDictService.deleteType(id)
     return NextResponse.json({ success: true, data })
   } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }
-}, { permission: PERMISSIONS.SYSTEM_DICT_CREATE })
+}, { permission: PERMISSIONS.SYSTEM_DICT_DELETE })

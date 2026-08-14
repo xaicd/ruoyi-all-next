@@ -34,6 +34,7 @@ function excludePlatformControlMenuTree(nodes: MenuTreeNode[]): MenuTreeNode[] {
     .map((node) => ({ ...node, children: excludePlatformControlMenuTree(node.children) }))
 }
 
+// admin-route-manifest: dynamic-wrapper GET
 export const GET = async (request: Request) => {
   const mode = new URL(request.url).searchParams.get("mode")
   if (mode === "tenant-package") {

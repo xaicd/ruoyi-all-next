@@ -71,13 +71,13 @@ export const ADMIN_MENU: AdminMenuItem[] = [
         key: "dict-data",
         label: "数据字典",
         path: "/admin/system/dicts",
-        requiredPermission: PERMISSIONS.SYSTEM_DICT_VIEW,
+        requiredPermission: PERMISSIONS.SYSTEM_DICT_QUERY,
       },
       {
         key: "notices",
         label: "系统通知",
         path: "/admin/system/notices",
-        requiredPermission: PERMISSIONS.SYSTEM_NOTICE_VIEW,
+        requiredPermission: PERMISSIONS.SYSTEM_NOTICE_QUERY,
       },
       {
         key: "notify-templates",
@@ -209,13 +209,7 @@ export const ADMIN_MENU: AdminMenuItem[] = [
         key: "infra-codegen",
         label: "代码生成",
         path: "/admin/infra/codegen",
-        requiredPermission: PERMISSIONS.INFRA_CODEGEN_VIEW,
-      },
-      {
-        key: "infra-template-engine",
-        label: "模板引擎",
-        path: "/admin/infra/template-engine",
-        requiredPermission: PERMISSIONS.INFRA_CODEGEN_VIEW,
+        requiredPermission: PERMISSIONS.INFRA_CODEGEN_QUERY,
       },
       {
         key: "infra-swagger",

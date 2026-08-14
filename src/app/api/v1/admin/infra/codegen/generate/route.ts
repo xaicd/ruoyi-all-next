@@ -103,4 +103,4 @@ export const GET = withAdminRoute(async () => {
     success: true,
     data: { templates, tables: tables.map((t) => ({ name: t.name, comment: t.comment, columns: t.columns.length })) },
   })
-}, { permission: PERMISSIONS.INFRA_CODEGEN_VIEW })
+}, { permission: PERMISSIONS.INFRA_CODEGEN_QUERY })

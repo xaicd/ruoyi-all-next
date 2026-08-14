@@ -12,6 +12,7 @@ type ApiResponse<T = any> = {
   success: boolean
   data?: T
   error?: string
+  code?: string
 }
 
 type RequestOptions = {
@@ -134,6 +135,7 @@ export const API = {
   ROLE_ASSIGNABLE_MENUS: "/api/v1/admin/system/menus?mode=role-assign",
   TENANT_PACKAGE_MENUS: "/api/v1/admin/system/menus?mode=tenant-package",
   ASSIGN_ROLE_MENU: "/api/v1/admin/system/permissions/assign-role-menu",
+  USER_PROFILE: "/api/v1/admin/system/user-profile",
   TENANTS: "/api/v1/admin/system/tenants",
   TENANT_SUBSCRIPTIONS: "/api/v1/admin/system/tenants",
   TENANT_PACKAGES: "/api/v1/admin/system/tenant-packages",

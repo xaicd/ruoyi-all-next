@@ -61,6 +61,11 @@ export const traceContext = {
     return traceStorage.run(trace, fn)
   },
 
+  /** 在已恢复的请求 trace 中执行。 */
+  runWithTrace<T>(trace: TraceInfo, fn: () => T | Promise<T>): T | Promise<T> {
+    return traceStorage.run(trace, fn)
+  },
+
   /**
    * 从请求头中恢复 trace（跨服务调用时）
    */
