@@ -293,6 +293,9 @@ export interface InfraApiErrorLogTable {
   error_code: string | null
   root_cause: string | null
   status: string
+  processed_at: Date | null
+  processed_by: string | null
+  process_note: string | null
   user_ip: string | null
   user_agent: string | null
   created_at: Generated<Date>

@@ -13,4 +13,4 @@ export const GET = withAdminRoute(async (request) => {
     status: params.get("status") ?? undefined,
   })
   return NextResponse.json({ success: true, data: await ApiErrorLogService.page(input) })
-}, { permission: PERMISSIONS.INFRA_API_ERROR_LOG_VIEW })
+}, { permission: PERMISSIONS.INFRA_API_ERROR_LOG_QUERY })

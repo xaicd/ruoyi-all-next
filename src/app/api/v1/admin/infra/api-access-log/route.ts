@@ -12,4 +12,4 @@ export const GET = withAdminRoute(async (request) => {
     keyword: params.get("keyword") ?? undefined,
   })
   return NextResponse.json({ success: true, data: await ApiAccessLogService.page(input) })
-}, { permission: PERMISSIONS.INFRA_API_LOG_VIEW })
+}, { permission: PERMISSIONS.INFRA_API_ACCESS_LOG_QUERY })

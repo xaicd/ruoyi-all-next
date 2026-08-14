@@ -49,3 +49,26 @@ export function registerCoreApiContracts(): void {
     responseSchema: { type: "object", description: "OpenAPI 3.0 document with x-error-catalog extension." },
   })
 }
+
+
+/** Audit-log contracts stay explicit so API/MCP clients know their read, retry, and authorization semantics. */
+export function registerAuditLogApiContracts(): void {
+  const entries = [
+    ["/api/v1/admin/infra/api-access-log", "GET", "查询 API 访问日志", "infra:api-access-log:query"],
+    ["/api/v1/admin/infra/api-access-log/{id}", "GET", "获取 API 访问日志详情", "infra:api-access-log:query"],
+    ["/api/v1/admin/infra/api-access-log/export", "GET", "导出 API 访问日志 CSV", "infra:api-access-log:export"],
+    ["/api/v1/admin/infra/api-error-logs", "GET", "查询 API 错误日志", "infra:api-error-log:query"],
+    ["/api/v1/admin/infra/api-error-logs/{id}", "GET", "获取 API 错误日志详情", "infra:api-error-log:query"],
+    ["/api/v1/admin/infra/api-error-logs/{id}", "PATCH", "标记 API 错误日志已处理", "infra:api-error-log:update-status"],
+    ["/api/v1/admin/infra/api-error-logs/export", "GET", "导出 API 错误日志 CSV", "infra:api-error-log:export"],
+    ["/api/v1/admin/infra/audit-log-retention", "POST", "预览或执行审计日志保留清理", "infra:audit-log:retention"],
+    ["/api/v1/admin/system/login-logs", "GET", "查询登录日志", "system:login-log:query"],
+    ["/api/v1/admin/system/login-logs/export", "GET", "导出登录日志 CSV", "system:login-log:export"],
+    ["/api/v1/admin/system/operate-logs", "GET", "查询操作日志", "system:operate-log:query"],
+    ["/api/v1/admin/system/operate-logs/export", "GET", "导出操作日志 CSV", "system:operate-log:export"],
+  ] as const
+  for (const [path, method, summary, permission] of entries) apiRegistry.register({
+    path, method: method as "GET" | "POST" | "PATCH", domain: path.includes("/system/") ? "system" : "infra", endpoint: "admin", version: "v1", summary, permission,
+    responseSchema: { type: "object", description: "Standard successful response; all failures follow the global ErrorResponse contract with code, messageKey, retryable, and traceId." },
+  })
+}

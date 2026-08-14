@@ -151,6 +151,8 @@ export const API = {
   FILES: "/api/v1/admin/infra/files",
   DATA_SOURCE_CONFIG: "/api/v1/admin/infra/data-source-config",
   CODEGEN: "/api/v1/admin/infra/codegen",
+  API_ACCESS_LOGS: "/api/v1/admin/infra/api-access-log",
+  API_ERROR_LOGS: "/api/v1/admin/infra/api-error-logs",
 
   // Pay
   PAY_ORDERS: "/api/v1/admin/pay/orders",

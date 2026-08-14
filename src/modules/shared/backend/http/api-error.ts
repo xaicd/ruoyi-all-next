@@ -21,6 +21,8 @@ export class ApiError extends Error {
 }
 
 export type ApiErrorDetail = { field: string; code: string; messageKey: string; message: string }
+type ErrorWithCode = Error & { code?: string; cause?: unknown }
+type ErrorContext = { request?: Request; operation?: string }
 export type ApiErrorResponse = {
   success: false
   /** Compatibility alias for message. */

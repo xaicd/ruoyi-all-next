@@ -10,6 +10,10 @@ export const apiErrorLogQuerySchema = infraPageQuerySchema.extend({
   status: z.enum(["UNPROCESSED", "PROCESSED"]).optional(),
 })
 
+export const apiErrorLogProcessSchema = z.object({
+  processNote: z.string().trim().max(500).optional(),
+})
+
 export const infraConfigUpdateSchema = z.object({
   id: z.string().trim().min(1),
   value: z.string().trim().min(1),

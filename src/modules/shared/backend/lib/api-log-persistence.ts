@@ -53,7 +53,8 @@ export async function persistApiErrorLog(input: ApiErrorLogInput): Promise<void>
       request_params: encode({ operation: input.operation }), exception_name: input.errorName,
       exception_message: String(redact(input.errorMessage)), exception_stack: input.stack ? String(redact(input.stack)) : null,
       error_code: input.errorCode ?? null, root_cause: input.rootCause ? String(redact(input.rootCause)) : null,
-      status: "UNPROCESSED", user_ip: input.userIp ?? null, user_agent: input.userAgent ?? null, created_at: new Date(),
+      status: "UNPROCESSED", processed_at: null, processed_by: null, process_note: null,
+      user_ip: input.userIp ?? null, user_agent: input.userAgent ?? null, created_at: new Date(),
     }).execute()
   } catch (error) {
     writeCompactError("audit.api_error.persist_failed", error, { traceId: input.traceId })
