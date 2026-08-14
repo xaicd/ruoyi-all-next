@@ -1,24 +1,41 @@
-import { domainLog } from "@/modules/shared/backend/lib/domain-log"
+import { getKyselyDb } from "@/modules/shared/backend/lib/database"
 
-type ApiErrorLogItem = { id: string; userId: string | null; requestMethod: string; requestUrl: string; exceptionName: string; exceptionMessage: string; status: string; userIp: string; createdAt: string }
+type ApiErrorLogQuery = { page: number; pageSize: number; keyword?: string; status?: "UNPROCESSED" | "PROCESSED" }
 
-const MOCK_DATA: ApiErrorLogItem[] = [
-  { id: "1", userId: "1", requestMethod: "POST", requestUrl: "/api/v1/admin/system/users", exceptionName: "ZodError", exceptionMessage: "用户名不能为空", status: "UNPROCESSED", userIp: "127.0.0.1", createdAt: "2026-08-07T11:00:00.000Z" },
-]
+function toItem(row: Awaited<ReturnType<typeof selectErrorLog>>) {
+  return { id: row.id, traceId: row.trace_id, userId: row.user_id, tenantId: row.tenant_id, applicationName: row.application_name, requestMethod: row.request_method, requestUrl: row.request_url, requestParams: row.request_params, exceptionName: row.exception_name, exceptionMessage: row.exception_message, exceptionStack: row.exception_stack, errorCode: row.error_code, rootCause: row.root_cause, status: row.status, userIp: row.user_ip, userAgent: row.user_agent, createdAt: row.created_at.toISOString() }
+}
+
+async function selectErrorLog(id: string) {
+  const db = await getKyselyDb()
+  return db.selectFrom("infra_api_error_log").selectAll().where("id", "=", id).executeTakeFirstOrThrow()
+}
 
 export class ApiErrorLogService {
-  static async page(input: any) {
-    let filtered = [...MOCK_DATA]
-    if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((l) => l.exceptionMessage.toLowerCase().includes(kw) || l.requestUrl.toLowerCase().includes(kw)) }
-    if (input.status) filtered = filtered.filter((l) => l.status === input.status)
-    filtered.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
-    domainLog.event("infra.apiErrorLog.page", { total: filtered.length })
-    const start = (input.page - 1) * input.pageSize
-    return { items: filtered.slice(start, start + input.pageSize), total: filtered.length, page: input.page, pageSize: input.pageSize }
+  static async page(input: ApiErrorLogQuery) {
+    const db = await getKyselyDb()
+    let query = db.selectFrom("infra_api_error_log")
+    if (input.keyword) {
+      const like = `%${input.keyword}%`
+      query = query.where((eb) => eb.or([eb("request_url", "ilike", like), eb("exception_message", "ilike", like), eb("trace_id", "ilike", like), eb("error_code", "ilike", like)]))
+    }
+    if (input.status) query = query.where("status", "=", input.status)
+    const [rows, count] = await Promise.all([
+      query.selectAll().orderBy("created_at", "desc").offset((input.page - 1) * input.pageSize).limit(input.pageSize).execute(),
+      query.select((eb) => eb.fn.countAll<number>().as("count")).executeTakeFirstOrThrow(),
+    ])
+    return { items: rows.map(toItem), total: Number(count.count), page: input.page, pageSize: input.pageSize }
   }
-  static async get(id: string) { return MOCK_DATA.find((l) => l.id === id) ?? null }
-  static async markProcessed(id: string) { const item = MOCK_DATA.find((l) => l.id === id); if (item) item.status = "PROCESSED"; return { success: true } }
-  static async create(input: any) { return { id: "mock" } }
-  static async update(input: any) { return ApiErrorLogService.markProcessed(input.id) }
-  static async delete(id: string) { const idx = MOCK_DATA.findIndex((l) => l.id === id); if (idx !== -1) MOCK_DATA.splice(idx, 1); return { success: true } }
+
+  static async get(id: string) {
+    const db = await getKyselyDb()
+    const row = await db.selectFrom("infra_api_error_log").selectAll().where("id", "=", id).executeTakeFirst()
+    return row ? toItem(row) : null
+  }
+
+  static async markProcessed(id: string) {
+    const db = await getKyselyDb()
+    const result = await db.updateTable("infra_api_error_log").set({ status: "PROCESSED" }).where("id", "=", id).executeTakeFirst()
+    return { success: Number(result.numUpdatedRows) > 0 }
+  }
 }

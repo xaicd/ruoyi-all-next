@@ -5,7 +5,7 @@ import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { ApiError, handleApiError } from "@/modules/shared/backend/http/api-error"
 import { traceContext } from "@/modules/shared/backend/lib/trace-context"
 import { recordApiAccess, resolveApiAccessOutcome } from "@/modules/shared/backend/lib/observability"
-import { persistApiAccessLog } from "@/modules/shared/backend/lib/api-log-persistence"
+import { persistApiAccessLog, persistLoginAuditLog } from "@/modules/shared/backend/lib/api-log-persistence"
 
 /** POST /api/v1/admin/system/auth — the only public administrator login method. */
 export async function POST(request: Request) {
@@ -13,10 +13,16 @@ export async function POST(request: Request) {
   return traceContext.runWithTrace(trace, async () => {
     const startedAt = Date.now()
     let response: Response
+    let username = "unknown"
+    let tenantCode: string | undefined
+    let userId: string | undefined
     try {
       const body = await request.json()
       const input = loginSchema.parse(body)
+      username = input.username
+      tenantCode = input.tenantCode
       const data = await SystemAuthService.login(input)
+      userId = data.user.id
       response = NextResponse.json({ success: true, data }, { headers: { "X-Trace-Id": trace.traceId } })
     } catch (error: unknown) {
       if (error instanceof Error && ["用户名或密码错误", "租户账号登录必须填写租户标识", "租户编码不存在", "账号未绑定租户"].includes(error.message)) {
@@ -34,7 +40,13 @@ export async function POST(request: Request) {
       resultMessage: errorCode === "AUTHENTICATION_FAILED" ? "用户名或密码校验失败" : undefined,
     }
     recordApiAccess(accessLog)
-    void persistApiAccessLog({ ...accessLog, traceId: trace.traceId, userIp: request.headers.get("x-forwarded-for")?.split(",")[0]?.trim(), userAgent: request.headers.get("user-agent") ?? undefined, operation: trace.operationName })
+    const userIp = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
+    void persistApiAccessLog({ ...accessLog, traceId: trace.traceId, userId, userIp, userAgent: request.headers.get("user-agent") ?? undefined, operation: trace.operationName })
+    void persistLoginAuditLog({
+      userId, username, userIp, userAgent: request.headers.get("user-agent") ?? undefined,
+      result: response.status < 400 ? "SUCCESS" : "FAIL", tenantId: tenantCode,
+      remark: response.status < 400 ? undefined : errorCode === "AUTHENTICATION_FAILED" ? "身份校验失败" : errorCode === "ACCOUNT_DISABLED" ? "账号已禁用" : errorCode === "DEPENDENCY_UNAVAILABLE" ? "认证依赖暂不可用" : "登录请求失败",
+    })
     return response
   })
 }

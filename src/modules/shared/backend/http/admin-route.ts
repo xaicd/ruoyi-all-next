@@ -5,7 +5,7 @@ import { toTenantContext } from "../auth/tenant"
 import { runWithTenantContext } from "../lib/biz-tenant"
 import { handleApiError } from "./api-error"
 import { recordApiAccess, resolveApiAccessOutcome } from "../lib/observability"
-import { persistApiAccessLog } from "../lib/api-log-persistence"
+import { persistApiAccessLog, persistOperateAuditLog } from "../lib/api-log-persistence"
 import { traceContext } from "../lib/trace-context"
 
 export type AdminRouteOptions = {
@@ -18,6 +18,20 @@ type AdminRouteHandler<TArgs extends unknown[]> = (
   auth: AuthContext,
   ...args: TArgs
 ) => Response | Promise<Response>
+
+const AUDIT_EXCLUDED_PATHS = ["/login-logs", "/operate-logs", "/api-access-log", "/api-error-logs"]
+
+function isAuditedMutation(method: string, path: string): boolean {
+  return ["POST", "PUT", "PATCH", "DELETE"].includes(method) && !AUDIT_EXCLUDED_PATHS.some((segment) => path.includes(segment))
+}
+
+function describeOperation(method: string, path: string) {
+  const segments = path.split("/").filter(Boolean).slice(3)
+  const module = (segments[0] ?? "admin").slice(0, 50)
+  const resource = segments.slice(1).join("/") || module
+  const type = method === "POST" ? "CREATE" : method === "DELETE" ? "DELETE" : "UPDATE"
+  return { module, name: `${type} ${resource}`.slice(0, 100), type: type as "CREATE" | "UPDATE" | "DELETE" }
+}
 
 /**
  * Resource-level admin boundary. Proxy protects the perimeter; this wrapper
@@ -51,7 +65,12 @@ export function withAdminRoute<TArgs extends unknown[]>(
         outcome: resolveApiAccessOutcome(response.status, errorCode), errorCode,
       }
       recordApiAccess(accessLog)
-      void persistApiAccessLog({ ...accessLog, traceId: trace.traceId, userIp: request.headers.get("x-forwarded-for")?.split(",")[0]?.trim(), userAgent: request.headers.get("user-agent") ?? undefined, operation: trace.operationName })
+      const userIp = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
+      void persistApiAccessLog({ ...accessLog, traceId: trace.traceId, userIp, userAgent: request.headers.get("user-agent") ?? undefined, operation: trace.operationName })
+      if (isAuditedMutation(request.method, path)) {
+        const operation = describeOperation(request.method, path)
+        void persistOperateAuditLog({ ...operation, method: request.method, path, status: response.status, durationMs: accessLog.durationMs, userId, tenantId, userIp })
+      }
       response.headers.set("X-Trace-Id", trace.traceId)
       return response
     })

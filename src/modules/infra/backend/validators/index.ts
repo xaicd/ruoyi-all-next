@@ -6,6 +6,10 @@ export const infraPageQuerySchema = z.object({
   keyword: z.string().trim().max(100).optional(),
 })
 
+export const apiErrorLogQuerySchema = infraPageQuerySchema.extend({
+  status: z.enum(["UNPROCESSED", "PROCESSED"]).optional(),
+})
+
 export const infraConfigUpdateSchema = z.object({
   id: z.string().trim().min(1),
   value: z.string().trim().min(1),
