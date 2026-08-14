@@ -1,44 +1,37 @@
-import { domainLog } from "@/modules/shared/backend/lib/domain-log"
+import { getKyselyDb } from "@/modules/shared/backend/lib/database"
 
-type LoginLogItem = { id: string; userId: string; username: string; userIp: string; result: string; remark: string | null; createdAt: string }
+type LoginLogQuery = { page: number; pageSize: number; keyword?: string; result?: "SUCCESS" | "FAIL" }
 
-const MOCK_DATA: LoginLogItem[] = [
-  { id: "1", userId: "1", username: "admin", userIp: "127.0.0.1", result: "SUCCESS", remark: null, createdAt: "2026-08-07T10:00:00.000Z" },
-  { id: "2", userId: "2", username: "test", userIp: "192.168.1.100", result: "SUCCESS", remark: null, createdAt: "2026-08-07T09:30:00.000Z" },
-  { id: "3", userId: "1", username: "admin", userIp: "10.0.0.1", result: "FAIL", remark: "密码错误", createdAt: "2026-08-06T18:00:00.000Z" },
-]
+function toItem(row: Awaited<ReturnType<typeof selectLoginLog>>) {
+  return { id: row.id, userId: row.user_id, username: row.username, userIp: row.user_ip, userAgent: row.user_agent, result: row.result, remark: row.remark, tenantId: row.tenant_id, createdAt: row.created_at.toISOString() }
+}
+
+async function selectLoginLog(id: string) {
+  const db = await getKyselyDb()
+  return db.selectFrom("system_login_log").selectAll().where("id", "=", id).executeTakeFirstOrThrow()
+}
 
 export class LoginLogService {
-  static async page(input: any) {
-    let filtered = [...MOCK_DATA]
-    if (input.keyword) { const kw = input.keyword.toLowerCase(); filtered = filtered.filter((l) => l.username.toLowerCase().includes(kw) || l.userIp.includes(kw)) }
-    if (input.result) filtered = filtered.filter((l) => l.result === input.result)
-    filtered.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
-    const total = filtered.length
-    const start = (input.page - 1) * input.pageSize
-    domainLog.event("system.loginLog.page", { total })
-    return { items: filtered.slice(start, start + input.pageSize), total, page: input.page, pageSize: input.pageSize }
+  static async page(input: LoginLogQuery) {
+    const db = await getKyselyDb()
+    let query = db.selectFrom("system_login_log")
+    if (input.keyword) {
+      const like = `%${input.keyword}%`
+      query = query.where((eb) => eb.or([eb("username", "ilike", like), eb("user_ip", "ilike", like)]))
+    }
+    if (input.result) query = query.where("result", "=", input.result)
+    const [rows, count] = await Promise.all([
+      query.selectAll().orderBy("created_at", "desc").offset((input.page - 1) * input.pageSize).limit(input.pageSize).execute(),
+      query.select((eb) => eb.fn.countAll<number>().as("count")).executeTakeFirstOrThrow(),
+    ])
+    return { items: rows.map(toItem), total: Number(count.count), page: input.page, pageSize: input.pageSize }
   }
 
   static async get(id: string) {
-    return MOCK_DATA.find((l) => l.id === id) ?? null
+    const db = await getKyselyDb()
+    const row = await db.selectFrom("system_login_log").selectAll().where("id", "=", id).executeTakeFirst()
+    return row ? toItem(row) : null
   }
-
-  static async delete(id: string) {
-    const idx = MOCK_DATA.findIndex((l) => l.id === id)
-    if (idx !== -1) MOCK_DATA.splice(idx, 1)
-    return { success: true }
-  }
-
-  static async update(...args: any[]) {
-    return { id: args[0], ...(args[1] || {}) }
-  }
-
-  static async create(input: Record<string, any>) {
-    return { id: String(Date.now()), ...input }
-  }
-
 }
 
-// Alias for index.ts re-export
 export { LoginLogService as SystemLoginLogService }
