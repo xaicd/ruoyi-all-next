@@ -2,12 +2,11 @@ import { NextResponse } from "next/server"
 import { wmsCheckinSchema } from "@/modules/wms/backend/validators"
 import { WmsService } from "@/modules/wms/backend/services"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { writeAuditLog } from "@/modules/shared/backend/lib/audit-log"
 
-export async function POST(request: Request) {
+export const POST = withAdminRoute(async (request, auth) => {
   try {
-    const auth = await ensurePermission(request, PERMISSIONS.WMS_OPERATION_CHECKIN)
     const body = await request.json()
     const input = wmsCheckinSchema.parse(body)
 
@@ -24,4 +23,4 @@ export async function POST(request: Request) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message ?? "操作失败" }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.WMS_OPERATION_CHECKIN })

@@ -1,19 +1,20 @@
 import { NextResponse } from "next/server"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 
 type RouteContext = { params: Promise<{ id: string }> }
 
-export async function GET(_request: Request, context: RouteContext) {
+export const GET = withAdminRoute(async (_request: Request, _auth, context: RouteContext) => {
   const { id } = await context.params
-  // TODO: 实现短信模板详情查询
   return NextResponse.json({ success: false, error: `短信模板 ${id} 详情待实现` }, { status: 501 })
-}
+}, { permission: PERMISSIONS.SYSTEM_SMS_TEMPLATE_QUERY })
 
-export async function PUT(_request: Request, context: RouteContext) {
+export const PUT = withAdminRoute(async (_request: Request, _auth, context: RouteContext) => {
   const { id } = await context.params
   return NextResponse.json({ success: false, error: `短信模板 ${id} 更新待实现` }, { status: 501 })
-}
+}, { permission: PERMISSIONS.SYSTEM_SMS_TEMPLATE_UPDATE })
 
-export async function DELETE(_request: Request, context: RouteContext) {
+export const DELETE = withAdminRoute(async (_request: Request, _auth, context: RouteContext) => {
   const { id } = await context.params
   return NextResponse.json({ success: false, error: `短信模板 ${id} 删除待实现` }, { status: 501 })
-}
+}, { permission: PERMISSIONS.SYSTEM_SMS_TEMPLATE_DELETE })

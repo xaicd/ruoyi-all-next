@@ -2,12 +2,11 @@ import { NextResponse } from "next/server"
 import { imMessageAuditSchema } from "@/modules/im/backend/validators"
 import { ImService } from "@/modules/im/backend/services"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { writeAuditLog } from "@/modules/shared/backend/lib/audit-log"
 
-export async function POST(request: Request) {
+export const POST = withAdminRoute(async (request, auth) => {
   try {
-    const auth = await ensurePermission(request, PERMISSIONS.IM_MESSAGE_AUDIT)
     const body = await request.json()
     const input = imMessageAuditSchema.parse(body)
 
@@ -24,4 +23,4 @@ export async function POST(request: Request) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message ?? "操作失败" }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.IM_MESSAGE_AUDIT })

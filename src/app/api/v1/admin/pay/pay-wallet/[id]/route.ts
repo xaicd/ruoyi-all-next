@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 import { PayWalletService } from "@/modules/pay/backend/services/pay-wallet.service"
 
 type RouteContext = { params: Promise<{ id: string }> }
 
-export async function GET(request: Request, context: RouteContext) {
+export const GET = withAdminRoute(async (request, _auth, context: RouteContext) => {
   try {
     const { id } = await context.params
     const data = await PayWalletService.get(id)
@@ -12,7 +14,7 @@ export async function GET(request: Request, context: RouteContext) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.PAY_WALLET_VIEW })
 
 export async function PUT(request: Request, context: RouteContext) {
   try {

@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { SystemDictService } from "@/modules/system/backend/services/dict.service"
 
 type RouteContext = { params: Promise<{ id: string }> }
 
-export async function GET(request: Request, context: RouteContext) {
+export const GET = withAdminRoute(async (request: Request, _auth, context: RouteContext) => {
   try {
     const { id } = await context.params
     const data = await SystemDictService.get(id)
@@ -12,9 +14,9 @@ export async function GET(request: Request, context: RouteContext) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_DICT_QUERY })
 
-export async function PUT(request: Request, context: RouteContext) {
+export const PUT = withAdminRoute(async (request: Request, _auth, context: RouteContext) => {
   try {
     const { id } = await context.params
     const body = await request.json()
@@ -23,9 +25,9 @@ export async function PUT(request: Request, context: RouteContext) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_DICT_UPDATE })
 
-export async function DELETE(request: Request, context: RouteContext) {
+export const DELETE = withAdminRoute(async (request: Request, _auth, context: RouteContext) => {
   try {
     const { id } = await context.params
     const data = await SystemDictService.delete(id)
@@ -33,4 +35,4 @@ export async function DELETE(request: Request, context: RouteContext) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_DICT_DELETE })

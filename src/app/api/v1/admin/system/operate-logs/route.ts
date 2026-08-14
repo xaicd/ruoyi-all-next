@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { OperateLogService } from "@/modules/system/backend/services/operate-log.service"
 
-export async function GET(request: Request) {
+export const GET = withAdminRoute(async (request: Request) => {
   try {
     const { searchParams } = new URL(request.url)
     const input = {
@@ -14,7 +16,7 @@ export async function GET(request: Request) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message || "查询失败" }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_OPERATE_LOG_QUERY })
 
 export async function POST(request: Request) {
   try {

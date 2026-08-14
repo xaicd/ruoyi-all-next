@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 import { PayChannelService } from "@/modules/pay/backend/services/pay-channel.service"
 
-export async function GET(request: Request) {
+export const GET = withAdminRoute(async (request, auth) => {
   try {
     const { searchParams } = new URL(request.url)
     const input = {
@@ -12,16 +14,16 @@ export async function GET(request: Request) {
     const data = await PayChannelService.page(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message || "查询失败" }, { status: 400 })
+    return NextResponse.json({ success: false, error: error?.message || "鏌ヨ澶辫触" }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.PAY_CHANNEL_VIEW })
 
-export async function POST(request: Request) {
+export const POST = withAdminRoute(async (request, auth) => {
   try {
     const body = await request.json()
     const data = await PayChannelService.create(body)
     return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message || "创建失败" }, { status: 400 })
+    return NextResponse.json({ success: false, error: error?.message || "鍒涘缓澶辫触" }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.PAY_CHANNEL_CREATE })

@@ -9,4 +9,4 @@ export const GET = withAdminRoute(async (request, auth) => {
     const message = error instanceof Error ? error.message : "未授权"
     return NextResponse.json({ success: false, error: message }, { status: 400 })
   }
-}, { permission: PERMISSIONS.SYSTEM_MAIL_ACCOUNT_VIEW })
+}, { permission: PERMISSIONS.SYSTEM_MAIL_TEMPLATE_QUERY })

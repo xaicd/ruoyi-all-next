@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { OperateLogService } from "@/modules/system/backend/services/operate-log.service"
 
 type RouteContext = { params: Promise<{ id: string }> }
 
-export async function GET(request: Request, context: RouteContext) {
+export const GET = withAdminRoute(async (request: Request, _auth, context: RouteContext) => {
   try {
     const { id } = await context.params
     const data = await OperateLogService.get(id)
@@ -12,7 +14,7 @@ export async function GET(request: Request, context: RouteContext) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_OPERATE_LOG_QUERY })
 
 export async function PUT(request: Request, context: RouteContext) {
   try {

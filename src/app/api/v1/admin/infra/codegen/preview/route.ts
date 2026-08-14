@@ -1,15 +1,14 @@
 import { NextResponse } from "next/server"
 import { CodegenEngineService } from "@/modules/infra/backend/services/codegen-engine.service"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 
 /**
  * POST /api/v1/admin/infra/codegen/preview
  * 预览生成代码（不写入文件）
  */
-export async function POST(request: Request) {
+export const POST = withAdminRoute(async (request: Request, _auth) => {
   try {
-    await ensurePermission(request, PERMISSIONS.INFRA_CODEGEN_VIEW)
     const body = await request.json()
 
     const config = {
@@ -38,4 +37,4 @@ export async function POST(request: Request) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message ?? "生成失败" }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.INFRA_CODEGEN_VIEW })

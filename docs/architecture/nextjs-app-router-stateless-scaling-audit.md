@@ -14,7 +14,7 @@
 | 非 v1 API | 0 | 无遗留 Route Handler |
 | 合计 | 824 | API 路径已统一 |
 
-2026-08-14 再次生成全量策略基线：820 条 admin Route 中，14 条使用 `withAdminRoute`，50 条仍使用旧 direct guard，756 条仅由全局 Proxy JWT 边界保护、尚未声明资源级权限。完整审阅清单在 `docs/architecture/artifacts/admin-route-policy-baseline.json`，并由 `npm run admin:routes:manifest:check` 校验，任何 Route、HTTP 方法或保护级别变化都必须显式更新并审查该清单。高风险资金、OTA、库存、租户和套餐写操作优先迁移；不得靠路径或模板名猜测权限码后批量声称完成。
+2026-08-14 再次生成**方法级**策略基线：820 条 admin Route、2,005 个 HTTP 操作中，138 个使用 `withAdminRoute`，旧 direct guard 已清零，剩余 1,867 个操作仅由全局 Proxy JWT 边界保护、尚未声明资源级权限。完整审阅清单在 `docs/architecture/artifacts/admin-route-policy-baseline.json`，并由 `npm run admin:routes:manifest:check` 校验，任何 Route、HTTP 方法或保护级别变化都必须显式更新并审查该清单。高风险资金、OTA、库存、租户和套餐写操作优先迁移；不得靠路径或模板名猜测权限码后批量声称完成。
 
 ## 无状态性矩阵
 | 能力 | 当前状态 | 多副本结论 | 必要改造 |

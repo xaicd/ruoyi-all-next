@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 import { CodegenEngineService } from "@/modules/infra/backend/services/codegen-engine.service"
 import { SchemaReaderService } from "@/modules/infra/backend/services/schema-reader.service"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 
 /**
  * POST /api/v1/admin/infra/codegen/generate
@@ -19,7 +21,7 @@ import { SchemaReaderService } from "@/modules/infra/backend/services/schema-rea
  *   generateTest: true
  * }
  */
-export async function POST(request: Request) {
+export const POST = withAdminRoute(async (request: Request) => {
   try {
     const body = await request.json()
 
@@ -88,17 +90,17 @@ export async function POST(request: Request) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message || "生成失败" }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.INFRA_CODEGEN_PREVIEW })
 
 /**
  * GET /api/v1/admin/infra/codegen/generate
  * 获取可用的模板列表
  */
-export async function GET() {
+export const GET = withAdminRoute(async () => {
   const templates = CodegenEngineService.listTemplates()
   const tables = await SchemaReaderService.listTables()
   return NextResponse.json({
     success: true,
     data: { templates, tables: tables.map((t) => ({ name: t.name, comment: t.comment, columns: t.columns.length })) },
   })
-}
+}, { permission: PERMISSIONS.INFRA_CODEGEN_VIEW })

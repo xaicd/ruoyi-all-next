@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { SchemaReaderService } from "@/modules/infra/backend/services/schema-reader.service"
 import { CodegenTableRepository, toCodegenColumnConfig } from "@/modules/infra/backend/repositories/codegen-table.repository"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 import { z } from "zod"
 
@@ -14,9 +14,8 @@ const importSchema = z.object({
  * POST /api/v1/admin/infra/codegen/import
  * 导入表：从 Schema Reader 读取表结构，保存到 CodegenTable
  */
-export async function POST(request: Request) {
+export const POST = withAdminRoute(async (request: Request, _auth) => {
   try {
-    await ensurePermission(request, PERMISSIONS.INFRA_CODEGEN_UPDATE)
     const body = await request.json()
     const { tableNames } = importSchema.parse(body)
 
@@ -62,7 +61,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, data: { imported, skipped } })
   } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }
-}
+}, { permission: PERMISSIONS.INFRA_CODEGEN_UPDATE })
 
 function inferModuleName(tableName: string): string {
   const prefixes = ["system", "infra", "pay", "mall", "crm", "erp", "bpm", "wms", "mes", "ai", "iot", "im", "mp", "member", "report"]

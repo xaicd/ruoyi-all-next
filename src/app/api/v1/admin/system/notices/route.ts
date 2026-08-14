@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { NoticeService } from "@/modules/system/backend/services/notice.service"
 
-export async function GET(request: Request) {
+export const GET = withAdminRoute(async (request: Request) => {
   try {
     const { searchParams } = new URL(request.url)
     const input = {
@@ -14,9 +16,9 @@ export async function GET(request: Request) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message || "查询失败" }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_NOTICE_QUERY })
 
-export async function POST(request: Request) {
+export const POST = withAdminRoute(async (request: Request) => {
   try {
     const body = await request.json()
     const data = await NoticeService.create(body)
@@ -24,4 +26,4 @@ export async function POST(request: Request) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message || "创建失败" }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_NOTICE_CREATE })

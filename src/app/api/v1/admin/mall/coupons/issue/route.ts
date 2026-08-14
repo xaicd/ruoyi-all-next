@@ -2,11 +2,10 @@ import { NextResponse } from "next/server"
 import { mallCouponIssueSchema } from "@/modules/mall/backend/validators"
 import { MallService } from "@/modules/mall/backend/services"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 
-export async function POST(request: Request) {
+export const POST = withAdminRoute(async (request) => {
   try {
-    await ensurePermission(request, PERMISSIONS.MALL_COUPON_ISSUE)
     const body = await request.json()
     const input = mallCouponIssueSchema.parse(body)
 
@@ -15,4 +14,4 @@ export async function POST(request: Request) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message ?? "操作失败" }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.MALL_COUPON_ISSUE })

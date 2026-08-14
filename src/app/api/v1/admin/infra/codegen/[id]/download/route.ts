@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { CodegenTableRepository } from "@/modules/infra/backend/repositories/codegen-table.repository"
 import { CodegenEngineService } from "@/modules/infra/backend/services/codegen-engine.service"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 import { zipSync, strToU8 } from "fflate"
 
@@ -12,9 +12,8 @@ type RouteContext = { params: Promise<{ id: string }> }
  * GET /api/v1/admin/infra/codegen/:id/download
  * 生成代码并下载 ZIP
  */
-export async function GET(request: Request, context: RouteContext) {
+export const GET = withAdminRoute(async (request: Request, _auth, context: RouteContext) => {
   try {
-    await ensurePermission(request, PERMISSIONS.INFRA_CODEGEN_VIEW)
     const { id } = await context.params
 
     const table = await CodegenTableRepository.findById(id)
@@ -58,4 +57,4 @@ export async function GET(request: Request, context: RouteContext) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.INFRA_CODEGEN_VIEW })
