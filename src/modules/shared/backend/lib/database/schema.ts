@@ -262,7 +262,9 @@ export interface InfraJobLogTable {
 
 export interface InfraApiAccessLogTable {
   id: Generated<string>
+  trace_id: string | null
   user_id: string | null
+  tenant_id: string | null
   application_name: string
   request_method: string
   request_url: string
@@ -271,12 +273,16 @@ export interface InfraApiAccessLogTable {
   result_code: number
   duration: number
   user_ip: string | null
+  user_agent: string | null
+  operation: string | null
   created_at: Generated<Date>
 }
 
 export interface InfraApiErrorLogTable {
   id: Generated<string>
+  trace_id: string | null
   user_id: string | null
+  tenant_id: string | null
   application_name: string
   request_method: string
   request_url: string
@@ -284,8 +290,11 @@ export interface InfraApiErrorLogTable {
   exception_name: string
   exception_message: string
   exception_stack: string | null
+  error_code: string | null
+  root_cause: string | null
   status: string
   user_ip: string | null
+  user_agent: string | null
   created_at: Generated<Date>
 }
 

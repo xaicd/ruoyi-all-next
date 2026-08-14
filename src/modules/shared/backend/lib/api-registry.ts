@@ -14,7 +14,7 @@
  * - 阶段C：独立 API 管理平台
  */
 
-// ============ Types ============
+import { getPublicErrorCatalog } from "../http/error-catalog"
 
 export type ApiEndpointInfo = {
   /** 路径，如 /api/v1/admin/system/users */
@@ -116,17 +116,62 @@ export const apiRegistry = {
     const paths: Record<string, Record<string, unknown>> = {}
     for (const info of registry.values()) {
       if (!paths[info.path]) paths[info.path] = {}
-      paths[info.path][info.method.toLowerCase()] = {
+      const operation: Record<string, unknown> = {
         summary: info.summary,
         tags: [info.domain],
         deprecated: info.deprecated || false,
         security: info.permission ? [{ bearerAuth: [] }] : [],
+        responses: {
+          "200": { description: "Successful response", content: { "application/json": { schema: info.responseSchema ?? { type: "object" } } } },
+          "400": { $ref: "#/components/responses/ValidationError" },
+          "401": { $ref: "#/components/responses/AuthenticationError" },
+          "403": { $ref: "#/components/responses/AuthorizationError" },
+          "500": { $ref: "#/components/responses/InternalError" },
+          "503": { $ref: "#/components/responses/DependencyUnavailable" },
+        },
       }
+      if (info.requestSchema) operation.requestBody = { required: true, content: { "application/json": { schema: info.requestSchema } } }
+      paths[info.path][info.method.toLowerCase()] = operation
     }
     return {
       openapi: "3.0.3",
-      info: { title: "ruoyi-all-next API", version: "1.0.0" },
+      info: { title: "ruoyi-all-next API", version: "1.0.0", description: "Versioned REST contract. All error responses use the shared error catalog." },
       paths,
+      components: {
+        schemas: {
+          ErrorDetail: {
+            type: "object",
+            required: ["field", "code", "messageKey", "message"],
+            properties: {
+              field: { type: "string", description: "Dot-separated request field path." },
+              code: { type: "string", description: "Stable field validation reason." },
+              messageKey: { type: "string", description: "Stable localization key." },
+              message: { type: "string", description: "Localized field validation message." },
+            },
+          },
+          ErrorResponse: {
+            type: "object",
+            required: ["success", "code", "message", "messageKey", "retryable", "traceId"],
+            properties: {
+              success: { type: "boolean", enum: [false] },
+              code: { type: "string", description: "Stable machine-readable error identifier. Never parse message text." },
+              message: { type: "string", description: "Localized display message." },
+              messageKey: { type: "string", description: "Stable localization key." },
+              retryable: { type: "boolean", description: "Whether clients may retry an idempotent request." },
+              traceId: { type: "string", description: "Correlation identifier for support and log lookup." },
+              details: { type: "array", items: { $ref: "#/components/schemas/ErrorDetail" } },
+            },
+          },
+        },
+        responses: {
+          ValidationError: { description: "Request validation failed", content: { "application/json": { schema: { $ref: "#/components/schemas/ErrorResponse" } } } },
+          AuthenticationError: { description: "Authentication failed or token is missing", content: { "application/json": { schema: { $ref: "#/components/schemas/ErrorResponse" } } } },
+          AuthorizationError: { description: "Caller lacks permission", content: { "application/json": { schema: { $ref: "#/components/schemas/ErrorResponse" } } } },
+          DependencyUnavailable: { description: "Required dependency is unavailable; inspect retryable before retrying", content: { "application/json": { schema: { $ref: "#/components/schemas/ErrorResponse" } } } },
+          InternalError: { description: "Unexpected server failure; use traceId for support", content: { "application/json": { schema: { $ref: "#/components/schemas/ErrorResponse" } } } },
+        },
+      },
+      "x-error-catalog": getPublicErrorCatalog(),
     }
   },
 

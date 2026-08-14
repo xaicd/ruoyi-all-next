@@ -4,7 +4,8 @@ import { requireAdminAuth, requirePlatformAdmin } from "../auth/guards"
 import { toTenantContext } from "../auth/tenant"
 import { runWithTenantContext } from "../lib/biz-tenant"
 import { handleApiError } from "./api-error"
-import { recordApiAccess } from "../lib/observability"
+import { recordApiAccess, resolveApiAccessOutcome } from "../lib/observability"
+import { persistApiAccessLog } from "../lib/api-log-persistence"
 import { traceContext } from "../lib/trace-context"
 
 export type AdminRouteOptions = {
@@ -44,7 +45,13 @@ export function withAdminRoute<TArgs extends unknown[]>(
       } catch (error) {
         response = handleApiError(error, { request, operation: trace.operationName })
       }
-      recordApiAccess({ method: request.method, path, status: response.status, durationMs: Date.now() - startedAt, userId, tenantId })
+      const errorCode = response.headers.get("X-Error-Code") ?? undefined
+      const accessLog = {
+        method: request.method, path, status: response.status, durationMs: Date.now() - startedAt, userId, tenantId,
+        outcome: resolveApiAccessOutcome(response.status, errorCode), errorCode,
+      }
+      recordApiAccess(accessLog)
+      void persistApiAccessLog({ ...accessLog, traceId: trace.traceId, userIp: request.headers.get("x-forwarded-for")?.split(",")[0]?.trim(), userAgent: request.headers.get("user-agent") ?? undefined, operation: trace.operationName })
       response.headers.set("X-Trace-Id", trace.traceId)
       return response
     })

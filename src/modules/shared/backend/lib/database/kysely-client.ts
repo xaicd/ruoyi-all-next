@@ -9,7 +9,7 @@
 
 import { Kysely, DummyDriver, SqliteAdapter, SqliteIntrospector, SqliteQueryCompiler } from "kysely"
 import { getDataSourceConfig, isMemoryMode } from "./datasource-manager"
-import { writeStructuredLog } from "../observability"
+import { writeCompactError } from "../observability"
 import type { DatabaseDriver } from "./types"
 import type { DB } from "./schema"
 
@@ -24,12 +24,7 @@ async function createPostgresDialect(url: string) {
     connectionTimeoutMillis: Math.max(1_000, Number(process.env.DB_CONNECT_TIMEOUT_MS ?? 5_000)),
     idleTimeoutMillis: Math.max(1_000, Number(process.env.DB_IDLE_TIMEOUT_MS ?? 30_000)),
   })
-  pool.on("error", (error) => writeStructuredLog("error", "database.pool.error", {
-    driver: "postgresql",
-    errorCode: (error as Error & { code?: string }).code,
-    errorMessage: error.message,
-    stack: error.stack,
-  }))
+  pool.on("error", (error) => writeCompactError("database.pool.error", error, { driver: "postgresql" }))
   return new PostgresDialect({ pool })
 }
 

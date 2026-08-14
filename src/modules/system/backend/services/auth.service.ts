@@ -15,7 +15,7 @@ import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 import { issueJwt, verifyJwt, type JwtPayload } from "@/modules/shared/backend/auth/jwt"
 import { getPlatformRole, isPlatformUsername, runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { isDependencyUnavailable } from "@/modules/shared/backend/http/api-error"
-import { writeStructuredLog } from "@/modules/shared/backend/lib/observability"
+import { summarizeError } from "@/modules/shared/backend/lib/observability"
 
 type TokenPayload = JwtPayload
 
@@ -155,9 +155,8 @@ export class SystemAuthService {
     }
     } catch (error) {
       if (isDependencyUnavailable(error)) {
-        const cause = error instanceof Error ? error : new Error("Unknown database dependency error")
-        domainLog.audit("system.auth.login.error", { targetType: "USER", targetId: input.username, reason: "dependency_unavailable", stage, errorCode: (cause as Error & { code?: string }).code })
-        writeStructuredLog("error", "system.auth.login.dependency_failed", { stage, username: input.username, errorCode: (cause as Error & { code?: string }).code, errorMessage: cause.message, stack: cause.stack })
+        const diagnostic = summarizeError(error)
+        domainLog.audit("system.auth.login.error", { targetType: "USER", targetId: input.username, reason: "dependency_unavailable", stage, errorCode: diagnostic.code ?? "DEPENDENCY_UNAVAILABLE" })
       }
       throw error
     }

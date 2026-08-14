@@ -1,3 +1,5 @@
+import { getPublicErrorCatalog } from "../http/error-catalog"
+
 type SwaggerDoc = {
   openapi: string
   info: {
@@ -6,6 +8,7 @@ type SwaggerDoc = {
     description: string
   }
   tags: Array<{ name: string; description: string }>
+  "x-error-catalog": ReturnType<typeof getPublicErrorCatalog>
 }
 
 export function buildAdminSwaggerDoc(): SwaggerDoc {
@@ -20,5 +23,6 @@ export function buildAdminSwaggerDoc(): SwaggerDoc {
       { name: "system", description: "system core apis" },
       { name: "infra", description: "infra core apis" },
     ],
+    "x-error-catalog": getPublicErrorCatalog(),
   }
 }

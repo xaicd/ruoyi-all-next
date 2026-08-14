@@ -11,8 +11,13 @@
 type ApiResponse<T = any> = {
   success: boolean
   data?: T
+  /** v1 compatibility alias for message. */
   error?: string
   code?: string
+  message?: string
+  messageKey?: string
+  retryable?: boolean
+  traceId?: string
 }
 
 type RequestOptions = {

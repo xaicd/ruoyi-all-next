@@ -4,7 +4,8 @@ import { SystemAuthService } from "@/modules/system/backend/services/auth.servic
 import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { ApiError, handleApiError } from "@/modules/shared/backend/http/api-error"
 import { traceContext } from "@/modules/shared/backend/lib/trace-context"
-import { recordApiAccess } from "@/modules/shared/backend/lib/observability"
+import { recordApiAccess, resolveApiAccessOutcome } from "@/modules/shared/backend/lib/observability"
+import { persistApiAccessLog } from "@/modules/shared/backend/lib/api-log-persistence"
 
 /** POST /api/v1/admin/system/auth — the only public administrator login method. */
 export async function POST(request: Request) {
@@ -19,14 +20,21 @@ export async function POST(request: Request) {
       response = NextResponse.json({ success: true, data }, { headers: { "X-Trace-Id": trace.traceId } })
     } catch (error: unknown) {
       if (error instanceof Error && ["用户名或密码错误", "租户账号登录必须填写租户标识", "租户编码不存在", "账号未绑定租户"].includes(error.message)) {
-        response = handleApiError(new ApiError(401, error.message, "AUTHENTICATION_FAILED"), { request, operation: trace.operationName })
+        response = handleApiError(new ApiError("AUTHENTICATION_FAILED"), { request, operation: trace.operationName })
       } else if (error instanceof Error && error.message.includes("禁用")) {
-        response = handleApiError(new ApiError(403, error.message, "ACCOUNT_DISABLED"), { request, operation: trace.operationName })
+        response = handleApiError(new ApiError("ACCOUNT_DISABLED"), { request, operation: trace.operationName })
       } else {
         response = handleApiError(error, { request, operation: trace.operationName })
       }
     }
-    recordApiAccess({ method: request.method, path: new URL(request.url).pathname, status: response.status, durationMs: Date.now() - startedAt })
+    const errorCode = response.headers.get("X-Error-Code") ?? undefined
+    const accessLog = {
+      method: request.method, path: new URL(request.url).pathname, status: response.status, durationMs: Date.now() - startedAt,
+      outcome: resolveApiAccessOutcome(response.status, errorCode), errorCode,
+      resultMessage: errorCode === "AUTHENTICATION_FAILED" ? "用户名或密码校验失败" : undefined,
+    }
+    recordApiAccess(accessLog)
+    void persistApiAccessLog({ ...accessLog, traceId: trace.traceId, userIp: request.headers.get("x-forwarded-for")?.split(",")[0]?.trim(), userAgent: request.headers.get("user-agent") ?? undefined, operation: trace.operationName })
     return response
   })
 }
