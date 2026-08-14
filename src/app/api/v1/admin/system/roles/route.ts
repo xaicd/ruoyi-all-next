@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { SystemRoleService } from "@/modules/system/backend/services/role.service"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 import { z } from "zod"
 
 const listQuerySchema = z.object({
@@ -20,9 +20,8 @@ const createRoleSchema = z.object({
   remark: z.string().trim().max(500).optional(),
 })
 
-export async function GET(request: Request) {
+export const GET = withAdminRoute(async (request, auth) => {
   try {
-    await ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_VIEW)
     const { searchParams } = new URL(request.url)
     const input = listQuerySchema.parse({
       page: searchParams.get("page") ?? 1,
@@ -35,11 +34,10 @@ export async function GET(request: Request) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message ?? "查询失败" }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_ROLE_VIEW })
 
-export async function POST(request: Request) {
+export const POST = withAdminRoute(async (request, auth) => {
   try {
-    await ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_CREATE)
     const body = await request.json()
     const input = createRoleSchema.parse(body) as any
     const data = await SystemRoleService.create(input)
@@ -47,4 +45,4 @@ export async function POST(request: Request) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message ?? "创建失败" }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_ROLE_CREATE })

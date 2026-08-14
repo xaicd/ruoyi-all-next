@@ -40,7 +40,16 @@
 3. WHEN 配置带 subModule THEN module、subModule、API BASE、route、app bridge、imports 与输出目录必须使用同一规范化路径。
 4. THE generator SHALL 明确 CRUD 与 TREE、MASTER_CHILD、WORKFLOW、SINGLETON 的能力边界；不支持时必须拒绝或采用专用 renderer。
 
-### Requirement 4: 受控注入
+### Requirement 4: 后端实现可替换性
+**User Story:** 作为架构维护者，我希望 C/U 前端只依赖稳定 API Contract 和 API Port，以便后端能够从 Next/TypeScript 按域替换为 Go，而无需重写页面或 Form。
+
+#### Acceptance Criteria
+1. THE generator SHALL 为标准 CRUD 生成版本化 Contract、frontend API Port 和 HTTP adapter；Form/Page 不得 import backend Service、Repository、ORM 或数据库 DTO。
+2. WHEN 某个域的 upstream 从 Next 切换为 Go THEN 浏览器路径、operation ID、请求/响应 DTO、权限、tenant scope 与错误语义必须保持兼容。
+3. THE route manifest SHALL 声明每个域的 owner、contract version、upstream、认证模式、timeout、retry、idempotency 与迁移状态。
+4. THE generator SHALL 将 database table metadata 与 public command/view DTO 分离，不得把 DO、密码、租户内部字段或 snake_case persistence 字段直接暴露给 Form。
+
+### Requirement 5: 受控注入
 **User Story:** 作为维护者，我希望导入生成结果是可预览、可审计且默认不覆盖人工代码的。
 
 #### Acceptance Criteria
@@ -49,7 +58,7 @@
 3. WHEN 目标已存在或输入越界 THEN injector 必须报告冲突或拒绝，并以非零状态结束；默认不得覆盖。
 4. WHEN 注入成功 THEN injector 必须执行路径与 import 契约检查。
 
-### Requirement 5: 迁移范围和验收
+### Requirement 6: 迁移范围和验收
 **User Story:** 作为项目负责人，我希望优先改造实际可用的 C/U 页面，并能明确哪些页面不适用。
 
 #### Acceptance Criteria

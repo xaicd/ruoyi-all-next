@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { SystemDeptService } from "@/modules/system/backend/services/dept.service"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 import { z } from "zod"
 
 const createDeptSchema = z.object({
@@ -18,9 +18,8 @@ const createDeptSchema = z.object({
  * GET /api/v1/admin/system/depts
  * 获取部门树/列表
  */
-export async function GET(request: Request) {
+export const GET = withAdminRoute(async (request, auth) => {
   try {
-    await ensurePermission(request, PERMISSIONS.SYSTEM_DEPT_VIEW)
     const { searchParams } = new URL(request.url)
     const mode = searchParams.get("mode") // tree | list
     const status = searchParams.get("status") || undefined
@@ -36,15 +35,14 @@ export async function GET(request: Request) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_DEPT_VIEW })
 
 /**
  * POST /api/v1/admin/system/depts
  * 创建部门
  */
-export async function POST(request: Request) {
+export const POST = withAdminRoute(async (request, auth) => {
   try {
-    await ensurePermission(request, PERMISSIONS.SYSTEM_DEPT_CREATE)
     const body = await request.json()
     const input = createDeptSchema.parse(body) as any
     const data = await SystemDeptService.create({ ...input, email: input.email || undefined })
@@ -52,4 +50,4 @@ export async function POST(request: Request) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_DEPT_CREATE })

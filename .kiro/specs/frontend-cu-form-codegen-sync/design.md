@@ -65,7 +65,7 @@ Page 不直接 import shared `request`；Form 不直接 import shared `request`�
 Form 的提交 Promise 未完成时不可二次提交；失败时保留 Form 和错误，成功时由 Page 刷新。
 
 ### Property 5: 注入原子性
-**Validates: Requirements 4.1, 4.3**
+**Validates: Requirements 5.1, 5.3**
 
 Injector 的允许写入集合是 manifest 输出集合的子集，冲突或路径拒绝时目标树不改变。
 

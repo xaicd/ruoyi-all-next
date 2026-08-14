@@ -32,9 +32,16 @@ export const PERMISSIONS = {
   SYSTEM_OAUTH2_CLIENT_VIEW: "system:oauth2-client:view",
   SYSTEM_OAUTH2_TOKEN_VIEW: "system:oauth2-token:view",
   SYSTEM_TENANT_VIEW: "system:tenant:query",
+  // 租户控制面为本项目扩展能力；仅 platformOnly Route 使用这些写权限。
+  SYSTEM_TENANT_CREATE: "system:tenant:create",
+  SYSTEM_TENANT_UPDATE: "system:tenant:update",
+  SYSTEM_TENANT_DELETE: "system:tenant:delete",
+  SYSTEM_TENANT_UPDATE_STATUS: "system:tenant:update-status",
+  SYSTEM_TENANT_ASSIGN_PACKAGE: "system:tenant:assign-package",
   SYSTEM_TENANT_PACKAGE_VIEW: "system:tenant-package:query",
-  SYSTEM_TENANT_UPDATE_STATUS: "system:tenant:update",
-  SYSTEM_TENANT_ASSIGN_PACKAGE: "system:tenant:update",
+  SYSTEM_TENANT_PACKAGE_CREATE: "system:tenant-package:create",
+  SYSTEM_TENANT_PACKAGE_UPDATE: "system:tenant-package:update",
+  SYSTEM_TENANT_PACKAGE_DELETE: "system:tenant-package:delete",
   SYSTEM_DICT_VIEW: "system:dict:view",
   SYSTEM_DICT_CREATE: "system:dict:create",
   SYSTEM_NOTICE_VIEW: "system:notice:view",
@@ -109,6 +116,11 @@ export const PERMISSIONS = {
   // ai
   AI_MODEL_VIEW: "ai:model:view",
   AI_MODEL_CREATE: "ai:model:create",
+  // 与本地 RuoYi SQL 的 API 密钥按钮权限保持一致。
+  AI_API_KEY_VIEW: "ai:api-key:query",
+  AI_API_KEY_CREATE: "ai:api-key:create",
+  AI_API_KEY_UPDATE: "ai:api-key:update",
+  AI_API_KEY_DELETE: "ai:api-key:delete",
   AI_CHAT_VIEW: "ai:chat:view",
   AI_CHAT_DELETE: "ai:chat:delete",
   // iot

@@ -1,36 +1,26 @@
 import { NextResponse } from "next/server"
 import { AiApiKeyService } from "@/modules/ai/backend/services/ai-api-key.service"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 
 type RouteContext = { params: Promise<{ id: string }> }
 
-export async function GET(request: Request, context: RouteContext) {
-  try {
-    const { id } = await context.params
-    const data = await AiApiKeyService.get(id)
-    if (!data) return NextResponse.json({ success: false, error: "不存在" }, { status: 404 })
-    return NextResponse.json({ success: true, data })
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
-  }
-}
+export const GET = withAdminRoute(async (_request, _auth, context: RouteContext) => {
+  const { id } = await context.params
+  const data = await AiApiKeyService.get(id)
+  if (!data) return NextResponse.json({ success: false, error: "不存在" }, { status: 404 })
+  return NextResponse.json({ success: true, data })
+}, { permission: PERMISSIONS.AI_API_KEY_VIEW })
 
-export async function PUT(request: Request, context: RouteContext) {
-  try {
-    const { id } = await context.params
-    const body = await request.json()
-    const data = await AiApiKeyService.update({ ...body, id })
-    return NextResponse.json({ success: true, data })
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
-  }
-}
+export const PUT = withAdminRoute(async (request, _auth, context: RouteContext) => {
+  const { id } = await context.params
+  const body = await request.json()
+  const data = await AiApiKeyService.update({ ...body, id })
+  return NextResponse.json({ success: true, data })
+}, { permission: PERMISSIONS.AI_API_KEY_UPDATE })
 
-export async function DELETE(request: Request, context: RouteContext) {
-  try {
-    const { id } = await context.params
-    const data = await AiApiKeyService.delete(id)
-    return NextResponse.json({ success: true, data })
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
-  }
-}
+export const DELETE = withAdminRoute(async (_request, _auth, context: RouteContext) => {
+  const { id } = await context.params
+  const data = await AiApiKeyService.delete(id)
+  return NextResponse.json({ success: true, data })
+}, { permission: PERMISSIONS.AI_API_KEY_DELETE })

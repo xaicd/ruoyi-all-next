@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { SystemRoleService } from "@/modules/system/backend/services/role.service"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 import { z } from "zod"
 
 type RouteContext = { params: Promise<{ id: string }> }
@@ -15,9 +15,8 @@ const updateRoleSchema = z.object({
   remark: z.string().trim().max(500).optional(),
 })
 
-export async function GET(request: Request, context: RouteContext) {
+export const GET = withAdminRoute(async (request, auth, context: RouteContext) => {
   try {
-    await ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_VIEW)
     const { id } = await context.params
     const data = await SystemRoleService.getById(id)
     return NextResponse.json({ success: true, data })
@@ -25,11 +24,10 @@ export async function GET(request: Request, context: RouteContext) {
     const status = error?.message?.includes("不存在") ? 404 : 400
     return NextResponse.json({ success: false, error: error?.message }, { status })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_ROLE_VIEW })
 
-export async function PUT(request: Request, context: RouteContext) {
+export const PUT = withAdminRoute(async (request, auth, context: RouteContext) => {
   try {
-    await ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_UPDATE)
     const { id } = await context.params
     const body = await request.json()
     const input = updateRoleSchema.parse(body)
@@ -39,11 +37,10 @@ export async function PUT(request: Request, context: RouteContext) {
     const status = error?.message?.includes("不存在") ? 404 : 400
     return NextResponse.json({ success: false, error: error?.message }, { status })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_ROLE_UPDATE })
 
-export async function DELETE(request: Request, context: RouteContext) {
+export const DELETE = withAdminRoute(async (request, auth, context: RouteContext) => {
   try {
-    await ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_DELETE)
     const { id } = await context.params
     const data = await SystemRoleService.delete(id)
     return NextResponse.json({ success: true, data })
@@ -52,11 +49,10 @@ export async function DELETE(request: Request, context: RouteContext) {
       : error?.message?.includes("不允许") ? 409 : 400
     return NextResponse.json({ success: false, error: error?.message }, { status })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_ROLE_DELETE })
 
-export async function PATCH(request: Request, context: RouteContext) {
+export const PATCH = withAdminRoute(async (request, auth, context: RouteContext) => {
   try {
-    await ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_UPDATE)
     const { id } = await context.params
     const body = await request.json()
 
@@ -77,4 +73,4 @@ export async function PATCH(request: Request, context: RouteContext) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_ROLE_UPDATE })

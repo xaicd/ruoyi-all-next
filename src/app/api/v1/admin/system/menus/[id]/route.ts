@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { SystemMenuService } from "@/modules/system/backend/services/menu.service"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 import { z } from "zod"
 
 type RouteContext = { params: Promise<{ id: string }> }
@@ -20,9 +20,8 @@ const updateMenuSchema = z.object({
   keepAlive: z.boolean().optional(),
 })
 
-export async function GET(request: Request, context: RouteContext) {
+export const GET = withAdminRoute(async (request, auth, context: RouteContext) => {
   try {
-    await ensurePermission(request, PERMISSIONS.SYSTEM_MENU_VIEW)
     const { id } = await context.params
     const data = await SystemMenuService.getById(id)
     return NextResponse.json({ success: true, data })
@@ -30,11 +29,10 @@ export async function GET(request: Request, context: RouteContext) {
     const status = error?.message?.includes("不存在") ? 404 : 400
     return NextResponse.json({ success: false, error: error?.message }, { status })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_MENU_VIEW })
 
-export async function PUT(request: Request, context: RouteContext) {
+export const PUT = withAdminRoute(async (request, auth, context: RouteContext) => {
   try {
-    await ensurePermission(request, PERMISSIONS.SYSTEM_MENU_UPDATE)
     const { id } = await context.params
     const body = await request.json()
     const input = updateMenuSchema.parse(body)
@@ -44,11 +42,10 @@ export async function PUT(request: Request, context: RouteContext) {
     const status = error?.message?.includes("不存在") ? 404 : 400
     return NextResponse.json({ success: false, error: error?.message }, { status })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_MENU_UPDATE })
 
-export async function DELETE(request: Request, context: RouteContext) {
+export const DELETE = withAdminRoute(async (request, auth, context: RouteContext) => {
   try {
-    await ensurePermission(request, PERMISSIONS.SYSTEM_MENU_DELETE)
     const { id } = await context.params
     const data = await SystemMenuService.delete(id)
     return NextResponse.json({ success: true, data })
@@ -57,4 +54,4 @@ export async function DELETE(request: Request, context: RouteContext) {
       : error?.message?.includes("子菜单") ? 409 : 400
     return NextResponse.json({ success: false, error: error?.message }, { status })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_MENU_DELETE })

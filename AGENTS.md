@@ -52,6 +52,15 @@
 4. 禁止在 src 下新建 backend/、frontend/、components/、lib/ 等平铺目录。
 5. 通用模板统一放 src/modules/shared/frontend/templates。
 
+### 3.3 可替换后端与微服务边界（强制）
+
+1. 对外 HTTP API 必须保持版本化的 `/api/v{n}/` 契约；React 页面只能依赖前端 API Port 与版本化 DTO，禁止依赖 Next Service、Repository、Prisma/Kysely 类型或本地路由实现。
+2. 每个可拆分域必须拥有版本化 API Contract、route manifest、application port 与 adapter 边界；Contract 是 TypeScript、Go 及其他实现共享的权威协议，数据库表结构不是浏览器 DTO 的来源。
+3. 同域业务调用可使用本地 application port；跨域调用必须经受控 service port / event port，禁止直接 import 其他域 Service 或 Repository。同步调用必须声明 timeout、retry、idempotency 与 trace；异步跨域事件必须采用 transactional outbox 和幂等 consumer 后才能用于可靠业务流程。
+4. Next.js Route 在阶段 A/B 是 BFF adapter，不是领域真源；迁移某域到 Go 时，只允许替换该域 upstream adapter / manifest 路由，浏览器 API 路径、DTO、权限、tenant scope 和错误契约不得变化。
+5. 新 Go 服务必须验证受信任的服务身份、传递 trace、tenant 与 actor context；禁止信任调用方伪造的 tenant、user 或 permission header。服务间认证、健康/readiness、指标和契约兼容检查是上线前置条件。
+6. 以域为独立扩展单元，支持独立构建、部署、水平扩缩、配置和迁移所有权；不得承诺无边界的“无限扩展”，容量目标须由 SLO、压测和资源预算确定。
+
 ## 4. 编码规范（强制）
 
 ### 4.1 Route 薄层
@@ -220,7 +229,7 @@ CI 前置检查：
 1. npm run lint
 2. npm test
 3. npm run build
-4. npm run start
+4. npm run start  # 运行 `.next-ruoyi/standalone/server.js`，验证生产构建
 
 ### 10.2 Docker 部署
 

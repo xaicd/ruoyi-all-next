@@ -18,6 +18,7 @@ export type {
 
 export {
   getDataSourceConfig,
+  assertProductionDataSourceConfiguration,
   isMemoryMode,
   getProtocolFamily,
   getCompatibilityTier,

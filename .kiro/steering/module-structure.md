@@ -13,18 +13,29 @@ inclusion: auto
 ```
 src/
 ├── modules/{moduleKebab}/
+│   ├── contract/
+│   │   ├── openapi.yaml                          ← 版本化外部 HTTP 契约（跨语言权威）
+│   │   └── route.manifest.yaml                   ← owner/upstream/auth/timeout/契约版本
 │   ├── backend/
+│   │   ├── application/                          ← use case；只依赖本域 ports
+│   │   ├── ports/                                ← persistence/service/event 等接口
+│   │   ├── adapters/
+│   │   │   ├── persistence/                      ← Kysely/Prisma 或其他存储实现
+│   │   │   └── transport/                        ← 本地/HTTP/gRPC 实现
 │   │   ├── services/
-│   │   │   ├── index.ts                         ← 统一 re-export
-│   │   │   └── {feature}.service.ts             ← export class {Module}{Feature}Service
+│   │   │   ├── index.ts                          ← 兼容门面统一 re-export
+│   │   │   └── {feature}.service.ts              ← 仅作门面或渐进迁移兼容
 │   │   ├── validators/
-│   │   │   ├── index.ts                         ← 统一 re-export
-│   │   │   └── {feature}.validators.ts          ← export const {feature}Schema = z.object(...)
-│   │   └── repositories/ (可选)
+│   │   │   ├── index.ts                          ← 统一 re-export
+│   │   │   └── {feature}.validators.ts           ← Zod adapter，不替代外部 Contract
+│   │   └── repositories/ (兼容期可选)
 │   │       └── {feature}.repository.ts
 │   └── frontend/
-│       └── pages/
-│           └── {featureKebab}.page.tsx           ← export default function {Module}{Feature}Page()
+│       ├── ports/{feature}.api.ts                ← API Port 与 typed DTO
+│       ├── adapters/http/{feature}.api.ts        ← 可替换的 HTTP adapter
+│       ├── api/{feature}.api.ts                  ← 过渡期 composition/export
+│       ├── components/{Feature}Form.tsx
+│       └── pages/{featureKebab}.page.tsx         ← export default function {Module}{Feature}Page()
 ├── app/(admin-pages)/admin/{moduleKebab}/{featureKebab}/
 │   └── page.tsx                                  ← 桥接: export { default } from "@/modules/{moduleKebab}/frontend/pages/{featureKebab}.page"
 └── app/api/v1/admin/{moduleKebab}/{featureKebab}/

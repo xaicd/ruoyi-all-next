@@ -59,10 +59,10 @@ export function getDataSourceConfig(): DataSourceConfig {
 
   const envDriver = process.env.DB_DRIVER as DatabaseDriver | undefined
   const envUrl = process.env.DATABASE_URL ?? ""
-
   const driver: DatabaseDriver = envDriver ?? (envUrl ? detectDriverFromUrl(envUrl) : "memory")
   const protocolFamily = DRIVER_PROTOCOL_MAP[driver] ?? "sqlite"
   const tier = DRIVER_TIER_MAP[driver] ?? "A"
+  const poolSize = Number(process.env.DB_POOL_SIZE ?? 10)
 
   _currentConfig = {
     name: "primary",
@@ -70,11 +70,22 @@ export function getDataSourceConfig(): DataSourceConfig {
     url: envUrl || "memory://ruoyi-all-next",
     tier,
     protocolFamily,
-    poolSize: Number(process.env.DB_POOL_SIZE) || 10,
+    poolSize,
     timezone: process.env.DB_TIMEZONE || "UTC",
   }
 
+  assertProductionDataSourceConfiguration(_currentConfig)
   return _currentConfig
+}
+
+/** Production replicas must never silently fall back to process-local storage. */
+export function assertProductionDataSourceConfiguration(config = getDataSourceConfig()): void {
+  if (process.env.NODE_ENV !== "production") return
+  if (!process.env.DATABASE_URL) throw new Error("生产环境必须配置 DATABASE_URL")
+  if (config.driver === "memory") throw new Error("生产环境禁止使用 memory 数据源")
+  if (!Number.isInteger(config.poolSize) || config.poolSize < 1) {
+    throw new Error("生产环境 DB_POOL_SIZE 必须是正整数")
+  }
 }
 
 export function isMemoryMode(): boolean {

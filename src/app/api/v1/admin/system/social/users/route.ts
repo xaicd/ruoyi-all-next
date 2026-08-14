@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { createSocialUserSchema, systemModulePageQuerySchema } from "@/modules/system/backend/validators"
 import { SystemSocialService } from "@/modules/system/backend/services/social.service"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
-export async function GET(request: Request) {
+export const GET = withAdminRoute(async (request, auth) => {
   try {
-    await ensurePermission(request, PERMISSIONS.SYSTEM_SOCIAL_USER_VIEW)
     const { searchParams } = new URL(request.url)
     const input = systemModulePageQuerySchema.parse({
       page: searchParams.get("page") ?? 1,
@@ -18,11 +17,10 @@ export async function GET(request: Request) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message ?? "查询失败" }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_SOCIAL_USER_VIEW })
 
-export async function POST(request: Request) {
+export const POST = withAdminRoute(async (request, auth) => {
   try {
-    const auth = await ensurePermission(request, PERMISSIONS.SYSTEM_SOCIAL_USER_CREATE)
     const body = await request.json()
     const input = createSocialUserSchema.parse(body)
     const data = await SystemSocialService.createUser(auth.userId, input)
@@ -30,4 +28,4 @@ export async function POST(request: Request) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message ?? "创建失败" }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_SOCIAL_USER_CREATE })

@@ -65,8 +65,8 @@ services:
       - "traefik.http.routers.ruoyi.entrypoints=websecure"
       - "traefik.http.routers.ruoyi.tls.certresolver=letsencrypt"
       - "traefik.http.services.ruoyi.loadbalancer.server.port=3100"
-      # 健康检查
-      - "traefik.http.services.ruoyi.loadbalancer.healthcheck.path=/api/v1/admin/system/auth/info"
+      # 仅向通过依赖检查的无认证 readiness endpoint 分流
+      - "traefik.http.services.ruoyi.loadbalancer.healthcheck.path=/readyz"
       - "traefik.http.services.ruoyi.loadbalancer.healthcheck.interval=30s"
       # 中间件
       - "traefik.http.routers.ruoyi.middlewares=compress,ratelimit"
@@ -79,7 +79,7 @@ services:
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3100"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3100/healthz"]
       interval: 30s
       timeout: 10s
       retries: 3

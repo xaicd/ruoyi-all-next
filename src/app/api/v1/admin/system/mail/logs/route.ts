@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { systemModulePageQuerySchema } from "@/modules/system/backend/validators"
 import { SystemMailService } from "@/modules/system/backend/services/mail.service"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
-export async function GET(request: Request) {
+export const GET = withAdminRoute(async (request, auth) => {
   try {
-    await ensurePermission(request, PERMISSIONS.SYSTEM_MAIL_LOG_VIEW)
     const { searchParams } = new URL(request.url)
     const input = systemModulePageQuerySchema.parse({
       page: searchParams.get("page") ?? 1,
@@ -18,4 +17,4 @@ export async function GET(request: Request) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message ?? "查询失败" }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_MAIL_LOG_VIEW })

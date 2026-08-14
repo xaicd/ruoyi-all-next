@@ -137,7 +137,7 @@ src/
 ```bash
 npm run dev          # 开发模式 (port 3100)
 npm run build        # 生产构建
-npm run start        # 生产启动
+npm run start        # 启动 standalone 生产构建（port 3100）
 npm run lint         # 代码检查
 npm run check        # 治理检查
 ```

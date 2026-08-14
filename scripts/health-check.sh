@@ -59,7 +59,7 @@ START_PID="$!"
 
 echo "[health-check] 3/4 等待服务就绪"
 for _ in $(seq 1 45); do
-  if curl -sS -o /dev/null "http://127.0.0.1:$PORT/"; then
+  if curl -sS -o /dev/null "http://127.0.0.1:$PORT/healthz"; then
     break
   fi
 
@@ -72,15 +72,14 @@ for _ in $(seq 1 45); do
   sleep 1
 done
 
-if ! curl -sS -o /dev/null "http://127.0.0.1:$PORT/"; then
+if ! curl -sS -o /dev/null "http://127.0.0.1:$PORT/healthz"; then
   echo "[health-check] 服务超时未就绪，日志如下:"
   cat "$SERVER_LOG"
   exit 1
 fi
 
-echo "[health-check] 4/4 路由/API 冒烟"
-http_check "http://127.0.0.1:$PORT/"
-http_check "http://127.0.0.1:$PORT/admin/infra/codegen"
-http_check "http://127.0.0.1:$PORT/api/admin/infra/codegen?page=1&pageSize=1"
+echo "[health-check] 4/4 无状态健康探针"
+http_check "http://127.0.0.1:$PORT/healthz"
+http_check "http://127.0.0.1:$PORT/readyz"
 
-echo "[health-check] 完成: 核心页面与 API 可达"
+echo "[health-check] 完成: liveness 与 readiness 可用"

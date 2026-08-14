@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { createNotifyMessageSchema, pageQuerySchema } from "@/modules/system/backend/validators"
 import { NotifyMessageService } from "@/modules/system/backend/services/notify-message.service"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
-export async function GET(request: Request) {
+export const GET = withAdminRoute(async (request, auth) => {
   try {
-    await ensurePermission(request, PERMISSIONS.SYSTEM_NOTIFY_MESSAGE_VIEW)
     const { searchParams } = new URL(request.url)
     const input = pageQuerySchema.parse({
       page: searchParams.get("page") ?? 1,
@@ -19,11 +18,10 @@ export async function GET(request: Request) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message ?? "查询失败" }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_NOTIFY_MESSAGE_VIEW })
 
-export async function POST(request: Request) {
+export const POST = withAdminRoute(async (request, auth) => {
   try {
-    const auth = await ensurePermission(request, PERMISSIONS.SYSTEM_NOTIFY_MESSAGE_CREATE)
     const body = await request.json()
     const input = createNotifyMessageSchema.parse(body)
 
@@ -32,4 +30,4 @@ export async function POST(request: Request) {
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message ?? "创建失败" }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_NOTIFY_MESSAGE_CREATE })

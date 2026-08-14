@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { SystemPermissionService } from "@/modules/system/backend/services/permission.service"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
 /** GET /api/v1/admin/system/permissions/role-menus?roleId=xxx */
-export async function GET(request: Request) {
+export const GET = withAdminRoute(async (request, auth) => {
   try {
-    await ensurePermission(request, PERMISSIONS.SYSTEM_ROLE_VIEW)
     const roleId = new URL(request.url).searchParams.get("roleId")?.trim()
     if (!roleId) return NextResponse.json({ success: false, error: "roleId 不能为空" }, { status: 400 })
 
@@ -16,4 +15,4 @@ export async function GET(request: Request) {
     const message = error instanceof Error ? error.message : "获取角色菜单失败"
     return NextResponse.json({ success: false, error: message }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_ROLE_VIEW })

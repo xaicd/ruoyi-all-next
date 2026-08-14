@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import {
   updateUserSchema,
   updateUserPasswordSchema,
@@ -6,7 +7,6 @@ import {
 } from "@/modules/system/backend/validators"
 import { SystemUserService } from "@/modules/system/backend/services/user.service"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { ensurePermission } from "@/modules/shared/backend/lib/permission-guard"
 
 type RouteContext = { params: Promise<{ id: string }> }
 
@@ -14,9 +14,8 @@ type RouteContext = { params: Promise<{ id: string }> }
  * GET /api/v1/admin/system/users/:id
  * 获取用户详情
  */
-export async function GET(request: Request, context: RouteContext) {
+export const GET = withAdminRoute(async (request, auth, context: RouteContext) => {
   try {
-    await ensurePermission(request, PERMISSIONS.SYSTEM_USER_VIEW)
     const { id } = await context.params
     const data = await SystemUserService.getById(id)
     return NextResponse.json({ success: true, data })
@@ -24,15 +23,14 @@ export async function GET(request: Request, context: RouteContext) {
     const status = error?.message?.includes("不存在") ? 404 : 400
     return NextResponse.json({ success: false, error: error?.message ?? "查询失败" }, { status })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_USER_VIEW })
 
 /**
  * PUT /api/v1/admin/system/users/:id
  * 更新用户
  */
-export async function PUT(request: Request, context: RouteContext) {
+export const PUT = withAdminRoute(async (request, auth, context: RouteContext) => {
   try {
-    await ensurePermission(request, PERMISSIONS.SYSTEM_USER_UPDATE)
     const { id } = await context.params
     const body = await request.json()
     const input = updateUserSchema.parse({ ...body, id })
@@ -44,15 +42,14 @@ export async function PUT(request: Request, context: RouteContext) {
       : error?.message?.includes("不存在") ? 404 : 400
     return NextResponse.json({ success: false, error: error?.message ?? "更新失败" }, { status })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_USER_UPDATE })
 
 /**
  * DELETE /api/v1/admin/system/users/:id
  * 删除用户
  */
-export async function DELETE(request: Request, context: RouteContext) {
+export const DELETE = withAdminRoute(async (request, auth, context: RouteContext) => {
   try {
-    await ensurePermission(request, PERMISSIONS.SYSTEM_USER_DELETE)
     const { id } = await context.params
 
     const data = await SystemUserService.delete(id)
@@ -63,20 +60,19 @@ export async function DELETE(request: Request, context: RouteContext) {
       : error?.message?.includes("不允许") ? 409 : 400
     return NextResponse.json({ success: false, error: error?.message ?? "删除失败" }, { status })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_USER_DELETE })
 
 /**
  * PATCH /api/v1/admin/system/users/:id
  * 部分更新（状态变更、密码重置）
  */
-export async function PATCH(request: Request, context: RouteContext) {
+export const PATCH = withAdminRoute(async (request, auth, context: RouteContext) => {
   try {
     const { id } = await context.params
     const body = await request.json()
 
     // 密码重置
     if (body.action === "resetPassword") {
-      await ensurePermission(request, PERMISSIONS.SYSTEM_USER_UPDATE)
       const input = updateUserPasswordSchema.parse({ id, password: body.password })
       const data = await SystemUserService.resetPassword(input)
       return NextResponse.json({ success: true, data })
@@ -84,7 +80,6 @@ export async function PATCH(request: Request, context: RouteContext) {
 
     // 状态变更
     if (body.action === "updateStatus") {
-      await ensurePermission(request, PERMISSIONS.SYSTEM_USER_UPDATE)
       if (!["ACTIVE", "DISABLED"].includes(body.status)) {
         return NextResponse.json({ success: false, error: "无效状态值" }, { status: 400 })
       }
@@ -98,4 +93,4 @@ export async function PATCH(request: Request, context: RouteContext) {
       : error?.message?.includes("不存在") ? 404 : 400
     return NextResponse.json({ success: false, error: error?.message ?? "操作失败" }, { status })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_USER_UPDATE })

@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { SystemMenuService } from "@/modules/system/backend/services/menu.service"
 import { SystemPermissionService } from "@/modules/system/backend/services/permission.service"
 import { isPlatformControlMenu } from "@/modules/system/backend/services/tenant-menu-scope.service"
-import { requireAdminAuth, getAuthErrorStatus } from "@/modules/shared/backend/auth/guards"
 import { getPlatformRole } from "@/modules/shared/backend/lib/biz-tenant"
 
 type MenuNode = {
@@ -52,9 +52,8 @@ function toSidebarItem(node: MenuNode, allowedMenuIds: Set<string>, isPlatformAd
 }
 
 /** Returns the same active system_menu tree used by menu management, excluding only buttons and hidden entries. */
-export async function GET(request: Request) {
+export const GET = withAdminRoute(async (request, auth) => {
   try {
-    const auth = await requireAdminAuth(request)
     const [tree, effectiveMenuIds] = await Promise.all([
       SystemMenuService.tree({ status: "ACTIVE" }) as Promise<MenuNode[]>,
       SystemPermissionService.getEffectiveUserMenuIds(auth.userId),
@@ -71,7 +70,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ success: true, data })
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "菜单导航加载失败"
-    const status = message.includes("用户不存在") ? 401 : getAuthErrorStatus(error)
+    const status = message.includes("用户不存在") ? 401 : 400
     return NextResponse.json({ success: false, error: message }, { status })
   }
-}
+})

@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server"
-import { getAuthErrorStatus, requireAdminAuth } from "@/modules/shared/backend/auth/guards"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 
-export async function GET(request: Request) {
+export const GET = withAdminRoute(async (request, auth) => {
   try {
-    await requireAdminAuth(request, PERMISSIONS.SYSTEM_SOCIAL_USER_VIEW)
     return NextResponse.json({ success: false, error: "社交客户端功能尚未实现" }, { status: 501 })
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "未授权"
-    return NextResponse.json({ success: false, error: message }, { status: getAuthErrorStatus(error) })
+    return NextResponse.json({ success: false, error: message }, { status: 400 })
   }
-}
+}, { permission: PERMISSIONS.SYSTEM_SOCIAL_USER_VIEW })
