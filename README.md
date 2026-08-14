@@ -140,6 +140,8 @@ npm run build        # 生产构建
 npm run start        # 启动 standalone 生产构建（port 3100）
 npm run lint         # 代码检查
 npm run check        # 治理检查
+npm run contracts:audit-logs:check  # 审计日志 OpenAPI 契约校验
+npm run audit-logs:retention        # 仅预览保留策略候选日志（需环境变量）
 ```
 
 ## 文档
@@ -148,3 +150,4 @@ npm run check        # 治理检查
 - [当前进度](docs/architecture/CURRENT-PROGRESS.md)
 - [数据库兼容规范](docs/architecture/ruoyi-all-next-database-compatibility.md)
 - [开发规范](AGENTS.md)
+- [审计日志运维](docs/operations/audit-log-operations.md)

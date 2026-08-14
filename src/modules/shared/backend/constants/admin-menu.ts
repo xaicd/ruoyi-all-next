@@ -212,6 +212,12 @@ export const ADMIN_MENU: AdminMenuItem[] = [
         requiredPermission: PERMISSIONS.INFRA_CODEGEN_QUERY,
       },
       {
+        key: "infra-online-definitions",
+        label: "Online 开发",
+        path: "/admin/infra/online-definitions",
+        requiredPermission: PERMISSIONS.INFRA_ONLINE_DEFINITION_QUERY,
+      },
+      {
         key: "infra-swagger",
         label: "接口文档",
         path: "/admin/infra/swagger",

@@ -52,6 +52,14 @@ export function registerCoreApiContracts(): void {
 
 
 /** Audit-log contracts stay explicit so API/MCP clients know their read, retry, and authorization semantics. */
+export function registerOnlineApiContracts(): void {
+  apiRegistry.register({
+    path: "/api/v1/admin/online/definitions", method: "GET", domain: "online", endpoint: "admin", version: "v1",
+    summary: "查询 Online 定义工作台", permission: "infra:online-definition:query",
+    responseSchema: { type: "object", description: "Phase-1 Online contract baseline. Definition metadata persistence is enabled by the next Prisma migration." },
+  })
+}
+
 export function registerAuditLogApiContracts(): void {
   const entries = [
     ["/api/v1/admin/infra/api-access-log", "GET", "查询 API 访问日志", "infra:api-access-log:query"],

@@ -1,0 +1,15 @@
+module: online
+version: v1
+routes:
+  - method: GET
+    path: /api/v1/admin/online/definitions
+    permission: infra:online-definition:query
+    tenantScope: required
+    timeoutMs: 5000
+    errors:
+      - 401 AUTHENTICATION_REQUIRED
+      - 403 AUTHORIZATION_DENIED
+      - 400 VALIDATION_ERROR
+notes:
+  - Phase 1 exposes a contract baseline only; Online Definition persistence is added by the Prisma metadata migration.
+  - Runtime and Online Test routes may only read published releases and are not enabled by this manifest.

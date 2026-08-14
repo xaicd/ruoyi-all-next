@@ -1,8 +1,9 @@
 import { getKyselyDb, hasRealDatabase } from "@/modules/shared/backend/lib/database"
 import { SEED_MENUS } from "@prisma/data"
+import { withOnlineMenuCatalog, withOnlinePackageMenuIds } from "@/modules/online/backend/menu-catalog"
 
 // 内存模式也必须具备与 RuoYi 初始化库一致的基础关联，不能只初始化菜单实体。
-const defaultMenuIds = SEED_MENUS.map((menu) => menu.id)
+const defaultMenuIds = withOnlineMenuCatalog(SEED_MENUS).map((menu) => menu.id)
 const memoryUserRoles = new Map<string, string[]>([
   ["1", ["1"]], // admin → 超级管理员
   ["2", ["2"]], // test → 普通角色
@@ -57,7 +58,7 @@ export const SystemPermissionRepository = {
   },
 
   async findRoleMenuIds(roleId: string): Promise<string[]> {
-    if (!hasRealDatabase()) return memoryRoleMenus.get(roleId) ?? []
+    if (!hasRealDatabase()) return withOnlinePackageMenuIds(memoryRoleMenus.get(roleId) ?? [])
     const db = await getKyselyDb()
     const rows = await db.selectFrom("system_role_menu").select("menu_id").where("role_id", "=", roleId).execute()
     return rows.map((row) => row.menu_id)

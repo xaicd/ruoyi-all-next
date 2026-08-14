@@ -1,0 +1,18 @@
+openapi: 3.0.3
+info:
+  title: Online low-code management API
+  version: 1.0.0-baseline
+paths:
+  /api/v1/admin/online/definitions:
+    get:
+      summary: Query the Online Definition management baseline
+      security:
+        - bearerAuth: []
+      x-permission: infra:online-definition:query
+      responses:
+        '200':
+          description: Phase and paged definition summary
+        '401':
+          description: Missing or invalid administrator token
+        '403':
+          description: Missing Online Definition query permission

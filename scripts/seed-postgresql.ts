@@ -6,6 +6,7 @@ import { SEED_DEPTS } from "../prisma/data/depts.seed-data"
 import { SEED_DICT_DATA } from "../prisma/data/dict-data.seed-data"
 import { SEED_DICT_TYPES } from "../prisma/data/dict-types.seed-data"
 import { SEED_MENUS } from "../prisma/data/menus.seed-data"
+import { withOnlineMenuCatalog, withOnlinePackageMenuIds } from "../src/modules/online/backend/menu-catalog"
 import { SEED_POSTS } from "../prisma/data/posts.seed-data"
 import { SEED_ROLES } from "../prisma/data/roles.seed-data"
 import { SEED_TENANT_PACKAGES } from "../prisma/data/tenant-packages.seed-data"
@@ -41,8 +42,9 @@ function assertStrongBootstrapPassword(password: string): void {
   }
 }
 function insertableMenus() {
-  const ids = new Set(SEED_MENUS.map((menu) => menu.id))
-  const pending = SEED_MENUS.map((menu) => ({ ...menu, parentId: menu.parentId && ids.has(menu.parentId) ? menu.parentId : null }))
+  const catalog = withOnlineMenuCatalog(SEED_MENUS)
+  const ids = new Set(catalog.map((menu) => menu.id))
+  const pending = catalog.map((menu) => ({ ...menu, parentId: menu.parentId && ids.has(menu.parentId) ? menu.parentId : null }))
   const ordered: typeof pending = []
   const inserted = new Set<string>()
   while (pending.length) {
@@ -109,10 +111,10 @@ async function main() {
     for (const menu of insertableMenus()) {
       await client.query(`INSERT INTO system_menu (id, name, permission, type, parent_id, path, component, icon, sort, status, visible, keep_alive, created_at, updated_at, deleted) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,false) ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, permission = EXCLUDED.permission, type = EXCLUDED.type, parent_id = EXCLUDED.parent_id, path = EXCLUDED.path, component = EXCLUDED.component, icon = EXCLUDED.icon, sort = EXCLUDED.sort, status = EXCLUDED.status, visible = EXCLUDED.visible, keep_alive = EXCLUDED.keep_alive, updated_at = EXCLUDED.updated_at, deleted = false`, [menu.id, menu.name, menu.permission, menu.type, menu.parentId, menu.path, menu.component, menu.icon, menu.sort, menu.status, menu.visible, menu.keepAlive, menu.createdAt, menu.updatedAt])
     }
-    const tenantMenuScope = new TenantMenuScope(SEED_MENUS)
+    const tenantMenuScope = new TenantMenuScope(withOnlineMenuCatalog(SEED_MENUS))
     for (const pkg of SEED_TENANT_PACKAGES) {
       await client.query(`DELETE FROM system_tenant_package_menu WHERE package_id = $1`, [pkg.id])
-      for (const menuId of tenantMenuScope.normalize(pkg.menuIds)) await client.query(`INSERT INTO system_tenant_package_menu (id, package_id, menu_id) VALUES ($1,$2,$3) ON CONFLICT (package_id, menu_id) DO NOTHING`, [randomUUID(), pkg.id, menuId])
+      for (const menuId of tenantMenuScope.normalize(withOnlinePackageMenuIds(pkg.menuIds))) await client.query(`INSERT INTO system_tenant_package_menu (id, package_id, menu_id) VALUES ($1,$2,$3) ON CONFLICT (package_id, menu_id) DO NOTHING`, [randomUUID(), pkg.id, menuId])
     }
     // Historical all-next draft packages were not sourced from RuoYi. Keep rows for audit,
     // but remove them from the catalog after the demo tenant is reassigned to package 111.
@@ -128,7 +130,7 @@ async function main() {
       for (const menu of insertableMenus()) await client.query(`INSERT INTO system_role_menu (id, role_id, menu_id) VALUES ($1,$2,$3) ON CONFLICT (role_id, menu_id) DO NOTHING`, [randomUUID(), assignedRoleId, menu.id])
     }
     await client.query("COMMIT")
-    console.log(`[seed] PostgreSQL catalog seeded: ${SEED_ROLES.length} roles, ${SEED_DEPTS.length} departments, ${SEED_POSTS.length} posts, ${SEED_DICT_TYPES.length} dictionary types, ${SEED_DICT_DATA.length} dictionary entries, and ${SEED_MENUS.length} menus.`)
+    console.log(`[seed] PostgreSQL catalog seeded: ${SEED_ROLES.length} roles, ${SEED_DEPTS.length} departments, ${SEED_POSTS.length} posts, ${SEED_DICT_TYPES.length} dictionary types, ${SEED_DICT_DATA.length} dictionary entries, and ${withOnlineMenuCatalog(SEED_MENUS).length} menus.`)
   } catch (error) {
     await client.query("ROLLBACK")
     throw error
