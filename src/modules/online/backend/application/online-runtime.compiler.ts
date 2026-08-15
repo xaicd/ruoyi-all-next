@@ -10,9 +10,19 @@ function asRecord(value: unknown): Record<string, unknown> {
   return value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {}
 }
 
+function stableJson(value: unknown): string {
+  if (value === null || typeof value !== "object") return JSON.stringify(value)
+  if (Array.isArray(value)) return `[${value.map(stableJson).join(",")}]`
+  const record = value as Record<string, unknown>
+  return `{${Object.keys(record).sort().map((key) => `${JSON.stringify(key)}:${stableJson(record[key])}`).join(",")}}`
+}
+
+export function onlineReleaseChecksum(snapshot: unknown): string {
+  return createHash("sha256").update(stableJson(snapshot)).digest("hex")
+}
+
 export function verifyOnlineReleaseChecksum(snapshot: unknown, expected: string): void {
-  const actual = createHash("sha256").update(JSON.stringify(snapshot)).digest("hex")
-  if (actual !== expected) throw new ApiError("CONFLICT", "Online Release 快照校验失败")
+  if (onlineReleaseChecksum(snapshot) !== expected) throw new ApiError("CONFLICT", "Online Release 快照校验失败")
 }
 
 export function compileOnlineRuntimeRelease(row: any): OnlineRuntimeRelease {

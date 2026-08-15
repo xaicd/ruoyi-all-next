@@ -1,4 +1,3 @@
-import { createHash } from "node:crypto"
 import { getKyselyDb, hasRealDatabase } from "@/modules/shared/backend/lib/database"
 import { ApiError } from "@/modules/shared/backend/http/api-error"
 import type { OnlineDefinitionDetail, OnlineDefinitionPage, OnlineDefinitionSummary, OnlineFieldDetail, OnlineIndexDetail, OnlineRelationDetail, OnlineReleaseSummary, OnlineRevisionDetail, OnlineViewDetail } from "../../application/online-definition.contract"
@@ -6,7 +5,7 @@ import { compileOnlineViews, failViewValidation, fingerprintOnlineViews } from "
 import { parseOnlineInteractionIR } from "../../application/online-interaction.compiler"
 import { validateOnlineModelAggregate } from "../../application/online-model.validator"
 import { fingerprintOnlineModelIR, parseOnlineModelIR } from "../../application/online-schema-plan.compiler"
-import { verifyOnlineReleaseChecksum } from "../../application/online-runtime.compiler"
+import { onlineReleaseChecksum, verifyOnlineReleaseChecksum } from "../../application/online-runtime.compiler"
 import { assertRuoyiSystemFieldsImmutable, createInitialOnlineInteraction, createInitialOnlineModel, mergeRuoyiSystemFields, mergeRuoyiSystemInteractions } from "../../application/online-model-defaults"
 
 function requireDatabase(): void {
@@ -71,7 +70,7 @@ function mapRelease(row: any): OnlineReleaseSummary {
 function mapView(row: any): OnlineViewDetail {
   return { code: row.code, kind: "PUCK", puckData: asRecord(row.puck_data_json), componentConfig: { configVersion: 1 }, version: 1 }
 }
-function checksum(snapshot: unknown): string { return createHash("sha256").update(JSON.stringify(snapshot)).digest("hex") }
+function checksum(snapshot: unknown): string { return onlineReleaseChecksum(snapshot) }
 
 function viewScope(definitionCode: string, model: ReturnType<typeof parseOnlineModelIR>, interaction: ReturnType<typeof parseOnlineInteractionIR>, actionRows: readonly any[]) {
   return { definitionCode, fieldCodes: new Set(model.fields.map((field) => field.code)), actionCodes: new Set(actionRows.map((action) => action.code)) }
