@@ -49,8 +49,8 @@ function unique(items: Array<{ code: string }>, label: string): void {
 
 export function parseOnlineInteractionIR(value: unknown, model: OnlineModelIR): OnlineInteractionIR {
   const interaction = onlineInteractionIrSchema.parse(value ?? {}) as OnlineInteractionIR
-  unique(interaction.fields, "字段交互")
-  unique(interaction.actions, "内置动作")
+  unique(interaction.fields as Array<{ code: string }>, "字段交互")
+  unique(interaction.actions as Array<{ code: string }>, "内置动作")
   const modelFields = new Set(model.fields.map((field) => field.code))
   for (const field of interaction.fields) {
     if (!modelFields.has(field.code)) throw new Error(`字段交互引用了不存在字段 ${field.code}`)

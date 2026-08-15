@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { useSearchParams } from "next/navigation"
 import { Render, type Data } from "@puckeditor/core"
 import "@puckeditor/core/puck.css"
 import { onlinePuckConfig } from "@/modules/online/frontend/puck/online-puck.config"
@@ -11,6 +12,8 @@ import type { OnlineRuntimeRecord, OnlineRuntimeRecordPage, OnlineTestSessionDet
 const definitionsEndpoint = "/api/v1/admin/online/definitions"
 
 export default function OnlineTestPage() {
+  const searchParams = useSearchParams()
+  const requestedDefinition = searchParams.get("definition")?.trim() ?? ""
   const [definitions, setDefinitions] = useState<OnlineDefinitionPage | null>(null)
   const [code, setCode] = useState("")
   const [session, setSession] = useState<OnlineTestSessionDetail | null>(null)
@@ -26,9 +29,14 @@ export default function OnlineTestPage() {
 
   useEffect(() => { void (async () => {
     const response = await request.get<OnlineDefinitionPage>(definitionsEndpoint, { page: 1, pageSize: 100 })
-    if (response.success && response.data) { setDefinitions(response.data); setCode(response.data.items.find((item) => item.publishedReleaseId && item.modelType === "SINGLE")?.code ?? "") }
-    else setMessage(response.error ?? "Online Definition 加载失败")
-  })() }, [])
+    if (response.success && response.data) {
+      setDefinitions(response.data)
+      const requested = requestedDefinition ? response.data.items.find((item) => item.code === requestedDefinition && item.publishedReleaseId && item.modelType === "SINGLE") : undefined
+      const fallback = response.data.items.find((item) => item.publishedReleaseId && item.modelType === "SINGLE")
+      setCode(requestedDefinition ? requested?.code ?? "" : fallback?.code ?? "")
+      setMessage(requestedDefinition && !requested ? "指定的 Definition 未发布或当前 Online Test 不支持其模型类型" : "")
+    } else setMessage(response.error ?? "Online Definition 加载失败")
+  })() }, [requestedDefinition])
 
   const loadRecords = async (active = session) => {
     if (!active) return

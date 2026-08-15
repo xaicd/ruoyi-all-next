@@ -62,11 +62,11 @@ async function validateRelationTargets(trx: any, input: { tenantId: string; defi
   const targets = [...new Set(input.model.relations.map((relation) => relation.targetDefinitionCode))]
   if (!targets.length) return
   if (targets.includes(input.definitionCode)) throw new Error("当前阶段不允许 Relation 自引用 Definition")
-  const definitions = await trx.selectFrom("online_definition").select(["code", "current_draft_revision_id"]).where("tenant_id", "=", input.tenantId).where("deleted", "=", false).where("code", "in", targets).execute()
+  const definitions = await trx.selectFrom("online_definition").select(["code", "current_draft_revision_id"]).where("tenant_id", "=", input.tenantId).where("deleted", "=", false).where("code", "in", targets).execute() as Array<{ code: string; current_draft_revision_id: string | null }>
   const definitionByCode = new Map(definitions.map((definition) => [definition.code, definition]))
   for (const target of targets) if (!definitionByCode.has(target)) throw new Error(`关联目标 Definition ${target} 不存在或不属于当前租户`)
   const revisionIds = definitions.flatMap((definition) => definition.current_draft_revision_id ? [definition.current_draft_revision_id] : [])
-  const revisions = revisionIds.length ? await trx.selectFrom("online_revision").select(["id", "model_json"]).where("tenant_id", "=", input.tenantId).where("id", "in", revisionIds).execute() : []
+  const revisions = (revisionIds.length ? await trx.selectFrom("online_revision").select(["id", "model_json"]).where("tenant_id", "=", input.tenantId).where("id", "in", revisionIds).execute() : []) as Array<{ id: string; model_json: unknown }>
   const fieldsByRevision = new Map(revisions.map((revision) => [revision.id, new Set(parseOnlineModelIR(revision.model_json).fields.map((field) => field.code))]))
   for (const relation of input.model.relations) {
     const target = definitionByCode.get(relation.targetDefinitionCode)
@@ -131,8 +131,10 @@ export class KyselyOnlineDefinitionRepository {
       const definitionId = crypto.randomUUID()
       const revisionId = crypto.randomUUID()
       const now = new Date()
+      const initialModel = parseOnlineModelIR({})
+      const initialInteraction = parseOnlineInteractionIR({}, initialModel)
       await trx.insertInto("online_definition").values({ id: definitionId, tenant_id: input.tenantId, code: input.code, name: input.name, model_type: input.modelType, status: "DRAFT", current_draft_revision_id: null, published_release_id: null, lock_version: 1, created_by: input.actorId, updated_by: input.actorId, created_at: now, updated_at: now, deleted: false }).execute()
-      await trx.insertInto("online_revision").values({ id: revisionId, definition_id: definitionId, tenant_id: input.tenantId, sequence: 1, status: "DRAFT", schema_revision: 0, model_json: {}, interaction_json: {}, policy_json: {}, workflow_json: {}, validation_report: null, created_by: input.actorId, published_by: null, published_at: null, created_at: now, updated_at: now }).execute()
+      await trx.insertInto("online_revision").values({ id: revisionId, definition_id: definitionId, tenant_id: input.tenantId, sequence: 1, status: "DRAFT", schema_revision: 0, model_json: initialModel, interaction_json: initialInteraction, policy_json: {}, workflow_json: {}, validation_report: null, created_by: input.actorId, published_by: null, published_at: null, created_at: now, updated_at: now }).execute()
       await trx.updateTable("online_definition").set({ current_draft_revision_id: revisionId, updated_at: now }).where("id", "=", definitionId).execute()
       const row = await trx.selectFrom("online_definition").selectAll().where("id", "=", definitionId).executeTakeFirstOrThrow()
       return mapDefinition(row)

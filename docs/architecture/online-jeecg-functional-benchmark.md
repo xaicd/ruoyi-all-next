@@ -170,3 +170,136 @@ Online 开发
 ```
 
 该信息架构是后续 UI 重构基准：先实现可治理的表单资产和结构化多页签设计，再逐步接入 Runtime、策略、树/主子和代码生成。
+
+
+## 全能力安全路线图（2026-08-15）
+
+> 本节把已观察到的 Jeecg Online 产品能力转化为本系统独立实现的范围、数据模型与启用前置条件。它不是对 Jeecg 服务端行为的推断，也不授权动态 DDL、任意 SQL 或脚本执行。
+
+### 对标结论与当前边界
+
+已观察到的 Jeecg 前端将“功能测试”按模型与页面主题路由到五类 AUTO 页面：默认单表、树表、ERP 主子表、内嵌子表和 Tab 主子表。各页呈现查询、受控工具栏、列表、表单、详情、导入导出等用户体验；表单资产管理还展示数据库导入、视图、授权、同步与代码生成等入口。
+
+本系统当前已实现的只有版本化 Definition / Draft / Release、受控 Puck 视图、语义 Schema Plan，以及 `SINGLE + GENERIC_RECORD` 的 actor-owned sandbox。它不等同于生产 AUTO Runtime：不会访问业务动态表，不能执行 `TREE` 或 `MASTER_DETAIL`，不会运行 Policy / Workflow，也不会执行 Schema Plan。因此，界面、菜单和文档不得把现状描述为已具备 Jeecg 全能力。
+
+### 能力范围矩阵
+
+| 能力域 | 独立实现目标 | 需要持久化的受控事实 | 运行前置条件 | 状态 |
+| --- | --- | --- | --- | --- |
+| 表单资产管理 | Definition 检索、分类、创建、复制、归档、版本与设计入口 | Definition 状态、分类、审计与 Release 摘要 | 所有写入走 Draft 乐观锁 | 基础已完成；结构化编辑待完善 |
+| 单表 AUTO | 发布版查询、列表、详情、创建、编辑、删除 | Release Query / List / Form / Detail / Action 配置 | 已验证 Release、受控存储、服务端策略 | 未启用 |
+| 树 AUTO | 分页或懒加载树、添加子节点、排序与安全删除 | Tree Binding、父字段、排序字段、根值、删除策略 | 父子完整性、环检测、原子写入 | 未启用 |
+| 主子 AUTO | ERP、内嵌、Tab 三种受控布局 | Master-detail Binding、子 Release Binding、显示布局 | 发布兼容性与主子事务 | 未启用 |
+| 字典与引用 | 字典显示、下拉、受控关联选择 | Tenant-scoped Dictionary / Reference Registry | 固定 registry、服务端解析和权限过滤 | 未启用 |
+| 权限策略 | 页面、动作、字段读写和行范围控制 | Typed Policy IR 与投影 | 每个服务端读写操作求值 | 未启用 |
+| 导入导出 | 受控 CSV/XLSX 模板、校验、异步导出 | Import / Export Profile、Job、审计 | Release 字段与策略校验 | 未启用 |
+| 表单分享 | 只读或受控提交的发布版访问 | Share Grant、期限、允许动作、受限受众 | 独立 token / 身份验证与服务端策略 | 未启用 |
+| 数据库导入 | 平台拥有数据源的只读结构导入为 Draft | Approved Source Registry、Import Job、审计 | 管理员审批、schema/table allowlist | 未启用 |
+| 代码生成 | 对已发布 Release 生成不可覆盖的预览 / ZIP | Generator Profile、Artifact、Release ID | 仅 immutable Release，人工下载 | 未启用 |
+| 报表、图表、仪表盘 | Typed 数据集、聚合、图表和 Puck 仪表盘 | Dataset / Report / Chart / Dashboard / Share 发布快照 | 数据源 registry、策略、参数化查询 | 未启用 |
+
+### 统一 Release 与运行时规则
+
+1. **Release 是唯一运行事实。** AUTO Runtime、导出、导入模板、分享、报表与代码生成均只能解析不可变、checksum 已验证的 Release；运行过程绝不读取 Draft。
+2. **Definition 是逻辑身份，Deployment 是物理绑定。** 即使将来采用 managed table，也不得用浏览器提交的名称、表名、连接串或 SQL 直接定位数据库对象。
+3. **关联必须绑定兼容的目标 Release。** 当前 Draft-to-Draft target-field 校验只能作为编辑提示；上线前 Relation Binding 必须保存 `targetDefinitionId + targetReleaseId + targetField`，并在发布时检查 tenant、字段类型、唯一性和已部署 schema revision。
+4. **服务端授权不可绕过。** 页面隐藏、Puck 控件隐藏和前端按钮 disabled 仅是展示；每次查询、读详情、创建、更新、删除、导入、导出和分享访问均由 authenticated server context、tenant scope 与编译后的 Policy 决定。
+5. **所有运行时参数都是值，不能是语句。** 字段、排序字段、操作符、聚合函数、图表类型、组件类型和 action code 均由 Release allowlist 决定；客户端只能提交受限值，不能提交 SQL、表达式、URL、组件名、handler 或数据源。
+
+### Managed Dynamic Table：待批准的生产存储设计
+
+`GENERIC_RECORD` 继续只作为测试 sandbox。生产 AUTO CRUD 若要接近动态表体验，必须新建 `MANAGED_TABLE` 路径；该路径默认关闭，且本轮没有创建 migration、DDL worker 或执行端点。
+
+**命名与隔离：**平台使用不可由用户配置的物理命名规则，例如 `onl_<tenant-safe-id>_<definition-stable-id>_r<schema-revision>`；Runtime 永不接收物理表名。每张平台管理表必须有平台生成主键、`tenant_id`、审计列与必要的软删除策略。所有查询还必须显式加服务端 tenant predicate；物理命名隔离不是授权替代。
+
+**建议新增的持久化模型（须单独评审后才实现）：**
+
+| 模型 | 最小字段 | 用途 |
+| --- | --- | --- |
+| `OnlineStorageBinding` | tenant、definition、storage kind、logical object key、active deployment | 将逻辑 Definition 映射到受控存储，而不是保存自由表名 |
+| `OnlineSchemaDeployment` | tenant、definition、release、schema revision、target fingerprint、state、environment、physical object key、approved/applied/failed audit | 一条 Release 在一个环境中的不可变部署证据 |
+| `OnlineDeploymentAttempt` | deployment、attempt no、worker identity、lock token、started/ended、result code、sanitized log | 保留重试、失败恢复和审计，不存 SQL 文本 |
+| `OnlineReferenceBinding` | source release/field、target definition/release/field、lookup profile | 固化跨 Definition 引用版本，不依赖目标 Draft |
+| `OnlinePolicyProjection` | revision、typed policy kind、subject、rule | 由 Policy IR 同步出的可审计投影，不能存表达式 |
+| `OnlineImportProfile` / `OnlineExportProfile` | release、允许字段、格式、限制、审计配置 | 定义固定模板和数据边界 |
+
+**仅允许的初始前向变更：**创建空 managed table、增加可空字段、增加非唯一索引，以及经明确审批后增加有回填策略的必填字段。字段删除、类型缩窄、唯一约束、默认值语义变更、关系约束变更、物理表复制、rename、drop 与 force-rebuild 都必须先归类为不可自动执行；初期应拒绝而非尝试“智能同步”。
+
+**受信部署流程：**
+
+```text
+Draft 保存 → 严格编译/校验 → Semantic Schema Plan → 独立审批
+→ 发布候选 Release → 后台受信 worker 取得数据库锁与部署租约
+→ 参数化且由平台生成的 DDL adapter 执行 → 部署结果审计
+→ schema revision 与 active deployment 原子切换 → AUTO Runtime 可解析
+```
+
+浏览器只可查看计划、审批状态和已脱敏的部署结果；不能调用 apply、传入 SQL 或指定表名。worker 必须与用户请求进程分离、使用最低权限数据库账号、采用环境 allowlist、幂等锁、超时与故障状态。回滚只允许切回仍兼容且仍存在的先前 Deployment；不可逆变更失败后进入 `FAILED / RECOVERY_REQUIRED`，禁止自动 drop 或覆盖数据。
+
+### AUTO Runtime 编译与路由
+
+产品层只暴露稳定的 Definition 路由，例如 `/admin/infra/online-runtime/[definitionCode]`；服务器解析当前已部署 Release 并编译 `runtime.kind`，页面不能选择任意组件或物理表：
+
+| Runtime kind | Release 条件 | 固定页面组成 |
+| --- | --- | --- |
+| `SINGLE_DEFAULT` | `SINGLE + MANAGED_TABLE + deployed` | Query Form、Action Bar、List、Create/Edit Dialog、Detail |
+| `TREE_DEFAULT` | `TREE + MANAGED_TABLE + deployed` | Query Form、Tree List、Add Child、Detail、受控删除 |
+| `MASTER_DETAIL_ERP` | `MASTER_DETAIL + all children deployed` | 主表列表、选中主记录的只读/受控子表区域、原子编辑 Dialog |
+| `MASTER_DETAIL_INNER` | 同上 | 主表 List 的单行展开子表区域 |
+| `MASTER_DETAIL_TAB` | 同上 | 主表 Create/Edit/Detail 中的受控子表 Tabs |
+
+`Online Test` 的 Definition deep-link 应先修复为准确选择 `?definition=<code>` 的 Published Definition；它仍展示 sandbox 能力。待 `SINGLE_DEFAULT` 生产 Runtime 真正实现后，资产列表的“功能测试 / 打开已发布表单”才可跳转到以上稳定 runtime 路由，不能再跳到任意选项的测试选择页。
+
+### Policy DSL 与受控动作
+
+现有 `policy_json` / `OnlinePolicy` 不能视为已执行授权。后续仅接受以下无表达式的 typed policy：
+
+- `PAGE_ACCESS`：固定 permission code 与 authenticated tenant membership。
+- `ACTION_ACCESS`：固定 built-in action code，允许的 role / tenant package / owner scope。
+- `FIELD_ACCESS`：对 Release field 的 `READ`、`WRITE`、`HIDDEN` 枚举决定。
+- `ROW_SCOPE`：仅内置 `TENANT_ALL`、`CREATED_BY_SELF`、`DEPARTMENT_SUBTREE`、`ASSIGNED_TO_SELF` 等注册 scope，且由服务器转换为参数化查询。
+
+Action 仅包括创建、更新、删除、批量删除、导入、导出、详情和经过注册的工作流提交。`handlerKey` 仅能引用平台发布的 server action registry；不得由 Draft 新增任意函数、HTTP 地址、Java 类、JavaScript 或 SQL。
+
+### 表单结构化编辑与校验补齐
+
+在启用 production runtime 前，管理工作区需将当前高级 JSON 覆盖的能力补成受控编辑器，并继续把结果写回 `model_json + interaction_json` 后同步投影：
+
+- 字段：默认值、长度、decimal 精度、nullable、identity、系统字段、备注、顺序、列表宽度、表单 span、详情 formatter。
+- 查询：是否启用、固定 operator、合法 query widget、默认值、排序白名单和默认排序。
+- 校验：必填、长度、数值范围、注册 rule key、dictionary/reference binding；校验器同时用于服务端 command schema 和前端提示。
+- 索引与关系：字段顺序、唯一性、on-delete、发布版目标绑定；编辑期间允许显示诊断，但发布必须 release-pin。
+- 模型语义：Tree 的 parent/sort/root；Master-detail 的 child release binding 与 `ERP / INNER / TAB` 枚举布局。
+- 动作与页面：固定 placement/order/enabled 和 Puck allowlist；嵌套容器要么完整以递归 schema 支持，要么在编辑器与编译器中一起拒绝。
+
+旧 Draft 解析应验证 `relations`、`settings`、`actions` 等新增默认值可被安全补齐；任何不能归一化的历史数据应提示迁移诊断，不能静默放宽 strict schema。
+
+### 报表、图表和仪表盘的独立后续域
+
+Jeecg 的 `onl_cgreport_*`、`onl_graphreport_*`、`onl_drag_*` 代表独立分析产品，不应把任意 SQL 或数据源能力塞入表单 Runtime。它们应在 CRUD / policy 稳定后以以下顺序建设：
+
+1. `Dataset`：只引用已发布且已部署的 Definition Release 或平台 curated dataset；字段、关联、可用维度/指标和 row policy 全部固定。
+2. `Report`：固定 select fields、allowlisted filter/operator、group-by、aggregate、sort 和分页上限；服务端以 Kysely 生成参数化查询。
+3. `Chart`：固定 chart type、dimension、metric、aggregate、palette 和上限；禁止脚本 formatter。
+4. `Dashboard`：复用 OnlineView/Puck 的组件 allowlist；组件仅绑定已发布 Dataset/Report/Chart 的 ID，不能填写 endpoint 或任意数据源。
+5. `Share`：发布版 dashboard/form 的受限 grant，含到期时间、访问主体、允许动作、撤销与审计；不生成匿名永久 URL。
+
+### 分阶段交付和完成定义
+
+| 阶段 | 交付物 | 完成定义 |
+| --- | --- | --- |
+| A：资产与建模体验 | 完整结构化编辑器、copy/archive、深链 sandbox 选择修复、字典 registry 设计 | 所有可见配置都能保存为 Draft、验证、发布并进入 Release 快照 |
+| B：部署治理（需明确批准） | Managed Table 迁移、Deployment 元数据、受信 worker、审批与审计 | 无浏览器 DDL；只能从审批 Release 部署可允许的前向变更 |
+| C：SINGLE AUTO | Release resolver、Policy evaluator、query/list/form/detail、生产 CRUD | 每个请求验证 Release、deployment、tenant、policy；无 Draft / raw SQL 读取 |
+| D：结构模型 | Tree、ERP、Inner、Tab 和原子主子写入 | 环检测、外键完整性、发布兼容、事务和删除策略均被服务端验证 |
+| E：数据交换与治理 | Import/export、sharing、workflow registry、generator artifact | 所有操作按 Release / policy / audit 执行，无自由 URL/脚本/连接 |
+| F：分析产品 | Dataset、report、chart、dashboard、share | 仅 typed semantic data model 和 allowlisted Puck 组件可运行 |
+
+在 A 阶段完成前不得宣称页面级表单设计已全功能；在 B 与 C 完成前不得宣称具有 Jeecg 式动态表 AUTO Runtime；在 F 完成前不得宣称报表、图表和仪表盘能力已对标完成。
+
+### 永久禁止项
+
+- 用户编写或持久化 JavaScript、Java、SQL、SpEL/任意表达式、HTML、`v-html`、任意 URL、动态组件名、任意数据源或连接串。
+- 前端触发 DDL、raw SQL、force sync、drop/rebuild、物理表 copy/drop 或跳过审批的 schema 变更。
+- 用前端隐藏控件代替服务端授权，或从浏览器传 tenant / role / data scope 作为可信上下文。
+- 为了“兼容”而让 Release Runtime 回读 Draft、目标 Definition 当前 Draft，或在未部署 schema 上执行生产 CRUD。
