@@ -4,6 +4,11 @@ import type { OnlineModelIR } from "./online-schema-plan.contract"
 
 const code = z.string().regex(/^[a-z][a-z0-9_]{1,63}$/, "标识必须以小写字母开头，仅允许小写字母、数字和下划线")
 const widgets = ["TEXT", "TEXTAREA", "NUMBER", "SWITCH", "DATE", "DATETIME", "SELECT", "DICTIONARY", "REFERENCE", "JSON"] as const
+const widgetsByScalarType: Record<string, ReadonlySet<string>> = {
+  string: new Set(["TEXT", "TEXTAREA", "SELECT", "DICTIONARY", "REFERENCE"]), text: new Set(["TEXT", "TEXTAREA", "SELECT", "DICTIONARY"]),
+  integer: new Set(["NUMBER", "SELECT", "DICTIONARY", "REFERENCE"]), decimal: new Set(["NUMBER", "SELECT", "DICTIONARY"]),
+  boolean: new Set(["SWITCH"]), date: new Set(["DATE"]), datetime: new Set(["DATETIME"]), json: new Set(["JSON"]),
+}
 const queryOperators = ["EQ", "NE", "LIKE", "IN", "GT", "GTE", "LT", "LTE", "BETWEEN"] as const
 const ruleKeys = ["EMAIL", "MOBILE", "IDENTIFIER"] as const
 const fieldInteractionSchema = z.object({
@@ -54,6 +59,10 @@ export function parseOnlineInteractionIR(value: unknown, model: OnlineModelIR): 
   const modelFields = new Set(model.fields.map((field) => field.code))
   for (const field of interaction.fields) {
     if (!modelFields.has(field.code)) throw new Error(`字段交互引用了不存在字段 ${field.code}`)
+    const modelField = model.fields.find((item) => item.code === field.code)!
+    const allowedWidgets = widgetsByScalarType[modelField.type]
+    if (!allowedWidgets?.has(field.widget)) throw new Error(`字段 ${field.code} 的 ${field.widget} 控件不支持 ${modelField.type} 类型`)
+    if (field.query.widget && (!allowedWidgets?.has(field.query.widget) || field.query.widget === "REFERENCE")) throw new Error(`查询字段 ${field.code} 的控件不支持 ${modelField.type} 类型`)
     if (field.dictionaryCode && field.widget !== "DICTIONARY" && field.widget !== "SELECT") throw new Error(`字段 ${field.code} 的 dictionaryCode 仅可用于 DICTIONARY 或 SELECT 控件`)
     if (field.query.enabled && !field.query.operator) throw new Error(`查询字段 ${field.code} 必须声明 operator`)
     if (field.query.widget === "REFERENCE") throw new Error(`查询字段 ${field.code} 不支持 REFERENCE 控件`)

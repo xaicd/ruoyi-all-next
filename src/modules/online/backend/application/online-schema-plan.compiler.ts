@@ -47,6 +47,18 @@ function toRecord(value: OnlineFieldIR | OnlineIndexIR): Record<string, unknown>
 function maxRisk(risks: OnlineSchemaRisk[]): OnlineSchemaRisk {
   return ["UNSUPPORTED", "DESTRUCTIVE", "REVIEW_REQUIRED", "SAFE", "NONE"].find((risk) => risks.includes(risk as OnlineSchemaRisk)) as OnlineSchemaRisk
 }
+function validateFieldDefault(field: OnlineFieldIR): void {
+  const value = field.default
+  if (value === undefined) return
+  if (value === null) { if (!field.nullable) throw new Error(`字段 ${field.code} 为必填时不能声明 null 默认值`); return }
+  if ((field.type === "string" || field.type === "text") && (typeof value !== "string" || (field.length !== undefined && value.length > field.length))) throw new Error(`字段 ${field.code} 的默认值必须是符合长度限制的文本`)
+  if (field.type === "integer" && (typeof value !== "number" || !Number.isInteger(value))) throw new Error(`字段 ${field.code} 的默认值必须是整数`)
+  if (field.type === "decimal" && (typeof value !== "number" || !Number.isFinite(value))) throw new Error(`字段 ${field.code} 的默认值必须是有限小数`)
+  if (field.type === "boolean" && typeof value !== "boolean") throw new Error(`字段 ${field.code} 的默认值必须是布尔值`)
+  if (field.type === "date" && (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value))) throw new Error(`字段 ${field.code} 的默认值必须是 YYYY-MM-DD 日期`)
+  if (field.type === "datetime" && (typeof value !== "string" || Number.isNaN(Date.parse(value)))) throw new Error(`字段 ${field.code} 的默认值必须是有效日期时间`)
+  if (field.type === "json") { if (typeof value !== "string") throw new Error(`字段 ${field.code} 的默认值必须是 JSON 文本`); try { JSON.parse(value) } catch { throw new Error(`字段 ${field.code} 的默认值不是有效 JSON 文本`) } }
+}
 
 export function parseOnlineModelIR(value: unknown): OnlineModelIR {
   const parsed = onlineModelIrSchema.parse(value ?? {}) as OnlineModelIR
@@ -59,6 +71,7 @@ export function parseOnlineModelIR(value: unknown): OnlineModelIR {
   for (const field of parsed.fields) {
     if (field.precision !== undefined && field.type !== "decimal") throw new Error(`字段 ${field.code} 的 precision 仅可用于 decimal 类型`)
     if (field.systemTemplate && field.identity) throw new Error(`字段 ${field.code} 不能同时是系统字段和 identity 字段`)
+    validateFieldDefault(field)
   }
   for (const index of parsed.indexes) {
     if (new Set(index.fields).size !== index.fields.length) throw new Error(`索引 ${index.code} 不可重复引用同一字段`)
