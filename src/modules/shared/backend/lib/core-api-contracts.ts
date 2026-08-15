@@ -53,10 +53,29 @@ export function registerCoreApiContracts(): void {
 
 /** Audit-log contracts stay explicit so API/MCP clients know their read, retry, and authorization semantics. */
 export function registerOnlineApiContracts(): void {
-  apiRegistry.register({
-    path: "/api/v1/admin/online/definitions", method: "GET", domain: "online", endpoint: "admin", version: "v1",
-    summary: "查询 Online 定义工作台", permission: "infra:online-definition:query",
-    responseSchema: { type: "object", description: "Phase-1 Online contract baseline. Definition metadata persistence is enabled by the next Prisma migration." },
+  const entries = [
+    ["/api/v1/admin/online/definitions", "GET", "分页查询租户 Online Definition", "infra:online-definition:query"],
+    ["/api/v1/admin/online/definitions", "POST", "创建 Online Definition 与初始 Draft Revision", "infra:online-definition:create"],
+    ["/api/v1/admin/online/definitions/{code}", "GET", "获取 Online Definition、Draft 与 Release", "infra:online-definition:query"],
+    ["/api/v1/admin/online/definitions/{code}", "PUT", "使用乐观锁更新 Online Definition", "infra:online-definition:update"],
+    ["/api/v1/admin/online/definitions/{code}/draft", "PUT", "使用乐观锁更新 Draft Revision", "infra:online-definition:update"],
+    ["/api/v1/admin/online/definitions/{code}/validate", "POST", "校验 Draft Revision", "infra:online-definition:update"],
+    ["/api/v1/admin/online/definitions/{code}/publish", "POST", "发布不可变 Online Release", "infra:online-definition:publish"],
+    ["/api/v1/admin/online/definitions/{code}/rollback", "POST", "回滚 Online 发布指针", "infra:online-definition:publish"],
+    ["/api/v1/admin/online/definitions/{code}/schema-plans", "GET", "查询仅语义化的 Schema Plan", "infra:online-definition:query"],
+    ["/api/v1/admin/online/definitions/{code}/schema-plans", "POST", "创建不执行 DDL 的 Schema Plan", "infra:online-definition:migrate"],
+    ["/api/v1/admin/online/definitions/{code}/schema-plans/{planId}", "GET", "获取仅语义化的 Schema Plan", "infra:online-definition:query"],
+    ["/api/v1/admin/online/definitions/{code}/schema-plans/{planId}/approve", "POST", "审批安全 Schema Plan，不执行 DDL", "infra:online-definition:migrate"],
+    ["/api/v1/admin/online/definitions/{code}/test-sessions", "POST", "从 Published Release 启动沙箱 Online Test", "infra:online-definition:test"],
+    ["/api/v1/admin/online/definitions/{code}/test-sessions/{sessionId}", "GET", "获取本人 Online Test Session", "infra:online-definition:test"],
+    ["/api/v1/admin/online/definitions/{code}/test-sessions/{sessionId}/records", "GET", "分页查询 Release 绑定的测试记录", "infra:online-definition:test"],
+    ["/api/v1/admin/online/definitions/{code}/test-sessions/{sessionId}/records", "POST", "创建经 Release 字段校验的测试记录", "infra:online-definition:test"],
+    ["/api/v1/admin/online/definitions/{code}/test-sessions/{sessionId}/records/{recordId}", "PUT", "更新经 Release 字段校验的测试记录", "infra:online-definition:test"],
+    ["/api/v1/admin/online/definitions/{code}/test-sessions/{sessionId}/records/{recordId}", "DELETE", "软删除测试记录", "infra:online-definition:test"],
+  ] as const
+  for (const [path, method, summary, permission] of entries) apiRegistry.register({
+    path, method: method as "GET" | "POST" | "PUT" | "DELETE", domain: "online", endpoint: "admin", version: "v1", summary, permission,
+    responseSchema: { type: "object", description: "Tenant-scoped Online metadata response. Definition writes use optimistic locking; Release snapshots are immutable." },
   })
 }
 

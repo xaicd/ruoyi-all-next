@@ -218,6 +218,12 @@ export const ADMIN_MENU: AdminMenuItem[] = [
         requiredPermission: PERMISSIONS.INFRA_ONLINE_DEFINITION_QUERY,
       },
       {
+        key: "infra-online-test",
+        label: "Online 测试",
+        path: "/admin/infra/online-test",
+        requiredPermission: PERMISSIONS.INFRA_ONLINE_DEFINITION_TEST,
+      },
+      {
         key: "infra-swagger",
         label: "接口文档",
         path: "/admin/infra/swagger",

@@ -3,6 +3,8 @@
 ## Overview
 Online 引擎借鉴 JeecgBoot 的“配置数据模型后可直接运行/测试”的产品能力，但从零设计为 Next.js + PostgreSQL + Prisma + Kysely + Puck 架构。它避免动态 force-sync、浏览器 `eval`、前端权限开关和表名隐式流程绑定。Definition 是唯一业务配置入口；Puck 只保存 View layout；Release 是 Runtime 与代码生成的唯一输入。
 
+Jeecg 的库表与产品功能学习结论已独立归档至 [Online 功能对标与安全设计档案](../../../docs/architecture/online-jeecg-functional-benchmark.md)。该档案仅用于功能对标，不构成对 Jeecg 后端实现、动态 SQL、存储脚本或强制同步机制的复制依据。
+
 ## Architecture
 
 ### Scope and Boundaries

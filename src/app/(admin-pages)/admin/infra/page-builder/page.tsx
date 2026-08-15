@@ -1,1 +1,6 @@
-export { default } from "@/modules/infra/frontend/pages/page-builder.page"
+import { redirect } from "next/navigation"
+
+/** The legacy Puck prototype is retired; all new work starts from Online Definitions. */
+export default function LegacyPageBuilderRedirect() {
+  redirect("/admin/infra/online-definitions")
+}

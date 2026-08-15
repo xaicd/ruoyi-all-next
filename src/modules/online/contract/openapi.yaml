@@ -1,18 +1,85 @@
 openapi: 3.0.3
 info:
   title: Online low-code management API
-  version: 1.0.0-baseline
+  version: 1.0.0-metadata
 paths:
   /api/v1/admin/online/definitions:
     get:
-      summary: Query the Online Definition management baseline
-      security:
-        - bearerAuth: []
+      summary: Query tenant-scoped Online Definitions
+      security: [{ bearerAuth: [] }]
       x-permission: infra:online-definition:query
-      responses:
-        '200':
-          description: Phase and paged definition summary
-        '401':
-          description: Missing or invalid administrator token
-        '403':
-          description: Missing Online Definition query permission
+    post:
+      summary: Create an Online Definition with its initial Draft Revision
+      security: [{ bearerAuth: [] }]
+      x-permission: infra:online-definition:create
+  /api/v1/admin/online/definitions/{code}:
+    get:
+      summary: Get an Online Definition, its current Draft Revision, and releases
+      security: [{ bearerAuth: [] }]
+      x-permission: infra:online-definition:query
+    put:
+      summary: Update Definition metadata with optimistic locking
+      security: [{ bearerAuth: [] }]
+      x-permission: infra:online-definition:update
+  /api/v1/admin/online/definitions/{code}/draft:
+    put:
+      summary: Update current Draft Revision metadata with optimistic locking
+      security: [{ bearerAuth: [] }]
+      x-permission: infra:online-definition:update
+  /api/v1/admin/online/definitions/{code}/validate:
+    post:
+      summary: Validate the current Draft Revision before publication
+      security: [{ bearerAuth: [] }]
+      x-permission: infra:online-definition:update
+  /api/v1/admin/online/definitions/{code}/publish:
+    post:
+      summary: Create immutable Release snapshot and a new Draft Revision
+      security: [{ bearerAuth: [] }]
+      x-permission: infra:online-definition:publish
+  /api/v1/admin/online/definitions/{code}/rollback:
+    post:
+      summary: Atomically switch the published release pointer to a prior release
+      security: [{ bearerAuth: [] }]
+      x-permission: infra:online-definition:publish
+  /api/v1/admin/online/definitions/{code}/schema-plans:
+    get:
+      summary: List tenant-scoped semantic schema plans; no executable SQL is exposed
+      security: [{ bearerAuth: [] }]
+      x-permission: infra:online-definition:query
+    post:
+      summary: Compile and persist a semantic schema plan without applying DDL
+      security: [{ bearerAuth: [] }]
+      x-permission: infra:online-definition:migrate
+  /api/v1/admin/online/definitions/{code}/schema-plans/{planId}:
+    get:
+      summary: Get one tenant-scoped semantic schema plan
+      security: [{ bearerAuth: [] }]
+      x-permission: infra:online-definition:query
+  /api/v1/admin/online/definitions/{code}/test-sessions:
+    post:
+      summary: Start an actor-owned sandbox Online Test Session from the current Published Release
+      security: [{ bearerAuth: [] }]
+      x-permission: infra:online-definition:test
+  /api/v1/admin/online/definitions/{code}/test-sessions/{sessionId}:
+    get:
+      summary: Get an actor-owned sandbox Online Test Session and immutable release runtime metadata
+      security: [{ bearerAuth: [] }]
+      x-permission: infra:online-definition:test
+  /api/v1/admin/online/definitions/{code}/test-sessions/{sessionId}/records:
+    get:
+      summary: Page sandbox records bound to the test session and immutable release
+      security: [{ bearerAuth: [] }]
+      x-permission: infra:online-definition:test
+    post:
+      summary: Create a sandbox record validated against the immutable release model
+      security: [{ bearerAuth: [] }]
+      x-permission: infra:online-definition:test
+  /api/v1/admin/online/definitions/{code}/test-sessions/{sessionId}/records/{recordId}:
+    put:
+      summary: Update a sandbox record using the immutable release model
+      security: [{ bearerAuth: [] }]
+      x-permission: infra:online-definition:test
+    delete:
+      summary: Soft-delete a sandbox record
+      security: [{ bearerAuth: [] }]
+      x-permission: infra:online-definition:test

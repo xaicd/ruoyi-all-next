@@ -368,4 +368,214 @@ export interface DB {
   infra_data_source_config: InfraDataSourceConfigTable
   infra_file_config: InfraFileConfigTable
   infra_file: InfraFileTable
+
+  // Online
+  online_definition: OnlineDefinitionTable
+  online_revision: OnlineRevisionTable
+  online_field: OnlineFieldTable
+  online_index: OnlineIndexTable
+  online_relation: OnlineRelationTable
+  online_view: OnlineViewTable
+  online_action: OnlineActionTable
+  online_policy: OnlinePolicyTable
+  online_workflow_binding: OnlineWorkflowBindingTable
+  online_release: OnlineReleaseTable
+  online_schema_change: OnlineSchemaChangeTable
+  online_test_session: OnlineTestSessionTable
+  online_record: OnlineRecordTable
+}
+
+
+// === Online 域 ===
+
+export interface OnlineDefinitionTable {
+  id: string
+  tenant_id: string
+  code: string
+  name: string
+  model_type: string
+  status: string
+  current_draft_revision_id: string | null
+  published_release_id: string | null
+  lock_version: number
+  created_by: string
+  updated_by: string
+  created_at: Generated<Date>
+  updated_at: Date
+  deleted: Generated<boolean>
+}
+
+export interface OnlineRevisionTable {
+  id: string
+  definition_id: string
+  tenant_id: string
+  sequence: number
+  status: string
+  schema_revision: number
+  model_json: unknown
+  interaction_json: unknown
+  policy_json: unknown
+  workflow_json: unknown
+  validation_report: unknown | null
+  created_by: string
+  published_by: string | null
+  published_at: Date | null
+  created_at: Generated<Date>
+  updated_at: Date
+}
+
+export interface OnlineFieldTable {
+  id: string
+  revision_id: string
+  tenant_id: string
+  code: string
+  label: string
+  field_type: string
+  required: boolean
+  length: number | null
+  sort: number
+  default_value: string | null
+  config: unknown
+  created_at: Generated<Date>
+  updated_at: Date
+  deleted: Generated<boolean>
+}
+
+export interface OnlineIndexTable {
+  id: string
+  revision_id: string
+  tenant_id: string
+  code: string
+  fields_json: unknown
+  unique: boolean
+  created_at: Generated<Date>
+  updated_at: Date
+  deleted: Generated<boolean>
+}
+
+export interface OnlineRelationTable {
+  id: string
+  revision_id: string
+  tenant_id: string
+  code: string
+  relation_type: string
+  target_definition_code: string | null
+  config: unknown
+  created_at: Generated<Date>
+  updated_at: Date
+  deleted: Generated<boolean>
+}
+
+export interface OnlineViewTable {
+  id: string
+  revision_id: string
+  tenant_id: string
+  code: string
+  kind: string
+  puck_data_json: unknown | null
+  component_config_json: unknown
+  version: number
+  created_at: Generated<Date>
+  updated_at: Date
+  deleted: Generated<boolean>
+}
+
+export interface OnlineActionTable {
+  id: string
+  revision_id: string
+  tenant_id: string
+  code: string
+  action_type: string
+  handler_key: string | null
+  config: unknown
+  created_at: Generated<Date>
+  updated_at: Date
+  deleted: Generated<boolean>
+}
+
+export interface OnlinePolicyTable {
+  id: string
+  revision_id: string
+  tenant_id: string
+  code: string
+  policy_type: string
+  subject_config: unknown
+  rule_config: unknown
+  created_at: Generated<Date>
+  updated_at: Date
+  deleted: Generated<boolean>
+}
+
+export interface OnlineWorkflowBindingTable {
+  id: string
+  revision_id: string
+  tenant_id: string
+  provider: string
+  process_key: string
+  status_field: string
+  config: unknown
+  created_at: Generated<Date>
+  updated_at: Date
+  deleted: Generated<boolean>
+}
+
+export interface OnlineReleaseTable {
+  id: string
+  definition_id: string
+  revision_id: string
+  tenant_id: string
+  release_no: number
+  snapshot_json: unknown
+  schema_revision: number
+  checksum: string
+  released_by: string
+  released_at: Generated<Date>
+  rollback_of_release_id: string | null
+}
+
+export interface OnlineSchemaChangeTable {
+  id: string
+  definition_id: string
+  revision_id: string
+  tenant_id: string
+  plan_json: unknown
+  risk: string
+  status: string
+  approval: unknown | null
+  execution_log: unknown | null
+  expected_schema_revision: number
+  applied_schema_revision: number | null
+  created_by: string
+  created_at: Generated<Date>
+  updated_at: Date
+}
+
+export interface OnlineTestSessionTable {
+  id: string
+  definition_id: string
+  revision_id: string
+  release_id: string | null
+  tenant_id: string
+  actor_id: string
+  schema_revision: number
+  environment: string
+  sandbox: boolean
+  started_at: Generated<Date>
+  ended_at: Date | null
+}
+
+
+export interface OnlineRecordTable {
+  id: string
+  tenant_id: string
+  definition_id: string
+  release_id: string
+  test_session_id: string
+  schema_revision: number
+  data_json: unknown
+  created_by: string
+  updated_by: string
+  created_at: Generated<Date>
+  updated_at: Date
+  deleted: Generated<boolean>
 }

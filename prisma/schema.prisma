@@ -233,6 +233,19 @@ model SystemTenant {
   deleted      Boolean              @default(false)
 
   subscriptions SystemTenantSubscription[]
+  onlineDefinitions OnlineDefinition[]
+  onlineRevisions OnlineRevision[]
+  onlineFields OnlineField[]
+  onlineIndexes OnlineIndex[]
+  onlineRelations OnlineRelation[]
+  onlineViews OnlineView[]
+  onlineActions OnlineAction[]
+  onlinePolicies OnlinePolicy[]
+  onlineWorkflowBindings OnlineWorkflowBinding[]
+  onlineReleases OnlineRelease[]
+  onlineSchemaChanges OnlineSchemaChange[]
+  onlineTestSessions OnlineTestSession[]
+  onlineRecords OnlineRecord[]
 
   @@map("system_tenant")
   @@index([packageId])
@@ -546,4 +559,298 @@ model InfraFile {
 
   @@map("infra_file")
   @@index([configId])
+}
+
+// ============================================================
+// ONLINE 域 - 版本化低代码元数据
+// ============================================================
+
+model OnlineDefinition {
+  id                     String         @id @default(cuid())
+  tenantId               String         @map("tenant_id")
+  code                   String         @db.VarChar(64)
+  name                   String         @db.VarChar(100)
+  modelType              String         @map("model_type") @db.VarChar(20)
+  status                 String         @default("DRAFT") @db.VarChar(20)
+  currentDraftRevisionId String?        @unique @map("current_draft_revision_id")
+  publishedReleaseId     String?        @unique @map("published_release_id")
+  lockVersion            Int            @default(1) @map("lock_version")
+  createdBy              String         @map("created_by")
+  updatedBy              String         @map("updated_by")
+  createdAt              DateTime       @default(now()) @map("created_at")
+  updatedAt              DateTime       @updatedAt @map("updated_at")
+  deleted                Boolean        @default(false)
+  tenant                 SystemTenant   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  revisions              OnlineRevision[] @relation("OnlineDefinitionRevisions")
+  releases               OnlineRelease[] @relation("OnlineDefinitionReleases")
+  schemaChanges          OnlineSchemaChange[]
+  testSessions           OnlineTestSession[]
+  records                OnlineRecord[]
+  currentDraftRevision   OnlineRevision? @relation("OnlineDefinitionCurrentDraft", fields: [currentDraftRevisionId], references: [id], onDelete: SetNull)
+  publishedRelease       OnlineRelease? @relation("OnlineDefinitionPublishedRelease", fields: [publishedReleaseId], references: [id], onDelete: SetNull)
+
+  @@unique([tenantId, code])
+  @@index([tenantId, status, updatedAt])
+  @@map("online_definition")
+}
+
+model OnlineRevision {
+  id               String               @id @default(cuid())
+  definitionId     String               @map("definition_id")
+  tenantId         String               @map("tenant_id")
+  sequence         Int
+  status           String               @default("DRAFT") @db.VarChar(20)
+  schemaRevision   Int                  @default(0) @map("schema_revision")
+  modelJson        Json                 @default("{}") @map("model_json")
+  interactionJson  Json                 @default("{}") @map("interaction_json")
+  policyJson       Json                 @default("{}") @map("policy_json")
+  workflowJson     Json                 @default("{}") @map("workflow_json")
+  validationReport Json?                @map("validation_report")
+  createdBy        String               @map("created_by")
+  publishedBy      String?              @map("published_by")
+  publishedAt      DateTime?            @map("published_at")
+  createdAt        DateTime             @default(now()) @map("created_at")
+  updatedAt        DateTime             @updatedAt @map("updated_at")
+  definition       OnlineDefinition     @relation("OnlineDefinitionRevisions", fields: [definitionId], references: [id], onDelete: Cascade)
+  tenant           SystemTenant         @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  currentForDefinition OnlineDefinition? @relation("OnlineDefinitionCurrentDraft")
+  fields           OnlineField[]
+  indexes          OnlineIndex[]
+  relations        OnlineRelation[]
+  views            OnlineView[]
+  actions          OnlineAction[]
+  policies         OnlinePolicy[]
+  workflowBindings OnlineWorkflowBinding[]
+  releases         OnlineRelease[]
+  schemaChanges    OnlineSchemaChange[]
+  testSessions     OnlineTestSession[]
+
+  @@unique([tenantId, definitionId, sequence])
+  @@index([tenantId, definitionId, status])
+  @@map("online_revision")
+}
+
+model OnlineField {
+  id           String         @id @default(cuid())
+  revisionId   String         @map("revision_id")
+  tenantId     String         @map("tenant_id")
+  code         String         @db.VarChar(64)
+  label        String         @db.VarChar(100)
+  fieldType    String         @map("field_type") @db.VarChar(30)
+  required     Boolean        @default(false)
+  length       Int?
+  sort         Int            @default(0)
+  defaultValue String?        @map("default_value")
+  config       Json           @default("{}")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+  deleted      Boolean        @default(false)
+  revision     OnlineRevision @relation(fields: [revisionId], references: [id], onDelete: Cascade)
+  tenant       SystemTenant   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+
+  @@unique([tenantId, revisionId, code])
+  @@index([tenantId, revisionId, sort])
+  @@map("online_field")
+}
+
+model OnlineIndex {
+  id           String         @id @default(cuid())
+  revisionId   String         @map("revision_id")
+  tenantId     String         @map("tenant_id")
+  code         String         @db.VarChar(64)
+  fieldsJson   Json           @map("fields_json")
+  unique       Boolean        @default(false)
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+  deleted      Boolean        @default(false)
+  revision     OnlineRevision @relation(fields: [revisionId], references: [id], onDelete: Cascade)
+  tenant       SystemTenant   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+
+  @@unique([tenantId, revisionId, code])
+  @@map("online_index")
+}
+
+model OnlineRelation {
+  id             String         @id @default(cuid())
+  revisionId     String         @map("revision_id")
+  tenantId       String         @map("tenant_id")
+  code           String         @db.VarChar(64)
+  relationType   String         @map("relation_type") @db.VarChar(30)
+  targetDefinitionCode String?  @map("target_definition_code") @db.VarChar(64)
+  config         Json           @default("{}")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+  deleted        Boolean        @default(false)
+  revision       OnlineRevision @relation(fields: [revisionId], references: [id], onDelete: Cascade)
+  tenant         SystemTenant   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+
+  @@unique([tenantId, revisionId, code])
+  @@map("online_relation")
+}
+
+model OnlineView {
+  id              String         @id @default(cuid())
+  revisionId      String         @map("revision_id")
+  tenantId        String         @map("tenant_id")
+  code            String         @db.VarChar(64)
+  kind            String         @db.VarChar(30)
+  puckDataJson    Json?          @map("puck_data_json")
+  componentConfig Json            @default("{}") @map("component_config_json")
+  version         Int            @default(1)
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime       @updatedAt @map("updated_at")
+  deleted         Boolean        @default(false)
+  revision        OnlineRevision @relation(fields: [revisionId], references: [id], onDelete: Cascade)
+  tenant          SystemTenant   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+
+  @@unique([tenantId, revisionId, code])
+  @@map("online_view")
+}
+
+model OnlineAction {
+  id                String         @id @default(cuid())
+  revisionId        String         @map("revision_id")
+  tenantId          String         @map("tenant_id")
+  code              String         @db.VarChar(64)
+  actionType        String         @map("action_type") @db.VarChar(30)
+  handlerKey        String?        @map("handler_key") @db.VarChar(100)
+  config            Json           @default("{}")
+  createdAt         DateTime       @default(now()) @map("created_at")
+  updatedAt         DateTime       @updatedAt @map("updated_at")
+  deleted           Boolean        @default(false)
+  revision          OnlineRevision @relation(fields: [revisionId], references: [id], onDelete: Cascade)
+  tenant            SystemTenant   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+
+  @@unique([tenantId, revisionId, code])
+  @@map("online_action")
+}
+
+model OnlinePolicy {
+  id                String         @id @default(cuid())
+  revisionId        String         @map("revision_id")
+  tenantId          String         @map("tenant_id")
+  code              String         @db.VarChar(64)
+  policyType        String         @map("policy_type") @db.VarChar(30)
+  subjectConfig     Json           @default("{}") @map("subject_config")
+  ruleConfig        Json           @default("{}") @map("rule_config")
+  createdAt         DateTime       @default(now()) @map("created_at")
+  updatedAt         DateTime       @updatedAt @map("updated_at")
+  deleted           Boolean        @default(false)
+  revision          OnlineRevision @relation(fields: [revisionId], references: [id], onDelete: Cascade)
+  tenant            SystemTenant   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+
+  @@unique([tenantId, revisionId, code])
+  @@map("online_policy")
+}
+
+model OnlineWorkflowBinding {
+  id                String         @id @default(cuid())
+  revisionId        String         @map("revision_id")
+  tenantId          String         @map("tenant_id")
+  provider          String         @db.VarChar(50)
+  processKey        String         @map("process_key") @db.VarChar(100)
+  statusField       String         @map("status_field") @db.VarChar(64)
+  config            Json           @default("{}")
+  createdAt         DateTime       @default(now()) @map("created_at")
+  updatedAt         DateTime       @updatedAt @map("updated_at")
+  deleted           Boolean        @default(false)
+  revision          OnlineRevision @relation(fields: [revisionId], references: [id], onDelete: Cascade)
+  tenant            SystemTenant   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+
+  @@unique([tenantId, revisionId, processKey])
+  @@map("online_workflow_binding")
+}
+
+model OnlineRelease {
+  id                  String           @id @default(cuid())
+  definitionId        String           @map("definition_id")
+  revisionId          String           @map("revision_id")
+  tenantId            String           @map("tenant_id")
+  releaseNo           Int              @map("release_no")
+  snapshotJson        Json             @map("snapshot_json")
+  schemaRevision      Int              @map("schema_revision")
+  checksum            String           @db.VarChar(64)
+  releasedBy          String           @map("released_by")
+  releasedAt          DateTime         @default(now()) @map("released_at")
+  rollbackOfReleaseId String?          @map("rollback_of_release_id")
+  definition          OnlineDefinition @relation("OnlineDefinitionReleases", fields: [definitionId], references: [id], onDelete: Cascade)
+  revision            OnlineRevision   @relation(fields: [revisionId], references: [id], onDelete: Restrict)
+  tenant              SystemTenant     @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  publishedForDefinition OnlineDefinition? @relation("OnlineDefinitionPublishedRelease")
+  rollbackOf          OnlineRelease?   @relation("OnlineReleaseRollback", fields: [rollbackOfReleaseId], references: [id], onDelete: Restrict)
+  rollbackChildren    OnlineRelease[]  @relation("OnlineReleaseRollback")
+  testSessions        OnlineTestSession[]
+  records             OnlineRecord[]
+
+  @@unique([tenantId, definitionId, releaseNo])
+  @@index([tenantId, definitionId, releasedAt])
+  @@map("online_release")
+}
+
+model OnlineSchemaChange {
+  id                    String           @id @default(cuid())
+  definitionId          String           @map("definition_id")
+  revisionId            String           @map("revision_id")
+  tenantId              String           @map("tenant_id")
+  planJson              Json             @map("plan_json")
+  risk                  String           @db.VarChar(20)
+  status                String           @db.VarChar(30)
+  approval              Json?
+  executionLog          Json?            @map("execution_log")
+  expectedSchemaRevision Int              @map("expected_schema_revision")
+  appliedSchemaRevision Int?              @map("applied_schema_revision")
+  createdBy             String           @map("created_by")
+  createdAt             DateTime         @default(now()) @map("created_at")
+  updatedAt             DateTime         @updatedAt @map("updated_at")
+  definition            OnlineDefinition @relation(fields: [definitionId], references: [id], onDelete: Cascade)
+  revision              OnlineRevision   @relation(fields: [revisionId], references: [id], onDelete: Restrict)
+  tenant                SystemTenant     @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+
+  @@index([tenantId, definitionId, status])
+  @@map("online_schema_change")
+}
+
+model OnlineTestSession {
+  id             String           @id @default(cuid())
+  definitionId   String           @map("definition_id")
+  revisionId     String           @map("revision_id")
+  releaseId      String?          @map("release_id")
+  tenantId       String           @map("tenant_id")
+  actorId        String           @map("actor_id")
+  schemaRevision Int              @map("schema_revision")
+  environment    String           @db.VarChar(30)
+  sandbox        Boolean          @default(true)
+  startedAt      DateTime         @default(now()) @map("started_at")
+  endedAt        DateTime?        @map("ended_at")
+  definition     OnlineDefinition @relation(fields: [definitionId], references: [id], onDelete: Cascade)
+  revision       OnlineRevision   @relation(fields: [revisionId], references: [id], onDelete: Restrict)
+  release        OnlineRelease?   @relation(fields: [releaseId], references: [id], onDelete: Restrict)
+  tenant         SystemTenant     @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  records        OnlineRecord[]
+
+  @@index([tenantId, definitionId, startedAt])
+  @@map("online_test_session")
+}
+
+model OnlineRecord {
+  id             String            @id @default(cuid())
+  tenantId       String            @map("tenant_id")
+  definitionId   String            @map("definition_id")
+  releaseId      String            @map("release_id")
+  testSessionId  String            @map("test_session_id")
+  schemaRevision Int               @map("schema_revision")
+  dataJson       Json              @map("data_json")
+  createdBy      String            @map("created_by")
+  updatedBy      String            @map("updated_by")
+  createdAt      DateTime          @default(now()) @map("created_at")
+  updatedAt      DateTime          @updatedAt @map("updated_at")
+  deleted        Boolean           @default(false)
+  tenant         SystemTenant      @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  definition     OnlineDefinition  @relation(fields: [definitionId], references: [id], onDelete: Cascade)
+  release        OnlineRelease     @relation(fields: [releaseId], references: [id], onDelete: Restrict)
+  testSession    OnlineTestSession @relation(fields: [testSessionId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, definitionId, releaseId, updatedAt])
+  @@index([tenantId, testSessionId, updatedAt])
+  @@map("online_record")
 }

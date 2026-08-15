@@ -1,10 +1,6 @@
-"use client"
+import { redirect } from "next/navigation"
 
-import { useParams } from "next/navigation"
-import PageRenderPage from "@/modules/infra/frontend/pages/page-render.page"
-
-export default function DynamicPageRender() {
-  const params = useParams()
-  const slug = params?.slug as string
-  return <PageRenderPage slug={slug} />
+/** Legacy Puck JSON pages are no longer rendered as production-style Online pages. */
+export default function LegacyDynamicPageRedirect() {
+  redirect("/admin/infra/online-definitions")
 }

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-14T14:42:52.366Z",
-  "routeCount": 825,
-  "operationCount": 2001,
+  "generatedAt": "2026-08-15T01:21:57.350Z",
+  "routeCount": 838,
+  "operationCount": 2019,
   "routes": [
     {
       "path": "/api/v1/admin/ai/ai-api-key",
@@ -3954,11 +3954,11 @@
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         },
         {
           "method": "POST",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/infra/pages/route.ts"
@@ -3968,15 +3968,15 @@
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         },
         {
           "method": "PUT",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         },
         {
           "method": "DELETE",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/infra/pages/[id]/route.ts"
@@ -3986,7 +3986,7 @@
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/infra/pages/render/[slug]/route.ts"
@@ -11018,6 +11018,156 @@
         }
       ],
       "source": "src/app/api/v1/admin/mp/mp-user/[id]/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/online/definitions",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        },
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/online/definitions/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/online/definitions/[code]",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/online/definitions/[code]/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/online/definitions/[code]/draft",
+      "operations": [
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/online/definitions/[code]/draft/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/online/definitions/[code]/publish",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/online/definitions/[code]/publish/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/online/definitions/[code]/rollback",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/online/definitions/[code]/rollback/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/online/definitions/[code]/schema-plans",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        },
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/online/definitions/[code]/schema-plans/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/online/definitions/[code]/schema-plans/[planId]",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/online/definitions/[code]/schema-plans/[planId]/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/online/definitions/[code]/schema-plans/[planId]/approve",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/online/definitions/[code]/schema-plans/[planId]/approve/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/online/definitions/[code]/test-sessions",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/online/definitions/[code]/test-sessions/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/online/definitions/[code]/test-sessions/[sessionId]",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/online/definitions/[code]/test-sessions/[sessionId]/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/online/definitions/[code]/test-sessions/[sessionId]/records",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        },
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/online/definitions/[code]/test-sessions/[sessionId]/records/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/online/definitions/[code]/test-sessions/[sessionId]/records/[recordId]",
+      "operations": [
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/online/definitions/[code]/test-sessions/[sessionId]/records/[recordId]/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/online/definitions/[code]/validate",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/online/definitions/[code]/validate/route.ts"
     },
     {
       "path": "/api/v1/admin/pay/orders",
