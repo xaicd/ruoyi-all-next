@@ -26,6 +26,5 @@ export function validateOnlineModelAggregate(modelType: OnlineModelType, definit
   for (const child of interaction.masterDetail.children) {
     if (child.targetDefinitionCode === definitionCode) throw new Error("MASTER_DETAIL 当前阶段不允许定义自引用子表")
     if (!childCodes.add(child.code)) throw new Error(`MASTER_DETAIL 子定义 code 不可重复：${child.code}`)
-    if (!fields.has(child.foreignKeyField)) throw new Error(`MASTER_DETAIL foreignKeyField ${child.foreignKeyField} 必须存在于当前 Draft 模型`)
   }
 }

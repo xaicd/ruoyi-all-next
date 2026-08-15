@@ -35,6 +35,7 @@ export const GET = withAdminRoute(async (request: Request, _auth, context: Route
         primaryKey: table.columns.filter((c) => c.isPrimary).map((c) => c.name),
         indexes: [],
       },
+      permissionPrefix: table.permissionPrefix ?? undefined,
       generateFrontend: true,
       generateTest: true,
     })

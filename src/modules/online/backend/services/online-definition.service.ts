@@ -4,7 +4,10 @@ import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 import { KyselyOnlineDefinitionRepository } from "../adapters/persistence/online-definition.repository"
 import { KyselyOnlineSchemaPlanRepository } from "../adapters/persistence/online-schema-plan.repository"
 import { KyselyOnlineRuntimeRepository } from "../adapters/persistence/online-runtime.repository"
-import type { ApproveOnlineSchemaPlanInput, CreateOnlineDefinitionInput, CreateOnlineRuntimeRecordInput, CreateOnlineSchemaPlanInput, OnlineDefinitionPageInput, OnlineRuntimeRecordPageInput, PublishOnlineRevisionInput, RollbackOnlineDefinitionInput, UpdateOnlineDefinitionInput, UpdateOnlineRevisionInput, UpdateOnlineRuntimeRecordInput, ValidateOnlineRevisionInput } from "../validators"
+import { toOnlineCodegenConfig } from "../application/online-codegen.adapter"
+import { CodegenEngineService } from "@/modules/infra/backend/services/codegen-engine.service"
+import { SystemDictService } from "@/modules/system/backend/services/dict.service"
+import type { ApproveOnlineSchemaPlanInput, ArchiveOnlineDefinitionInput, CreateOnlineDefinitionInput, CreateOnlineRuntimeRecordInput, CreateOnlineSchemaPlanInput, DeleteOnlineDefinitionInput, NormalizeOnlineSystemFieldsInput, OnlineDefinitionPageInput, OnlineRuntimeRecordPageInput, PublishOnlineRevisionInput, RollbackOnlineDefinitionInput, UpdateOnlineDefinitionInput, UpdateOnlineRevisionInput, UpdateOnlineRuntimeRecordInput, ValidateOnlineRevisionInput } from "../validators"
 
 function tenantScope(auth: AuthContext): { tenantId: string; actorId: string } {
   if (!auth.tenantId) throw new ApiError("FORBIDDEN", "Online Definition 必须在租户上下文中管理")
@@ -14,13 +17,20 @@ function tenantScope(auth: AuthContext): { tenantId: string; actorId: string } {
 export class OnlineDefinitionService {
   static async page(auth: AuthContext, input: OnlineDefinitionPageInput) {
     const { tenantId } = tenantScope(auth)
-    const data = await KyselyOnlineDefinitionRepository.page({ tenantId, page: input.page ?? 1, pageSize: input.pageSize ?? 20 })
+    const data = await KyselyOnlineDefinitionRepository.page({
+      tenantId,
+      page: input.page ?? 1,
+      pageSize: input.pageSize ?? 20,
+      keyword: input.keyword,
+      modelType: input.modelType,
+      status: input.status,
+    })
     return { ...data, phase: "METADATA_READY" as const, persistence: "POSTGRESQL_REQUIRED" as const }
   }
 
   static async create(auth: AuthContext, input: CreateOnlineDefinitionInput) {
     const scope = tenantScope(auth)
-    const data = await KyselyOnlineDefinitionRepository.create({ ...scope, code: input.code!, name: input.name!, modelType: input.modelType! })
+    const data = await KyselyOnlineDefinitionRepository.create({ ...scope, code: input.code!, name: input.name!, modelType: input.modelType!, model: input.model, interaction: input.interaction })
     domainLog.audit("online.definition.create", { targetType: "ONLINE_DEFINITION", targetId: data.id })
     return data
   }
@@ -37,10 +47,30 @@ export class OnlineDefinitionService {
     return data
   }
 
+  static async archive(auth: AuthContext, code: string, input: ArchiveOnlineDefinitionInput) {
+    const scope = tenantScope(auth)
+    const data = await KyselyOnlineDefinitionRepository.archiveDefinition({ ...scope, code, expectedLockVersion: input.expectedLockVersion })
+    domainLog.audit("online.definition.archive", { targetType: "ONLINE_DEFINITION", targetId: data.id })
+    return data
+  }
+
+  static async delete(auth: AuthContext, code: string, input: DeleteOnlineDefinitionInput) {
+    const scope = tenantScope(auth)
+    await KyselyOnlineDefinitionRepository.deleteDefinition({ ...scope, code, expectedLockVersion: input.expectedLockVersion })
+    domainLog.audit("online.definition.delete", { targetType: "ONLINE_DEFINITION", targetId: code })
+  }
+
   static async updateDraft(auth: AuthContext, code: string, input: UpdateOnlineRevisionInput) {
     const scope = tenantScope(auth)
     const data = await KyselyOnlineDefinitionRepository.updateDraft({ ...scope, code, expectedLockVersion: input.expectedLockVersion!, model: input.model, interaction: input.interaction, views: input.views, policy: input.policy, workflow: input.workflow })
     domainLog.audit("online.revision.update", { targetType: "ONLINE_DEFINITION", targetId: data.id })
+    return data
+  }
+
+  static async normalizeSystemFields(auth: AuthContext, code: string, input: NormalizeOnlineSystemFieldsInput) {
+    const scope = tenantScope(auth)
+    const data = await KyselyOnlineDefinitionRepository.normalizeSystemFields({ ...scope, code, expectedLockVersion: input.expectedLockVersion })
+    domainLog.audit("online.definition.normalize-system-fields", { targetType: "ONLINE_DEFINITION", targetId: data.id })
     return data
   }
 
@@ -87,6 +117,38 @@ export class OnlineDefinitionService {
     return data
   }
 
+  static async previewGeneratedCode(auth: AuthContext, code: string) {
+    const { tenantId } = tenantScope(auth)
+    const runtime = await KyselyOnlineRuntimeRepository.resolveCurrentPublishedRelease({ tenantId, definitionCode: code })
+    const childRuntimes = await KyselyOnlineRuntimeRepository.resolveMasterDetailChildReleases({ tenantId, runtime })
+    const config = toOnlineCodegenConfig(runtime, childRuntimes)
+    const outputs = CodegenEngineService.preview(config)
+    domainLog.audit("online.definition.codegen.preview", { targetType: "ONLINE_DEFINITION", targetId: runtime.definitionId, metadata: { releaseId: runtime.releaseId, schemaRevision: runtime.schemaRevision, fileCount: outputs.length } })
+    return { releaseId: runtime.releaseId, schemaRevision: runtime.schemaRevision, files: outputs }
+  }
+
+  static async generateCode(auth: AuthContext, code: string) {
+    const { tenantId } = tenantScope(auth)
+    const runtime = await KyselyOnlineRuntimeRepository.resolveCurrentPublishedRelease({ tenantId, definitionCode: code })
+    const childRuntimes = await KyselyOnlineRuntimeRepository.resolveMasterDetailChildReleases({ tenantId, runtime })
+    const config = toOnlineCodegenConfig(runtime, childRuntimes)
+    const outputs = CodegenEngineService.generate(config)
+    domainLog.audit("online.definition.codegen.download", { targetType: "ONLINE_DEFINITION", targetId: runtime.definitionId, metadata: { releaseId: runtime.releaseId, schemaRevision: runtime.schemaRevision, fileCount: outputs.length } })
+    return { releaseId: runtime.releaseId, schemaRevision: runtime.schemaRevision, className: config.className, files: outputs }
+  }
+
+  /** Returns only dictionary values explicitly referenced by this immutable Published Release. */
+  static async lookupDictionaryOptions(auth: AuthContext, code: string, fieldCode: string) {
+    const { tenantId } = tenantScope(auth)
+    const runtime = await KyselyOnlineRuntimeRepository.resolveCurrentPublishedRelease({ tenantId, definitionCode: code })
+    const field = runtime.interaction.fields.find((item) => item.code === fieldCode)
+    if (!field?.dictionaryCode || ![field.widget, field.query.widget].some((widget) => widget === "DICTIONARY" || widget === "SELECT")) throw new ApiError("NOT_FOUND", "当前 Published Release 未为该字段配置字典选项")
+    const values = await SystemDictService.getDataByType(field.dictionaryCode)
+    const options = values.filter((value: { status: string }) => value.status === "ACTIVE").map((value: { value: string; label: string }) => ({ value: value.value, label: value.label }))
+    domainLog.audit("online.definition.lookup.dictionary", { targetType: "ONLINE_DEFINITION", targetId: runtime.definitionId, metadata: { releaseId: runtime.releaseId, fieldCode, dictionaryCode: field.dictionaryCode, optionCount: options.length } })
+    return { releaseId: runtime.releaseId, fieldCode, options }
+  }
+
   static async startTestSession(auth: AuthContext, code: string) {
     const scope = tenantScope(auth)
     const data = await KyselyOnlineRuntimeRepository.startTestSession({ ...scope, definitionCode: code })
@@ -99,7 +161,8 @@ export class OnlineDefinitionService {
   }
 
   static async pageTestRecords(auth: AuthContext, code: string, sessionId: string, input: OnlineRuntimeRecordPageInput) {
-    return KyselyOnlineRuntimeRepository.pageRecords({ ...tenantScope(auth), definitionCode: code, sessionId, page: input.page, pageSize: input.pageSize })
+    const conditions = (input.conditions ?? []).map((condition) => ({ field: condition.field!, value: condition.value! }))
+    return KyselyOnlineRuntimeRepository.pageRecords({ ...tenantScope(auth), definitionCode: code, sessionId, page: input.page, pageSize: input.pageSize, conditions })
   }
 
   static async createTestRecord(auth: AuthContext, code: string, sessionId: string, input: CreateOnlineRuntimeRecordInput) {

@@ -1,228 +1,46 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
-import { request, API } from "@/modules/shared/frontend/lib/request"
+import Link from "next/link"
+import { useCallback, useEffect, useState } from "react"
+import type { OnlineDefinitionPage, OnlineDefinitionSummary } from "@/modules/online/backend/application/online-definition.contract"
+import { API, request } from "@/modules/shared/frontend/lib/request"
 
-// === Types ===
-type CodegenTable = { id: string; tableName: string; tableComment: string; moduleName: string; className: string; template: string; scene: string; createdAt: string; updatedAt: string }
-type DbTable = { name: string; comment?: string; columns: any[] }
+type CodegenColumn = { name: string; comment?: string; type: string; uiComponent: "INPUT" | "TEXTAREA" | "NUMBER" | "SELECT" | "RADIO" | "CHECKBOX" | "SWITCH" | "DATE" | "DATETIME" | "UPLOAD" | "RICH_TEXT" | "TREE_SELECT" | "HIDDEN"; nullable: boolean; listShow: boolean; formShow: boolean; queryShow: boolean; queryType: "=" | "LIKE" | "BETWEEN" | ">" | "<" | "IN"; dictType: string | null; formValidation: string | null }
+type CodegenTable = { id: string; tableName: string; tableComment: string; moduleName: string; businessName: string; className: string; template: string; scene: string; permissionPrefix?: string | null; columns?: CodegenColumn[]; createdAt: string; updatedAt: string }
+type DbTable = { name: string; comment?: string; columns: unknown[] }
 type PageData = { items: CodegenTable[]; total: number; page: number; pageSize: number }
 type PreviewFile = { path: string; type: string; content: string }
+type Tab = "database" | "import" | "online"
+const ONLINE_ENDPOINT = "/api/v1/admin/online/definitions"
+const onlineType: Record<OnlineDefinitionSummary["modelType"], string> = { SINGLE: "单表", TREE: "树表", MASTER_DETAIL: "主子表" }
+const onlineStatus: Record<OnlineDefinitionSummary["status"], string> = { DRAFT: "草稿", ACTIVE: "已发布", ARCHIVED: "已归档" }
+const formatDate = (value: string) => new Date(value).toLocaleDateString("zh-CN")
 
 export default function InfraCodegenPage() {
-  const [tab, setTab] = useState<"list" | "import">("list")
-  const [data, setData] = useState<PageData>({ items: [], total: 0, page: 1, pageSize: 20 })
-  const [loading, setLoading] = useState(false)
-  const [keyword, setKeyword] = useState("")
-  const [page, setPage] = useState(1)
-
-  // 导入相关
-  const [dbTables, setDbTables] = useState<DbTable[]>([])
-  const [sourceMode, setSourceMode] = useState<{ mode: string; description: string }>({ mode: "unknown", description: "" })
-  const [selectedTables, setSelectedTables] = useState<string[]>([])
-  const [importing, setImporting] = useState(false)
-
-  // 预览相关
-  const [previewFiles, setPreviewFiles] = useState<PreviewFile[] | null>(null)
-  const [previewActive, setPreviewActive] = useState(0)
-  const [previewTableName, setPreviewTableName] = useState("")
-
-  const loadList = useCallback(async () => {
-    setLoading(true)
-    try {
-      const res = await request.get(API.CODEGEN, { page, pageSize: 20, keyword: keyword || undefined })
-      if (res.success) setData(res.data)
-    } finally { setLoading(false) }
-  }, [page, keyword])
-
-  const loadDbTables = async () => {
-    const res = await request.get(`${API.CODEGEN}/tables`)
-    if (res.success) {
-      setDbTables(res.data.tables)
-      setSourceMode(res.data.sourceMode)
-    }
-  }
-
-  useEffect(() => { loadList() }, [loadList])
-
-  // === 导入 ===
-  const handleImport = async () => {
-    if (selectedTables.length === 0) { alert("请选择要导入的表"); return }
-    setImporting(true)
-    try {
-      const res = await request.post(`${API.CODEGEN}/import`, { tableNames: selectedTables })
-      if (res.success) {
-        alert(`导入成功: ${res.data.imported.length} 张表${res.data.skipped.length ? `，跳过 ${res.data.skipped.length} 张` : ""}`)
-        setSelectedTables([])
-        setTab("list")
-        loadList()
-      } else { alert(res.error) }
-    } finally { setImporting(false) }
-  }
-
-  // === 预览 ===
-  const handlePreview = async (table: CodegenTable) => {
-    const res = await request.post(`${API.CODEGEN}/preview`, { moduleName: table.moduleName, className: table.className, businessName: table.tableComment, template: table.template, scene: table.scene, tableName: table.tableName })
-    if (res.success) {
-      setPreviewFiles(res.data)
-      setPreviewActive(0)
-      setPreviewTableName(table.className)
-    } else { alert(res.error) }
-  }
-
-  // === 下载（需要 blob，保持原生 fetch） ===
-  const handleDownload = async (table: CodegenTable) => {
-    const res = await fetch(`${API.CODEGEN}/${table.id}/download`)
-    if (res.ok) {
-      const blob = await res.blob()
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement("a")
-      a.href = url
-      a.download = `codegen-${table.className}.zip`
-      a.click()
-      URL.revokeObjectURL(url)
-    } else { alert("下载失败") }
-  }
-
-  // === 删除 ===
-  const handleDelete = async (table: CodegenTable) => {
-    if (!confirm(`确认删除「${table.tableName}」的生成配置？`)) return
-    const res = await request.delete(`${API.CODEGEN}/${table.id}`)
-    if (res.success) loadList(); else alert(res.error)
-  }
-
-  const totalPages = Math.ceil(data.total / data.pageSize)
-
-  return (
-    <div className="space-y-4">
-      {/* Header + Tabs */}
-      <div className="flex items-center justify-between rounded-lg border bg-white p-4">
-        <div>
-          <h1 className="text-lg font-semibold text-slate-900">代码生成</h1>
-          <p className="mt-0.5 text-sm text-slate-500">导入数据库表 → 配置字段 → 生成完整模块代码</p>
-        </div>
-        <div className="flex gap-2">
-          <button onClick={() => { setTab("list"); loadList() }} className={`h-9 rounded-md px-4 text-sm font-medium transition ${tab === "list" ? "bg-blue-600 text-white" : "border text-slate-600 hover:bg-slate-50"}`}>已导入表</button>
-          <button onClick={() => { setTab("import"); loadDbTables() }} className={`h-9 rounded-md px-4 text-sm font-medium transition ${tab === "import" ? "bg-blue-600 text-white" : "border text-slate-600 hover:bg-slate-50"}`}>导入表</button>
-        </div>
-      </div>
-
-      {/* Tab: 已导入表列表 */}
-      {tab === "list" && (
-        <>
-          <div className="rounded-lg border bg-white p-4">
-            <div className="flex items-center gap-3">
-              <input value={keyword} onChange={(e) => setKeyword(e.target.value)} onKeyDown={(e) => e.key === "Enter" && loadList()} placeholder="表名 / 描述 / 类名" className="h-9 w-56 rounded-md border px-3 text-sm" />
-              <button onClick={() => { setPage(1); loadList() }} className="h-9 rounded-md bg-slate-900 px-4 text-sm text-white">查询</button>
-              <span className="ml-auto text-xs text-slate-400">共 {data.total} 张表</span>
-            </div>
-          </div>
-
-          {data.items.length === 0 ? (
-            <div className="rounded-lg border bg-white p-12 text-center">
-              <p className="text-slate-400">暂无已导入的表</p>
-              <p className="mt-2 text-xs text-slate-400">点击右上角「导入表」从数据库/Schema 中导入</p>
-            </div>
-          ) : (
-            <div className="rounded-lg border bg-white">
-              <table className="w-full text-sm">
-                <thead><tr className="border-b bg-slate-50 text-left text-xs font-medium text-slate-500">
-                  <th className="px-4 py-3">表名</th><th className="px-4 py-3">描述</th><th className="px-4 py-3">模块</th><th className="px-4 py-3">类名</th><th className="px-4 py-3">模板</th><th className="px-4 py-3">更新时间</th><th className="px-4 py-3 text-right">操作</th>
-                </tr></thead>
-                <tbody>
-                  {data.items.map((t) => (
-                    <tr key={t.id} className="border-b last:border-0 hover:bg-slate-50">
-                      <td className="px-4 py-3"><code className="rounded bg-slate-100 px-1.5 py-0.5 text-xs">{t.tableName}</code></td>
-                      <td className="px-4 py-3">{t.tableComment}</td>
-                      <td className="px-4 py-3"><span className="rounded bg-blue-50 px-2 py-0.5 text-xs text-blue-700">{t.moduleName}</span></td>
-                      <td className="px-4 py-3 font-medium">{t.className}</td>
-                      <td className="px-4 py-3 text-xs text-slate-500">{t.template}</td>
-                      <td className="px-4 py-3 text-xs text-slate-400">{new Date(t.updatedAt).toLocaleDateString("zh-CN")}</td>
-                      <td className="px-4 py-3 text-right space-x-2">
-                        <button onClick={() => handlePreview(t)} className="text-blue-600 hover:text-blue-800">预览</button>
-                        <button onClick={() => handleDownload(t)} className="text-green-600 hover:text-green-800">生成</button>
-                        <button onClick={() => handleDelete(t)} className="text-red-600 hover:text-red-800">删除</button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              {totalPages > 1 && <div className="flex items-center justify-between border-t px-4 py-3"><span className="text-xs text-slate-500">第 {page}/{totalPages} 页</span><div className="flex gap-1"><button disabled={page <= 1} onClick={() => setPage((p) => p - 1)} className="h-8 rounded border px-3 text-xs disabled:opacity-50">上一页</button><button disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)} className="h-8 rounded border px-3 text-xs disabled:opacity-50">下一页</button></div></div>}
-            </div>
-          )}
-        </>
-      )}
-
-      {/* Tab: 导入表 */}
-      {tab === "import" && (
-        <div className="rounded-lg border bg-white p-4">
-          <div className="mb-4 flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-slate-700">选择要导入的表</p>
-              <p className="mt-0.5 text-xs text-slate-400">数据源: {sourceMode.description}</p>
-            </div>
-            <button onClick={handleImport} disabled={importing || selectedTables.length === 0} className="h-9 rounded-md bg-blue-600 px-4 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50">
-              {importing ? "导入中..." : `导入 (${selectedTables.length})`}
-            </button>
-          </div>
-
-          {dbTables.length === 0 ? (
-            <p className="py-8 text-center text-slate-400">未找到可导入的表</p>
-          ) : (
-            <div className="max-h-96 overflow-auto rounded-lg border">
-              <table className="w-full text-sm">
-                <thead><tr className="sticky top-0 border-b bg-slate-50 text-left text-xs font-medium text-slate-500">
-                  <th className="px-4 py-2 w-10"><input type="checkbox" checked={selectedTables.length === dbTables.length} onChange={(e) => setSelectedTables(e.target.checked ? dbTables.map((t) => t.name) : [])} /></th>
-                  <th className="px-4 py-2">表名</th><th className="px-4 py-2">描述</th><th className="px-4 py-2">字段数</th>
-                </tr></thead>
-                <tbody>
-                  {dbTables.map((t) => (
-                    <tr key={t.name} className="border-b last:border-0 hover:bg-slate-50">
-                      <td className="px-4 py-2"><input type="checkbox" checked={selectedTables.includes(t.name)} onChange={(e) => setSelectedTables(e.target.checked ? [...selectedTables, t.name] : selectedTables.filter((n) => n !== t.name))} /></td>
-                      <td className="px-4 py-2"><code className="text-xs">{t.name}</code></td>
-                      <td className="px-4 py-2 text-slate-500">{t.comment || "-"}</td>
-                      <td className="px-4 py-2 text-xs text-slate-400">{t.columns.length}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* 预览弹窗 */}
-      {previewFiles && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-6">
-          <div className="flex h-full max-h-[85vh] w-full max-w-5xl flex-col rounded-xl bg-white shadow-2xl">
-            {/* 头部 */}
-            <div className="flex items-center justify-between border-b px-6 py-4">
-              <h2 className="text-base font-semibold">代码预览 - {previewTableName}</h2>
-              <button onClick={() => setPreviewFiles(null)} className="rounded-lg border px-3 py-1.5 text-xs text-slate-500 hover:bg-slate-50">关闭</button>
-            </div>
-            {/* 内容 */}
-            <div className="flex flex-1 overflow-hidden">
-              {/* 文件列表 */}
-              <div className="w-56 overflow-y-auto border-r bg-slate-50 p-3">
-                {previewFiles.map((file, i) => (
-                  <button key={i} onClick={() => setPreviewActive(i)} className={`mb-1 block w-full truncate rounded px-2.5 py-2 text-left text-xs transition ${i === previewActive ? "bg-blue-50 font-medium text-blue-700" : "text-slate-600 hover:bg-white"}`}>
-                    <span className={`mr-1.5 inline-block rounded px-1 py-0.5 text-[10px] ${file.type === "service" ? "bg-green-100 text-green-700" : file.type === "route" ? "bg-purple-100 text-purple-700" : file.type === "page" ? "bg-blue-100 text-blue-700" : "bg-slate-100 text-slate-600"}`}>{file.type}</span>
-                    <br /><span className="text-[11px]">{file.path.split("/").pop()}</span>
-                  </button>
-                ))}
-              </div>
-              {/* 代码内容 */}
-              <div className="flex-1 overflow-hidden p-4">
-                <div className="mb-2 flex items-center justify-between">
-                  <code className="text-xs text-slate-500">{previewFiles[previewActive]?.path}</code>
-                  <button onClick={() => navigator.clipboard.writeText(previewFiles[previewActive]?.content ?? "")} className="rounded border px-2.5 py-1 text-xs text-slate-500 hover:bg-slate-50">复制</button>
-                </div>
-                <pre className="h-full max-h-[60vh] overflow-auto rounded-lg bg-slate-900 p-4 text-xs leading-relaxed text-slate-100"><code>{previewFiles[previewActive]?.content}</code></pre>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  )
+  const [tab, setTab] = useState<Tab>("online"), [data, setData] = useState<PageData>({ items: [], total: 0, page: 1, pageSize: 20 }), [keyword, setKeyword] = useState(""), [page, setPage] = useState(1), [loading, setLoading] = useState(false), [selectedIds, setSelectedIds] = useState<string[]>([])
+  const [dbTables, setDbTables] = useState<DbTable[]>([]), [sourceMode, setSourceMode] = useState({ mode: "unknown", description: "" }), [selectedTables, setSelectedTables] = useState<string[]>([]), [importing, setImporting] = useState(false)
+  const [online, setOnline] = useState<OnlineDefinitionPage | null>(null), [onlineLoading, setOnlineLoading] = useState(false), [onlineError, setOnlineError] = useState("")
+  const [previewFiles, setPreviewFiles] = useState<PreviewFile[] | null>(null), [previewActive, setPreviewActive] = useState(0), [previewTitle, setPreviewTitle] = useState(""), [configTable, setConfigTable] = useState<CodegenTable | null>(null), [configSaving, setConfigSaving] = useState(false)
+  const loadList = useCallback(async () => { setLoading(true); try { const res = await request.get<PageData>(API.CODEGEN, { page, pageSize: 20, keyword: keyword || undefined }); if (res.success && res.data) setData(res.data) } finally { setLoading(false) } }, [page, keyword])
+  const loadOnline = useCallback(async () => { setOnlineLoading(true); setOnlineError(""); try { const res = await request.get<OnlineDefinitionPage>(ONLINE_ENDPOINT, { page: 1, pageSize: 20 }); if (res.success && res.data) setOnline(res.data); else setOnlineError(res.error ?? "Online 定义加载失败") } finally { setOnlineLoading(false) } }, [])
+  const loadDbTables = async () => { const res = await request.get<{ tables: DbTable[]; sourceMode: { mode: string; description: string } }>(`${API.CODEGEN}/tables`); if (res.success && res.data) { setDbTables(res.data.tables); setSourceMode(res.data.sourceMode) } }
+  useEffect(() => { void loadList() }, [loadList]); useEffect(() => { if (tab === "online") void loadOnline() }, [tab, loadOnline])
+  const showPreview = (files: PreviewFile[], title: string) => { setPreviewFiles(files); setPreviewActive(0); setPreviewTitle(title) }
+  const handleImport = async () => { if (!selectedTables.length) return alert("请选择要导入的表"); setImporting(true); try { const res = await request.post<{ imported: { tableName: string }[]; skipped: string[] }>(`${API.CODEGEN}/import`, { tableNames: selectedTables }); if (res.success && res.data) { alert(`导入成功：${res.data.imported.length} 张表${res.data.skipped.length ? `；跳过 ${res.data.skipped.length} 张` : ""}`); setSelectedTables([]); setTab("database"); void loadList() } else alert(res.error ?? "导入失败") } finally { setImporting(false) } }
+  const handleTablePreview = async (table: CodegenTable) => { const res = await request.post<PreviewFile[]>(`${API.CODEGEN}/preview`, { tableId: table.id }); if (res.success && res.data) showPreview(res.data, `${table.businessName} · 数据库生成`); else alert(res.error ?? "代码预览失败") }
+  const handleOnlinePreview = async (item: OnlineDefinitionSummary) => { const res = await request.post<{ files: PreviewFile[] }>(`${ONLINE_ENDPOINT}/${item.code}/codegen/preview`); if (res.success && res.data) showPreview(res.data.files, `${item.name} · Online Release ${item.currentRelease?.releaseNo ?? ""}`); else alert(res.error ?? "请先发布并确认当前 Online 模型可生成代码") }
+  const download = async (path: string, name: string) => { const token = localStorage.getItem("ruoyi_token"), res = await fetch(path, { headers: token ? { Authorization: `Bearer ${token}` } : {} }); if (!res.ok) return alert("下载失败，请确认当前版本已发布且有生成权限"); const url = URL.createObjectURL(await res.blob()), link = document.createElement("a"); link.href = url; link.download = name; link.click(); URL.revokeObjectURL(url) }
+  const openConfig = async (table: CodegenTable) => { const res = await request.get<CodegenTable>(`${API.CODEGEN}/${table.id}`); if (res.success && res.data?.columns) setConfigTable(res.data); else alert(res.error ?? "字段配置加载失败") }
+  const patchColumn = (index: number, patch: Partial<CodegenColumn>) => setConfigTable(current => current?.columns ? { ...current, columns: current.columns.map((column, position) => position === index ? { ...column, ...patch } : column) } : current)
+  const saveConfig = async () => { if (!configTable?.columns) return; setConfigSaving(true); try { const res = await request.put<CodegenTable>(`${API.CODEGEN}/${configTable.id}`, { moduleName: configTable.moduleName, businessName: configTable.businessName, className: configTable.className, permissionPrefix: configTable.permissionPrefix || null, columns: configTable.columns.map(({ name, uiComponent, listShow, formShow, queryShow, queryType, dictType, formValidation }) => ({ name, uiComponent, listShow, formShow, queryShow, queryType, dictType, formValidation })) }); if (!res.success) return alert(res.error ?? "字段配置保存失败"); setConfigTable(null); void loadList() } finally { setConfigSaving(false) } }
+  const deleteTables = async (tables: CodegenTable[]) => { if (!tables.length || !confirm(`确认删除 ${tables.length} 个代码生成配置？`)) return; const res = await request.delete(`${API.CODEGEN}?ids=${tables.map(item => item.id).join(",")}`); if (res.success) { setSelectedIds([]); void loadList() } else alert(res.error ?? "删除失败") }
+  const totalPages = Math.max(1, Math.ceil(data.total / data.pageSize)); const allImportedSelected = data.items.length > 0 && data.items.every(item => selectedIds.includes(item.id))
+  return <main className="min-h-full bg-slate-50 p-4 lg:p-6"><div className="mx-auto max-w-[1500px] space-y-4">
+    <header className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"><div className="flex flex-wrap items-start justify-between gap-4 px-5 py-5"><div><p className="text-xs font-semibold tracking-wider text-blue-600">ONLINE LOW-CODE · RUOYI CODEGEN</p><h1 className="mt-1 text-xl font-semibold text-slate-900">Online 低代码</h1><p className="mt-1 text-sm text-slate-500">一个业务模型有两项核心能力：在线设计业务库表与页面；从已发布 Release 生成完整模块代码。代码生成复用传统 RuoYi Codegen 引擎。</p></div><div className="flex flex-wrap gap-2"><button onClick={() => { setTab("import"); void loadDbTables() }} className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">接入</button><Link href="/admin/infra/online-definitions/new" className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">新建</Link></div></div><div className="grid border-t border-slate-100 md:grid-cols-2"><button onClick={() => { setTab("online"); void loadOnline() }} className={`border-b-2 p-4 text-left transition md:border-b-0 md:border-r ${tab === "online" ? "border-blue-600 bg-blue-50/60" : "border-transparent hover:bg-slate-50"}`}><span className="text-sm font-semibold text-slate-900">设计</span><p className="mt-1 text-xs leading-5 text-slate-500">设计业务库表、字段、关系、交互和页面；校验后生成并审核 Schema Plan，再发布 Release。</p></button><button onClick={() => { setTab("online"); void loadOnline() }} className="p-4 text-left transition hover:bg-slate-50"><span className="text-sm font-semibold text-slate-900">生成</span><p className="mt-1 text-xs leading-5 text-slate-500">基于已发布 Release 预览和下载完整 CRUD 模块；沿用 RuoYi 代码生成模板与审阅式 ZIP 交付。</p></button></div><div className="border-t border-slate-100 bg-slate-50 px-5 py-2 text-xs text-slate-500">存量表导入是兼容工具：用于已有数据库接入传统 Codegen，不属于 Online 新建业务的主流程。</div></header>
+    {tab === "database" && <><section className="rounded-xl border border-slate-200 bg-white shadow-sm"><div className="flex flex-wrap items-end gap-3 p-4"><label className="grid gap-1 text-sm text-slate-600"><span>表名 / 描述 / 实体</span><input value={keyword} onChange={event => setKeyword(event.target.value)} onKeyDown={event => event.key === "Enter" && void loadList()} placeholder="例如：system_user" className="h-9 w-64 rounded-lg border border-slate-200 px-3 text-sm outline-none focus:border-blue-500" /></label><button onClick={() => { setPage(1); void loadList() }} className="h-9 rounded-lg bg-slate-900 px-4 text-sm font-medium text-white">查询</button><button onClick={() => { setKeyword(""); setPage(1) }} className="h-9 rounded-lg border border-slate-200 px-4 text-sm text-slate-700">重置</button><span className="ml-auto text-xs text-slate-500">共 {data.total} 张已导入表</span></div><div className="flex items-center justify-between border-t border-slate-100 px-4 py-3"><div><span className="text-sm font-medium text-slate-800">数据库生成配置</span><span className="ml-2 text-xs text-slate-500">字段配置会同时影响预览和下载 ZIP。</span></div><div className="flex gap-2"><button disabled={!selectedIds.length} onClick={() => void deleteTables(data.items.filter(item => selectedIds.includes(item.id)))} className="rounded-lg border border-rose-200 px-3 py-1.5 text-xs text-rose-700 disabled:cursor-not-allowed disabled:opacity-40">删除</button><button onClick={() => { setTab("import"); void loadDbTables() }} className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white">导入</button></div></div>{loading ? <div className="p-12 text-center text-sm text-slate-400">加载中…</div> : !data.items.length ? <div className="grid gap-4 p-10 text-center"><div><p className="text-base font-medium text-slate-700">还没有数据库生成配置</p><p className="mt-2 text-sm text-slate-500">从现有数据库表开始，或新建 Online 应用进行可视化建模。</p></div><div className="flex justify-center gap-2"><button onClick={() => { setTab("import"); void loadDbTables() }} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white">导入</button><Link href="/admin/infra/online-definitions/new" className="rounded-lg border border-slate-200 px-4 py-2 text-sm text-slate-700">新建</Link></div></div> : <div className="overflow-x-auto"><table className="min-w-[1040px] w-full text-left text-sm"><thead className="bg-slate-50 text-xs text-slate-500"><tr><th className="w-12 px-4 py-3"><input aria-label="选择全部" type="checkbox" checked={allImportedSelected} onChange={event => setSelectedIds(event.target.checked ? data.items.map(item => item.id) : [])} /></th><th className="px-4 py-3">表名 / 说明</th><th className="px-4 py-3">模块</th><th className="px-4 py-3">实体</th><th className="px-4 py-3">模板</th><th className="px-4 py-3">更新时间</th><th className="px-4 py-3 text-right">操作</th></tr></thead><tbody>{data.items.map(item => <tr key={item.id} className="border-t border-slate-100 hover:bg-blue-50/40"><td className="px-4 py-4"><input aria-label={`选择 ${item.tableName}`} type="checkbox" checked={selectedIds.includes(item.id)} onChange={event => setSelectedIds(current => event.target.checked ? [...current, item.id] : current.filter(id => id !== item.id))} /></td><td className="px-4 py-4"><code className="rounded bg-slate-100 px-1.5 py-0.5 text-xs">{item.tableName}</code><p className="mt-1 text-xs text-slate-500">{item.tableComment}</p></td><td className="px-4 py-4"><span className="rounded bg-blue-50 px-2 py-1 text-xs text-blue-700">{item.moduleName}</span></td><td className="px-4 py-4 font-medium text-slate-800">{item.className}</td><td className="px-4 py-4 text-xs text-slate-600">{item.template}</td><td className="px-4 py-4 text-xs text-slate-500">{formatDate(item.updatedAt)}</td><td className="px-4 py-4 text-right whitespace-nowrap"><button onClick={() => void openConfig(item)} className="mr-3 text-slate-700 hover:text-slate-950">配置</button><button onClick={() => void handleTablePreview(item)} className="mr-3 text-blue-700 hover:text-blue-800">预览</button><button onClick={() => void download(`${API.CODEGEN}/${item.id}/download`, `codegen-${item.className}.zip`)} className="mr-3 text-emerald-700 hover:text-emerald-800">下载</button><button onClick={() => void deleteTables([item])} className="text-rose-600 hover:text-rose-700">删除</button></td></tr>)}</tbody></table></div>}<footer className="flex items-center justify-between border-t border-slate-100 px-4 py-3 text-xs text-slate-500"><span>第 {page}/{totalPages} 页</span><div className="flex gap-2"><button disabled={page <= 1} onClick={() => setPage(current => current - 1)} className="rounded border px-3 py-1.5 disabled:opacity-40">上页</button><button disabled={page >= totalPages} onClick={() => setPage(current => current + 1)} className="rounded border px-3 py-1.5 disabled:opacity-40">下页</button></div></footer></section></>}
+    {tab === "import" && <section className="rounded-xl border border-slate-200 bg-white shadow-sm"><div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 p-4"><div><h2 className="text-sm font-semibold text-slate-900">从数据库导入</h2><p className="mt-1 text-xs text-slate-500">数据源：{sourceMode.description || "正在读取 Schema"}。导入后可继续配置字段和生成模板。</p></div><div className="flex gap-2"><button onClick={() => setTab("database")} className="rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700">返回</button><button onClick={() => void handleImport()} disabled={importing || !selectedTables.length} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50">导入</button></div></div>{!dbTables.length ? <div className="p-12 text-center"><p className="text-sm text-slate-500">未找到可导入的表。</p><button onClick={() => void loadDbTables()} className="mt-3 text-sm text-blue-700">重读</button></div> : <div className="max-h-[560px] overflow-auto"><table className="w-full text-left text-sm"><thead className="sticky top-0 bg-slate-50 text-xs text-slate-500"><tr><th className="w-12 px-4 py-3"><input aria-label="选择全部表" type="checkbox" checked={selectedTables.length === dbTables.length} onChange={event => setSelectedTables(event.target.checked ? dbTables.map(item => item.name) : [])} /></th><th className="px-4 py-3">表名</th><th className="px-4 py-3">表说明</th><th className="px-4 py-3">字段数</th></tr></thead><tbody>{dbTables.map(item => <tr key={item.name} className="border-t border-slate-100 hover:bg-blue-50/40"><td className="px-4 py-3"><input aria-label={`选择 ${item.name}`} type="checkbox" checked={selectedTables.includes(item.name)} onChange={event => setSelectedTables(current => event.target.checked ? [...current, item.name] : current.filter(name => name !== item.name))} /></td><td className="px-4 py-3"><code className="text-xs">{item.name}</code></td><td className="px-4 py-3 text-slate-600">{item.comment || "-"}</td><td className="px-4 py-3 text-xs text-slate-500">{item.columns.length}</td></tr>)}</tbody></table></div>}</section>}
+    {tab === "online" && <section className="rounded-xl border border-slate-200 bg-white shadow-sm"><div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 p-4"><div><h2 className="text-sm font-semibold text-slate-900">01 · 业务模型</h2><p className="mt-1 text-xs text-slate-500">主入口：在线设计业务库表与页面，生成并审核 Schema 计划；发布后可由当前 Release 生成稳定代码。</p></div><div className="flex gap-2"><Link href="/admin/infra/online-definitions" className="rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700">全部</Link><Link href="/admin/infra/online-definitions/new" className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white">新建</Link></div></div>{onlineError ? <div className="p-10 text-center"><p className="text-sm text-rose-700">{onlineError}</p><p className="mt-2 text-xs text-slate-500">Online 需要已迁移的 PostgreSQL 数据库与租户上下文。</p><button onClick={() => void loadOnline()} className="mt-3 text-sm text-blue-700">重试</button></div> : onlineLoading && !online ? <div className="p-12 text-center text-sm text-slate-400">加载 Online 定义…</div> : !online?.items.length ? <div className="p-12 text-center"><p className="text-base font-medium text-slate-700">从业务模型开始</p><p className="mt-2 text-sm text-slate-500">创建单表、树表或主子表模型，再进入设计器配置库表字段和页面行为。</p><Link href="/admin/infra/online-definitions/new" className="mt-4 inline-block rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white">新建</Link></div> : <><div className="overflow-x-auto"><table className="min-w-[960px] w-full text-left text-sm"><thead className="bg-slate-50 text-xs text-slate-500"><tr><th className="px-4 py-3">类型</th><th className="px-4 py-3">业务模型 / 编码</th><th className="px-4 py-3">发布状态</th><th className="px-4 py-3">当前版本</th><th className="px-4 py-3">Schema 计划</th><th className="px-4 py-3 text-right">操作</th></tr></thead><tbody>{online.items.map(item => <tr key={item.id} className="border-t border-slate-100 hover:bg-blue-50/40"><td className="px-4 py-4"><span className="rounded bg-slate-100 px-2 py-1 text-xs text-slate-700">{onlineType[item.modelType]}</span></td><td className="px-4 py-4"><div className="font-medium text-slate-800">{item.name}</div><code className="mt-1 text-xs text-slate-500">{item.code}</code></td><td className="px-4 py-4"><span className={`rounded-full px-2 py-1 text-xs font-medium ${item.status === "ACTIVE" ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}>{onlineStatus[item.status]}</span></td><td className="px-4 py-4 text-xs text-slate-600">{item.currentRelease ? <>Release {item.currentRelease.releaseNo}<br /><span className="text-slate-400">模型 v{item.currentRelease.schemaRevision}</span></> : <span className="text-slate-400">尚未发布</span>}</td><td className="px-4 py-4 text-xs text-slate-600">{item.latestSchemaPlan ? `${item.latestSchemaPlan.status} · ${item.latestSchemaPlan.risk}` : <span className="text-slate-400">未生成</span>}</td><td className="px-4 py-4 text-right whitespace-nowrap"><Link href={`/admin/infra/online-definitions/${encodeURIComponent(item.code)}`} className="mr-3 text-blue-700 hover:text-blue-800">设计</Link><button disabled={!item.publishedReleaseId} title={item.publishedReleaseId ? "预览当前发布版本生成的代码" : "请先发布业务模型"} onClick={() => void handleOnlinePreview(item)} className="mr-3 text-blue-700 disabled:cursor-not-allowed disabled:text-slate-300">预览</button><button disabled={!item.publishedReleaseId} onClick={() => void download(`${ONLINE_ENDPOINT}/${item.code}/codegen/download`, `online-${item.code}-release-${item.currentRelease?.schemaRevision ?? 0}.zip`)} className="text-emerald-700 disabled:cursor-not-allowed disabled:text-slate-300">下载</button></td></tr>)}</tbody></table></div><footer className="flex justify-between border-t border-slate-100 px-4 py-3 text-xs text-slate-500"><span>展示最近 {online.items.length} 个定义；发布快照不可变。</span><button onClick={() => void loadOnline()} className="text-blue-700">刷新</button></footer></>}</section>}
+    {configTable?.columns && <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-4"><div role="dialog" aria-modal="true" className="flex max-h-[90vh] w-full max-w-6xl flex-col rounded-xl bg-white shadow-2xl"><div className="flex items-start justify-between border-b px-5 py-4"><div><h2 className="font-semibold text-slate-900">数据库生成配置 · {configTable.tableName}</h2><p className="mt-1 text-xs text-slate-500">字段配置影响列表、表单、查询、预览和审阅式 ZIP 交付。</p></div><button onClick={() => setConfigTable(null)} className="rounded border px-3 py-1.5 text-xs">关闭</button></div><div className="grid gap-3 border-b p-4 md:grid-cols-4"><label className="text-xs text-slate-600">模块<input value={configTable.moduleName} onChange={event => setConfigTable({ ...configTable, moduleName: event.target.value })} className="mt-1 h-8 w-full rounded border px-2 text-sm" /></label><label className="text-xs text-slate-600">功能说明<input value={configTable.businessName} onChange={event => setConfigTable({ ...configTable, businessName: event.target.value })} className="mt-1 h-8 w-full rounded border px-2 text-sm" /></label><label className="text-xs text-slate-600">实体类名<input value={configTable.className} onChange={event => setConfigTable({ ...configTable, className: event.target.value })} className="mt-1 h-8 w-full rounded border px-2 text-sm" /></label><label className="text-xs text-slate-600">权限前缀<input value={configTable.permissionPrefix ?? ""} onChange={event => setConfigTable({ ...configTable, permissionPrefix: event.target.value })} placeholder={`${configTable.moduleName}:resource`} className="mt-1 h-8 w-full rounded border px-2 font-mono text-sm" /></label></div><div className="overflow-auto p-4"><table className="min-w-[1000px] w-full text-left text-xs"><thead className="sticky top-0 bg-slate-50 text-slate-500"><tr><th className="p-2">字段</th><th className="p-2">类型</th><th className="p-2">控件</th><th className="p-2 text-center">列表</th><th className="p-2 text-center">表单</th><th className="p-2 text-center">查询</th><th className="p-2">查询方式</th><th className="p-2">字典编码</th><th className="p-2">校验</th></tr></thead><tbody>{configTable.columns.map((column, index) => <tr key={column.name} className="border-t"><td className="p-2 font-mono">{column.name}<span className="ml-1 text-slate-400">{column.comment}</span></td><td className="p-2">{column.type}</td><td className="p-2"><select value={column.uiComponent} onChange={event => patchColumn(index, { uiComponent: event.target.value as CodegenColumn["uiComponent"] })} className="h-7 rounded border px-1">{["INPUT", "TEXTAREA", "NUMBER", "SELECT", "RADIO", "CHECKBOX", "SWITCH", "DATE", "DATETIME", "UPLOAD", "RICH_TEXT", "TREE_SELECT", "HIDDEN"].map(value => <option key={value}>{value}</option>)}</select></td>{(["listShow", "formShow", "queryShow"] as const).map(key => <td key={key} className="p-2 text-center"><input type="checkbox" checked={column[key]} onChange={event => patchColumn(index, { [key]: event.target.checked })} /></td>)}<td className="p-2"><select disabled={!column.queryShow} value={column.queryType} onChange={event => patchColumn(index, { queryType: event.target.value as CodegenColumn["queryType"] })} className="h-7 rounded border px-1 disabled:bg-slate-100">{["=", "LIKE", "BETWEEN", ">", "<", "IN"].map(value => <option key={value}>{value}</option>)}</select></td><td className="p-2"><input value={column.dictType ?? ""} onChange={event => patchColumn(index, { dictType: event.target.value || null })} className="h-7 w-28 rounded border px-1" /></td><td className="p-2"><select value={column.formValidation ?? ""} onChange={event => patchColumn(index, { formValidation: event.target.value === "required" ? "required" : null })} className="h-7 rounded border px-1"><option value="">无</option><option value="required">必填</option></select></td></tr>)}</tbody></table></div><div className="flex justify-end gap-2 border-t p-4"><button onClick={() => setConfigTable(null)} className="rounded border px-4 py-2 text-sm">取消</button><button disabled={configSaving} onClick={() => void saveConfig()} className="rounded bg-blue-600 px-4 py-2 text-sm text-white disabled:opacity-50">保存</button></div></div></div>}
+    {previewFiles && <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-4"><div role="dialog" aria-modal="true" className="flex h-full max-h-[85vh] w-full max-w-6xl flex-col rounded-xl bg-white shadow-2xl"><div className="flex items-center justify-between border-b px-5 py-4"><div><h2 className="text-base font-semibold text-slate-900">代码预览 · {previewTitle}</h2><p className="mt-1 text-xs text-slate-500">{previewFiles.length} 个文件；请下载 ZIP 并审阅后受控注入。</p></div><button onClick={() => setPreviewFiles(null)} className="rounded border px-3 py-1.5 text-xs">关闭</button></div><div className="flex min-h-0 flex-1"><aside className="w-64 shrink-0 overflow-y-auto border-r bg-slate-50 p-3">{previewFiles.map((file, index) => <button key={file.path} onClick={() => setPreviewActive(index)} className={`mb-1 block w-full rounded px-3 py-2 text-left text-xs ${previewActive === index ? "bg-blue-100 font-medium text-blue-800" : "text-slate-600 hover:bg-white"}`}><span className="rounded bg-white px-1 py-0.5 text-[10px] uppercase text-slate-500">{file.type}</span><span className="mt-1 block truncate">{file.path.split("/").pop()}</span></button>)}</aside><section className="min-w-0 flex-1 overflow-hidden p-4"><div className="mb-3 flex items-center justify-between gap-3"><code className="truncate text-xs text-slate-500">{previewFiles[previewActive]?.path}</code><button onClick={() => void navigator.clipboard.writeText(previewFiles[previewActive]?.content ?? "")} className="shrink-0 rounded border px-2.5 py-1 text-xs">复制</button></div><pre className="h-[calc(85vh-150px)] overflow-auto rounded-lg bg-slate-950 p-4 text-xs leading-relaxed text-slate-100"><code>{previewFiles[previewActive]?.content}</code></pre></section></div></div></div>}
+  </div></main>
 }

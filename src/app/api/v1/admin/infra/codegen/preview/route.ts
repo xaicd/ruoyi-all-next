@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { CodegenEngineService } from "@/modules/infra/backend/services/codegen-engine.service"
+import { CodegenTableRepository } from "@/modules/infra/backend/repositories/codegen-table.repository"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 
@@ -11,15 +12,31 @@ export const POST = withAdminRoute(async (request: Request, _auth) => {
   try {
     const body = await request.json()
 
+    const stored = body.tableId
+      ? await CodegenTableRepository.findById(String(body.tableId))
+      : body.tableName
+        ? await CodegenTableRepository.findByTableName(String(body.tableName))
+        : null
+    if (!body.table && !stored) throw new Error("请提供已导入的 tableId/tableName，或完整 table 配置")
+
     const config = {
-      moduleName: body.moduleName,
+      moduleName: body.moduleName ?? stored?.moduleName,
       subModule: body.subModule,
-      businessName: body.businessName,
-      className: body.className,
-      template: body.template || "CRUD",
-      scene: body.scene || "ADMIN",
-      table: body.table || { name: body.tableName || body.className?.toLowerCase(), comment: body.businessName, columns: [] },
-      author: body.author,
+      businessName: body.businessName ?? stored?.businessName,
+      className: body.className ?? stored?.className,
+      template: body.template ?? stored?.template ?? "CRUD",
+      scene: body.scene ?? stored?.scene ?? "ADMIN",
+      table: body.table ?? {
+        name: stored!.tableName,
+        comment: stored!.tableComment,
+        schema: "public",
+        type: "TABLE" as const,
+        columns: stored!.columns,
+        primaryKey: stored!.columns.filter((column) => column.isPrimary).map((column) => column.name),
+        indexes: [],
+      },
+      author: body.author ?? stored?.author,
+      permissionPrefix: body.permissionPrefix ?? stored?.permissionPrefix ?? undefined,
       generateFrontend: body.generateFrontend ?? true,
       generateTest: body.generateTest ?? false,
     }

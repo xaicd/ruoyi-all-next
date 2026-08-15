@@ -5,6 +5,9 @@ routes:
   - { method: POST, path: /api/v1/admin/online/definitions, permission: infra:online-definition:create, tenantScope: required, timeoutMs: 5000 }
   - { method: GET, path: /api/v1/admin/online/definitions/{code}, permission: infra:online-definition:query, tenantScope: required, timeoutMs: 5000 }
   - { method: PUT, path: /api/v1/admin/online/definitions/{code}, permission: infra:online-definition:update, tenantScope: required, timeoutMs: 5000 }
+  - { method: DELETE, path: /api/v1/admin/online/definitions/{code}, permission: infra:online-definition:delete, tenantScope: required, timeoutMs: 5000 }
+  - { method: POST, path: /api/v1/admin/online/definitions/{code}/archive, permission: infra:online-definition:update, tenantScope: required, timeoutMs: 5000 }
+  - { method: POST, path: /api/v1/admin/online/definitions/{code}/normalize-system-fields, permission: infra:online-definition:update, tenantScope: required, timeoutMs: 5000 }
   - { method: PUT, path: /api/v1/admin/online/definitions/{code}/draft, permission: infra:online-definition:update, tenantScope: required, timeoutMs: 5000 }
   - { method: POST, path: /api/v1/admin/online/definitions/{code}/validate, permission: infra:online-definition:update, tenantScope: required, timeoutMs: 5000 }
   - { method: POST, path: /api/v1/admin/online/definitions/{code}/publish, permission: infra:online-definition:publish, tenantScope: required, timeoutMs: 5000 }

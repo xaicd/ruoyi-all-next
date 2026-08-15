@@ -6,10 +6,34 @@ paths:
   /api/v1/admin/online/definitions:
     get:
       summary: Query tenant-scoped Online Definitions
+      parameters:
+        - { name: page, in: query, schema: { type: integer, minimum: 1, default: 1 } }
+        - { name: pageSize, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 20 } }
+        - { name: keyword, in: query, description: Matches definition code or name, schema: { type: string, minLength: 1, maxLength: 100 } }
+        - { name: modelType, in: query, schema: { type: string, enum: [SINGLE, TREE, MASTER_DETAIL] } }
+        - { name: status, in: query, description: Archived definitions are intentionally not returned, schema: { type: string, enum: [DRAFT, ACTIVE] } }
+      responses:
+        "200":
+          description: Tenant-scoped definition page
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/OnlineDefinitionPageResponse" }
       security: [{ bearerAuth: [] }]
       x-permission: infra:online-definition:query
     post:
       summary: Create an Online Definition with its initial Draft Revision
+      description: The optional initial Draft model and interaction configuration are validated as strict Online IR. RuoYi system fields and their read-only interactions are canonicalized by the server.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/OnlineDefinitionCreateRequest" }
+      responses:
+        "201":
+          description: Draft definition created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/OnlineDefinitionResponse" }
       security: [{ bearerAuth: [] }]
       x-permission: infra:online-definition:create
   /api/v1/admin/online/definitions/{code}:
@@ -19,6 +43,25 @@ paths:
       x-permission: infra:online-definition:query
     put:
       summary: Update Definition metadata with optimistic locking
+      security: [{ bearerAuth: [] }]
+      x-permission: infra:online-definition:update
+    delete:
+      summary: Soft-delete an unpublished and unreferenced Online Definition
+      security: [{ bearerAuth: [] }]
+      x-permission: infra:online-definition:delete
+  /api/v1/admin/online/definitions/{code}/archive:
+    post:
+      summary: Archive an Online Definition with optimistic locking
+      security: [{ bearerAuth: [] }]
+      x-permission: infra:online-definition:update
+  /api/v1/admin/online/definitions/{code}/normalize-system-fields:
+    post:
+      summary: Add and lock missing RuoYi system fields on the current Draft Revision
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/OptimisticLockRequest" }
       security: [{ bearerAuth: [] }]
       x-permission: infra:online-definition:update
   /api/v1/admin/online/definitions/{code}/draft:
@@ -55,6 +98,33 @@ paths:
       summary: Get one tenant-scoped semantic schema plan
       security: [{ bearerAuth: [] }]
       x-permission: infra:online-definition:query
+  /api/v1/admin/online/definitions/{code}/schema-plans/{planId}/approve:
+    post:
+      summary: Approve a safe semantic schema plan without applying DDL
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - { $ref: "#/components/schemas/OptimisticLockRequest" }
+                - type: object
+                  properties:
+                    note: { type: string, minLength: 1, maxLength: 500 }
+      security: [{ bearerAuth: [] }]
+      x-permission: infra:online-definition:migrate
+  /api/v1/admin/online/definitions/{code}/codegen/preview:
+    post:
+      summary: Preview review-only shared RuoYi CRUD output from the current immutable Published Release
+      description: Only compatible SINGLE and GENERIC_RECORD releases are accepted. The output uses the same CodegenEngine templates and manifest as Infra Codegen and never writes server files.
+      security: [{ bearerAuth: [] }]
+      x-permission: infra:online-definition:generate
+  /api/v1/admin/online/definitions/{code}/codegen/download:
+    get:
+      summary: Download review-only shared RuoYi CRUD ZIP from the current immutable Published Release
+      description: The ZIP includes the shared codegen manifest and requires local review plus controlled injection; it does not apply DDL or write project files on the server.
+      security: [{ bearerAuth: [] }]
+      x-permission: infra:online-definition:generate
   /api/v1/admin/online/definitions/{code}/test-sessions:
     post:
       summary: Start an actor-owned sandbox Online Test Session from the current Published Release
@@ -68,6 +138,16 @@ paths:
   /api/v1/admin/online/definitions/{code}/test-sessions/{sessionId}/records:
     get:
       summary: Page sandbox records bound to the test session and immutable release
+      parameters:
+        - { name: page, in: query, schema: { type: integer, minimum: 1, default: 1 } }
+        - { name: pageSize, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 20 } }
+        - name: conditions
+          in: query
+          required: false
+          description: JSON array of Release-configured query conditions. Each item contains a field and scalar value, or an array for IN/BETWEEN. Fields outside the immutable Release query allowlist are rejected.
+          schema:
+            type: string
+            maxLength: 20000
       security: [{ bearerAuth: [] }]
       x-permission: infra:online-definition:test
     post:
@@ -83,3 +163,86 @@ paths:
       summary: Soft-delete a sandbox record
       security: [{ bearerAuth: [] }]
       x-permission: infra:online-definition:test
+components:
+  schemas:
+    OptimisticLockRequest:
+      type: object
+      required: [expectedLockVersion]
+      properties:
+        expectedLockVersion: { type: integer, minimum: 1 }
+    OnlineDefinitionCreateRequest:
+      type: object
+      additionalProperties: false
+      required: [code, name, modelType]
+      properties:
+        code: { type: string, pattern: "^[a-z][a-z0-9_]{1,63}$" }
+        name: { type: string, minLength: 1, maxLength: 100 }
+        modelType: { type: string, enum: [SINGLE, TREE, MASTER_DETAIL] }
+        model:
+          type: object
+          description: Optional initial Model IR. Its strict fields, indexes, and relations are validated by the server; relation targets must be tenant-safe published releases.
+          additionalProperties: true
+        interaction:
+          type: object
+          description: Optional initial Interaction IR. Its strict field widgets, visibility, validation, actions, and settings are validated against the submitted model.
+          additionalProperties: true
+    OnlineDefinitionResponse:
+      type: object
+      required: [success, data]
+      properties:
+        success: { type: boolean, enum: [true] }
+        data: { $ref: "#/components/schemas/OnlineDefinitionSummary" }
+    OnlineDefinitionReleaseSummary:
+      type: object
+      required: [id, releaseNo, schemaRevision, releasedAt]
+      properties:
+        id: { type: string }
+        releaseNo: { type: integer, minimum: 1 }
+        schemaRevision: { type: integer, minimum: 0 }
+        releasedAt: { type: string, format: date-time }
+    OnlineDefinitionSchemaPlanSummary:
+      type: object
+      description: Latest generated semantic plan only; it does not indicate physical database DDL was applied.
+      required: [id, risk, status, expectedSchemaRevision, createdAt, updatedAt]
+      properties:
+        id: { type: string }
+        risk: { type: string, enum: [NONE, SAFE, REVIEW_REQUIRED, DESTRUCTIVE, UNSUPPORTED] }
+        status: { type: string, enum: [DRAFT, REVIEW_REQUIRED, APPROVED, APPLYING, APPLIED, FAILED, SUPERSEDED] }
+        expectedSchemaRevision: { type: integer, minimum: 0 }
+        appliedSchemaRevision: { type: integer, nullable: true, minimum: 0 }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    OnlineDefinitionSummary:
+      type: object
+      required: [id, code, name, modelType, status, lockVersion, currentRelease, latestSchemaPlan, createdAt, updatedAt]
+      properties:
+        id: { type: string }
+        code: { type: string, pattern: "^[a-z][a-z0-9_]{1,63}$" }
+        name: { type: string, minLength: 1, maxLength: 100 }
+        modelType: { type: string, enum: [SINGLE, TREE, MASTER_DETAIL] }
+        status: { type: string, enum: [DRAFT, ACTIVE, ARCHIVED] }
+        lockVersion: { type: integer, minimum: 1 }
+        currentDraftRevisionId: { type: string, nullable: true }
+        publishedReleaseId: { type: string, nullable: true }
+        currentRelease: { allOf: [{ $ref: "#/components/schemas/OnlineDefinitionReleaseSummary" }], nullable: true }
+        latestSchemaPlan: { allOf: [{ $ref: "#/components/schemas/OnlineDefinitionSchemaPlanSummary" }], nullable: true }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    OnlineDefinitionPage:
+      type: object
+      required: [items, total, page, pageSize, phase, persistence]
+      properties:
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/OnlineDefinitionSummary" }
+        total: { type: integer, minimum: 0 }
+        page: { type: integer, minimum: 1 }
+        pageSize: { type: integer, minimum: 1, maximum: 100 }
+        phase: { type: string, enum: [METADATA_READY] }
+        persistence: { type: string, enum: [POSTGRESQL_REQUIRED] }
+    OnlineDefinitionPageResponse:
+      type: object
+      required: [success, data]
+      properties:
+        success: { type: boolean, enum: [true] }
+        data: { $ref: "#/components/schemas/OnlineDefinitionPage" }

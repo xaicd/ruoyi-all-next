@@ -7,7 +7,7 @@
   "featureListPascal": "StockItems",
   "featureCamel": "stockItems",
   "featureListLabel": "库存",
-  "modulePermissionConst": "WMS_STOCK_ITEMS_VIEW",
-  "outputRoot": ".",
+  "permissionPrefix": "wms:stock-items",
+  "outputRoot": "tmp/module-pack-stock-items",
   "overwrite": false
 }

@@ -1,7 +1,7 @@
 import { getKyselyDb, hasRealDatabase } from "@/modules/shared/backend/lib/database"
 import { ApiError } from "@/modules/shared/backend/http/api-error"
-import { compileOnlineRuntimeRelease, validateOnlineRuntimeData, verifyOnlineReleaseChecksum } from "../../application/online-runtime.compiler"
-import type { OnlineRuntimeRecord, OnlineRuntimeRecordPage, OnlineRuntimeRelease, OnlineTestSessionDetail, OnlineTestSessionSummary } from "../../application/online-runtime.contract"
+import { compileOnlineRuntimeQueryConditions, compileOnlineRuntimeRelease, matchesOnlineRuntimeQueryConditions, validateOnlineRuntimeData, verifyOnlineReleaseChecksum } from "../../application/online-runtime.compiler"
+import type { OnlineRuntimeQueryCondition, OnlineRuntimeRecord, OnlineRuntimeRecordPage, OnlineRuntimeRelease, OnlineTestSessionDetail, OnlineTestSessionSummary } from "../../application/online-runtime.contract"
 
 function requireDatabase(): void {
   if (!hasRealDatabase()) throw new ApiError("DEPENDENCY_UNAVAILABLE", "Online Runtime 需要已迁移的 PostgreSQL 数据库")
@@ -16,21 +16,49 @@ function mapRecord(row: any): OnlineRuntimeRecord {
 function mapSession(row: any, runtime: OnlineRuntimeRelease): OnlineTestSessionSummary {
   return { id: row.id, definitionCode: runtime.definitionCode, releaseId: row.release_id, schemaRevision: row.schema_revision, sandbox: row.sandbox, startedAt: date(row.started_at) }
 }
+function requireSandboxAction(runtime: OnlineRuntimeRelease, type: "CREATE" | "UPDATE" | "DELETE"): void {
+  if (!runtime.interaction.actions.length) return
+  if (!runtime.interaction.actions.some((action) => action.type === type && action.enabled)) throw new ApiError("FORBIDDEN", `当前 Published Release 未启用 ${type} sandbox 动作`)
+}
 
 export class KyselyOnlineRuntimeRepository {
-  private static async resolveCurrentRelease(input: { tenantId: string; definitionCode: string }): Promise<OnlineRuntimeRelease> {
+  static async resolveCurrentPublishedRelease(input: { tenantId: string; definitionCode: string }): Promise<OnlineRuntimeRelease> {
     requireDatabase()
     const db = await getKyselyDb()
     const definition = await db.selectFrom("online_definition").select(["id", "published_release_id"]).where("tenant_id", "=", input.tenantId).where("code", "=", input.definitionCode).where("deleted", "=", false).executeTakeFirst()
     if (!definition) throw new ApiError("NOT_FOUND", "Online Definition 不存在")
-    if (!definition.published_release_id) throw new ApiError("CONFLICT", "Online Definition 尚未发布，不能进入在线测试")
+    if (!definition.published_release_id) throw new ApiError("CONFLICT", "Online Definition 尚未发布，不能生成代码")
     const release = await db.selectFrom("online_release").selectAll().where("id", "=", definition.published_release_id).where("tenant_id", "=", input.tenantId).where("definition_id", "=", definition.id).executeTakeFirst()
     if (!release) throw new ApiError("CONFLICT", "当前 Published Release 不存在")
     verifyOnlineReleaseChecksum(release.snapshot_json, release.checksum)
     const runtime = compileOnlineRuntimeRelease(release)
-    if (runtime.modelType !== "SINGLE") throw new ApiError("CONFLICT", `${runtime.modelType} Runtime 尚未启用；当前 Online Test 仅支持 SINGLE`)
-    if (runtime.model.storage.kind !== "GENERIC_RECORD") throw new ApiError("CONFLICT", "当前 Published Release 未使用受支持的 GENERIC_RECORD 存储")
     return runtime
+  }
+
+  static async resolvePublishedReleaseById(input: { tenantId: string; releaseId: string; definitionCode: string }): Promise<OnlineRuntimeRelease> {
+    requireDatabase()
+    const db = await getKyselyDb()
+    const row = await db.selectFrom("online_release")
+      .innerJoin("online_definition", "online_definition.id", "online_release.definition_id")
+      .select(["online_release.id", "online_release.definition_id", "online_release.revision_id", "online_release.schema_revision", "online_release.snapshot_json", "online_release.checksum"])
+      .where("online_release.id", "=", input.releaseId).where("online_release.tenant_id", "=", input.tenantId)
+      .where("online_definition.tenant_id", "=", input.tenantId).where("online_definition.code", "=", input.definitionCode).where("online_definition.deleted", "=", false)
+      .executeTakeFirst()
+    if (!row) throw new ApiError("CONFLICT", "主子表固定目标 Release 不存在、跨租户或与目标 Definition 不匹配")
+    verifyOnlineReleaseChecksum(row.snapshot_json, row.checksum)
+    return compileOnlineRuntimeRelease(row)
+  }
+
+  static async resolveMasterDetailChildReleases(input: { tenantId: string; runtime: OnlineRuntimeRelease }): Promise<OnlineRuntimeRelease[]> {
+    const children = input.runtime.interaction.masterDetail?.children ?? []
+    const releases = await Promise.all(children.map(async (child) => {
+      if (!child.targetReleaseId) throw new ApiError("CONFLICT", `主子表子定义 ${child.code} 缺少不可变 targetReleaseId`)
+      const target = await this.resolvePublishedReleaseById({ tenantId: input.tenantId, releaseId: child.targetReleaseId, definitionCode: child.targetDefinitionCode })
+      const foreignKey = target.model.fields.find((field) => field.code === child.foreignKeyField)
+      if (!foreignKey || foreignKey.systemManaged || foreignKey.type !== "string") throw new ApiError("CONFLICT", `主子表子定义 ${child.code} 的 foreignKeyField 与固定目标 Release 不兼容`)
+      return target
+    }))
+    return releases
   }
 
   private static async sessionContext(input: { tenantId: string; actorId: string; definitionCode: string; sessionId: string }): Promise<{ runtime: OnlineRuntimeRelease; session: any }> {
@@ -49,7 +77,8 @@ export class KyselyOnlineRuntimeRepository {
   }
 
   static async startTestSession(input: { tenantId: string; actorId: string; definitionCode: string }): Promise<OnlineTestSessionDetail> {
-    const runtime = await this.resolveCurrentRelease(input)
+    const runtime = await this.resolveCurrentPublishedRelease(input)
+    if (runtime.modelType !== "SINGLE" || runtime.model.storage.kind !== "GENERIC_RECORD") throw new ApiError("CONFLICT", "当前 Online Test 仅支持 SINGLE + GENERIC_RECORD Published Release")
     const db = await getKyselyDb()
     const now = new Date()
     const row = await db.insertInto("online_test_session").values({ id: crypto.randomUUID(), definition_id: runtime.definitionId, revision_id: runtime.revisionId, release_id: runtime.releaseId, tenant_id: input.tenantId, actor_id: input.actorId, schema_revision: runtime.schemaRevision, environment: "ONLINE_TEST", sandbox: true, started_at: now, ended_at: null }).returningAll().executeTakeFirstOrThrow()
@@ -61,17 +90,19 @@ export class KyselyOnlineRuntimeRepository {
     return { ...mapSession(session, runtime), runtime: { definitionCode: runtime.definitionCode, definitionName: runtime.definitionName, modelType: runtime.modelType, releaseId: runtime.releaseId, schemaRevision: runtime.schemaRevision, model: runtime.model, interaction: runtime.interaction, views: runtime.views } }
   }
 
-  static async pageRecords(input: { tenantId: string; actorId: string; definitionCode: string; sessionId: string; page: number; pageSize: number }): Promise<OnlineRuntimeRecordPage> {
+  static async pageRecords(input: { tenantId: string; actorId: string; definitionCode: string; sessionId: string; page: number; pageSize: number; conditions: OnlineRuntimeQueryCondition[] }): Promise<OnlineRuntimeRecordPage> {
     const { runtime, session } = await this.sessionContext(input)
+    const conditions = compileOnlineRuntimeQueryConditions(runtime, input.conditions)
     const db = await getKyselyDb()
-    const base = db.selectFrom("online_record").where("tenant_id", "=", input.tenantId).where("definition_id", "=", runtime.definitionId).where("release_id", "=", runtime.releaseId).where("test_session_id", "=", session.id).where("deleted", "=", false)
-    const count = await base.select((eb) => eb.fn.countAll<number>().as("count")).executeTakeFirst()
-    const rows = await base.selectAll().orderBy("updated_at", "desc").offset((input.page - 1) * input.pageSize).limit(input.pageSize).execute()
-    return { items: rows.map(mapRecord), total: Number(count?.count ?? 0), page: input.page, pageSize: input.pageSize }
+    const rows = await db.selectFrom("online_record").selectAll().where("tenant_id", "=", input.tenantId).where("definition_id", "=", runtime.definitionId).where("release_id", "=", runtime.releaseId).where("test_session_id", "=", session.id).where("deleted", "=", false).orderBy("updated_at", "desc").execute()
+    const filtered = rows.filter((row) => matchesOnlineRuntimeQueryConditions(asRecord(row.data_json), conditions))
+    const offset = (input.page - 1) * input.pageSize
+    return { items: filtered.slice(offset, offset + input.pageSize).map(mapRecord), total: filtered.length, page: input.page, pageSize: input.pageSize }
   }
 
   static async createRecord(input: { tenantId: string; actorId: string; definitionCode: string; sessionId: string; data: Record<string, unknown> }): Promise<OnlineRuntimeRecord> {
     const { runtime, session } = await this.sessionContext(input)
+    requireSandboxAction(runtime, "CREATE")
     const data = validateOnlineRuntimeData(runtime, input.data, "CREATE")
     const db = await getKyselyDb()
     const now = new Date()
@@ -81,6 +112,7 @@ export class KyselyOnlineRuntimeRepository {
 
   static async updateRecord(input: { tenantId: string; actorId: string; definitionCode: string; sessionId: string; recordId: string; data: Record<string, unknown> }): Promise<OnlineRuntimeRecord> {
     const { runtime, session } = await this.sessionContext(input)
+    requireSandboxAction(runtime, "UPDATE")
     const db = await getKyselyDb()
     const current = await db.selectFrom("online_record").selectAll().where("id", "=", input.recordId).where("tenant_id", "=", input.tenantId).where("definition_id", "=", runtime.definitionId).where("release_id", "=", runtime.releaseId).where("test_session_id", "=", session.id).where("deleted", "=", false).executeTakeFirst()
     if (!current) throw new ApiError("NOT_FOUND", "Online Test 记录不存在")
@@ -91,6 +123,7 @@ export class KyselyOnlineRuntimeRepository {
 
   static async deleteRecord(input: { tenantId: string; actorId: string; definitionCode: string; sessionId: string; recordId: string }): Promise<void> {
     const { runtime, session } = await this.sessionContext(input)
+    requireSandboxAction(runtime, "DELETE")
     const db = await getKyselyDb()
     const result = await db.updateTable("online_record").set({ deleted: true, updated_by: input.actorId, updated_at: new Date() }).where("id", "=", input.recordId).where("tenant_id", "=", input.tenantId).where("definition_id", "=", runtime.definitionId).where("release_id", "=", runtime.releaseId).where("test_session_id", "=", session.id).where("deleted", "=", false).executeTakeFirst()
     if (Number(result.numUpdatedRows) !== 1) throw new ApiError("NOT_FOUND", "Online Test 记录不存在")

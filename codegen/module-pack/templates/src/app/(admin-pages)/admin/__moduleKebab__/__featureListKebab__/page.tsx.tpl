@@ -1,1 +1,1 @@
-export { default } from "@/modules/{{moduleKebab}}/frontend/pages/{{featureListKebab}}.page"
+export { default } from "@/modules/{{moduleKebab}}/frontend/pages/{{featureListKebab}}-list.page"

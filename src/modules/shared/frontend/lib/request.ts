@@ -118,8 +118,8 @@ class RequestClient {
     return this.request<T>(url, { method: "PATCH", body })
   }
 
-  delete<T = any>(url: string) {
-    return this.request<T>(url, { method: "DELETE" })
+  delete<T = any>(url: string, body?: any) {
+    return this.request<T>(url, { method: "DELETE", body })
   }
 }
 

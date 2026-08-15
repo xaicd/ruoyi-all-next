@@ -34,6 +34,11 @@ export type OnlineRuntimeRecord = {
   updatedAt: string
 }
 
+export type OnlineRuntimeQueryCondition = {
+  field: string
+  value: string | number | boolean | null | Array<string | number | boolean | null>
+}
+
 export type OnlineRuntimeRecordPage = {
   items: OnlineRuntimeRecord[]
   total: number

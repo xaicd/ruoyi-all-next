@@ -10,6 +10,7 @@ import {
   type OnlineSchemaPlanPayload,
   type OnlineSchemaRisk,
 } from "./online-schema-plan.contract"
+import { validateRuoyiSystemFields } from "./online-model-defaults"
 
 const code = z.string().regex(/^[a-z][a-z0-9_]{1,63}$/, "标识必须以小写字母开头，仅允许小写字母、数字和下划线")
 const fieldSchema = z.object({
@@ -22,9 +23,10 @@ const fieldSchema = z.object({
   remark: z.string().trim().max(300).optional(),
   identity: z.enum(["PLATFORM_UUID", "MANUAL"]).optional(),
   systemTemplate: z.enum(["CREATED_AUDIT", "UPDATED_AUDIT"]).optional(),
+  systemManaged: z.boolean().default(false),
 }).strict()
 const indexSchema = z.object({ code, fields: z.array(code).min(1).max(16), unique: z.boolean().default(false) }).strict()
-const relationSchema = z.object({ code, type: z.enum(["ONE_TO_ONE", "ONE_TO_MANY", "MANY_TO_ONE"]), sourceField: code, targetDefinitionCode: code, targetField: code, onDelete: z.enum(["RESTRICT", "SET_NULL"]).default("RESTRICT") }).strict()
+const relationSchema = z.object({ code, type: z.enum(["ONE_TO_ONE", "ONE_TO_MANY", "MANY_TO_ONE"]), sourceField: code, targetDefinitionCode: code, targetReleaseId: z.string().uuid().optional(), targetField: code, onDelete: z.enum(["RESTRICT", "SET_NULL"]).default("RESTRICT") }).strict()
 export const onlineModelIrSchema = z.object({
   version: z.literal(1).default(1),
   storage: z.object({ kind: z.enum(ONLINE_STORAGE_KINDS).default("GENERIC_RECORD") }).strict().default({ kind: "GENERIC_RECORD" }),
@@ -73,6 +75,7 @@ export function parseOnlineModelIR(value: unknown): OnlineModelIR {
     if (field.systemTemplate && field.identity) throw new Error(`字段 ${field.code} 不能同时是系统字段和 identity 字段`)
     validateFieldDefault(field)
   }
+  validateRuoyiSystemFields(parsed)
   for (const index of parsed.indexes) {
     if (new Set(index.fields).size !== index.fields.length) throw new Error(`索引 ${index.code} 不可重复引用同一字段`)
     for (const field of index.fields) if (!fieldCodes.has(field)) throw new Error(`索引 ${index.code} 引用了不存在字段 ${field}`)

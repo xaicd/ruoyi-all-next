@@ -15,7 +15,7 @@ const fieldInteractionSchema = z.object({
   code,
   label: z.string().trim().min(1).max(100),
   widget: z.enum(widgets),
-  query: z.object({ enabled: z.boolean().default(false), operator: z.enum(queryOperators).optional(), widget: z.enum(widgets).optional(), defaultValue: z.union([z.string(), z.number(), z.boolean(), z.null()]).optional(), required: z.boolean().default(false) }).strict().default({ enabled: false }),
+  query: z.object({ enabled: z.boolean().default(false), operator: z.enum(queryOperators).optional(), widget: z.enum(widgets).optional(), defaultValue: z.union([z.string(), z.number(), z.boolean(), z.null(), z.array(z.union([z.string(), z.number(), z.boolean(), z.null()])).min(1).max(32)]).optional(), required: z.boolean().default(false) }).strict().default({ enabled: false }),
   visibility: z.object({ list: z.boolean().default(true), form: z.boolean().default(true), detail: z.boolean().default(true) }).strict().default({ list: true, form: true, detail: true }),
   list: z.object({ order: z.number().int().min(0).max(127).optional(), width: z.number().int().min(60).max(800).optional(), sortable: z.boolean().default(false), summary: z.boolean().default(false) }).strict().default({ sortable: false, summary: false }),
   form: z.object({ order: z.number().int().min(0).max(127).optional(), span: z.number().int().min(1).max(24).default(12), placeholder: z.string().trim().max(120).optional() }).strict().default({ span: 12 }),
@@ -27,7 +27,7 @@ const fieldInteractionSchema = z.object({
 const settingsSchema = z.object({ category: code.default("general"), identityStrategy: z.enum(["PLATFORM_UUID", "MANUAL"]).default("PLATFORM_UUID"), list: z.object({ pagination: z.boolean().default(true), selection: z.boolean().default(false), layout: z.enum(["TABLE", "CARD"]).default("TABLE") }).strict().default({ pagination: true, selection: false, layout: "TABLE" }), form: z.object({ layout: z.enum(["GRID", "TABS", "DRAWER", "DIALOG"]).default("GRID"), theme: z.enum(["DEFAULT", "COMPACT"]).default("DEFAULT"), horizontalScroll: z.boolean().default(false) }).strict().default({ layout: "GRID", theme: "DEFAULT", horizontalScroll: false }) }).strict().default({ category: "general", identityStrategy: "PLATFORM_UUID", list: { pagination: true, selection: false, layout: "TABLE" }, form: { layout: "GRID", theme: "DEFAULT", horizontalScroll: false } })
 const actionSchema = z.object({ code, label: z.string().trim().min(1).max(80), type: z.enum(["CREATE", "UPDATE", "DELETE", "EXPORT", "IMPORT", "SUBMIT_WORKFLOW"]), placement: z.enum(["TOOLBAR", "ROW", "FORM_FOOTER"]), order: z.number().int().min(0).max(127).default(0), enabled: z.boolean().default(true) }).strict()
 const treeSchema = z.object({ parentField: code, sortField: code.optional(), rootValue: z.union([z.string(), z.number(), z.null()]).optional(), childrenIndicator: z.boolean().default(false) }).strict()
-const masterDetailChildSchema = z.object({ code, targetDefinitionCode: code, foreignKeyField: code, display: z.enum(["TABLE", "TABS"]).default("TABLE") }).strict()
+const masterDetailChildSchema = z.object({ code, targetDefinitionCode: code, /** Immutable child Release is resolved and pinned server-side during validation/publish. */ targetReleaseId: z.string().uuid().optional(), foreignKeyField: code, display: z.enum(["TABLE", "TABS"]).default("TABLE") }).strict()
 export const onlineInteractionIrSchema = z.object({
   version: z.literal(1).default(1), settings: settingsSchema,
   fields: z.array(fieldInteractionSchema).max(128).default([]),
@@ -45,7 +45,7 @@ export type OnlineInteractionIR = {
   fields: OnlineFieldInteractionIR[]
   actions: OnlineActionIR[]
   tree?: { parentField: string; sortField?: string; rootValue?: string | number | null; childrenIndicator: boolean }
-  masterDetail?: { children: Array<{ code: string; targetDefinitionCode: string; foreignKeyField: string; display: "TABLE" | "TABS" }> }
+  masterDetail?: { children: Array<{ code: string; targetDefinitionCode: string; targetReleaseId?: string; foreignKeyField: string; display: "TABLE" | "TABS" }> }
 }
 
 function unique(items: Array<{ code: string }>, label: string): void {
@@ -60,10 +60,11 @@ export function parseOnlineInteractionIR(value: unknown, model: OnlineModelIR): 
   for (const field of interaction.fields) {
     if (!modelFields.has(field.code)) throw new Error(`字段交互引用了不存在字段 ${field.code}`)
     const modelField = model.fields.find((item) => item.code === field.code)!
+    if (modelField.systemManaged && !field.readOnly) throw new Error(`系统字段 ${field.code} 必须为只读`)
     const allowedWidgets = widgetsByScalarType[modelField.type]
     if (!allowedWidgets?.has(field.widget)) throw new Error(`字段 ${field.code} 的 ${field.widget} 控件不支持 ${modelField.type} 类型`)
     if (field.query.widget && (!allowedWidgets?.has(field.query.widget) || field.query.widget === "REFERENCE")) throw new Error(`查询字段 ${field.code} 的控件不支持 ${modelField.type} 类型`)
-    if (field.dictionaryCode && field.widget !== "DICTIONARY" && field.widget !== "SELECT") throw new Error(`字段 ${field.code} 的 dictionaryCode 仅可用于 DICTIONARY 或 SELECT 控件`)
+    if (field.dictionaryCode && ![field.widget, field.query.widget].some((widget) => widget === "DICTIONARY" || widget === "SELECT")) throw new Error(`字段 ${field.code} 的 dictionaryCode 仅可用于 DICTIONARY 或 SELECT 控件`)
     if (field.query.enabled && !field.query.operator) throw new Error(`查询字段 ${field.code} 必须声明 operator`)
     if (field.query.widget === "REFERENCE") throw new Error(`查询字段 ${field.code} 不支持 REFERENCE 控件`)
     if (field.validation.minLength !== undefined && field.validation.maxLength !== undefined && field.validation.minLength > field.validation.maxLength) throw new Error(`字段 ${field.code} 的最小长度不能大于最大长度`)

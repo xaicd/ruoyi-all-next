@@ -213,7 +213,7 @@ export const ADMIN_MENU: AdminMenuItem[] = [
       },
       {
         key: "infra-online-definitions",
-        label: "Online 开发",
+        label: "业务建模",
         path: "/admin/infra/online-definitions",
         requiredPermission: PERMISSIONS.INFRA_ONLINE_DEFINITION_QUERY,
       },

@@ -323,7 +323,8 @@ src/app/
 ```bash
 # 1. 在 /admin/infra/codegen 页面导入表 → 预览 → 下载 ZIP
 # 2. 解压到 tmp/ 目录
-# 3. 注入到项目（自动修正路径 + 跳过已存在文件）
+# 3. 先在临时目录审阅清单与源码，再受控注入（默认遇到冲突即失败，不覆盖）
+node scripts/inject-codegen-output.cjs tmp/codegen-{ClassName} --dry-run
 node scripts/inject-codegen-output.cjs tmp/codegen-{ClassName}
 # 4. Next.js hot reload 自动检测新文件 → 浏览器刷新可用
 # 5. 侧边栏动态加载：GET /api/v1/admin/system/menus/sidebar

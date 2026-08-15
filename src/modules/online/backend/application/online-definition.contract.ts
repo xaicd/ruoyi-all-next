@@ -3,6 +3,24 @@ export type OnlineModelType = (typeof ONLINE_MODEL_TYPES)[number]
 export type OnlineDefinitionStatus = "DRAFT" | "ACTIVE" | "ARCHIVED"
 export type OnlineRevisionStatus = "DRAFT" | "VALIDATED" | "PUBLISHED" | "ARCHIVED"
 
+export type OnlineDefinitionReleaseSummary = {
+  id: string
+  releaseNo: number
+  schemaRevision: number
+  releasedAt: string
+}
+
+/** Latest generated plan only; it does not indicate that physical database DDL was applied. */
+export type OnlineDefinitionSchemaPlanSummary = {
+  id: string
+  risk: "NONE" | "SAFE" | "REVIEW_REQUIRED" | "DESTRUCTIVE" | "UNSUPPORTED"
+  status: "DRAFT" | "REVIEW_REQUIRED" | "APPROVED" | "APPLYING" | "APPLIED" | "FAILED" | "SUPERSEDED"
+  expectedSchemaRevision: number
+  appliedSchemaRevision: number | null
+  createdAt: string
+  updatedAt: string
+}
+
 export type OnlineDefinitionSummary = {
   id: string
   code: string
@@ -12,6 +30,9 @@ export type OnlineDefinitionSummary = {
   lockVersion: number
   currentDraftRevisionId: string | null
   publishedReleaseId: string | null
+  currentRelease: OnlineDefinitionReleaseSummary | null
+  latestSchemaPlan: OnlineDefinitionSchemaPlanSummary | null
+  createdAt: string
   updatedAt: string
 }
 
@@ -27,7 +48,10 @@ export type OnlineFieldDetail = {
 }
 
 export type OnlineIndexDetail = { code: string; fields: string[]; unique: boolean }
-export type OnlineRelationDetail = { code: string; type: "ONE_TO_ONE" | "ONE_TO_MANY" | "MANY_TO_ONE"; sourceField: string; targetDefinitionCode: string; targetField: string; onDelete: "RESTRICT" | "SET_NULL" }
+export type OnlineRelationDetail = {
+  code: string; type: "ONE_TO_ONE" | "ONE_TO_MANY" | "MANY_TO_ONE"; sourceField: string
+  targetDefinitionCode: string; targetReleaseId?: string; targetField: string; onDelete: "RESTRICT" | "SET_NULL"
+}
 
 export type OnlineViewDetail = {
   code: "list" | "form" | "detail" | "dashboard"

@@ -12,10 +12,15 @@ export type OnlineIdentityStrategy = "PLATFORM_UUID" | "MANUAL"
 export type OnlineRelationType = "ONE_TO_ONE" | "ONE_TO_MANY" | "MANY_TO_ONE"
 export type OnlineFieldIR = {
   code: string; type: OnlineScalarType; nullable: boolean; length?: number; precision?: number
-  default?: string | number | boolean | null; remark?: string; identity?: OnlineIdentityStrategy; systemTemplate?: "CREATED_AUDIT" | "UPDATED_AUDIT"
+  default?: string | number | boolean | null; remark?: string; identity?: OnlineIdentityStrategy; systemTemplate?: "CREATED_AUDIT" | "UPDATED_AUDIT"; systemManaged?: boolean
 }
 export type OnlineIndexIR = { code: string; fields: string[]; unique: boolean }
-export type OnlineRelationIR = { code: string; type: OnlineRelationType; sourceField: string; targetDefinitionCode: string; targetField: string; onDelete: "RESTRICT" | "SET_NULL" }
+export type OnlineRelationIR = {
+  code: string; type: OnlineRelationType; sourceField: string; targetDefinitionCode: string
+  /** Immutable same-tenant Online Release selected by the server during Draft normalization. */
+  targetReleaseId?: string
+  targetField: string; onDelete: "RESTRICT" | "SET_NULL"
+}
 export type OnlineModelIR = { version: 1; storage: { kind: OnlineStorageKind }; fields: OnlineFieldIR[]; indexes: OnlineIndexIR[]; relations: OnlineRelationIR[] }
 export type OnlineSchemaOperationKind = "ADD_FIELD" | "ALTER_FIELD" | "DROP_FIELD" | "ADD_INDEX" | "DROP_INDEX" | "NO_OP"
 export type OnlineSchemaOperation = { kind: OnlineSchemaOperationKind; subject: string; before?: Record<string, unknown>; after?: Record<string, unknown>; reasons: string[] }

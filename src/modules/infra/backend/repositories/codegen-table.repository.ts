@@ -16,6 +16,8 @@ export type CodegenTableRow = {
   scene: "ADMIN" | "APP"
   author: string
   parentMenuId: string | null
+  /** Resource permission prefix, e.g. infra:codegen-table. */
+  permissionPrefix: string | null
   columns: CodegenColumnConfig[]
   createdAt: string
   updatedAt: string
@@ -45,6 +47,7 @@ export type CreateCodegenTableData = {
   template?: string
   scene?: string
   author?: string
+  permissionPrefix?: string | null
   columns: CodegenColumnConfig[]
 }
 
@@ -90,6 +93,7 @@ export const CodegenTableRepository = {
       scene: (data.scene as any) ?? "ADMIN",
       author: data.author ?? "admin",
       parentMenuId: null,
+      permissionPrefix: data.permissionPrefix ?? null,
       columns: data.columns,
       createdAt: now,
       updatedAt: now,
@@ -111,6 +115,7 @@ export const CodegenTableRepository = {
       template: (data.template as any) ?? table.template,
       scene: (data.scene as any) ?? table.scene,
       author: data.author ?? table.author,
+      permissionPrefix: data.permissionPrefix ?? table.permissionPrefix,
       columns: data.columns ?? table.columns,
       updatedAt: new Date().toISOString(),
     }

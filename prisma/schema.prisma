@@ -677,14 +677,17 @@ model OnlineRelation {
   code           String         @db.VarChar(64)
   relationType   String         @map("relation_type") @db.VarChar(30)
   targetDefinitionCode String?  @map("target_definition_code") @db.VarChar(64)
+  targetReleaseId      String?  @map("target_release_id")
   config         Json           @default("{}")
   createdAt      DateTime       @default(now()) @map("created_at")
   updatedAt      DateTime       @updatedAt @map("updated_at")
   deleted        Boolean        @default(false)
   revision       OnlineRevision @relation(fields: [revisionId], references: [id], onDelete: Cascade)
   tenant         SystemTenant   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  targetRelease  OnlineRelease? @relation("OnlineRelationTargetRelease", fields: [targetReleaseId], references: [id], onDelete: Restrict)
 
   @@unique([tenantId, revisionId, code])
+  @@index([tenantId, targetReleaseId])
   @@map("online_relation")
 }
 
@@ -779,6 +782,7 @@ model OnlineRelease {
   publishedForDefinition OnlineDefinition? @relation("OnlineDefinitionPublishedRelease")
   rollbackOf          OnlineRelease?   @relation("OnlineReleaseRollback", fields: [rollbackOfReleaseId], references: [id], onDelete: Restrict)
   rollbackChildren    OnlineRelease[]  @relation("OnlineReleaseRollback")
+  targetRelations     OnlineRelation[] @relation("OnlineRelationTargetRelease")
   testSessions        OnlineTestSession[]
   records             OnlineRecord[]
 

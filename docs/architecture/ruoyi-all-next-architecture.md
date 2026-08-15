@@ -40,7 +40,7 @@ ruoyi-all-next/
 │   └── skills/                      # 治理 Skill
 │
 ├── scripts/                         # 开发脚本（不参与构建）
-│   ├── codegen-from-source.ts       # 代码生成器（从源仓库扫描生成）
+│   ├── codegen-from-source.ts       # 源仓库能力扫描器（不生成代码）
 │   ├── scaffold-feature.ts          # 功能脚手架
 │   └── fix-*.cjs                    # 修复工具脚本
 │

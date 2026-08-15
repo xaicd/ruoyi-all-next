@@ -1,110 +1,56 @@
 /**
- * inject-codegen-output.cjs
- * 
- * 将 codegen 生成的代码 drop-in 到项目中，自动修正：
- * 1. 导入路径（modules/system/services → modules/system/backend/services）
- * 2. 类名规范（UserService → 保留，但在 API route 中复用）
- * 3. 类型字段（dept_id → deptId，created_at → createdAt）
- * 
- * Usage:
- *   node scripts/inject-codegen-output.cjs ./tmp/codegen-User
- *   node scripts/inject-codegen-output.cjs ./tmp/codegen-Student
+ * Manifest-driven local injector for reviewed codegen ZIPs.
+ * Usage: node scripts/inject-codegen-output.cjs <extracted-directory> [--dry-run]
  */
+const fs = require("fs")
+const path = require("path")
 
-const fs = require('fs')
-const path = require('path')
+const ROOT = path.resolve(__dirname, "..")
+const args = process.argv.slice(2)
+const sourceArg = args.find((arg) => !arg.startsWith("--"))
+const dryRun = args.includes("--dry-run")
 
-const ROOT = path.resolve(__dirname, '..')
-const SOURCE_DIR = process.argv[2] ? path.resolve(ROOT, process.argv[2]) : path.join(ROOT, 'tmp', 'codegen-User')
+if (!sourceArg) fail("Usage: node scripts/inject-codegen-output.cjs <extracted-directory> [--dry-run]")
+const sourceDir = path.resolve(ROOT, sourceArg)
+const manifestPath = path.join(sourceDir, "codegen-manifest.json")
+if (!fs.existsSync(manifestPath)) fail("Missing codegen-manifest.json; only reviewed manifest-based codegen output can be injected.")
 
-if (!fs.existsSync(SOURCE_DIR)) {
-  console.error(`Source directory not found: ${SOURCE_DIR}`)
-  process.exit(1)
+let manifest
+try { manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8")) } catch { fail("codegen-manifest.json is not valid JSON.") }
+if (manifest?.contractVersion !== "1.0.0" || !Array.isArray(manifest.outputs)) fail("Unsupported codegen manifest contract.")
+
+const planned = []
+for (const entry of manifest.outputs) {
+  if (!entry || typeof entry.path !== "string") fail("Manifest contains an invalid output entry.")
+  const relative = entry.path.replace(/\\/g, "/")
+  if (!relative.startsWith("src/") || relative.includes("..") || path.posix.isAbsolute(relative) || !/\.(ts|tsx)$/.test(relative)) fail(`Rejected non-source or unsafe output path: ${entry.path}`)
+  const source = path.resolve(sourceDir, ...relative.split("/"))
+  const target = path.resolve(ROOT, ...relative.split("/"))
+  if (!isWithin(sourceDir, source) || !isWithin(ROOT, target)) fail(`Rejected path escaping its root: ${entry.path}`)
+  if (!fs.existsSync(source) || !fs.statSync(source).isFile()) fail(`Manifest file is missing: ${entry.path}`)
+  const content = fs.readFileSync(source, "utf8")
+  validateContent(relative, content)
+  planned.push({ relative, source, target, content })
 }
 
-console.log(`\n🚀 Injecting codegen output from: ${SOURCE_DIR}\n`)
+const duplicate = planned.find((item, index) => planned.findIndex((other) => other.relative === item.relative) !== index)
+if (duplicate) fail(`Manifest contains duplicate output path: ${duplicate.relative}`)
+const conflicts = planned.filter((item) => fs.existsSync(item.target))
+if (conflicts.length) fail(`Injection aborted; existing files would be overwritten:\n${conflicts.map((item) => `  - ${item.relative}`).join("\n")}`)
 
-let copyCount = 0
-let skipCount = 0
+console.log(`${dryRun ? "DRY RUN: " : ""}Validated ${planned.length} files from ${path.relative(ROOT, sourceDir)}`)
+for (const item of planned) console.log(`  ${dryRun ? "WOULD COPY" : "COPY"}: ${item.relative}`)
+if (dryRun) process.exit(0)
 
-// Path fixes: generated path → correct path in project
-const PATH_FIXES = [
-  // Import path fixes
-  [/@\/modules\/(\w+)\/services\//g, '@/modules/$1/backend/services/'],
-  [/@\/modules\/(\w+)\/validators\//g, '@/modules/$1/backend/validators/'],
-  [/@\/modules\/(\w+)\/repositories\//g, '@/modules/$1/backend/repositories/'],
-  [/@\/modules\/(\w+)\/types\//g, '@/modules/$1/backend/types/'],
-]
-
-// File path remapping: generated path → project path
-function getTargetPath(sourceFile) {
-  // Remove the SOURCE_DIR prefix and normalize to forward slashes
-  const relative = path.relative(path.join(SOURCE_DIR, 'src'), sourceFile).replace(/\\/g, '/')
-  
-  // Apply path transforms (forward slash based)
-  let target = relative
-  target = target.replace(/modules\/(\w+)\/services\//g, 'modules/$1/backend/services/')
-  target = target.replace(/modules\/(\w+)\/validators\//g, 'modules/$1/backend/validators/')
-  target = target.replace(/modules\/(\w+)\/repositories\//g, 'modules/$1/backend/repositories/')
-  target = target.replace(/modules\/(\w+)\/types\//g, 'modules/$1/backend/types/')
-  target = target.replace(/modules\/(\w+)\/__tests__\//g, 'modules/$1/backend/services/__tests__/')
-  
-  return path.join(ROOT, 'src', ...target.split('/'))
+for (const item of planned) {
+  fs.mkdirSync(path.dirname(item.target), { recursive: true })
+  fs.writeFileSync(item.target, item.content, "utf8")
 }
+console.log(`Injected ${planned.length} reviewed files. Register permissions and menus explicitly before exposing routes.`)
 
-function fixContent(content, targetPath) {
-  let fixed = content
-  
-  // Fix import paths
-  for (const [from, to] of PATH_FIXES) {
-    fixed = fixed.replace(from, to)
-  }
-  
-  // Fix snake_case field names in types files
-  if (targetPath.includes('/types/') || targetPath.includes('.types.ts')) {
-    // Keep as-is for now - types reflect the DB schema
-  }
-  
-  return fixed
+function validateContent(relative, content) {
+  if (content.includes("/api/admin/") || content.includes("/(admin)/")) fail(`Rejected legacy route convention in ${relative}`)
+  if (/export\s+async\s+function\s+(GET|POST|PUT|DELETE)/.test(content) && !content.includes("withAdminRoute")) fail(`Rejected unprotected API route in ${relative}`)
 }
-
-function processDir(dir) {
-  if (!fs.existsSync(dir)) return
-  const items = fs.readdirSync(dir, { withFileTypes: true })
-  
-  for (const item of items) {
-    const full = path.join(dir, item.name)
-    if (item.isDirectory()) {
-      processDir(full)
-    } else if (item.name.endsWith('.ts') || item.name.endsWith('.tsx')) {
-      const target = getTargetPath(full)
-      const targetDir = path.dirname(target)
-      
-      // Check if target already exists
-      if (fs.existsSync(target)) {
-        console.log(`  ⚠️  SKIP (exists): ${path.relative(ROOT, target)}`)
-        skipCount++
-        continue
-      }
-      
-      // Read and fix content
-      const content = fs.readFileSync(full, 'utf-8')
-      const fixed = fixContent(content, target)
-      
-      // Write to project
-      fs.mkdirSync(targetDir, { recursive: true })
-      fs.writeFileSync(target, fixed)
-      copyCount++
-      console.log(`  ✅ COPY: ${path.relative(ROOT, target)}`)
-    }
-  }
-}
-
-processDir(path.join(SOURCE_DIR, 'src'))
-
-console.log(`\n✅ Done! Copied ${copyCount} files, skipped ${skipCount} existing files.`)
-console.log('\n📋 Next steps:')
-console.log('  1. Check copied files for any remaining issues')
-console.log('  2. Restart next dev if already running (hot reload picks up new files)')
-console.log('  3. Add menu entry for the new page in the sidebar config')
-console.log('  4. Run: node scripts/check-types.cjs  — to verify no new TS errors')
+function isWithin(root, candidate) { return candidate === root || candidate.startsWith(`${root}${path.sep}`) }
+function fail(message) { console.error(`Codegen injection failed: ${message}`); process.exit(1) }

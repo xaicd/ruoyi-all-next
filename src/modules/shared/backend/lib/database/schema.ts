@@ -460,6 +460,7 @@ export interface OnlineRelationTable {
   code: string
   relation_type: string
   target_definition_code: string | null
+  target_release_id: string | null
   config: unknown
   created_at: Generated<Date>
   updated_at: Date

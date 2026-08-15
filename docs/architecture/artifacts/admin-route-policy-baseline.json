@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-15T01:21:57.350Z",
-  "routeCount": 838,
-  "operationCount": 2019,
+  "generatedAt": "2026-08-15T13:02:06.120Z",
+  "routeCount": 843,
+  "operationCount": 2025,
   "routes": [
     {
       "path": "/api/v1/admin/ai/ai-api-key",
@@ -11043,9 +11043,43 @@
         {
           "method": "PUT",
           "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/online/definitions/[code]/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/online/definitions/[code]/archive",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/online/definitions/[code]/archive/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/online/definitions/[code]/codegen/download",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/online/definitions/[code]/codegen/download/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/online/definitions/[code]/codegen/preview",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/online/definitions/[code]/codegen/preview/route.ts"
     },
     {
       "path": "/api/v1/admin/online/definitions/[code]/draft",
@@ -11056,6 +11090,26 @@
         }
       ],
       "source": "src/app/api/v1/admin/online/definitions/[code]/draft/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/online/definitions/[code]/lookup/dictionary",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/online/definitions/[code]/lookup/dictionary/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/online/definitions/[code]/normalize-system-fields",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/online/definitions/[code]/normalize-system-fields/route.ts"
     },
     {
       "path": "/api/v1/admin/online/definitions/[code]/publish",

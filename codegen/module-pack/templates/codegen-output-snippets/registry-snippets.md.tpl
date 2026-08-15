@@ -1,24 +1,29 @@
-# Registry Snippets for {{moduleKebab}}
+# Generated feature registration — {{moduleKebab}}/{{featureListKebab}}
 
-## permissions.ts
+The ZIP deliberately does **not** modify shared registries. Review and register these resources explicitly after inspecting the generated files.
+
+## Permission codes
 
 ```ts
-{{modulePermissionConst}}: "{{moduleKebab}}:{{featureListKebab}}:view",
+{{permissionPrefix}}:query
+{{permissionPrefix}}:create
+{{permissionPrefix}}:update
+{{permissionPrefix}}:delete
 ```
 
-## admin-menu.ts
+## Admin menu
 
 ```ts
 {
   key: "{{moduleKebab}}-{{featureListKebab}}",
   label: "{{moduleLabel}}{{featureListLabel}}",
   path: "/admin/{{moduleKebab}}/{{featureListKebab}}",
-  requiredPermission: PERMISSIONS.{{modulePermissionConst}},
+  requiredPermission: {{featureListPascal}}PermissionCodes.query,
 }
 ```
 
-## capability-matrix.md row suggestion
+## Safety checklist
 
-```md
-| {{moduleKebab}} | {{moduleLabel}}领域能力 | PARTIAL | 由 codegen 模板包生成最小闭环骨架 |
-```
+- Register menu/button permissions before exposing the route.
+- Replace the generated in-memory service with a reviewed tenant-aware repository.
+- Keep generated output in a reviewable ZIP; do not enable server-side arbitrary directory writes.
