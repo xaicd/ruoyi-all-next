@@ -26,6 +26,7 @@ export const updateOnlineRevisionSchema = z.object({
   expectedLockVersion: z.number().int().min(1),
   model: onlineModelIrSchema.optional(),
   interaction: onlineInteractionIrSchema.optional(),
+  views: z.array(z.unknown()).max(4).optional(),
   policy: metadataObject.optional(),
   workflow: metadataObject.optional(),
 })

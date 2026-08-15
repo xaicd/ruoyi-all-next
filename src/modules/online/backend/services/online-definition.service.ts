@@ -39,7 +39,7 @@ export class OnlineDefinitionService {
 
   static async updateDraft(auth: AuthContext, code: string, input: UpdateOnlineRevisionInput) {
     const scope = tenantScope(auth)
-    const data = await KyselyOnlineDefinitionRepository.updateDraft({ ...scope, code, expectedLockVersion: input.expectedLockVersion!, model: input.model, interaction: input.interaction, policy: input.policy, workflow: input.workflow })
+    const data = await KyselyOnlineDefinitionRepository.updateDraft({ ...scope, code, expectedLockVersion: input.expectedLockVersion!, model: input.model, interaction: input.interaction, views: input.views, policy: input.policy, workflow: input.workflow })
     domainLog.audit("online.revision.update", { targetType: "ONLINE_DEFINITION", targetId: data.id })
     return data
   }

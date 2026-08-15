@@ -3,6 +3,7 @@ import { ApiError } from "@/modules/shared/backend/http/api-error"
 import { parseOnlineInteractionIR } from "./online-interaction.compiler"
 import type { OnlineRuntimeRelease } from "./online-runtime.contract"
 import { parseOnlineModelIR } from "./online-schema-plan.compiler"
+import { compileOnlineViews } from "./online-view.compiler"
 import type { OnlineFieldIR } from "./online-schema-plan.contract"
 
 function asRecord(value: unknown): Record<string, unknown> {
@@ -22,7 +23,11 @@ export function compileOnlineRuntimeRelease(row: any): OnlineRuntimeRelease {
   if (modelType !== "SINGLE" && modelType !== "TREE" && modelType !== "MASTER_DETAIL") throw new ApiError("CONFLICT", "Online Release 模型类型无效")
   const model = parseOnlineModelIR(revision.model)
   const interaction = parseOnlineInteractionIR(revision.interaction, model)
-  return { definitionId: row.definition_id, definitionCode: String(definition.code), definitionName: String(definition.name), modelType, releaseId: row.id, revisionId: row.revision_id, schemaRevision: row.schema_revision, model, interaction }
+  const rawViews = Array.isArray(revision.views) ? revision.views : []
+  const releasedActions = Array.isArray(revision.actions) && revision.actions.every((action) => typeof action === "string") ? new Set(revision.actions) : new Set<string>()
+  let views
+  try { views = compileOnlineViews(rawViews.map((view) => { const item = asRecord(view); return { code: item.code, kind: item.kind, puckData: item.puckData, version: item.version } }), { definitionCode: String(definition.code), fieldCodes: new Set(model.fields.map((field) => field.code)), actionCodes: releasedActions }) } catch (error) { throw new ApiError("CONFLICT", error instanceof Error ? `Online Release 视图无效：${error.message}` : "Online Release 视图无效") }
+  return { definitionId: row.definition_id, definitionCode: String(definition.code), definitionName: String(definition.name), modelType, releaseId: row.id, revisionId: row.revision_id, schemaRevision: row.schema_revision, model, interaction, views }
 }
 
 function validScalar(field: OnlineFieldIR, value: unknown): boolean {

@@ -28,7 +28,7 @@ const componentRoutes: Record<string, string> = {
   "system/oauth2/token/index": "/admin/system/oauth2-tokens", "system/sms/channel/index": "/admin/system/sms-channels", "system/sms/log/index": "/admin/system/sms-logs",
   "system/mail/account/index": "/admin/system/mail-accounts", "system/mail/log/index": "/admin/system/mail-logs", "infra/config/index": "/admin/infra/configs",
   "infra/job/index": "/admin/infra/job-center", "infra/file/index": "/admin/infra/files", "infra/dataSourceConfig/index": "/admin/infra/db-configs", "infra/codegen/index": "/admin/infra/codegen",
-  "infra/build/index": "/admin/infra/page-builder", "infra/online-definition/index": "/admin/infra/online-definitions", "infra/apiAccessLog/index": "/admin/infra/api-access-log", "infra/apiErrorLog/index": "/admin/infra/api-error-logs",
+  "infra/build/index": "/admin/infra/page-builder", "infra/online-definition/index": "/admin/infra/online-definitions", "infra/online-test/index": "/admin/infra/online-test", "infra/apiAccessLog/index": "/admin/infra/api-access-log", "infra/apiErrorLog/index": "/admin/infra/api-error-logs",
   "pay/order/index": "/admin/pay/orders", "pay/refund/index": "/admin/pay/refunds", "crm/customer/index": "/admin/crm/customers", "crm/clue/index": "/admin/crm/clues",
 }
 

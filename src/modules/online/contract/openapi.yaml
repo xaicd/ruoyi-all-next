@@ -23,17 +23,17 @@ paths:
       x-permission: infra:online-definition:update
   /api/v1/admin/online/definitions/{code}/draft:
     put:
-      summary: Update current Draft Revision metadata with optimistic locking
+      summary: Update current Draft Revision metadata and allowlisted Puck views with optimistic locking
       security: [{ bearerAuth: [] }]
       x-permission: infra:online-definition:update
   /api/v1/admin/online/definitions/{code}/validate:
     post:
-      summary: Validate the current Draft Revision before publication
+      summary: Validate the current Draft Revision, including its allowlisted Puck views, before publication
       security: [{ bearerAuth: [] }]
       x-permission: infra:online-definition:update
   /api/v1/admin/online/definitions/{code}/publish:
     post:
-      summary: Create immutable Release snapshot and a new Draft Revision
+      summary: Create immutable Release snapshot (including normalized Puck views) and a new Draft Revision
       security: [{ bearerAuth: [] }]
       x-permission: infra:online-definition:publish
   /api/v1/admin/online/definitions/{code}/rollback:

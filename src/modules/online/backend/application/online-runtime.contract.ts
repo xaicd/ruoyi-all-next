@@ -1,5 +1,6 @@
 import type { OnlineModelIR } from "./online-schema-plan.contract"
 import type { OnlineInteractionIR } from "./online-interaction.compiler"
+import type { OnlineViewDetail } from "./online-definition.contract"
 
 export type OnlineRuntimeRelease = {
   definitionId: string
@@ -11,6 +12,7 @@ export type OnlineRuntimeRelease = {
   schemaRevision: number
   model: OnlineModelIR
   interaction: OnlineInteractionIR
+  views: OnlineViewDetail[]
 }
 
 export type OnlineTestSessionSummary = {

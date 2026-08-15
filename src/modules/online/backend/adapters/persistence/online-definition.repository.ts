@@ -1,7 +1,8 @@
 import { createHash } from "node:crypto"
 import { getKyselyDb, hasRealDatabase } from "@/modules/shared/backend/lib/database"
 import { ApiError } from "@/modules/shared/backend/http/api-error"
-import type { OnlineDefinitionDetail, OnlineDefinitionPage, OnlineDefinitionSummary, OnlineFieldDetail, OnlineReleaseSummary, OnlineRevisionDetail } from "../../application/online-definition.contract"
+import type { OnlineDefinitionDetail, OnlineDefinitionPage, OnlineDefinitionSummary, OnlineFieldDetail, OnlineReleaseSummary, OnlineRevisionDetail, OnlineViewDetail } from "../../application/online-definition.contract"
+import { compileOnlineViews, failViewValidation, fingerprintOnlineViews } from "../../application/online-view.compiler"
 import { parseOnlineInteractionIR } from "../../application/online-interaction.compiler"
 import { validateOnlineModelAggregate } from "../../application/online-model.validator"
 import { fingerprintOnlineModelIR, parseOnlineModelIR } from "../../application/online-schema-plan.compiler"
@@ -18,8 +19,8 @@ function date(value: Date | string): string { return value instanceof Date ? val
 function mapDefinition(row: any): OnlineDefinitionSummary {
   return { id: row.id, code: row.code, name: row.name, modelType: row.model_type, status: row.status, lockVersion: row.lock_version, currentDraftRevisionId: row.current_draft_revision_id, publishedReleaseId: row.published_release_id, updatedAt: date(row.updated_at) }
 }
-function mapRevision(row: any, fields: OnlineFieldDetail[] = []): OnlineRevisionDetail {
-  return { id: row.id, definitionId: row.definition_id, sequence: row.sequence, status: row.status, schemaRevision: row.schema_revision, model: asRecord(row.model_json), interaction: asRecord(row.interaction_json), policy: asRecord(row.policy_json), workflow: asRecord(row.workflow_json), fields, validationReport: row.validation_report ? asRecord(row.validation_report) : null, createdAt: date(row.created_at), updatedAt: date(row.updated_at) }
+function mapRevision(row: any, fields: OnlineFieldDetail[] = [], views: OnlineViewDetail[] = []): OnlineRevisionDetail {
+  return { id: row.id, definitionId: row.definition_id, sequence: row.sequence, status: row.status, schemaRevision: row.schema_revision, model: asRecord(row.model_json), interaction: asRecord(row.interaction_json), policy: asRecord(row.policy_json), workflow: asRecord(row.workflow_json), fields, views, validationReport: row.validation_report ? asRecord(row.validation_report) : null, createdAt: date(row.created_at), updatedAt: date(row.updated_at) }
 }
 function mapField(row: any): OnlineFieldDetail {
   return { code: row.code, label: row.label, fieldType: row.field_type, required: row.required, length: row.length, sort: row.sort, defaultValue: row.default_value, config: asRecord(row.config) }
@@ -27,7 +28,31 @@ function mapField(row: any): OnlineFieldDetail {
 function mapRelease(row: any): OnlineReleaseSummary {
   return { id: row.id, releaseNo: row.release_no, revisionId: row.revision_id, schemaRevision: row.schema_revision, checksum: row.checksum, releasedAt: date(row.released_at), rollbackOfReleaseId: row.rollback_of_release_id }
 }
+function mapView(row: any): OnlineViewDetail {
+  return { code: row.code, kind: "PUCK", puckData: asRecord(row.puck_data_json), componentConfig: { configVersion: 1 }, version: 1 }
+}
 function checksum(snapshot: unknown): string { return createHash("sha256").update(JSON.stringify(snapshot)).digest("hex") }
+
+function viewScope(definitionCode: string, model: ReturnType<typeof parseOnlineModelIR>, interaction: ReturnType<typeof parseOnlineInteractionIR>, actionRows: readonly any[]) {
+  return { definitionCode, fieldCodes: new Set(model.fields.map((field) => field.code)), actionCodes: new Set(actionRows.map((action) => action.code)) }
+}
+
+async function readViews(trx: any, tenantId: string, revisionId: string): Promise<OnlineViewDetail[]> {
+  const rows = await trx.selectFrom("online_view").selectAll().where("tenant_id", "=", tenantId).where("revision_id", "=", revisionId).where("deleted", "=", false).orderBy("code", "asc").execute()
+  return rows.map(mapView)
+}
+
+async function syncViews(trx: any, input: { tenantId: string; revisionId: string; views: OnlineViewDetail[] }): Promise<void> {
+  await trx.deleteFrom("online_view").where("tenant_id", "=", input.tenantId).where("revision_id", "=", input.revisionId).execute()
+  if (!input.views.length) return
+  const now = new Date()
+  await trx.insertInto("online_view").values(input.views.map((view) => ({ id: crypto.randomUUID(), revision_id: input.revisionId, tenant_id: input.tenantId, code: view.code, kind: view.kind, puck_data_json: view.puckData, component_config_json: view.componentConfig, version: view.version, created_at: now, updated_at: now, deleted: false }))).execute()
+}
+
+async function loadViewScope(trx: any, input: { tenantId: string; revisionId: string; definitionCode: string; model: ReturnType<typeof parseOnlineModelIR>; interaction: ReturnType<typeof parseOnlineInteractionIR> }) {
+  const actions = await trx.selectFrom("online_action").select("code").where("tenant_id", "=", input.tenantId).where("revision_id", "=", input.revisionId).where("deleted", "=", false).execute()
+  return viewScope(input.definitionCode, input.model, input.interaction, actions)
+}
 
 async function syncFieldProjection(trx: any, input: { tenantId: string; revisionId: string; model: ReturnType<typeof parseOnlineModelIR>; interaction: ReturnType<typeof parseOnlineInteractionIR> }): Promise<void> {
   await trx.deleteFrom("online_field").where("tenant_id", "=", input.tenantId).where("revision_id", "=", input.revisionId).execute()
@@ -81,10 +106,11 @@ export class KyselyOnlineDefinitionRepository {
       definition.current_draft_revision_id ? db.selectFrom("online_revision").selectAll().where("id", "=", definition.current_draft_revision_id).where("tenant_id", "=", input.tenantId).executeTakeFirst() : undefined,
       db.selectFrom("online_release").selectAll().where("definition_id", "=", definition.id).where("tenant_id", "=", input.tenantId).orderBy("release_no", "desc").execute(),
     ])
-    const fields = revision
-      ? await db.selectFrom("online_field").selectAll().where("tenant_id", "=", input.tenantId).where("revision_id", "=", revision.id).where("deleted", "=", false).orderBy("sort", "asc").execute()
-      : []
-    return { ...mapDefinition(definition), revision: revision ? mapRevision(revision, fields.map(mapField)) : null, releases: releases.map(mapRelease) }
+    const [fields, views] = revision ? await Promise.all([
+      db.selectFrom("online_field").selectAll().where("tenant_id", "=", input.tenantId).where("revision_id", "=", revision.id).where("deleted", "=", false).orderBy("sort", "asc").execute(),
+      readViews(db, input.tenantId, revision.id),
+    ]) : [[], []]
+    return { ...mapDefinition(definition), revision: revision ? mapRevision(revision, fields.map(mapField), views) : null, releases: releases.map(mapRelease) }
   }
 
   static async updateDefinition(input: { tenantId: string; actorId: string; code: string; name?: string; expectedLockVersion: number }): Promise<OnlineDefinitionSummary> {
@@ -95,7 +121,7 @@ export class KyselyOnlineDefinitionRepository {
     return mapDefinition(row)
   }
 
-  static async updateDraft(input: { tenantId: string; actorId: string; code: string; expectedLockVersion: number; model?: Record<string, unknown>; interaction?: Record<string, unknown>; policy?: Record<string, unknown>; workflow?: Record<string, unknown> }): Promise<OnlineDefinitionDetail> {
+  static async updateDraft(input: { tenantId: string; actorId: string; code: string; expectedLockVersion: number; model?: Record<string, unknown>; interaction?: Record<string, unknown>; views?: unknown[]; policy?: Record<string, unknown>; workflow?: Record<string, unknown> }): Promise<OnlineDefinitionDetail> {
     requireDatabase()
     const db = await getKyselyDb()
     await db.transaction().execute(async (trx) => {
@@ -105,10 +131,14 @@ export class KyselyOnlineDefinitionRepository {
       if (!current) throw new ApiError("CONFLICT", "Draft Revision 已被发布或归档")
       const nextModel = parseOnlineModelIR(input.model ?? current.model_json)
       const nextInteraction = parseOnlineInteractionIR(input.interaction ?? current.interaction_json, nextModel)
+      const nextViewScope = await loadViewScope(trx, { tenantId: input.tenantId, revisionId: current.id, definitionCode: definition.code, model: nextModel, interaction: nextInteraction })
+      let nextViews: OnlineViewDetail[]
+      try { nextViews = input.views === undefined ? await readViews(trx, input.tenantId, current.id) : compileOnlineViews(input.views, nextViewScope) } catch (error) { failViewValidation(error) }
       const modelChanged = fingerprintOnlineModelIR(current.model_json) !== fingerprintOnlineModelIR(nextModel)
       const updated = await trx.updateTable("online_revision").set({ ...(input.model !== undefined ? { model_json: nextModel } : {}), ...(input.interaction !== undefined ? { interaction_json: nextInteraction } : {}), ...(input.policy ? { policy_json: input.policy } : {}), ...(input.workflow ? { workflow_json: input.workflow } : {}), status: "DRAFT", validation_report: null, updated_at: new Date() }).where("id", "=", current.id).where("tenant_id", "=", input.tenantId).where("status", "in", ["DRAFT", "VALIDATED"]).executeTakeFirst()
       if (Number(updated.numUpdatedRows) !== 1) throw new ApiError("CONFLICT", "Draft Revision 已被发布或归档")
       if (input.model !== undefined || input.interaction !== undefined) await syncFieldProjection(trx, { tenantId: input.tenantId, revisionId: current.id, model: nextModel, interaction: nextInteraction })
+      if (input.views !== undefined) await syncViews(trx, { tenantId: input.tenantId, revisionId: current.id, views: nextViews })
       if (modelChanged) await trx.updateTable("online_schema_change").set({ status: "SUPERSEDED", updated_at: new Date() }).where("tenant_id", "=", input.tenantId).where("definition_id", "=", definition.id).where("revision_id", "=", current.id).where("status", "in", ["DRAFT", "REVIEW_REQUIRED", "APPROVED"]).execute()
       await trx.updateTable("online_definition").set({ updated_by: input.actorId, updated_at: new Date(), lock_version: definition.lock_version + 1 }).where("id", "=", definition.id).where("lock_version", "=", input.expectedLockVersion).execute()
     })
@@ -124,15 +154,19 @@ export class KyselyOnlineDefinitionRepository {
       const revision = await trx.selectFrom("online_revision").selectAll().where("id", "=", definition.current_draft_revision_id).where("tenant_id", "=", input.tenantId).executeTakeFirst()
       if (!revision || revision.status !== "DRAFT") throw new ApiError("CONFLICT", "仅 DRAFT Revision 可以校验")
       let modelFingerprint: string
+      let viewFingerprint: string
       try {
         const model = parseOnlineModelIR(revision.model_json)
         const interaction = parseOnlineInteractionIR(revision.interaction_json, model)
         validateOnlineModelAggregate(definition.model_type as any, definition.code, model, interaction)
+        const storedViews = await readViews(trx, input.tenantId, revision.id)
+        const views = compileOnlineViews(storedViews.map(({ code, kind, puckData, version }) => ({ code, kind, puckData, version })), await loadViewScope(trx, { tenantId: input.tenantId, revisionId: revision.id, definitionCode: definition.code, model, interaction }))
         modelFingerprint = fingerprintOnlineModelIR(model)
+        viewFingerprint = fingerprintOnlineViews(views)
       } catch (error) {
-        throw new ApiError("VALIDATION_ERROR", error instanceof Error ? `Online 模型无效：${error.message}` : "Online 模型无效")
+        throw new ApiError("VALIDATION_ERROR", error instanceof Error ? `Online Draft 无效：${error.message}` : "Online Draft 无效")
       }
-      const report = { valid: true, validatedAt: new Date().toISOString(), checks: ["model-ir", "field-index-references", "field-interaction-ir", `${definition.model_type.toLowerCase()}-semantics`], compilerVersion: "2026-08-15", modelFingerprint, warnings: ["动态 DDL apply、Puck layout 与 runtime policy 将在后续阶段单独校验"] }
+      const report = { valid: true, validatedAt: new Date().toISOString(), checks: ["model-ir", "field-index-references", "field-interaction-ir", "puck-view-allowlist", "puck-view-references", `${definition.model_type.toLowerCase()}-semantics`], compilerVersion: "2026-08-15", modelFingerprint, viewFingerprint, warnings: ["动态 DDL apply 与 runtime policy 将在后续阶段单独实现"] }
       await trx.updateTable("online_revision").set({ status: "VALIDATED", validation_report: report, updated_at: new Date() }).where("id", "=", revision.id).execute()
       await trx.updateTable("online_definition").set({ updated_by: input.actorId, updated_at: new Date(), lock_version: definition.lock_version + 1 }).where("id", "=", definition.id).execute()
     })
@@ -151,12 +185,18 @@ export class KyselyOnlineDefinitionRepository {
       if (pendingPlan && pendingPlan.risk !== "NONE") throw new ApiError("CONFLICT", "Schema Plan 尚未执行；当前阶段仅支持创建和审批计划，不支持发布待迁移模型")
       const last = await trx.selectFrom("online_release").select("release_no").where("tenant_id", "=", input.tenantId).where("definition_id", "=", definition.id).orderBy("release_no", "desc").executeTakeFirst()
       const fields = await trx.selectFrom("online_field").selectAll().where("tenant_id", "=", input.tenantId).where("revision_id", "=", revision.id).where("deleted", "=", false).orderBy("sort", "asc").execute()
-      const snapshot = { definition: { code: definition.code, name: definition.name, modelType: definition.model_type }, revision: { id: revision.id, sequence: revision.sequence, schemaRevision: revision.schema_revision, model: revision.model_json, interaction: revision.interaction_json, fields: fields.map(mapField), policy: revision.policy_json, workflow: revision.workflow_json } }
+      const model = parseOnlineModelIR(revision.model_json)
+      const interaction = parseOnlineInteractionIR(revision.interaction_json, model)
+      const storedViews = await readViews(trx, input.tenantId, revision.id)
+      const actionRows = await trx.selectFrom("online_action").select("code").where("tenant_id", "=", input.tenantId).where("revision_id", "=", revision.id).where("deleted", "=", false).orderBy("code", "asc").execute()
+      const views = compileOnlineViews(storedViews.map(({ code, kind, puckData, version }) => ({ code, kind, puckData, version })), viewScope(definition.code, model, interaction, actionRows))
+      const snapshot = { definition: { code: definition.code, name: definition.name, modelType: definition.model_type }, revision: { id: revision.id, sequence: revision.sequence, schemaRevision: revision.schema_revision, model, interaction, fields: fields.map(mapField), views, actions: actionRows.map((action) => action.code), policy: revision.policy_json, workflow: revision.workflow_json } }
       const releaseId = crypto.randomUUID()
       await trx.insertInto("online_release").values({ id: releaseId, definition_id: definition.id, revision_id: revision.id, tenant_id: input.tenantId, release_no: (last?.release_no ?? 0) + 1, snapshot_json: snapshot, schema_revision: revision.schema_revision, checksum: checksum(snapshot), released_by: input.actorId, released_at: new Date(), rollback_of_release_id: null }).execute()
       await trx.updateTable("online_revision").set({ status: "PUBLISHED", published_by: input.actorId, published_at: new Date(), updated_at: new Date() }).where("id", "=", revision.id).execute()
       const nextRevisionId = crypto.randomUUID()
       await trx.insertInto("online_revision").values({ id: nextRevisionId, definition_id: definition.id, tenant_id: input.tenantId, sequence: revision.sequence + 1, status: "DRAFT", schema_revision: revision.schema_revision, model_json: revision.model_json, interaction_json: revision.interaction_json, policy_json: revision.policy_json, workflow_json: revision.workflow_json, validation_report: null, created_by: input.actorId, published_by: null, published_at: null, created_at: new Date(), updated_at: new Date() }).execute()
+      await syncViews(trx, { tenantId: input.tenantId, revisionId: nextRevisionId, views })
       await syncFieldProjection(trx, { tenantId: input.tenantId, revisionId: nextRevisionId, model: parseOnlineModelIR(revision.model_json), interaction: parseOnlineInteractionIR(revision.interaction_json, parseOnlineModelIR(revision.model_json)) })
       await trx.updateTable("online_definition").set({ status: "ACTIVE", current_draft_revision_id: nextRevisionId, published_release_id: releaseId, updated_by: input.actorId, updated_at: new Date(), lock_version: definition.lock_version + 1 }).where("id", "=", definition.id).execute()
     })

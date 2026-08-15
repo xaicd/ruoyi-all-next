@@ -26,6 +26,14 @@ export type OnlineFieldDetail = {
   config: Record<string, unknown>
 }
 
+export type OnlineViewDetail = {
+  code: "list" | "form" | "detail" | "dashboard"
+  kind: "PUCK"
+  puckData: Record<string, unknown>
+  componentConfig: { configVersion: 1 }
+  version: 1
+}
+
 export type OnlineRevisionDetail = {
   id: string
   definitionId: string
@@ -37,6 +45,7 @@ export type OnlineRevisionDetail = {
   policy: Record<string, unknown>
   workflow: Record<string, unknown>
   fields: OnlineFieldDetail[]
+  views: OnlineViewDetail[]
   validationReport: Record<string, unknown> | null
   createdAt: string
   updatedAt: string
