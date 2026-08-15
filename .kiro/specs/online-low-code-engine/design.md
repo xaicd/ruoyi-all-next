@@ -158,3 +158,16 @@ type OnlinePuckProps = {
 ## Testing Strategy
 
 单元测试覆盖 Model IR、schema diff、Puck allowlist、Release checksum、policy compiler、表达式 AST 和专用 codegen renderer。真实测试数据库集成测试覆盖安全 migration、schema lock、SINGLE/TREE/MASTER_DETAIL CRUD、同租户关联、双租户隔离、发布/回滚和 Workflow 状态。浏览器 smoke 覆盖设计、迁移、发布、进入在线测试、真实 CRUD、审计和权限拒绝。发布前执行 Prisma validate/generate、Kysely schema 检查、定向 Vitest、路由保护检查、TypeScript/构建可行的最小验证。
+
+
+## Screenshot-derived Product Workspace Standard
+
+Jeecg Online 的截图表明，成熟的 Online 开发不是单一 JSON/Puck 编辑器，而是“表单资产列表 → 表单设计多页签 → 发布治理”的完整页面级工作区。本项目采用相同的用户任务分层，但所有配置必须被编译成受控 IR 并经服务端校验：
+
+```text
+资产列表：筛选 / 状态 / 类型 / 版本 / 创建 / 复制 / 归档
+设计工作区：基础属性 / 数据模型 / 页面属性 / 校验字典 / 关系索引 / 查询配置 / Puck 页面
+治理工作区：Draft 保存 / validate / semantic Schema Plan / Publish / Rollback / sandbox Test
+```
+
+UI 不得把下列能力误实现为可执行元数据：自定义 JS、Java、SQL、任意数据源连接、任意 URL、任意 HTML/CSS、动态 DDL 或一键强制同步。截图中的“增强”必须映射为注册 action/formatter；“导入数据库表”必须映射为授权数据源上的只读 introspection；“代码生成”必须映射为 Published Release 的 dry-run/preview/download。

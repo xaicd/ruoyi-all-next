@@ -17,14 +17,20 @@ const fieldSchema = z.object({
   type: z.enum(ONLINE_SCALAR_TYPES),
   nullable: z.boolean().default(true),
   length: z.number().int().min(1).max(65535).optional(),
+  precision: z.number().int().min(0).max(18).optional(),
   default: z.union([z.string(), z.number(), z.boolean(), z.null()]).optional(),
+  remark: z.string().trim().max(300).optional(),
+  identity: z.enum(["PLATFORM_UUID", "MANUAL"]).optional(),
+  systemTemplate: z.enum(["CREATED_AUDIT", "UPDATED_AUDIT"]).optional(),
 }).strict()
 const indexSchema = z.object({ code, fields: z.array(code).min(1).max(16), unique: z.boolean().default(false) }).strict()
+const relationSchema = z.object({ code, type: z.enum(["ONE_TO_ONE", "ONE_TO_MANY", "MANY_TO_ONE"]), sourceField: code, targetDefinitionCode: code, targetField: code, onDelete: z.enum(["RESTRICT", "SET_NULL"]).default("RESTRICT") }).strict()
 export const onlineModelIrSchema = z.object({
   version: z.literal(1).default(1),
   storage: z.object({ kind: z.enum(ONLINE_STORAGE_KINDS).default("GENERIC_RECORD") }).strict().default({ kind: "GENERIC_RECORD" }),
   fields: z.array(fieldSchema).max(128).default([]),
   indexes: z.array(indexSchema).max(64).default([]),
+  relations: z.array(relationSchema).max(32).default([]),
 }).strict()
 
 function stable(value: unknown): string {
@@ -46,15 +52,27 @@ export function parseOnlineModelIR(value: unknown): OnlineModelIR {
   const parsed = onlineModelIrSchema.parse(value ?? {}) as OnlineModelIR
   unique(parsed.fields, "字段")
   unique(parsed.indexes, "索引")
+  unique(parsed.relations, "关联")
   const fieldCodes = new Set(parsed.fields.map((field) => field.code))
+  const identities = parsed.fields.filter((field) => field.identity !== undefined)
+  if (identities.length > 1) throw new Error("每个数据模型最多声明一个 identity 字段")
+  for (const field of parsed.fields) {
+    if (field.precision !== undefined && field.type !== "decimal") throw new Error(`字段 ${field.code} 的 precision 仅可用于 decimal 类型`)
+    if (field.systemTemplate && field.identity) throw new Error(`字段 ${field.code} 不能同时是系统字段和 identity 字段`)
+  }
   for (const index of parsed.indexes) {
     if (new Set(index.fields).size !== index.fields.length) throw new Error(`索引 ${index.code} 不可重复引用同一字段`)
     for (const field of index.fields) if (!fieldCodes.has(field)) throw new Error(`索引 ${index.code} 引用了不存在字段 ${field}`)
+  }
+  for (const relation of parsed.relations) {
+    if (!fieldCodes.has(relation.sourceField)) throw new Error(`关联 ${relation.code} 引用了不存在的源字段 ${relation.sourceField}`)
+    if (relation.onDelete === "SET_NULL" && !parsed.fields.find((field) => field.code === relation.sourceField)?.nullable) throw new Error(`关联 ${relation.code} 使用 SET_NULL 时源字段必须可空`)
   }
   return {
     ...parsed,
     fields: [...parsed.fields].sort((a, b) => a.code.localeCompare(b.code)),
     indexes: [...parsed.indexes].map((index) => ({ ...index, fields: [...index.fields] })).sort((a, b) => a.code.localeCompare(b.code)),
+    relations: [...parsed.relations].sort((a, b) => a.code.localeCompare(b.code)),
   }
 }
 

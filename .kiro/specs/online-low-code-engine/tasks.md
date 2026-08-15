@@ -84,3 +84,21 @@
 - 数据模型变更先走 Migration Plan；生产环境绝不复刻 Jeecg 式强制删表同步。
 - Puck 仅负责页面布局，不能承载 schema、SQL、权限或可执行脚本。
 - 任务 2 和 3 属于中风险数据库/配置改动：上线前必须在专用测试库与 staging 演练，生产执行须备份、审批并具备向前修复方案。
+
+
+## Screenshot-derived Product Experience Backlog
+
+> 来源：Jeecg Online 页面截图功能学习；仅作为产品交互对标，不复制存储 JS/Java/SQL、强制同步或动态 DDL 机制。
+
+- [ ] 9. 完整 Online 表单资产与多页签设计体验（依赖：2、3、4）
+  - [ ] 9.1 改造 Online 列表为资产管理页：表单名称/编码/类型/分类/状态/Draft 版本/Published Release/更新时间筛选，新增、复制、归档、批量操作和设计入口。
+  - [ ] 9.2 增加基础属性 IR/UI：分类、受控主键策略、列表/表单布局、分页、复选框、树设置；所有 props 均使用固定枚举和服务端校验。
+  - [ ] 9.3 实现字段设计网格：字段代码、名称、类型、长度/精度、默认值、必填、系统字段模板、排序；保持 Model IR 为唯一事实来源和 Schema Plan gate。
+  - [ ] 9.4 实现页面属性网格：列表/表单/详情可见性、排序、字段宽度、布局 span、widget、readonly、固定 formatter key、查询 widget/operator；禁止任意组件参数和脚本转换器。
+  - [ ] 9.5 实现校验与字典页签：Validation IR、dictionary/reference registry、服务端 Zod 编译和 tenant-scoped 引用验证。
+  - [ ] 9.6 实现关系、索引、查询配置页签：Relation/Index/Query IR，所有结构改动先进入无 SQL 输出的 Schema Plan。
+  - [ ] 9.7 实现发布治理页：完整展示 Draft 校验、视图指纹、Schema Plan 风险、Release 时间线、回滚、进入 Release-fixed sandbox Test。
+
+- [ ] 10. 受控数据源导入和 Release 代码生成入口（依赖：8、9）
+  - [ ] 10.1 在授权数据源上提供只读 schema introspection，导入结果必须为 Draft Model IR 并要求显式确认；禁止任意连接、SQL 和自动同步。
+  - [ ] 10.2 提供 Release codegen dry-run、文件预览与 ZIP 下载；仅使用已发布 Release，保留 checksum 与来源元数据。

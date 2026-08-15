@@ -53,12 +53,12 @@ export class KyselyOnlineRuntimeRepository {
     const db = await getKyselyDb()
     const now = new Date()
     const row = await db.insertInto("online_test_session").values({ id: crypto.randomUUID(), definition_id: runtime.definitionId, revision_id: runtime.revisionId, release_id: runtime.releaseId, tenant_id: input.tenantId, actor_id: input.actorId, schema_revision: runtime.schemaRevision, environment: "ONLINE_TEST", sandbox: true, started_at: now, ended_at: null }).returningAll().executeTakeFirstOrThrow()
-    return { ...mapSession(row, runtime), runtime: { definitionCode: runtime.definitionCode, definitionName: runtime.definitionName, modelType: runtime.modelType, releaseId: runtime.releaseId, schemaRevision: runtime.schemaRevision, model: runtime.model, interaction: runtime.interaction } }
+    return { ...mapSession(row, runtime), runtime: { definitionCode: runtime.definitionCode, definitionName: runtime.definitionName, modelType: runtime.modelType, releaseId: runtime.releaseId, schemaRevision: runtime.schemaRevision, model: runtime.model, interaction: runtime.interaction, views: runtime.views } }
   }
 
   static async getTestSession(input: { tenantId: string; actorId: string; definitionCode: string; sessionId: string }): Promise<OnlineTestSessionDetail> {
     const { runtime, session } = await this.sessionContext(input)
-    return { ...mapSession(session, runtime), runtime: { definitionCode: runtime.definitionCode, definitionName: runtime.definitionName, modelType: runtime.modelType, releaseId: runtime.releaseId, schemaRevision: runtime.schemaRevision, model: runtime.model, interaction: runtime.interaction } }
+    return { ...mapSession(session, runtime), runtime: { definitionCode: runtime.definitionCode, definitionName: runtime.definitionName, modelType: runtime.modelType, releaseId: runtime.releaseId, schemaRevision: runtime.schemaRevision, model: runtime.model, interaction: runtime.interaction, views: runtime.views } }
   }
 
   static async pageRecords(input: { tenantId: string; actorId: string; definitionCode: string; sessionId: string; page: number; pageSize: number }): Promise<OnlineRuntimeRecordPage> {

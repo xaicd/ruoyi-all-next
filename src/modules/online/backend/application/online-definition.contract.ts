@@ -26,6 +26,9 @@ export type OnlineFieldDetail = {
   config: Record<string, unknown>
 }
 
+export type OnlineIndexDetail = { code: string; fields: string[]; unique: boolean }
+export type OnlineRelationDetail = { code: string; type: "ONE_TO_ONE" | "ONE_TO_MANY" | "MANY_TO_ONE"; sourceField: string; targetDefinitionCode: string; targetField: string; onDelete: "RESTRICT" | "SET_NULL" }
+
 export type OnlineViewDetail = {
   code: "list" | "form" | "detail" | "dashboard"
   kind: "PUCK"
@@ -45,6 +48,8 @@ export type OnlineRevisionDetail = {
   policy: Record<string, unknown>
   workflow: Record<string, unknown>
   fields: OnlineFieldDetail[]
+  indexes: OnlineIndexDetail[]
+  relations: OnlineRelationDetail[]
   views: OnlineViewDetail[]
   validationReport: Record<string, unknown> | null
   createdAt: string

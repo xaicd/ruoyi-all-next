@@ -42,5 +42,5 @@ export type OnlineRuntimeRecordPage = {
 }
 
 export type OnlineTestSessionDetail = OnlineTestSessionSummary & {
-  runtime: Pick<OnlineRuntimeRelease, "definitionCode" | "definitionName" | "modelType" | "releaseId" | "schemaRevision" | "model" | "interaction">
+  runtime: Pick<OnlineRuntimeRelease, "definitionCode" | "definitionName" | "modelType" | "releaseId" | "schemaRevision" | "model" | "interaction" | "views">
 }

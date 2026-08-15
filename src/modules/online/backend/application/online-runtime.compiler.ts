@@ -24,7 +24,8 @@ export function compileOnlineRuntimeRelease(row: any): OnlineRuntimeRelease {
   const model = parseOnlineModelIR(revision.model)
   const interaction = parseOnlineInteractionIR(revision.interaction, model)
   const rawViews = Array.isArray(revision.views) ? revision.views : []
-  const releasedActions = Array.isArray(revision.actions) && revision.actions.every((action) => typeof action === "string") ? new Set(revision.actions) : new Set<string>()
+  const rawActions = Array.isArray(revision.actions) ? revision.actions : []
+  const releasedActions = new Set(rawActions.flatMap((action) => typeof action === "string" ? [action] : (action && typeof action === "object" && typeof (action as Record<string, unknown>).code === "string" ? [(action as Record<string, unknown>).code as string] : [])))
   let views
   try { views = compileOnlineViews(rawViews.map((view) => { const item = asRecord(view); return { code: item.code, kind: item.kind, puckData: item.puckData, version: item.version } }), { definitionCode: String(definition.code), fieldCodes: new Set(model.fields.map((field) => field.code)), actionCodes: releasedActions }) } catch (error) { throw new ApiError("CONFLICT", error instanceof Error ? `Online Release 视图无效：${error.message}` : "Online Release 视图无效") }
   return { definitionId: row.definition_id, definitionCode: String(definition.code), definitionName: String(definition.name), modelType, releaseId: row.id, revisionId: row.revision_id, schemaRevision: row.schema_revision, model, interaction, views }
