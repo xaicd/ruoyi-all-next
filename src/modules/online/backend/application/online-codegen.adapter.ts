@@ -44,6 +44,7 @@ export function toOnlineCodegenConfig(runtime: OnlineRuntimeRelease, childRuntim
     moduleName: "online", businessName: runtime.definitionName, className: pascal(runtime.definitionCode), template: templateFor(runtime), scene: "ADMIN",
     table: { name: runtime.definitionCode, comment: runtime.definitionName, schema: runtime.model.storage.kind === "MANAGED_TABLE" ? "public" : "online", type: "TABLE", columns: fields, primaryKey: ["id"], indexes: runtime.model.indexes.map((index) => ({ name: index.code, columns: index.fields, unique: index.unique })) },
     advanced: { fields, model: { type: runtime.modelType, tree: runtime.interaction.tree, masterDetail }, actions: runtime.interaction.actions.map((action) => ({ code: action.code!, label: action.label!, type: action.type!, placement: action.placement!, order: action.order ?? 0, enabled: action.enabled ?? true })) },
+    onlineRuntime: { definitionCode: runtime.definitionCode, storageKind: runtime.model.storage.kind, releaseId: runtime.releaseId, schemaRevision: runtime.schemaRevision },
     permissionPrefix: `online:${runtime.definitionCode.replace(/_/g, "-")}`, generateFrontend: true, generateTest: true,
   }
 }

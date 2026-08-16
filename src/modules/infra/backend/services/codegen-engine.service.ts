@@ -66,6 +66,8 @@ export type CodegenConfig = {
   permissionPrefix?: string
   /** Online / advanced renderer metadata. This is additive and preserves imported-table CRUD compatibility. */
   advanced?: CodegenAdvancedConfig
+  /** Immutable Published Release binding for production Online managed-table code. */
+  onlineRuntime?: { definitionCode: string; storageKind: "GENERIC_RECORD" | "MANAGED_TABLE"; releaseId: string; schemaRevision: number }
   /** 主子表配置 */
   masterChild?: {
     childTable: TableInfo
@@ -197,9 +199,9 @@ export class CodegenEngineService {
 
     validateConfig(config)
 
-    // 1. Types and explicit per-operation permissions.
+    // 1. Types. Managed Online routes deliberately use centrally registered Online permissions.
     outputs.push(generateTypes(config))
-    outputs.push(generatePermissions(config))
+    if (config.onlineRuntime?.storageKind !== "MANAGED_TABLE") outputs.push(generatePermissions(config))
 
     // 2. Validator (Zod Schema)
     outputs.push(generateValidator(config))
@@ -412,6 +414,7 @@ export type ${className}UpdateInput = z.infer<typeof ${camel}UpdateSchema>
 }
 
 function generateService(config: CodegenConfig): CodegenOutput {
+  if (config.onlineRuntime?.storageKind === "MANAGED_TABLE") return generateManagedOnlineService(config)
   const { className, moduleName, businessName } = config
   const kebab = toKebab(className)
   const camel = toCamel(className)
@@ -566,6 +569,7 @@ ${treeDeleteGuard}
 }
 
 function generateRoute(config: CodegenConfig): CodegenOutput {
+  if (config.onlineRuntime?.storageKind === "MANAGED_TABLE") return generateManagedOnlineRoute(config)
   const { className, moduleName, subModule } = config
   const kebab = toKebab(className)
   const camel = toCamel(className)
@@ -611,6 +615,7 @@ export const DELETE = withAdminRoute(async (request: Request) => {
 }
 
 function generateActionRoutes(config: CodegenConfig): CodegenOutput[] {
+  if (config.onlineRuntime?.storageKind === "MANAGED_TABLE") return []
   const { className, moduleName, subModule } = config
   const kebab = toKebab(className)
   const camel = toCamel(className)
@@ -671,6 +676,7 @@ function generateListPage(config: CodegenConfig): CodegenOutput {
   const canExport = enabledActions(config, "EXPORT")
   const canImport = enabledActions(config, "IMPORT")
   const canSubmitWorkflow = enabledActions(config, "SUBMIT_WORKFLOW")
+  const noCrudActions = config.onlineRuntime?.storageKind === "MANAGED_TABLE" && !canCreate && !canUpdate && !canDelete
   const colDefs = columns.map((column) => `                <td className="px-4 py-2.5">{formatValue(item.${column.name})}</td>`).join("\n")
   const headerDefs = columns.map((column) => `              <th className="px-4 py-3">${column.comment || column.name}</th>`).join("\n")
   const filterDefs = filters.map((column) => {
@@ -747,7 +753,7 @@ export default function ${className}ListPage() {
   }
 
   return <div className="space-y-4">
-    <header className="flex items-center justify-between rounded-lg border bg-white p-4"><div><h1 className="text-lg font-semibold text-slate-900">${businessName}管理</h1><p className="mt-0.5 text-sm text-slate-500">由代码生成器字段配置驱动</p></div><div className="flex gap-2">${canExport ? `<button onClick={() => void handleExport()} className="h-9 rounded-md border px-4 text-sm">导出</button>` : ""}${canImport ? `<button onClick={() => void handleImport()} className="h-9 rounded-md border px-4 text-sm">导入 JSON</button>` : ""}${canCreate ? `<button onClick={handleCreate} className="h-9 rounded-md bg-blue-600 px-4 text-sm font-medium text-white hover:bg-blue-700">新增</button>` : ""}</div></header>
+    <header className="flex items-center justify-between rounded-lg border bg-white p-4"><div><h1 className="text-lg font-semibold text-slate-900">${businessName}管理</h1><p className="mt-0.5 text-sm text-slate-500">由代码生成器字段配置驱动</p>${noCrudActions ? `<p className="mt-1 text-sm text-amber-700">当前发布版本未启用新增、编辑或删除动作，仅可查询。</p>` : ""}</div><div className="flex gap-2">${canExport ? `<button onClick={() => void handleExport()} className="h-9 rounded-md border px-4 text-sm">导出</button>` : ""}${canImport ? `<button onClick={() => void handleImport()} className="h-9 rounded-md border px-4 text-sm">导入 JSON</button>` : ""}${canCreate ? `<button onClick={handleCreate} className="h-9 rounded-md bg-blue-600 px-4 text-sm font-medium text-white hover:bg-blue-700">新增</button>` : ""}</div></header>
     <section className="rounded-lg border bg-white p-4"><div className="flex flex-wrap items-end gap-3">
 ${filterDefs || "          <span className=\"text-sm text-slate-400\">当前未配置查询字段</span>"}
           <button onClick={handleQuery} className="h-9 rounded-md bg-slate-900 px-4 text-sm text-white">查询</button><button onClick={() => { setFilters(QUERY_DEFAULTS); setPage(1) }} className="h-9 rounded-md border px-4 text-sm">重置</button><span className="ml-auto text-xs text-slate-400">共 {data.total} 条</span>
@@ -961,6 +967,7 @@ function generateManifest(config: CodegenConfig, outputs: CodegenOutput[]): Code
 }
 
 function generateTest(config: CodegenConfig): CodegenOutput {
+  if (config.onlineRuntime?.storageKind === "MANAGED_TABLE") return generateManagedOnlineTest(config)
   const { className, moduleName, businessName } = config
   const kebab = toKebab(className)
 
@@ -986,6 +993,65 @@ describe("${className}Service", () => {
     await expect(${className}Service.delete("not-exist")).rejects.toThrow("${businessName}不存在")
   })
 })
+`
+  return { path: `${getBackendPath(config)}/services/__tests__/${kebab}.service.test.ts`, content, type: "test" }
+}
+
+
+function generateManagedOnlineService(config: CodegenConfig): CodegenOutput {
+  const { className, moduleName } = config
+  const kebab = toKebab(className)
+  const camel = toCamel(className)
+  const runtime = config.onlineRuntime!
+  const content = `// Auto-generated by Codegen Engine
+// Immutable Online release binding; do not accept table, tenant, or release input from clients.
+import { domainLog } from "@/modules/shared/backend/lib/domain-log"
+import { KyselyOnlineManagedTableRuntimeRepository } from "@/modules/online/backend/adapters/persistence/online-managed-table-runtime.repository"
+import type { ${className}PageQueryInput, ${className}CreateInput, ${className}UpdateInput } from "../validators/${kebab}.validator"
+
+type Scope = { tenantId: string; actorId: string }
+const runtime = { definitionCode: ${JSON.stringify(runtime.definitionCode)}, releaseId: ${JSON.stringify(runtime.releaseId)}, schemaRevision: ${runtime.schemaRevision} } as const
+export class ${className}Service {
+  static async page(scope: Scope, input: ${className}PageQueryInput) {
+    const conditions = Object.entries(input).filter(([key]) => !["page", "pageSize"].includes(key)).map(([field, value]) => ({ field, value: value as string | number | boolean | null | Array<string | number | boolean | null> }))
+    return KyselyOnlineManagedTableRuntimeRepository.page({ ...scope, ...runtime, page: input.page, pageSize: input.pageSize, conditions })
+  }
+  static async get(scope: Scope, id: string) { return KyselyOnlineManagedTableRuntimeRepository.get({ ...scope, ...runtime, id }) }
+  static async create(scope: Scope, input: ${className}CreateInput) { const data = await KyselyOnlineManagedTableRuntimeRepository.create({ ...scope, ...runtime, data: input }); domainLog.audit("${moduleName}.${camel}.create", { targetType: "ONLINE_${className.toUpperCase()}", targetId: String(data.id) }); return data }
+  static async update(scope: Scope, input: ${className}UpdateInput) { const { id, ...data } = input; const result = await KyselyOnlineManagedTableRuntimeRepository.update({ ...scope, ...runtime, id, data }); domainLog.audit("${moduleName}.${camel}.update", { targetType: "ONLINE_${className.toUpperCase()}", targetId: id }); return result }
+  static async delete(scope: Scope, id: string) { await KyselyOnlineManagedTableRuntimeRepository.delete({ ...scope, ...runtime, id }); domainLog.audit("${moduleName}.${camel}.delete", { targetType: "ONLINE_${className.toUpperCase()}", targetId: id }) }
+}
+`
+  return { path: `${getBackendPath(config)}/services/${kebab}.service.ts`, content, type: "service" }
+}
+
+function generateManagedOnlineRoute(config: CodegenConfig): CodegenOutput {
+  const { className, moduleName, subModule } = config
+  const kebab = toKebab(className)
+  const camel = toCamel(className)
+  const sub = subModule ? `/${subModule}` : ""
+  const content = `// Auto-generated by Codegen Engine
+import { NextResponse } from "next/server"
+import { ${className}Service } from "@/modules/${moduleName}${sub}/backend/services/${kebab}.service"
+import { ${camel}PageQuerySchema, ${camel}CreateSchema, ${camel}UpdateSchema } from "@/modules/${moduleName}${sub}/backend/validators/${kebab}.validator"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { ApiError } from "@/modules/shared/backend/http/api-error"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+function scope(auth: { tenantId?: string; userId: string }) { if (!auth.tenantId) throw new ApiError("FORBIDDEN", "Tenant scope is required"); return { tenantId: auth.tenantId, actorId: auth.userId } }
+export const GET = withAdminRoute(async (request, auth) => { const params = new URL(request.url).searchParams; const id = params.get("id"); if (id) return NextResponse.json({ success: true, data: await ${className}Service.get(scope(auth), id) }); const input = ${camel}PageQuerySchema.parse(Object.fromEntries(Array.from(params.keys()).map((key) => { const values = params.getAll(key); return [key, values.length > 1 ? values : values[0]] }))); return NextResponse.json({ success: true, data: await ${className}Service.page(scope(auth), input) }) }, { permission: PERMISSIONS.INFRA_ONLINE_DEFINITION_QUERY })
+export const POST = withAdminRoute(async (request, auth) => { const input = ${camel}CreateSchema.parse(await request.json()); return NextResponse.json({ success: true, data: await ${className}Service.create(scope(auth), input) }, { status: 201 }) }, { permission: PERMISSIONS.INFRA_ONLINE_DEFINITION_CREATE })
+export const PUT = withAdminRoute(async (request, auth) => { const input = ${camel}UpdateSchema.parse(await request.json()); return NextResponse.json({ success: true, data: await ${className}Service.update(scope(auth), input) }) }, { permission: PERMISSIONS.INFRA_ONLINE_DEFINITION_UPDATE })
+export const DELETE = withAdminRoute(async (request, auth) => { const id = new URL(request.url).searchParams.get("id"); if (!id) return NextResponse.json({ success: false, error: "id is required" }, { status: 400 }); await ${className}Service.delete(scope(auth), id); return NextResponse.json({ success: true }) }, { permission: PERMISSIONS.INFRA_ONLINE_DEFINITION_DELETE })
+`
+  return { path: `src/app/api/v1/admin/${moduleName}${sub}/${kebab}/route.ts`, content, type: "route" }
+}
+
+function generateManagedOnlineTest(config: CodegenConfig): CodegenOutput {
+  const { className } = config
+  const kebab = toKebab(className)
+  const content = `import { describe, expect, it } from "vitest"
+import { ${className}Service } from "../${kebab}.service"
+describe("${className}Service managed runtime", () => { it("exports scoped CRUD operations", () => { expect(${className}Service.page).toBeTypeOf("function"); expect(${className}Service.create).toBeTypeOf("function") }) })
 `
   return { path: `${getBackendPath(config)}/services/__tests__/${kebab}.service.test.ts`, content, type: "test" }
 }

@@ -26,5 +26,6 @@ routes:
 notes:
   - Schema Plan routes expose semantic model diffs only; the apply endpoint never accepts or returns executable SQL and only applies a server-derived, approved MANAGED_TABLE plan after explicit confirmation.
   - Managed physical-table apply is PostgreSQL-only and currently supports SINGLE models, first table creation, additive nullable fields, and ordinary indexes; destructive or drifted changes are blocked.
+  - Production Online CRUD ZIP generation is restricted to a current published SINGLE + MANAGED_TABLE Release. Generated routes derive actor/tenant scope from authentication and bind immutable release ID plus schema revision server-side; table, tenant, and release values are never client inputs.
   - Runtime and Online Test routes resolve only the current Published Release and only support the sandboxed GENERIC_RECORD SINGLE model in this phase.
   - Each Online Test Session is actor-owned; every sandbox record is scoped to tenant, Definition, immutable Release and test session.

@@ -127,6 +127,7 @@ export class OnlineDefinitionService {
   static async previewGeneratedCode(auth: AuthContext, code: string) {
     const { tenantId } = tenantScope(auth)
     const runtime = await KyselyOnlineRuntimeRepository.resolveCurrentPublishedRelease({ tenantId, definitionCode: code })
+    if (runtime.modelType !== "SINGLE" || runtime.model.storage.kind !== "MANAGED_TABLE") throw new ApiError("CONFLICT", "生产 CRUD 代码下载当前仅支持 SINGLE + MANAGED_TABLE 已发布模型")
     const childRuntimes = await KyselyOnlineRuntimeRepository.resolveMasterDetailChildReleases({ tenantId, runtime })
     const config = toOnlineCodegenConfig(runtime, childRuntimes)
     const outputs = CodegenEngineService.preview(config)
@@ -137,6 +138,7 @@ export class OnlineDefinitionService {
   static async generateCode(auth: AuthContext, code: string) {
     const { tenantId } = tenantScope(auth)
     const runtime = await KyselyOnlineRuntimeRepository.resolveCurrentPublishedRelease({ tenantId, definitionCode: code })
+    if (runtime.modelType !== "SINGLE" || runtime.model.storage.kind !== "MANAGED_TABLE") throw new ApiError("CONFLICT", "生产 CRUD 代码下载当前仅支持 SINGLE + MANAGED_TABLE 已发布模型")
     const childRuntimes = await KyselyOnlineRuntimeRepository.resolveMasterDetailChildReleases({ tenantId, runtime })
     const config = toOnlineCodegenConfig(runtime, childRuntimes)
     const outputs = CodegenEngineService.generate(config)
