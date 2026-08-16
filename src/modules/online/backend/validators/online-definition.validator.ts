@@ -37,8 +37,8 @@ export const deleteOnlineDefinitionSchema = z.object({
 
 export const updateOnlineRevisionSchema = z.object({
   expectedLockVersion: z.number().int().min(1),
-  model: onlineModelIrSchema.optional(),
-  interaction: onlineInteractionIrSchema.optional(),
+  model: metadataObject.optional(),
+  interaction: metadataObject.optional(),
   views: z.array(z.unknown()).max(4).optional(),
   policy: metadataObject.optional(),
   workflow: metadataObject.optional(),
@@ -55,6 +55,17 @@ export const createOnlineSchemaPlanSchema = z.object({
 export const approveOnlineSchemaPlanSchema = z.object({
   expectedLockVersion: z.number().int().min(1),
   note: z.string().trim().min(1).max(500).optional(),
+})
+
+/** Explicit acknowledgement for the server-generated, approved physical-table plan. */
+export const applyOnlineSchemaPlanSchema = z.object({
+  expectedLockVersion: z.number().int().min(1),
+  confirmation: z.literal("APPLY_MANAGED_TABLE"),
+})
+
+/** Bounded tenant-scoped batch used only to build a review ZIP from published Releases. */
+export const batchDownloadOnlineCodeSchema = z.object({
+  codes: z.array(codeSchema).min(1, "请至少选择一个已发布模型").max(50, "单次最多生成 50 个模型").refine((codes) => new Set(codes).size === codes.length, "模型编码不可重复"),
 })
 
 export const validateOnlineRevisionSchema = z.object({
@@ -87,6 +98,8 @@ export type DeleteOnlineDefinitionInput = z.infer<typeof deleteOnlineDefinitionS
 export type CreateOnlineSchemaPlanInput = z.infer<typeof createOnlineSchemaPlanSchema>
 export type NormalizeOnlineSystemFieldsInput = z.infer<typeof normalizeOnlineSystemFieldsSchema>
 export type ApproveOnlineSchemaPlanInput = z.infer<typeof approveOnlineSchemaPlanSchema>
+export type ApplyOnlineSchemaPlanInput = z.infer<typeof applyOnlineSchemaPlanSchema>
+export type BatchDownloadOnlineCodeInput = z.infer<typeof batchDownloadOnlineCodeSchema>
 export type CreateOnlineDefinitionInput = z.infer<typeof createOnlineDefinitionSchema>
 export type UpdateOnlineDefinitionInput = z.infer<typeof updateOnlineDefinitionSchema>
 export type UpdateOnlineRevisionInput = z.infer<typeof updateOnlineRevisionSchema>

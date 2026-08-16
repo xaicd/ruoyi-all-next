@@ -162,7 +162,7 @@ type OnlinePuckProps = {
 
 ## Screenshot-derived Product Workspace Standard
 
-Jeecg Online 的截图表明，成熟的 Online 开发不是单一 JSON/Puck 编辑器，而是“表单资产列表 → 表单设计多页签 → 发布治理”的完整页面级工作区。本项目采用相同的用户任务分层，但所有配置必须被编译成受控 IR 并经服务端校验：
+Jeecg Online 的截图表明，成熟的 Online开发不是单一 JSON/Puck 编辑器，而是“表单资产列表 → 表单设计多页签 → 发布治理”的完整页面级工作区。本项目采用相同的用户任务分层，但所有配置必须被编译成受控 IR 并经服务端校验：
 
 ```text
 资产列表：筛选 / 状态 / 类型 / 版本 / 创建 / 复制 / 归档

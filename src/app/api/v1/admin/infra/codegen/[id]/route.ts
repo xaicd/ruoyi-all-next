@@ -12,7 +12,7 @@ const mutableColumnSchema = z.object({
   name: identifier,
   uiComponent: z.enum(["INPUT", "TEXTAREA", "NUMBER", "SELECT", "RADIO", "CHECKBOX", "SWITCH", "DATE", "DATETIME", "UPLOAD", "RICH_TEXT", "TREE_SELECT", "HIDDEN"]),
   listShow: z.boolean(), formShow: z.boolean(), queryShow: z.boolean(),
-  queryType: z.enum(["=", "LIKE", "BETWEEN", ">", "<", "IN"]),
+  queryType: z.enum(["=", "!=", "LIKE", "BETWEEN", ">", ">=", "<", "<=", "IN"]),
   dictType: identifier.nullable(), formValidation: z.enum(["required"]).nullable(),
 }).strict()
 const updateSchema = z.object({
@@ -23,16 +23,16 @@ const updateSchema = z.object({
   permissionPrefix, columns: z.array(mutableColumnSchema).min(1).max(128).optional(),
 }).strict()
 
-export const GET = withAdminRoute(async (_request: Request, _auth, context: RouteContext) => {
+export const GET = withAdminRoute(async (_request: Request, auth, context: RouteContext) => {
   const { id } = await context.params
-  const data = await CodegenTableRepository.findById(id)
+  const data = await CodegenTableRepository.findById(id, auth.tenantId)
   if (!data) return NextResponse.json({ success: false, error: "表配置不存在" }, { status: 404 })
   return NextResponse.json({ success: true, data })
 }, { permission: PERMISSIONS.INFRA_CODEGEN_QUERY })
 
-export const PUT = withAdminRoute(async (request: Request, _auth, context: RouteContext) => {
+export const PUT = withAdminRoute(async (request: Request, auth, context: RouteContext) => {
   const { id } = await context.params
-  const current = await CodegenTableRepository.findById(id)
+  const current = await CodegenTableRepository.findById(id, auth.tenantId)
   if (!current) return NextResponse.json({ success: false, error: "表配置不存在" }, { status: 404 })
   const input = updateSchema.parse(await request.json())
   const { columns: requestedColumns, ...metadata } = input
@@ -45,8 +45,10 @@ export const PUT = withAdminRoute(async (request: Request, _auth, context: Route
   return NextResponse.json({ success: true, data })
 }, { permission: PERMISSIONS.INFRA_CODEGEN_UPDATE })
 
-export const DELETE = withAdminRoute(async (_request: Request, _auth, context: RouteContext) => {
+export const DELETE = withAdminRoute(async (_request: Request, auth, context: RouteContext) => {
   const { id } = await context.params
+  const current = await CodegenTableRepository.findById(id, auth.tenantId)
+  if (!current) return NextResponse.json({ success: false, error: "表配置不存在" }, { status: 404 })
   await CodegenTableRepository.delete(id)
   return NextResponse.json({ success: true })
 }, { permission: PERMISSIONS.INFRA_CODEGEN_DELETE })

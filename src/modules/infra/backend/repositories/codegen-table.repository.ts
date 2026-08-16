@@ -3,7 +3,10 @@
  */
 
 import type { PageResult } from "@/modules/shared/backend/lib/database"
+import type { CodegenAdvancedConfig, CodegenQueryOperator } from "../services/codegen-engine.service"
 import type { ColumnInfo, UiComponentType } from "../services/schema-reader.service"
+
+export type CodegenTableSource = "DATABASE" | "ONLINE"
 
 export type CodegenTableRow = {
   id: string
@@ -12,12 +15,21 @@ export type CodegenTableRow = {
   moduleName: string
   businessName: string
   className: string
-  template: "CRUD" | "TREE" | "MASTER_CHILD" | "WORKFLOW" | "SINGLETON"
+  template: "CRUD" | "TREE" | "MASTER_CHILD" | "MASTER_DETAIL" | "WORKFLOW" | "SINGLETON"
   scene: "ADMIN" | "APP"
   author: string
   parentMenuId: string | null
   /** Resource permission prefix, e.g. infra:codegen-table. */
   permissionPrefix: string | null
+  /** DATABASE entries are legacy/global; ONLINE entries are always tenant-scoped. */
+  source: CodegenTableSource
+  tenantId: string | null
+  onlineDefinitionCode: string | null
+  onlineReleaseId: string | null
+  onlineSchemaRevision: number | null
+  onlineStorageKind: "GENERIC_RECORD" | "MANAGED_TABLE" | null
+  /** Immutable Online Release metadata retained for safe Tree/Master-Detail generation. */
+  onlineAdvanced: CodegenAdvancedConfig | null
   columns: CodegenColumnConfig[]
   createdAt: string
   updatedAt: string
@@ -31,7 +43,7 @@ export type CodegenColumnConfig = ColumnInfo & {
   /** 是否在查询条件中 */
   queryShow: boolean
   /** 查询方式 */
-  queryType: "=" | "LIKE" | "BETWEEN" | ">" | "<" | "IN"
+  queryType: CodegenQueryOperator
   /** 关联字典类型 */
   dictType: string | null
   /** 表单校验规则描述 */
@@ -48,6 +60,13 @@ export type CreateCodegenTableData = {
   scene?: string
   author?: string
   permissionPrefix?: string | null
+  source?: CodegenTableSource
+  tenantId?: string | null
+  onlineDefinitionCode?: string | null
+  onlineReleaseId?: string | null
+  onlineSchemaRevision?: number | null
+  onlineStorageKind?: "GENERIC_RECORD" | "MANAGED_TABLE" | null
+  onlineAdvanced?: CodegenAdvancedConfig | null
   columns: CodegenColumnConfig[]
 }
 
@@ -60,8 +79,8 @@ const MEMORY_STORE: CodegenTableRow[] = []
 let memoryIdSeq = 100
 
 export const CodegenTableRepository = {
-  async findList(params: { page: number; pageSize: number; keyword?: string }): Promise<PageResult<CodegenTableRow>> {
-    let filtered = [...MEMORY_STORE]
+  async findList(params: { page: number; pageSize: number; keyword?: string; tenantId?: string | null }): Promise<PageResult<CodegenTableRow>> {
+    let filtered = MEMORY_STORE.filter((table) => table.source === "DATABASE" || Boolean(params.tenantId) && table.tenantId === params.tenantId)
     if (params.keyword) {
       const kw = params.keyword.toLowerCase()
       filtered = filtered.filter((t) => t.tableName.toLowerCase().includes(kw) || t.tableComment.toLowerCase().includes(kw) || t.className.toLowerCase().includes(kw))
@@ -72,12 +91,16 @@ export const CodegenTableRepository = {
     return { items: filtered.slice(start, start + params.pageSize), total, page: params.page, pageSize: params.pageSize }
   },
 
-  async findById(id: string): Promise<CodegenTableRow | null> {
-    return MEMORY_STORE.find((t) => t.id === id) ?? null
+  async findById(id: string, tenantId?: string | null): Promise<CodegenTableRow | null> {
+    return MEMORY_STORE.find((table) => table.id === id && (table.source === "DATABASE" || Boolean(tenantId) && table.tenantId === tenantId)) ?? null
   },
 
-  async findByTableName(tableName: string): Promise<CodegenTableRow | null> {
-    return MEMORY_STORE.find((t) => t.tableName === tableName) ?? null
+  async findByTableName(tableName: string, tenantId?: string | null): Promise<CodegenTableRow | null> {
+    return MEMORY_STORE.find((table) => table.tableName === tableName && (table.source === "DATABASE" || Boolean(tenantId) && table.tenantId === tenantId)) ?? null
+  },
+
+  async findByOnlineRelease(input: { tenantId: string; definitionCode: string; releaseId: string }): Promise<CodegenTableRow | null> {
+    return MEMORY_STORE.find((table) => table.source === "ONLINE" && table.tenantId === input.tenantId && table.onlineDefinitionCode === input.definitionCode && table.onlineReleaseId === input.releaseId) ?? null
   },
 
   async create(data: CreateCodegenTableData): Promise<CodegenTableRow> {
@@ -94,6 +117,13 @@ export const CodegenTableRepository = {
       author: data.author ?? "admin",
       parentMenuId: null,
       permissionPrefix: data.permissionPrefix ?? null,
+      source: data.source ?? "DATABASE",
+      tenantId: data.tenantId ?? null,
+      onlineDefinitionCode: data.onlineDefinitionCode ?? null,
+      onlineReleaseId: data.onlineReleaseId ?? null,
+      onlineSchemaRevision: data.onlineSchemaRevision ?? null,
+      onlineStorageKind: data.onlineStorageKind ?? null,
+      onlineAdvanced: data.onlineAdvanced ?? null,
       columns: data.columns,
       createdAt: now,
       updatedAt: now,

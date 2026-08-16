@@ -219,9 +219,9 @@ export const ADMIN_MENU: AdminMenuItem[] = [
       },
       {
         key: "infra-online-test",
-        label: "Online 测试",
+        label: "AUTO报表",
         path: "/admin/infra/online-test",
-        requiredPermission: PERMISSIONS.INFRA_ONLINE_DEFINITION_TEST,
+        requiredPermission: PERMISSIONS.REPORT_CUSTOM_SQL_EXECUTE,
       },
       {
         key: "infra-swagger",

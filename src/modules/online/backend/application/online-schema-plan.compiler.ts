@@ -102,8 +102,11 @@ function fieldRisk(before: OnlineFieldIR, after: OnlineFieldIR): { risk: OnlineS
 }
 
 function storageRisk(baseline: OnlineModelIR, target: OnlineModelIR): { risk: OnlineSchemaRisk; reasons: string[] } | null {
-  if (baseline.storage.kind === target.storage.kind && target.storage.kind === "GENERIC_RECORD") return null
-  return { risk: "UNSUPPORTED", reasons: ["当前阶段仅支持 GENERIC_RECORD 的计划评估，不允许迁移存储实现"] }
+  if (baseline.storage.kind === target.storage.kind) return null
+  if (baseline.storage.kind === "GENERIC_RECORD" && baseline.fields.length === 0 && target.storage.kind === "MANAGED_TABLE") {
+    return { risk: "REVIEW_REQUIRED", reasons: ["首次启用托管物理表需要审批并受控应用 DDL"] }
+  }
+  return { risk: "UNSUPPORTED", reasons: ["仅支持新建 Definition 首次启用 MANAGED_TABLE；存储模式不能在已存在模型间迁移"] }
 }
 
 export function buildOnlineSchemaPlan(baselineInput: unknown, targetInput: unknown): { risk: OnlineSchemaRisk; payload: OnlineSchemaPlanPayload } {

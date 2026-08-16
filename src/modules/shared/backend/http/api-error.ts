@@ -61,6 +61,7 @@ export function classifyApiError(error: unknown): ErrorCode {
 }
 
 function getValidationDetails(error: unknown): ApiErrorDetail[] | undefined {
+  if (error instanceof ApiError && error.code === "VALIDATION_ERROR") return [{ field: "body", code: "INVALID_CONFIGURATION", messageKey: "validation.request_invalid", message: error.message }]
   if (!(error instanceof ZodError)) return undefined
   return error.issues.map((issue: ZodIssue) => ({
     field: issue.path.join(".") || "body",

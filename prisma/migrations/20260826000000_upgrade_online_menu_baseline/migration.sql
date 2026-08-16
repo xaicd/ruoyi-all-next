@@ -1,7 +1,7 @@
 -- Reuse the RuoYi-derived form-builder menu ID so existing role and package grants
 -- remain valid while the unsafe prototype is replaced by the Online workbench.
 UPDATE "system_menu"
-SET "name" = 'Online 开发',
+SET "name" = 'Online开发',
     "permission" = 'infra:online-definition:query',
     "path" = 'online-definitions',
     "component" = 'infra/online-definition/index',

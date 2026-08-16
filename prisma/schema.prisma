@@ -244,8 +244,10 @@ model SystemTenant {
   onlineWorkflowBindings OnlineWorkflowBinding[]
   onlineReleases OnlineRelease[]
   onlineSchemaChanges OnlineSchemaChange[]
+  onlineManagedTables OnlineManagedTable[]
   onlineTestSessions OnlineTestSession[]
   onlineRecords OnlineRecord[]
+  dataSourceConfigs InfraDataSourceConfig[]
 
   @@map("system_tenant")
   @@index([packageId])
@@ -528,9 +530,11 @@ model InfraFileConfig {
   @@map("infra_file_config")
 }
 
-/// 数据源配置（平台全局，密码以密文保存）
+/// 数据源配置（归属单一租户，密码以密文保存）
 model InfraDataSourceConfig {
   id                String   @id @default(cuid())
+  tenantId          String?  @map("tenant_id")
+  tenant            SystemTenant? @relation(fields: [tenantId], references: [id], onDelete: Restrict)
   name              String   @db.VarChar(100)
   driver            String   @db.VarChar(30)
   url               String   @db.VarChar(1024)
@@ -544,6 +548,7 @@ model InfraDataSourceConfig {
   @@map("infra_data_source_config")
   @@index([name])
   @@index([deleted])
+  @@index([tenantId, deleted, updatedAt])
 }
 
 /// 文件
@@ -584,6 +589,7 @@ model OnlineDefinition {
   revisions              OnlineRevision[] @relation("OnlineDefinitionRevisions")
   releases               OnlineRelease[] @relation("OnlineDefinitionReleases")
   schemaChanges          OnlineSchemaChange[]
+  managedTable           OnlineManagedTable?
   testSessions           OnlineTestSession[]
   records                OnlineRecord[]
   currentDraftRevision   OnlineRevision? @relation("OnlineDefinitionCurrentDraft", fields: [currentDraftRevisionId], references: [id], onDelete: SetNull)
@@ -789,6 +795,23 @@ model OnlineRelease {
   @@unique([tenantId, definitionId, releaseNo])
   @@index([tenantId, definitionId, releasedAt])
   @@map("online_release")
+}
+
+model OnlineManagedTable {
+  id                String           @id @default(cuid())
+  tenantId          String           @map("tenant_id")
+  definitionId      String           @unique @map("definition_id")
+  physicalTableName String           @unique @map("physical_table_name") @db.VarChar(64)
+  schemaRevision    Int              @default(0) @map("schema_revision")
+  modelFingerprint  String           @map("model_fingerprint") @db.VarChar(64)
+  lastPlanId        String?          @map("last_plan_id")
+  createdAt         DateTime         @default(now()) @map("created_at")
+  updatedAt         DateTime         @updatedAt @map("updated_at")
+  definition        OnlineDefinition @relation(fields: [definitionId], references: [id], onDelete: Cascade)
+  tenant            SystemTenant     @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+
+  @@index([tenantId, physicalTableName])
+  @@map("online_managed_table")
 }
 
 model OnlineSchemaChange {

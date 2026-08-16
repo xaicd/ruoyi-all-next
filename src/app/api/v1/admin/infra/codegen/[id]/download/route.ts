@@ -12,11 +12,11 @@ type RouteContext = { params: Promise<{ id: string }> }
  * GET /api/v1/admin/infra/codegen/:id/download
  * 生成代码并下载 ZIP
  */
-export const GET = withAdminRoute(async (request: Request, _auth, context: RouteContext) => {
+export const GET = withAdminRoute(async (request: Request, auth, context: RouteContext) => {
   try {
     const { id } = await context.params
 
-    const table = await CodegenTableRepository.findById(id)
+    const table = await CodegenTableRepository.findById(id, auth.tenantId)
     if (!table) return NextResponse.json({ success: false, error: "表配置不存在" }, { status: 404 })
 
     // 调用 CodegenEngine 生成代码
@@ -36,6 +36,7 @@ export const GET = withAdminRoute(async (request: Request, _auth, context: Route
         indexes: [],
       },
       permissionPrefix: table.permissionPrefix ?? undefined,
+      advanced: table.onlineAdvanced ?? undefined,
       generateFrontend: true,
       generateTest: true,
     })

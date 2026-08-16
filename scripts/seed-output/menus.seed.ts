@@ -1153,7 +1153,7 @@ export const SEED_MENUS = [
   },
   {
     "id": "1070",
-    "name": "代码生成案例",
+    "name": "代码案例",
     "permission": null,
     "type": "DIR",
     "parentId": "2",

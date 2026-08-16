@@ -4,8 +4,9 @@ import type { OnlineModelIR } from "./online-schema-plan.contract"
 
 export function validateOnlineModelAggregate(modelType: OnlineModelType, definitionCode: string, model: OnlineModelIR, interaction: OnlineInteractionIR): void {
   const fields = new Map(model.fields.map((field) => [field.code, field]))
-  if (model.storage.kind !== "GENERIC_RECORD") throw new Error("当前阶段仅允许 GENERIC_RECORD 存储")
   if (!model.fields.length) throw new Error("数据模型至少需要一个字段")
+  if (model.storage.kind === "MANAGED_TABLE" && modelType !== "SINGLE") throw new Error("MANAGED_TABLE 当前仅支持单表模型")
+  if (model.storage.kind === "MANAGED_TABLE" && model.relations.length) throw new Error("MANAGED_TABLE 当前不支持物理外键关联")
 
   if (modelType === "SINGLE") {
     if (interaction.tree || interaction.masterDetail) throw new Error("SINGLE 模型不能配置 tree 或 masterDetail")

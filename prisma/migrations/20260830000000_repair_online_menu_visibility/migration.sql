@@ -3,7 +3,7 @@
 INSERT INTO "system_menu" (
   "id", "name", "permission", "type", "parent_id", "path", "component", "icon", "sort", "status", "visible", "keep_alive", "created_at", "updated_at", "deleted"
 ) VALUES
-  ('114', 'Online 开发', 'infra:online-definition:query', 'MENU', '2', 'online-definitions', 'infra/online-definition/index', 'fa:wpforms', 2, 'ACTIVE', true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, false),
+  ('114', 'Online开发', 'infra:online-definition:query', 'MENU', '2', 'online-definitions', 'infra/online-definition/index', 'fa:wpforms', 2, 'ACTIVE', true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, false),
   ('online-114-test-page', 'Online 测试', 'infra:online-definition:test', 'MENU', '2', 'online-test', 'infra/online-test/index', 'ep:aim', 3, 'ACTIVE', true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, false)
 ON CONFLICT ("id") DO UPDATE SET
   "name" = EXCLUDED."name",

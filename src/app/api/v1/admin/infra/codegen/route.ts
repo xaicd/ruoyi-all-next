@@ -10,11 +10,11 @@ const listSchema = z.object({ page: z.coerce.number().int().min(1).default(1), p
  * GET /api/v1/admin/infra/codegen
  * 获取已导入的表列表
  */
-export const GET = withAdminRoute(async (request: Request) => {
+export const GET = withAdminRoute(async (request: Request, auth) => {
   try {
     const { searchParams } = new URL(request.url)
     const input = listSchema.parse({ page: searchParams.get("page") ?? 1, pageSize: searchParams.get("pageSize") ?? 20, keyword: searchParams.get("keyword") ?? undefined }) as any
-    const data = await CodegenTableRepository.findList(input)
+    const data = await CodegenTableRepository.findList({ ...input, tenantId: auth.tenantId })
     return NextResponse.json({ success: true, data })
   } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }
 }, { permission: PERMISSIONS.INFRA_CODEGEN_QUERY })
@@ -23,12 +23,13 @@ export const GET = withAdminRoute(async (request: Request) => {
  * DELETE /api/v1/admin/infra/codegen?ids=1,2,3
  * 批量删除
  */
-export const DELETE = withAdminRoute(async (request: Request) => {
+export const DELETE = withAdminRoute(async (request: Request, auth) => {
   try {
     const { searchParams } = new URL(request.url)
     const ids = (searchParams.get("ids") ?? "").split(",").filter(Boolean)
     if (ids.length === 0) return NextResponse.json({ success: false, error: "ids 不能为空" }, { status: 400 })
-    await CodegenTableRepository.deleteByIds(ids)
-    return NextResponse.json({ success: true, data: { deleted: ids.length } })
+    const deletable = (await Promise.all(ids.map((id) => CodegenTableRepository.findById(id, auth.tenantId)))).flatMap((table) => table ? [table.id] : [])
+    await CodegenTableRepository.deleteByIds(deletable)
+    return NextResponse.json({ success: true, data: { deleted: deletable.length } })
   } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }
 }, { permission: PERMISSIONS.INFRA_CODEGEN_DELETE })

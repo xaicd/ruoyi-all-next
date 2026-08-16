@@ -16,6 +16,7 @@ routes:
   - { method: POST, path: /api/v1/admin/online/definitions/{code}/schema-plans, permission: infra:online-definition:migrate, tenantScope: required, timeoutMs: 5000 }
   - { method: GET, path: /api/v1/admin/online/definitions/{code}/schema-plans/{planId}, permission: infra:online-definition:query, tenantScope: required, timeoutMs: 5000 }
   - { method: POST, path: /api/v1/admin/online/definitions/{code}/schema-plans/{planId}/approve, permission: infra:online-definition:migrate, tenantScope: required, timeoutMs: 5000 }
+  - { method: POST, path: /api/v1/admin/online/definitions/{code}/schema-plans/{planId}/apply, permission: infra:online-definition:migrate, tenantScope: required, timeoutMs: 15000 }
   - { method: POST, path: /api/v1/admin/online/definitions/{code}/test-sessions, permission: infra:online-definition:test, tenantScope: required, timeoutMs: 5000 }
   - { method: GET, path: /api/v1/admin/online/definitions/{code}/test-sessions/{sessionId}, permission: infra:online-definition:test, tenantScope: required, timeoutMs: 5000 }
   - { method: GET, path: /api/v1/admin/online/definitions/{code}/test-sessions/{sessionId}/records, permission: infra:online-definition:test, tenantScope: required, timeoutMs: 5000 }
@@ -23,7 +24,7 @@ routes:
   - { method: PUT, path: /api/v1/admin/online/definitions/{code}/test-sessions/{sessionId}/records/{recordId}, permission: infra:online-definition:test, tenantScope: required, timeoutMs: 5000 }
   - { method: DELETE, path: /api/v1/admin/online/definitions/{code}/test-sessions/{sessionId}/records/{recordId}, permission: infra:online-definition:test, tenantScope: required, timeoutMs: 5000 }
 notes:
-  - Schema Plan routes create, query, and approve semantic model-diff records only; no endpoint accepts, emits, or executes SQL.
-  - Dynamic DDL apply is intentionally unavailable in this phase, including for approved plans.
+  - Schema Plan routes expose semantic model diffs only; the apply endpoint never accepts or returns executable SQL and only applies a server-derived, approved MANAGED_TABLE plan after explicit confirmation.
+  - Managed physical-table apply is PostgreSQL-only and currently supports SINGLE models, first table creation, additive nullable fields, and ordinary indexes; destructive or drifted changes are blocked.
   - Runtime and Online Test routes resolve only the current Published Release and only support the sandboxed GENERIC_RECORD SINGLE model in this phase.
   - Each Online Test Session is actor-owned; every sandbox record is scoped to tenant, Definition, immutable Release and test session.

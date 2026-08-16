@@ -278,7 +278,7 @@ export const SEED_MENUS: SystemMenuRow[] = [
   },
   {
     "id": "114",
-    "name": "Online 开发",
+    "name": "Online开发",
     "permission": "infra:online-definition:query",
     "type": "MENU",
     "parentId": "2",
@@ -1318,7 +1318,7 @@ export const SEED_MENUS: SystemMenuRow[] = [
   },
   {
     "id": "1070",
-    "name": "代码生成案例",
+    "name": "代码案例",
     "permission": null,
     "type": "DIR",
     "parentId": "2",

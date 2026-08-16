@@ -1,6 +1,8 @@
 export {
   approveOnlineSchemaPlanSchema,
+  applyOnlineSchemaPlanSchema,
   archiveOnlineDefinitionSchema,
+  batchDownloadOnlineCodeSchema,
   createOnlineDefinitionSchema,
   createOnlineRuntimeRecordSchema,
   createOnlineSchemaPlanSchema,
@@ -16,7 +18,9 @@ export {
   updateOnlineRuntimeRecordSchema,
   validateOnlineRevisionSchema,
   type ApproveOnlineSchemaPlanInput,
+  type ApplyOnlineSchemaPlanInput,
   type ArchiveOnlineDefinitionInput,
+  type BatchDownloadOnlineCodeInput,
   type CreateOnlineDefinitionInput,
   type CreateOnlineSchemaPlanInput,
   type CreateOnlineRuntimeRecordInput,

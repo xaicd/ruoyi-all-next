@@ -18,6 +18,7 @@ type ApiResponse<T = any> = {
   messageKey?: string
   retryable?: boolean
   traceId?: string
+  details?: Array<{ field: string; code: string; messageKey: string; message: string }>
 }
 
 type RequestOptions = {
@@ -151,6 +152,7 @@ export const API = {
   FILES: "/api/v1/admin/infra/files",
   DATA_SOURCE_CONFIG: "/api/v1/admin/infra/data-source-config",
   CODEGEN: "/api/v1/admin/infra/codegen",
+  REPORT_CUSTOM_SQL: "/api/v1/admin/report/custom-sql",
   API_ACCESS_LOGS: "/api/v1/admin/infra/api-access-log",
   API_ERROR_LOGS: "/api/v1/admin/infra/api-error-logs",
 

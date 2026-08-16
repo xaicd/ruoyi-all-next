@@ -173,6 +173,8 @@ export const PERMISSIONS = {
   // report
   REPORT_BOARD_VIEW: "report:board:view",
   REPORT_EXPORT: "report:export",
+  // 自定义 SQL 连接到平台级数据源，仅允许平台管理员使用。
+  REPORT_CUSTOM_SQL_EXECUTE: "report:custom-sql:execute",
 } as const
 
 export type PermissionCode = (typeof PERMISSIONS)[keyof typeof PERMISSIONS]

@@ -47,7 +47,7 @@ async function connectAndPing(config: ConnectionConfig) {
 }
 
 function toResponse(row: DataSourceConfigRow) {
-  return { id: row.id, name: row.name, driver: row.driver, url: row.url, username: row.username, remark: row.remark, isMaster: false, hasPassword: true, createdAt: row.createdAt, updatedAt: row.updatedAt }
+  return { id: row.id, tenantId: row.tenantId, name: row.name, driver: row.driver, url: row.url, username: row.username, remark: row.remark, isMaster: false, hasPassword: true, createdAt: row.createdAt, updatedAt: row.updatedAt }
 }
 
 function safeUrlForResponse(value: string) {
@@ -68,17 +68,17 @@ function masterResponse() {
 
 export class DataSourceConfigService {
   static async page(input: DataSourceConfigPageInput) {
-    const pageInput = { page: input.page ?? 1, pageSize: input.pageSize ?? 20, keyword: input.keyword }
+    const pageInput = { tenantId: input.tenantId, page: input.page ?? 1, pageSize: input.pageSize ?? 20, keyword: input.keyword }
     const result = await DataSourceConfigRepository.findPage(pageInput)
-    const includeMaster = pageInput.page === 1 && (!pageInput.keyword || masterResponse().name.toLowerCase().includes(pageInput.keyword.toLowerCase()) || masterResponse().driver.includes(pageInput.keyword.toLowerCase()))
-    const items = includeMaster ? [masterResponse(), ...result.items.map(toResponse)] : result.items.map(toResponse)
-    domainLog.event("infra.data-source-config.page", { page: pageInput.page, total: result.total })
-    return { items, total: result.total + (includeMaster ? 1 : 0), page: pageInput.page, pageSize: pageInput.pageSize }
+    const master = masterResponse()
+    domainLog.event("infra.data-source-config.page", { tenantId: input.tenantId, page: pageInput.page, total: result.total })
+    return { items: pageInput.page === 1 ? [master, ...result.items.map(toResponse)] : result.items.map(toResponse), total: result.total, page: pageInput.page, pageSize: pageInput.pageSize }
   }
 
-  static async get(id: string) {
-    if (id === MASTER_ID) return masterResponse()
-    const row = await DataSourceConfigRepository.findById(id)
+  static async get(tenantId: string, id: string) {
+    if (!tenantId) throw new Error("请选择归属租户")
+    if (id === MASTER_ID) throw new Error("系统主数据源不能分配给租户报表")
+    const row = await DataSourceConfigRepository.findById(tenantId, id)
     if (!row) throw new Error("数据源不存在")
     return toResponse(row)
   }
@@ -86,31 +86,30 @@ export class DataSourceConfigService {
   static async create(input: CreateDataSourceConfigInput) {
     const config: ConnectionConfig = { driver: input.driver!, url: input.url!, username: input.username!, password: input.password! }
     await connectAndPing(config)
-    const row = await DataSourceConfigRepository.create({ name: input.name!, driver: config.driver, url: config.url, username: config.username, encryptedPassword: cryptoEngine.encrypt(config.password), remark: input.remark ?? null })
-    domainLog.event("infra.data-source-config.create", { id: row.id, driver: row.driver })
+    const row = await DataSourceConfigRepository.create({ tenantId: input.tenantId, name: input.name!, driver: config.driver, url: config.url, username: config.username, encryptedPassword: cryptoEngine.encrypt(config.password), remark: input.remark ?? null })
+    domainLog.event("infra.data-source-config.create", { id: row.id, tenantId: row.tenantId, driver: row.driver })
     domainLog.audit("infra.data-source-config.create", { targetType: "INFRA_DATA_SOURCE_CONFIG", targetId: row.id })
     return { id: row.id }
   }
 
   static async update(input: UpdateDataSourceConfigInput) {
     if (input.id === MASTER_ID) throw new Error("系统主数据源不允许修改")
-    const current = await DataSourceConfigRepository.findById(input.id)
+    const current = await DataSourceConfigRepository.findById(input.tenantId, input.id)
     if (!current) throw new Error("数据源不存在")
     const password = input.password || cryptoEngine.decrypt(current.encryptedPassword)
     const config: ConnectionConfig = { driver: input.driver!, url: input.url!, username: input.username!, password }
     await connectAndPing(config)
     const { id } = input
-    await DataSourceConfigRepository.update(id, { name: input.name!, driver: config.driver, url: config.url, username: config.username, remark: input.remark, encryptedPassword: input.password ? cryptoEngine.encrypt(input.password) : undefined })
-    domainLog.event("infra.data-source-config.update", { id, driver: config.driver })
+    await DataSourceConfigRepository.update(input.tenantId, id, { name: input.name!, driver: config.driver, url: config.url, username: config.username, remark: input.remark, encryptedPassword: input.password ? cryptoEngine.encrypt(input.password) : undefined })
+    domainLog.event("infra.data-source-config.update", { id, tenantId: input.tenantId, driver: config.driver })
     domainLog.audit("infra.data-source-config.update", { targetType: "INFRA_DATA_SOURCE_CONFIG", targetId: id })
     return { id }
   }
 
-  static async delete(id: string) {
+  static async delete(tenantId: string, id: string) {
     if (id === MASTER_ID) throw new Error("系统主数据源不允许删除")
-    if (!await DataSourceConfigRepository.findById(id)) throw new Error("数据源不存在")
-    await DataSourceConfigRepository.softDelete(id)
-    domainLog.event("infra.data-source-config.delete", { id })
+    await DataSourceConfigRepository.softDelete(tenantId, id)
+    domainLog.event("infra.data-source-config.delete", { id, tenantId })
     domainLog.audit("infra.data-source-config.delete", { targetType: "INFRA_DATA_SOURCE_CONFIG", targetId: id })
     return { success: true }
   }
@@ -119,7 +118,7 @@ export class DataSourceConfigService {
     let config: ConnectionConfig
     if (input.id) {
       if (input.id === MASTER_ID) throw new Error("系统主数据源由运行环境维护，不能在管理端测试")
-      const row = await DataSourceConfigRepository.findById(input.id)
+      const row = await DataSourceConfigRepository.findById(input.tenantId!, input.id)
       if (!row) throw new Error("数据源不存在")
       config = { driver: row.driver, url: row.url, username: row.username, password: cryptoEngine.decrypt(row.encryptedPassword) }
     } else {

@@ -8,14 +8,14 @@ import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
  * POST /api/v1/admin/infra/codegen/preview
  * 预览生成代码（不写入文件）
  */
-export const POST = withAdminRoute(async (request: Request, _auth) => {
+export const POST = withAdminRoute(async (request: Request, auth) => {
   try {
     const body = await request.json()
 
     const stored = body.tableId
-      ? await CodegenTableRepository.findById(String(body.tableId))
+      ? await CodegenTableRepository.findById(String(body.tableId), auth.tenantId)
       : body.tableName
-        ? await CodegenTableRepository.findByTableName(String(body.tableName))
+        ? await CodegenTableRepository.findByTableName(String(body.tableName), auth.tenantId)
         : null
     if (!body.table && !stored) throw new Error("请提供已导入的 tableId/tableName，或完整 table 配置")
 
@@ -37,6 +37,7 @@ export const POST = withAdminRoute(async (request: Request, _auth) => {
       },
       author: body.author ?? stored?.author,
       permissionPrefix: body.permissionPrefix ?? stored?.permissionPrefix ?? undefined,
+      advanced: stored?.onlineAdvanced ?? undefined,
       generateFrontend: body.generateFrontend ?? true,
       generateTest: body.generateTest ?? false,
     }

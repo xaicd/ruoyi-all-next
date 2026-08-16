@@ -7,7 +7,7 @@ import { KyselyOnlineRuntimeRepository } from "../adapters/persistence/online-ru
 import { toOnlineCodegenConfig } from "../application/online-codegen.adapter"
 import { CodegenEngineService } from "@/modules/infra/backend/services/codegen-engine.service"
 import { SystemDictService } from "@/modules/system/backend/services/dict.service"
-import type { ApproveOnlineSchemaPlanInput, ArchiveOnlineDefinitionInput, CreateOnlineDefinitionInput, CreateOnlineRuntimeRecordInput, CreateOnlineSchemaPlanInput, DeleteOnlineDefinitionInput, NormalizeOnlineSystemFieldsInput, OnlineDefinitionPageInput, OnlineRuntimeRecordPageInput, PublishOnlineRevisionInput, RollbackOnlineDefinitionInput, UpdateOnlineDefinitionInput, UpdateOnlineRevisionInput, UpdateOnlineRuntimeRecordInput, ValidateOnlineRevisionInput } from "../validators"
+import type { ApplyOnlineSchemaPlanInput, ApproveOnlineSchemaPlanInput, ArchiveOnlineDefinitionInput, BatchDownloadOnlineCodeInput, CreateOnlineDefinitionInput, CreateOnlineRuntimeRecordInput, CreateOnlineSchemaPlanInput, DeleteOnlineDefinitionInput, NormalizeOnlineSystemFieldsInput, OnlineDefinitionPageInput, OnlineRuntimeRecordPageInput, PublishOnlineRevisionInput, RollbackOnlineDefinitionInput, UpdateOnlineDefinitionInput, UpdateOnlineRevisionInput, UpdateOnlineRuntimeRecordInput, ValidateOnlineRevisionInput } from "../validators"
 
 function tenantScope(auth: AuthContext): { tenantId: string; actorId: string } {
   if (!auth.tenantId) throw new ApiError("FORBIDDEN", "Online Definition 必须在租户上下文中管理")
@@ -103,6 +103,13 @@ export class OnlineDefinitionService {
     return data
   }
 
+  static async applySchemaPlan(auth: AuthContext, code: string, planId: string, input: ApplyOnlineSchemaPlanInput) {
+    const scope = tenantScope(auth)
+    const data = await KyselyOnlineSchemaPlanRepository.apply({ ...scope, code, planId, expectedLockVersion: input.expectedLockVersion })
+    domainLog.audit("online.schema-plan.apply", { targetType: "ONLINE_SCHEMA_CHANGE", targetId: data.id, metadata: { status: data.status, appliedSchemaRevision: data.appliedSchemaRevision } })
+    return data
+  }
+
   static async publish(auth: AuthContext, code: string, input: PublishOnlineRevisionInput) {
     const scope = tenantScope(auth)
     const data = await KyselyOnlineDefinitionRepository.publish({ ...scope, code, expectedLockVersion: input.expectedLockVersion! })
@@ -135,6 +142,14 @@ export class OnlineDefinitionService {
     const outputs = CodegenEngineService.generate(config)
     domainLog.audit("online.definition.codegen.download", { targetType: "ONLINE_DEFINITION", targetId: runtime.definitionId, metadata: { releaseId: runtime.releaseId, schemaRevision: runtime.schemaRevision, fileCount: outputs.length } })
     return { releaseId: runtime.releaseId, schemaRevision: runtime.schemaRevision, className: config.className, files: outputs }
+  }
+
+  /** Generates every requested Release under the current tenant; failures abort the whole batch. */
+  static async generateCodeBatch(auth: AuthContext, input: BatchDownloadOnlineCodeInput) {
+    const results = []
+    for (const code of input.codes) results.push({ code, ...(await this.generateCode(auth, code)) })
+    domainLog.audit("online.definition.codegen.batch-download", { targetType: "ONLINE_DEFINITION", targetId: input.codes.join(","), metadata: { definitionCount: results.length, fileCount: results.reduce((total, result) => total + result.files.length, 0) } })
+    return results
   }
 
   /** Returns only dictionary values explicitly referenced by this immutable Published Release. */

@@ -315,6 +315,7 @@ export interface InfraFileConfigTable {
 
 export interface InfraDataSourceConfigTable {
   id: string
+  tenant_id: string | null
   name: string
   driver: string
   url: string
@@ -381,6 +382,7 @@ export interface DB {
   online_workflow_binding: OnlineWorkflowBindingTable
   online_release: OnlineReleaseTable
   online_schema_change: OnlineSchemaChangeTable
+  online_managed_table: OnlineManagedTableTable
   online_test_session: OnlineTestSessionTable
   online_record: OnlineRecordTable
 }
@@ -532,6 +534,18 @@ export interface OnlineReleaseTable {
   released_by: string
   released_at: Generated<Date>
   rollback_of_release_id: string | null
+}
+
+export interface OnlineManagedTableTable {
+  id: string
+  tenant_id: string
+  definition_id: string
+  physical_table_name: string
+  schema_revision: number
+  model_fingerprint: string
+  last_plan_id: string | null
+  created_at: Generated<Date>
+  updated_at: Date
 }
 
 export interface OnlineSchemaChangeTable {

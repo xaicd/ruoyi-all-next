@@ -26,6 +26,7 @@ export type CodegenWidget = "TEXT" | "TEXTAREA" | "NUMBER" | "SWITCH" | "DATE" |
 export type CodegenValidationRule = "EMAIL" | "MOBILE" | "IDENTIFIER"
 export type CodegenActionType = "CREATE" | "UPDATE" | "DELETE" | "EXPORT" | "IMPORT" | "SUBMIT_WORKFLOW"
 export type CodegenAdvancedField = ColumnInfo & {
+  listShow?: boolean; formShow?: boolean; queryShow?: boolean; queryType?: CodegenQueryOperator; dictType?: string | null; formValidation?: string | null
   widget?: CodegenWidget; readOnly?: boolean; defaultValueTyped?: string | number | boolean | null
   query?: { enabled: boolean; operator?: CodegenQueryOperator; widget?: CodegenWidget; defaultValue?: string | number | boolean | null | Array<string | number | boolean | null>; required?: boolean }
   validation?: { ruleKeys?: CodegenValidationRule[]; minLength?: number; maxLength?: number; min?: number; max?: number }
