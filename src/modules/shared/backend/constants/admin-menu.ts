@@ -207,13 +207,13 @@ export const ADMIN_MENU: AdminMenuItem[] = [
       },
       {
         key: "infra-codegen",
-        label: "代码生成",
+        label: "代码生成（存量表）",
         path: "/admin/infra/codegen",
         requiredPermission: PERMISSIONS.INFRA_CODEGEN_QUERY,
       },
       {
         key: "infra-online-definitions",
-        label: "业务建模",
+        label: "业务建模（Online）",
         path: "/admin/infra/online-definitions",
         requiredPermission: PERMISSIONS.INFRA_ONLINE_DEFINITION_QUERY,
       },
