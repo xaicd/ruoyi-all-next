@@ -57,6 +57,7 @@ This directory stores built-in low-code template assets for the `next-react` sta
 - `next-react-admin-domain-api-index.template.ts`
 - `next-react-admin-domain-view-index.template.ts`
 - `next-react-admin-service-facade.template.ts`
+- `next-react-admin-service-rpc.template.ts`
 - `next-react-admin-service-strategy.template.ts`
 - `next-react-admin-service-guard.template.ts`
 - `next-react-admin-service-test.template.ts`

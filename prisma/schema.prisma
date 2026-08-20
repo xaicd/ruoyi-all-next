@@ -566,6 +566,37 @@ model InfraFile {
   @@index([configId])
 }
 
+/// 可靠跨域事件 outbox（与业务写同事务；payload/headers 用 TEXT JSON 兼容多方言）
+model InfraMessageOutbox {
+  id          String    @id
+  eventId     String    @unique @map("event_id") @db.VarChar(64)
+  subject     String    @db.VarChar(200)
+  type        String    @db.VarChar(120)
+  source      String    @db.VarChar(64)
+  payload     String
+  headers     String
+  status      String    @db.VarChar(20)
+  attempts    Int       @default(0)
+  tenantId    String?   @map("tenant_id") @db.VarChar(64)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  publishedAt DateTime? @map("published_at")
+
+  @@index([status, createdAt])
+  @@index([tenantId, status])
+  @@map("infra_message_outbox")
+}
+
+/// 可靠跨域事件 inbox（consumer + eventId 去重）
+model InfraMessageInbox {
+  id          String   @id
+  consumer    String   @db.VarChar(120)
+  eventId     String   @map("event_id") @db.VarChar(64)
+  processedAt DateTime @default(now()) @map("processed_at")
+
+  @@unique([consumer, eventId])
+  @@map("infra_message_inbox")
+}
+
 // ============================================================
 // ONLINE 域 - 版本化低代码元数据
 // ============================================================

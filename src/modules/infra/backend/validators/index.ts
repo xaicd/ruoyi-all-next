@@ -41,9 +41,21 @@ export const infraCodegenExportSchema = z.object({
   includeDisabled: z.boolean().optional(),
 })
 
+export const infraCodegenPreviewSchema = z.object({
+  moduleName: z.string().trim().min(1),
+  className: z.string().trim().min(1),
+}).passthrough()
+
+export const templatePreviewSchema = z.object({
+  templateCode: z.string().trim().min(1),
+  variables: z.record(z.string(), z.any()).optional().default({}),
+})
+
 export type InfraPageQueryInput = z.infer<typeof infraPageQuerySchema>
 export type InfraConfigUpdateInput = z.infer<typeof infraConfigUpdateSchema>
 export type UpdateConfigInput = z.infer<typeof updateConfigSchema>
 export type InfraJobOperateInput = z.infer<typeof infraJobOperateSchema>
 export type TriggerJobInput = z.infer<typeof triggerJobSchema>
 export type InfraCodegenExportInput = z.infer<typeof infraCodegenExportSchema>
+export type InfraCodegenPreviewInput = z.infer<typeof infraCodegenPreviewSchema>
+export type TemplatePreviewRpcInput = z.infer<typeof templatePreviewSchema>

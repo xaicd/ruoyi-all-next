@@ -5,6 +5,10 @@ type {{featureListPascal}} = { id: string; name: string; status: "ACTIVE" | "DIS
 const MOCK_ITEMS: {{featureListPascal}}[] = []
 let nextId = 100
 
+/**
+ * Same-process callers use this Service as a local application port.
+ * Cross-domain callers must use createDomainFacade("{{moduleKebab}}"), never import this Service.
+ */
 export class {{featureListPascal}}Service {
   static async page(input: {{featureListPascal}}PageQueryInput) {
     const start = (input.page - 1) * input.pageSize

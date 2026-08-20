@@ -1,6 +1,6 @@
 # ruoyi-all-next 微服务演进蓝图（Spring Cloud 对标）
 
-更新时间：2026-08-02
+更新时间：2026-08-19
 
 ## 1. 目标
 
@@ -19,7 +19,10 @@
 1. 对外 API 全部版本化
 2. 事件总线统一（发布/订阅）
 3. 读写链路可观察（traceId）
-4. 模块具备独立配置与独立迁移
+4. 模块具备独立配置、独立打包与独立进程运行
+5. BFF 可按 route manifest / `RUOYI_DOMAIN_*_UPSTREAM` 把单域 API 切到独立镜像
+
+独立打包命令与切流约定见 `docs/architecture/ruoyi-all-next-domain-pack.md`。跨域命令/事件约束见 `docs/architecture/ruoyi-all-next-messaging-constraints.md`。模块分层与 SDK/RPC 双模见 `docs/architecture/ruoyi-all-next-module-rpc.md`。
 
 ## 2.3 阶段 C：微服务化
 
@@ -38,7 +41,7 @@
 | Service Discovery | K8s Service + DNS / 注册中心 |
 | Circuit Breaker | 并发治理中的熔断器组件 |
 | Distributed Trace | requestId + trace 链路日志 |
-| Event Bus | 现有 event-bus 抽象层 |
+| Event Bus | 现有 event-bus 抽象；阶段 C 默认 NATS JetStream |
 
 ## 4. 拆分优先级建议
 

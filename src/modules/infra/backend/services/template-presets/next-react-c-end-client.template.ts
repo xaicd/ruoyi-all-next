@@ -1,10 +1,6 @@
-export const nextReactCEndClientTemplate = `import { api } from "@/frontend/services/api-client"
+export const nextReactCEndClientTemplate = `import { request } from "@/modules/shared/frontend/lib/request"
 
 export async function list{{entityName}}ForUser(params?: { page?: number; pageSize?: number }) {
-  const query = new URLSearchParams()
-  if (params?.page) query.set("page", String(params.page))
-  if (params?.pageSize) query.set("pageSize", String(params.pageSize))
-  const suffix = query.size ? "?" + query.toString() : ""
-  return api.get<{ items: unknown[]; total: number }>("/api/{{modulePath}}" + suffix)
+  return request.get<{ items: unknown[]; total: number }>("/api/v1/app/{{modulePath}}", params)
 }
 `

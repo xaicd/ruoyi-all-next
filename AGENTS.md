@@ -56,10 +56,11 @@
 
 1. 对外 HTTP API 必须保持版本化的 `/api/v{n}/` 契约；React 页面只能依赖前端 API Port 与版本化 DTO，禁止依赖 Next Service、Repository、Prisma/Kysely 类型或本地路由实现。
 2. 每个可拆分域必须拥有版本化 API Contract、route manifest、application port 与 adapter 边界；Contract 是 TypeScript、Go 及其他实现共享的权威协议，数据库表结构不是浏览器 DTO 的来源。
-3. 同域业务调用可使用本地 application port；跨域调用必须经受控 service port / event port，禁止直接 import 其他域 Service 或 Repository。同步调用必须声明 timeout、retry、idempotency 与 trace；异步跨域事件必须采用 transactional outbox 和幂等 consumer 后才能用于可靠业务流程。
+3. 同域业务调用可使用本地 application port；跨域同步必须走 Domain Facade / `broker.call()` / `serviceBus.call()`（subject=`ruoyi.cmd.<domain>.<method>`），禁止直接 import 其他域 Service 或 Repository。同进程打包时 Facade 走 SDK 内存调用（不序列化）；跨服务独立部署时同一 Facade 切到 RPC，由 `POST /api/internal/rpc` 承载（生产需 `RUOYI_RPC_TOKEN`）。默认远程协议是自研 NATS request-reply + JSON；`RUOYI_RPC_PROTOCOL=grpc` 时走自研 gRPC unary + protobuf frame（无 `@grpc/grpc-js`）。不采用 Dubbo/Thrift 作为默认真源。`shared` 是核心基础 SDK，不是微服务。跨域异步必须走 `broker.emit|broadcast`（subject=`ruoyi.evt.<domain>.<entity>.<action>`）。同步调用必须经过 registry、timeout、retry、bulkhead、circuitBreaker；写命令重试必须带 idempotency。可靠跨域事件必须走 `broker.publishReliable()` / `runUnitOfWork()` + consumer inbox，禁止只靠内存 emit/broadcast。同库同事务 outbox 走 Kysely（无真实库时为可回滚内存事务）；跨库拆分仍属阶段 C。服务间总线使用自研 NATS 语义（inbox / queue group / stream ack），禁止引入 Moleculer、NestJS 或 nats.io 运行时。
 4. Next.js Route 在阶段 A/B 是 BFF adapter，不是领域真源；迁移某域到 Go 时，只允许替换该域 upstream adapter / manifest 路由，浏览器 API 路径、DTO、权限、tenant scope 和错误契约不得变化。
 5. 新 Go 服务必须验证受信任的服务身份、传递 trace、tenant 与 actor context；禁止信任调用方伪造的 tenant、user 或 permission header。服务间认证、健康/readiness、指标和契约兼容检查是上线前置条件。
 6. 以域为独立扩展单元，支持独立构建、部署、水平扩缩、配置和迁移所有权；不得承诺无边界的“无限扩展”，容量目标须由 SLO、压测和资源预算确定。
+7. 低代码模板、Codegen ZIP 与 Online 代码下载必须遵守同一双模：生成 Service 可被 broker 调用；跨域走 Domain Facade；同进程 SDK，拆分后 RPC。禁止生成跨域直接 import Service 的代码。Online 预览/下载必须走 `infraFacade`，不得 import `CodegenEngineService`。
 
 ## 4. 编码规范（强制）
 
@@ -209,12 +210,20 @@ CI 前置检查：
 4. 迁移作战板：npm run ruoyi:migration:board
 5. 治理检查：npm run check
 6. strict 治理：npm run ruoyi:matrix:check:strict && npm run ruoyi:governance:check:strict
+7. 域独立打包：npm run domain:list && npm run domain:pack -- pay
+8. 一体运行：npm run dev（或 npm run runtime:all）
+9. 域独立运行：npm run domain:dev -- pay
+10. 拆分部署（BFF + pay，Facade RPC）：npm run runtime:split 或 npm run domain:up -- pay
+11. 域 RPC 契约：npm run domain:contracts（生成 TS Facade / proto / gen/go 桩）
+12. 微服务治理门禁：npm run microservice:check
 
 子项目本地命令面（apps/ruoyi/ruoyi-all-next/package.json）：
 
 1. npm run quick-start
 2. npm run check
 3. npm run scaffold
+4. npm run domain:list
+5. npm run domain:up -- pay
 
 ### 9.3 本地验证最小闭环
 
@@ -272,6 +281,11 @@ CI 前置检查：
 10. apps/ruoyi/ruoyi-all-next/docs/guides/service-design-patterns.md
 11. apps/ruoyi/ruoyi-all-next/scripts/quick-start.sh
 12. apps/ruoyi/ruoyi-all-next/scripts/scaffold-feature.ts
+13. apps/ruoyi/ruoyi-all-next/docs/architecture/ruoyi-all-next-domain-pack.md
+14. apps/ruoyi/ruoyi-all-next/docs/architecture/ruoyi-all-next-messaging-constraints.md
+15. apps/ruoyi/ruoyi-all-next/docs/architecture/ruoyi-all-next-microservice-governance.md
+16. apps/ruoyi/ruoyi-all-next/docs/architecture/ruoyi-all-next-module-rpc.md
+16. apps/ruoyi/ruoyi-all-next/docs/architecture/ruoyi-all-next-module-rpc.md
 
 ## 14. 代码生成器架构规范
 
@@ -292,6 +306,7 @@ src/modules/{domain}/
 │   ├── types/{kebab}.types.ts        ← DO/VO/CreateInput/UpdateInput/PageQuery
 │   ├── validators/{kebab}.validator.ts ← Zod Schema (create/update/pageQuery)
 │   ├── services/{kebab}.service.ts    ← Service (CRUD + MOCK_DATA)
+│   ├── services/{kebab}.rpc.ts        ← 双模 RPC binding（同进程 SDK / 拆分 RPC）
 │   └── services/__tests__/{kebab}.service.test.ts ← Vitest 测试
 ├── frontend/
 │   ├── api/{kebab}.api.ts            ← 前端 API 封装 (page/get/create/update/delete)
@@ -342,3 +357,10 @@ node scripts/inject-codegen-output.cjs tmp/codegen-{ClassName}
 - 种子数据统一放 `prisma/data/`，通过 `@prisma/data` alias import。
 - 各 Repository 通过 `import { SEED_XXX } from "@prisma/data"` 初始化 MEMORY_STORE。
 - 生成脚本：`scripts/inject-seed-to-repositories.cjs`。
+
+
+### 15. User Conversation & Requirement Logging (MANDATORY)
+
+**所有用户对话输入与需求内容必须实时记录汇总：**
+- 任何 AI Agent / IDE（Antigravity、Cursor、Windsurf、Claude Code、Copilot、Kiro、Trae、Codex 等）在接收到用户的每次对话输入与需求时，**必须**将用户的原始输入内容完整记录并追加汇总到 `docs/features/sprint-prod/{MMDD}.md`（例如 8月17日记录到 `docs/features/sprint-prod/0817.md`）。
+- 保持需求序号递增与用户输入的完整性，确保需求历史与上下文严格可追溯。

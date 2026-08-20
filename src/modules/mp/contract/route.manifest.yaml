@@ -1,0 +1,43 @@
+# Generated from src/modules/shared/backend/constants/domain-catalog.json
+# Do not hand-edit pack/upstream fields. Run: npm run domain:manifests
+domain: mp
+owner: mp
+kind: business
+stage: B
+contractVersion: v1
+implementation: local-ts
+publicPrefix:
+  - /api/v1/admin/mp
+upstream:
+  env: RUOYI_DOMAIN_MP_UPSTREAM
+  protocol: http
+  defaultPort: 3216
+auth:
+  audience: admin
+  tenantPolicy: required
+resilience:
+  timeoutMs: 8000
+  retry:
+    maxAttempts: 1
+    safeMethodsOnly: true
+  idempotencyRequired: true
+rollout:
+  mode: local
+messaging:
+  transport: in-process
+  queueGroup: ruoyi.mp
+  commandSubject: ruoyi.cmd.mp.>
+  eventSubject: ruoyi.evt.mp.>
+invoke:
+  colocated: sdk
+  remote: rpc
+  protocol: nats-rr
+  serialization: json
+  facade: required
+pack:
+  enabled: true
+  kind: api-only
+  independentDatabase: false
+  dependsOnModules:
+    - shared
+    - mp

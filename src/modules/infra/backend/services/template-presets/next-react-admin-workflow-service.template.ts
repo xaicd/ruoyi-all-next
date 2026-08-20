@@ -1,20 +1,22 @@
-export const nextReactAdminWorkflowServiceTemplate = `import { logger } from "@/lib/logger"
+export const nextReactAdminWorkflowServiceTemplate = `import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 
-const log = logger.child("{{entityName}}WorkflowService", "biz")
-
+/**
+ * Same-process callers use this Service as a local application port.
+ * Cross-domain callers must use createDomainFacade("{{moduleName}}"), never import this Service.
+ */
 export class {{entityName}}WorkflowService {
   static async list() {
-    log.event("{{modulePath}}.workflow.list")
+    domainLog.event("{{moduleName}}.{{featureKebab}}.workflow.list")
     return { items: [], total: 0 }
   }
 
   static async create(input: Record<string, unknown>) {
-    log.event("{{modulePath}}.workflow.create", { keys: Object.keys(input) })
+    domainLog.event("{{moduleName}}.{{featureKebab}}.workflow.create", { keys: Object.keys(input) })
     return input
   }
 
   static async audit(input: Record<string, unknown>) {
-    log.event("{{modulePath}}.workflow.audit", { keys: Object.keys(input) })
+    domainLog.audit("{{moduleName}}.{{featureKebab}}.workflow.audit", { keys: Object.keys(input) })
     return input
   }
 }

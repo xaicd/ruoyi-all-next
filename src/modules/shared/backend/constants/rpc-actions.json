@@ -1,0 +1,376 @@
+{
+  "version": 1,
+  "description": "RPC action catalog. Source of truth for contract/actions.ts, domain facades, Go .proto files, and gen/go stubs.",
+  "goModule": "ruoyi/all-next/gen",
+  "fieldSets": {
+    "ping": [{ "name": "n", "type": "int32", "optional": true }],
+    "pageQuery": [
+      { "name": "page", "type": "int32" },
+      { "name": "pageSize", "type": "int32" },
+      { "name": "keyword", "type": "string", "optional": true }
+    ]
+  },
+  "domains": {
+    "system": {
+      "actions": [{ "method": "ping", "schema": "ping" }]
+    },
+    "infra": {
+      "actions": [
+        { "method": "ping", "schema": "ping" },
+        {
+          "method": "updateConfig",
+          "service": "InfraConfigService",
+          "module": "config.service",
+          "schema": "updateConfigSchema",
+          "fields": [
+            { "name": "key", "type": "string" },
+            { "name": "value", "type": "string" },
+            { "name": "remark", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "previewCodegen",
+          "service": "CodegenEngineService",
+          "module": "codegen-engine.service",
+          "schema": "infraCodegenPreviewSchema",
+          "fields": [
+            { "name": "moduleName", "type": "string" },
+            { "name": "className", "type": "string" },
+            { "name": "businessName", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "generateCodegen",
+          "service": "CodegenEngineService",
+          "module": "codegen-engine.service",
+          "schema": "infraCodegenPreviewSchema",
+          "fields": [
+            { "name": "moduleName", "type": "string" },
+            { "name": "className", "type": "string" },
+            { "name": "businessName", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "previewTemplate",
+          "service": "InfraTemplateEngineService",
+          "module": "template-engine.service",
+          "target": "preview",
+          "schema": "templatePreviewSchema",
+          "fields": [
+            { "name": "templateCode", "type": "string" }
+          ]
+        },
+        {
+          "method": "generateTemplate",
+          "service": "InfraTemplateEngineService",
+          "module": "template-engine.service",
+          "target": "generate",
+          "schema": "infraCodegenExportSchema",
+          "fields": [
+            { "name": "stack", "type": "string", "optional": true },
+            { "name": "includeDisabled", "type": "bool", "optional": true }
+          ]
+        }
+      ]
+    },
+    "online": {
+      "actions": [
+        { "method": "ping", "schema": "ping" },
+        {
+          "method": "pageDefinitions",
+          "schema": "onlineDefinitionPageSchema",
+          "fields": [
+            { "name": "page", "type": "int32" },
+            { "name": "pageSize", "type": "int32" },
+            { "name": "keyword", "type": "string", "optional": true },
+            { "name": "modelType", "type": "string", "optional": true },
+            { "name": "status", "type": "string", "optional": true }
+          ]
+        }
+      ]
+    },
+    "bpm": {
+      "actions": [
+        { "method": "ping", "schema": "ping" },
+        { "method": "listDefinitions", "schema": "bpmPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listTasks", "schema": "bpmPageQuerySchema", "fieldsRef": "pageQuery" },
+        {
+          "method": "actionTask",
+          "schema": "bpmTaskActionSchema",
+          "fields": [
+            { "name": "taskId", "type": "string" },
+            { "name": "action", "type": "string" },
+            { "name": "comment", "type": "string", "optional": true },
+            { "name": "delegateUserId", "type": "string", "optional": true }
+          ]
+        }
+      ]
+    },
+    "pay": {
+      "actions": [
+        { "method": "ping", "schema": "ping" },
+        {
+          "method": "listOrders",
+          "service": "PayService",
+          "module": "index",
+          "schema": "payPageQuerySchema",
+          "fields": [
+            { "name": "page", "type": "int32" },
+            { "name": "pageSize", "type": "int32" },
+            { "name": "keyword", "type": "string", "optional": true },
+            { "name": "status", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "createOrder",
+          "service": "PayService",
+          "module": "index",
+          "schema": "payOrderCreateSchema",
+          "fields": [
+            { "name": "appId", "type": "string" },
+            { "name": "channelCode", "type": "string" },
+            { "name": "merchantOrderId", "type": "string" },
+            { "name": "subject", "type": "string" },
+            { "name": "amount", "type": "int64" },
+            { "name": "expireTime", "type": "string", "optional": true },
+            { "name": "notifyUrl", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "createRefund",
+          "service": "PayService",
+          "module": "index",
+          "schema": "payRefundCreateSchema",
+          "fields": [
+            { "name": "payOrderId", "type": "string" },
+            { "name": "refundAmount", "type": "int64" },
+            { "name": "reason", "type": "string" }
+          ]
+        }
+      ]
+    },
+    "report": {
+      "actions": [
+        { "method": "ping", "schema": "ping" },
+        { "method": "listBoards", "schema": "reportPageQuerySchema", "fieldsRef": "pageQuery" },
+        {
+          "method": "exportBoard",
+          "schema": "reportExportSchema",
+          "fields": [
+            { "name": "boardId", "type": "string" },
+            { "name": "format", "type": "string" },
+            { "name": "dateFrom", "type": "string", "optional": true },
+            { "name": "dateTo", "type": "string", "optional": true }
+          ]
+        }
+      ]
+    },
+    "mp": {
+      "actions": [
+        { "method": "ping", "schema": "ping" },
+        { "method": "listAccounts", "schema": "mpPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listFans", "schema": "mpPageQuerySchema", "fieldsRef": "pageQuery" },
+        {
+          "method": "sendMessage",
+          "schema": "mpSendMessageSchema",
+          "fields": [
+            { "name": "accountId", "type": "string" },
+            { "name": "content", "type": "string" }
+          ]
+        }
+      ]
+    },
+    "mall": {
+      "actions": [
+        { "method": "ping", "schema": "ping" },
+        { "method": "listProducts", "schema": "mallPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listOrders", "schema": "mallPageQuerySchema", "fieldsRef": "pageQuery" },
+        {
+          "method": "issueCoupon",
+          "schema": "mallCouponIssueSchema",
+          "fields": [
+            { "name": "couponTemplateId", "type": "string" },
+            { "name": "targetUserId", "type": "string" },
+            { "name": "amount", "type": "int32" }
+          ]
+        }
+      ]
+    },
+    "member": {
+      "actions": [
+        { "method": "ping", "schema": "ping" },
+        { "method": "listUsers", "schema": "memberPageQuerySchema", "fields": [
+            { "name": "page", "type": "int32" },
+            { "name": "pageSize", "type": "int32" },
+            { "name": "keyword", "type": "string", "optional": true },
+            { "name": "levelId", "type": "string", "optional": true }
+          ] },
+        {
+          "method": "updateUser",
+          "schema": "memberUserUpdateSchema",
+          "fields": [
+            { "name": "id", "type": "string" },
+            { "name": "nickname", "type": "string", "optional": true },
+            { "name": "mobile", "type": "string", "optional": true },
+            { "name": "levelId", "type": "string", "optional": true }
+          ]
+        },
+        { "method": "listLevels", "schema": "memberPageQuerySchema", "fieldsRef": "pageQuery" },
+        {
+          "method": "createLevel",
+          "schema": "memberLevelCreateSchema",
+          "fields": [
+            { "name": "name", "type": "string" },
+            { "name": "minPoint", "type": "int32" },
+            { "name": "discount", "type": "double" },
+            { "name": "icon", "type": "string", "optional": true }
+          ]
+        },
+        { "method": "listPoints", "schema": "memberPageQuerySchema", "fieldsRef": "pageQuery" },
+        {
+          "method": "adjustPoint",
+          "schema": "memberPointAdjustSchema",
+          "fields": [
+            { "name": "userId", "type": "string" },
+            { "name": "point", "type": "int32" },
+            { "name": "remark", "type": "string" }
+          ]
+        }
+      ]
+    },
+    "crm": {
+      "actions": [
+        { "method": "ping", "schema": "ping" },
+        { "method": "listCustomers", "schema": "crmPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listClues", "schema": "crmPageQuerySchema", "fieldsRef": "pageQuery" },
+        {
+          "method": "createFollowup",
+          "schema": "crmFollowupSchema",
+          "fields": [
+            { "name": "customerId", "type": "string" },
+            { "name": "content", "type": "string" }
+          ]
+        }
+      ]
+    },
+    "erp": {
+      "actions": [
+        { "method": "ping", "schema": "ping" },
+        { "method": "listProducts", "schema": "erpPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listOrders", "schema": "erpPageQuerySchema", "fieldsRef": "pageQuery" },
+        {
+          "method": "adjustStock",
+          "schema": "erpStockAdjustmentSchema",
+          "fields": [
+            { "name": "productId", "type": "string" },
+            { "name": "delta", "type": "int32" },
+            { "name": "reason", "type": "string" }
+          ]
+        }
+      ]
+    },
+    "wms": {
+      "actions": [
+        { "method": "ping", "schema": "ping" },
+        { "method": "listWarehouses", "schema": "wmsPageQuerySchema", "fieldsRef": "pageQuery" },
+        {
+          "method": "checkin",
+          "schema": "wmsCheckinSchema",
+          "fields": [
+            { "name": "warehouseId", "type": "string" },
+            { "name": "quantity", "type": "int32" },
+            { "name": "note", "type": "string", "optional": true }
+          ]
+        }
+      ]
+    },
+    "mes": {
+      "actions": [
+        { "method": "ping", "schema": "ping" },
+        { "method": "listWorkOrders", "schema": "mesPageQuerySchema", "fieldsRef": "pageQuery" },
+        {
+          "method": "reportWork",
+          "schema": "mesReportWorkSchema",
+          "fields": [
+            { "name": "workOrderId", "type": "string" },
+            { "name": "outputQty", "type": "int32" },
+            { "name": "scrapQty", "type": "int32" },
+            { "name": "note", "type": "string", "optional": true }
+          ]
+        }
+      ]
+    },
+    "ai": {
+      "actions": [
+        { "method": "ping", "schema": "ping" },
+        { "method": "listModels", "schema": "aiPageQuerySchema", "fieldsRef": "pageQuery" },
+        {
+          "method": "createModel",
+          "schema": "aiModelCreateSchema",
+          "fields": [
+            { "name": "name", "type": "string" },
+            { "name": "platform", "type": "string" },
+            { "name": "model", "type": "string" },
+            { "name": "apiKey", "type": "string" },
+            { "name": "apiUrl", "type": "string", "optional": true },
+            { "name": "temperature", "type": "double", "optional": true },
+            { "name": "maxTokens", "type": "int32", "optional": true }
+          ]
+        },
+        { "method": "listChats", "schema": "aiPageQuerySchema", "fieldsRef": "pageQuery" },
+        {
+          "method": "deleteChat",
+          "schema": "aiChatDeleteSchema",
+          "fields": [{ "name": "chatId", "type": "string" }]
+        }
+      ]
+    },
+    "iot": {
+      "actions": [
+        { "method": "ping", "schema": "ping" },
+        { "method": "listDevices", "schema": "iotPageQuerySchema", "fields": [
+            { "name": "page", "type": "int32" },
+            { "name": "pageSize", "type": "int32" },
+            { "name": "keyword", "type": "string", "optional": true },
+            { "name": "status", "type": "string", "optional": true }
+          ] },
+        {
+          "method": "createDevice",
+          "schema": "iotDeviceCreateSchema",
+          "fields": [
+            { "name": "name", "type": "string" },
+            { "name": "deviceKey", "type": "string" },
+            { "name": "productId", "type": "string" },
+            { "name": "gatewayId", "type": "string", "optional": true },
+            { "name": "remark", "type": "string", "optional": true }
+          ]
+        },
+        { "method": "listAlerts", "schema": "iotPageQuerySchema", "fieldsRef": "pageQuery" },
+        {
+          "method": "handleAlert",
+          "schema": "iotAlertHandleSchema",
+          "fields": [
+            { "name": "alertId", "type": "string" },
+            { "name": "resolution", "type": "string" }
+          ]
+        }
+      ]
+    },
+    "im": {
+      "actions": [
+        { "method": "ping", "schema": "ping" },
+        { "method": "listConversations", "schema": "imPageQuerySchema", "fieldsRef": "pageQuery" },
+        {
+          "method": "auditMessage",
+          "schema": "imMessageAuditSchema",
+          "fields": [
+            { "name": "conversationId", "type": "string" },
+            { "name": "messageId", "type": "string" },
+            { "name": "decision", "type": "string" },
+            { "name": "reason", "type": "string", "optional": true }
+          ]
+        }
+      ]
+    }
+  }
+}

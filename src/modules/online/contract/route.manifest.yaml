@@ -1,5 +1,27 @@
+domain: online
 module: online
+owner: infra
+kind: business
+stage: B
 version: v1
+contractVersion: v1
+implementation: local-ts
+publicPrefix:
+  - /api/v1/admin/online
+upstream:
+  env: RUOYI_DOMAIN_ONLINE_UPSTREAM
+  protocol: http
+  defaultPort: 3212
+pack:
+  enabled: true
+  kind: api-only
+  independentDatabase: false
+invoke:
+  colocated: sdk
+  remote: rpc
+  protocol: nats-rr
+  serialization: json
+  facade: required
 routes:
   - { method: GET, path: /api/v1/admin/online/definitions, permission: infra:online-definition:query, tenantScope: required, timeoutMs: 5000 }
   - { method: POST, path: /api/v1/admin/online/definitions, permission: infra:online-definition:create, tenantScope: required, timeoutMs: 5000 }

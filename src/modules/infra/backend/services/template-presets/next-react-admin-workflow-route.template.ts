@@ -1,41 +1,25 @@
-export const nextReactAdminWorkflowRouteTemplate = `import { apiResponse, parseBody } from "@/lib/api-response"
-import { withAuth } from "@/lib/rbac"
-import { PERMISSIONS } from "@/lib/rbac-registry"
-import { handleRouteError } from "@/backend/utils/route-handler"
-import { {{entityName}}WorkflowService } from "@/backend/services/{{modulePath}}/workflow.service"
+export const nextReactAdminWorkflowRouteTemplate = `import { NextResponse } from "next/server"
+import { {{entityName}}WorkflowService } from "@/modules/{{moduleName}}/backend/services/workflow.service"
 import {
   create{{entityName}}WorkflowSchema,
   audit{{entityName}}WorkflowSchema,
-} from "@/backend/validators/{{modulePath}}/workflow.validator"
+} from "@/modules/{{moduleName}}/backend/validators/workflow.validator"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 
-export const GET = withAuth(async () => {
-  try {
-    const data = await {{entityName}}WorkflowService.list()
-    return apiResponse({ success: true, data })
-  } catch (error) {
-    return handleRouteError(error)
-  }
-}, { permission: PERMISSIONS.{{permissionView}} })
+export const GET = withAdminRoute(async () => {
+  const data = await {{entityName}}WorkflowService.list()
+  return NextResponse.json({ success: true, data })
+}, { permission: "{{permissionView}}" })
 
-export const POST = withAuth(async (request: Request) => {
-  try {
-    const body = await parseBody(request)
-    const input = create{{entityName}}WorkflowSchema.parse(body)
-    const data = await {{entityName}}WorkflowService.create(input)
-    return apiResponse({ success: true, data })
-  } catch (error) {
-    return handleRouteError(error)
-  }
-}, { permission: PERMISSIONS.{{permissionUpdate}} })
+export const POST = withAdminRoute(async (request: Request) => {
+  const input = create{{entityName}}WorkflowSchema.parse(await request.json())
+  const data = await {{entityName}}WorkflowService.create(input)
+  return NextResponse.json({ success: true, data })
+}, { permission: "{{permissionUpdate}}" })
 
-export const PATCH = withAuth(async (request: Request) => {
-  try {
-    const body = await parseBody(request)
-    const input = audit{{entityName}}WorkflowSchema.parse(body)
-    const data = await {{entityName}}WorkflowService.audit(input)
-    return apiResponse({ success: true, data })
-  } catch (error) {
-    return handleRouteError(error)
-  }
-}, { permission: PERMISSIONS.{{permissionUpdate}} })
+export const PATCH = withAdminRoute(async (request: Request) => {
+  const input = audit{{entityName}}WorkflowSchema.parse(await request.json())
+  const data = await {{entityName}}WorkflowService.audit(input)
+  return NextResponse.json({ success: true, data })
+}, { permission: "{{permissionUpdate}}" })
 `

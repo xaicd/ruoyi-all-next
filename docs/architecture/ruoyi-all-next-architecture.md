@@ -1,6 +1,6 @@
 # ruoyi-all-next 架构总览
 
-更新时间：2026-08-07
+更新时间：2026-08-19
 
 ## 1. 项目定位
 
@@ -56,11 +56,12 @@ ruoyi-all-next/
 │   │   └── globals.css
 │   │
 │   └── modules/                     # 全部业务实现
-│       ├── shared/                  # 公共基座（不含业务逻辑）
+│       ├── shared/                  # 核心基础模块（永远 SDK，不可独立部署）
 │       │   ├── backend/
-│       │   │   ├── constants/       # 权限码、菜单
+│       │   │   ├── constants/       # 权限码、菜单、域目录、RPC 策略
 │       │   │   │   ├── permissions.ts
-│       │   │   │   └── admin-menu.ts
+│       │   │   │   ├── admin-menu.ts
+│       │   │   │   └── domain-catalog.json
 │       │   │   ├── lib/             # 基础设施层（微服务治理）
 │       │   │   │   ├── auth-gateway.ts        # 统一授权网关
 │       │   │   │   ├── service-bus.ts         # 跨域调用总线
@@ -158,27 +159,29 @@ ruoyi-all-next/
 
 ## 5. 微服务演进路径
 
-### 阶段 A：模块化单体（当前）
+### 阶段 A：模块化单体（代码仍按此组织）
 
-- 所有域共享一个进程
-- 域间通过 import 直接调用
-- 单数据库
+- 所有域共享一个 Next.js 代码库
+- 域代码落在 `src/modules/<domain>`
+- 未配置 upstream 时，BFF 同进程处理全部 API
 
-### 阶段 B：可拆分单体
+### 阶段 B：可拆分单体（打包/运行/部署已接通）
 
-- 域间调用走 service-bus（本地直接调用，但接口统一）
-- 状态变更走 event-bus（解耦）
-- 每个域独立配置 namespace
-- API 版本化（/api/v1/, /api/v2/）
+- 每个域有 `contract/route.manifest.yaml` 与 catalog 声明
+- 可用 `npm run domain:pack|dev|build` 产出 API-only 进程
+- BFF 通过 `RUOYI_DOMAIN_<DOMAIN>_UPSTREAM` 把该域 API 切到独立进程
+- 数据库仍默认共享，独立 schema/独库尚未作为默认
 
-### 阶段 C：微服务化
+### 阶段 C：微服务化（未完成）
 
-- 每个域独立部署为 Next.js 服务
-- service-bus 切换为 HTTP/gRPC 远程调用
-- event-bus 切换为 Kafka/Redis Streams
+- 每个域独立部署为 Next.js 或 Go 服务
+- service-bus 在同进程走 SDK，跨进程走 RPC（默认 nats-rr + JSON；跨语言 typed 调用预留 gRPC + protobuf）
+- event-bus 切换为 Kafka/Redis Streams + transactional outbox
 - 独立数据库（per service）
 - 网关统一入口（Traefik）
 - 服务注册与发现（K8s DNS）
+
+独立打包细节见 `docs/architecture/ruoyi-all-next-domain-pack.md`。SDK/RPC 双模见 `docs/architecture/ruoyi-all-next-module-rpc.md`。
 
 ## 6. 域间通信规范
 
@@ -186,11 +189,10 @@ ruoyi-all-next/
 // ❌ 禁止：跨域直接 import
 import { PayService } from "@/modules/pay/backend/services"
 
-// ✅ 正确：走 service-bus
-import { serviceBus } from "@/modules/shared/backend/lib/service-bus"
-const result = await serviceBus.call({
-  service: "pay", method: "createOrder", payload: {...}
-})
+// ✅ 正确：走 Domain Facade（同进程 SDK，跨进程 RPC）
+import { createDomainFacade } from "@/modules/shared/backend/lib/rpc-facade"
+const pay = createDomainFacade("pay", ["createOrder"] as const)
+await pay.createOrder({ amount: 9900 }, { caller: "mall.order" })
 
 // ✅ 正确：走 event-bus
 import { eventBus } from "@/modules/shared/backend/lib/event-bus"
@@ -222,9 +224,9 @@ await eventBus.publish({
 ## 9. 关键约束
 
 1. `src/app/` 只放路由壳（1-15 行），真实实现在 `modules/`
-2. 域间通信必须走 service-bus 或 event-bus
+2. 域间通信必须走 Domain Facade（同进程 SDK / 跨进程 RPC）或 event-bus
 3. 每个域独立 validators + services + pages
-4. 公共基座在 `modules/shared/`，禁止在其他位置建公共层
+4. `shared` 是核心基础 SDK；`system`/`infra` 是平台域；其余是业务域。禁止把 shared 拆成微服务
 5. API 必须版本化
 6. 敏感操作必须有审计日志
 7. 所有写接口必须有 Zod 校验

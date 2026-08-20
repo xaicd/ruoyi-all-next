@@ -5,7 +5,7 @@ import { KyselyOnlineDefinitionRepository } from "../adapters/persistence/online
 import { KyselyOnlineSchemaPlanRepository } from "../adapters/persistence/online-schema-plan.repository"
 import { KyselyOnlineRuntimeRepository } from "../adapters/persistence/online-runtime.repository"
 import { toOnlineCodegenConfig } from "../application/online-codegen.adapter"
-import { CodegenEngineService } from "@/modules/infra/backend/services/codegen-engine.service"
+import { infraFacade } from "@/modules/infra/contract/infra.facade"
 import { SystemDictService } from "@/modules/system/backend/services/dict.service"
 import type { ApplyOnlineSchemaPlanInput, ApproveOnlineSchemaPlanInput, ArchiveOnlineDefinitionInput, BatchDownloadOnlineCodeInput, CreateOnlineDefinitionInput, CreateOnlineRuntimeRecordInput, CreateOnlineSchemaPlanInput, DeleteOnlineDefinitionInput, NormalizeOnlineSystemFieldsInput, OnlineDefinitionPageInput, OnlineRuntimeRecordPageInput, PublishOnlineRevisionInput, RollbackOnlineDefinitionInput, UpdateOnlineDefinitionInput, UpdateOnlineRevisionInput, UpdateOnlineRuntimeRecordInput, ValidateOnlineRevisionInput } from "../validators"
 
@@ -130,7 +130,7 @@ export class OnlineDefinitionService {
     if (runtime.modelType !== "SINGLE" || runtime.model.storage.kind !== "MANAGED_TABLE") throw new ApiError("CONFLICT", "生产 CRUD 代码下载当前仅支持 SINGLE + MANAGED_TABLE 已发布模型")
     const childRuntimes = await KyselyOnlineRuntimeRepository.resolveMasterDetailChildReleases({ tenantId, runtime })
     const config = toOnlineCodegenConfig(runtime, childRuntimes)
-    const outputs = CodegenEngineService.preview(config)
+    const outputs = await invokeInfraCodegen("previewCodegen", config)
     domainLog.audit("online.definition.codegen.preview", { targetType: "ONLINE_DEFINITION", targetId: runtime.definitionId, metadata: { releaseId: runtime.releaseId, schemaRevision: runtime.schemaRevision, fileCount: outputs.length } })
     return { releaseId: runtime.releaseId, schemaRevision: runtime.schemaRevision, files: outputs }
   }
@@ -141,7 +141,7 @@ export class OnlineDefinitionService {
     if (runtime.modelType !== "SINGLE" || runtime.model.storage.kind !== "MANAGED_TABLE") throw new ApiError("CONFLICT", "生产 CRUD 代码下载当前仅支持 SINGLE + MANAGED_TABLE 已发布模型")
     const childRuntimes = await KyselyOnlineRuntimeRepository.resolveMasterDetailChildReleases({ tenantId, runtime })
     const config = toOnlineCodegenConfig(runtime, childRuntimes)
-    const outputs = CodegenEngineService.generate(config)
+    const outputs = await invokeInfraCodegen("generateCodegen", config)
     domainLog.audit("online.definition.codegen.download", { targetType: "ONLINE_DEFINITION", targetId: runtime.definitionId, metadata: { releaseId: runtime.releaseId, schemaRevision: runtime.schemaRevision, fileCount: outputs.length } })
     return { releaseId: runtime.releaseId, schemaRevision: runtime.schemaRevision, className: config.className, files: outputs }
   }
@@ -198,4 +198,14 @@ export class OnlineDefinitionService {
     await KyselyOnlineRuntimeRepository.deleteRecord({ ...tenantScope(auth), definitionCode: code, sessionId, recordId })
     domainLog.audit("online.test.record.delete", { targetType: "ONLINE_RECORD", targetId: recordId })
   }
+}
+
+type InfraCodegenFiles = { files?: Array<{ path: string; content: string; type: string }> }
+
+async function invokeInfraCodegen(method: "previewCodegen" | "generateCodegen", config: ReturnType<typeof toOnlineCodegenConfig>) {
+  const result = await infraFacade[method](config, { caller: "online.definition" })
+  if (!result.success) throw new ApiError("INTERNAL_ERROR", result.error ?? "infra codegen 调用失败")
+  const files = (result.data as InfraCodegenFiles | undefined)?.files
+  if (!Array.isArray(files)) throw new ApiError("INTERNAL_ERROR", "infra codegen 返回缺少 files")
+  return files
 }

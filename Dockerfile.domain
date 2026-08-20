@@ -1,0 +1,49 @@
+# ============================================================
+# ruoyi-all-next 单域独立构建（API-only standalone）
+# 用法：docker build -f Dockerfile.domain --build-arg RUOYI_PACK_DOMAIN=pay -t ruoyi-domain-pay .
+# ============================================================
+
+ARG RUOYI_PACK_DOMAIN=pay
+
+FROM node:20-alpine AS deps
+WORKDIR /app
+COPY package.json package-lock.json* .npmrc ./
+RUN npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+
+FROM node:20-alpine AS packer
+WORKDIR /app
+ARG RUOYI_PACK_DOMAIN
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN node scripts/pack-domain.cjs ${RUOYI_PACK_DOMAIN} --materialize
+
+FROM node:20-alpine AS builder
+WORKDIR /app
+ARG RUOYI_PACK_DOMAIN
+ENV RUOYI_PACK_DOMAIN=${RUOYI_PACK_DOMAIN}
+ENV NEXT_TELEMETRY_DISABLED=1
+COPY --from=packer /app/dist/domain-packs/${RUOYI_PACK_DOMAIN} ./
+COPY --from=deps /app/node_modules ./node_modules
+RUN npx prisma generate
+RUN npx next build
+
+FROM node:20-alpine AS runner
+WORKDIR /app
+ARG RUOYI_PACK_DOMAIN
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3100
+ENV HOSTNAME="0.0.0.0"
+ENV RUOYI_PACK_DOMAIN=${RUOYI_PACK_DOMAIN}
+
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next-ruoyi/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next-ruoyi/static ./.next-ruoyi/static
+COPY --from=builder /app/prisma ./prisma
+
+USER nextjs
+EXPOSE 3100
+CMD ["node", "server.js"]

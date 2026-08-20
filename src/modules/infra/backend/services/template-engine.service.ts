@@ -63,9 +63,18 @@ async function readTemplateCatalog() {
   return mergeTemplates(stored)
 }
 
+function deriveTemplateVariables(variables: Record<string, string | number | boolean | null | undefined> = {}) {
+  const modulePath = String(variables.modulePath ?? variables.moduleName ?? "").replace(/^\/+|\/+$/g, "")
+  const moduleName = String(variables.moduleName ?? modulePath.split("/")[0] ?? "")
+  const featureKebab = String(variables.featureKebab ?? (modulePath.split("/").slice(1).join("-") || moduleName))
+  const apiBase = String(variables.apiBase ?? (modulePath ? `/api/v1/admin/${modulePath}` : "/api/v1/admin"))
+  return { ...variables, modulePath, moduleName, featureKebab, apiBase }
+}
+
 function renderTemplate(content: string, variables: TemplatePreviewInput["variables"]) {
+  const resolved = deriveTemplateVariables(variables)
   return content.replace(/\{\{\s*([\w.-]+)\s*\}\}/g, (_, key: string) => {
-    const value = variables[key]
+    const value = resolved[key]
     if (value === null || value === undefined) return ""
     return String(value)
   })

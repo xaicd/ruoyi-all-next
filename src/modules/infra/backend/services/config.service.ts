@@ -4,6 +4,7 @@
  */
 
 import { InfraConfigRepository } from "@/modules/infra/backend/repositories/config.repository"
+import type { UpdateConfigInput } from "@/modules/infra/backend/validators"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 
 type ListInput = { page: number; pageSize: number; keyword?: string; category?: string }
@@ -43,6 +44,16 @@ export class InfraConfigService {
     domainLog.event("infra.config.create", { configId: config.id, key: config.configKey })
     domainLog.audit("infra.config.create", { targetType: "CONFIG", targetId: config.id, configKey: config.configKey })
     return { id: config.id }
+  }
+
+  static async updateConfig(input: UpdateConfigInput) {
+    const existing = await InfraConfigRepository.findByKey(input.key)
+    if (!existing) throw new Error(`配置项不存在: ${input.key}`)
+
+    await InfraConfigRepository.update(existing.id, { value: input.value, remark: input.remark })
+    domainLog.event("infra.config.update", { configId: existing.id, key: input.key })
+    domainLog.audit("infra.config.update", { targetType: "CONFIG", targetId: existing.id, configKey: input.key })
+    return { id: existing.id, key: input.key, value: input.value }
   }
 
   static async update(input: UpdateInput) {

@@ -53,6 +53,7 @@ import {
   nextReactAdminDomainApiIndexTemplate,
   nextReactAdminDomainViewIndexTemplate,
   nextReactAdminServiceFacadeTemplate,
+  nextReactAdminServiceRpcTemplate,
   nextReactAdminServiceStrategyTemplate,
   nextReactAdminServiceGuardTemplate,
   nextReactAdminServiceTestTemplate,
@@ -99,7 +100,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminRouteTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/app/api/admin/{{modulePath}}/route.ts",
+      filePath: "src/app/api/v1/admin/{{modulePath}}/route.ts",
       layer: "api",
     },
   }),
@@ -114,7 +115,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminServiceTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/backend/services/{{modulePath}}/{{serviceFile}}",
+      filePath: "src/modules/{{moduleName}}/backend/services/{{serviceFile}}",
       layer: "service",
     },
   }),
@@ -129,7 +130,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminValidatorTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/backend/validators/{{modulePath}}/{{validatorFile}}",
+      filePath: "src/modules/{{moduleName}}/backend/validators/{{validatorFile}}",
       layer: "validator",
     },
   }),
@@ -144,7 +145,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminPageTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/app/(admin)/admin/{{modulePath}}/page.tsx",
+      filePath: "src/app/(admin-pages)/admin/{{modulePath}}/page.tsx",
       layer: "page",
     },
   }),
@@ -159,7 +160,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminClientTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/frontend/services/{{modulePath}}.ts",
+      filePath: "src/modules/{{moduleName}}/frontend/api/{{entityName}}.api.ts",
       layer: "client",
     },
   }),
@@ -174,7 +175,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminTypesTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/shared/types/{{modulePath}}.ts",
+      filePath: "src/modules/{{moduleName}}/backend/types/{{entityName}}.types.ts",
       layer: "types",
     },
   }),
@@ -189,7 +190,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminTreePageTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/app/(admin)/admin/{{modulePath}}/tree/page.tsx",
+      filePath: "src/app/(admin-pages)/admin/{{modulePath}}/tree/page.tsx",
       layer: "page",
     },
   }),
@@ -204,7 +205,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminTreeRouteTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/app/api/admin/{{modulePath}}/tree/route.ts",
+      filePath: "src/app/api/v1/admin/{{modulePath}}/tree/route.ts",
       layer: "api",
     },
   }),
@@ -219,7 +220,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminTreeServiceTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/backend/services/{{modulePath}}/tree.service.ts",
+      filePath: "src/modules/{{moduleName}}/backend/services/tree.service.ts",
       layer: "service",
     },
   }),
@@ -234,7 +235,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminTreeValidatorTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/backend/validators/{{modulePath}}/tree.validator.ts",
+      filePath: "src/modules/{{moduleName}}/backend/validators/tree.validator.ts",
       layer: "validator",
     },
   }),
@@ -249,7 +250,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminTreeClientTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/frontend/services/{{modulePath}}/tree.ts",
+      filePath: "src/modules/{{moduleName}}/frontend/api/{{featureKebab}}-tree.api.ts",
       layer: "client",
     },
   }),
@@ -264,7 +265,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminTreeTypesTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/shared/types/{{modulePath}}/tree.ts",
+      filePath: "src/modules/{{moduleName}}/backend/types/{{featureKebab}}-tree.types.ts",
       layer: "types",
     },
   }),
@@ -279,7 +280,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminWorkflowServiceTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/backend/services/{{modulePath}}/workflow.service.ts",
+      filePath: "src/modules/{{moduleName}}/backend/services/workflow.service.ts",
       layer: "service",
     },
   }),
@@ -294,7 +295,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminWorkflowValidatorTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/backend/validators/{{modulePath}}/workflow.validator.ts",
+      filePath: "src/modules/{{moduleName}}/backend/validators/workflow.validator.ts",
       layer: "validator",
     },
   }),
@@ -309,7 +310,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminWorkflowPageTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/app/(admin)/admin/{{modulePath}}/workflow/page.tsx",
+      filePath: "src/app/(admin-pages)/admin/{{modulePath}}/workflow/page.tsx",
       layer: "page",
     },
   }),
@@ -324,7 +325,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminWorkflowRouteTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/app/api/admin/{{modulePath}}/workflow/route.ts",
+      filePath: "src/app/api/v1/admin/{{modulePath}}/workflow/route.ts",
       layer: "api",
     },
   }),
@@ -339,7 +340,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminWorkflowClientTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/frontend/services/{{modulePath}}/workflow.ts",
+      filePath: "src/modules/{{moduleName}}/frontend/api/{{featureKebab}}-workflow.api.ts",
       layer: "client",
     },
   }),
@@ -354,7 +355,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminWorkflowTypesTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/shared/types/{{modulePath}}/workflow.ts",
+      filePath: "src/modules/{{moduleName}}/backend/types/{{featureKebab}}-workflow.types.ts",
       layer: "types",
     },
   }),
@@ -369,7 +370,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminDomainPageTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/app/(admin)/admin/{{modulePath}}/domain/page.tsx",
+      filePath: "src/app/(admin-pages)/admin/{{modulePath}}/domain/page.tsx",
       layer: "page",
     },
   }),
@@ -384,7 +385,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminDomainClientTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/frontend/services/{{modulePath}}/domain.ts",
+      filePath: "src/modules/{{moduleName}}/frontend/api/{{entityName}}-domain.api.ts",
       layer: "client",
     },
   }),
@@ -399,7 +400,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminDomainTypesIndexTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/shared/types/{{modulePath}}/domain.ts",
+      filePath: "src/modules/{{moduleName}}/backend/types/{{entityName}}-domain.types.ts",
       layer: "types",
     },
   }),
@@ -414,7 +415,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminRouteIndexTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/app/api/admin/{{modulePath}}/index.ts",
+      filePath: "src/app/api/v1/admin/{{modulePath}}/index.ts",
       layer: "api",
     },
   }),
@@ -429,7 +430,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminFormComponentTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/frontend/components/admin/{{modulePath}}/{{entityName}}-form.tsx",
+      filePath: "src/modules/{{moduleName}}/frontend/components/{{entityName}}-form.tsx",
       layer: "page",
     },
   }),
@@ -549,7 +550,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminLoginPageTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/app/(admin)/admin/login/page.tsx",
+      filePath: "src/app/(admin-pages)/admin/login/page.tsx",
       layer: "page",
     },
   }),
@@ -564,7 +565,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminHomePageTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/app/(admin)/admin/home/page.tsx",
+      filePath: "src/app/(admin-pages)/admin/home/page.tsx",
       layer: "page",
     },
   }),
@@ -579,7 +580,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminProfilePageTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/app/(admin)/admin/profile/page.tsx",
+      filePath: "src/app/(admin-pages)/admin/profile/page.tsx",
       layer: "page",
     },
   }),
@@ -594,7 +595,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminErrorPageTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/app/(admin)/admin/error/page.tsx",
+      filePath: "src/app/(admin-pages)/admin/error/page.tsx",
       layer: "page",
     },
   }),
@@ -609,7 +610,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminIframePageTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/app/(admin)/admin/iframe/page.tsx",
+      filePath: "src/app/(admin-pages)/admin/iframe/page.tsx",
       layer: "page",
     },
   }),
@@ -624,7 +625,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminRedirectPageTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/app/(admin)/admin/redirect/page.tsx",
+      filePath: "src/app/(admin-pages)/admin/redirect/page.tsx",
       layer: "page",
     },
   }),
@@ -669,7 +670,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminReportPageTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/app/(admin)/admin/report/page.tsx",
+      filePath: "src/app/(admin-pages)/admin/report/page.tsx",
       layer: "page",
     },
   }),
@@ -684,7 +685,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminWmsPageTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/app/(admin)/admin/wms/page.tsx",
+      filePath: "src/app/(admin-pages)/admin/wms/page.tsx",
       layer: "page",
     },
   }),
@@ -699,7 +700,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminMesPageTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/app/(admin)/admin/mes/page.tsx",
+      filePath: "src/app/(admin-pages)/admin/mes/page.tsx",
       layer: "page",
     },
   }),
@@ -714,7 +715,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminImPageTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/app/(admin)/admin/im/page.tsx",
+      filePath: "src/app/(admin-pages)/admin/im/page.tsx",
       layer: "page",
     },
   }),
@@ -789,7 +790,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminUtilsFormatTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/frontend/utils/{{modulePath}}-format.ts",
+      filePath: "src/modules/{{moduleName}}/frontend/utils/{{featureKebab}}-format.ts",
       layer: "types",
     },
   }),
@@ -804,7 +805,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminAssetsManifestTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/frontend/assets/{{modulePath}}-assets.ts",
+      filePath: "src/modules/{{moduleName}}/frontend/assets/{{featureKebab}}-assets.ts",
       layer: "types",
     },
   }),
@@ -819,7 +820,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminDomainListPageTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/app/(admin)/admin/{{modulePath}}/domain/list/page.tsx",
+      filePath: "src/app/(admin-pages)/admin/{{modulePath}}/domain/list/page.tsx",
       layer: "page",
     },
   }),
@@ -834,7 +835,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminDomainDetailPageTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/app/(admin)/admin/{{modulePath}}/domain/detail/page.tsx",
+      filePath: "src/app/(admin-pages)/admin/{{modulePath}}/domain/detail/page.tsx",
       layer: "page",
     },
   }),
@@ -849,7 +850,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminDomainApiIndexTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/app/api/admin/{{modulePath}}/domain/index.ts",
+      filePath: "src/app/api/v1/admin/{{modulePath}}/domain/index.ts",
       layer: "api",
     },
   }),
@@ -864,7 +865,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminDomainViewIndexTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/frontend/config/{{modulePath}}-domain-view.ts",
+      filePath: "src/modules/{{moduleName}}/frontend/config/{{featureKebab}}-domain-view.ts",
       layer: "types",
     },
   }),
@@ -879,7 +880,22 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminServiceFacadeTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/backend/services/{{modulePath}}/{{entityName}}.facade.ts",
+      filePath: "src/modules/{{moduleName}}/backend/services/{{entityName}}.facade.ts",
+      layer: "service",
+    },
+  }),
+  presetTemplate({
+    code: "next-react-admin-service-rpc",
+    name: "Next React 管理 Service RPC 表面",
+    category: "FOUNDATION",
+    templateType: "BACKEND",
+    engine: "handlebars",
+    status: "ACTIVE",
+    description: "生成同进程 SDK / 拆分 RPC 绑定声明，禁止跨域直接 import Service。",
+    content: nextReactAdminServiceRpcTemplate,
+    options: {
+      stack: "next-react",
+      filePath: "src/modules/{{moduleName}}/backend/services/{{entityName}}.rpc.ts",
       layer: "service",
     },
   }),
@@ -894,7 +910,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminServiceStrategyTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/backend/services/{{modulePath}}/strategies/{{entityName}}.strategy.ts",
+      filePath: "src/modules/{{moduleName}}/backend/services/strategies/{{entityName}}.strategy.ts",
       layer: "service",
     },
   }),
@@ -909,7 +925,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminServiceGuardTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/backend/services/{{modulePath}}/guards/{{entityName}}-state.guard.ts",
+      filePath: "src/modules/{{moduleName}}/backend/services/guards/{{entityName}}-state.guard.ts",
       layer: "service",
     },
   }),
@@ -924,7 +940,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactAdminServiceTestTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/backend/services/{{modulePath}}/__tests__/{{entityName}}.facade.test.ts",
+      filePath: "src/modules/{{moduleName}}/backend/services/__tests__/{{entityName}}.facade.test.ts",
       layer: "service",
     },
   }),
@@ -935,7 +951,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     templateType: "BACKEND",
     engine: "handlebars",
     status: "ACTIVE",
-    description: "一键导出 Service 设计模式四件套（Facade/Strategy/Guard/Test）。",
+    description: "一键导出 Service 设计模式套件（Facade/Strategy/Guard/Test/Rpc）。",
     content: nextReactAdminServicePatternPackTemplate,
     options: {
       stack: "next-react",
@@ -946,6 +962,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
         "next-react-admin-service-strategy",
         "next-react-admin-service-guard",
         "next-react-admin-service-test",
+        "next-react-admin-service-rpc",
       ],
     },
   }),
@@ -975,7 +992,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactMerchantClientTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/frontend/services/merchant/{{modulePath}}.ts",
+      filePath: "src/modules/{{moduleName}}/frontend/api/{{entityName}}-merchant.api.ts",
       layer: "client",
     },
   }),
@@ -1005,7 +1022,7 @@ export const DEFAULT_NEXT_REACT_TEMPLATE_PRESETS: InfraTemplateRecord[] = [
     content: nextReactCEndClientTemplate,
     options: {
       stack: "next-react",
-      filePath: "src/frontend/services/public/{{modulePath}}.ts",
+      filePath: "src/modules/{{moduleName}}/frontend/api/{{entityName}}-app.api.ts",
       layer: "client",
     },
   }),

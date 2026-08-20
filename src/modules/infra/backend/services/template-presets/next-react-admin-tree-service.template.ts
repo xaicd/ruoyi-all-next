@@ -1,7 +1,9 @@
-export const nextReactAdminTreeServiceTemplate = `import { logger } from "@/lib/logger"
+export const nextReactAdminTreeServiceTemplate = `import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 
-const log = logger.child("{{entityName}}TreeService", "biz")
-
+/**
+ * Same-process callers use this Service as a local application port.
+ * Cross-domain callers must use createDomainFacade("{{moduleName}}"), never import this Service.
+ */
 type TreeItem = {
   id: string
   parentId: string | null
@@ -10,13 +12,13 @@ type TreeItem = {
 
 export class {{entityName}}TreeService {
   static async listTree() {
-    log.event("{{modulePath}}.tree.list")
+    domainLog.event("{{moduleName}}.{{featureKebab}}.tree.list")
     const items: TreeItem[] = []
     return items
   }
 
   static async moveNode(input: { id: string; targetParentId: string | null }) {
-    log.event("{{modulePath}}.tree.move", input)
+    domainLog.event("{{moduleName}}.{{featureKebab}}.tree.move", input)
     return { success: true }
   }
 }

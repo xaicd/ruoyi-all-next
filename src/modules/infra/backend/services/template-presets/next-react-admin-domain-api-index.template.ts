@@ -1,7 +1,7 @@
 export const nextReactAdminDomainApiIndexTemplate = `export const {{entityName}}DomainApiMap = {
-  root: "/api/admin/{{modulePath}}",
-  list: "/api/admin/{{modulePath}}/domain/list",
-  detail: "/api/admin/{{modulePath}}/domain/detail",
-  metrics: "/api/admin/{{modulePath}}/domain/metrics",
+  root: "{{apiBase}}",
+  list: "{{apiBase}}/domain/list",
+  detail: "{{apiBase}}/domain/detail",
+  metrics: "{{apiBase}}/domain/metrics",
 } as const
 `

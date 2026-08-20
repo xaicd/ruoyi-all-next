@@ -8,6 +8,25 @@
 | **dev** | docker-compose.dev.yml | PostgreSQL | 团队开发联调 |
 | **test** | docker-compose.test.yml | MySQL（运行时兼容验证；Prisma 迁移需先提供独立 MySQL schema） | QA 兼容性验证 |
 | **prod** | docker-compose.prod.yml | PostgreSQL + Nginx | 生产部署 |
+| **domains** | docker-compose.domains.yml | PostgreSQL | BFF + 可选域独立进程 |
+
+### 域独立部署
+
+页面仍走 BFF（`:3100`）。某个域设置 `RUOYI_DOMAIN_<NAME>_UPSTREAM` 后，对应 `/api/v1/**/<domain>` 由该域独立镜像承接。
+
+```bash
+# 查看可打包域
+npm run domain:list
+
+# 本地拆出 pay：BFF 3100 + pay 3214
+npm run domain:dev -- pay
+RUOYI_DOMAIN_PAY_UPSTREAM=http://127.0.0.1:3214 npm run dev
+
+# Compose 拆出 pay
+npm run domain:up -- pay
+```
+
+详细约定见 `docs/architecture/ruoyi-all-next-domain-pack.md`。
 
 ## 快速启动
 
@@ -78,6 +97,7 @@ deploy/
 ├── docker-compose.local.yml    # 本地环境（内存模式）
 ├── docker-compose.dev.yml      # 开发环境（PostgreSQL）
 ├── docker-compose.test.yml     # 测试环境（MySQL）
+├── docker-compose.domains.yml  # BFF + 可选域独立进程
 ├── docker-compose.prod.yml     # 生产环境（Traefik + PG + Redis）
 ├── .env.prod.example           # 生产环境变量模板
 └── README.md                   # 本文件

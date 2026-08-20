@@ -1,0 +1,43 @@
+# Generated from src/modules/shared/backend/constants/domain-catalog.json
+# Do not hand-edit pack/upstream fields. Run: npm run domain:manifests
+domain: mes
+owner: mes
+kind: business
+stage: B
+contractVersion: v1
+implementation: local-ts
+publicPrefix:
+  - /api/v1/admin/mes
+upstream:
+  env: RUOYI_DOMAIN_MES_UPSTREAM
+  protocol: http
+  defaultPort: 3222
+auth:
+  audience: admin
+  tenantPolicy: required
+resilience:
+  timeoutMs: 8000
+  retry:
+    maxAttempts: 1
+    safeMethodsOnly: true
+  idempotencyRequired: true
+rollout:
+  mode: local
+messaging:
+  transport: in-process
+  queueGroup: ruoyi.mes
+  commandSubject: ruoyi.cmd.mes.>
+  eventSubject: ruoyi.evt.mes.>
+invoke:
+  colocated: sdk
+  remote: rpc
+  protocol: nats-rr
+  serialization: json
+  facade: required
+pack:
+  enabled: true
+  kind: api-only
+  independentDatabase: false
+  dependsOnModules:
+    - shared
+    - mes

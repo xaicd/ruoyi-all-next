@@ -1,7 +1,6 @@
-export const nextReactMerchantClientTemplate = `import { api } from "@/frontend/services/api-client"
+export const nextReactMerchantClientTemplate = `import { request } from "@/modules/shared/frontend/lib/request"
 
 export async function list{{entityName}}ForMerchant(keyword?: string) {
-  const query = keyword ? "?keyword=" + encodeURIComponent(keyword) : ""
-  return api.get<{ items: unknown[]; total: number }>("/api/merchant/{{modulePath}}" + query)
+  return request.get<{ items: unknown[]; total: number }>("/api/v1/merchant/{{modulePath}}", keyword ? { keyword } : undefined)
 }
 `

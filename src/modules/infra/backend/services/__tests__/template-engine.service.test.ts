@@ -1,6 +1,28 @@
-import { afterEach, describe, expect, it } from "vitest"
-import { ruoyiPrisma } from "../@/modules/shared/backend/prisma"
+import { afterEach, describe, expect, it, vi } from "vitest"
+import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
 import { InfraTemplateEngineService } from "../template-engine.service"
+
+const { settingStore } = vi.hoisted(() => ({
+  settingStore: new Map<string, { key: string; value: { items: unknown[] } }>(),
+}))
+
+vi.mock("@/modules/shared/backend/prisma", () => ({
+  ruoyiPrisma: {
+    setting: {
+      findUnique: async ({ where }: { where: { key: string } }) => settingStore.get(where.key) ?? null,
+      findMany: async () => [...settingStore.values()],
+      upsert: async ({ where, create, update }: { where: { key: string }; create: { key: string; value: { items: unknown[] } }; update: { value: { items: unknown[] } } }) => {
+        const next = { key: where.key, value: update?.value ?? create.value }
+        settingStore.set(where.key, next)
+        return next
+      },
+      deleteMany: async ({ where }: { where: { key: string } }) => {
+        const existed = settingStore.delete(where.key)
+        return { count: existed ? 1 : 0 }
+      },
+    },
+  },
+}))
 
 describe("InfraTemplateEngineService", () => {
   afterEach(async () => {
@@ -42,7 +64,7 @@ describe("InfraTemplateEngineService", () => {
     expect(listed.items.find((item) => item.code === "next-react-admin-page")?.options).toMatchObject({
       stack: "next-react",
       layer: "page",
-      filePath: "src/app/(admin)/admin/{{modulePath}}/page.tsx",
+      filePath: "src/app/(admin-pages)/admin/{{modulePath}}/page.tsx",
     })
   })
 
@@ -86,7 +108,7 @@ describe("InfraTemplateEngineService", () => {
     })
 
     expect(scaffold.files).toHaveLength(6)
-    expect(scaffold.files.some((file) => file.path.includes("src/app/api/admin/infra/codegen/route.ts"))).toBe(true)
+    expect(scaffold.files.some((file) => file.path.includes("src/app/api/v1/admin/infra/codegen/route.ts"))).toBe(true)
     expect(scaffold.files.some((file) => file.content.includes("InfraCodegenService"))).toBe(true)
   })
 
@@ -116,21 +138,24 @@ describe("InfraTemplateEngineService", () => {
 
     const byPath = Object.fromEntries(scaffold.files.map((file) => [file.path, file.content]))
 
-    expect(byPath["src/app/api/admin/infra/codegen/route.ts"]).toContain(
-      'from "@/backend/services/infra/codegen/codegen.service.ts"',
+    expect(byPath["src/app/api/v1/admin/infra/codegen/route.ts"]).toContain(
+      'from "@/modules/infra/backend/services/codegen.service.ts"',
     )
-    expect(byPath["src/app/api/admin/infra/codegen/route.ts"]).toContain("InfraCodegenService")
-    expect(byPath["src/backend/services/infra/codegen/codegen.service.ts"]).toContain(
+    expect(byPath["src/app/api/v1/admin/infra/codegen/route.ts"]).toContain("InfraCodegenService")
+    expect(byPath["src/modules/infra/backend/services/codegen.service.ts"]).toContain(
       "InfraCodegenService",
     )
-    expect(byPath["src/backend/validators/infra/codegen/infra.validator.ts"]).toContain(
+    expect(byPath["src/modules/infra/backend/services/codegen.service.ts"]).toContain(
+      "createDomainFacade",
+    )
+    expect(byPath["src/modules/infra/backend/validators/infra.validator.ts"]).toContain(
       "infraCodegenQuerySchema",
     )
-    expect(byPath["src/app/(admin)/admin/infra/codegen/page.tsx"]).toContain(
+    expect(byPath["src/app/(admin-pages)/admin/infra/codegen/page.tsx"]).toContain(
       "CodegenTemplate 管理",
     )
-    expect(byPath["src/frontend/services/infra/codegen.ts"]).toContain("api.get")
-    expect(byPath["src/shared/types/infra/codegen.ts"]).toContain("CodegenTemplateItem")
+    expect(byPath["src/modules/infra/frontend/api/CodegenTemplate.api.ts"]).toContain("request.get")
+    expect(byPath["src/modules/infra/backend/types/CodegenTemplate.types.ts"]).toContain("CodegenTemplateItem")
   })
 
   it("新增 TREE/WORKFLOW 与商户端/C端模板族可正常导出", async () => {
@@ -167,30 +192,30 @@ describe("InfraTemplateEngineService", () => {
 
     const byPath = Object.fromEntries(scaffold.files.map((file) => [file.path, file.content]))
 
-    expect(byPath["src/app/api/admin/infra/template-center/tree/route.ts"]).toContain("export const PATCH")
-    expect(byPath["src/app/(admin)/admin/infra/template-center/tree/page.tsx"]).toContain("树管理")
-    expect(byPath["src/backend/services/infra/template-center/tree.service.ts"]).toContain(
+    expect(byPath["src/app/api/v1/admin/infra/template-center/tree/route.ts"]).toContain("export const PATCH")
+    expect(byPath["src/app/(admin-pages)/admin/infra/template-center/tree/page.tsx"]).toContain("树管理")
+    expect(byPath["src/modules/infra/backend/services/tree.service.ts"]).toContain(
       "moveNode",
     )
-    expect(byPath["src/backend/validators/infra/template-center/tree.validator.ts"]).toContain(
+    expect(byPath["src/modules/infra/backend/validators/tree.validator.ts"]).toContain(
       "TreeInputSchema",
     )
-    expect(byPath["src/frontend/services/infra/template-center/tree.ts"]).toContain("/tree")
-    expect(byPath["src/shared/types/infra/template-center/tree.ts"]).toContain("TreeNode")
+    expect(byPath["src/modules/infra/frontend/api/template-center-tree.api.ts"]).toContain("/tree")
+    expect(byPath["src/modules/infra/backend/types/template-center-tree.types.ts"]).toContain("TreeNode")
 
-    expect(byPath["src/backend/services/infra/template-center/workflow.service.ts"]).toContain("audit")
-    expect(byPath["src/backend/validators/infra/template-center/workflow.validator.ts"]).toContain(
+    expect(byPath["src/modules/infra/backend/services/workflow.service.ts"]).toContain("audit")
+    expect(byPath["src/modules/infra/backend/validators/workflow.validator.ts"]).toContain(
       "createTemplateCenterWorkflowSchema",
     )
-    expect(byPath["src/app/(admin)/admin/infra/template-center/workflow/page.tsx"]).toContain("流程审批")
-    expect(byPath["src/app/api/admin/infra/template-center/workflow/route.ts"]).toContain("export const PATCH")
-    expect(byPath["src/frontend/services/infra/template-center/workflow.ts"]).toContain("/workflow")
-    expect(byPath["src/shared/types/infra/template-center/workflow.ts"]).toContain("WorkflowItem")
+    expect(byPath["src/app/(admin-pages)/admin/infra/template-center/workflow/page.tsx"]).toContain("流程审批")
+    expect(byPath["src/app/api/v1/admin/infra/template-center/workflow/route.ts"]).toContain("export const PATCH")
+    expect(byPath["src/modules/infra/frontend/api/template-center-workflow.api.ts"]).toContain("/workflow")
+    expect(byPath["src/modules/infra/backend/types/template-center-workflow.types.ts"]).toContain("WorkflowItem")
 
     expect(byPath["src/app/(admin)/merchant/infra/template-center/page.tsx"]).toContain("商户工作台")
-    expect(byPath["src/frontend/services/merchant/infra/template-center.ts"]).toContain("/api/merchant/")
+    expect(byPath["src/modules/infra/frontend/api/TemplateCenter-merchant.api.ts"]).toContain("/api/v1/merchant/")
     expect(byPath["src/app/(public)/infra/template-center/page.tsx"]).toContain("PageContainer")
-    expect(byPath["src/frontend/services/public/infra/template-center.ts"]).toContain("/api/")
+    expect(byPath["src/modules/infra/frontend/api/TemplateCenter-app.api.ts"]).toContain("/api/v1/app/")
   })
 
   it("新增 DOMAIN P0 模板族可正常导出", async () => {
@@ -211,14 +236,14 @@ describe("InfraTemplateEngineService", () => {
 
     const byPath = Object.fromEntries(scaffold.files.map((file) => [file.path, file.content]))
 
-    expect(byPath["src/app/(admin)/admin/system/user/domain/page.tsx"]).toContain(
+    expect(byPath["src/app/(admin-pages)/admin/system/user/domain/page.tsx"]).toContain(
       "SystemUser 域导航",
     )
-    expect(byPath["src/frontend/services/system/user/domain.ts"]).toContain(
+    expect(byPath["src/modules/system/frontend/api/SystemUser-domain.api.ts"]).toContain(
       'DOMAIN_BASE + "/domain/summary"',
     )
-    expect(byPath["src/shared/types/system/user/domain.ts"]).toContain("SystemUserDomainStats")
-    expect(byPath["src/app/api/admin/system/user/index.ts"]).toContain(
+    expect(byPath["src/modules/system/backend/types/SystemUser-domain.types.ts"]).toContain("SystemUserDomainStats")
+    expect(byPath["src/app/api/v1/admin/system/user/index.ts"]).toContain(
       "SystemUserAdminRouteMap",
     )
   })
@@ -241,10 +266,10 @@ describe("InfraTemplateEngineService", () => {
 
     const byPath = Object.fromEntries(scaffold.files.map((file) => [file.path, file.content]))
 
-    expect(byPath["src/frontend/components/admin/system/user/SystemUser-form.tsx"]).toContain(
+    expect(byPath["src/modules/system/frontend/components/SystemUser-form.tsx"]).toContain(
       "useForm",
     )
-    expect(byPath["src/frontend/components/admin/system/user/SystemUser-form.tsx"]).toContain(
+    expect(byPath["src/modules/system/frontend/components/SystemUser-form.tsx"]).toContain(
       "SystemUserForm",
     )
     expect(byPath["src/frontend/components/admin/system/user/SystemUser-detail-drawer.tsx"]).toContain(
@@ -326,12 +351,12 @@ describe("InfraTemplateEngineService", () => {
 
     const byPath = Object.fromEntries(scaffold.files.map((file) => [file.path, file.content]))
 
-    expect(byPath["src/app/(admin)/admin/login/page.tsx"]).toContain("管理后台登录")
-    expect(byPath["src/app/(admin)/admin/home/page.tsx"]).toContain("运营总览")
-    expect(byPath["src/app/(admin)/admin/profile/page.tsx"]).toContain("个人中心")
-    expect(byPath["src/app/(admin)/admin/error/page.tsx"]).toContain("页面加载失败")
-    expect(byPath["src/app/(admin)/admin/iframe/page.tsx"]).toContain("admin-iframe")
-    expect(byPath["src/app/(admin)/admin/redirect/page.tsx"]).toContain("router.replace")
+    expect(byPath["src/app/(admin-pages)/admin/login/page.tsx"]).toContain("管理后台登录")
+    expect(byPath["src/app/(admin-pages)/admin/home/page.tsx"]).toContain("运营总览")
+    expect(byPath["src/app/(admin-pages)/admin/profile/page.tsx"]).toContain("个人中心")
+    expect(byPath["src/app/(admin-pages)/admin/error/page.tsx"]).toContain("页面加载失败")
+    expect(byPath["src/app/(admin-pages)/admin/iframe/page.tsx"]).toContain("admin-iframe")
+    expect(byPath["src/app/(admin-pages)/admin/redirect/page.tsx"]).toContain("router.replace")
 
     expect(byPath["src/frontend/config/admin-route-access.ts"]).toContain("ADMIN_STATIC_ROUTES")
     expect(byPath["src/frontend/config/admin-route-access.ts"]).toContain("buildAdminModuleRoute")
@@ -366,10 +391,10 @@ describe("InfraTemplateEngineService", () => {
 
     const byPath = Object.fromEntries(scaffold.files.map((file) => [file.path, file.content]))
 
-    expect(byPath["src/app/(admin)/admin/report/page.tsx"]).toContain("经营报表中心")
-    expect(byPath["src/app/(admin)/admin/wms/page.tsx"]).toContain("仓配中心")
-    expect(byPath["src/app/(admin)/admin/mes/page.tsx"]).toContain("生产执行中心")
-    expect(byPath["src/app/(admin)/admin/im/page.tsx"]).toContain("消息协同中心")
+    expect(byPath["src/app/(admin-pages)/admin/report/page.tsx"]).toContain("经营报表中心")
+    expect(byPath["src/app/(admin-pages)/admin/wms/page.tsx"]).toContain("仓配中心")
+    expect(byPath["src/app/(admin-pages)/admin/mes/page.tsx"]).toContain("生产执行中心")
+    expect(byPath["src/app/(admin-pages)/admin/im/page.tsx"]).toContain("消息协同中心")
 
     expect(byPath["src/frontend/components/layout/admin-layout-shell.tsx"]).toContain(
       "AdminLayoutShell",
@@ -399,20 +424,20 @@ describe("InfraTemplateEngineService", () => {
 
     const byPath = Object.fromEntries(scaffold.files.map((file) => [file.path, file.content]))
 
-    expect(byPath["src/frontend/utils/system/user-format.ts"]).toContain("formatSystemUserStatus")
-    expect(byPath["src/frontend/assets/system/user-assets.ts"]).toContain("SystemUserAssets")
+    expect(byPath["src/modules/system/frontend/utils/user-format.ts"]).toContain("formatSystemUserStatus")
+    expect(byPath["src/modules/system/frontend/assets/user-assets.ts"]).toContain("SystemUserAssets")
 
-    expect(byPath["src/app/(admin)/admin/system/user/domain/list/page.tsx"]).toContain(
+    expect(byPath["src/app/(admin-pages)/admin/system/user/domain/list/page.tsx"]).toContain(
       "SystemUser 域模块列表",
     )
-    expect(byPath["src/app/(admin)/admin/system/user/domain/detail/page.tsx"]).toContain(
+    expect(byPath["src/app/(admin-pages)/admin/system/user/domain/detail/page.tsx"]).toContain(
       "SystemUser 域详情",
     )
 
-    expect(byPath["src/app/api/admin/system/user/domain/index.ts"]).toContain(
+    expect(byPath["src/app/api/v1/admin/system/user/domain/index.ts"]).toContain(
       "SystemUserDomainApiMap",
     )
-    expect(byPath["src/frontend/config/system/user-domain-view.ts"]).toContain(
+    expect(byPath["src/modules/system/frontend/config/user-domain-view.ts"]).toContain(
       "SystemUserDomainViewMap",
     )
   })
@@ -437,36 +462,39 @@ describe("InfraTemplateEngineService", () => {
 
     const byPath = Object.fromEntries(scaffold.files.map((file) => [file.path, file.content]))
 
-    expect(byPath["src/backend/services/system/user/SystemUser.facade.ts"]).toContain(
+    expect(byPath["src/modules/system/backend/services/SystemUser.facade.ts"]).toContain(
       "class SystemUserServiceFacade",
     )
-    expect(byPath["src/backend/services/system/user/SystemUser.facade.ts"]).toContain(
+    expect(byPath["src/modules/system/backend/services/SystemUser.facade.ts"]).toContain(
       "SYSTEM_USER_UPDATE",
     )
+    expect(byPath["src/modules/system/backend/services/SystemUser.facade.ts"]).toContain(
+      "createDomainFacade",
+    )
 
-    expect(byPath["src/backend/services/system/user/strategies/SystemUser.strategy.ts"]).toContain(
+    expect(byPath["src/modules/system/backend/services/strategies/SystemUser.strategy.ts"]).toContain(
       "SystemUserStrategyResolver",
     )
-    expect(byPath["src/backend/services/system/user/strategies/SystemUser.strategy.ts"]).toContain(
+    expect(byPath["src/modules/system/backend/services/strategies/SystemUser.strategy.ts"]).toContain(
       "FAST_PATH",
     )
 
-    expect(byPath["src/backend/services/system/user/guards/SystemUser-state.guard.ts"]).toContain(
+    expect(byPath["src/modules/system/backend/services/guards/SystemUser-state.guard.ts"]).toContain(
       "SystemUserStateGuard",
     )
-    expect(byPath["src/backend/services/system/user/guards/SystemUser-state.guard.ts"]).toContain(
+    expect(byPath["src/modules/system/backend/services/guards/SystemUser-state.guard.ts"]).toContain(
       "assertTransition",
     )
 
-    expect(byPath["src/backend/services/system/user/__tests__/SystemUser.facade.test.ts"]).toContain(
+    expect(byPath["src/modules/system/backend/services/__tests__/SystemUser.facade.test.ts"]).toContain(
       "SystemUserServiceFacade",
     )
-    expect(byPath["src/backend/services/system/user/__tests__/SystemUser.facade.test.ts"]).toContain(
+    expect(byPath["src/modules/system/backend/services/__tests__/SystemUser.facade.test.ts"]).toContain(
       "权限不足时拒绝执行",
     )
   })
 
-  it("Service 设计模式组合包可一键展开为四件套", async () => {
+  it("Service 设计模式组合包可一键展开为 Facade/Strategy/Guard/Test/Rpc", async () => {
     const scaffold = await InfraTemplateEngineService.generate({
       stack: "next-react",
       includeDisabled: false,
@@ -480,10 +508,11 @@ describe("InfraTemplateEngineService", () => {
     })
 
     const paths = scaffold.files.map((file) => file.path)
-    expect(paths).toHaveLength(4)
-    expect(paths).toContain("src/backend/services/system/user/SystemUser.facade.ts")
-    expect(paths).toContain("src/backend/services/system/user/strategies/SystemUser.strategy.ts")
-    expect(paths).toContain("src/backend/services/system/user/guards/SystemUser-state.guard.ts")
-    expect(paths).toContain("src/backend/services/system/user/__tests__/SystemUser.facade.test.ts")
+    expect(paths).toHaveLength(5)
+    expect(paths).toContain("src/modules/system/backend/services/SystemUser.facade.ts")
+    expect(paths).toContain("src/modules/system/backend/services/strategies/SystemUser.strategy.ts")
+    expect(paths).toContain("src/modules/system/backend/services/guards/SystemUser-state.guard.ts")
+    expect(paths).toContain("src/modules/system/backend/services/__tests__/SystemUser.facade.test.ts")
+    expect(paths).toContain("src/modules/system/backend/services/SystemUser.rpc.ts")
   })
 })

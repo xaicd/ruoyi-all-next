@@ -1,6 +1,6 @@
 # ruoyi-all-next 域治理声明表
 
-更新时间：2026-08-06
+更新时间：2026-08-19
 
 ## 1. 说明
 
@@ -25,7 +25,7 @@
 | system | PARTIAL | Tier-A | React-radix | A | database-compatibility + ui-framework-governance + microservice-evolution | apps/ruoyi/ruoyi-all-next/src/backend/services/__tests__/system-online-user.service.test.ts | 单体内聚，先补真实会话存储后再拆分 |
 | infra | PARTIAL | Tier-A | React-radix | A | database-compatibility + ui-framework-governance + microservice-evolution | apps/ruoyi/ruoyi-all-next/src/backend/services/__tests__/infra-services.test.ts | 单体内聚，保留调度与配置适配层 |
 | bpm | PARTIAL | Tier-A | React-radix | A | database-compatibility + ui-framework-governance + microservice-evolution | apps/ruoyi/ruoyi-all-next/src/backend/services/__tests__/bpm-process.service.test.ts | 单体内聚，待流程实例增长后独立服务 |
-| pay | PARTIAL | MIXED | React-radix | B | database-compatibility + ui-framework-governance + microservice-evolution | apps/ruoyi/ruoyi-all-next/src/modules/pay/backend/services/__tests__/pay.module.service.test.ts | 优先拆支付网关与回调服务，避免交易链路耦合 |
+| pay | PARTIAL | MIXED | React-radix | B | database-compatibility + ui-framework-governance + microservice-evolution | apps/ruoyi/ruoyi-all-next/src/modules/pay/backend/services/__tests__/pay.module.service.test.ts | 已支持 API-only 独立打包/运行/部署（`npm run domain:up -- pay`）；数据库仍共享，后续再拆支付网关与回调服务 |
 | report | PARTIAL | Tier-A | React-radix | A | database-compatibility + ui-framework-governance + microservice-evolution | apps/ruoyi/ruoyi-all-next/src/modules/report/backend/services/__tests__/report.module.service.test.ts | 单体内聚，后续按指标计算压力评估拆分 |
 | mp | PARTIAL | MIXED | React-radix | B | database-compatibility + ui-framework-governance + microservice-evolution | apps/ruoyi/ruoyi-all-next/src/backend/services/__tests__/mp.service.test.ts | 拆账号治理与消息投递链路，降低第三方通道耦合 |
 | member | PARTIAL | Tier-A | React-radix | A | database-compatibility + ui-framework-governance + microservice-evolution | apps/ruoyi/ruoyi-all-next/src/modules/member/backend/services/__tests__/member.module.service.test.ts | 单体内聚，先统一会员模型再拆分 |

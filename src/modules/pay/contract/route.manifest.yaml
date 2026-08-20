@@ -1,0 +1,45 @@
+# Generated from src/modules/shared/backend/constants/domain-catalog.json
+# Do not hand-edit pack/upstream fields. Run: npm run domain:manifests
+domain: pay
+owner: pay
+kind: business
+stage: B
+contractVersion: v1
+implementation: local-ts
+publicPrefix:
+  - /api/v1/admin/pay
+  - /api/v1/app/pay
+  - /api/v1/open/pay
+upstream:
+  env: RUOYI_DOMAIN_PAY_UPSTREAM
+  protocol: http
+  defaultPort: 3214
+auth:
+  audience: admin
+  tenantPolicy: required
+resilience:
+  timeoutMs: 5000
+  retry:
+    maxAttempts: 1
+    safeMethodsOnly: true
+  idempotencyRequired: true
+rollout:
+  mode: local
+messaging:
+  transport: in-process
+  queueGroup: ruoyi.pay
+  commandSubject: ruoyi.cmd.pay.>
+  eventSubject: ruoyi.evt.pay.>
+invoke:
+  colocated: sdk
+  remote: rpc
+  protocol: nats-rr
+  serialization: json
+  facade: required
+pack:
+  enabled: true
+  kind: api-only
+  independentDatabase: false
+  dependsOnModules:
+    - shared
+    - pay

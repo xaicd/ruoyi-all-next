@@ -1,27 +1,16 @@
-export const nextReactAdminTreeRouteTemplate = `import { apiResponse, parseBody } from "@/lib/api-response"
-import { withAuth } from "@/lib/rbac"
-import { PERMISSIONS } from "@/lib/rbac-registry"
-import { handleRouteError } from "@/backend/utils/route-handler"
-import { {{entityName}}TreeService } from "@/backend/services/{{modulePath}}/tree.service"
-import { {{entityName}}TreeInputSchema } from "@/backend/validators/{{modulePath}}/tree.validator"
+export const nextReactAdminTreeRouteTemplate = `import { NextResponse } from "next/server"
+import { {{entityName}}TreeService } from "@/modules/{{moduleName}}/backend/services/tree.service"
+import { {{entityName}}TreeInputSchema } from "@/modules/{{moduleName}}/backend/validators/tree.validator"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 
-export const GET = withAuth(async () => {
-  try {
-    const data = await {{entityName}}TreeService.listTree()
-    return apiResponse({ success: true, data })
-  } catch (error) {
-    return handleRouteError(error)
-  }
-}, { permission: PERMISSIONS.{{permissionView}} })
+export const GET = withAdminRoute(async () => {
+  const data = await {{entityName}}TreeService.listTree()
+  return NextResponse.json({ success: true, data })
+}, { permission: "{{permissionView}}" })
 
-export const PATCH = withAuth(async (request: Request) => {
-  try {
-    const body = await parseBody(request)
-    const input = {{entityName}}TreeInputSchema.parse(body)
-    const data = await {{entityName}}TreeService.moveNode(input)
-    return apiResponse({ success: true, data })
-  } catch (error) {
-    return handleRouteError(error)
-  }
-}, { permission: PERMISSIONS.{{permissionUpdate}} })
+export const PATCH = withAdminRoute(async (request: Request) => {
+  const input = {{entityName}}TreeInputSchema.parse(await request.json())
+  const data = await {{entityName}}TreeService.moveNode(input)
+  return NextResponse.json({ success: true, data })
+}, { permission: "{{permissionUpdate}}" })
 `

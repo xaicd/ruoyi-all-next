@@ -1,0 +1,43 @@
+# Generated from src/modules/shared/backend/constants/domain-catalog.json
+# Do not hand-edit pack/upstream fields. Run: npm run domain:manifests
+domain: erp
+owner: erp
+kind: business
+stage: B
+contractVersion: v1
+implementation: local-ts
+publicPrefix:
+  - /api/v1/admin/erp
+upstream:
+  env: RUOYI_DOMAIN_ERP_UPSTREAM
+  protocol: http
+  defaultPort: 3220
+auth:
+  audience: admin
+  tenantPolicy: required
+resilience:
+  timeoutMs: 8000
+  retry:
+    maxAttempts: 1
+    safeMethodsOnly: true
+  idempotencyRequired: true
+rollout:
+  mode: local
+messaging:
+  transport: in-process
+  queueGroup: ruoyi.erp
+  commandSubject: ruoyi.cmd.erp.>
+  eventSubject: ruoyi.evt.erp.>
+invoke:
+  colocated: sdk
+  remote: rpc
+  protocol: nats-rr
+  serialization: json
+  facade: required
+pack:
+  enabled: true
+  kind: api-only
+  independentDatabase: false
+  dependsOnModules:
+    - shared
+    - erp

@@ -21,9 +21,10 @@
 
 ### 3.1 Facade（门面模式，必选）
 
-1. 每个域暴露一个稳定门面入口（如 DomainService）。
+1. 每个域暴露一个稳定门面入口（如 DomainService 或 `createDomainFacade(domain, methods)`）。
 2. 门面对外保持清晰方法名，对内可拆分子服务。
-3. 兼容层 re-export 只允许转发门面，不允许新增业务。
+3. 跨域只依赖 Facade：同进程走 SDK 内存调用，跨服务走 RPC。禁止直接 import 其他域 Service / Repository。
+4. 兼容层 re-export 只允许转发门面，不允许新增业务。
 
 ### 3.2 Strategy（策略模式，推荐）
 

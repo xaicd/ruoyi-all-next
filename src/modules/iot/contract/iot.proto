@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package ruoyi.iot.v1;
+
+option go_package = "ruoyi/all-next/gen/iot/v1;iotv1";
+
+// Generated from src/modules/shared/backend/constants/rpc-actions.json
+// Do not hand-edit. Run: npm run domain:contracts
+// gRPC path: /ruoyi.iot.v1.IotService/<Method>
+
+message JsonReply {
+  string json = 1;
+}
+
+message PingRequest {
+  optional int32 n = 1;
+}
+
+message ListDevicesRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+  optional string status = 4;
+}
+
+message CreateDeviceRequest {
+  string name = 1;
+  string device_key = 2 [json_name = "deviceKey"];
+  string product_id = 3 [json_name = "productId"];
+  optional string gateway_id = 4 [json_name = "gatewayId"];
+  optional string remark = 5;
+}
+
+message ListAlertsRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message HandleAlertRequest {
+  string alert_id = 1 [json_name = "alertId"];
+  string resolution = 2;
+}
+
+service IotService {
+  rpc Ping(PingRequest) returns (JsonReply);
+  rpc ListDevices(ListDevicesRequest) returns (JsonReply);
+  rpc CreateDevice(CreateDeviceRequest) returns (JsonReply);
+  rpc ListAlerts(ListAlertsRequest) returns (JsonReply);
+  rpc HandleAlert(HandleAlertRequest) returns (JsonReply);
+}

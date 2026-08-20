@@ -1,4 +1,4 @@
-export const nextReactAdminDomainClientTemplate = `import { api } from "@/frontend/services/api-client"
+export const nextReactAdminDomainClientTemplate = `import { request } from "@/modules/shared/frontend/lib/request"
 
 export interface {{entityName}}DomainSummary {
   code: string
@@ -6,13 +6,13 @@ export interface {{entityName}}DomainSummary {
   itemCount: number
 }
 
-const DOMAIN_BASE = "/api/admin/{{modulePath}}"
+const DOMAIN_BASE = "{{apiBase}}"
 
 export async function get{{entityName}}DomainSummary() {
-  return api.get<{{entityName}}DomainSummary[]>(DOMAIN_BASE + "/domain/summary")
+  return request.get<{{entityName}}DomainSummary[]>(DOMAIN_BASE + "/domain/summary")
 }
 
 export async function refresh{{entityName}}DomainIndex() {
-  return api.post<{ success: true }>(DOMAIN_BASE + "/domain/reindex", {})
+  return request.post<{ success: true }>(DOMAIN_BASE + "/domain/reindex", {})
 }
 `

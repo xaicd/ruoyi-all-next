@@ -51,6 +51,7 @@ import { nextReactAdminDomainDetailPageTemplate } from "./next-react-admin-domai
 import { nextReactAdminDomainApiIndexTemplate } from "./next-react-admin-domain-api-index.template"
 import { nextReactAdminDomainViewIndexTemplate } from "./next-react-admin-domain-view-index.template"
 import { nextReactAdminServiceFacadeTemplate } from "./next-react-admin-service-facade.template"
+import { nextReactAdminServiceRpcTemplate } from "./next-react-admin-service-rpc.template"
 import { nextReactAdminServiceStrategyTemplate } from "./next-react-admin-service-strategy.template"
 import { nextReactAdminServiceGuardTemplate } from "./next-react-admin-service-guard.template"
 import { nextReactAdminServiceTestTemplate } from "./next-react-admin-service-test.template"
@@ -114,6 +115,7 @@ export {
   nextReactAdminDomainApiIndexTemplate,
   nextReactAdminDomainViewIndexTemplate,
   nextReactAdminServiceFacadeTemplate,
+  nextReactAdminServiceRpcTemplate,
   nextReactAdminServiceStrategyTemplate,
   nextReactAdminServiceGuardTemplate,
   nextReactAdminServiceTestTemplate,

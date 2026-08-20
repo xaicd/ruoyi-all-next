@@ -29,6 +29,12 @@ export function cacheDelete(key: string) {
   CACHE.delete(key)
 }
 
+export function cacheDeletePrefix(prefix: string) {
+  for (const key of CACHE.keys()) {
+    if (key.startsWith(prefix)) CACHE.delete(key)
+  }
+}
+
 /** Use these APIs for any tenant-owned resource; raw cache keys are platform-only. */
 export function cacheSetForTenant<T>(purpose: string, id: string, value: T, ttlMs = 60_000) {
   cacheSet(tenantKey(purpose, id), value, ttlMs)

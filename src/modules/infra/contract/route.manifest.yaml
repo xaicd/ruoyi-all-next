@@ -1,0 +1,43 @@
+# Generated from src/modules/shared/backend/constants/domain-catalog.json
+# Do not hand-edit pack/upstream fields. Run: npm run domain:manifests
+domain: infra
+owner: infra
+kind: platform
+stage: A
+contractVersion: v1
+implementation: local-ts
+publicPrefix:
+  - /api/v1/admin/infra
+upstream:
+  env: RUOYI_DOMAIN_INFRA_UPSTREAM
+  protocol: http
+  defaultPort: 3211
+auth:
+  audience: admin
+  tenantPolicy: required
+resilience:
+  timeoutMs: 8000
+  retry:
+    maxAttempts: 1
+    safeMethodsOnly: true
+  idempotencyRequired: false
+rollout:
+  mode: local
+messaging:
+  transport: in-process
+  queueGroup: ruoyi.infra
+  commandSubject: ruoyi.cmd.infra.>
+  eventSubject: ruoyi.evt.infra.>
+invoke:
+  colocated: sdk
+  remote: rpc
+  protocol: nats-rr
+  serialization: json
+  facade: required
+pack:
+  enabled: true
+  kind: api-only
+  independentDatabase: false
+  dependsOnModules:
+    - shared
+    - infra

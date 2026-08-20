@@ -1,6 +1,6 @@
 export const nextReactAdminServiceTestTemplate = `import { describe, expect, it, vi } from "vitest"
 
-import { {{serviceName}}Facade } from "@/backend/services/{{modulePath}}/{{entityName}}.facade"
+import { {{serviceName}}Facade } from "@/modules/{{moduleName}}/backend/services/{{entityName}}.facade"
 
 describe("{{serviceName}}Facade", () => {
   it("权限不足时拒绝执行", async () => {
@@ -27,7 +27,7 @@ describe("{{serviceName}}Facade", () => {
 
   it("可挂接日志 spy（示例）", () => {
     const spy = vi.fn()
-    spy("{{modulePath}}.execute.success")
+    spy("{{moduleName}}.{{featureKebab}}.execute.success")
     expect(spy).toHaveBeenCalledTimes(1)
   })
 })

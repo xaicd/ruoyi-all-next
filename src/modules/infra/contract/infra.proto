@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package ruoyi.infra.v1;
+
+option go_package = "ruoyi/all-next/gen/infra/v1;infrav1";
+
+// Generated from src/modules/shared/backend/constants/rpc-actions.json
+// Do not hand-edit. Run: npm run domain:contracts
+// gRPC path: /ruoyi.infra.v1.InfraService/<Method>
+
+message JsonReply {
+  string json = 1;
+}
+
+message PingRequest {
+  optional int32 n = 1;
+}
+
+message UpdateConfigRequest {
+  string key = 1;
+  string value = 2;
+  optional string remark = 3;
+}
+
+message PreviewCodegenRequest {
+  string module_name = 1 [json_name = "moduleName"];
+  string class_name = 2 [json_name = "className"];
+  optional string business_name = 3 [json_name = "businessName"];
+}
+
+message GenerateCodegenRequest {
+  string module_name = 1 [json_name = "moduleName"];
+  string class_name = 2 [json_name = "className"];
+  optional string business_name = 3 [json_name = "businessName"];
+}
+
+message PreviewTemplateRequest {
+  string template_code = 1 [json_name = "templateCode"];
+}
+
+message GenerateTemplateRequest {
+  optional string stack = 1;
+  optional bool include_disabled = 2 [json_name = "includeDisabled"];
+}
+
+service InfraService {
+  rpc Ping(PingRequest) returns (JsonReply);
+  rpc UpdateConfig(UpdateConfigRequest) returns (JsonReply);
+  rpc PreviewCodegen(PreviewCodegenRequest) returns (JsonReply);
+  rpc GenerateCodegen(GenerateCodegenRequest) returns (JsonReply);
+  rpc PreviewTemplate(PreviewTemplateRequest) returns (JsonReply);
+  rpc GenerateTemplate(GenerateTemplateRequest) returns (JsonReply);
+}

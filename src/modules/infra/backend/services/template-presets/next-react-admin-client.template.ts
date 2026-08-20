@@ -1,12 +1,13 @@
-export const nextReactAdminClientTemplate = `import { api } from "@/frontend/services/api-client"
+export const nextReactAdminClientTemplate = `import { request } from "@/modules/shared/frontend/lib/request"
 
 export interface {{entityName}}ListItem {
   id: string
   name: string
 }
 
+const BASE = "{{apiBase}}"
+
 export async function list{{entityName}}(keyword?: string) {
-  const query = keyword ? "?keyword=" + keyword : ""
-  return api.get<{ items: {{entityName}}ListItem[]; total: number }>("/api/admin/{{modulePath}}" + query)
+  return request.get<{ items: {{entityName}}ListItem[]; total: number }>(BASE, keyword ? { keyword } : undefined)
 }
 `

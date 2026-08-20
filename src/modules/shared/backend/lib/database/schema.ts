@@ -338,6 +338,28 @@ export interface InfraFileTable {
   created_at: Generated<Date>
 }
 
+export interface InfraMessageOutboxTable {
+  id: string
+  event_id: string
+  subject: string
+  type: string
+  source: string
+  payload: string
+  headers: string
+  status: string
+  attempts: number
+  tenant_id: string | null
+  created_at: Date
+  published_at: Date | null
+}
+
+export interface InfraMessageInboxTable {
+  id: string
+  consumer: string
+  event_id: string
+  processed_at: Date
+}
+
 // === 顶层 DB 接口（Kysely 入口） ===
 
 export interface DB {
@@ -369,6 +391,8 @@ export interface DB {
   infra_data_source_config: InfraDataSourceConfigTable
   infra_file_config: InfraFileConfigTable
   infra_file: InfraFileTable
+  infra_message_outbox: InfraMessageOutboxTable
+  infra_message_inbox: InfraMessageInboxTable
 
   // Online
   online_definition: OnlineDefinitionTable
