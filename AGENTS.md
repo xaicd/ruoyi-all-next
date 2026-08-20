@@ -1,8 +1,8 @@
 # ruoyi-all-next 开发工作手册
 
-更新时间：2026-08-03
+更新时间：2026-08-20
 
-本文件是 ruoyi-all-next 子项目的独立开发规范，覆盖架构边界、研发流程、测试门禁、运行部署与交付标准。
+本文件是 ruoyi-all-next 的独立开发规范，覆盖架构边界、研发流程、测试门禁、运行部署与交付标准。当前仓库根目录即本项目，命令均在仓库根执行。
 
 ## 1. 项目定位
 
@@ -12,9 +12,9 @@
 
 ## 2. 适用范围与边界
 
-1. 本规范仅作用于 apps/ruoyi/ruoyi-all-next 目录。
+1. 本规范作用于本仓库根目录（即 ruoyi-all-next）。
 2. all-next 当前阶段只允许建设 RuoYi 原生域，不接收非原生扩展域。
-3. 原生域清单、规模证据、迁移阶段以扫描结果为准。
+3. 原生域清单、规模证据、迁移阶段以扫描结果为准。权威运行时清单：`src/modules/shared/backend/constants/domain-catalog.json`。
 
 原生域（15）：
 
@@ -34,23 +34,26 @@
 14. iot
 15. im
 
+低代码域 `online` 已在 catalog 业务层登记，跨域必须走 Domain Facade，不得直接 import 其他域 Service。`shared` 是核心基础 SDK，不是域、不是微服务。
+
 ## 3. 架构总览
 
 ### 3.1 分层架构
 
-1. Route 层：src/app/api/admin/**/route.ts
-2. Service 层：src/modules/<domain>/backend/services/**
-3. Validator 层：src/modules/<domain>/backend/validators/**
-4. Page 层：src/app/(admin)/admin/** + src/modules/<domain>/frontend/pages/**
-5. 基座层：src/modules/shared/backend/constants、src/modules/shared/backend/lib
+1. Route 层：`src/app/api/v1/**/route.ts`（另有内部 RPC：`src/app/api/internal/rpc/route.ts`）
+2. Service 层：`src/modules/<domain>/backend/services/**`
+3. Validator 层：`src/modules/<domain>/backend/validators/**`
+4. Page 层：`src/app/(admin-pages)/admin/**` + `src/modules/<domain>/frontend/pages/**`
+5. 基座层：`src/modules/shared/backend/constants`、`src/modules/shared/backend/lib`
+6. Contract 层：`src/modules/<domain>/contract/`（Facade、actions、proto、route manifest）
 
 ### 3.2 目录约束
 
-1. 新增业务域必须落在 src/modules/<domain>/。
-2. 公共基座（constants/lib/templates）统一放 src/modules/shared/。
+1. 新增业务域必须落在 `src/modules/<domain>/`。
+2. 公共基座（constants/lib/templates）统一放 `src/modules/shared/`。
 3. src 下只允许两个顶层目录：app（Next.js路由）和 modules（全部业务+基座）。
 4. 禁止在 src 下新建 backend/、frontend/、components/、lib/ 等平铺目录。
-5. 通用模板统一放 src/modules/shared/frontend/templates。
+5. 通用模板统一放 `src/modules/shared/frontend/templates`。
 
 ### 3.3 可替换后端与微服务边界（强制）
 
@@ -101,7 +104,7 @@
 2. 每个域必须有稳定 Service 门面，子能力按策略/子服务拆分。
 3. 涉及状态迁移必须使用状态守卫，禁止无守卫直接写状态。
 4. 复杂流程建议统一执行管道：authorize -> guard -> transaction -> log。
-5. 规范文档：apps/ruoyi/ruoyi-all-next/docs/guides/service-design-patterns.md。
+5. 规范文档：docs/guides/service-design-patterns.md。
 
 ## 5. Domain-First 研发流程
 
@@ -131,19 +134,23 @@
 
 CI 前置检查：
 
-1. cd apps/ruoyi/ruoyi-all-next && npm run ruoyi:matrix:check
-2. cd apps/ruoyi/ruoyi-all-next && npm run ruoyi:governance:check
-3. 合并前建议执行 strict：
-	- cd apps/ruoyi/ruoyi-all-next && npm run ruoyi:matrix:check:strict
-	- cd apps/ruoyi/ruoyi-all-next && npm run ruoyi:governance:check:strict
+1. npm run ruoyi:matrix:check
+2. npm run ruoyi:governance:check
+3. npm run domain:check
+4. npm run microservice:check
+5. 合并前建议执行 strict：
+	- npm run ruoyi:matrix:check:strict
+	- npm run ruoyi:governance:check:strict
+
+一键门禁：`npm run check`（含 matrix、governance、domain、microservice）。
 
 ## 6.1 Skill Registry（强制）
 
 以下 Skill 为 all-next 的治理必备项，AGENTS 必须注册并在对应场景启用：
 
-1. database-compatibility：apps/ruoyi/ruoyi-all-next/docs/skills/ruoyi-all-next/database-compatibility.SKILL.md
-2. ui-framework-governance：apps/ruoyi/ruoyi-all-next/docs/skills/ruoyi-all-next/ui-framework-governance.SKILL.md
-3. microservice-evolution：apps/ruoyi/ruoyi-all-next/docs/skills/ruoyi-all-next/microservice-evolution.SKILL.md
+1. database-compatibility：docs/skills/ruoyi-all-next/database-compatibility.SKILL.md
+2. ui-framework-governance：docs/skills/ruoyi-all-next/ui-framework-governance.SKILL.md
+3. microservice-evolution：docs/skills/ruoyi-all-next/microservice-evolution.SKILL.md
 4. ui-ux-pro-max：.kiro/steering/ui-ux-pro-max/SKILL.md
 
 启用规则：
@@ -157,12 +164,12 @@ CI 前置检查：
 
 推荐每个批次都执行以下命令链：
 
-1. cd apps/ruoyi/ruoyi-all-next && npm run ruoyi:full:scan
-2. cd apps/ruoyi/ruoyi-all-next && npm run ruoyi:deep:scan
-3. cd apps/ruoyi/ruoyi-all-next && npm run ruoyi:mini:scan
-4. cd apps/ruoyi/ruoyi-all-next && npm run ruoyi:migration:board
+1. npm run ruoyi:full:scan
+2. npm run ruoyi:deep:scan
+3. npm run ruoyi:mini:scan
+4. npm run ruoyi:migration:board
 
-产物目录：apps/ruoyi/ruoyi-all-next/docs/architecture/artifacts/
+产物目录：docs/architecture/artifacts/
 
 迁移节奏：
 
@@ -180,27 +187,26 @@ CI 前置检查：
 
 建议命令：
 
-1. npm test -- --run apps/ruoyi/ruoyi-all-next/src/backend/services/<domain>-log-audit.test.ts
-2. npm test -- --run apps/ruoyi/ruoyi-all-next/src/modules/infra/backend/services/__tests__/template-engine.service.test.ts
-3. npm test
+1. npm test -- --run src/modules/infra/backend/services/__tests__/template-engine.service.test.ts
+2. npm test -- --run src/modules/shared/backend/lib/__tests__/rpc-protocol.test.ts
+3. npm test -- --run src/modules/infra/backend/services/__tests__/codegen-engine.rpc.test.ts
+4. npm test
 
 ## 9. 本地开发与运行步骤
 
-说明：当前 all-next 作为主仓库中的子项目运行，ruoyi 相关命令统一在子项目目录执行。
+说明：命令统一在仓库根目录执行。
 
-子项目一键入口（推荐）：
+一键入口（推荐）：
 
-1. cd apps/ruoyi/ruoyi-all-next
-2. npm run quick-start
+1. npm run quick-start
 
 该入口会自动执行基础设施启动、数据库初始化、治理检查与开发服务器启动。
 
 ### 9.1 首次启动
 
-1. cd apps/ruoyi/ruoyi-all-next
-2. 首次初始化：npm run init
-3. 门禁检查：npm run check
-4. 启动应用：npm run dev
+1. 首次初始化：npm run init
+2. 门禁检查：npm run check
+3. 启动应用：npm run dev
 
 ### 9.2 all-next 研发常用命令
 
@@ -217,7 +223,7 @@ CI 前置检查：
 11. 域 RPC 契约：npm run domain:contracts（生成 TS Facade / proto / gen/go 桩）
 12. 微服务治理门禁：npm run microservice:check
 
-子项目本地命令面（apps/ruoyi/ruoyi-all-next/package.json）：
+本地命令面（package.json）：
 
 1. npm run quick-start
 2. npm run check
@@ -242,9 +248,13 @@ CI 前置检查：
 
 ### 10.2 Docker 部署
 
-1. 构建镜像：docker build -t qloapps-next .
-2. 生产编排启动：docker-compose up -d
-3. 开发编排启动：docker-compose -f docker-compose.dev.yml up -d
+1. 一体镜像：docker build -t ruoyi-all-next .
+2. 域镜像：docker build -f Dockerfile.domain -t ruoyi-all-next-domain .
+3. 生产编排：docker compose -f deploy/docker-compose.prod.yml up -d
+4. 开发编排：docker compose -f deploy/docker-compose.dev.yml up -d
+5. 拆分编排（BFF + 域）：npm run domain:up -- pay
+
+详见 deploy/README.md。
 
 ### 10.3 发布门禁
 
@@ -269,23 +279,23 @@ CI 前置检查：
 
 ## 13. 参考文档
 
-1. apps/ruoyi/ruoyi-all-next/README.md
-2. apps/ruoyi/ruoyi-all-next/src/modules/README.md
-3. apps/ruoyi/ruoyi-all-next/docs/architecture/ruoyi-native-capabilities-catalog.md
-4. apps/ruoyi/ruoyi-all-next/docs/architecture/ruoyi-full-migration-board.md
-5. apps/ruoyi/ruoyi-all-next/docs/architecture/system-core-implementation-checklist.md
+1. README.md
+2. src/modules/README.md
+3. docs/architecture/ruoyi-native-capabilities-catalog.md
+4. docs/architecture/ruoyi-full-migration-board.md
+5. docs/architecture/system-core-implementation-checklist.md
 6. docs/architecture/ruoyi-all-next-capability-matrix.md
 7. docs/architecture/ruoyi-all-next-domain-governance.md
 8. docs/guides/logging-standards.md
 9. docs/guides/rbac-guide.md
-10. apps/ruoyi/ruoyi-all-next/docs/guides/service-design-patterns.md
-11. apps/ruoyi/ruoyi-all-next/scripts/quick-start.sh
-12. apps/ruoyi/ruoyi-all-next/scripts/scaffold-feature.ts
-13. apps/ruoyi/ruoyi-all-next/docs/architecture/ruoyi-all-next-domain-pack.md
-14. apps/ruoyi/ruoyi-all-next/docs/architecture/ruoyi-all-next-messaging-constraints.md
-15. apps/ruoyi/ruoyi-all-next/docs/architecture/ruoyi-all-next-microservice-governance.md
-16. apps/ruoyi/ruoyi-all-next/docs/architecture/ruoyi-all-next-module-rpc.md
-16. apps/ruoyi/ruoyi-all-next/docs/architecture/ruoyi-all-next-module-rpc.md
+10. docs/guides/service-design-patterns.md
+11. scripts/quick-start.sh
+12. scripts/scaffold-feature.ts
+13. docs/architecture/ruoyi-all-next-domain-pack.md
+14. docs/architecture/ruoyi-all-next-messaging-constraints.md
+15. docs/architecture/ruoyi-all-next-microservice-governance.md
+16. docs/architecture/ruoyi-all-next-module-rpc.md
+17. deploy/README.md
 
 ## 14. 代码生成器架构规范
 
