@@ -4,6 +4,7 @@ import {
   payPageQuerySchema,
   payOrderCreateSchema,
   payRefundCreateSchema,
+  payRefundPageQuerySchema,
 } from "../backend/validators"
 
 export const payPingSchema = z.object({
@@ -15,6 +16,7 @@ export const PAY_ACTION_SCHEMAS = {
   "pay.listOrders": payPageQuerySchema,
   "pay.createOrder": payOrderCreateSchema,
   "pay.createRefund": payRefundCreateSchema,
+  "pay.listRefunds": payRefundPageQuerySchema,
 } as const
 
 export function registerActionSchemas() {

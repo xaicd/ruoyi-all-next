@@ -1,4 +1,4 @@
-import type { CodegenAdvancedField, CodegenConfig, CodegenQueryOperator, CodegenTemplate } from "@/modules/infra/backend/services/codegen-engine.service"
+import type { CodegenAdvancedField, CodegenConfig, CodegenQueryOperator, CodegenTemplate } from "@/modules/infra/contract/codegen.types"
 import type { OnlineRuntimeRelease } from "./online-runtime.contract"
 
 const systemFields = ["id", "creator", "create_time", "updater", "update_time", "deleted", "tenant_id"]

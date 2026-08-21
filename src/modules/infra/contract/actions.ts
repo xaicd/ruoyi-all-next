@@ -5,6 +5,8 @@ import {
   infraCodegenPreviewSchema,
   templatePreviewSchema,
   infraCodegenExportSchema,
+  listQueryDataSourcesSchema,
+  getQueryConnectionSchema,
 } from "../backend/validators"
 
 export const infraPingSchema = z.object({
@@ -18,6 +20,8 @@ export const INFRA_ACTION_SCHEMAS = {
   "infra.generateCodegen": infraCodegenPreviewSchema,
   "infra.previewTemplate": templatePreviewSchema,
   "infra.generateTemplate": infraCodegenExportSchema,
+  "infra.listQueryDataSources": listQueryDataSourcesSchema,
+  "infra.getQueryConnection": getQueryConnectionSchema,
 } as const
 
 export function registerActionSchemas() {

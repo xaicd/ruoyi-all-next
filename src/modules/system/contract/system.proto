@@ -16,6 +16,16 @@ message PingRequest {
   optional int32 n = 1;
 }
 
+message GetDictDataByTypeRequest {
+  string type = 1;
+}
+
+message ResolveTenantEntitlementRequest {
+  string tenant_id = 1 [json_name = "tenantId"];
+}
+
 service SystemService {
   rpc Ping(PingRequest) returns (JsonReply);
+  rpc GetDictDataByType(GetDictDataByTypeRequest) returns (JsonReply);
+  rpc ResolveTenantEntitlement(ResolveTenantEntitlementRequest) returns (JsonReply);
 }

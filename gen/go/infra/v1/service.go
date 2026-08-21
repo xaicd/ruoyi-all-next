@@ -12,6 +12,8 @@ const (
 	GenerateCodegenPath = "/ruoyi.infra.v1.InfraService/GenerateCodegen"
 	PreviewTemplatePath = "/ruoyi.infra.v1.InfraService/PreviewTemplate"
 	GenerateTemplatePath = "/ruoyi.infra.v1.InfraService/GenerateTemplate"
+	ListQueryDataSourcesPath = "/ruoyi.infra.v1.InfraService/ListQueryDataSources"
+	GetQueryConnectionPath = "/ruoyi.infra.v1.InfraService/GetQueryConnection"
 )
 
 type JsonReply struct {
@@ -49,6 +51,15 @@ type GenerateTemplateRequest struct {
 	IncludeDisabled *bool `json:"includeDisabled,omitempty"`
 }
 
+type ListQueryDataSourcesRequest struct {
+	TenantId string `json:"tenantId"`
+}
+
+type GetQueryConnectionRequest struct {
+	TenantId string `json:"tenantId"`
+	Id string `json:"id"`
+}
+
 type InfraService interface {
 	Ping(ctx context.Context, in *PingRequest) (*JsonReply, error)
 	UpdateConfig(ctx context.Context, in *UpdateConfigRequest) (*JsonReply, error)
@@ -56,6 +67,8 @@ type InfraService interface {
 	GenerateCodegen(ctx context.Context, in *GenerateCodegenRequest) (*JsonReply, error)
 	PreviewTemplate(ctx context.Context, in *PreviewTemplateRequest) (*JsonReply, error)
 	GenerateTemplate(ctx context.Context, in *GenerateTemplateRequest) (*JsonReply, error)
+	ListQueryDataSources(ctx context.Context, in *ListQueryDataSourcesRequest) (*JsonReply, error)
+	GetQueryConnection(ctx context.Context, in *GetQueryConnectionRequest) (*JsonReply, error)
 }
 
 type Invoker func(ctx context.Context, path string, in any) (json string, err error)
@@ -106,6 +119,22 @@ func (c *Client) PreviewTemplate(ctx context.Context, in *PreviewTemplateRequest
 
 func (c *Client) GenerateTemplate(ctx context.Context, in *GenerateTemplateRequest) (*JsonReply, error) {
 	raw, err := c.Invoke(ctx, GenerateTemplatePath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) ListQueryDataSources(ctx context.Context, in *ListQueryDataSourcesRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, ListQueryDataSourcesPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) GetQueryConnection(ctx context.Context, in *GetQueryConnectionRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, GetQueryConnectionPath, in)
 	if err != nil {
 		return nil, err
 	}

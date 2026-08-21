@@ -19,7 +19,15 @@ describe("rpc action contracts", () => {
       "listOrders",
       "createOrder",
       "createRefund",
+      "listRefunds",
     ])
+    expect(rpcActions.domains.system.actions.map((item) => item.method)).toEqual([
+      "ping",
+      "getDictDataByType",
+      "resolveTenantEntitlement",
+    ])
+    expect(grpcMethodPath("system", "getDictDataByType")).toBe("/ruoyi.system.v1.SystemService/GetDictDataByType")
+    expect(grpcMethodPath("system", "resolveTenantEntitlement")).toBe("/ruoyi.system.v1.SystemService/ResolveTenantEntitlement")
     const goStub = readFileSync(path.resolve(process.cwd(), "gen/go/pay/v1/service.go"), "utf8")
     expect(goStub).toContain('CreateOrderPath = "/ruoyi.pay.v1.PayService/CreateOrder"')
     expect(goStub).toContain("type PayService interface")

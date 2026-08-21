@@ -54,6 +54,7 @@
     { "id": "goStub", "moleculer": "Go client SDK", "nestNats": "generated client", "status": "DONE", "ref": "gen/go/pay/v1/service.go", "marker": "type PayService interface" },
     { "id": "httpRpc", "moleculer": "remote transporter hop", "nestNats": "ClientProxy over HTTP", "status": "DONE", "ref": "src/modules/shared/backend/lib/rpc-http.ts", "marker": "handleInternalRpc" },
     { "id": "splitRuntime", "moleculer": "separate nodes", "nestNats": "hybrid app", "status": "DONE", "ref": "src/modules/shared/backend/lib/broker-registry.ts", "marker": "readDomainUpstream" },
-    { "id": "lowcodeTemplates", "moleculer": "generated service actions", "nestNats": "generated message patterns", "status": "DONE", "ref": "src/modules/infra/backend/services/template-presets/next-react-admin-service-facade.template.ts", "marker": "createDomainFacade" }
+    { "id": "lowcodeTemplates", "moleculer": "generated service actions", "nestNats": "generated message patterns", "status": "DONE", "ref": "src/modules/infra/backend/services/template-presets/next-react-admin-service-facade.template.ts", "marker": "createDomainFacade" },
+    { "id": "schemaConfluence", "moleculer": "action + HTTP validator", "nestNats": "shared pipes", "status": "DONE", "ref": "src/modules/shared/backend/http/parse-action-input.ts", "marker": "parseActionQuery" }
   ]
 }

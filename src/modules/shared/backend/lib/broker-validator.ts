@@ -8,6 +8,10 @@ export function registerActionSchema(action: string, schema: ActionSchema) {
   schemas.set(action, schema)
 }
 
+export function getActionSchema(action: string): ActionSchema | undefined {
+  return schemas.get(action)
+}
+
 export function applyActionSchema(action: string, params: unknown, extra?: ActionSchema) {
   const schema = extra ?? schemas.get(action)
   if (!schema) return params ?? {}

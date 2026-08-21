@@ -43,6 +43,15 @@ message GenerateTemplateRequest {
   optional bool include_disabled = 2 [json_name = "includeDisabled"];
 }
 
+message ListQueryDataSourcesRequest {
+  string tenant_id = 1 [json_name = "tenantId"];
+}
+
+message GetQueryConnectionRequest {
+  string tenant_id = 1 [json_name = "tenantId"];
+  string id = 2;
+}
+
 service InfraService {
   rpc Ping(PingRequest) returns (JsonReply);
   rpc UpdateConfig(UpdateConfigRequest) returns (JsonReply);
@@ -50,4 +59,6 @@ service InfraService {
   rpc GenerateCodegen(GenerateCodegenRequest) returns (JsonReply);
   rpc PreviewTemplate(PreviewTemplateRequest) returns (JsonReply);
   rpc GenerateTemplate(GenerateTemplateRequest) returns (JsonReply);
+  rpc ListQueryDataSources(ListQueryDataSourcesRequest) returns (JsonReply);
+  rpc GetQueryConnection(GetQueryConnectionRequest) returns (JsonReply);
 }

@@ -140,6 +140,20 @@ describe("dual-mode broker invoke and facade", () => {
     expect(ok.rpcProtocol).toBe("in-process")
   })
 
+  it("routes pay.listRefunds onto PayRefundService by catalog target", async () => {
+    const { registerActionSchemas } = await import("@/modules/pay/contract/actions")
+    const { payFacade } = await import("@/modules/pay/contract/pay.facade")
+    registerActionSchemas()
+    broker.start({})
+    const result = await payFacade.listRefunds({ page: 1, pageSize: 10 })
+    expect(result.success, result.error).toBe(true)
+    expect(result.invokeMode).toBe("sdk")
+    const data = result.data as { items: unknown[]; total: number; page: number }
+    expect(data.page).toBe(1)
+    expect(Array.isArray(data.items)).toBe(true)
+    expect(data.total).toBeGreaterThan(0)
+  })
+
   it("routes pay facade methods onto the real PayService", async () => {
     const { payFacade } = await import("@/modules/pay/contract/pay.facade")
     broker.start({})
@@ -167,6 +181,30 @@ describe("dual-mode broker invoke and facade", () => {
     })
     expect(updated.success, updated.error).toBe(true)
     expect(updated.data).toMatchObject({ key: "sys.application.name", value: "ruoyi-all-next-facade" })
+  })
+
+  it("routes system.getDictDataByType onto SystemDictService", async () => {
+    const { systemFacade } = await import("@/modules/system/contract/system.facade")
+    broker.start({})
+    const result = await systemFacade.getDictDataByType({ type: "system_user_sex" }, { caller: "online.definition" })
+    expect(result.success, result.error).toBe(true)
+    expect(result.invokeMode).toBe("sdk")
+    const items = (result.data as Array<{ value: string; label: string; status: string }> | undefined) ?? []
+    expect(items.length).toBeGreaterThan(0)
+    expect(items[0]).toMatchObject({ value: expect.any(String), label: expect.any(String) })
+  })
+
+  it("routes system.resolveTenantEntitlement through the domain facade", async () => {
+    registerService("system", async (method, payload) => {
+      expect(method).toBe("resolveTenantEntitlement")
+      return { tenantId: (payload as { tenantId: string }).tenantId, accountLimit: 10 }
+    })
+    broker.start({})
+    const { systemFacade } = await import("@/modules/system/contract/system.facade")
+    const result = await systemFacade.resolveTenantEntitlement({ tenantId: "tenant-1" }, { caller: "shared.auth" })
+    expect(result.success, result.error).toBe(true)
+    expect(result.invokeMode).toBe("sdk")
+    expect(result.data).toMatchObject({ tenantId: "tenant-1", accountLimit: 10 })
   })
 
   it("exposes infra codegen preview on the domain facade", async () => {

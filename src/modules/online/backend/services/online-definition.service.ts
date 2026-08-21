@@ -6,8 +6,8 @@ import { KyselyOnlineSchemaPlanRepository } from "../adapters/persistence/online
 import { KyselyOnlineRuntimeRepository } from "../adapters/persistence/online-runtime.repository"
 import { toOnlineCodegenConfig } from "../application/online-codegen.adapter"
 import { infraFacade } from "@/modules/infra/contract/infra.facade"
-import { SystemDictService } from "@/modules/system/backend/services/dict.service"
-import type { ApplyOnlineSchemaPlanInput, ApproveOnlineSchemaPlanInput, ArchiveOnlineDefinitionInput, BatchDownloadOnlineCodeInput, CreateOnlineDefinitionInput, CreateOnlineRuntimeRecordInput, CreateOnlineSchemaPlanInput, DeleteOnlineDefinitionInput, NormalizeOnlineSystemFieldsInput, OnlineDefinitionPageInput, OnlineRuntimeRecordPageInput, PublishOnlineRevisionInput, RollbackOnlineDefinitionInput, UpdateOnlineDefinitionInput, UpdateOnlineRevisionInput, UpdateOnlineRuntimeRecordInput, ValidateOnlineRevisionInput } from "../validators"
+import { systemFacade } from "@/modules/system/contract/system.facade"
+import type { ApplyOnlineSchemaPlanInput, ApproveOnlineSchemaPlanInput, ArchiveOnlineDefinitionInput, BatchDownloadOnlineCodeInput, CreateOnlineDefinitionInput, CreateOnlineRuntimeRecordInput, CreateOnlineSchemaPlanInput, DeleteOnlineDefinitionInput, NormalizeOnlineSystemFieldsInput, OnlineDefinitionPageInput, OnlinePageDefinitionsInput, OnlineRuntimeRecordPageInput, PublishOnlineRevisionInput, ResolvePublishedReleaseInput, RollbackOnlineDefinitionInput, UpdateOnlineDefinitionInput, UpdateOnlineRevisionInput, UpdateOnlineRuntimeRecordInput, ValidateOnlineRevisionInput } from "../validators"
 
 function tenantScope(auth: AuthContext): { tenantId: string; actorId: string } {
   if (!auth.tenantId) throw new ApiError("FORBIDDEN", "Online Definition 必须在租户上下文中管理")
@@ -16,9 +16,13 @@ function tenantScope(auth: AuthContext): { tenantId: string; actorId: string } {
 
 export class OnlineDefinitionService {
   static async page(auth: AuthContext, input: OnlineDefinitionPageInput) {
-    const { tenantId } = tenantScope(auth)
+    return this.pageDefinitions({ ...input, tenantId: tenantScope(auth).tenantId })
+  }
+
+  static async pageDefinitions(input: OnlinePageDefinitionsInput) {
+    if (!input.tenantId) throw new ApiError("FORBIDDEN", "Online Definition 必须在租户上下文中管理")
     const data = await KyselyOnlineDefinitionRepository.page({
-      tenantId,
+      tenantId: input.tenantId,
       page: input.page ?? 1,
       pageSize: input.pageSize ?? 20,
       keyword: input.keyword,
@@ -26,6 +30,30 @@ export class OnlineDefinitionService {
       status: input.status,
     })
     return { ...data, phase: "METADATA_READY" as const, persistence: "POSTGRESQL_REQUIRED" as const }
+  }
+
+  static async resolvePublishedRelease(input: ResolvePublishedReleaseInput) {
+    return KyselyOnlineRuntimeRepository.resolvePublishedReleaseById(input)
+  }
+
+  static async resolveCodegenImport(input: ResolvePublishedReleaseInput) {
+    const runtime = await KyselyOnlineRuntimeRepository.resolvePublishedReleaseById(input)
+    const childRuntimes = await KyselyOnlineRuntimeRepository.resolveMasterDetailChildReleases({ tenantId: input.tenantId, runtime })
+    const config = toOnlineCodegenConfig(runtime, childRuntimes)
+    return {
+      definitionCode: runtime.definitionCode,
+      definitionName: runtime.definitionName,
+      releaseId: runtime.releaseId,
+      schemaRevision: runtime.schemaRevision,
+      storageKind: runtime.model.storage.kind,
+      moduleName: config.moduleName,
+      businessName: config.businessName,
+      className: config.className,
+      template: config.template,
+      scene: config.scene,
+      permissionPrefix: config.permissionPrefix,
+      advanced: config.advanced,
+    }
   }
 
   static async create(auth: AuthContext, input: CreateOnlineDefinitionInput) {
@@ -160,8 +188,12 @@ export class OnlineDefinitionService {
     const runtime = await KyselyOnlineRuntimeRepository.resolveCurrentPublishedRelease({ tenantId, definitionCode: code })
     const field = runtime.interaction.fields.find((item) => item.code === fieldCode)
     if (!field?.dictionaryCode || ![field.widget, field.query.widget].some((widget) => widget === "DICTIONARY" || widget === "SELECT")) throw new ApiError("NOT_FOUND", "当前 Published Release 未为该字段配置字典选项")
-    const values = await SystemDictService.getDataByType(field.dictionaryCode)
-    const options = values.filter((value: { status: string }) => value.status === "ACTIVE").map((value: { value: string; label: string }) => ({ value: value.value, label: value.label }))
+    const result = await systemFacade.getDictDataByType({ type: field.dictionaryCode }, { caller: "online.definition" })
+    if (!result.success) throw new ApiError("INTERNAL_ERROR", result.error ?? "system dict 调用失败")
+    const values = Array.isArray(result.data) ? result.data : []
+    const options = values
+      .filter((value: { status: string }) => value.status === "ACTIVE")
+      .map((value: { value: string; label: string }) => ({ value: value.value, label: value.label }))
     domainLog.audit("online.definition.lookup.dictionary", { targetType: "ONLINE_DEFINITION", targetId: runtime.definitionId, metadata: { releaseId: runtime.releaseId, fieldCode, dictionaryCode: field.dictionaryCode, optionCount: options.length } })
     return { releaseId: runtime.releaseId, fieldCode, options }
   }

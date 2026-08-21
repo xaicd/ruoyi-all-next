@@ -39,9 +39,17 @@ message CreateRefundRequest {
   string reason = 3;
 }
 
+message ListRefundsRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+  optional string status = 4;
+}
+
 service PayService {
   rpc Ping(PingRequest) returns (JsonReply);
   rpc ListOrders(ListOrdersRequest) returns (JsonReply);
   rpc CreateOrder(CreateOrderRequest) returns (JsonReply);
   rpc CreateRefund(CreateRefundRequest) returns (JsonReply);
+  rpc ListRefunds(ListRefundsRequest) returns (JsonReply);
 }

@@ -14,6 +14,16 @@ export const onlineDefinitionPageSchema = z.object({
   status: z.enum(["DRAFT", "ACTIVE"]).optional(),
 })
 
+export const onlinePageDefinitionsSchema = onlineDefinitionPageSchema.extend({
+  tenantId: z.string().trim().min(1, "tenantId 不能为空"),
+})
+
+export const resolvePublishedReleaseSchema = z.object({
+  tenantId: z.string().trim().min(1, "tenantId 不能为空"),
+  definitionCode: z.string().trim().min(1, "definitionCode 不能为空"),
+  releaseId: z.string().trim().min(1, "releaseId 不能为空"),
+})
+
 export const createOnlineDefinitionSchema = z.object({
   code: codeSchema,
   name: z.string().trim().min(1).max(100),
@@ -93,6 +103,8 @@ export const rollbackOnlineDefinitionSchema = z.object({
 })
 
 export type OnlineDefinitionPageInput = z.infer<typeof onlineDefinitionPageSchema>
+export type OnlinePageDefinitionsInput = z.infer<typeof onlinePageDefinitionsSchema>
+export type ResolvePublishedReleaseInput = z.infer<typeof resolvePublishedReleaseSchema>
 export type ArchiveOnlineDefinitionInput = z.infer<typeof archiveOnlineDefinitionSchema>
 export type DeleteOnlineDefinitionInput = z.infer<typeof deleteOnlineDefinitionSchema>
 export type CreateOnlineSchemaPlanInput = z.infer<typeof createOnlineSchemaPlanSchema>

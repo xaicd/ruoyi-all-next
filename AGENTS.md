@@ -63,7 +63,7 @@
 4. Next.js Route 在阶段 A/B 是 BFF adapter，不是领域真源；迁移某域到 Go 时，只允许替换该域 upstream adapter / manifest 路由，浏览器 API 路径、DTO、权限、tenant scope 和错误契约不得变化。
 5. 新 Go 服务必须验证受信任的服务身份、传递 trace、tenant 与 actor context；禁止信任调用方伪造的 tenant、user 或 permission header。服务间认证、健康/readiness、指标和契约兼容检查是上线前置条件。
 6. 以域为独立扩展单元，支持独立构建、部署、水平扩缩、配置和迁移所有权；不得承诺无边界的“无限扩展”，容量目标须由 SLO、压测和资源预算确定。
-7. 低代码模板、Codegen ZIP 与 Online 代码下载必须遵守同一双模：生成 Service 可被 broker 调用；跨域走 Domain Facade；同进程 SDK，拆分后 RPC。禁止生成跨域直接 import Service 的代码。Online 预览/下载必须走 `infraFacade`，不得 import `CodegenEngineService`。
+7. 低代码模板、Codegen ZIP 与 Online 代码下载必须遵守同一双模：生成 Service 可被 broker 调用；跨域走 Domain Facade；同进程 SDK，拆分后 RPC。禁止生成跨域直接 import Service 的代码。Online 预览/下载必须走 `infraFacade`，不得 import `CodegenEngineService`；字典选项必须走 `systemFacade`，不得 import `SystemDictService`。`shared` 鉴权必须走 `systemFacade.resolveTenantEntitlement`，不得 import `TenantEntitlementService`。
 
 ## 4. 编码规范（强制）
 
@@ -286,8 +286,8 @@ CI 前置检查：
 5. docs/architecture/system-core-implementation-checklist.md
 6. docs/architecture/ruoyi-all-next-capability-matrix.md
 7. docs/architecture/ruoyi-all-next-domain-governance.md
-8. docs/guides/logging-standards.md
-9. docs/guides/rbac-guide.md
+8. docs/guides/api-route-conventions.md
+9. docs/guides/tenant-catalog-bootstrap.md
 10. docs/guides/service-design-patterns.md
 11. scripts/quick-start.sh
 12. scripts/scaffold-feature.ts

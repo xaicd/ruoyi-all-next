@@ -107,4 +107,14 @@ describe("transactional outbox", () => {
     })).rejects.toThrow(/domain rollback/)
     expect(await listOutbox()).toHaveLength(0)
   })
+
+  it("owns the outbox store by writing domain in stage A/B shared storage", async () => {
+    const { getOutboxStoreForDomain, resolveOutboxOwnerDomain } = await import("../transactional-outbox")
+    expect(resolveOutboxOwnerDomain("pay.order")).toBe("pay")
+    expect(getOutboxStoreForDomain("pay")).toBe(getOutboxStoreForDomain("mall"))
+    await runUnitOfWork(async (uow) => {
+      uow.appendOutbox({ type: "pay.order.paid", source: "pay", payload: { id: "owner" } })
+    }, { domain: "pay", dispatch: false })
+    expect(await listOutbox("pending")).toHaveLength(1)
+  })
 })

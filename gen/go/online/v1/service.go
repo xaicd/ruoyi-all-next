@@ -8,6 +8,13 @@ const (
 	ServiceName = "OnlineService"
 	PingPath = "/ruoyi.online.v1.OnlineService/Ping"
 	PageDefinitionsPath = "/ruoyi.online.v1.OnlineService/PageDefinitions"
+	ResolvePublishedReleasePath = "/ruoyi.online.v1.OnlineService/ResolvePublishedRelease"
+	ResolveCodegenImportPath = "/ruoyi.online.v1.OnlineService/ResolveCodegenImport"
+	PageManagedRecordsPath = "/ruoyi.online.v1.OnlineService/PageManagedRecords"
+	GetManagedRecordPath = "/ruoyi.online.v1.OnlineService/GetManagedRecord"
+	CreateManagedRecordPath = "/ruoyi.online.v1.OnlineService/CreateManagedRecord"
+	UpdateManagedRecordPath = "/ruoyi.online.v1.OnlineService/UpdateManagedRecord"
+	DeleteManagedRecordPath = "/ruoyi.online.v1.OnlineService/DeleteManagedRecord"
 )
 
 type JsonReply struct {
@@ -19,6 +26,7 @@ type PingRequest struct {
 }
 
 type PageDefinitionsRequest struct {
+	TenantId string `json:"tenantId"`
 	Page int32 `json:"page"`
 	PageSize int32 `json:"pageSize"`
 	Keyword *string `json:"keyword,omitempty"`
@@ -26,9 +34,73 @@ type PageDefinitionsRequest struct {
 	Status *string `json:"status,omitempty"`
 }
 
+type ResolvePublishedReleaseRequest struct {
+	TenantId string `json:"tenantId"`
+	DefinitionCode string `json:"definitionCode"`
+	ReleaseId string `json:"releaseId"`
+}
+
+type ResolveCodegenImportRequest struct {
+	TenantId string `json:"tenantId"`
+	DefinitionCode string `json:"definitionCode"`
+	ReleaseId string `json:"releaseId"`
+}
+
+type PageManagedRecordsRequest struct {
+	TenantId string `json:"tenantId"`
+	ActorId string `json:"actorId"`
+	DefinitionCode string `json:"definitionCode"`
+	ReleaseId string `json:"releaseId"`
+	SchemaRevision int32 `json:"schemaRevision"`
+	Page int32 `json:"page"`
+	PageSize int32 `json:"pageSize"`
+}
+
+type GetManagedRecordRequest struct {
+	TenantId string `json:"tenantId"`
+	ActorId string `json:"actorId"`
+	DefinitionCode string `json:"definitionCode"`
+	ReleaseId string `json:"releaseId"`
+	SchemaRevision int32 `json:"schemaRevision"`
+	Id string `json:"id"`
+}
+
+type CreateManagedRecordRequest struct {
+	TenantId string `json:"tenantId"`
+	ActorId string `json:"actorId"`
+	DefinitionCode string `json:"definitionCode"`
+	ReleaseId string `json:"releaseId"`
+	SchemaRevision int32 `json:"schemaRevision"`
+}
+
+type UpdateManagedRecordRequest struct {
+	TenantId string `json:"tenantId"`
+	ActorId string `json:"actorId"`
+	DefinitionCode string `json:"definitionCode"`
+	ReleaseId string `json:"releaseId"`
+	SchemaRevision int32 `json:"schemaRevision"`
+	Id string `json:"id"`
+}
+
+type DeleteManagedRecordRequest struct {
+	TenantId string `json:"tenantId"`
+	ActorId string `json:"actorId"`
+	DefinitionCode string `json:"definitionCode"`
+	ReleaseId string `json:"releaseId"`
+	SchemaRevision int32 `json:"schemaRevision"`
+	Id string `json:"id"`
+}
+
 type OnlineService interface {
 	Ping(ctx context.Context, in *PingRequest) (*JsonReply, error)
 	PageDefinitions(ctx context.Context, in *PageDefinitionsRequest) (*JsonReply, error)
+	ResolvePublishedRelease(ctx context.Context, in *ResolvePublishedReleaseRequest) (*JsonReply, error)
+	ResolveCodegenImport(ctx context.Context, in *ResolveCodegenImportRequest) (*JsonReply, error)
+	PageManagedRecords(ctx context.Context, in *PageManagedRecordsRequest) (*JsonReply, error)
+	GetManagedRecord(ctx context.Context, in *GetManagedRecordRequest) (*JsonReply, error)
+	CreateManagedRecord(ctx context.Context, in *CreateManagedRecordRequest) (*JsonReply, error)
+	UpdateManagedRecord(ctx context.Context, in *UpdateManagedRecordRequest) (*JsonReply, error)
+	DeleteManagedRecord(ctx context.Context, in *DeleteManagedRecordRequest) (*JsonReply, error)
 }
 
 type Invoker func(ctx context.Context, path string, in any) (json string, err error)
@@ -47,6 +119,62 @@ func (c *Client) Ping(ctx context.Context, in *PingRequest) (*JsonReply, error) 
 
 func (c *Client) PageDefinitions(ctx context.Context, in *PageDefinitionsRequest) (*JsonReply, error) {
 	raw, err := c.Invoke(ctx, PageDefinitionsPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) ResolvePublishedRelease(ctx context.Context, in *ResolvePublishedReleaseRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, ResolvePublishedReleasePath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) ResolveCodegenImport(ctx context.Context, in *ResolveCodegenImportRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, ResolveCodegenImportPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) PageManagedRecords(ctx context.Context, in *PageManagedRecordsRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, PageManagedRecordsPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) GetManagedRecord(ctx context.Context, in *GetManagedRecordRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, GetManagedRecordPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) CreateManagedRecord(ctx context.Context, in *CreateManagedRecordRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, CreateManagedRecordPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) UpdateManagedRecord(ctx context.Context, in *UpdateManagedRecordRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, UpdateManagedRecordPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) DeleteManagedRecord(ctx context.Context, in *DeleteManagedRecordRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, DeleteManagedRecordPath, in)
 	if err != nil {
 		return nil, err
 	}

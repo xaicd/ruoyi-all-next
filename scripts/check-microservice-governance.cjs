@@ -13,7 +13,7 @@ if (!Array.isArray(catalog.capabilities) || catalog.capabilities.length < 20) {
   fail("governance catalog must declare at least 20 Moleculer/Nest NATS capabilities")
 }
 
-const required = ["broker", "gateway", "action", "event", "queueGroup", "registry", "circuitBreaker", "bulkhead", "fallback", "natsAdapter", "jetStream", "outbox", "cacher", "validator", "moduleLayers", "dualInvoke", "rpcCodec", "rpcFacade", "rpcTransport", "grpcAdapter", "protobufCodec", "contractActions", "rpcActionsCatalog", "domainProto", "goStub", "httpRpc", "splitRuntime", "lowcodeTemplates"]
+const required = ["broker", "gateway", "action", "event", "queueGroup", "registry", "circuitBreaker", "bulkhead", "fallback", "natsAdapter", "jetStream", "outbox", "cacher", "validator", "moduleLayers", "dualInvoke", "rpcCodec", "rpcFacade", "rpcTransport", "grpcAdapter", "protobufCodec", "contractActions", "rpcActionsCatalog", "domainProto", "goStub", "httpRpc", "splitRuntime", "lowcodeTemplates", "schemaConfluence"]
 for (const id of required) {
   const item = catalog.capabilities.find((capability) => capability.id === id)
   if (!item || item.status === "TODO") fail(`${id} must not be TODO`)
@@ -98,9 +98,99 @@ for (const method of ["previewCodegen", "generateCodegen", "previewTemplate", "g
   if (!infraActions.includes(method)) fail(`rpc-actions.json infra must declare ${method}`)
 }
 
+const systemActions = rpcActions.domains?.system?.actions?.map((item) => item.method) ?? []
+if (!systemActions.includes("getDictDataByType")) fail("rpc-actions.json system must declare getDictDataByType")
+if (!systemActions.includes("resolveTenantEntitlement")) fail("rpc-actions.json system must declare resolveTenantEntitlement")
+
+const onlineActions = rpcActions.domains?.online?.actions?.map((item) => item.method) ?? []
+for (const method of ["pageDefinitions", "resolvePublishedRelease", "resolveCodegenImport", "pageManagedRecords", "getManagedRecord", "createManagedRecord", "updateManagedRecord", "deleteManagedRecord"]) {
+  if (!onlineActions.includes(method)) fail(`rpc-actions.json online must declare ${method}`)
+}
+
+const payRefundActions = rpcActions.domains?.pay?.actions?.map((item) => item.method) ?? []
+if (!payRefundActions.includes("listRefunds")) fail("rpc-actions.json pay must declare listRefunds")
+
+for (const [domain, spec] of Object.entries(rpcActions.domains ?? {})) {
+  const validatorsDir = path.join(ROOT, "src", "modules", domain, "backend", "validators")
+  if (!fs.existsSync(validatorsDir)) fail(`missing validators for ${domain}`)
+  const validatorSource = fs.readdirSync(validatorsDir).filter((name) => name.endsWith(".ts")).map((name) => fs.readFileSync(path.join(validatorsDir, name), "utf8")).join("\n")
+  for (const action of spec.actions ?? []) {
+    if (action.schema === "ping") continue
+    if (!validatorSource.includes(`export const ${action.schema}`)) {
+      fail(`rpc-actions.json ${domain}.${action.method} schema ${action.schema} must live in ${domain} backend validators`)
+    }
+  }
+}
+
+const guardsPath = path.join(ROOT, "src", "modules", "shared", "backend", "auth", "guards.ts")
+const guardsSource = fs.readFileSync(guardsPath, "utf8")
+if (guardsSource.includes("TenantEntitlementService")) fail("shared guards must not import TenantEntitlementService; use systemFacade")
+if (!guardsSource.includes("systemFacade")) fail("shared guards must call tenant entitlement through systemFacade")
+
+const codegenTablesPath = path.join(ROOT, "src", "app", "api", "v1", "admin", "infra", "codegen", "tables", "route.ts")
+const codegenTables = fs.readFileSync(codegenTablesPath, "utf8")
+if (codegenTables.includes("OnlineDefinitionService") || codegenTables.includes("KyselyOnlineRuntimeRepository")) {
+  fail("infra codegen tables route must not import online Service/Repository; use onlineFacade")
+}
+if (!codegenTables.includes("onlineFacade")) fail("infra codegen tables route must call online through onlineFacade")
+
+const onlineAdapterPath = path.join(ROOT, "src", "modules", "online", "backend", "application", "online-codegen.adapter.ts")
+const onlineAdapter = fs.readFileSync(onlineAdapterPath, "utf8")
+if (onlineAdapter.includes("codegen-engine.service")) fail("online-codegen.adapter must import codegen types from infra contract, not the engine service")
+
+const reportSqlPath = path.join(ROOT, "src", "modules", "report", "backend", "services", "custom-sql-report.service.ts")
+const reportSql = fs.readFileSync(reportSqlPath, "utf8")
+if (reportSql.includes("DataSourceConfigRepository")) fail("report custom-sql must not import infra repository; use infraFacade")
+if (!reportSql.includes("infraFacade")) fail("report custom-sql must call data sources through infraFacade")
+
+const reportSqlTestPath = path.join(ROOT, "src", "modules", "report", "backend", "services", "__tests__", "custom-sql-report.service.test.ts")
+const reportSqlTest = fs.readFileSync(reportSqlTestPath, "utf8")
+if (reportSqlTest.includes("DataSourceConfigRepository")) fail("report custom-sql test must spy infraFacade, not import infra repository")
+if (!reportSqlTest.includes("infraFacade")) fail("report custom-sql test must assert infraFacade tenant scope")
+
+const payOrdersPath = path.join(ROOT, "src", "app", "api", "v1", "admin", "pay", "orders", "route.ts")
+const payOrders = fs.readFileSync(payOrdersPath, "utf8")
+if (!payOrders.includes("PAY_ACTION_SCHEMAS") || !payOrders.includes("parseActionQuery")) {
+  fail("pay orders route must parse query with PAY_ACTION_SCHEMAS via parseActionQuery")
+}
+
+const payRefundsPath = path.join(ROOT, "src", "app", "api", "v1", "admin", "pay", "refunds", "route.ts")
+const payRefunds = fs.readFileSync(payRefundsPath, "utf8")
+if (!payRefunds.includes("PAY_ACTION_SCHEMAS") || !payRefunds.includes("parseActionQuery")) {
+  fail("pay refunds route must parse query with PAY_ACTION_SCHEMAS via parseActionQuery")
+}
+
+const codegenImportPath = path.join(ROOT, "src", "app", "api", "v1", "admin", "infra", "codegen", "import", "route.ts")
+const codegenImport = fs.readFileSync(codegenImportPath, "utf8")
+if (codegenImport.includes("KyselyOnlineRuntimeRepository") || codegenImport.includes("online-codegen.adapter")) {
+  fail("infra codegen import route must not import online Service/Repository/adapter; use onlineFacade")
+}
+if (!codegenImport.includes("onlineFacade.resolveCodegenImport")) {
+  fail("infra codegen import route must call online through onlineFacade.resolveCodegenImport")
+}
+
 const onlineDefinitionPath = path.join(ROOT, "src", "modules", "online", "backend", "services", "online-definition.service.ts")
 const onlineDefinition = fs.readFileSync(onlineDefinitionPath, "utf8")
 if (onlineDefinition.includes("CodegenEngineService")) fail("online-definition must not import CodegenEngineService; use infraFacade")
 if (!onlineDefinition.includes("infraFacade")) fail("online-definition must call infra codegen through infraFacade")
+if (onlineDefinition.includes("SystemDictService")) fail("online-definition must not import SystemDictService; use systemFacade")
+if (!onlineDefinition.includes("systemFacade")) fail("online-definition must call system dict through systemFacade")
+
+const systemMenuRepo = fs.readFileSync(path.join(ROOT, "src", "modules", "system", "backend", "repositories", "menu.repository.ts"), "utf8")
+const systemPermissionRepo = fs.readFileSync(path.join(ROOT, "src", "modules", "system", "backend", "repositories", "permission.repository.ts"), "utf8")
+const tenantMenuScope = fs.readFileSync(path.join(ROOT, "src", "modules", "system", "backend", "services", "tenant-menu-scope.service.ts"), "utf8")
+for (const [name, source] of [["menu.repository", systemMenuRepo], ["permission.repository", systemPermissionRepo], ["tenant-menu-scope", tenantMenuScope]]) {
+  if (source.includes("online/backend/menu-catalog")) fail(`${name} must import online menu catalog from contract, not backend`)
+}
+if (!fs.existsSync(path.join(ROOT, "src", "modules", "online", "contract", "menu-catalog.ts"))) {
+  fail("online contract must publish menu-catalog.ts")
+}
+
+const codegenEngine = fs.readFileSync(path.join(ROOT, "src", "modules", "infra", "backend", "services", "codegen-engine.service.ts"), "utf8")
+if (codegenEngine.includes("KyselyOnlineManagedTableRuntimeRepository")) fail("codegen managed-table template must not import Online repository; use onlineFacade")
+if (!codegenEngine.includes("onlineFacade.pageManagedRecords")) fail("codegen managed-table template must call onlineFacade.pageManagedRecords")
+
+const outboxSource = fs.readFileSync(path.join(ROOT, "src", "modules", "shared", "backend", "lib", "transactional-outbox.ts"), "utf8")
+if (!outboxSource.includes("getOutboxStoreForDomain")) fail("outbox must expose getOutboxStoreForDomain for per-domain store ownership")
 
 console.log(`[microservice-governance] PASS: ${catalog.capabilities.length} capabilities mapped from Moleculer + NestJS NATS`)

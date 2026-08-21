@@ -1,5 +1,6 @@
 import { SystemTenantRepository, type SystemTenantRow } from "@/modules/system/backend/repositories/tenant.repository"
 import { TenantPackageRepository, type TenantPackageRow } from "@/modules/system/backend/repositories/tenant-package.repository"
+import type { ResolveTenantEntitlementInput } from "../validators"
 
 export type TenantEntitlement = {
   tenant: SystemTenantRow
@@ -13,6 +14,10 @@ function asMillis(value: string): number {
 
 /** Resolves and validates the current tenant subscription in one place. */
 export class TenantEntitlementService {
+  static async resolveTenantEntitlement(input: ResolveTenantEntitlementInput) {
+    return this.resolve(input.tenantId)
+  }
+
   static async resolve(tenantId: string, now = new Date()): Promise<TenantEntitlement> {
     const tenant = await SystemTenantRepository.findById(tenantId)
     if (!tenant) throw new Error("租户不存在")

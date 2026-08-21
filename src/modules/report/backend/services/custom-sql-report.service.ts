@@ -2,7 +2,7 @@ import { createHash } from "node:crypto"
 import { Client as PgClient } from "pg"
 import mysql from "mysql2/promise"
 import { Parser } from "node-sql-parser"
-import { DataSourceConfigRepository } from "@/modules/infra/backend/repositories/data-source-config.repository"
+import { infraFacade } from "@/modules/infra/contract/infra.facade"
 import type { ExecuteCustomSqlReportInput } from "@/modules/report/backend/validators/custom-sql-report.validator"
 import { ApiError } from "@/modules/shared/backend/http/api-error"
 import { cryptoEngine } from "@/modules/shared/backend/lib/crypto-engine"
@@ -134,12 +134,16 @@ async function runMysql(config: { url: string; username: string; password: strin
 
 export class CustomSqlReportService {
   static async dataSources(tenantId: string) {
-    const page = await DataSourceConfigRepository.findPage({ tenantId, page: 1, pageSize: 100 })
-    return page.items.filter((item) => PG_DRIVERS.has(item.driver) || MYSQL_DRIVERS.has(item.driver)).map(({ id, name, driver }) => ({ id, name, driver }))
+    const result = await infraFacade.listQueryDataSources({ tenantId }, { caller: "report.custom-sql" })
+    if (!result.success) throw new ApiError("INTERNAL_ERROR", result.error ?? "infra listQueryDataSources 调用失败")
+    const items = Array.isArray(result.data) ? result.data as Array<{ id: string; name: string; driver: string }> : []
+    return items.filter((item) => PG_DRIVERS.has(item.driver) || MYSQL_DRIVERS.has(item.driver)).map(({ id, name, driver }) => ({ id, name, driver }))
   }
 
   static async execute(tenantId: string, input: ExecuteCustomSqlReportInput): Promise<QueryResult> {
-    const source = await DataSourceConfigRepository.findById(tenantId, input.dataSourceId)
+    const lookup = await infraFacade.getQueryConnection({ tenantId, id: input.dataSourceId }, { caller: "report.custom-sql" })
+    if (!lookup.success) throw new ApiError("INTERNAL_ERROR", lookup.error ?? "infra getQueryConnection 调用失败")
+    const source = lookup.data as { id: string; driver: string; url: string; username: string; encryptedPassword: string } | null
     if (!source) throw new ApiError("NOT_FOUND", "数据源不存在或已删除")
     if (!PG_DRIVERS.has(source.driver) && !MYSQL_DRIVERS.has(source.driver)) validationError("该数据源类型暂不支持报表查询")
     validateReadOnlySql(input.sql, source.driver)

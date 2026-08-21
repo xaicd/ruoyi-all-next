@@ -1,7 +1,7 @@
 import type { PermissionCode } from "../constants/permissions"
 import { AuthenticationError, AuthorizationError, type AuthContext, type AuthEndpoint } from "./context"
 import { activateTenantContext, getPlatformRole } from "../lib/biz-tenant"
-import { TenantEntitlementService } from "@/modules/system/backend/services/tenant-entitlement.service"
+import { systemFacade } from "@/modules/system/contract/system.facade"
 import { toTenantContext } from "./tenant"
 import { verifyJwt } from "./jwt"
 
@@ -40,10 +40,9 @@ export async function requireAdminAuth(request: Request, requiredPermission?: Pe
 
   if (!isPlatformAdmin) {
     if (!auth.tenantId) throw new AuthorizationError("管理员账号未绑定租户")
-    try {
-      await TenantEntitlementService.resolve(auth.tenantId)
-    } catch (error) {
-      throw new AuthorizationError(error instanceof Error ? error.message : "租户权益不可用")
+    const entitlement = await systemFacade.resolveTenantEntitlement({ tenantId: auth.tenantId }, { caller: "shared.auth" })
+    if (!entitlement.success) {
+      throw new AuthorizationError(entitlement.error ?? "租户权益不可用")
     }
   }
 

@@ -17,14 +17,79 @@ message PingRequest {
 }
 
 message PageDefinitionsRequest {
-  int32 page = 1;
-  int32 page_size = 2 [json_name = "pageSize"];
-  optional string keyword = 3;
-  optional string model_type = 4 [json_name = "modelType"];
-  optional string status = 5;
+  string tenant_id = 1 [json_name = "tenantId"];
+  int32 page = 2;
+  int32 page_size = 3 [json_name = "pageSize"];
+  optional string keyword = 4;
+  optional string model_type = 5 [json_name = "modelType"];
+  optional string status = 6;
+}
+
+message ResolvePublishedReleaseRequest {
+  string tenant_id = 1 [json_name = "tenantId"];
+  string definition_code = 2 [json_name = "definitionCode"];
+  string release_id = 3 [json_name = "releaseId"];
+}
+
+message ResolveCodegenImportRequest {
+  string tenant_id = 1 [json_name = "tenantId"];
+  string definition_code = 2 [json_name = "definitionCode"];
+  string release_id = 3 [json_name = "releaseId"];
+}
+
+message PageManagedRecordsRequest {
+  string tenant_id = 1 [json_name = "tenantId"];
+  string actor_id = 2 [json_name = "actorId"];
+  string definition_code = 3 [json_name = "definitionCode"];
+  string release_id = 4 [json_name = "releaseId"];
+  int32 schema_revision = 5 [json_name = "schemaRevision"];
+  int32 page = 6;
+  int32 page_size = 7 [json_name = "pageSize"];
+}
+
+message GetManagedRecordRequest {
+  string tenant_id = 1 [json_name = "tenantId"];
+  string actor_id = 2 [json_name = "actorId"];
+  string definition_code = 3 [json_name = "definitionCode"];
+  string release_id = 4 [json_name = "releaseId"];
+  int32 schema_revision = 5 [json_name = "schemaRevision"];
+  string id = 6;
+}
+
+message CreateManagedRecordRequest {
+  string tenant_id = 1 [json_name = "tenantId"];
+  string actor_id = 2 [json_name = "actorId"];
+  string definition_code = 3 [json_name = "definitionCode"];
+  string release_id = 4 [json_name = "releaseId"];
+  int32 schema_revision = 5 [json_name = "schemaRevision"];
+}
+
+message UpdateManagedRecordRequest {
+  string tenant_id = 1 [json_name = "tenantId"];
+  string actor_id = 2 [json_name = "actorId"];
+  string definition_code = 3 [json_name = "definitionCode"];
+  string release_id = 4 [json_name = "releaseId"];
+  int32 schema_revision = 5 [json_name = "schemaRevision"];
+  string id = 6;
+}
+
+message DeleteManagedRecordRequest {
+  string tenant_id = 1 [json_name = "tenantId"];
+  string actor_id = 2 [json_name = "actorId"];
+  string definition_code = 3 [json_name = "definitionCode"];
+  string release_id = 4 [json_name = "releaseId"];
+  int32 schema_revision = 5 [json_name = "schemaRevision"];
+  string id = 6;
 }
 
 service OnlineService {
   rpc Ping(PingRequest) returns (JsonReply);
   rpc PageDefinitions(PageDefinitionsRequest) returns (JsonReply);
+  rpc ResolvePublishedRelease(ResolvePublishedReleaseRequest) returns (JsonReply);
+  rpc ResolveCodegenImport(ResolveCodegenImportRequest) returns (JsonReply);
+  rpc PageManagedRecords(PageManagedRecordsRequest) returns (JsonReply);
+  rpc GetManagedRecord(GetManagedRecordRequest) returns (JsonReply);
+  rpc CreateManagedRecord(CreateManagedRecordRequest) returns (JsonReply);
+  rpc UpdateManagedRecord(UpdateManagedRecordRequest) returns (JsonReply);
+  rpc DeleteManagedRecord(DeleteManagedRecordRequest) returns (JsonReply);
 }

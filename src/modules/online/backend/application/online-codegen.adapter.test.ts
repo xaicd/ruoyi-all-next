@@ -21,7 +21,9 @@ describe("Online managed-table codegen", () => {
     const route = outputs.find((item) => item.type === "route")!.content
     const test = outputs.find((item) => item.type === "test")!.content
     expect(outputs.some((item) => item.type === "permission")).toBe(false)
-    expect(service).toContain("KyselyOnlineManagedTableRuntimeRepository")
+    expect(service).toContain("onlineFacade")
+    expect(service).toContain("pageManagedRecords")
+    expect(service).not.toContain("KyselyOnlineManagedTableRuntimeRepository")
     expect(service).not.toContain("MOCK_DATA")
     expect(route).toContain("scope(auth)")
     expect(route).toContain('new ApiError("FORBIDDEN", "Tenant scope is required")')

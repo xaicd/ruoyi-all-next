@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
 import { SchemaReaderService } from "@/modules/infra/backend/services/schema-reader.service"
-import { KyselyOnlineRuntimeRepository } from "@/modules/online/backend/adapters/persistence/online-runtime.repository"
-import { OnlineDefinitionService } from "@/modules/online/backend/services"
+import { onlineFacade } from "@/modules/online/contract/online.facade"
 import { ApiError } from "@/modules/shared/backend/http/api-error"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
@@ -26,13 +25,35 @@ type Candidate = {
   online: { definitionCode: string; definitionName: string; releaseId: string; releaseNo: number; schemaRevision: number } | null
 }
 
-async function publishedDefinitions(auth: Parameters<typeof OnlineDefinitionService.page>[0]) {
-  const items = []
+type OnlineDefinitionPage = {
+  items: Array<{
+    code: string
+    name: string
+    publishedReleaseId?: string | null
+    currentRelease?: { releaseNo: number; schemaRevision: number } | null
+  }>
+  total: number
+}
+
+type PublishedRelease = {
+  model: { fields: unknown[]; storage: { kind: "GENERIC_RECORD" | "MANAGED_TABLE" } }
+}
+
+async function unwrap<T>(result: { success: boolean; error?: string; data?: unknown }, message: string): Promise<T> {
+  if (!result.success) throw new ApiError("INTERNAL_ERROR", result.error ?? message)
+  return result.data as T
+}
+
+async function publishedDefinitions(tenantId: string) {
+  const items: OnlineDefinitionPage["items"] = []
   let page = 1
   while (true) {
-    const result = await OnlineDefinitionService.page(auth, { page, pageSize: 100, status: "ACTIVE" })
-    items.push(...result.items.filter((item) => item.publishedReleaseId && item.currentRelease))
-    if (items.length >= result.total || result.items.length < 100) return items
+    const data = await unwrap<OnlineDefinitionPage>(
+      await onlineFacade.pageDefinitions({ tenantId, page, pageSize: 100, status: "ACTIVE" }, { caller: "infra.codegen" }),
+      "online pageDefinitions 调用失败",
+    )
+    items.push(...data.items.filter((item) => item.publishedReleaseId && item.currentRelease))
+    if (items.length >= data.total || data.items.length < 100) return items
     page += 1
   }
 }
@@ -41,18 +62,21 @@ async function publishedDefinitions(auth: Parameters<typeof OnlineDefinitionServ
 export const GET = withAdminRoute(async (request, auth) => {
   if (!auth.tenantId) throw new ApiError("FORBIDDEN", "Online 设计表必须在租户上下文中选择")
   const input = querySchema.parse(Object.fromEntries(new URL(request.url).searchParams))
-  const [tables, definitions] = await Promise.all([SchemaReaderService.listTables(), publishedDefinitions(auth)])
+  const [tables, definitions] = await Promise.all([SchemaReaderService.listTables(), publishedDefinitions(auth.tenantId)])
   const physicalNames = new Set(tables.map((table) => table.name))
   const onlineCandidates: Candidate[] = await Promise.all(definitions.map(async (definition) => {
     const releaseId = definition.publishedReleaseId!
-    const runtime = await KyselyOnlineRuntimeRepository.resolvePublishedReleaseById({ tenantId: auth.tenantId!, definitionCode: definition.code, releaseId })
+    const runtime = await unwrap<PublishedRelease>(
+      await onlineFacade.resolvePublishedRelease({ tenantId: auth.tenantId!, definitionCode: definition.code, releaseId }, { caller: "infra.codegen" }),
+      "online resolvePublishedRelease 调用失败",
+    )
     return {
       id: `ONLINE:${releaseId}`,
       name: definition.code,
       comment: definition.name,
       columns: [],
       fieldCount: runtime.model.fields.length,
-      source: "ONLINE",
+      source: "ONLINE" as const,
       physical: physicalNames.has(definition.code),
       storageKind: runtime.model.storage.kind,
       online: { definitionCode: definition.code, definitionName: definition.name, releaseId, releaseNo: definition.currentRelease!.releaseNo, schemaRevision: definition.currentRelease!.schemaRevision },
@@ -64,7 +88,7 @@ export const GET = withAdminRoute(async (request, auth) => {
     comment: table.comment,
     columns: table.columns,
     fieldCount: table.columns.length,
-    source: "DATABASE",
+    source: "DATABASE" as const,
     physical: true,
     storageKind: null,
     online: null,

@@ -7,6 +7,8 @@ import "context"
 const (
 	ServiceName = "SystemService"
 	PingPath = "/ruoyi.system.v1.SystemService/Ping"
+	GetDictDataByTypePath = "/ruoyi.system.v1.SystemService/GetDictDataByType"
+	ResolveTenantEntitlementPath = "/ruoyi.system.v1.SystemService/ResolveTenantEntitlement"
 )
 
 type JsonReply struct {
@@ -17,8 +19,18 @@ type PingRequest struct {
 	N *int32 `json:"n,omitempty"`
 }
 
+type GetDictDataByTypeRequest struct {
+	Type string `json:"type"`
+}
+
+type ResolveTenantEntitlementRequest struct {
+	TenantId string `json:"tenantId"`
+}
+
 type SystemService interface {
 	Ping(ctx context.Context, in *PingRequest) (*JsonReply, error)
+	GetDictDataByType(ctx context.Context, in *GetDictDataByTypeRequest) (*JsonReply, error)
+	ResolveTenantEntitlement(ctx context.Context, in *ResolveTenantEntitlementRequest) (*JsonReply, error)
 }
 
 type Invoker func(ctx context.Context, path string, in any) (json string, err error)
@@ -29,6 +41,22 @@ type Client struct {
 
 func (c *Client) Ping(ctx context.Context, in *PingRequest) (*JsonReply, error) {
 	raw, err := c.Invoke(ctx, PingPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) GetDictDataByType(ctx context.Context, in *GetDictDataByTypeRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, GetDictDataByTypePath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) ResolveTenantEntitlement(ctx context.Context, in *ResolveTenantEntitlementRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, ResolveTenantEntitlementPath, in)
 	if err != nil {
 		return nil, err
 	}

@@ -10,6 +10,7 @@ const (
 	ListOrdersPath = "/ruoyi.pay.v1.PayService/ListOrders"
 	CreateOrderPath = "/ruoyi.pay.v1.PayService/CreateOrder"
 	CreateRefundPath = "/ruoyi.pay.v1.PayService/CreateRefund"
+	ListRefundsPath = "/ruoyi.pay.v1.PayService/ListRefunds"
 )
 
 type JsonReply struct {
@@ -43,11 +44,19 @@ type CreateRefundRequest struct {
 	Reason string `json:"reason"`
 }
 
+type ListRefundsRequest struct {
+	Page int32 `json:"page"`
+	PageSize int32 `json:"pageSize"`
+	Keyword *string `json:"keyword,omitempty"`
+	Status *string `json:"status,omitempty"`
+}
+
 type PayService interface {
 	Ping(ctx context.Context, in *PingRequest) (*JsonReply, error)
 	ListOrders(ctx context.Context, in *ListOrdersRequest) (*JsonReply, error)
 	CreateOrder(ctx context.Context, in *CreateOrderRequest) (*JsonReply, error)
 	CreateRefund(ctx context.Context, in *CreateRefundRequest) (*JsonReply, error)
+	ListRefunds(ctx context.Context, in *ListRefundsRequest) (*JsonReply, error)
 }
 
 type Invoker func(ctx context.Context, path string, in any) (json string, err error)
@@ -82,6 +91,14 @@ func (c *Client) CreateOrder(ctx context.Context, in *CreateOrderRequest) (*Json
 
 func (c *Client) CreateRefund(ctx context.Context, in *CreateRefundRequest) (*JsonReply, error) {
 	raw, err := c.Invoke(ctx, CreateRefundPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) ListRefunds(ctx context.Context, in *ListRefundsRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, ListRefundsPath, in)
 	if err != nil {
 		return nil, err
 	}

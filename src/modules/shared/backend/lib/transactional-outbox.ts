@@ -65,6 +65,16 @@ function nextId(prefix: string) {
   return `${prefix}-${Date.now()}-${++seq}`
 }
 
+export function resolveOutboxOwnerDomain(source: string): string {
+  const [domain] = source.split(".")
+  return domain || source
+}
+
+/** Stage C will return the writing domain's store. Stage A/B still share one outbox. */
+export function getOutboxStoreForDomain(_domain: string) {
+  return getOutboxStore()
+}
+
 function eventMatches(event: { type: string; subject?: string }, pattern: string | RegExp) {
   return eventSubjectAliases(event.type).some((alias) => matchSubject(alias, pattern))
     || (event.subject ? matchSubject(event.subject, pattern) : false)
@@ -102,9 +112,9 @@ export type UnitOfWork = {
 
 export async function runUnitOfWork<T>(
   work: (uow: UnitOfWork) => Promise<T>,
-  options: { dispatch?: boolean } = {},
+  options: { dispatch?: boolean; domain?: string } = {},
 ): Promise<{ result: T; eventIds: string[] }> {
-  const store = getOutboxStore()
+  const store = getOutboxStoreForDomain(options.domain ?? "shared")
   const staged: OutboxRecord[] = []
   const result = await store.runInTransaction(async (tx) => {
     const value = await work({

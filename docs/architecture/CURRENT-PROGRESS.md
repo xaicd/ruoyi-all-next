@@ -1,8 +1,33 @@
 # ruoyi-all-next 当前进度与待办
 
-更新时间：2026-08-10
+更新时间：2026-08-20
+
+## 双模 SDK / RPC 任务清单（持续更新）
+
+权威门禁：`npm run microservice:check`、`npm run domain:check`。
+
+| ID | 状态 | 项 | 说明 |
+|---|---|---|---|
+| D1 | DONE | 分层与 Facade | `shared` SDK；system/infra 平台；业务域可拆。跨域走 Facade |
+| D2 | DONE | 一体 SDK / 拆分 RPC | `POST /api/internal/rpc`；nats-rr JSON；自研 gRPC unary |
+| D3 | DONE | 低代码 codegen/template | Online 预览下载走 `infraFacade`；模板/ZIP 输出 `*.rpc.ts` |
+| D4 | DONE | Online 字典 | `systemFacade.getDictDataByType` |
+| D5 | DONE | shared 鉴权 | `systemFacade.resolveTenantEntitlement` |
+| D6 | DONE | Route/broker schema 合流 | `parseActionQuery` + rpc-actions schema 必须在 validators |
+| D7 | DONE | infra 选表 / 报表数据源 | `onlineFacade` + `infraFacade.listQueryDataSources` |
+| D8 | DONE | system 菜单 catalog | 改为 `online/contract/menu-catalog`，禁止 import online backend |
+| D9 | DONE | 生成 managed-table Service | 改为 `onlineFacade` 托管表 CRUD，禁止生成 Repository import |
+| D10 | DONE | outbox 归属挂钩 | `getOutboxStoreForDomain`；跨库表仍属阶段 C |
+| D11 | TODO | Facade 覆盖该域全部 HTTP | 只覆盖 `rpc-actions.json` 门面，不宣称全路由 |
+| D12 | TODO | 官方 protoc + grpc-go | 当前 Go 桩走 `Invoker`，不引入 grpc-go |
+| D13 | TODO | 跨库 outbox 投递 | 每域独立库后的表归属与 dispatcher |
+| D14 | DONE | infra codegen import | `onlineFacade.resolveCodegenImport`，禁止 import online repository/adapter |
+| D15 | DONE | pay 退款列表 schema 合流 | HTTP 与 broker 共用 `PAY_ACTION_SCHEMAS["pay.listRefunds"]` |
+| D16 | DONE | report 测试改 spy Facade | 禁止测试 import infra `DataSourceConfigRepository` |
+| D17 | TODO | 其余域列表查询 schema 合流 | mall/crm/bpm 等 HTTP 改走对应 `ACTION_SCHEMAS` + `parseActionQuery` |
 
 ## 已完成
+
 
 1. modules-first 架构重构完成
 2. 15 域全量代码生成（388 Controller → 1400+ 文件）

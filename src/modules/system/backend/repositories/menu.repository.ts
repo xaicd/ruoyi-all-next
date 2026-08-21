@@ -4,7 +4,7 @@
 
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
 import { SEED_MENUS } from "@prisma/data"
-import { withOnlineMenuCatalog } from "@/modules/online/backend/menu-catalog"
+import { withOnlineMenuCatalog } from "@/modules/online/contract/menu-catalog"
 
 export type SystemMenuRow = {
   id: string

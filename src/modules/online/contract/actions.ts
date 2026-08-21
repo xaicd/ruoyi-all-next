@@ -1,7 +1,13 @@
 import { z } from "zod"
 import { registerActionSchema } from "@/modules/shared/backend/lib/broker-validator"
 import {
-  onlineDefinitionPageSchema,
+  onlinePageDefinitionsSchema,
+  resolvePublishedReleaseSchema,
+  pageManagedRecordsSchema,
+  getManagedRecordSchema,
+  createManagedRecordSchema,
+  updateManagedRecordSchema,
+  deleteManagedRecordSchema,
 } from "../backend/validators"
 
 export const onlinePingSchema = z.object({
@@ -10,7 +16,14 @@ export const onlinePingSchema = z.object({
 
 export const ONLINE_ACTION_SCHEMAS = {
   "online.ping": onlinePingSchema,
-  "online.pageDefinitions": onlineDefinitionPageSchema,
+  "online.pageDefinitions": onlinePageDefinitionsSchema,
+  "online.resolvePublishedRelease": resolvePublishedReleaseSchema,
+  "online.resolveCodegenImport": resolvePublishedReleaseSchema,
+  "online.pageManagedRecords": pageManagedRecordsSchema,
+  "online.getManagedRecord": getManagedRecordSchema,
+  "online.createManagedRecord": createManagedRecordSchema,
+  "online.updateManagedRecord": updateManagedRecordSchema,
+  "online.deleteManagedRecord": deleteManagedRecordSchema,
 } as const
 
 export function registerActionSchemas() {

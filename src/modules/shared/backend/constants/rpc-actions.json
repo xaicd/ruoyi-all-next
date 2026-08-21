@@ -12,7 +12,23 @@
   },
   "domains": {
     "system": {
-      "actions": [{ "method": "ping", "schema": "ping" }]
+      "actions": [
+        { "method": "ping", "schema": "ping" },
+        {
+          "method": "getDictDataByType",
+          "service": "SystemDictService",
+          "module": "dict.service",
+          "schema": "getDictDataByTypeSchema",
+          "fields": [{ "name": "type", "type": "string" }]
+        },
+        {
+          "method": "resolveTenantEntitlement",
+          "service": "TenantEntitlementService",
+          "module": "tenant-entitlement.service",
+          "schema": "resolveTenantEntitlementSchema",
+          "fields": [{ "name": "tenantId", "type": "string" }]
+        }
+      ]
     },
     "infra": {
       "actions": [
@@ -70,6 +86,23 @@
             { "name": "stack", "type": "string", "optional": true },
             { "name": "includeDisabled", "type": "bool", "optional": true }
           ]
+        },
+        {
+          "method": "listQueryDataSources",
+          "service": "DataSourceConfigService",
+          "module": "data-source-config.service",
+          "schema": "listQueryDataSourcesSchema",
+          "fields": [{ "name": "tenantId", "type": "string" }]
+        },
+        {
+          "method": "getQueryConnection",
+          "service": "DataSourceConfigService",
+          "module": "data-source-config.service",
+          "schema": "getQueryConnectionSchema",
+          "fields": [
+            { "name": "tenantId", "type": "string" },
+            { "name": "id", "type": "string" }
+          ]
         }
       ]
     },
@@ -78,13 +111,108 @@
         { "method": "ping", "schema": "ping" },
         {
           "method": "pageDefinitions",
-          "schema": "onlineDefinitionPageSchema",
+          "service": "OnlineDefinitionService",
+          "module": "online-definition.service",
+          "schema": "onlinePageDefinitionsSchema",
           "fields": [
+            { "name": "tenantId", "type": "string" },
             { "name": "page", "type": "int32" },
             { "name": "pageSize", "type": "int32" },
             { "name": "keyword", "type": "string", "optional": true },
             { "name": "modelType", "type": "string", "optional": true },
             { "name": "status", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "resolvePublishedRelease",
+          "service": "OnlineDefinitionService",
+          "module": "online-definition.service",
+          "schema": "resolvePublishedReleaseSchema",
+          "fields": [
+            { "name": "tenantId", "type": "string" },
+            { "name": "definitionCode", "type": "string" },
+            { "name": "releaseId", "type": "string" }
+          ]
+        },
+        {
+          "method": "resolveCodegenImport",
+          "service": "OnlineDefinitionService",
+          "module": "online-definition.service",
+          "schema": "resolvePublishedReleaseSchema",
+          "fields": [
+            { "name": "tenantId", "type": "string" },
+            { "name": "definitionCode", "type": "string" },
+            { "name": "releaseId", "type": "string" }
+          ]
+        },
+        {
+          "method": "pageManagedRecords",
+          "service": "OnlineManagedTableService",
+          "module": "online-managed-table.service",
+          "schema": "pageManagedRecordsSchema",
+          "fields": [
+            { "name": "tenantId", "type": "string" },
+            { "name": "actorId", "type": "string" },
+            { "name": "definitionCode", "type": "string" },
+            { "name": "releaseId", "type": "string" },
+            { "name": "schemaRevision", "type": "int32" },
+            { "name": "page", "type": "int32" },
+            { "name": "pageSize", "type": "int32" }
+          ]
+        },
+        {
+          "method": "getManagedRecord",
+          "service": "OnlineManagedTableService",
+          "module": "online-managed-table.service",
+          "schema": "getManagedRecordSchema",
+          "fields": [
+            { "name": "tenantId", "type": "string" },
+            { "name": "actorId", "type": "string" },
+            { "name": "definitionCode", "type": "string" },
+            { "name": "releaseId", "type": "string" },
+            { "name": "schemaRevision", "type": "int32" },
+            { "name": "id", "type": "string" }
+          ]
+        },
+        {
+          "method": "createManagedRecord",
+          "service": "OnlineManagedTableService",
+          "module": "online-managed-table.service",
+          "schema": "createManagedRecordSchema",
+          "fields": [
+            { "name": "tenantId", "type": "string" },
+            { "name": "actorId", "type": "string" },
+            { "name": "definitionCode", "type": "string" },
+            { "name": "releaseId", "type": "string" },
+            { "name": "schemaRevision", "type": "int32" }
+          ]
+        },
+        {
+          "method": "updateManagedRecord",
+          "service": "OnlineManagedTableService",
+          "module": "online-managed-table.service",
+          "schema": "updateManagedRecordSchema",
+          "fields": [
+            { "name": "tenantId", "type": "string" },
+            { "name": "actorId", "type": "string" },
+            { "name": "definitionCode", "type": "string" },
+            { "name": "releaseId", "type": "string" },
+            { "name": "schemaRevision", "type": "int32" },
+            { "name": "id", "type": "string" }
+          ]
+        },
+        {
+          "method": "deleteManagedRecord",
+          "service": "OnlineManagedTableService",
+          "module": "online-managed-table.service",
+          "schema": "deleteManagedRecordSchema",
+          "fields": [
+            { "name": "tenantId", "type": "string" },
+            { "name": "actorId", "type": "string" },
+            { "name": "definitionCode", "type": "string" },
+            { "name": "releaseId", "type": "string" },
+            { "name": "schemaRevision", "type": "int32" },
+            { "name": "id", "type": "string" }
           ]
         }
       ]
@@ -145,6 +273,19 @@
             { "name": "payOrderId", "type": "string" },
             { "name": "refundAmount", "type": "int64" },
             { "name": "reason", "type": "string" }
+          ]
+        },
+        {
+          "method": "listRefunds",
+          "service": "PayRefundService",
+          "module": "refund.service",
+          "target": "list",
+          "schema": "payRefundPageQuerySchema",
+          "fields": [
+            { "name": "page", "type": "int32" },
+            { "name": "pageSize", "type": "int32" },
+            { "name": "keyword", "type": "string", "optional": true },
+            { "name": "status", "type": "string", "optional": true }
           ]
         }
       ]

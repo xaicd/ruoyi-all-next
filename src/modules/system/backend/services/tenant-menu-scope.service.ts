@@ -1,5 +1,5 @@
 import { SystemMenuRepository, type SystemMenuRow } from "@/modules/system/backend/repositories/menu.repository"
-import { withOnlinePackageMenuIds } from "@/modules/online/backend/menu-catalog"
+import { withOnlinePackageMenuIds } from "@/modules/online/contract/menu-catalog"
 
 const PLATFORM_CONTROL_MENU_NAMES = new Set(["租户管理", "租户套餐", "数据源配置", "OAuth 2.0", "令牌管理", "应用管理"])
 const PLATFORM_CONTROL_PERMISSION_PREFIXES = ["system:tenant:", "system:tenant-package:", "system:oauth2-", "infra:data-source-config:"]

@@ -2,9 +2,9 @@ import { createHash } from "crypto"
 import { NextResponse } from "next/server"
 import { z } from "zod"
 import { CodegenTableRepository, toCodegenColumnConfig, type CodegenColumnConfig } from "@/modules/infra/backend/repositories/codegen-table.repository"
+import type { CodegenAdvancedConfig, CodegenScene, CodegenTemplate } from "@/modules/infra/contract/codegen.types"
 import { SchemaReaderService } from "@/modules/infra/backend/services/schema-reader.service"
-import { toOnlineCodegenConfig } from "@/modules/online/backend/application/online-codegen.adapter"
-import { KyselyOnlineRuntimeRepository } from "@/modules/online/backend/adapters/persistence/online-runtime.repository"
+import { onlineFacade } from "@/modules/online/contract/online.facade"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 import { ApiError } from "@/modules/shared/backend/http/api-error"
 import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
@@ -14,13 +14,28 @@ const databaseCandidateSchema = z.object({ source: z.literal("DATABASE"), tableN
 const onlineCandidateSchema = z.object({ source: z.literal("ONLINE"), definitionCode: z.string().trim().regex(/^[a-z][a-z0-9_]{1,63}$/), releaseId: z.string().uuid() }).strict()
 const importSchema = z.object({ candidates: z.array(z.discriminatedUnion("source", [databaseCandidateSchema, onlineCandidateSchema])).min(1, "至少选择一张表").max(100) }).strict()
 
+type CodegenImportPayload = {
+  definitionCode: string
+  definitionName: string
+  releaseId: string
+  schemaRevision: number
+  storageKind: "GENERIC_RECORD" | "MANAGED_TABLE"
+  moduleName: string
+  businessName: string
+  className: string
+  template: CodegenTemplate
+  scene: CodegenScene
+  permissionPrefix: string
+  advanced: CodegenAdvancedConfig
+}
+
 function onlineStorageName(tenantId: string, definitionCode: string, releaseId: string): string {
   const suffix = createHash("sha256").update(`${tenantId}:${definitionCode}:${releaseId}`).digest("hex").slice(0, 7)
   return `online_${definitionCode.slice(0, 48)}_${suffix}`
 }
 
-function onlineColumns(config: ReturnType<typeof toOnlineCodegenConfig>): CodegenColumnConfig[] {
-  return config.advanced.fields.map((field) => ({
+function onlineColumns(payload: CodegenImportPayload): CodegenColumnConfig[] {
+  return payload.advanced.fields.map((field) => ({
     name: field.name,
     type: field.type,
     tsType: field.tsType,
@@ -39,6 +54,11 @@ function onlineColumns(config: ReturnType<typeof toOnlineCodegenConfig>): Codege
     dictType: field.dictType,
     formValidation: field.formValidation,
   }))
+}
+
+async function unwrap<T>(result: { success: boolean; error?: string; data?: unknown }, message: string): Promise<T> {
+  if (!result.success) throw new ApiError("INTERNAL_ERROR", result.error ?? message)
+  return result.data as T
 }
 
 /**
@@ -68,27 +88,28 @@ export const POST = withAdminRoute(async (request: Request, auth) => {
       if (!auth.tenantId) throw new ApiError("FORBIDDEN", "Online 设计表必须在租户上下文中导入")
       const existing = await CodegenTableRepository.findByOnlineRelease({ tenantId: auth.tenantId, definitionCode: candidate.definitionCode, releaseId: candidate.releaseId })
       if (existing) { skipped.push(candidate.definitionCode); continue }
-      const runtime = await KyselyOnlineRuntimeRepository.resolvePublishedReleaseById({ tenantId: auth.tenantId, definitionCode: candidate.definitionCode, releaseId: candidate.releaseId })
-      const childRuntimes = await KyselyOnlineRuntimeRepository.resolveMasterDetailChildReleases({ tenantId: auth.tenantId, runtime })
-      const config = toOnlineCodegenConfig(runtime, childRuntimes)
-      const tableName = onlineStorageName(auth.tenantId, runtime.definitionCode, runtime.releaseId)
+      const payload = await unwrap<CodegenImportPayload>(
+        await onlineFacade.resolveCodegenImport({ tenantId: auth.tenantId, definitionCode: candidate.definitionCode, releaseId: candidate.releaseId }, { caller: "infra.codegen" }),
+        "online resolveCodegenImport 调用失败",
+      )
+      const tableName = onlineStorageName(auth.tenantId, payload.definitionCode, payload.releaseId)
       const row = await CodegenTableRepository.create({
         tableName,
-        tableComment: `${runtime.definitionName}（Online Release）`,
-        moduleName: config.moduleName,
-        businessName: config.businessName,
-        className: config.className,
-        template: config.template,
-        scene: config.scene,
-        permissionPrefix: config.permissionPrefix,
+        tableComment: `${payload.definitionName}（Online Release）`,
+        moduleName: payload.moduleName,
+        businessName: payload.businessName,
+        className: payload.className,
+        template: payload.template,
+        scene: payload.scene,
+        permissionPrefix: payload.permissionPrefix,
         source: "ONLINE",
         tenantId: auth.tenantId,
-        onlineDefinitionCode: runtime.definitionCode,
-        onlineReleaseId: runtime.releaseId,
-        onlineSchemaRevision: runtime.schemaRevision,
-        onlineStorageKind: runtime.model.storage.kind,
-        onlineAdvanced: config.advanced,
-        columns: onlineColumns(config),
+        onlineDefinitionCode: payload.definitionCode,
+        onlineReleaseId: payload.releaseId,
+        onlineSchemaRevision: payload.schemaRevision,
+        onlineStorageKind: payload.storageKind,
+        onlineAdvanced: payload.advanced,
+        columns: onlineColumns(payload),
       })
       imported.push({ tableName: row.tableName, id: row.id })
     }

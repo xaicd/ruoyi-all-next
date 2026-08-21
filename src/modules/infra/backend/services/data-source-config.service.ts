@@ -2,7 +2,7 @@ import { performance } from "node:perf_hooks"
 import { Client as PgClient } from "pg"
 import mysql from "mysql2/promise"
 import { DataSourceConfigRepository, type DataSourceConfigRow } from "@/modules/infra/backend/repositories/data-source-config.repository"
-import type { CreateDataSourceConfigInput, DataSourceConfigPageInput, TestDataSourceConnectionInput, UpdateDataSourceConfigInput } from "@/modules/infra/backend/validators/data-source-config.validator"
+import type { CreateDataSourceConfigInput, DataSourceConfigPageInput, GetQueryConnectionInput, ListQueryDataSourcesInput, TestDataSourceConnectionInput, UpdateDataSourceConfigInput } from "@/modules/infra/backend/validators/data-source-config.validator"
 import { cryptoEngine } from "@/modules/shared/backend/lib/crypto-engine"
 import { getDataSourceConfig } from "@/modules/shared/backend/lib/database/datasource-manager"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
@@ -128,5 +128,15 @@ export class DataSourceConfigService {
     domainLog.event("infra.data-source-config.test", { id: input.id, driver: config.driver, latencyMs: result.latencyMs })
     domainLog.audit("infra.data-source-config.test", { targetType: "INFRA_DATA_SOURCE_CONFIG", targetId: input.id ?? "draft" })
     return result
+  }
+
+  static async listQueryDataSources(input: ListQueryDataSourcesInput) {
+    const page = await DataSourceConfigRepository.findPage({ tenantId: input.tenantId, page: 1, pageSize: 100 })
+    return page.items.map(({ id, name, driver }) => ({ id, name, driver }))
+  }
+
+  static async getQueryConnection(input: GetQueryConnectionInput) {
+    if (input.id === MASTER_ID) return null
+    return DataSourceConfigRepository.findById(input.tenantId, input.id)
   }
 }

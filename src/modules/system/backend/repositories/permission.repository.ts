@@ -1,6 +1,6 @@
 import { getKyselyDb, hasRealDatabase } from "@/modules/shared/backend/lib/database"
 import { SEED_MENUS } from "@prisma/data"
-import { withOnlineMenuCatalog, withOnlinePackageMenuIds } from "@/modules/online/backend/menu-catalog"
+import { withOnlineMenuCatalog, withOnlinePackageMenuIds } from "@/modules/online/contract/menu-catalog"
 
 // 内存模式也必须具备与 RuoYi 初始化库一致的基础关联，不能只初始化菜单实体。
 const defaultMenuIds = withOnlineMenuCatalog(SEED_MENUS).map((menu) => menu.id)

@@ -59,3 +59,12 @@ export type TriggerJobInput = z.infer<typeof triggerJobSchema>
 export type InfraCodegenExportInput = z.infer<typeof infraCodegenExportSchema>
 export type InfraCodegenPreviewInput = z.infer<typeof infraCodegenPreviewSchema>
 export type TemplatePreviewRpcInput = z.infer<typeof templatePreviewSchema>
+
+export {
+  createDataSourceConfigSchema,
+  dataSourceConfigPageSchema,
+  getQueryConnectionSchema,
+  listQueryDataSourcesSchema,
+  testDataSourceConnectionSchema,
+  updateDataSourceConfigSchema,
+} from "./data-source-config.validator"

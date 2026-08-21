@@ -4,6 +4,7 @@
 
 import { SystemDictTypeRepository, SystemDictDataRepository } from "@/modules/system/backend/repositories/dict.repository"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
+import type { GetDictDataByTypeInput } from "../validators"
 
 export class SystemDictService {
   // === 字典类型 ===
@@ -58,6 +59,10 @@ export class SystemDictService {
 
   static async getDataByType(type: string) {
     return SystemDictDataRepository.findByType(type)
+  }
+
+  static async getDictDataByType(input: GetDictDataByTypeInput) {
+    return this.getDataByType(input.type)
   }
 
   static async createData(input: { dictTypeId: string; label: string; value: string; sort?: number; status?: string; colorType?: string; remark?: string }) {
