@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server"
-import { loginSchema } from "@/modules/system/backend/validators"
+import { SYSTEM_ACTION_SCHEMAS } from "@/modules/system/contract/actions"
 import { SystemAuthService } from "@/modules/system/backend/services/auth.service"
 import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+import { parseActionBody } from "@/modules/shared/backend/http/parse-action-input"
 import { ApiError, handleApiError } from "@/modules/shared/backend/http/api-error"
 import { traceContext } from "@/modules/shared/backend/lib/trace-context"
 import { recordApiAccess, resolveApiAccessOutcome } from "@/modules/shared/backend/lib/observability"
@@ -18,7 +19,7 @@ export async function POST(request: Request) {
     let userId: string | undefined
     try {
       const body = await request.json()
-      const input = loginSchema.parse(body)
+      const input = parseActionBody(SYSTEM_ACTION_SCHEMAS["system.login"], body)
       username = input.username
       tenantCode = input.tenantCode
       const data = await SystemAuthService.login(input)
@@ -53,19 +54,18 @@ export async function POST(request: Request) {
 
 /** GET /api/v1/admin/system/auth — current authenticated administrator. */
 export const GET = withAdminRoute(async (_request, auth) => {
-  const data = await SystemAuthService.getPermissionInfo(auth.userId)
+  const data = await SystemAuthService.getPermissionInfoByUser(parseActionBody(SYSTEM_ACTION_SCHEMAS["system.getPermissionInfoByUser"], { userId: auth.userId }))
   return NextResponse.json({ success: true, data })
 })
 
 /** PUT /api/v1/admin/system/auth — refresh an authenticated administrator token. */
 export const PUT = withAdminRoute(async (request) => {
   const token = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "")
-  if (!token) throw new Error("未登录")
-  const data = await SystemAuthService.refreshToken(token)
+  const data = await SystemAuthService.refreshAccessToken(parseActionBody(SYSTEM_ACTION_SCHEMAS["system.refreshAccessToken"], { token }))
   return NextResponse.json({ success: true, data })
 })
 
 /** DELETE /api/v1/admin/system/auth — stateless logout acknowledgement. */
 export const DELETE = withAdminRoute(async () => (
-  NextResponse.json({ success: true, data: { message: "已退出" } })
+  NextResponse.json({ success: true, data: await SystemAuthService.logout(parseActionBody(SYSTEM_ACTION_SCHEMAS["system.logout"], {})) })
 ))

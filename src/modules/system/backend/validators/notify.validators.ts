@@ -23,3 +23,29 @@ export const createNotifyMessageSchema = z.object({
 export type CreateNoticeInput = z.infer<typeof createNoticeSchema>
 export type CreateNotifyTemplateInput = z.infer<typeof createNotifyTemplateSchema>
 export type CreateNotifyMessageInput = z.infer<typeof createNotifyMessageSchema>
+
+export const updateNoticeSchema = z.object({
+  id: z.string().trim().min(1, "id 不能为空"),
+  title: z.string().trim().min(1).max(200).optional(),
+  content: z.string().trim().min(1).optional(),
+  type: z.enum(["INFO", "WARN", "ALERT"]).optional(),
+  status: z.enum(["ACTIVE", "DISABLED"]).optional(),
+})
+
+export const createAreaSchema = z.object({
+  name: z.string().trim().min(1).max(50),
+  parentId: z.string().trim().optional(),
+  level: z.coerce.number().int().min(1).optional(),
+})
+
+export const updateAreaSchema = z.object({
+  id: z.string().trim().min(1, "id 不能为空"),
+  name: z.string().trim().min(1).max(50).optional(),
+  parentId: z.string().trim().nullable().optional(),
+  level: z.coerce.number().int().min(1).optional(),
+  status: z.enum(["ACTIVE", "DISABLED"]).optional(),
+})
+
+export type UpdateNoticeInput = z.infer<typeof updateNoticeSchema>
+export type CreateAreaInput = z.infer<typeof createAreaSchema>
+export type UpdateAreaInput = z.infer<typeof updateAreaSchema>

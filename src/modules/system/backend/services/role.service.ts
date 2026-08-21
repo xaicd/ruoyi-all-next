@@ -69,4 +69,8 @@ export class SystemRoleService {
     domainLog.audit("system.role.updateStatus", { targetType: "ROLE", targetId: id, newStatus: status })
     return { success: true }
   }
+
+  static async getRole(input: { id: string }) { return this.getById(input.id) }
+  static async deleteRole(input: { id: string }) { return this.delete(input.id) }
+  static async updateRoleStatus(input: { id: string; status: "ACTIVE" | "DISABLED" }) { return this.updateStatus(input.id, input.status) }
 }

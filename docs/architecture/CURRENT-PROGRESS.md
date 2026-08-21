@@ -10,21 +10,27 @@
 |---|---|---|---|
 | D1 | DONE | 分层与 Facade | `shared` SDK；system/infra 平台；业务域可拆。跨域走 Facade |
 | D2 | DONE | 一体 SDK / 拆分 RPC | `POST /api/internal/rpc`；nats-rr JSON；自研 gRPC unary |
-| D3 | DONE | 低代码 codegen/template | Online 预览下载走 `infraFacade`；模板/ZIP 输出 `*.rpc.ts` |
-| D4 | DONE | Online 字典 | `systemFacade.getDictDataByType` |
-| D5 | DONE | shared 鉴权 | `systemFacade.resolveTenantEntitlement` |
+| D3 | DONE | 低代码 codegen/template | Online 预览下载走 `infraPlatformFacade`；模板/ZIP 输出 `*.rpc.ts` |
+| D4 | DONE | Online 字典 | `systemPublicFacade.getDictDataByType` |
+| D5 | DONE | shared 鉴权 | `systemPlatformFacade.resolveTenantEntitlement` |
 | D6 | DONE | Route/broker schema 合流 | `parseActionQuery` + rpc-actions schema 必须在 validators |
-| D7 | DONE | infra 选表 / 报表数据源 | `onlineFacade` + `infraFacade.listQueryDataSources` |
+| D7 | DONE | infra 选表 / 报表数据源 | `onlineFacade` + `infraPlatformFacade.listQueryDataSources` |
 | D8 | DONE | system 菜单 catalog | 改为 `online/contract/menu-catalog`，禁止 import online backend |
 | D9 | DONE | 生成 managed-table Service | 改为 `onlineFacade` 托管表 CRUD，禁止生成 Repository import |
 | D10 | DONE | outbox 归属挂钩 | `getOutboxStoreForDomain`；跨库表仍属阶段 C |
-| D11 | TODO | Facade 覆盖该域全部 HTTP | 只覆盖 `rpc-actions.json` 门面，不宣称全路由 |
+| D11 | DONE | Facade 覆盖 system/infra 全部 HTTP | 全量方法仅 BFF 同域双模；业务域不调这批后台 CRUD |
+| D23 | DONE | system/infra 对外契约 | 业务域只开放字典 `getDictDataByType` 与登录用户 `getPermissionInfoByUser` |
+| D21 | DONE | system/infra 剩余真实 HTTP | 字典数据/套餐/权限/日志/通知/邮件/短信/OAuth2/社交/codegen 表/数据源测试/导出/审计留存进 Facade |
+| D22 | DONE | system/infra 收口剩余缺口 | profile/登录/验证码/侧栏/模板/社交客户端/codegen 候选表导入下载进 Facade |
 | D12 | TODO | 官方 protoc + grpc-go | 当前 Go 桩走 `Invoker`，不引入 grpc-go |
 | D13 | TODO | 跨库 outbox 投递 | 每域独立库后的表归属与 dispatcher |
 | D14 | DONE | infra codegen import | `onlineFacade.resolveCodegenImport`，禁止 import online repository/adapter |
 | D15 | DONE | pay 退款列表 schema 合流 | HTTP 与 broker 共用 `PAY_ACTION_SCHEMAS["pay.listRefunds"]` |
 | D16 | DONE | report 测试改 spy Facade | 禁止测试 import infra `DataSourceConfigRepository` |
 | D17 | DONE | 其余域列表查询 schema 合流 | mall/crm/bpm/member/erp/report/mp/wms/mes/ai/iot/im 门面列表 HTTP 改走对应 `ACTION_SCHEMAS` |
+| D18 | DONE | system 平台核心 CRUD 双模收口 | users/roles/menus/depts/posts/dicts/tenants 列表与创建走 Facade + 共用 schema |
+| D19 | DONE | infra 平台核心 CRUD 双模收口 | configs/jobs/files/data-source 列表与创建走 Facade + 共用 schema |
+| D20 | DONE | system/infra 单资源写路径 | `[id]` 更新/删除与 infra pages/logs 进 Facade |
 
 ## 已完成
 

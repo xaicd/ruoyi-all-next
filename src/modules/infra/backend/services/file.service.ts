@@ -35,4 +35,7 @@ export class InfraFileService {
     // TODO: 同步删除实际存储中的文件
     return { success: true }
   }
+
+  static async getFile(input: { id: string }) { return this.getById(input.id) }
+  static async deleteFile(input: { id: string }) { return this.delete(input.id) }
 }

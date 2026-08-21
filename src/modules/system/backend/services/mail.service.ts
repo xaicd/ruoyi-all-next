@@ -106,4 +106,9 @@ export class SystemMailService {
       pageSize: input.pageSize,
     }
   }
+
+  static async createMailAccount(input: CreateMailAccountInput & { operatorId?: string }) {
+    const { operatorId, ...data } = input
+    return this.createAccount(operatorId ?? "system", data)
+  }
 }

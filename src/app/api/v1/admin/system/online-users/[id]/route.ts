@@ -1,36 +1,14 @@
 import { NextResponse } from "next/server"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+import { parseActionBody } from "@/modules/shared/backend/http/parse-action-input"
+import { SYSTEM_ACTION_SCHEMAS } from "@/modules/system/contract/actions"
 import { SystemOnlineUserService } from "@/modules/system/backend/services/online-user.service"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 
 type RouteContext = { params: Promise<{ id: string }> }
 
-export async function GET(request: Request, context: RouteContext) {
-  try {
-    const { id } = await context.params
-    const data = await SystemOnlineUserService.get(id)
-    if (!data) return NextResponse.json({ success: false, error: "不存在" }, { status: 404 })
-    return NextResponse.json({ success: true, data })
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
-  }
-}
-
-export async function PUT(request: Request, context: RouteContext) {
-  try {
-    const { id } = await context.params
-    const body = await request.json()
-    const data = await SystemOnlineUserService.update({ ...body, id })
-    return NextResponse.json({ success: true, data })
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
-  }
-}
-
-export async function DELETE(request: Request, context: RouteContext) {
-  try {
-    const { id } = await context.params
-    const data = await SystemOnlineUserService.delete(id)
-    return NextResponse.json({ success: true, data })
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
-  }
-}
+export const DELETE = withAdminRoute(async (_request, auth, context: RouteContext) => {
+  const { id } = await context.params
+  const input = parseActionBody(SYSTEM_ACTION_SCHEMAS["system.forceLogoutOnlineUser"], { sessionId: id })
+  return NextResponse.json({ success: true, data: await SystemOnlineUserService.forceLogoutOnlineUser({ ...input, operatorId: auth.userId }) })
+}, { permission: PERMISSIONS.SYSTEM_ONLINE_USER_FORCE_LOGOUT })

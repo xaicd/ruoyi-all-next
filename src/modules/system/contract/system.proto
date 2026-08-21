@@ -24,8 +24,727 @@ message ResolveTenantEntitlementRequest {
   string tenant_id = 1 [json_name = "tenantId"];
 }
 
+message ListUsersRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+  optional string status = 4;
+  optional string dept_id = 5 [json_name = "deptId"];
+}
+
+message CreateUserRequest {
+  string username = 1;
+  string nickname = 2;
+  string password = 3;
+  optional string phone = 4;
+  optional string email = 5;
+  optional string dept_id = 6 [json_name = "deptId"];
+  optional string status = 7;
+}
+
+message ListRolesRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+  optional string status = 4;
+}
+
+message CreateRoleRequest {
+  string name = 1;
+  string code = 2;
+  optional int32 sort = 3;
+  optional string status = 4;
+  optional string data_scope = 5 [json_name = "dataScope"];
+  optional string remark = 6;
+}
+
+message ListMenusRequest {
+  optional string mode = 1;
+  optional string status = 2;
+  optional string role_id = 3 [json_name = "roleId"];
+}
+
+message TreeMenusRequest {
+  optional string mode = 1;
+  optional string status = 2;
+  optional string role_id = 3 [json_name = "roleId"];
+}
+
+message CreateMenuRequest {
+  string name = 1;
+  string type = 2;
+  optional string parent_id = 3 [json_name = "parentId"];
+  optional string permission = 4;
+  optional string path = 5;
+}
+
+message ListDeptsRequest {
+  optional string mode = 1;
+  optional string status = 2;
+  optional string keyword = 3;
+}
+
+message TreeDeptsRequest {
+  optional string mode = 1;
+  optional string status = 2;
+  optional string keyword = 3;
+}
+
+message CreateDeptRequest {
+  string name = 1;
+  optional string parent_id = 2 [json_name = "parentId"];
+  optional int32 sort = 3;
+  optional string status = 4;
+}
+
+message ListPostsRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+  optional string status = 4;
+}
+
+message CreatePostRequest {
+  string name = 1;
+  string code = 2;
+  optional int32 sort = 3;
+  optional string status = 4;
+  optional string remark = 5;
+}
+
+message ListDictTypesRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+  optional string status = 4;
+  optional string type = 5;
+}
+
+message CreateDictTypeRequest {
+  string name = 1;
+  string type = 2;
+  optional string status = 3;
+  optional string remark = 4;
+}
+
+message ListTenantsRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+  optional string status = 4;
+}
+
+message CreateTenantRequest {
+  string tenant_code = 1 [json_name = "tenantCode"];
+  string name = 2;
+  string package_id = 3 [json_name = "packageId"];
+  string admin_username = 4 [json_name = "adminUsername"];
+  string admin_nickname = 5 [json_name = "adminNickname"];
+  string admin_password = 6 [json_name = "adminPassword"];
+}
+
+message GetUserRequest {
+  string id = 1;
+}
+
+message UpdateUserRequest {
+  string id = 1;
+  optional string nickname = 2;
+  optional string status = 3;
+}
+
+message DeleteUserRequest {
+  string id = 1;
+}
+
+message ResetUserPasswordRequest {
+  string id = 1;
+  string password = 2;
+}
+
+message UpdateUserStatusRequest {
+  string id = 1;
+  string status = 2;
+}
+
+message GetRoleRequest {
+  string id = 1;
+}
+
+message UpdateRoleRequest {
+  string id = 1;
+  optional string name = 2;
+  optional string code = 3;
+}
+
+message DeleteRoleRequest {
+  string id = 1;
+}
+
+message UpdateRoleStatusRequest {
+  string id = 1;
+  string status = 2;
+}
+
+message GetMenuRequest {
+  string id = 1;
+}
+
+message UpdateMenuRequest {
+  string id = 1;
+  optional string name = 2;
+}
+
+message DeleteMenuRequest {
+  string id = 1;
+}
+
+message GetDeptRequest {
+  string id = 1;
+}
+
+message UpdateDeptRequest {
+  string id = 1;
+  optional string name = 2;
+}
+
+message DeleteDeptRequest {
+  string id = 1;
+}
+
+message GetPostRequest {
+  string id = 1;
+}
+
+message UpdatePostRequest {
+  string id = 1;
+  optional string name = 2;
+  optional string code = 3;
+}
+
+message DeletePostRequest {
+  string id = 1;
+}
+
+message GetDictTypeRequest {
+  string id = 1;
+}
+
+message UpdateDictTypeRequest {
+  string id = 1;
+  optional string name = 2;
+  optional string type = 3;
+}
+
+message DeleteDictTypeRequest {
+  string id = 1;
+}
+
+message GetTenantRequest {
+  string id = 1;
+}
+
+message UpdateTenantRequest {
+  string id = 1;
+  optional string name = 2;
+}
+
+message DeleteTenantRequest {
+  string id = 1;
+}
+
+message UpdateTenantStatusRequest {
+  string id = 1;
+  string status = 2;
+}
+
+message ListDictDataRequest {
+  optional string dict_type_id = 1 [json_name = "dictTypeId"];
+  optional string type = 2;
+}
+
+message CreateDictDataRequest {
+  string dict_type_id = 1 [json_name = "dictTypeId"];
+  string label = 2;
+  string value = 3;
+}
+
+message GetDictDataRequest {
+  string id = 1;
+}
+
+message UpdateDictDataRequest {
+  string id = 1;
+  optional string label = 2;
+  optional string value = 3;
+}
+
+message DeleteDictDataRequest {
+  string id = 1;
+}
+
+message ListTenantPackagesRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+  optional bool all = 4;
+}
+
+message CreateTenantPackageRequest {
+  string name = 1;
+  optional string status = 2;
+}
+
+message GetTenantPackageRequest {
+  string id = 1;
+}
+
+message UpdateTenantPackageRequest {
+  string id = 1;
+  optional string name = 2;
+}
+
+message DeleteTenantPackageRequest {
+  string id = 1;
+}
+
+message AssignTenantPackageRequest {
+  string tenant_id = 1 [json_name = "tenantId"];
+  string package_id = 2 [json_name = "packageId"];
+}
+
+message GetTenantSubscriptionsRequest {
+  string id = 1;
+}
+
+message GetRoleMenusRequest {
+  string role_id = 1 [json_name = "roleId"];
+}
+
+message AssignRoleMenuRequest {
+  string role_id = 1 [json_name = "roleId"];
+}
+
+message AssignUserRoleRequest {
+  string user_id = 1 [json_name = "userId"];
+}
+
+message PageLoginLogsRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message GetLoginLogRequest {
+  string id = 1;
+}
+
+message ExportLoginLogsRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message PageOperateLogsRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message GetOperateLogRequest {
+  string id = 1;
+}
+
+message ExportOperateLogsRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message ListOnlineUsersRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message ForceLogoutOnlineUserRequest {
+  string session_id = 1 [json_name = "sessionId"];
+}
+
+message PageNoticesRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message CreateNoticeRequest {
+  string title = 1;
+  string content = 2;
+}
+
+message GetNoticeRequest {
+  string id = 1;
+}
+
+message UpdateNoticeRequest {
+  string id = 1;
+  optional string title = 2;
+}
+
+message DeleteNoticeRequest {
+  string id = 1;
+}
+
+message ListOauth2ClientsRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message ListOauth2TokensRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message ListSocialUsersRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message CreateSocialUserRequest {
+  string provider = 1;
+  string nickname = 2;
+  string external_id = 3 [json_name = "externalId"];
+}
+
+message ListMailAccountsRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message CreateMailAccountRequest {
+  string email = 1;
+  string host = 2;
+}
+
+message ListMailLogsRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message ListSmsChannelsRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message CreateSmsChannelRequest {
+  string name = 1;
+  string sign_name = 2 [json_name = "signName"];
+}
+
+message ListSmsLogsRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message PageNotifyMessagesRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message CreateNotifyMessageRequest {
+  string template_code = 1 [json_name = "templateCode"];
+  string receiver = 2;
+}
+
+message PageNotifyTemplatesRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message CreateNotifyTemplateRequest {
+  string code = 1;
+  string name = 2;
+}
+
+message PageIpAreasRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message PageAreasRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message CreateAreaRequest {
+  string name = 1;
+}
+
+message GetAreaRequest {
+  string id = 1;
+}
+
+message UpdateAreaRequest {
+  string id = 1;
+  optional string name = 2;
+}
+
+message DeleteAreaRequest {
+  string id = 1;
+}
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+  optional string tenant_code = 3 [json_name = "tenantCode"];
+}
+
+message GetPermissionInfoByUserRequest {
+  string user_id = 1 [json_name = "userId"];
+}
+
+message RefreshAccessTokenRequest {
+  string token = 1;
+}
+
+message LogoutRequest {
+  optional int32 n = 1;
+}
+
+message GenerateCaptchaRequest {
+  optional int32 n = 1;
+}
+
+message VerifyCaptchaRequest {
+  string captcha_id = 1 [json_name = "captchaId"];
+  string code = 2;
+}
+
+message GetUserProfileRequest {
+  string user_id = 1 [json_name = "userId"];
+}
+
+message UpdateUserProfileRequest {
+  string user_id = 1 [json_name = "userId"];
+  optional string nickname = 2;
+}
+
+message GetSidebarNavRequest {
+  string user_id = 1 [json_name = "userId"];
+  optional bool is_platform_admin = 2 [json_name = "isPlatformAdmin"];
+}
+
+message OpenOauth2TokenRequest {
+  string client_id = 1 [json_name = "clientId"];
+  string client_secret = 2 [json_name = "clientSecret"];
+}
+
+message GetOauth2UserInfoRequest {
+  string access_token = 1 [json_name = "accessToken"];
+}
+
+message ListMailTemplatesRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message CreateMailTemplateRequest {
+  string name = 1;
+  string code = 2;
+  string subject = 3;
+}
+
+message GetMailTemplateRequest {
+  string id = 1;
+}
+
+message UpdateMailTemplateRequest {
+  string id = 1;
+  optional string name = 2;
+}
+
+message DeleteMailTemplateRequest {
+  string id = 1;
+}
+
+message ListSmsTemplatesRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message CreateSmsTemplateRequest {
+  string name = 1;
+  string code = 2;
+}
+
+message GetSmsTemplateRequest {
+  string id = 1;
+}
+
+message UpdateSmsTemplateRequest {
+  string id = 1;
+  optional string name = 2;
+}
+
+message DeleteSmsTemplateRequest {
+  string id = 1;
+}
+
+message ListSocialClientsRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message CreateSocialClientRequest {
+  string name = 1;
+  string provider = 2;
+  string client_id = 3 [json_name = "clientId"];
+}
+
+message GetSocialClientRequest {
+  string id = 1;
+}
+
+message UpdateSocialClientRequest {
+  string id = 1;
+  optional string name = 2;
+}
+
+message DeleteSocialClientRequest {
+  string id = 1;
+}
+
 service SystemService {
   rpc Ping(PingRequest) returns (JsonReply);
   rpc GetDictDataByType(GetDictDataByTypeRequest) returns (JsonReply);
   rpc ResolveTenantEntitlement(ResolveTenantEntitlementRequest) returns (JsonReply);
+  rpc ListUsers(ListUsersRequest) returns (JsonReply);
+  rpc CreateUser(CreateUserRequest) returns (JsonReply);
+  rpc ListRoles(ListRolesRequest) returns (JsonReply);
+  rpc CreateRole(CreateRoleRequest) returns (JsonReply);
+  rpc ListMenus(ListMenusRequest) returns (JsonReply);
+  rpc TreeMenus(TreeMenusRequest) returns (JsonReply);
+  rpc CreateMenu(CreateMenuRequest) returns (JsonReply);
+  rpc ListDepts(ListDeptsRequest) returns (JsonReply);
+  rpc TreeDepts(TreeDeptsRequest) returns (JsonReply);
+  rpc CreateDept(CreateDeptRequest) returns (JsonReply);
+  rpc ListPosts(ListPostsRequest) returns (JsonReply);
+  rpc CreatePost(CreatePostRequest) returns (JsonReply);
+  rpc ListDictTypes(ListDictTypesRequest) returns (JsonReply);
+  rpc CreateDictType(CreateDictTypeRequest) returns (JsonReply);
+  rpc ListTenants(ListTenantsRequest) returns (JsonReply);
+  rpc CreateTenant(CreateTenantRequest) returns (JsonReply);
+  rpc GetUser(GetUserRequest) returns (JsonReply);
+  rpc UpdateUser(UpdateUserRequest) returns (JsonReply);
+  rpc DeleteUser(DeleteUserRequest) returns (JsonReply);
+  rpc ResetUserPassword(ResetUserPasswordRequest) returns (JsonReply);
+  rpc UpdateUserStatus(UpdateUserStatusRequest) returns (JsonReply);
+  rpc GetRole(GetRoleRequest) returns (JsonReply);
+  rpc UpdateRole(UpdateRoleRequest) returns (JsonReply);
+  rpc DeleteRole(DeleteRoleRequest) returns (JsonReply);
+  rpc UpdateRoleStatus(UpdateRoleStatusRequest) returns (JsonReply);
+  rpc GetMenu(GetMenuRequest) returns (JsonReply);
+  rpc UpdateMenu(UpdateMenuRequest) returns (JsonReply);
+  rpc DeleteMenu(DeleteMenuRequest) returns (JsonReply);
+  rpc GetDept(GetDeptRequest) returns (JsonReply);
+  rpc UpdateDept(UpdateDeptRequest) returns (JsonReply);
+  rpc DeleteDept(DeleteDeptRequest) returns (JsonReply);
+  rpc GetPost(GetPostRequest) returns (JsonReply);
+  rpc UpdatePost(UpdatePostRequest) returns (JsonReply);
+  rpc DeletePost(DeletePostRequest) returns (JsonReply);
+  rpc GetDictType(GetDictTypeRequest) returns (JsonReply);
+  rpc UpdateDictType(UpdateDictTypeRequest) returns (JsonReply);
+  rpc DeleteDictType(DeleteDictTypeRequest) returns (JsonReply);
+  rpc GetTenant(GetTenantRequest) returns (JsonReply);
+  rpc UpdateTenant(UpdateTenantRequest) returns (JsonReply);
+  rpc DeleteTenant(DeleteTenantRequest) returns (JsonReply);
+  rpc UpdateTenantStatus(UpdateTenantStatusRequest) returns (JsonReply);
+  rpc ListDictData(ListDictDataRequest) returns (JsonReply);
+  rpc CreateDictData(CreateDictDataRequest) returns (JsonReply);
+  rpc GetDictData(GetDictDataRequest) returns (JsonReply);
+  rpc UpdateDictData(UpdateDictDataRequest) returns (JsonReply);
+  rpc DeleteDictData(DeleteDictDataRequest) returns (JsonReply);
+  rpc ListTenantPackages(ListTenantPackagesRequest) returns (JsonReply);
+  rpc CreateTenantPackage(CreateTenantPackageRequest) returns (JsonReply);
+  rpc GetTenantPackage(GetTenantPackageRequest) returns (JsonReply);
+  rpc UpdateTenantPackage(UpdateTenantPackageRequest) returns (JsonReply);
+  rpc DeleteTenantPackage(DeleteTenantPackageRequest) returns (JsonReply);
+  rpc AssignTenantPackage(AssignTenantPackageRequest) returns (JsonReply);
+  rpc GetTenantSubscriptions(GetTenantSubscriptionsRequest) returns (JsonReply);
+  rpc GetRoleMenus(GetRoleMenusRequest) returns (JsonReply);
+  rpc AssignRoleMenu(AssignRoleMenuRequest) returns (JsonReply);
+  rpc AssignUserRole(AssignUserRoleRequest) returns (JsonReply);
+  rpc PageLoginLogs(PageLoginLogsRequest) returns (JsonReply);
+  rpc GetLoginLog(GetLoginLogRequest) returns (JsonReply);
+  rpc ExportLoginLogs(ExportLoginLogsRequest) returns (JsonReply);
+  rpc PageOperateLogs(PageOperateLogsRequest) returns (JsonReply);
+  rpc GetOperateLog(GetOperateLogRequest) returns (JsonReply);
+  rpc ExportOperateLogs(ExportOperateLogsRequest) returns (JsonReply);
+  rpc ListOnlineUsers(ListOnlineUsersRequest) returns (JsonReply);
+  rpc ForceLogoutOnlineUser(ForceLogoutOnlineUserRequest) returns (JsonReply);
+  rpc PageNotices(PageNoticesRequest) returns (JsonReply);
+  rpc CreateNotice(CreateNoticeRequest) returns (JsonReply);
+  rpc GetNotice(GetNoticeRequest) returns (JsonReply);
+  rpc UpdateNotice(UpdateNoticeRequest) returns (JsonReply);
+  rpc DeleteNotice(DeleteNoticeRequest) returns (JsonReply);
+  rpc ListOauth2Clients(ListOauth2ClientsRequest) returns (JsonReply);
+  rpc ListOauth2Tokens(ListOauth2TokensRequest) returns (JsonReply);
+  rpc ListSocialUsers(ListSocialUsersRequest) returns (JsonReply);
+  rpc CreateSocialUser(CreateSocialUserRequest) returns (JsonReply);
+  rpc ListMailAccounts(ListMailAccountsRequest) returns (JsonReply);
+  rpc CreateMailAccount(CreateMailAccountRequest) returns (JsonReply);
+  rpc ListMailLogs(ListMailLogsRequest) returns (JsonReply);
+  rpc ListSmsChannels(ListSmsChannelsRequest) returns (JsonReply);
+  rpc CreateSmsChannel(CreateSmsChannelRequest) returns (JsonReply);
+  rpc ListSmsLogs(ListSmsLogsRequest) returns (JsonReply);
+  rpc PageNotifyMessages(PageNotifyMessagesRequest) returns (JsonReply);
+  rpc CreateNotifyMessage(CreateNotifyMessageRequest) returns (JsonReply);
+  rpc PageNotifyTemplates(PageNotifyTemplatesRequest) returns (JsonReply);
+  rpc CreateNotifyTemplate(CreateNotifyTemplateRequest) returns (JsonReply);
+  rpc PageIpAreas(PageIpAreasRequest) returns (JsonReply);
+  rpc PageAreas(PageAreasRequest) returns (JsonReply);
+  rpc CreateArea(CreateAreaRequest) returns (JsonReply);
+  rpc GetArea(GetAreaRequest) returns (JsonReply);
+  rpc UpdateArea(UpdateAreaRequest) returns (JsonReply);
+  rpc DeleteArea(DeleteAreaRequest) returns (JsonReply);
+  rpc Login(LoginRequest) returns (JsonReply);
+  rpc GetPermissionInfoByUser(GetPermissionInfoByUserRequest) returns (JsonReply);
+  rpc RefreshAccessToken(RefreshAccessTokenRequest) returns (JsonReply);
+  rpc Logout(LogoutRequest) returns (JsonReply);
+  rpc GenerateCaptcha(GenerateCaptchaRequest) returns (JsonReply);
+  rpc VerifyCaptcha(VerifyCaptchaRequest) returns (JsonReply);
+  rpc GetUserProfile(GetUserProfileRequest) returns (JsonReply);
+  rpc UpdateUserProfile(UpdateUserProfileRequest) returns (JsonReply);
+  rpc GetSidebarNav(GetSidebarNavRequest) returns (JsonReply);
+  rpc OpenOauth2Token(OpenOauth2TokenRequest) returns (JsonReply);
+  rpc GetOauth2UserInfo(GetOauth2UserInfoRequest) returns (JsonReply);
+  rpc ListMailTemplates(ListMailTemplatesRequest) returns (JsonReply);
+  rpc CreateMailTemplate(CreateMailTemplateRequest) returns (JsonReply);
+  rpc GetMailTemplate(GetMailTemplateRequest) returns (JsonReply);
+  rpc UpdateMailTemplate(UpdateMailTemplateRequest) returns (JsonReply);
+  rpc DeleteMailTemplate(DeleteMailTemplateRequest) returns (JsonReply);
+  rpc ListSmsTemplates(ListSmsTemplatesRequest) returns (JsonReply);
+  rpc CreateSmsTemplate(CreateSmsTemplateRequest) returns (JsonReply);
+  rpc GetSmsTemplate(GetSmsTemplateRequest) returns (JsonReply);
+  rpc UpdateSmsTemplate(UpdateSmsTemplateRequest) returns (JsonReply);
+  rpc DeleteSmsTemplate(DeleteSmsTemplateRequest) returns (JsonReply);
+  rpc ListSocialClients(ListSocialClientsRequest) returns (JsonReply);
+  rpc CreateSocialClient(CreateSocialClientRequest) returns (JsonReply);
+  rpc GetSocialClient(GetSocialClientRequest) returns (JsonReply);
+  rpc UpdateSocialClient(UpdateSocialClientRequest) returns (JsonReply);
+  rpc DeleteSocialClient(DeleteSocialClientRequest) returns (JsonReply);
 }

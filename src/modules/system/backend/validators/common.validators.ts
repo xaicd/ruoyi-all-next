@@ -15,3 +15,14 @@ export const systemModulePageQuerySchema = z.object({
 
 export type PageQueryInput = z.infer<typeof pageQuerySchema>
 export type SystemModulePageQueryInput = z.infer<typeof systemModulePageQuerySchema>
+
+export const resourceIdSchema = z.object({
+  id: z.string().trim().min(1, "id 不能为空"),
+})
+
+export const resourceStatusSchema = resourceIdSchema.extend({
+  status: z.enum(["ACTIVE", "DISABLED"]),
+})
+
+export type ResourceIdInput = z.infer<typeof resourceIdSchema>
+export type ResourceStatusInput = z.infer<typeof resourceStatusSchema>

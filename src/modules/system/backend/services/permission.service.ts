@@ -76,6 +76,10 @@ export class SystemPermissionService {
     return allowedMenuIds ? assignedMenuIds.filter((menuId) => allowedMenuIds.has(menuId)) : assignedMenuIds
   }
 
+  static async getRoleMenus(input: { roleId: string }) {
+    return { menuIds: await this.getRoleMenuIds(input.roleId) }
+  }
+
   /** Candidate menu IDs for a role form. Tenant roles are limited to their active package. */
   static async getRoleAssignableMenuIds(roleId: string): Promise<string[]> {
     const { menuIds: allowedMenuIds } = await resolveRolePackageMenuIds(roleId)

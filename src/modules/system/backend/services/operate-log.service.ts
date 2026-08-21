@@ -36,6 +36,9 @@ export class OperateLogService {
   }
 
   static async exportRows(input: OperateLogQuery) { return (await this.page({ ...input, page: 1, pageSize: 10_000 })).items }
+
+  static async getOperateLog(input: { id: string }) { return this.get(input.id) }
+  static async exportOperateLogs(input: OperateLogQuery) { return this.exportRows(input) }
 }
 
 export { OperateLogService as SystemOperateLogService }

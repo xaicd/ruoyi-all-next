@@ -13,3 +13,9 @@ export const assignRoleMenuSchema = z.object({
 
 export type AssignUserRoleInput = z.infer<typeof assignUserRoleSchema>
 export type AssignRoleMenuInput = z.infer<typeof assignRoleMenuSchema>
+
+export const getRoleMenusSchema = z.object({
+  roleId: z.string().trim().min(1, "roleId 不能为空"),
+})
+
+export type GetRoleMenusInput = z.infer<typeof getRoleMenusSchema>

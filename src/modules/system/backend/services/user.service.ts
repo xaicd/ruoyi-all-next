@@ -233,6 +233,10 @@ export class SystemUserService {
 
     return { success: true }
   }
+
+  static async getUser(input: { id: string }) { return this.getById(input.id) }
+  static async deleteUser(input: { id: string }) { return this.delete(input.id) }
+  static async updateUserStatus(input: { id: string; status: "ACTIVE" | "DISABLED" }) { return this.updateStatus(input.id, input.status) }
 }
 
 // Alias for codegen-generated routes

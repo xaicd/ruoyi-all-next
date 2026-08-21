@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest"
 import { hashPasswordMD5 } from "@/modules/shared/backend/lib/crypto"
-import { ruoyiPrisma } from "../@/modules/shared/backend/prisma"
+import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
 import { SystemOauth2Service } from "../oauth2.service"
 
 describe("SystemOauth2Service", () => {

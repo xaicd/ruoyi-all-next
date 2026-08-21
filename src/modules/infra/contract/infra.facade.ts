@@ -1,5 +1,5 @@
 import { createDomainFacade } from "@/modules/shared/backend/lib/rpc-facade"
 
-export const INFRA_FACADE_METHODS = ["ping", "updateConfig", "previewCodegen", "generateCodegen", "previewTemplate", "generateTemplate", "listQueryDataSources", "getQueryConnection"] as const
+export const INFRA_FACADE_METHODS = ["ping", "updateConfig", "previewCodegen", "generateCodegen", "previewTemplate", "generateTemplate", "listQueryDataSources", "getQueryConnection", "listConfigs", "getConfigByKey", "createConfig", "listJobs", "createJob", "listFiles", "recordFile", "pageDataSourceConfigs", "getConfig", "updateConfigItem", "deleteConfig", "getJob", "updateJob", "deleteJob", "triggerJob", "updateJobStatus", "getFile", "deleteFile", "listPages", "getPage", "getPageBySlug", "pageApiErrorLogs", "getApiErrorLog", "processApiErrorLog", "pageApiAccessLogs", "getApiAccessLog", "testDataSourceConnection", "listCodegenTables", "getCodegenTable", "updateCodegenTable", "deleteCodegenTable", "deleteCodegenTables", "exportApiAccessLogs", "exportApiErrorLogs", "runAuditLogRetention", "listCodegenCandidates", "importCodegenTables", "generateCodegenArchive", "listCodegenCatalog"] as const
 
 export const infraFacade = createDomainFacade("infra", INFRA_FACADE_METHODS)

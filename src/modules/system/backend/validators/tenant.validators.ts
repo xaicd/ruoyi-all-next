@@ -48,4 +48,47 @@ export type UpdateTenantStatusInput = z.infer<typeof updateTenantStatusSchema>
 export type AssignTenantPackageInput = z.infer<typeof assignTenantPackageSchema>
 export type ResolveTenantEntitlementInput = z.infer<typeof resolveTenantEntitlementSchema>
 export type TenantListQueryInput = z.infer<typeof tenantListQuerySchema>
-export type 
+export type CreateTenantWithAdminInput = z.infer<typeof createTenantWithAdminSchema>
+
+export const updateTenantSchema = z.object({
+  id: z.string().trim().min(1, "id 不能为空"),
+  name: z.string().trim().min(1).max(50).optional(),
+  contactName: z.string().trim().max(30).optional(),
+  contactPhone: z.string().trim().max(20).optional(),
+  domain: z.string().trim().max(100).optional(),
+  packageId: z.string().trim().optional(),
+  status: z.enum(["ACTIVE", "DISABLED"]).optional(),
+  effectiveAt: z.string().datetime().optional(),
+  expireTime: z.string().datetime().nullable().optional(),
+  accountLimit: z.coerce.number().int().min(1).nullable().optional(),
+})
+
+export type UpdateTenantInput = z.infer<typeof updateTenantSchema>
+
+export const tenantPackageListSchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(100).default(20),
+  keyword: z.string().trim().max(50).optional(),
+  all: z.preprocess((value) => value === true || value === "true", z.boolean().optional()),
+})
+
+export const createTenantPackageSchema = z.object({
+  name: z.string().trim().min(1).max(50),
+  status: z.enum(["ACTIVE", "DISABLED"]).default("ACTIVE"),
+  accountLimit: z.coerce.number().int().min(1, "默认账号席位至少为 1").nullable().optional(),
+  menuIds: z.array(z.string().trim().min(1)).optional(),
+  remark: z.string().trim().max(500).optional(),
+})
+
+export const updateTenantPackageSchema = z.object({
+  id: z.string().trim().min(1, "id 不能为空"),
+  name: z.string().trim().min(1).max(50).optional(),
+  status: z.enum(["ACTIVE", "DISABLED"]).optional(),
+  accountLimit: z.coerce.number().int().min(1, "默认账号席位至少为 1").nullable().optional(),
+  menuIds: z.array(z.string().trim().min(1)).optional(),
+  remark: z.string().trim().max(500).optional(),
+})
+
+export type TenantPackageListInput = z.infer<typeof tenantPackageListSchema>
+export type CreateTenantPackageInput = z.infer<typeof createTenantPackageSchema>
+export type UpdateTenantPackageInput = z.infer<typeof updateTenantPackageSchema>

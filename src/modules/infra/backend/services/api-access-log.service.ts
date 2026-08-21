@@ -35,4 +35,7 @@ export class ApiAccessLogService {
   }
 
   static async exportRows(input: ApiAccessLogQuery) { return (await this.page({ ...input, page: 1, pageSize: 10_000 })).items }
+
+  static async getApiAccessLog(input: { id: string }) { return this.get(input.id) }
+  static async exportApiAccessLogs(input: ApiAccessLogQuery) { return this.exportRows(input) }
 }

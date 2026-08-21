@@ -45,4 +45,7 @@ export class SystemPostService {
     domainLog.audit("system.post.delete", { targetType: "POST", targetId: id })
     return { success: true }
   }
+
+  static async getPost(input: { id: string }) { return this.getById(input.id) }
+  static async deletePost(input: { id: string }) { return this.delete(input.id) }
 }

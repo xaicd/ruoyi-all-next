@@ -1,16 +1,11 @@
 import { NextResponse } from "next/server"
 import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
-import { assignRoleMenuSchema } from "@/modules/system/backend/validators"
+import { parseActionBody } from "@/modules/shared/backend/http/parse-action-input"
+import { SYSTEM_ACTION_SCHEMAS } from "@/modules/system/contract/actions"
 import { SystemPermissionService } from "@/modules/system/backend/services/permission.service"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 
-export const POST = withAdminRoute(async (request, auth) => {
-  try {
-    const body = await request.json()
-    const input = assignRoleMenuSchema.parse(body) as any
-    const data = await SystemPermissionService.assignRoleMenu(input)
-    return NextResponse.json({ success: true, data })
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message ?? "操作失败" }, { status: 400 })
-  }
+export const POST = withAdminRoute(async (request) => {
+  const input = parseActionBody(SYSTEM_ACTION_SCHEMAS["system.assignRoleMenu"], await request.json())
+  return NextResponse.json({ success: true, data: await SystemPermissionService.assignRoleMenu(input) })
 }, { permission: PERMISSIONS.SYSTEM_PERMISSION_ASSIGN_ROLE_MENU })

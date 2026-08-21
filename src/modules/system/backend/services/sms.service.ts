@@ -106,4 +106,9 @@ export class SystemSmsService {
       pageSize: input.pageSize,
     }
   }
+
+  static async createSmsChannel(input: CreateSmsChannelInput & { operatorId?: string }) {
+    const { operatorId, ...data } = input
+    return this.createChannel(operatorId ?? "system", data)
+  }
 }

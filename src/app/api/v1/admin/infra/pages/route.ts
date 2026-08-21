@@ -1,15 +1,17 @@
 import { NextResponse } from "next/server"
-import { InfraPageRepository } from "@/modules/infra/backend/repositories/page.repository"
+import { InfraPageService } from "@/modules/infra/backend/services/page.service"
+import { INFRA_ACTION_SCHEMAS } from "@/modules/infra/contract/actions"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+import { parseActionQuery } from "@/modules/shared/backend/http/parse-action-input"
 
 /**
  * Compatibility-only read endpoint for legacy Puck data. It is not part of the
  * Online engine and cannot create definitions, releases, or runtime pages.
  */
 export const GET = withAdminRoute(async (request) => {
-  const status = new URL(request.url).searchParams.get("status") ?? undefined
-  return NextResponse.json({ success: true, data: await InfraPageRepository.findAll({ status }) })
+  const input = parseActionQuery(INFRA_ACTION_SCHEMAS["infra.listPages"], request)
+  return NextResponse.json({ success: true, data: await InfraPageService.listPages(input) })
 }, { permission: PERMISSIONS.INFRA_ONLINE_DEFINITION_QUERY })
 
 export const POST = withAdminRoute(async () => {

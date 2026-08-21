@@ -52,6 +52,211 @@ message GetQueryConnectionRequest {
   string id = 2;
 }
 
+message ListConfigsRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+  optional string category = 4;
+  optional string key = 5;
+}
+
+message GetConfigByKeyRequest {
+  string key = 1;
+}
+
+message CreateConfigRequest {
+  string name = 1;
+  string config_key = 2 [json_name = "configKey"];
+  string value = 3;
+  optional string category = 4;
+  optional string remark = 5;
+}
+
+message ListJobsRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+  optional string status = 4;
+}
+
+message CreateJobRequest {
+  string name = 1;
+  string handler_name = 2 [json_name = "handlerName"];
+  string cron_expression = 3 [json_name = "cronExpression"];
+  optional string status = 4;
+}
+
+message ListFilesRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+  optional string type = 4;
+}
+
+message RecordFileRequest {
+  string config_id = 1 [json_name = "configId"];
+  string path = 2;
+  string url = 3;
+  optional string name = 4;
+  optional string type = 5;
+  int64 size = 6;
+}
+
+message PageDataSourceConfigsRequest {
+  string tenant_id = 1 [json_name = "tenantId"];
+  int32 page = 2;
+  int32 page_size = 3 [json_name = "pageSize"];
+  optional string keyword = 4;
+}
+
+message GetConfigRequest {
+  string id = 1;
+}
+
+message UpdateConfigItemRequest {
+  string id = 1;
+  optional string name = 2;
+  optional string value = 3;
+}
+
+message DeleteConfigRequest {
+  string id = 1;
+}
+
+message GetJobRequest {
+  string id = 1;
+}
+
+message UpdateJobRequest {
+  string id = 1;
+  optional string name = 2;
+}
+
+message DeleteJobRequest {
+  string id = 1;
+}
+
+message TriggerJobRequest {
+  string id = 1;
+}
+
+message UpdateJobStatusRequest {
+  string id = 1;
+  string status = 2;
+}
+
+message GetFileRequest {
+  string id = 1;
+}
+
+message DeleteFileRequest {
+  string id = 1;
+}
+
+message ListPagesRequest {
+  optional string status = 1;
+}
+
+message GetPageRequest {
+  string id = 1;
+}
+
+message GetPageBySlugRequest {
+  string slug = 1;
+}
+
+message PageApiErrorLogsRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message GetApiErrorLogRequest {
+  string id = 1;
+}
+
+message ProcessApiErrorLogRequest {
+  string id = 1;
+  string processed_by = 2 [json_name = "processedBy"];
+  optional string process_note = 3 [json_name = "processNote"];
+}
+
+message PageApiAccessLogsRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message GetApiAccessLogRequest {
+  string id = 1;
+}
+
+message TestDataSourceConnectionRequest {
+  optional string tenant_id = 1 [json_name = "tenantId"];
+  optional string id = 2;
+}
+
+message ListCodegenTablesRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+  optional string tenant_id = 4 [json_name = "tenantId"];
+}
+
+message GetCodegenTableRequest {
+  string id = 1;
+  optional string tenant_id = 2 [json_name = "tenantId"];
+}
+
+message UpdateCodegenTableRequest {
+  string id = 1;
+  optional string business_name = 2 [json_name = "businessName"];
+}
+
+message DeleteCodegenTableRequest {
+  string id = 1;
+  optional string tenant_id = 2 [json_name = "tenantId"];
+}
+
+message DeleteCodegenTablesRequest {
+  optional string tenant_id = 1 [json_name = "tenantId"];
+}
+
+message ExportApiAccessLogsRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message ExportApiErrorLogsRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  optional string keyword = 3;
+}
+
+message RunAuditLogRetentionRequest {
+  optional bool dry_run = 1 [json_name = "dryRun"];
+}
+
+message ListCodegenCandidatesRequest {
+  int32 page = 1;
+  int32 page_size = 2 [json_name = "pageSize"];
+  string tenant_id = 3 [json_name = "tenantId"];
+}
+
+message ImportCodegenTablesRequest {
+  string tenant_id = 1 [json_name = "tenantId"];
+}
+
+message GenerateCodegenArchiveRequest {
+  string id = 1;
+  optional string tenant_id = 2 [json_name = "tenantId"];
+}
+
+message ListCodegenCatalogRequest {
+  optional int32 n = 1;
+}
+
 service InfraService {
   rpc Ping(PingRequest) returns (JsonReply);
   rpc UpdateConfig(UpdateConfigRequest) returns (JsonReply);
@@ -61,4 +266,43 @@ service InfraService {
   rpc GenerateTemplate(GenerateTemplateRequest) returns (JsonReply);
   rpc ListQueryDataSources(ListQueryDataSourcesRequest) returns (JsonReply);
   rpc GetQueryConnection(GetQueryConnectionRequest) returns (JsonReply);
+  rpc ListConfigs(ListConfigsRequest) returns (JsonReply);
+  rpc GetConfigByKey(GetConfigByKeyRequest) returns (JsonReply);
+  rpc CreateConfig(CreateConfigRequest) returns (JsonReply);
+  rpc ListJobs(ListJobsRequest) returns (JsonReply);
+  rpc CreateJob(CreateJobRequest) returns (JsonReply);
+  rpc ListFiles(ListFilesRequest) returns (JsonReply);
+  rpc RecordFile(RecordFileRequest) returns (JsonReply);
+  rpc PageDataSourceConfigs(PageDataSourceConfigsRequest) returns (JsonReply);
+  rpc GetConfig(GetConfigRequest) returns (JsonReply);
+  rpc UpdateConfigItem(UpdateConfigItemRequest) returns (JsonReply);
+  rpc DeleteConfig(DeleteConfigRequest) returns (JsonReply);
+  rpc GetJob(GetJobRequest) returns (JsonReply);
+  rpc UpdateJob(UpdateJobRequest) returns (JsonReply);
+  rpc DeleteJob(DeleteJobRequest) returns (JsonReply);
+  rpc TriggerJob(TriggerJobRequest) returns (JsonReply);
+  rpc UpdateJobStatus(UpdateJobStatusRequest) returns (JsonReply);
+  rpc GetFile(GetFileRequest) returns (JsonReply);
+  rpc DeleteFile(DeleteFileRequest) returns (JsonReply);
+  rpc ListPages(ListPagesRequest) returns (JsonReply);
+  rpc GetPage(GetPageRequest) returns (JsonReply);
+  rpc GetPageBySlug(GetPageBySlugRequest) returns (JsonReply);
+  rpc PageApiErrorLogs(PageApiErrorLogsRequest) returns (JsonReply);
+  rpc GetApiErrorLog(GetApiErrorLogRequest) returns (JsonReply);
+  rpc ProcessApiErrorLog(ProcessApiErrorLogRequest) returns (JsonReply);
+  rpc PageApiAccessLogs(PageApiAccessLogsRequest) returns (JsonReply);
+  rpc GetApiAccessLog(GetApiAccessLogRequest) returns (JsonReply);
+  rpc TestDataSourceConnection(TestDataSourceConnectionRequest) returns (JsonReply);
+  rpc ListCodegenTables(ListCodegenTablesRequest) returns (JsonReply);
+  rpc GetCodegenTable(GetCodegenTableRequest) returns (JsonReply);
+  rpc UpdateCodegenTable(UpdateCodegenTableRequest) returns (JsonReply);
+  rpc DeleteCodegenTable(DeleteCodegenTableRequest) returns (JsonReply);
+  rpc DeleteCodegenTables(DeleteCodegenTablesRequest) returns (JsonReply);
+  rpc ExportApiAccessLogs(ExportApiAccessLogsRequest) returns (JsonReply);
+  rpc ExportApiErrorLogs(ExportApiErrorLogsRequest) returns (JsonReply);
+  rpc RunAuditLogRetention(RunAuditLogRetentionRequest) returns (JsonReply);
+  rpc ListCodegenCandidates(ListCodegenCandidatesRequest) returns (JsonReply);
+  rpc ImportCodegenTables(ImportCodegenTablesRequest) returns (JsonReply);
+  rpc GenerateCodegenArchive(GenerateCodegenArchiveRequest) returns (JsonReply);
+  rpc ListCodegenCatalog(ListCodegenCatalogRequest) returns (JsonReply);
 }

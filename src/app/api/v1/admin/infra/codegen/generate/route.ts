@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server"
 import { CodegenEngineService } from "@/modules/infra/backend/services/codegen-engine.service"
+import { CodegenTableService } from "@/modules/infra/backend/services/codegen-table.service"
 import { SchemaReaderService } from "@/modules/infra/backend/services/schema-reader.service"
+import { INFRA_ACTION_SCHEMAS } from "@/modules/infra/contract/actions"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+import { parseActionBody } from "@/modules/shared/backend/http/parse-action-input"
 
 /**
  * POST /api/v1/admin/infra/codegen/generate
@@ -66,7 +69,7 @@ export const POST = withAdminRoute(async (request: Request) => {
       }
     }
 
-    const outputs = CodegenEngineService.generate({
+    const outputs = CodegenEngineService.generate(parseActionBody(INFRA_ACTION_SCHEMAS["infra.generateCodegen"], {
       moduleName,
       subModule,
       businessName,
@@ -76,7 +79,7 @@ export const POST = withAdminRoute(async (request: Request) => {
       table,
       generateFrontend,
       generateTest,
-    })
+    }))
 
     return NextResponse.json({
       success: true,
@@ -97,10 +100,6 @@ export const POST = withAdminRoute(async (request: Request) => {
  * 获取可用的模板列表
  */
 export const GET = withAdminRoute(async () => {
-  const templates = CodegenEngineService.listTemplates()
-  const tables = await SchemaReaderService.listTables()
-  return NextResponse.json({
-    success: true,
-    data: { templates, tables: tables.map((t) => ({ name: t.name, comment: t.comment, columns: t.columns.length })) },
-  })
+  const data = await CodegenTableService.listCodegenCatalog(parseActionBody(INFRA_ACTION_SCHEMAS["infra.listCodegenCatalog"], {}))
+  return NextResponse.json({ success: true, data })
 }, { permission: PERMISSIONS.INFRA_CODEGEN_QUERY })

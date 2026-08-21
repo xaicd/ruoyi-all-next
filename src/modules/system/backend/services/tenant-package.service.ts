@@ -52,4 +52,14 @@ export class SystemTenantPackageService {
     domainLog.audit("system.tenantPackage.delete", { targetType: "TENANT_PACKAGE", targetId: id })
     return { success: true }
   }
+
+  static async listTenantPackages(input: { page?: number; pageSize?: number; keyword?: string; all?: boolean }) {
+    if (input.all) return this.getAll()
+    return this.list(input)
+  }
+
+  static async getTenantPackage(input: { id: string }) { return this.getById(input.id) }
+  static async createTenantPackage(input: { name: string; status?: string; accountLimit?: number | null; menuIds?: string[]; remark?: string }) { return this.create(input) }
+  static async updateTenantPackage(input: { id: string; name?: string; status?: string; accountLimit?: number | null; menuIds?: string[]; remark?: string }) { return this.update(input) }
+  static async deleteTenantPackage(input: { id: string }) { return this.delete(input.id) }
 }

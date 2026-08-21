@@ -237,4 +237,12 @@ export class SystemTenantService {
     domainLog.audit("system.tenant.assignPackage", { targetType: "TENANT", targetId: input.tenantId, packageId: input.packageId, operatorId })
     return { success: true }
   }
+
+  static async getTenant(input: { id: string }) { return this.getById(input.id) }
+  static async deleteTenant(input: { id: string }) { return this.delete(input.id) }
+  static async updateTenantStatus(input: { id: string; status: "ACTIVE" | "DISABLED" }) { return this.updateStatus(input.id, input.status) }
+  static async assignTenantPackage(input: { tenantId: string; packageId: string; operatorId?: string }) {
+    return this.assignPackage(input.operatorId ?? "system", { tenantId: input.tenantId, packageId: input.packageId })
+  }
+  static async getTenantSubscriptions(input: { id: string }) { return this.getSubscriptionHistory(input.id) }
 }

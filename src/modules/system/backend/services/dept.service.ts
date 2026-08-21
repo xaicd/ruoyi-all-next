@@ -98,4 +98,7 @@ export class SystemDeptService {
     domainLog.audit("system.dept.delete", { targetType: "DEPT", targetId: id })
     return { success: true }
   }
+
+  static async getDept(input: { id: string }) { return this.getById(input.id) }
+  static async deleteDept(input: { id: string }) { return this.delete(input.id) }
 }

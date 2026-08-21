@@ -1,35 +1,18 @@
 import { NextResponse } from "next/server"
-import { CodegenTableRepository } from "@/modules/infra/backend/repositories/codegen-table.repository"
+import { CodegenTableService } from "@/modules/infra/backend/services/codegen-table.service"
+import { INFRA_ACTION_SCHEMAS } from "@/modules/infra/contract/actions"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
-import { z } from "zod"
+import { parseActionQuery } from "@/modules/shared/backend/http/parse-action-input"
 
-const listSchema = z.object({ page: z.coerce.number().int().min(1).default(1), pageSize: z.coerce.number().int().min(1).max(100).default(20), keyword: z.string().trim().optional() })
-
-/**
- * GET /api/v1/admin/infra/codegen
- * 获取已导入的表列表
- */
-export const GET = withAdminRoute(async (request: Request, auth) => {
-  try {
-    const { searchParams } = new URL(request.url)
-    const input = listSchema.parse({ page: searchParams.get("page") ?? 1, pageSize: searchParams.get("pageSize") ?? 20, keyword: searchParams.get("keyword") ?? undefined }) as any
-    const data = await CodegenTableRepository.findList({ ...input, tenantId: auth.tenantId })
-    return NextResponse.json({ success: true, data })
-  } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }
+export const GET = withAdminRoute(async (request, auth) => {
+  const input = parseActionQuery(INFRA_ACTION_SCHEMAS["infra.listCodegenTables"], request)
+  const data = await CodegenTableService.listCodegenTables({ ...input, tenantId: input.tenantId ?? auth.tenantId })
+  return NextResponse.json({ success: true, data })
 }, { permission: PERMISSIONS.INFRA_CODEGEN_QUERY })
 
-/**
- * DELETE /api/v1/admin/infra/codegen?ids=1,2,3
- * 批量删除
- */
-export const DELETE = withAdminRoute(async (request: Request, auth) => {
-  try {
-    const { searchParams } = new URL(request.url)
-    const ids = (searchParams.get("ids") ?? "").split(",").filter(Boolean)
-    if (ids.length === 0) return NextResponse.json({ success: false, error: "ids 不能为空" }, { status: 400 })
-    const deletable = (await Promise.all(ids.map((id) => CodegenTableRepository.findById(id, auth.tenantId)))).flatMap((table) => table ? [table.id] : [])
-    await CodegenTableRepository.deleteByIds(deletable)
-    return NextResponse.json({ success: true, data: { deleted: deletable.length } })
-  } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }
+export const DELETE = withAdminRoute(async (request, auth) => {
+  const input = parseActionQuery(INFRA_ACTION_SCHEMAS["infra.deleteCodegenTables"], request)
+  const data = await CodegenTableService.deleteCodegenTables({ ...input, tenantId: input.tenantId ?? auth.tenantId })
+  return NextResponse.json({ success: true, data })
 }, { permission: PERMISSIONS.INFRA_CODEGEN_DELETE })

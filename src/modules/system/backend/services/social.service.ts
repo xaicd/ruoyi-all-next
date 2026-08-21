@@ -78,4 +78,9 @@ export class SystemSocialService {
 
     return created
   }
+
+  static async createSocialUser(input: CreateSocialUserInput & { operatorId?: string }) {
+    const { operatorId, ...data } = input
+    return this.createUser(operatorId ?? "system", data)
+  }
 }

@@ -61,4 +61,9 @@ export class InfraJobService {
     // TODO: 接入真实调度引擎
     return { success: true, message: `任务 ${existing.name} 已触发执行` }
   }
+
+  static async getJob(input: { id: string }) { return this.getById(input.id) }
+  static async deleteJob(input: { id: string }) { return this.delete(input.id) }
+  static async triggerJob(input: { id: string }) { return this.trigger(input.id) }
+  static async updateJobStatus(input: { id: string; status: "ACTIVE" | "DISABLED" }) { return this.updateStatus(input.id, input.status) }
 }

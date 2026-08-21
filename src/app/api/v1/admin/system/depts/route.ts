@@ -1,50 +1,25 @@
 import { NextResponse } from "next/server"
 import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+import { parseActionBody, parseActionQuery } from "@/modules/shared/backend/http/parse-action-input"
+import { SYSTEM_ACTION_SCHEMAS } from "@/modules/system/contract/actions"
 import { SystemDeptService } from "@/modules/system/backend/services/dept.service"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { z } from "zod"
 
-const createDeptSchema = z.object({
-  name: z.string().trim().min(1, "部门名称不能为空").max(50),
-  parentId: z.string().trim().optional(),
-  sort: z.coerce.number().int().min(0).default(0),
-  leaderId: z.string().trim().optional(),
-  phone: z.string().trim().max(20).optional(),
-  email: z.string().trim().email().optional().or(z.literal("")),
-  status: z.enum(["ACTIVE", "DISABLED"]).default("ACTIVE"),
-})
-
-/**
- * GET /api/v1/admin/system/depts
- * 获取部门树/列表
- */
-export const GET = withAdminRoute(async (request, auth) => {
+export const GET = withAdminRoute(async (request) => {
   try {
-    const { searchParams } = new URL(request.url)
-    const mode = searchParams.get("mode") // tree | list
-    const status = searchParams.get("status") || undefined
-    const keyword = searchParams.get("keyword") || undefined
-
-    if (mode === "list") {
-      const data = await SystemDeptService.list({ status, keyword })
-      return NextResponse.json({ success: true, data })
-    }
-
-    const data = await SystemDeptService.tree({ status, keyword })
+    const input = parseActionQuery(SYSTEM_ACTION_SCHEMAS["system.treeDepts"], request)
+    const data = input.mode === "list"
+      ? await SystemDeptService.list(input)
+      : await SystemDeptService.tree(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
   }
 }, { permission: PERMISSIONS.SYSTEM_DEPT_VIEW })
 
-/**
- * POST /api/v1/admin/system/depts
- * 创建部门
- */
-export const POST = withAdminRoute(async (request, auth) => {
+export const POST = withAdminRoute(async (request) => {
   try {
-    const body = await request.json()
-    const input = createDeptSchema.parse(body) as any
+    const input = parseActionBody(SYSTEM_ACTION_SCHEMAS["system.createDept"], await request.json())
     const data = await SystemDeptService.create({ ...input, email: input.email || undefined })
     return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error: any) {

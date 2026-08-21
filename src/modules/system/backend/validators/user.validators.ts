@@ -47,3 +47,17 @@ export type UpdateUserInput = z.infer<typeof updateUserSchema>
 export type UpdateUserPasswordInput = z.infer<typeof updateUserPasswordSchema>
 export type DeleteUserInput = z.infer<typeof deleteUserSchema>
 export type UserListQueryInput = z.infer<typeof userListQuerySchema>
+
+export const getUserProfileSchema = z.object({
+  userId: z.string().trim().min(1, "userId 不能为空"),
+})
+
+export const updateUserProfileSchema = z.object({
+  userId: z.string().trim().min(1, "userId 不能为空"),
+  nickname: z.string().trim().min(1).max(30).optional(),
+  phone: z.string().trim().max(20).optional(),
+  email: z.string().trim().email().max(50).optional(),
+}).refine((value) => value.nickname !== undefined || value.phone !== undefined || value.email !== undefined, "至少提供一个可更新字段")
+
+export type GetUserProfileInput = z.infer<typeof getUserProfileSchema>
+export type UpdateUserProfileInput = z.infer<typeof updateUserProfileSchema>

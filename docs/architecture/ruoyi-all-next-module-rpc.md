@@ -54,7 +54,7 @@
 |---|---|---|---|
 | 浏览器 / 小程序 | 版本化 HTTP | `/api/v1/admin/pay/...` | 把 Service 类或 Prisma 类型泄漏给前端 |
 | 同域内部 | 本地 application port | `PayOrderService.create` | Route 里写事务 |
-| 跨域同步 | Facade 方法 = RPC action | `pay.createOrder` → `ruoyi.cmd.pay.createOrder` | 直接 import 其他域 |
+| 跨域同步 | Facade 方法 = RPC action | 业务域调 `systemPublicFacade.getDictDataByType` / `getPermissionInfoByUser` | 把 system/infra 后台 CRUD 当公开 RPC；直接 import 其他域 |
 | 跨域异步 | 可靠事件 | `ruoyi.evt.pay.order.paid` | 只靠内存 emit 做资金/库存 |
 
 Facade **是强制的**。它就是 RPC 接口：
@@ -117,13 +117,13 @@ broker.start({ RUOYI_PACK_DOMAIN: "pay", RUOYI_RPC_PROTOCOL: "grpc" })
 10. Broker 分发：`src/modules/shared/backend/lib/service-broker.ts`；`rpc-actions.json` 的 `service`/`module`/`target` 指定落到哪个 Service 文件
 11. 跨进程 RPC：`src/modules/shared/backend/lib/rpc-http.ts`，入口 `POST /api/internal/rpc`
 12. 门禁：`npm run microservice:check` 与 `npm run domain:check`
-13. 低代码：Online 预览/下载走 `infraFacade.previewCodegen` / `generateCodegen`；字典走 `systemFacade.getDictDataByType`；模板引擎 Facade 预置与 codegen ZIP / module-pack 输出 `createDomainFacade` 与 `*.rpc.ts`
+13. 低代码：Online 预览/下载走 `infraPlatformFacade.previewCodegen` / `generateCodegen`；字典走 `systemPublicFacade.getDictDataByType`；模板引擎 Facade 预置与 codegen ZIP / module-pack 输出 `createDomainFacade` 与 `*.rpc.ts`
 
 ## 7. 低代码模板与生成器
 
 低代码产物必须能在一体进程和拆分进程里用同一套调用面：
 
-1. **Online** 不得 `import` `CodegenEngineService` 或 `SystemDictService`。预览/下载走 `infraFacade`，字典走 `systemFacade.getDictDataByType`；一体是 SDK，拆出后是 RPC。Codegen IR 类型走 `infra/contract/codegen.types.ts`。
+1. **Online** 不得 `import` `CodegenEngineService` 或 `SystemDictService`。预览/下载走 `infraPlatformFacade`，字典走 `systemPublicFacade.getDictDataByType`；一体是 SDK，拆出后是 RPC。Codegen IR 类型走 `infra/contract/codegen.types.ts`。system/infra **不对业务域整体开放**，公开面只有字典与登录用户信息。
 2. **模板引擎** `next-react-admin-service-facade` 生成 `createDomainFacade`；组合包同时输出 `*.rpc.ts`。
 3. **Codegen ZIP / module-pack** 为生成 Service 附带 RPC binding，并写明跨域禁止 import Service。
 4. 浏览器仍只走 `/api/v1/...`；生成器不会把 Next Service 类型泄漏给前端页面。

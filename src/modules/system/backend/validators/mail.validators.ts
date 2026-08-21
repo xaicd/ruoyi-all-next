@@ -8,3 +8,23 @@ export const createMailAccountSchema = z.object({
 })
 
 export type CreateMailAccountInput = z.infer<typeof createMailAccountSchema>
+
+export const createMailTemplateSchema = z.object({
+  name: z.string().trim().min(1).max(100),
+  code: z.string().trim().min(1).max(100),
+  subject: z.string().trim().min(1).max(200),
+  content: z.string().trim().min(1),
+  status: z.enum(["ACTIVE", "DISABLED"]).default("ACTIVE"),
+})
+
+export const updateMailTemplateSchema = z.object({
+  id: z.string().trim().min(1, "id 不能为空"),
+  name: z.string().trim().min(1).max(100).optional(),
+  code: z.string().trim().min(1).max(100).optional(),
+  subject: z.string().trim().min(1).max(200).optional(),
+  content: z.string().trim().min(1).optional(),
+  status: z.enum(["ACTIVE", "DISABLED"]).optional(),
+})
+
+export type CreateMailTemplateInput = z.infer<typeof createMailTemplateSchema>
+export type UpdateMailTemplateInput = z.infer<typeof updateMailTemplateSchema>

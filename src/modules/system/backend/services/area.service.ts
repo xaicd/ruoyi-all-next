@@ -33,6 +33,11 @@ export class AreaService {
     return { id: row.id }
   }
 
+  static async getArea(input: { id: string }) { return this.get(input.id) }
+  static async createArea(input: { name: string; parentId?: string; level?: number }) { return this.create(input) }
+  static async updateArea(input: { id: string; name?: string; parentId?: string | null; level?: number; status?: string }) { return this.update(input) }
+  static async deleteArea(input: { id: string }) { return this.delete(input.id) }
+
   static async update(input: any) {
     const idx = MOCK_DATA.findIndex((a) => a.id === input.id)
     if (idx === -1) throw new Error("地区不存在")

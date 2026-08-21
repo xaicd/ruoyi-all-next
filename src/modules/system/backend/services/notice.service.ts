@@ -48,6 +48,11 @@ export class NoticeService {
     domainLog.event("system.notice.delete", { id })
     return { success: true }
   }
+
+  static async getNotice(input: { id: string }) { return this.get(input.id) }
+  static async createNotice(input: { title: string; content: string; type?: string }) { return this.create(input) }
+  static async updateNotice(input: { id: string; title?: string; content?: string; type?: string; status?: string }) { return this.update(input) }
+  static async deleteNotice(input: { id: string }) { return this.delete(input.id) }
 }
 
 // Alias for index.ts re-export

@@ -18,3 +18,16 @@ export const createDeptSchema = z.object({
 
 export type DeptQueryInput = z.infer<typeof deptQuerySchema>
 export type CreateDeptInput = z.infer<typeof createDeptSchema>
+
+export const updateDeptSchema = z.object({
+  id: z.string().trim().min(1, "id 不能为空"),
+  name: z.string().trim().min(1).max(50).optional(),
+  parentId: z.string().trim().optional(),
+  sort: z.coerce.number().int().min(0).optional(),
+  leaderId: z.string().trim().optional(),
+  phone: z.string().trim().max(20).optional(),
+  email: z.string().trim().email().optional().or(z.literal("")),
+  status: z.enum(["ACTIVE", "DISABLED"]).optional(),
+})
+
+export type UpdateDeptInput = z.infer<typeof updateDeptSchema>

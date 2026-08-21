@@ -11,7 +11,8 @@
     "platform": {
       "domains": ["system", "infra"],
       "deployable": true,
-      "defaultColocateWith": "bff"
+      "defaultColocateWith": "bff",
+      "publicRpc": "system: getDictDataByType + getPermissionInfoByUser; infra: none"
     },
     "business": {
       "domains": ["online", "bpm", "pay", "report", "mp", "mall", "member", "crm", "erp", "wms", "mes", "ai", "iot", "im"],

@@ -15,3 +15,22 @@ export const captchaVerifySchema = z.object({
 
 export type LoginInput = z.infer<typeof loginSchema>
 export type CaptchaVerifyInput = z.infer<typeof captchaVerifySchema>
+
+export const emptyPayloadSchema = z.object({})
+
+export const actorIdSchema = z.object({
+  userId: z.string().trim().min(1, "userId 不能为空"),
+})
+
+export const refreshTokenSchema = z.object({
+  token: z.string().trim().min(1, "token 不能为空"),
+})
+
+export const sidebarNavSchema = z.object({
+  userId: z.string().trim().min(1, "userId 不能为空"),
+  isPlatformAdmin: z.coerce.boolean().default(false),
+})
+
+export type ActorIdInput = z.infer<typeof actorIdSchema>
+export type RefreshTokenInput = z.infer<typeof refreshTokenSchema>
+export type SidebarNavInput = z.infer<typeof sidebarNavSchema>

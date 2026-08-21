@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest"
-import { infraFacade } from "@/modules/infra/contract/infra.facade"
+import { infraPlatformFacade } from "@/modules/infra/contract/infra.platform.facade"
 import { ApiError } from "@/modules/shared/backend/http/api-error"
 import { CustomSqlReportService, compileNamedParameters, validateReadOnlySql } from "../custom-sql-report.service"
 
@@ -28,8 +28,8 @@ describe("CustomSqlReportService SQL safety", () => {
   })
 
   it("always scopes datasource lookup to the current tenant", async () => {
-    const list = vi.spyOn(infraFacade, "listQueryDataSources").mockResolvedValue({ success: true, data: [] } as Awaited<ReturnType<typeof infraFacade.listQueryDataSources>>)
-    const conn = vi.spyOn(infraFacade, "getQueryConnection").mockResolvedValue({ success: true, data: null } as Awaited<ReturnType<typeof infraFacade.getQueryConnection>>)
+    const list = vi.spyOn(infraPlatformFacade, "listQueryDataSources").mockResolvedValue({ success: true, data: [] } as Awaited<ReturnType<typeof infraPlatformFacade.listQueryDataSources>>)
+    const conn = vi.spyOn(infraPlatformFacade, "getQueryConnection").mockResolvedValue({ success: true, data: null } as Awaited<ReturnType<typeof infraPlatformFacade.getQueryConnection>>)
     await CustomSqlReportService.dataSources("tenant-a")
     expect(list).toHaveBeenCalledWith({ tenantId: "tenant-a" }, expect.objectContaining({ caller: "report.custom-sql" }))
     await expect(CustomSqlReportService.execute("tenant-a", { dataSourceId: "tenant-b-source", sql: "SELECT 1", parameters: {}, maxRows: 1 })).rejects.toMatchObject({ code: "NOT_FOUND" })

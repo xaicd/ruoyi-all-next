@@ -36,6 +36,9 @@ export class LoginLogService {
   }
 
   static async exportRows(input: LoginLogQuery) { return (await this.page({ ...input, page: 1, pageSize: 10_000 })).items }
+
+  static async getLoginLog(input: { id: string }) { return this.get(input.id) }
+  static async exportLoginLogs(input: LoginLogQuery) { return this.exportRows(input) }
 }
 
 export { LoginLogService as SystemLoginLogService }

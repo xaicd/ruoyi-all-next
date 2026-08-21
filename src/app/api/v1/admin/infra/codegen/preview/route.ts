@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server"
 import { CodegenEngineService } from "@/modules/infra/backend/services/codegen-engine.service"
-import { CodegenTableRepository } from "@/modules/infra/backend/repositories/codegen-table.repository"
+import { CodegenTableService } from "@/modules/infra/backend/services/codegen-table.service"
+import { INFRA_ACTION_SCHEMAS } from "@/modules/infra/contract/actions"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+import { parseActionBody } from "@/modules/shared/backend/http/parse-action-input"
 
 /**
  * POST /api/v1/admin/infra/codegen/preview
@@ -12,11 +14,11 @@ export const POST = withAdminRoute(async (request: Request, auth) => {
   try {
     const body = await request.json()
 
-    const stored = body.tableId
-      ? await CodegenTableRepository.findById(String(body.tableId), auth.tenantId)
-      : body.tableName
-        ? await CodegenTableRepository.findByTableName(String(body.tableName), auth.tenantId)
-        : null
+    const stored = await CodegenTableService.findStoredTable({
+      id: body.tableId ? String(body.tableId) : undefined,
+      tableName: body.tableName ? String(body.tableName) : undefined,
+      tenantId: auth.tenantId,
+    })
     if (!body.table && !stored) throw new Error("请提供已导入的 tableId/tableName，或完整 table 配置")
 
     const config = {
@@ -42,7 +44,7 @@ export const POST = withAdminRoute(async (request: Request, auth) => {
       generateTest: body.generateTest ?? false,
     }
 
-    const outputs = CodegenEngineService.preview(config)
+    const outputs = CodegenEngineService.preview(parseActionBody(INFRA_ACTION_SCHEMAS["infra.previewCodegen"], config))
 
     return NextResponse.json({
       success: true,

@@ -1,27 +1,15 @@
 import { NextResponse } from "next/server"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+import { parseActionBody, parseActionQuery } from "@/modules/shared/backend/http/parse-action-input"
+import { SYSTEM_ACTION_SCHEMAS } from "@/modules/system/contract/actions"
 import { SystemOnlineUserService } from "@/modules/system/backend/services/online-user.service"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 
-export async function GET(request: Request) {
-  try {
-    const { searchParams } = new URL(request.url)
-    const input = {
-      page: Number(searchParams.get("page") || 1),
-      pageSize: Number(searchParams.get("pageSize") || 20),
-      keyword: searchParams.get("keyword") || undefined,
-    }
-    const data = await SystemOnlineUserService.page(input)
-    return NextResponse.json({ success: true, data })
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message || "查询失败" }, { status: 400 })
-  }
-}
+export const GET = withAdminRoute(async (request) => {
+  return NextResponse.json({ success: true, data: await SystemOnlineUserService.listOnlineUsers(parseActionQuery(SYSTEM_ACTION_SCHEMAS["system.listOnlineUsers"], request)) })
+}, { permission: PERMISSIONS.SYSTEM_ONLINE_USER_VIEW })
 
-export async function POST(request: Request) {
-  try {
-    const body = await request.json()
-    const data = await SystemOnlineUserService.create(body)
-    return NextResponse.json({ success: true, data }, { status: 201 })
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message || "创建失败" }, { status: 400 })
-  }
-}
+export const POST = withAdminRoute(async (request, auth) => {
+  const input = parseActionBody(SYSTEM_ACTION_SCHEMAS["system.forceLogoutOnlineUser"], await request.json())
+  return NextResponse.json({ success: true, data: await SystemOnlineUserService.forceLogoutOnlineUser({ ...input, operatorId: auth.userId }) })
+}, { permission: PERMISSIONS.SYSTEM_ONLINE_USER_FORCE_LOGOUT })

@@ -39,4 +39,11 @@ export class ApiErrorLogService {
     const result = await db.updateTable("infra_api_error_log").set({ status: "PROCESSED", processed_at: new Date(), processed_by: input.processedBy, process_note: input.processNote ?? null }).where("id", "=", id).where("status", "=", "UNPROCESSED").executeTakeFirst()
     return { success: Number(result.numUpdatedRows) > 0 }
   }
+
+  static async getApiErrorLog(input: { id: string }) { return this.get(input.id) }
+  static async processApiErrorLog(input: { id: string; processedBy: string; processNote?: string }) {
+    return this.markProcessed(input.id, { processedBy: input.processedBy, processNote: input.processNote })
+  }
+
+  static async exportApiErrorLogs(input: ApiErrorLogQuery) { return this.exportRows(input) }
 }

@@ -33,4 +33,13 @@ export class UserProfileService {
     domainLog.audit("system.userProfile.updatePassword", { targetType: "USER", targetId: userId })
     return { success: true }
   }
+
+  static async getUserProfile(input: { userId: string }) {
+    return this.getProfile(input.userId)
+  }
+
+  static async updateUserProfile(input: { userId: string; nickname?: string; phone?: string; email?: string }) {
+    const { userId, ...patch } = input
+    return this.updateProfile(userId, patch)
+  }
 }

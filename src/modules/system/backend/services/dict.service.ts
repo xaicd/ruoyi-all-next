@@ -50,6 +50,9 @@ export class SystemDictService {
     return { success: true }
   }
 
+  static async getDictType(input: { id: string }) { return this.getType(input.id) }
+  static async deleteDictType(input: { id: string }) { return this.deleteType(input.id) }
+
   // === 字典数据 ===
   static async listData(dictTypeId: string) {
     const data = await SystemDictDataRepository.findByDictTypeId(dictTypeId)
@@ -86,6 +89,27 @@ export class SystemDictService {
     domainLog.event("system.dict.deleteData", { dictDataId: id })
     return { success: true }
   }
+
+  static async listDictData(input: { dictTypeId?: string; type?: string }) {
+    if (input.type) return this.getDataByType(input.type)
+    return this.listData(input.dictTypeId!)
+  }
+
+  static async createDictData(input: { dictTypeId: string; label: string; value: string; sort?: number; status?: string; colorType?: string; remark?: string }) {
+    return this.createData(input)
+  }
+
+  static async getDictData(input: { id: string }) {
+    const data = await SystemDictDataRepository.findById(input.id)
+    if (!data) throw new Error(`字典数据不存在: ${input.id}`)
+    return data
+  }
+
+  static async updateDictData(input: { id: string; label?: string; value?: string; sort?: number; status?: string; colorType?: string; remark?: string }) {
+    return this.updateData(input)
+  }
+
+  static async deleteDictData(input: { id: string }) { return this.deleteData(input.id) }
 
   static async page(...args: any[]) {
     return {}

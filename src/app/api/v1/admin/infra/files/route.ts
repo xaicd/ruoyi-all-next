@@ -1,25 +1,21 @@
 import { NextResponse } from "next/server"
 import { InfraFileService } from "@/modules/infra/backend/services/file.service"
+import { INFRA_ACTION_SCHEMAS } from "@/modules/infra/contract/actions"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
-import { z } from "zod"
+import { parseActionBody, parseActionQuery } from "@/modules/shared/backend/http/parse-action-input"
 
-const listSchema = z.object({ page: z.coerce.number().int().min(1).default(1), pageSize: z.coerce.number().int().min(1).max(100).default(20), keyword: z.string().trim().optional(), type: z.string().trim().optional() })
-
-export const GET = withAdminRoute(async (request: Request, _auth) => {
+export const GET = withAdminRoute(async (request) => {
   try {
-    const { searchParams } = new URL(request.url)
-    const input = listSchema.parse({ page: searchParams.get("page") ?? 1, pageSize: searchParams.get("pageSize") ?? 20, keyword: searchParams.get("keyword") ?? undefined, type: searchParams.get("type") ?? undefined })
+    const input = parseActionQuery(INFRA_ACTION_SCHEMAS["infra.listFiles"], request)
     const data = await InfraFileService.list(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }
 }, { permission: PERMISSIONS.INFRA_FILE_VIEW })
 
-/** POST 用于记录文件上传（实际文件通过 multipart 上传到存储后调用此接口登记） */
-export const POST = withAdminRoute(async (request: Request, _auth) => {
+export const POST = withAdminRoute(async (request) => {
   try {
-    const body = await request.json()
-    const input = z.object({ configId: z.string().trim().min(1), name: z.string().trim().optional(), path: z.string().trim().min(1), url: z.string().trim().min(1), type: z.string().trim().optional(), size: z.coerce.number().int().min(0) }).parse(body) as any
+    const input = parseActionBody(INFRA_ACTION_SCHEMAS["infra.recordFile"], await request.json())
     const data = await InfraFileService.recordUpload(input)
     return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }

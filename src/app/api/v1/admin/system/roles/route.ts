@@ -1,34 +1,13 @@
 import { NextResponse } from "next/server"
 import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+import { parseActionBody, parseActionQuery } from "@/modules/shared/backend/http/parse-action-input"
+import { SYSTEM_ACTION_SCHEMAS } from "@/modules/system/contract/actions"
 import { SystemRoleService } from "@/modules/system/backend/services/role.service"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { z } from "zod"
 
-const listQuerySchema = z.object({
-  page: z.coerce.number().int().min(1).default(1),
-  pageSize: z.coerce.number().int().min(1).max(100).default(20),
-  keyword: z.string().trim().max(50).optional(),
-  status: z.enum(["ACTIVE", "DISABLED"]).optional(),
-})
-
-const createRoleSchema = z.object({
-  name: z.string().trim().min(1, "角色名不能为空").max(30),
-  code: z.string().trim().min(1, "角色编码不能为空").max(100),
-  sort: z.coerce.number().int().min(0).default(0),
-  status: z.enum(["ACTIVE", "DISABLED"]).default("ACTIVE"),
-  dataScope: z.enum(["ALL", "DEPT", "DEPT_AND_CHILD", "SELF"]).default("ALL"),
-  remark: z.string().trim().max(500).optional(),
-})
-
-export const GET = withAdminRoute(async (request, auth) => {
+export const GET = withAdminRoute(async (request) => {
   try {
-    const { searchParams } = new URL(request.url)
-    const input = listQuerySchema.parse({
-      page: searchParams.get("page") ?? 1,
-      pageSize: searchParams.get("pageSize") ?? 20,
-      keyword: searchParams.get("keyword") ?? undefined,
-      status: searchParams.get("status") ?? undefined,
-    }) as any
+    const input = parseActionQuery(SYSTEM_ACTION_SCHEMAS["system.listRoles"], request)
     const data = await SystemRoleService.list(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
@@ -36,10 +15,9 @@ export const GET = withAdminRoute(async (request, auth) => {
   }
 }, { permission: PERMISSIONS.SYSTEM_ROLE_VIEW })
 
-export const POST = withAdminRoute(async (request, auth) => {
+export const POST = withAdminRoute(async (request) => {
   try {
-    const body = await request.json()
-    const input = createRoleSchema.parse(body) as any
+    const input = parseActionBody(SYSTEM_ACTION_SCHEMAS["system.createRole"], await request.json())
     const data = await SystemRoleService.create(input)
     return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error: any) {

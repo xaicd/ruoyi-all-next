@@ -63,4 +63,12 @@ export class SystemCaptchaService {
 
     return { success: true }
   }
+
+  static async generateCaptcha(_input: Record<string, never> = {}) {
+    return this.generate()
+  }
+
+  static async verifyCaptcha(input: CaptchaVerifyInput) {
+    return this.verify(input)
+  }
 }

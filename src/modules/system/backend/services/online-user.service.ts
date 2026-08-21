@@ -45,4 +45,12 @@ export class SystemOnlineUserService {
     return { id: String(Date.now()), ...input }
   }
 
+  static async listOnlineUsers(input: { page?: number; pageSize?: number; keyword?: string }) {
+    return this.list({ page: input.page ?? 1, pageSize: input.pageSize ?? 20, keyword: input.keyword })
+  }
+
+  static async forceLogoutOnlineUser(input: { sessionId: string; operatorId?: string }) {
+    return this.forceLogout(input.operatorId ?? "system", { sessionId: input.sessionId })
+  }
+
 }

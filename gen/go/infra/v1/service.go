@@ -14,6 +14,45 @@ const (
 	GenerateTemplatePath = "/ruoyi.infra.v1.InfraService/GenerateTemplate"
 	ListQueryDataSourcesPath = "/ruoyi.infra.v1.InfraService/ListQueryDataSources"
 	GetQueryConnectionPath = "/ruoyi.infra.v1.InfraService/GetQueryConnection"
+	ListConfigsPath = "/ruoyi.infra.v1.InfraService/ListConfigs"
+	GetConfigByKeyPath = "/ruoyi.infra.v1.InfraService/GetConfigByKey"
+	CreateConfigPath = "/ruoyi.infra.v1.InfraService/CreateConfig"
+	ListJobsPath = "/ruoyi.infra.v1.InfraService/ListJobs"
+	CreateJobPath = "/ruoyi.infra.v1.InfraService/CreateJob"
+	ListFilesPath = "/ruoyi.infra.v1.InfraService/ListFiles"
+	RecordFilePath = "/ruoyi.infra.v1.InfraService/RecordFile"
+	PageDataSourceConfigsPath = "/ruoyi.infra.v1.InfraService/PageDataSourceConfigs"
+	GetConfigPath = "/ruoyi.infra.v1.InfraService/GetConfig"
+	UpdateConfigItemPath = "/ruoyi.infra.v1.InfraService/UpdateConfigItem"
+	DeleteConfigPath = "/ruoyi.infra.v1.InfraService/DeleteConfig"
+	GetJobPath = "/ruoyi.infra.v1.InfraService/GetJob"
+	UpdateJobPath = "/ruoyi.infra.v1.InfraService/UpdateJob"
+	DeleteJobPath = "/ruoyi.infra.v1.InfraService/DeleteJob"
+	TriggerJobPath = "/ruoyi.infra.v1.InfraService/TriggerJob"
+	UpdateJobStatusPath = "/ruoyi.infra.v1.InfraService/UpdateJobStatus"
+	GetFilePath = "/ruoyi.infra.v1.InfraService/GetFile"
+	DeleteFilePath = "/ruoyi.infra.v1.InfraService/DeleteFile"
+	ListPagesPath = "/ruoyi.infra.v1.InfraService/ListPages"
+	GetPagePath = "/ruoyi.infra.v1.InfraService/GetPage"
+	GetPageBySlugPath = "/ruoyi.infra.v1.InfraService/GetPageBySlug"
+	PageApiErrorLogsPath = "/ruoyi.infra.v1.InfraService/PageApiErrorLogs"
+	GetApiErrorLogPath = "/ruoyi.infra.v1.InfraService/GetApiErrorLog"
+	ProcessApiErrorLogPath = "/ruoyi.infra.v1.InfraService/ProcessApiErrorLog"
+	PageApiAccessLogsPath = "/ruoyi.infra.v1.InfraService/PageApiAccessLogs"
+	GetApiAccessLogPath = "/ruoyi.infra.v1.InfraService/GetApiAccessLog"
+	TestDataSourceConnectionPath = "/ruoyi.infra.v1.InfraService/TestDataSourceConnection"
+	ListCodegenTablesPath = "/ruoyi.infra.v1.InfraService/ListCodegenTables"
+	GetCodegenTablePath = "/ruoyi.infra.v1.InfraService/GetCodegenTable"
+	UpdateCodegenTablePath = "/ruoyi.infra.v1.InfraService/UpdateCodegenTable"
+	DeleteCodegenTablePath = "/ruoyi.infra.v1.InfraService/DeleteCodegenTable"
+	DeleteCodegenTablesPath = "/ruoyi.infra.v1.InfraService/DeleteCodegenTables"
+	ExportApiAccessLogsPath = "/ruoyi.infra.v1.InfraService/ExportApiAccessLogs"
+	ExportApiErrorLogsPath = "/ruoyi.infra.v1.InfraService/ExportApiErrorLogs"
+	RunAuditLogRetentionPath = "/ruoyi.infra.v1.InfraService/RunAuditLogRetention"
+	ListCodegenCandidatesPath = "/ruoyi.infra.v1.InfraService/ListCodegenCandidates"
+	ImportCodegenTablesPath = "/ruoyi.infra.v1.InfraService/ImportCodegenTables"
+	GenerateCodegenArchivePath = "/ruoyi.infra.v1.InfraService/GenerateCodegenArchive"
+	ListCodegenCatalogPath = "/ruoyi.infra.v1.InfraService/ListCodegenCatalog"
 )
 
 type JsonReply struct {
@@ -60,6 +99,211 @@ type GetQueryConnectionRequest struct {
 	Id string `json:"id"`
 }
 
+type ListConfigsRequest struct {
+	Page int32 `json:"page"`
+	PageSize int32 `json:"pageSize"`
+	Keyword *string `json:"keyword,omitempty"`
+	Category *string `json:"category,omitempty"`
+	Key *string `json:"key,omitempty"`
+}
+
+type GetConfigByKeyRequest struct {
+	Key string `json:"key"`
+}
+
+type CreateConfigRequest struct {
+	Name string `json:"name"`
+	ConfigKey string `json:"configKey"`
+	Value string `json:"value"`
+	Category *string `json:"category,omitempty"`
+	Remark *string `json:"remark,omitempty"`
+}
+
+type ListJobsRequest struct {
+	Page int32 `json:"page"`
+	PageSize int32 `json:"pageSize"`
+	Keyword *string `json:"keyword,omitempty"`
+	Status *string `json:"status,omitempty"`
+}
+
+type CreateJobRequest struct {
+	Name string `json:"name"`
+	HandlerName string `json:"handlerName"`
+	CronExpression string `json:"cronExpression"`
+	Status *string `json:"status,omitempty"`
+}
+
+type ListFilesRequest struct {
+	Page int32 `json:"page"`
+	PageSize int32 `json:"pageSize"`
+	Keyword *string `json:"keyword,omitempty"`
+	Type *string `json:"type,omitempty"`
+}
+
+type RecordFileRequest struct {
+	ConfigId string `json:"configId"`
+	Path string `json:"path"`
+	Url string `json:"url"`
+	Name *string `json:"name,omitempty"`
+	Type *string `json:"type,omitempty"`
+	Size int64 `json:"size"`
+}
+
+type PageDataSourceConfigsRequest struct {
+	TenantId string `json:"tenantId"`
+	Page int32 `json:"page"`
+	PageSize int32 `json:"pageSize"`
+	Keyword *string `json:"keyword,omitempty"`
+}
+
+type GetConfigRequest struct {
+	Id string `json:"id"`
+}
+
+type UpdateConfigItemRequest struct {
+	Id string `json:"id"`
+	Name *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+type DeleteConfigRequest struct {
+	Id string `json:"id"`
+}
+
+type GetJobRequest struct {
+	Id string `json:"id"`
+}
+
+type UpdateJobRequest struct {
+	Id string `json:"id"`
+	Name *string `json:"name,omitempty"`
+}
+
+type DeleteJobRequest struct {
+	Id string `json:"id"`
+}
+
+type TriggerJobRequest struct {
+	Id string `json:"id"`
+}
+
+type UpdateJobStatusRequest struct {
+	Id string `json:"id"`
+	Status string `json:"status"`
+}
+
+type GetFileRequest struct {
+	Id string `json:"id"`
+}
+
+type DeleteFileRequest struct {
+	Id string `json:"id"`
+}
+
+type ListPagesRequest struct {
+	Status *string `json:"status,omitempty"`
+}
+
+type GetPageRequest struct {
+	Id string `json:"id"`
+}
+
+type GetPageBySlugRequest struct {
+	Slug string `json:"slug"`
+}
+
+type PageApiErrorLogsRequest struct {
+	Page int32 `json:"page"`
+	PageSize int32 `json:"pageSize"`
+	Keyword *string `json:"keyword,omitempty"`
+}
+
+type GetApiErrorLogRequest struct {
+	Id string `json:"id"`
+}
+
+type ProcessApiErrorLogRequest struct {
+	Id string `json:"id"`
+	ProcessedBy string `json:"processedBy"`
+	ProcessNote *string `json:"processNote,omitempty"`
+}
+
+type PageApiAccessLogsRequest struct {
+	Page int32 `json:"page"`
+	PageSize int32 `json:"pageSize"`
+	Keyword *string `json:"keyword,omitempty"`
+}
+
+type GetApiAccessLogRequest struct {
+	Id string `json:"id"`
+}
+
+type TestDataSourceConnectionRequest struct {
+	TenantId *string `json:"tenantId,omitempty"`
+	Id *string `json:"id,omitempty"`
+}
+
+type ListCodegenTablesRequest struct {
+	Page int32 `json:"page"`
+	PageSize int32 `json:"pageSize"`
+	Keyword *string `json:"keyword,omitempty"`
+	TenantId *string `json:"tenantId,omitempty"`
+}
+
+type GetCodegenTableRequest struct {
+	Id string `json:"id"`
+	TenantId *string `json:"tenantId,omitempty"`
+}
+
+type UpdateCodegenTableRequest struct {
+	Id string `json:"id"`
+	BusinessName *string `json:"businessName,omitempty"`
+}
+
+type DeleteCodegenTableRequest struct {
+	Id string `json:"id"`
+	TenantId *string `json:"tenantId,omitempty"`
+}
+
+type DeleteCodegenTablesRequest struct {
+	TenantId *string `json:"tenantId,omitempty"`
+}
+
+type ExportApiAccessLogsRequest struct {
+	Page int32 `json:"page"`
+	PageSize int32 `json:"pageSize"`
+	Keyword *string `json:"keyword,omitempty"`
+}
+
+type ExportApiErrorLogsRequest struct {
+	Page int32 `json:"page"`
+	PageSize int32 `json:"pageSize"`
+	Keyword *string `json:"keyword,omitempty"`
+}
+
+type RunAuditLogRetentionRequest struct {
+	DryRun *bool `json:"dryRun,omitempty"`
+}
+
+type ListCodegenCandidatesRequest struct {
+	Page int32 `json:"page"`
+	PageSize int32 `json:"pageSize"`
+	TenantId string `json:"tenantId"`
+}
+
+type ImportCodegenTablesRequest struct {
+	TenantId string `json:"tenantId"`
+}
+
+type GenerateCodegenArchiveRequest struct {
+	Id string `json:"id"`
+	TenantId *string `json:"tenantId,omitempty"`
+}
+
+type ListCodegenCatalogRequest struct {
+	N *int32 `json:"n,omitempty"`
+}
+
 type InfraService interface {
 	Ping(ctx context.Context, in *PingRequest) (*JsonReply, error)
 	UpdateConfig(ctx context.Context, in *UpdateConfigRequest) (*JsonReply, error)
@@ -69,6 +313,45 @@ type InfraService interface {
 	GenerateTemplate(ctx context.Context, in *GenerateTemplateRequest) (*JsonReply, error)
 	ListQueryDataSources(ctx context.Context, in *ListQueryDataSourcesRequest) (*JsonReply, error)
 	GetQueryConnection(ctx context.Context, in *GetQueryConnectionRequest) (*JsonReply, error)
+	ListConfigs(ctx context.Context, in *ListConfigsRequest) (*JsonReply, error)
+	GetConfigByKey(ctx context.Context, in *GetConfigByKeyRequest) (*JsonReply, error)
+	CreateConfig(ctx context.Context, in *CreateConfigRequest) (*JsonReply, error)
+	ListJobs(ctx context.Context, in *ListJobsRequest) (*JsonReply, error)
+	CreateJob(ctx context.Context, in *CreateJobRequest) (*JsonReply, error)
+	ListFiles(ctx context.Context, in *ListFilesRequest) (*JsonReply, error)
+	RecordFile(ctx context.Context, in *RecordFileRequest) (*JsonReply, error)
+	PageDataSourceConfigs(ctx context.Context, in *PageDataSourceConfigsRequest) (*JsonReply, error)
+	GetConfig(ctx context.Context, in *GetConfigRequest) (*JsonReply, error)
+	UpdateConfigItem(ctx context.Context, in *UpdateConfigItemRequest) (*JsonReply, error)
+	DeleteConfig(ctx context.Context, in *DeleteConfigRequest) (*JsonReply, error)
+	GetJob(ctx context.Context, in *GetJobRequest) (*JsonReply, error)
+	UpdateJob(ctx context.Context, in *UpdateJobRequest) (*JsonReply, error)
+	DeleteJob(ctx context.Context, in *DeleteJobRequest) (*JsonReply, error)
+	TriggerJob(ctx context.Context, in *TriggerJobRequest) (*JsonReply, error)
+	UpdateJobStatus(ctx context.Context, in *UpdateJobStatusRequest) (*JsonReply, error)
+	GetFile(ctx context.Context, in *GetFileRequest) (*JsonReply, error)
+	DeleteFile(ctx context.Context, in *DeleteFileRequest) (*JsonReply, error)
+	ListPages(ctx context.Context, in *ListPagesRequest) (*JsonReply, error)
+	GetPage(ctx context.Context, in *GetPageRequest) (*JsonReply, error)
+	GetPageBySlug(ctx context.Context, in *GetPageBySlugRequest) (*JsonReply, error)
+	PageApiErrorLogs(ctx context.Context, in *PageApiErrorLogsRequest) (*JsonReply, error)
+	GetApiErrorLog(ctx context.Context, in *GetApiErrorLogRequest) (*JsonReply, error)
+	ProcessApiErrorLog(ctx context.Context, in *ProcessApiErrorLogRequest) (*JsonReply, error)
+	PageApiAccessLogs(ctx context.Context, in *PageApiAccessLogsRequest) (*JsonReply, error)
+	GetApiAccessLog(ctx context.Context, in *GetApiAccessLogRequest) (*JsonReply, error)
+	TestDataSourceConnection(ctx context.Context, in *TestDataSourceConnectionRequest) (*JsonReply, error)
+	ListCodegenTables(ctx context.Context, in *ListCodegenTablesRequest) (*JsonReply, error)
+	GetCodegenTable(ctx context.Context, in *GetCodegenTableRequest) (*JsonReply, error)
+	UpdateCodegenTable(ctx context.Context, in *UpdateCodegenTableRequest) (*JsonReply, error)
+	DeleteCodegenTable(ctx context.Context, in *DeleteCodegenTableRequest) (*JsonReply, error)
+	DeleteCodegenTables(ctx context.Context, in *DeleteCodegenTablesRequest) (*JsonReply, error)
+	ExportApiAccessLogs(ctx context.Context, in *ExportApiAccessLogsRequest) (*JsonReply, error)
+	ExportApiErrorLogs(ctx context.Context, in *ExportApiErrorLogsRequest) (*JsonReply, error)
+	RunAuditLogRetention(ctx context.Context, in *RunAuditLogRetentionRequest) (*JsonReply, error)
+	ListCodegenCandidates(ctx context.Context, in *ListCodegenCandidatesRequest) (*JsonReply, error)
+	ImportCodegenTables(ctx context.Context, in *ImportCodegenTablesRequest) (*JsonReply, error)
+	GenerateCodegenArchive(ctx context.Context, in *GenerateCodegenArchiveRequest) (*JsonReply, error)
+	ListCodegenCatalog(ctx context.Context, in *ListCodegenCatalogRequest) (*JsonReply, error)
 }
 
 type Invoker func(ctx context.Context, path string, in any) (json string, err error)
@@ -135,6 +418,318 @@ func (c *Client) ListQueryDataSources(ctx context.Context, in *ListQueryDataSour
 
 func (c *Client) GetQueryConnection(ctx context.Context, in *GetQueryConnectionRequest) (*JsonReply, error) {
 	raw, err := c.Invoke(ctx, GetQueryConnectionPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) ListConfigs(ctx context.Context, in *ListConfigsRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, ListConfigsPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) GetConfigByKey(ctx context.Context, in *GetConfigByKeyRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, GetConfigByKeyPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) CreateConfig(ctx context.Context, in *CreateConfigRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, CreateConfigPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) ListJobs(ctx context.Context, in *ListJobsRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, ListJobsPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) CreateJob(ctx context.Context, in *CreateJobRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, CreateJobPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) ListFiles(ctx context.Context, in *ListFilesRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, ListFilesPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) RecordFile(ctx context.Context, in *RecordFileRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, RecordFilePath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) PageDataSourceConfigs(ctx context.Context, in *PageDataSourceConfigsRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, PageDataSourceConfigsPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) GetConfig(ctx context.Context, in *GetConfigRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, GetConfigPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) UpdateConfigItem(ctx context.Context, in *UpdateConfigItemRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, UpdateConfigItemPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) DeleteConfig(ctx context.Context, in *DeleteConfigRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, DeleteConfigPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) GetJob(ctx context.Context, in *GetJobRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, GetJobPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) UpdateJob(ctx context.Context, in *UpdateJobRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, UpdateJobPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) DeleteJob(ctx context.Context, in *DeleteJobRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, DeleteJobPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) TriggerJob(ctx context.Context, in *TriggerJobRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, TriggerJobPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) UpdateJobStatus(ctx context.Context, in *UpdateJobStatusRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, UpdateJobStatusPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) GetFile(ctx context.Context, in *GetFileRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, GetFilePath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) DeleteFile(ctx context.Context, in *DeleteFileRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, DeleteFilePath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) ListPages(ctx context.Context, in *ListPagesRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, ListPagesPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) GetPage(ctx context.Context, in *GetPageRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, GetPagePath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) GetPageBySlug(ctx context.Context, in *GetPageBySlugRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, GetPageBySlugPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) PageApiErrorLogs(ctx context.Context, in *PageApiErrorLogsRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, PageApiErrorLogsPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) GetApiErrorLog(ctx context.Context, in *GetApiErrorLogRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, GetApiErrorLogPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) ProcessApiErrorLog(ctx context.Context, in *ProcessApiErrorLogRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, ProcessApiErrorLogPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) PageApiAccessLogs(ctx context.Context, in *PageApiAccessLogsRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, PageApiAccessLogsPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) GetApiAccessLog(ctx context.Context, in *GetApiAccessLogRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, GetApiAccessLogPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) TestDataSourceConnection(ctx context.Context, in *TestDataSourceConnectionRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, TestDataSourceConnectionPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) ListCodegenTables(ctx context.Context, in *ListCodegenTablesRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, ListCodegenTablesPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) GetCodegenTable(ctx context.Context, in *GetCodegenTableRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, GetCodegenTablePath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) UpdateCodegenTable(ctx context.Context, in *UpdateCodegenTableRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, UpdateCodegenTablePath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) DeleteCodegenTable(ctx context.Context, in *DeleteCodegenTableRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, DeleteCodegenTablePath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) DeleteCodegenTables(ctx context.Context, in *DeleteCodegenTablesRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, DeleteCodegenTablesPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) ExportApiAccessLogs(ctx context.Context, in *ExportApiAccessLogsRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, ExportApiAccessLogsPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) ExportApiErrorLogs(ctx context.Context, in *ExportApiErrorLogsRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, ExportApiErrorLogsPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) RunAuditLogRetention(ctx context.Context, in *RunAuditLogRetentionRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, RunAuditLogRetentionPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) ListCodegenCandidates(ctx context.Context, in *ListCodegenCandidatesRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, ListCodegenCandidatesPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) ImportCodegenTables(ctx context.Context, in *ImportCodegenTablesRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, ImportCodegenTablesPath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) GenerateCodegenArchive(ctx context.Context, in *GenerateCodegenArchiveRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, GenerateCodegenArchivePath, in)
+	if err != nil {
+		return nil, err
+	}
+	return &JsonReply{JSON: raw}, nil
+}
+
+func (c *Client) ListCodegenCatalog(ctx context.Context, in *ListCodegenCatalogRequest) (*JsonReply, error) {
+	raw, err := c.Invoke(ctx, ListCodegenCatalogPath, in)
 	if err != nil {
 		return nil, err
 	}

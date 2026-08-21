@@ -1,27 +1,13 @@
 import { NextResponse } from "next/server"
 import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
-import {
-  userListQuerySchema,
-  createUserSchema,
-} from "@/modules/system/backend/validators"
+import { parseActionBody, parseActionQuery } from "@/modules/shared/backend/http/parse-action-input"
+import { SYSTEM_ACTION_SCHEMAS } from "@/modules/system/contract/actions"
 import { SystemUserService } from "@/modules/system/backend/services/user.service"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 
-/**
- * GET /api/v1/admin/system/users
- * 分页查询用户列表
- */
-export const GET = withAdminRoute(async (request, auth) => {
+export const GET = withAdminRoute(async (request) => {
   try {
-    const { searchParams } = new URL(request.url)
-    const input = userListQuerySchema.parse({
-      page: searchParams.get("page") ?? 1,
-      pageSize: searchParams.get("pageSize") ?? 20,
-      keyword: searchParams.get("keyword") ?? undefined,
-      status: searchParams.get("status") ?? undefined,
-      deptId: searchParams.get("deptId") ?? undefined,
-    })
-
+    const input = parseActionQuery(SYSTEM_ACTION_SCHEMAS["system.listUsers"], request)
     const data = await SystemUserService.list(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
@@ -30,15 +16,9 @@ export const GET = withAdminRoute(async (request, auth) => {
   }
 }, { permission: PERMISSIONS.SYSTEM_USER_VIEW })
 
-/**
- * POST /api/v1/admin/system/users
- * 创建用户
- */
-export const POST = withAdminRoute(async (request, auth) => {
+export const POST = withAdminRoute(async (request) => {
   try {
-    const body = await request.json()
-    const input = createUserSchema.parse(body)
-
+    const input = parseActionBody(SYSTEM_ACTION_SCHEMAS["system.createUser"], await request.json())
     const data = await SystemUserService.create(input)
     return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error: any) {

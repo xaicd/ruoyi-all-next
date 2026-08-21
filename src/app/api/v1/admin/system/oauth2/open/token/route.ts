@@ -1,22 +1,10 @@
 import { NextResponse } from "next/server"
-import { oauth2OpenTokenSchema } from "@/modules/system/backend/validators"
-import { SystemOauth2Service } from "@/modules/system/backend/services/oauth2.service"
 import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+import { parseActionBody } from "@/modules/shared/backend/http/parse-action-input"
+import { SYSTEM_ACTION_SCHEMAS } from "@/modules/system/contract/actions"
+import { SystemOauth2Service } from "@/modules/system/backend/services/oauth2.service"
 
-/**
- * @deprecated This legacy admin endpoint is deliberately platform-admin-only.
- * A standards-compliant public OAuth endpoint is pending secure client and token storage.
- */
 export const POST = withAdminRoute(async (request) => {
-  try {
-    const body = await request.json()
-    const input = oauth2OpenTokenSchema.parse(body)
-    const data = await SystemOauth2Service.openToken(input)
-    return NextResponse.json({ success: true, data }, { headers: { Deprecation: "true" } })
-  } catch (error: any) {
-    return NextResponse.json(
-      { success: false, error: error?.message ?? "获取 token 失败" },
-      { status: 400, headers: { Deprecation: "true" } },
-    )
-  }
+  const data = await SystemOauth2Service.openToken(parseActionBody(SYSTEM_ACTION_SCHEMAS["system.openOauth2Token"], await request.json()))
+  return NextResponse.json({ success: true, data }, { headers: { Deprecation: "true" } })
 }, { platformOnly: true })

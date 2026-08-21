@@ -211,4 +211,16 @@ export class SystemAuthService {
     })
     return issued
   }
+
+  static async getPermissionInfoByUser(input: { userId: string }) {
+    return this.getPermissionInfo(input.userId)
+  }
+
+  static async refreshAccessToken(input: { token: string }) {
+    return this.refreshToken(input.token)
+  }
+
+  static async logout(_input: Record<string, never> = {}) {
+    return { message: "已退出" }
+  }
 }

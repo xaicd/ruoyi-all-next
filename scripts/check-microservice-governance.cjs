@@ -100,7 +100,16 @@ for (const method of ["previewCodegen", "generateCodegen", "previewTemplate", "g
 
 const systemActions = rpcActions.domains?.system?.actions?.map((item) => item.method) ?? []
 if (!systemActions.includes("getDictDataByType")) fail("rpc-actions.json system must declare getDictDataByType")
+if (!systemActions.includes("getPermissionInfoByUser")) fail("rpc-actions.json system must declare getPermissionInfoByUser")
 if (!systemActions.includes("resolveTenantEntitlement")) fail("rpc-actions.json system must declare resolveTenantEntitlement")
+for (const method of ["listUsers", "createUser", "listRoles", "createRole", "listMenus", "treeMenus", "createMenu", "listDepts", "treeDepts", "createDept", "listPosts", "createPost", "listDictTypes", "createDictType", "listTenants", "createTenant", "getUser", "updateUser", "deleteUser", "resetUserPassword", "updateUserStatus", "getRole", "updateRole", "deleteRole", "updateRoleStatus", "getMenu", "updateMenu", "deleteMenu", "getDept", "updateDept", "deleteDept", "getPost", "updatePost", "deletePost", "getDictType", "updateDictType", "deleteDictType", "getTenant", "updateTenant", "deleteTenant", "updateTenantStatus", "listDictData", "createDictData", "getDictData", "updateDictData", "deleteDictData", "listTenantPackages", "createTenantPackage", "getTenantPackage", "updateTenantPackage", "deleteTenantPackage", "assignTenantPackage", "getTenantSubscriptions", "getRoleMenus", "assignRoleMenu", "assignUserRole", "pageLoginLogs", "getLoginLog", "exportLoginLogs", "pageOperateLogs", "getOperateLog", "exportOperateLogs", "listOnlineUsers", "forceLogoutOnlineUser", "pageNotices", "createNotice", "listMailAccounts", "createMailAccount", "listSmsChannels", "createSmsChannel", "login", "getPermissionInfoByUser", "getUserProfile", "getSidebarNav", "listMailTemplates", "listSmsTemplates", "listSocialClients"]) {
+  if (!systemActions.includes(method)) fail(`rpc-actions.json system must declare ${method}`)
+}
+
+const infraCoreActions = rpcActions.domains?.infra?.actions?.map((item) => item.method) ?? []
+for (const method of ["listConfigs", "getConfigByKey", "createConfig", "listJobs", "createJob", "listFiles", "recordFile", "pageDataSourceConfigs", "getConfig", "updateConfigItem", "deleteConfig", "getJob", "updateJob", "deleteJob", "triggerJob", "updateJobStatus", "getFile", "deleteFile", "listPages", "getPage", "getPageBySlug", "pageApiErrorLogs", "getApiErrorLog", "processApiErrorLog", "pageApiAccessLogs", "getApiAccessLog", "testDataSourceConnection", "listCodegenTables", "getCodegenTable", "updateCodegenTable", "deleteCodegenTable", "deleteCodegenTables", "exportApiAccessLogs", "exportApiErrorLogs", "runAuditLogRetention", "listCodegenCandidates", "importCodegenTables", "generateCodegenArchive", "listCodegenCatalog"]) {
+  if (!infraCoreActions.includes(method)) fail(`rpc-actions.json infra must declare ${method}`)
+}
 
 const onlineActions = rpcActions.domains?.online?.actions?.map((item) => item.method) ?? []
 for (const method of ["pageDefinitions", "resolvePublishedRelease", "resolveCodegenImport", "pageManagedRecords", "getManagedRecord", "createManagedRecord", "updateManagedRecord", "deleteManagedRecord"]) {
@@ -124,15 +133,30 @@ for (const [domain, spec] of Object.entries(rpcActions.domains ?? {})) {
 
 const guardsPath = path.join(ROOT, "src", "modules", "shared", "backend", "auth", "guards.ts")
 const guardsSource = fs.readFileSync(guardsPath, "utf8")
-if (guardsSource.includes("TenantEntitlementService")) fail("shared guards must not import TenantEntitlementService; use systemFacade")
-if (!guardsSource.includes("systemFacade")) fail("shared guards must call tenant entitlement through systemFacade")
+if (guardsSource.includes("TenantEntitlementService")) fail("shared guards must not import TenantEntitlementService; use systemPlatformFacade")
+if (!guardsSource.includes("systemPlatformFacade")) fail("shared guards must call tenant entitlement through systemPlatformFacade")
 
 const codegenTablesPath = path.join(ROOT, "src", "app", "api", "v1", "admin", "infra", "codegen", "tables", "route.ts")
 const codegenTables = fs.readFileSync(codegenTablesPath, "utf8")
-if (codegenTables.includes("OnlineDefinitionService") || codegenTables.includes("KyselyOnlineRuntimeRepository")) {
-  fail("infra codegen tables route must not import online Service/Repository; use onlineFacade")
+if (codegenTables.includes("OnlineDefinitionService") || codegenTables.includes("KyselyOnlineRuntimeRepository") || codegenTables.includes("onlineFacade")) {
+  fail("infra codegen tables route must not import online Service/Repository/Facade; use CodegenTableService")
 }
-if (!codegenTables.includes("onlineFacade")) fail("infra codegen tables route must call online through onlineFacade")
+if (!codegenTables.includes("CodegenTableService")) fail("infra codegen tables route must call CodegenTableService")
+
+const codegenImportPath = path.join(ROOT, "src", "app", "api", "v1", "admin", "infra", "codegen", "import", "route.ts")
+const codegenImport = fs.readFileSync(codegenImportPath, "utf8")
+if (codegenImport.includes("OnlineDefinitionService") || codegenImport.includes("KyselyOnlineRuntimeRepository") || codegenImport.includes("onlineFacade")) {
+  fail("infra codegen import route must not import online Service/Repository/Facade; use CodegenTableService")
+}
+if (!codegenImport.includes("CodegenTableService")) fail("infra codegen import route must call CodegenTableService")
+
+const codegenTableServicePath = path.join(ROOT, "src", "modules", "infra", "backend", "services", "codegen-table.service.ts")
+const codegenTableService = fs.readFileSync(codegenTableServicePath, "utf8")
+if (codegenTableService.includes("OnlineDefinitionService") || codegenTableService.includes("KyselyOnlineRuntimeRepository")) {
+  fail("CodegenTableService must not import online Service/Repository; use onlineFacade")
+}
+if (!codegenTableService.includes("onlineFacade")) fail("CodegenTableService must call online through onlineFacade")
+if (!codegenTableService.includes("onlineFacade.resolveCodegenImport")) fail("CodegenTableService must call online through onlineFacade.resolveCodegenImport")
 
 const onlineAdapterPath = path.join(ROOT, "src", "modules", "online", "backend", "application", "online-codegen.adapter.ts")
 const onlineAdapter = fs.readFileSync(onlineAdapterPath, "utf8")
@@ -140,13 +164,13 @@ if (onlineAdapter.includes("codegen-engine.service")) fail("online-codegen.adapt
 
 const reportSqlPath = path.join(ROOT, "src", "modules", "report", "backend", "services", "custom-sql-report.service.ts")
 const reportSql = fs.readFileSync(reportSqlPath, "utf8")
-if (reportSql.includes("DataSourceConfigRepository")) fail("report custom-sql must not import infra repository; use infraFacade")
-if (!reportSql.includes("infraFacade")) fail("report custom-sql must call data sources through infraFacade")
+if (reportSql.includes("DataSourceConfigRepository")) fail("report custom-sql must not import infra repository; use infraPlatformFacade")
+if (!reportSql.includes("infraPlatformFacade")) fail("report custom-sql must call data sources through infraPlatformFacade")
 
 const reportSqlTestPath = path.join(ROOT, "src", "modules", "report", "backend", "services", "__tests__", "custom-sql-report.service.test.ts")
 const reportSqlTest = fs.readFileSync(reportSqlTestPath, "utf8")
-if (reportSqlTest.includes("DataSourceConfigRepository")) fail("report custom-sql test must spy infraFacade, not import infra repository")
-if (!reportSqlTest.includes("infraFacade")) fail("report custom-sql test must assert infraFacade tenant scope")
+if (reportSqlTest.includes("DataSourceConfigRepository")) fail("report custom-sql test must spy infraPlatformFacade, not import infra repository")
+if (!reportSqlTest.includes("infraPlatformFacade")) fail("report custom-sql test must assert infraPlatformFacade tenant scope")
 
 const payOrdersPath = path.join(ROOT, "src", "app", "api", "v1", "admin", "pay", "orders", "route.ts")
 const payOrders = fs.readFileSync(payOrdersPath, "utf8")
@@ -158,13 +182,6 @@ const payRefundsPath = path.join(ROOT, "src", "app", "api", "v1", "admin", "pay"
 const payRefunds = fs.readFileSync(payRefundsPath, "utf8")
 if (!payRefunds.includes("PAY_ACTION_SCHEMAS") || !payRefunds.includes("parseActionQuery")) {
   fail("pay refunds route must parse query with PAY_ACTION_SCHEMAS via parseActionQuery")
-}
-
-function mustUseActionSchemas(label, relPath, token) {
-  const source = fs.readFileSync(path.join(ROOT, relPath), "utf8")
-  if (!source.includes(token) || !source.includes("parseActionQuery") && !source.includes("parseActionBody")) {
-    fail(`${label} must parse with ${token} via parseActionQuery/parseActionBody`)
-  }
 }
 
 for (const [label, relPath, token] of [
@@ -195,21 +212,151 @@ for (const [label, relPath, token] of [
   mustUseActionSchemas(label, relPath, token)
 }
 
-const codegenImportPath = path.join(ROOT, "src", "app", "api", "v1", "admin", "infra", "codegen", "import", "route.ts")
-const codegenImport = fs.readFileSync(codegenImportPath, "utf8")
-if (codegenImport.includes("KyselyOnlineRuntimeRepository") || codegenImport.includes("online-codegen.adapter")) {
-  fail("infra codegen import route must not import online Service/Repository/adapter; use onlineFacade")
+function mustUseActionSchemas(label, relPath, token) {
+  const source = fs.readFileSync(path.join(ROOT, relPath), "utf8")
+  if (!source.includes(token) || !source.includes("parseActionQuery") && !source.includes("parseActionBody")) {
+    fail(`${label} must parse with ${token} via parseActionQuery/parseActionBody`)
+  }
 }
-if (!codegenImport.includes("onlineFacade.resolveCodegenImport")) {
-  fail("infra codegen import route must call online through onlineFacade.resolveCodegenImport")
+
+mustUseActionSchemas("system users route", "src/app/api/v1/admin/system/users/route.ts", "SYSTEM_ACTION_SCHEMAS")
+mustUseActionSchemas("system roles route", "src/app/api/v1/admin/system/roles/route.ts", "SYSTEM_ACTION_SCHEMAS")
+mustUseActionSchemas("system posts route", "src/app/api/v1/admin/system/posts/route.ts", "SYSTEM_ACTION_SCHEMAS")
+mustUseActionSchemas("system depts route", "src/app/api/v1/admin/system/depts/route.ts", "SYSTEM_ACTION_SCHEMAS")
+mustUseActionSchemas("system dicts route", "src/app/api/v1/admin/system/dicts/route.ts", "SYSTEM_ACTION_SCHEMAS")
+mustUseActionSchemas("system tenants route", "src/app/api/v1/admin/system/tenants/route.ts", "SYSTEM_ACTION_SCHEMAS")
+mustUseActionSchemas("system menus route", "src/app/api/v1/admin/system/menus/route.ts", "SYSTEM_ACTION_SCHEMAS")
+mustUseActionSchemas("infra configs route", "src/app/api/v1/admin/infra/configs/route.ts", "INFRA_ACTION_SCHEMAS")
+mustUseActionSchemas("infra jobs route", "src/app/api/v1/admin/infra/jobs/route.ts", "INFRA_ACTION_SCHEMAS")
+mustUseActionSchemas("infra files route", "src/app/api/v1/admin/infra/files/route.ts", "INFRA_ACTION_SCHEMAS")
+mustUseActionSchemas("infra data-source-config route", "src/app/api/v1/admin/infra/data-source-config/route.ts", "INFRA_ACTION_SCHEMAS")
+mustUseActionSchemas("system users [id] route", "src/app/api/v1/admin/system/users/[id]/route.ts", "SYSTEM_ACTION_SCHEMAS")
+mustUseActionSchemas("system roles [id] route", "src/app/api/v1/admin/system/roles/[id]/route.ts", "SYSTEM_ACTION_SCHEMAS")
+mustUseActionSchemas("system menus [id] route", "src/app/api/v1/admin/system/menus/[id]/route.ts", "SYSTEM_ACTION_SCHEMAS")
+mustUseActionSchemas("system depts [id] route", "src/app/api/v1/admin/system/depts/[id]/route.ts", "SYSTEM_ACTION_SCHEMAS")
+mustUseActionSchemas("system posts [id] route", "src/app/api/v1/admin/system/posts/[id]/route.ts", "SYSTEM_ACTION_SCHEMAS")
+mustUseActionSchemas("system dicts [id] route", "src/app/api/v1/admin/system/dicts/[id]/route.ts", "SYSTEM_ACTION_SCHEMAS")
+mustUseActionSchemas("system tenants [id] route", "src/app/api/v1/admin/system/tenants/[id]/route.ts", "SYSTEM_ACTION_SCHEMAS")
+mustUseActionSchemas("infra configs [id] route", "src/app/api/v1/admin/infra/configs/[id]/route.ts", "INFRA_ACTION_SCHEMAS")
+mustUseActionSchemas("infra jobs [id] route", "src/app/api/v1/admin/infra/jobs/[id]/route.ts", "INFRA_ACTION_SCHEMAS")
+mustUseActionSchemas("infra files [id] route", "src/app/api/v1/admin/infra/files/[id]/route.ts", "INFRA_ACTION_SCHEMAS")
+mustUseActionSchemas("infra pages route", "src/app/api/v1/admin/infra/pages/route.ts", "INFRA_ACTION_SCHEMAS")
+mustUseActionSchemas("infra pages [id] route", "src/app/api/v1/admin/infra/pages/[id]/route.ts", "INFRA_ACTION_SCHEMAS")
+mustUseActionSchemas("infra pages render route", "src/app/api/v1/admin/infra/pages/render/[slug]/route.ts", "INFRA_ACTION_SCHEMAS")
+mustUseActionSchemas("infra api-error-logs route", "src/app/api/v1/admin/infra/api-error-logs/route.ts", "INFRA_ACTION_SCHEMAS")
+mustUseActionSchemas("infra api-error-logs [id] route", "src/app/api/v1/admin/infra/api-error-logs/[id]/route.ts", "INFRA_ACTION_SCHEMAS")
+mustUseActionSchemas("infra api-access-log route", "src/app/api/v1/admin/infra/api-access-log/route.ts", "INFRA_ACTION_SCHEMAS")
+mustUseActionSchemas("infra api-access-log [id] route", "src/app/api/v1/admin/infra/api-access-log/[id]/route.ts", "INFRA_ACTION_SCHEMAS")
+for (const [label, relPath, token] of [
+  ["system dict-data route", "src/app/api/v1/admin/system/dict-data/route.ts", "SYSTEM_ACTION_SCHEMAS"],
+  ["system tenant-packages route", "src/app/api/v1/admin/system/tenant-packages/route.ts", "SYSTEM_ACTION_SCHEMAS"],
+  ["system assign-package route", "src/app/api/v1/admin/system/tenants/assign-package/route.ts", "SYSTEM_ACTION_SCHEMAS"],
+  ["system role-menus route", "src/app/api/v1/admin/system/permissions/role-menus/route.ts", "SYSTEM_ACTION_SCHEMAS"],
+  ["system assign-role-menu route", "src/app/api/v1/admin/system/permissions/assign-role-menu/route.ts", "SYSTEM_ACTION_SCHEMAS"],
+  ["system assign-user-role route", "src/app/api/v1/admin/system/permissions/assign-user-role/route.ts", "SYSTEM_ACTION_SCHEMAS"],
+  ["system login-logs route", "src/app/api/v1/admin/system/login-logs/route.ts", "SYSTEM_ACTION_SCHEMAS"],
+  ["system operate-logs route", "src/app/api/v1/admin/system/operate-logs/route.ts", "SYSTEM_ACTION_SCHEMAS"],
+  ["system online-users route", "src/app/api/v1/admin/system/online-users/route.ts", "SYSTEM_ACTION_SCHEMAS"],
+  ["system notices route", "src/app/api/v1/admin/system/notices/route.ts", "SYSTEM_ACTION_SCHEMAS"],
+  ["system mail accounts route", "src/app/api/v1/admin/system/mail/accounts/route.ts", "SYSTEM_ACTION_SCHEMAS"],
+  ["system sms channels route", "src/app/api/v1/admin/system/sms/channels/route.ts", "SYSTEM_ACTION_SCHEMAS"],
+  ["infra codegen route", "src/app/api/v1/admin/infra/codegen/route.ts", "INFRA_ACTION_SCHEMAS"],
+  ["infra codegen [id] route", "src/app/api/v1/admin/infra/codegen/[id]/route.ts", "INFRA_ACTION_SCHEMAS"],
+  ["infra data-source test route", "src/app/api/v1/admin/infra/data-source-config/test/route.ts", "INFRA_ACTION_SCHEMAS"],
+  ["infra audit-log-retention route", "src/app/api/v1/admin/infra/audit-log-retention/route.ts", "INFRA_ACTION_SCHEMAS"],
+  ["system auth route", "src/app/api/v1/admin/system/auth/route.ts", "SYSTEM_ACTION_SCHEMAS"],
+  ["system captcha route", "src/app/api/v1/admin/system/auth/captcha/route.ts", "SYSTEM_ACTION_SCHEMAS"],
+  ["system user-profile route", "src/app/api/v1/admin/system/user-profile/route.ts", "SYSTEM_ACTION_SCHEMAS"],
+  ["system sidebar route", "src/app/api/v1/admin/system/menus/sidebar/route.ts", "SYSTEM_ACTION_SCHEMAS"],
+  ["system mail-template route", "src/app/api/v1/admin/system/mail-template/route.ts", "SYSTEM_ACTION_SCHEMAS"],
+  ["system sms-template route", "src/app/api/v1/admin/system/sms-template/route.ts", "SYSTEM_ACTION_SCHEMAS"],
+  ["system social-client route", "src/app/api/v1/admin/system/social-client/route.ts", "SYSTEM_ACTION_SCHEMAS"],
+  ["infra codegen tables route", "src/app/api/v1/admin/infra/codegen/tables/route.ts", "INFRA_ACTION_SCHEMAS"],
+  ["infra codegen import route", "src/app/api/v1/admin/infra/codegen/import/route.ts", "INFRA_ACTION_SCHEMAS"],
+  ["infra codegen download route", "src/app/api/v1/admin/infra/codegen/[id]/download/route.ts", "INFRA_ACTION_SCHEMAS"],
+]) {
+  mustUseActionSchemas(label, relPath, token)
+}
+
+const codegenRoute = fs.readFileSync(path.join(ROOT, "src/app/api/v1/admin/infra/codegen/route.ts"), "utf8")
+if (codegenRoute.includes("CodegenTableRepository")) fail("infra codegen route must not import CodegenTableRepository; use CodegenTableService")
+for (const [label, file] of [
+  ["infra codegen preview route", "src/app/api/v1/admin/infra/codegen/preview/route.ts"],
+  ["infra codegen import route", "src/app/api/v1/admin/infra/codegen/import/route.ts"],
+  ["infra codegen tables route", "src/app/api/v1/admin/infra/codegen/tables/route.ts"],
+  ["infra codegen download route", "src/app/api/v1/admin/infra/codegen/[id]/download/route.ts"],
+]) {
+  const source = fs.readFileSync(path.join(ROOT, file), "utf8")
+  if (source.includes("CodegenTableRepository")) fail(`${label} must not import CodegenTableRepository; use CodegenTableService`)
+}
+if (!codegenRoute.includes("CodegenTableService")) fail("infra codegen route must call CodegenTableService")
+
+for (const relPath of [
+  "src/app/api/v1/admin/infra/pages/route.ts",
+  "src/app/api/v1/admin/infra/pages/[id]/route.ts",
+  "src/app/api/v1/admin/infra/pages/render/[slug]/route.ts",
+]) {
+  const source = fs.readFileSync(path.join(ROOT, relPath), "utf8")
+  if (source.includes("InfraPageRepository")) fail(`${relPath} must not import InfraPageRepository; use InfraPageService`)
+  if (!source.includes("InfraPageService")) fail(`${relPath} must call InfraPageService`)
 }
 
 const onlineDefinitionPath = path.join(ROOT, "src", "modules", "online", "backend", "services", "online-definition.service.ts")
 const onlineDefinition = fs.readFileSync(onlineDefinitionPath, "utf8")
-if (onlineDefinition.includes("CodegenEngineService")) fail("online-definition must not import CodegenEngineService; use infraFacade")
-if (!onlineDefinition.includes("infraFacade")) fail("online-definition must call infra codegen through infraFacade")
-if (onlineDefinition.includes("SystemDictService")) fail("online-definition must not import SystemDictService; use systemFacade")
-if (!onlineDefinition.includes("systemFacade")) fail("online-definition must call system dict through systemFacade")
+if (onlineDefinition.includes("CodegenEngineService")) fail("online-definition must not import CodegenEngineService; use infraPlatformFacade")
+if (!onlineDefinition.includes("infraPlatformFacade")) fail("online-definition must call infra codegen through infraPlatformFacade")
+if (onlineDefinition.includes("SystemDictService")) fail("online-definition must not import SystemDictService; use systemPublicFacade")
+if (!onlineDefinition.includes("systemPublicFacade")) fail("online-definition must call system dict through systemPublicFacade")
+
+const exposure = rpcActions.exposure
+if (!exposure?.system || JSON.stringify(exposure.system.public) !== JSON.stringify(["getDictDataByType", "getPermissionInfoByUser"])) {
+  fail("system public RPC must be exactly getDictDataByType and getPermissionInfoByUser")
+}
+if ((exposure.infra?.public ?? []).length !== 0) fail("infra must not expose a public business RPC surface")
+if (!fs.existsSync(path.join(ROOT, "src/modules/system/contract/system.public.facade.ts"))) fail("system public facade must exist")
+if (!fs.existsSync(path.join(ROOT, "src/modules/system/contract/system.platform.facade.ts"))) fail("system platform facade must exist")
+if (!fs.existsSync(path.join(ROOT, "src/modules/infra/contract/infra.platform.facade.ts"))) fail("infra platform facade must exist")
+
+function walkTsFiles(dir, acc = []) {
+  if (!fs.existsSync(dir)) return acc
+  for (const name of fs.readdirSync(dir)) {
+    const full = path.join(dir, name)
+    if (fs.statSync(full).isDirectory()) {
+      if (name === "node_modules" || name === "contract") continue
+      walkTsFiles(full, acc)
+      continue
+    }
+    if (name.endsWith(".ts")) acc.push(full)
+  }
+  return acc
+}
+
+const relFromRoot = (file) => path.relative(ROOT, file).replace(/\\/g, "/")
+const businessDomains = domainCatalog.layers.business.domains
+for (const domain of businessDomains) {
+  for (const file of walkTsFiles(path.join(ROOT, "src", "modules", domain))) {
+    const source = fs.readFileSync(file, "utf8")
+    const rel = relFromRoot(file)
+    if (source.includes("/system/contract/system.facade") || source.includes("/system/contract/system.platform.facade")) {
+      fail(`${rel} must import system.public.facade; system/infra are not a public admin RPC`)
+    }
+    if (source.includes("/infra/contract/infra.facade")) {
+      fail(`${rel} must not import the full infra facade; infra has no public business RPC`)
+    }
+    if (["online", "report"].includes(domain)) continue
+    if (source.includes("/infra/contract/infra.platform.facade")) {
+      fail(`${rel} must not import infra platform facade; only online/report may`)
+    }
+  }
+}
+
+for (const file of walkTsFiles(path.join(ROOT, "src", "modules", "shared"))) {
+  const source = fs.readFileSync(file, "utf8")
+  const rel = relFromRoot(file)
+  if (rel.includes("/__tests__/")) continue
+  if (source.includes("/system/contract/system.facade")) fail(`${rel} must import system.platform.facade, not the full system facade`)
+  if (source.includes("/infra/contract/infra.facade")) fail(`${rel} must not import the full infra facade`)
+}
 
 const systemMenuRepo = fs.readFileSync(path.join(ROOT, "src", "modules", "system", "backend", "repositories", "menu.repository.ts"), "utf8")
 const systemPermissionRepo = fs.readFileSync(path.join(ROOT, "src", "modules", "system", "backend", "repositories", "permission.repository.ts"), "utf8")

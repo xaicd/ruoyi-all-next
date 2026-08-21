@@ -30,6 +30,10 @@ export class InfraConfigService {
     return config
   }
 
+  static async getConfigByKey(input: { key: string }) {
+    return this.getByKey(input.key)
+  }
+
   /** 运行时获取配置值 */
   static async getValue(key: string, defaultValue?: string): Promise<string> {
     const value = await InfraConfigRepository.getValue(key)
@@ -81,4 +85,7 @@ export class InfraConfigService {
     return {}
   }
 
+  static async getConfig(input: { id: string }) { return this.getById(input.id) }
+  static async updateConfigItem(input: { id: string; name?: string; value?: string; category?: string; visible?: boolean; remark?: string }) { return this.update(input) }
+  static async deleteConfig(input: { id: string }) { return this.delete(input.id) }
 }

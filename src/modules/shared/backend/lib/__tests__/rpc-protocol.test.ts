@@ -184,14 +184,28 @@ describe("dual-mode broker invoke and facade", () => {
   })
 
   it("routes system.getDictDataByType onto SystemDictService", async () => {
-    const { systemFacade } = await import("@/modules/system/contract/system.facade")
+    const { systemPublicFacade } = await import("@/modules/system/contract/system.public.facade")
     broker.start({})
-    const result = await systemFacade.getDictDataByType({ type: "system_user_sex" }, { caller: "online.definition" })
+    const result = await systemPublicFacade.getDictDataByType({ type: "system_user_sex" }, { caller: "online.definition" })
     expect(result.success, result.error).toBe(true)
     expect(result.invokeMode).toBe("sdk")
     const items = (result.data as Array<{ value: string; label: string; status: string }> | undefined) ?? []
     expect(items.length).toBeGreaterThan(0)
     expect(items[0]).toMatchObject({ value: expect.any(String), label: expect.any(String) })
+  })
+
+  it("exposes login user info on the system public facade", async () => {
+    const { registerActionSchemas } = await import("@/modules/system/contract/actions")
+    const { systemPublicFacade } = await import("@/modules/system/contract/system.public.facade")
+    registerActionSchemas()
+    broker.start({})
+    const listed = await (await import("@/modules/system/contract/system.facade")).systemFacade.listUsers({ page: 1, pageSize: 1 })
+    expect(listed.success, listed.error).toBe(true)
+    const userId = (listed.data as { items: Array<{ id: string }> }).items[0]?.id
+    expect(userId).toBeTruthy()
+    const info = await systemPublicFacade.getPermissionInfoByUser({ userId }, { caller: "bff.auth" })
+    expect(info.success, info.error).toBe(true)
+    expect(info.data).toMatchObject({ user: { id: userId } })
   })
 
   it("routes system.resolveTenantEntitlement through the domain facade", async () => {
@@ -205,6 +219,117 @@ describe("dual-mode broker invoke and facade", () => {
     expect(result.success, result.error).toBe(true)
     expect(result.invokeMode).toBe("sdk")
     expect(result.data).toMatchObject({ tenantId: "tenant-1", accountLimit: 10 })
+  })
+
+  it("routes system.listUsers onto SystemUserService", async () => {
+    const { registerActionSchemas } = await import("@/modules/system/contract/actions")
+    const { systemFacade } = await import("@/modules/system/contract/system.facade")
+    registerActionSchemas()
+    broker.start({})
+    const result = await systemFacade.listUsers({ page: 1, pageSize: 10 })
+    expect(result.success, result.error).toBe(true)
+    expect(result.invokeMode).toBe("sdk")
+    const data = result.data as { items: unknown[]; total: number; page: number }
+    expect(data.page).toBe(1)
+    expect(Array.isArray(data.items)).toBe(true)
+  })
+
+  it("routes infra listConfigs and listJobs onto config/job services", async () => {
+    const { registerActionSchemas } = await import("@/modules/infra/contract/actions")
+    const { infraFacade } = await import("@/modules/infra/contract/infra.facade")
+    registerActionSchemas()
+    broker.start({})
+    const configs = await infraFacade.listConfigs({ page: 1, pageSize: 20 })
+    expect(configs.success, configs.error).toBe(true)
+    expect(configs.invokeMode).toBe("sdk")
+    const configData = configs.data as { items: Array<{ configKey?: string }>; total: number }
+    expect(configData.total).toBeGreaterThan(0)
+    expect(configData.items.some((item) => item.configKey === "sys.application.name")).toBe(true)
+    const jobs = await infraFacade.listJobs({ page: 1, pageSize: 10 })
+    expect(jobs.success, jobs.error).toBe(true)
+    const jobData = jobs.data as { items: unknown[]; page: number }
+    expect(jobData.page).toBe(1)
+    expect(Array.isArray(jobData.items)).toBe(true)
+  })
+
+  it("routes system.getUser onto SystemUserService", async () => {
+    const { registerActionSchemas } = await import("@/modules/system/contract/actions")
+    const { systemFacade } = await import("@/modules/system/contract/system.facade")
+    registerActionSchemas()
+    broker.start({})
+    const listed = await systemFacade.listUsers({ page: 1, pageSize: 1 })
+    expect(listed.success, listed.error).toBe(true)
+    const userId = (listed.data as { items: Array<{ id: string }> }).items[0]?.id
+    expect(userId).toBeTruthy()
+    const result = await systemFacade.getUser({ id: userId })
+    expect(result.success, result.error).toBe(true)
+    expect(result.invokeMode).toBe("sdk")
+    expect(result.data).toMatchObject({ id: userId })
+  })
+
+  it("routes system tenant package and online user lists onto domain services", async () => {
+    const { registerActionSchemas } = await import("@/modules/system/contract/actions")
+    const { systemFacade } = await import("@/modules/system/contract/system.facade")
+    registerActionSchemas()
+    broker.start({})
+    const packages = await systemFacade.listTenantPackages({ page: 1, pageSize: 10 })
+    expect(packages.success, packages.error).toBe(true)
+    expect(packages.invokeMode).toBe("sdk")
+    const online = await systemFacade.listOnlineUsers({ page: 1, pageSize: 10 })
+    expect(online.success, online.error).toBe(true)
+    const onlineData = online.data as { items: unknown[]; page: number }
+    expect(onlineData.page).toBe(1)
+    expect(Array.isArray(onlineData.items)).toBe(true)
+  })
+
+  it("routes infra listCodegenTables onto CodegenTableService", async () => {
+    const { registerActionSchemas } = await import("@/modules/infra/contract/actions")
+    const { infraFacade } = await import("@/modules/infra/contract/infra.facade")
+    registerActionSchemas()
+    broker.start({})
+    const result = await infraFacade.listCodegenTables({ page: 1, pageSize: 10 })
+    expect(result.success, result.error).toBe(true)
+    expect(result.invokeMode).toBe("sdk")
+    const data = result.data as { items: unknown[]; page: number }
+    expect(data.page).toBe(1)
+    expect(Array.isArray(data.items)).toBe(true)
+  })
+
+  it("exposes system login schema and infra codegen catalog on the domain facade", async () => {
+    const { registerActionSchemas: registerSystem } = await import("@/modules/system/contract/actions")
+    const { systemFacade } = await import("@/modules/system/contract/system.facade")
+    registerSystem()
+    broker.start({})
+    const listed = await systemFacade.listUsers({ page: 1, pageSize: 1 })
+    expect(listed.success, listed.error).toBe(true)
+    const userId = (listed.data as { items: Array<{ id: string }> }).items[0]?.id
+    expect(userId).toBeTruthy()
+    const sidebar = await systemFacade.getSidebarNav({ userId, isPlatformAdmin: true })
+    expect(sidebar.success, sidebar.error).toBe(true)
+    const { registerActionSchemas: registerInfra } = await import("@/modules/infra/contract/actions")
+    const { infraFacade } = await import("@/modules/infra/contract/infra.facade")
+    registerInfra()
+    const catalog = await infraFacade.listCodegenCatalog({})
+    expect(catalog.success, catalog.error).toBe(true)
+    expect(Array.isArray((catalog.data as { templates?: unknown[] }).templates)).toBe(true)
+  })
+
+  it("routes infra getConfig and listPages onto config/page services", async () => {
+    const { registerActionSchemas } = await import("@/modules/infra/contract/actions")
+    const { infraFacade } = await import("@/modules/infra/contract/infra.facade")
+    registerActionSchemas()
+    broker.start({})
+    const configs = await infraFacade.listConfigs({ page: 1, pageSize: 1 })
+    expect(configs.success, configs.error).toBe(true)
+    const configId = (configs.data as { items: Array<{ id: string; configKey?: string }> }).items[0]?.id
+    expect(configId).toBeTruthy()
+    const config = await infraFacade.getConfig({ id: configId })
+    expect(config.success, config.error).toBe(true)
+    expect(config.data).toMatchObject({ id: configId })
+    const pages = await infraFacade.listPages({})
+    expect(pages.success, pages.error).toBe(true)
+    expect(Array.isArray(pages.data)).toBe(true)
+    expect((pages.data as unknown[]).length).toBeGreaterThan(0)
   })
 
   it("exposes infra codegen preview on the domain facade", async () => {

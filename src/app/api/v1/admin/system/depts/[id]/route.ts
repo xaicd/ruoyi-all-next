@@ -1,25 +1,16 @@
 import { NextResponse } from "next/server"
 import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+import { parseActionBody } from "@/modules/shared/backend/http/parse-action-input"
+import { SYSTEM_ACTION_SCHEMAS } from "@/modules/system/contract/actions"
 import { SystemDeptService } from "@/modules/system/backend/services/dept.service"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { z } from "zod"
 
 type RouteContext = { params: Promise<{ id: string }> }
 
-const updateDeptSchema = z.object({
-  name: z.string().trim().min(1).max(50).optional(),
-  parentId: z.string().trim().optional(),
-  sort: z.coerce.number().int().min(0).optional(),
-  leaderId: z.string().trim().optional(),
-  phone: z.string().trim().max(20).optional(),
-  email: z.string().trim().email().optional().or(z.literal("")),
-  status: z.enum(["ACTIVE", "DISABLED"]).optional(),
-})
-
-export const GET = withAdminRoute(async (request, auth, context: RouteContext) => {
+export const GET = withAdminRoute(async (_request, _auth, context: RouteContext) => {
   try {
     const { id } = await context.params
-    const data = await SystemDeptService.getById(id)
+    const data = await SystemDeptService.getDept(parseActionBody(SYSTEM_ACTION_SCHEMAS["system.getDept"], { id }))
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
     const status = error?.message?.includes("不存在") ? 404 : 400
@@ -27,12 +18,11 @@ export const GET = withAdminRoute(async (request, auth, context: RouteContext) =
   }
 }, { permission: PERMISSIONS.SYSTEM_DEPT_VIEW })
 
-export const PUT = withAdminRoute(async (request, auth, context: RouteContext) => {
+export const PUT = withAdminRoute(async (request, _auth, context: RouteContext) => {
   try {
     const { id } = await context.params
-    const body = await request.json()
-    const input = updateDeptSchema.parse(body)
-    const data = await SystemDeptService.update({ id, ...input, email: input.email || undefined })
+    const input = parseActionBody(SYSTEM_ACTION_SCHEMAS["system.updateDept"], { ...await request.json(), id })
+    const data = await SystemDeptService.update({ ...input, email: input.email || undefined })
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
     const status = error?.message?.includes("不存在") ? 404 : 400
@@ -40,10 +30,10 @@ export const PUT = withAdminRoute(async (request, auth, context: RouteContext) =
   }
 }, { permission: PERMISSIONS.SYSTEM_DEPT_UPDATE })
 
-export const DELETE = withAdminRoute(async (request, auth, context: RouteContext) => {
+export const DELETE = withAdminRoute(async (_request, _auth, context: RouteContext) => {
   try {
     const { id } = await context.params
-    const data = await SystemDeptService.delete(id)
+    const data = await SystemDeptService.deleteDept(parseActionBody(SYSTEM_ACTION_SCHEMAS["system.deleteDept"], { id }))
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
     const status = error?.message?.includes("不存在") ? 404

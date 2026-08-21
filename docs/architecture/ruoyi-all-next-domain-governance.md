@@ -37,4 +37,4 @@
 | im | PARTIAL | MIXED | React-radix | B | database-compatibility + ui-framework-governance + microservice-evolution | src/modules/im/backend/services/__tests__/im.module.service.test.ts | 拆会话管理与消息审核链路，避免通信链路耦合 |
 | ai | PARTIAL | MIXED | React-radix | B | database-compatibility + ui-framework-governance + microservice-evolution | src/modules/ai/backend/services/__tests__/ai.module.service.test.ts | 拆模型治理与推理网关，控制依赖爆炸 |
 | iot | PARTIAL | MIXED | React-radix | B | database-compatibility + ui-framework-governance + microservice-evolution | src/modules/iot/backend/services/__tests__/iot.module.service.test.ts | 拆设备接入与规则引擎，隔离高吞吐链路 |
-| online | PARTIAL | MIXED | React-radix | B | database-compatibility + ui-framework-governance + microservice-evolution | src/modules/online/backend/application/online-codegen.adapter.test.ts | 已支持独立打包；跨域 codegen 走 `infraFacade`，字典走 `systemFacade`，数据库仍共享 |
+| online | PARTIAL | MIXED | React-radix | B | database-compatibility + ui-framework-governance + microservice-evolution | src/modules/online/backend/application/online-codegen.adapter.test.ts | 已支持独立打包；跨域 codegen 走 `infraPlatformFacade`，字典走 `systemPublicFacade`，数据库仍共享 |

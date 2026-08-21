@@ -2,12 +2,28 @@
   "version": 1,
   "description": "RPC action catalog. Source of truth for contract/actions.ts, domain facades, Go .proto files, and gen/go stubs.",
   "goModule": "ruoyi/all-next/gen",
+  "exposure": {
+    "description": "system/infra are not a public microservice surface. Business domains may call public methods only. platform is for shared/online/report. Everything else is BFF-local.",
+    "system": {
+      "public": ["getDictDataByType", "getPermissionInfoByUser"],
+      "platform": ["ping", "resolveTenantEntitlement"]
+    },
+    "infra": {
+      "public": [],
+      "platform": ["ping", "previewCodegen", "generateCodegen", "previewTemplate", "generateTemplate", "listQueryDataSources", "getQueryConnection"]
+    }
+  },
   "fieldSets": {
     "ping": [{ "name": "n", "type": "int32", "optional": true }],
     "pageQuery": [
       { "name": "page", "type": "int32" },
       { "name": "pageSize", "type": "int32" },
       { "name": "keyword", "type": "string", "optional": true }
+    ],
+    "resourceId": [{ "name": "id", "type": "string" }],
+    "resourceStatus": [
+      { "name": "id", "type": "string" },
+      { "name": "status", "type": "string" }
     ]
   },
   "domains": {
@@ -27,7 +43,321 @@
           "module": "tenant-entitlement.service",
           "schema": "resolveTenantEntitlementSchema",
           "fields": [{ "name": "tenantId", "type": "string" }]
-        }
+        },
+        {
+          "method": "listUsers",
+          "service": "SystemUserService",
+          "module": "user.service",
+          "target": "list",
+          "schema": "userListQuerySchema",
+          "fields": [
+            { "name": "page", "type": "int32" },
+            { "name": "pageSize", "type": "int32" },
+            { "name": "keyword", "type": "string", "optional": true },
+            { "name": "status", "type": "string", "optional": true },
+            { "name": "deptId", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "createUser",
+          "service": "SystemUserService",
+          "module": "user.service",
+          "target": "create",
+          "schema": "createUserSchema",
+          "fields": [
+            { "name": "username", "type": "string" },
+            { "name": "nickname", "type": "string" },
+            { "name": "password", "type": "string" },
+            { "name": "phone", "type": "string", "optional": true },
+            { "name": "email", "type": "string", "optional": true },
+            { "name": "deptId", "type": "string", "optional": true },
+            { "name": "status", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "listRoles",
+          "service": "SystemRoleService",
+          "module": "role.service",
+          "target": "list",
+          "schema": "roleListQuerySchema",
+          "fields": [
+            { "name": "page", "type": "int32" },
+            { "name": "pageSize", "type": "int32" },
+            { "name": "keyword", "type": "string", "optional": true },
+            { "name": "status", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "createRole",
+          "service": "SystemRoleService",
+          "module": "role.service",
+          "target": "create",
+          "schema": "createRoleSchema",
+          "fields": [
+            { "name": "name", "type": "string" },
+            { "name": "code", "type": "string" },
+            { "name": "sort", "type": "int32", "optional": true },
+            { "name": "status", "type": "string", "optional": true },
+            { "name": "dataScope", "type": "string", "optional": true },
+            { "name": "remark", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "listMenus",
+          "service": "SystemMenuService",
+          "module": "menu.service",
+          "target": "list",
+          "schema": "menuQuerySchema",
+          "fields": [
+            { "name": "mode", "type": "string", "optional": true },
+            { "name": "status", "type": "string", "optional": true },
+            { "name": "roleId", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "treeMenus",
+          "service": "SystemMenuService",
+          "module": "menu.service",
+          "target": "tree",
+          "schema": "menuQuerySchema",
+          "fields": [
+            { "name": "mode", "type": "string", "optional": true },
+            { "name": "status", "type": "string", "optional": true },
+            { "name": "roleId", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "createMenu",
+          "service": "SystemMenuService",
+          "module": "menu.service",
+          "target": "create",
+          "schema": "createMenuSchema",
+          "fields": [
+            { "name": "name", "type": "string" },
+            { "name": "type", "type": "string" },
+            { "name": "parentId", "type": "string", "optional": true },
+            { "name": "permission", "type": "string", "optional": true },
+            { "name": "path", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "listDepts",
+          "service": "SystemDeptService",
+          "module": "dept.service",
+          "target": "list",
+          "schema": "deptQuerySchema",
+          "fields": [
+            { "name": "mode", "type": "string", "optional": true },
+            { "name": "status", "type": "string", "optional": true },
+            { "name": "keyword", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "treeDepts",
+          "service": "SystemDeptService",
+          "module": "dept.service",
+          "target": "tree",
+          "schema": "deptQuerySchema",
+          "fields": [
+            { "name": "mode", "type": "string", "optional": true },
+            { "name": "status", "type": "string", "optional": true },
+            { "name": "keyword", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "createDept",
+          "service": "SystemDeptService",
+          "module": "dept.service",
+          "target": "create",
+          "schema": "createDeptSchema",
+          "fields": [
+            { "name": "name", "type": "string" },
+            { "name": "parentId", "type": "string", "optional": true },
+            { "name": "sort", "type": "int32", "optional": true },
+            { "name": "status", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "listPosts",
+          "service": "SystemPostService",
+          "module": "post.service",
+          "target": "list",
+          "schema": "postListQuerySchema",
+          "fields": [
+            { "name": "page", "type": "int32" },
+            { "name": "pageSize", "type": "int32" },
+            { "name": "keyword", "type": "string", "optional": true },
+            { "name": "status", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "createPost",
+          "service": "SystemPostService",
+          "module": "post.service",
+          "target": "create",
+          "schema": "createPostSchema",
+          "fields": [
+            { "name": "name", "type": "string" },
+            { "name": "code", "type": "string" },
+            { "name": "sort", "type": "int32", "optional": true },
+            { "name": "status", "type": "string", "optional": true },
+            { "name": "remark", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "listDictTypes",
+          "service": "SystemDictService",
+          "module": "dict.service",
+          "target": "listTypes",
+          "schema": "dictTypeListQuerySchema",
+          "fields": [
+            { "name": "page", "type": "int32" },
+            { "name": "pageSize", "type": "int32" },
+            { "name": "keyword", "type": "string", "optional": true },
+            { "name": "status", "type": "string", "optional": true },
+            { "name": "type", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "createDictType",
+          "service": "SystemDictService",
+          "module": "dict.service",
+          "target": "createType",
+          "schema": "createDictTypeSchema",
+          "fields": [
+            { "name": "name", "type": "string" },
+            { "name": "type", "type": "string" },
+            { "name": "status", "type": "string", "optional": true },
+            { "name": "remark", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "listTenants",
+          "service": "SystemTenantService",
+          "module": "tenant.service",
+          "target": "list",
+          "schema": "tenantListQuerySchema",
+          "fields": [
+            { "name": "page", "type": "int32" },
+            { "name": "pageSize", "type": "int32" },
+            { "name": "keyword", "type": "string", "optional": true },
+            { "name": "status", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "createTenant",
+          "service": "SystemTenantService",
+          "module": "tenant.service",
+          "target": "create",
+          "schema": "createTenantWithAdminSchema",
+          "fields": [
+            { "name": "tenantCode", "type": "string" },
+            { "name": "name", "type": "string" },
+            { "name": "packageId", "type": "string" },
+            { "name": "adminUsername", "type": "string" },
+            { "name": "adminNickname", "type": "string" },
+            { "name": "adminPassword", "type": "string" }
+          ]
+        },
+        { "method": "getUser", "service": "SystemUserService", "module": "user.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "updateUser", "service": "SystemUserService", "module": "user.service", "target": "update", "schema": "updateUserSchema", "fields": [{ "name": "id", "type": "string" }, { "name": "nickname", "type": "string", "optional": true }, { "name": "status", "type": "string", "optional": true }] },
+        { "method": "deleteUser", "service": "SystemUserService", "module": "user.service", "schema": "deleteUserSchema", "fieldsRef": "resourceId" },
+        { "method": "resetUserPassword", "service": "SystemUserService", "module": "user.service", "target": "resetPassword", "schema": "updateUserPasswordSchema", "fields": [{ "name": "id", "type": "string" }, { "name": "password", "type": "string" }] },
+        { "method": "updateUserStatus", "service": "SystemUserService", "module": "user.service", "schema": "resourceStatusSchema", "fieldsRef": "resourceStatus" },
+        { "method": "getRole", "service": "SystemRoleService", "module": "role.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "updateRole", "service": "SystemRoleService", "module": "role.service", "target": "update", "schema": "updateRoleSchema", "fields": [{ "name": "id", "type": "string" }, { "name": "name", "type": "string", "optional": true }, { "name": "code", "type": "string", "optional": true }] },
+        { "method": "deleteRole", "service": "SystemRoleService", "module": "role.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "updateRoleStatus", "service": "SystemRoleService", "module": "role.service", "schema": "resourceStatusSchema", "fieldsRef": "resourceStatus" },
+        { "method": "getMenu", "service": "SystemMenuService", "module": "menu.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "updateMenu", "service": "SystemMenuService", "module": "menu.service", "target": "update", "schema": "updateMenuSchema", "fields": [{ "name": "id", "type": "string" }, { "name": "name", "type": "string", "optional": true }] },
+        { "method": "deleteMenu", "service": "SystemMenuService", "module": "menu.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "getDept", "service": "SystemDeptService", "module": "dept.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "updateDept", "service": "SystemDeptService", "module": "dept.service", "target": "update", "schema": "updateDeptSchema", "fields": [{ "name": "id", "type": "string" }, { "name": "name", "type": "string", "optional": true }] },
+        { "method": "deleteDept", "service": "SystemDeptService", "module": "dept.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "getPost", "service": "SystemPostService", "module": "post.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "updatePost", "service": "SystemPostService", "module": "post.service", "target": "update", "schema": "updatePostSchema", "fields": [{ "name": "id", "type": "string" }, { "name": "name", "type": "string", "optional": true }, { "name": "code", "type": "string", "optional": true }] },
+        { "method": "deletePost", "service": "SystemPostService", "module": "post.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "getDictType", "service": "SystemDictService", "module": "dict.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "updateDictType", "service": "SystemDictService", "module": "dict.service", "target": "updateType", "schema": "updateDictTypeSchema", "fields": [{ "name": "id", "type": "string" }, { "name": "name", "type": "string", "optional": true }, { "name": "type", "type": "string", "optional": true }] },
+        { "method": "deleteDictType", "service": "SystemDictService", "module": "dict.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "getTenant", "service": "SystemTenantService", "module": "tenant.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "updateTenant", "service": "SystemTenantService", "module": "tenant.service", "target": "update", "schema": "updateTenantSchema", "fields": [{ "name": "id", "type": "string" }, { "name": "name", "type": "string", "optional": true }] },
+        { "method": "deleteTenant", "service": "SystemTenantService", "module": "tenant.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "updateTenantStatus", "service": "SystemTenantService", "module": "tenant.service", "schema": "resourceStatusSchema", "fieldsRef": "resourceStatus" },
+        { "method": "listDictData", "service": "SystemDictService", "module": "dict.service", "schema": "listDictDataSchema", "fields": [{ "name": "dictTypeId", "type": "string", "optional": true }, { "name": "type", "type": "string", "optional": true }] },
+        { "method": "createDictData", "service": "SystemDictService", "module": "dict.service", "schema": "createDictDataSchema", "fields": [{ "name": "dictTypeId", "type": "string" }, { "name": "label", "type": "string" }, { "name": "value", "type": "string" }] },
+        { "method": "getDictData", "service": "SystemDictService", "module": "dict.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "updateDictData", "service": "SystemDictService", "module": "dict.service", "schema": "updateDictDataSchema", "fields": [{ "name": "id", "type": "string" }, { "name": "label", "type": "string", "optional": true }, { "name": "value", "type": "string", "optional": true }] },
+        { "method": "deleteDictData", "service": "SystemDictService", "module": "dict.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "listTenantPackages", "service": "SystemTenantPackageService", "module": "tenant-package.service", "schema": "tenantPackageListSchema", "fields": [{ "name": "page", "type": "int32" }, { "name": "pageSize", "type": "int32" }, { "name": "keyword", "type": "string", "optional": true }, { "name": "all", "type": "bool", "optional": true }] },
+        { "method": "createTenantPackage", "service": "SystemTenantPackageService", "module": "tenant-package.service", "schema": "createTenantPackageSchema", "fields": [{ "name": "name", "type": "string" }, { "name": "status", "type": "string", "optional": true }] },
+        { "method": "getTenantPackage", "service": "SystemTenantPackageService", "module": "tenant-package.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "updateTenantPackage", "service": "SystemTenantPackageService", "module": "tenant-package.service", "schema": "updateTenantPackageSchema", "fields": [{ "name": "id", "type": "string" }, { "name": "name", "type": "string", "optional": true }] },
+        { "method": "deleteTenantPackage", "service": "SystemTenantPackageService", "module": "tenant-package.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "assignTenantPackage", "service": "SystemTenantService", "module": "tenant.service", "schema": "assignTenantPackageSchema", "fields": [{ "name": "tenantId", "type": "string" }, { "name": "packageId", "type": "string" }] },
+        { "method": "getTenantSubscriptions", "service": "SystemTenantService", "module": "tenant.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "getRoleMenus", "service": "SystemPermissionService", "module": "permission.service", "schema": "getRoleMenusSchema", "fields": [{ "name": "roleId", "type": "string" }] },
+        { "method": "assignRoleMenu", "service": "SystemPermissionService", "module": "permission.service", "schema": "assignRoleMenuSchema", "fields": [{ "name": "roleId", "type": "string" }] },
+        { "method": "assignUserRole", "service": "SystemPermissionService", "module": "permission.service", "schema": "assignUserRoleSchema", "fields": [{ "name": "userId", "type": "string" }] },
+        { "method": "pageLoginLogs", "service": "LoginLogService", "module": "login-log.service", "target": "page", "schema": "loginLogQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "getLoginLog", "service": "LoginLogService", "module": "login-log.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "exportLoginLogs", "service": "LoginLogService", "module": "login-log.service", "schema": "loginLogQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "pageOperateLogs", "service": "OperateLogService", "module": "operate-log.service", "target": "page", "schema": "operateLogQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "getOperateLog", "service": "OperateLogService", "module": "operate-log.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "exportOperateLogs", "service": "OperateLogService", "module": "operate-log.service", "schema": "operateLogQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listOnlineUsers", "service": "SystemOnlineUserService", "module": "online-user.service", "schema": "systemModulePageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "forceLogoutOnlineUser", "service": "SystemOnlineUserService", "module": "online-user.service", "schema": "forceLogoutSchema", "fields": [{ "name": "sessionId", "type": "string" }] },
+        { "method": "pageNotices", "service": "NoticeService", "module": "notice.service", "target": "page", "schema": "pageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "createNotice", "service": "NoticeService", "module": "notice.service", "schema": "createNoticeSchema", "fields": [{ "name": "title", "type": "string" }, { "name": "content", "type": "string" }] },
+        { "method": "getNotice", "service": "NoticeService", "module": "notice.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "updateNotice", "service": "NoticeService", "module": "notice.service", "schema": "updateNoticeSchema", "fields": [{ "name": "id", "type": "string" }, { "name": "title", "type": "string", "optional": true }] },
+        { "method": "deleteNotice", "service": "NoticeService", "module": "notice.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "listOauth2Clients", "service": "SystemOauth2Service", "module": "oauth2.service", "target": "listClients", "schema": "pageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listOauth2Tokens", "service": "SystemOauth2Service", "module": "oauth2.service", "target": "listTokens", "schema": "pageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listSocialUsers", "service": "SystemSocialService", "module": "social.service", "target": "listUsers", "schema": "systemModulePageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "createSocialUser", "service": "SystemSocialService", "module": "social.service", "schema": "createSocialUserSchema", "fields": [{ "name": "provider", "type": "string" }, { "name": "nickname", "type": "string" }, { "name": "externalId", "type": "string" }] },
+        { "method": "listMailAccounts", "service": "SystemMailService", "module": "mail.service", "target": "listAccounts", "schema": "systemModulePageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "createMailAccount", "service": "SystemMailService", "module": "mail.service", "schema": "createMailAccountSchema", "fields": [{ "name": "email", "type": "string" }, { "name": "host", "type": "string" }] },
+        { "method": "listMailLogs", "service": "SystemMailService", "module": "mail.service", "target": "listLogs", "schema": "systemModulePageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listSmsChannels", "service": "SystemSmsService", "module": "sms.service", "target": "listChannels", "schema": "systemModulePageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "createSmsChannel", "service": "SystemSmsService", "module": "sms.service", "schema": "createSmsChannelSchema", "fields": [{ "name": "name", "type": "string" }, { "name": "signName", "type": "string" }] },
+        { "method": "listSmsLogs", "service": "SystemSmsService", "module": "sms.service", "target": "listLogs", "schema": "systemModulePageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "pageNotifyMessages", "service": "NotifyMessageService", "module": "notify-message.service", "target": "page", "schema": "pageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "createNotifyMessage", "service": "NotifyMessageService", "module": "notify-message.service", "target": "create", "schema": "createNotifyMessageSchema", "fields": [{ "name": "templateCode", "type": "string" }, { "name": "receiver", "type": "string" }] },
+        { "method": "pageNotifyTemplates", "service": "NotifyTemplateService", "module": "notify-template.service", "target": "page", "schema": "pageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "createNotifyTemplate", "service": "NotifyTemplateService", "module": "notify-template.service", "target": "create", "schema": "createNotifyTemplateSchema", "fields": [{ "name": "code", "type": "string" }, { "name": "name", "type": "string" }] },
+        { "method": "pageIpAreas", "service": "IpAreaService", "module": "ip-area.service", "target": "page", "schema": "systemModulePageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "pageAreas", "service": "AreaService", "module": "area.service", "target": "page", "schema": "pageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "createArea", "service": "AreaService", "module": "area.service", "schema": "createAreaSchema", "fields": [{ "name": "name", "type": "string" }] },
+        { "method": "getArea", "service": "AreaService", "module": "area.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "updateArea", "service": "AreaService", "module": "area.service", "schema": "updateAreaSchema", "fields": [{ "name": "id", "type": "string" }, { "name": "name", "type": "string", "optional": true }] },
+        { "method": "deleteArea", "service": "AreaService", "module": "area.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "login", "service": "SystemAuthService", "module": "auth.service", "schema": "loginSchema", "fields": [{ "name": "username", "type": "string" }, { "name": "password", "type": "string" }, { "name": "tenantCode", "type": "string", "optional": true }] },
+        { "method": "getPermissionInfoByUser", "service": "SystemAuthService", "module": "auth.service", "schema": "actorIdSchema", "fields": [{ "name": "userId", "type": "string" }] },
+        { "method": "refreshAccessToken", "service": "SystemAuthService", "module": "auth.service", "schema": "refreshTokenSchema", "fields": [{ "name": "token", "type": "string" }] },
+        { "method": "logout", "service": "SystemAuthService", "module": "auth.service", "schema": "emptyPayloadSchema", "fieldsRef": "ping" },
+        { "method": "generateCaptcha", "service": "SystemCaptchaService", "module": "captcha.service", "schema": "emptyPayloadSchema", "fieldsRef": "ping" },
+        { "method": "verifyCaptcha", "service": "SystemCaptchaService", "module": "captcha.service", "schema": "captchaVerifySchema", "fields": [{ "name": "captchaId", "type": "string" }, { "name": "code", "type": "string" }] },
+        { "method": "getUserProfile", "service": "UserProfileService", "module": "user-profile.service", "schema": "getUserProfileSchema", "fields": [{ "name": "userId", "type": "string" }] },
+        { "method": "updateUserProfile", "service": "UserProfileService", "module": "user-profile.service", "schema": "updateUserProfileSchema", "fields": [{ "name": "userId", "type": "string" }, { "name": "nickname", "type": "string", "optional": true }] },
+        { "method": "getSidebarNav", "service": "SystemMenuService", "module": "menu.service", "schema": "sidebarNavSchema", "fields": [{ "name": "userId", "type": "string" }, { "name": "isPlatformAdmin", "type": "bool", "optional": true }] },
+        { "method": "openOauth2Token", "service": "SystemOauth2Service", "module": "oauth2.service", "target": "openToken", "schema": "oauth2OpenTokenSchema", "fields": [{ "name": "clientId", "type": "string" }, { "name": "clientSecret", "type": "string" }] },
+        { "method": "getOauth2UserInfo", "service": "SystemOauth2Service", "module": "oauth2.service", "target": "getUserInfo", "schema": "oauth2UserInfoSchema", "fields": [{ "name": "accessToken", "type": "string" }] },
+        { "method": "listMailTemplates", "service": "SystemMailTemplateService", "module": "mail-template.service", "schema": "systemModulePageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "createMailTemplate", "service": "SystemMailTemplateService", "module": "mail-template.service", "schema": "createMailTemplateSchema", "fields": [{ "name": "name", "type": "string" }, { "name": "code", "type": "string" }, { "name": "subject", "type": "string" }] },
+        { "method": "getMailTemplate", "service": "SystemMailTemplateService", "module": "mail-template.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "updateMailTemplate", "service": "SystemMailTemplateService", "module": "mail-template.service", "schema": "updateMailTemplateSchema", "fields": [{ "name": "id", "type": "string" }, { "name": "name", "type": "string", "optional": true }] },
+        { "method": "deleteMailTemplate", "service": "SystemMailTemplateService", "module": "mail-template.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "listSmsTemplates", "service": "SystemSmsTemplateService", "module": "sms-template.service", "schema": "systemModulePageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "createSmsTemplate", "service": "SystemSmsTemplateService", "module": "sms-template.service", "schema": "createSmsTemplateSchema", "fields": [{ "name": "name", "type": "string" }, { "name": "code", "type": "string" }] },
+        { "method": "getSmsTemplate", "service": "SystemSmsTemplateService", "module": "sms-template.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "updateSmsTemplate", "service": "SystemSmsTemplateService", "module": "sms-template.service", "schema": "updateSmsTemplateSchema", "fields": [{ "name": "id", "type": "string" }, { "name": "name", "type": "string", "optional": true }] },
+        { "method": "deleteSmsTemplate", "service": "SystemSmsTemplateService", "module": "sms-template.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "listSocialClients", "service": "SystemSocialClientService", "module": "social-client.service", "schema": "systemModulePageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "createSocialClient", "service": "SystemSocialClientService", "module": "social-client.service", "schema": "createSocialClientSchema", "fields": [{ "name": "name", "type": "string" }, { "name": "provider", "type": "string" }, { "name": "clientId", "type": "string" }] },
+        { "method": "getSocialClient", "service": "SystemSocialClientService", "module": "social-client.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "updateSocialClient", "service": "SystemSocialClientService", "module": "social-client.service", "schema": "updateSocialClientSchema", "fields": [{ "name": "id", "type": "string" }, { "name": "name", "type": "string", "optional": true }] },
+        { "method": "deleteSocialClient", "service": "SystemSocialClientService", "module": "social-client.service", "schema": "resourceIdSchema", "fieldsRef": "resourceId" }
       ]
     },
     "infra": {
@@ -103,7 +433,140 @@
             { "name": "tenantId", "type": "string" },
             { "name": "id", "type": "string" }
           ]
-        }
+        },
+        {
+          "method": "listConfigs",
+          "service": "InfraConfigService",
+          "module": "config.service",
+          "target": "list",
+          "schema": "infraConfigListSchema",
+          "fields": [
+            { "name": "page", "type": "int32" },
+            { "name": "pageSize", "type": "int32" },
+            { "name": "keyword", "type": "string", "optional": true },
+            { "name": "category", "type": "string", "optional": true },
+            { "name": "key", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "getConfigByKey",
+          "service": "InfraConfigService",
+          "module": "config.service",
+          "schema": "getConfigByKeySchema",
+          "fields": [{ "name": "key", "type": "string" }]
+        },
+        {
+          "method": "createConfig",
+          "service": "InfraConfigService",
+          "module": "config.service",
+          "target": "create",
+          "schema": "infraConfigCreateSchema",
+          "fields": [
+            { "name": "name", "type": "string" },
+            { "name": "configKey", "type": "string" },
+            { "name": "value", "type": "string" },
+            { "name": "category", "type": "string", "optional": true },
+            { "name": "remark", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "listJobs",
+          "service": "InfraJobService",
+          "module": "job.service",
+          "target": "list",
+          "schema": "infraJobListSchema",
+          "fields": [
+            { "name": "page", "type": "int32" },
+            { "name": "pageSize", "type": "int32" },
+            { "name": "keyword", "type": "string", "optional": true },
+            { "name": "status", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "createJob",
+          "service": "InfraJobService",
+          "module": "job.service",
+          "target": "create",
+          "schema": "infraJobCreateSchema",
+          "fields": [
+            { "name": "name", "type": "string" },
+            { "name": "handlerName", "type": "string" },
+            { "name": "cronExpression", "type": "string" },
+            { "name": "status", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "listFiles",
+          "service": "InfraFileService",
+          "module": "file.service",
+          "target": "list",
+          "schema": "infraFileListSchema",
+          "fields": [
+            { "name": "page", "type": "int32" },
+            { "name": "pageSize", "type": "int32" },
+            { "name": "keyword", "type": "string", "optional": true },
+            { "name": "type", "type": "string", "optional": true }
+          ]
+        },
+        {
+          "method": "recordFile",
+          "service": "InfraFileService",
+          "module": "file.service",
+          "target": "recordUpload",
+          "schema": "infraFileRecordSchema",
+          "fields": [
+            { "name": "configId", "type": "string" },
+            { "name": "path", "type": "string" },
+            { "name": "url", "type": "string" },
+            { "name": "name", "type": "string", "optional": true },
+            { "name": "type", "type": "string", "optional": true },
+            { "name": "size", "type": "int64" }
+          ]
+        },
+        {
+          "method": "pageDataSourceConfigs",
+          "service": "DataSourceConfigService",
+          "module": "data-source-config.service",
+          "target": "page",
+          "schema": "dataSourceConfigPageSchema",
+          "fields": [
+            { "name": "tenantId", "type": "string" },
+            { "name": "page", "type": "int32" },
+            { "name": "pageSize", "type": "int32" },
+            { "name": "keyword", "type": "string", "optional": true }
+          ]
+        },
+        { "method": "getConfig", "service": "InfraConfigService", "module": "config.service", "schema": "infraResourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "updateConfigItem", "service": "InfraConfigService", "module": "config.service", "schema": "infraConfigItemUpdateSchema", "fields": [{ "name": "id", "type": "string" }, { "name": "name", "type": "string", "optional": true }, { "name": "value", "type": "string", "optional": true }] },
+        { "method": "deleteConfig", "service": "InfraConfigService", "module": "config.service", "schema": "infraResourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "getJob", "service": "InfraJobService", "module": "job.service", "schema": "infraResourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "updateJob", "service": "InfraJobService", "module": "job.service", "target": "update", "schema": "infraJobUpdateSchema", "fields": [{ "name": "id", "type": "string" }, { "name": "name", "type": "string", "optional": true }] },
+        { "method": "deleteJob", "service": "InfraJobService", "module": "job.service", "schema": "infraResourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "triggerJob", "service": "InfraJobService", "module": "job.service", "schema": "infraResourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "updateJobStatus", "service": "InfraJobService", "module": "job.service", "schema": "infraResourceStatusSchema", "fieldsRef": "resourceStatus" },
+        { "method": "getFile", "service": "InfraFileService", "module": "file.service", "schema": "infraResourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "deleteFile", "service": "InfraFileService", "module": "file.service", "schema": "infraResourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "listPages", "service": "InfraPageService", "module": "page.service", "schema": "infraPageListSchema", "fields": [{ "name": "status", "type": "string", "optional": true }] },
+        { "method": "getPage", "service": "InfraPageService", "module": "page.service", "schema": "infraResourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "getPageBySlug", "service": "InfraPageService", "module": "page.service", "schema": "getPageBySlugSchema", "fields": [{ "name": "slug", "type": "string" }] },
+        { "method": "pageApiErrorLogs", "service": "ApiErrorLogService", "module": "api-error-log.service", "target": "page", "schema": "apiErrorLogQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "getApiErrorLog", "service": "ApiErrorLogService", "module": "api-error-log.service", "schema": "infraResourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "processApiErrorLog", "service": "ApiErrorLogService", "module": "api-error-log.service", "schema": "processApiErrorLogSchema", "fields": [{ "name": "id", "type": "string" }, { "name": "processedBy", "type": "string" }, { "name": "processNote", "type": "string", "optional": true }] },
+        { "method": "pageApiAccessLogs", "service": "ApiAccessLogService", "module": "api-access-log.service", "target": "page", "schema": "infraPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "getApiAccessLog", "service": "ApiAccessLogService", "module": "api-access-log.service", "schema": "infraResourceIdSchema", "fieldsRef": "resourceId" },
+        { "method": "testDataSourceConnection", "service": "DataSourceConfigService", "module": "data-source-config.service", "target": "testConnection", "schema": "testDataSourceConnectionSchema", "fields": [{ "name": "tenantId", "type": "string", "optional": true }, { "name": "id", "type": "string", "optional": true }] },
+        { "method": "listCodegenTables", "service": "CodegenTableService", "module": "codegen-table.service", "schema": "codegenTableListSchema", "fields": [{ "name": "page", "type": "int32" }, { "name": "pageSize", "type": "int32" }, { "name": "keyword", "type": "string", "optional": true }, { "name": "tenantId", "type": "string", "optional": true }] },
+        { "method": "getCodegenTable", "service": "CodegenTableService", "module": "codegen-table.service", "schema": "codegenTableIdSchema", "fields": [{ "name": "id", "type": "string" }, { "name": "tenantId", "type": "string", "optional": true }] },
+        { "method": "updateCodegenTable", "service": "CodegenTableService", "module": "codegen-table.service", "schema": "codegenTableUpdateSchema", "fields": [{ "name": "id", "type": "string" }, { "name": "businessName", "type": "string", "optional": true }] },
+        { "method": "deleteCodegenTable", "service": "CodegenTableService", "module": "codegen-table.service", "schema": "codegenTableIdSchema", "fields": [{ "name": "id", "type": "string" }, { "name": "tenantId", "type": "string", "optional": true }] },
+        { "method": "deleteCodegenTables", "service": "CodegenTableService", "module": "codegen-table.service", "schema": "codegenTableIdsSchema", "fields": [{ "name": "tenantId", "type": "string", "optional": true }] },
+        { "method": "exportApiAccessLogs", "service": "ApiAccessLogService", "module": "api-access-log.service", "schema": "infraPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "exportApiErrorLogs", "service": "ApiErrorLogService", "module": "api-error-log.service", "schema": "apiErrorLogQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "runAuditLogRetention", "service": "AuditLogRetentionService", "module": "audit-log-retention.service", "target": "run", "schema": "auditLogRetentionSchema", "fields": [{ "name": "dryRun", "type": "bool", "optional": true }] },
+        { "method": "listCodegenCandidates", "service": "CodegenTableService", "module": "codegen-table.service", "schema": "codegenCandidateQuerySchema", "fields": [{ "name": "page", "type": "int32" }, { "name": "pageSize", "type": "int32" }, { "name": "tenantId", "type": "string" }] },
+        { "method": "importCodegenTables", "service": "CodegenTableService", "module": "codegen-table.service", "schema": "codegenImportSchema", "fields": [{ "name": "tenantId", "type": "string" }] },
+        { "method": "generateCodegenArchive", "service": "CodegenTableService", "module": "codegen-table.service", "schema": "codegenTableIdSchema", "fields": [{ "name": "id", "type": "string" }, { "name": "tenantId", "type": "string", "optional": true }] },
+        { "method": "listCodegenCatalog", "service": "CodegenTableService", "module": "codegen-table.service", "schema": "emptyPayloadSchema", "fieldsRef": "ping" }
       ]
     },
     "online": {

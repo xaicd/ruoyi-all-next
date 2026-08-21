@@ -5,8 +5,8 @@ import { KyselyOnlineDefinitionRepository } from "../adapters/persistence/online
 import { KyselyOnlineSchemaPlanRepository } from "../adapters/persistence/online-schema-plan.repository"
 import { KyselyOnlineRuntimeRepository } from "../adapters/persistence/online-runtime.repository"
 import { toOnlineCodegenConfig } from "../application/online-codegen.adapter"
-import { infraFacade } from "@/modules/infra/contract/infra.facade"
-import { systemFacade } from "@/modules/system/contract/system.facade"
+import { infraPlatformFacade } from "@/modules/infra/contract/infra.platform.facade"
+import { systemPublicFacade } from "@/modules/system/contract/system.public.facade"
 import type { ApplyOnlineSchemaPlanInput, ApproveOnlineSchemaPlanInput, ArchiveOnlineDefinitionInput, BatchDownloadOnlineCodeInput, CreateOnlineDefinitionInput, CreateOnlineRuntimeRecordInput, CreateOnlineSchemaPlanInput, DeleteOnlineDefinitionInput, NormalizeOnlineSystemFieldsInput, OnlineDefinitionPageInput, OnlinePageDefinitionsInput, OnlineRuntimeRecordPageInput, PublishOnlineRevisionInput, ResolvePublishedReleaseInput, RollbackOnlineDefinitionInput, UpdateOnlineDefinitionInput, UpdateOnlineRevisionInput, UpdateOnlineRuntimeRecordInput, ValidateOnlineRevisionInput } from "../validators"
 
 function tenantScope(auth: AuthContext): { tenantId: string; actorId: string } {
@@ -188,7 +188,7 @@ export class OnlineDefinitionService {
     const runtime = await KyselyOnlineRuntimeRepository.resolveCurrentPublishedRelease({ tenantId, definitionCode: code })
     const field = runtime.interaction.fields.find((item) => item.code === fieldCode)
     if (!field?.dictionaryCode || ![field.widget, field.query.widget].some((widget) => widget === "DICTIONARY" || widget === "SELECT")) throw new ApiError("NOT_FOUND", "当前 Published Release 未为该字段配置字典选项")
-    const result = await systemFacade.getDictDataByType({ type: field.dictionaryCode }, { caller: "online.definition" })
+    const result = await systemPublicFacade.getDictDataByType({ type: field.dictionaryCode }, { caller: "online.definition" })
     if (!result.success) throw new ApiError("INTERNAL_ERROR", result.error ?? "system dict 调用失败")
     const values = Array.isArray(result.data) ? result.data : []
     const options = values
@@ -235,7 +235,7 @@ export class OnlineDefinitionService {
 type InfraCodegenFiles = { files?: Array<{ path: string; content: string; type: string }> }
 
 async function invokeInfraCodegen(method: "previewCodegen" | "generateCodegen", config: ReturnType<typeof toOnlineCodegenConfig>) {
-  const result = await infraFacade[method](config, { caller: "online.definition" })
+  const result = await infraPlatformFacade[method](config, { caller: "online.definition" })
   if (!result.success) throw new ApiError("INTERNAL_ERROR", result.error ?? "infra codegen 调用失败")
   const files = (result.data as InfraCodegenFiles | undefined)?.files
   if (!Array.isArray(files)) throw new ApiError("INTERNAL_ERROR", "infra codegen 返回缺少 files")

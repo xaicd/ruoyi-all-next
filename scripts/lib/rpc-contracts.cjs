@@ -82,6 +82,38 @@ export const ${domain}Facade = createDomainFacade("${domain}", ${exportName})
 `
 }
 
+function uniqueMethods(methods) {
+  return [...new Set(methods)]
+}
+
+function toNamedFacadeTs(domain, methods, constSuffix, exportName, header) {
+  const methodsConst = `${constName(domain)}_${constSuffix}`
+  if (methods.length === 0) {
+    return `${header}export const ${methodsConst} = [] as const
+`
+  }
+  const methodList = methods.map((item) => `"${item}"`).join(", ")
+  return `${header}import { createDomainFacade } from "@/modules/shared/backend/lib/rpc-facade"
+
+export const ${methodsConst} = [${methodList}] as const
+
+export const ${exportName} = createDomainFacade("${domain}", ${methodsConst})
+`
+}
+
+function exposureMethods(catalog, domain) {
+  const spec = catalog.exposure?.[domain]
+  if (!spec) return null
+  const actionNames = new Set((catalog.domains[domain]?.actions ?? []).map((item) => item.method))
+  for (const method of [...(spec.public ?? []), ...(spec.platform ?? [])]) {
+    if (!actionNames.has(method)) throw new Error(`exposure ${domain}.${method} is not an rpc action`)
+  }
+  return {
+    public: spec.public ?? [],
+    platform: uniqueMethods([...(spec.platform ?? []), ...(spec.public ?? [])]),
+  }
+}
+
 function toProto(domain, spec, catalog) {
   const service = `${pascal(domain)}Service`
   const messages = []
@@ -195,6 +227,8 @@ function contractPaths(domain) {
     dir,
     actions: path.join(dir, "actions.ts"),
     facade: path.join(dir, `${domain}.facade.ts`),
+    publicFacade: path.join(dir, `${domain}.public.facade.ts`),
+    platformFacade: path.join(dir, `${domain}.platform.facade.ts`),
     proto: path.join(dir, `${domain}.proto`),
     go: path.join(ROOT, "gen", "go", domain, "v1", "service.go"),
   }
@@ -224,6 +258,23 @@ function writeGeneratedContracts() {
     fs.mkdirSync(path.dirname(targets.go), { recursive: true })
     fs.writeFileSync(targets.actions, files.actions)
     fs.writeFileSync(targets.facade, files.facade)
+    const scoped = exposureMethods(catalog, domain.name)
+    if (scoped) {
+      fs.writeFileSync(targets.publicFacade, toNamedFacadeTs(
+        domain.name,
+        scoped.public,
+        "PUBLIC_METHODS",
+        `${domain.name}PublicFacade`,
+        "// Business-domain public RPC. Do not add admin CRUD here.\n",
+      ))
+      fs.writeFileSync(targets.platformFacade, toNamedFacadeTs(
+        domain.name,
+        scoped.platform,
+        "PLATFORM_METHODS",
+        `${domain.name}PlatformFacade`,
+        "// Platform collaboration RPC for shared/online/report. Not a public business API.\n",
+      ))
+    }
     fs.writeFileSync(targets.proto, files.proto)
     fs.writeFileSync(targets.go, files.go)
     written.push(path.relative(ROOT, targets.dir).replace(/\\/g, "/"))
