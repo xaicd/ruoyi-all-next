@@ -312,6 +312,8 @@ CI 前置检查：
 
 ```
 src/modules/{domain}/
+├── contract/
+│   └── {kebab}.actions.ts            ← ACTION_SCHEMAS（HTTP 与 broker 共用）
 ├── backend/
 │   ├── types/{kebab}.types.ts        ← DO/VO/CreateInput/UpdateInput/PageQuery
 │   ├── validators/{kebab}.validator.ts ← Zod Schema (create/update/pageQuery)

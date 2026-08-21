@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest"
-import { CodegenEngineService } from "@/modules/infra/backend/services/codegen-engine.service"
 import { toOnlineCodegenConfig } from "./online-codegen.adapter"
 import type { OnlineRuntimeRelease } from "./online-runtime.contract"
 
@@ -14,26 +13,19 @@ const runtime: OnlineRuntimeRelease = {
   views: [],
 }
 
-describe("Online managed-table codegen", () => {
-  it("generates tenant-scoped runtime CRUD instead of mock data", () => {
-    const outputs = CodegenEngineService.generate(toOnlineCodegenConfig(runtime))
-    const service = outputs.find((item) => item.type === "service")!.content
-    const route = outputs.find((item) => item.type === "route")!.content
-    const test = outputs.find((item) => item.type === "test")!.content
-    expect(outputs.some((item) => item.type === "permission")).toBe(false)
-    expect(service).toContain("onlineFacade")
-    expect(service).toContain("pageManagedRecords")
-    expect(service).not.toContain("KyselyOnlineManagedTableRuntimeRepository")
-    expect(service).not.toContain("MOCK_DATA")
-    expect(route).toContain("scope(auth)")
-    expect(route).toContain('new ApiError("FORBIDDEN", "Tenant scope is required")')
-    expect(route).toContain("INFRA_ONLINE_DEFINITION_QUERY")
-    expect(test).toContain('from "../check.service"')
+describe("Online managed-table codegen IR", () => {
+  it("maps published release into codegen IR without calling infra engine", () => {
+    const config = toOnlineCodegenConfig(runtime)
+    expect(config.moduleName).toBe("online")
+    expect(config.className).toBe("Check")
+    expect(config.onlineRuntime?.storageKind).toBe("MANAGED_TABLE")
+    expect(config.onlineRuntime?.releaseId).toBe("release-1")
+    expect(config.permissionPrefix).toBe("online:check")
   })
 
-  it("warns instead of rendering unreachable CRUD controls when no release actions exist", () => {
+  it("keeps an empty action list so generated UI can stay query-only", () => {
     const readOnlyRuntime: OnlineRuntimeRelease = { ...runtime, interaction: { ...runtime.interaction, actions: [] } }
-    const page = CodegenEngineService.generate(toOnlineCodegenConfig(readOnlyRuntime)).find((item) => item.type === "page")!.content
-    expect(page).toContain("当前发布版本未启用新增、编辑或删除动作，仅可查询。")
+    const config = toOnlineCodegenConfig(readOnlyRuntime)
+    expect(config.advanced?.actions ?? []).toEqual([])
   })
 })

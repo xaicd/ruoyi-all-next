@@ -142,6 +142,7 @@ describe("InfraTemplateEngineService", () => {
       'from "@/modules/infra/backend/services/codegen.service.ts"',
     )
     expect(byPath["src/app/api/v1/admin/infra/codegen/route.ts"]).toContain("InfraCodegenService")
+    expect(byPath["src/app/api/v1/admin/infra/codegen/route.ts"]).toContain("parseActionQuery")
     expect(byPath["src/modules/infra/backend/services/codegen.service.ts"]).toContain(
       "InfraCodegenService",
     )

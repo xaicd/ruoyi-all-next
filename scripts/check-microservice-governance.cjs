@@ -371,6 +371,13 @@ if (!fs.existsSync(path.join(ROOT, "src", "modules", "online", "contract", "menu
 const codegenEngine = fs.readFileSync(path.join(ROOT, "src", "modules", "infra", "backend", "services", "codegen-engine.service.ts"), "utf8")
 if (codegenEngine.includes("KyselyOnlineManagedTableRuntimeRepository")) fail("codegen managed-table template must not import Online repository; use onlineFacade")
 if (!codegenEngine.includes("onlineFacade.pageManagedRecords")) fail("codegen managed-table template must call onlineFacade.pageManagedRecords")
+if (!codegenEngine.includes("parseActionQuery") || !codegenEngine.includes("ACTION_SCHEMAS")) {
+  fail("codegen routes must parse with generated ACTION_SCHEMAS via parseActionQuery")
+}
+
+const onlineAdapterTestPath = path.join(ROOT, "src", "modules", "online", "backend", "application", "online-codegen.adapter.test.ts")
+const onlineAdapterTest = fs.readFileSync(onlineAdapterTestPath, "utf8")
+if (onlineAdapterTest.includes("CodegenEngineService")) fail("online adapter test must not import CodegenEngineService; assert codegen IR only")
 
 const outboxSource = fs.readFileSync(path.join(ROOT, "src", "modules", "shared", "backend", "lib", "transactional-outbox.ts"), "utf8")
 if (!outboxSource.includes("getOutboxStoreForDomain")) fail("outbox must expose getOutboxStoreForDomain for per-domain store ownership")

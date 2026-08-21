@@ -5,6 +5,7 @@ import {
   audit{{entityName}}WorkflowSchema,
 } from "@/modules/{{moduleName}}/backend/validators/workflow.validator"
 import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+import { parseActionBody } from "@/modules/shared/backend/http/parse-action-input"
 
 export const GET = withAdminRoute(async () => {
   const data = await {{entityName}}WorkflowService.list()
@@ -12,13 +13,13 @@ export const GET = withAdminRoute(async () => {
 }, { permission: "{{permissionView}}" })
 
 export const POST = withAdminRoute(async (request: Request) => {
-  const input = create{{entityName}}WorkflowSchema.parse(await request.json())
+  const input = parseActionBody(create{{entityName}}WorkflowSchema, await request.json())
   const data = await {{entityName}}WorkflowService.create(input)
   return NextResponse.json({ success: true, data })
 }, { permission: "{{permissionUpdate}}" })
 
 export const PATCH = withAdminRoute(async (request: Request) => {
-  const input = audit{{entityName}}WorkflowSchema.parse(await request.json())
+  const input = parseActionBody(audit{{entityName}}WorkflowSchema, await request.json())
   const data = await {{entityName}}WorkflowService.audit(input)
   return NextResponse.json({ success: true, data })
 }, { permission: "{{permissionUpdate}}" })

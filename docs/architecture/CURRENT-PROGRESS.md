@@ -28,6 +28,7 @@
 | D15 | DONE | pay 退款列表 schema 合流 | HTTP 与 broker 共用 `PAY_ACTION_SCHEMAS["pay.listRefunds"]` |
 | D16 | DONE | report 测试改 spy Facade | 禁止测试 import infra `DataSourceConfigRepository` |
 | D17 | DONE | 其余域列表查询 schema 合流 | mall/crm/bpm/member/erp/report/mp/wms/mes/ai/iot/im 门面列表 HTTP 改走对应 `ACTION_SCHEMAS` |
+| D24 | DONE | 在线/表驱动生成对齐双模 | 生成 Route 走 `ACTION_SCHEMAS` + `parseActionQuery`/`parseActionBody`；清单带 `rpcActions` 片段；online 测试只断言 IR |
 | D18 | DONE | system 平台核心 CRUD 双模收口 | users/roles/menus/depts/posts/dicts/tenants 列表与创建走 Facade + 共用 schema |
 | D19 | DONE | infra 平台核心 CRUD 双模收口 | configs/jobs/files/data-source 列表与创建走 Facade + 共用 schema |
 | D20 | DONE | system/infra 单资源写路径 | `[id]` 更新/删除与 infra pages/logs 进 Facade |
