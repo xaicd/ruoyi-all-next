@@ -160,6 +160,41 @@ if (!payRefunds.includes("PAY_ACTION_SCHEMAS") || !payRefunds.includes("parseAct
   fail("pay refunds route must parse query with PAY_ACTION_SCHEMAS via parseActionQuery")
 }
 
+function mustUseActionSchemas(label, relPath, token) {
+  const source = fs.readFileSync(path.join(ROOT, relPath), "utf8")
+  if (!source.includes(token) || !source.includes("parseActionQuery") && !source.includes("parseActionBody")) {
+    fail(`${label} must parse with ${token} via parseActionQuery/parseActionBody`)
+  }
+}
+
+for (const [label, relPath, token] of [
+  ["mall products route", "src/app/api/v1/admin/mall/products/route.ts", "MALL_ACTION_SCHEMAS"],
+  ["mall orders route", "src/app/api/v1/admin/mall/orders/route.ts", "MALL_ACTION_SCHEMAS"],
+  ["mall coupon issue route", "src/app/api/v1/admin/mall/coupons/issue/route.ts", "MALL_ACTION_SCHEMAS"],
+  ["crm customers route", "src/app/api/v1/admin/crm/customers/route.ts", "CRM_ACTION_SCHEMAS"],
+  ["crm clues route", "src/app/api/v1/admin/crm/clues/route.ts", "CRM_ACTION_SCHEMAS"],
+  ["crm followups route", "src/app/api/v1/admin/crm/followups/route.ts", "CRM_ACTION_SCHEMAS"],
+  ["bpm process-definitions route", "src/app/api/v1/admin/bpm/process-definitions/route.ts", "BPM_ACTION_SCHEMAS"],
+  ["bpm tasks route", "src/app/api/v1/admin/bpm/tasks/route.ts", "BPM_ACTION_SCHEMAS"],
+  ["member users route", "src/app/api/v1/admin/member/users/route.ts", "MEMBER_ACTION_SCHEMAS"],
+  ["member levels route", "src/app/api/v1/admin/member/levels/route.ts", "MEMBER_ACTION_SCHEMAS"],
+  ["member points route", "src/app/api/v1/admin/member/points/route.ts", "MEMBER_ACTION_SCHEMAS"],
+  ["erp products route", "src/app/api/v1/admin/erp/products/route.ts", "ERP_ACTION_SCHEMAS"],
+  ["erp orders route", "src/app/api/v1/admin/erp/orders/route.ts", "ERP_ACTION_SCHEMAS"],
+  ["report boards route", "src/app/api/v1/admin/report/boards/route.ts", "REPORT_ACTION_SCHEMAS"],
+  ["mp accounts route", "src/app/api/v1/admin/mp/accounts/route.ts", "MP_ACTION_SCHEMAS"],
+  ["mp fans route", "src/app/api/v1/admin/mp/fans/route.ts", "MP_ACTION_SCHEMAS"],
+  ["wms warehouse route", "src/app/api/v1/admin/wms/wms-warehouse/route.ts", "WMS_ACTION_SCHEMAS"],
+  ["mes work-order route", "src/app/api/v1/admin/mes/mes-pro-work-order/route.ts", "MES_ACTION_SCHEMAS"],
+  ["ai models route", "src/app/api/v1/admin/ai/models/route.ts", "AI_ACTION_SCHEMAS"],
+  ["ai chats route", "src/app/api/v1/admin/ai/chats/route.ts", "AI_ACTION_SCHEMAS"],
+  ["iot devices route", "src/app/api/v1/admin/iot/devices/route.ts", "IOT_ACTION_SCHEMAS"],
+  ["iot alerts route", "src/app/api/v1/admin/iot/alerts/route.ts", "IOT_ACTION_SCHEMAS"],
+  ["im conversations route", "src/app/api/v1/admin/im/conversations/route.ts", "IM_ACTION_SCHEMAS"],
+]) {
+  mustUseActionSchemas(label, relPath, token)
+}
+
 const codegenImportPath = path.join(ROOT, "src", "app", "api", "v1", "admin", "infra", "codegen", "import", "route.ts")
 const codegenImport = fs.readFileSync(codegenImportPath, "utf8")
 if (codegenImport.includes("KyselyOnlineRuntimeRepository") || codegenImport.includes("online-codegen.adapter")) {

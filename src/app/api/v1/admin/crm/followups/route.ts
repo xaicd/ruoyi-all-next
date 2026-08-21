@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server"
 import { FollowupsService } from "@/modules/crm/backend/services/followups.service"
+import { CRM_ACTION_SCHEMAS } from "@/modules/crm/contract/actions"
+import { parseActionBody } from "@/modules/shared/backend/http/parse-action-input"
 
 export async function GET(request: Request) {
   try {
@@ -18,8 +20,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json()
-    const data = await FollowupsService.create(body)
+    const data = await FollowupsService.create(parseActionBody(CRM_ACTION_SCHEMAS["crm.createFollowup"], await request.json()))
     return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message || "创建失败" }, { status: 400 })

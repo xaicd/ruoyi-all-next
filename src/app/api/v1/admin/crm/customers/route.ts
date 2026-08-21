@@ -1,17 +1,16 @@
 import { NextResponse } from "next/server"
+import { z } from "zod"
 import { CrmCustomerService } from "@/modules/crm/backend/services/customer.service"
+import { CRM_ACTION_SCHEMAS } from "@/modules/crm/contract/actions"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
-import { z } from "zod"
+import { parseActionQuery } from "@/modules/shared/backend/http/parse-action-input"
 
-const listSchema = z.object({ page: z.coerce.number().int().min(1).default(1), pageSize: z.coerce.number().int().min(1).max(100).default(20), keyword: z.string().trim().optional(), level: z.enum(["A", "B", "C", "D"]).optional(), status: z.enum(["ACTIVE", "LOCKED", "POOL"]).optional() })
 const createSchema = z.object({ name: z.string().trim().min(1).max(100), phone: z.string().trim().max(20).optional(), email: z.string().trim().email().optional().or(z.literal("")), industry: z.string().trim().max(50).optional(), level: z.enum(["A", "B", "C", "D"]).default("C"), source: z.string().trim().max(50).optional(), remark: z.string().trim().max(500).optional() })
 
 export const GET = withAdminRoute(async (request) => {
   try {
-    const { searchParams } = new URL(request.url)
-    const input = listSchema.parse({ page: searchParams.get("page") ?? 1, pageSize: searchParams.get("pageSize") ?? 20, keyword: searchParams.get("keyword") ?? undefined, level: searchParams.get("level") ?? undefined, status: searchParams.get("status") ?? undefined })
-    const data = await CrmCustomerService.list(input)
+    const data = await CrmCustomerService.list(parseActionQuery(CRM_ACTION_SCHEMAS["crm.listCustomers"], request))
     return NextResponse.json({ success: true, data })
   } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }
 }, { permission: PERMISSIONS.CRM_CUSTOMER_VIEW })

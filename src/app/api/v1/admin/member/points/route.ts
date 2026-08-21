@@ -1,15 +1,11 @@
 import { NextResponse } from "next/server"
 import { PointsService } from "@/modules/member/backend/services/points.service"
+import { MEMBER_ACTION_SCHEMAS } from "@/modules/member/contract/actions"
+import { parseActionQuery } from "@/modules/shared/backend/http/parse-action-input"
 
 export async function GET(request: Request) {
   try {
-    const { searchParams } = new URL(request.url)
-    const input = {
-      page: Number(searchParams.get("page") || 1),
-      pageSize: Number(searchParams.get("pageSize") || 20),
-      keyword: searchParams.get("keyword") || undefined,
-    }
-    const data = await PointsService.page(input)
+    const data = await PointsService.page(parseActionQuery(MEMBER_ACTION_SCHEMAS["member.listPoints"], request))
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message || "查询失败" }, { status: 400 })

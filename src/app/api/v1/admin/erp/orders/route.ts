@@ -1,15 +1,11 @@
 import { NextResponse } from "next/server"
 import { OrdersService } from "@/modules/erp/backend/services/orders.service"
+import { ERP_ACTION_SCHEMAS } from "@/modules/erp/contract/actions"
+import { parseActionQuery } from "@/modules/shared/backend/http/parse-action-input"
 
 export async function GET(request: Request) {
   try {
-    const { searchParams } = new URL(request.url)
-    const input = {
-      page: Number(searchParams.get("page") || 1),
-      pageSize: Number(searchParams.get("pageSize") || 20),
-      keyword: searchParams.get("keyword") || undefined,
-    }
-    const data = await OrdersService.page(input)
+    const data = await OrdersService.page(parseActionQuery(ERP_ACTION_SCHEMAS["erp.listOrders"], request))
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message || "查询失败" }, { status: 400 })

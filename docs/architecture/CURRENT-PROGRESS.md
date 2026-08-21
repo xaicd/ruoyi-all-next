@@ -1,6 +1,6 @@
 # ruoyi-all-next 当前进度与待办
 
-更新时间：2026-08-20
+更新时间：2026-08-21
 
 ## 双模 SDK / RPC 任务清单（持续更新）
 
@@ -24,7 +24,7 @@
 | D14 | DONE | infra codegen import | `onlineFacade.resolveCodegenImport`，禁止 import online repository/adapter |
 | D15 | DONE | pay 退款列表 schema 合流 | HTTP 与 broker 共用 `PAY_ACTION_SCHEMAS["pay.listRefunds"]` |
 | D16 | DONE | report 测试改 spy Facade | 禁止测试 import infra `DataSourceConfigRepository` |
-| D17 | TODO | 其余域列表查询 schema 合流 | mall/crm/bpm 等 HTTP 改走对应 `ACTION_SCHEMAS` + `parseActionQuery` |
+| D17 | DONE | 其余域列表查询 schema 合流 | mall/crm/bpm/member/erp/report/mp/wms/mes/ai/iot/im 门面列表 HTTP 改走对应 `ACTION_SCHEMAS` |
 
 ## 已完成
 

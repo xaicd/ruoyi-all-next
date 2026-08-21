@@ -1,15 +1,11 @@
 import { NextResponse } from "next/server"
 import { BoardsService } from "@/modules/report/backend/services/boards.service"
+import { REPORT_ACTION_SCHEMAS } from "@/modules/report/contract/actions"
+import { parseActionQuery } from "@/modules/shared/backend/http/parse-action-input"
 
 export async function GET(request: Request) {
   try {
-    const { searchParams } = new URL(request.url)
-    const input = {
-      page: Number(searchParams.get("page") || 1),
-      pageSize: Number(searchParams.get("pageSize") || 20),
-      keyword: searchParams.get("keyword") || undefined,
-    }
-    const data = await BoardsService.page(input)
+    const data = await BoardsService.page(parseActionQuery(REPORT_ACTION_SCHEMAS["report.listBoards"], request))
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message || "查询失败" }, { status: 400 })

@@ -15,4 +15,11 @@ describe("parseActionQuery", () => {
     const request = new Request("http://local.test/api/v1/admin/pay/orders?page=0")
     expect(() => parseActionQuery(schema, request)).toThrow()
   })
+
+  it("parses mall list query with the broker action schema", async () => {
+    const { mallPageQuerySchema } = await import("@/modules/mall/backend/validators")
+    const request = new Request("http://local.test/api/v1/admin/mall/products?page=1&pageSize=20&keyword=gift")
+    const input = parseActionQuery(mallPageQuerySchema, request)
+    expect(input).toMatchObject({ page: 1, pageSize: 20, keyword: "gift" })
+  })
 })

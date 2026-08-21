@@ -59,5 +59,5 @@ await broker.publishReliable("pay.order.paid", { orderId: "pay-001" }, "pay") //
 ## 4. 尚未完成
 
 1. 跨库（每域独立数据库）时的 outbox 表归属与投递；`getOutboxStoreForDomain` 已预留，当前仍共用一个 store
-2. 其余域 Facade 目前只覆盖 `rpc-actions.json` 门面方法，不是该域全部 HTTP 路由
+2. 其余域 Facade 目前只覆盖 `rpc-actions.json` 门面方法，不是该域全部 HTTP 路由。门面列表查询已与 HTTP 共用 `ACTION_SCHEMAS`
 3. Go 客户端目前通过 `Invoker` 回调对接；尚未接入官方 `protoc` + grpc-go 运行时
