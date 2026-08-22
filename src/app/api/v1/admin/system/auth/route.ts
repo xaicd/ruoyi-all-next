@@ -65,7 +65,7 @@ export const PUT = withAdminRoute(async (request) => {
   return NextResponse.json({ success: true, data })
 })
 
-/** DELETE /api/v1/admin/system/auth — stateless logout acknowledgement. */
-export const DELETE = withAdminRoute(async () => (
-  NextResponse.json({ success: true, data: await SystemAuthService.logout(parseActionBody(SYSTEM_ACTION_SCHEMAS["system.logout"], {})) })
+/** DELETE /api/v1/admin/system/auth — revoke the current administrator session. */
+export const DELETE = withAdminRoute(async (_request, auth) => (
+  NextResponse.json({ success: true, data: await SystemAuthService.logout({ jti: auth.jti, userId: auth.userId }) })
 ))

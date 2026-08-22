@@ -2,6 +2,8 @@ import type { OnlineModelIR } from "./online-schema-plan.contract"
 import type { OnlineInteractionIR } from "./online-interaction.compiler"
 import type { OnlineViewDetail } from "./online-definition.contract"
 
+export type OnlineRuntimeKind = "SINGLE_DEFAULT" | "TREE_DEFAULT" | "MASTER_DETAIL_ERP" | "MASTER_DETAIL_INNER" | "MASTER_DETAIL_TAB"
+
 export type OnlineRuntimeRelease = {
   definitionId: string
   definitionCode: string
@@ -13,6 +15,10 @@ export type OnlineRuntimeRelease = {
   model: OnlineModelIR
   interaction: OnlineInteractionIR
   views: OnlineViewDetail[]
+}
+
+export type OnlineRuntimeView = Pick<OnlineRuntimeRelease, "definitionCode" | "definitionName" | "modelType" | "releaseId" | "schemaRevision" | "model" | "interaction" | "views"> & {
+  kind: OnlineRuntimeKind
 }
 
 export type OnlineTestSessionSummary = {
@@ -46,6 +52,15 @@ export type OnlineRuntimeRecordPage = {
   pageSize: number
 }
 
+export type OnlineRuntimeChildBinding = {
+  code: string
+  targetDefinitionCode: string
+  foreignKeyField: string
+  display: "TABLE" | "TABS"
+  runtime: OnlineRuntimeView
+}
+
 export type OnlineTestSessionDetail = OnlineTestSessionSummary & {
-  runtime: Pick<OnlineRuntimeRelease, "definitionCode" | "definitionName" | "modelType" | "releaseId" | "schemaRevision" | "model" | "interaction" | "views">
+  runtime: OnlineRuntimeView
+  children: OnlineRuntimeChildBinding[]
 }

@@ -114,6 +114,8 @@ melos_*.log
 .platform-admin-credentials.txt
 **/.platform-admin-credentials.txt
 
+# 本地文件存储（infra LOCAL adapter）
+.data/
 # 用户上传 & TTS 临时语音文件（运行时生成，禁止入库）
 public/uploads/
 public/sounds/

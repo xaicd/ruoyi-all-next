@@ -317,7 +317,8 @@ src/modules/{domain}/
 ├── backend/
 │   ├── types/{kebab}.types.ts        ← DO/VO/CreateInput/UpdateInput/PageQuery
 │   ├── validators/{kebab}.validator.ts ← Zod Schema (create/update/pageQuery)
-│   ├── services/{kebab}.service.ts    ← Service (CRUD + MOCK_DATA)
+│   ├── repositories/{kebab}.repository.ts ← Kysely 真实库 + 内存回退
+│   ├── services/{kebab}.service.ts    ← Service（调本域 Repository；托管表走 onlineFacade）
 │   ├── services/{kebab}.rpc.ts        ← 双模 RPC binding（同进程 SDK / 拆分 RPC）
 │   └── services/__tests__/{kebab}.service.test.ts ← Vitest 测试
 ├── frontend/

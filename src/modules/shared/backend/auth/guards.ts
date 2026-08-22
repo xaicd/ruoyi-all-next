@@ -25,6 +25,7 @@ function toContext(token: string, endpoint: AuthEndpoint): AuthContext {
     isGuest: false,
     memberId: payload.memberId,
     memberLevel: payload.memberLevel,
+    jti: payload.jti,
   }
   // Transitional activation: existing route handlers call the guard directly.
   // New handlers should wrap their full execution in runWithTenantContext.

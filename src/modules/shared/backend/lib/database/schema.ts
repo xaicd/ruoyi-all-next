@@ -191,6 +191,42 @@ export interface SystemNoticeTable {
   deleted: Generated<boolean>
 }
 
+export interface SystemAreaTable {
+  id: Generated<string>
+  name: string
+  parent_id: string | null
+  level: number
+  status: string
+  created_at: Generated<Date>
+  updated_at: Date
+  deleted: Generated<boolean>
+}
+
+export interface SystemNotifyTemplateTable {
+  id: Generated<string>
+  code: string
+  name: string
+  channel: string
+  content: string
+  params: string
+  status: string
+  created_at: Generated<Date>
+  updated_at: Date
+  deleted: Generated<boolean>
+}
+
+export interface SystemNotifyMessageTable {
+  id: Generated<string>
+  template_code: string
+  template_name: string
+  channel: string
+  receiver: string
+  content: string
+  read_status: Generated<boolean>
+  created_at: Generated<Date>
+  deleted: Generated<boolean>
+}
+
 export interface SystemLoginLogTable {
   id: Generated<string>
   user_id: string | null
@@ -379,6 +415,9 @@ export interface DB {
   system_tenant_package_menu: SystemTenantPackageMenuTable
   system_tenant_subscription: SystemTenantSubscriptionTable
   system_notice: SystemNoticeTable
+  system_area: SystemAreaTable
+  system_notify_template: SystemNotifyTemplateTable
+  system_notify_message: SystemNotifyMessageTable
   system_login_log: SystemLoginLogTable
   system_operate_log: SystemOperateLogTable
 

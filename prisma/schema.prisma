@@ -320,6 +320,53 @@ model SystemNotice {
   @@map("system_notice")
 }
 
+/// 行政区划
+model SystemArea {
+  id        String   @id @default(cuid())
+  name      String   @db.VarChar(50)
+  parentId  String?  @map("parent_id")
+  level     Int      @default(1)
+  status    String   @default("ACTIVE") @db.VarChar(10)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  deleted   Boolean  @default(false)
+
+  @@map("system_area")
+  @@index([parentId])
+}
+
+/// 站内信/短信/邮件模板
+model SystemNotifyTemplate {
+  id        String   @id @default(cuid())
+  code      String   @unique @db.VarChar(64)
+  name      String   @db.VarChar(100)
+  channel   String   @db.VarChar(10)
+  content   String   @default("")
+  params    String   @default("[]")
+  status    String   @default("ACTIVE") @db.VarChar(10)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  deleted   Boolean  @default(false)
+
+  @@map("system_notify_template")
+}
+
+/// 通知发送记录
+model SystemNotifyMessage {
+  id           String   @id @default(cuid())
+  templateCode String   @map("template_code") @db.VarChar(64)
+  templateName String   @map("template_name") @db.VarChar(100)
+  channel      String   @db.VarChar(10)
+  receiver     String   @db.VarChar(100)
+  content      String   @default("")
+  readStatus   Boolean  @default(false) @map("read_status")
+  createdAt    DateTime @default(now()) @map("created_at")
+  deleted      Boolean  @default(false)
+
+  @@map("system_notify_message")
+  @@index([templateCode])
+}
+
 /// 登录日志
 model SystemLoginLog {
   id        String   @id @default(cuid())

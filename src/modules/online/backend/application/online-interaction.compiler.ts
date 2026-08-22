@@ -33,7 +33,7 @@ export const onlineInteractionIrSchema = z.object({
   fields: z.array(fieldInteractionSchema).max(128).default([]),
   actions: z.array(actionSchema).max(32).default([]),
   tree: treeSchema.optional(),
-  masterDetail: z.object({ children: z.array(masterDetailChildSchema).min(1).max(16) }).strict().optional(),
+  masterDetail: z.object({ layout: z.enum(["ERP", "INNER", "TAB"]).optional(), children: z.array(masterDetailChildSchema).min(1).max(16) }).strict().optional(),
 }).strict()
 
 export type OnlineFieldInteractionIR = z.infer<typeof fieldInteractionSchema>
@@ -45,7 +45,7 @@ export type OnlineInteractionIR = {
   fields: OnlineFieldInteractionIR[]
   actions: OnlineActionIR[]
   tree?: { parentField: string; sortField?: string; rootValue?: string | number | null; childrenIndicator: boolean }
-  masterDetail?: { children: Array<{ code: string; targetDefinitionCode: string; targetReleaseId?: string; foreignKeyField: string; display: "TABLE" | "TABS" }> }
+  masterDetail?: { layout?: "ERP" | "INNER" | "TAB"; children: Array<{ code: string; targetDefinitionCode: string; targetReleaseId?: string; foreignKeyField: string; display: "TABLE" | "TABS" }> }
 }
 
 function unique(items: Array<{ code: string }>, label: string): void {

@@ -374,6 +374,10 @@ if (!codegenEngine.includes("onlineFacade.pageManagedRecords")) fail("codegen ma
 if (!codegenEngine.includes("parseActionQuery") || !codegenEngine.includes("ACTION_SCHEMAS")) {
   fail("codegen routes must parse with generated ACTION_SCHEMAS via parseActionQuery")
 }
+if (codegenEngine.includes("MOCK_DATA")) fail("table-driven codegen must persist via Repository, not MOCK_DATA")
+if (!codegenEngine.includes("generateRepository") || !codegenEngine.includes("hasRealDatabase") || !codegenEngine.includes("insertDynamicRow")) {
+  fail("table-driven codegen must emit a Kysely/memory Repository")
+}
 
 const onlineAdapterTestPath = path.join(ROOT, "src", "modules", "online", "backend", "application", "online-codegen.adapter.test.ts")
 const onlineAdapterTest = fs.readFileSync(onlineAdapterTestPath, "utf8")

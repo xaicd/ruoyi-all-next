@@ -13,6 +13,7 @@ import { SystemMenuRepository, type SystemMenuRow } from "@/modules/system/backe
 import { SystemPermissionService } from "@/modules/system/backend/services/permission.service"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 import { issueJwt, verifyJwt, type JwtPayload } from "@/modules/shared/backend/auth/jwt"
+import { registerAdminSession, revokeAdminSession, revokeAdminSessionsForUser } from "@/modules/shared/backend/auth/session-registry"
 import { getPlatformRole, isPlatformUsername, runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { isDependencyUnavailable } from "@/modules/shared/backend/http/api-error"
 import { summarizeError } from "@/modules/shared/backend/lib/observability"
@@ -133,13 +134,22 @@ export class SystemAuthService {
     }
 
     // 签发 JWT
-    const { token, expiresIn } = issueJwt({
+    const { token, expiresIn, jti } = issueJwt({
       sub: user.id,
       username: user.username,
       permissions: jwtPermissions,
       roles,
       tenantId: user.tenantId ?? undefined,
       type: "admin",
+    })
+    registerAdminSession({
+      sessionId: jti,
+      userId: user.id,
+      username: user.username,
+      nickname: user.nickname,
+      userIp: "unknown",
+      loginTime: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + expiresIn * 1000).toISOString(),
     })
 
     domainLog.audit("system.auth.login.success", { targetType: "USER", targetId: user.id })
@@ -201,6 +211,7 @@ export class SystemAuthService {
     const user = await SystemUserRepository.findById(payload.sub)
     if (!user) throw new Error("用户不存在")
     await requireUsableTenant(user, payload.roles.includes(getPlatformRole()))
+    if (payload.jti) revokeAdminSession(payload.jti)
     const issued = issueJwt({
       sub: payload.sub,
       username: payload.username,
@@ -208,6 +219,15 @@ export class SystemAuthService {
       roles: payload.roles,
       tenantId: payload.tenantId,
       type: "admin",
+    })
+    registerAdminSession({
+      sessionId: issued.jti,
+      userId: user.id,
+      username: user.username,
+      nickname: user.nickname,
+      userIp: "unknown",
+      loginTime: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + issued.expiresIn * 1000).toISOString(),
     })
     return issued
   }
@@ -220,7 +240,9 @@ export class SystemAuthService {
     return this.refreshToken(input.token)
   }
 
-  static async logout(_input: Record<string, never> = {}) {
+  static async logout(input: { jti?: string; userId?: string } = {}) {
+    if (input.jti) revokeAdminSession(input.jti)
+    else if (input.userId) revokeAdminSessionsForUser(input.userId)
     return { message: "已退出" }
   }
 }

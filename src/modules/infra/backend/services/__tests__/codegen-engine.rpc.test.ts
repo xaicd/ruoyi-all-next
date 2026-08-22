@@ -33,12 +33,19 @@ describe("CodegenEngineService dual-mode RPC", () => {
     expect(rpc?.content).toContain("registerActionSchemas")
     expect(service?.content).toContain("createDomainFacade")
     expect(service?.content).toContain("never import this Service")
+    expect(service?.content).not.toContain("MOCK_DATA")
+    expect(service?.content).toContain("DemoWidgetRepository")
+    const repository = outputs.find((item) => item.path.endsWith("demo-widget.repository.ts"))
+    expect(repository?.content).toContain("hasRealDatabase")
+    expect(repository?.content).toContain("insertDynamicRow")
+    expect(repository?.content).toContain('TABLE_NAME = "demo_widget"')
     const actions = outputs.find((item) => item.path.endsWith("demo-widget.actions.ts"))
     const route = outputs.find((item) => item.path.endsWith("demo-widget/route.ts"))
     expect(actions?.content).toContain("DEMO_WIDGET_ACTION_SCHEMAS")
     expect(actions?.content).toContain("infra.pageDemoWidget")
     expect(route?.content).toContain("parseActionQuery")
     expect(route?.content).toContain("DEMO_WIDGET_ACTION_SCHEMAS")
+    expect(route?.content).toContain("scope(auth)")
     const manifest = outputs.find((item) => item.path === "codegen-manifest.json")
     expect(manifest?.content).toContain("rpcActions")
   })
@@ -65,6 +72,7 @@ describe("CodegenEngineService dual-mode RPC", () => {
     const actions = outputs.find((item) => item.path.endsWith("check.actions.ts"))!.content
     const page = outputs.find((item) => item.type === "page")!.content
     expect(outputs.some((item) => item.type === "permission")).toBe(false)
+    expect(outputs.some((item) => item.path.includes("/repositories/"))).toBe(false)
     expect(service).toContain("onlineFacade")
     expect(service).toContain("pageManagedRecords")
     expect(service).not.toContain("KyselyOnlineManagedTableRuntimeRepository")
@@ -76,5 +84,22 @@ describe("CodegenEngineService dual-mode RPC", () => {
     expect(route).toContain('new ApiError("FORBIDDEN", "Tenant scope is required")')
     expect(route).toContain("INFRA_ONLINE_DEFINITION_QUERY")
     expect(page).toContain("当前发布版本未启用新增、编辑或删除动作，仅可查询。")
+  })
+
+  it("emits tenant-scoped Kysely persistence when the imported table has tenant_id", () => {
+    const outputs = CodegenEngineService.generate({
+      ...demoConfig,
+      table: {
+        ...demoConfig.table,
+        columns: [
+          ...demoConfig.table.columns,
+          { name: "tenant_id", type: "varchar", tsType: "string", nullable: false, isPrimary: false, isAutoIncrement: false, uiComponent: "HIDDEN" as const },
+        ],
+      },
+    })
+    const repository = outputs.find((item) => item.path.endsWith("demo-widget.repository.ts"))!.content
+    expect(repository).toContain("HAS_TENANT = true")
+    expect(repository).toContain("Tenant scope is required")
+    expect(repository).toContain("eqColumn(\"tenant_id\"")
   })
 })

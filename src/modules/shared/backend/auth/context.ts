@@ -11,6 +11,7 @@ export type AuthContext = {
   isGuest: boolean
   memberId?: string
   memberLevel?: string
+  jti?: string
 }
 
 export class AuthenticationError extends Error {

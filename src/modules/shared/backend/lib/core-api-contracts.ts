@@ -73,7 +73,7 @@ export function registerOnlineApiContracts(): void {
     ["/api/v1/admin/online/definitions/{code}/schema-plans/{planId}", "GET", "获取仅语义化的 Schema Plan", "infra:online-definition:query"],
     ["/api/v1/admin/online/definitions/{code}/schema-plans/{planId}/approve", "POST", "审批安全 Schema Plan，不执行 DDL", "infra:online-definition:migrate"],
     ["/api/v1/admin/online/definitions/{code}/schema-plans/{planId}/apply", "POST", "显式应用已审批的托管物理表 Schema Plan", "infra:online-definition:migrate"],
-    ["/api/v1/admin/online/definitions/{code}/test-sessions", "POST", "从 Published Release 启动沙箱 Online Test", "infra:online-definition:test"],
+    ["/api/v1/admin/online/definitions/{code}/test-sessions", "POST", "从 Published Release 启动沙箱功能测试（单表/树表/主子表 AUTO）", "infra:online-definition:test"],
     ["/api/v1/admin/online/definitions/{code}/test-sessions/{sessionId}", "GET", "获取本人 Online Test Session", "infra:online-definition:test"],
     ["/api/v1/admin/online/definitions/{code}/test-sessions/{sessionId}/records", "GET", "分页查询 Release 绑定的测试记录", "infra:online-definition:test"],
     ["/api/v1/admin/online/definitions/{code}/test-sessions/{sessionId}/records", "POST", "创建经 Release 字段校验的测试记录", "infra:online-definition:test"],

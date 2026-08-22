@@ -1,5 +1,6 @@
-import { createHmac, timingSafeEqual } from "node:crypto"
+import { createHmac, randomUUID, timingSafeEqual } from "node:crypto"
 import { AuthenticationError, type AuthEndpoint } from "./context"
+import { isAdminSessionRevoked } from "./session-registry"
 
 const DEVELOPMENT_SECRET = "ruoyi-all-next-dev-secret-key-2026"
 const MAX_EXPIRES_IN_SECONDS = 24 * 60 * 60
@@ -15,6 +16,7 @@ export type JwtPayload = {
   memberId?: string
   memberLevel?: string
   type: AuthEndpoint
+  jti?: string
   iat: number
   exp: number
   iss?: string
@@ -66,13 +68,14 @@ function assertPayload(value: unknown, endpoint?: AuthEndpoint): asserts value i
   if (endpoint && payload.type !== endpoint) throw new AuthenticationError("JWT 使用场景不匹配")
 }
 
-export function issueJwt(payload: JwtIssuePayload): { token: string; expiresIn: number } {
+export function issueJwt(payload: JwtIssuePayload): { token: string; expiresIn: number; jti: string } {
   const { secret, expiresIn, issuer, audience } = getConfig()
   const now = Math.floor(Date.now() / 1000)
-  const fullPayload: JwtPayload = { ...payload, iat: now, exp: now + expiresIn, ...(issuer ? { iss: issuer } : {}), ...(audience ? { aud: audience } : {}) }
+  const jti = payload.jti ?? randomUUID()
+  const fullPayload: JwtPayload = { ...payload, jti, iat: now, exp: now + expiresIn, ...(issuer ? { iss: issuer } : {}), ...(audience ? { aud: audience } : {}) }
   const header: JwtHeader = { alg: "HS256", typ: "JWT" }
   const signingInput = `${encode(header)}.${encode(fullPayload)}`
-  return { token: `${signingInput}.${signature(signingInput, secret).toString("base64url")}`, expiresIn }
+  return { token: `${signingInput}.${signature(signingInput, secret).toString("base64url")}`, expiresIn, jti }
 }
 
 export function verifyJwt(token: string, endpoint?: AuthEndpoint): JwtPayload {
@@ -94,6 +97,7 @@ export function verifyJwt(token: string, endpoint?: AuthEndpoint): JwtPayload {
   assertPayload(payload, endpoint)
   const now = Math.floor(Date.now() / 1000)
   if (payload.exp <= now || payload.iat > now + 60) throw new AuthenticationError("JWT 已过期或尚未生效")
+  if (isAdminSessionRevoked(payload.jti)) throw new AuthenticationError("登录已失效")
   if (issuer && payload.iss !== issuer) throw new AuthenticationError("JWT issuer 无效")
   if (audience && payload.aud !== audience) throw new AuthenticationError("JWT audience 无效")
   return payload

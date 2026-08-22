@@ -68,6 +68,7 @@ export const infraFileRecordSchema = z.object({
   url: z.string().trim().min(1),
   type: z.string().trim().optional(),
   size: z.coerce.number().int().min(0),
+  contentBase64: z.string().trim().max(8_000_000).optional(),
 })
 
 export const infraResourceIdSchema = z.object({

@@ -3,10 +3,12 @@
  */
 
 import { InfraJobRepository } from "@/modules/infra/backend/repositories/job.repository"
+import { executeJob, startJobScheduler } from "@/modules/infra/backend/lib/job-runtime"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 
 export class InfraJobService {
   static async list(input: any) {
+    startJobScheduler()
     const result = await InfraJobRepository.findList(input)
     domainLog.event("infra.job.list", { page: input.page, total: result.total })
     return result
@@ -53,13 +55,13 @@ export class InfraJobService {
     return { success: true }
   }
 
-  /** 手动触发一次执行（模拟） */
+  /** 手动触发一次真实执行，并写入任务日志 */
   static async trigger(id: string) {
     const existing = await InfraJobRepository.findById(id)
     if (!existing) throw new Error(`任务不存在: ${id}`)
     domainLog.event("infra.job.trigger", { jobId: id, handler: existing.handlerName })
-    // TODO: 接入真实调度引擎
-    return { success: true, message: `任务 ${existing.name} 已触发执行` }
+    const result = await executeJob(existing)
+    return { success: result.status === "SUCCESS", message: result.result }
   }
 
   static async getJob(input: { id: string }) { return this.getById(input.id) }

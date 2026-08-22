@@ -30,3 +30,22 @@ export {
   hasRealDatabase,
   destroyKyselyDb,
 } from "./kysely-client"
+
+export {
+  sqlTable,
+  sqlColumn,
+  mapDbRow,
+  likePredicate,
+  comparePredicate,
+  matchesMemory,
+  alwaysTrue,
+  eqColumn,
+  joinAnd,
+  selectDynamicPage,
+  selectDynamicById,
+  existsDynamicRow,
+  insertDynamicRow,
+  updateDynamicRow,
+  deleteDynamicRow,
+} from "./dynamic-table"
+export type { DynamicPersistScope, DynamicQueryOperator } from "./dynamic-table"

@@ -1,6 +1,6 @@
 # ruoyi-all-next 当前进度与待办
 
-更新时间：2026-08-21
+更新时间：2026-08-22
 
 ## 双模 SDK / RPC 任务清单（持续更新）
 
@@ -29,6 +29,9 @@
 | D16 | DONE | report 测试改 spy Facade | 禁止测试 import infra `DataSourceConfigRepository` |
 | D17 | DONE | 其余域列表查询 schema 合流 | mall/crm/bpm/member/erp/report/mp/wms/mes/ai/iot/im 门面列表 HTTP 改走对应 `ACTION_SCHEMAS` |
 | D24 | DONE | 在线/表驱动生成对齐双模 | 生成 Route 走 `ACTION_SCHEMAS` + `parseActionQuery`/`parseActionBody`；清单带 `rpcActions` 片段；online 测试只断言 IR |
+| D25 | DONE | 表驱动 CRUD 真实持久化 | 生成 Repository：有库走 Kysely 动态表（方言在 shared），无库内存回退；托管表仍走 `onlineFacade` |
+| D26 | DONE | system 剩余 MOCK + infra 文件/调度实装 | 公告/地区/通知模板与消息双模仓储；在线用户接会话注册；本地文件落盘；任务 trigger 真实执行并写日志 |
+| D27 | DONE | Online 功能测试对齐 Jeecg AUTO | 已发布定义进入 `/admin/infra/online-runtime/[code]`：查询/工具栏/列表/表单/详情；树表与主子表 ERP/INNER/TAB 沙箱 |
 | D18 | DONE | system 平台核心 CRUD 双模收口 | users/roles/menus/depts/posts/dicts/tenants 列表与创建走 Facade + 共用 schema |
 | D19 | DONE | infra 平台核心 CRUD 双模收口 | configs/jobs/files/data-source 列表与创建走 Facade + 共用 schema |
 | D20 | DONE | system/infra 单资源写路径 | `[id]` 更新/删除与 infra pages/logs 进 Facade |
@@ -89,6 +92,9 @@
 | /admin/infra/configs | 系统配置 | ✅ CRUD |
 | /admin/infra/job-center | 定时任务 | ✅ CRUD + 手动触发 |
 | /admin/infra/files | 文件管理 | ✅ 列表 + 删除 |
+| /admin/infra/online-definitions | Online 业务建模 | ✅ 列表 + 设计 + 发布 |
+| /admin/infra/online-runtime/[code] | Online 功能测试 | ✅ 已发布 AUTO 沙箱（单表/树表/主子表） |
+| /admin/infra/online-test | AUTO报表 | ✅ 只读参数化 SQL |
 | /admin/pay/orders | 支付订单 | ✅ 列表 + 筛选 |
 | /admin/pay/refunds | 退款订单 | ✅ 列表 + 筛选 |
 
@@ -174,8 +180,8 @@
 - ✅ InfraConfig Repository + Service + API（Kysely + 内存双模）
 - ✅ InfraJob 定时任务 Repository + Service + API（CRUD + 手动触发）
 - ✅ InfraFile 文件管理 Repository + Service + API（上传记录 + 删除）
-- TODO 接入真实调度引擎（cron-based scheduler）
-- TODO 接入真实文件存储（S3/OSS/MinIO）
+- TODO 接入真实调度引擎（cron-based scheduler） → 进程内 cron 匹配 + trigger 真实执行 + job log；外部分布式调度仍可替换
+- TODO 接入真实文件存储（S3/OSS/MinIO） → LOCAL 磁盘已落地（`FILE_STORAGE_DIR`）；对象存储适配器待补
 
 ### P4：类型修复
 - 关闭 ignoreBuildErrors

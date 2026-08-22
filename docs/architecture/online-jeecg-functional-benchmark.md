@@ -180,16 +180,16 @@ Online开发
 
 已观察到的 Jeecg 前端将“功能测试”按模型与页面主题路由到五类 AUTO 页面：默认单表、树表、ERP 主子表、内嵌子表和 Tab 主子表。各页呈现查询、受控工具栏、列表、表单、详情、导入导出等用户体验；表单资产管理还展示数据库导入、视图、授权、同步与代码生成等入口。
 
-本系统当前已实现的只有版本化 Definition / Draft / Release、受控 Puck 视图、语义 Schema Plan，以及 `SINGLE + GENERIC_RECORD` 的 actor-owned sandbox。它不等同于生产 AUTO Runtime：不会访问业务动态表，不能执行 `TREE` 或 `MASTER_DETAIL`，不会运行 Policy / Workflow，也不会执行 Schema Plan。因此，界面、菜单和文档不得把现状描述为已具备 Jeecg 全能力。
+本系统已提供已发布 Definition 的沙箱 AUTO 功能测试：查询、工具栏、列表、新增/编辑弹窗与详情；按模型编译为 `SINGLE_DEFAULT` / `TREE_DEFAULT` / `MASTER_DETAIL_ERP|INNER|TAB`。它仍不是生产 AUTO Runtime：不访问业务动态表，不运行 Policy / Workflow，也不执行 Schema Plan。因此，界面、菜单和文档不得把现状描述为已具备 Jeecg 全能力。
 
 ### 能力范围矩阵
 
 | 能力域 | 独立实现目标 | 需要持久化的受控事实 | 运行前置条件 | 状态 |
 | --- | --- | --- | --- | --- |
 | 表单资产管理 | Definition 检索、分类、创建、复制、归档、版本与设计入口 | Definition 状态、分类、审计与 Release 摘要 | 所有写入走 Draft 乐观锁 | 基础已完成；结构化编辑待完善 |
-| 单表 AUTO | 发布版查询、列表、详情、创建、编辑、删除 | Release Query / List / Form / Detail / Action 配置 | 已验证 Release、受控存储、服务端策略 | 未启用 |
-| 树 AUTO | 分页或懒加载树、添加子节点、排序与安全删除 | Tree Binding、父字段、排序字段、根值、删除策略 | 父子完整性、环检测、原子写入 | 未启用 |
-| 主子 AUTO | ERP、内嵌、Tab 三种受控布局 | Master-detail Binding、子 Release Binding、显示布局 | 发布兼容性与主子事务 | 未启用 |
+| 单表 AUTO | 发布版查询、列表、详情、创建、编辑、删除 | Release Query / List / Form / Detail / Action 配置 | 已验证 Release、受控存储、服务端策略 | 沙箱已启用；生产 MANAGED_TABLE Runtime 未启用 |
+| 树 AUTO | 分页或懒加载树、添加子节点、排序与安全删除 | Tree Binding、父字段、排序字段、根值、删除策略 | 父子完整性、环检测、原子写入 | 沙箱已启用；生产 Runtime 未启用 |
+| 主子 AUTO | ERP、内嵌、Tab 三种受控布局 | Master-detail Binding、子 Release Binding、显示布局 | 发布兼容性与主子事务 | 沙箱已启用；生产 Runtime 未启用 |
 | 字典与引用 | 字典显示、下拉、受控关联选择 | Tenant-scoped Dictionary / Reference Registry | 固定 registry、服务端解析和权限过滤 | 未启用 |
 | 权限策略 | 页面、动作、字段读写和行范围控制 | Typed Policy IR 与投影 | 每个服务端读写操作求值 | 未启用 |
 | 导入导出 | 受控 CSV/XLSX 模板、校验、异步导出 | Import / Export Profile、Job、审计 | Release 字段与策略校验 | 未启用 |
@@ -248,7 +248,7 @@ Draft 保存 → 严格编译/校验 → Semantic Schema Plan → 独立审批
 | `MASTER_DETAIL_INNER` | 同上 | 主表 List 的单行展开子表区域 |
 | `MASTER_DETAIL_TAB` | 同上 | 主表 Create/Edit/Detail 中的受控子表 Tabs |
 
-`Online Test` 的 Definition deep-link 应先修复为准确选择 `?definition=<code>` 的 Published Definition；它仍展示 sandbox 能力。待 `SINGLE_DEFAULT` 生产 Runtime 真正实现后，资产列表的“功能测试 / 打开已发布表单”才可跳转到以上稳定 runtime 路由，不能再跳到任意选项的测试选择页。
+`Online Test` 的 Definition deep-link `?definition=<code>` 会转到该 Definition 的功能测试 Runtime。资产列表与设计页的「功能测试」进入 `/admin/infra/online-runtime/[definitionCode]`，不再进入 AUTO 报表 SQL 页。生产 `MANAGED_TABLE` Runtime 仍未替换沙箱存储。
 
 ### Policy DSL 与受控动作
 
