@@ -377,3 +377,13 @@ node scripts/inject-codegen-output.cjs tmp/codegen-{ClassName}
 **所有用户对话输入与需求内容必须实时记录汇总：**
 - 任何 AI Agent / IDE（Antigravity、Cursor、Windsurf、Claude Code、Copilot、Kiro、Trae、Codex 等）在接收到用户的每次对话输入与需求时，**必须**将用户的原始输入内容完整记录并追加汇总到 `docs/features/sprint-prod/{MMDD}.md`（例如 8月17日记录到 `docs/features/sprint-prod/0817.md`）。
 - 保持需求序号递增与用户输入的完整性，确保需求历史与上下文严格可追溯。
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

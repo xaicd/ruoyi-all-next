@@ -62,7 +62,7 @@ import {
   nextReactMerchantClientTemplate,
   nextReactCEndPageTemplate,
   nextReactCEndClientTemplate,
-} from "./template-presets"
+} from "./template-presets/index"
 
 type TemplateOptions = {
   stack: "next-react"

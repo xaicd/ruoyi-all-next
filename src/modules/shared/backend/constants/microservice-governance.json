@@ -17,7 +17,7 @@
     { "id": "node", "moleculer": "Node", "nestNats": "microservice instance", "status": "DONE", "ref": "src/modules/shared/backend/lib/service-broker.ts", "marker": "nodeID" },
     { "id": "service", "moleculer": "Service", "nestNats": "message handler module", "status": "DONE", "ref": "src/modules/shared/backend/constants/domain-catalog.json", "marker": "publicPrefixes" },
     { "id": "broker", "moleculer": "ServiceBroker", "nestNats": "ClientProxy + microservice", "status": "DONE", "ref": "src/modules/shared/backend/lib/service-broker.ts", "marker": "export const broker" },
-    { "id": "gateway", "moleculer": "API Gateway", "nestNats": "HTTP app / BFF", "status": "DONE", "ref": "src/middleware.ts", "marker": "matchRemoteDomainUpstream" },
+    { "id": "gateway", "moleculer": "API Gateway", "nestNats": "HTTP app / BFF", "status": "DONE", "ref": "src/proxy.ts", "marker": "matchRemoteDomainUpstream" },
     { "id": "transporter", "moleculer": "Transporter", "nestNats": "Transport.NATS", "status": "DONE", "ref": "src/modules/shared/backend/lib/nats-fabric.ts", "marker": "natsRequest" },
     { "id": "action", "moleculer": "broker.call / actions", "nestNats": "@MessagePattern", "status": "DONE", "ref": "src/modules/shared/backend/lib/messaging-protocol.ts", "marker": "commandSubject" },
     { "id": "event", "moleculer": "emit / broadcast", "nestNats": "@EventPattern", "status": "DONE", "ref": "src/modules/shared/backend/lib/event-bus.ts", "marker": "eventBus" },
