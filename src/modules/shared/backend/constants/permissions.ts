@@ -175,6 +175,22 @@ export const PERMISSIONS = {
   AI_TOKEN_DELETE: "ai:token:delete",
   AI_USAGE_VIEW: "ai:usage:query",
   AI_PLAYGROUND_VIEW: "ai:playground:query",
+  // aigw (模型中台与 AI 网关)
+  AIGW_CHANNEL_VIEW: "aigw:channel:view",
+  AIGW_CHANNEL_CREATE: "aigw:channel:create",
+  AIGW_CHANNEL_UPDATE: "aigw:channel:update",
+  AIGW_CHANNEL_DELETE: "aigw:channel:delete",
+  AIGW_MODEL_VIEW: "aigw:model:view",
+  AIGW_MODEL_CREATE: "aigw:model:create",
+  AIGW_MODEL_UPDATE: "aigw:model:update",
+  AIGW_MODEL_DELETE: "aigw:model:delete",
+  AIGW_TOKEN_VIEW: "aigw:token:view",
+  AIGW_TOKEN_CREATE: "aigw:token:create",
+  AIGW_TOKEN_UPDATE: "aigw:token:update",
+  AIGW_TOKEN_DELETE: "aigw:token:delete",
+  AIGW_USAGE_VIEW: "aigw:usage:view",
+  AIGW_PLAYGROUND_VIEW: "aigw:playground:view",
+
   // iot
   IOT_DEVICE_VIEW: "iot:device:view",
   IOT_DEVICE_CREATE: "iot:device:create",

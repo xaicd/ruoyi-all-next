@@ -1,10 +1,11 @@
 import { getKyselyDb, hasRealDatabase } from "@/modules/shared/backend/lib/database"
 import { SEED_MENUS } from "@prisma/data"
 import { withOnlineMenuCatalog, withOnlinePackageMenuIds } from "@/modules/online/contract/menu-catalog"
+import { withAigwMenuCatalog, withAigwPackageMenuIds } from "@/modules/aigw/contract/menu-catalog"
 import { withAiMenuCatalog, withAiPackageMenuIds } from "@/modules/ai/contract/menu-catalog"
 
 // 内存模式也必须具备与 RuoYi 初始化库一致的基础关联，不能只初始化菜单实体。
-const defaultMenuIds = withAiMenuCatalog(withOnlineMenuCatalog(SEED_MENUS)).map((menu) => menu.id)
+const defaultMenuIds = withAiMenuCatalog(withAigwMenuCatalog(withOnlineMenuCatalog(SEED_MENUS))).map((menu) => menu.id)
 const memoryUserRoles = new Map<string, string[]>([
   ["1", ["1"]], // admin → 超级管理员
   ["2", ["2"]], // test → 普通角色
@@ -13,7 +14,6 @@ const memoryRoleMenus = new Map<string, string[]>([
   ["1", defaultMenuIds], // 超级管理员拥有完整系统菜单和按钮权限
   ["4", defaultMenuIds], // 默认租户管理员具备初始化管理权限
 ])
-
 
 function uniqueIds(ids: string[]): string[] {
   return [...new Set(ids)]
@@ -60,10 +60,12 @@ export const SystemPermissionRepository = {
   },
 
   async findRoleMenuIds(roleId: string): Promise<string[]> {
-    if (!hasRealDatabase()) return withAiPackageMenuIds(withOnlinePackageMenuIds(memoryRoleMenus.get(roleId) ?? []))
+    if (!hasRealDatabase()) return withAiPackageMenuIds(withAigwPackageMenuIds(withOnlinePackageMenuIds(memoryRoleMenus.get(roleId) ?? [])))
     const db = await getKyselyDb()
     const rows = await db.selectFrom("system_role_menu").select("menu_id").where("role_id", "=", roleId).execute()
     return rows.map((row) => row.menu_id)
   },
+
+
 
 }

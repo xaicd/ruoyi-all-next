@@ -959,3 +959,148 @@ model OnlineRecord {
   @@index([tenantId, testSessionId, updatedAt])
   @@map("online_record")
 }
+
+// ============================================================
+// AI 域 - 核心表 (new-api 模型中台与网关)
+// ============================================================
+
+/// AI 上游渠道
+model AiChannel {
+  id          String   @id @default(cuid())
+  name        String   @db.VarChar(100)
+  provider    String   @db.VarChar(50)
+  baseUrl     String?  @map("base_url") @db.VarChar(500)
+  apiKey      String?  @map("api_key") @db.VarChar(500)
+  models      Json     @default("[]")
+  modelMap    Json     @default("{}") @map("model_map")
+  weight      Int      @default(100)
+  priority    Int      @default(1)
+  status      String   @default("ACTIVE") @db.VarChar(20)
+  autoDisable Boolean  @default(true) @map("auto_disable")
+  failCount   Int      @default(0) @map("fail_count")
+  protocol    String   @default("openai") @db.VarChar(20)
+  tenantId    String?  @map("tenant_id")
+  createdBy   String?  @map("created_by") @db.VarChar(64)
+  updatedBy   String?  @map("updated_by") @db.VarChar(64)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  deleted     Boolean  @default(false)
+
+  usages      AiUsage[]
+
+  @@index([tenantId])
+  @@index([status, priority])
+  @@map("ai_channel")
+}
+
+/// AI 调用令牌 (API Key / Access Token)
+model AiAccessToken {
+  id          String    @id @default(cuid())
+  name        String    @db.VarChar(100)
+  key         String    @unique @db.VarChar(100)
+  status      String    @default("ACTIVE") @db.VarChar(20)
+  remainQuota BigInt    @default(500000) @map("remain_quota")
+  unlimited   Boolean   @default(false)
+  models      Json      @default("[]")
+  ipAllowlist Json      @default("[]") @map("ip_allowlist")
+  group       String    @default("default") @db.VarChar(50)
+  expiresAt   DateTime? @map("expires_at")
+  tenantId    String?   @map("tenant_id")
+  createdBy   String?   @map("created_by") @db.VarChar(64)
+  updatedBy   String?   @map("updated_by") @db.VarChar(64)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deleted     Boolean   @default(false)
+
+  usages      AiUsage[]
+
+  @@index([tenantId])
+  @@index([key])
+  @@map("ai_access_token")
+}
+
+/// AI 用量流水审计
+model AiUsage {
+  id               String         @id @default(cuid())
+  tokenId          String?        @map("token_id")
+  channelId        String?        @map("channel_id")
+  model            String         @db.VarChar(100)
+  promptTokens     Int            @default(0) @map("prompt_tokens")
+  completionTokens Int            @default(0) @map("completion_tokens")
+  totalTokens      Int            @default(0) @map("total_tokens")
+  success          Boolean        @default(true)
+  latencyMs        Int            @default(0) @map("latency_ms")
+  error            String?        @db.VarChar(500)
+  tenantId         String?        @map("tenant_id")
+  createdAt        DateTime       @default(now()) @map("created_at")
+
+  token            AiAccessToken? @relation(fields: [tokenId], references: [id])
+  channel          AiChannel?     @relation(fields: [channelId], references: [id])
+
+  @@index([tenantId, createdAt])
+  @@index([tokenId])
+  @@index([channelId])
+  @@map("ai_usage")
+}
+
+/// AI 模型目录与定价基准
+model AiModel {
+  id           String   @id @default(cuid())
+  name         String   @db.VarChar(100)
+  modelKey     String   @unique @map("model_key") @db.VarChar(100)
+  provider     String   @db.VarChar(50)
+  inputRatio   Float    @default(1.0) @map("input_ratio")
+  outputRatio  Float    @default(2.0) @map("output_ratio")
+  status       String   @default("ACTIVE") @db.VarChar(20)
+  sort         Int      @default(0)
+  description  String?  @db.VarChar(500)
+  tenantId     String?  @map("tenant_id")
+  createdBy    String?  @map("created_by") @db.VarChar(64)
+  updatedBy    String?  @map("updated_by") @db.VarChar(64)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  deleted      Boolean  @default(false)
+
+  @@index([tenantId])
+  @@index([status])
+  @@map("ai_model")
+}
+
+/// AI 对话会话
+model AiChatConversation {
+  id           String   @id @default(cuid())
+  userId       String   @map("user_id")
+  title        String   @db.VarChar(200)
+  model        String   @db.VarChar(100)
+  systemPrompt String?  @map("system_prompt") @db.Text
+  pinned       Boolean  @default(false)
+  tenantId     String?  @map("tenant_id")
+  createdBy    String?  @map("created_by") @db.VarChar(64)
+  updatedBy    String?  @map("updated_by") @db.VarChar(64)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  deleted      Boolean  @default(false)
+
+  messages     AiChatMessage[]
+
+  @@index([tenantId, userId])
+  @@map("ai_chat_conversation")
+}
+
+/// AI 对话消息
+model AiChatMessage {
+  id             String             @id @default(cuid())
+  conversationId String             @map("conversation_id")
+  role           String             @db.VarChar(20)
+  content        String             @db.Text
+  tokens         Int                @default(0)
+  tenantId       String?            @map("tenant_id")
+  createdAt      DateTime           @default(now()) @map("created_at")
+
+  conversation   AiChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+  @@map("ai_chat_message")
+}
+
+

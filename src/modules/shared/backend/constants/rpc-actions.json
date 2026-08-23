@@ -948,7 +948,44 @@
         }
       ]
     },
+    "aigw": {
+      "actions": [
+        { "method": "ping", "schema": "ping" },
+        { "method": "listChannels", "schema": "aigwPageQuerySchema", "fieldsRef": "pageQuery" },
+        {
+          "method": "createChannel",
+          "schema": "aigwChannelCreateSchema",
+          "fields": [
+            { "name": "name", "type": "string" },
+            { "name": "provider", "type": "string" },
+            { "name": "baseUrl", "type": "string", "optional": true },
+            { "name": "apiKey", "type": "string", "optional": true },
+            { "name": "models", "type": "json" }
+          ]
+        },
+        { "method": "listTokens", "schema": "aigwPageQuerySchema", "fieldsRef": "pageQuery" },
+        {
+          "method": "createToken",
+          "schema": "aigwTokenCreateSchema",
+          "fields": [
+            { "name": "name", "type": "string" },
+            { "name": "remainQuota", "type": "int32", "optional": true }
+          ]
+        },
+        { "method": "listModels", "schema": "aigwPageQuerySchema", "fieldsRef": "pageQuery" },
+        {
+          "method": "relayChat",
+          "schema": "aigwRelayChatSchema",
+          "fields": [
+            { "name": "apiKey", "type": "string" },
+            { "name": "model", "type": "string" },
+            { "name": "messages", "type": "json" }
+          ]
+        }
+      ]
+    },
     "iot": {
+
       "actions": [
         { "method": "ping", "schema": "ping" },
         { "method": "listDevices", "schema": "iotPageQuerySchema", "fields": [

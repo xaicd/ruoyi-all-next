@@ -125,9 +125,15 @@ export class SystemMenuService {
       "infra/job/index": "/admin/infra/job-center", "infra/file/index": "/admin/infra/files", "infra/dataSourceConfig/index": "/admin/infra/db-configs", "infra/codegen/index": "/admin/infra/codegen",
       "infra/build/index": "/admin/infra/page-builder", "infra/online-definition/index": "/admin/infra/online-definitions", "infra/online-test/index": "/admin/infra/online-test", "infra/apiAccessLog/index": "/admin/infra/api-access-log", "infra/apiErrorLog/index": "/admin/infra/api-error-logs",
       "pay/order/index": "/admin/pay/orders", "pay/refund/index": "/admin/pay/refunds", "crm/customer/index": "/admin/crm/customers", "crm/clue/index": "/admin/crm/clues",
-      "ai/channel/index": "/admin/ai/channels", "ai/model/index": "/admin/ai/models", "ai/token/index": "/admin/ai/tokens",
-      "ai/usage/index": "/admin/ai/usages", "ai/playground/index": "/admin/ai/playground", "ai/chat/index": "/admin/ai/chats",
+      "aigw/channel/index": "/admin/aigw/channels", "aigw/model/index": "/admin/aigw/models", "aigw/token/index": "/admin/aigw/tokens",
+      "aigw/usage/index": "/admin/aigw/usages", "aigw/playground/index": "/admin/aigw/playground", "aigw/chat/index": "/admin/aigw/chats",
+      "ai/chat-conversation/index": "/admin/ai/ai-chat-conversation", "ai/chat-role/index": "/admin/ai/ai-chat-role",
+      "ai/knowledge/index": "/admin/ai/ai-knowledge", "ai/image/index": "/admin/ai/ai-image",
+      "ai/mind-map/index": "/admin/ai/ai-mind-map", "ai/write/index": "/admin/ai/ai-write",
+      "ai/workflow/index": "/admin/ai/ai-workflow",
     }
+
+
 
     const iconFor = (icon: string | null, type: string) => icon || (type === "DIR" ? "folder" : "file")
 

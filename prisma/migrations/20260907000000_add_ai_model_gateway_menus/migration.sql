@@ -28,11 +28,11 @@ ON CONFLICT ("id") DO UPDATE SET
 -- Grant AI Gateway menus to Super Admin role ('1')
 INSERT INTO "system_role_menu" ("id", "role_id", "menu_id")
 VALUES
-  (concat('ai-role-1-dir'), '1', 'ai-gateway-dir'),
-  (concat('ai-role-1-channels'), '1', 'ai-gateway-channels'),
-  (concat('ai-role-1-models'), '1', 'ai-gateway-models'),
-  (concat('ai-role-1-tokens'), '1', 'ai-gateway-tokens'),
-  (concat('ai-role-1-usages'), '1', 'ai-gateway-usages'),
-  (concat('ai-role-1-playground'), '1', 'ai-gateway-playground'),
-  (concat('ai-role-1-chats'), '1', 'ai-gateway-chats')
-ON CONFLICT ("role_id", "menu_id") DO NOTHING;
+  ('ai-role-1-dir', '1', 'ai-gateway-dir'),
+  ('ai-role-1-channels', '1', 'ai-gateway-channels'),
+  ('ai-role-1-models', '1', 'ai-gateway-models'),
+  ('ai-role-1-tokens', '1', 'ai-gateway-tokens'),
+  ('ai-role-1-usages', '1', 'ai-gateway-usages'),
+  ('ai-role-1-playground', '1', 'ai-gateway-playground'),
+  ('ai-role-1-chats', '1', 'ai-gateway-chats')
+ON CONFLICT ("id") DO NOTHING;

@@ -7,3 +7,5 @@ export { SEED_DICT_DATA } from "./dict-data.seed-data"
 export { SEED_ROLES } from "./roles.seed-data"
 export { SEED_USERS } from "./users.seed-data"
 export { SEED_TENANT_PACKAGES } from "./tenant-packages.seed-data"
+export { SEED_AI_CHANNELS, SEED_AI_TOKENS, SEED_AI_MODELS } from "./ai.seed-data"
+

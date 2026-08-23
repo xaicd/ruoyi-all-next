@@ -1,6 +1,7 @@
 import type { AiPageQueryInput, AiModelCreateInput, AiChatDeleteInput } from "../validators"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
-import { AiGatewayRelayService } from "./ai-gateway-relay.service"
+import { AigwRelayService } from "@/modules/aigw/backend/services"
+
 
 type AiModel = {
   id: string
@@ -82,20 +83,30 @@ export class AiService {
     messages: { role: string; content: string }[]
     stream?: boolean
   }) {
-    return AiGatewayRelayService.relayChatCompletion(input)
+    return AigwRelayService.relayChatCompletion(input)
   }
 
   static listPublicModels() {
-    return AiGatewayRelayService.listPublicModels()
+    return AigwRelayService.listPublicModels()
   }
 
   static embed(input: { apiKey: string; model?: string; input: string | string[] }) {
-    return AiGatewayRelayService.embed(input)
+    return AigwRelayService.embed(input)
   }
 }
 
-export { AiChannelService } from "./ai-channel.service"
-export { AiAccessTokenService } from "./ai-access-token.service"
-export { AiUsageService } from "./ai-usage.service"
-export { AiGatewayRelayService } from "./ai-gateway-relay.service"
-export { aiGatewayStore } from "./ai-gateway.store"
+export * from "./ai-api-key.service"
+export * from "./ai-chat-conversation.service"
+export * from "./ai-chat-message.service"
+export * from "./ai-chat-role.service"
+export * from "./ai-image.service"
+export * from "./ai-knowledge-document.service"
+export * from "./ai-knowledge-segment.service"
+export * from "./ai-knowledge.service"
+export * from "./ai-mind-map.service"
+export * from "./ai-music.service"
+export * from "./ai-tool.service"
+export * from "./ai-workflow.service"
+export * from "./ai-write.service"
+
+

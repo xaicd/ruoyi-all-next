@@ -1,5 +1,10 @@
 import { SystemMenuRepository, type SystemMenuRow } from "@/modules/system/backend/repositories/menu.repository"
 import { withOnlinePackageMenuIds } from "@/modules/online/contract/menu-catalog"
+import { withAigwPackageMenuIds } from "@/modules/aigw/contract/menu-catalog"
+import { withAiPackageMenuIds } from "@/modules/ai/contract/menu-catalog"
+
+
+
 
 const PLATFORM_CONTROL_MENU_NAMES = new Set(["租户管理", "租户套餐", "数据源配置", "OAuth 2.0", "令牌管理", "应用管理"])
 const PLATFORM_CONTROL_PERMISSION_PREFIXES = ["system:tenant:", "system:tenant-package:", "system:oauth2-", "infra:data-source-config:"]
@@ -90,8 +95,11 @@ export async function getTenantPackageCandidateMenuIds(): Promise<string[]> {
 
 /** Effective tenant authorization: package membership intersected with the safe tenant catalog. */
 export async function getTenantAssignableMenuIds(packageMenuIds: Iterable<string>): Promise<Set<string>> {
-  return new Set((await currentScope()).normalize(withOnlinePackageMenuIds(packageMenuIds)))
+  return new Set((await currentScope()).normalize(withAiPackageMenuIds(withAigwPackageMenuIds(withOnlinePackageMenuIds(packageMenuIds)))))
 }
+
+
+
 
 /** Rejects direct package writes outside the safe tenant catalog and returns a tree-complete selection. */
 export async function validateTenantPackageMenuIds(menuIds: string[]): Promise<string[]> {

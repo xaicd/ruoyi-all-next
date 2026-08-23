@@ -15,9 +15,10 @@
       "publicRpc": "system: getDictDataByType + getPermissionInfoByUser; infra: none"
     },
     "business": {
-      "domains": ["online", "bpm", "pay", "report", "mp", "mall", "member", "crm", "erp", "wms", "mes", "ai", "iot", "im"],
+      "domains": ["online", "bpm", "pay", "report", "mp", "mall", "member", "crm", "erp", "wms", "mes", "ai", "aigw", "iot", "im"],
       "deployable": true
     }
+
   },
   "rpc": {
     "local": {
@@ -294,7 +295,25 @@
       "resilience": { "timeoutMs": 15000, "retryMaxAttempts": 1, "safeMethodsOnly": true, "idempotencyRequired": true }
     },
     {
+      "name": "aigw",
+      "owner": "aigw",
+      "kind": "business",
+      "stage": "B",
+      "contractVersion": "v1",
+      "publicPrefixes": ["/api/v1/admin/aigw", "/api/v1/open/aigw"],
+      "implementation": "local-ts",
+      "upstreamEnv": "RUOYI_DOMAIN_AIGW_UPSTREAM",
+      "defaultPort": 3226,
+      "packable": true,
+      "packKind": "api-only",
+      "dependsOnModules": ["shared"],
+      "independentDatabase": false,
+      "auth": { "audience": "admin", "tenantPolicy": "required" },
+      "resilience": { "timeoutMs": 15000, "retryMaxAttempts": 1, "safeMethodsOnly": true, "idempotencyRequired": true }
+    },
+    {
       "name": "iot",
+
       "owner": "iot",
       "kind": "business",
       "stage": "B",

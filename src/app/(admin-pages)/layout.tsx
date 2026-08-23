@@ -166,15 +166,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-100 text-slate-900 font-sans antialiased">
+    <div className="flex h-screen overflow-hidden bg-slate-50 text-slate-900 font-sans antialiased">
       {/* Sidebar */}
       <aside
-        className={`flex flex-col border-r border-slate-200 bg-white transition-all duration-200 ${
+        className={`flex flex-col border-r border-slate-200 bg-white transition-all duration-200 shadow-sm ${
           collapsed ? "w-16" : "w-64"
         }`}
       >
         {/* Brand Header */}
-        <div className="flex h-14 items-center justify-between border-b border-slate-200 px-4">
+        <div className="flex h-14 items-center justify-between border-b border-slate-100 px-4 bg-gradient-to-r from-white to-blue-50/30">
           <BrandMark
             size={28}
             withName={!collapsed}
@@ -201,10 +201,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         {/* Menu Search Box (when expanded) */}
         {!collapsed && (
-          <div className="border-b border-slate-100 p-2.5">
+          <div className="border-b border-slate-100 p-2.5 bg-slate-50/50">
             <div className="relative">
               <svg
-                className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400"
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-blue-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -217,7 +217,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="搜索菜单 (Ctrl+K)..."
-                className="h-8 w-full rounded-lg border border-slate-200 bg-slate-50 pl-8 pr-7 text-xs text-slate-900 placeholder-slate-400 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500"
+                className="h-8 w-full rounded-lg border border-slate-200 bg-white pl-8 pr-7 text-xs text-slate-900 placeholder-slate-400 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
               />
               {searchQuery && (
                 <button
@@ -233,7 +233,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         )}
 
         {/* Menu Navigation Area */}
-        <nav className="flex-1 overflow-y-auto px-2.5 py-2.5 space-y-1 custom-scrollbar">
+        <nav className="flex-1 overflow-y-auto px-2 py-2 space-y-1 custom-scrollbar">
           {/* 1. Search Results Mode */}
           {searchQuery.trim() !== "" ? (
             <div className="space-y-1">
@@ -256,15 +256,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     onClick={() => setSearchQuery("")}
                     className={`flex items-center justify-between rounded-lg px-2.5 py-2 text-xs transition ${
                       pathname === item.href
-                        ? "bg-blue-50 font-semibold text-blue-700"
-                        : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+                        ? "bg-blue-600 font-semibold text-white shadow-sm shadow-blue-500/25"
+                        : "text-slate-700 hover:bg-blue-50 hover:text-blue-600"
                     }`}
                   >
                     <div className="flex items-center gap-2 truncate">
-                      <MenuIcon label={item.label} icon={item.icon} isSub className={pathname === item.href ? "text-blue-600" : "text-slate-400"} />
+                      <MenuIcon label={item.label} icon={item.icon} isSub isActive={pathname === item.href} />
                       <span className="truncate">{item.label}</span>
                     </div>
-                    <span className="text-[10px] text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded font-mono shrink-0 ml-1">
+                    <span className={`text-[10px] px-1.5 py-0.5 rounded font-mono shrink-0 ml-1 ${
+                      pathname === item.href ? "bg-blue-700 text-blue-100" : "bg-slate-100 text-slate-500"
+                    }`}>
                       {item.groupTitle}
                     </span>
                   </Link>
@@ -276,8 +278,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <>
               {/* Pinned / Favorite Menus Section */}
               {!collapsed && favoriteMenus.length > 0 && (
-                <div className="mb-3 border-b border-slate-100 pb-2">
-                  <div className="px-2.5 py-1 text-[11px] font-semibold text-slate-400 flex items-center gap-1">
+                <div className="mb-2.5 rounded-lg bg-blue-50/40 p-1.5 border border-blue-100/60">
+                  <div className="px-2 py-0.5 text-[11px] font-semibold text-blue-700 flex items-center gap-1">
                     <span>📌 常用快捷菜单</span>
                   </div>
                   <div className="space-y-0.5 mt-1">
@@ -285,20 +287,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                       <Link
                         key={`fav-${fav.id}`}
                         href={fav.href}
-                        className={`group flex items-center justify-between rounded-lg px-2.5 py-1.5 text-xs transition ${
+                        className={`group flex items-center justify-between rounded-md px-2 py-1.5 text-xs transition ${
                           pathname === fav.href
-                            ? "bg-blue-50 font-semibold text-blue-700"
-                            : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                            ? "bg-blue-600 font-semibold text-white shadow-sm shadow-blue-500/25"
+                            : "text-slate-700 hover:bg-blue-100/70 hover:text-blue-700"
                         }`}
                       >
                         <div className="flex items-center gap-2 truncate">
-                          <MenuIcon label={fav.label} icon={fav.icon} isSub className={pathname === fav.href ? "text-blue-600" : "text-slate-400"} />
+                          <MenuIcon label={fav.label} icon={fav.icon} isSub isActive={pathname === fav.href} />
                           <span className="truncate">{fav.label}</span>
                         </div>
                         <button
                           type="button"
                           onClick={(e) => toggleFavorite(fav.id, e)}
-                          className="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-500 text-xs transition"
+                          className={`opacity-0 group-hover:opacity-100 text-xs transition ${
+                            pathname === fav.href ? "text-blue-200 hover:text-white" : "text-slate-400 hover:text-red-500"
+                          }`}
                           title="取消置顶"
                         >
                           ×
@@ -325,13 +329,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         {/* Bottom Collapse & Lock Control */}
-        <div className="border-t border-slate-200 p-2 flex items-center gap-1">
+        <div className="border-t border-slate-100 p-2 bg-slate-50/50 flex items-center gap-1">
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="flex-1 flex items-center justify-center rounded-lg py-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 text-xs"
+            className="flex-1 flex items-center justify-center rounded-lg py-1.5 text-slate-500 transition hover:bg-blue-50 hover:text-blue-600 text-xs font-medium"
             title={collapsed ? "展开侧边栏" : "收起侧边栏"}
           >
-            <svg className={`h-4 w-4 transition-transform ${collapsed ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className={`h-4 w-4 transition-transform ${collapsed ? "rotate-180 text-blue-600" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
             </svg>
             {!collapsed && <span className="ml-1.5">收起侧栏</span>}
@@ -342,24 +346,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Main Content Viewport */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top Navbar */}
-        <header className="flex h-14 items-center justify-between border-b border-slate-200 bg-white px-6">
+        <header className="flex h-14 items-center justify-between border-b border-slate-200 bg-white px-6 shadow-sm">
           <div className="flex items-center gap-2 text-xs text-slate-500">
-            <Link href="/" className="hover:text-blue-600 transition">门户首页</Link>
+            <Link href="/" className="hover:text-blue-600 transition font-medium">门户首页</Link>
             <span className="text-slate-300">/</span>
             <span className="font-semibold text-slate-800">{getPageTitle(pathname, menuGroups)}</span>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1">
-              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white">
+            <div className="flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50/50 px-3 py-1">
+              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white shadow-sm shadow-blue-500/20">
                 {username.charAt(0).toUpperCase()}
               </div>
-              <span className="text-xs font-medium text-slate-700">{username}</span>
+              <span className="text-xs font-semibold text-slate-800">{username}</span>
             </div>
 
             <button
               onClick={handleLogout}
-              className="rounded-lg border border-slate-200 px-2.5 py-1 text-xs text-slate-600 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+              className="rounded-lg border border-slate-200 px-2.5 py-1 text-xs font-medium text-slate-600 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
             >
               退出
             </button>
@@ -367,7 +371,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </header>
 
         {/* Content Area */}
-        <main className="flex-1 overflow-y-auto p-6 bg-slate-50">
+        <main className="flex-1 overflow-y-auto p-6 bg-slate-50/70">
           {children}
         </main>
       </div>
@@ -400,7 +404,6 @@ function MenuGroup({
     if (hasActiveChild) setOpen(true)
   }, [hasActiveChild])
 
-
   if (collapsed) {
     const links = flattenLinks(group.children)
     return (
@@ -413,17 +416,24 @@ function MenuGroup({
   }
 
   return (
-    <div className="mb-1.5">
+    <div className="mb-1">
       <button
         onClick={() => setOpen(!open)}
-        className={`flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-xs font-semibold transition ${
-          hasActiveChild ? "text-blue-700 bg-blue-50/60" : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+        className={`flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-xs font-semibold transition ${
+          hasActiveChild
+            ? "text-blue-700 bg-blue-50/80 font-bold"
+            : "text-slate-700 hover:bg-blue-50/50 hover:text-blue-600"
         }`}
       >
-        <MenuIcon label={group.title} icon={group.icon} className={hasActiveChild ? "text-blue-600" : "text-slate-500"} />
+        <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md transition ${
+          hasActiveChild ? "bg-blue-600 text-white shadow-sm shadow-blue-500/20" : "bg-blue-50 text-blue-600"
+        }`}>
+          <MenuIcon label={group.title} icon={group.icon} isActive={hasActiveChild} isDirectory />
+        </div>
         <span className="flex-1 truncate text-left">{group.title}</span>
-        <Chevron open={open} />
+        <Chevron open={open} active={hasActiveChild} />
       </button>
+
       {open && (
         <MenuTreeItems
           items={group.children}
@@ -451,7 +461,7 @@ function MenuTreeItems({
   onToggleFavorite: (id: string, e: React.MouseEvent) => void
 }) {
   return (
-    <ul className={`mt-0.5 space-y-0.5 ${level === 1 ? "ml-3 border-l border-slate-200/80 pl-2" : "ml-2.5 border-l border-slate-200/80 pl-2"}`}>
+    <ul className={`mt-0.5 space-y-0.5 ${level === 1 ? "ml-3.5 border-l-2 border-blue-100 pl-2" : "ml-2.5 border-l border-blue-100 pl-2"}`}>
       {items.map((item) => (
         <MenuTreeItem
           key={item.id}
@@ -496,12 +506,12 @@ function MenuTreeItem({
       <button
         onClick={() => setOpen(!open)}
         className={`flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-xs transition ${
-          active ? "font-semibold text-blue-700" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+          active ? "font-semibold text-blue-700 bg-blue-50/50" : "text-slate-600 hover:bg-blue-50/40 hover:text-blue-600"
         }`}
       >
-        <MenuIcon label={item.label} icon={item.icon} isSub className={active ? "text-blue-600" : "text-slate-400"} />
+        <MenuIcon label={item.label} icon={item.icon} isSub isActive={active} />
         <span className="flex-1 truncate text-left">{item.label}</span>
-        <Chevron open={open} />
+        <Chevron open={open} active={active} />
       </button>
       {open && (
         <MenuTreeItems
@@ -533,14 +543,22 @@ function SidebarLink({
   const isFav = favoriteIds.includes(item.id)
 
   const className = collapsed
-    ? `mb-1 flex items-center justify-center rounded-lg py-2 transition ${active ? "bg-blue-50 text-blue-600" : "text-slate-500 hover:bg-slate-100 hover:text-slate-900"}`
-    : `group flex items-center justify-between rounded-lg px-2.5 py-1.5 text-xs transition ${active ? "bg-blue-50 font-semibold text-blue-600" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"}`
+    ? `mb-1 flex items-center justify-center rounded-lg py-2 transition ${
+        active
+          ? "bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-semibold"
+          : "text-slate-600 hover:bg-blue-50 hover:text-blue-600"
+      }`
+    : `group flex items-center justify-between rounded-lg px-2.5 py-1.5 text-xs transition ${
+        active
+          ? "bg-blue-600 font-semibold text-white shadow-sm shadow-blue-500/25"
+          : "text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+      }`
 
   if (!item.href) {
     return (
-      <span title={`${item.label}（尚未开通）`} className={`${className} opacity-50 cursor-not-allowed`}>
+      <span title={`${item.label}（尚未开通）`} className={`${className} opacity-40 cursor-not-allowed`}>
         <div className="flex items-center gap-2 truncate">
-          <MenuIcon label={item.label} icon={item.icon} isSub className={active ? "text-blue-600" : "text-slate-400"} />
+          <MenuIcon label={item.label} icon={item.icon} isSub isActive={active} />
           {!collapsed && <span className="truncate">{item.label}</span>}
         </div>
       </span>
@@ -550,7 +568,7 @@ function SidebarLink({
   return (
     <Link href={item.href} title={collapsed ? item.label : undefined} className={className}>
       <div className="flex items-center gap-2 truncate">
-        <MenuIcon label={item.label} icon={item.icon} isSub className={active ? "text-blue-600" : "text-slate-400"} />
+        <MenuIcon label={item.label} icon={item.icon} isSub isActive={active} />
         {!collapsed && <span className="truncate">{item.label}</span>}
       </div>
 
@@ -559,7 +577,13 @@ function SidebarLink({
           type="button"
           onClick={(e) => onToggleFavorite(item.id, e)}
           className={`opacity-0 group-hover:opacity-100 transition p-0.5 rounded text-xs ${
-            isFav ? "opacity-100 text-amber-500" : "text-slate-400 hover:text-amber-500"
+            isFav
+              ? active
+                ? "opacity-100 text-amber-300 hover:text-amber-200"
+                : "opacity-100 text-amber-500 hover:text-amber-600"
+              : active
+              ? "text-blue-200 hover:text-white"
+              : "text-slate-400 hover:text-amber-500"
           }`}
           title={isFav ? "取消快捷常用置顶" : "点击锁定置顶到常用"}
         >
@@ -573,8 +597,31 @@ function SidebarLink({
 }
 
 /** Modern, crisp SVG Icon Component mapping domain titles to clean vector icons */
-function MenuIcon({ label, icon, isSub = false, className = "" }: { label: string; icon?: string; isSub?: boolean; className?: string }) {
-  const c = `h-4 w-4 shrink-0 stroke-[1.75] ${className}`
+function MenuIcon({
+  label,
+  icon,
+  isSub = false,
+  isActive = false,
+  isDirectory = false,
+  className = "",
+}: {
+  label: string
+  icon?: string
+  isSub?: boolean
+  isActive?: boolean
+  isDirectory?: boolean
+  className?: string
+}) {
+  const iconSize = isDirectory ? "h-3.5 w-3.5" : "h-4 w-4"
+  const colorClass = isActive
+    ? isDirectory
+      ? "text-white"
+      : "text-white"
+    : isSub
+    ? "text-blue-500 group-hover:text-blue-600"
+    : "text-blue-600"
+
+  const c = `${iconSize} shrink-0 stroke-[1.75] ${colorClass} ${className}`
 
   if (label.includes("系统管理") || label.includes("权限")) {
     return <svg className={c} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
@@ -625,7 +672,7 @@ function MenuIcon({ label, icon, isSub = false, className = "" }: { label: strin
   // Default subtle folder / document icon for sub-items
   if (isSub) {
     return (
-      <svg className="h-3.5 w-3.5 shrink-0 text-slate-400 stroke-[1.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg className={`${iconSize} shrink-0 stroke-[1.75] ${colorClass}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
       </svg>
     )
@@ -638,9 +685,11 @@ function MenuIcon({ label, icon, isSub = false, className = "" }: { label: strin
   )
 }
 
-function Chevron({ open }: { open: boolean }) {
+function Chevron({ open, active = false }: { open: boolean; active?: boolean }) {
   return (
-    <svg className={`h-3 w-3 shrink-0 text-slate-400 transition-transform ${open ? "rotate-90" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg className={`h-3 w-3 shrink-0 transition-transform ${
+      open ? "rotate-90 text-blue-600 font-bold" : active ? "text-blue-500" : "text-slate-400"
+    }`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
     </svg>
   )

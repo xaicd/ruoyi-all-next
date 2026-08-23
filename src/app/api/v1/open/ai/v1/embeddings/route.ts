@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { AiGatewayRelayService } from "@/modules/ai/backend/services/ai-gateway-relay.service"
+import { AigwRelayService } from "@/modules/aigw/backend/services"
 import { aiEmbeddingSchema } from "@/modules/ai/backend/validators"
 import { readOpenApiKey } from "@/modules/ai/backend/lib/open-api-key"
 
@@ -20,12 +20,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: { message: "缺少令牌" } }, { status: 401 })
     }
     const body = aiEmbeddingSchema.parse(await request.json())
-    const data = AiGatewayRelayService.embed({
+    const data = AigwRelayService.embed({
       apiKey,
       model: body.model,
       input: body.input,
     })
     return NextResponse.json(data)
+
   } catch (error) {
     return fail(error)
   }

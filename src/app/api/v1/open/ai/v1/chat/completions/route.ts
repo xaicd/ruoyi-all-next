@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { AiGatewayRelayService } from "@/modules/ai/backend/services/ai-gateway-relay.service"
+import { AigwRelayService } from "@/modules/aigw/backend/services"
 import { aiRelayChatSchema } from "@/modules/ai/backend/validators"
 import { clientIp, readOpenApiKey } from "@/modules/ai/backend/lib/open-api-key"
 
@@ -16,14 +16,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: { message: "缺少令牌", type: "invalid_request_error" } }, { status: 401 })
     }
     const body = aiRelayChatSchema.parse(await request.json())
-    const data = await AiGatewayRelayService.relayChatCompletion({
+    const data = await AigwRelayService.relayChatCompletion({
       apiKey,
       model: body.model,
-      messages: body.messages,
+      messages: body.messages as any,
       stream: body.stream,
       clientIp: clientIp(request),
     })
+
     return NextResponse.json(data)
+
   } catch (error) {
     return fail(error)
   }
