@@ -108,25 +108,31 @@
 4. 复杂流程建议统一执行管道：authorize -> guard -> transaction -> log。
 5. 规范文档：docs/guides/service-design-patterns.md。
 
-## 5. Domain-First 研发流程
+## 5. Domain-First 研发流程与“开箱即用”闭环规范（强制）
 
-每个域按六要素推进，不允许跳步宣称完成。
+每个域与新功能按完整闭环推进，**严禁仅生成只读骨架或占位页面（Forbidden Skeleton-Only Delivery）**。
 
-1. API
-2. Service
-3. Validator
-4. Page
-5. Permission
-6. Log + Test
+### 5.1 完整六要素交付标准
+1. **API 层（Full Verbs）**：必须完整实现 `GET`（分页查询）、`POST`（创建）、`PUT`（更新）、`DELETE`（删除），禁止仅写读接口遗漏写与删。
+2. **Service & Repository 层**：必须具备 `page`、`get`、`create`、`update`、`delete` 全套方法，支持多租户隔离与操作审计。
+3. **Validator 层**：写操作与查询必须有完整的 Zod Schema 校验。
+4. **Page & Component 交互层（禁止只读无按钮页面）**：
+   - 必须配备 **顶部操作栏**（`+ 新增` 按钮、刷新、多条件搜索与重置）；
+   - 必须配备 **高辨识度状态 Badge**（如 ACTIVE 绿色、DISABLED 灰色）与 Key 复制工具；
+   - 必须配备 **表格操作列（Actions）**：至少包含 `[编辑]`、`[启用/禁用]`、`[删除]` 及业务专有按钮（如连通性测试、联调探测）；
+   - 必须配备 **新增/编辑弹窗表单（Modal Form）**，支持参数录入与表单校验，确保用户开箱即用。
+5. **Permission 权限层**：完整绑定 `VIEW`、`CREATE`、`UPDATE`、`DELETE` 权限码。
+6. **Log + Test 层**：至少包含关键路径与 CRUD 自动化测试。
 
-标准顺序：
-
-1. 先读扫描证据与迁移作战板，确认域边界。
-2. 用模板生成最小闭环骨架。
-3. 补齐权限、日志与关键路径测试。
-4. 回写文档与矩阵状态。
+标准推进顺序：
+1. 确认域边界与数据模型（多租户 + 审计 6 大字段）。
+2. 构建完整的 API、Service、Repository 与 Validator（GET/POST/PUT/DELETE）。
+3. 构建完整交互的 Frontend API 与前端管理页面（含操作列与 CRUD 弹窗）。
+4. 补齐权限、日志与自动化测试。
+5. 门禁检查与文档记录回写。
 
 ## 6. 能力同步与治理门禁
+
 
 1. 能力状态必须对照 docs/architecture/ruoyi-all-next-capability-matrix.md。
 2. 域声明必须同步 docs/architecture/ruoyi-all-next-domain-governance.md。
@@ -150,17 +156,20 @@ CI 前置检查：
 
 以下 Skill 为 all-next 的治理必备项，AGENTS 必须注册并在对应场景启用：
 
-1. database-compatibility：docs/skills/ruoyi-all-next/database-compatibility.SKILL.md
-2. ui-framework-governance：docs/skills/ruoyi-all-next/ui-framework-governance.SKILL.md
-3. microservice-evolution：docs/skills/ruoyi-all-next/microservice-evolution.SKILL.md
-4. ui-ux-pro-max：.kiro/steering/ui-ux-pro-max/SKILL.md
+1. new-feature：.agents/skills/new-feature/SKILL.md
+2. database-compatibility：docs/skills/ruoyi-all-next/database-compatibility.SKILL.md
+3. ui-framework-governance：docs/skills/ruoyi-all-next/ui-framework-governance.SKILL.md
+4. microservice-evolution：docs/skills/ruoyi-all-next/microservice-evolution.SKILL.md
+5. ui-ux-pro-max：.kiro/steering/ui-ux-pro-max/SKILL.md
 
 启用规则：
 
-1. 涉及数据库选型、兼容等级或迁移时，启用 database-compatibility。
-2. 涉及页面模板、组件结构或交互规范时，启用 ui-framework-governance + ui-ux-pro-max。
-3. 涉及域拆分、独立发布或阶段演进时，启用 microservice-evolution。
-4. 涉及 C 端页面、视觉设计、UX 交互或前端组件开发时，必须启用 ui-ux-pro-max。
+1. 涉及新增功能、业务模块扩展或新表落地时，**必须强制启用 new-feature**，执行 RBAC 权限、全动词 API、单行 UI 规范与 CRUD 弹窗一体化交付。
+2. 涉及数据库选型、兼容等级或迁移时，启用 database-compatibility。
+3. 涉及页面模板、组件结构或交互规范时，启用 ui-framework-governance + ui-ux-pro-max。
+4. 涉及域拆分、独立发布或阶段演进时，启用 microservice-evolution。
+5. 涉及 C 端页面、视觉设计、UX 交互或前端组件开发时，必须启用 ui-ux-pro-max。
+
 
 ## 7. 扫描与迁移节奏（证据驱动）
 
