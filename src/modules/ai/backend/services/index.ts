@@ -47,7 +47,7 @@ export class AiService {
 
   static async createModel(input: AiModelCreateInput) {
     const exists = MOCK_AI_MODELS.find((m) => m.name === input.name)
-    if (exists) throw new Error("Model name exists")
+    if (exists) throw new Error("模型名称已存在")
     const id = `ai-model-${Date.now()}`
     const model: AiModel = { id, name: input.name, platform: input.platform, model: input.model, apiUrl: input.apiUrl, temperature: input.temperature, maxTokens: input.maxTokens, enabled: true, createdAt: new Date().toISOString() }
     MOCK_AI_MODELS.push(model)
@@ -69,7 +69,7 @@ export class AiService {
 
   static async deleteChat(input: AiChatDeleteInput) {
     const idx = MOCK_AI_CHATS.findIndex((c) => c.id === input.chatId)
-    if (idx === -1) throw new Error("Chat not found")
+    if (idx === -1) throw new Error("对话记录不存在")
     const [removed] = MOCK_AI_CHATS.splice(idx, 1)
     domainLog.event("ai.chat.delete", { chatId: input.chatId })
     domainLog.audit("ai.chat.delete", { targetType: "AI_CHAT", targetId: input.chatId, title: removed.title })
@@ -87,6 +87,10 @@ export class AiService {
 
   static listPublicModels() {
     return AiGatewayRelayService.listPublicModels()
+  }
+
+  static embed(input: { apiKey: string; model?: string; input: string | string[] }) {
+    return AiGatewayRelayService.embed(input)
   }
 }
 

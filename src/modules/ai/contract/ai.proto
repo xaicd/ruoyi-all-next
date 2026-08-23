@@ -42,10 +42,29 @@ message DeleteChatRequest {
   string chat_id = 1 [json_name = "chatId"];
 }
 
+message RelayChatCompletionRequest {
+  string api_key = 1 [json_name = "apiKey"];
+  string model = 2;
+  json messages = 3;
+}
+
+message ListPublicModelsRequest {
+  optional int32 n = 1;
+}
+
+message EmbedRequest {
+  string api_key = 1 [json_name = "apiKey"];
+  optional string model = 2;
+  json input = 3;
+}
+
 service AiService {
   rpc Ping(PingRequest) returns (JsonReply);
   rpc ListModels(ListModelsRequest) returns (JsonReply);
   rpc CreateModel(CreateModelRequest) returns (JsonReply);
   rpc ListChats(ListChatsRequest) returns (JsonReply);
   rpc DeleteChat(DeleteChatRequest) returns (JsonReply);
+  rpc RelayChatCompletion(RelayChatCompletionRequest) returns (JsonReply);
+  rpc ListPublicModels(ListPublicModelsRequest) returns (JsonReply);
+  rpc Embed(EmbedRequest) returns (JsonReply);
 }

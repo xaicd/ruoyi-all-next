@@ -5,6 +5,8 @@ import {
   aiModelCreateSchema,
   aiChatDeleteSchema,
   aiRelayChatSchema,
+  empty,
+  aiEmbeddingSchema,
 } from "../backend/validators"
 
 export const aiPingSchema = z.object({
@@ -18,7 +20,8 @@ export const AI_ACTION_SCHEMAS = {
   "ai.listChats": aiPageQuerySchema,
   "ai.deleteChat": aiChatDeleteSchema,
   "ai.relayChatCompletion": aiRelayChatSchema,
-  "ai.listPublicModels": z.object({}),
+  "ai.listPublicModels": empty,
+  "ai.embed": aiEmbeddingSchema,
 } as const
 
 export function registerActionSchemas() {

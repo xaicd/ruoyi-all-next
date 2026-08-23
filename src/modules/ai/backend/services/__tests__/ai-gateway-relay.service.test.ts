@@ -51,6 +51,16 @@ describe("AI 网关（对齐 new-api 能力，自研）", () => {
     expect(result.choices[0]?.message.content).toContain("retry")
   })
 
+  it("embeddings 占位接口可记账", () => {
+    const result = AiGatewayRelayService.embed({
+      apiKey: "sk-ruoyi-demo-gateway",
+      model: "mock-chat",
+      input: "hello",
+    })
+    expect(result.data[0]?.embedding).toHaveLength(8)
+    expect(result.usage.prompt_tokens).toBeGreaterThan(0)
+  })
+
   it("新建令牌只回一次明文 key", async () => {
     const created = await AiAccessTokenService.create({ name: "临时令牌" })
     expect(created.key.startsWith("sk-ruoyi-")).toBe(true)

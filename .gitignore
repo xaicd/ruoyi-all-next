@@ -96,7 +96,7 @@ next-env.d.ts
 **/*.keystore
 **/*.p12
 **/*.p8
-
+gen/**
 # IDE
 .idea/
 *.iml

@@ -1,4 +1,3 @@
-import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 import { AiAccessTokenService } from "./ai-access-token.service"
 import { AiChannelService } from "./ai-channel.service"
 import { AiUsageService } from "./ai-usage.service"
@@ -69,6 +68,35 @@ export class AiGatewayRelayService {
     return {
       object: "list" as const,
       data: AiChannelService.listActiveModels().map((id) => ({ id, object: "model" as const, owned_by: "ruoyi-ai" })),
+    }
+  }
+
+  static embed(input: { apiKey: string; model?: string; input: string | string[] }) {
+    const model = input.model || "mock-chat"
+    const token = AiAccessTokenService.assertUsable(input.apiKey, { model })
+    const text = Array.isArray(input.input) ? input.input.join(" ") : input.input
+    const promptTokens = estimateTokens(text)
+    AiAccessTokenService.consume(token.id, promptTokens)
+    AiUsageService.record({
+      tokenId: token.id,
+      channelId: "embed-mock",
+      model,
+      promptTokens,
+      completionTokens: 0,
+      success: true,
+      latencyMs: 0,
+    })
+    return {
+      object: "list" as const,
+      data: [
+        {
+          object: "embedding" as const,
+          index: 0,
+          embedding: Array.from({ length: 8 }, (_, index) => Number(((index + 1) / 10).toFixed(4))),
+        },
+      ],
+      model,
+      usage: { prompt_tokens: promptTokens, total_tokens: promptTokens },
     }
   }
 }

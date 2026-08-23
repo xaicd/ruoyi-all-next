@@ -936,7 +936,16 @@
             { "name": "messages", "type": "json" }
           ]
         },
-        { "method": "listPublicModels", "schema": "empty" }
+        { "method": "listPublicModels", "schema": "empty" },
+        {
+          "method": "embed",
+          "schema": "aiEmbeddingSchema",
+          "fields": [
+            { "name": "apiKey", "type": "string" },
+            { "name": "model", "type": "string", "optional": true },
+            { "name": "input", "type": "json" }
+          ]
+        }
       ]
     },
     "iot": {

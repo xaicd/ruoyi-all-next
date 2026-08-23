@@ -1,6 +1,9 @@
 import { z } from "zod"
 
+export const empty = z.object({})
+
 export const aiPageQuerySchema = z.object({
+
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(100).default(20),
   keyword: z.string().trim().max(100).optional(),
