@@ -13,7 +13,9 @@
     "db:down": "docker compose -f deploy/docker-compose.dev.yml stop postgres",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
+    "db:backup": "node scripts/backup-db.cjs",
     "db:seed": "tsx scripts/seed-postgresql.ts",
+
     "catalog:sync:ruoyi": "node scripts/extract-seed-from-sql.cjs",
     "health-check": "bash ./scripts/health-check.sh",
     "admin:routes:manifest": "node scripts/generate-admin-route-manifest.cjs",

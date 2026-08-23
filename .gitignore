@@ -121,7 +121,12 @@ public/uploads/
 public/sounds/
 public/dvr/
 
+# 数据库自动备份（必须排除在 git 之外）
+backups/
+*.dump
+backup_*.sql
+db_backup_*.sql
 
 ruoyi/**
 apps/ruoyi-all-next/
-apps/ruoyi
+apps/ruoyi

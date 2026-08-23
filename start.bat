@@ -104,6 +104,7 @@ echo [STEP] Applying database migrations and seed data...
 call npm run db:generate
 call npm run db:migrate
 call npm run db:seed
+call npm run db:backup
 
 echo [OK] Infrastructure is ready.
 goto :app
@@ -114,7 +115,9 @@ docker compose -f deploy/docker-compose.dev.yml up -d --wait postgres redis
 call npm run db:generate
 call npm run db:migrate
 call npm run db:seed
+call npm run db:backup
 echo [OK] Infrastructure containers are running.
+
 pause
 goto :end
 
