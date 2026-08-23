@@ -409,6 +409,41 @@ node scripts/inject-codegen-output.cjs tmp/codegen-{ClassName}
   4. **目标设计文档保护**：自动识别并完好保留目标目录下已有的业务规格文档（如 `应算通-*`、`*.md`），严禁覆盖用户既有设计；
   5. **开箱即用**：产出工程可直接通过 `start.bat` / `./start.sh` 一键运行，无需人工执行初始化 SQL！后续有新表结构变更仅需执行增量 `npm run db:migrate`。
 
+### 17. 目录职责划分与基座/业务边界规范（Core Base vs Business Domain）
+
+为了保证业务工程（如 `agent-zqall`）与通用基座（`ruoyi-all-next`）之间既能**独立演进**，又能**通过版本化升级平滑同步底座能力与双向反哺功能**，严格执行以下目录与边界规范：
+
+#### 17.1 目录职责分类矩阵
+
+| 目录属性 | 包含文件与路径 | 职责定位与变更权限 | 升级与反哺规则 |
+|---|---|---|---|
+| 🟢 **业务开发区<br>(Business Zone)** | • `src/modules/<domain>/`<br>• `src/app/api/v1/admin/<domain>/`<br>• `src/app/(admin-pages)/admin/<domain>/`<br>• `clients/<channel>/modules/<domain>/` | **具体业务开发区域**。<br>包含业务 DTO、Validator、Repository、Service、前端页面与弹窗组件。按域完全自包含。 | **单模块热拔插移植**：将业务域移植回基座时，按「五要素清单」整包拷贝，不影响其他业务域。 |
+| 🛡️ **基座公共内核<br>(Core Base Zone)** | • `src/modules/shared/`<br>• `src/modules/system/` (公开面外)<br>• `src/modules/infra/` (公开面外)<br>• `scripts/`, `deploy/`, `prisma/data/` | **通用技术底座与公共 SDK**。<br>包含通信总线、RBAC 鉴权、签名加密、Kysely 引擎、Docker 编排。 | **基座版本化升级（Base Upgrade）**：通过基座版本升级统一更新，严禁在业务开发中向 `shared` 堆砌业务逻辑。 |
+| 📋 **全局路由与契约<br>(Registry Zone)** | • `src/modules/shared/backend/constants/domain-catalog.json`<br>• `src/modules/shared/backend/constants/permissions.ts`<br>• `prisma/schema.prisma` | **全局权威契约与数据模型**。<br>记录系统全部合法域、RBAC 权限白名单与 Prisma 模型。 | **追加式维护（Append-Only）**：新业务仅可在此追加条目，严禁破坏既有数据字典与权限语义。 |
+
+#### 17.2 业务功能反哺与移植「标准五要素清单」（The 5-Element Porting Package）
+
+当衍生业务工程孵化出通用功能并需移植回基座时，仅需同步以下 5 项：
+1. **模块目录**：`src/modules/{domain}/`（前后端业务代码与 Contract）
+2. **Next.js 路由**：`src/app/api/v1/admin/{domain}/` 与 `src/app/(admin-pages)/admin/{domain}/`
+3. **数据库增量迁移**：`prisma/migrations/2026MMDD000000_{feature}/` 与 `prisma/schema.prisma` 新增模型
+4. **权限码追加**：`src/modules/shared/backend/constants/permissions.ts`
+5. **Catalog 登记**：`src/modules/shared/backend/constants/domain-catalog.json`
+
+#### 17.3 移植合规门禁三步法
+```bash
+# 1. 部署增量迁移
+npm run db:migrate
+
+# 2. 重新生成 RPC 与路由 Manifest
+npm run domain:contracts
+npm run domain:manifests
+
+# 3. 执行全量合规与单元测试检查
+npm run check
+```
+
+
 
 <!-- BEGIN:nextjs-agent-rules -->
 
