@@ -125,9 +125,12 @@ export class SystemMenuService {
       "infra/job/index": "/admin/infra/job-center", "infra/file/index": "/admin/infra/files", "infra/dataSourceConfig/index": "/admin/infra/db-configs", "infra/codegen/index": "/admin/infra/codegen",
       "infra/build/index": "/admin/infra/page-builder", "infra/online-definition/index": "/admin/infra/online-definitions", "infra/online-test/index": "/admin/infra/online-test", "infra/apiAccessLog/index": "/admin/infra/api-access-log", "infra/apiErrorLog/index": "/admin/infra/api-error-logs",
       "pay/order/index": "/admin/pay/orders", "pay/refund/index": "/admin/pay/refunds", "crm/customer/index": "/admin/crm/customers", "crm/clue/index": "/admin/crm/clues",
+      "ai/channel/index": "/admin/ai/channels", "ai/model/index": "/admin/ai/models", "ai/token/index": "/admin/ai/tokens",
+      "ai/usage/index": "/admin/ai/usages", "ai/playground/index": "/admin/ai/playground", "ai/chat/index": "/admin/ai/chats",
     }
-    const icons: Record<string, string> = { "ep:tools": "⚙️", "ep:monitor": "🔧", "ep:avatar": "👤", "ep:user": "🛡️", "ep:menu": "📋", "fa:address-card": "🏢", "fa:address-book-o": "💼", "ep:collection": "📖", "ep:takeaway-box": "📢", "fa:road": "🏠", "fa:key": "🔑", "fa:tasks": "⏰", "ep:upload-filled": "📁", "ep:document-copy": "🛠️", "fa:fighter-jet": "🌐", "ep:message": "📱", "fa:stack-exchange": "📨", "ep:connection": "✉️", "ep:coffee-cup": "☕", "fa:reddit-square": "🔴", "ep:aim": "🎯", "ep:setting": "⚙️" }
-    const iconFor = (icon: string | null, type: string) => (icon && icons[icon]) || (type === "DIR" ? "📁" : "📄")
+
+    const iconFor = (icon: string | null, type: string) => icon || (type === "DIR" ? "folder" : "file")
+
     const hrefFor = (node: MenuNode) => node.type !== "MENU" ? null : (node.component && componentRoutes[node.component]) || (node.path?.startsWith("/") ? node.path : null)
     const toSidebarItem = (node: MenuNode, allowedMenuIds: Set<string>, isPlatformAdmin: boolean): SidebarItem | null => {
       if (!isPlatformAdmin && isPlatformControlMenu(node)) return null

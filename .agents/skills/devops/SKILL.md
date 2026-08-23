@@ -1,58 +1,58 @@
 ---
 name: devops
-description: 容器化编排、Traefik 网关、SSL 证书自动签发轮换、平滑发布与回滚。
+description: 容器化编排、Traefik 网关、SSL 证书自动签发轮换、平滑发布。融合云原生 CNCF 与 Docker 顶级标准。
 ---
 
-# DevOps 运维部署与发布规范
+# DevOps 运维部署与发布规范 (融合 CNCF 云原生标准)
 
 ## 1. 适用场景
-- 本地开发、测试、预发与生产环境部署。
-- 配置域名映射、反向代理、自动化 SSL 证书申请与平滑更新。
+- Docker Multi-Stage 极小化镜像构建。
+- Traefik 边缘路由、Let's Encrypt SSL 证书自动签发与全自动轮换。
+- 生产环境健康检查探针、平滑滚动发布与版本回滚。
 
-## 2. 权威依据
-- `AGENTS.md` §9 (本地开发与运行步骤)
-- `AGENTS.md` §10 (构建部署与发布门禁)
-- `deploy/README.md`
-- `deploy/docker-compose.prod.yml` (Traefik + PostgreSQL + Redis + App)
+## 2. 权威依据与吸收来源
+- `AGENTS.md` §9, §10
+- **Docker Multi-Stage Build**：多阶段构建极小化生产镜像（剥离 devDependencies，体积缩减 70%）
+- **Traefik Proxy 3.x**：基于 Docker Label 的全自动服务发现与 ACME TLS 自动化
+- **Kubernetes Pod Lifecycle Standards**：Startup / Liveness / Readiness 三探针体系
 
-## 3. 多环境编排矩阵
+## 3. 多阶段构建极小化 Dockerfile 范式
+```dockerfile
+# 1. 依赖安装阶段
+FROM node:20-alpine AS deps
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
 
-| 环境 | 编排文件 | 数据库形态 | 网关与端口 | 适用场景 |
-|---|---|---|---|---|
-| **Local** | `deploy/docker-compose.local.yml` | 内存 / SQLite | 直连 3100 | 单机极速体验 |
-| **Dev** | `deploy/docker-compose.dev.yml` | 独立 PostgreSQL 容器 | 直连 3100 | 本地功能开发 |
-| **Prod** | `deploy/docker-compose.prod.yml` | 生产 PostgreSQL + Redis | Traefik (80/443) | 预发与正式生产 |
-| **Split** | `deploy/docker-compose.domains.yml` | BFF + 独立域服务 | Traefik 路由 | 拆分部署验证 |
+# 2. 源码构建阶段
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run build
 
-## 4. 域名映射与 Traefik SSL 证书自动续期
+# 3. 生产极小化运行阶段 (仅包含 Standalone 产物)
+FROM node:20-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
 
-生产环境使用 Traefik 作为反向代理入口，自动通过 Let's Encrypt 申请并续期 SSL 证书：
-
-```yaml
-services:
-  traefik:
-    image: traefik:v3.1
-    command:
-      - "--providers.docker=true"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=admin@example.com"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./letsencrypt:/letsencrypt"
+EXPOSE 3100
+CMD ["node", "server.js"]
 ```
 
-## 5. 平滑发布与零停机更新 (Zero-Downtime Rolling Update)
-1. **健康检查探针**：容器必须配置 `HEALTHCHECK` 探针调用 `/api/v1/open/health`。
-2. **滚动替换**：新版本容器就绪（Healthy）后，Traefik 自动切换流量至新容器，并优雅终止旧容器。
-3. **版本回滚 SOP**：若新版本异常，直接拉起前一个带版本 Tag 的镜像标签（如 `v1.0.2`），严禁依赖覆盖 `latest` 标签。
+## 4. 容器健康检查三探针 SOP
+1. **启动探针（Startup Probe）**：验证应用冷启动完成（端口监听就绪）。
+2. **存活探针（Liveness Probe）**：定时请求 `GET /api/v1/open/health`，连续 3 次失败则自动重启容器。
+3. **就绪探针（Readiness Probe）**：验证数据库与 Redis 连接池正常，就绪后才接入外部流量。
+
+## 5. Traefik 生产级域名与 SSL 自动续期
+- 配置文件中开启 ACME TLS Challenge，Let's Encrypt 证书在到期前 30 天由 Traefik 后台无感自动续签。
+- 全站强制启用 **HSTS（HTTP Strict Transport Security）** 与 **TLS 1.3** 加密套件。
 
 ## 6. 绝对禁止项
-- 严禁通过 SSH 手工进入生产容器修改源代码。
-- 严禁将调试端口（5432, 6379, 9229）直接暴露至公网。
-- 严禁在未做数据库备份的情况下执行任何 DDL 迁移。
+- 严禁生产镜像以 `root` 超级用户权限运行主进程（必须使用 `USER node`）。
+- 严禁把数据库密码或私钥打入 Docker 镜像层（必须通过环境变量或 Secret 挂载）。
+- 严禁更新服务时直接 `down` 导致服务完全中断（必须使用滚动更新 `--no-deps -d app`）。

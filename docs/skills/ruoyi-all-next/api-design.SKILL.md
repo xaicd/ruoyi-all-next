@@ -1,70 +1,54 @@
 ---
 name: api-design
-description: 版本化 HTTP/RPC 契约。新增或修改 API、DTO、OpenAPI、客户端对接时启用。
+description: 版本化 HTTP/RPC 契约。融合 Microsoft REST Guidelines 与 OpenAPI 3.1 业界标准。
 ---
 
-# API 契约与接口设计规范
+# API 契约与接口设计规范 (融合微软与 OpenAPI 标准)
 
 ## 1. 适用场景
-- 新增或修改对外 HTTP 接口（Admin/App/Open）。
-- 定义领域 DTO、Zod 校验 Schema 与 OpenAPI 文档。
-- 定义微服务跨域 RPC / Proto / Facade 契约。
+- 新增或重构对外 HTTP API、DTO 数据传输对象、参数校验。
+- 编写跨端客户端 API 调用层与微服务 RPC 通信契约。
 
-## 2. 权威依据
-- `AGENTS.md` §3.1 (分层架构契约)
-- `AGENTS.md` §3.3 (可替换后端与版本化契约边界：对外 HTTP 统一 `/api/v{n}/`)
-- `AGENTS.md` §4.1 (Route 薄层约束：参数解析、鉴权、调 Service、统一响应)
-- `AGENTS.md` §4.3 (Validator 与错误码契约)
-- `docs/guides/api-route-conventions.md`
-- `docs/specs/api-security-persistence-spec.md`
+## 2. 权威依据与吸收来源
+- `AGENTS.md` §3.1, §3.3, §4.1, §4.3
+- **Microsoft REST API Guidelines**：统一命名、错误模型、幂等重试机制、批量操作规范
+- **OpenAPI 3.1 Specification**：JSON Schema 验证、多端自动代码生成契约
+- **W3C Trace Context**：分布式全链路请求头传递
 
-## 3. API 分面与路由前缀规范
+## 3. 标准 URL 命名与 HTTP 动词映射
 
-| 面 | 路径前缀 | 目标终端 | 鉴权机制 |
+| 动作类型 | HTTP 动词 | URL 示例 | 语义说明 |
 |---|---|---|---|
-| **Admin** | `/api/v1/admin/<domain>/<resource>` | 管理后台 | Admin JWT + Permission Code (`hasPermission`) |
-| **App** | `/api/v1/app/<domain>/<resource>` | H5 / 小程序 / App | Member JWT (`requireMemberAuth`) |
-| **Open** | `/api/v1/open/<domain>/<resource>` | 第三方 / 开放平台 | API Key / HMAC 签名 + Nonce |
-| **Internal** | `/api/internal/rpc` | 服务间 RPC | `RUOYI_RPC_TOKEN` (外部网络严格隔离) |
+| 列表分页查询 | `GET` | `/api/v1/admin/mall/spu` | 支持 `page`, `pageSize`, `keyword` |
+| 获取单个详情 | `GET` | `/api/v1/admin/mall/spu/:id` | 资源不存在返回 404 |
+| 创建新资源 | `POST` | `/api/v1/admin/mall/spu` | 成功返回 200/201 及新实体 |
+| 完整更新资源 | `PUT` | `/api/v1/admin/mall/spu/:id` | 必须包含完整实体字段 |
+| 局部状态变更 | `PATCH` | `/api/v1/admin/mall/spu/:id/status` | 仅更新状态字段 |
+| 删除指定资源 | `DELETE` | `/api/v1/admin/mall/spu/:id` | 支持单删或批量 (`?ids=1,2,3`) |
+| 复杂非 CRUD 操作 | `POST` | `/api/v1/admin/pay/order/:id/refund` | 使用特定动词子路径 |
 
-## 4. 统一 HTTP 响应封套与状态码契约
+## 4. 幂等性与防重提交机制 (Idempotency)
+针对资金支付、订单创建等写接口，客户端必须在请求头中携带：
+- `Idempotency-Key: <UUID / NanoID>`
+- 服务端在 Redis 中缓存该 Key 的执行结果 5 分钟，若检测到重复 Key，直接返回初次执行结果，避免重复扣款/建单。
 
-所有 HTTP 接口必须返回统一 JSON 结构：
-
+## 5. 统一标准响应与错误对象模型
 ```typescript
 export interface ApiResponse<T = any> {
-  code: number          // 0 为成功，非 0 为错误码 (如 40001, 40100)
-  data: T               // 业务载荷
-  msg: string           // 用户提示信息
-  traceId?: string      // 链路追踪标识
+  code: number          // 0 为成功，非 0 业务错误码 (如 40001)
+  data: T               // 业务负载数据
+  msg: string           // 用户可读的友好提示文案
+  traceId?: string      // W3C 链路追踪 ID (用于日志定位)
+}
+
+// 错误响应时的字段级详细 Issue (遵循 RFC 7807)
+export interface ApiErrorDetail {
+  field: string         // 出错字段 (如 "mobile")
+  message: string       // 校验失败原因 (如 "手机号格式不正确")
 }
 ```
 
-### HTTP 语义状态码规范：
-- `200 OK`：成功请求。
-- `400 Bad Request`：输入参数校验失败（Zod 抛出字段级 issues）。
-- `401 Unauthorized`：未登录、Token 过期或签名无效。
-- `403 Forbidden`：已登录但无此资源的操作权限码。
-- `404 Not Found`：目标实体不存在。
-- `409 Conflict`：唯一键冲突、状态机流转冲突或并发乐观锁冲突。
-- `429 Too Many Requests`：触发分布式限流或防刷规则。
-- `500 Internal Server Error`：服务端未捕获异常（记录详细 Error 日志）。
-
-## 5. Zod Schema 强契约规范
-所有写操作（POST / PUT / PATCH / DELETE）必须定义对应的 Zod Schema，禁止裸 body 传入 Service：
-
-```typescript
-export const userCreateSchema = z.object({
-  username: z.string().trim().min(3).max(30),
-  nickname: z.string().trim().min(1).max(50),
-  email: z.string().email().optional(),
-  mobile: z.string().regex(/^1[3-9]\d{9}$/, "手机号格式不正确").optional(),
-  deptId: z.string().optional(),
-  roleIds: z.array(z.string()).min(1, "至少分配一个角色"),
-})
-```
-
 ## 6. 绝对禁止项
-- 禁止为特定客户端单独开设 `/api/h5/` 或 `/api/uniapp/` 前缀。
-- 禁止浏览器端直接依赖 Prisma / Kysely 数据库实体类型作为 DTO。
-- 禁止在 Route 层编写复杂业务编排、多表事务与直接 SQL 查询。
+- 严禁在 URL 中出现大写字母或下划线（统一小写短横线 kebab-case）。
+- 严禁成功请求返回非 200 HTTP 状态码但包含业务错误数据。
+- 严禁客户端直接传入未做 Zod 校验与类型清洗的裸对象。

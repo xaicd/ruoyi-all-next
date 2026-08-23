@@ -204,15 +204,22 @@ function SystemMenusPageContent() {
                       ) : (
                         <span className="mr-1.5 w-4" />
                       )}
-                      <span className="mr-1.5 text-base">
-                        {node.type === "DIR" ? "📁" : node.type === "MENU" ? "📄" : "🔘"}
+                      <span className="mr-2 inline-flex items-center text-slate-400">
+                        {node.type === "DIR" ? (
+                          <svg className="h-4 w-4 text-blue-600 stroke-[1.75]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
+                        ) : node.type === "MENU" ? (
+                          <svg className="h-4 w-4 text-slate-500 stroke-[1.75]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                        ) : (
+                          <svg className="h-3.5 w-3.5 text-amber-500 stroke-[2]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="6" /></svg>
+                        )}
                       </span>
-                      <span className={`font-medium ${node.status === "DISABLED" ? "text-slate-400 line-through" : ""}`}>
+                      <span className={`font-medium ${node.status === "DISABLED" ? "text-slate-400 line-through" : "text-slate-800"}`}>
                         {node.name}
                       </span>
                       {!node.visible && (
-                        <span className="ml-1.5 rounded bg-slate-100 px-1 text-[10px] text-slate-400">隐藏</span>
+                        <span className="ml-1.5 rounded bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-400 border border-slate-200">隐藏</span>
                       )}
+
                     </div>
                   </td>
 

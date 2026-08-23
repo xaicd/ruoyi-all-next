@@ -5,6 +5,7 @@
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
 import { SEED_MENUS } from "@prisma/data"
 import { withOnlineMenuCatalog } from "@/modules/online/contract/menu-catalog"
+import { withAiMenuCatalog } from "@/modules/ai/contract/menu-catalog"
 
 export type SystemMenuRow = {
   id: string
@@ -39,8 +40,9 @@ export type CreateMenuData = {
 
 export type UpdateMenuData = Partial<CreateMenuData>
 
-// === 内存存储（由 RuoYi 原始 SQL 全量生成） ===
-const MEMORY_STORE: SystemMenuRow[] = withOnlineMenuCatalog(SEED_MENUS)
+// === 内存存储（由 RuoYi 原始 SQL 全量生成 + Online 扩展 + AI 网关扩展） ===
+const MEMORY_STORE: SystemMenuRow[] = withAiMenuCatalog(withOnlineMenuCatalog(SEED_MENUS))
+
 
 let memoryIdSeq = 5000
 
