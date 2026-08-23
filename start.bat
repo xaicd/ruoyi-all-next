@@ -3,6 +3,7 @@ setlocal enabledelayedexpansion
 title RuoYi All Next - Start Manager
 
 cd /d "%~dp0"
+set "PATH=%~dp0node_modules\.bin;%PATH%"
 
 echo ================================================================
 echo          RuoYi All Next - Developer Launcher

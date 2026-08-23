@@ -1,8 +1,32 @@
 const fs = require("node:fs")
 const path = require("node:path")
 
+function fixBinShims(rootDir) {
+  const binDir = path.join(rootDir, "node_modules", ".bin")
+  if (!fs.existsSync(binDir)) return
+  try {
+    const files = fs.readdirSync(binDir)
+    for (const file of files) {
+      if (file.startsWith(".") && file.includes("-")) {
+        const cleanName = file.replace(/^\./, "").replace(/-[a-zA-Z0-9]+$/, "")
+        const targetPath = path.join(binDir, cleanName)
+        const srcPath = path.join(binDir, file)
+        if (!fs.existsSync(targetPath)) {
+          fs.copyFileSync(srcPath, targetPath)
+        }
+      }
+    }
+    const prismaCmd = path.join(binDir, "prisma.cmd")
+    if (!fs.existsSync(prismaCmd)) {
+      const content = `@ECHO off\nGOTO start\n:find_dp0\nSET dp0=%~dp0\nEXIT /b\n:start\nSETLOCAL\nCALL :find_dp0\nIF EXIST "%dp0%\\node.exe" (\n  SET "_prog=%dp0%\\node.exe"\n) ELSE (\n  SET "_prog=node"\n  SET PATHEXT=%PATHEXT:;.JS;=;%\n)\nendLocal & goto #_undefined_# 2>NUL || title %COMSPEC% & "%_prog%"  "%dp0%\\..\\prisma\\build\\index.js" %*\n`
+      fs.writeFileSync(prismaCmd, content, "utf8")
+    }
+  } catch {}
+}
+
 function autoDetectAndSyncEnv() {
   const rootDir = process.cwd()
+  fixBinShims(rootDir)
   const dirName = path.basename(rootDir)
   
   // 从目录名推导数据库名 (如 agent-zqall -> agent_zqall, ruoyi-all-next -> ruoyi_next)
