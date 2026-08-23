@@ -37,6 +37,7 @@ if "%MODE%"=="" (
     echo   [3] Infrastructure Only - Start DB + Redis containers
     echo   [4] Architecture Governance Check - npm run check
     echo   [5] Stop Project Docker Containers
+    echo   [6] Database Backup - npm run db:backup
     echo.
     set /p "CHOICE=Enter number [default 1]: "
     if "!CHOICE!"=="" set "CHOICE=1"
@@ -45,6 +46,7 @@ if "%MODE%"=="" (
     if "!CHOICE!"=="3" set "MODE=infra"
     if "!CHOICE!"=="4" set "MODE=check"
     if "!CHOICE!"=="5" set "MODE=stop"
+    if "!CHOICE!"=="6" set "MODE=backup"
 )
 
 if /I "%MODE%"=="help" goto :help
@@ -56,8 +58,10 @@ if /I "%MODE%"=="infra" goto :infra
 if /I "%MODE%"=="docker" goto :docker
 if /I "%MODE%"=="memory" goto :memory
 if /I "%MODE%"=="check" goto :check
+if /I "%MODE%"=="backup" goto :backup
 if /I "%MODE%"=="status" goto :status
 if /I "%MODE%"=="stop" goto :stop
+
 
 echo [ERROR] Unknown mode: %MODE%
 goto :help
@@ -143,7 +147,16 @@ echo.
 pause
 goto :end
 
+:backup
+
+echo [STEP] Backing up PostgreSQL database...
+call npm run db:backup
+echo.
+pause
+goto :end
+
 :status
+
 docker compose -f deploy/docker-compose.dev.yml ps
 pause
 goto :end
