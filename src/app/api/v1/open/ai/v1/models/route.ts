@@ -1,15 +1,10 @@
 import { NextResponse } from "next/server"
 import { AiAccessTokenService } from "@/modules/ai/backend/services/ai-access-token.service"
 import { AiGatewayRelayService } from "@/modules/ai/backend/services/ai-gateway-relay.service"
-
-function readApiKey(request: Request): string {
-  const header = request.headers.get("authorization") || ""
-  const match = /^Bearer\s+(.+)$/i.exec(header)
-  return match?.[1]?.trim() || request.headers.get("x-api-key")?.trim() || ""
-}
+import { readOpenApiKey } from "@/modules/ai/backend/lib/open-api-key"
 
 export async function GET(request: Request) {
-  const apiKey = readApiKey(request)
+  const apiKey = readOpenApiKey(request)
   if (!apiKey) {
     return NextResponse.json({ error: { message: "缺少令牌" } }, { status: 401 })
   }

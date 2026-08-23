@@ -20,6 +20,10 @@ export const aiChatDeleteSchema = z.object({
   chatId: z.string().trim().min(1, "chatId 不能为空"),
 })
 
+export const aiIdSchema = z.object({
+  id: z.string().trim().min(1),
+})
+
 export const aiChannelWriteSchema = z.object({
   name: z.string().trim().min(1).max(100),
   provider: z.enum(["OPENAI", "AZURE", "ANTHROPIC", "GEMINI", "TONGYI", "DEEPSEEK", "MOMA", "CUSTOM", "MOCK"]),
@@ -32,6 +36,10 @@ export const aiChannelWriteSchema = z.object({
   autoDisable: z.boolean().optional(),
 })
 
+export const aiChannelUpdateSchema = aiChannelWriteSchema.partial().extend({
+  status: z.enum(["ACTIVE", "DISABLED"]).optional(),
+})
+
 export const aiAccessTokenWriteSchema = z.object({
   name: z.string().trim().min(1).max(100),
   remainQuota: z.coerce.number().int().min(0).optional(),
@@ -42,16 +50,30 @@ export const aiAccessTokenWriteSchema = z.object({
   expiresAt: z.string().optional(),
 })
 
+export const aiAccessTokenUpdateSchema = z.object({
+  status: z.enum(["ACTIVE", "DISABLED"]).optional(),
+  remainQuota: z.coerce.number().int().min(0).optional(),
+  models: z.array(z.string()).optional(),
+})
+
 export const aiRelayChatSchema = z.object({
   apiKey: z.string().trim().min(1).optional(),
   model: z.string().trim().min(1),
-  messages: z.array(z.object({ role: z.string(), content: z.string() })).min(1),
+  messages: z.array(z.object({ role: z.string().min(1), content: z.string() })).min(1),
   stream: z.boolean().optional(),
+})
+
+export const aiEmbeddingSchema = z.object({
+  model: z.string().trim().min(1).optional(),
+  input: z.union([z.string(), z.array(z.string())]),
 })
 
 export type AiPageQueryInput = z.infer<typeof aiPageQuerySchema>
 export type AiModelCreateInput = z.infer<typeof aiModelCreateSchema>
 export type AiChatDeleteInput = z.infer<typeof aiChatDeleteSchema>
 export type AiChannelWriteInput = z.infer<typeof aiChannelWriteSchema>
+export type AiChannelUpdateInput = z.infer<typeof aiChannelUpdateSchema>
 export type AiAccessTokenWriteInput = z.infer<typeof aiAccessTokenWriteSchema>
+export type AiAccessTokenUpdateInput = z.infer<typeof aiAccessTokenUpdateSchema>
 export type AiRelayChatInput = z.infer<typeof aiRelayChatSchema>
+export type AiEmbeddingInput = z.infer<typeof aiEmbeddingSchema>

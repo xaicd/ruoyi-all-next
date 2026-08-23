@@ -43,7 +43,7 @@ Skill 写法见 [skill-authoring.SKILL.md](./skill-authoring.SKILL.md)。
 
 ## 3. 分层
 
-1. **通用层（可选参考）**：Agent Skills 格式见 https://agentskills.io ；目录 https://skills.sh 。UI 可用 `nextlevelbuilder/ui-ux-pro-max-skill`、`vercel-labs/agent-skills`；API 可用社区 `api-design`；架构可用 ADR Skill。
+1. **通用层（可选参考）**：格式 [agentskills.io](https://agentskills.io)；目录 [skills.sh](https://skills.sh)。UI：[nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill)、[vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills)。API/架构用社区 REST 与 ADR Skill，细节以本仓库为准。
 2. **项目层（强制）**：本目录 + `AGENTS.md` + `docs/guides` + `docs/architecture`。
 3. **证据层**：扫描产物、测试、`npm run check`。未落地不得标 DONE。
 

@@ -56,6 +56,7 @@ export class AiChannelService {
   static async update(input: Partial<AiChannelWriteInput> & { id: string; status?: "ACTIVE" | "DISABLED" }) {
     const record = aiGatewayStore.channels.find((item) => item.id === input.id)
     if (!record) throw new Error("渠道不存在")
+    if (input.status) assertChannelStatus(record.status, input.status)
     if (input.name) record.name = input.name
     if (input.provider) record.provider = input.provider
     if (input.baseUrl !== undefined) record.baseUrl = input.baseUrl
@@ -65,8 +66,14 @@ export class AiChannelService {
     if (input.weight !== undefined) record.weight = input.weight
     if (input.priority !== undefined) record.priority = input.priority
     if (input.autoDisable !== undefined) record.autoDisable = input.autoDisable
+    const fromStatus = record.status
     if (input.status) record.status = input.status
-    domainLog.audit("ai.channel.update", { targetType: "AI_CHANNEL", targetId: record.id })
+    domainLog.audit("ai.channel.update", {
+      targetType: "AI_CHANNEL",
+      targetId: record.id,
+      fromStatus,
+      toStatus: record.status,
+    })
     return true
   }
 
@@ -104,6 +111,14 @@ export class AiChannelService {
     const record = aiGatewayStore.channels.find((item) => item.id === id)
     if (!record) return
     record.failCount = 0
+  }
+}
+
+function assertChannelStatus(from: AiChannelRecord["status"], to: AiChannelRecord["status"]) {
+  if (from === to) return
+  const allowed = new Set(["ACTIVE->DISABLED", "DISABLED->ACTIVE"])
+  if (!allowed.has(`${from}->${to}`)) {
+    throw Object.assign(new Error(`渠道状态不可从 ${from} 迁到 ${to}`), { status: 409 })
   }
 }
 

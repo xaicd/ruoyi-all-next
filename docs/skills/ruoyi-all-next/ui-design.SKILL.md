@@ -21,7 +21,7 @@ description: 管理端与 C 端 UI/UX。画页面、改布局、做 H5/uni-app/F
 | 渠道 | 放哪 | 设计重点 |
 |---|---|---|
 | admin-web | `src/modules/<domain>/frontend` | 筛选/工具栏/表格/分页；权限显隐 |
-| h5 / uniapp / flutter | `clients/<channel>/.../modules/<domain>` | 拇指区、加载/空/错、会员 JWT |
+| h5 / uniapp / flutter | `clients/<channel>/src` 或 `lib` 下 `{app,shared,modules}` | 拇指区、加载/空/错、会员 JWT |
 | desktop-pc | `clients/desktop-pc` 壳 + 管理端页 | 窗口/托盘；业务 UI 不复制一套 Admin |
 
 ## 清单
@@ -30,7 +30,7 @@ description: 管理端与 C 端 UI/UX。画页面、改布局、做 H5/uni-app/F
 2. 品牌文案/Logo 来自 `GET /api/v1/open/meta/project-profile`。
 3. 可点击元素有 cursor 与 focus；对比度足够。
 4. 管理端复用 template，不把新域堆进 `app/`。
-5. 域目录名 = `domain-catalog`；域间不互相 import 内部文件。
+5. 域目录名 = `domain-catalog.json`；域间不互相 import 内部文件。
 6. 有布局改动则按真实交互验证，不只截一张图。
 
 ## 禁止

@@ -11,7 +11,7 @@ description: 需求与原型收敛。新功能、多端、业务项目初始化�
 
 ## 权威
 
-- `docs/guides/project-profile-bootstrap.md`（平台名/Logo/默认账号）
+- `docs/guides/project-profile-bootstrap.md`
 - `docs/architecture/ruoyi-all-next-client-channels.md`
 - `docs/architecture/ruoyi-all-next-capability-matrix.md`
 - `docs/features/sprint-prod/{MMDD}.md`（原始需求必须追加）

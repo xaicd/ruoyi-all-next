@@ -1,26 +1,27 @@
 "use client"
 
 import { useState } from "react"
+import { aiGatewayApi } from "@/modules/ai/frontend/api/ai-gateway.api"
 
 export default function AiPlaygroundPage() {
   const [model, setModel] = useState("mock-chat")
   const [prompt, setPrompt] = useState("ping")
   const [output, setOutput] = useState("")
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
 
   async function run() {
     setLoading(true)
+    setError("")
     try {
-      const response = await fetch("/api/v1/admin/ai/playground", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          model,
-          messages: [{ role: "user", content: prompt }],
-        }),
+      const json = await aiGatewayApi.playground({
+        model,
+        messages: [{ role: "user", content: prompt }],
       })
-      const json = await response.json()
       setOutput(JSON.stringify(json, null, 2))
+      if (!json.success) setError(json.error || json.message || "调用失败")
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "调用失败")
     } finally {
       setLoading(false)
     }
@@ -60,7 +61,8 @@ export default function AiPlaygroundPage() {
         >
           {loading ? "调用中" : "发送"}
         </button>
-        <pre className="overflow-auto rounded-md bg-slate-50 p-3 text-xs">{output}</pre>
+        {error ? <p className="text-sm text-red-600">{error}</p> : null}
+        <pre className="overflow-auto rounded-md bg-slate-50 p-3 text-xs">{output || (loading ? "加载中…" : "暂无结果")}</pre>
       </div>
     </div>
   )
