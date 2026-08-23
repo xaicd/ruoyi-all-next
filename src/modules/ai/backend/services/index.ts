@@ -1,5 +1,6 @@
 import type { AiPageQueryInput, AiModelCreateInput, AiChatDeleteInput } from "../validators"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
+import { AiGatewayRelayService } from "./ai-gateway-relay.service"
 
 type AiModel = {
   id: string
@@ -74,4 +75,23 @@ export class AiService {
     domainLog.audit("ai.chat.delete", { targetType: "AI_CHAT", targetId: input.chatId, title: removed.title })
     return { chatId: input.chatId, deleted: true }
   }
+
+  static relayChatCompletion(input: {
+    apiKey: string
+    model: string
+    messages: { role: string; content: string }[]
+    stream?: boolean
+  }) {
+    return AiGatewayRelayService.relayChatCompletion(input)
+  }
+
+  static listPublicModels() {
+    return AiGatewayRelayService.listPublicModels()
+  }
 }
+
+export { AiChannelService } from "./ai-channel.service"
+export { AiAccessTokenService } from "./ai-access-token.service"
+export { AiUsageService } from "./ai-usage.service"
+export { AiGatewayRelayService } from "./ai-gateway-relay.service"
+export { aiGatewayStore } from "./ai-gateway.store"

@@ -1,0 +1,6 @@
+{
+  "name": "@ruoyi/client-h5",
+  "private": true,
+  "version": "0.1.0",
+  "description": "H5 client package for ruoyi-all-next. Layout scaffold only."
+}

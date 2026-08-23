@@ -1,0 +1,6 @@
+name: ruoyi_client_flutter
+description: Flutter client package for ruoyi-all-next. Layout scaffold only.
+publish_to: "none"
+version: 0.1.0
+environment:
+  sdk: ">=3.0.0 <4.0.0"

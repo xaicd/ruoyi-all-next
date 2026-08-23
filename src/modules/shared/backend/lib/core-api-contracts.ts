@@ -48,6 +48,26 @@ export function registerCoreApiContracts(): void {
     summary: "获取 OpenAPI 契约文档",
     responseSchema: { type: "object", description: "OpenAPI 3.0 document with x-error-catalog extension." },
   })
+
+  apiRegistry.register({
+    path: "/api/v1/open/meta/project-profile",
+    method: "GET",
+    domain: "platform",
+    endpoint: "open",
+    version: "v1",
+    summary: "获取多端公开品牌与平台名称",
+    responseSchema: { type: "object", description: "Public project identity without accounts or tenant secrets." },
+  })
+
+  apiRegistry.register({
+    path: "/api/v1/open/meta/client-channels",
+    method: "GET",
+    domain: "platform",
+    endpoint: "open",
+    version: "v1",
+    summary: "获取 PC/H5/uni-app/Flutter/桌面客户端渠道标准",
+    responseSchema: { type: "object", description: "Client channel catalog, API surfaces, and shared client rules." },
+  })
 }
 
 

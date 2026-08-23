@@ -20,6 +20,38 @@ export const aiChatDeleteSchema = z.object({
   chatId: z.string().trim().min(1, "chatId 不能为空"),
 })
 
+export const aiChannelWriteSchema = z.object({
+  name: z.string().trim().min(1).max(100),
+  provider: z.enum(["OPENAI", "AZURE", "ANTHROPIC", "GEMINI", "TONGYI", "DEEPSEEK", "MOMA", "CUSTOM", "MOCK"]),
+  baseUrl: z.string().trim().max(500).optional(),
+  apiKey: z.string().trim().max(500).optional(),
+  models: z.array(z.string().trim().min(1)).min(1),
+  modelMap: z.record(z.string(), z.string()).optional(),
+  weight: z.coerce.number().int().min(1).max(1000).optional(),
+  priority: z.coerce.number().int().min(0).max(100).optional(),
+  autoDisable: z.boolean().optional(),
+})
+
+export const aiAccessTokenWriteSchema = z.object({
+  name: z.string().trim().min(1).max(100),
+  remainQuota: z.coerce.number().int().min(0).optional(),
+  unlimited: z.boolean().optional(),
+  models: z.array(z.string()).optional(),
+  ipAllowlist: z.array(z.string()).optional(),
+  group: z.string().trim().max(50).optional(),
+  expiresAt: z.string().optional(),
+})
+
+export const aiRelayChatSchema = z.object({
+  apiKey: z.string().trim().min(1).optional(),
+  model: z.string().trim().min(1),
+  messages: z.array(z.object({ role: z.string(), content: z.string() })).min(1),
+  stream: z.boolean().optional(),
+})
+
 export type AiPageQueryInput = z.infer<typeof aiPageQuerySchema>
 export type AiModelCreateInput = z.infer<typeof aiModelCreateSchema>
 export type AiChatDeleteInput = z.infer<typeof aiChatDeleteSchema>
+export type AiChannelWriteInput = z.infer<typeof aiChannelWriteSchema>
+export type AiAccessTokenWriteInput = z.infer<typeof aiAccessTokenWriteSchema>
+export type AiRelayChatInput = z.infer<typeof aiRelayChatSchema>

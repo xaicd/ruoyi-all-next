@@ -13,7 +13,7 @@
 | 管理员显示名 | 同上 JSON 的 `bootstrapAdmin.nickname` | `npm run db:seed` |
 | 管理员账号和密码 | `.env.local` 的 `ADMIN_BOOTSTRAP_*` | `npm run db:seed` |
 
-不要把密码写进 JSON。菜单目录仍来自 RuoYi SQL 同步，不按项目手写第二套菜单。
+账号密码不要写进 JSON。菜单目录仍来自 RuoYi SQL 同步，不要按项目手写第二套菜单。H5 / uni-app / Flutter / 桌面客户端的品牌也只读这份 profile：`GET /api/v1/open/meta/project-profile`。多端规则见 [多端能力标准](../architecture/ruoyi-all-next-client-channels.md)。
 
 ## 初始化顺序
 

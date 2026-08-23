@@ -1,0 +1,135 @@
+{
+  "version": "v1",
+  "channelHeader": "X-Client-Channel",
+  "identity": {
+    "profilePath": "/api/v1/open/meta/project-profile",
+    "channelsPath": "/api/v1/open/meta/client-channels",
+    "errorCatalogPath": "/api/v1/open/meta/error-catalog",
+    "openapiPath": "/api/v1/open/openapi"
+  },
+  "surfaces": [
+    {
+      "id": "admin",
+      "prefix": "/api/v1/admin",
+      "auth": "admin-jwt",
+      "audience": "admin",
+      "usedBy": ["admin-web", "desktop-pc"]
+    },
+    {
+      "id": "app",
+      "prefix": "/api/v1/app",
+      "auth": "member-jwt",
+      "audience": "app",
+      "usedBy": ["h5", "uniapp", "flutter"]
+    },
+    {
+      "id": "open",
+      "prefix": "/api/v1/open",
+      "auth": "public-or-signature",
+      "audience": "open",
+      "usedBy": ["admin-web", "h5", "uniapp", "flutter", "desktop-pc"]
+    },
+    {
+      "id": "internal",
+      "prefix": "/api/internal",
+      "auth": "service-token",
+      "audience": "internal",
+      "usedBy": []
+    }
+  ],
+  "channels": [
+    {
+      "id": "admin-web",
+      "name": "管理端 PC",
+      "kind": "web",
+      "surface": "admin",
+      "workspace": "src/app",
+      "runtime": "next-app-router",
+      "status": "ga",
+      "platforms": ["windows", "macos", "linux"],
+      "tokenStore": "localStorage",
+      "packageKind": "in-repo-admin",
+      "notes": "当前管理后台真源。域 UI 落在 src/modules/<domain>/frontend，不进 clients/。"
+    },
+    {
+      "id": "h5",
+      "name": "C 端 H5",
+      "kind": "web",
+      "surface": "app",
+      "workspace": "clients/h5",
+      "runtime": "uni-app-h5-or-next",
+      "status": "standard-only",
+      "platforms": ["mobile-browser", "wechat-webview"],
+      "tokenStore": "httpOnly-or-memory",
+      "packageKind": "standalone",
+      "notes": "独立包 clients/h5。会员 JWT 走 /api/v1/app。页面可与 uni-app 共用视图，禁止另写一套 DTO。"
+    },
+    {
+      "id": "uniapp",
+      "name": "uni-app 小程序/App",
+      "kind": "mini-program",
+      "surface": "app",
+      "workspace": "clients/uniapp",
+      "runtime": "uni-app",
+      "status": "standard-only",
+      "platforms": ["mp-weixin", "mp-alipay", "app-plus", "h5"],
+      "tokenStore": "uni.storage",
+      "packageKind": "standalone",
+      "notes": "独立包 clients/uniapp。pages 只做路由壳，实现放 src/modules/<domain>。"
+    },
+    {
+      "id": "flutter",
+      "name": "Flutter App",
+      "kind": "native",
+      "surface": "app",
+      "workspace": "clients/flutter",
+      "runtime": "flutter",
+      "status": "standard-only",
+      "platforms": ["android", "ios"],
+      "tokenStore": "secure-storage",
+      "packageKind": "standalone",
+      "notes": "独立包 clients/flutter。源码根是 lib/，域目录与后端 domain-catalog 同名。"
+    },
+    {
+      "id": "desktop-pc",
+      "name": "跨平台 PC 客户端",
+      "kind": "desktop",
+      "surface": "admin",
+      "workspace": "clients/desktop-pc",
+      "runtime": "tauri",
+      "status": "standard-only",
+      "platforms": ["windows", "macos", "linux"],
+      "tokenStore": "os-keychain",
+      "packageKind": "standalone",
+      "notes": "独立包 clients/desktop-pc。src-tauri 只做壳，业务 UI 按 modules/<domain> 或嵌入 admin-web。"
+    }
+  ],
+  "rules": [
+    "同一业务能力只定义一份版本化 DTO，多端不得分叉字段名。",
+    "admin JWT 与 member JWT 不得混用。",
+    "客户端禁止 import Next Service、Repository 或 Prisma 类型。",
+    "平台名称与 Logo 只来自 project-profile，禁止各端再写一套品牌常量。",
+    "新客户端请求应带 X-Client-Channel，取值必须是 channels[].id。",
+    "C 端默认走 /api/v1/app；第三方回调与公开元数据走 /api/v1/open。",
+    "每个渠道一个独立包；包内按后端域名建 modules/<domain>，禁止把新域堆进 pages 或 shared。",
+    "本标准不表示 H5 / uni-app / Flutter / 桌面客户端已经交付。"
+  ],
+  "packageLayout": {
+    "requiredSourceDirs": ["app", "shared", "modules"],
+    "moduleSubdirs": ["api", "models", "pages", "components"],
+    "sourceRootByRuntime": {
+      "next-app-router": "src",
+      "uni-app-h5-or-next": "src",
+      "uni-app": "src",
+      "flutter": "lib",
+      "tauri": "src"
+    },
+    "manifestByRuntime": {
+      "next-app-router": "package.json",
+      "uni-app-h5-or-next": "package.json",
+      "uni-app": "package.json",
+      "flutter": "pubspec.yaml",
+      "tauri": "package.json"
+    }
+  }
+}

@@ -201,14 +201,18 @@ await eventBus.publish({
 })
 ```
 
-## 7. 多端 API 设计
+## 7. 多端能力
 
-| 端 | URL 前缀 | 鉴权方式 | 说明 |
+权威标准：`docs/architecture/ruoyi-all-next-client-channels.md`（契约 `src/modules/shared/contract/client-channels.json`）。
+
+| API 面 | URL 前缀 | 鉴权 | 使用渠道 |
 |---|---|---|---|
-| admin | `/api/v1/admin/*` | JWT + permission code | 管理后台 |
-| app | `/api/v1/app/*` | Member JWT | 用户端/小程序 |
-| open | `/api/v1/open/*` | 签名验证 | 第三方回调 |
-| internal | `/api/v1/internal/*` | 服务间 token | 微服务内部 |
+| admin | `/api/v1/admin/*` | 管理员 JWT + 权限码 | 管理端 PC、跨平台 PC 客户端 |
+| app | `/api/v1/app/*` | 会员 JWT | H5、uni-app、Flutter |
+| open | `/api/v1/open/*` | 公开或签名 | 品牌/错误码/OpenAPI、支付回调 |
+| internal | `/api/internal/*` | 服务间 token | 仅服务间，客户端禁用 |
+
+渠道：`admin-web`（已交付）、`h5` / `uniapp` / `flutter` / `desktop-pc`（标准已发布，工程未交付）。请求头 `X-Client-Channel` 必须是渠道 id。品牌只来自 `project-profile`。
 
 ## 8. 数据规模
 

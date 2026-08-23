@@ -33,6 +33,7 @@
 | D26 | DONE | system 剩余 MOCK + infra 文件/调度实装 | 公告/地区/通知模板与消息双模仓储；在线用户接会话注册；本地文件落盘；任务 trigger 真实执行并写日志 |
 | D27 | DONE | Online 功能测试对齐 Jeecg AUTO | 已发布定义进入 `/admin/infra/online-runtime/[code]`：查询/工具栏/列表/表单/详情；树表与主子表 ERP/INNER/TAB 沙箱 |
 | D28 | DONE | 业务项目身份初始化底座 | 新项目只改 `project-profile.json`、Logo 与 `.env.local` 默认账号；seed 写入平台名/租户/套餐展示名 |
+| D29 | DONE | 多端能力标准 | PC / H5 / uni-app / Flutter / 桌面客户端共用 admin/app/open 面；各端独立包且按域名分目录；H5 等工程尚未交付 |
 | D18 | DONE | system 平台核心 CRUD 双模收口 | users/roles/menus/depts/posts/dicts/tenants 列表与创建走 Facade + 共用 schema |
 | D19 | DONE | infra 平台核心 CRUD 双模收口 | configs/jobs/files/data-source 列表与创建走 Facade + 共用 schema |
 | D20 | DONE | system/infra 单资源写路径 | `[id]` 更新/删除与 infra pages/logs 进 Facade |

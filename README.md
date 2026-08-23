@@ -110,6 +110,12 @@ src/
     │   └── database/             # 多数据库引擎（Kysely）
     ├── system/                   # 系统管理（用户/角色/菜单/部门/岗位/字典/租户）
     └── infra/                    # 基础设施（配置/定时任务/文件）
+
+clients/                          # 多端独立包（H5 / uni-app / Flutter / 桌面壳）
+├── h5/src/{app,shared,modules}   # 按后端域名分 modules/<domain>
+├── uniapp/
+├── flutter/lib/
+└── desktop-pc/
 ```
 
 ## 已实现模块
@@ -160,6 +166,7 @@ npm run audit-logs:retention        # 仅预览保留策略候选日志（需环
 - [架构总览](docs/architecture/ruoyi-all-next-architecture.md)
 - [当前进度](docs/architecture/CURRENT-PROGRESS.md)
 - [业务项目身份初始化](docs/guides/project-profile-bootstrap.md)
+- [多端能力标准](docs/architecture/ruoyi-all-next-client-channels.md)
 - [数据库兼容规范](docs/architecture/ruoyi-all-next-database-compatibility.md)
 - [开发规范](AGENTS.md)
 - [审计日志运维](docs/operations/audit-log-operations.md)

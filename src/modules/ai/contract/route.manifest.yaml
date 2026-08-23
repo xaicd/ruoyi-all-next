@@ -8,6 +8,7 @@ contractVersion: v1
 implementation: local-ts
 publicPrefix:
   - /api/v1/admin/ai
+  - /api/v1/open/ai
 upstream:
   env: RUOYI_DOMAIN_AI_UPSTREAM
   protocol: http

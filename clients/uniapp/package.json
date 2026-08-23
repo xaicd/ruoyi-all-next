@@ -1,0 +1,6 @@
+{
+  "name": "@ruoyi/client-uniapp",
+  "private": true,
+  "version": "0.1.0",
+  "description": "uni-app client package for ruoyi-all-next. Layout scaffold only."
+}

@@ -282,7 +282,7 @@
       "kind": "business",
       "stage": "B",
       "contractVersion": "v1",
-      "publicPrefixes": ["/api/v1/admin/ai"],
+      "publicPrefixes": ["/api/v1/admin/ai", "/api/v1/open/ai"],
       "implementation": "local-ts",
       "upstreamEnv": "RUOYI_DOMAIN_AI_UPSTREAM",
       "defaultPort": 3223,

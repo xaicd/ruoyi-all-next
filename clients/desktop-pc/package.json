@@ -1,0 +1,6 @@
+{
+  "name": "@ruoyi/client-desktop-pc",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Desktop PC client package for ruoyi-all-next. Layout scaffold only."
+}

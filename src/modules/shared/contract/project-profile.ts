@@ -42,3 +42,22 @@ export type ProjectProfile = z.infer<typeof projectProfileSchema>
 export type ProjectTenantProfile = z.infer<typeof tenantSchema>
 
 export const projectProfile: ProjectProfile = projectProfileSchema.parse(rawProjectProfile)
+
+export type PublicProjectProfile = Pick<
+  ProjectProfile,
+  "platformName" | "shortName" | "description" | "copyright" | "version" | "loginHeadline" | "loginTagline" | "branding"
+>
+
+/** Public branding for H5 / uni-app / Flutter / desktop. Never includes accounts or tenant secrets. */
+export function toPublicProjectProfile(profile: ProjectProfile = projectProfile): PublicProjectProfile {
+  return {
+    platformName: profile.platformName,
+    shortName: profile.shortName,
+    description: profile.description,
+    copyright: profile.copyright,
+    version: profile.version,
+    loginHeadline: profile.loginHeadline,
+    loginTagline: profile.loginTagline,
+    branding: profile.branding,
+  }
+}

@@ -383,13 +383,37 @@ export const ADMIN_MENU: AdminMenuItem[] = [
   },
   {
     key: "ai",
-    label: "AI中台",
+    label: "模型中台",
     children: [
       {
+        key: "ai-channels",
+        label: "上游渠道",
+        path: "/admin/ai/channels",
+        requiredPermission: PERMISSIONS.AI_CHANNEL_VIEW,
+      },
+      {
         key: "ai-models",
-        label: "模型管理",
+        label: "模型目录",
         path: "/admin/ai/models",
         requiredPermission: PERMISSIONS.AI_MODEL_VIEW,
+      },
+      {
+        key: "ai-tokens",
+        label: "调用令牌",
+        path: "/admin/ai/tokens",
+        requiredPermission: PERMISSIONS.AI_TOKEN_VIEW,
+      },
+      {
+        key: "ai-usages",
+        label: "用量日志",
+        path: "/admin/ai/usages",
+        requiredPermission: PERMISSIONS.AI_USAGE_VIEW,
+      },
+      {
+        key: "ai-playground",
+        label: "联调探测",
+        path: "/admin/ai/playground",
+        requiredPermission: PERMISSIONS.AI_PLAYGROUND_VIEW,
       },
       {
         key: "ai-chats",

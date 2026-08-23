@@ -926,7 +926,17 @@
           "method": "deleteChat",
           "schema": "aiChatDeleteSchema",
           "fields": [{ "name": "chatId", "type": "string" }]
-        }
+        },
+        {
+          "method": "relayChatCompletion",
+          "schema": "aiRelayChatSchema",
+          "fields": [
+            { "name": "apiKey", "type": "string" },
+            { "name": "model", "type": "string" },
+            { "name": "messages", "type": "json" }
+          ]
+        },
+        { "method": "listPublicModels", "schema": "empty" }
       ]
     },
     "iot": {

@@ -54,6 +54,8 @@
 3. src 下只允许两个顶层目录：app（Next.js路由）和 modules（全部业务+基座）。
 4. 禁止在 src 下新建 backend/、frontend/、components/、lib/ 等平铺目录。
 5. 通用模板统一放 `src/modules/shared/frontend/templates`。
+6. C 端与桌面壳必须落在仓库根 `clients/<channel>/`，一渠道一包：`h5`、`uniapp`、`flutter`、`desktop-pc`。
+7. 独立客户端包内固定 `app/`、`shared/`、`modules/<domain>/`；域名与 `domain-catalog.json` 一致，禁止把新域堆进 `app`、`shared` 或根 `pages`。细则见 docs/architecture/ruoyi-all-next-client-channels.md。
 
 ### 3.3 可替换后端与微服务边界（强制）
 
@@ -296,6 +298,8 @@ CI 前置检查：
 15. docs/architecture/ruoyi-all-next-microservice-governance.md
 16. docs/architecture/ruoyi-all-next-module-rpc.md
 17. deploy/README.md
+18. docs/architecture/ruoyi-all-next-client-channels.md
+19. docs/guides/project-profile-bootstrap.md
 
 ## 14. 代码生成器架构规范
 
