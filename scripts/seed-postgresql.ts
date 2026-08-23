@@ -10,6 +10,8 @@ import { withOnlineMenuCatalog, withOnlinePackageMenuIds } from "../src/modules/
 import { SEED_POSTS } from "../prisma/data/posts.seed-data"
 import { SEED_ROLES } from "../prisma/data/roles.seed-data"
 import { SEED_TENANT_PACKAGES } from "../prisma/data/tenant-packages.seed-data"
+import { projectProfile } from "../src/modules/shared/contract/project-profile"
+import { overlayPackageName } from "../src/modules/shared/contract/project-profile-overlay"
 import { TenantMenuScope } from "../src/modules/system/backend/services/tenant-menu-scope.service"
 import { SEED_USERS } from "../prisma/data/users.seed-data"
 
@@ -64,14 +66,18 @@ async function main() {
     await client.query("BEGIN")
 
     for (const pkg of SEED_TENANT_PACKAGES) {
-      await client.query(`INSERT INTO system_tenant_package (id, name, status, account_limit, remark, created_at, updated_at, deleted) VALUES ($1,$2,$3,NULL,$4,$5,$6,false) ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, status = EXCLUDED.status, remark = EXCLUDED.remark, updated_at = EXCLUDED.updated_at, deleted = false`, [pkg.id, pkg.name, pkg.status, pkg.remark, pkg.createdAt, pkg.updatedAt])
+      await client.query(`INSERT INTO system_tenant_package (id, name, status, account_limit, remark, created_at, updated_at, deleted) VALUES ($1,$2,$3,NULL,$4,$5,$6,false) ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, status = EXCLUDED.status, remark = EXCLUDED.remark, updated_at = EXCLUDED.updated_at, deleted = false`, [pkg.id, overlayPackageName(pkg.id, pkg.name), pkg.status, pkg.remark, pkg.createdAt, pkg.updatedAt])
     }
 
-    await client.query(`INSERT INTO system_tenant (id, tenant_code, name, contact_name, contact_phone, domain, package_id, status, effective_at, expire_time, account_limit, created_at, updated_at, deleted) VALUES ('1','default','默认租户','管理员','13800000001',NULL,'111','ACTIVE','2026-01-01T00:00:00.000Z','2030-12-31T23:59:59.000Z',999,'2026-01-01T00:00:00.000Z','2026-01-01T00:00:00.000Z',false) ON CONFLICT (id) DO UPDATE SET tenant_code = EXCLUDED.tenant_code, package_id = EXCLUDED.package_id, updated_at = EXCLUDED.updated_at, deleted = false`)
-    await client.query(`INSERT INTO system_tenant (id, tenant_code, name, contact_name, contact_phone, domain, package_id, status, effective_at, expire_time, account_limit, created_at, updated_at, deleted) VALUES ('2','demo','演示租户','张三','13900000001','demo.ruoyi.local','111','ACTIVE','2026-03-01T00:00:00.000Z','2027-06-30T23:59:59.000Z',50,'2026-03-01T00:00:00.000Z','2026-03-01T00:00:00.000Z',false) ON CONFLICT (id) DO UPDATE SET tenant_code = EXCLUDED.tenant_code, package_id = EXCLUDED.package_id, updated_at = EXCLUDED.updated_at, deleted = false`)
-    // A pristine schema is migrated before seeding, while existing databases receive
-    // their historical rows from the migration. Do not overwrite existing history.
-    await client.query(`INSERT INTO system_tenant_subscription (id, tenant_id, package_id, effective_at, expire_at, account_limit, status, change_type, remark) VALUES ('initial-1','1','111','2026-01-01T00:00:00.000Z','2030-12-31T23:59:59.000Z',999,'ACTIVE','MIGRATION','初始化默认租户权益'), ('initial-2','2','111','2026-03-01T00:00:00.000Z','2027-06-30T23:59:59.000Z',50,'ACTIVE','MIGRATION','初始化演示租户权益') ON CONFLICT (id) DO NOTHING`)
+    const tenantLifecycle: Record<string, { effectiveAt: string; expireTime: string; accountLimit: number }> = {
+      "1": { effectiveAt: "2026-01-01T00:00:00.000Z", expireTime: "2030-12-31T23:59:59.000Z", accountLimit: 999 },
+      "2": { effectiveAt: "2026-03-01T00:00:00.000Z", expireTime: "2027-06-30T23:59:59.000Z", accountLimit: 50 },
+    }
+    for (const tenant of projectProfile.tenants) {
+      const lifecycle = tenantLifecycle[tenant.id] ?? tenantLifecycle["1"]
+      await client.query(`INSERT INTO system_tenant (id, tenant_code, name, contact_name, contact_phone, domain, package_id, status, effective_at, expire_time, account_limit, created_at, updated_at, deleted) VALUES ($1,$2,$3,$4,$5,$6,$7,'ACTIVE',$8,$9,$10,$11,$11,false) ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, contact_name = EXCLUDED.contact_name, contact_phone = EXCLUDED.contact_phone, domain = EXCLUDED.domain, package_id = EXCLUDED.package_id, updated_at = EXCLUDED.updated_at, deleted = false`, [tenant.id, tenant.code, tenant.name, tenant.contactName ?? null, tenant.contactPhone ?? null, tenant.domain ?? null, tenant.packageId, lifecycle.effectiveAt, lifecycle.expireTime, lifecycle.accountLimit, "2026-01-01T00:00:00.000Z"])
+      await client.query(`INSERT INTO system_tenant_subscription (id, tenant_id, package_id, effective_at, expire_at, account_limit, status, change_type, remark) VALUES ($1,$2,$3,$4,$5,$6,'ACTIVE','MIGRATION',$7) ON CONFLICT (id) DO NOTHING`, [`initial-${tenant.id}`, tenant.id, tenant.packageId, lifecycle.effectiveAt, lifecycle.expireTime, lifecycle.accountLimit, `初始化${tenant.name}权益`])
+    }
 
     for (const dept of SEED_DEPTS) {
       await client.query(`INSERT INTO system_dept (id, name, parent_id, sort, leader_id, phone, email, status, tenant_id, created_at, updated_at, deleted) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,false) ON CONFLICT (id) DO NOTHING`, [dept.id, dept.name, dept.parentId, dept.sort, dept.leaderId, dept.phone, dept.email, dept.status, dept.tenantId, dept.createdAt, dept.updatedAt])
@@ -106,7 +112,7 @@ async function main() {
     await client.query(`UPDATE "system_user" SET status = 'DISABLED', updated_at = $1 WHERE username IN ('admin', 'ruoyi_local_operator') AND username <> $2`, [new Date().toISOString(), bootstrapUsername])
     await client.query(`DELETE FROM system_user_role AS ur USING "system_user" AS u WHERE ur.user_id = u.id AND u.username IN ('admin', 'ruoyi_local_operator') AND u.username <> $1`, [bootstrapUsername])
     const templateUser = SEED_USERS[0]
-    const adminResult = await client.query<{ id: string }>(`INSERT INTO "system_user" (id, username, nickname, password, salt, phone, email, avatar, status, dept_id, remark, tenant_id, created_at, updated_at, deleted) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'ACTIVE',$9,$10,$11,$12,$13,false) ON CONFLICT (username) DO UPDATE SET nickname = EXCLUDED.nickname, password = EXCLUDED.password, salt = EXCLUDED.salt, status = 'ACTIVE', deleted = false, updated_at = EXCLUDED.updated_at RETURNING id`, [randomUUID(), bootstrapUsername, "本地开发管理员", passwordHash(bootstrapPassword, bootstrapSalt), bootstrapSalt, templateUser.phone, templateUser.email, templateUser.avatar, templateUser.deptId, "本地环境专用管理员", templateUser.tenantId, templateUser.createdAt, new Date().toISOString()])
+    const adminResult = await client.query<{ id: string }>(`INSERT INTO "system_user" (id, username, nickname, password, salt, phone, email, avatar, status, dept_id, remark, tenant_id, created_at, updated_at, deleted) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'ACTIVE',$9,$10,$11,$12,$13,false) ON CONFLICT (username) DO UPDATE SET nickname = EXCLUDED.nickname, password = EXCLUDED.password, salt = EXCLUDED.salt, status = 'ACTIVE', deleted = false, updated_at = EXCLUDED.updated_at RETURNING id`, [randomUUID(), bootstrapUsername, projectProfile.bootstrapAdmin.nickname, passwordHash(bootstrapPassword, bootstrapSalt), bootstrapSalt, templateUser.phone, templateUser.email, templateUser.avatar, templateUser.deptId, "本地环境专用管理员", templateUser.tenantId, templateUser.createdAt, new Date().toISOString()])
     const adminId = adminResult.rows[0].id
     for (const menu of insertableMenus()) {
       await client.query(`INSERT INTO system_menu (id, name, permission, type, parent_id, path, component, icon, sort, status, visible, keep_alive, created_at, updated_at, deleted) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,false) ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, permission = EXCLUDED.permission, type = EXCLUDED.type, parent_id = EXCLUDED.parent_id, path = EXCLUDED.path, component = EXCLUDED.component, icon = EXCLUDED.icon, sort = EXCLUDED.sort, status = EXCLUDED.status, visible = EXCLUDED.visible, keep_alive = EXCLUDED.keep_alive, updated_at = EXCLUDED.updated_at, deleted = false`, [menu.id, menu.name, menu.permission, menu.type, menu.parentId, menu.path, menu.component, menu.icon, menu.sort, menu.status, menu.visible, menu.keepAlive, menu.createdAt, menu.updatedAt])

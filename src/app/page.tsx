@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { projectProfile } from "@/modules/shared/contract/project-profile"
 
 const systemModules = [
   { href: "/admin/system/users", label: "用户管理", icon: "👤", desc: "管理系统用户账号" },
@@ -28,8 +29,8 @@ export default function HomePage() {
       <header className="border-b bg-white/80 backdrop-blur-sm">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 text-sm font-bold text-white">R</div>
-            <span className="text-lg font-semibold text-slate-900">RuoYi All Next</span>
+            <img src={projectProfile.branding.logoSrc} alt={projectProfile.platformName} className="h-9 w-9 rounded-lg" />
+            <span className="text-lg font-semibold text-slate-900">{projectProfile.platformName}</span>
           </div>
           <Link href="/login" className="rounded-lg bg-slate-900 px-5 py-2 text-sm font-medium text-white transition hover:bg-slate-800">
             登录后台
@@ -41,11 +42,10 @@ export default function HomePage() {
         {/* Hero */}
         <section className="mb-10">
           <h1 className="text-3xl font-bold tracking-tight text-slate-900">
-            企业级全栈管理平台
+            {projectProfile.loginHeadline}
           </h1>
           <p className="mt-2 max-w-2xl text-base text-slate-500">
-            基于 Next.js 15 + TypeScript + Kysely 构建的模块化单体架构，支持 PostgreSQL、MySQL 及国产数据库，
-            具备向微服务平滑演进的能力。
+            {projectProfile.description}
           </p>
         </section>
 
@@ -120,7 +120,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="border-t bg-white py-6 text-center text-xs text-slate-400">
-        RuoYi All Next v0.1.0 · Powered by Next.js 15 · © 2026
+        {projectProfile.platformName} v{projectProfile.version} · {projectProfile.copyright}
       </footer>
     </div>
   )

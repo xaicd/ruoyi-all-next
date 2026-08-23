@@ -3,6 +3,7 @@ import type {
   Oauth2UserInfoInput,
   PageQueryInput,
 } from "@/modules/system/backend/validators"
+import { projectProfile } from "@/modules/shared/contract/project-profile"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 import { comparePasswordMD5 } from "@/modules/shared/backend/lib/crypto"
 import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
@@ -31,7 +32,7 @@ const DEFAULT_CLIENTS: Oauth2ClientItem[] = [
     id: "oc-001",
     clientId: "admin-web",
     clientSecret: "admin-web-secret",
-    name: "管理后台",
+    name: `${projectProfile.shortName}管理后台`,
     status: "ACTIVE",
   },
   {

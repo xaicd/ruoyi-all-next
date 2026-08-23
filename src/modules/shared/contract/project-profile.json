@@ -1,0 +1,53 @@
+{
+  "platformName": "RuoYi All Next",
+  "shortName": "RuoYi",
+  "description": "企业级全栈管理平台，基于 Next.js 构建。支持多数据库、多租户、微服务演进。",
+  "copyright": "© 2026",
+  "version": "0.1.0",
+  "loginHeadline": "企业级全栈管理平台",
+  "loginTagline": "基于 Next.js 构建。支持多数据库、多租户、微服务演进。",
+  "branding": {
+    "mark": "R",
+    "logoSrc": "/branding/logo.svg",
+    "favicon": "/branding/favicon.svg"
+  },
+  "bootstrapAdmin": {
+    "nickname": "本地开发管理员"
+  },
+  "defaultUsers": [
+    {
+      "username": "test",
+      "nickname": "测试用户"
+    }
+  ],
+  "tenants": [
+    {
+      "id": "1",
+      "code": "default",
+      "name": "默认租户",
+      "contactName": "管理员",
+      "contactPhone": "13800000001",
+      "domain": null,
+      "packageId": "111"
+    },
+    {
+      "id": "2",
+      "code": "demo",
+      "name": "演示租户",
+      "contactName": "张三",
+      "contactPhone": "13900000001",
+      "domain": "demo.ruoyi.local",
+      "packageId": "111"
+    }
+  ],
+  "packages": [
+    {
+      "id": "111",
+      "name": "普通套餐"
+    },
+    {
+      "id": "113",
+      "name": "测试套餐（啥都没有）"
+    }
+  ]
+}

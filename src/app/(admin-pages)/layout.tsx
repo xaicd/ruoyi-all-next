@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
+import { BrandMark } from "@/modules/shared/frontend/components/brand-mark"
 import { request } from "@/modules/shared/frontend/lib/request"
 
 type SidebarItem = { id: string; href: string | null; label: string; icon: string; children: SidebarItem[] }
@@ -75,8 +76,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Sidebar */}
       <aside className={`flex flex-col border-r bg-white transition-all duration-200 ${collapsed ? "w-16" : "w-60"}`}>
         <div className="flex h-14 items-center border-b px-3">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 text-xs font-bold text-white">R</div>
-          {!collapsed && <span className="ml-2.5 text-sm font-semibold text-slate-900 whitespace-nowrap">RuoYi Admin</span>}
+          <BrandMark size={32} withName={!collapsed} nameClassName="text-sm font-semibold text-slate-900 whitespace-nowrap" />
         </div>
 
         <nav className="flex-1 overflow-y-auto px-2 py-3">

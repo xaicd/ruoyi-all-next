@@ -1,6 +1,8 @@
 "use client"
 
 import { useState } from "react"
+import { projectProfile } from "@/modules/shared/contract/project-profile"
+import { BrandMark } from "@/modules/shared/frontend/components/brand-mark"
 import { request, API } from "@/modules/shared/frontend/lib/request"
 
 type BootstrapCredentials = { username: string; password: string }
@@ -40,10 +42,10 @@ export default function LoginPage({ bootstrapCredentials }: { bootstrapCredentia
       {/* 左侧装饰 */}
       <div className="hidden w-1/2 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 lg:flex lg:flex-col lg:justify-center lg:px-16">
         <div className="max-w-md">
-          <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 text-xl font-bold text-white">R</div>
-          <h1 className="text-3xl font-bold text-white">RuoYi All Next</h1>
+          <BrandMark size={48} inverted />
+          <h1 className="mt-6 text-3xl font-bold text-white">{projectProfile.platformName}</h1>
           <p className="mt-3 text-base text-blue-100/80">
-            企业级全栈管理平台，基于 Next.js 15 构建。支持多数据库、多租户、微服务演进。
+            {projectProfile.loginHeadline}。{projectProfile.loginTagline}
           </p>
           <div className="mt-10 grid grid-cols-2 gap-4">
             <div className="rounded-lg bg-white/10 p-4">
@@ -70,8 +72,8 @@ export default function LoginPage({ bootstrapCredentials }: { bootstrapCredentia
       <div className="flex w-full items-center justify-center bg-slate-50 px-6 lg:w-1/2">
         <div className="w-full max-w-sm">
           <div className="mb-8">
-            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 text-sm font-bold text-white lg:hidden">R</div>
-            <h2 className="text-2xl font-bold text-slate-900">登录管理后台</h2>
+            <div className="mb-4 lg:hidden"><BrandMark size={40} /></div>
+            <h2 className="text-2xl font-bold text-slate-900">登录{projectProfile.shortName}后台</h2>
             <p className="mt-1 text-sm text-slate-500">平台管理员可直接登录；租户账号请同时填写租户编码。</p>
           </div>
 
@@ -142,7 +144,7 @@ export default function LoginPage({ bootstrapCredentials }: { bootstrapCredentia
           )}
 
           <p className="mt-6 text-center text-xs text-slate-400">
-            RuoYi All Next v0.1.0 · {bootstrapCredentials ? "本地开发环境" : "安全登录"}
+            {projectProfile.platformName} v{projectProfile.version} · {bootstrapCredentials ? "本地开发环境" : "安全登录"}
           </p>
         </div>
       </div>

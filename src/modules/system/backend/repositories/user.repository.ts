@@ -11,6 +11,7 @@
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
 import type { PageResult } from "@/modules/shared/backend/lib/database"
 import { getCurrentTenantId, isPlatformContext, isPlatformUsername, isTenantRequired } from "@/modules/shared/backend/lib/biz-tenant"
+import { overlayUserNickname } from "@/modules/shared/contract/project-profile-overlay"
 import { SEED_USERS } from "@prisma/data"
 
 // === 数据结构 ===
@@ -60,7 +61,7 @@ export type UserListParams = {
 
 // === 内存存储 ===
 
-const MEMORY_STORE: SystemUserRow[] = [...SEED_USERS]
+const MEMORY_STORE: SystemUserRow[] = SEED_USERS.map((user) => ({ ...user, nickname: overlayUserNickname(user.username, user.nickname) }))
 const MEMORY_USER_POSTS = new Map<string, Set<string>>()
 
 let memoryIdSeq = 100

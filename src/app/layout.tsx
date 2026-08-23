@@ -1,12 +1,14 @@
 import type { Metadata } from "next"
+import { projectProfile } from "@/modules/shared/contract/project-profile"
 import "./globals.css"
 
 export const metadata: Metadata = {
   title: {
-    default: "RuoYi All Next",
-    template: "%s - RuoYi Admin",
+    default: projectProfile.platformName,
+    template: `%s · ${projectProfile.shortName}`,
   },
-  description: "基于 Next.js 15 的企业级全栈管理平台",
+  description: projectProfile.description,
+  icons: { icon: projectProfile.branding.favicon },
 }
 
 export default function RootLayout({

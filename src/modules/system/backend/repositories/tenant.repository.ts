@@ -3,6 +3,7 @@
  */
 
 import { randomUUID } from "node:crypto"
+import { overlayTenant } from "@/modules/shared/contract/project-profile-overlay"
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
 import type { PageResult } from "@/modules/shared/backend/lib/database"
 
@@ -30,7 +31,7 @@ export type TenantListParams = { page: number; pageSize: number; keyword?: strin
 const MEMORY_STORE: SystemTenantRow[] = [
   { id: "1", tenantCode: "default", name: "默认租户", contactName: "管理员", contactPhone: "13800000001", domain: null, packageId: "111", status: "ACTIVE", effectiveAt: "2026-01-01T00:00:00.000Z", expireTime: "2030-12-31T23:59:59.000Z", accountLimit: 999, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
   { id: "2", tenantCode: "demo", name: "演示租户", contactName: "张三", contactPhone: "13900000001", domain: "demo.ruoyi.local", packageId: "111", status: "ACTIVE", effectiveAt: "2026-03-01T00:00:00.000Z", expireTime: "2027-06-30T23:59:59.000Z", accountLimit: 50, createdAt: "2026-03-01T00:00:00.000Z", updatedAt: "2026-03-01T00:00:00.000Z" },
-]
+].map(overlayTenant)
 let memoryIdSeq = 100
 
 export const SystemTenantRepository = {

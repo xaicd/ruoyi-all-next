@@ -84,6 +84,17 @@ npm run db:seed
 npm run dev
 ```
 
+## 作为业务项目初始化
+
+本仓库就是业务系统的默认底座：每个新项目复制一次代码，只改展示身份，不要再搭一套后台。
+
+1. 改 `src/modules/shared/contract/project-profile.json`：平台名称、简称、登录文案、默认租户名、套餐名、管理员昵称。
+2. 替换 `public/branding/logo.svg` 与 `public/branding/favicon.svg`。
+3. 在 `.env.local` 填写本项目自己的 `ADMIN_BOOTSTRAP_USERNAME` / `ADMIN_BOOTSTRAP_PASSWORD` / `ADMIN_BOOTSTRAP_SALT`。
+4. 执行一次 `npm run db:migrate` 与 `npm run db:seed`。
+
+账号密码不进 Git。菜单、权限、CRUD 能力沿用本仓库，不按项目再初始化一遍。详见 [项目身份初始化](docs/guides/project-profile-bootstrap.md)。
+
 ## 项目结构
 
 ```
@@ -148,6 +159,7 @@ npm run audit-logs:retention        # 仅预览保留策略候选日志（需环
 
 - [架构总览](docs/architecture/ruoyi-all-next-architecture.md)
 - [当前进度](docs/architecture/CURRENT-PROGRESS.md)
+- [业务项目身份初始化](docs/guides/project-profile-bootstrap.md)
 - [数据库兼容规范](docs/architecture/ruoyi-all-next-database-compatibility.md)
 - [开发规范](AGENTS.md)
 - [审计日志运维](docs/operations/audit-log-operations.md)
