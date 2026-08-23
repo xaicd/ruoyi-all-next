@@ -1,13 +1,17 @@
--- Reuse the RuoYi-derived form-builder menu ID so existing role and package grants
--- remain valid while the unsafe prototype is replaced by the Online workbench.
-UPDATE "system_menu"
-SET "name" = 'Online开发',
-    "permission" = 'infra:online-definition:query',
-    "path" = 'online-definitions',
-    "component" = 'infra/online-definition/index',
-    "updated_at" = CURRENT_TIMESTAMP,
-    "deleted" = false
-WHERE "id" = '114';
+-- Ensure menu 114 exists before child buttons are attached
+INSERT INTO "system_menu" (
+  "id", "name", "permission", "type", "parent_id", "path", "component", "icon", "sort", "status", "visible", "keep_alive", "created_at", "updated_at", "deleted"
+) VALUES (
+  '114', 'Online开发', 'infra:online-definition:query', 'MENU', NULL, 'online-definitions', 'infra/online-definition/index', 'code', 99, 'ACTIVE', true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, false
+)
+ON CONFLICT ("id") DO UPDATE SET
+  "name" = EXCLUDED."name",
+  "permission" = EXCLUDED."permission",
+  "path" = EXCLUDED."path",
+  "component" = EXCLUDED."component",
+  "updated_at" = CURRENT_TIMESTAMP,
+  "deleted" = false;
+
 
 INSERT INTO "system_menu" (
   "id", "name", "permission", "type", "parent_id", "path", "component", "icon", "sort", "status", "visible", "keep_alive", "created_at", "updated_at", "deleted"

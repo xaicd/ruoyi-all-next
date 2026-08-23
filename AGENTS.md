@@ -238,9 +238,11 @@ CI 前置检查：
 
 1. npm run quick-start
 2. npm run check
-3. npm run scaffold
-4. npm run domain:list
-5. npm run domain:up -- pay
+3. npm run project:create -- <目标路径>  (一键孵化新工程与独立数据库)
+4. npm run scaffold
+5. npm run domain:list
+6. npm run domain:up -- pay
+
 
 ### 9.3 本地验证最小闭环
 
@@ -390,6 +392,23 @@ node scripts/inject-codegen-output.cjs tmp/codegen-{ClassName}
 **所有用户对话输入与需求内容必须实时记录汇总：**
 - 任何 AI Agent / IDE（Antigravity、Cursor、Windsurf、Claude Code、Copilot、Kiro、Trae、Codex 等）在接收到用户的每次对话输入与需求时，**必须**将用户的原始输入内容完整记录并追加汇总到 `docs/features/sprint-prod/{MMDD}.md`（例如 8月17日记录到 `docs/features/sprint-prod/0817.md`）。
 - 保持需求序号递增与用户输入的完整性，确保需求历史与上下文严格可追溯。
+
+### 16. ProjectReactor 脚手架与 GitHub Template 规范（供 DigitalStaff AI NPC 员工与全自动工程孵化）
+
+**作为 GitHub Template 模板底座的权威一键生成机制：**
+- 当 `DigitalStaff` AI NPC 员工或开发者需要以此底座衍生创建新业务工程时，统一调用：
+  ```bash
+  npm run project:create -- <目标路径>
+  # 例如：npm run project:create -- D:/workspace/cw/agent-zqall
+  # 或直接运行：create-project.bat <目标路径>
+  ```
+- **自动化工作流水线（全托管零配置）：**
+  1. **反应堆克隆与包名重塑**：自动将 `ruoyi-all-next` 转换为目标工程名，重塑 `package.json`（自动分配独立 `PORT=3200` 避开冲突）；
+  2. **二进制防损坏保护**：图片、字体、压缩包与数据库 dump 文件走二进制流白名单拷贝，绝不进行文本正则替换；
+  3. **数据库物理隔离与全量就绪**：自动连接 PostgreSQL 服务，创建目标独立数据库（如 `agent_zqall`），并默认部署全量 27 项基准 SQL 迁移与 RBAC 菜单权限；
+  4. **目标设计文档保护**：自动识别并完好保留目标目录下已有的业务规格文档（如 `应算通-*`、`*.md`），严禁覆盖用户既有设计；
+  5. **开箱即用**：产出工程可直接通过 `start.bat` / `./start.sh` 一键运行，无需人工执行初始化 SQL！后续有新表结构变更仅需执行增量 `npm run db:migrate`。
+
 
 <!-- BEGIN:nextjs-agent-rules -->
 

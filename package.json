@@ -16,6 +16,7 @@
     "db:backup": "node scripts/backup-db.cjs",
     "db:seed": "tsx scripts/seed-postgresql.ts",
     "project:clone": "node scripts/clone-project-base.cjs",
+    "project:create": "node scripts/clone-project-base.cjs",
 
 
     "catalog:sync:ruoyi": "node scripts/extract-seed-from-sql.cjs",

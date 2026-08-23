@@ -23,8 +23,12 @@ if ! command -v npm >/dev/null 2>&1; then
   exit 1
 fi
 
-# 2. 解析模式或展示交互式菜单
+# 2. 智能感知当前目录与同步环境
+node scripts/auto-detect-env.cjs
+
+# 3. 解析模式或展示交互式菜单
 MODE="${1:-}"
+
 
 if [ -z "$MODE" ]; then
   echo "Please select startup mode:"

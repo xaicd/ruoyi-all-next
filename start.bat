@@ -27,8 +27,12 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-REM 2. Parse Mode
+REM 2. Auto Detect Directory & Sync Environment
+node scripts/auto-detect-env.cjs
+
+REM 3. Parse Mode
 set "MODE=%~1"
+
 
 if "%MODE%"=="" (
     echo Please select startup mode:

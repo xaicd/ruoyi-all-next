@@ -1,10 +1,17 @@
--- Forward repair for databases whose legacy form-builder menu was not upgraded.
--- This migration is intentionally deployment-only; it is not executed by application startup.
+-- Ensure parent directory '2' exists before inserting children
+INSERT INTO "system_menu" (
+  "id", "name", "permission", "type", "parent_id", "path", "component", "icon", "sort", "status", "visible", "keep_alive", "created_at", "updated_at", "deleted"
+) VALUES (
+  '2', '系统监控', NULL, 'DIR', NULL, 'monitor', NULL, 'monitor', 2, 'ACTIVE', true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, false
+)
+ON CONFLICT ("id") DO NOTHING;
+
 INSERT INTO "system_menu" (
   "id", "name", "permission", "type", "parent_id", "path", "component", "icon", "sort", "status", "visible", "keep_alive", "created_at", "updated_at", "deleted"
 ) VALUES
   ('114', 'Online开发', 'infra:online-definition:query', 'MENU', '2', 'online-definitions', 'infra/online-definition/index', 'fa:wpforms', 2, 'ACTIVE', true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, false),
   ('online-114-test-page', 'Online 测试', 'infra:online-definition:test', 'MENU', '2', 'online-test', 'infra/online-test/index', 'ep:aim', 3, 'ACTIVE', true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, false)
+
 ON CONFLICT ("id") DO UPDATE SET
   "name" = EXCLUDED."name",
   "permission" = EXCLUDED."permission",
