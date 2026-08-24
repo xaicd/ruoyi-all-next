@@ -46,7 +46,13 @@ deleted      BOOLEAN NOT NULL DEFAULT FALSE   -- 软删除标记 (0/1 或 false/
 3. **写入侧**：insert 时 `tenant_id` 取上下文值；无上下文场景（open/relay/内部任务）从已验证的资源归属取（如 API Token 的 `token.tenantId`），禁止硬编码 `"1"` 或 `null`。
 4. **required 兜底**：`TENANT_MODE=required` 时缺租户直接抛错（`requireTenantId()`），把静默全量返回变成显性 bug。
 
-## 6. 绝对禁止项
+## 6. 全量初始化与最新 SQL 构建标准（唯一官方标准入口）
+- **唯一官方生成命令**：`npm run build:init-sql`（对应 `scripts/build-v1-init-sql.ts`）。
+- **职责**：提取 Prisma 纯净 DDL 并拓扑排序装配全域 Seed 数据，自动编译输出 `sql/init/ruoyi_all_next_v1.0.0_postgresql.sql`。
+- **严禁项**：严禁私自手写临时 scratch 脚本导出/篡改初始化 SQL，必须通过维护 `scripts/build-v1-init-sql.ts` 形成统一资产。
+
+## 7. 绝对禁止项
 - 严禁通过字符串拼接拼装 SQL（防止 SQL 注入）。
 - 严禁跨域直接操作他域的数据表（必须走 Domain Facade）。
 - 严禁生产环境无备份直接执行破坏性迁移（DROP COLUMN / DROP TABLE）。
+- 严禁绕过 `scripts/build-v1-init-sql.ts` 手写临时初始化 SQL。

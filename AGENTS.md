@@ -291,13 +291,15 @@ CI 前置检查：
 10. 拆分部署（BFF + pay，Facade RPC）：npm run runtime:split 或 npm run domain:up -- pay
 11. 域 RPC 契约：npm run domain:contracts（生成 TS Facade / proto / gen/go 桩）
 12. 微服务治理门禁：npm run microservice:check
+13. 全域初始化与最新 SQL 编译（唯一官方标准入口）：`npm run build:init-sql`（对应 `scripts/build-v1-init-sql.ts`，严禁编写临时 scratch 导出脚本！）
 
 本地命令面（package.json）：
 
 1. npm run quick-start
 2. npm run check
-3. npm run project:create -- <目标路径>  (一键孵化新工程与独立数据库)
-4. npm run scaffold
+3. npm run build:init-sql  (编译最新官方全量 PostgreSQL V1.0.0 初始化 SQL)
+4. npm run project:create -- <目标路径>  (一键孵化新工程与独立数据库)
+5. npm run scaffold
 5. npm run domain:list
 6. npm run domain:up -- pay
 
