@@ -178,7 +178,7 @@ export function EnterprisePortalCpcPage() {
               {quota?.enterpriseName || "广东省政务服务和数据管理局"}
             </h1>
             <p className="text-xs text-slate-300 mt-1">
-              签约套餐：<span className="text-amber-300 font-bold">{quota?.tierName || "旗舰智算融合套餐"}</span> • 运营商供给：中国移动 MOMA 智算集群
+              签约套餐：<span className="text-amber-300 font-bold">{quota?.tierName || "旗舰智算融合套餐"}</span> • 运营中枢：<span className="text-blue-300 font-bold">RoMA 应算通</span> • 算力供给：中国移动 MOMA 智算集群
             </p>
           </div>
 

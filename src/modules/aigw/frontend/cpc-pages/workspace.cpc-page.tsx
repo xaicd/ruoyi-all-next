@@ -41,11 +41,11 @@ export function WorkspaceCpcPage() {
       <header className="h-14 border-b border-slate-800 px-6 flex items-center justify-between bg-slate-950/60 backdrop-blur-md">
         <div className="flex items-center gap-3">
           <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center font-black text-xs">
-            M
+            R
           </div>
           <div>
             <div className="text-xs font-bold flex items-center gap-2">
-              <span>中国移动 MOMA 智算 • 政企 AI 协同工作台 (CPC)</span>
+              <span>RoMA 应算通 智算中枢 • 政企 AI 协同工作台 (CPC)</span>
               <span className="px-1.5 py-0.2 text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded">
                 DeepSeek-V3 671B 满血公文版
               </span>
