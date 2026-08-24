@@ -42,6 +42,17 @@ export type CreateMenuData = {
 
 export type UpdateMenuData = Partial<CreateMenuData>
 
+// 历史废弃旧菜单 ID 物理隔离黑名单（彻底防御真实数据库或内存遗留）
+const LEGACY_PURGE_IDS = new Set([
+  "2758", "2759", "2760", "2783", "2792", "2796", "2798", "2915", "5000",
+  "9000", "9001", "9002", "9003", "9004", "9005",
+  "9100", "9101", "9102", "9103", "9104",
+  "9200", "9201", "9202", "9203",
+  "9300", "9301",
+  "9400", "9401", "9402", "9403",
+  "ai-gateway-dir",
+])
+
 // === 内存存储（由 RuoYi 原始 SQL 全量生成 + Online 扩展 + AIGW 模型中台 + AI 应用） ===
 const MEMORY_STORE: SystemMenuRow[] = withAiMenuCatalog(withAigwMenuCatalog(withOnlineMenuCatalog(SEED_MENUS)))
 
@@ -49,13 +60,14 @@ let memoryIdSeq = 5000
 
 export const SystemMenuRepository = {
   async findAll(params?: { status?: string }): Promise<SystemMenuRow[]> {
-    if (hasRealDatabase()) return findAllFromDb(params)
-    let filtered = [...MEMORY_STORE]
+    const raw = hasRealDatabase() ? await findAllFromDb(params) : [...MEMORY_STORE]
+    let filtered = raw.filter((m) => !LEGACY_PURGE_IDS.has(m.id) && (!m.parentId || !LEGACY_PURGE_IDS.has(m.parentId)))
     if (params?.status) filtered = filtered.filter((m) => m.status === params.status)
     return filtered.sort((a, b) => a.sort - b.sort)
   },
 
   async findById(id: string): Promise<SystemMenuRow | null> {
+    if (LEGACY_PURGE_IDS.has(id)) return null
     if (hasRealDatabase()) return findByIdFromDb(id)
     return MEMORY_STORE.find((m) => m.id === id) ?? null
   },

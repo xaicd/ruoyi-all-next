@@ -73,9 +73,11 @@ function SystemMenusPageContent() {
       const data = res.data ?? []
       setTree(data)
       // Default: expand top-level (DIR) nodes
-      const topIds = data.filter(n => n.type === "DIR").map(n => n.id)
+      const topIds = data.filter((n) => n.type === "DIR").map((n) => n.id)
       setExpandedIds(new Set(topIds))
-    } finally { setLoading(false) }
+    } finally {
+      setLoading(false)
+    }
   }, [])
 
   useEffect(() => { loadData() }, [loadData])

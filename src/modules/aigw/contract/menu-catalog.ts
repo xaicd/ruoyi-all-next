@@ -503,18 +503,26 @@ export const AIGW_PACKAGE_MENU_IDS = [
   AIGW_INVOICES_MENU_ID,
 ]
 
+// 历史遗留旧 RuoYi 模型中台树节点全量清除清单
+const LEGACY_PURGE_MENU_IDS = [
+  "2758", "2759", "2760", "2783", "2792", "2796", "2798", "2915", "5000",
+  "9000", "9001", "9002", "9003", "9004", "9005",
+  "9100", "9101", "9102", "9103", "9104",
+  "9200", "9201", "9202", "9203",
+  "9300", "9301",
+  "9400", "9401", "9402", "9403",
+  "ai-gateway-dir",
+]
+
 export function withAigwMenuCatalog<T extends { id: string }>(menus: T[]): T[] {
   const byId = new Map(menus.map((item) => [item.id, item]))
-  // 覆盖/补充模型中台全部多级分组菜单
+  // 1. 彻底拔除历史老旧模型中台（2758）整棵树与旧 9000 散落节点
+  for (const removeId of LEGACY_PURGE_MENU_IDS) {
+    byId.delete(removeId)
+  }
+  // 2. 注入唯一权威的全新 RoMA 模型中台 5 大标准化分组结构
   for (const entry of AIGW_MENU_ENTRIES) {
     byId.set(entry.id, entry as unknown as T)
-  }
-  // 移除旧独立模块/旧目录菜单顶层节点（彻底清除重复的模型中台 ai-gateway-dir）
-  for (const removeId of [
-    "ai-gateway-dir",
-    "9000", "9004", "9005", "9100", "9101", "9103", "9104", "9200", "9201", "9203", "9300", "9400", "9402"
-  ]) {
-    byId.delete(removeId)
   }
   return [...byId.values()]
 }
