@@ -387,49 +387,55 @@ export const ADMIN_MENU: AdminMenuItem[] = [
     children: [
       {
         key: "ai-routing-dir",
-        label: "算力路由",
+        label: "算力中枢",
         children: [
           {
-            key: "ai-channels",
-            label: "上游渠道",
-            path: "/admin/aigw/channels",
-            requiredPermission: PERMISSIONS.AI_CHANNEL_VIEW,
+            key: "ai-workbench",
+            label: "体验中心",
+            path: "/admin/aigw/workbench",
+            requiredPermission: PERMISSIONS.AIGW_USAGE_VIEW,
           },
           {
-            key: "ai-models",
-            label: "模型目录",
-            path: "/admin/aigw/models",
-            requiredPermission: PERMISSIONS.AI_MODEL_VIEW,
-          },
-          {
-            key: "ai-tokens",
-            label: "调用令牌",
-            path: "/admin/aigw/tokens",
-            requiredPermission: PERMISSIONS.AI_TOKEN_VIEW,
-          },
-          {
-            key: "ai-usages",
-            label: "用量日志",
-            path: "/admin/aigw/usages",
-            requiredPermission: PERMISSIONS.AI_USAGE_VIEW,
+            key: "ai-dashboard",
+            label: "监控大屏",
+            path: "/admin/aigw/dashboard",
+            requiredPermission: PERMISSIONS.AIGW_USAGE_VIEW,
           },
           {
             key: "ai-playground",
             label: "联调探测",
             path: "/admin/aigw/playground",
-            requiredPermission: PERMISSIONS.AI_PLAYGROUND_VIEW,
+            requiredPermission: PERMISSIONS.AIGW_PLAYGROUND_VIEW,
           },
           {
-            key: "ai-chats",
-            label: "对话记录",
-            path: "/admin/aigw/chats",
-            requiredPermission: PERMISSIONS.AI_CHAT_VIEW,
+            key: "ai-channels",
+            label: "上游渠道",
+            path: "/admin/aigw/channels",
+            requiredPermission: PERMISSIONS.AIGW_CHANNEL_VIEW,
+          },
+          {
+            key: "ai-models",
+            label: "模型目录",
+            path: "/admin/aigw/models",
+            requiredPermission: PERMISSIONS.AIGW_MODEL_VIEW,
+          },
+          {
+            key: "ai-tokens",
+            label: "调用令牌",
+            path: "/admin/aigw/tokens",
+            requiredPermission: PERMISSIONS.AIGW_TOKEN_VIEW,
+          },
+          {
+            key: "ai-usages",
+            label: "用量日志",
+            path: "/admin/aigw/usages",
+            requiredPermission: PERMISSIONS.AIGW_USAGE_VIEW,
           },
         ],
       },
       {
         key: "ai-identity-dir",
-        label: "身份开户",
+        label: "政企门户",
         children: [
           {
             key: "ai-enterprises",
@@ -438,8 +444,14 @@ export const ADMIN_MENU: AdminMenuItem[] = [
             requiredPermission: PERMISSIONS.ENTITLEMENT_ENTERPRISE_VIEW,
           },
           {
+            key: "ai-tenant-members",
+            label: "成员份额",
+            path: "/admin/aigw/tenant-members",
+            requiredPermission: PERMISSIONS.ENTITLEMENT_ENTERPRISE_VIEW,
+          },
+          {
             key: "ai-seats",
-            label: "席位授权",
+            label: "席位分配",
             path: "/admin/aigw/seats",
             requiredPermission: PERMISSIONS.ENTITLEMENT_SEAT_VIEW,
           },
@@ -452,8 +464,32 @@ export const ADMIN_MENU: AdminMenuItem[] = [
         ],
       },
       {
-        key: "ai-tariff-dir",
-        label: "资费套餐",
+        key: "ai-app-dir",
+        label: "应用生态",
+        children: [
+          {
+            key: "ai-isv-apps",
+            label: "应用生态",
+            path: "/admin/aigw/isv-apps",
+            requiredPermission: PERMISSIONS.AIGW_CHANNEL_VIEW,
+          },
+          {
+            key: "ai-mcp-hub",
+            label: "私有工具",
+            path: "/admin/aigw/mcp-hub",
+            requiredPermission: PERMISSIONS.AIGW_CHANNEL_VIEW,
+          },
+          {
+            key: "ai-chats",
+            label: "对话记录",
+            path: "/admin/aigw/chats",
+            requiredPermission: PERMISSIONS.AI_CHAT_VIEW,
+          },
+        ],
+      },
+      {
+        key: "ai-settlement-dir",
+        label: "资费清分",
         children: [
           {
             key: "ai-tariffs",
@@ -463,19 +499,13 @@ export const ADMIN_MENU: AdminMenuItem[] = [
           },
           {
             key: "ai-skus",
-            label: "算力包表",
+            label: "算力油包",
             path: "/admin/aigw/skus",
             requiredPermission: PERMISSIONS.SCHEME_SKU_VIEW,
           },
-        ],
-      },
-      {
-        key: "ai-settlement-dir",
-        label: "清分结算",
-        children: [
           {
             key: "ai-pipelines",
-            label: "清分流水",
+            label: "渠道清分",
             path: "/admin/aigw/pipelines",
             requiredPermission: PERMISSIONS.SPLIT_PIPELINE_VIEW,
           },
@@ -487,7 +517,7 @@ export const ADMIN_MENU: AdminMenuItem[] = [
           },
           {
             key: "ai-invoices",
-            label: "发票开具",
+            label: "对公发票",
             path: "/admin/aigw/invoices",
             requiredPermission: PERMISSIONS.SETTLEMENT_INVOICE_VIEW,
           },

@@ -14,34 +14,7 @@ export interface AigwQuotaRow {
   updatedAt: string
 }
 
-const MEMORY_QUOTAS: AigwQuotaRow[] = [
-  {
-    id: "q-101",
-    tenantId: "1",
-    enterpriseId: "ent-1",
-    enterpriseName: "智能智算科技（广州）有限公司",
-    monthlyTokenCap: 500000000,
-    usedTokenCount: 124500000,
-    warnThresholdRatio: 80,
-    autoThrottle: true,
-    status: "ACTIVE",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "q-102",
-    tenantId: "1",
-    enterpriseId: "ent-2",
-    enterpriseName: "量子算力数字工程研究院",
-    monthlyTokenCap: 1000000000,
-    usedTokenCount: 450000000,
-    warnThresholdRatio: 85,
-    autoThrottle: true,
-    status: "ACTIVE",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-]
+export const MEMORY_QUOTAS: AigwQuotaRow[] = []
 
 export class AigwQuotaRepository {
   async findPage(tenantId: string, page = 1, pageSize = 20, enterpriseId?: string) {
@@ -68,6 +41,46 @@ export class AigwQuotaRepository {
     )
     const items = filtered.slice((page - 1) * pageSize, page * pageSize)
     return { items, total: filtered.length }
+  }
+
+  async create(tenantId: string, data: any) {
+    const record: AigwQuotaRow = {
+      id: `q-${Date.now()}`,
+      tenantId,
+      enterpriseId: data.enterpriseId || `ent-${Date.now()}`,
+      enterpriseName: data.enterpriseName || "未命名企业",
+      monthlyTokenCap: Number(data.monthlyTokenCap || 50000000),
+      usedTokenCount: Number(data.usedTokenCount || 0),
+      warnThresholdRatio: Number(data.warnThresholdRatio || 80),
+      autoThrottle: Boolean(data.autoThrottle ?? true),
+      status: data.status || "ACTIVE",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }
+    MEMORY_QUOTAS.unshift(record)
+    return record
+  }
+
+  async update(id: string, data: any) {
+    const idx = MEMORY_QUOTAS.findIndex((item) => item.id === id)
+    if (idx !== -1) {
+      MEMORY_QUOTAS[idx] = {
+        ...MEMORY_QUOTAS[idx],
+        ...data,
+        updatedAt: new Date().toISOString(),
+      }
+      return MEMORY_QUOTAS[idx]
+    }
+    return null
+  }
+
+  async delete(id: string) {
+    const idx = MEMORY_QUOTAS.findIndex((item) => item.id === id)
+    if (idx !== -1) {
+      MEMORY_QUOTAS.splice(idx, 1)
+      return true
+    }
+    return false
   }
 }
 

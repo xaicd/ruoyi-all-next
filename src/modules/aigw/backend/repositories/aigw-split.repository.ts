@@ -6,25 +6,37 @@ export interface AigwSplitPipelineRow {
   name: string
   channelCode: string
   partnerName: string
+  carrierName?: string
+  month?: string
+  totalTokens?: string
+  totalAmount?: string
+  carrierShare?: string
+  platformShare?: string
   commissionRateRatio: number
   totalRevenueAmount: number
   settledCommissionAmount: number
-  status: "ACTIVE" | "DISABLED"
+  status: "ACTIVE" | "SETTLED" | "UNSETTLED" | "DISABLED"
   createdAt: string
   updatedAt: string
 }
 
-const MEMORY_PIPELINES: AigwSplitPipelineRow[] = [
+export const MEMORY_PIPELINES: AigwSplitPipelineRow[] = [
   {
     id: "sp-1",
     tenantId: "1",
-    name: "华南大区渠道算力分佣流水线",
-    channelCode: "CHANNEL_HN_01",
-    partnerName: "华南算力分销代理",
-    commissionRateRatio: 0.12,
-    totalRevenueAmount: 250000.0,
-    settledCommissionAmount: 30000.0,
-    status: "ACTIVE",
+    name: "中国电信广东省分公司月度算力清分流水线",
+    channelCode: "CT_GD_01",
+    partnerName: "中国电信广东省分公司",
+    carrierName: "中国电信广东省分公司",
+    month: "2026-08",
+    totalTokens: "3420",
+    totalAmount: "0.0342",
+    carrierShare: "0.0103",
+    platformShare: "0.0239",
+    commissionRateRatio: 0.3,
+    totalRevenueAmount: 0.0342,
+    settledCommissionAmount: 0.0103,
+    status: "SETTLED",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
@@ -53,22 +65,49 @@ export class AigwSplitRepository {
   }
 
   async create(tenantId: string, data: any): Promise<any> {
-    const record = {
+    const record: AigwSplitPipelineRow = {
       id: `sp-${Date.now()}`,
       tenantId,
-      name: data.carrierName || "三方清分",
+      name: data.carrierName ? `${data.carrierName}清分流水线` : "三方清分流水线",
       channelCode: "CHANNEL_DEMO",
       partnerName: data.carrierName || "运营商代理",
+      carrierName: data.carrierName || "运营商代理",
+      month: data.month || "2026-08",
+      totalTokens: data.totalTokens ? String(data.totalTokens) : "0",
+      totalAmount: data.totalAmount ? String(data.totalAmount) : "0",
+      carrierShare: data.carrierShare ? String(data.carrierShare) : "0",
+      platformShare: data.platformShare ? String(data.platformShare) : "0",
       commissionRateRatio: 0.3,
-      totalRevenueAmount: parseFloat(data.totalAmount) || 0,
-      settledCommissionAmount: parseFloat(data.carrierShare) || 0,
+      totalRevenueAmount: parseFloat(data.totalAmount || "0"),
+      settledCommissionAmount: parseFloat(data.carrierShare || "0"),
       status: data.status || "SETTLED",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      ...data,
     }
-    MEMORY_PIPELINES.unshift(record as any)
+    MEMORY_PIPELINES.unshift(record)
     return record
+  }
+
+  async update(id: string, data: any) {
+    const idx = MEMORY_PIPELINES.findIndex((item) => item.id === id)
+    if (idx !== -1) {
+      MEMORY_PIPELINES[idx] = {
+        ...MEMORY_PIPELINES[idx],
+        ...data,
+        updatedAt: new Date().toISOString(),
+      }
+      return MEMORY_PIPELINES[idx]
+    }
+    return null
+  }
+
+  async delete(id: string) {
+    const idx = MEMORY_PIPELINES.findIndex((item) => item.id === id)
+    if (idx !== -1) {
+      MEMORY_PIPELINES.splice(idx, 1)
+      return true
+    }
+    return false
   }
 }
 

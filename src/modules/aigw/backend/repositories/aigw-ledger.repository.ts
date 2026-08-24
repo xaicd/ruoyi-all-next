@@ -14,20 +14,7 @@ export interface AigwQuotaLedgerRecord {
   createdAt: string
 }
 
-const MEMORY_LEDGER_STORE: AigwQuotaLedgerRecord[] = [
-  {
-    id: "ledger-001",
-    tenantId: "1",
-    changeType: "CONTRACT_FRAMEWORK_GRANT",
-    deltaTokens: 500000000,
-    balanceAfter: 500000000,
-    modelPattern: "*",
-    refId: "CT-2026-GD-0088",
-    operatorId: "admin",
-    remark: "中国电信广东分公司 5亿 Token 框架招投标开户划拨",
-    createdAt: "2026-08-24T00:00:00.000Z",
-  },
-]
+export const MEMORY_LEDGER_STORE: AigwQuotaLedgerRecord[] = []
 
 export class AigwQuotaLedgerRepository {
   private hasRealDatabase(): boolean {
@@ -118,7 +105,7 @@ export class AigwQuotaLedgerRepository {
             remark: r.remark,
             createdAt: r.created_at ? new Date(r.created_at).toISOString() : new Date().toISOString(),
           })),
-          total: Number(totalRes?.cnt ?? 0),
+          total: Number((totalRes as any)?.cnt ?? 0),
         }
       } catch (err) {
         console.warn("[AigwQuotaLedgerRepository] Fallback to memory query:", err)

@@ -16,38 +16,7 @@ export interface AigwEnterpriseRow {
   updatedAt: string
 }
 
-const MEMORY_ENTERPRISES: AigwEnterpriseRow[] = [
-  {
-    id: "ent-1",
-    tenantId: "1",
-    name: "智能智算科技（广州）有限公司",
-    code: "ENT_GZ_AI",
-    creditCode: "91440101MA59XXXX1A",
-    province: "广东",
-    city: "广州",
-    industry: "互联网/软件",
-    contactName: "张经理",
-    contactPhone: "13800138000",
-    status: "ACTIVE",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "ent-2",
-    tenantId: "1",
-    name: "量子算力数字工程研究院",
-    code: "ENT_SZ_QUANTUM",
-    creditCode: "91440300MA58XXXX2B",
-    province: "广东",
-    city: "深圳",
-    industry: "人工智能/大数据",
-    contactName: "李院长",
-    contactPhone: "13900139000",
-    status: "ACTIVE",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-]
+export const MEMORY_ENTERPRISES: AigwEnterpriseRow[] = []
 
 export class AigwEnterpriseRepository {
   async findPage(tenantId: string, page = 1, pageSize = 20, keyword?: string) {

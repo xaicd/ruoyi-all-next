@@ -22,11 +22,12 @@ export default function AigwSeatsPage() {
   const [pageSize] = useState(10)
   const [keyword, setKeyword] = useState("")
   const [loading, setLoading] = useState(true)
+  const [viewMode, setViewMode] = useState<"table" | "card">("table")
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<SeatItem | null>(null)
   const [formData, setFormData] = useState({
-    enterpriseId: "CT_GD_GOV",
+    enterpriseId: "CM_GD_GOV",
     userName: "",
     userEmail: "",
     appType: "WORKBUDDY" as "WORKBUDDY" | "QODER" | "TRAE",
@@ -133,7 +134,7 @@ export default function AigwSeatsPage() {
   return (
     <div className="p-6 space-y-5">
       {/* 头部区域 */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold tracking-tight text-slate-900">席位分配与授权</h1>
           <p className="text-xs text-slate-500 mt-0.5">
@@ -141,15 +142,41 @@ export default function AigwSeatsPage() {
           </p>
         </div>
         <div className="flex items-center gap-2.5">
+          {/* 视图切换按钮 */}
+          <div className="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200">
+            <button
+              onClick={() => setViewMode("table")}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
+                viewMode === "table"
+                  ? "bg-white text-slate-900 shadow-xs font-semibold"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              <span>☰</span>
+              <span>列表视图</span>
+            </button>
+            <button
+              onClick={() => setViewMode("card")}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
+                viewMode === "card"
+                  ? "bg-white text-slate-900 shadow-xs font-semibold"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              <span>⊞</span>
+              <span>卡片视图</span>
+            </button>
+          </div>
+
           <button
             onClick={() => fetchList(page, keyword)}
-            className="px-3 py-1.5 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition shadow-sm"
+            className="px-3.5 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition shadow-xs"
           >
             刷新
           </button>
           <button
             onClick={openCreateModal}
-            className="px-3.5 py-1.5 text-xs font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition shadow-sm flex items-center gap-1"
+            className="px-4 py-2 text-xs font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition shadow-sm flex items-center gap-1"
           >
             <span className="text-sm leading-none">+</span> 新增席位授权
           </button>
@@ -185,97 +212,162 @@ export default function AigwSeatsPage() {
         </div>
       </div>
 
-      {/* 席位表格 */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-slate-600">
-            <thead className="bg-slate-50/80 text-[11px] uppercase text-slate-500 border-b border-slate-200 font-semibold tracking-wider whitespace-nowrap">
-              <tr>
-                <th className="px-5 py-3">所属企业</th>
-                <th className="px-5 py-3">开发者姓名/邮箱</th>
-                <th className="px-5 py-3">客户端应用类型</th>
-                <th className="px-5 py-3">月度 Token 配额</th>
-                <th className="px-5 py-3">已使用 Token</th>
-                <th className="px-5 py-3">席位状态</th>
-                <th className="px-5 py-3 text-right">操作</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {loading ? (
+      {/* 视图展现 */}
+      {viewMode === "table" ? (
+        /* 席位表格 */
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs text-slate-600">
+              <thead className="bg-slate-50/80 text-[11px] uppercase text-slate-500 border-b border-slate-200 font-semibold tracking-wider whitespace-nowrap">
                 <tr>
-                  <td colSpan={7} className="text-center py-10 text-slate-400">
-                    正在加载席位授权列表...
-                  </td>
+                  <th className="px-5 py-3">所属企业</th>
+                  <th className="px-5 py-3">开发者姓名/邮箱</th>
+                  <th className="px-5 py-3">客户端应用类型</th>
+                  <th className="px-5 py-3">月度 Token 配额</th>
+                  <th className="px-5 py-3">已使用 Token</th>
+                  <th className="px-5 py-3">席位状态</th>
+                  <th className="px-5 py-3 text-right">操作</th>
                 </tr>
-              ) : items.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className="text-center py-10 text-slate-400">
-                    暂无席位数据
-                  </td>
-                </tr>
-              ) : (
-                items.map((item) => (
-                  <tr key={item.id} className="hover:bg-slate-50/70 transition whitespace-nowrap">
-                    <td className="px-5 py-3">
-                      <code className="text-[11px] font-mono bg-slate-100 px-1.5 py-0.5 rounded text-slate-700">
-                        {item.enterpriseId}
-                      </code>
-                    </td>
-                    <td className="px-5 py-3">
-                      <div className="font-semibold text-slate-900">{item.userName}</div>
-                      <div className="text-[11px] text-slate-500 font-mono">{item.userEmail || "未绑定邮箱"}</div>
-                    </td>
-                    <td className="px-5 py-3">
-                      <span className="px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded text-[11px] font-medium border border-indigo-100">
-                        {item.appType}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3 font-mono">{item.monthlyTokenCap?.toLocaleString()} Token</td>
-                    <td className="px-5 py-3 font-mono text-slate-500">{item.usedTokenCount?.toLocaleString()} Token</td>
-                    <td className="px-5 py-3">
-                      <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium ${
-                          item.status === "ACTIVE"
-                            ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                            : "bg-slate-100 text-slate-500 border border-slate-200"
-                        }`}
-                      >
-                        {item.status === "ACTIVE" ? "正常" : "禁用"}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3 text-right whitespace-nowrap min-w-[190px]">
-                      <div className="inline-flex items-center justify-end gap-1.5">
-                        <button
-                          onClick={() => openEditModal(item)}
-                          className="text-[11px] font-medium text-blue-600 hover:text-blue-800 transition px-2 py-1 hover:bg-blue-50 rounded"
-                        >
-                          编辑
-                        </button>
-                        <button
-                          onClick={() => handleToggleStatus(item)}
-                          className={`text-[11px] font-medium px-2 py-1 rounded transition ${
-                            item.status === "ACTIVE"
-                              ? "text-amber-600 hover:text-amber-800 hover:bg-amber-50"
-                              : "text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50"
-                          }`}
-                        >
-                          {item.status === "ACTIVE" ? "停用" : "启用"}
-                        </button>
-                        <button
-                          onClick={() => handleDelete(item)}
-                          className="text-[11px] font-medium text-rose-600 hover:text-rose-800 transition px-2 py-1 hover:bg-rose-50 rounded"
-                        >
-                          删除
-                        </button>
-                      </div>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {loading ? (
+                  <tr>
+                    <td colSpan={7} className="text-center py-10 text-slate-400">
+                      正在加载席位授权列表...
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : items.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="text-center py-10 text-slate-400">
+                      暂无席位数据
+                    </td>
+                  </tr>
+                ) : (
+                  items.map((item) => (
+                    <tr key={item.id} className="hover:bg-slate-50/70 transition whitespace-nowrap">
+                      <td className="px-5 py-3">
+                        <code className="text-[11px] font-mono bg-slate-100 px-1.5 py-0.5 rounded text-slate-700">
+                          {item.enterpriseId}
+                        </code>
+                      </td>
+                      <td className="px-5 py-3">
+                        <div className="font-semibold text-slate-900">{item.userName}</div>
+                        <div className="text-[11px] text-slate-500 font-mono">{item.userEmail || "未绑定邮箱"}</div>
+                      </td>
+                      <td className="px-5 py-3">
+                        <span className="px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded text-[11px] font-medium border border-indigo-100">
+                          {item.appType}
+                        </span>
+                      </td>
+                      <td className="px-5 py-3 font-mono">{item.monthlyTokenCap?.toLocaleString()} Token</td>
+                      <td className="px-5 py-3 font-mono text-slate-500">{item.usedTokenCount?.toLocaleString()} Token</td>
+                      <td className="px-5 py-3">
+                        <span
+                          className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium ${
+                            item.status === "ACTIVE"
+                              ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                              : "bg-slate-100 text-slate-500 border border-slate-200"
+                          }`}
+                        >
+                          {item.status === "ACTIVE" ? "正常" : "禁用"}
+                        </span>
+                      </td>
+                      <td className="px-5 py-3 text-right whitespace-nowrap min-w-[190px]">
+                        <div className="inline-flex items-center justify-end gap-1.5">
+                          <button
+                            onClick={() => openEditModal(item)}
+                            className="text-[11px] font-medium text-blue-600 hover:text-blue-800 transition px-2 py-1 hover:bg-blue-50 rounded"
+                          >
+                            编辑
+                          </button>
+                          <button
+                            onClick={() => handleToggleStatus(item)}
+                            className={`text-[11px] font-medium px-2 py-1 rounded transition ${
+                              item.status === "ACTIVE"
+                                ? "text-amber-600 hover:text-amber-800 hover:bg-amber-50"
+                                : "text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50"
+                            }`}
+                          >
+                            {item.status === "ACTIVE" ? "停用" : "启用"}
+                          </button>
+                          <button
+                            onClick={() => handleDelete(item)}
+                            className="text-[11px] font-medium text-rose-600 hover:text-rose-800 transition px-2 py-1 hover:bg-rose-50 rounded"
+                          >
+                            删除
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      ) : (
+        /* 卡片网格视图 */
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {items.map((item) => (
+            <div
+              key={item.id}
+              className="p-5 bg-white rounded-xl border border-slate-200 shadow-sm space-y-3 flex flex-col justify-between hover:border-blue-300 transition"
+            >
+              <div className="space-y-2.5">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <h3 className="text-xs font-bold text-slate-900">{item.userName}</h3>
+                    <span className="text-[10px] text-slate-400 font-mono">企业: {item.enterpriseId}</span>
+                  </div>
+                  <span
+                    className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${
+                      item.status === "ACTIVE" ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-500"
+                    }`}
+                  >
+                    {item.status === "ACTIVE" ? "正常" : "禁用"}
+                  </span>
+                </div>
+
+                <div className="p-2 bg-slate-50 rounded-lg space-y-1 text-[11px] text-slate-600">
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">客户端类型:</span>
+                    <span className="text-indigo-600 font-semibold">{item.appType}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">已用/月度配额:</span>
+                    <span className="font-mono">
+                      {((item.usedTokenCount || 0) / 10000).toFixed(0)}w / {((item.monthlyTokenCap || 0) / 10000).toFixed(0)}w
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-1.5 text-xs">
+                <button
+                  onClick={() => openEditModal(item)}
+                  className="px-2.5 py-1 text-blue-600 hover:bg-blue-50 font-medium rounded transition"
+                >
+                  编辑
+                </button>
+                <button
+                  onClick={() => handleToggleStatus(item)}
+                  className={`px-2 py-1 rounded font-medium transition ${
+                    item.status === "ACTIVE" ? "text-amber-600 hover:bg-amber-50" : "text-emerald-600 hover:bg-emerald-50"
+                  }`}
+                >
+                  {item.status === "ACTIVE" ? "停用" : "启用"}
+                </button>
+                <button
+                  onClick={() => handleDelete(item)}
+                  className="px-2 py-1 text-rose-600 hover:bg-rose-50 font-medium rounded transition"
+                >
+                  删除
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* 弹窗表单 */}
       {isModalOpen && (

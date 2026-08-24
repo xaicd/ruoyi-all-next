@@ -20,6 +20,7 @@ export default function AigwTariffsPage() {
   const [pageSize] = useState(10)
   const [keyword, setKeyword] = useState("")
   const [loading, setLoading] = useState(true)
+  const [viewMode, setViewMode] = useState<"table" | "card">("table")
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<TariffItem | null>(null)
@@ -130,7 +131,7 @@ export default function AigwTariffsPage() {
   return (
     <div className="p-6 space-y-5">
       {/* 头部区域 */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold tracking-tight text-slate-900">资费策略与闲时折扣</h1>
           <p className="text-xs text-slate-500 mt-0.5">
@@ -138,15 +139,41 @@ export default function AigwTariffsPage() {
           </p>
         </div>
         <div className="flex items-center gap-2.5">
+          {/* 视图切换按钮 */}
+          <div className="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200">
+            <button
+              onClick={() => setViewMode("table")}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
+                viewMode === "table"
+                  ? "bg-white text-slate-900 shadow-xs font-semibold"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              <span>☰</span>
+              <span>列表视图</span>
+            </button>
+            <button
+              onClick={() => setViewMode("card")}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
+                viewMode === "card"
+                  ? "bg-white text-slate-900 shadow-xs font-semibold"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              <span>⊞</span>
+              <span>卡片视图</span>
+            </button>
+          </div>
+
           <button
             onClick={() => fetchList(page, keyword)}
-            className="px-3 py-1.5 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition shadow-sm"
+            className="px-3.5 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition shadow-xs"
           >
             刷新
           </button>
           <button
             onClick={openCreateModal}
-            className="px-3.5 py-1.5 text-xs font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition shadow-sm flex items-center gap-1"
+            className="px-4 py-2 text-xs font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition shadow-sm flex items-center gap-1"
           >
             <span className="text-sm leading-none">+</span> 新增资费规则
           </button>
@@ -182,94 +209,159 @@ export default function AigwTariffsPage() {
         </div>
       </div>
 
-      {/* 资费表格 */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-slate-600">
-            <thead className="bg-slate-50/80 text-[11px] uppercase text-slate-500 border-b border-slate-200 font-semibold tracking-wider whitespace-nowrap">
-              <tr>
-                <th className="px-5 py-3">策略名称</th>
-                <th className="px-5 py-3">模型通配匹配</th>
-                <th className="px-5 py-3">基准单价 (元/kToken)</th>
-                <th className="px-5 py-3">闲时折扣倍率</th>
-                <th className="px-5 py-3">状态</th>
-                <th className="px-5 py-3 text-right">操作</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {loading ? (
+      {/* 视图展现 */}
+      {viewMode === "table" ? (
+        /* 资费表格 */
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs text-slate-600">
+              <thead className="bg-slate-50/80 text-[11px] uppercase text-slate-500 border-b border-slate-200 font-semibold tracking-wider whitespace-nowrap">
                 <tr>
-                  <td colSpan={6} className="text-center py-10 text-slate-400">
-                    正在加载资费规则列表...
-                  </td>
+                  <th className="px-5 py-3">策略名称</th>
+                  <th className="px-5 py-3">模型通配匹配</th>
+                  <th className="px-5 py-3">基准单价 (元/kToken)</th>
+                  <th className="px-5 py-3">闲时折扣倍率</th>
+                  <th className="px-5 py-3">状态</th>
+                  <th className="px-5 py-3 text-right">操作</th>
                 </tr>
-              ) : items.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="text-center py-10 text-slate-400">
-                    暂无资费规则
-                  </td>
-                </tr>
-              ) : (
-                items.map((item) => (
-                  <tr key={item.id} className="hover:bg-slate-50/70 transition whitespace-nowrap">
-                    <td className="px-5 py-3 font-semibold text-slate-900">{item.name}</td>
-                    <td className="px-5 py-3">
-                      <code className="text-[11px] font-mono bg-slate-100 px-1.5 py-0.5 rounded text-indigo-600 font-semibold">
-                        {item.modelPattern}
-                      </code>
-                    </td>
-                    <td className="px-5 py-3 font-mono font-semibold text-slate-900">
-                      ¥ {item.unitPrice} / kToken
-                    </td>
-                    <td className="px-5 py-3">
-                      <span className="px-2 py-0.5 bg-amber-50 text-amber-700 rounded text-[11px] font-medium border border-amber-200 font-mono">
-                        {item.offPeakRatio * 10} 折 ({item.offPeakRatio * 100}%)
-                      </span>
-                    </td>
-                    <td className="px-5 py-3">
-                      <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium ${
-                          item.status === "ACTIVE"
-                            ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                            : "bg-slate-100 text-slate-500 border border-slate-200"
-                        }`}
-                      >
-                        {item.status === "ACTIVE" ? "生效中" : "已停用"}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3 text-right whitespace-nowrap min-w-[190px]">
-                      <div className="inline-flex items-center justify-end gap-1.5">
-                        <button
-                          onClick={() => openEditModal(item)}
-                          className="text-[11px] font-medium text-blue-600 hover:text-blue-800 transition px-2 py-1 hover:bg-blue-50 rounded"
-                        >
-                          编辑
-                        </button>
-                        <button
-                          onClick={() => handleToggleStatus(item)}
-                          className={`text-[11px] font-medium px-2 py-1 rounded transition ${
-                            item.status === "ACTIVE"
-                              ? "text-amber-600 hover:text-amber-800 hover:bg-amber-50"
-                              : "text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50"
-                          }`}
-                        >
-                          {item.status === "ACTIVE" ? "停用" : "启用"}
-                        </button>
-                        <button
-                          onClick={() => handleDelete(item)}
-                          className="text-[11px] font-medium text-rose-600 hover:text-rose-800 transition px-2 py-1 hover:bg-rose-50 rounded"
-                        >
-                          删除
-                        </button>
-                      </div>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {loading ? (
+                  <tr>
+                    <td colSpan={6} className="text-center py-10 text-slate-400">
+                      正在加载资费规则列表...
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : items.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="text-center py-10 text-slate-400">
+                      暂无资费规则
+                    </td>
+                  </tr>
+                ) : (
+                  items.map((item) => (
+                    <tr key={item.id} className="hover:bg-slate-50/70 transition whitespace-nowrap">
+                      <td className="px-5 py-3 font-semibold text-slate-900">{item.name}</td>
+                      <td className="px-5 py-3">
+                        <code className="text-[11px] font-mono bg-slate-100 px-1.5 py-0.5 rounded text-indigo-600 font-semibold">
+                          {item.modelPattern}
+                        </code>
+                      </td>
+                      <td className="px-5 py-3 font-mono font-semibold text-slate-900">
+                        ¥ {item.unitPrice} / kToken
+                      </td>
+                      <td className="px-5 py-3">
+                        <span className="px-2 py-0.5 bg-amber-50 text-amber-700 rounded text-[11px] font-medium border border-amber-200 font-mono">
+                          {item.offPeakRatio * 10} 折 ({item.offPeakRatio * 100}%)
+                        </span>
+                      </td>
+                      <td className="px-5 py-3">
+                        <span
+                          className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium ${
+                            item.status === "ACTIVE"
+                              ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                              : "bg-slate-100 text-slate-500 border border-slate-200"
+                          }`}
+                        >
+                          {item.status === "ACTIVE" ? "生效中" : "已停用"}
+                        </span>
+                      </td>
+                      <td className="px-5 py-3 text-right whitespace-nowrap min-w-[190px]">
+                        <div className="inline-flex items-center justify-end gap-1.5">
+                          <button
+                            onClick={() => openEditModal(item)}
+                            className="text-[11px] font-medium text-blue-600 hover:text-blue-800 transition px-2 py-1 hover:bg-blue-50 rounded"
+                          >
+                            编辑
+                          </button>
+                          <button
+                            onClick={() => handleToggleStatus(item)}
+                            className={`text-[11px] font-medium px-2 py-1 rounded transition ${
+                              item.status === "ACTIVE"
+                                ? "text-amber-600 hover:text-amber-800 hover:bg-amber-50"
+                                : "text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50"
+                            }`}
+                          >
+                            {item.status === "ACTIVE" ? "停用" : "启用"}
+                          </button>
+                          <button
+                            onClick={() => handleDelete(item)}
+                            className="text-[11px] font-medium text-rose-600 hover:text-rose-800 transition px-2 py-1 hover:bg-rose-50 rounded"
+                          >
+                            删除
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      ) : (
+        /* 卡片网格视图 */
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {items.map((item) => (
+            <div
+              key={item.id}
+              className="p-5 bg-white rounded-xl border border-slate-200 shadow-sm space-y-3 flex flex-col justify-between hover:border-blue-300 transition"
+            >
+              <div className="space-y-2.5">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <h3 className="text-xs font-bold text-slate-900">{item.name}</h3>
+                    <code className="text-[10px] text-indigo-600 font-mono font-semibold">
+                      {item.modelPattern}
+                    </code>
+                  </div>
+                  <span
+                    className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${
+                      item.status === "ACTIVE" ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-500"
+                    }`}
+                  >
+                    {item.status === "ACTIVE" ? "生效中" : "已停用"}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-[11px]">
+                  <div className="p-2 bg-slate-50 rounded-lg">
+                    <span className="text-slate-400 block text-[10px]">基准单价</span>
+                    <strong className="text-slate-800 font-mono">¥ {item.unitPrice}</strong>
+                  </div>
+                  <div className="p-2 bg-slate-50 rounded-lg">
+                    <span className="text-slate-400 block text-[10px]">闲时阶梯折扣</span>
+                    <strong className="text-amber-700 font-mono">{item.offPeakRatio * 10} 折</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-1.5 text-xs">
+                <button
+                  onClick={() => openEditModal(item)}
+                  className="px-2.5 py-1 text-blue-600 hover:bg-blue-50 font-medium rounded transition"
+                >
+                  编辑
+                </button>
+                <button
+                  onClick={() => handleToggleStatus(item)}
+                  className={`px-2 py-1 rounded font-medium transition ${
+                    item.status === "ACTIVE" ? "text-amber-600 hover:bg-amber-50" : "text-emerald-600 hover:bg-emerald-50"
+                  }`}
+                >
+                  {item.status === "ACTIVE" ? "停用" : "启用"}
+                </button>
+                <button
+                  onClick={() => handleDelete(item)}
+                  className="px-2 py-1 text-rose-600 hover:bg-rose-50 font-medium rounded transition"
+                >
+                  删除
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* 弹窗表单 */}
       {isModalOpen && (

@@ -7,7 +7,7 @@ export interface AigwSeatRow {
   userId?: string | null
   userName: string
   userEmail?: string | null
-  appType: "WORKBUDDY" | "QODER" | "TRAE"
+  appType: "WORKBUDDY" | "QODER" | "TRAE" | string
   vendorSeatId?: string | null
   monthlyTokenCap: number
   usedTokenCount: number
@@ -16,38 +16,7 @@ export interface AigwSeatRow {
   updatedAt: string
 }
 
-const MEMORY_SEATS: AigwSeatRow[] = [
-  {
-    id: "seat-1",
-    tenantId: "1",
-    enterpriseId: "ent-1",
-    userId: "user-101",
-    userName: "张三 (高级工程师)",
-    userEmail: "zhangsan@ai-gz.com",
-    appType: "WORKBUDDY",
-    vendorSeatId: "wb_lic_9901",
-    monthlyTokenCap: 10000000,
-    usedTokenCount: 2450000,
-    status: "ACTIVE",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "seat-2",
-    tenantId: "1",
-    enterpriseId: "ent-1",
-    userId: "user-102",
-    userName: "李四 (架构师)",
-    userEmail: "lisi@ai-gz.com",
-    appType: "QODER",
-    vendorSeatId: "qd_lic_8802",
-    monthlyTokenCap: 20000000,
-    usedTokenCount: 8900000,
-    status: "ACTIVE",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-]
+export const MEMORY_SEATS: AigwSeatRow[] = []
 
 export class AigwSeatRepository {
   async findPage(tenantId: string, page = 1, pageSize = 20, enterpriseId?: string) {

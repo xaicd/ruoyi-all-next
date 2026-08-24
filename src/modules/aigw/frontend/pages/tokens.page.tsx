@@ -22,6 +22,7 @@ export default function AigwTokensPage() {
   const [pageSize] = useState(10)
   const [keyword, setKeyword] = useState("")
   const [loading, setLoading] = useState(true)
+  const [viewMode, setViewMode] = useState<"table" | "card">("table")
 
   // 弹窗状态
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -153,7 +154,7 @@ export default function AigwTokensPage() {
   return (
     <div className="p-6 space-y-5">
       {/* 头部 */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold tracking-tight text-slate-900">调用令牌 (API Keys)</h1>
           <p className="text-xs text-slate-500 mt-0.5">
@@ -161,15 +162,41 @@ export default function AigwTokensPage() {
           </p>
         </div>
         <div className="flex items-center gap-2.5">
+          {/* 视图切换按钮 */}
+          <div className="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200">
+            <button
+              onClick={() => setViewMode("table")}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
+                viewMode === "table"
+                  ? "bg-white text-slate-900 shadow-xs font-semibold"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              <span>☰</span>
+              <span>列表视图</span>
+            </button>
+            <button
+              onClick={() => setViewMode("card")}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
+                viewMode === "card"
+                  ? "bg-white text-slate-900 shadow-xs font-semibold"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              <span>⊞</span>
+              <span>卡片视图</span>
+            </button>
+          </div>
+
           <button
             onClick={() => fetchList(page, keyword)}
-            className="px-3 py-1.5 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition shadow-sm"
+            className="px-3.5 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition shadow-xs"
           >
             刷新
           </button>
           <button
             onClick={openCreateModal}
-            className="px-3.5 py-1.5 text-xs font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition shadow-sm flex items-center gap-1"
+            className="px-4 py-2 text-xs font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition shadow-sm flex items-center gap-1"
           >
             <span className="text-sm leading-none">+</span> 生成新令牌
           </button>
@@ -205,152 +232,240 @@ export default function AigwTokensPage() {
         </div>
       </div>
 
-      {/* 表格 - 严格单行不换行、文本截断 */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-slate-600">
-            <thead className="bg-slate-50/80 text-[11px] uppercase text-slate-500 border-b border-slate-200 font-semibold tracking-wider whitespace-nowrap">
-              <tr>
-                <th className="px-5 py-3">令牌名称</th>
-                <th className="px-5 py-3">API 密钥 (Key)</th>
-                <th className="px-5 py-3">总配额 / 已消耗</th>
-                <th className="px-5 py-3">配额使用率</th>
-                <th className="px-5 py-3">状态</th>
-                <th className="px-5 py-3 text-right">操作</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {loading ? (
+      {/* 视图展现 */}
+      {viewMode === "table" ? (
+        /* 表格 - 严格单行不换行、文本截断 */
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs text-slate-600">
+              <thead className="bg-slate-50/80 text-[11px] uppercase text-slate-500 border-b border-slate-200 font-semibold tracking-wider whitespace-nowrap">
                 <tr>
-                  <td colSpan={6} className="text-center py-10 text-slate-400">
-                    正在加载令牌列表...
-                  </td>
+                  <th className="px-5 py-3">令牌名称</th>
+                  <th className="px-5 py-3">API 密钥 (Key)</th>
+                  <th className="px-5 py-3">总配额 / 已消耗</th>
+                  <th className="px-5 py-3">配额使用率</th>
+                  <th className="px-5 py-3">状态</th>
+                  <th className="px-5 py-3 text-right">操作</th>
                 </tr>
-              ) : items.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="text-center py-10 text-slate-400">
-                    暂无已生成的访问令牌
-                  </td>
-                </tr>
-              ) : (
-                items.map((item) => {
-                  const percent = item.unlimitedQuota
-                    ? 0
-                    : Math.min(100, Math.round(((item.usedQuota || 0) / (item.quota || 1)) * 100))
-                  return (
-                    <tr key={item.id} className="hover:bg-slate-50/70 transition whitespace-nowrap">
-                      {/* 令牌名称 (截断) */}
-                      <td className="px-5 py-3">
-                        <div
-                          className="font-semibold text-slate-900 max-w-[180px] truncate"
-                          title={item.name}
-                        >
-                          {item.name}
-                        </div>
-                        <div className="text-[10px] text-slate-400 mt-0.5">
-                          {item.expiredAt ? `到期: ${item.expiredAt.slice(0, 10)}` : "永不过期"}
-                        </div>
-                      </td>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {loading ? (
+                  <tr>
+                    <td colSpan={6} className="text-center py-10 text-slate-400">
+                      正在加载令牌列表...
+                    </td>
+                  </tr>
+                ) : items.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="text-center py-10 text-slate-400">
+                      暂无令牌数据
+                    </td>
+                  </tr>
+                ) : (
+                  items.map((item) => {
+                    const usagePercent =
+                      item.unlimitedQuota || !item.quota
+                        ? 0
+                        : Math.min(100, Math.round(((item.usedQuota || 0) / item.quota) * 100))
 
-                      {/* API Key */}
-                      <td className="px-5 py-3">
-                        <div className="inline-flex items-center gap-1.5 max-w-[220px]">
-                          <code
-                            className="text-[11px] text-slate-700 bg-slate-100 px-2 py-0.5 rounded font-mono truncate max-w-[160px] inline-block"
-                            title={item.key}
+                    return (
+                      <tr key={item.id} className="hover:bg-slate-50/70 transition whitespace-nowrap">
+                        {/* 令牌名称 */}
+                        <td className="px-5 py-3">
+                          <div
+                            className="font-semibold text-slate-900 max-w-[180px] truncate"
+                            title={item.name}
                           >
-                            {item.key}
-                          </code>
-                          <button
-                            onClick={() => copyToClipboard(item.key, item.id)}
-                            className="text-[10px] text-blue-600 hover:text-blue-800 transition"
-                          >
-                            {copiedId === item.id ? "已复制" : "复制"}
-                          </button>
-                        </div>
-                      </td>
-
-                      {/* 配额 */}
-                      <td className="px-5 py-3">
-                        <span className="text-[11px] font-mono text-slate-700">
-                          {item.unlimitedQuota ? "无限额度" : `${formatQuota(item.quota)} Token`} /{" "}
-                          <span className="text-slate-400">{formatQuota(item.usedQuota)}</span>
-                        </span>
-                      </td>
-
-                      {/* 进度条 */}
-                      <td className="px-5 py-3">
-                        {item.unlimitedQuota ? (
-                          <span className="text-[11px] text-slate-400">不限</span>
-                        ) : (
-                          <div className="w-28">
-                            <div className="flex justify-between text-[10px] mb-0.5 font-mono text-slate-500">
-                              <span>{percent}%</span>
-                            </div>
-                            <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-                              <div
-                                className={`h-full rounded-full transition-all ${
-                                  percent > 90
-                                    ? "bg-rose-500"
-                                    : percent > 60
-                                    ? "bg-amber-500"
-                                    : "bg-blue-600"
-                                }`}
-                                style={{ width: `${percent}%` }}
-                              />
-                            </div>
+                            {item.name}
                           </div>
-                        )}
-                      </td>
+                        </td>
 
-                      {/* 状态 */}
-                      <td className="px-5 py-3">
-                        <span
-                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium ${
-                            item.status === "ACTIVE"
-                              ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                              : "bg-slate-100 text-slate-500 border border-slate-200"
-                          }`}
-                        >
-                          {item.status === "ACTIVE" ? "生效中" : "已禁用"}
-                        </span>
-                      </td>
+                        {/* API Key 带复制 */}
+                        <td className="px-5 py-3">
+                          <div className="inline-flex items-center gap-1.5 max-w-[220px]">
+                            <code
+                              className="text-[11px] text-slate-700 font-mono bg-slate-100 px-1.5 py-0.5 rounded max-w-[150px] truncate inline-block"
+                              title={item.key}
+                            >
+                              {item.key}
+                            </code>
+                            <button
+                              onClick={() => copyToClipboard(item.key, item.id)}
+                              className="text-[10px] text-slate-400 hover:text-slate-700 transition"
+                            >
+                              {copiedId === item.id ? "已复制" : "复制"}
+                            </button>
+                          </div>
+                        </td>
 
-                      {/* 操作列 (单行横向) */}
-                      <td className="px-5 py-3 text-right whitespace-nowrap min-w-[170px]">
-                        <div className="inline-flex items-center justify-end gap-1.5">
-                          <button
-                            onClick={() => openEditModal(item)}
-                            className="text-[11px] font-medium text-blue-600 hover:text-blue-800 transition px-2 py-1 hover:bg-blue-50 rounded"
-                          >
-                            调整
-                          </button>
-                          <button
-                            onClick={() => handleToggleStatus(item)}
-                            className={`text-[11px] font-medium px-2 py-1 rounded transition ${
+                        {/* 配额展示 */}
+                        <td className="px-5 py-3 font-mono text-[11px]">
+                          {item.unlimitedQuota ? (
+                            <span className="text-emerald-600 font-semibold">无限制</span>
+                          ) : (
+                            <span className="text-slate-700">
+                              <span className="font-semibold">{formatQuota(item.usedQuota)}</span> /{" "}
+                              {formatQuota(item.quota)}
+                            </span>
+                          )}
+                        </td>
+
+                        {/* 使用率进度条 */}
+                        <td className="px-5 py-3">
+                          {item.unlimitedQuota ? (
+                            <span className="text-slate-400 text-[11px]">不限额</span>
+                          ) : (
+                            <div className="flex items-center gap-2 max-w-[140px]">
+                              <div className="w-20 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                                <div
+                                  className={`h-full rounded-full ${
+                                    usagePercent >= 90
+                                      ? "bg-rose-500"
+                                      : usagePercent >= 70
+                                      ? "bg-amber-500"
+                                      : "bg-blue-600"
+                                  }`}
+                                  style={{ width: `${usagePercent}%` }}
+                                />
+                              </div>
+                              <span className="text-[10px] font-mono text-slate-500">
+                                {usagePercent}%
+                              </span>
+                            </div>
+                          )}
+                        </td>
+
+                        {/* 状态 */}
+                        <td className="px-5 py-3">
+                          <span
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium ${
                               item.status === "ACTIVE"
-                                ? "text-amber-600 hover:text-amber-800 hover:bg-amber-50"
-                                : "text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50"
+                                ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                : "bg-slate-100 text-slate-500 border border-slate-200"
                             }`}
                           >
-                            {item.status === "ACTIVE" ? "禁用" : "启用"}
-                          </button>
-                          <button
-                            onClick={() => handleDelete(item)}
-                            className="text-[11px] font-medium text-rose-600 hover:text-rose-800 transition px-2 py-1 hover:bg-rose-50 rounded"
-                          >
-                            删除
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  )
-                })
-              )}
-            </tbody>
-          </table>
+                            {item.status === "ACTIVE" ? "正常" : "已禁用"}
+                          </span>
+                        </td>
+
+                        {/* 操作列 (单行横向) */}
+                        <td className="px-5 py-3 text-right whitespace-nowrap min-w-[190px]">
+                          <div className="inline-flex items-center justify-end gap-1.5">
+                            <button
+                              onClick={() => openEditModal(item)}
+                              className="text-[11px] font-medium text-blue-600 hover:text-blue-800 transition px-2 py-1 hover:bg-blue-50 rounded"
+                            >
+                              编辑
+                            </button>
+                            <button
+                              onClick={() => handleToggleStatus(item)}
+                              className={`text-[11px] font-medium px-2 py-1 rounded transition ${
+                                item.status === "ACTIVE"
+                                  ? "text-amber-600 hover:text-amber-800 hover:bg-amber-50"
+                                  : "text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50"
+                              }`}
+                            >
+                              {item.status === "ACTIVE" ? "禁用" : "启用"}
+                            </button>
+                            <button
+                              onClick={() => handleDelete(item)}
+                              className="text-[11px] font-medium text-rose-600 hover:text-rose-800 transition px-2 py-1 hover:bg-rose-50 rounded"
+                            >
+                              删除
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      ) : (
+        /* 卡片网格视图 */
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {items.map((item) => {
+            const usagePercent =
+              item.unlimitedQuota || !item.quota
+                ? 0
+                : Math.min(100, Math.round(((item.usedQuota || 0) / item.quota) * 100))
+            return (
+              <div
+                key={item.id}
+                className="p-5 bg-white rounded-xl border border-slate-200 shadow-sm space-y-3 flex flex-col justify-between hover:border-blue-300 transition"
+              >
+                <div className="space-y-2.5">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <h3 className="text-xs font-bold text-slate-900">{item.name}</h3>
+                      <span className="text-[10px] text-slate-400 font-mono">ID: {item.id}</span>
+                    </div>
+                    <span
+                      className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${
+                        item.status === "ACTIVE" ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-500"
+                      }`}
+                    >
+                      {item.status === "ACTIVE" ? "正常" : "已禁用"}
+                    </span>
+                  </div>
+
+                  <div className="p-2 bg-slate-50 rounded-lg flex items-center justify-between font-mono text-[11px]">
+                    <span className="text-slate-700 truncate max-w-[200px]">{item.key}</span>
+                    <button
+                      onClick={() => copyToClipboard(item.key, item.id)}
+                      className="text-[10px] text-blue-600 hover:text-blue-800"
+                    >
+                      {copiedId === item.id ? "已复制" : "复制Key"}
+                    </button>
+                  </div>
+
+                  <div className="space-y-1 text-[11px]">
+                    <div className="flex justify-between text-slate-500">
+                      <span>已消耗 / 总配额</span>
+                      <span className="font-mono">
+                        {formatQuota(item.usedQuota)} / {item.unlimitedQuota ? "无限" : formatQuota(item.quota)}
+                      </span>
+                    </div>
+                    <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                      <div
+                        className={`h-full rounded-full ${
+                          usagePercent >= 90 ? "bg-rose-500" : usagePercent >= 70 ? "bg-amber-500" : "bg-blue-600"
+                        }`}
+                        style={{ width: `${usagePercent}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-1.5 text-xs">
+                  <button
+                    onClick={() => openEditModal(item)}
+                    className="px-2.5 py-1 text-blue-600 hover:bg-blue-50 font-medium rounded transition"
+                  >
+                    编辑
+                  </button>
+                  <button
+                    onClick={() => handleToggleStatus(item)}
+                    className={`px-2 py-1 rounded font-medium transition ${
+                      item.status === "ACTIVE" ? "text-amber-600 hover:bg-amber-50" : "text-emerald-600 hover:bg-emerald-50"
+                    }`}
+                  >
+                    {item.status === "ACTIVE" ? "禁用" : "启用"}
+                  </button>
+                  <button
+                    onClick={() => handleDelete(item)}
+                    className="px-2 py-1 text-rose-600 hover:bg-rose-50 font-medium rounded transition"
+                  >
+                    删除
+                  </button>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
 
       {/* 弹窗 */}
       {isModalOpen && (

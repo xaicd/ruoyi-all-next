@@ -13,6 +13,8 @@ type PublicAdminRouteException = {
 export const ADMIN_PUBLIC_ROUTE_EXCEPTIONS: readonly PublicAdminRouteException[] = [
   { path: "/api/v1/admin/system/auth", methods: ["POST"], reason: "administrator login" },
   { path: "/api/v1/admin/system/auth/captcha", methods: ["GET", "POST"], reason: "login captcha issuance and verification" },
+  { path: "/api/v1/admin/aigw/demo/execute", methods: ["POST"], reason: "Playground demo execution and interactive scenario testing" },
+  { path: "/api/v1/admin/aigw/auth/agent-verify", methods: ["POST"], reason: "Third-party ISV agent authentication by phone" },
 ]
 
 export function getAdminRoutePolicy(pathname: string, method: string): AdminRoutePolicy {

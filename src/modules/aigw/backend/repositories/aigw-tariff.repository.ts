@@ -14,34 +14,7 @@ export interface AigwTariffRow {
   updatedAt: string
 }
 
-const MEMORY_TARIFFS: AigwTariffRow[] = [
-  {
-    id: "tar-1",
-    tenantId: "1",
-    name: "DeepSeek-V3 阶梯资费包",
-    code: "TARIFF_DS_V3",
-    modelGroup: "deepseek-v3",
-    baseRatePerKTokens: 0.002,
-    tier1ThresholdTokens: 100000000,
-    tier1DiscountRate: 0.8,
-    status: "ACTIVE",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "tar-2",
-    tenantId: "1",
-    name: "Claude 3.5 Sonnet 企业算力资费",
-    code: "TARIFF_CLAUDE_35",
-    modelGroup: "claude-3-5-sonnet",
-    baseRatePerKTokens: 0.015,
-    tier1ThresholdTokens: 50000000,
-    tier1DiscountRate: 0.85,
-    status: "ACTIVE",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-]
+export const MEMORY_TARIFFS: AigwTariffRow[] = []
 
 export class AigwTariffRepository {
   async findPage(tenantId: string, page = 1, pageSize = 20) {
@@ -63,6 +36,46 @@ export class AigwTariffRepository {
     const filtered = MEMORY_TARIFFS.filter((item) => item.tenantId === tenantId)
     const items = filtered.slice((page - 1) * pageSize, page * pageSize)
     return { items, total: filtered.length }
+  }
+
+  async create(tenantId: string, data: any) {
+    const record: AigwTariffRow = {
+      id: `tar-${Date.now()}`,
+      tenantId,
+      name: data.name || "资费策略",
+      code: data.code || `TARIFF_${Date.now()}`,
+      modelGroup: data.modelPattern || data.modelGroup || "deepseek-v3",
+      baseRatePerKTokens: Number(data.unitPrice || data.baseRatePerKTokens || 0.002),
+      tier1ThresholdTokens: 50000000,
+      tier1DiscountRate: Number(data.discountRatio || 0.5),
+      status: data.status || "ACTIVE",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }
+    MEMORY_TARIFFS.unshift(record)
+    return record
+  }
+
+  async update(id: string, data: any) {
+    const idx = MEMORY_TARIFFS.findIndex((item) => item.id === id)
+    if (idx !== -1) {
+      MEMORY_TARIFFS[idx] = {
+        ...MEMORY_TARIFFS[idx],
+        ...data,
+        updatedAt: new Date().toISOString(),
+      }
+      return MEMORY_TARIFFS[idx]
+    }
+    return null
+  }
+
+  async delete(id: string) {
+    const idx = MEMORY_TARIFFS.findIndex((item) => item.id === id)
+    if (idx !== -1) {
+      MEMORY_TARIFFS.splice(idx, 1)
+      return true
+    }
+    return false
   }
 }
 
