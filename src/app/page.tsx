@@ -7,7 +7,7 @@ import { projectProfile } from "@/modules/shared/contract/project-profile"
 const coreDomains = [
   { id: "system", name: "系统管理", path: "/admin/system/users", desc: "用户、角色、菜单权限、部门岗位、数据字典与多租户隔离", tag: "System" },
   { id: "infra", name: "基础设施", path: "/admin/infra/configs", desc: "动态参数中心、定时任务调度、代码生成引擎与审计日志", tag: "Infra" },
-  { id: "ai", name: "AI 模型网关", path: "/admin/ai/channels", desc: "多上游供应商负载均衡、Token 额度计费与 OpenAI 兼容出口", tag: "Gateway" },
+  { id: "ai", name: "AI 模型网关", path: "/admin/aigw/channels", desc: "多上游供应商负载均衡、Token 额度计费与 OpenAI 兼容出口", tag: "Gateway" },
   { id: "mall", name: "商城中心", path: "/admin/mall/spu", desc: "商品 SPU/SKU、类目属性、订单结算与移动端多端购物车", tag: "Commerce" },
   { id: "member", name: "会员中心", path: "/admin/member/users", desc: "C 端会员档案、成长等级、积分流水与用户画像", tag: "Member" },
   { id: "pay", name: "支付中心", path: "/admin/pay/orders", desc: "微信/支付宝聚合支付、商户应用分账与异步退款通知", tag: "Payment" },

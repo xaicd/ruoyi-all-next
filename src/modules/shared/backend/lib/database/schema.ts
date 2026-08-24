@@ -448,6 +448,11 @@ export interface DB {
   online_managed_table: OnlineManagedTableTable
   online_test_session: OnlineTestSessionTable
   online_record: OnlineRecordTable
+  aigw_tenant_quota_ledger: AigwTenantQuotaLedgerTable
+  system_tenant_package_ai_quota: SystemTenantPackageAiQuotaTable
+  system_tenant_package_ai_seat: SystemTenantPackageAiSeatTable
+  system_tenant_package_ai_tariff: SystemTenantPackageAiTariffTable
+  aigw_carrier_agent: AigwCarrierAgentTable
 }
 
 
@@ -657,3 +662,64 @@ export interface OnlineRecordTable {
   updated_at: Date
   deleted: Generated<boolean>
 }
+
+// === AIGW 配额台账 & 运营商渠道 & 租户套餐关联表 ===
+
+export interface AigwTenantQuotaLedgerTable {
+  id: string
+  tenant_id: string
+  change_type: string
+  delta_tokens: number
+  balance_after: number
+  model_pattern: string | null
+  ref_id: string | null
+  operator_id: string | null
+  remark: string | null
+  created_at: Generated<Date>
+}
+
+export interface SystemTenantPackageAiQuotaTable {
+  id: string
+  package_id: string
+  model_pattern: string
+  quota_tokens: number
+  refresh_cycle: string
+  created_at: Generated<Date>
+  updated_at: Date
+  deleted: Generated<boolean>
+}
+
+export interface SystemTenantPackageAiSeatTable {
+  id: string
+  package_id: string
+  seat_type: string
+  max_seats: number
+  created_at: Generated<Date>
+  updated_at: Date
+  deleted: Generated<boolean>
+}
+
+export interface SystemTenantPackageAiTariffTable {
+  id: string
+  package_id: string
+  tariff_id: string
+  overage_policy: string
+  created_at: Generated<Date>
+  updated_at: Date
+  deleted: Generated<boolean>
+}
+
+export interface AigwCarrierAgentTable {
+  id: string
+  carrier_code: string
+  carrier_name: string
+  province: string
+  revenue_share_ratio: number
+  contact_name: string | null
+  contact_phone: string | null
+  status: string
+  created_at: Generated<Date>
+  updated_at: Date
+  deleted: Generated<boolean>
+}
+

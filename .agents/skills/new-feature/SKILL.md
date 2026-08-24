@@ -46,8 +46,9 @@ flowchart TD
 ### 第 2 步：数据建模与多租户索引设计 (Prisma & Kysely)
 1. **标准 6 大审计与租户字段（强制）**：
    - `tenant_id`（带 B-Tree 索引）、`created_by`、`updated_by`、`created_at`、`updated_at`、`deleted`；
-2. **从读写路径倒推索引**：针对组合查询（如 `tenant_id + status + created_at`）建立复合索引；
-3. **Repository 落地**：必须实现 `findAll`、`findById`、`create`、`update`、`delete`，并在所有 SQL/Kysely 查询中强制限定 `tenant_id = :currentTenantId`。
+2. **Kysely DB 工厂解包规则**：`const db = await getKyselyDb()` 必须 `await` 异步解包 Kysely 实例，禁止同步直调；
+3. **Repository 双导出规范**：文件与 `index.ts` 必须同时导出 `XxxRepository` (PascalCase) 与 `export const xxxRepository = XxxRepository` (camelCase) 别名；
+4. **Repository 落地**：必须实现 `findAll`、`findById`、`create`、`update`、`delete`，并在所有 SQL/Kysely 查询中强制限定 `tenant_id = :currentTenantId`。
 
 ---
 
@@ -74,14 +75,15 @@ flowchart TD
 ---
 
 ### 第 6 步：前端开箱即用 UI 与弹窗交互 (Frontend UI Standard)
-严格遵循 `.agents/skills/ui-design/SKILL.md`：
-1. **API Client 封装**：`src/modules/{domain}/frontend/api/{entity}.api.ts` 暴露 `page/create/update/delete`；
-2. **顶部工具栏**：配备 `[+ 新增]` 主按钮、多条件筛选输入、`[查询]`、`[重置]` 与 `[刷新]`；
-3. **严格单行排版（whitespace-nowrap）**：表格行高整齐一致，严禁无序折行；
-4. **超长内容单行截断（Truncate）**：URL、密钥、长名称等使用 `max-w-[200px] truncate` + `title="..."` 悬停提示；
-5. **多标签收敛**：列表 Tags 单行最多显示 2 个，超出显示 `+N` 徽标；
-6. **操作列横向排布**：操作列固定保底宽度（`min-w-[190px]`），横向平铺 `[编辑]`、`[启用/禁用]`、`[删除]`、业务动作（如探测/测试）；
-7. **模态表单弹窗（Form Modal）**：具备参数校验、新增/编辑状态复用与友好反馈。
+严格遵循 `channels.page.tsx` UI Design System：
+1. **API Client 封装**：`src/modules/{domain}/frontend/api/{entity}.api.ts` 使用 `request.get(url, { params })` / `request.post(url, data)`；
+2. **顶部工具栏与按钮顺序**：标题 `text-xl font-bold tracking-tight text-slate-900`，`[刷新]`(白色描边 `bg-white border-slate-300`) 在左，`[+ 新增]`(Blue `bg-blue-600`) 在右；
+3. **搜索栏 Container**：`p-3.5 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3`，`bg-slate-900` 查询 + `bg-slate-100` 重置，右侧统计数据；
+4. **严格单行排版（whitespace-nowrap）**：`bg-slate-50/80` 表头，`px-5 py-3 text-xs` 单元格；
+5. **超长内容单行截断（Truncate）**：URL、密钥、长名称等使用 `max-w-[200px] truncate` + `title="..."` 悬停提示；
+6. **多标签收敛**：列表 Tags 单行最多显示 2 个，超出显示 `+N` 徽标；
+7. **操作列横向排布**：操作列固定保底宽度（`min-w-[190px]`），横向平铺 `[编辑]`(Blue)、`[启用/禁用]`(Amber/Emerald)、`[删除]`(Rose)、业务动作；
+8. **模态表单弹窗（Form Modal）**：具备参数校验、新增/编辑状态复用与友好反馈。
 
 ---
 

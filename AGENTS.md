@@ -108,6 +108,17 @@
 4. 复杂流程建议统一执行管道：authorize -> guard -> transaction -> log。
 5. 规范文档：docs/guides/service-design-patterns.md。
 
+### 4.7 Repository & Service 导出规范与大小写防混淆（强制）
+
+1. 所有 Repository 与 Service 文件，必须同时导出 **PascalCase（类名/对象）** 与 **camelCase（单例别名）**，杜绝消费端因大小写风格差异引发 Turbopack / Next.js 构建错误：
+   ```ts
+   // 规范示例：aigw-usage.repository.ts
+   export const AigwUsageRepository = { ... }
+   export const aigwUsageRepository = AigwUsageRepository
+   ```
+2. 模块级 `repositories/index.ts` 与 `services/index.ts` 集中重导出时，必须同时保留 PascalCase 和 camelCase 导出；
+3. 代码生成器（Codegen Engine）模板强制默认输出 camelCase 单例别名。
+
 ## 5. Domain-First 研发流程与“开箱即用”闭环规范（强制）
 
 每个域与新功能按完整闭环推进，**严禁仅生成只读骨架或占位页面（Forbidden Skeleton-Only Delivery）**。
@@ -130,6 +141,24 @@
 3. 构建完整交互的 Frontend API 与前端管理页面（含操作列与 CRUD 弹窗）。
 4. 补齐权限、日志与自动化测试。
 5. 门禁检查与文档记录回写。
+
+### 5.2 前端 UI Design System 与低代码 Codegen 模板对齐规范（强制）
+
+所有手动编写与低代码生成器 (Codegen Engine) 产出的前端页面，必须严格遵循平台统一 UI Design System 风格指南（以 `channels.page.tsx` 为视觉基准）：
+1. **页面 Header 规范**：
+   - 主标题: `text-xl font-bold tracking-tight text-slate-900`
+   - 副标题: `text-xs text-slate-500 mt-0.5`
+   - 右侧按钮顺序: 【刷新】(白色 `bg-white border-slate-300`) 在左，【+ 新增】(`bg-blue-600 hover:bg-blue-700 text-white`) 在右。
+2. **搜索栏 Search Container 规范**：
+   - 容器: `p-3.5 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3`
+   - 控件: `bg-slate-900 text-white` 查询按钮 + `bg-slate-100 text-slate-600` 重置按钮
+   - 右侧统计: `共 X 个节点/开户` 数据面板。
+3. **表格 Table & 操作列 规范**：
+   - 表头: `bg-slate-50/80 text-[11px] uppercase text-slate-500 font-semibold tracking-wider`
+   - 单元格: `px-5 py-3 text-xs text-slate-600`
+   - 操作列: 固定 `text-right whitespace-nowrap min-w-[190px]`，按钮为 `[编辑]` (Blue)、`[启用/停用]` (Amber/Emerald)、`[删除]` (Rose)。
+4. **Codegen Engine 低代码模板**：
+   - 代码生成器模板 (`src/modules/infra/backend/services/codegen-engine.service.ts`) 与生成脚手架必须硬化使用上述 DOM 结构与 Token，确保生成的代码开箱与原生模版 100% 视觉一致。
 
 ## 6. 能力同步与治理门禁
 

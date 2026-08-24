@@ -191,16 +191,70 @@ export const PERMISSIONS = {
   AIGW_USAGE_VIEW: "aigw:usage:view",
   AIGW_PLAYGROUND_VIEW: "aigw:playground:view",
 
+  // entitlement (身份权益与渠道开户)
+  ENTITLEMENT_ENTERPRISE_VIEW: "entitlement:enterprise:query",
+  ENTITLEMENT_ENTERPRISE_CREATE: "entitlement:enterprise:create",
+  ENTITLEMENT_ENTERPRISE_UPDATE: "entitlement:enterprise:update",
+  ENTITLEMENT_ENTERPRISE_DELETE: "entitlement:enterprise:delete",
+  ENTITLEMENT_SEAT_VIEW: "entitlement:seat:query",
+  ENTITLEMENT_SEAT_CREATE: "entitlement:seat:create",
+  ENTITLEMENT_SEAT_UPDATE: "entitlement:seat:update",
+  ENTITLEMENT_SEAT_DELETE: "entitlement:seat:delete",
+  ENTITLEMENT_QUOTA_VIEW: "entitlement:quota:query",
+  ENTITLEMENT_QUOTA_UPDATE: "entitlement:quota:update",
+  ENTITLEMENT_POLICY_VIEW: "entitlement:policy:query",
+  ENTITLEMENT_POLICY_UPDATE: "entitlement:policy:update",
+  ENTITLEMENT_CHANNEL_VIEW: "entitlement:channel:query",
+  ENTITLEMENT_CHANNEL_CREATE: "entitlement:channel:create",
+  ENTITLEMENT_CHANNEL_UPDATE: "entitlement:channel:update",
+  ENTITLEMENT_CHANNEL_DELETE: "entitlement:channel:delete",
+
+  // meter (用量策略与计量)
+  METER_USAGE_VIEW: "meter:usage:query",
+  METER_TARIFF_VIEW: "meter:tariff:query",
+  METER_TARIFF_CREATE: "meter:tariff:create",
+  METER_TARIFF_UPDATE: "meter:tariff:update",
+  METER_TARIFF_DELETE: "meter:tariff:delete",
+  METER_DISPATCH_VIEW: "meter:dispatch:query",
+  METER_DISPATCH_UPDATE: "meter:dispatch:update",
+  METER_DASHBOARD_VIEW: "meter:dashboard:query",
+
+  // scheme (运营清分 - 方案工厂与资费)
+  SCHEME_FACTORY_VIEW: "scheme:factory:query",
+  SCHEME_FACTORY_CREATE: "scheme:factory:create",
+  SCHEME_FACTORY_UPDATE: "scheme:factory:update",
+  SCHEME_FACTORY_DELETE: "scheme:factory:delete",
+  SCHEME_SANDBOX_RUN: "scheme:sandbox:run",
+  SCHEME_SKU_VIEW: "scheme:sku:query",
+  SCHEME_SKU_CREATE: "scheme:sku:create",
+  SCHEME_SKU_UPDATE: "scheme:sku:update",
+  SCHEME_SKU_DELETE: "scheme:sku:delete",
+
+  // split (运营清分 - 分账引擎)
+  SPLIT_PIPELINE_VIEW: "split:pipeline:query",
+  SPLIT_PIPELINE_CREATE: "split:pipeline:create",
+  SPLIT_PIPELINE_UPDATE: "split:pipeline:update",
+  SPLIT_PIPELINE_DELETE: "split:pipeline:delete",
+  SPLIT_EXECUTE: "split:engine:execute",
+
+  // report
+  REPORT_CUSTOM_SQL_EXECUTE: "report:custom-sql:execute",
+  REPORT_BOARD_VIEW: "report:board:view",
   // iot
   IOT_DEVICE_VIEW: "iot:device:view",
-  IOT_DEVICE_CREATE: "iot:device:create",
   IOT_ALERT_VIEW: "iot:alert:view",
-  IOT_ALERT_HANDLE: "iot:alert:handle",
-  // report
-  REPORT_BOARD_VIEW: "report:board:view",
-  REPORT_EXPORT: "report:export",
-  // 自定义 SQL 连接到平台级数据源，仅允许平台管理员使用。
-  REPORT_CUSTOM_SQL_EXECUTE: "report:custom-sql:execute",
+  // settlement (票款账务与结算)
+  SETTLEMENT_CONTRACT_VIEW: "settlement:contract:query",
+  SETTLEMENT_CONTRACT_CREATE: "settlement:contract:create",
+  SETTLEMENT_CONTRACT_UPDATE: "settlement:contract:update",
+  SETTLEMENT_CONTRACT_DELETE: "settlement:contract:delete",
+  SETTLEMENT_BATCH_VIEW: "settlement:batch:query",
+  SETTLEMENT_BATCH_CREATE: "settlement:batch:create",
+  SETTLEMENT_BATCH_UPDATE: "settlement:batch:update",
+  SETTLEMENT_BATCH_POST: "settlement:batch:post",
+  SETTLEMENT_INVOICE_VIEW: "settlement:invoice:query",
+  SETTLEMENT_INVOICE_CREATE: "settlement:invoice:create",
+  SETTLEMENT_INVOICE_UPDATE: "settlement:invoice:update",
 } as const
 
 export type PermissionCode = (typeof PERMISSIONS)[keyof typeof PERMISSIONS]

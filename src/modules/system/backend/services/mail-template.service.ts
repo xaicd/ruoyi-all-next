@@ -46,7 +46,14 @@ export class SystemMailTemplateService {
   static async createMailTemplate(input: CreateMailTemplateInput) {
     const items = await load()
     if (items.some((item) => item.code === input.code)) throw new Error(`邮件模板编码已存在: ${input.code}`)
-    const created: MailTemplateItem = { id: `mailt-${Date.now()}`, ...input }
+    const created: MailTemplateItem = {
+      id: `mailt-${Date.now()}`,
+      name: input.name ?? "",
+      code: input.code ?? "",
+      subject: input.subject ?? "",
+      content: input.content ?? "",
+      status: input.status ?? "ACTIVE",
+    }
     await save([created, ...items])
     domainLog.audit("system.mailTemplate.create", { targetType: "MAIL_TEMPLATE", targetId: created.id })
     return created

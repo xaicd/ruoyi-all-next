@@ -31,57 +31,66 @@ if %errorlevel% neq 0 (
 REM 2. Auto Detect Directory & Sync Environment
 node scripts/auto-detect-env.cjs
 
-REM 3. Parse Mode
-set "MODE=%~1"
-
-
-if "%MODE%"=="" (
-    echo Please select startup mode:
-    echo   [1] Fast Local Dev Mode - Next.js at http://localhost:3100 [Recommended]
-    echo   [2] Full Docker Mode - PostgreSQL:5433 + Redis:6380 + Next.js
-    echo   [3] Infrastructure Only - Start DB + Redis containers
-    echo   [4] Architecture Governance Check - npm run check
-    echo   [5] Stop Project Docker Containers
-    echo   [6] Database Backup - npm run db:backup
-    echo.
-    set /p "CHOICE=Enter number [default 1]: "
-    if "!CHOICE!"=="" set "CHOICE=1"
-    if "!CHOICE!"=="1" set "MODE=app"
-    if "!CHOICE!"=="2" set "MODE=dev"
-    if "!CHOICE!"=="3" set "MODE=infra"
-    if "!CHOICE!"=="4" set "MODE=check"
-    if "!CHOICE!"=="5" set "MODE=stop"
-    if "!CHOICE!"=="6" set "MODE=backup"
+set "APP_PORT=3200"
+if exist ".env" (
+    for /f "usebackq tokens=1,* delims==" %%A in (`findstr /r "^PORT=" .env 2^>nul`) do (
+        if "%%A"=="PORT" set "APP_PORT=%%B"
+    )
 )
 
-if /I "%MODE%"=="help" goto :help
-if /I "%MODE%"=="-h" goto :help
-if /I "%MODE%"=="--help" goto :help
-if /I "%MODE%"=="app" goto :app
-if /I "%MODE%"=="dev" goto :dev
-if /I "%MODE%"=="infra" goto :infra
-if /I "%MODE%"=="docker" goto :docker
-if /I "%MODE%"=="memory" goto :memory
-if /I "%MODE%"=="check" goto :check
-if /I "%MODE%"=="backup" goto :backup
-if /I "%MODE%"=="status" goto :status
-if /I "%MODE%"=="stop" goto :stop
+REM 3. Parse Command Line Arguments
+if /I "%~1"=="help" goto :help
+if /I "%~1"=="-h" goto :help
+if /I "%~1"=="--help" goto :help
+if /I "%~1"=="app" goto :app
+if /I "%~1"=="dev" goto :dev
+if /I "%~1"=="infra" goto :infra
+if /I "%~1"=="docker" goto :docker
+if /I "%~1"=="memory" goto :memory
+if /I "%~1"=="check" goto :check
+if /I "%~1"=="backup" goto :backup
+if /I "%~1"=="status" goto :status
+if /I "%~1"=="stop" goto :stop
 
+if not "%~1"=="" (
+    echo [ERROR] Unknown mode: %~1
+    goto :help
+)
 
-echo [ERROR] Unknown mode: %MODE%
-goto :help
+REM 4. Interactive Menu Selection
+echo Please select startup mode:
+echo   [1] Fast Local Dev Mode - Next.js at http://localhost:%APP_PORT% [Recommended]
+echo   [2] Full Docker Mode - PostgreSQL:5433 + Redis:6380 + Next.js
+echo   [3] Infrastructure Only - Start DB + Redis containers
+echo   [4] Architecture Governance Check - npm run check
+echo   [5] Stop Project Docker Containers
+echo   [6] Database Backup - npm run db:backup
+echo.
+set "CHOICE=1"
+set /p "CHOICE=Enter number [default 1]: "
+
+if "%CHOICE%"=="1" goto :app
+if "%CHOICE%"=="2" goto :dev
+if "%CHOICE%"=="3" goto :infra
+if "%CHOICE%"=="4" goto :check
+if "%CHOICE%"=="5" goto :stop
+if "%CHOICE%"=="6" goto :backup
+
+echo [WARN] Invalid option selected, defaulting to Fast Local Dev Mode...
+goto :app
 
 :app
 echo [INFO] Starting Next.js development server...
-echo [INFO] Access Homepage: http://localhost:3100
-echo [INFO] Access Admin:    http://localhost:3100/login
+echo [INFO] Access Homepage: http://localhost:%APP_PORT%
+echo [INFO] Access Admin:    http://localhost:%APP_PORT%/login
 echo.
 call npm run dev
 if %errorlevel% neq 0 (
     echo.
     echo [TIP] If dependencies are missing, run: npm install
-    pause
 )
+echo.
+echo [INFO] Server process ended.
 goto :end
 
 :dev
@@ -126,15 +135,12 @@ call npm run db:migrate
 call npm run db:seed
 call npm run db:backup
 echo [OK] Infrastructure containers are running.
-
-pause
 goto :end
 
 :docker
 echo [STEP] Building and starting complete Docker compose stack...
 docker compose -f deploy/docker-compose.dev.yml up -d --build
-echo [OK] App running in Docker at http://localhost:3100
-pause
+echo [OK] App running in Docker at http://localhost:%APP_PORT%
 goto :end
 
 :memory
@@ -149,35 +155,29 @@ goto :end
 echo [STEP] Running governance and lint checks...
 call npm run check
 echo.
-pause
 goto :end
 
 :backup
-
 echo [STEP] Backing up PostgreSQL database...
 call npm run db:backup
 echo.
-pause
 goto :end
 
 :status
-
 docker compose -f deploy/docker-compose.dev.yml ps
-pause
 goto :end
 
 :stop
 echo [STEP] Stopping Docker services...
 docker compose -f deploy/docker-compose.dev.yml down
 echo [OK] Containers stopped.
-pause
 goto :end
 
 :help
 echo Usage: start.bat [mode]
 echo.
 echo Available modes:
-echo   app     - Fast local Next.js dev server: http://localhost:3100
+echo   app     - Fast local Next.js dev server: http://localhost:%APP_PORT%
 echo   dev     - Start Docker DB/Redis, migrate, and run Next.js
 echo   infra   - Start DB/Redis containers only
 echo   docker  - Full Docker containerized deployment
@@ -186,6 +186,9 @@ echo   check   - Run matrix, domain, and governance checks
 echo   status  - Show Docker container status
 echo   stop    - Stop all project containers
 echo.
+goto :end
 
 :end
+echo.
+pause
 endlocal

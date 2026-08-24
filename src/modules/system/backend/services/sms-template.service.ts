@@ -45,7 +45,13 @@ export class SystemSmsTemplateService {
   static async createSmsTemplate(input: CreateSmsTemplateInput) {
     const items = await load()
     if (items.some((item) => item.code === input.code)) throw new Error(`短信模板编码已存在: ${input.code}`)
-    const created: SmsTemplateItem = { id: `smst-${Date.now()}`, ...input }
+    const created: SmsTemplateItem = {
+      id: `smst-${Date.now()}`,
+      name: input.name ?? "",
+      code: input.code ?? "",
+      content: input.content ?? "",
+      status: input.status ?? "ACTIVE",
+    }
     await save([created, ...items])
     domainLog.audit("system.smsTemplate.create", { targetType: "SMS_TEMPLATE", targetId: created.id })
     return created

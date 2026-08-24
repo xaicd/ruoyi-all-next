@@ -1,15 +1,15 @@
 import { beforeEach, describe, expect, it } from "vitest"
-import { clearCacheStore, cacheGet, cacheSet } from "../cache-store"
-import { clearDatasources, getDatasource, registerDatasource } from "../persistence-datasource"
-import { mapperPage } from "../persistence-mapper"
-import { translateByDict } from "../persistence-translate"
-import { clearMqListeners, mqPublish, mqSubscribe } from "../platform-mq"
-import { clearWebsocketHub, listWebsocketMessages, websocketConnect, websocketSend } from "../platform-websocket"
-import { clearMonitorStore, listTracerSpans, monitorIncrement, monitorRead, tracerRecord } from "../platform-monitor"
-import { dictTranslate, excelToCsv } from "../platform-excel-dict"
-import { clearTenantContext, getTenantContext, setTenantContext } from "../biz-tenant"
-import { buildDataPermissionScope, hasDataPermission } from "../biz-data-permission"
-import { resolveIpArea } from "../biz-ip-area"
+import { clearCacheStore, cacheGet, cacheSet } from "./cache-store"
+import { clearDatasources, getDatasource, registerDatasource } from "./persistence-datasource"
+import { mapperPage } from "./persistence-mapper"
+import { translateByDict } from "./persistence-translate"
+import { clearMqListeners, mqPublish, mqSubscribe } from "./platform-mq"
+import { clearWebsocketHub, listWebsocketMessages, websocketConnect, websocketSend } from "./platform-websocket"
+import { clearMonitorStore, listTracerSpans, monitorIncrement, monitorRead, tracerRecord } from "./platform-monitor"
+import { dictTranslate, excelToCsv } from "./platform-excel-dict"
+import { clearTenantContext, getTenantContext, setTenantContext } from "./biz-tenant"
+import { buildDataPermissionScope, hasDataPermission } from "./biz-data-permission"
+import { resolveIpArea } from "./biz-ip-area"
 
 describe("starter platform libs", () => {
   beforeEach(() => {
@@ -57,7 +57,7 @@ describe("starter platform libs", () => {
     expect(dictTranslate("A", [{ value: "A", label: "可用" }])).toBe("可用")
     expect(excelToCsv(["id"], [["1"]])).toContain("id")
 
-    setTenantContext({ tenantId: "t-1", tenantPackageId: "tp-1" })
+    setTenantContext({ tenantId: "t-1", isPlatform: false })
     expect(getTenantContext()?.tenantId).toBe("t-1")
 
     const scope = buildDataPermissionScope("SD-JN")

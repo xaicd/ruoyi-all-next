@@ -1,17 +1,16 @@
 /**
- * 统一请求客户端
+ * 统一请求客户端 (支持 Axios 函数式与 RequestClient 对象式双模调用)
  *
  * 功能：
  * - 自动附加 Authorization header
  * - Token 过期自动跳转登录
  * - 统一响应解析
- * - 统一错误处理
+ * - 兼容 request({ url, method, params, data }) 与 request.get(url, config) 双重语法
  */
 
 type ApiResponse<T = any> = {
   success: boolean
   data?: T
-  /** v1 compatibility alias for message. */
   error?: string
   code?: string
   message?: string
@@ -22,23 +21,23 @@ type ApiResponse<T = any> = {
 }
 
 type RequestOptions = {
-  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH"
+  url?: string
+  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "get" | "post" | "put" | "delete" | "patch"
+  params?: any
+  data?: any
   body?: any
   headers?: Record<string, string>
-  /** 跳过 token 检查（登录接口用） */
   noAuth?: boolean
 }
 
 class RequestClient {
   private baseUrl = ""
 
-  /** 获取 token */
   private getToken(): string | null {
     if (typeof window === "undefined") return null
     return localStorage.getItem("ruoyi_token")
   }
 
-  /** token 过期处理 */
   private handleUnauthorized() {
     if (typeof window === "undefined") return
     localStorage.removeItem("ruoyi_token")
@@ -49,17 +48,14 @@ class RequestClient {
     }
   }
 
-  /** 核心请求方法 */
   async request<T = any>(url: string, options: RequestOptions = {}): Promise<ApiResponse<T>> {
     const { method = "GET", body, headers = {}, noAuth = false } = options
 
-    // 构建 headers
     const finalHeaders: Record<string, string> = {
       "Content-Type": "application/json",
       ...headers,
     }
 
-    // 自动附加 token
     if (!noAuth) {
       const token = this.getToken()
       if (token) {
@@ -67,20 +63,18 @@ class RequestClient {
       }
     }
 
-    // 构建 fetch options
     const fetchOptions: RequestInit = {
-      method,
+      method: method.toUpperCase(),
       headers: finalHeaders,
     }
 
-    if (body && method !== "GET") {
+    if (body && method.toUpperCase() !== "GET") {
       fetchOptions.body = JSON.stringify(body)
     }
 
     try {
       const response = await fetch(this.baseUrl + url, fetchOptions)
 
-      // 401: token 过期或无效
       if (response.status === 401 && !noAuth) {
         this.handleUnauthorized()
         return { success: false, error: "登录已过期，请重新登录" }
@@ -92,40 +86,69 @@ class RequestClient {
       return { success: false, error: error?.message ?? "网络异常" }
     }
   }
+}
 
-  // === 快捷方法 ===
+const clientInstance = new RequestClient()
 
-  get<T = any>(url: string, params?: Record<string, any>) {
-    if (params) {
+/** 兼容双模调用的请求主入口 */
+function requestCore<T = any>(
+  urlOrConfig: string | (RequestOptions & { url: string }),
+  options?: RequestOptions
+): Promise<ApiResponse<T>> {
+  if (typeof urlOrConfig === "string") {
+    let finalUrl = urlOrConfig
+    if (options?.params) {
       const sp = new URLSearchParams()
-      Object.entries(params).forEach(([k, v]) => {
+      Object.entries(options.params).forEach(([k, v]) => {
         if (v !== undefined && v !== null && v !== "") sp.set(k, String(v))
       })
       const qs = sp.toString()
-      if (qs) url += (url.includes("?") ? "&" : "?") + qs
+      if (qs) finalUrl += (finalUrl.includes("?") ? "&" : "?") + qs
     }
-    return this.request<T>(url, { method: "GET" })
+    return clientInstance.request<T>(finalUrl, options)
   }
 
-  post<T = any>(url: string, body?: any, options?: Partial<RequestOptions>) {
-    return this.request<T>(url, { method: "POST", body, ...options })
+  const { url, method = "GET", params, data, body, ...rest } = urlOrConfig
+  let finalUrl = url
+  if (params) {
+    const sp = new URLSearchParams()
+    Object.entries(params).forEach(([k, v]) => {
+      if (v !== undefined && v !== null && v !== "") sp.set(k, String(v))
+    })
+    const qs = sp.toString()
+    if (qs) finalUrl += (finalUrl.includes("?") ? "&" : "?") + qs
   }
 
-  put<T = any>(url: string, body?: any) {
-    return this.request<T>(url, { method: "PUT", body })
-  }
-
-  patch<T = any>(url: string, body?: any) {
-    return this.request<T>(url, { method: "PATCH", body })
-  }
-
-  delete<T = any>(url: string, body?: any) {
-    return this.request<T>(url, { method: "DELETE", body })
-  }
+  return clientInstance.request<T>(finalUrl, {
+    method: method as any,
+    body: data ?? body,
+    ...rest,
+  })
 }
 
-/** 全局请求实例 */
-export const request = new RequestClient()
+requestCore.get = function <T = any>(url: string, config?: any) {
+  const params = config?.params ?? (config && !config.headers && !config.noAuth ? config : undefined)
+  return requestCore<T>({ url, method: "GET", params, ...(config?.headers ? { headers: config.headers } : {}) })
+}
+
+requestCore.post = function <T = any>(url: string, data?: any, config?: any) {
+  return requestCore<T>({ url, method: "POST", data, ...config })
+}
+
+requestCore.put = function <T = any>(url: string, data?: any, config?: any) {
+  return requestCore<T>({ url, method: "PUT", data, ...config })
+}
+
+requestCore.patch = function <T = any>(url: string, data?: any, config?: any) {
+  return requestCore<T>({ url, method: "PATCH", data, ...config })
+}
+
+requestCore.delete = function <T = any>(url: string, config?: any) {
+  return requestCore<T>({ url, method: "DELETE", ...config })
+}
+
+/** 全局请求实例 (双模支持: request({ url, method }) 或 request.get(url, params)) */
+export const request = requestCore as any
 
 /** API 路径常量 */
 export const API = {

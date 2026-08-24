@@ -14,11 +14,22 @@ export type RelayChatInput = {
 }
 
 export class AigwRelayService {
+  static assertContentSafety(messages: ChatMessage[]) {
+    const text = messages.map((m) => m.content).join(" ")
+    const forbiddenKeywords = ["SQL注入测试", "<script>alert", "非法木马", "网络攻击脚本"]
+    for (const kw of forbiddenKeywords) {
+      if (text.includes(kw)) {
+        throw Object.assign(new Error(`合规防线提示: 输入内容触发安全审计机制 (${kw})`), { status: 400 })
+      }
+    }
+  }
+
   static async relayChatCompletion(input: RelayChatInput) {
     const token = AigwAccessTokenService.assertUsable(input.apiKey, {
       model: input.model,
       clientIp: input.clientIp,
     })
+    AigwRelayService.assertContentSafety(input.messages)
     if (input.stream) {
       throw Object.assign(new Error("流式输出一期未开放"), { status: 400 })
     }

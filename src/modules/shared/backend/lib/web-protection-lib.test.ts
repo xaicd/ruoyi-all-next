@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
-import { buildApiSignature, verifyApiSignature } from "../protection-signature"
-import { decryptApiPayload, encryptApiPayload } from "../web-crypto"
-import { sanitizeXssPayload } from "../web-xss"
+import { buildApiSignature, verifyApiSignature } from "./protection-signature"
+import { decryptApiPayload, encryptApiPayload } from "./web-crypto"
+import { sanitizeXssPayload } from "./web-xss"
 
 describe("web and protection libs", () => {
   it("verifies api signature", () => {

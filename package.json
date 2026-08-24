@@ -1,5 +1,5 @@
 {
-  "name": "ruoyi-all-next",
+  "name": "agent-zqall",
   "private": true,
   "version": "0.1.0",
   "engines": {
@@ -17,8 +17,6 @@
     "db:seed": "tsx scripts/seed-postgresql.ts",
     "project:clone": "node scripts/clone-project-base.cjs",
     "project:create": "node scripts/clone-project-base.cjs",
-
-
     "catalog:sync:ruoyi": "node scripts/extract-seed-from-sql.cjs",
     "health-check": "bash ./scripts/health-check.sh",
     "admin:routes:manifest": "node scripts/generate-admin-route-manifest.cjs",
@@ -27,8 +25,8 @@
     "contracts:audit-logs:check": "tsx scripts/check-audit-log-contracts.ts",
     "audit-logs:retention": "tsx scripts/run-audit-log-retention.ts",
     "init": "echo '[ruoyi-all-next] 本地最小启动无需基础设施初始化；如需接入仓库根初始化，请执行 npm run init:root'",
-    "init:root": "bash ./scripts/run-root-npm.sh docker:dev:core && bash ./scripts/run-root-npm.sh db:init:force",
-    "dev": "next dev -p 3100",
+    "init:root": "node ./scripts/run-root-npm.cjs docker:dev:core && node ./scripts/run-root-npm.cjs db:init:force",
+    "dev": "next dev -p 3200",
     "build": "next build",
     "start": "node .next-ruoyi/standalone/server.js",
     "lint": "next lint",
@@ -45,16 +43,16 @@
     "runtime:all": "node scripts/domain-up.cjs --all",
     "runtime:split": "node scripts/domain-up.cjs pay",
     "microservice:check": "node scripts/check-microservice-governance.cjs",
-    "ruoyi:full:scan": "bash ./scripts/run-root-tsx.sh scripts/scan-ruoyi-full-capabilities.ts",
-    "ruoyi:deep:scan": "bash ./scripts/run-root-tsx.sh scripts/scan-ruoyi-domain-evidence.ts",
-    "ruoyi:mini:scan": "bash ./scripts/run-root-tsx.sh scripts/scan-yudao-boot-mini-core.ts",
-    "ruoyi:starter:scan": "bash ./scripts/run-root-tsx.sh scripts/scan-all-next-starter-coverage.ts",
-    "ruoyi:migration:board": "bash ./scripts/run-root-tsx.sh scripts/build-ruoyi-migration-board.ts",
-    "ruoyi:p0:check": "bash ./scripts/run-root-tsx.sh scripts/check-ruoyi-p0.ts",
-    "ruoyi:matrix:check": "bash ./scripts/run-root-tsx.sh scripts/check-ruoyi-capability-matrix.ts",
-    "ruoyi:matrix:check:strict": "bash ./scripts/run-root-tsx.sh scripts/check-ruoyi-capability-matrix.ts --strict",
-    "ruoyi:governance:check": "bash ./scripts/run-root-tsx.sh scripts/check-ruoyi-governance.ts",
-    "ruoyi:governance:check:strict": "bash ./scripts/run-root-tsx.sh scripts/check-ruoyi-governance.ts --strict",
+    "ruoyi:full:scan": "node ./scripts/run-root-tsx.cjs scripts/scan-ruoyi-full-capabilities.ts",
+    "ruoyi:deep:scan": "node ./scripts/run-root-tsx.cjs scripts/scan-ruoyi-domain-evidence.ts",
+    "ruoyi:mini:scan": "node ./scripts/run-root-tsx.cjs scripts/scan-yudao-boot-mini-core.ts",
+    "ruoyi:starter:scan": "node ./scripts/run-root-tsx.cjs scripts/scan-all-next-starter-coverage.ts",
+    "ruoyi:migration:board": "node ./scripts/run-root-tsx.cjs scripts/build-ruoyi-migration-board.ts",
+    "ruoyi:p0:check": "node ./scripts/run-root-tsx.cjs scripts/check-ruoyi-p0.ts",
+    "ruoyi:matrix:check": "node ./scripts/run-root-tsx.cjs scripts/check-ruoyi-capability-matrix.ts",
+    "ruoyi:matrix:check:strict": "node ./scripts/run-root-tsx.cjs scripts/check-ruoyi-capability-matrix.ts --strict",
+    "ruoyi:governance:check": "node ./scripts/run-root-tsx.cjs scripts/check-ruoyi-governance.ts",
+    "ruoyi:governance:check:strict": "node ./scripts/run-root-tsx.cjs scripts/check-ruoyi-governance.ts --strict",
     "scaffold": "npx tsx ./scripts/scaffold-feature.ts"
   },
   "dependencies": {

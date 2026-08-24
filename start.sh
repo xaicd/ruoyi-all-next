@@ -26,13 +26,20 @@ fi
 # 2. 智能感知当前目录与同步环境
 node scripts/auto-detect-env.cjs
 
+APP_PORT="3200"
+if [ -f ".env" ]; then
+  DETECTED_PORT=$(grep -E '^PORT=' .env | cut -d'=' -f2 | tr -d ' "' || true)
+  if [ -n "$DETECTED_PORT" ]; then
+    APP_PORT="$DETECTED_PORT"
+  fi
+fi
+
 # 3. 解析模式或展示交互式菜单
 MODE="${1:-}"
 
-
 if [ -z "$MODE" ]; then
   echo "Please select startup mode:"
-  echo "  [1] Fast Local Dev Mode - Next.js at http://localhost:3100 [Recommended]"
+  echo "  [1] Fast Local Dev Mode - Next.js at http://localhost:${APP_PORT} [Recommended]"
   echo "  [2] Full Docker Mode - PostgreSQL:5433 + Redis:6380 + Next.js"
   echo "  [3] Infrastructure Only - Start DB + Redis containers"
   echo "  [4] Architecture Governance Check - npm run check"
@@ -53,11 +60,11 @@ if [ -z "$MODE" ]; then
 fi
 
 usage() {
-  cat <<'EOF'
+  cat <<EOF
 Usage: ./start.sh [mode]
 
 Available modes:
-  app     - Fast local Next.js dev server: http://localhost:3100 [Default]
+  app     - Fast local Next.js dev server: http://localhost:${APP_PORT} [Default]
   dev     - Start Docker DB/Redis, migrate, seed, backup, and run Next.js
   infra   - Start DB/Redis containers, migrate, seed, and backup
   docker  - Full containerized deployment
@@ -71,8 +78,8 @@ EOF
 
 app() {
   echo "[INFO] Starting Next.js development server..."
-  echo "[INFO] Access Homepage: http://localhost:3100"
-  echo "[INFO] Access Admin:    http://localhost:3100/login"
+  echo "[INFO] Access Homepage: http://localhost:${APP_PORT}"
+  echo "[INFO] Access Admin:    http://localhost:${APP_PORT}/login"
   echo ""
   exec npm run dev
 }
@@ -122,7 +129,7 @@ case "$MODE" in
     infra || true
     echo '[STEP] Building and starting complete Docker compose stack...'
     "${COMPOSE[@]}" up -d --build
-    echo '[OK] App running in Docker at http://localhost:3100'
+    echo "[OK] App running in Docker at http://localhost:${APP_PORT}"
     ;;
   memory)
     echo "[INFO] Starting in pure in-memory mode..."

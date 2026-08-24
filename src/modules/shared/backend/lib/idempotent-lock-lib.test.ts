@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest"
-import { acquireIdempotencyKey, clearIdempotencyKeys } from "../protection-idempotent"
-import { clearLockQueue, withKeyedLock } from "../protection-lock"
+import { acquireIdempotencyKey, clearIdempotencyKeys } from "./protection-idempotent"
+import { clearLockQueue, withKeyedLock } from "./protection-lock"
 
 describe("idempotent and lock libs", () => {
   beforeEach(() => {

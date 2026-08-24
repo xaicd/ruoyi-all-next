@@ -18,26 +18,38 @@ describe("infra services", () => {
     const key = `infra.test.config.${Date.now()}`
     createdKeys.push(key)
 
-    const saved = await InfraConfigService.save({
-      key,
+    const saved = await InfraConfigService.create({
+      name: "测试配置",
+      configKey: key,
       value: "persisted-value",
       remark: "from infra test",
     })
 
-    expect(saved.key).toBe(key)
-    expect(saved.value).toBe("persisted-value")
+    expect(saved.id).toBeDefined()
 
     const result = await InfraConfigService.list({ page: 1, pageSize: 20, keyword: key })
-    expect(result.items.some((item) => item.key === key)).toBe(true)
+    expect(result.items.some((item: { configKey: string }) => item.configKey === key)).toBe(true)
   })
 
   it("reads persisted api logs from the database", async () => {
-    const key = `infra.api_logs.${Date.now()}`
-    createdKeys.push(key)
-
-    await ruoyiPrisma.setting.create({
-      data: {
+    await ruoyiPrisma.setting.upsert({
+      where: { key: "infra.api-logs" },
+      create: {
         key: "infra.api-logs",
+        value: {
+          items: [
+            {
+              id: "api-log-1",
+              method: "GET",
+              path: "/api/admin/infra/configs",
+              statusCode: 200,
+              durationMs: 19,
+              createdAt: new Date().toISOString(),
+            },
+          ],
+        },
+      },
+      update: {
         value: {
           items: [
             {
@@ -58,12 +70,23 @@ describe("infra services", () => {
   })
 
   it("updates a persisted job state and returns the new state", async () => {
-    const key = `infra.job_center.${Date.now()}`
-    createdKeys.push(key)
-
-    await ruoyiPrisma.setting.create({
-      data: {
+    await ruoyiPrisma.setting.upsert({
+      where: { key: "infra.jobs" },
+      create: {
         key: "infra.jobs",
+        value: {
+          items: [
+            {
+              id: "job-001",
+              name: "wallet-settlement",
+              cron: "0 2 * * *",
+              status: "RUNNING",
+              updatedAt: new Date().toISOString(),
+            },
+          ],
+        },
+      },
+      update: {
         value: {
           items: [
             {
@@ -79,8 +102,8 @@ describe("infra services", () => {
     })
 
     const result = await InfraJobCenterService.trigger({
-      jobId: "job-001",
-      action: "pause",
+      id: "job-001",
+      action: "PAUSE",
     })
 
     expect(result.status).toBe("PAUSED")

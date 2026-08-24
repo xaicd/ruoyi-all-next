@@ -45,7 +45,13 @@ export class SystemSocialClientService {
   static async createSocialClient(input: CreateSocialClientInput) {
     const items = await load()
     if (items.some((item) => item.clientId === input.clientId && item.provider === input.provider)) throw new Error(`社交客户端已存在: ${input.provider}/${input.clientId}`)
-    const created: SocialClientItem = { id: `socc-${Date.now()}`, ...input }
+    const created: SocialClientItem = {
+      id: `socc-${Date.now()}`,
+      name: input.name ?? "",
+      provider: input.provider ?? "WECHAT",
+      clientId: input.clientId ?? "",
+      status: input.status ?? "ACTIVE",
+    }
     await save([created, ...items])
     domainLog.audit("system.socialClient.create", { targetType: "SOCIAL_CLIENT", targetId: created.id })
     return created

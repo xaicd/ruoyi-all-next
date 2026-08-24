@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest"
-import { ruoyiPrisma } from "../@/modules/shared/backend/prisma"
+import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
 import { BpmProcessService } from "../process.service"
 
 describe("BpmProcessService", () => {

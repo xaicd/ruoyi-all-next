@@ -1,13 +1,13 @@
 {
-  "platformName": "RuoYi All Next",
-  "shortName": "RuoYi",
-  "description": "企业级全栈管理平台，基于 Next.js 构建。支持多数据库、多租户、微服务演进。",
+  "platformName": "应算通",
+  "shortName": "应算通",
+  "description": "应算通 — 企业级全栈 AI 算力中台与大模型网关管理平台。",
   "copyright": "© 2026",
   "version": "0.1.0",
-  "loginHeadline": "企业级全栈管理平台",
-  "loginTagline": "基于 Next.js 构建。支持多数据库、多租户、微服务演进。",
+  "loginHeadline": "应算通 AI 算力中台",
+  "loginTagline": "企业级全栈 AI 算力中台与大模型网关，支持多运营商清分、算力配额与闲时优惠。",
   "branding": {
-    "mark": "R",
+    "mark": "应",
     "logoSrc": "/branding/logo.svg",
     "favicon": "/branding/favicon.svg"
   },

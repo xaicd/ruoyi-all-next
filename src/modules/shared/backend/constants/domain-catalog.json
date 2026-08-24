@@ -18,7 +18,6 @@
       "domains": ["online", "bpm", "pay", "report", "mp", "mall", "member", "crm", "erp", "wms", "mes", "ai", "aigw", "iot", "im"],
       "deployable": true
     }
-
   },
   "rpc": {
     "local": {
@@ -313,7 +312,6 @@
     },
     {
       "name": "iot",
-
       "owner": "iot",
       "kind": "business",
       "stage": "B",
