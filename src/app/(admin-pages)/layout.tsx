@@ -166,45 +166,56 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50 text-slate-900 font-sans antialiased">
-      {/* Sidebar */}
+    <div className="flex h-screen bg-slate-100/80 font-sans text-slate-800 antialiased overflow-hidden">
+      {/* Sidebar - 普鲁士深砚冷墨色高定侧边栏 */}
       <aside
-        className={`flex flex-col border-r border-slate-200 bg-white transition-all duration-200 shadow-sm ${
+        className={`flex flex-col border-r border-slate-800/80 bg-slate-950 text-slate-300 transition-all duration-300 ease-in-out relative z-20 ${
           collapsed ? "w-16" : "w-64"
         }`}
       >
         {/* Brand Header */}
-        <div className="flex h-14 items-center justify-between border-b border-slate-100 px-4 bg-gradient-to-r from-white to-blue-50/30">
-          <BrandMark
-            size={28}
-            withName={!collapsed}
-            nameClassName="text-sm font-bold text-slate-900 tracking-tight whitespace-nowrap"
-          />
+        <div className="flex h-14 items-center justify-between px-4 border-b border-slate-800/80 bg-slate-950">
+          {!collapsed ? (
+            <div className="flex items-center gap-2.5 overflow-hidden">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-black text-sm text-white shadow-md shadow-blue-500/20">
+                R
+              </div>
+              <div className="flex flex-col truncate">
+                <span className="text-sm font-bold tracking-tight text-white flex items-center gap-1.5">
+                  <span>RoMA 应算通</span>
+                  <span className="px-1.5 py-0.2 text-[9px] bg-blue-500/20 text-blue-300 border border-blue-500/30 rounded font-mono">
+                    PRO
+                  </span>
+                </span>
+                <span className="text-[10px] text-slate-400 truncate">政企算力全域运营基座</span>
+              </div>
+            </div>
+          ) : (
+            <div className="mx-auto w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-black text-sm text-white shadow-md">
+              R
+            </div>
+          )}
 
           {!collapsed && (
             <button
               type="button"
               onClick={toggleLock}
-              className={`rounded-lg p-1.5 transition ${
-                isLocked
-                  ? "text-blue-600 bg-blue-50 hover:bg-blue-100"
-                  : "text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+              className={`p-1.5 rounded-lg text-xs transition ${
+                isLocked ? "text-blue-400 bg-blue-950/60 border border-blue-500/30" : "text-slate-500 hover:text-slate-300"
               }`}
-              title={isLocked ? "侧边栏已锁定固定" : "点击锁定侧边栏"}
+              title={isLocked ? "侧边栏已锁定" : "侧边栏悬浮模式"}
             >
-              <svg className="h-4 w-4 stroke-[2]" fill={isLocked ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-              </svg>
+              {isLocked ? "🔒" : "🔓"}
             </button>
           )}
         </div>
 
         {/* Menu Search Box (when expanded) */}
         {!collapsed && (
-          <div className="border-b border-slate-100 p-2.5 bg-slate-50/50">
+          <div className="border-b border-slate-800/80 p-2.5 bg-slate-900/40">
             <div className="relative">
               <svg
-                className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-blue-500"
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-blue-400"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -217,13 +228,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="搜索菜单 (Ctrl+K)..."
-                className="h-8 w-full rounded-lg border border-slate-200 bg-white pl-8 pr-7 text-xs text-slate-900 placeholder-slate-400 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                className="h-8 w-full rounded-xl border border-slate-800 bg-slate-900/80 pl-8 pr-7 text-xs text-slate-100 placeholder-slate-500 outline-none transition focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs font-bold"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs font-bold"
                 >
                   ×
                 </button>
@@ -239,13 +250,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <div className="space-y-1">
               <div className="px-2 py-1 text-[11px] font-medium text-slate-400 flex items-center justify-between">
                 <span>搜索结果 ({searchResults.length})</span>
-                <button onClick={() => setSearchQuery("")} className="text-blue-600 hover:underline">
+                <button onClick={() => setSearchQuery("")} className="text-blue-400 hover:underline">
                   清除
                 </button>
               </div>
 
               {searchResults.length === 0 ? (
-                <div className="py-6 text-center text-xs text-slate-400">
+                <div className="py-6 text-center text-xs text-slate-500">
                   未找到匹配 &ldquo;{searchQuery}&rdquo; 的菜单
                 </div>
               ) : (
@@ -254,10 +265,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     key={item.id}
                     href={item.href}
                     onClick={() => setSearchQuery("")}
-                    className={`flex items-center justify-between rounded-lg px-2.5 py-2 text-xs transition ${
+                    className={`flex items-center justify-between rounded-xl px-2.5 py-2 text-xs transition ${
                       pathname === item.href
-                        ? "bg-blue-600 font-semibold text-white shadow-sm shadow-blue-500/25"
-                        : "text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+                        ? "bg-blue-600 font-bold text-white shadow-md shadow-blue-500/25"
+                        : "text-slate-300 hover:bg-slate-800/70 hover:text-white"
                     }`}
                   >
                     <div className="flex items-center gap-2 truncate">
@@ -265,7 +276,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                       <span className="truncate">{item.label}</span>
                     </div>
                     <span className={`text-[10px] px-1.5 py-0.5 rounded font-mono shrink-0 ml-1 ${
-                      pathname === item.href ? "bg-blue-700 text-blue-100" : "bg-slate-100 text-slate-500"
+                      pathname === item.href ? "bg-blue-700 text-white" : "bg-slate-800 text-slate-400"
                     }`}>
                       {item.groupTitle}
                     </span>
@@ -278,31 +289,29 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <>
               {/* Pinned / Favorite Menus Section */}
               {!collapsed && favoriteMenus.length > 0 && (
-                <div className="mb-2.5 rounded-lg bg-blue-50/40 p-1.5 border border-blue-100/60">
-                  <div className="px-2 py-0.5 text-[11px] font-semibold text-blue-700 flex items-center gap-1">
-                    <span>📌 常用快捷菜单</span>
+                <div className="mb-2 pb-2 border-b border-slate-800/60">
+                  <div className="px-2 py-1 text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                    ★ 常用置顶菜单
                   </div>
-                  <div className="space-y-0.5 mt-1">
+                  <div className="space-y-0.5">
                     {favoriteMenus.map((fav) => (
                       <Link
-                        key={`fav-${fav.id}`}
+                        key={fav.id}
                         href={fav.href}
-                        className={`group flex items-center justify-between rounded-md px-2 py-1.5 text-xs transition ${
+                        className={`group flex items-center justify-between rounded-xl px-2.5 py-1.5 text-xs transition ${
                           pathname === fav.href
-                            ? "bg-blue-600 font-semibold text-white shadow-sm shadow-blue-500/25"
-                            : "text-slate-700 hover:bg-blue-100/70 hover:text-blue-700"
+                            ? "bg-blue-600 font-bold text-white shadow-md shadow-blue-500/25"
+                            : "text-slate-300 hover:bg-slate-800/70 hover:text-white"
                         }`}
                       >
                         <div className="flex items-center gap-2 truncate">
-                          <MenuIcon label={fav.label} icon={fav.icon} isSub isActive={pathname === fav.href} />
+                          <span className="text-sm">{fav.icon || "📌"}</span>
                           <span className="truncate">{fav.label}</span>
                         </div>
                         <button
                           type="button"
                           onClick={(e) => toggleFavorite(fav.id, e)}
-                          className={`opacity-0 group-hover:opacity-100 text-xs transition ${
-                            pathname === fav.href ? "text-blue-200 hover:text-white" : "text-slate-400 hover:text-red-500"
-                          }`}
+                          className="opacity-0 group-hover:opacity-100 text-xs text-slate-400 hover:text-rose-400 transition"
                           title="取消置顶"
                         >
                           ×
@@ -329,13 +338,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         {/* Bottom Collapse & Lock Control */}
-        <div className="border-t border-slate-100 p-2 bg-slate-50/50 flex items-center gap-1">
+        <div className="border-t border-slate-800/80 p-2 bg-slate-950 flex items-center gap-1">
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="flex-1 flex items-center justify-center rounded-lg py-1.5 text-slate-500 transition hover:bg-blue-50 hover:text-blue-600 text-xs font-medium"
+            className="flex-1 flex items-center justify-center rounded-xl py-1.5 text-slate-400 transition hover:bg-slate-800 hover:text-white text-xs font-medium"
             title={collapsed ? "展开侧边栏" : "收起侧边栏"}
           >
-            <svg className={`h-4 w-4 transition-transform ${collapsed ? "rotate-180 text-blue-600" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className={`h-4 w-4 transition-transform ${collapsed ? "rotate-180 text-blue-400" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
             </svg>
             {!collapsed && <span className="ml-1.5">收起侧栏</span>}
@@ -343,19 +352,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
       </aside>
 
-      {/* Main Content Viewport */}
-      <div className="flex flex-1 flex-col overflow-hidden">
+      {/* Main Content Viewport - 钛白微灰高级工作区 */}
+      <div className="flex flex-1 flex-col overflow-hidden bg-slate-100/70">
         {/* Top Navbar */}
-        <header className="flex h-14 items-center justify-between border-b border-slate-200 bg-white px-6 shadow-sm">
+        <header className="flex h-14 items-center justify-between border-b border-slate-200/80 bg-white/95 backdrop-blur-md px-6 shadow-xs">
           <div className="flex items-center gap-2 text-xs text-slate-500">
             <Link href="/" className="hover:text-blue-600 transition font-medium">门户首页</Link>
             <span className="text-slate-300">/</span>
-            <span className="font-semibold text-slate-800">{getPageTitle(pathname, menuGroups)}</span>
+            <span className="font-bold text-slate-900">{getPageTitle(pathname, menuGroups)}</span>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50/50 px-3 py-1">
-              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white shadow-sm shadow-blue-500/20">
+            <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1">
+              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white shadow-sm">
                 {username.charAt(0).toUpperCase()}
               </div>
               <span className="text-xs font-semibold text-slate-800">{username}</span>
@@ -363,15 +372,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
             <button
               onClick={handleLogout}
-              className="rounded-lg border border-slate-200 px-2.5 py-1 text-xs font-medium text-slate-600 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+              className="rounded-xl border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600 shadow-2xs"
             >
-              退出
+              🚪 退出
             </button>
           </div>
         </header>
 
         {/* Content Area */}
-        <main className="flex-1 overflow-y-auto p-6 bg-slate-50/70">
+        <main className="flex-1 overflow-y-auto p-6">
           {children}
         </main>
       </div>
@@ -419,14 +428,14 @@ function MenuGroup({
     <div className="mb-1">
       <button
         onClick={() => setOpen(!open)}
-        className={`flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-xs font-semibold transition ${
+        className={`flex w-full items-center gap-2 rounded-xl px-2.5 py-2 text-xs font-semibold transition ${
           hasActiveChild
-            ? "text-blue-700 bg-blue-50/80 font-bold"
-            : "text-slate-700 hover:bg-blue-50/50 hover:text-blue-600"
+            ? "text-white bg-slate-900 font-bold border border-slate-800"
+            : "text-slate-400 hover:bg-slate-900/60 hover:text-slate-200"
         }`}
       >
-        <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md transition ${
-          hasActiveChild ? "bg-blue-600 text-white shadow-sm shadow-blue-500/20" : "bg-blue-50 text-blue-600"
+        <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg transition ${
+          hasActiveChild ? "bg-blue-600 text-white shadow-sm shadow-blue-500/20" : "bg-slate-800 text-slate-300"
         }`}>
           <MenuIcon label={group.title} icon={group.icon} isActive={hasActiveChild} isDirectory />
         </div>
@@ -461,7 +470,7 @@ function MenuTreeItems({
   onToggleFavorite: (id: string, e: React.MouseEvent) => void
 }) {
   return (
-    <ul className={`mt-0.5 space-y-0.5 ${level === 1 ? "ml-3.5 border-l-2 border-blue-100 pl-2" : "ml-2.5 border-l border-blue-100 pl-2"}`}>
+    <ul className={`mt-0.5 space-y-0.5 ${level === 1 ? "ml-3.5 border-l border-slate-800/80 pl-2" : "ml-2.5 border-l border-slate-800/80 pl-2"}`}>
       {items.map((item) => (
         <MenuTreeItem
           key={item.id}
@@ -505,12 +514,14 @@ function MenuTreeItem({
     <li>
       <button
         onClick={() => setOpen(!open)}
-        className={`flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-xs transition ${
-          active ? "font-semibold text-blue-700 bg-blue-50/50" : "text-slate-600 hover:bg-blue-50/40 hover:text-blue-600"
+        className={`flex w-full items-center gap-2 rounded-xl px-2.5 py-2 text-xs font-medium transition ${
+          active
+            ? "font-bold text-white bg-slate-900 border border-slate-800"
+            : "text-slate-200 hover:bg-slate-900 hover:text-white"
         }`}
       >
         <MenuIcon label={item.label} icon={item.icon} isSub isActive={active} />
-        <span className="flex-1 truncate text-left">{item.label}</span>
+        <span className="flex-1 truncate text-left text-slate-100 font-medium">{item.label}</span>
         <Chevron open={open} active={active} />
       </button>
       {open && (
@@ -543,23 +554,23 @@ function SidebarLink({
   const isFav = favoriteIds.includes(item.id)
 
   const className = collapsed
-    ? `mb-1 flex items-center justify-center rounded-lg py-2 transition ${
+    ? `mb-1 flex items-center justify-center rounded-xl py-2 transition ${
         active
-          ? "bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-semibold"
-          : "text-slate-600 hover:bg-blue-50 hover:text-blue-600"
+          ? "bg-blue-600 text-white shadow-md shadow-blue-500/25 font-bold"
+          : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
       }`
-    : `group flex items-center justify-between rounded-lg px-2.5 py-1.5 text-xs transition ${
+    : `group flex items-center justify-between rounded-xl px-2.5 py-1.5 text-xs transition ${
         active
-          ? "bg-blue-600 font-semibold text-white shadow-sm shadow-blue-500/25"
-          : "text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+          ? "bg-blue-600 font-bold text-white shadow-md shadow-blue-500/25"
+          : "text-slate-200 hover:bg-slate-900/90 hover:text-white font-medium"
       }`
 
   if (!item.href) {
     return (
-      <span title={`${item.label}（尚未开通）`} className={`${className} opacity-40 cursor-not-allowed`}>
+      <span title={`${item.label}（尚未开通）`} className={`${className} opacity-30 cursor-not-allowed`}>
         <div className="flex items-center gap-2 truncate">
           <MenuIcon label={item.label} icon={item.icon} isSub isActive={active} />
-          {!collapsed && <span className="truncate">{item.label}</span>}
+          {!collapsed && <span className="truncate text-slate-400">{item.label}</span>}
         </div>
       </span>
     )
@@ -614,14 +625,12 @@ function MenuIcon({
 }) {
   const iconSize = isDirectory ? "h-3.5 w-3.5" : "h-4 w-4"
   const colorClass = isActive
-    ? isDirectory
-      ? "text-white"
-      : "text-white"
+    ? "text-white"
     : isSub
-    ? "text-blue-500 group-hover:text-blue-600"
-    : "text-blue-600"
+    ? "text-blue-400 group-hover:text-blue-300"
+    : "text-blue-400"
 
-  const c = `${iconSize} shrink-0 stroke-[1.75] ${colorClass} ${className}`
+  const c = `${iconSize} shrink-0 stroke-[1.8] ${colorClass} ${className}`
 
   if (label.includes("系统管理") || label.includes("权限")) {
     return <svg className={c} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>

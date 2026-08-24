@@ -100,16 +100,16 @@ async function main() {
   ).join(",\n")
   seedSql += `INSERT INTO "system_dict_data" ("id", "dict_type", "label", "value", "sort", "status", "color_type", "css_class", "remark", "created_at", "updated_at") VALUES\n${dictDataValues}\nON CONFLICT ("id") DO NOTHING;\n\n`
 
-  // 初始超级管理员用户 (vps_adm 与 admin)
-  seedSql += `-- 9. 平台超级管理员用户 (vps_adm & admin)\n`
+  // 初始超级管理员与系统运维用户 (vps_adm 与 roma_ops)
+  seedSql += `-- 9. 平台超级管理员与系统运维用户 (vps_adm & roma_ops)\n`
   const salt = "ce51297c3af216ee"
   const md5 = (value: string) => createHash("md5").update(value).digest("hex")
   const encPwd = md5(md5("Vps_Admin159&w") + salt)
 
   seedSql += `INSERT INTO "system_user" ("id", "username", "password", "nickname", "remark", "dept_id", "post_ids", "email", "mobile", "sex", "avatar", "status", "login_ip", "login_date", "created_at", "updated_at") VALUES\n`
-  seedSql += `('1', 'vps_adm', '${encPwd}', '平台超级管理员', '系统首创平台管理员', '100', '["1"]', 'admin@ruoyi.vip', '13800138000', 1, '', 'ACTIVE', '127.0.0.1', NOW(), NOW(), NOW()),\n`
-  seedSql += `('2', 'admin', '${encPwd}', '系统管理员', '系统内置管理员', '100', '["1"]', 'admin2@ruoyi.vip', '13800138001', 1, '', 'ACTIVE', '127.0.0.1', NOW(), NOW(), NOW())\n`
-  seedSql += `ON CONFLICT ("id") DO NOTHING;\n\n`
+  seedSql += `('1', 'vps_adm', '${encPwd}', '平台超级管理员', '系统首创平台管理员', '100', '["1"]', 'vps_adm@roma.vip', '13800138000', 1, '', 'ACTIVE', '127.0.0.1', NOW(), NOW(), NOW()),\n`
+  seedSql += `('2', 'roma_ops', '${encPwd}', '系统运维管理员', '系统内置高安全运维账号', '100', '["1"]', 'roma_ops@roma.vip', '13800138001', 1, '', 'ACTIVE', '127.0.0.1', NOW(), NOW(), NOW())\n`
+  seedSql += `ON CONFLICT ("id") DO UPDATE SET "username" = EXCLUDED."username", "password" = EXCLUDED."password", "nickname" = EXCLUDED."nickname";\n\n`
 
   // 用户与角色关联 (给 vps_adm 和 admin 绑定 super_admin 角色)
   seedSql += `-- 10. 用户角色关联\n`

@@ -29,8 +29,10 @@ export type UpdateTenantData = Partial<CreateTenantData>
 export type TenantListParams = { page: number; pageSize: number; keyword?: string; status?: string }
 
 const MEMORY_STORE: SystemTenantRow[] = [
-  { id: "1", tenantCode: "default", name: "默认租户", contactName: "管理员", contactPhone: "13800000001", domain: null, packageId: "111", status: "ACTIVE", effectiveAt: "2026-01-01T00:00:00.000Z", expireTime: "2030-12-31T23:59:59.000Z", accountLimit: 999, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "2", tenantCode: "demo", name: "演示租户", contactName: "张三", contactPhone: "13900000001", domain: "demo.ruoyi.local", packageId: "111", status: "ACTIVE", effectiveAt: "2026-03-01T00:00:00.000Z", expireTime: "2027-06-30T23:59:59.000Z", accountLimit: 50, createdAt: "2026-03-01T00:00:00.000Z", updatedAt: "2026-03-01T00:00:00.000Z" },
+  { id: "1", tenantCode: "default", name: "RoMA 平台运营中枢", contactName: "平台超管", contactPhone: "13800000000", domain: "roma.local", packageId: "111", status: "ACTIVE", effectiveAt: "2026-01-01T00:00:00.000Z", expireTime: "2030-12-31T23:59:59.000Z", accountLimit: 9999, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
+  { id: "2", tenantCode: "gd-gov-data", name: "广东省政务服务和数据管理局", contactName: "李总", contactPhone: "13800000001", domain: "gd-gov.roma.local", packageId: "111", status: "ACTIVE", effectiveAt: "2026-01-01T00:00:00.000Z", expireTime: "2028-12-31T23:59:59.000Z", accountLimit: 100, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
+  { id: "3", tenantCode: "yue-transport-tech", name: "广东省交通数智科技集团有限公司", contactName: "张工", contactPhone: "13911112222", domain: "transport.roma.local", packageId: "111", status: "ACTIVE", effectiveAt: "2026-01-01T00:00:00.000Z", expireTime: "2028-12-31T23:59:59.000Z", accountLimit: 80, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
+  { id: "4", tenantCode: "gz-digital-gov", name: "广州市数字政府运营中心", contactName: "王主任", contactPhone: "13766668888", domain: "gz-gov.roma.local", packageId: "112", status: "ACTIVE", effectiveAt: "2026-01-01T00:00:00.000Z", expireTime: "2027-12-31T23:59:59.000Z", accountLimit: 50, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },
 ].map(overlayTenant)
 let memoryIdSeq = 100
 
@@ -77,6 +79,40 @@ export const SystemTenantRepository = {
     return updated
   },
 
+  /**
+   * 根据数据权限范围查询所辖租户列表 (支持平台超管全量与顶级代理商自定义授权租户过滤)
+   */
+  async findListByScope(params: TenantListParams, allowedTenantIds?: string[]): Promise<PageResult<SystemTenantRow>> {
+    const listRes = await this.findList(params)
+    if (!allowedTenantIds || allowedTenantIds.length === 0) {
+      return listRes
+    }
+    const set = new Set(allowedTenantIds)
+    const filteredItems = listRes.items.filter((item) => set.has(item.id))
+    return {
+      items: filteredItems,
+      total: filteredItems.length,
+      page: params.page,
+      pageSize: params.pageSize,
+    }
+  },
+
+  /**
+   * 查询指定用户(如顶级代理商/客户经理)所托管管理的所有租户列表
+   */
+  async getUserManagedTenants(userId: string): Promise<SystemTenantRow[]> {
+    // 默认返回当前真实可管理的 4 大机构
+    const all = await this.findList({ page: 1, pageSize: 100 })
+    return all.items
+  },
+
+  /**
+   * 为指定企业租户调整/划拨席位与配额
+   */
+  async allocateTenantQuota(id: string, accountLimit: number): Promise<SystemTenantRow> {
+    return this.update(id, { accountLimit })
+  },
+
   async delete(id: string): Promise<void> {
     if (hasRealDatabase()) return deleteInDb(id)
     if (id === "1") throw new Error("不允许删除默认租户")
@@ -85,6 +121,8 @@ export const SystemTenantRepository = {
     MEMORY_STORE.splice(idx, 1)
   },
 }
+
+export const systemTenantRepository = SystemTenantRepository
 
 // === Kysely ===
 async function findListFromDb(params: TenantListParams): Promise<PageResult<SystemTenantRow>> {

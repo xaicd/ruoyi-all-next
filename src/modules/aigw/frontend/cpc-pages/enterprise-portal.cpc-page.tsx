@@ -1,504 +1,561 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { useSearchParams } from "next/navigation"
-import { request } from "@/modules/shared/frontend/lib/request"
+import { useState, useEffect } from "react"
+import Link from "next/link"
 
-interface EnterpriseQuotaSummary {
+type EnterpriseQuota = {
   enterpriseName: string
   creditCode: string
   tierName: string
-  tokensTotal: number
-  tokensUsed: number
-  tokensRemain: number
-  usagePercent: number
-  momaBeansBalance: number
-  seatsTotal: number
-  seatsAssigned: number
-  seatsActive: number
-  monthlyBillAmount: number
-  currentMonthExpireAt: string
-  boundMcps: Array<{ code: string; name: string; version: string }>
+  totalTokenMonthly: number
+  usedTokenMonthly: number
+  remainingTokenMonthly: number
+  mobileBeansEquivalent: number
+  activeSeats: number
+  totalSeats: number
+  privateMcps: Array<{ id: string; name: string; version: string; description: string }>
 }
 
-interface MemberItem {
+type MemberSeat = {
   id: string
-  phone: string
+  mobile: string
   name: string
-  deptName: string
-  role: string
-  allowedApps: string[]
-  monthlyTokenCap: number
-  usedTokens: number
-  status: string
+  dept: string
+  title: string
+  agentApp: string
+  monthlyLimitToken: number
+  usedTokenMonthly: number
+  status: "ACTIVE" | "SUSPENDED"
 }
 
 export function EnterprisePortalCpcPage() {
-  const searchParams = useSearchParams()
-  const embedded = searchParams.get("embedded") === "true"
-  const ticket = searchParams.get("ticket") || ""
-  const initialOrg = searchParams.get("org") || "gd-gov-data"
+  const [quota, setQuota] = useState<EnterpriseQuota>({
+    enterpriseName: "广东省政务服务和数据管理局",
+    creditCode: "11440000MB2D00001X",
+    tierName: "旗舰智算融合套餐 (月包)",
+    totalTokenMonthly: 100000000,
+    usedTokenMonthly: 18000000,
+    remainingTokenMonthly: 82000000,
+    mobileBeansEquivalent: 82000,
+    activeSeats: 3,
+    totalSeats: 100,
+    privateMcps: [
+      { id: "mcp-doc", name: "国家标准红头公文排版与合规审计", version: "v2.1", description: "GB/T 9704-2012 党政机关公文格式自动化" },
+      { id: "mcp-meeting", name: "腾讯会议速记与企微待办任务派发", version: "v1.4", description: "政企私有部署会议纪要自动提炼" },
+    ],
+  })
 
-  const [orgCode, setOrgCode] = useState(initialOrg)
-  const [loading, setLoading] = useState(true)
-  const [quota, setQuota] = useState<EnterpriseQuotaSummary | null>(null)
-  const [members, setMembers] = useState<MemberItem[]>([
+  const [members, setMembers] = useState<MemberSeat[]>([
     {
       id: "mem-1",
-      phone: "13800000001",
+      mobile: "13800000001",
       name: "李总",
-      deptName: "数智推进处",
-      role: "信息化处长 / IT管理员",
-      allowedApps: ["workbuddy", "cherry-studio"],
-      monthlyTokenCap: 20_000_000,
-      usedTokens: 2_850_000,
+      dept: "数智推进中心",
+      title: "信息化负责人 / IT总监",
+      agentApp: "腾讯 WorkBuddy • Cherry Studio",
+      monthlyLimitToken: 20000000,
+      usedTokenMonthly: 2850000,
       status: "ACTIVE",
     },
     {
       id: "mem-2",
-      phone: "13911112222",
+      mobile: "13911112222",
       name: "张工",
-      deptName: "核心研发中心",
-      role: "首席架构师",
-      allowedApps: ["qoder", "trae"],
-      monthlyTokenCap: 30_000_000,
-      usedTokens: 12_400_000,
+      dept: "核心研发中心",
+      title: "首席架构师",
+      agentApp: "阿里 Qoder • 字节 Trae",
+      monthlyLimitToken: 30000000,
+      usedTokenMonthly: 12400000,
       status: "ACTIVE",
     },
     {
       id: "mem-3",
-      phone: "13766668888",
+      mobile: "13766668888",
       name: "王主任",
-      deptName: "综合行政办",
-      role: "行政主任",
-      allowedApps: ["workbuddy"],
-      monthlyTokenCap: 10_000_000,
-      usedTokens: 1_200_000,
+      dept: "综合行政办",
+      title: "行政主任",
+      agentApp: "腾讯 WorkBuddy",
+      monthlyLimitToken: 10000000,
+      usedTokenMonthly: 1200000,
       status: "ACTIVE",
     },
   ])
 
-  // 开通新员工弹窗
-  const [modalOpen, setModalOpen] = useState(false)
-  const [form, setForm] = useState({
-    phone: "",
+  const [showModal, setShowModal] = useState(false)
+  const [formData, setFormData] = useState({
+    mobile: "",
     name: "",
-    deptName: "行政综合部",
-    role: "公文起草专员",
-    allowedApps: ["workbuddy"],
-    monthlyTokenCap: 10_000_000,
+    dept: "大数据应用科",
+    agentApp: "腾讯 WorkBuddy",
+    monthlyLimitToken: 10000000,
   })
 
-  // 调整额度弹窗
-  const [adjustModalOpen, setAdjustModalOpen] = useState(false)
-  const [adjustTarget, setAdjustTarget] = useState<MemberItem | null>(null)
-  const [newCap, setNewCap] = useState<number>(20_000_000)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [copiedId, setCopiedId] = useState<string | null>(null)
 
-  const fetchSummary = async (code = orgCode) => {
-    setLoading(true)
-    try {
-      const res: any = await request.get(`/api/v1/open/enterprise/quota/summary?org=${code}`)
-      if (res.success && res.data) {
-        setQuota(res.data)
-      }
-    } catch (err) {
-      console.error("加载政企算力大盘失败:", err)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    fetchSummary()
-  }, [orgCode])
-
-  // 快捷为员工开通
-  const handleCreateMember = async (e: React.FormEvent) => {
+  const handleCreateMember = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!form.phone || !form.name) return
-    try {
-      const res: any = await request.post("/api/v1/open/enterprise/members/sync", {
-        members: [{ ...form, sendSmsNotification: true }],
-      })
-      if (res.success) {
-        setMembers([
-          {
-            id: `mem-${Date.now()}`,
-            phone: form.phone,
-            name: form.name,
-            deptName: form.deptName,
-            role: form.role,
-            allowedApps: form.allowedApps,
-            monthlyTokenCap: Number(form.monthlyTokenCap),
-            usedTokens: 0,
-            status: "ACTIVE",
-          },
-          ...members,
-        ])
-        setModalOpen(false)
-        setForm({ phone: "", name: "", deptName: "行政综合部", role: "公文起草专员", allowedApps: ["workbuddy"], monthlyTokenCap: 10_000_000 })
-        alert(`🎉 成功为【${form.name} (${form.phone})】分配 ${(form.monthlyTokenCap / 10_000).toFixed(0)}万 Token 算力与 WorkBuddy 授权，激活短信已自动下发！`)
-      }
-    } catch (err: any) {
-      alert(err.message || "开通失败")
+    if (!formData.mobile || !formData.name) return
+
+    const newMember: MemberSeat = {
+      id: `mem-${Date.now()}`,
+      mobile: formData.mobile,
+      name: formData.name,
+      dept: formData.dept,
+      title: "业务经办人",
+      agentApp: formData.agentApp,
+      monthlyLimitToken: Number(formData.monthlyLimitToken),
+      usedTokenMonthly: 0,
+      status: "ACTIVE",
     }
+
+    setMembers([newMember, ...members])
+    setQuota({ ...quota, activeSeats: quota.activeSeats + 1 })
+    setShowModal(false)
+    setFormData({ mobile: "", name: "", dept: "大数据应用科", agentApp: "腾讯 WorkBuddy", monthlyLimitToken: 10000000 })
+    alert(`🎉 成功为【${newMember.name}】开通算力！\n已自动模拟下发短信授权通知与客户端唤起码。`)
   }
 
-  // 调整额度
-  const handleSaveAdjust = () => {
-    if (!adjustTarget) return
-    setMembers(members.map((m) => (m.id === adjustTarget.id ? { ...m, monthlyTokenCap: Number(newCap) } : m)))
-    setAdjustModalOpen(false)
-    alert(`已将【${adjustTarget.name}】的月度算力额度调整为 ${(Number(newCap) / 10_000).toFixed(0)}万 Token`)
+  const handleCopyLink = (m: MemberSeat) => {
+    const link = `workbuddy://connect?token=auth_tkt_${m.mobile}&server=http://localhost:3200`
+    navigator.clipboard?.writeText?.(link)
+    setCopiedId(m.id)
+    setTimeout(() => setCopiedId(null), 1800)
   }
 
-  const copyText = (text: string) => {
-    navigator.clipboard.writeText(text)
-    alert("已复制: " + text)
-  }
+  const filteredMembers = members.filter(
+    (m) => m.name.includes(searchTerm) || m.mobile.includes(searchTerm) || m.dept.includes(searchTerm)
+  )
+
+  const usagePercent = Math.round((quota.usedTokenMonthly / quota.totalTokenMonthly) * 100)
 
   return (
-    <div className={`space-y-4 ${embedded ? "p-3" : "p-6 max-w-7xl mx-auto"}`}>
-      {/* 顶部企业身份 Header */}
-      <div className="bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-950 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
+    <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-blue-600 selection:text-white antialiased flex flex-col font-sans">
+      {/* 顶部顶级科技微导轨 */}
+      <header className="h-16 border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-xl sticky top-0 z-30 px-6 lg:px-10 flex items-center justify-between">
+        <div className="flex items-center gap-3.5">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center font-black text-sm text-white shadow-lg shadow-blue-500/25">
+            R
+          </div>
           <div>
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="px-2 py-0.5 text-[10px] font-extrabold bg-blue-500 text-white rounded tracking-wider">
-                政企自服务专区 (CPC)
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-bold text-white tracking-tight">RoMA 应算通</span>
+              <span className="text-slate-500 text-xs">/</span>
+              <span className="text-xs font-semibold text-slate-300">政企内网算力自服务专区 (CPC)</span>
+              <span className="px-2 py-0.5 text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full font-mono font-medium">
+                SSO 免密直连中
               </span>
-              {ticket && (
-                <span className="px-2 py-0.5 text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded font-mono">
-                  🔑 免密单点已生效 ({ticket.slice(0, 12)}...)
-                </span>
-              )}
-              <span className="text-xs text-slate-300 font-mono">纳税人识别号: {quota?.creditCode || "11440000MB2D00001X"}</span>
             </div>
-            <h1 className="text-xl font-extrabold tracking-tight">
-              {quota?.enterpriseName || "广东省政务服务和数据管理局"}
-            </h1>
-            <p className="text-xs text-slate-300 mt-1">
-              签约套餐：<span className="text-amber-300 font-bold">{quota?.tierName || "旗舰智算融合套餐"}</span> • 运营中枢：<span className="text-blue-300 font-bold">RoMA 应算通</span> • 算力供给：中国移动 MOMA 智算集群
-            </p>
           </div>
+        </div>
 
-          <div className="flex items-center gap-3">
-            {/* 切换模拟机构 */}
+        <div className="flex items-center gap-3 text-xs">
+          {/* 多租户代运营切换器 (Tenant Switcher) */}
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800/80 border border-slate-700/80 text-slate-300 font-sans shadow-xs">
+            <span className="text-slate-400">托管机构:</span>
             <select
-              value={orgCode}
-              onChange={(e) => setOrgCode(e.target.value)}
-              className="bg-white/10 text-white border border-white/20 rounded-xl px-3 py-1.5 text-xs focus:outline-none"
+              value={quota.enterpriseName}
+              onChange={async (e) => {
+                const selectedName = e.target.value
+                let targetId = "2"
+                let newTokens = 100000000
+                let newCredit = "11440000MB2D00001X"
+
+                if (selectedName.includes("交通")) {
+                  targetId = "3"
+                  newTokens = 80000000
+                  newCredit = "91440000MA5CL9999X"
+                } else if (selectedName.includes("广州")) {
+                  targetId = "4"
+                  newTokens = 50000000
+                  newCredit = "11440100MB2D88888X"
+                }
+
+                try {
+                  const res = await fetch("/api/v1/auth/switch-tenant", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ tenantId: targetId }),
+                  })
+                  const json = await res.json()
+                  if (json.success && json.data?.token) {
+                    localStorage.setItem("ruoyi_token", json.data.token)
+                  }
+                } catch {}
+
+                setQuota({
+                  ...quota,
+                  enterpriseName: selectedName,
+                  creditCode: newCredit,
+                  totalTokenMonthly: newTokens,
+                  remainingTokenMonthly: Math.round(newTokens * 0.82),
+                  usedTokenMonthly: Math.round(newTokens * 0.18),
+                  mobileBeansEquivalent: Math.round(newTokens * 0.82 / 1000),
+                })
+              }}
+              className="bg-transparent text-white font-bold focus:outline-none cursor-pointer"
             >
-              <option value="gd-gov-data" className="text-slate-900">广东省政务服务和数据管理局 (1亿Token)</option>
-              <option value="yue-transport-tech" className="text-slate-900">广东省交通数智科技集团 (8000万Token)</option>
+              <option value="广东省政务服务和数据管理局" className="bg-slate-900 text-white">🏛️ 广东省政务服务和数据管理局</option>
+              <option value="广东省交通数智科技集团有限公司" className="bg-slate-900 text-white">🏢 广东省交通数智科技集团有限公司</option>
+              <option value="广州市数字政府运营中心" className="bg-slate-900 text-white">🏛️ 广州市数字政府运营中心</option>
             </select>
+          </div>
 
-            <button
-              onClick={() => setModalOpen(true)}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-semibold shadow-md transition-colors whitespace-nowrap"
-            >
-              + 为员工开通算力
-            </button>
-          </div>
-        </div>
-
-        {/* 算力资产大盘卡片 */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-5 border-t border-white/10">
-          <div>
-            <div className="text-[11px] text-slate-400">本月可用算力总量</div>
-            <div className="text-2xl font-extrabold text-white font-mono mt-0.5">
-              {((quota?.tokensTotal || 100_000_000) / 10_000).toLocaleString()} <span className="text-xs font-normal">万 Token</span>
-            </div>
-          </div>
-          <div>
-            <div className="text-[11px] text-slate-400">本月剩余可用余额</div>
-            <div className="text-2xl font-extrabold text-emerald-400 font-mono mt-0.5">
-              {((quota?.tokensRemain || 82_000_000) / 10_000).toLocaleString()} <span className="text-xs font-normal">万 Token</span>
-            </div>
-          </div>
-          <div>
-            <div className="text-[11px] text-slate-400">折合移动豆余额</div>
-            <div className="text-2xl font-extrabold text-amber-300 font-mono mt-0.5">
-              {(quota?.momaBeansBalance || 82_000).toLocaleString()} <span className="text-xs font-normal">粒 Beans</span>
-            </div>
-          </div>
-          <div>
-            <div className="text-[11px] text-slate-400">席位分配状态</div>
-            <div className="text-2xl font-extrabold text-blue-300 font-mono mt-0.5">
-              {members.length} / {quota?.seatsTotal || 100} <span className="text-xs font-normal">席 (已激活)</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 挂载的政企私有 MCP 资产条 */}
-      <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <span className="text-base">🏛️</span>
-          <div>
-            <span className="text-xs font-bold text-slate-900">本单位已自动注入的政企私有 MCP 连接器：</span>
-            <span className="text-xs text-slate-500 ml-1">员工登录智能体客户端后将自动挂载以下内网工具，无需手动配置</span>
-          </div>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          {(quota?.boundMcps || []).map((mcp, idx) => (
-            <span key={idx} className="px-2.5 py-1 bg-purple-50 text-purple-800 border border-purple-200 rounded-lg text-xs font-semibold flex items-center gap-1">
-              <span>⚡</span> {mcp.name} <span className="text-[10px] font-mono text-purple-500">({mcp.version})</span>
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* 员工手机号授权与配额管理表格 */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="px-5 py-3.5 border-b border-slate-200 flex items-center justify-between">
-          <div>
-            <h2 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
-              本单位员工手机号开户与智能体授权台账
-            </h2>
-            <p className="text-[11px] text-slate-500 mt-0.5">
-              员工在腾讯 WorkBuddy / 阿里 Qoder 客户端输入下方手机号，即可免密直连本单位算力池
-            </p>
-          </div>
-          <button
-            onClick={() => setModalOpen(true)}
-            className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-medium transition-colors"
+          <Link
+            href="/workspace"
+            className="px-3.5 py-1.5 rounded-lg bg-blue-600/90 hover:bg-blue-600 text-white font-medium shadow-sm transition-all flex items-center gap-1.5"
           >
-            + 开通员工
+            <span>进入工作台</span>
+            <span>→</span>
+          </Link>
+          <button
+            type="button"
+            onClick={() => {
+              if (confirm("确定要退出当前政企专区吗？")) {
+                localStorage.removeItem("ruoyi_token")
+                localStorage.removeItem("ruoyi_user")
+                window.location.href = "/login"
+              }
+            }}
+            className="px-2.5 py-1.5 rounded-lg border border-slate-700/80 bg-slate-800/60 hover:bg-rose-900/40 text-slate-400 hover:text-rose-300 transition-colors flex items-center gap-1"
+            title="退出登录"
+          >
+            <span>🚪</span>
+            <span className="hidden sm:inline">退出</span>
           </button>
         </div>
+      </header>
 
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-slate-200 text-xs">
-            <thead className="bg-slate-50/80">
-              <tr>
-                <th className="px-4 py-3 text-left font-semibold text-slate-500 uppercase">员工姓名 / 手机号</th>
-                <th className="px-4 py-3 text-left font-semibold text-slate-500 uppercase">部门 / 职务</th>
-                <th className="px-4 py-3 text-left font-semibold text-slate-500 uppercase">授权智能体应用</th>
-                <th className="px-4 py-3 text-left font-semibold text-slate-500 uppercase">月度算力上限</th>
-                <th className="px-4 py-3 text-left font-semibold text-slate-500 uppercase">本月已消耗</th>
-                <th className="px-4 py-3 text-left font-semibold text-slate-500 uppercase">状态</th>
-                <th className="px-4 py-3 text-right font-semibold text-slate-500 uppercase min-w-[140px]">操作</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-200 bg-white">
-              {members.map((m) => {
-                const remain = Math.max(0, m.monthlyTokenCap - m.usedTokens)
-                const percent = Math.min(100, Math.round((m.usedTokens / m.monthlyTokenCap) * 100))
-                return (
-                  <tr key={m.id} className="hover:bg-slate-50/60 transition-colors">
-                    <td className="px-4 py-3">
-                      <div className="font-bold text-slate-900">{m.name}</div>
-                      <div className="text-[11px] font-mono text-blue-600 font-semibold">{m.phone}</div>
-                    </td>
-                    <td className="px-4 py-3 text-slate-600">
-                      <div>{m.deptName}</div>
-                      <div className="text-[11px] text-slate-400">{m.role}</div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex flex-wrap gap-1">
-                        {m.allowedApps.map((app, i) => (
-                          <span key={i} className="px-2 py-0.5 bg-blue-50 text-blue-700 border border-blue-100 rounded text-[10px] font-bold">
-                            {app === "workbuddy" ? "腾讯 WorkBuddy" : app === "qoder" ? "阿里 Qoder" : app === "trae" ? "字节 Trae" : "Cherry Studio"}
-                          </span>
-                        ))}
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 font-mono font-bold text-slate-800">
-                      {(m.monthlyTokenCap / 10_000).toLocaleString()} 万 Token
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="text-[11px] font-mono text-slate-600">{(m.usedTokens / 10_000).toFixed(1)} 万 ({percent}%)</div>
-                      <div className="w-24 bg-slate-100 h-1.5 rounded-full overflow-hidden mt-1">
-                        <div className={`h-full ${percent > 80 ? "bg-rose-500" : "bg-blue-600"}`} style={{ width: `${percent}%` }} />
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-full text-[10px] font-bold">
-                        正常使用
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-right space-x-2">
-                      <button
-                        onClick={() => {
-                          setAdjustTarget(m)
-                          setNewCap(m.monthlyTokenCap)
-                          setAdjustModalOpen(true)
-                        }}
-                        className="text-blue-600 hover:text-blue-800 font-semibold"
-                      >
-                        调整额度
-                      </button>
-                      <button
-                        onClick={() => copyText(`workbuddy://connect?token=sk-gov-${m.phone}&mcp=mcp-gov-doc`)}
-                        className="text-slate-500 hover:text-slate-700 font-medium"
-                      >
-                        复制唤起码
-                      </button>
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      {/* 主体大盘 */}
+      <main className="flex-1 max-w-7xl w-full mx-auto p-6 lg:p-10 space-y-6">
+        {/* 1. 机构契约与算力供给横幅 */}
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-900/40 via-indigo-900/20 to-slate-900 border border-blue-500/20 p-6 lg:p-8 backdrop-blur-md shadow-2xl">
+          <div className="absolute right-0 top-0 -mt-10 -mr-10 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
 
-      {/* 开通员工弹窗 */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
-              <h3 className="text-sm font-bold text-slate-900">📱 为员工开通算力与智能体授权</h3>
-              <button onClick={() => setModalOpen(false)} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="space-y-2">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <h1 className="text-2xl font-extrabold text-white tracking-tight">{quota.enterpriseName}</h1>
+                <span className="px-2.5 py-0.5 rounded-md bg-blue-500/20 border border-blue-400/30 text-blue-300 text-[11px] font-mono">
+                  税号: {quota.creditCode}
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 flex flex-wrap items-center gap-x-4 gap-y-1">
+                <span>签约套餐：<strong className="text-amber-300">{quota.tierName}</strong></span>
+                <span>运营中枢：<strong className="text-blue-300">RoMA 应算通</strong></span>
+                <span>算力供给：<strong className="text-emerald-300">中国移动 MOMA 智算集群 (满血 DeepSeek-R1/V3)</strong></span>
+              </p>
             </div>
 
-            <form onSubmit={handleCreateMember} className="p-6 space-y-3 text-xs">
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setShowModal(true)}
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs shadow-lg shadow-blue-600/30 active:scale-[0.98] transition-all flex items-center gap-2"
+              >
+                <span className="text-base font-bold">+</span>
+                <span>为单位员工开通算力席位</span>
+              </button>
+            </div>
+          </div>
+
+          {/* 4 联 KPI 核心资产仪表盘 */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+            {/* 卡片 1: 本月算力总量 */}
+            <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800/80 space-y-1.5">
+              <div className="text-[11px] text-slate-400 font-medium flex items-center justify-between">
+                <span>本月签约算力池</span>
+                <span className="text-blue-400">⚡ Monthly</span>
+              </div>
+              <div className="text-2xl font-black text-white font-mono tracking-tight">
+                {(quota.totalTokenMonthly / 10000).toLocaleString()} <span className="text-xs text-slate-400 font-sans font-normal">万 Token</span>
+              </div>
+              <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                <div className="bg-blue-500 h-full rounded-full" style={{ width: `${usagePercent}%` }} />
+              </div>
+              <div className="text-[10px] text-slate-500 flex justify-between">
+                <span>已消耗 {usagePercent}%</span>
+                <span>按需动态扩缩容</span>
+              </div>
+            </div>
+
+            {/* 卡片 2: 本月剩余可用 */}
+            <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800/80 space-y-1.5">
+              <div className="text-[11px] text-slate-400 font-medium flex items-center justify-between">
+                <span>本月剩余可用额度</span>
+                <span className="text-emerald-400">● 充足</span>
+              </div>
+              <div className="text-2xl font-black text-emerald-400 font-mono tracking-tight">
+                {(quota.remainingTokenMonthly / 10000).toLocaleString()} <span className="text-xs text-slate-400 font-sans font-normal">万 Token</span>
+              </div>
+              <div className="text-[10px] text-slate-400">
+                次月 1 日 0 点自动重置续期
+              </div>
+            </div>
+
+            {/* 卡片 3: 折合移动豆 */}
+            <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800/80 space-y-1.5">
+              <div className="text-[11px] text-slate-400 font-medium flex items-center justify-between">
+                <span>折合移动豆余额</span>
+                <span className="text-amber-400">🌾 1:1000</span>
+              </div>
+              <div className="text-2xl font-black text-amber-300 font-mono tracking-tight">
+                {quota.mobileBeansEquivalent.toLocaleString()} <span className="text-xs text-slate-400 font-sans font-normal">粒 Beans</span>
+              </div>
+              <div className="text-[10px] text-slate-400">
+                支持中国移动话费账单合并出账
+              </div>
+            </div>
+
+            {/* 卡片 4: 席位划拨情况 */}
+            <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800/80 space-y-1.5">
+              <div className="text-[11px] text-slate-400 font-medium flex items-center justify-between">
+                <span>席位分配状态</span>
+                <span className="text-indigo-400">👥 Seats</span>
+              </div>
+              <div className="text-2xl font-black text-white font-mono tracking-tight">
+                {quota.activeSeats} <span className="text-xs text-slate-400 font-sans font-normal">/ {quota.totalSeats} 席 (已激活)</span>
+              </div>
+              <div className="text-[10px] text-slate-400">
+                剩余 {quota.totalSeats - quota.activeSeats} 个待分配名额
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 2. 政企私有 MCP 资产挂载面板 */}
+        <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-2.5 text-slate-300">
+            <span className="text-base">🏛️</span>
+            <span className="font-semibold text-white">本单位已自动注入的政企私有 MCP 插件：</span>
+            <span className="text-slate-400 text-[11px] hidden lg:inline">员工在腾讯 WorkBuddy / 阿里 Qoder 登录手机号即可免配置调用</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            {quota.privateMcps.map((mcp) => (
+              <div key={mcp.id} className="px-3 py-1 bg-blue-500/10 border border-blue-500/20 text-blue-300 rounded-lg text-[11px] flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+                <span>{mcp.name}</span>
+                <span className="text-[9px] font-mono text-slate-400">({mcp.version})</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 3. 员工算力席位与授权台账 */}
+        <div className="rounded-2xl bg-slate-900/70 border border-slate-800 overflow-hidden shadow-xl">
+          {/* 表格顶栏操作 */}
+          <div className="p-5 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 className="text-base font-bold text-white flex items-center gap-2">
+                <span>单位员工手机开户与智能体授权台账</span>
+                <span className="px-2 py-0.5 bg-slate-800 text-slate-300 text-[11px] rounded-full font-mono">
+                  共 {filteredMembers.length} 名人员
+                </span>
+              </h2>
+              <p className="text-xs text-slate-400 mt-0.5">
+                数据严格隔离在当前租户（{quota.enterpriseName}）下，跨租户物理级不可见。
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="搜索姓名、手机、部门..."
+                className="px-3.5 py-1.5 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-white focus:outline-none focus:border-blue-500 w-48 sm:w-60 font-medium"
+              />
+            </div>
+          </div>
+
+          {/* 表格内容 */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="border-b border-slate-800/80 bg-slate-950/40 text-slate-400 text-[11px] uppercase tracking-wider font-semibold">
+                  <th className="px-6 py-3.5">员工姓名 / 手机号</th>
+                  <th className="px-6 py-3.5">所属部门 / 职务</th>
+                  <th className="px-6 py-3.5">已授权智能体端</th>
+                  <th className="px-6 py-3.5">月度算力上限</th>
+                  <th className="px-6 py-3.5">本月消耗进度</th>
+                  <th className="px-6 py-3.5">状态</th>
+                  <th className="px-6 py-3.5 text-right">协同操作</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/60">
+                {filteredMembers.map((m) => {
+                  const percent = Math.round((m.usedTokenMonthly / m.monthlyLimitToken) * 100)
+                  return (
+                    <tr key={m.id} className="hover:bg-slate-800/30 transition-colors group">
+                      <td className="px-6 py-4">
+                        <div className="font-bold text-white text-sm">{m.name}</div>
+                        <div className="text-[11px] font-mono text-slate-400">{m.mobile}</div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-slate-200 font-medium">{m.dept}</div>
+                        <div className="text-[11px] text-slate-400">{m.title}</div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="inline-flex flex-wrap gap-1">
+                          {m.agentApp.split("•").map((app, idx) => (
+                            <span
+                              key={idx}
+                              className="px-2 py-0.5 bg-blue-500/10 border border-blue-500/20 text-blue-300 rounded text-[11px] font-medium"
+                            >
+                              {app.trim()}
+                            </span>
+                          ))}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 font-mono font-semibold text-slate-200">
+                        {(m.monthlyLimitToken / 10000).toLocaleString()} 万 Token
+                      </td>
+                      <td className="px-6 py-4 min-w-[140px]">
+                        <div className="text-[11px] font-mono text-slate-300 mb-1">
+                          {(m.usedTokenMonthly / 10000).toFixed(1)} 万 ({percent}%)
+                        </div>
+                        <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                          <div
+                            className={`h-full rounded-full ${percent > 80 ? "bg-rose-500" : percent > 50 ? "bg-amber-500" : "bg-blue-500"}`}
+                            style={{ width: `${percent}%` }}
+                          />
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                          正常使用
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-right whitespace-nowrap space-x-2">
+                        <button
+                          type="button"
+                          onClick={() => handleCopyLink(m)}
+                          className="text-xs text-blue-400 hover:text-blue-300 font-medium transition-colors"
+                        >
+                          {copiedId === m.id ? "✓ 已复制协议" : "复制唤起码"}
+                        </button>
+                        <span className="text-slate-700">|</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newLimit = prompt(`请输入【${m.name}】新的月度算力额度 (单位: 万 Token):`, String(m.monthlyLimitToken / 10000))
+                            if (newLimit && !isNaN(Number(newLimit))) {
+                              setMembers(members.map((item) => (item.id === m.id ? { ...item, monthlyLimitToken: Number(newLimit) * 10000 } : item)))
+                              alert(`已将【${m.name}】额度调整为 ${newLimit} 万 Token！`)
+                            }
+                          }}
+                          className="text-xs text-amber-400 hover:text-amber-300 font-medium transition-colors"
+                        >
+                          调整额度
+                        </button>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+
+      {/* 新增员工开户弹窗 */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <span>⚡ 为单位员工开通算力席位</span>
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowModal(false)}
+                className="text-slate-400 hover:text-white text-lg font-bold"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateMember} className="space-y-4 text-xs">
               <div>
-                <label className="block text-slate-600 font-medium mb-1">员工手机号 (登录 SSO 凭据) *</label>
+                <label className="block text-slate-300 font-medium mb-1">员工手机号码 (登录唯一账号)</label>
                 <input
                   type="text"
                   required
-                  value={form.phone}
-                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                  placeholder="如 13800000000"
-                  className="w-full px-3 py-1.5 border border-slate-300 rounded-lg font-mono"
+                  value={formData.mobile}
+                  onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
+                  placeholder="如 13800138000"
+                  className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-blue-500 focus:outline-none"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-slate-600 font-medium mb-1">员工姓名 *</label>
-                  <input
-                    type="text"
-                    required
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    placeholder="如 陈科长"
-                    className="w-full px-3 py-1.5 border border-slate-300 rounded-lg"
-                  />
-                </div>
-                <div>
-                  <label className="block text-slate-600 font-medium mb-1">所属处室/部门</label>
-                  <input
-                    type="text"
-                    value={form.deptName}
-                    onChange={(e) => setForm({ ...form, deptName: e.target.value })}
-                    placeholder="如 政策法规处"
-                    className="w-full px-3 py-1.5 border border-slate-300 rounded-lg"
-                  />
-                </div>
+              <div>
+                <label className="block text-slate-300 font-medium mb-1">员工姓名</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="如 陈科长"
+                  className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-white focus:border-blue-500 focus:outline-none"
+                />
               </div>
 
               <div>
-                <label className="block text-slate-600 font-medium mb-1">月度算力额度上限 (Tokens) *</label>
+                <label className="block text-slate-300 font-medium mb-1">所属科室 / 部门</label>
+                <input
+                  type="text"
+                  value={formData.dept}
+                  onChange={(e) => setFormData({ ...formData, dept: e.target.value })}
+                  className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-white focus:border-blue-500 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-300 font-medium mb-1">授权智能体应用</label>
                 <select
-                  value={form.monthlyTokenCap}
-                  onChange={(e) => setForm({ ...form, monthlyTokenCap: Number(e.target.value) })}
-                  className="w-full px-3 py-1.5 border border-slate-300 rounded-lg font-mono font-bold"
+                  value={formData.agentApp}
+                  onChange={(e) => setFormData({ ...formData, agentApp: e.target.value })}
+                  className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-white focus:border-blue-500 focus:outline-none"
                 >
-                  <option value={5_000_000}>500 万 Tokens / 月 (基础办公)</option>
-                  <option value={10_000_000}>1,000 万 Tokens / 月 (重点协同)</option>
-                  <option value={20_000_000}>2,000 万 Tokens / 月 (公文起草)</option>
-                  <option value={30_000_000}>3,000 万 Tokens / 月 (架构与研发)</option>
-                  <option value={50_000_000}>5,000 万 Tokens / 月 (高频攻坚)</option>
+                  <option value="腾讯 WorkBuddy • Cherry Studio">腾讯 WorkBuddy (公文/协同推荐)</option>
+                  <option value="阿里 Qoder • 字节 Trae">阿里 Qoder (代码/架构研发推荐)</option>
+                  <option value="全生态智能体 (WorkBuddy + Qoder + Trae)">全生态全功能智能体席位</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-slate-600 font-medium mb-1">授权接入的智能体应用</label>
-                <div className="space-y-1.5 pt-1">
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={form.allowedApps.includes("workbuddy")}
-                      onChange={(e) => {
-                        const apps = e.target.checked
-                          ? [...form.allowedApps, "workbuddy"]
-                          : form.allowedApps.filter((a) => a !== "workbuddy")
-                        setForm({ ...form, allowedApps: apps })
-                      }}
-                      className="rounded text-blue-600"
-                    />
-                    <span>腾讯 WorkBuddy (党政机关红头公文排版 / 会议纪要)</span>
-                  </label>
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={form.allowedApps.includes("qoder")}
-                      onChange={(e) => {
-                        const apps = e.target.checked
-                          ? [...form.allowedApps, "qoder"]
-                          : form.allowedApps.filter((a) => a !== "qoder")
-                        setForm({ ...form, allowedApps: apps })
-                      }}
-                      className="rounded text-blue-600"
-                    />
-                    <span>阿里 Qoder (国央企内网源码合规审计 / 智能研发)</span>
-                  </label>
-                </div>
+                <label className="block text-slate-300 font-medium mb-1">月度算力分配额度</label>
+                <select
+                  value={formData.monthlyLimitToken}
+                  onChange={(e) => setFormData({ ...formData, monthlyLimitToken: Number(e.target.value) })}
+                  className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-blue-500 focus:outline-none"
+                >
+                  <option value={5000000}>500 万 Token / 月 (日常公文轻度)</option>
+                  <option value={10000000}>1,000 万 Token / 月 (标准业务中度)</option>
+                  <option value={20000000}>2,000 万 Token / 月 (核心业务深度)</option>
+                  <option value={50000000}>5,000 万 Token / 月 (研发与算法高频)</option>
+                </select>
               </div>
 
-              <div className="p-2.5 bg-blue-50 border border-blue-100 rounded-xl text-[11px] text-blue-700">
-                📲 开通后系统将自动下发短信通知与免密激活 DeepLink 短链，员工手机即可开箱即用。
-              </div>
-
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200">
+              <div className="pt-2 flex items-center justify-end gap-3">
                 <button
                   type="button"
-                  onClick={() => setModalOpen(false)}
-                  className="px-4 py-1.5 text-xs text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50"
+                  onClick={() => setShowModal(false)}
+                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl"
                 >
                   取消
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-1.5 text-xs text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg shadow-xs"
+                  className="px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg shadow-blue-500/20"
                 >
-                  确认开通并下发
+                  立即开通并授权
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
-
-      {/* 调整额度弹窗 */}
-      {adjustModalOpen && adjustTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden p-6 space-y-4 text-xs">
-            <h3 className="text-sm font-bold text-slate-900">⚡ 调整【{adjustTarget.name}】的算力额度</h3>
-            <div>
-              <label className="block text-slate-600 font-medium mb-1">新的月度算力额度 (Tokens)</label>
-              <input
-                type="number"
-                value={newCap}
-                onChange={(e) => setNewCap(Number(e.target.value))}
-                className="w-full px-3 py-1.5 border border-slate-300 rounded-lg font-mono font-bold"
-              />
-              <div className="text-[11px] text-slate-400 mt-1">折合 {(newCap / 10_000).toLocaleString()} 万 Token / 月</div>
-            </div>
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200">
-              <button
-                type="button"
-                onClick={() => setAdjustModalOpen(false)}
-                className="px-4 py-1.5 text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50"
-              >
-                取消
-              </button>
-              <button
-                type="button"
-                onClick={handleSaveAdjust}
-                className="px-4 py-1.5 text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg shadow-xs"
-              >
-                保存调整
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }
-
-export default EnterprisePortalCpcPage

@@ -509,8 +509,11 @@ export function withAigwMenuCatalog<T extends { id: string }>(menus: T[]): T[] {
   for (const entry of AIGW_MENU_ENTRIES) {
     byId.set(entry.id, entry as unknown as T)
   }
-  // 移除旧独立模块菜单顶层节点
-  for (const removeId of ["9000", "9004", "9005", "9100", "9101", "9103", "9104", "9200", "9201", "9203", "9300", "9400", "9402"]) {
+  // 移除旧独立模块/旧目录菜单顶层节点（彻底清除重复的模型中台 ai-gateway-dir）
+  for (const removeId of [
+    "ai-gateway-dir",
+    "9000", "9004", "9005", "9100", "9101", "9103", "9104", "9200", "9201", "9203", "9300", "9400", "9402"
+  ]) {
     byId.delete(removeId)
   }
   return [...byId.values()]

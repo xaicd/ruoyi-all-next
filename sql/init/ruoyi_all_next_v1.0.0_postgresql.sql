@@ -1,6 +1,6 @@
 -- ==============================================================================
 -- ruoyi-all-next 第一版权威全量初始化 SQL (V1.0.0 PostgreSQL)
--- 生成时间: 2026-08-24T12:46:44.539Z
+-- 生成时间: 2026-08-24T14:41:19.452Z
 -- 包含: 全 15 域完整 DDL + 工整 4 字符系统菜单 + 平台超管 + 完整业务种子数据
 -- ==============================================================================
 
@@ -1347,8 +1347,9 @@ ON CONFLICT ("id") DO NOTHING;
 
 -- 2. 租户套餐
 INSERT INTO "system_tenant_package" ("id", "name", "status", "menu_ids", "remark", "created_at", "updated_at") VALUES
-('111', '普通套餐', 'ACTIVE', '["1","2","5","1031","1032","1033","1034","1035","1036","1037","1038","1039","1050","1051","1052","1053","1054","1056","1057","1058","1059","1060","1063","1064","1065","1066","1067","1070","1075","1077","1078","1082","1083","1084","1085","1086","1087","1088","1089","1090","1091","1092","1117","1118","1119","1120","100","101","102","1126","103","1127","1128","1129","106","1130","107","1132","1133","110","1134","111","1135","112","1136","113","1137","2161","114","1138","1139","115","1140","116","1141","1142","1143","1150","1161","1162","1166","1173","1174","2713","2714","1178","2715","2716","2717","2718","2720","2721","1185","2722","1186","1187","2723","1188","2724","1189","2725","1190","2726","1191","2727","1192","2728","2729","1193","1194","2730","1195","2731","2732","1197","2733","1198","2734","1199","2735","1200","1201","1202","2739","2740","1207","1208","1209","2745","1210","2746","1211","2747","1212","2748","1213","1215","1216","1217","1218","1219","1220","2756","1221","2757","1222","1224","1225","1226","1227","1228","1229","1237","1238","2262","1239","1240","1241","1242","1243","2275","2276","2277","1255","1256","1257","2281","1258","2282","1259","2283","1260","2284","2285","2287","2288","2293","2294","2297","2300","2301","2302","2317","2318","2319","2320","2321","2322","2323","2324","2325","2326","2327","2328","2329","2330","2331","2332","2333","2334","2335","2363","2364","5011","5012","2472","2478","2479","2480","2481","2482","2483","2484","2485","2486","2487","2488","2489","2490","2491","2492","2493","2494","2495","2497","2525","1001","1002","1003","1004","1005","1006","1007","1008","1009","1010","1011","1012","1013","2549","1014","2550","1015","2551","1016","2552","1017","2553","1018","2554","1019","2555","1020","2556","2557","2558","2559"]', '小功能', NOW(), NOW()),
-('113', '测试套餐（啥都没有）', 'ACTIVE', '["2160","1254","2159"]', NULL, NOW(), NOW())
+('111', 'RoMA 智算运营旗舰套餐', 'ACTIVE', '["1","100","1001","1002","1003","1004","1005","1006","101","1007","1008","1009","1010","102","103","1011","1012","1013","1014","104","1015","1016","1017","1018","105","106","107","108","500","501","aigw-dir","aigw-routing-dir","aigw-identity-dir","aigw-app-dir","aigw-settlement-dir","aigw-workbench","aigw-dashboard","aigw-playground","aigw-channels","aigw-models","aigw-tokens","aigw-usages","aigw-enterprises","aigw-tenant-members","aigw-seats","aigw-quotas","aigw-isv-apps","aigw-mcp-hub","aigw-chats","aigw-tariffs","aigw-skus","aigw-pipelines","aigw-contracts","aigw-invoices","ai-app-dir","ai-app-chat-conversation","ai-app-chat-role","ai-app-knowledge","ai-app-image","ai-app-mind-map","ai-app-write","ai-app-workflow"]', '默认租户旗舰套餐：开通系统管理、智汇应用、模型中台与算力调度、在线建模等全套核心业务能力', NOW(), NOW()),
+('112', '政企算力自服务专区套餐', 'ACTIVE', '["1","100","103","107","aigw-dir","aigw-partner-portal","aigw-tokens","aigw-usages","ai-app-dir","ai-app-chat-conversation","ai-app-chat-role","ai-app-knowledge","ai-app-image","ai-app-mind-map","ai-app-write","ai-app-workflow"]', '面向政企客户内网挂载：开通算力资产大盘、员工管理、AI 协同工作台与私有 MCP 挂载', NOW(), NOW()),
+('113', '极简体验套餐', 'ACTIVE', '["ai-app-dir","ai-app-chat-conversation","ai-app-chat-role"]', '轻量体验套餐：仅开通 AI 对话聊天与智能角色', NOW(), NOW())
 ON CONFLICT ("id") DO NOTHING;
 
 -- 3. 组织部门
@@ -1381,12 +1382,11 @@ ON CONFLICT ("id") DO NOTHING;
 
 -- 5. 角色信息 (含超级管理员、平台运营、渠道代理商)
 INSERT INTO "system_role" ("id", "name", "code", "sort", "data_scope", "status", "type", "remark", "created_at", "updated_at") VALUES
-('1', '超级管理员', 'super_admin', 1, 'ALL', 'ACTIVE', NULL, '超级管理员', NOW(), NOW()),
-('2', '普通角色', 'common', 2, 'DEPT', 'ACTIVE', NULL, '普通员工角色', NOW(), NOW()),
-('3', 'CRM 管理员', 'crm_admin', 3, 'ALL', 'ACTIVE', NULL, 'CRM 专属角色', NOW(), NOW()),
-('4', '租户管理员', 'tenant-admin-default', 0, 'ALL', 'ACTIVE', NULL, '租户默认管理角色（系统自动生成）', NOW(), NOW()),
-('5', '测试角色', 'test', 5, 'SELF', 'ACTIVE', NULL, '测试用角色', NOW(), NOW()),
-('6', '平台管理员', 'platform-admin', 0, 'ALL', 'ACTIVE', NULL, '租户与套餐控制面管理员', NOW(), NOW())
+('1', '平台超级管理员', 'super_admin', 1, 'ALL', 'ACTIVE', NULL, '掌控全系统 15 域全部功能、调度 MOMA 算力底座与全局治理', NOW(), NOW()),
+('2', '运营商大客户经理', 'aigw_manager', 2, 'DEPT_AND_CHILD', 'ACTIVE', NULL, '运营商政企客户经理/营业厅经理：名下客户用量热力图、一纸开户、20% 长尾分润、升档推荐', NOW(), NOW()),
+('3', '地市渠道合伙人', 'aigw_partner', 3, 'SELF', 'ACTIVE', NULL, '地市生态代理商/ISV：地市商机报备锁定、客户签约开户、20% 算力清分分成提现', NOW(), NOW()),
+('4', '政企单位主管', 'enterprise_admin', 4, 'DEPT', 'ACTIVE', NULL, '政企客户 IT 负责人/办公室主管：掌握单位 1 亿算力池、移动豆监控、科室员工席位划拨与 MCP 挂载', NOW(), NOW()),
+('5', '业务协同员工', 'cpc_employee', 5, 'SELF', 'ACTIVE', NULL, '机关公文起草员/核心研发人员：AI 协同工作台、GB/T 9704 红头公文排版、政务知识库、代码审计、WorkBuddy 唤起', NOW(), NOW())
 ON CONFLICT ("id") DO NOTHING;
 
 -- 6. 系统菜单与权限点 (已全面工整为 4 字符)
@@ -4137,11 +4137,11 @@ INSERT INTO "system_dict_data" ("id", "dict_type", "label", "value", "sort", "st
 ('1061136', NULL, '通话参与者离开', '1603', 1603, 'ACTIVE', 'info', NULL, NULL, NOW(), NOW())
 ON CONFLICT ("id") DO NOTHING;
 
--- 9. 平台超级管理员用户 (vps_adm & admin)
+-- 9. 平台超级管理员与系统运维用户 (vps_adm & roma_ops)
 INSERT INTO "system_user" ("id", "username", "password", "nickname", "remark", "dept_id", "post_ids", "email", "mobile", "sex", "avatar", "status", "login_ip", "login_date", "created_at", "updated_at") VALUES
-('1', 'vps_adm', 'd5a9671aa1a1c893ab42de0c6810dede', '平台超级管理员', '系统首创平台管理员', '100', '["1"]', 'admin@ruoyi.vip', '13800138000', 1, '', 'ACTIVE', '127.0.0.1', NOW(), NOW(), NOW()),
-('2', 'admin', 'd5a9671aa1a1c893ab42de0c6810dede', '系统管理员', '系统内置管理员', '100', '["1"]', 'admin2@ruoyi.vip', '13800138001', 1, '', 'ACTIVE', '127.0.0.1', NOW(), NOW(), NOW())
-ON CONFLICT ("id") DO NOTHING;
+('1', 'vps_adm', 'd5a9671aa1a1c893ab42de0c6810dede', '平台超级管理员', '系统首创平台管理员', '100', '["1"]', 'vps_adm@roma.vip', '13800138000', 1, '', 'ACTIVE', '127.0.0.1', NOW(), NOW(), NOW()),
+('2', 'roma_ops', 'd5a9671aa1a1c893ab42de0c6810dede', '系统运维管理员', '系统内置高安全运维账号', '100', '["1"]', 'roma_ops@roma.vip', '13800138001', 1, '', 'ACTIVE', '127.0.0.1', NOW(), NOW(), NOW())
+ON CONFLICT ("id") DO UPDATE SET "username" = EXCLUDED."username", "password" = EXCLUDED."password", "nickname" = EXCLUDED."nickname";
 
 -- 10. 用户角色关联
 INSERT INTO "system_user_role" ("id", "user_id", "role_id", "created_at", "updated_at") VALUES

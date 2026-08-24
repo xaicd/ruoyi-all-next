@@ -1,9 +1,28 @@
 import { z } from "zod"
 import { pageQuerySchema } from "./common.validators"
 
+// 敏感高危用户名黑名单（防字典扫描与暴力破解）
+export const FORBIDDEN_USERNAMES = new Set([
+  "admin",
+  "root",
+  "administrator",
+  "system",
+  "manager",
+  "master",
+  "guest",
+  "superadmin",
+  "null",
+  "undefined",
+])
+
 // === 用户管理 CRUD ===
 export const createUserSchema = z.object({
-  username: z.string().trim().min(2, "用户名至少 2 个字符").max(30),
+  username: z
+    .string()
+    .trim()
+    .min(2, "用户名至少 2 个字符")
+    .max(30)
+    .refine((val) => !FORBIDDEN_USERNAMES.has(val.toLowerCase()), "用户名包含常见敏感词(如admin/root等)，为了系统安全禁止使用"),
   nickname: z.string().trim().min(1, "昵称不能为空").max(30),
   password: z.string().trim().min(6, "密码至少 6 位").max(32),
   phone: z.string().trim().max(20).optional(),
