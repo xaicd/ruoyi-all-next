@@ -69,9 +69,19 @@ export async function POST(request: Request) {
         },
         momaRouting: {
           targetModel: app.momaModelTarget,
-          carrierCluster: "中国移动 MOMA 智算中心",
+          carrierCluster: "中国移动 MOMA 智算中心 (广州/韶关集群)",
+          endpoint: "https://moma.10086.cn/api/v1",
           sessionToken: `moma-sess-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
         },
+        injectedMcps: member.phone === "13800000001" ? [
+          { code: "mcp-gov-document", name: "国家标准红头公文排版与合规审计", status: "MOUNTED", version: "v2.1" },
+          { code: "mcp-meeting-wework", name: "腾讯会议速记与企微待办派发", status: "MOUNTED", version: "v1.4" },
+        ] : member.phone === "13911112222" ? [
+          { code: "mcp-gitlab-audit", name: "国央企内网 GitLab 源码合规审计与单测生成", status: "MOUNTED", version: "v3.0" },
+          { code: "mcp-bidding-audit", name: "政府采购招投标方案比对审查", status: "MOUNTED", version: "v1.8" },
+        ] : [
+          { code: "mcp-12345-hotline", name: "政务 12345 市民热线诉求与工单分派", status: "MOUNTED", version: "v1.5" },
+        ],
       },
     })
   } catch (err: any) {

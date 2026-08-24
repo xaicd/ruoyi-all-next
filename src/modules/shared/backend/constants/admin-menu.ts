@@ -45,13 +45,13 @@ export const ADMIN_MENU: AdminMenuItem[] = [
       },
       {
         key: "oauth2-clients",
-        label: "OAuth2客户端",
+        label: "授权应用",
         path: "/admin/system/oauth2-clients",
         requiredPermission: PERMISSIONS.SYSTEM_OAUTH2_CLIENT_VIEW,
       },
       {
         key: "oauth2-tokens",
-        label: "OAuth2令牌",
+        label: "授权令牌",
         path: "/admin/system/oauth2-tokens",
         requiredPermission: PERMISSIONS.SYSTEM_OAUTH2_TOKEN_VIEW,
       },
@@ -123,7 +123,7 @@ export const ADMIN_MENU: AdminMenuItem[] = [
       },
       {
         key: "ip-areas",
-        label: "IP区域",
+        label: "地区管理",
         path: "/admin/system/ip-areas",
         requiredPermission: PERMISSIONS.SYSTEM_IP_AREA_VIEW,
       },
@@ -183,7 +183,7 @@ export const ADMIN_MENU: AdminMenuItem[] = [
       },
       {
         key: "infra-redis",
-        label: "Redis监控",
+        label: "缓存监控",
         path: "/admin/infra/redis",
         requiredPermission: PERMISSIONS.INFRA_REDIS_VIEW,
       },
@@ -201,25 +201,25 @@ export const ADMIN_MENU: AdminMenuItem[] = [
       },
       {
         key: "infra-db-configs",
-        label: "数据源配置",
+        label: "数据源库",
         path: "/admin/infra/db-configs",
         requiredPermission: PERMISSIONS.INFRA_DATA_SOURCE_CONFIG_QUERY,
       },
       {
         key: "infra-codegen",
-        label: "代码生成（存量表）",
+        label: "代码生成",
         path: "/admin/infra/codegen",
         requiredPermission: PERMISSIONS.INFRA_CODEGEN_QUERY,
       },
       {
         key: "infra-online-definitions",
-        label: "业务建模（Online）",
+        label: "在线建模",
         path: "/admin/infra/online-definitions",
         requiredPermission: PERMISSIONS.INFRA_ONLINE_DEFINITION_QUERY,
       },
       {
         key: "infra-online-test",
-        label: "AUTO报表",
+        label: "动态报表",
         path: "/admin/infra/online-test",
         requiredPermission: PERMISSIONS.REPORT_CUSTOM_SQL_EXECUTE,
       },
@@ -251,11 +251,11 @@ export const ADMIN_MENU: AdminMenuItem[] = [
   },
   {
     key: "mp",
-    label: "公众号中心",
+    label: "微信公号",
     children: [
       {
         key: "mp-accounts",
-        label: "公众号账号",
+        label: "账号管理",
         path: "/admin/mp/accounts",
         requiredPermission: PERMISSIONS.MP_ACCOUNT_VIEW,
       },
@@ -291,13 +291,13 @@ export const ADMIN_MENU: AdminMenuItem[] = [
     children: [
       {
         key: "erp-products",
-        label: "ERP商品",
+        label: "商品管理",
         path: "/admin/erp/products",
         requiredPermission: PERMISSIONS.ERP_PRODUCT_VIEW,
       },
       {
         key: "erp-orders",
-        label: "ERP订单",
+        label: "订单管理",
         path: "/admin/erp/orders",
         requiredPermission: PERMISSIONS.ERP_ORDER_VIEW,
       },
@@ -351,7 +351,7 @@ export const ADMIN_MENU: AdminMenuItem[] = [
       },
       {
         key: "pay-refunds",
-        label: "退款单",
+        label: "退款单据",
         path: "/admin/pay/refunds",
         requiredPermission: PERMISSIONS.PAY_REFUND_VIEW,
       },
@@ -459,11 +459,11 @@ export const ADMIN_MENU: AdminMenuItem[] = [
       },
       {
         key: "ai-app-dir",
-        label: "应用生态",
+        label: "生态应用",
         children: [
           {
             key: "ai-isv-apps",
-            label: "应用生态",
+            label: "生态应用",
             path: "/admin/aigw/isv-apps",
             requiredPermission: PERMISSIONS.AIGW_CHANNEL_VIEW,
           },
@@ -478,6 +478,12 @@ export const ADMIN_MENU: AdminMenuItem[] = [
             label: "对话记录",
             path: "/admin/aigw/chats",
             requiredPermission: PERMISSIONS.AI_CHAT_VIEW,
+          },
+          {
+            key: "ai-agent-sandbox",
+            label: "联调沙箱",
+            path: "/admin/aigw/agent-sandbox",
+            requiredPermission: PERMISSIONS.AIGW_CHANNEL_VIEW,
           },
         ],
       },
@@ -515,13 +521,31 @@ export const ADMIN_MENU: AdminMenuItem[] = [
             path: "/admin/aigw/invoices",
             requiredPermission: PERMISSIONS.SETTLEMENT_INVOICE_VIEW,
           },
+          {
+            key: "ai-partner-portal",
+            label: "渠道门户",
+            path: "/admin/aigw/partner-portal",
+            requiredPermission: PERMISSIONS.AIGW_CHANNEL_VIEW,
+          },
+          {
+            key: "ai-partners",
+            label: "代理商户",
+            path: "/admin/aigw/aigw-partner",
+            requiredPermission: PERMISSIONS.AIGW_CHANNEL_VIEW,
+          },
+          {
+            key: "ai-leads",
+            label: "商机报备",
+            path: "/admin/aigw/aigw-partner-lead",
+            requiredPermission: PERMISSIONS.AIGW_CHANNEL_VIEW,
+          },
         ],
       },
     ],
   },
   {
     key: "iot",
-    label: "IoT中台",
+    label: "物联中台",
     children: [
       {
         key: "iot-devices",

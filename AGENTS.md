@@ -40,10 +40,12 @@
 
 ### 3.1 分层架构
 
-1. Route 层：`src/app/api/v1/**/route.ts`（另有内部 RPC：`src/app/api/internal/rpc/route.ts`）
+1. Route 层：`src/app/api/v1/**/route.ts`（另有内部 RPC：`src/app/api/internal/rpc/route.ts` 与开放接口 `src/app/api/v1/open/**`）
 2. Service 层：`src/modules/<domain>/backend/services/**`
 3. Validator 层：`src/modules/<domain>/backend/validators/**`
-4. Page 层：`src/app/(admin-pages)/admin/**` + `src/modules/<domain>/frontend/pages/**`
+4. Page 层（Admin 运营后台 vs CPC 客户/政企 PC 双轨）：
+   - Admin 运营后台：`src/app/(admin-pages)/admin/**` + `src/modules/<domain>/frontend/pages/**`
+   - CPC 客户/政企/C端 PC：`src/app/(cpc-pages)/cpc/**` + `src/modules/<domain>/frontend/cpc-pages/**`
 5. 基座层：`src/modules/shared/backend/constants`、`src/modules/shared/backend/lib`
 6. Contract 层：`src/modules/<domain>/contract/`（Facade、actions、proto、route manifest）
 
@@ -54,8 +56,12 @@
 3. src 下只允许两个顶层目录：app（Next.js路由）和 modules（全部业务+基座）。
 4. 禁止在 src 下新建 backend/、frontend/、components/、lib/ 等平铺目录。
 5. 通用模板统一放 `src/modules/shared/frontend/templates`。
-6. C 端与桌面壳必须落在仓库根 `clients/<channel>/`，一渠道一包：`h5`、`uniapp`、`flutter`、`desktop-pc`。
-7. 独立客户端包内固定 `app/`、`shared/`、`modules/<domain>/`；域名与 `domain-catalog.json` 一致，禁止把新域堆进 `app`、`shared` 或根 `pages`。细则见 docs/architecture/ruoyi-all-next-client-channels.md。
+6. **前端双轨页面规范（强制）**：
+   - `src/modules/<domain>/frontend/pages/` 专用于 **Admin 运营管理端页面**；
+   - `src/modules/<domain>/frontend/cpc-pages/` 专用于 **Client PC（面向客户、政企内网挂载大盘、C 端员工协同工作台）页面**；
+   - 严禁将客户/政企/C 端 PC 页面混入 `frontend/pages/` 中，必须严格收敛在 `frontend/cpc-pages/` 下，实现 Admin 与 Client PC 物理级解耦；
+7. C 端与桌面壳必须落在仓库根 `clients/<channel>/`，一渠道一包：`h5`、`uniapp`、`flutter`、`desktop-pc`。
+8. 独立客户端包内固定 `app/`、`shared/`、`modules/<domain>/`；域名与 `domain-catalog.json` 一致，禁止把新域堆进 `app`、`shared` 或根 `pages`。细则见 docs/architecture/ruoyi-all-next-client-channels.md。
 
 ### 3.3 可替换后端与微服务边界（强制）
 

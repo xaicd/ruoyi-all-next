@@ -45,8 +45,6 @@ export type UpdateMenuData = Partial<CreateMenuData>
 // === 内存存储（由 RuoYi 原始 SQL 全量生成 + Online 扩展 + AIGW 模型中台 + AI 应用） ===
 const MEMORY_STORE: SystemMenuRow[] = withAiMenuCatalog(withAigwMenuCatalog(withOnlineMenuCatalog(SEED_MENUS)))
 
-
-
 let memoryIdSeq = 5000
 
 export const SystemMenuRepository = {

@@ -27,6 +27,9 @@ export const AIGW_SKUS_MENU_ID = "aigw-skus"
 export const AIGW_PIPELINES_MENU_ID = "aigw-pipelines"
 export const AIGW_CONTRACTS_MENU_ID = "aigw-contracts"
 export const AIGW_INVOICES_MENU_ID = "aigw-invoices"
+export const AIGW_PARTNER_PORTAL_MENU_ID = "aigw-partner-portal"
+export const AIGW_PARTNERS_MENU_ID = "aigw-partners"
+export const AIGW_LEADS_MENU_ID = "aigw-leads"
 
 export type AigwMenuCatalogRow = {
   id: string
@@ -263,7 +266,7 @@ export const AIGW_MENU_ENTRIES: AigwMenuCatalogRow[] = [
   // 2 级分组 3：应用生态
   {
     id: AIGW_APP_DIR_ID,
-    name: "应用生态",
+    name: "生态应用",
     permission: "aigw:channel:view",
     type: "DIR",
     parentId: AIGW_DIR_ID,
@@ -279,7 +282,7 @@ export const AIGW_MENU_ENTRIES: AigwMenuCatalogRow[] = [
   },
   {
     id: AIGW_ISV_APPS_MENU_ID,
-    name: "应用生态",
+    name: "生态应用",
     permission: "aigw:channel:view",
     type: "MENU",
     parentId: AIGW_APP_DIR_ID,
@@ -422,6 +425,54 @@ export const AIGW_MENU_ENTRIES: AigwMenuCatalogRow[] = [
     keepAlive: true,
     createdAt: "2026-08-23T00:00:00.000Z",
     updatedAt: "2026-08-23T00:00:00.000Z",
+  },
+  {
+    id: AIGW_PARTNER_PORTAL_MENU_ID,
+    name: "渠道门户",
+    permission: "aigw:channel:view",
+    type: "MENU",
+    parentId: AIGW_SETTLEMENT_DIR_ID,
+    path: "partner-portal",
+    component: "aigw/partner-portal/index",
+    icon: "ep:data-line",
+    sort: 6,
+    status: "ACTIVE",
+    visible: true,
+    keepAlive: true,
+    createdAt: "2026-08-24T00:00:00.000Z",
+    updatedAt: "2026-08-24T00:00:00.000Z",
+  },
+  {
+    id: AIGW_PARTNERS_MENU_ID,
+    name: "代理商户",
+    permission: "aigw:partner:view",
+    type: "MENU",
+    parentId: AIGW_SETTLEMENT_DIR_ID,
+    path: "aigw-partner",
+    component: "aigw/aigw-partner/index",
+    icon: "ep:user",
+    sort: 7,
+    status: "ACTIVE",
+    visible: true,
+    keepAlive: true,
+    createdAt: "2026-08-24T00:00:00.000Z",
+    updatedAt: "2026-08-24T00:00:00.000Z",
+  },
+  {
+    id: AIGW_LEADS_MENU_ID,
+    name: "商机报备",
+    permission: "aigw:partner-lead:view",
+    type: "MENU",
+    parentId: AIGW_SETTLEMENT_DIR_ID,
+    path: "aigw-partner-lead",
+    component: "aigw/aigw-partner-lead/index",
+    icon: "ep:folder-checked",
+    sort: 8,
+    status: "ACTIVE",
+    visible: true,
+    keepAlive: true,
+    createdAt: "2026-08-24T00:00:00.000Z",
+    updatedAt: "2026-08-24T00:00:00.000Z",
   },
 ]
 

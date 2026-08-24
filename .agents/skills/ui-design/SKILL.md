@@ -58,6 +58,16 @@ description: 管理端与 C 端 UI/UX 设计。融合 Vercel、ui-ux-pro-max、S
 2. **工具栏与表格（Table & Toolbar）**：支持批量操作、列筛选显隐、单行双击预览。
 3. **弹窗表单（FormModal）**：支持 ESC 关闭、表单校验高亮聚焦第一个错误项。
 
+## 6. Admin 运营后台 vs CPC 客户/政企 PC 双轨前端规范 (强制)
+1. **目录结构物理级解耦**：
+   - `src/modules/<domain>/frontend/pages/` 专用于 **Admin 运营后台**（带侧边栏、系统级权限与高级配置）；
+   - `src/modules/<domain>/frontend/cpc-pages/` 专用于 **Client PC（面向客户、政企内网挂载自服务大盘、C 端员工 AI 工作台）**；
+   - 严禁将面向政企挂载或 C 端用户的页面混入 `frontend/pages/` 中。
+2. **App Router 路由组对齐**：
+   - 运营后台：`src/app/(admin-pages)/admin/<domain>/<feature>/page.tsx`
+   - CPC 客户端：`src/app/(cpc-pages)/cpc/<domain>/<feature>/page.tsx`（具备独立极简 `(cpc-pages)/layout.tsx`，支持 `?embedded=true` 彻底无边框 iframe 嵌入政企存量 OA）。
+
+
 ### 5.1 管理端表格排版规范（强制）
 1. **严禁无序折行/跨行**：表格行与单元格统一使用 `whitespace-nowrap`，确保每一行高度整齐一致；
 2. **超长内容单行截断（Truncate & Ellipsis）**：URL、密钥、长名称、描述等必须限定宽度（如 `max-w-[200px] truncate`），并通过 `title="..."` 悬停展示完整文本；

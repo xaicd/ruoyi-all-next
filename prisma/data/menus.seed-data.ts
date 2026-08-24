@@ -230,7 +230,7 @@ export const SEED_MENUS: SystemMenuRow[] = [
   },
   {
     "id": "111",
-    "name": "MySQL 监控",
+    "name": "库表监控",
     "permission": null,
     "type": "MENU",
     "parentId": "2740",
@@ -246,7 +246,7 @@ export const SEED_MENUS: SystemMenuRow[] = [
   },
   {
     "id": "112",
-    "name": "Java 监控",
+    "name": "服务监控",
     "permission": null,
     "type": "MENU",
     "parentId": "2740",
@@ -262,7 +262,7 @@ export const SEED_MENUS: SystemMenuRow[] = [
   },
   {
     "id": "113",
-    "name": "Redis 监控",
+    "name": "缓存监控",
     "permission": null,
     "type": "MENU",
     "parentId": "2740",
@@ -310,7 +310,7 @@ export const SEED_MENUS: SystemMenuRow[] = [
   },
   {
     "id": "116",
-    "name": "API 接口",
+    "name": "接口文档",
     "permission": "infra:swagger:list",
     "type": "MENU",
     "parentId": "2",
@@ -1398,7 +1398,7 @@ export const SEED_MENUS: SystemMenuRow[] = [
   },
   {
     "id": "1083",
-    "name": "API 日志",
+    "name": "访问日志",
     "permission": null,
     "type": "MENU",
     "parentId": "2",
@@ -2998,7 +2998,7 @@ export const SEED_MENUS: SystemMenuRow[] = [
   },
   {
     "id": "1255",
-    "name": "数据源配置",
+    "name": "数据源库",
     "permission": null,
     "type": "MENU",
     "parentId": "2",

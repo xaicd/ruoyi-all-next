@@ -36,6 +36,9 @@ export function generateListPage(config: CodegenConfig): CodegenOutput {
     `                  <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.${c.name} ?? "-")}>{String(item.${c.name} ?? "-")}</td>`
   ).join("\n")
 
+  const advancedActions = (config.advanced as any)?.actions
+  const isReadOnly = Array.isArray(advancedActions) && advancedActions.length === 0
+
   const content = `"use client"
 
 import React, { useState, useEffect, useCallback } from "react"
@@ -45,7 +48,7 @@ import { Pagination } from "@/modules/shared/frontend/components/pagination"
 import type { ${className}VO, ${className}PageQuery } from "@/modules/${moduleName}${sub}/backend/types/${kebab}.types"
 
 export function ${className}ListPage() {
-  const [data, setData] = useState<${className}VO[]>([])
+  ${isReadOnly ? `// 当前发布版本未启用新增、编辑或删除动作，仅可查询。\n` : ""}  const [data, setData] = useState<${className}VO[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)

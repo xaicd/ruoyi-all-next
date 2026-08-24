@@ -29,9 +29,10 @@ src/modules/{domain}/
 │   ├── services/{entity}.service.ts    ← 核心业务逻辑 (事务、状态机、审计)
 │   └── services/__tests__/{entity}.test.ts ← Vitest 自动化测试
 └── frontend/
-    ├── api/{entity}.api.ts            ← 前端 API 封装
+    ├── api/{entity}.api.ts            ← 前端 API 封装 (三端共用 SDK)
     ├── components/{Entity}Form.tsx    ← 弹窗/表单组件
-    └── pages/{entity}-list.page.tsx   ← 列表管理页
+    ├── pages/{entity}-list.page.tsx   ← 🔴 Admin 运营管理端页面
+    └── cpc-pages/{feature}.cpc-page.tsx ← 🟢 CPC 客户/政企挂载/C端 PC 页面
 ```
 
 ## 4. 标准分层职责清单

@@ -27,7 +27,7 @@ export type AiMenuCatalogRow = {
 export const AI_MENU_ENTRIES: AiMenuCatalogRow[] = [
   {
     id: AI_APP_DIR_ID,
-    name: "AI 智汇应用",
+    name: "智汇应用",
     permission: "ai:chat-conversation:query",
     type: "DIR",
     parentId: null,
@@ -59,7 +59,7 @@ export const AI_MENU_ENTRIES: AiMenuCatalogRow[] = [
   },
   {
     id: AI_CHAT_ROLE_MENU_ID,
-    name: "角色智能体",
+    name: "智能角色",
     permission: "ai:chat-role:query",
     type: "MENU",
     parentId: AI_APP_DIR_ID,
@@ -75,7 +75,7 @@ export const AI_MENU_ENTRIES: AiMenuCatalogRow[] = [
   },
   {
     id: AI_KNOWLEDGE_MENU_ID,
-    name: "知识库 (RAG)",
+    name: "知识库群",
     permission: "ai:knowledge:query",
     type: "MENU",
     parentId: AI_APP_DIR_ID,
@@ -91,7 +91,7 @@ export const AI_MENU_ENTRIES: AiMenuCatalogRow[] = [
   },
   {
     id: AI_IMAGE_MENU_ID,
-    name: "AI 绘画",
+    name: "智能绘画",
     permission: "ai:image:query",
     type: "MENU",
     parentId: AI_APP_DIR_ID,
@@ -107,7 +107,7 @@ export const AI_MENU_ENTRIES: AiMenuCatalogRow[] = [
   },
   {
     id: AI_MIND_MAP_MENU_ID,
-    name: "AI 脑图",
+    name: "智能思维",
     permission: "ai:mind-map:query",
     type: "MENU",
     parentId: AI_APP_DIR_ID,
@@ -123,13 +123,13 @@ export const AI_MENU_ENTRIES: AiMenuCatalogRow[] = [
   },
   {
     id: AI_WRITE_MENU_ID,
-    name: "AI 写作",
+    name: "智能创作",
     permission: "ai:write:query",
     type: "MENU",
     parentId: AI_APP_DIR_ID,
     path: "ai-write",
     component: "ai/write/index",
-    icon: "ep:edit-pen",
+    icon: "ep:edit",
     sort: 6,
     status: "ACTIVE",
     visible: true,
@@ -139,13 +139,13 @@ export const AI_MENU_ENTRIES: AiMenuCatalogRow[] = [
   },
   {
     id: AI_WORKFLOW_MENU_ID,
-    name: "工作流编排",
+    name: "流程编排",
     permission: "ai:workflow:query",
     type: "MENU",
     parentId: AI_APP_DIR_ID,
     path: "ai-workflow",
     component: "ai/workflow/index",
-    icon: "ep:operation",
+    icon: "ep:connection",
     sort: 7,
     status: "ACTIVE",
     visible: true,

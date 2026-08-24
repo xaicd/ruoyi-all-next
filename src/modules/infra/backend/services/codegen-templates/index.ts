@@ -1,5 +1,5 @@
 // Codegen Templates Master Index & Orchestration Pipeline
-import type { CodegenConfig, CodegenOutput } from "./common"
+import { type CodegenConfig, type CodegenOutput, toCamel } from "./common"
 import { generateTypes } from "./types.template"
 import { generateValidator } from "./validator.template"
 import { generateRepository } from "./repository.template"
@@ -47,7 +47,13 @@ export function generateAllCodegenOutputs(config: CodegenConfig, options?: Gener
   const outputs: CodegenOutput[] = [
     generateTypes(config),
     generateValidator(config),
-    generateRepository(config),
+  ]
+
+  if (config.onlineRuntime?.storageKind !== "MANAGED_TABLE") {
+    outputs.push(generateRepository(config))
+  }
+
+  outputs.push(
     generateService(config),
     generateRpc(config),
     generateActions(config),
@@ -59,7 +65,16 @@ export function generateAllCodegenOutputs(config: CodegenConfig, options?: Gener
     generateAppPage(config),
     generateTest(config),
     generateRbacSql(config),
-  ]
+    {
+      path: "codegen-manifest.json",
+      type: "manifest" as any,
+      content: JSON.stringify({
+        moduleName: config.moduleName,
+        className: config.className,
+        rpcActions: [`ruoyi.cmd.${config.moduleName}.${toCamel(config.className)}.page`],
+      }, null, 2),
+    },
+  )
 
   if (options?.includeClients !== false) {
     outputs.push(
