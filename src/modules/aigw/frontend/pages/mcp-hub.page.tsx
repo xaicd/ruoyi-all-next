@@ -4,13 +4,17 @@ import { useState, useEffect, useCallback } from "react"
 import { mcpHubApi } from "../api/mcp-hub.api"
 import { AigwMcpAsset, CreateMcpAssetInput } from "../../backend/types/aigw-mcp.types"
 import { ViewModeSwitcher, ViewMode } from "@/modules/shared/frontend/components/view-mode-switcher"
+import { Pagination } from "@/modules/shared/frontend/components/pagination"
 
 export default function AigwMcpHubPage() {
   const [items, setItems] = useState<AigwMcpAsset[]>([])
+  const [total, setTotal] = useState(0)
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
   const [loading, setLoading] = useState(false)
   const [keyword, setKeyword] = useState("")
   const [category, setCategory] = useState("")
-  const [viewMode, setViewMode] = useState<"table" | "card">("table")
+  const [viewMode, setViewMode] = useState<ViewMode>("table")
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [isExportOpen, setIsExportOpen] = useState(false)
   const [selectedMcp, setSelectedMcp] = useState<AigwMcpAsset | null>(null)
@@ -25,23 +29,24 @@ export default function AigwMcpHubPage() {
     endpoint: "http://127.0.0.1:8090/mcp/custom/sse",
   })
 
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async (p = page, ps = pageSize, kw = keyword, cat = category) => {
     setLoading(true)
     try {
-      const res = await mcpHubApi.page({ keyword, category: category || undefined })
+      const res = await mcpHubApi.page({ page: p, pageSize: ps, keyword: kw || undefined, category: cat || undefined })
       if (res.success && res.data) {
         setItems(res.data.list || [])
+        setTotal(res.data.total || (res.data.list ? res.data.list.length : 0))
       }
     } catch (err: any) {
       console.error("加载 MCP 资产失败", err)
     } finally {
       setLoading(false)
     }
-  }, [keyword, category])
+  }, [page, pageSize, keyword, category])
 
   useEffect(() => {
-    loadData()
-  }, [loadData])
+    loadData(page, pageSize, keyword, category)
+  }, [page, pageSize, keyword, category, loadData])
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -397,6 +402,22 @@ export default function AigwMcpHubPage() {
           )}
         </>
       )}
+
+      {/* 通用底部分页控件 */}
+      <Pagination
+        total={total}
+        page={page}
+        pageSize={pageSize}
+        onPageChange={(p) => {
+          setPage(p)
+          loadData(p, pageSize, keyword, category)
+        }}
+        onPageSizeChange={(ps) => {
+          setPageSize(ps)
+          setPage(1)
+          loadData(1, ps, keyword, category)
+        }}
+      />
 
       {/* 4. 上架弹窗 */}
       {isCreateOpen && (

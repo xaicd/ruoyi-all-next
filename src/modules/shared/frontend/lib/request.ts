@@ -147,8 +147,17 @@ requestCore.delete = function <T = any>(url: string, config?: any) {
   return requestCore<T>({ url, method: "DELETE", ...config })
 }
 
+export interface RequestInstance {
+  <T = any>(config: RequestOptions): Promise<ApiResponse<T>>
+  get<T = any>(url: string, config?: any): Promise<ApiResponse<T>>
+  post<T = any>(url: string, data?: any, config?: any): Promise<ApiResponse<T>>
+  put<T = any>(url: string, data?: any, config?: any): Promise<ApiResponse<T>>
+  patch<T = any>(url: string, data?: any, config?: any): Promise<ApiResponse<T>>
+  delete<T = any>(url: string, config?: any): Promise<ApiResponse<T>>
+}
+
 /** 全局请求实例 (双模支持: request({ url, method }) 或 request.get(url, params)) */
-export const request = requestCore as any
+export const request: RequestInstance = requestCore as unknown as RequestInstance
 
 /** API 路径常量 */
 export const API = {

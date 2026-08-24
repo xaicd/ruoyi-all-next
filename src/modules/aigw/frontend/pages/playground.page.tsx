@@ -210,7 +210,7 @@ export default function AigwPlaygroundPage() {
               </span>
               <span className="text-[10px] text-slate-400">企微连接器 MCP</span>
             </div>
-            <h3 className="text-sm font-bold text-slate-900">会议录音速记 -> 核心决议提炼与待办派发</h3>
+            <h3 className="text-sm font-bold text-slate-900">会议录音速记 → 核心决议提炼与待办派发</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
               2小时长会议录音秒级提炼核心决议，自动拆解分工责任人并一键发送至企微待办。
             </p>

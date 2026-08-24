@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { AigwChannelApi } from "../api/channels.api"
-import { ViewModeSwitcher } from "@/modules/shared/frontend/components/view-mode-switcher"
+import { ViewModeSwitcher, ViewMode } from "@/modules/shared/frontend/components/view-mode-switcher"
+import { Pagination } from "@/modules/shared/frontend/components/pagination"
 
 interface ChannelItem {
   id: string
@@ -33,10 +34,10 @@ export default function AigwChannelsPage() {
   const [items, setItems] = useState<ChannelItem[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
-  const [pageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(10)
   const [keyword, setKeyword] = useState("")
   const [loading, setLoading] = useState(true)
-  const [viewMode, setViewMode] = useState<"table" | "card">("table")
+  const [viewMode, setViewMode] = useState<ViewMode>("table")
   const [availableModels] = useState<string[]>(DEFAULT_SUGGESTED_MODELS)
   const [fetchingUpstreamModels, setFetchingUpstreamModels] = useState(false)
 
@@ -58,10 +59,10 @@ export default function AigwChannelsPage() {
   const [testingId, setTestingId] = useState<string | null>(null)
   const [testResult, setTestResult] = useState<Record<string, string>>({})
 
-  const fetchList = async (p = page, kw = keyword) => {
+  const fetchList = async (p = page, ps = pageSize, kw = keyword) => {
     setLoading(true)
     try {
-      const res = await AigwChannelApi.page({ page: p, pageSize, keyword: kw || undefined })
+      const res = await AigwChannelApi.page({ page: p, pageSize: ps, keyword: kw || undefined })
       if (res.success && res.data) {
         setItems(res.data.items || [])
         setTotal(res.data.total || 0)
@@ -74,19 +75,19 @@ export default function AigwChannelsPage() {
   }
 
   useEffect(() => {
-    fetchList(page, keyword)
-  }, [page])
+    fetchList(page, pageSize, keyword)
+  }, [page, pageSize])
 
   const handleSearch = (e?: React.FormEvent) => {
     if (e) e.preventDefault()
     setPage(1)
-    fetchList(1, keyword)
+    fetchList(1, pageSize, keyword)
   }
 
   const handleReset = () => {
     setKeyword("")
     setPage(1)
-    fetchList(1, "")
+    fetchList(1, pageSize, "")
   }
 
   const openCreateModal = () => {
@@ -138,7 +139,7 @@ export default function AigwChannelsPage() {
         await AigwChannelApi.create(payload)
       }
       setIsModalOpen(false)
-      fetchList(page, keyword)
+      fetchList(page, pageSize, keyword)
     } catch (err: any) {
       alert(err?.message || "保存渠道失败")
     } finally {
@@ -150,7 +151,7 @@ export default function AigwChannelsPage() {
     const nextStatus = item.status === "ACTIVE" ? "DISABLED" : "ACTIVE"
     try {
       await AigwChannelApi.update(item.id, { status: nextStatus })
-      fetchList(page, keyword)
+      fetchList(page, pageSize, keyword)
     } catch (err: any) {
       alert(err?.message || "切换状态失败")
     }
@@ -160,7 +161,7 @@ export default function AigwChannelsPage() {
     if (!confirm(`确定要删除上游渠道【${item.name}】吗？`)) return
     try {
       await AigwChannelApi.delete(item.id)
-      fetchList(page, keyword)
+      fetchList(page, pageSize, keyword)
     } catch (err: any) {
       alert(err?.message || "删除渠道失败")
     }
@@ -216,7 +217,7 @@ export default function AigwChannelsPage() {
           <ViewModeSwitcher mode={viewMode} onChange={setViewMode} />
 
           <button
-            onClick={() => fetchList(page, keyword)}
+            onClick={() => fetchList(page, pageSize, keyword)}
             className="px-3.5 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition shadow-xs"
           >
             刷新
@@ -494,6 +495,22 @@ export default function AigwChannelsPage() {
           ))}
         </div>
       )}
+
+      {/* 通用底部分页控件 */}
+      <Pagination
+        total={total}
+        page={page}
+        pageSize={pageSize}
+        onPageChange={(p) => {
+          setPage(p)
+          fetchList(p, pageSize, keyword)
+        }}
+        onPageSizeChange={(ps) => {
+          setPageSize(ps)
+          setPage(1)
+          fetchList(1, ps, keyword)
+        }}
+      />
 
       {/* 弹窗表单 */}
       {isModalOpen && (

@@ -40,6 +40,12 @@ deleted      BOOLEAN NOT NULL DEFAULT FALSE   -- 软删除标记 (0/1 或 false/
 - 仓储层统一使用 **Kysely 查询构建器**，由驱动层抹平参数化占位符差异（PG `$1,$2` vs MySQL `?,?`）。
 - 内存回退机制：当未连接真实物理数据库时，Repository 必须提供完全一致的 MEMORY_STORE 模拟实现，保证离线与轻量单元测试 100% 可行。
 
+### 5.1 多租户查询过滤实现（强制）
+1. **租户来源**：查询/写入时租户必须从全局上下文取（`getCurrentTenantId()`，`src/modules/shared/backend/lib/biz-tenant.ts`），禁止依赖调用方显式传 `tenantId` 参数透传（断链=数据泄露，见 AGENTS.md §4.8）。
+2. **双模式同语义**：真实库 `where tenant_id = <current>`；内存 Repository 必须等价过滤（`!row.tenantId || row.tenantId === current`），禁止内存不过滤。
+3. **写入侧**：insert 时 `tenant_id` 取上下文值；无上下文场景（open/relay/内部任务）从已验证的资源归属取（如 API Token 的 `token.tenantId`），禁止硬编码 `"1"` 或 `null`。
+4. **required 兜底**：`TENANT_MODE=required` 时缺租户直接抛错（`requireTenantId()`），把静默全量返回变成显性 bug。
+
 ## 6. 绝对禁止项
 - 严禁通过字符串拼接拼装 SQL（防止 SQL 注入）。
 - 严禁跨域直接操作他域的数据表（必须走 Domain Facade）。

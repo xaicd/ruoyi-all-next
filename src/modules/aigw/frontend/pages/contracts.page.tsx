@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { AigwSettlementApi } from "../api/contracts.api"
+import { ViewModeSwitcher, ViewMode } from "@/modules/shared/frontend/components/view-mode-switcher"
+import { Pagination } from "@/modules/shared/frontend/components/pagination"
 
 interface ContractItem {
   id: string
@@ -17,9 +19,10 @@ export default function AigwContractsPage() {
   const [items, setItems] = useState<ContractItem[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
-  const [pageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(10)
   const [loading, setLoading] = useState(true)
-  const [viewMode, setViewMode] = useState<"table" | "card">("table")
+  const [keyword, setKeyword] = useState("")
+  const [viewMode, setViewMode] = useState<ViewMode>("table")
 
   // Modal State
   const [modalOpen, setModalOpen] = useState(false)
@@ -32,12 +35,14 @@ export default function AigwContractsPage() {
     status: "ACTIVE",
   })
 
-  const fetchList = async (p = page) => {
+  const fetchList = async (p = page, ps = pageSize, kw = keyword) => {
     setLoading(true)
     try {
-      const res = await AigwSettlementApi.page({ page: p, pageSize })
+      const res = await AigwSettlementApi.page({ page: p, pageSize: ps })
       if (res.success && res.data) {
-        setItems(res.data.items || [])
+        let list = res.data.items || []
+        if (kw) list = list.filter((i: any) => i.contractNo.includes(kw) || i.carrierName.includes(kw))
+        setItems(list)
         setTotal(res.data.total || 0)
       }
     } catch (err) {
@@ -48,8 +53,20 @@ export default function AigwContractsPage() {
   }
 
   useEffect(() => {
-    fetchList(page)
-  }, [page])
+    fetchList(page, pageSize, keyword)
+  }, [page, pageSize])
+
+  const handleSearch = (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
+    setPage(1)
+    fetchList(1, pageSize, keyword)
+  }
+
+  const handleReset = () => {
+    setKeyword("")
+    setPage(1)
+    fetchList(1, pageSize, "")
+  }
 
   const handleOpenModal = (item?: ContractItem) => {
     if (item) {
@@ -64,8 +81,8 @@ export default function AigwContractsPage() {
     } else {
       setEditingItem(null)
       setForm({
-        contractNo: `CT-2026-${Math.floor(Math.random() * 8999 + 1000)}`,
-        carrierName: "中国电信股份有限公司广东省政企分公司",
+        contractNo: `CM-${new Date().getFullYear()}-GD-${Math.floor(1000 + Math.random() * 9000)}`,
+        carrierName: "中国移动通信集团有限公司广东省分公司",
         grantedTokens: 50000000,
         amount: 500000,
         status: "ACTIVE",
@@ -83,61 +100,37 @@ export default function AigwContractsPage() {
         await AigwSettlementApi.create(form)
       }
       setModalOpen(false)
-      fetchList(page)
-    } catch (err) {
-      alert("保存失败")
+      fetchList(page, pageSize, keyword)
+    } catch (err: any) {
+      alert(err?.message || "操作失败")
     }
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm("确定要删除该框架合同记录吗？")) return
+    if (!confirm("确定要作废并删除该框架合同吗？")) return
     try {
       await AigwSettlementApi.delete(id)
-      fetchList(page)
-    } catch (err) {
-      alert("删除失败")
+      fetchList(page, pageSize, keyword)
+    } catch (err: any) {
+      alert(err?.message || "删除失败")
     }
   }
 
   return (
     <div className="p-6 space-y-5">
-      {/* 头部区域 */}
+      {/* 头部 */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900">招投标对公框架合同账务</h1>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">招投标合同与大包采购</h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            管理 To B / To G 中国移动招投标采购框架协议合同标段与划拨资金对公台账
+            中国移动政企 ICT/DICT 项目框架合同、年度算力保底采购与履约消耗跟踪
           </p>
         </div>
         <div className="flex items-center gap-2.5">
-          {/* 视图切换按钮 */}
-          <div className="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200">
-            <button
-              onClick={() => setViewMode("table")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
-                viewMode === "table"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <span>☰</span>
-              <span>列表视图</span>
-            </button>
-            <button
-              onClick={() => setViewMode("card")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
-                viewMode === "card"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <span>⊞</span>
-              <span>卡片视图</span>
-            </button>
-          </div>
+          <ViewModeSwitcher mode={viewMode} onChange={setViewMode} />
 
           <button
-            onClick={() => fetchList(page)}
+            onClick={() => fetchList(page, pageSize, keyword)}
             className="px-3.5 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition shadow-xs"
           >
             刷新
@@ -146,7 +139,7 @@ export default function AigwContractsPage() {
             onClick={() => handleOpenModal()}
             className="px-4 py-2 text-xs font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition shadow-sm flex items-center gap-1"
           >
-            <span className="text-sm leading-none">+</span> 录入框架合同标段
+            <span className="text-sm leading-none">+</span> 录入新合同
           </button>
         </div>
       </div>
@@ -288,6 +281,22 @@ export default function AigwContractsPage() {
           ))}
         </div>
       )}
+
+      {/* 通用底部分页控件 */}
+      <Pagination
+        total={total}
+        page={page}
+        pageSize={pageSize}
+        onPageChange={(p) => {
+          setPage(p)
+          fetchList(p, pageSize, keyword)
+        }}
+        onPageSizeChange={(ps) => {
+          setPageSize(ps)
+          setPage(1)
+          fetchList(1, ps, keyword)
+        }}
+      />
 
       {/* Form Modal */}
       {modalOpen && (

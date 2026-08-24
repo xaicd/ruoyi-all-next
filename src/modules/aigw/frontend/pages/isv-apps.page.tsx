@@ -2,13 +2,17 @@
 
 import { useEffect, useState } from "react"
 import { AigwIsvAppApi, type IsvAppItem } from "../api/isv-apps.api"
+import { ViewModeSwitcher, ViewMode } from "@/modules/shared/frontend/components/view-mode-switcher"
+import { Pagination } from "@/modules/shared/frontend/components/pagination"
 
 export default function AigwIsvAppsPage() {
   const [items, setItems] = useState<IsvAppItem[]>([])
   const [total, setTotal] = useState(0)
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
   const [keyword, setKeyword] = useState("")
   const [loading, setLoading] = useState(true)
-  const [viewMode, setViewMode] = useState<"table" | "card">("table")
+  const [viewMode, setViewMode] = useState<ViewMode>("table")
 
   // 弹窗状态
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -28,10 +32,10 @@ export default function AigwIsvAppsPage() {
   })
   const [submitting, setSubmitting] = useState(false)
 
-  const fetchList = async (kw = keyword) => {
+  const fetchList = async (p = page, ps = pageSize, kw = keyword) => {
     setLoading(true)
     try {
-      const res = await AigwIsvAppApi.list({ keyword: kw || undefined })
+      const res = await AigwIsvAppApi.list({ keyword: kw || undefined, page: p, pageSize: ps })
       setItems(res.items || [])
       setTotal(res.total || 0)
     } catch (err) {
@@ -42,8 +46,20 @@ export default function AigwIsvAppsPage() {
   }
 
   useEffect(() => {
-    fetchList()
-  }, [])
+    fetchList(page, pageSize, keyword)
+  }, [page, pageSize])
+
+  const handleSearch = (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
+    setPage(1)
+    fetchList(1, pageSize, keyword)
+  }
+
+  const handleReset = () => {
+    setKeyword("")
+    setPage(1)
+    fetchList(1, pageSize, "")
+  }
 
   const handleOpenCreate = () => {
     setEditingItem(null)
@@ -85,7 +101,7 @@ export default function AigwIsvAppsPage() {
     const nextStatus = item.status === "ACTIVE" ? "DISABLED" : "ACTIVE"
     try {
       await AigwIsvAppApi.update(item.id, { status: nextStatus })
-      fetchList()
+      fetchList(page, pageSize, keyword)
     } catch (err: any) {
       alert(`更新状态失败: ${err.message}`)
     }
@@ -95,7 +111,7 @@ export default function AigwIsvAppsPage() {
     if (!confirm(`确定下架并删除智能体应用 ${item.name} 吗？`)) return
     try {
       await AigwIsvAppApi.delete(item.id)
-      fetchList()
+      fetchList(page, pageSize, keyword)
     } catch (err: any) {
       alert(`删除失败: ${err.message}`)
     }
@@ -111,7 +127,7 @@ export default function AigwIsvAppsPage() {
         await AigwIsvAppApi.create(formData)
       }
       setIsModalOpen(false)
-      fetchList()
+      fetchList(page, pageSize, keyword)
     } catch (err: any) {
       alert(`提交失败: ${err.message}`)
     } finally {
@@ -125,7 +141,7 @@ export default function AigwIsvAppsPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold tracking-tight text-slate-900">
-            中国移动政企智能体应用生态分发池
+            应用生态分发池 (ISV)
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
             聚合中移九天、腾讯 WorkBuddy、阿里 Qoder 等政企专版 Agent，统一鉴权并绑定移动 MOMA 算力管道与政企账单统付
@@ -133,34 +149,10 @@ export default function AigwIsvAppsPage() {
         </div>
 
         <div className="flex items-center gap-2.5">
-          {/* 视图切换按钮 */}
-          <div className="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200">
-            <button
-              onClick={() => setViewMode("table")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
-                viewMode === "table"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <span>☰</span>
-              <span>列表视图</span>
-            </button>
-            <button
-              onClick={() => setViewMode("card")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
-                viewMode === "card"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <span>⊞</span>
-              <span>卡片视图</span>
-            </button>
-          </div>
+          <ViewModeSwitcher mode={viewMode} onChange={setViewMode} />
 
           <button
-            onClick={() => fetchList()}
+            onClick={() => fetchList(page, pageSize, keyword)}
             disabled={loading}
             className="px-3.5 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 shadow-xs transition"
           >
@@ -170,14 +162,14 @@ export default function AigwIsvAppsPage() {
             onClick={handleOpenCreate}
             className="px-4 py-2 text-xs font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 shadow-sm transition flex items-center gap-1.5"
           >
-            <span>+ 接入新智能体</span>
+            <span>+ 接入新应用</span>
           </button>
         </div>
       </div>
 
       {/* 2. 搜索栏 Search Container 规范 */}
       <div className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-2.5 flex-1 min-w-[280px]">
+        <form onSubmit={handleSearch} className="flex flex-wrap items-center gap-2.5 flex-1 min-w-[280px]">
           <input
             type="text"
             placeholder="搜索应用名称、代码或厂商..."
@@ -186,21 +178,19 @@ export default function AigwIsvAppsPage() {
             className="w-72 px-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
           />
           <button
-            onClick={() => fetchList(keyword)}
+            type="submit"
             className="px-3.5 py-1.5 text-xs font-medium text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition"
           >
             查询
           </button>
           <button
-            onClick={() => {
-              setKeyword("")
-              fetchList("")
-            }}
+            type="button"
+            onClick={handleReset}
             className="px-3.5 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition"
           >
             重置
           </button>
-        </div>
+        </form>
 
         <div className="text-xs text-slate-500 font-medium">
           已接入 <span className="text-slate-900 font-bold">{total}</span> 个政企专版智能体
@@ -396,6 +386,22 @@ export default function AigwIsvAppsPage() {
           ))}
         </div>
       )}
+
+      {/* 通用底部分页控件 */}
+      <Pagination
+        total={total}
+        page={page}
+        pageSize={pageSize}
+        onPageChange={(p) => {
+          setPage(p)
+          fetchList(p, pageSize, keyword)
+        }}
+        onPageSizeChange={(ps) => {
+          setPageSize(ps)
+          setPage(1)
+          fetchList(1, ps, keyword)
+        }}
+      />
 
       {/* 4. 新增 / 编辑弹窗 Modal Form */}
       {isModalOpen && (

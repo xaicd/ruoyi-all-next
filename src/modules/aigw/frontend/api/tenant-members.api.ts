@@ -3,6 +3,9 @@ import { request } from "@/modules/shared/frontend/lib/request"
 export interface MemberAllocationItem {
   id: string
   tenantId: string
+  enterpriseId?: string
+  enterpriseName?: string
+  enterpriseCode?: string
   phone: string
   name: string
   deptName: string
@@ -16,11 +19,13 @@ export interface MemberAllocationItem {
 }
 
 export const AigwTenantMemberApi = {
-  async list(params?: { keyword?: string; status?: string; tenantId?: string }): Promise<{ items: MemberAllocationItem[]; total: number }> {
+  async list(params?: { keyword?: string; status?: string; tenantId?: string; page?: number; pageSize?: number }): Promise<{ items: MemberAllocationItem[]; total: number }> {
     const query = new URLSearchParams()
     if (params?.keyword) query.set("keyword", params.keyword)
     if (params?.status) query.set("status", params.status)
     if (params?.tenantId) query.set("tenantId", params.tenantId)
+    if (params?.page) query.set("page", String(params.page))
+    if (params?.pageSize) query.set("pageSize", String(params.pageSize))
     const res: any = await request.get(`/api/v1/admin/aigw/tenant-members?${query.toString()}`)
     return res?.data || res
   },

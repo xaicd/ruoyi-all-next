@@ -1,3 +1,13 @@
+import { getCurrentTenantId, isTenantRequired, isPlatformContext } from "@/modules/shared/backend/lib/biz-tenant"
+
+function currentTenantId(explicit?: string): string | undefined {
+  if (explicit) return explicit
+  const tenantId = getCurrentTenantId()
+  if (tenantId) return tenantId
+  if (isTenantRequired() && !isPlatformContext()) throw new Error("算力包数据访问缺少租户上下文")
+  return undefined
+}
+
 export interface AigwSkuRow {
   id: string
   tenantId: string
@@ -51,16 +61,19 @@ export const MEMORY_SKUS: AigwSkuRow[] = [
 ]
 
 export class AigwSkuRepository {
-  async findPage(tenantId: string, page = 1, pageSize = 20) {
-    const filtered = MEMORY_SKUS.filter((item) => item.tenantId === tenantId)
+  async findPage(tenantId?: string, page = 1, pageSize = 20) {
+    const activeTenantId = currentTenantId(tenantId)
+    const filtered = MEMORY_SKUS.filter((item) => !activeTenantId || item.tenantId === activeTenantId)
     const items = filtered.slice((page - 1) * pageSize, page * pageSize)
     return { items, total: filtered.length }
   }
 
-  async create(tenantId: string, data: any) {
+  async create(dataOrTenant: any, maybeData?: any) {
+    const activeTenantId = typeof dataOrTenant === "string" ? currentTenantId(dataOrTenant) : currentTenantId()
+    const data = typeof dataOrTenant === "string" ? maybeData : dataOrTenant
     const record: AigwSkuRow = {
       id: `sku-${Date.now()}`,
-      tenantId,
+      tenantId: activeTenantId || "1",
       code: data.code || `SKU_${Date.now()}`,
       name: data.name || "算力加油包",
       tokens: Number(data.tokens || 10000000),
@@ -97,4 +110,6 @@ export class AigwSkuRepository {
   }
 }
 
-export const aigwSkuRepository = new AigwSkuRepository()
+export const AigwSkuRepositorySingleton = new AigwSkuRepository()
+export const aigwSkuRepository = AigwSkuRepositorySingleton
+export { AigwSkuRepositorySingleton as AigwSkuRepo }

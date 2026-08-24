@@ -435,7 +435,7 @@ export const ADMIN_MENU: AdminMenuItem[] = [
       },
       {
         key: "ai-identity-dir",
-        label: "政企门户",
+        label: "企业管理",
         children: [
           {
             key: "ai-enterprises",
@@ -445,15 +445,9 @@ export const ADMIN_MENU: AdminMenuItem[] = [
           },
           {
             key: "ai-tenant-members",
-            label: "成员份额",
+            label: "成员席位",
             path: "/admin/aigw/tenant-members",
             requiredPermission: PERMISSIONS.ENTITLEMENT_ENTERPRISE_VIEW,
-          },
-          {
-            key: "ai-seats",
-            label: "席位分配",
-            path: "/admin/aigw/seats",
-            requiredPermission: PERMISSIONS.ENTITLEMENT_SEAT_VIEW,
           },
           {
             key: "ai-quotas",

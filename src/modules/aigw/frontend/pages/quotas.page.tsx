@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { AigwQuotaApi } from "../api/quotas.api"
+import { ViewModeSwitcher, ViewMode } from "@/modules/shared/frontend/components/view-mode-switcher"
+import { Pagination } from "@/modules/shared/frontend/components/pagination"
 
 interface QuotaItem {
   id: string
@@ -19,10 +21,10 @@ export default function AigwQuotasPage() {
   const [items, setItems] = useState<QuotaItem[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
-  const [pageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(10)
   const [loading, setLoading] = useState(true)
   const [keyword, setKeyword] = useState("")
-  const [viewMode, setViewMode] = useState<"table" | "card">("table")
+  const [viewMode, setViewMode] = useState<ViewMode>("table")
 
   // Modal State
   const [modalOpen, setModalOpen] = useState(false)
@@ -34,10 +36,10 @@ export default function AigwQuotasPage() {
     autoThrottle: true,
   })
 
-  const fetchList = async (p = page) => {
+  const fetchList = async (p = page, ps = pageSize, kw = keyword) => {
     setLoading(true)
     try {
-      const res = await AigwQuotaApi.page({ page: p, pageSize })
+      const res = await AigwQuotaApi.page({ page: p, pageSize: ps, keyword: kw || undefined })
       if (res.success && res.data) {
         setItems(res.data.items || [])
         setTotal(res.data.total || 0)
@@ -50,8 +52,20 @@ export default function AigwQuotasPage() {
   }
 
   useEffect(() => {
-    fetchList(page)
-  }, [page])
+    fetchList(page, pageSize, keyword)
+  }, [page, pageSize])
+
+  const handleSearch = (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
+    setPage(1)
+    fetchList(1, pageSize, keyword)
+  }
+
+  const handleReset = () => {
+    setKeyword("")
+    setPage(1)
+    fetchList(1, pageSize, "")
+  }
 
   const handleOpenModal = (item?: QuotaItem) => {
     if (item) {
@@ -83,65 +97,41 @@ export default function AigwQuotasPage() {
         await AigwQuotaApi.create(form)
       }
       setModalOpen(false)
-      fetchList(page)
-    } catch (err) {
-      alert("保存失败")
+      fetchList(page, pageSize, keyword)
+    } catch (err: any) {
+      alert(err?.message || "操作失败")
     }
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm("确定要删除该企业的配额管控策略吗？")) return
+    if (!confirm("确定要删除该企业的配额管控吗？")) return
     try {
       await AigwQuotaApi.delete(id)
-      fetchList(page)
-    } catch (err) {
-      alert("删除失败")
+      fetchList(page, pageSize, keyword)
+    } catch (err: any) {
+      alert(err?.message || "删除失败")
     }
   }
 
-  const filteredItems = items.filter(
-    (item) => !keyword || item.enterpriseName.includes(keyword)
+  const filteredItems = items.filter((item) =>
+    (item.enterpriseName || "").toLowerCase().includes(keyword.toLowerCase())
   )
 
   return (
     <div className="p-6 space-y-5">
-      {/* 头部区域 */}
+      {/* 头部 */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900">企业算力配额与用量水线</h1>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">算力配额与熔断管控</h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            管控政企客户月度 Token 消费上限封顶、高水位预警阈值与自动限流保护
+            配置企业租户月度算力 Token 消费上限、预警水位线与防超支自动限流熔断
           </p>
         </div>
         <div className="flex items-center gap-2.5">
-          {/* 视图切换按钮 */}
-          <div className="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200">
-            <button
-              onClick={() => setViewMode("table")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
-                viewMode === "table"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <span>☰</span>
-              <span>列表视图</span>
-            </button>
-            <button
-              onClick={() => setViewMode("card")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
-                viewMode === "card"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <span>⊞</span>
-              <span>卡片视图</span>
-            </button>
-          </div>
+          <ViewModeSwitcher mode={viewMode} onChange={setViewMode} />
 
           <button
-            onClick={() => fetchList(page)}
+            onClick={() => fetchList(page, pageSize, keyword)}
             className="px-3.5 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition shadow-xs"
           >
             刷新
@@ -150,14 +140,14 @@ export default function AigwQuotasPage() {
             onClick={() => handleOpenModal()}
             className="px-4 py-2 text-xs font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition shadow-sm flex items-center gap-1"
           >
-            <span className="text-sm leading-none">+</span> 划拨/新增算力配额
+            <span className="text-sm leading-none">+</span> 划拨配额
           </button>
         </div>
       </div>
 
       {/* 搜索栏 */}
       <div className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
-        <form onSubmit={(e) => { e.preventDefault(); fetchList(page) }} className="flex items-center gap-2.5 flex-1 min-w-[280px]">
+        <form onSubmit={handleSearch} className="flex items-center gap-2.5 flex-1 min-w-[280px]">
           <input
             type="text"
             placeholder="搜索企业名称..."
@@ -173,14 +163,14 @@ export default function AigwQuotasPage() {
           </button>
           <button
             type="button"
-            onClick={() => setKeyword("")}
+            onClick={handleReset}
             className="px-3.5 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition"
           >
             重置
           </button>
         </form>
         <div className="text-xs text-slate-500 whitespace-nowrap">
-          共 <span className="font-semibold text-slate-900">{filteredItems.length}</span> 个管控企业
+          共 <span className="font-semibold text-slate-900">{total}</span> 个配额主体
         </div>
       </div>
 
@@ -335,6 +325,22 @@ export default function AigwQuotasPage() {
           })}
         </div>
       )}
+
+      {/* 通用底部分页控件 */}
+      <Pagination
+        total={total}
+        page={page}
+        pageSize={pageSize}
+        onPageChange={(p) => {
+          setPage(p)
+          fetchList(p, pageSize, keyword)
+        }}
+        onPageSizeChange={(ps) => {
+          setPageSize(ps)
+          setPage(1)
+          fetchList(1, ps, keyword)
+        }}
+      />
 
       {/* CRUD Modal Form */}
       {modalOpen && (

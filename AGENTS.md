@@ -119,6 +119,29 @@
 2. 模块级 `repositories/index.ts` 与 `services/index.ts` 集中重导出时，必须同时保留 PascalCase 和 camelCase 导出；
 3. 代码生成器（Codegen Engine）模板强制默认输出 camelCase 单例别名。
 
+### 4.8 多租户隔离规范（强制）
+
+**租户来源唯一权威 = 全局上下文 `getCurrentTenantId()`**（`src/modules/shared/backend/lib/biz-tenant.ts`，由 `withAdminRoute` 对每个 admin 请求自动注入 `runWithTenantContext`）。禁止用"显式 tenantId 参数透传"作为长期姿势——透传断链即数据泄露，已在 aigw usages 域实证。
+
+1. **Repository 取租户（强制）**：所有业务表 Repository 在查询（select/update/delete）与写入（insert）时，一律从全局上下文取租户，禁止依赖调用方显式传 `tenantId` 参数。对齐 system 域先例（`user/role/post/dept.repository.ts` 的 `currentTenantId()` helper）：
+   ```ts
+   import { getCurrentTenantId, isTenantRequired, isPlatformContext } from "@/modules/shared/backend/lib/biz-tenant"
+
+   function currentTenantId(): string | undefined {
+     const tenantId = getCurrentTenantId()
+     if (tenantId) return tenantId
+     if (isTenantRequired() && !isPlatformContext()) throw new Error("业务数据访问缺少租户上下文")
+     return undefined
+   }
+   // 查询：有值即过滤（真实库 where tenant_id = ?，内存 filter 同语义）
+   // 写入：tenant_id 必须取上下文值，禁止硬编码默认租户
+   ```
+2. **无上下文场景（open/relay/内部任务）**：租户必须从**已验证的资源归属**取（如 relay 从解析出的 API Token 取 `token.tenantId`），禁止落默认值 `"1"`；平台上下文（`isPlatformContext()`）跳过过滤。
+3. **内存 Repository 与真实库 Repository 必须同语义**：内存 filter 条件 `(!row.tenantId || row.tenantId === current)` 与真实库 `where tenant_id` 等价，禁止出现"内存不过滤、真实库过滤"或反之。
+4. **`TENANT_MODE=required` 生产兜底**：生产环境必须设置，此时缺租户上下文的业务访问直接抛错（`requireTenantId()` / `requireTenantContext()`），把"静默全量返回"变成显性 bug。
+5. **低代码生成器（Codegen Engine）与静态模板包（codegen/module-pack）**：生成/示例代码必须遵守第 1-3 条；route 模板必须接收 `(request, auth)` 并把租户传入 Service/Repository，禁止生成断链代码。
+6. **禁止项**：禁止业务 Repository 出现无 `tenant_id` 过滤的 select/update/delete；禁止 insert 时 `tenant_id` 硬编码 `"1"` 或 `null`；禁止信任调用方伪造的 `x-tenant-id` Header（必须从已验证 JWT / 资源归属解析）。
+
 ## 5. Domain-First 研发流程与“开箱即用”闭环规范（强制）
 
 每个域与新功能按完整闭环推进，**严禁仅生成只读骨架或占位页面（Forbidden Skeleton-Only Delivery）**。

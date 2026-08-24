@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { AigwInvoiceApi } from "../api/invoices.api"
+import { ViewModeSwitcher, ViewMode } from "@/modules/shared/frontend/components/view-mode-switcher"
+import { Pagination } from "@/modules/shared/frontend/components/pagination"
 
 interface InvoiceItem {
   id: string
@@ -18,9 +20,10 @@ export default function AigwInvoicesPage() {
   const [items, setItems] = useState<InvoiceItem[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
-  const [pageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(10)
   const [loading, setLoading] = useState(true)
-  const [viewMode, setViewMode] = useState<"table" | "card">("table")
+  const [keyword, setKeyword] = useState("")
+  const [viewMode, setViewMode] = useState<ViewMode>("table")
 
   // Modal State
   const [modalOpen, setModalOpen] = useState(false)
@@ -34,12 +37,14 @@ export default function AigwInvoicesPage() {
     status: "ISSUED",
   })
 
-  const fetchList = async (p = page) => {
+  const fetchList = async (p = page, ps = pageSize, kw = keyword) => {
     setLoading(true)
     try {
-      const res = await AigwInvoiceApi.page({ page: p, pageSize })
+      const res = await AigwInvoiceApi.page({ page: p, pageSize: ps })
       if (res.success && res.data) {
-        setItems(res.data.items || [])
+        let list = res.data.items || []
+        if (kw) list = list.filter((i: any) => i.invoiceNo.includes(kw) || i.title.includes(kw))
+        setItems(list)
         setTotal(res.data.total || 0)
       }
     } catch (err) {
@@ -50,8 +55,20 @@ export default function AigwInvoicesPage() {
   }
 
   useEffect(() => {
-    fetchList(page)
-  }, [page])
+    fetchList(page, pageSize, keyword)
+  }, [page, pageSize])
+
+  const handleSearch = (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
+    setPage(1)
+    fetchList(1, pageSize, keyword)
+  }
+
+  const handleReset = () => {
+    setKeyword("")
+    setPage(1)
+    fetchList(1, pageSize, "")
+  }
 
   const handleOpenModal = (item?: InvoiceItem) => {
     if (item) {
@@ -67,10 +84,10 @@ export default function AigwInvoicesPage() {
     } else {
       setEditingItem(null)
       setForm({
-        invoiceNo: `INV-202608-${Math.floor(Math.random() * 899 + 100)}`,
-        title: "中国电信股份有限公司广东省政企分公司",
+        invoiceNo: `INV-${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, "0")}-${Math.floor(100 + Math.random() * 900)}`,
+        title: "中国移动通信集团有限公司广东省分公司",
         taxNo: "91440000123456789X",
-        amount: 150000,
+        amount: 100000,
         type: "增值税专用发票",
         status: "ISSUED",
       })
@@ -87,61 +104,37 @@ export default function AigwInvoicesPage() {
         await AigwInvoiceApi.create(form)
       }
       setModalOpen(false)
-      fetchList(page)
-    } catch (err) {
-      alert("保存失败")
+      fetchList(page, pageSize, keyword)
+    } catch (err: any) {
+      alert(err?.message || "操作失败")
     }
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm("确定要作废/删除该发票记录吗？")) return
+    if (!confirm("确定要作废并删除该发票凭证吗？")) return
     try {
       await AigwInvoiceApi.delete(id)
-      fetchList(page)
-    } catch (err) {
-      alert("删除失败")
+      fetchList(page, pageSize, keyword)
+    } catch (err: any) {
+      alert(err?.message || "删除失败")
     }
   }
 
   return (
     <div className="p-6 space-y-5">
-      {/* 头部区域 */}
+      {/* 头部 */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900">对公结算发票与合规审计</h1>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">算力发票与财务开票</h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            开具与管理中国移动及政企大客户 AI 算力对公结算增值税专用发票与税务开票记录
+            对公结算发票开具凭据、专票/普票申请记录与财务对账档案
           </p>
         </div>
         <div className="flex items-center gap-2.5">
-          {/* 视图切换按钮 */}
-          <div className="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200">
-            <button
-              onClick={() => setViewMode("table")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
-                viewMode === "table"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <span>☰</span>
-              <span>列表视图</span>
-            </button>
-            <button
-              onClick={() => setViewMode("card")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
-                viewMode === "card"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <span>⊞</span>
-              <span>卡片视图</span>
-            </button>
-          </div>
+          <ViewModeSwitcher mode={viewMode} onChange={setViewMode} />
 
           <button
-            onClick={() => fetchList(page)}
+            onClick={() => fetchList(page, pageSize, keyword)}
             className="px-3.5 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition shadow-xs"
           >
             刷新
@@ -150,7 +143,7 @@ export default function AigwInvoicesPage() {
             onClick={() => handleOpenModal()}
             className="px-4 py-2 text-xs font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition shadow-sm flex items-center gap-1"
           >
-            <span className="text-sm leading-none">+</span> 开具对公发票
+            <span className="text-sm leading-none">+</span> 开具发票
           </button>
         </div>
       </div>
@@ -294,6 +287,22 @@ export default function AigwInvoicesPage() {
           ))}
         </div>
       )}
+
+      {/* 通用底部分页控件 */}
+      <Pagination
+        total={total}
+        page={page}
+        pageSize={pageSize}
+        onPageChange={(p) => {
+          setPage(p)
+          fetchList(p, pageSize, keyword)
+        }}
+        onPageSizeChange={(ps) => {
+          setPageSize(ps)
+          setPage(1)
+          fetchList(1, ps, keyword)
+        }}
+      />
 
       {/* Form Modal */}
       {modalOpen && (

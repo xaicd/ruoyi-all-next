@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { AigwSplitApi } from "../api/pipelines.api"
+import { ViewModeSwitcher, ViewMode } from "@/modules/shared/frontend/components/view-mode-switcher"
+import { Pagination } from "@/modules/shared/frontend/components/pagination"
 
 interface PipelineItem {
   id: string
@@ -19,9 +21,10 @@ export default function AigwPipelinesPage() {
   const [items, setItems] = useState<PipelineItem[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
-  const [pageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(10)
   const [loading, setLoading] = useState(true)
-  const [viewMode, setViewMode] = useState<"table" | "card">("table")
+  const [keyword, setKeyword] = useState("")
+  const [viewMode, setViewMode] = useState<ViewMode>("table")
 
   // Modal State
   const [modalOpen, setModalOpen] = useState(false)
@@ -36,12 +39,14 @@ export default function AigwPipelinesPage() {
     status: "SETTLED",
   })
 
-  const fetchList = async (p = page) => {
+  const fetchList = async (p = page, ps = pageSize, kw = keyword) => {
     setLoading(true)
     try {
-      const res = await AigwSplitApi.page({ page: p, pageSize })
+      const res = await AigwSplitApi.page({ page: p, pageSize: ps })
       if (res.success && res.data) {
-        setItems(res.data.items || [])
+        let list = res.data.items || []
+        if (kw) list = list.filter((i: any) => i.carrierName.includes(kw) || i.month.includes(kw))
+        setItems(list)
         setTotal(res.data.total || 0)
       }
     } catch (err) {
@@ -52,8 +57,20 @@ export default function AigwPipelinesPage() {
   }
 
   useEffect(() => {
-    fetchList(page)
-  }, [page])
+    fetchList(page, pageSize, keyword)
+  }, [page, pageSize])
+
+  const handleSearch = (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
+    setPage(1)
+    fetchList(1, pageSize, keyword)
+  }
+
+  const handleReset = () => {
+    setKeyword("")
+    setPage(1)
+    fetchList(1, pageSize, "")
+  }
 
   const handleOpenModal = (item?: PipelineItem) => {
     if (item) {
@@ -70,7 +87,7 @@ export default function AigwPipelinesPage() {
     } else {
       setEditingItem(null)
       setForm({
-        carrierName: "中国电信广东省分公司",
+        carrierName: "中国移动通信集团 (广州/韶关集群)",
         month: "2026-08",
         totalTokens: "10000000",
         totalAmount: "100",
@@ -91,61 +108,37 @@ export default function AigwPipelinesPage() {
         await AigwSplitApi.create(form)
       }
       setModalOpen(false)
-      fetchList(page)
-    } catch (err) {
-      alert("保存失败")
+      fetchList(page, pageSize, keyword)
+    } catch (err: any) {
+      alert(err?.message || "操作失败")
     }
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm("确定要删除该笔清分流水记录吗？")) return
+    if (!confirm("确定要作废并删除该清分账单吗？")) return
     try {
       await AigwSplitApi.delete(id)
-      fetchList(page)
-    } catch (err) {
-      alert("删除失败")
+      fetchList(page, pageSize, keyword)
+    } catch (err: any) {
+      alert(err?.message || "删除失败")
     }
   }
 
   return (
     <div className="p-6 space-y-5">
-      {/* 头部区域 */}
+      {/* 头部 */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900">运营商清分结算流水</h1>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">算力清分与结算对账</h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            实时按月度汇总中国移动 AI 算力集群消费比例与三方抽成清分对账单
+            中国移动省专公司算力管道、ISV 应用生态与平台之间的三方自动清分与账期结算
           </p>
         </div>
         <div className="flex items-center gap-2.5">
-          {/* 视图切换按钮 */}
-          <div className="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200">
-            <button
-              onClick={() => setViewMode("table")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
-                viewMode === "table"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <span>☰</span>
-              <span>列表视图</span>
-            </button>
-            <button
-              onClick={() => setViewMode("card")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
-                viewMode === "card"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <span>⊞</span>
-              <span>卡片视图</span>
-            </button>
-          </div>
+          <ViewModeSwitcher mode={viewMode} onChange={setViewMode} />
 
           <button
-            onClick={() => fetchList(page)}
+            onClick={() => fetchList(page, pageSize, keyword)}
             className="px-3.5 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition shadow-xs"
           >
             刷新
@@ -154,7 +147,7 @@ export default function AigwPipelinesPage() {
             onClick={() => handleOpenModal()}
             className="px-4 py-2 text-xs font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition shadow-sm flex items-center gap-1"
           >
-            <span className="text-sm leading-none">+</span> 生成清分对账单
+            <span className="text-sm leading-none">+</span> 生成清分账单
           </button>
         </div>
       </div>
@@ -314,6 +307,22 @@ export default function AigwPipelinesPage() {
           ))}
         </div>
       )}
+
+      {/* 通用底部分页控件 */}
+      <Pagination
+        total={total}
+        page={page}
+        pageSize={pageSize}
+        onPageChange={(p) => {
+          setPage(p)
+          fetchList(p, pageSize, keyword)
+        }}
+        onPageSizeChange={(ps) => {
+          setPageSize(ps)
+          setPage(1)
+          fetchList(1, ps, keyword)
+        }}
+      />
 
       {/* Form Modal */}
       {modalOpen && (

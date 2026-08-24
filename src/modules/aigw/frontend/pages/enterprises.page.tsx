@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { AigwEnterpriseApi } from "../api/enterprises.api"
+import { ViewModeSwitcher, ViewMode } from "@/modules/shared/frontend/components/view-mode-switcher"
+import { Pagination } from "@/modules/shared/frontend/components/pagination"
 
 interface EnterpriseItem {
   id: string
@@ -20,10 +22,10 @@ export default function AigwEnterprisesPage() {
   const [items, setItems] = useState<EnterpriseItem[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
-  const [pageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(10)
   const [keyword, setKeyword] = useState("")
   const [loading, setLoading] = useState(true)
-  const [viewMode, setViewMode] = useState<"table" | "card">("table")
+  const [viewMode, setViewMode] = useState<ViewMode>("table")
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<EnterpriseItem | null>(null)
@@ -39,10 +41,10 @@ export default function AigwEnterprisesPage() {
   })
   const [submitting, setSubmitting] = useState(false)
 
-  const fetchList = async (p = page, kw = keyword) => {
+  const fetchList = async (p = page, ps = pageSize, kw = keyword) => {
     setLoading(true)
     try {
-      const res = await AigwEnterpriseApi.page({ page: p, pageSize, keyword: kw || undefined })
+      const res = await AigwEnterpriseApi.page({ page: p, pageSize: ps, keyword: kw || undefined })
       if (res.success && res.data) {
         setItems(res.data.items || [])
         setTotal(res.data.total || 0)
@@ -55,19 +57,19 @@ export default function AigwEnterprisesPage() {
   }
 
   useEffect(() => {
-    fetchList(page, keyword)
-  }, [page])
+    fetchList(page, pageSize, keyword)
+  }, [page, pageSize])
 
   const handleSearch = (e?: React.FormEvent) => {
     if (e) e.preventDefault()
     setPage(1)
-    fetchList(1, keyword)
+    fetchList(1, pageSize, keyword)
   }
 
   const handleReset = () => {
     setKeyword("")
     setPage(1)
-    fetchList(1, "")
+    fetchList(1, pageSize, "")
   }
 
   const openCreateModal = () => {
@@ -110,7 +112,7 @@ export default function AigwEnterprisesPage() {
         await AigwEnterpriseApi.create(formData)
       }
       setIsModalOpen(false)
-      fetchList(page, keyword)
+      fetchList(page, pageSize, keyword)
     } catch (err: any) {
       alert(err?.message || "保存企业失败")
     } finally {
@@ -122,7 +124,7 @@ export default function AigwEnterprisesPage() {
     const nextStatus = item.status === "ACTIVE" ? "DISABLED" : "ACTIVE"
     try {
       await AigwEnterpriseApi.update(item.id, { status: nextStatus })
-      fetchList(page, keyword)
+      fetchList(page, pageSize, keyword)
     } catch (err: any) {
       alert(err?.message || "状态更新失败")
     }
@@ -132,7 +134,7 @@ export default function AigwEnterprisesPage() {
     if (!confirm(`确定要删除企业「${item.name}」吗？`)) return
     try {
       await AigwEnterpriseApi.delete(item.id)
-      fetchList(page, keyword)
+      fetchList(page, pageSize, keyword)
     } catch (err: any) {
       alert(err?.message || "删除失败")
     }
@@ -143,40 +145,17 @@ export default function AigwEnterprisesPage() {
       {/* 头部区域 */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900">算力开户与企业客户</h1>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">算力开户与企业主体</h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            管理 AI 算力开户企业主体、企业编号、省份区域与对接联系人
+            管理接入中国移动政企算力中枢的企业租户主体、属地归属与综合台账
           </p>
         </div>
         <div className="flex items-center gap-2.5">
-          {/* 视图切换按钮 */}
-          <div className="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200">
-            <button
-              onClick={() => setViewMode("table")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
-                viewMode === "table"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <span>☰</span>
-              <span>列表视图</span>
-            </button>
-            <button
-              onClick={() => setViewMode("card")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
-                viewMode === "card"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <span>⊞</span>
-              <span>卡片视图</span>
-            </button>
-          </div>
+          {/* 通用视图切换组件 */}
+          <ViewModeSwitcher mode={viewMode} onChange={setViewMode} />
 
           <button
-            onClick={() => fetchList(page, keyword)}
+            onClick={() => fetchList(page, pageSize, keyword)}
             className="px-3.5 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition shadow-xs"
           >
             刷新
@@ -376,6 +355,22 @@ export default function AigwEnterprisesPage() {
           ))}
         </div>
       )}
+
+      {/* 通用底部分页控件 */}
+      <Pagination
+        total={total}
+        page={page}
+        pageSize={pageSize}
+        onPageChange={(p) => {
+          setPage(p)
+          fetchList(p, pageSize, keyword)
+        }}
+        onPageSizeChange={(ps) => {
+          setPageSize(ps)
+          setPage(1)
+          fetchList(1, ps, keyword)
+        }}
+      />
 
       {/* 弹窗表单 */}
       {isModalOpen && (

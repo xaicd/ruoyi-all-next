@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { AigwSeatApi } from "../api/seats.api"
+import { ViewModeSwitcher, ViewMode } from "@/modules/shared/frontend/components/view-mode-switcher"
+import { Pagination } from "@/modules/shared/frontend/components/pagination"
 
 interface SeatItem {
   id: string
@@ -19,10 +21,10 @@ export default function AigwSeatsPage() {
   const [items, setItems] = useState<SeatItem[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
-  const [pageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(10)
   const [keyword, setKeyword] = useState("")
   const [loading, setLoading] = useState(true)
-  const [viewMode, setViewMode] = useState<"table" | "card">("table")
+  const [viewMode, setViewMode] = useState<ViewMode>("table")
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<SeatItem | null>(null)
@@ -36,10 +38,10 @@ export default function AigwSeatsPage() {
   })
   const [submitting, setSubmitting] = useState(false)
 
-  const fetchList = async (p = page, kw = keyword) => {
+  const fetchList = async (p = page, ps = pageSize, kw = keyword) => {
     setLoading(true)
     try {
-      const res = await AigwSeatApi.page({ page: p, pageSize, enterpriseId: kw || undefined })
+      const res = await AigwSeatApi.page({ page: p, pageSize: ps, enterpriseId: kw || undefined })
       if (res.success && res.data) {
         setItems(res.data.items || [])
         setTotal(res.data.total || 0)
@@ -52,19 +54,19 @@ export default function AigwSeatsPage() {
   }
 
   useEffect(() => {
-    fetchList(page, keyword)
-  }, [page])
+    fetchList(page, pageSize, keyword)
+  }, [page, pageSize])
 
   const handleSearch = (e?: React.FormEvent) => {
     if (e) e.preventDefault()
     setPage(1)
-    fetchList(1, keyword)
+    fetchList(1, pageSize, keyword)
   }
 
   const handleReset = () => {
     setKeyword("")
     setPage(1)
-    fetchList(1, "")
+    fetchList(1, pageSize, "")
   }
 
   const openCreateModal = () => {
@@ -103,7 +105,7 @@ export default function AigwSeatsPage() {
         await AigwSeatApi.create(formData)
       }
       setIsModalOpen(false)
-      fetchList(page, keyword)
+      fetchList(page, pageSize, keyword)
     } catch (err: any) {
       alert(err?.message || "保存席位失败")
     } finally {
@@ -115,7 +117,7 @@ export default function AigwSeatsPage() {
     const nextStatus = item.status === "ACTIVE" ? "DISABLED" : "ACTIVE"
     try {
       await AigwSeatApi.update(item.id, { status: nextStatus })
-      fetchList(page, keyword)
+      fetchList(page, pageSize, keyword)
     } catch (err: any) {
       alert(err?.message || "状态更新失败")
     }
@@ -125,7 +127,7 @@ export default function AigwSeatsPage() {
     if (!confirm(`确定要删除席位「${item.userName}」吗？`)) return
     try {
       await AigwSeatApi.delete(item.id)
-      fetchList(page, keyword)
+      fetchList(page, pageSize, keyword)
     } catch (err: any) {
       alert(err?.message || "删除失败")
     }
@@ -142,34 +144,10 @@ export default function AigwSeatsPage() {
           </p>
         </div>
         <div className="flex items-center gap-2.5">
-          {/* 视图切换按钮 */}
-          <div className="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200">
-            <button
-              onClick={() => setViewMode("table")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
-                viewMode === "table"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <span>☰</span>
-              <span>列表视图</span>
-            </button>
-            <button
-              onClick={() => setViewMode("card")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
-                viewMode === "card"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <span>⊞</span>
-              <span>卡片视图</span>
-            </button>
-          </div>
+          <ViewModeSwitcher mode={viewMode} onChange={setViewMode} />
 
           <button
-            onClick={() => fetchList(page, keyword)}
+            onClick={() => fetchList(page, pageSize, keyword)}
             className="px-3.5 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition shadow-xs"
           >
             刷新
@@ -178,7 +156,7 @@ export default function AigwSeatsPage() {
             onClick={openCreateModal}
             className="px-4 py-2 text-xs font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition shadow-sm flex items-center gap-1"
           >
-            <span className="text-sm leading-none">+</span> 新增席位授权
+            <span className="text-sm leading-none">+</span> 分配席位
           </button>
         </div>
       </div>
@@ -368,6 +346,22 @@ export default function AigwSeatsPage() {
           ))}
         </div>
       )}
+
+      {/* 通用底部分页控件 */}
+      <Pagination
+        total={total}
+        page={page}
+        pageSize={pageSize}
+        onPageChange={(p) => {
+          setPage(p)
+          fetchList(p, pageSize, keyword)
+        }}
+        onPageSizeChange={(ps) => {
+          setPageSize(ps)
+          setPage(1)
+          fetchList(1, ps, keyword)
+        }}
+      />
 
       {/* 弹窗表单 */}
       {isModalOpen && (

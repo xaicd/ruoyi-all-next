@@ -3,6 +3,9 @@ import { randomUUID } from "node:crypto"
 export interface AigwMemberAllocationRow {
   id: string
   tenantId: string
+  enterpriseId?: string
+  enterpriseName?: string
+  enterpriseCode?: string
   phone: string
   name: string
   deptName: string
@@ -20,6 +23,9 @@ export const SEED_MEMBER_ALLOCATIONS: AigwMemberAllocationRow[] = [
   {
     id: "mem-001",
     tenantId: "1",
+    enterpriseId: "ent-001",
+    enterpriseName: "广东省政务服务和数据管理局",
+    enterpriseCode: "gd-gov-data",
     phone: "13800000001",
     name: "李总 (政企信息化主管)",
     deptName: "数智创新部",
@@ -34,6 +40,9 @@ export const SEED_MEMBER_ALLOCATIONS: AigwMemberAllocationRow[] = [
   {
     id: "mem-002",
     tenantId: "1",
+    enterpriseId: "ent-003",
+    enterpriseName: "广东省交通数智科技集团有限公司",
+    enterpriseCode: "yue-transport-tech",
     phone: "13911112222",
     name: "张工 (核心研发架构师)",
     deptName: "技术研发中心",
@@ -48,6 +57,9 @@ export const SEED_MEMBER_ALLOCATIONS: AigwMemberAllocationRow[] = [
   {
     id: "mem-003",
     tenantId: "1",
+    enterpriseId: "ent-002",
+    enterpriseName: "广州市数字政府运营中心",
+    enterpriseCode: "gz-digital-gov",
     phone: "13766668888",
     name: "王主任 (政务综合办)",
     deptName: "行政综合部",
@@ -57,6 +69,40 @@ export const SEED_MEMBER_ALLOCATIONS: AigwMemberAllocationRow[] = [
     allowedApps: ["workbuddy"],
     status: "ACTIVE",
     lastLoginAt: "2026-08-24T09:20:00.000Z",
+    createdAt: "2026-01-01T00:00:00.000Z",
+  },
+  {
+    id: "mem-004",
+    tenantId: "1",
+    enterpriseId: "ent-004",
+    enterpriseName: "深圳市住房公积金管理中心",
+    enterpriseCode: "sz-housing-fund",
+    phone: "13600009999",
+    name: "陈科长 (政策法规科)",
+    deptName: "政策法规与归集科",
+    monthlyTokenCap: 15_000_000,
+    usedTokens: 3_200_000,
+    momaBeansBalance: 11800,
+    allowedApps: ["workbuddy"],
+    status: "ACTIVE",
+    lastLoginAt: "2026-08-24T08:45:00.000Z",
+    createdAt: "2026-01-01T00:00:00.000Z",
+  },
+  {
+    id: "mem-005",
+    tenantId: "1",
+    enterpriseId: "ent-005",
+    enterpriseName: "中国移动通信集团广东有限公司",
+    enterpriseCode: "chinamobile-gd",
+    phone: "13588886666",
+    name: "林经理 (政企大客户总监)",
+    deptName: "政企客户部",
+    monthlyTokenCap: 50_000_000,
+    usedTokens: 12_600_000,
+    momaBeansBalance: 37400,
+    allowedApps: ["workbuddy", "qoder"],
+    status: "ACTIVE",
+    lastLoginAt: "2026-08-24T10:10:00.000Z",
     createdAt: "2026-01-01T00:00:00.000Z",
   },
 ]

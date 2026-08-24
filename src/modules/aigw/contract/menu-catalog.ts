@@ -194,10 +194,10 @@ export const AIGW_MENU_ENTRIES: AigwMenuCatalogRow[] = [
     updatedAt: "2026-08-23T00:00:00.000Z",
   },
 
-  // 2 级分组 2：政企门户
+  // 2 级分组 2：企业管理
   {
     id: AIGW_IDENTITY_DIR_ID,
-    name: "政企门户",
+    name: "企业管理",
     permission: "entitlement:enterprise:query",
     type: "DIR",
     parentId: AIGW_DIR_ID,
@@ -229,7 +229,7 @@ export const AIGW_MENU_ENTRIES: AigwMenuCatalogRow[] = [
   },
   {
     id: AIGW_TENANT_MEMBERS_MENU_ID,
-    name: "成员份额",
+    name: "成员席位",
     permission: "entitlement:enterprise:query",
     type: "MENU",
     parentId: AIGW_IDENTITY_DIR_ID,
@@ -237,22 +237,6 @@ export const AIGW_MENU_ENTRIES: AigwMenuCatalogRow[] = [
     component: "aigw/tenant-members/index",
     icon: "ep:user",
     sort: 2,
-    status: "ACTIVE",
-    visible: true,
-    keepAlive: true,
-    createdAt: "2026-08-23T00:00:00.000Z",
-    updatedAt: "2026-08-23T00:00:00.000Z",
-  },
-  {
-    id: AIGW_SEATS_MENU_ID,
-    name: "席位分配",
-    permission: "entitlement:seat:query",
-    type: "MENU",
-    parentId: AIGW_IDENTITY_DIR_ID,
-    path: "seats",
-    component: "aigw/seats/index",
-    icon: "ep:user-filled",
-    sort: 3,
     status: "ACTIVE",
     visible: true,
     keepAlive: true,

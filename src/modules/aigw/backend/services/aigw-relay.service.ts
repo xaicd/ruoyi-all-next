@@ -49,6 +49,7 @@ export class AigwRelayService {
         AigwChannelService.markOk(channel.id)
         void AigwUsageService.record({
           tokenId: token.id,
+          tenantId: token.tenantId,
           channelId: channel.id,
           model: input.model,
           promptTokens: result.usage.prompt_tokens,
@@ -63,6 +64,7 @@ export class AigwRelayService {
         AigwChannelService.markFail(channel.id)
         void AigwUsageService.record({
           tokenId: token.id,
+          tenantId: token.tenantId,
           channelId: channel.id,
           model: input.model,
           promptTokens: 0,
@@ -90,6 +92,7 @@ export class AigwRelayService {
     AigwAccessTokenService.consume(token.id, promptTokens)
     void AigwUsageService.record({
       tokenId: token.id,
+      tenantId: token.tenantId,
       channelId: "ch-mock-001",
       model,
       promptTokens,

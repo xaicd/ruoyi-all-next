@@ -17,10 +17,12 @@ export interface IsvAppItem {
 }
 
 export const AigwIsvAppApi = {
-  async list(params?: { status?: string; keyword?: string }): Promise<{ items: IsvAppItem[]; total: number }> {
+  async list(params?: { status?: string; keyword?: string; page?: number; pageSize?: number }): Promise<{ items: IsvAppItem[]; total: number }> {
     const query = new URLSearchParams()
     if (params?.status) query.set("status", params.status)
     if (params?.keyword) query.set("keyword", params.keyword)
+    if (params?.page) query.set("page", String(params.page))
+    if (params?.pageSize) query.set("pageSize", String(params.pageSize))
     const res: any = await request.get(`/api/v1/admin/aigw/isv-apps?${query.toString()}`)
     return res?.data || res
   },

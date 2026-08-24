@@ -1,4 +1,13 @@
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
+import { getCurrentTenantId, isTenantRequired, isPlatformContext } from "@/modules/shared/backend/lib/biz-tenant"
+
+function currentTenantId(explicit?: string): string | undefined {
+  if (explicit) return explicit
+  const tenantId = getCurrentTenantId()
+  if (tenantId) return tenantId
+  if (isTenantRequired() && !isPlatformContext()) throw new Error("席位数据访问缺少租户上下文")
+  return undefined
+}
 
 export interface AigwSeatRow {
   id: string
@@ -19,11 +28,13 @@ export interface AigwSeatRow {
 export const MEMORY_SEATS: AigwSeatRow[] = []
 
 export class AigwSeatRepository {
-  async findPage(tenantId: string, page = 1, pageSize = 20, enterpriseId?: string) {
+  async findPage(tenantId?: string, page = 1, pageSize = 20, enterpriseId?: string) {
+    const activeTenantId = currentTenantId(tenantId)
     if (hasRealDatabase()) {
       try {
         const db = await getKyselyDb()
-        let query = db.selectFrom("aigw_seat" as any).selectAll().where("tenant_id" as any, "=", tenantId)
+        let query = db.selectFrom("aigw_seat" as any).selectAll()
+        if (activeTenantId) query = query.where("tenant_id" as any, "=", activeTenantId)
         if (enterpriseId) {
           query = query.where("enterprise_id" as any, "=", enterpriseId)
         }
@@ -39,17 +50,19 @@ export class AigwSeatRepository {
       }
     }
     const filtered = MEMORY_SEATS.filter(
-      (item) => item.tenantId === tenantId && (!enterpriseId || item.enterpriseId === enterpriseId)
+      (item) => (!activeTenantId || item.tenantId === activeTenantId) && (!enterpriseId || item.enterpriseId === enterpriseId)
     )
     const items = filtered.slice((page - 1) * pageSize, page * pageSize)
     return { items, total: filtered.length }
   }
 
-  async create(tenantId: string, data: Omit<AigwSeatRow, "id" | "tenantId" | "usedTokenCount" | "createdAt" | "updatedAt">): Promise<AigwSeatRow> {
+  async create(dataOrTenant: any, maybeData?: any): Promise<AigwSeatRow> {
+    const activeTenantId = typeof dataOrTenant === "string" ? currentTenantId(dataOrTenant) : currentTenantId()
+    const data = typeof dataOrTenant === "string" ? maybeData : dataOrTenant
     const now = new Date().toISOString()
     const record: AigwSeatRow = {
       id: `seat-${Date.now()}`,
-      tenantId,
+      tenantId: activeTenantId || "1",
       ...data,
       usedTokenCount: 0,
       createdAt: now,
@@ -68,4 +81,7 @@ export class AigwSeatRepository {
   }
 }
 
-export const aigwSeatRepository = new AigwSeatRepository()
+export const AigwSeatRepositorySingleton = new AigwSeatRepository()
+export const aigwSeatRepository = AigwSeatRepositorySingleton
+export { AigwSeatRepositorySingleton as AigwSeatRepo }
+

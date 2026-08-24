@@ -48,7 +48,19 @@ flowchart TD
    - `tenant_id`（带 B-Tree 索引）、`created_by`、`updated_by`、`created_at`、`updated_at`、`deleted`；
 2. **Kysely DB 工厂解包规则**：`const db = await getKyselyDb()` 必须 `await` 异步解包 Kysely 实例，禁止同步直调；
 3. **Repository 双导出规范**：文件与 `index.ts` 必须同时导出 `XxxRepository` (PascalCase) 与 `export const xxxRepository = XxxRepository` (camelCase) 别名；
-4. **Repository 落地**：必须实现 `findAll`、`findById`、`create`、`update`、`delete`，并在所有 SQL/Kysely 查询中强制限定 `tenant_id = :currentTenantId`。
+4. **Repository 落地**：必须实现 `findAll`、`findById`、`create`、`update`、`delete`，并在所有 SQL/Kysely 查询中强制限定租户隔离。**租户必须从全局上下文取，禁止显式 tenantId 参数透传**（透传断链=数据泄露，AGENTS.md §4.8 已实证）：
+   ```ts
+   import { getCurrentTenantId, isTenantRequired, isPlatformContext } from "@/modules/shared/backend/lib/biz-tenant"
+
+   function currentTenantId(): string | undefined {
+     const tenantId = getCurrentTenantId()
+     if (tenantId) return tenantId
+     if (isTenantRequired() && !isPlatformContext()) throw new Error("业务数据访问缺少租户上下文")
+     return undefined
+   }
+   // 查询：真实库 where tenant_id = current；内存 filter (!row.tenantId || row.tenantId === current) 同语义
+   // 写入：tenant_id 取 current，无上下文场景（open/relay）从已验证资源归属取，禁止硬编码 "1"
+   ```
 
 ---
 

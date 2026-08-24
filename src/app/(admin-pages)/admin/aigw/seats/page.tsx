@@ -1,3 +1,3 @@
-import AigwSeatsPage from "@/modules/aigw/frontend/pages/seats.page"
+import AigwTenantMembersPage from "@/modules/aigw/frontend/pages/tenant-members.page"
 
-export default AigwSeatsPage
+export default AigwTenantMembersPage

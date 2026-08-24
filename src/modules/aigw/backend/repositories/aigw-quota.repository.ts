@@ -1,4 +1,13 @@
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
+import { getCurrentTenantId, isTenantRequired, isPlatformContext } from "@/modules/shared/backend/lib/biz-tenant"
+
+function currentTenantId(explicit?: string): string | undefined {
+  if (explicit) return explicit
+  const tenantId = getCurrentTenantId()
+  if (tenantId) return tenantId
+  if (isTenantRequired() && !isPlatformContext()) throw new Error("配额数据访问缺少租户上下文")
+  return undefined
+}
 
 export interface AigwQuotaRow {
   id: string
@@ -17,11 +26,13 @@ export interface AigwQuotaRow {
 export const MEMORY_QUOTAS: AigwQuotaRow[] = []
 
 export class AigwQuotaRepository {
-  async findPage(tenantId: string, page = 1, pageSize = 20, enterpriseId?: string) {
+  async findPage(tenantId?: string, page = 1, pageSize = 20, enterpriseId?: string) {
+    const activeTenantId = currentTenantId(tenantId)
     if (hasRealDatabase()) {
       try {
         const db = await getKyselyDb()
-        let query = db.selectFrom("aigw_quota" as any).selectAll().where("tenant_id" as any, "=", tenantId)
+        let query = db.selectFrom("aigw_quota" as any).selectAll()
+        if (activeTenantId) query = query.where("tenant_id" as any, "=", activeTenantId)
         if (enterpriseId) {
           query = query.where("enterprise_id" as any, "=", enterpriseId)
         }
@@ -37,16 +48,18 @@ export class AigwQuotaRepository {
       }
     }
     const filtered = MEMORY_QUOTAS.filter(
-      (item) => item.tenantId === tenantId && (!enterpriseId || item.enterpriseId === enterpriseId)
+      (item) => (!activeTenantId || item.tenantId === activeTenantId) && (!enterpriseId || item.enterpriseId === enterpriseId)
     )
     const items = filtered.slice((page - 1) * pageSize, page * pageSize)
     return { items, total: filtered.length }
   }
 
-  async create(tenantId: string, data: any) {
+  async create(dataOrTenant: any, maybeData?: any) {
+    const activeTenantId = typeof dataOrTenant === "string" ? currentTenantId(dataOrTenant) : currentTenantId()
+    const data = typeof dataOrTenant === "string" ? maybeData : dataOrTenant
     const record: AigwQuotaRow = {
       id: `q-${Date.now()}`,
-      tenantId,
+      tenantId: activeTenantId || "1",
       enterpriseId: data.enterpriseId || `ent-${Date.now()}`,
       enterpriseName: data.enterpriseName || "未命名企业",
       monthlyTokenCap: Number(data.monthlyTokenCap || 50000000),
@@ -58,6 +71,14 @@ export class AigwQuotaRepository {
       updatedAt: new Date().toISOString(),
     }
     MEMORY_QUOTAS.unshift(record)
+    if (hasRealDatabase()) {
+      try {
+        const db = await getKyselyDb()
+        await db.insertInto("aigw_quota" as any).values(record as any).execute()
+      } catch (err) {
+        console.warn("[aigw-quota] DB create fallback:", err)
+      }
+    }
     return record
   }
 

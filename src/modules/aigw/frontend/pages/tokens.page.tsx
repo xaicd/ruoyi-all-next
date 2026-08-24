@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { AigwTokenApi } from "../api/tokens.api"
+import { ViewModeSwitcher, ViewMode } from "@/modules/shared/frontend/components/view-mode-switcher"
+import { Pagination } from "@/modules/shared/frontend/components/pagination"
 
 interface TokenItem {
   id: string
@@ -19,10 +21,10 @@ export default function AigwTokensPage() {
   const [items, setItems] = useState<TokenItem[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
-  const [pageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(10)
   const [keyword, setKeyword] = useState("")
   const [loading, setLoading] = useState(true)
-  const [viewMode, setViewMode] = useState<"table" | "card">("table")
+  const [viewMode, setViewMode] = useState<ViewMode>("table")
 
   // 弹窗状态
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -38,10 +40,10 @@ export default function AigwTokensPage() {
   const [copiedId, setCopiedId] = useState<string | null>(null)
   const [createdTokenResult, setCreatedTokenResult] = useState<string | null>(null)
 
-  const fetchList = async (p = page, kw = keyword) => {
+  const fetchList = async (p = page, ps = pageSize, kw = keyword) => {
     setLoading(true)
     try {
-      const res = await AigwTokenApi.page({ page: p, pageSize, keyword: kw || undefined })
+      const res = await AigwTokenApi.page({ page: p, pageSize: ps, keyword: kw || undefined })
       if (res.success && res.data) {
         setItems(res.data.items || [])
         setTotal(res.data.total || 0)
@@ -54,19 +56,19 @@ export default function AigwTokensPage() {
   }
 
   useEffect(() => {
-    fetchList(page, keyword)
-  }, [page])
+    fetchList(page, pageSize, keyword)
+  }, [page, pageSize])
 
   const handleSearch = (e?: React.FormEvent) => {
     if (e) e.preventDefault()
     setPage(1)
-    fetchList(1, keyword)
+    fetchList(1, pageSize, keyword)
   }
 
   const handleReset = () => {
     setKeyword("")
     setPage(1)
-    fetchList(1, "")
+    fetchList(1, pageSize, "")
   }
 
   const openCreateModal = () => {
@@ -110,7 +112,7 @@ export default function AigwTokensPage() {
           setIsModalOpen(false)
         }
       }
-      fetchList(page, keyword)
+      fetchList(page, pageSize, keyword)
     } catch (err: any) {
       alert(err?.message || "保存令牌失败")
     } finally {
@@ -122,7 +124,7 @@ export default function AigwTokensPage() {
     const nextStatus = item.status === "ACTIVE" ? "DISABLED" : "ACTIVE"
     try {
       await AigwTokenApi.update(item.id, { status: nextStatus })
-      fetchList(page, keyword)
+      fetchList(page, pageSize, keyword)
     } catch (err: any) {
       alert(err?.message || "状态更新失败")
     }
@@ -132,7 +134,7 @@ export default function AigwTokensPage() {
     if (!confirm(`确定要删除令牌「${item.name}」吗？`)) return
     try {
       await AigwTokenApi.delete(item.id)
-      fetchList(page, keyword)
+      fetchList(page, pageSize, keyword)
     } catch (err: any) {
       alert(err?.message || "删除失败")
     }
@@ -162,34 +164,11 @@ export default function AigwTokensPage() {
           </p>
         </div>
         <div className="flex items-center gap-2.5">
-          {/* 视图切换按钮 */}
-          <div className="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200">
-            <button
-              onClick={() => setViewMode("table")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
-                viewMode === "table"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <span>☰</span>
-              <span>列表视图</span>
-            </button>
-            <button
-              onClick={() => setViewMode("card")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
-                viewMode === "card"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <span>⊞</span>
-              <span>卡片视图</span>
-            </button>
-          </div>
+          {/* 通用视图切换组件 */}
+          <ViewModeSwitcher mode={viewMode} onChange={setViewMode} />
 
           <button
-            onClick={() => fetchList(page, keyword)}
+            onClick={() => fetchList(page, pageSize, keyword)}
             className="px-3.5 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition shadow-xs"
           >
             刷新
@@ -466,6 +445,22 @@ export default function AigwTokensPage() {
           })}
         </div>
       )}
+
+      {/* 通用底部分页控件 */}
+      <Pagination
+        total={total}
+        page={page}
+        pageSize={pageSize}
+        onPageChange={(p) => {
+          setPage(p)
+          fetchList(p, pageSize, keyword)
+        }}
+        onPageSizeChange={(ps) => {
+          setPageSize(ps)
+          setPage(1)
+          fetchList(1, ps, keyword)
+        }}
+      />
 
       {/* 弹窗 */}
       {isModalOpen && (

@@ -1,4 +1,13 @@
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
+import { getCurrentTenantId, isTenantRequired, isPlatformContext } from "@/modules/shared/backend/lib/biz-tenant"
+
+function currentTenantId(explicit?: string): string | undefined {
+  if (explicit) return explicit
+  const tenantId = getCurrentTenantId()
+  if (tenantId) return tenantId
+  if (isTenantRequired() && !isPlatformContext()) throw new Error("资费数据访问缺少租户上下文")
+  return undefined
+}
 
 export interface AigwTariffRow {
   id: string
@@ -17,11 +26,13 @@ export interface AigwTariffRow {
 export const MEMORY_TARIFFS: AigwTariffRow[] = []
 
 export class AigwTariffRepository {
-  async findPage(tenantId: string, page = 1, pageSize = 20) {
+  async findPage(tenantId?: string, page = 1, pageSize = 20) {
+    const activeTenantId = currentTenantId(tenantId)
     if (hasRealDatabase()) {
       try {
         const db = await getKyselyDb()
-        const query = db.selectFrom("aigw_tariff" as any).selectAll().where("tenant_id" as any, "=", tenantId)
+        let query = db.selectFrom("aigw_tariff" as any).selectAll()
+        if (activeTenantId) query = query.where("tenant_id" as any, "=", activeTenantId)
         const totalResult = await query.select((eb: any) => eb.fn.count("id").as("total")).executeTakeFirst()
         const items = await query
           .offset((page - 1) * pageSize)
@@ -33,15 +44,17 @@ export class AigwTariffRepository {
         console.warn("[aigw-tariff] DB fallback:", err)
       }
     }
-    const filtered = MEMORY_TARIFFS.filter((item) => item.tenantId === tenantId)
+    const filtered = MEMORY_TARIFFS.filter((item) => !activeTenantId || item.tenantId === activeTenantId)
     const items = filtered.slice((page - 1) * pageSize, page * pageSize)
     return { items, total: filtered.length }
   }
 
-  async create(tenantId: string, data: any) {
+  async create(dataOrTenant: any, maybeData?: any) {
+    const activeTenantId = typeof dataOrTenant === "string" ? currentTenantId(dataOrTenant) : currentTenantId()
+    const data = typeof dataOrTenant === "string" ? maybeData : dataOrTenant
     const record: AigwTariffRow = {
       id: `tar-${Date.now()}`,
-      tenantId,
+      tenantId: activeTenantId || "1",
       name: data.name || "资费策略",
       code: data.code || `TARIFF_${Date.now()}`,
       modelGroup: data.modelPattern || data.modelGroup || "deepseek-v3",

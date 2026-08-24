@@ -2,10 +2,14 @@
 
 import { useEffect, useState } from "react"
 import { request } from "@/modules/shared/frontend/lib/request"
+import { ViewModeSwitcher, ViewMode } from "@/modules/shared/frontend/components/view-mode-switcher"
+import { Pagination } from "@/modules/shared/frontend/components/pagination"
 
 interface UsageItem {
   id: string
   tokenId?: string
+  tokenName?: string
+  tokenKey?: string
   model?: string
   promptTokens: number
   completionTokens: number
@@ -19,16 +23,16 @@ export default function AigwUsagesPage() {
   const [items, setItems] = useState<UsageItem[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
-  const [pageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(10)
   const [keyword, setKeyword] = useState("")
   const [loading, setLoading] = useState(true)
-  const [viewMode, setViewMode] = useState<"table" | "card">("table")
+  const [viewMode, setViewMode] = useState<ViewMode>("table")
 
-  const fetchList = async (p = page, kw = keyword) => {
+  const fetchList = async (p = page, ps = pageSize, kw = keyword) => {
     setLoading(true)
     try {
       const res = await request.get("/api/v1/admin/aigw/usages", {
-        params: { page: p, pageSize, keyword: kw || undefined },
+        params: { page: p, pageSize: ps, keyword: kw || undefined },
       })
       if (res.success && res.data) {
         setItems(res.data.items || [])
@@ -42,19 +46,19 @@ export default function AigwUsagesPage() {
   }
 
   useEffect(() => {
-    fetchList(page, keyword)
-  }, [page])
+    fetchList(page, pageSize, keyword)
+  }, [page, pageSize])
 
   const handleSearch = (e?: React.FormEvent) => {
     if (e) e.preventDefault()
     setPage(1)
-    fetchList(1, keyword)
+    fetchList(1, pageSize, keyword)
   }
 
   const handleReset = () => {
     setKeyword("")
     setPage(1)
-    fetchList(1, "")
+    fetchList(1, pageSize, "")
   }
 
   return (
@@ -68,47 +72,24 @@ export default function AigwUsagesPage() {
           </p>
         </div>
         <div className="flex items-center gap-2.5">
-          {/* 视图切换按钮 */}
-          <div className="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200">
-            <button
-              onClick={() => setViewMode("table")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
-                viewMode === "table"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <span>☰</span>
-              <span>列表视图</span>
-            </button>
-            <button
-              onClick={() => setViewMode("card")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
-                viewMode === "card"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <span>⊞</span>
-              <span>卡片视图</span>
-            </button>
-          </div>
+          {/* 通用视图切换组件 */}
+          <ViewModeSwitcher mode={viewMode} onChange={setViewMode} />
 
           <button
-            onClick={() => fetchList(page, keyword)}
+            onClick={() => fetchList(page, pageSize, keyword)}
             className="px-3.5 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition shadow-xs"
           >
-            刷新数据
+            刷新
           </button>
         </div>
       </div>
 
-      {/* 搜索 */}
+      {/* 筛选栏 */}
       <div className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
-        <form onSubmit={handleSearch} className="flex items-center gap-2.5 flex-1 min-w-[280px]">
+        <form onSubmit={handleSearch} className="flex flex-wrap items-center gap-2.5 flex-1 min-w-[280px]">
           <input
             type="text"
-            placeholder="搜索模型 / IP / Token ID..."
+            placeholder="搜索模型 / IP / TokenID..."
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             className="px-3 py-1.5 text-xs border border-slate-300 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -128,50 +109,60 @@ export default function AigwUsagesPage() {
           </button>
         </form>
         <div className="text-xs text-slate-500 whitespace-nowrap">
-          共记录 <span className="font-semibold text-slate-900">{total}</span> 条请求日志
+          共 <span className="font-semibold text-slate-900">{total}</span> 条调用记录
         </div>
       </div>
 
       {/* 视图展现 */}
       {viewMode === "table" ? (
-        /* 表格 - 严格单行不换行、文本截断 */
+        /* 用量表格 - 严格单行不换行、文本截断 */
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs text-slate-600">
               <thead className="bg-slate-50/80 text-[11px] uppercase text-slate-500 border-b border-slate-200 font-semibold tracking-wider whitespace-nowrap">
                 <tr>
-                  <th className="px-5 py-3">流水 ID</th>
+                  <th className="px-5 py-3">请求 ID</th>
+                  <th className="px-5 py-3">调用令牌 / Key</th>
                   <th className="px-5 py-3">调用模型</th>
-                  <th className="px-5 py-3">Prompt</th>
-                  <th className="px-5 py-3">Completion</th>
-                  <th className="px-5 py-3">总 Token 消耗</th>
-                  <th className="px-5 py-3">客户端 IP</th>
-                  <th className="px-5 py-3 text-right">请求时间</th>
+                  <th className="px-5 py-3">Prompt Token</th>
+                  <th className="px-5 py-3">Completion Token</th>
+                  <th className="px-5 py-3">总 Tokens</th>
+                  <th className="px-5 py-3">调用者 IP</th>
+                  <th className="px-5 py-3 text-right">调用时间</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {loading ? (
                   <tr>
-                    <td colSpan={7} className="text-center py-10 text-slate-400">
-                      正在加载用量日志...
+                    <td colSpan={8} className="text-center py-10 text-slate-400">
+                      正在加载日志...
                     </td>
                   </tr>
                 ) : items.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="text-center py-10 text-slate-400">
-                      暂无用量流水数据
+                    <td colSpan={8} className="text-center py-10 text-slate-400">
+                      暂无用量记录
                     </td>
                   </tr>
                 ) : (
                   items.map((item) => (
                     <tr key={item.id} className="hover:bg-slate-50/70 transition whitespace-nowrap">
-                      <td className="px-5 py-3 font-mono text-[11px] text-slate-500">
-                        <span className="max-w-[120px] truncate inline-block align-middle" title={item.id}>
-                          {item.id}
-                        </span>
+                      <td className="px-5 py-3">
+                        <code
+                          className="text-[11px] text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded font-mono max-w-[120px] truncate inline-block"
+                          title={item.id}
+                        >
+                          {item.id.slice(0, 12)}...
+                        </code>
                       </td>
                       <td className="px-5 py-3">
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-blue-50 text-blue-700 font-mono">
+                        <div className="flex flex-col">
+                          <span className="font-semibold text-slate-900 text-xs">{item.tokenName || "默认调用"}</span>
+                          <code className="text-[10px] text-slate-400 font-mono tracking-tight">{item.tokenKey || (item.tokenId ? `ID: ${item.tokenId.slice(0, 8)}` : "Direct API")}</code>
+                        </div>
+                      </td>
+                      <td className="px-5 py-3">
+                        <span className="font-semibold text-slate-900 font-mono text-[11px]">
                           {item.model || "deepseek-chat"}
                         </span>
                       </td>
@@ -182,7 +173,7 @@ export default function AigwUsagesPage() {
                         {item.completionTokens || 0}
                       </td>
                       <td className="px-5 py-3">
-                        <span className="font-semibold text-slate-900 font-mono text-[11px]">
+                        <span className="font-semibold text-blue-600 font-mono text-[11px]">
                           {item.totalTokens || 0}
                         </span>
                       </td>
@@ -211,7 +202,9 @@ export default function AigwUsagesPage() {
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <h3 className="text-xs font-bold text-slate-900 font-mono">{item.model || "deepseek-chat"}</h3>
-                    <span className="text-[10px] text-slate-400 font-mono">ID: {item.id.slice(0, 16)}...</span>
+                    <div className="text-[10px] text-slate-500 mt-0.5">
+                      <span className="font-medium text-slate-800">{item.tokenName || "默认令牌"}</span> · <span className="font-mono text-slate-400">{item.tokenKey || item.tokenId?.slice(0, 8) || "Direct"}</span>
+                    </div>
                   </div>
                   <span className="text-[10px] font-mono text-slate-400">
                     {item.createdAt ? new Date(item.createdAt).toLocaleTimeString() : "刚刚"}
@@ -236,12 +229,28 @@ export default function AigwUsagesPage() {
 
               <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-mono">
                 <span>IP: {item.ip || "127.0.0.1"}</span>
-                <span>Token: {item.tokenId?.slice(0, 8) || "Direct"}</span>
+                <span>ID: {item.id.slice(0, 10)}...</span>
               </div>
             </div>
           ))}
         </div>
       )}
+
+      {/* 通用底部分页控件 */}
+      <Pagination
+        total={total}
+        page={page}
+        pageSize={pageSize}
+        onPageChange={(p) => {
+          setPage(p)
+          fetchList(p, pageSize, keyword)
+        }}
+        onPageSizeChange={(ps) => {
+          setPageSize(ps)
+          setPage(1)
+          fetchList(1, ps, keyword)
+        }}
+      />
     </div>
   )
 }

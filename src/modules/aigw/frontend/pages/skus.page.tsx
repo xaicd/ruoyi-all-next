@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { AigwSkuApi } from "../api/skus.api"
+import { ViewModeSwitcher, ViewMode } from "@/modules/shared/frontend/components/view-mode-switcher"
+import { Pagination } from "@/modules/shared/frontend/components/pagination"
 
 interface SkuItem {
   id: string
@@ -17,10 +19,10 @@ export default function AigwSkusPage() {
   const [items, setItems] = useState<SkuItem[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
-  const [pageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(10)
   const [loading, setLoading] = useState(true)
   const [keyword, setKeyword] = useState("")
-  const [viewMode, setViewMode] = useState<"table" | "card">("table")
+  const [viewMode, setViewMode] = useState<ViewMode>("table")
 
   // Modal State
   const [modalOpen, setModalOpen] = useState(false)
@@ -34,12 +36,14 @@ export default function AigwSkusPage() {
     remark: "通用大模型加油包",
   })
 
-  const fetchList = async (p = page) => {
+  const fetchList = async (p = page, ps = pageSize, kw = keyword) => {
     setLoading(true)
     try {
-      const res = await AigwSkuApi.page({ page: p, pageSize })
+      const res = await AigwSkuApi.page({ page: p, pageSize: ps })
       if (res.success && res.data) {
-        setItems(res.data.items || [])
+        let list = res.data.items || []
+        if (kw) list = list.filter((i: any) => i.name.includes(kw) || i.code.includes(kw))
+        setItems(list)
         setTotal(res.data.total || 0)
       }
     } catch (err) {
@@ -50,8 +54,20 @@ export default function AigwSkusPage() {
   }
 
   useEffect(() => {
-    fetchList(page)
-  }, [page])
+    fetchList(page, pageSize, keyword)
+  }, [page, pageSize])
+
+  const handleSearch = (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
+    setPage(1)
+    fetchList(1, pageSize, keyword)
+  }
+
+  const handleReset = () => {
+    setKeyword("")
+    setPage(1)
+    fetchList(1, pageSize, "")
+  }
 
   const handleOpenModal = (item?: SkuItem) => {
     if (item) {
@@ -67,10 +83,10 @@ export default function AigwSkusPage() {
     } else {
       setEditingItem(null)
       setForm({
-        code: `SKU_${Date.now()}`,
-        name: "新算力加油包 (1,000万 Token)",
+        code: `SKU_${Date.now().toString().slice(-6)}`,
+        name: "",
         tokens: 10000000,
-        price: 49,
+        price: 99,
         status: "ACTIVE",
         remark: "",
       })
@@ -87,65 +103,37 @@ export default function AigwSkusPage() {
         await AigwSkuApi.create(form)
       }
       setModalOpen(false)
-      fetchList(page)
-    } catch (err) {
-      alert("保存失败")
+      fetchList(page, pageSize, keyword)
+    } catch (err: any) {
+      alert(err?.message || "操作失败")
     }
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm("确定要下架/删除该算力加油包吗？")) return
+    if (!confirm("确定要下架并删除该算力规格吗？")) return
     try {
       await AigwSkuApi.delete(id)
-      fetchList(page)
-    } catch (err) {
-      alert("删除失败")
+      fetchList(page, pageSize, keyword)
+    } catch (err: any) {
+      alert(err?.message || "删除失败")
     }
   }
 
-  const filteredItems = items.filter(
-    (item) => !keyword || item.name.includes(keyword) || item.code.includes(keyword)
-  )
-
   return (
     <div className="p-6 space-y-5">
-      {/* 头部区域 */}
+      {/* 头部 */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900">算力加油包 SKU 目录</h1>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">算力商品与加油包 SKU</h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            发布可在 Mall 电商上架的 AI 算力 Token 加油包 SPU/SKU 商品，支持线上扫码支付履约
+            上架标准化算力加油包与企业套餐商品，提供给政企客户自助加购与充值
           </p>
         </div>
         <div className="flex items-center gap-2.5">
-          {/* 视图切换按钮 */}
-          <div className="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200">
-            <button
-              onClick={() => setViewMode("table")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
-                viewMode === "table"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <span>☰</span>
-              <span>列表视图</span>
-            </button>
-            <button
-              onClick={() => setViewMode("card")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
-                viewMode === "card"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <span>⊞</span>
-              <span>卡片视图</span>
-            </button>
-          </div>
+          <ViewModeSwitcher mode={viewMode} onChange={setViewMode} />
 
           <button
-            onClick={() => fetchList(page)}
+            onClick={() => fetchList(page, pageSize, keyword)}
             className="px-3.5 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition shadow-xs"
           >
             刷新
@@ -154,17 +142,17 @@ export default function AigwSkusPage() {
             onClick={() => handleOpenModal()}
             className="px-4 py-2 text-xs font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition shadow-sm flex items-center gap-1"
           >
-            <span className="text-sm leading-none">+</span> 新增算力包 SKU
+            <span className="text-sm leading-none">+</span> 上架新规格
           </button>
         </div>
       </div>
 
       {/* 搜索栏 */}
       <div className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
-        <form onSubmit={(e) => { e.preventDefault(); fetchList(page) }} className="flex items-center gap-2.5 flex-1 min-w-[280px]">
+        <form onSubmit={handleSearch} className="flex items-center gap-2.5 flex-1 min-w-[280px]">
           <input
             type="text"
-            placeholder="搜索 SKU 名称 / 编码..."
+            placeholder="搜索商品名称、SKU 编码..."
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             className="px-3 py-1.5 text-xs border border-slate-300 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -177,14 +165,14 @@ export default function AigwSkusPage() {
           </button>
           <button
             type="button"
-            onClick={() => setKeyword("")}
+            onClick={handleReset}
             className="px-3.5 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition"
           >
             重置
           </button>
         </form>
         <div className="text-xs text-slate-500 whitespace-nowrap">
-          共 <span className="font-semibold text-slate-900">{filteredItems.length}</span> 个算力加油包
+          共 <span className="font-semibold text-slate-900">{total}</span> 个在售规格
         </div>
       </div>
 
@@ -211,14 +199,14 @@ export default function AigwSkusPage() {
                       正在加载加油包列表...
                     </td>
                   </tr>
-                ) : filteredItems.length === 0 ? (
+                ) : items.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="text-center py-10 text-slate-400">
                       暂无算力加油包
                     </td>
                   </tr>
                 ) : (
-                  filteredItems.map((item) => (
+                  items.map((item) => (
                     <tr key={item.id} className="hover:bg-slate-50/70 transition whitespace-nowrap">
                       <td className="px-5 py-3">
                         <code className="text-[11px] font-mono bg-slate-100 px-1.5 py-0.5 rounded text-indigo-600 font-semibold">
@@ -263,7 +251,7 @@ export default function AigwSkusPage() {
       ) : (
         /* 卡片网格视图 */
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredItems.map((item) => (
+          {items.map((item) => (
             <div
               key={item.id}
               className="p-5 bg-white rounded-xl border border-slate-200 shadow-sm space-y-3 flex flex-col justify-between hover:border-blue-300 transition"
@@ -311,6 +299,22 @@ export default function AigwSkusPage() {
           ))}
         </div>
       )}
+
+      {/* 通用底部分页控件 */}
+      <Pagination
+        total={total}
+        page={page}
+        pageSize={pageSize}
+        onPageChange={(p) => {
+          setPage(p)
+          fetchList(p, pageSize, keyword)
+        }}
+        onPageSizeChange={(ps) => {
+          setPageSize(ps)
+          setPage(1)
+          fetchList(1, ps, keyword)
+        }}
+      />
 
       {/* Form Modal */}
       {modalOpen && (

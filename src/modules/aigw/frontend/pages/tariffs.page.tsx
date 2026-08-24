@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { AigwTariffApi } from "../api/tariffs.api"
+import { ViewModeSwitcher, ViewMode } from "@/modules/shared/frontend/components/view-mode-switcher"
+import { Pagination } from "@/modules/shared/frontend/components/pagination"
 
 interface TariffItem {
   id: string
@@ -17,10 +19,10 @@ export default function AigwTariffsPage() {
   const [items, setItems] = useState<TariffItem[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
-  const [pageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(10)
   const [keyword, setKeyword] = useState("")
   const [loading, setLoading] = useState(true)
-  const [viewMode, setViewMode] = useState<"table" | "card">("table")
+  const [viewMode, setViewMode] = useState<ViewMode>("table")
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<TariffItem | null>(null)
@@ -33,10 +35,10 @@ export default function AigwTariffsPage() {
   })
   const [submitting, setSubmitting] = useState(false)
 
-  const fetchList = async (p = page, kw = keyword) => {
+  const fetchList = async (p = page, ps = pageSize, kw = keyword) => {
     setLoading(true)
     try {
-      const res = await AigwTariffApi.page({ page: p, pageSize })
+      const res = await AigwTariffApi.page({ page: p, pageSize: ps })
       if (res.success && res.data) {
         let list = res.data.items || []
         if (kw) list = list.filter((i: any) => i.name.includes(kw) || i.modelPattern.includes(kw))
@@ -51,19 +53,19 @@ export default function AigwTariffsPage() {
   }
 
   useEffect(() => {
-    fetchList(page, keyword)
-  }, [page])
+    fetchList(page, pageSize, keyword)
+  }, [page, pageSize])
 
   const handleSearch = (e?: React.FormEvent) => {
     if (e) e.preventDefault()
     setPage(1)
-    fetchList(1, keyword)
+    fetchList(1, pageSize, keyword)
   }
 
   const handleReset = () => {
     setKeyword("")
     setPage(1)
-    fetchList(1, "")
+    fetchList(1, pageSize, "")
   }
 
   const openCreateModal = () => {
@@ -100,7 +102,7 @@ export default function AigwTariffsPage() {
         await AigwTariffApi.create(formData)
       }
       setIsModalOpen(false)
-      fetchList(page, keyword)
+      fetchList(page, pageSize, keyword)
     } catch (err: any) {
       alert(err?.message || "保存资费规则失败")
     } finally {
@@ -112,7 +114,7 @@ export default function AigwTariffsPage() {
     const nextStatus = item.status === "ACTIVE" ? "DISABLED" : "ACTIVE"
     try {
       await AigwTariffApi.update(item.id, { status: nextStatus })
-      fetchList(page, keyword)
+      fetchList(page, pageSize, keyword)
     } catch (err: any) {
       alert(err?.message || "状态更新失败")
     }
@@ -122,7 +124,7 @@ export default function AigwTariffsPage() {
     if (!confirm(`确定要删除资费规则「${item.name}」吗？`)) return
     try {
       await AigwTariffApi.delete(item.id)
-      fetchList(page, keyword)
+      fetchList(page, pageSize, keyword)
     } catch (err: any) {
       alert(err?.message || "删除失败")
     }
@@ -133,40 +135,16 @@ export default function AigwTariffsPage() {
       {/* 头部区域 */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900">资费策略与闲时折扣</h1>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">算力资费与计费策略</h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            配置不同模型通配符的基准 Token 单价、闲时 (夜间 22:00~08:00) 阶梯折扣倍率
+            配置模型 Token 单价、闲时折扣阶梯、分时计费规则与企业专属折扣方案
           </p>
         </div>
         <div className="flex items-center gap-2.5">
-          {/* 视图切换按钮 */}
-          <div className="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200">
-            <button
-              onClick={() => setViewMode("table")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
-                viewMode === "table"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <span>☰</span>
-              <span>列表视图</span>
-            </button>
-            <button
-              onClick={() => setViewMode("card")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 ${
-                viewMode === "card"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <span>⊞</span>
-              <span>卡片视图</span>
-            </button>
-          </div>
+          <ViewModeSwitcher mode={viewMode} onChange={setViewMode} />
 
           <button
-            onClick={() => fetchList(page, keyword)}
+            onClick={() => fetchList(page, pageSize, keyword)}
             className="px-3.5 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition shadow-xs"
           >
             刷新
@@ -175,7 +153,7 @@ export default function AigwTariffsPage() {
             onClick={openCreateModal}
             className="px-4 py-2 text-xs font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition shadow-sm flex items-center gap-1"
           >
-            <span className="text-sm leading-none">+</span> 新增资费规则
+            <span className="text-sm leading-none">+</span> 新增资费策略
           </button>
         </div>
       </div>
@@ -185,7 +163,7 @@ export default function AigwTariffsPage() {
         <form onSubmit={handleSearch} className="flex items-center gap-2.5 flex-1 min-w-[280px]">
           <input
             type="text"
-            placeholder="搜索规则名称 / 模型匹配..."
+            placeholder="搜索策略名称、模型通配符..."
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             className="px-3 py-1.5 text-xs border border-slate-300 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -205,7 +183,7 @@ export default function AigwTariffsPage() {
           </button>
         </form>
         <div className="text-xs text-slate-500 whitespace-nowrap">
-          共 <span className="font-semibold text-slate-900">{total}</span> 条资费策略
+          共 <span className="font-semibold text-slate-900">{total}</span> 个资费策略
         </div>
       </div>
 
@@ -362,6 +340,22 @@ export default function AigwTariffsPage() {
           ))}
         </div>
       )}
+
+      {/* 通用底部分页控件 */}
+      <Pagination
+        total={total}
+        page={page}
+        pageSize={pageSize}
+        onPageChange={(p) => {
+          setPage(p)
+          fetchList(p, pageSize, keyword)
+        }}
+        onPageSizeChange={(ps) => {
+          setPageSize(ps)
+          setPage(1)
+          fetchList(1, ps, keyword)
+        }}
+      />
 
       {/* 弹窗表单 */}
       {isModalOpen && (
