@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest"
-import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
+import { TenantPackageRepository } from "@/modules/system/backend/repositories/tenant-package.repository"
 import { SystemTenantPackageService } from "../tenant-package.service"
 
 describe("SystemTenantPackageService", () => {
@@ -8,10 +8,10 @@ describe("SystemTenantPackageService", () => {
   })
 
   it("propagates database failures instead of falling back to mock packages", async () => {
-    vi.spyOn(ruoyiPrisma.tenantPackage, "findMany").mockRejectedValueOnce(new Error("db unavailable"))
+    vi.spyOn(TenantPackageRepository, "findList").mockRejectedValueOnce(new Error("db unavailable"))
 
     await expect(
-      SystemTenantPackageService.list({ page: 1, pageSize: 20, keyword: "" }),
+      SystemTenantPackageService.list({ page: 1, pageSize: 20 }),
     ).rejects.toThrow("db unavailable")
   })
 })

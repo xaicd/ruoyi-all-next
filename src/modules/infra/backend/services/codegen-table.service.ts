@@ -115,6 +115,7 @@ export class CodegenTableService {
     template?: "CRUD"
     scene?: "ADMIN" | "APP"
     permissionPrefix?: string | null
+    parentMenuId?: string | null
     columns?: Array<Partial<CodegenColumnConfig> & { name: string }>
   }) {
     const current = await this.getCodegenTable(input)

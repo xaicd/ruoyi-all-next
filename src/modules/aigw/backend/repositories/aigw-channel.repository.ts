@@ -148,3 +148,6 @@ export const AigwChannelRepository = {
     }
   },
 }
+
+export const aigwChannelRepository = AigwChannelRepository
+

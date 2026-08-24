@@ -7,6 +7,8 @@ import { SEED_DICT_DATA } from "../prisma/data/dict-data.seed-data"
 import { SEED_DICT_TYPES } from "../prisma/data/dict-types.seed-data"
 import { SEED_MENUS } from "../prisma/data/menus.seed-data"
 import { withOnlineMenuCatalog, withOnlinePackageMenuIds } from "../src/modules/online/contract/menu-catalog"
+import { withAigwMenuCatalog, withAigwPackageMenuIds } from "../src/modules/aigw/contract/menu-catalog"
+import { withAiMenuCatalog } from "../src/modules/ai/contract/menu-catalog"
 import { SEED_POSTS } from "../prisma/data/posts.seed-data"
 import { SEED_ROLES } from "../prisma/data/roles.seed-data"
 import { SEED_TENANT_PACKAGES } from "../prisma/data/tenant-packages.seed-data"
@@ -43,8 +45,11 @@ function assertStrongBootstrapPassword(password: string): void {
     throw new Error("ADMIN_BOOTSTRAP_PASSWORD must be at least 12 characters and include uppercase, lowercase, number, and symbol; admin123 is forbidden.")
   }
 }
+function fullMenuCatalog() {
+  return withAiMenuCatalog(withAigwMenuCatalog(withOnlineMenuCatalog(SEED_MENUS)))
+}
 function insertableMenus() {
-  const catalog = withOnlineMenuCatalog(SEED_MENUS)
+  const catalog = fullMenuCatalog()
   const ids = new Set(catalog.map((menu) => menu.id))
   const pending = catalog.map((menu) => ({ ...menu, parentId: menu.parentId && ids.has(menu.parentId) ? menu.parentId : null }))
   const ordered: typeof pending = []
@@ -114,13 +119,17 @@ async function main() {
     const templateUser = SEED_USERS[0]
     const adminResult = await client.query<{ id: string }>(`INSERT INTO "system_user" (id, username, nickname, password, salt, phone, email, avatar, status, dept_id, remark, tenant_id, created_at, updated_at, deleted) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'ACTIVE',$9,$10,$11,$12,$13,false) ON CONFLICT (username) DO UPDATE SET nickname = EXCLUDED.nickname, password = EXCLUDED.password, salt = EXCLUDED.salt, status = 'ACTIVE', deleted = false, updated_at = EXCLUDED.updated_at RETURNING id`, [randomUUID(), bootstrapUsername, projectProfile.bootstrapAdmin.nickname, passwordHash(bootstrapPassword, bootstrapSalt), bootstrapSalt, templateUser.phone, templateUser.email, templateUser.avatar, templateUser.deptId, "本地环境专用管理员", templateUser.tenantId, templateUser.createdAt, new Date().toISOString()])
     const adminId = adminResult.rows[0].id
+    await client.query(`UPDATE system_menu SET deleted = true WHERE id LIKE 'ys-%' OR id LIKE 'ai-gateway-%' OR id IN ('9000', '9004', '9005', '9100', '9101', '9103', '9104', '9200', '9201', '9203', '9300', '9400', '9402')`)
+    await client.query(`DELETE FROM system_role_menu WHERE menu_id LIKE 'ys-%' OR menu_id LIKE 'ai-gateway-%' OR menu_id LIKE '90%' OR menu_id LIKE '91%' OR menu_id LIKE '92%' OR menu_id LIKE '93%' OR menu_id LIKE '94%'`)
+    await client.query(`DELETE FROM system_tenant_package_menu WHERE menu_id LIKE 'ys-%' OR menu_id LIKE 'ai-gateway-%' OR menu_id LIKE '90%' OR menu_id LIKE '91%' OR menu_id LIKE '92%' OR menu_id LIKE '93%' OR menu_id LIKE '94%'`)
+
     for (const menu of insertableMenus()) {
       await client.query(`INSERT INTO system_menu (id, name, permission, type, parent_id, path, component, icon, sort, status, visible, keep_alive, created_at, updated_at, deleted) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,false) ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, permission = EXCLUDED.permission, type = EXCLUDED.type, parent_id = EXCLUDED.parent_id, path = EXCLUDED.path, component = EXCLUDED.component, icon = EXCLUDED.icon, sort = EXCLUDED.sort, status = EXCLUDED.status, visible = EXCLUDED.visible, keep_alive = EXCLUDED.keep_alive, updated_at = EXCLUDED.updated_at, deleted = false`, [menu.id, menu.name, menu.permission, menu.type, menu.parentId, menu.path, menu.component, menu.icon, menu.sort, menu.status, menu.visible, menu.keepAlive, menu.createdAt, menu.updatedAt])
     }
-    const tenantMenuScope = new TenantMenuScope(withOnlineMenuCatalog(SEED_MENUS))
+    const tenantMenuScope = new TenantMenuScope(fullMenuCatalog())
     for (const pkg of SEED_TENANT_PACKAGES) {
       await client.query(`DELETE FROM system_tenant_package_menu WHERE package_id = $1`, [pkg.id])
-      for (const menuId of tenantMenuScope.normalize(withOnlinePackageMenuIds(pkg.menuIds))) await client.query(`INSERT INTO system_tenant_package_menu (id, package_id, menu_id) VALUES ($1,$2,$3) ON CONFLICT (package_id, menu_id) DO NOTHING`, [randomUUID(), pkg.id, menuId])
+      for (const menuId of tenantMenuScope.normalize(withAigwPackageMenuIds(withOnlinePackageMenuIds(pkg.menuIds)))) await client.query(`INSERT INTO system_tenant_package_menu (id, package_id, menu_id) VALUES ($1,$2,$3) ON CONFLICT (package_id, menu_id) DO NOTHING`, [randomUUID(), pkg.id, menuId])
     }
     // Historical all-next draft packages were not sourced from RuoYi. Keep rows for audit,
     // but remove them from the catalog after the demo tenant is reassigned to package 111.
@@ -136,7 +145,7 @@ async function main() {
       for (const menu of insertableMenus()) await client.query(`INSERT INTO system_role_menu (id, role_id, menu_id) VALUES ($1,$2,$3) ON CONFLICT (role_id, menu_id) DO NOTHING`, [randomUUID(), assignedRoleId, menu.id])
     }
     await client.query("COMMIT")
-    console.log(`[seed] PostgreSQL catalog seeded: ${SEED_ROLES.length} roles, ${SEED_DEPTS.length} departments, ${SEED_POSTS.length} posts, ${SEED_DICT_TYPES.length} dictionary types, ${SEED_DICT_DATA.length} dictionary entries, and ${withOnlineMenuCatalog(SEED_MENUS).length} menus.`)
+    console.log(`[seed] PostgreSQL catalog seeded: ${SEED_ROLES.length} roles, ${SEED_DEPTS.length} departments, ${SEED_POSTS.length} posts, ${SEED_DICT_TYPES.length} dictionary types, ${SEED_DICT_DATA.length} dictionary entries, and ${fullMenuCatalog().length} menus.`)
   } catch (error) {
     await client.query("ROLLBACK")
     throw error

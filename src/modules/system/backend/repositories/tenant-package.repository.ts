@@ -180,3 +180,7 @@ async function mapRows(rows: any[]): Promise<TenantPackageRow[]> {
 function mapRow(row: any, menuIds: Map<string, string[]>): TenantPackageRow {
   return { id: row.id, name: row.name, status: row.status, accountLimit: row.account_limit, menuIds: menuIds.get(row.id) ?? [], remark: row.remark, createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : String(row.created_at), updatedAt: row.updated_at instanceof Date ? row.updated_at.toISOString() : String(row.updated_at) }
 }
+
+export const SystemTenantPackageRepository = TenantPackageRepository
+export const systemTenantPackageRepository = TenantPackageRepository
+

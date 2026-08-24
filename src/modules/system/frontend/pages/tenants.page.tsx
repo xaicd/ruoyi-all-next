@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { request, API } from "@/modules/shared/frontend/lib/request"
+import { Pagination } from "@/modules/shared/frontend/components/pagination"
 
 // === Types ===
 type Tenant = {
@@ -35,100 +36,167 @@ function defaultTenantExpireDate(): string {
 
 // === Main Component ===
 export default function SystemTenantsPage() {
-  const [data, setData] = useState<PageData>({ items: [], total: 0, page: 1, pageSize: 20 })
+  const [data, setData] = useState<PageData>({ items: [], total: 0, page: 1, pageSize: 10 })
   const [loading, setLoading] = useState(false)
   const [keyword, setKeyword] = useState("")
   const [statusFilter, setStatusFilter] = useState("")
   const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
   const [showForm, setShowForm] = useState(false)
   const [editingTenant, setEditingTenant] = useState<Tenant | null>(null)
   const [showAssignPkg, setShowAssignPkg] = useState(false)
   const [assignTarget, setAssignTarget] = useState<Tenant | null>(null)
   const [historyTarget, setHistoryTarget] = useState<Tenant | null>(null)
 
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async (p = page, ps = pageSize, kw = keyword, st = statusFilter) => {
     setLoading(true)
     try {
-      const result = await request.get(API.TENANTS, { page, pageSize: 20, keyword: keyword || undefined, status: statusFilter || undefined })
+      const result = await request.get(API.TENANTS, { page: p, pageSize: ps, keyword: kw || undefined, status: st || undefined })
       if (result.success && result.data) setData(result.data)
     } finally {
       setLoading(false)
     }
-  }, [page, keyword, statusFilter])
+  }, [page, pageSize, keyword, statusFilter])
 
-  useEffect(() => { loadData() }, [loadData])
+  useEffect(() => { loadData(page, pageSize, keyword, statusFilter) }, [loadData, page, pageSize])
 
-  const handleSearch = () => { setPage(1); loadData() }
-  const handleReset = () => { setKeyword(""); setStatusFilter(""); setPage(1) }
+  const handleSearch = () => { setPage(1); loadData(1, pageSize, keyword, statusFilter) }
+  const handleReset = () => { setKeyword(""); setStatusFilter(""); setPage(1); loadData(1, pageSize, "", "") }
   const handleCreate = () => { setEditingTenant(null); setShowForm(true) }
-  const handleEdit = (t: Tenant) => { setEditingTenant(t); setShowForm(true) }
+  const handleEdit = (tenant: Tenant) => { setEditingTenant(tenant); setShowForm(true) }
 
-  const handleDelete = async (t: Tenant) => {
-    if (!confirm(`确认删除租户「${t.name}」？`)) return
-    const result = await request.delete(`${API.TENANTS}/${t.id}`)
-    if (result.success) loadData()
-    else alert(result.error || "删除失败")
+  const handleDelete = async (tenant: Tenant) => {
+    if (!confirm(`确定要删除租户「${tenant.name} (${tenant.tenantCode})」吗？`)) return
+    const result = await request.delete(`${API.TENANTS}/${tenant.id}`)
+    if (result.success) loadData(page, pageSize, keyword, statusFilter); else alert(result.error || "删除失败")
   }
 
-  const handleToggleStatus = async (t: Tenant) => {
-    const newStatus = t.status === "ACTIVE" ? "DISABLED" : "ACTIVE"
-    const result = await request.patch(`${API.TENANTS}/${t.id}`, { action: "updateStatus", status: newStatus })
-    if (result.success) loadData()
-    else alert(result.error || "状态变更失败")
+  const handleToggleStatus = async (tenant: Tenant) => {
+    const nextStatus = tenant.status === "ACTIVE" ? "DISABLED" : "ACTIVE"
+    const result = await request.patch(`${API.TENANTS}/${tenant.id}`, { action: "updateStatus", status: nextStatus })
+    if (result.success) loadData(page, pageSize, keyword, statusFilter); else alert(result.error || "状态更新失败")
   }
-
-  const handleAssignPackage = (t: Tenant) => { setAssignTarget(t); setShowAssignPkg(true) }
-  const handleHistory = (t: Tenant) => setHistoryTarget(t)
 
   const handleFormSubmit = async (formData: Record<string, any>) => {
-    let result
-    if (editingTenant) {
-      result = await request.put(`${API.TENANTS}/${editingTenant.id}`, formData)
-    } else {
-      result = await request.post(API.TENANTS, formData)
-    }
-    if (result.success) { setShowForm(false); loadData() }
-    else alert(result.error || "操作失败")
+    const result = editingTenant
+      ? await request.put(`${API.TENANTS}/${editingTenant.id}`, formData)
+      : await request.post(API.TENANTS, formData)
+    if (result.success) { setShowForm(false); loadData(page, pageSize, keyword, statusFilter) } else alert(result.error || "保存失败")
   }
 
   const handleAssignSubmit = async (packageId: string) => {
     if (!assignTarget) return
     const result = await request.post(`${API.TENANTS}/assign-package`, { tenantId: assignTarget.id, packageId })
-    if (result.success) { setShowAssignPkg(false); loadData() }
-    else alert(result.error || "分配套餐失败")
+    if (result.success) { setShowAssignPkg(false); loadData(page, pageSize, keyword, statusFilter) } else alert(result.error || "分配套餐失败")
   }
 
-  const totalPages = Math.ceil(data.total / data.pageSize)
-
   return (
-    <div className="space-y-4 pb-6">
-      <div className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3">
-          <span className="h-9 w-1 rounded-full bg-blue-600" />
-          <div><h1 className="text-lg font-semibold tracking-tight text-slate-900">租户管理</h1><p className="mt-0.5 text-sm text-slate-500">管理租户资料、服务套餐与首个管理员账号</p></div>
+    <div className="space-y-4">
+      {/* 页头 */}
+      <div className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-5 shadow-xs md:flex-row md:items-center md:justify-between">
+        <div>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">租户管理</h1>
+          <p className="mt-0.5 text-xs text-slate-500">管理多租户实体、租户套餐授权、账号限额与生命周期</p>
         </div>
-        <button onClick={handleCreate} className="inline-flex h-9 items-center justify-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 hover:shadow">+ 新增租户</button>
+        <button onClick={handleCreate} className="inline-flex h-9 items-center justify-center rounded-xl bg-blue-600 px-4 text-xs font-semibold text-white shadow-xs transition hover:bg-blue-700">
+          + 新增租户
+        </button>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-        <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_170px_auto_auto]">
-          <input value={keyword} onChange={(e) => setKeyword(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleSearch()} placeholder="租户编码 / 租户名称 / 联系人" className="h-9 rounded-lg border border-slate-200 px-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10" />
-          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"><option value="">全部状态</option><option value="ACTIVE">启用</option><option value="DISABLED">禁用</option></select>
-          <button onClick={handleSearch} className="h-9 rounded-lg bg-slate-900 px-4 text-sm font-medium text-white transition hover:bg-slate-800">查询</button>
-          <button onClick={handleReset} className="h-9 rounded-lg border border-slate-200 px-4 text-sm font-medium text-slate-600 transition hover:bg-slate-50">重置</button>
-        </div>
+      {/* 搜索栏 */}
+      <div className="flex flex-wrap items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-xs">
+        <input
+          type="text"
+          placeholder="搜索租户名称 / 编码 / 联系人..."
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          className="h-9 w-64 rounded-lg border border-slate-200 bg-slate-50 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+        />
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="h-9 rounded-lg border border-slate-200 bg-slate-50 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+        >
+          <option value="">全部状态</option>
+          <option value="ACTIVE">正常</option>
+          <option value="DISABLED">停用</option>
+        </select>
+        <button onClick={handleSearch} className="h-9 rounded-lg bg-slate-900 px-4 text-xs font-medium text-white hover:bg-slate-800 transition">查询</button>
+        <button onClick={handleReset} className="h-9 rounded-lg bg-slate-100 px-4 text-xs font-medium text-slate-600 hover:bg-slate-200 transition">重置</button>
+        <span className="ml-auto text-xs text-slate-500">
+          共 <span className="font-semibold text-slate-900">{data.total}</span> 个租户
+        </span>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-        <div className="flex items-center justify-between border-b border-slate-100 px-5 py-3"><span className="text-sm font-medium text-slate-800">租户列表</span><span className="text-xs text-slate-400">共 {data.total} 条记录</span></div>
+      {/* 列表 */}
+      <div className="rounded-xl border border-slate-200 bg-white shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[980px] text-sm">
-            <thead><tr className="border-b border-slate-100 bg-slate-50/80 text-left text-xs font-medium text-slate-500"><th className="px-5 py-3">租户名称</th><th className="px-4 py-3">租户编码</th><th className="px-4 py-3">联系人</th><th className="px-4 py-3">联系电话</th><th className="px-4 py-3">套餐</th><th className="px-4 py-3">生效时间</th><th className="px-4 py-3 text-center">已用 / 席位</th><th className="px-4 py-3">过期时间</th><th className="px-4 py-3">状态</th><th className="px-5 py-3 text-right">操作</th></tr></thead>
-            <tbody>{loading ? <tr><td colSpan={10} className="px-4 py-14 text-center text-slate-400">加载中...</td></tr> : data.items.length === 0 ? <tr><td colSpan={10} className="px-4 py-14 text-center text-slate-400">暂无数据</td></tr> : data.items.map((t) => <tr key={t.id} className="border-b border-slate-100 last:border-0 transition hover:bg-blue-50/30"><td className="px-5 py-3.5 font-medium text-slate-800">{t.name}</td><td className="px-4 py-3.5"><code className="rounded bg-slate-100 px-2 py-1 text-xs text-slate-600">{t.tenantCode}</code></td><td className="px-4 py-3.5 text-slate-700">{t.contactName || "-"}</td><td className="px-4 py-3.5 text-slate-500">{t.contactPhone || "-"}</td><td className="px-4 py-3.5"><span className="rounded bg-blue-50 px-2 py-1 text-xs text-blue-700">{t.packageName || "未分配"}</span></td><td className="px-4 py-3.5 text-slate-500">{new Date(t.effectiveAt).toLocaleDateString("zh-CN")}</td><td className="px-4 py-3.5 text-center font-medium text-slate-700">{t.accountUsed} / {t.effectiveAccountLimit ?? "不限"}</td><td className="px-4 py-3.5 text-slate-500">{t.expireTime ? new Date(t.expireTime).toLocaleDateString("zh-CN") : "长期"}</td><td className="px-4 py-3.5"><button onClick={() => handleToggleStatus(t)} className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium transition ${t.status === "ACTIVE" ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100" : "bg-red-50 text-red-700 hover:bg-red-100"}`}>{t.status === "ACTIVE" ? "启用" : "禁用"}</button></td><td className="px-5 py-3.5 text-right"><div className="inline-flex gap-3 text-sm"><button onClick={() => handleHistory(t)} className="text-slate-600 hover:text-slate-900">历史</button><button onClick={() => handleAssignPackage(t)} className="text-violet-600 hover:text-violet-800">套餐</button><button onClick={() => handleEdit(t)} className="text-blue-600 hover:text-blue-800">编辑</button><button onClick={() => handleDelete(t)} className="text-red-500 hover:text-red-700">删除</button></div></td></tr>)}</tbody>
+          <table className="w-full text-left text-xs text-slate-600">
+            <thead className="border-b border-slate-100 bg-slate-50/80 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+              <tr>
+                <th className="px-5 py-3">租户编码</th>
+                <th className="px-5 py-3">租户名称</th>
+                <th className="px-5 py-3">绑定套餐</th>
+                <th className="px-5 py-3">账号使用 / 限额</th>
+                <th className="px-5 py-3">状态</th>
+                <th className="px-5 py-3">有效期至</th>
+                <th className="px-5 py-3 text-right">操作</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {loading ? (
+                <tr><td colSpan={7} className="py-12 text-center text-xs text-slate-400">正在加载租户列表...</td></tr>
+              ) : data.items.length === 0 ? (
+                <tr><td colSpan={7} className="py-12 text-center text-xs text-slate-400">暂无租户数据</td></tr>
+              ) : (
+                data.items.map((tenant) => (
+                  <tr key={tenant.id} className="hover:bg-slate-50/70 transition">
+                    <td className="px-5 py-3 font-mono font-semibold text-indigo-600">{tenant.tenantCode}</td>
+                    <td className="px-5 py-3 font-medium text-slate-900">{tenant.name}</td>
+                    <td className="px-5 py-3">
+                      <span className="inline-flex rounded bg-blue-50 px-2 py-0.5 text-[11px] font-medium text-blue-700">
+                        {tenant.packageName || "未指定套餐"}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3 font-mono">
+                      {tenant.accountUsed} / {tenant.effectiveAccountLimit ?? "不限"}
+                    </td>
+                    <td className="px-5 py-3">
+                      <span className={`inline-flex rounded-full px-2 py-0.5 text-[11px] font-medium ${tenant.status === "ACTIVE" ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"}`}>
+                        {tenant.status === "ACTIVE" ? "正常" : "停用"}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3 text-slate-500">{tenant.expireTime ? tenant.expireTime.split("T")[0] : "永久"}</td>
+                    <td className="px-5 py-3 text-right whitespace-nowrap">
+                      <button onClick={() => { setAssignTarget(tenant); setShowAssignPkg(true) }} className="mr-2 text-indigo-600 hover:text-indigo-800">分配套餐</button>
+                      <button onClick={() => setHistoryTarget(tenant)} className="mr-2 text-slate-600 hover:text-slate-800">履约历史</button>
+                      <button onClick={() => handleEdit(tenant)} className="mr-2 text-blue-600 hover:text-blue-800">编辑</button>
+                      <button onClick={() => handleToggleStatus(tenant)} className="mr-2 text-amber-600 hover:text-amber-800">{tenant.status === "ACTIVE" ? "停用" : "启用"}</button>
+                      <button onClick={() => handleDelete(tenant)} className="text-rose-600 hover:text-rose-800">删除</button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
           </table>
         </div>
-        {totalPages > 1 && <div className="flex items-center justify-between border-t border-slate-100 px-5 py-3"><span className="text-xs text-slate-500">第 {page} / {totalPages} 页</span><div className="flex gap-2"><button disabled={page <= 1} onClick={() => setPage((p) => p - 1)} className="h-8 rounded-lg border border-slate-200 px-3 text-xs text-slate-600 disabled:cursor-not-allowed disabled:opacity-50">上一页</button><button disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)} className="h-8 rounded-lg border border-slate-200 px-3 text-xs text-slate-600 disabled:cursor-not-allowed disabled:opacity-50">下一页</button></div></div>}
       </div>
+
+      {/* 通用底部分页控件 */}
+      <Pagination
+        total={data.total}
+        page={page}
+        pageSize={pageSize}
+        onPageChange={(p) => {
+          setPage(p)
+          loadData(p, pageSize, keyword, statusFilter)
+        }}
+        onPageSizeChange={(ps) => {
+          setPageSize(ps)
+          setPage(1)
+          loadData(1, ps, keyword, statusFilter)
+        }}
+      />
 
       {/* 新增/编辑弹窗 */}
       {showForm && <TenantFormDialog tenant={editingTenant} onSubmit={handleFormSubmit} onClose={() => setShowForm(false)} />}

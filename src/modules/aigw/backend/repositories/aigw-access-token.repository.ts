@@ -1,4 +1,5 @@
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
+import { getCurrentTenantId, isTenantRequired, isPlatformContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { SEED_AI_TOKENS } from "@prisma/data"
 
 export type AigwAccessTokenRow = {
@@ -40,17 +41,31 @@ function mapFromDb(r: any): AigwAccessTokenRow {
   }
 }
 
+/**
+ * 租户唯一来源 = 全局上下文（AGENTS.md §4.8）。
+ * 有上下文即过滤（admin 场景）；无上下文（relay/open 鉴权）不过滤，行为与现状兼容。
+ */
+function currentTenantId(): string | undefined {
+  const tenantId = getCurrentTenantId()
+  if (tenantId) return tenantId
+  if (isTenantRequired() && !isPlatformContext()) throw new Error("令牌数据访问缺少租户上下文")
+  return undefined
+}
+
 export const AigwAccessTokenRepository = {
   async findAll(params?: { status?: string; keyword?: string }): Promise<AigwAccessTokenRow[]> {
+    const tenantId = currentTenantId()
     if (hasRealDatabase()) {
       const db = await getKyselyDb()
       let query = db.selectFrom("ai_access_token" as any).selectAll().where("deleted" as any, "=", false)
+      if (tenantId) query = query.where("tenant_id" as any, "=", tenantId)
       if (params?.status) query = query.where("status" as any, "=", params.status)
       const rows = await query.execute()
       return rows.map(mapFromDb)
     }
 
     let list = [...MEMORY_STORE].filter((r) => !r.deleted)
+    if (tenantId) list = list.filter((r) => !r.tenantId || r.tenantId === tenantId)
     if (params?.status) list = list.filter((r) => r.status === params.status)
     if (params?.keyword) {
       const kw = params.keyword.toLowerCase()
@@ -59,32 +74,56 @@ export const AigwAccessTokenRepository = {
     return list
   },
 
-  async findById(id: string): Promise<AigwAccessTokenRow | null> {
+  async findByIds(ids: string[]): Promise<AigwAccessTokenRow[]> {
+    if (!ids.length) return []
+    const tenantId = currentTenantId()
     if (hasRealDatabase()) {
       const db = await getKyselyDb()
-      const r = await db.selectFrom("ai_access_token" as any).selectAll().where("id" as any, "=", id).executeTakeFirst()
+      let query = db.selectFrom("ai_access_token" as any).selectAll().where("id" as any, "in", ids)
+      if (tenantId) query = query.where("tenant_id" as any, "=", tenantId)
+      const rows = await query.execute()
+      return rows.map(mapFromDb)
+    }
+    const set = new Set(ids)
+    return MEMORY_STORE.filter((r) => set.has(r.id) && !r.deleted && (!tenantId || !r.tenantId || r.tenantId === tenantId))
+  },
+
+  async findById(id: string): Promise<AigwAccessTokenRow | null> {
+    const tenantId = currentTenantId()
+    if (hasRealDatabase()) {
+      const db = await getKyselyDb()
+      let query = db.selectFrom("ai_access_token" as any).selectAll().where("id" as any, "=", id)
+      if (tenantId) query = query.where("tenant_id" as any, "=", tenantId)
+      const r = await query.executeTakeFirst()
       if (!r) return null
       return mapFromDb(r)
     }
-    return MEMORY_STORE.find((r) => r.id === id && !r.deleted) ?? null
+    return MEMORY_STORE.find((r) => r.id === id && !r.deleted && (!tenantId || !r.tenantId || r.tenantId === tenantId)) ?? null
   },
 
   async findByKey(key: string): Promise<AigwAccessTokenRow | null> {
+    const tenantId = currentTenantId()
     if (hasRealDatabase()) {
       const db = await getKyselyDb()
-      const r = await db.selectFrom("ai_access_token" as any).selectAll().where("key" as any, "=", key).where("deleted" as any, "=", false).executeTakeFirst()
+      let query = db.selectFrom("ai_access_token" as any).selectAll().where("key" as any, "=", key).where("deleted" as any, "=", false)
+      if (tenantId) query = query.where("tenant_id" as any, "=", tenantId)
+      const r = await query.executeTakeFirst()
       if (!r) return null
       return mapFromDb(r)
     }
-    return MEMORY_STORE.find((r) => r.key === key && !r.deleted) ?? null
+    return MEMORY_STORE.find((r) => r.key === key && !r.deleted && (!tenantId || !r.tenantId || r.tenantId === tenantId)) ?? null
   },
 
   async create(data: Omit<AigwAccessTokenRow, "id" | "createdAt">): Promise<AigwAccessTokenRow> {
     const now = new Date().toISOString()
     const id = `tok-${Date.now().toString(36)}-${(++memorySeq).toString(36)}`
+    // 租户优先级：显式传入（资源归属）→ 全局上下文；禁止硬编码 "1"
+    const tenantId = data.tenantId ?? currentTenantId()
+    if (isTenantRequired() && !tenantId) throw new Error("令牌创建缺少租户上下文")
     const row: AigwAccessTokenRow = {
       ...data,
       id,
+      tenantId: tenantId ?? null,
       createdAt: now,
       updatedAt: now,
       deleted: false,
@@ -102,7 +141,7 @@ export const AigwAccessTokenRepository = {
         ip_allowlist: JSON.stringify(data.ipAllowlist ?? []),
         group: data.group,
         expires_at: data.expiresAt ? new Date(data.expiresAt) : null,
-        tenant_id: data.tenantId ?? "1",
+        tenant_id: tenantId ?? null,
         created_at: now,
         updated_at: now,
         deleted: false,
@@ -158,3 +197,6 @@ export const AigwAccessTokenRepository = {
     }
   },
 }
+
+export const aigwAccessTokenRepository = AigwAccessTokenRepository
+

@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest"
-import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
 import { SystemCaptchaService } from "../captcha.service"
 import { SystemDictService } from "../dict.service"
 import { SystemPermissionService } from "../permission.service"
+import { SystemRoleRepository } from "@/modules/system/backend/repositories/role.repository"
+import { SystemMenuRepository } from "@/modules/system/backend/repositories/menu.repository"
+import { SystemUserRepository } from "@/modules/system/backend/repositories/user.repository"
 
 describe("system persistence services", () => {
   it("persists captcha records and verifies them", async () => {
@@ -17,33 +19,51 @@ describe("system persistence services", () => {
   })
 
   it("stores and lists dict items from the database", async () => {
-    const created = await SystemDictService.create("op-1", {
-      dictType: "common_status",
+    const type = await SystemDictService.createType({
+      name: "测试状态",
+      type: `test_status_${Date.now()}`,
+      status: "ACTIVE",
+    })
+
+    const created = await SystemDictService.createData({
+      dictTypeId: type.id,
       label: "测试",
       value: "TEST",
       status: "ACTIVE",
     })
 
-    const result = await SystemDictService.list({ page: 1, pageSize: 20, keyword: "TEST" })
+    const result = await SystemDictService.listData(type.id)
 
-    expect(created.value).toBe("TEST")
-    expect(result.items.some((item) => item.value === "TEST")).toBe(true)
+    expect(created.id).toBeDefined()
+    expect(result.some((item) => item.value === "TEST")).toBe(true)
   })
 
   it("assigns user roles and role menus through the database", async () => {
     const stamp = Date.now()
-    const role = await ruoyiPrisma.adminRole.create({
-      data: { id: `role-test-${stamp}`, name: "测试角色", code: `TEST_ROLE_${stamp}`, sortOrder: 999, status: "ACTIVE" },
+    const role = await SystemRoleRepository.create({
+      name: "测试角色",
+      code: `TEST_ROLE_${stamp}`,
+      sort: 999,
+      status: "ACTIVE",
     })
-    const menu = await ruoyiPrisma.adminMenu.create({
-      data: { id: `menu-test-${stamp}`, key: `menu-test-${stamp}`, name: "测试菜单", path: "/test", permission: "test:view", type: "MENU", sortOrder: 1 },
+    const menu = await SystemMenuRepository.create({
+      name: "测试菜单",
+      path: "/test",
+      permission: "test:view",
+      type: "MENU",
+      sort: 1,
     })
-    const admin = await ruoyiPrisma.admin.create({
-      data: { id: `admin-test-${stamp}`, username: `test-${stamp}`, password: "x", phone: `1380000${stamp.toString().slice(-4)}`, status: "ACTIVE" },
+    const user = await SystemUserRepository.create({
+      username: `test-${stamp}`,
+      nickname: `测试-${stamp}`,
+      password: "x",
+      salt: "s",
+      phone: `1380000${stamp.toString().slice(-4)}`,
+      status: "ACTIVE",
     })
 
     const userRole = await SystemPermissionService.assignUserRole("op-1", {
-      userId: admin.id,
+      userId: user.id,
       roleIds: [role.id],
     })
     const roleMenu = await SystemPermissionService.assignRoleMenu("op-1", {

@@ -180,6 +180,7 @@ export const codegenTableUpdateSchema = codegenTableIdSchema.extend({
   template: z.literal("CRUD").optional(),
   scene: z.enum(["ADMIN", "APP"]).optional(),
   permissionPrefix: z.string().trim().nullable().optional(),
+  parentMenuId: z.string().trim().nullable().optional(),
   columns: z.array(z.object({ name: z.string().trim().min(1) }).passthrough()).optional(),
 })
 

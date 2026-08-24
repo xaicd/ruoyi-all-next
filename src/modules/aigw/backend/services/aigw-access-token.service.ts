@@ -52,6 +52,7 @@ export class AigwAccessTokenService {
       ipAllowlist: record.ipAllowlist,
       group: record.group,
       expiresAt: record.expiresAt ?? undefined,
+      tenantId: record.tenantId ?? undefined,
       createdAt: record.createdAt,
     })
     domainLog.audit("aigw.token.create", { targetType: "AIGW_TOKEN", targetId: record.id })

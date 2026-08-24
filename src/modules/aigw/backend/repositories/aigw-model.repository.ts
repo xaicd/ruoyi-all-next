@@ -100,3 +100,6 @@ export const AigwModelRepository = {
     return row
   },
 }
+
+export const aigwModelRepository = AigwModelRepository
+

@@ -2,42 +2,44 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { request, API } from "@/modules/shared/frontend/lib/request"
+import { Pagination } from "@/modules/shared/frontend/components/pagination"
 
 type InfraConfig = { id: string; category: string; name: string; configKey: string; value: string; visible: boolean; remark: string | null; createdAt: string }
 type PageData = { items: InfraConfig[]; total: number; page: number; pageSize: number }
 
 export default function InfraConfigsPage() {
-  const [data, setData] = useState<PageData>({ items: [], total: 0, page: 1, pageSize: 20 })
+  const [data, setData] = useState<PageData>({ items: [], total: 0, page: 1, pageSize: 10 })
   const [loading, setLoading] = useState(false)
   const [keyword, setKeyword] = useState("")
   const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState<InfraConfig | null>(null)
 
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async (p = page, ps = pageSize, kw = keyword) => {
     setLoading(true)
     try {
-      const res = await request.get(API.CONFIGS, { page, pageSize: 20, keyword: keyword || undefined })
+      const res = await request.get(API.CONFIGS, { page: p, pageSize: ps, keyword: kw || undefined })
       if (res.success) setData(res.data)
     } finally { setLoading(false) }
-  }, [page, keyword])
+  }, [page, pageSize, keyword])
 
-  useEffect(() => { loadData() }, [loadData])
+  useEffect(() => {
+    loadData(page, pageSize, keyword)
+  }, [loadData, page, pageSize])
 
   const handleDelete = async (config: InfraConfig) => {
     if (!confirm(`确认删除配置「${config.name}」？`)) return
     const res = await request.delete(`${API.CONFIGS}/${config.id}`)
-    if (res.success) loadData(); else alert(res.error)
+    if (res.success) loadData(page, pageSize, keyword); else alert(res.error)
   }
 
   const handleSubmit = async (formData: Record<string, any>) => {
     const res = editing
       ? await request.put(`${API.CONFIGS}/${editing.id}`, formData)
       : await request.post(API.CONFIGS, formData)
-    if (res.success) { setShowForm(false); loadData() } else alert(res.error)
+    if (res.success) { setShowForm(false); loadData(page, pageSize, keyword) } else alert(res.error)
   }
-
-  const totalPages = Math.ceil(data.total / data.pageSize)
 
   return (
     <div className="space-y-4">
@@ -46,13 +48,18 @@ export default function InfraConfigsPage() {
         <button onClick={() => { setEditing(null); setShowForm(true) }} className="h-9 rounded-md bg-blue-600 px-4 text-sm font-medium text-white hover:bg-blue-700">新增配置</button>
       </div>
 
-      <div className="rounded-lg border bg-white p-4">
-        <div className="flex items-center gap-3">
-          <input value={keyword} onChange={(e) => setKeyword(e.target.value)} onKeyDown={(e) => e.key === "Enter" && loadData()} placeholder="配置名 / Key" className="h-9 w-56 rounded-md border px-3 text-sm" />
-          <button onClick={() => { setPage(1); loadData() }} className="h-9 rounded-md bg-slate-900 px-4 text-sm text-white">查询</button>
-          <button onClick={() => { setKeyword(""); setPage(1) }} className="h-9 rounded-md border px-4 text-sm">重置</button>
-          <span className="ml-auto text-xs text-slate-400">共 {data.total} 条</span>
-        </div>
+      <div className="flex items-center gap-2 rounded-lg border bg-white p-4">
+        <input
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          placeholder="搜索配置名称 / Key"
+          className="h-9 w-64 rounded-md border px-3 text-sm"
+        />
+        <button onClick={() => { setPage(1); loadData(1, pageSize, keyword) }} className="h-9 rounded-md bg-slate-900 px-4 text-sm text-white">查询</button>
+        <button onClick={() => { setKeyword(""); setPage(1); loadData(1, pageSize, "") }} className="h-9 rounded-md border px-4 text-sm">重置</button>
+        <span className="ml-auto text-xs text-slate-500">
+          共 <span className="font-semibold text-slate-900">{data.total}</span> 个配置项
+        </span>
       </div>
 
       <div className="rounded-lg border bg-white">
@@ -61,8 +68,8 @@ export default function InfraConfigsPage() {
             <th className="px-4 py-3">配置名称</th><th className="px-4 py-3">Key</th><th className="px-4 py-3">Value</th><th className="px-4 py-3">分类</th><th className="px-4 py-3 text-right">操作</th>
           </tr></thead>
           <tbody>
-            {loading ? <tr><td colSpan={5} className="px-4 py-12 text-center text-slate-400">加载中...</td></tr>
-            : data.items.length === 0 ? <tr><td colSpan={5} className="px-4 py-12 text-center text-slate-400">暂无数据</td></tr>
+            {loading ? <tr><td colSpan={5} className="py-8 text-center text-slate-400">加载中...</td></tr>
+            : data.items.length === 0 ? <tr><td colSpan={5} className="py-8 text-center text-slate-400">暂无数据</td></tr>
             : data.items.map((config) => (
               <tr key={config.id} className="border-b last:border-0 hover:bg-slate-50">
                 <td className="px-4 py-3 font-medium">{config.name}</td>
@@ -77,8 +84,23 @@ export default function InfraConfigsPage() {
             ))}
           </tbody>
         </table>
-        {totalPages > 1 && <div className="flex items-center justify-between border-t px-4 py-3"><span className="text-xs text-slate-500">第 {page}/{totalPages} 页</span><div className="flex gap-1"><button disabled={page <= 1} onClick={() => setPage((p) => p - 1)} className="h-8 rounded border px-3 text-xs disabled:opacity-50">上一页</button><button disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)} className="h-8 rounded border px-3 text-xs disabled:opacity-50">下一页</button></div></div>}
       </div>
+
+      {/* 通用底部分页控件 */}
+      <Pagination
+        total={data.total}
+        page={page}
+        pageSize={pageSize}
+        onPageChange={(p) => {
+          setPage(p)
+          loadData(p, pageSize, keyword)
+        }}
+        onPageSizeChange={(ps) => {
+          setPageSize(ps)
+          setPage(1)
+          loadData(1, ps, keyword)
+        }}
+      />
 
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react"
 import { request, API } from "@/modules/shared/frontend/lib/request"
+import { Pagination } from "@/modules/shared/frontend/components/pagination"
 
 type SystemRole = {
   id: string
@@ -19,27 +20,30 @@ type MenuNode = { id: string; name: string; permission: string | null; children:
 type RoleMenuIdsResponse = { menuIds: string[] }
 
 export default function SystemRolesPage() {
-  const [data, setData] = useState<PageData>({ items: [], total: 0, page: 1, pageSize: 20 })
+  const [data, setData] = useState<PageData>({ items: [], total: 0, page: 1, pageSize: 10 })
   const [loading, setLoading] = useState(false)
   const [keyword, setKeyword] = useState("")
   const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState<SystemRole | null>(null)
 
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async (p = page, ps = pageSize, kw = keyword) => {
     setLoading(true)
     try {
-      const res = await request.get(API.ROLES, { page, pageSize: 20, keyword: keyword || undefined })
+      const res = await request.get(API.ROLES, { page: p, pageSize: ps, keyword: kw || undefined })
       if (res.success) setData(res.data)
     } finally { setLoading(false) }
-  }, [page, keyword])
+  }, [page, pageSize, keyword])
 
-  useEffect(() => { loadData() }, [loadData])
+  useEffect(() => {
+    loadData(page, pageSize, keyword)
+  }, [loadData, page, pageSize])
 
   const handleDelete = async (role: SystemRole) => {
     if (!confirm(`确认删除角色「${role.name}」？`)) return
     const res = await request.delete(`${API.ROLES}/${role.id}`)
-    if (res.success) loadData(); else alert(res.error)
+    if (res.success) loadData(page, pageSize, keyword); else alert(res.error)
   }
 
   const [showMenuAssign, setShowMenuAssign] = useState(false)
@@ -54,10 +58,8 @@ export default function SystemRolesPage() {
     const res = editing
       ? await request.put(`${API.ROLES}/${editing.id}`, formData)
       : await request.post(API.ROLES, formData)
-    if (res.success) { setShowForm(false); loadData() } else alert(res.error)
+    if (res.success) { setShowForm(false); loadData(page, pageSize, keyword) } else alert(res.error)
   }
-
-  const totalPages = Math.ceil(data.total / data.pageSize)
 
   return (
     <div className="space-y-4">
@@ -69,24 +71,35 @@ export default function SystemRolesPage() {
         <button onClick={() => { setEditing(null); setShowForm(true) }} className="h-9 rounded-md bg-blue-600 px-4 text-sm font-medium text-white hover:bg-blue-700">新增角色</button>
       </div>
 
-      <div className="rounded-lg border bg-white p-4">
-        <div className="flex items-center gap-3">
-          <input value={keyword} onChange={(e) => setKeyword(e.target.value)} onKeyDown={(e) => e.key === "Enter" && loadData()} placeholder="角色名 / 编码" className="h-9 w-56 rounded-md border px-3 text-sm" />
-          <button onClick={() => { setPage(1); loadData() }} className="h-9 rounded-md bg-slate-900 px-4 text-sm text-white">查询</button>
-          <button onClick={() => { setKeyword(""); setPage(1) }} className="h-9 rounded-md border px-4 text-sm">重置</button>
-          <span className="ml-auto text-xs text-slate-400">共 {data.total} 条</span>
-        </div>
+      <div className="flex items-center gap-2 rounded-lg border bg-white p-4">
+        <input
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          placeholder="搜索角色名称/编码"
+          className="h-9 w-64 rounded-md border px-3 text-sm"
+        />
+        <button onClick={() => { setPage(1); loadData(1, pageSize, keyword) }} className="h-9 rounded-md bg-slate-900 px-4 text-sm text-white">查询</button>
+        <button onClick={() => { setKeyword(""); setPage(1); loadData(1, pageSize, "") }} className="h-9 rounded-md border px-4 text-sm">重置</button>
       </div>
 
       <div className="rounded-lg border bg-white">
         <table className="w-full text-sm">
-          <thead><tr className="border-b bg-slate-50 text-left text-xs font-medium text-slate-500">
-            <th className="px-4 py-3">角色名称</th><th className="px-4 py-3">角色编码</th><th className="px-4 py-3">排序</th><th className="px-4 py-3">状态</th><th className="px-4 py-3">数据范围</th><th className="px-4 py-3 text-right">操作</th>
-          </tr></thead>
+          <thead>
+            <tr className="border-b bg-slate-50 text-left text-xs font-medium text-slate-500">
+              <th className="px-4 py-3">角色名称</th>
+              <th className="px-4 py-3">角色编码</th>
+              <th className="px-4 py-3">显示顺序</th>
+              <th className="px-4 py-3">状态</th>
+              <th className="px-4 py-3">数据范围</th>
+              <th className="px-4 py-3 text-right">操作</th>
+            </tr>
+          </thead>
           <tbody>
-            {loading ? <tr><td colSpan={6} className="px-4 py-12 text-center text-slate-400">加载中...</td></tr>
-            : data.items.length === 0 ? <tr><td colSpan={6} className="px-4 py-12 text-center text-slate-400">暂无数据</td></tr>
-            : data.items.map((role) => (
+            {loading ? (
+              <tr><td colSpan={6} className="py-8 text-center text-slate-400">加载中...</td></tr>
+            ) : data.items.length === 0 ? (
+              <tr><td colSpan={6} className="py-8 text-center text-slate-400">暂无数据</td></tr>
+            ) : data.items.map((role) => (
               <tr key={role.id} className="border-b last:border-0 hover:bg-slate-50">
                 <td className="px-4 py-3 font-medium">{role.name}</td>
                 <td className="px-4 py-3"><code className="rounded bg-slate-100 px-2 py-1 text-xs text-slate-600">{role.code}</code></td>
@@ -102,16 +115,22 @@ export default function SystemRolesPage() {
             ))}
           </tbody>
         </table>
-        {totalPages > 1 && (
-          <div className="flex items-center justify-between border-t px-4 py-3">
-            <span className="text-xs text-slate-500">第 {page}/{totalPages} 页</span>
-            <div className="flex gap-1">
-              <button disabled={page <= 1} onClick={() => setPage((p) => p - 1)} className="h-8 rounded border px-3 text-xs disabled:opacity-50">上一页</button>
-              <button disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)} className="h-8 rounded border px-3 text-xs disabled:opacity-50">下一页</button>
-            </div>
-          </div>
-        )}
       </div>
+
+      <Pagination
+        total={data.total}
+        page={page}
+        pageSize={pageSize}
+        onPageChange={(p) => {
+          setPage(p)
+          loadData(p, pageSize, keyword)
+        }}
+        onPageSizeChange={(ps) => {
+          setPageSize(ps)
+          setPage(1)
+          loadData(1, ps, keyword)
+        }}
+      />
 
       {showForm && <RoleFormDialog role={editing} onSubmit={handleSubmit} onClose={() => setShowForm(false)} />}
       {showMenuAssign && assigningRole && <MenuAssignDialog key={`${assigningRole.id}-ruoyi-menu-permissions-v2`} role={assigningRole} onClose={() => setShowMenuAssign(false)} />}

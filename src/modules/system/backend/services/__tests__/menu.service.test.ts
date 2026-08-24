@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest"
-import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
+import { SystemMenuRepository } from "@/modules/system/backend/repositories/menu.repository"
 import { SystemMenuService } from "../menu.service"
 
 describe("SystemMenuService", () => {
@@ -8,10 +8,10 @@ describe("SystemMenuService", () => {
   })
 
   it("propagates database failures instead of falling back to mock menus", async () => {
-    vi.spyOn(ruoyiPrisma.adminMenu, "findMany").mockRejectedValueOnce(new Error("db unavailable"))
+    vi.spyOn(SystemMenuRepository, "findAll").mockRejectedValueOnce(new Error("db unavailable"))
 
     await expect(
-      SystemMenuService.list({ page: 1, pageSize: 20, keyword: "" }),
+      SystemMenuService.list({ status: "ACTIVE" }),
     ).rejects.toThrow("db unavailable")
   })
 })

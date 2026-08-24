@@ -59,6 +59,7 @@ export type CreateCodegenTableData = {
   template?: string
   scene?: string
   author?: string
+  parentMenuId?: string | null
   permissionPrefix?: string | null
   source?: CodegenTableSource
   tenantId?: string | null
@@ -145,6 +146,7 @@ export const CodegenTableRepository = {
       template: (data.template as any) ?? table.template,
       scene: (data.scene as any) ?? table.scene,
       author: data.author ?? table.author,
+      parentMenuId: data.parentMenuId !== undefined ? data.parentMenuId : table.parentMenuId,
       permissionPrefix: data.permissionPrefix ?? table.permissionPrefix,
       columns: data.columns ?? table.columns,
       updatedAt: new Date().toISOString(),

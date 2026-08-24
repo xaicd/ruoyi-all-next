@@ -2,6 +2,7 @@
  * SystemMenu Repository - 树形菜单/权限
  */
 
+import { randomUUID } from "node:crypto"
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
 import { SEED_MENUS } from "@prisma/data"
 import { withOnlineMenuCatalog } from "@/modules/online/contract/menu-catalog"
@@ -136,6 +137,7 @@ async function findByIdFromDb(id: string): Promise<SystemMenuRow | null> {
 async function createInDb(data: CreateMenuData): Promise<SystemMenuRow> {
   const db = await getKyselyDb()
   const row = await db.insertInto("system_menu").values({
+    id: (data as any).id ?? randomUUID(),
     name: data.name,
     permission: data.permission ?? null,
     type: data.type,

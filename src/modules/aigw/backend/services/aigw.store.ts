@@ -37,6 +37,7 @@ export type AigwAccessTokenRecord = {
   ipAllowlist: string[]
   group: string
   expiresAt?: string
+  tenantId?: string
   createdAt: string
 }
 
@@ -50,6 +51,7 @@ export type AigwUsageRecord = {
   success: boolean
   latencyMs: number
   error?: string
+  tenantId?: string
   createdAt: string
 }
 
@@ -83,6 +85,7 @@ const tokens: AigwAccessTokenRecord[] = [
     models: [],
     ipAllowlist: [],
     group: "default",
+    tenantId: "1",
     createdAt: "2026-01-01T00:00:00.000Z",
   },
 ]

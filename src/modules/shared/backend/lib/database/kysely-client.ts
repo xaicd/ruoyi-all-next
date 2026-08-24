@@ -10,6 +10,7 @@
 import { Kysely, DummyDriver, SqliteAdapter, SqliteIntrospector, SqliteQueryCompiler } from "kysely"
 import { getDataSourceConfig, isMemoryMode } from "./datasource-manager"
 import { writeCompactError } from "../observability"
+import { tenantIsolationPlugin } from "./tenant-isolation-plugin"
 import type { DatabaseDriver } from "./types"
 import type { DB } from "./schema"
 
@@ -90,7 +91,9 @@ export async function getKyselyDb(): Promise<Kysely<DB>> {
       dialect = createDummyDialect()
   }
 
-  _kyselyInstance = new Kysely<DB>({ dialect })
+  // 全局单例挂载租户隔离插件（AGENTS.md §4.8 / L2）：
+  // 有租户上下文时自动注入 tenant_id 过滤/填充；平台上下文与无上下文场景零改动。
+  _kyselyInstance = new Kysely<DB>({ dialect, plugins: [tenantIsolationPlugin] })
   return _kyselyInstance
 }
 

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest"
-import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
+import { SystemUserRepository } from "@/modules/system/backend/repositories/user.repository"
 import { SystemUserService } from "../user.service"
 
 describe("SystemUserService", () => {
@@ -8,7 +8,7 @@ describe("SystemUserService", () => {
   })
 
   it("propagates repository errors instead of falling back to mock data", async () => {
-    vi.spyOn(ruoyiPrisma.admin, "findMany").mockRejectedValueOnce(new Error("db unavailable"))
+    vi.spyOn(SystemUserRepository, "findList").mockRejectedValueOnce(new Error("db unavailable"))
 
     await expect(
       SystemUserService.list({ page: 1, pageSize: 20, keyword: "" }),

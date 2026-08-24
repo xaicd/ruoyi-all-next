@@ -2,6 +2,7 @@
  * SystemDict Repository - 字典类型 + 字典数据
  */
 
+import { randomUUID } from "node:crypto"
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
 import type { PageResult } from "@/modules/shared/backend/lib/database"
 import { SEED_DICT_TYPES, SEED_DICT_DATA } from "@prisma/data"
@@ -45,7 +46,7 @@ export const SystemDictTypeRepository = {
   },
 
   async create(data: CreateDictTypeData): Promise<SystemDictTypeRow> {
-    if (hasRealDatabase()) { const db = await getKyselyDb(); const row = await db.insertInto("system_dict_type").values({ name: data.name, type: data.type, status: data.status ?? "ACTIVE", remark: data.remark ?? null, updated_at: new Date(), deleted: false } as any).returningAll().executeTakeFirstOrThrow(); return mapTypeRow(row) }
+    if (hasRealDatabase()) { const db = await getKyselyDb(); const row = await db.insertInto("system_dict_type").values({ id: (data as any).id ?? randomUUID(), name: data.name, type: data.type, status: data.status ?? "ACTIVE", remark: data.remark ?? null, updated_at: new Date(), deleted: false } as any).returningAll().executeTakeFirstOrThrow(); return mapTypeRow(row) }
     const now = new Date().toISOString()
     const row: SystemDictTypeRow = { id: String(++typeIdSeq), name: data.name, type: data.type, status: data.status ?? "ACTIVE", remark: data.remark ?? null, createdAt: now, updatedAt: now }
     DICT_TYPES.push(row)
@@ -89,7 +90,7 @@ export const SystemDictDataRepository = {
   },
 
   async create(data: CreateDictDataInput): Promise<SystemDictDataRow> {
-    if (hasRealDatabase()) { const db = await getKyselyDb(); const row = await db.insertInto("system_dict_data").values({ dict_type_id: data.dictTypeId, label: data.label, value: data.value, sort: data.sort ?? 0, status: data.status ?? "ACTIVE", color_type: data.colorType ?? null, remark: data.remark ?? null, updated_at: new Date(), deleted: false } as any).returningAll().executeTakeFirstOrThrow(); return mapDataRow(row) }
+    if (hasRealDatabase()) { const db = await getKyselyDb(); const row = await db.insertInto("system_dict_data").values({ id: (data as any).id ?? randomUUID(), dict_type_id: data.dictTypeId, label: data.label, value: data.value, sort: data.sort ?? 0, status: data.status ?? "ACTIVE", color_type: data.colorType ?? null, remark: data.remark ?? null, updated_at: new Date(), deleted: false } as any).returningAll().executeTakeFirstOrThrow(); return mapDataRow(row) }
     const now = new Date().toISOString()
     const row: SystemDictDataRow = { id: String(++dataIdSeq), dictTypeId: data.dictTypeId, label: data.label, value: data.value, sort: data.sort ?? 0, status: data.status ?? "ACTIVE", colorType: data.colorType ?? null, remark: data.remark ?? null, createdAt: now, updatedAt: now }
     DICT_DATA.push(row)

@@ -27,6 +27,7 @@ type PageData = {
 // === API ===
 import { request, API } from "@/modules/shared/frontend/lib/request"
 import { DepartmentTreeSelect } from "@/modules/system/frontend/components/department-tree-select"
+import { Pagination } from "@/modules/shared/frontend/components/pagination"
 
 async function fetchUsers(params: {
   page: number
@@ -55,22 +56,23 @@ async function updateUserStatus(id: string, status: string) {
 
 // === Main Component ===
 export default function SystemUsersPage() {
-  const [data, setData] = useState<PageData>({ items: [], total: 0, page: 1, pageSize: 20 })
+  const [data, setData] = useState<PageData>({ items: [], total: 0, page: 1, pageSize: 10 })
   const [loading, setLoading] = useState(false)
   const [keyword, setKeyword] = useState("")
   const [statusFilter, setStatusFilter] = useState("")
   const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
   const [showForm, setShowForm] = useState(false)
   const [editingUser, setEditingUser] = useState<SystemUser | null>(null)
 
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async (p = page, ps = pageSize, kw = keyword, st = statusFilter) => {
     setLoading(true)
     try {
       const result = await fetchUsers({
-        page,
-        pageSize: 20,
-        keyword: keyword || undefined,
-        status: statusFilter || undefined,
+        page: p,
+        pageSize: ps,
+        keyword: kw || undefined,
+        status: st || undefined,
       })
       if (result.success && result.data) {
         setData(result.data)
@@ -78,21 +80,22 @@ export default function SystemUsersPage() {
     } finally {
       setLoading(false)
     }
-  }, [page, keyword, statusFilter])
+  }, [page, pageSize, keyword, statusFilter])
 
   useEffect(() => {
-    loadData()
-  }, [loadData])
+    loadData(page, pageSize, keyword, statusFilter)
+  }, [loadData, page, pageSize])
 
   const handleSearch = () => {
     setPage(1)
-    loadData()
+    loadData(1, pageSize, keyword, statusFilter)
   }
 
   const handleReset = () => {
     setKeyword("")
     setStatusFilter("")
     setPage(1)
+    loadData(1, pageSize, "", "")
   }
 
   const handleCreate = () => {
@@ -264,32 +267,23 @@ export default function SystemUsersPage() {
             </tbody>
           </table>
         </div>
-
-        {/* 分页 */}
-        {totalPages > 1 && (
-          <div className="flex items-center justify-between border-t px-4 py-3">
-            <span className="text-xs text-slate-500">
-              第 {page} / {totalPages} 页
-            </span>
-            <div className="flex gap-1">
-              <button
-                disabled={page <= 1}
-                onClick={() => setPage((p) => p - 1)}
-                className="h-8 rounded border px-3 text-xs disabled:opacity-50"
-              >
-                上一页
-              </button>
-              <button
-                disabled={page >= totalPages}
-                onClick={() => setPage((p) => p + 1)}
-                className="h-8 rounded border px-3 text-xs disabled:opacity-50"
-              >
-                下一页
-              </button>
-            </div>
-          </div>
-        )}
       </div>
+
+      {/* 通用底部分页控件 */}
+      <Pagination
+        total={data.total}
+        page={page}
+        pageSize={pageSize}
+        onPageChange={(p) => {
+          setPage(p)
+          loadData(p, pageSize, keyword, statusFilter)
+        }}
+        onPageSizeChange={(ps) => {
+          setPageSize(ps)
+          setPage(1)
+          loadData(1, ps, keyword, statusFilter)
+        }}
+      />
 
       {/* 新增/编辑弹窗 */}
       {showForm && (

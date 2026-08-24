@@ -3,6 +3,7 @@
  * 双模式：真实 DB (Kysely) / 内存存储
  */
 
+import { randomUUID } from "node:crypto"
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
 import type { PageResult } from "@/modules/shared/backend/lib/database"
 import { getCurrentTenantId, isPlatformContext, isTenantRequired } from "@/modules/shared/backend/lib/biz-tenant"
@@ -133,6 +134,7 @@ async function findByCodeFromDb(code: string, tenantId?: string): Promise<System
 async function createInDb(data: CreateRoleData, tenantId?: string): Promise<SystemRoleRow> {
   const db = await getKyselyDb()
   const row = await db.insertInto("system_role").values({
+    id: (data as any).id ?? randomUUID(),
     name: data.name,
     code: data.code,
     sort: data.sort ?? 0,
