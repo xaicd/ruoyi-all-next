@@ -23,5 +23,8 @@ describe("agent-profile workspace bundle", () => {
     expect(profile.seamGraph.path).toBe(SEAM_GRAPH_REL)
     expect(profile.trace.sprintProd).toBe("docs/features/sprint-prod/")
     expect(profile.trace.writer).toBe("scripts/write-harness-trace.cjs")
+    expect(profile.npc.layers.L0.skills).toEqual(["coding", "automated-testing", "agent-harness"])
+    expect(profile.npc.layers.L4.skills).toEqual(["devops"])
+    expect(profile.npc.forbiddenSkillSources).toEqual(expect.arrayContaining(["crush"]))
   })
 })

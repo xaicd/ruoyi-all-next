@@ -115,7 +115,7 @@ dsh：一个能力必须同时有 Service Definition、Provider、Consumer。本
 5. **门禁**：`npm run check`；发布前 strict。
 6. **反哺**：通用能力按五要素清单迁回本基座（AGENTS.md §17.2）。
 
-NPC 角色与 Skill 映射（DigitalStaff L0–L4 对基座 Skill，不改 DigitalStaff 源码）：
+NPC 角色与 Skill 映射（DigitalStaff L0–L8 对基座 Skill；真源在本仓 `npc.layers`，DigitalStaff 只读取）：
 
 | NPC 层 | 角色 | 必开 Skill |
 |---|---|---|
@@ -124,7 +124,13 @@ NPC 角色与 Skill 映射（DigitalStaff L0–L4 对基座 Skill，不改 Digit
 | L2 | API 契约 | api-design、architecture-design |
 | L3 | 可观测 | devops、security |
 | L4 | 部署 | devops |
+| L5 | 文档 | product-requirements |
+| L6 | 数据库 | database-design、database-compatibility |
+| L7 | UI | ui-design、ui-framework-governance |
+| L8 | 测试 | automated-testing |
 | 业务开发 | 全链路 | product-requirements → new-feature |
+
+机器真源：`agent-profile.json` 的 `npc.layers`。DigitalStaff 只读此表，禁止把 Crush 技能名写进 ruoyi 工作区。
 
 ## 8. 后期进化批次（证据驱动，未落地不得标 DONE）
 
@@ -134,7 +140,7 @@ NPC 角色与 Skill 映射（DigitalStaff L0–L4 对基座 Skill，不改 Digit
 | **P1** | `project:create --profile/--bundle` | 已落地：可孵出 minimal（保留 online/ai/aigw 伴生域） |
 | **P2** | 由 catalog + contract 生成 seam 图 | 已落地：`npm run domain:seams`，`domain:check` 禁止漂移 |
 | **P3** | Agent 动作轨迹与 sprint-prod / check 产物对齐 | 已落地（本仓）：`npm run check` 写 `harness-trace-latest.json`；会话事件仍归 DigitalStaff |
-| **P4** | DigitalStaff Native 读取本仓库 `agent-profile.json` 作为 workspace plugin | Loop 仍在 DigitalStaff，不反向依赖本仓库运行时 |
+| **P4** | DigitalStaff Native 读取本仓库 `agent-profile.json` 作为 workspace plugin | A1–A4 已在 DigitalStaff 落地；A5 技能映射真源在 `npc.layers` |
 
 ## 9. 检查清单
 

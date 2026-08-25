@@ -99,6 +99,20 @@
     "gates": ["npm run check", "npm run harness:check"],
     "strictGates": ["npm run ruoyi:matrix:check:strict", "npm run ruoyi:governance:check:strict"],
     "seamCommand": "npm run domain:seams",
+    "skillsDir": ".agents/skills",
+    "forbiddenSkillSources": ["crush", "pod"],
+    "layers": {
+      "L0": { "role": "code-maintain", "skills": ["coding", "automated-testing", "agent-harness"] },
+      "L1": { "role": "service-governance", "skills": ["service-governance", "microservice-evolution"] },
+      "L2": { "role": "api-contract", "skills": ["api-design", "architecture-design"] },
+      "L3": { "role": "observability", "skills": ["devops", "security"] },
+      "L4": { "role": "deploy", "skills": ["devops"] },
+      "L5": { "role": "docs", "skills": ["product-requirements"] },
+      "L6": { "role": "database", "skills": ["database-design", "database-compatibility"] },
+      "L7": { "role": "ui", "skills": ["ui-design", "ui-framework-governance"] },
+      "L8": { "role": "test", "skills": ["automated-testing"] },
+      "business": { "role": "full-delivery", "skills": ["product-requirements", "new-feature"] }
+    },
     "portBack": ["src/modules/{domain}/", "src/app/api/v1/admin/{domain}/", "src/app/(admin-pages)/admin/{domain}/", "prisma/migrations/", "permissions.ts", "domain-catalog.json"]
   },
   "absorbFromDeepseekHarness": [

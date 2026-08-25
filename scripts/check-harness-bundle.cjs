@@ -96,4 +96,25 @@ if (!profile.trace?.sprintProd || !profile.trace?.gateArtifact || !profile.trace
 const writerRel = profile.trace.writer
 if (!fs.existsSync(path.join(ROOT, ...writerRel.split("/")))) fail(`missing trace writer ${writerRel}`)
 
-console.log(`[harness-bundle] PASS: workspace-bundle, ${graph.domains.length} seams, hatch P1, prompt assembly`)
+const CRUSH_SKILL_NAMES = new Set(["git-flow", "code-review", "build-project", "run-preview", "test-validate", "deploy-artifact"])
+const layers = profile.npc?.layers
+if (!layers || !layers.L0 || !layers.L4) fail("agent-profile.npc.layers must declare at least L0 and L4")
+const skillsDir = profile.npc?.skillsDir || ".agents/skills"
+const seenSkills = new Set()
+for (const [layer, spec] of Object.entries(layers)) {
+  if (!spec || !Array.isArray(spec.skills) || spec.skills.length === 0) {
+    fail(`npc.layers.${layer} must list base skills`)
+  }
+  for (const skill of spec.skills) {
+    const name = String(skill || "").trim()
+    if (!name) fail(`npc.layers.${layer} has an empty skill name`)
+    if (CRUSH_SKILL_NAMES.has(name) || name.toLowerCase().includes("crush")) {
+      fail(`npc.layers.${layer} must not use Crush skill name ${name}`)
+    }
+    const skillFile = path.join(ROOT, skillsDir, name, "SKILL.md")
+    if (!fs.existsSync(skillFile)) fail(`npc.layers.${layer} skill missing: ${skillsDir}/${name}/SKILL.md`)
+    seenSkills.add(name)
+  }
+}
+
+console.log(`[harness-bundle] PASS: workspace-bundle, ${graph.domains.length} seams, hatch P1, ${seenSkills.size} layer skills`)
