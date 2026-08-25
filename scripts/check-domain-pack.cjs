@@ -2,6 +2,7 @@ const fs = require("fs")
 const path = require("path")
 const { ROOT, listDomains, toYaml, manifestPath } = require("./lib/domain-catalog.cjs")
 const { loadRpcActions, renderDomain, contractPaths } = require("./lib/rpc-contracts.cjs")
+const { assertSeamGraphMatches, SEAM_GRAPH_REL } = require("./lib/seam-graph.cjs")
 
 function exists(target) {
   return fs.existsSync(path.join(ROOT, target))
@@ -12,7 +13,16 @@ function fail(message) {
 }
 
 const domains = listDomains()
-if (domains.length < 16) fail(`expected at least 16 packable domains, found ${domains.length}`)
+const hatchManifestPath = path.join(ROOT, "src", "modules", "shared", "contract", "hatch-manifest.json")
+const hatch = fs.existsSync(hatchManifestPath) ? JSON.parse(fs.readFileSync(hatchManifestPath, "utf8")) : null
+if (!hatch?.pruned && domains.length < 16) fail(`expected at least 16 packable domains, found ${domains.length}`)
+if (hatch?.pruned && Array.isArray(hatch.domains)) {
+  const catalogNames = domains.map((item) => item.name).slice().sort()
+  const hatchNames = [...hatch.domains].sort()
+  if (catalogNames.join(",") !== hatchNames.join(",")) {
+    fail(`hatch-manifest domains must match domain-catalog (${hatchNames.join(", ")})`)
+  }
+}
 
 const ports = new Set()
 const envs = new Set()
@@ -67,4 +77,10 @@ if (!fs.existsSync(path.join(ROOT, "src", "app", "api", "internal", "rpc", "rout
   fail("missing src/app/api/internal/rpc/route.ts for split-process RPC")
 }
 
-console.log(`[domain-pack:check] PASS: ${domains.length} domains have packable modules, API prefixes, route manifests, RPC contracts, and Go stubs`)
+try {
+  assertSeamGraphMatches()
+} catch (error) {
+  fail(error.message || String(error))
+}
+
+console.log(`[domain-pack:check] PASS: ${domains.length} domains have packable modules, API prefixes, route manifests, RPC contracts, Go stubs, and ${SEAM_GRAPH_REL}`)

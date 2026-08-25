@@ -121,6 +121,9 @@ public/uploads/
 public/sounds/
 public/dvr/
 
+# Last npm run check stamp (local replay; not a second domain list)
+docs/architecture/artifacts/harness-trace-latest.json
+
 # 数据库自动备份（必须排除在 git 之外）
 backups/
 *.dump

@@ -1,6 +1,6 @@
 # ruoyi-all-next 开发工作手册
 
-更新时间：2026-08-20
+更新时间：2026-08-25
 
 本文件是 ruoyi-all-next 的独立开发规范，覆盖架构边界、研发流程、测试门禁、运行部署与交付标准。当前仓库根目录即本项目，命令均在仓库根执行。
 
@@ -9,6 +9,7 @@
 1. ruoyi-all-next 是基于 Next.js 的 RuoYi 能力迁移与复用基座。
 2. 目标是以模块化单体方式先完成全域能力吸收，再按域支持独立拆分。
 3. 当前阶段坚持“证据驱动迁移”：任何能力声明必须有扫描产物与代码落地。
+4. 本仓库同时是新业务项目与 DigitalStaff NPC 员工独立开发的底层模板（Workspace Bundle）。Agent Loop 留在 DigitalStaff；本仓按 DeepSeek Harness 思想做可组合、可追溯进化，见 §18。
 
 ## 2. 适用范围与边界
 
@@ -219,6 +220,7 @@ CI 前置检查：
 3. ui-framework-governance：docs/skills/ruoyi-all-next/ui-framework-governance.SKILL.md
 4. microservice-evolution：docs/skills/ruoyi-all-next/microservice-evolution.SKILL.md
 5. ui-ux-pro-max：.kiro/steering/ui-ux-pro-max/SKILL.md
+6. agent-harness：.agents/skills/agent-harness/SKILL.md
 
 启用规则：
 
@@ -227,6 +229,7 @@ CI 前置检查：
 3. 涉及页面模板、组件结构或交互规范时，启用 ui-framework-governance + ui-ux-pro-max。
 4. 涉及域拆分、独立发布或阶段演进时，启用 microservice-evolution。
 5. 涉及 C 端页面、视觉设计、UX 交互或前端组件开发时，必须启用 ui-ux-pro-max。
+6. 涉及新业务项目孵化、DigitalStaff NPC 模板、DeepSeek Harness 学习或基座智能进化时，启用 agent-harness。
 
 
 ## 7. 扫描与迁移节奏（证据驱动）
@@ -371,6 +374,7 @@ CI 前置检查：
 17. deploy/README.md
 18. docs/architecture/ruoyi-all-next-client-channels.md
 19. docs/guides/project-profile-bootstrap.md
+20. docs/architecture/ruoyi-all-next-harness-evolution.md
 
 ## 14. 代码生成器架构规范
 
@@ -459,9 +463,15 @@ node scripts/inject-codegen-output.cjs tmp/codegen-{ClassName}
 - 当 `DigitalStaff` AI NPC 员工或开发者需要以此底座衍生创建新业务工程时，统一调用：
   ```bash
   npm run project:create -- <目标路径>
-  # 例如：npm run project:create -- D:/workspace/cw/agent-zqall
-  # 或直接运行：create-project.bat <目标路径>
+  npm run project:create -- <目标路径> --profile minimal
+  npm run project:create -- <目标路径> --profile vertical --bundle mall,crm
+  # 或直接运行：create-project.bat <目标路径> --profile minimal
   ```
+  - `standard`（默认）：整仓原生域，数字工厂全能力模板。
+  - `minimal`：shared + system + infra + 平台伴生域 `online/ai/aigw`（菜单目录与 codegen Facade 依赖，不能裁）。
+  - `vertical`：minimal + `--bundle` 业务域白名单。
+  - `creator`：等同 standard（含 online/codegen）。
+  - 产物写入 `src/modules/shared/contract/hatch-manifest.json`。Prisma 迁移仍为全量基座表。
 - **自动化工作流水线（全托管零配置）：**
   1. **反应堆克隆与包名重塑**：自动将 `ruoyi-all-next` 转换为目标工程名，重塑 `package.json`（自动分配独立 `PORT=3200` 避开冲突）；
   2. **二进制防损坏保护**：图片、字体、压缩包与数据库 dump 文件走二进制流白名单拷贝，绝不进行文本正则替换；
@@ -503,7 +513,15 @@ npm run domain:manifests
 npm run check
 ```
 
+### 18. Harness 进化规范（DeepSeek Harness 思想 × DigitalStaff NPC 模板）
 
+本仓库是 **Workspace Bundle**（业务工程模板），不是 Agent 运行时。公式：`NPC = Model + DigitalStaff Native + 本仓库`。
+
+1. **学思想，不搬框架**：吸收插件化域、Capability Seam、Profile/Bundle/Patch、Prompt 分段组装、可追溯轨迹。禁止引入 Cordis、禁止在 `src/` 实现 Agent Loop、禁止运行时自挂载插件。
+2. **机器可读入口**：`src/modules/shared/contract/agent-profile.json`。域名真源仍是 `domain-catalog.json`。
+3. **提示分段**：`.agents/context/ASSEMBLY.md`。禁止把本文件整篇灌进每一次模型请求。
+4. **NPC 孵化**：只允许 `npm run project:create -- <目标路径>`；身份只改 `project-profile.json` 与 `public/branding/`。
+5. **后期进化**：P1 `--profile/--bundle`、P2 seam 图、P3 门禁轨迹已落地；P4 由 DigitalStaff 读取本仓 `agent-profile.json`。细则见 `docs/architecture/ruoyi-all-next-harness-evolution.md`。
 
 <!-- BEGIN:nextjs-agent-rules -->
 

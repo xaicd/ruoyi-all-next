@@ -30,6 +30,7 @@ Skill 写法见 [skill-authoring.SKILL.md](./skill-authoring.SKILL.md)。
 | 用户在做 | 必开 |
 |---|---|
 | 新增/修改 Skill | skill-authoring |
+| 新业务项目孵化、DigitalStaff NPC 模板、DeepSeek Harness 进化 | agent-harness、product-requirements |
 | 新功能、客户端、业务项目初始化 | product-requirements |
 | 管理端/C 端页面或视觉 | ui-design、ui-framework-governance、ui-ux-pro-max |
 | 新 HTTP/RPC、改 DTO | api-design |
@@ -54,6 +55,7 @@ Skill 写法见 [skill-authoring.SKILL.md](./skill-authoring.SKILL.md)。
 | database-compatibility.SKILL.md | 数据库兼容等级 |
 | ui-framework-governance.SKILL.md | 管理端模板结构 |
 | microservice-evolution.SKILL.md | A/B/C 拆分 |
+| agent-harness.SKILL.md | NPC 工作区模板与 Harness 思想进化 |
 | ../../../.kiro/steering/ui-ux-pro-max/SKILL.md | 视觉/UX 检索 |
 
 ## 5. 客户端

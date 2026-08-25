@@ -39,7 +39,7 @@ if "%TARGET_DIR%"=="" (
 echo.
 echo [Step 2] 正在基于当前底座克隆并初始化新项目...
 echo ----------------------------------------------------------------
-node scripts/clone-project-base.cjs "%TARGET_DIR%"
+node scripts/clone-project-base.cjs "%TARGET_DIR%" %2 %3 %4 %5 %6 %7 %8 %9
 if %errorlevel% neq 0 (
     echo [ERROR] 项目初始化失败，请检查路径权限。
     pause

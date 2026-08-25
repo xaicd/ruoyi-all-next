@@ -11,8 +11,22 @@ const fs = require("node:fs")
 const path = require("node:path")
 const { execSync } = require("node:child_process")
 const { Client } = require("pg")
+const {
+  parseArgv,
+  helpText,
+  resolveHatchPlan,
+  shouldSkipRelPath,
+  pruneCatalog,
+  pruneRpcActions,
+  buildHatchManifest,
+} = require("./lib/hatch-profile.cjs")
+const { writeSeamGraph } = require("./lib/seam-graph.cjs")
 
 const SOURCE_ROOT = path.resolve(__dirname, "..")
+const CATALOG_REL = path.join("src", "modules", "shared", "backend", "constants", "domain-catalog.json")
+const RPC_ACTIONS_REL = path.join("src", "modules", "shared", "backend", "constants", "rpc-actions.json")
+const AGENT_PROFILE_REL = path.join("src", "modules", "shared", "contract", "agent-profile.json")
+const HATCH_MANIFEST_REL = path.join("src", "modules", "shared", "contract", "hatch-manifest.json")
 
 // 默认基准标识符 (对标 Yudao 的 GROUP_ID, ARTIFACT_ID, TITLE)
 const BASE_PROJECT_NAME = "ruoyi-all-next"
@@ -76,19 +90,24 @@ function transformFileContent(content, targetName, targetTitle, targetDbName, ta
 /**
  * 递归反应堆拷贝与转换
  */
-function reactorCopy(src, dest, targetName, targetTitle, targetDbName, targetPort) {
+function reactorCopy(src, dest, ctx, rel = "") {
   if (!fs.existsSync(dest)) {
     fs.mkdirSync(dest, { recursive: true })
   }
 
   const entries = fs.readdirSync(src, { withFileTypes: true })
   for (const entry of entries) {
+    const entryRel = rel ? `${rel}/${entry.name}` : entry.name
     const srcPath = path.join(src, entry.name)
     const destPath = path.join(dest, entry.name)
 
+    if (shouldSkipRelPath(entryRel.replace(/\\/g, "/"), ctx.plan)) {
+      continue
+    }
+
     if (entry.isDirectory()) {
       if (EXCLUDE_DIRS.has(entry.name)) continue
-      reactorCopy(srcPath, destPath, targetName, targetTitle, targetDbName, targetPort)
+      reactorCopy(srcPath, destPath, ctx, entryRel)
     } else if (entry.isFile()) {
       if (EXCLUDE_FILES.has(entry.name)) continue
 
@@ -109,9 +128,9 @@ function reactorCopy(src, dest, targetName, targetTitle, targetDbName, targetPor
       if (entry.name === "package.json") {
         try {
           const pkg = JSON.parse(fs.readFileSync(srcPath, "utf8"))
-          pkg.name = targetName
+          pkg.name = ctx.targetName
           if (pkg.scripts && pkg.scripts.dev) {
-            pkg.scripts.dev = pkg.scripts.dev.replace("-p 3100", `-p ${targetPort}`)
+            pkg.scripts.dev = pkg.scripts.dev.replace("-p 3100", `-p ${ctx.targetPort}`)
           }
           fs.writeFileSync(destPath, JSON.stringify(pkg, null, 2), "utf8")
           continue
@@ -121,13 +140,42 @@ function reactorCopy(src, dest, targetName, targetTitle, targetDbName, targetPor
       // 文本文件：执行反应堆内容替换
       try {
         const raw = fs.readFileSync(srcPath, "utf8")
-        const transformed = transformFileContent(raw, targetName, targetTitle, targetDbName, targetPort)
+        const transformed = transformFileContent(raw, ctx.targetName, ctx.targetTitle, ctx.targetDbName, ctx.targetPort)
         fs.writeFileSync(destPath, transformed, "utf8")
       } catch {
-        // 回退直接复制
         fs.copyFileSync(srcPath, destPath)
       }
     }
+  }
+}
+
+function applyHatchPatches(destRoot, plan, sourceCatalog) {
+  const catalogPath = path.join(destRoot, CATALOG_REL)
+  const rpcPath = path.join(destRoot, RPC_ACTIONS_REL)
+  const hatchPath = path.join(destRoot, HATCH_MANIFEST_REL)
+  const agentPath = path.join(destRoot, AGENT_PROFILE_REL)
+  const destCatalog = pruneCatalog(sourceCatalog, plan)
+
+  fs.writeFileSync(catalogPath, `${JSON.stringify(destCatalog, null, 2)}\n`, "utf8")
+
+  let destRpc = { domains: {} }
+  if (fs.existsSync(rpcPath)) {
+    destRpc = pruneRpcActions(JSON.parse(fs.readFileSync(rpcPath, "utf8")), plan)
+    fs.writeFileSync(rpcPath, `${JSON.stringify(destRpc, null, 2)}\n`, "utf8")
+  }
+
+  fs.writeFileSync(hatchPath, `${JSON.stringify(buildHatchManifest(plan), null, 2)}\n`, "utf8")
+  writeSeamGraph({ root: destRoot, catalog: destCatalog, rpcActions: destRpc })
+
+  if (fs.existsSync(agentPath)) {
+    const agentProfile = JSON.parse(fs.readFileSync(agentPath, "utf8"))
+    agentProfile.selectedHatch = {
+      profile: plan.profile,
+      domains: plan.domains,
+      includeClients: plan.includeClients,
+      hatchCommand: `npm run project:create -- <target-path> --profile ${plan.profile}${plan.bundle.length ? ` --bundle ${plan.bundle.join(",")}` : ""}`,
+    }
+    fs.writeFileSync(agentPath, `${JSON.stringify(agentProfile, null, 2)}\n`, "utf8")
   }
 }
 
@@ -181,31 +229,43 @@ async function autoProvisionDatabase(targetDbName) {
 /**
  * 主执行函数
  */
-async function runProjectReactor(targetDir, customTitle) {
+async function runProjectReactor(targetDir, plan, sourceCatalog, options = {}) {
   const resolvedTarget = path.resolve(targetDir)
   const targetName = (path.basename(resolvedTarget) || "agent-app").replace(/[^a-zA-Z0-9_-]/g, "-").toLowerCase()
   const targetDbName = targetName.replace(/[^a-z0-9_]/g, "_")
-  const targetTitle = customTitle || targetName.split("-").map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(" ")
+  const targetTitle = options.customTitle || targetName.split("-").map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(" ")
   const targetPort = "3200"
+  const ctx = { targetName, targetTitle, targetDbName, targetPort, plan }
 
   console.log("================================================================")
   console.log("             ProjectReactor - Next.js 全自动项目重塑引擎          ")
   console.log("================================================================")
-  console.log(`  📦 源底座路径:    ${SOURCE_ROOT}`)
-  console.log(`  🚀 目标工程路径:  ${resolvedTarget}`)
-  console.log(`  🏷️  目标工程包名:  ${targetName}`)
-  console.log(`  🗄️  目标数据库名:  ${targetDbName}`)
-  console.log(`  🌐 默认服务端口:  ${targetPort}`)
+  console.log(`  源底座路径:    ${SOURCE_ROOT}`)
+  console.log(`  目标工程路径:  ${resolvedTarget}`)
+  console.log(`  目标工程包名:  ${targetName}`)
+  console.log(`  目标数据库名:  ${targetDbName}`)
+  console.log(`  默认服务端口:  ${targetPort}`)
+  console.log(`  Hatch profile: ${plan.profile}`)
+  console.log(`  保留域:        ${plan.domains.join(", ")}`)
+  if (plan.excludedDomains.length) {
+    console.log(`  裁剪域:        ${plan.excludedDomains.join(", ")}`)
+  }
+  console.log(`  客户端包:      ${plan.includeClients ? "保留" : "跳过"}`)
   console.log("================================================================")
+
+  if (options.dryRun) {
+    console.log("[DRY-RUN] 仅打印计划，不复制文件、不初始化数据库。")
+    console.log(JSON.stringify(buildHatchManifest(plan), null, 2))
+    return plan
+  }
 
   if (!fs.existsSync(resolvedTarget)) {
     fs.mkdirSync(resolvedTarget, { recursive: true })
   }
 
-  // 1. 执行反应堆克隆与文本替换
-  reactorCopy(SOURCE_ROOT, resolvedTarget, targetName, targetTitle, targetDbName, targetPort)
+  reactorCopy(SOURCE_ROOT, resolvedTarget, ctx)
+  applyHatchPatches(resolvedTarget, plan, sourceCatalog)
 
-  // 2. 独立配置 .env
   const destEnv = path.join(resolvedTarget, ".env")
   const srcEnv = path.join(SOURCE_ROOT, ".env")
   let baseEnv = fs.existsSync(srcEnv) ? fs.readFileSync(srcEnv, "utf8") : ""
@@ -216,22 +276,40 @@ async function runProjectReactor(targetDir, customTitle) {
   }
   fs.writeFileSync(destEnv, baseEnv, "utf8")
 
-  // 3. 自动创建数据库并部署全量 SQL
   await autoProvisionDatabase(targetDbName)
 
   console.log("================================================================")
-  console.log("[SUCCESS] 🎉 项目重构与一键初始化完成！全量基础数据已全部就绪！")
+  console.log("[SUCCESS] 项目重构与一键初始化完成。")
   console.log("================================================================")
-  console.log("\n极简启动指引:")
+  console.log("\n启动指引:")
   console.log(`  1. cd /d "${resolvedTarget}"`)
-  console.log("  2. start.bat (直接双击运行，无需手动执行任何初始化 SQL)")
-  console.log("  3. 后续开发如新增表结构，直接运行 npm run db:migrate 即可增量升级！")
+  console.log("  2. start.bat")
+  console.log("  3. 新增表结构后运行 npm run db:migrate")
+  console.log(`  Hatch: ${plan.profile} → ${HATCH_MANIFEST_REL}`)
   console.log("================================================================")
+  return plan
 }
 
-// 命令行参数解析
-const targetArg = process.argv.slice(2).find((arg) => !arg.startsWith("--")) || "D:/workspace/cw/agent-zqall"
-runProjectReactor(targetArg).catch((err) => {
-  console.error("[REACTOR ERROR]", err)
+function main() {
+  try {
+    const parsed = parseArgv(process.argv)
+    if (parsed.help) {
+      console.log(helpText())
+      return Promise.resolve()
+    }
+
+    const catalog = JSON.parse(fs.readFileSync(path.join(SOURCE_ROOT, CATALOG_REL), "utf8"))
+    const plan = resolveHatchPlan(catalog, parsed)
+    const targetArg = parsed.target || "D:/workspace/cw/agent-zqall"
+    return runProjectReactor(targetArg, plan, catalog, { dryRun: parsed.dryRun })
+  } catch (err) {
+    console.error("[REACTOR ERROR]", err.message || err)
+    process.exitCode = 1
+    return Promise.resolve()
+  }
+}
+
+main().catch((err) => {
+  console.error("[REACTOR ERROR]", err.message || err)
   process.exit(1)
 })

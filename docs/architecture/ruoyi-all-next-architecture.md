@@ -1,6 +1,6 @@
 # ruoyi-all-next 架构总览
 
-更新时间：2026-08-19
+更新时间：2026-08-25
 
 ## 1. 项目定位
 
@@ -33,6 +33,7 @@ ruoyi-all-next/
 │   │   ├── ruoyi-all-next-architecture.md  ← 本文件
 │   │   ├── ruoyi-all-next-capability-matrix.md
 │   │   ├── ruoyi-all-next-domain-governance.md
+│   │   ├── ruoyi-all-next-harness-evolution.md  # DeepSeek Harness 思想 × NPC 模板
 │   │   ├── ruoyi-all-next-sync-taskboard.md
 │   │   └── ruoyi-full-migration-board.md
 │   ├── guides/                      # 开发指南
@@ -168,6 +169,7 @@ ruoyi-all-next/
 ### 阶段 B：可拆分单体（打包/运行/部署已接通）
 
 - 每个域有 `contract/route.manifest.yaml` 与 catalog 声明
+- NPC 发现面：`agent-profile.json` + 由 catalog 生成的 `seam-graph.json`（禁止手写第二份域名）
 - 可用 `npm run domain:pack|dev|build` 产出 API-only 进程
 - BFF 通过 `RUOYI_DOMAIN_<DOMAIN>_UPSTREAM` 把该域 API 切到独立进程
 - 数据库仍默认共享，独立 schema/独库尚未作为默认

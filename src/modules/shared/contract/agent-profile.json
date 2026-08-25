@@ -1,0 +1,121 @@
+{
+  "version": 1,
+  "kind": "workspace-bundle",
+  "role": "business-project-template",
+  "not": ["agent-runtime", "cordis-host", "llm-loop", "privileged-core-to-patch"],
+  "description": "RuoYi All Next is the DigitalStaff NPC workspace template. Agent loop stays in DigitalStaff Native. This repo is the composable environment.",
+  "harnessPartners": {
+    "runtime": "DigitalStaff NativeCodingEngine",
+    "runtimePath": "D:/workspace/cw/ai/DigitalStaff",
+    "reference": "https://github.com/deepseek-ai/deepseek-harness",
+    "referencePhilosophy": "Everything is a Plugin. Every run is traceable.",
+    "doNotVendor": ["cordis", "dsh-agent-loop", "self-modification"]
+  },
+  "promptAssembly": {
+    "file": ".agents/context/ASSEMBLY.md",
+    "sections": [
+      { "name": "identity", "order": -100, "path": ".agents/context/IDENTITY.md" },
+      { "name": "soul", "order": 0, "path": ".agents/context/SOUL.md" },
+      { "name": "seams", "order": 50, "path": "src/modules/shared/contract/agent-profile.json" },
+      { "name": "seam-graph", "order": 55, "path": "src/modules/shared/contract/seam-graph.json" },
+      { "name": "catalog", "order": 60, "path": "src/modules/shared/backend/constants/domain-catalog.json" },
+      { "name": "skill", "order": 100, "path": ".agents/skills", "load": "on-demand" },
+      { "name": "project-identity", "order": 150, "path": "src/modules/shared/contract/project-profile.json" },
+      { "name": "gates", "order": 200, "path": "AGENTS.md", "mode": "cite-section-not-full-file" }
+    ]
+  },
+  "bundles": {
+    "base": {
+      "modules": ["shared"],
+      "deployable": false,
+      "note": "SDK packed into every process. Never a microservice."
+    },
+    "platform": {
+      "domains": ["system", "infra"],
+      "deployable": true
+    },
+    "business": {
+      "source": "domain-catalog.json layers.business",
+      "note": "Do not duplicate domain names here. Catalog is the runtime source of truth."
+    },
+    "clients": {
+      "channels": ["h5", "uniapp", "flutter", "desktop-pc"]
+    }
+  },
+  "profiles": {
+    "minimal": { "stacks": ["base", "platform"], "companions": ["online", "ai", "aigw"], "use": "identity-only hatch; keep menu-catalog and codegen facades" },
+    "standard": { "stacks": ["base", "platform", "business", "clients"], "use": "default DigitalStaff NPC template" },
+    "vertical": { "stacks": ["base", "platform", "business:allowlist", "clients"], "use": "ontology-driven hatch" },
+    "creator": { "stacks": ["standard", "online-codegen"], "use": "lowcode + codegen" }
+  },
+  "seamGraph": {
+    "path": "src/modules/shared/contract/seam-graph.json",
+    "source": "src/modules/shared/backend/constants/domain-catalog.json",
+    "generated": true,
+    "rule": "Generated from catalog + contract. Do not hand-edit domain names."
+  },
+  "seams": [
+    {
+      "id": "domain-facade",
+      "definition": "src/modules/<domain>/contract/",
+      "provider": "src/modules/<domain>/backend/services/",
+      "consumer": "src/app/api/v1/** and other domain facades",
+      "rule": "Cross-domain must use Facade / broker.call. Never import another domain Service."
+    },
+    {
+      "id": "http-api",
+      "definition": "versioned /api/v{n}/ DTO + actions schema",
+      "provider": "src/app/api/v1/**/route.ts",
+      "consumer": "frontend api/*.api.ts and client channels",
+      "rule": "Pages depend on API Port only, not Next Service or Prisma types."
+    },
+    {
+      "id": "tenant-scope",
+      "definition": "getCurrentTenantId() in biz-tenant.ts",
+      "provider": "withAdminRoute + Repository currentTenantId()",
+      "consumer": "all business tables",
+      "rule": "No explicit tenantId passthrough as long-term pattern."
+    },
+    {
+      "id": "permission",
+      "definition": "src/modules/shared/backend/constants/permissions.ts",
+      "provider": "RBAC + system_menu",
+      "consumer": "Route withAdminRoute permission + page visibility",
+      "rule": "No hardcoded roles as long-term scheme."
+    }
+  ],
+  "trace": {
+    "sprintProd": "docs/features/sprint-prod/",
+    "gateArtifact": "docs/architecture/artifacts/harness-trace-latest.json",
+    "writer": "scripts/write-harness-trace.cjs",
+    "note": "Human log is append-only sprint-prod. Gate stamp is written by npm run check. Session events stay in DigitalStaff."
+  },
+  "npc": {
+    "hatchCommand": "npm run project:create -- <target-path> [--profile minimal|standard|vertical|creator] [--bundle mall,crm]",
+    "identityFile": "src/modules/shared/contract/project-profile.json",
+    "brandingDir": "public/branding/",
+    "businessZone": ["src/modules/<domain>/", "src/app/api/v1/admin/<domain>/", "src/app/(admin-pages)/admin/<domain>/", "clients/<channel>/modules/<domain>/"],
+    "coreZone": ["src/modules/shared/", "src/modules/system/", "src/modules/infra/", "scripts/", "deploy/", "prisma/data/"],
+    "gates": ["npm run check", "npm run harness:check"],
+    "strictGates": ["npm run ruoyi:matrix:check:strict", "npm run ruoyi:governance:check:strict"],
+    "seamCommand": "npm run domain:seams",
+    "portBack": ["src/modules/{domain}/", "src/app/api/v1/admin/{domain}/", "src/app/(admin-pages)/admin/{domain}/", "prisma/migrations/", "permissions.ts", "domain-catalog.json"]
+  },
+  "absorbFromDeepseekHarness": [
+    "plugin-shaped domains",
+    "capability-seams",
+    "profile-bundle-patch",
+    "prompt-section-assembly",
+    "scoped-tools-via-rbac-tenant",
+    "append-only-trace-via-sprint-and-gates",
+    "skills-as-plugins"
+  ],
+  "forbidden": [
+    "introduce-cordis",
+    "host-agent-loop-in-this-repo",
+    "runtime-self-modification",
+    "skip-npm-run-check",
+    "duplicate-domain-names-outside-catalog",
+    "patch-core-zone-from-business-projects"
+  ]
+}

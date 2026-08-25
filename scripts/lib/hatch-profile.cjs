@@ -1,0 +1,238 @@
+/**
+ * ProjectReactor hatch plan: Profile + Bundle + Patch（对标 DeepSeek Harness 叠层，不引入 Cordis）。
+ * 域名真源是 domain-catalog.json，本文件只决定「这次克隆保留哪些域」。
+ */
+
+const PROFILES = Object.freeze(["minimal", "standard", "vertical", "creator"])
+
+/** system/infra 通过 Facade 依赖这些业务域；裁掉会导致基座无法编译。 */
+const PLATFORM_COMPANIONS = Object.freeze(["online", "ai", "aigw"])
+
+const DOMAIN_PATH_PREFIXES = Object.freeze([
+  "src/modules/",
+  "src/app/api/v1/admin/",
+  "src/app/api/v1/app/",
+  "src/app/api/v1/open/",
+  "src/app/(admin-pages)/admin/",
+  "src/app/(cpc-pages)/cpc/",
+  "clients/h5/src/modules/",
+  "clients/uniapp/src/modules/",
+  "clients/desktop-pc/src/modules/",
+  "clients/flutter/modules/",
+])
+
+function splitCsv(value) {
+  return String(value || "")
+    .split(/[,+\s]+/)
+    .map((item) => item.trim().toLowerCase())
+    .filter(Boolean)
+}
+
+function unique(list) {
+  return [...new Set(list)]
+}
+
+function parseArgv(argv) {
+  const args = argv.slice(2)
+  const out = {
+    target: undefined,
+    profile: "standard",
+    bundle: [],
+    help: false,
+    dryRun: false,
+  }
+
+  for (let i = 0; i < args.length; i += 1) {
+    const arg = args[i]
+    if (arg === "--help" || arg === "-h") {
+      out.help = true
+      continue
+    }
+    if (arg === "--dry-run") {
+      out.dryRun = true
+      continue
+    }
+    if (arg === "--profile") {
+      out.profile = String(args[i + 1] || "").trim().toLowerCase()
+      i += 1
+      continue
+    }
+    if (arg.startsWith("--profile=")) {
+      out.profile = arg.slice("--profile=".length).trim().toLowerCase()
+      continue
+    }
+    if (arg === "--bundle") {
+      out.bundle = splitCsv(args[i + 1])
+      i += 1
+      continue
+    }
+    if (arg.startsWith("--bundle=")) {
+      out.bundle = splitCsv(arg.slice("--bundle=".length))
+      continue
+    }
+    if (arg.startsWith("--")) {
+      throw new Error(`未知参数 ${arg}。使用 --help 查看用法。`)
+    }
+    if (!out.target) {
+      out.target = arg
+      continue
+    }
+    throw new Error(`多余位置参数: ${arg}`)
+  }
+
+  if (out.bundle.length > 0 && out.profile === "standard") {
+    out.profile = "vertical"
+  }
+
+  return out
+}
+
+function helpText() {
+  return `用法:
+  npm run project:create -- <目标路径> [--profile minimal|standard|vertical|creator] [--bundle mall,crm]
+
+Profile:
+  standard  整仓（默认，DigitalStaff NPC 全能力模板）
+  minimal   shared + system + infra + 平台伴生域 (online/ai/aigw)
+  vertical  minimal + --bundle 业务域白名单
+  creator   等同 standard（含 online/codegen）
+
+说明:
+  平台伴生域因 system 菜单目录与 infra codegen 的 Facade 依赖，不能从 minimal 裁掉。
+  Prisma 迁移仍部署全量基座表，裁剪的是代码与 catalog 发现面。`
+}
+
+function catalogDomainNames(catalog) {
+  return (catalog.domains || []).map((item) => item.name)
+}
+
+function businessDomainNames(catalog) {
+  return catalog.layers?.business?.domains || []
+}
+
+function platformDomainNames(catalog) {
+  return catalog.layers?.platform?.domains || ["system", "infra"]
+}
+
+function resolveHatchPlan(catalog, options = {}) {
+  const profile = String(options.profile || "standard").toLowerCase()
+  const requestedBundle = unique(options.bundle || [])
+
+  if (!PROFILES.includes(profile)) {
+    throw new Error(`未知 profile "${profile}"。可选: ${PROFILES.join(", ")}`)
+  }
+
+  const known = new Set(catalogDomainNames(catalog))
+  for (const name of requestedBundle) {
+    if (!known.has(name)) {
+      throw new Error(`--bundle 含未知域 "${name}"。合法域名以 domain-catalog.json 为准。`)
+    }
+  }
+
+  if (profile === "vertical" && requestedBundle.length === 0) {
+    throw new Error("vertical profile 必须提供 --bundle（例如 --bundle mall,crm）")
+  }
+
+  if (profile === "minimal" && requestedBundle.length > 0) {
+    throw new Error("minimal 不能叠加 --bundle；请改用 --profile vertical --bundle ...")
+  }
+
+  const platform = platformDomainNames(catalog)
+  const companions = PLATFORM_COMPANIONS.filter((name) => known.has(name))
+  const business = businessDomainNames(catalog)
+
+  let selected = []
+  let includeClients = true
+
+  if (profile === "minimal") {
+    selected = unique([...platform, ...companions])
+    includeClients = false
+  } else if (profile === "vertical") {
+    const extra = requestedBundle.filter((name) => !platform.includes(name))
+    selected = unique([...platform, ...companions, ...extra])
+    includeClients = true
+  } else {
+    selected = unique([...platform, ...business])
+    includeClients = true
+  }
+
+  selected = selected.filter((name) => known.has(name))
+  const excludedDomains = catalogDomainNames(catalog).filter((name) => !selected.includes(name))
+  const pruned = excludedDomains.length > 0 || !includeClients
+
+  return {
+    profile,
+    includeClients,
+    pruned,
+    companions,
+    domains: selected,
+    excludedDomains,
+    bundle: requestedBundle,
+  }
+}
+
+function matchesDomainPrefix(rel, domain) {
+  const needle = domain.replace(/\\/g, "/")
+  for (const prefix of DOMAIN_PATH_PREFIXES) {
+    if (rel === `${prefix}${needle}` || rel.startsWith(`${prefix}${needle}/`)) return true
+  }
+  return false
+}
+
+function shouldSkipRelPath(relPath, plan) {
+  const rel = String(relPath || "").replace(/\\/g, "/")
+  if (!rel) return false
+  if (!plan.includeClients && (rel === "clients" || rel.startsWith("clients/"))) return true
+  for (const domain of plan.excludedDomains || []) {
+    if (matchesDomainPrefix(rel, domain)) return true
+  }
+  return false
+}
+
+function pruneCatalog(catalog, plan) {
+  const keep = new Set(plan.domains)
+  const next = JSON.parse(JSON.stringify(catalog))
+  next.domains = (catalog.domains || []).filter((item) => keep.has(item.name))
+  next.layers.business.domains = (catalog.layers?.business?.domains || []).filter((name) => keep.has(name))
+  return next
+}
+
+function pruneRpcActions(rpcCatalog, plan) {
+  const keep = new Set(plan.domains)
+  const next = JSON.parse(JSON.stringify(rpcCatalog))
+  const domains = {}
+  for (const [name, spec] of Object.entries(rpcCatalog.domains || {})) {
+    if (keep.has(name)) domains[name] = spec
+  }
+  next.domains = domains
+  return next
+}
+
+function buildHatchManifest(plan) {
+  return {
+    version: 1,
+    kind: "hatch-manifest",
+    profile: plan.profile,
+    pruned: Boolean(plan.pruned),
+    includeClients: Boolean(plan.includeClients),
+    domains: plan.domains,
+    excludedDomains: plan.excludedDomains,
+    companions: plan.companions,
+    bundle: plan.bundle,
+    prisma: "full-base-migrations",
+    note: "Prisma 迁移仍为全量基座表；代码目录与 catalog 发现面按 profile 裁剪。",
+  }
+}
+
+module.exports = {
+  PROFILES,
+  PLATFORM_COMPANIONS,
+  DOMAIN_PATH_PREFIXES,
+  parseArgv,
+  helpText,
+  resolveHatchPlan,
+  shouldSkipRelPath,
+  pruneCatalog,
+  pruneRpcActions,
+  buildHatchManifest,
+}

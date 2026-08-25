@@ -74,17 +74,21 @@ const grpcPath = path.join(ROOT, "src", "modules", "shared", "backend", "lib", "
 const grpcSource = fs.readFileSync(grpcPath, "utf8")
 if (!grpcSource.includes("grpcUnary") || !grpcSource.includes("/ruoyi.")) fail("grpc-fabric.ts must implement in-house unary paths")
 
+const hasDomain = (name) => domainCatalog.domains.some((item) => item.name === name)
+
 const payFacadePath = path.join(ROOT, "src", "modules", "pay", "contract", "pay.facade.ts")
-if (!fs.readFileSync(payFacadePath, "utf8").includes("createDomainFacade")) fail("pay contract facade is required")
+if (hasDomain("pay")) {
+  if (!fs.readFileSync(payFacadePath, "utf8").includes("createDomainFacade")) fail("pay contract facade is required")
 
-const protoPath = path.join(ROOT, "src", "modules", "pay", "contract", "pay.proto")
-if (!fs.existsSync(protoPath) || !fs.readFileSync(protoPath, "utf8").includes("service PayService")) {
-  fail("pay.proto must declare PayService; run npm run domain:contracts")
-}
+  const protoPath = path.join(ROOT, "src", "modules", "pay", "contract", "pay.proto")
+  if (!fs.existsSync(protoPath) || !fs.readFileSync(protoPath, "utf8").includes("service PayService")) {
+    fail("pay.proto must declare PayService; run npm run domain:contracts")
+  }
 
-const goStubPath = path.join(ROOT, "gen", "go", "pay", "v1", "service.go")
-if (!fs.existsSync(goStubPath) || !fs.readFileSync(goStubPath, "utf8").includes("type PayService interface")) {
-  fail("gen/go/pay/v1/service.go must declare PayService; run npm run domain:contracts")
+  const goStubPath = path.join(ROOT, "gen", "go", "pay", "v1", "service.go")
+  if (!fs.existsSync(goStubPath) || !fs.readFileSync(goStubPath, "utf8").includes("type PayService interface")) {
+    fail("gen/go/pay/v1/service.go must declare PayService; run npm run domain:contracts")
+  }
 }
 
 const rpcActionsPath = path.join(ROOT, "src", "modules", "shared", "backend", "constants", "rpc-actions.json")
@@ -112,14 +116,17 @@ for (const method of ["listConfigs", "getConfigByKey", "createConfig", "listJobs
 }
 
 const onlineActions = rpcActions.domains?.online?.actions?.map((item) => item.method) ?? []
-for (const method of ["pageDefinitions", "resolvePublishedRelease", "resolveCodegenImport", "pageManagedRecords", "getManagedRecord", "createManagedRecord", "updateManagedRecord", "deleteManagedRecord"]) {
-  if (!onlineActions.includes(method)) fail(`rpc-actions.json online must declare ${method}`)
+if (hasDomain("online")) {
+  for (const method of ["pageDefinitions", "resolvePublishedRelease", "resolveCodegenImport", "pageManagedRecords", "getManagedRecord", "createManagedRecord", "updateManagedRecord", "deleteManagedRecord"]) {
+    if (!onlineActions.includes(method)) fail(`rpc-actions.json online must declare ${method}`)
+  }
 }
 
 const payRefundActions = rpcActions.domains?.pay?.actions?.map((item) => item.method) ?? []
-if (!payRefundActions.includes("listRefunds")) fail("rpc-actions.json pay must declare listRefunds")
+if (hasDomain("pay") && !payRefundActions.includes("listRefunds")) fail("rpc-actions.json pay must declare listRefunds")
 
 for (const [domain, spec] of Object.entries(rpcActions.domains ?? {})) {
+  if (!hasDomain(domain)) continue
   const validatorsDir = path.join(ROOT, "src", "modules", domain, "backend", "validators")
   if (!fs.existsSync(validatorsDir)) fail(`missing validators for ${domain}`)
   const validatorSource = fs.readdirSync(validatorsDir).filter((name) => name.endsWith(".ts")).map((name) => fs.readFileSync(path.join(validatorsDir, name), "utf8")).join("\n")
@@ -364,24 +371,34 @@ const tenantMenuScope = fs.readFileSync(path.join(ROOT, "src", "modules", "syste
 for (const [name, source] of [["menu.repository", systemMenuRepo], ["permission.repository", systemPermissionRepo], ["tenant-menu-scope", tenantMenuScope]]) {
   if (source.includes("online/backend/menu-catalog")) fail(`${name} must import online menu catalog from contract, not backend`)
 }
-if (!fs.existsSync(path.join(ROOT, "src", "modules", "online", "contract", "menu-catalog.ts"))) {
-  fail("online contract must publish menu-catalog.ts")
+if (hasDomain("online")) {
+  if (!fs.existsSync(path.join(ROOT, "src", "modules", "online", "contract", "menu-catalog.ts"))) {
+    fail("online contract must publish menu-catalog.ts")
+  }
+  const onlineAdapterTestPath = path.join(ROOT, "src", "modules", "online", "backend", "application", "online-codegen.adapter.test.ts")
+  const onlineAdapterTest = fs.readFileSync(onlineAdapterTestPath, "utf8")
+  if (onlineAdapterTest.includes("CodegenEngineService")) fail("online adapter test must not import CodegenEngineService; assert codegen IR only")
 }
 
 const codegenEngine = fs.readFileSync(path.join(ROOT, "src", "modules", "infra", "backend", "services", "codegen-engine.service.ts"), "utf8")
-if (codegenEngine.includes("KyselyOnlineManagedTableRuntimeRepository")) fail("codegen managed-table template must not import Online repository; use onlineFacade")
-if (!codegenEngine.includes("onlineFacade.pageManagedRecords")) fail("codegen managed-table template must call onlineFacade.pageManagedRecords")
-if (!codegenEngine.includes("parseActionQuery") || !codegenEngine.includes("ACTION_SCHEMAS")) {
+const codegenServiceTemplate = fs.readFileSync(path.join(ROOT, "src", "modules", "infra", "backend", "services", "codegen-templates", "service.template.ts"), "utf8")
+const codegenRepoTemplate = fs.readFileSync(path.join(ROOT, "src", "modules", "infra", "backend", "services", "codegen-templates", "repository.template.ts"), "utf8")
+const codegenRouteTemplate = fs.readFileSync(path.join(ROOT, "src", "modules", "infra", "backend", "services", "codegen-templates", "route.template.ts"), "utf8")
+if (codegenServiceTemplate.includes("KyselyOnlineManagedTableRuntimeRepository") || codegenEngine.includes("KyselyOnlineManagedTableRuntimeRepository")) {
+  fail("codegen managed-table template must not import Online repository; use onlineFacade")
+}
+if (!codegenServiceTemplate.includes("onlineFacade.queryManagedRecords") && !codegenServiceTemplate.includes("onlineFacade.pageManagedRecords")) {
+  fail("codegen managed-table template must call onlineFacade for managed records")
+}
+if (!codegenRouteTemplate.includes("parseActionQuery") || !codegenRouteTemplate.includes("ACTION_SCHEMAS")) {
   fail("codegen routes must parse with generated ACTION_SCHEMAS via parseActionQuery")
 }
-if (codegenEngine.includes("MOCK_DATA")) fail("table-driven codegen must persist via Repository, not MOCK_DATA")
-if (!codegenEngine.includes("generateRepository") || !codegenEngine.includes("hasRealDatabase") || !codegenEngine.includes("insertDynamicRow")) {
+if (codegenEngine.includes("MOCK_DATA") || codegenRepoTemplate.includes("MOCK_DATA")) {
+  fail("table-driven codegen must persist via Repository, not MOCK_DATA")
+}
+if (!codegenRepoTemplate.includes("export function generateRepository") || !codegenRepoTemplate.includes("hasRealDatabase") || !codegenRepoTemplate.includes("insertDynamicRow")) {
   fail("table-driven codegen must emit a Kysely/memory Repository")
 }
-
-const onlineAdapterTestPath = path.join(ROOT, "src", "modules", "online", "backend", "application", "online-codegen.adapter.test.ts")
-const onlineAdapterTest = fs.readFileSync(onlineAdapterTestPath, "utf8")
-if (onlineAdapterTest.includes("CodegenEngineService")) fail("online adapter test must not import CodegenEngineService; assert codegen IR only")
 
 const outboxSource = fs.readFileSync(path.join(ROOT, "src", "modules", "shared", "backend", "lib", "transactional-outbox.ts"), "utf8")
 if (!outboxSource.includes("getOutboxStoreForDomain")) fail("outbox must expose getOutboxStoreForDomain for per-domain store ownership")

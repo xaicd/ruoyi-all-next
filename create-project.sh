@@ -35,7 +35,7 @@ fi
 echo ""
 echo "[Step 2] 正在基于当前底座克隆并初始化新项目..."
 echo "----------------------------------------------------------------"
-node scripts/clone-project-base.cjs "$TARGET_DIR"
+node scripts/clone-project-base.cjs "$TARGET_DIR" "${@:2}"
 
 echo ""
 echo "================================================================"

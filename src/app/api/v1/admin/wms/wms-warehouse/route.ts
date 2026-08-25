@@ -2,12 +2,14 @@
 import { NextResponse } from "next/server"
 import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { WmsWarehouseService } from "@/modules/wms/backend/services/wms-warehouse.service"
+import { WMS_ACTION_SCHEMAS } from "@/modules/wms/contract/actions"
 import {
   wmsWarehouseCreateSchema,
   wmsWarehousePageQuerySchema,
   wmsWarehouseUpdateSchema,
 } from "@/modules/wms/backend/validators/wms-warehouse.validator"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { parseActionQuery } from "@/modules/shared/backend/http/parse-action-input"
 
 const PERM_PREFIX = "WMS_WAREHOUSE"
 const VIEW_PERM = (PERMISSIONS as Record<string, string>)[`${PERM_PREFIX}_VIEW`] ?? "wms:wms-warehouse:view"
@@ -16,10 +18,10 @@ const UPDATE_PERM = (PERMISSIONS as Record<string, string>)[`${PERM_PREFIX}_UPDA
 const DELETE_PERM = (PERMISSIONS as Record<string, string>)[`${PERM_PREFIX}_DELETE`] ?? "wms:wms-warehouse:delete"
 
 export const GET = withAdminRoute(async (request, auth) => {
-  const { searchParams } = new URL(request.url)
-  const raw: Record<string, unknown> = {}
-  searchParams.forEach((v, k) => { raw[k] = v })
-  const query = wmsWarehousePageQuerySchema.parse(raw)
+  if (!WMS_ACTION_SCHEMAS["wms.listWarehouses"]) {
+    throw new Error("missing wms.listWarehouses action schema")
+  }
+  const query = parseActionQuery(wmsWarehousePageQuerySchema, request)
   const result = await WmsWarehouseService.page(query, auth.userId, auth.tenantId)
   return NextResponse.json({ success: true, data: result })
 }, { permission: VIEW_PERM })
