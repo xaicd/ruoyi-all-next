@@ -192,7 +192,6 @@
 
 ## 6. 能力同步与治理门禁
 
-
 1. 能力状态必须对照 docs/architecture/ruoyi-all-next-capability-matrix.md。
 2. 域声明必须同步 docs/architecture/ruoyi-all-next-domain-governance.md。
 3. 未登记能力不得标记 DONE。
@@ -211,7 +210,37 @@ CI 前置检查：
 
 一键门禁：`npm run check`（含 matrix、governance、domain、microservice）。
 
-## 6.1 Skill Registry（强制）
+## 6.1 多模型三阶段协作规范（强制）
+
+为杜绝多模型协同过程中的越权修改、规格漂移与虚假测试，全平台严格贯彻「规划 -> 开发 -> 独立测试」不可逾越的三阶段流水线与门禁铁律：
+
+### 1. 规划阶段 (Planning Phase)
+- **定位**：由 Pro / 高推理模型主导，严禁直接编写产品代码；
+- **产物**：必须完整产出 `requirements.md`、`design.md`、`tasks.md`；
+- **状态收敛**：`PLAN_APPROVED`；
+- **声明权限**：只能声明“规划完成，可进入开发”，严禁越权声明已实现。
+
+### 2. 开发阶段 (Development Phase)
+- **定位**：严格按照已冻结的规格和任务 DAG 实现；
+- **交付内容**：必须提供候选 Commit SHA、精确变更范围、开发自测记录和风险说明；
+- **状态收敛**：`DEV_READY`；
+- **声明权限**：只能声明“开发完成，等待独立测试”，严禁自行宣布测试通过或上线。
+
+### 3. 独立测试阶段 (Independent Testing Phase)
+- **定位**：针对不可变候选 SHA 进行独立客观验收；
+- **判定结果**：限定为 `PASS` / `CONDITIONAL` / `FAIL` / `BLOCKED` 四种状态；
+- **状态收敛**：`TEST_PASSED`；
+- **自愈回归**：若修改任何产品代码，必须生成新的候选 SHA 并重新执行完整测试矩阵。
+
+### 4. 门禁与协作铁律
+1. **权威推导链**：`requirements.md` → `design.md` → `tasks.md` 为唯一权威单向推导链，规格变化必须退回规划阶段，严禁开发模型暗改需求；
+2. **测试隔离**：开发自测绝对不能替代独立测试；单个 `[x]` 严禁同时代表实现、测试和上线；
+3. **状态真源**：项目阶段状态以 `project-status.md` 为准，正式发布状态只看 `CURRENT.md`；
+4. **发布审批门禁**：`RELEASE_APPROVED` 属于三阶段之后的人工/运维门禁，不属于测试模型自动权限；
+5. **提交与推送授权**：规划、开发、测试模型默认不得擅自提交或推送，必须经过授权和阶段门禁；
+6. **交接六要素**：跨模型交接必须完整记录 **SHA、变更范围、开发验证、风险说明、环境限制、下一阶段入口**。
+
+## 6.2 Skill Registry（强制）
 
 以下 Skill 为 all-next 的治理必备项，AGENTS 必须注册并在对应场景启用：
 

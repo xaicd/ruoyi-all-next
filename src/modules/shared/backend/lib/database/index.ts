@@ -49,3 +49,11 @@ export {
   deleteDynamicRow,
 } from "./dynamic-table"
 export type { DynamicPersistScope, DynamicQueryOperator } from "./dynamic-table"
+
+export {
+  QueryWrapper,
+  BaseMapper,
+  BaseService
+} from "./base-mapper"
+export type { QueryCondition, OrderItem, QueryOperator } from "./base-mapper"
+
