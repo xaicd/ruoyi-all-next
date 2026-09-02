@@ -627,7 +627,31 @@ npm run check
   - 🔒 **安全最高防护 (Opt-in Security & Least Privilege)**：API 强制绑定 permission code，参数必接 Validator，防越权与注入；
   - 🧪 **交付质量最高 (SpaceX-Grade Testing & Zero Fake Mock)**：4 层测试金字塔矩阵，嵌入式 SQLite 真实实例校验，严禁前端伪造 Mock。
 
+### 22. 全 IT 工种与企业级多维业务工作场景全景大典 (Full-Spectrum Enterprise IT Roles & Workflow Scenarios)
+
+**本模板工程超越单一 CRUD 页面视角，深度覆盖企业真实 IT 组织中全工种、全链路的工作场景，并在 15 大业务域中精准归口赋能：**
+- **1. 六大多工种核心工作场景赋能矩阵**：
+  - 📊 **数据工程师 / BI 分析师 (Data & BI)**：
+    - 场景：跨库数据同步 (CDC/Sync)、定时清洗调度 (`infra/job`)、多维聚合查询与报表 (`report` 域)、大屏看板；
+    - 支撑底座：利用 Kysely 复杂查询与 `report` 域动态报表引擎，杜绝手写重复统计脚本；
+  - 🔄 **业务架构师 / 流程编排专家 (Orchestration & Workflow)**：
+    - 场景：BPM 审批流 (`bpm` 域)、工作流状态机与跨域 Saga 分布式事务、规则引擎；
+    - 支撑底座：基于 `bpm` 域与服务总线 (`broker.call/emit`)，以可视化/DSL 驱动复杂业务编排；
+  - 📈 **运营专家 / 营销增长 (Operations & Marketing)**：
+    - 场景：用户画像分群、营销活动规则策略 (`mall`/`member` 域)、多渠道触达通知 (`mp`/`im` 域 / 短信 / 微信 / 邮件)、A/B 实验；
+    - 支撑底座：数据字典与系统参数动态热生效，策略变更免重新发版；
+  - 🛠️ **DevOps / SRE 云原生运维 (DevOps & SRE)**：
+    - 场景：容器化部署与健康探活、分布式链路追踪 (`infra/trace`)、API 限流降级与日志归档；
+    - 支撑底座：多环境配置驱动、独立端口分配与零冲突运行时防守；
+  - 🔒 **安全与合规审计专家 (Security & Audit)**：
+    - 场景：敏感字段脱敏、系统安全审计日志 (`system/operlog`)、RBAC 细粒度权限码硬防守；
+  - 🤖 **AI 算法 / Prompt / Agent 编排师 (AI & Agents)**：
+    - 场景：大模型网关 (`ai` 域)、智能问答与知识库检索、NPC 人设与 Agent Profile 注入；
+- **2. 全工种需求域本体精准归口**：
+  - 任何工种发起的变更或研发需求，**必须在 `domain-catalog.json` 15 大原生域中精准归口**，按各工种最佳实践实施落地！
+
 <!-- BEGIN:nextjs-agent-rules -->
+
 
 
 
