@@ -602,11 +602,16 @@ npm run check
 - **逆向调用链防守与全量回归**：
   - 修改存量函数或接口前，**必须先执行全文 Grep 扫描全部调用方与依赖方**，评估影响面并跑通存量单元/集成回归测试，确保既有业务功能 100% 零破损！
 
-### 21. 业务域全息导航与“多维最优解”执行决策大典 (Ontology & Domain-Driven Optimal Execution)
+### 21. 业务域与 API 契约驱动“多维最优解”执行大典 (Ontology & API-Contract-First Optimal Execution)
 
-**本工程所有研发与功能变更以「业务域与 Contract 契约网」为唯一真源，任意需求必须在域本体中精准导航并执行五维最优解：**
-- **1. 域本体全息导航定位 (Domain & Contract Blueprint Navigation)**：
-  - 需求接收时，先查阅 `domain-catalog.json`、`src/modules/<domain>/contract/` 与权威路由清单，精确定位负责域与跨域调用链（Blast Radius）；
+**本工程所有研发与功能变更以「业务域与 API Contract 契约网」为唯一真源，任意需求必须以 API 契约为探针精准导航并执行五维最优解：**
+- **1. API 契约第一切入点与 5 步全息穿透闭环 (API-Contract-First 5-Step Traceability)**：
+  - **API 是业务最显式、最标准、最直接的暴露面与契约中枢**。任何需求进入时，统一执行 API 5 步穿透闭环：
+    ① **【API 路由定位】**：从 `domain-catalog.json` 与路由清单中秒级锚定目标端点（URL/Method/RPC）；
+    ② **【契约剖析 (Contract Diff)】**：提取 Request/Response DTO、校验器（Validator）与权限码（Permission Code）；
+    ③ **【向下垂直穿透 (Trace Down)】**：从 BFF Route -> Controller -> Service 业务逻辑 -> Domain Facade / RPC -> BaseMapper / DAL 存储底座；
+    ④ **【向上逆向影响面 (Blast Radius)】**：检索所有前端页面/CPC 客户端调用点与跨域消费方，评估破坏性变更风险；
+    ⑤ **【契约化测试回归】**：以 API 契约与 DTO 为基准，自动生成/执行 L2 集成测试与 L3 E2E 验收，确保零破坏。
 - **2. 五维帕累托最优决策执行法则 (5-Dimension Pareto Optimal Decision)**：
   - 💰 **最省 Token 算力 (Minimum Cost)**：极简 Schema/DSL 驱动，杜绝长篇样板生成；优先使用 `scaffold-feature` 与存量领域 Facade；
   - 🛡️ **风险最低与零破坏 (Minimum Risk & Zero Breakage)**：开闭原则扩展，旧接口契约 100% 向下兼容；轻量字段复用 `metadata` 零迁移；
@@ -615,6 +620,7 @@ npm run check
   - 🧪 **交付质量最高 (SpaceX-Grade Testing & Zero Fake Mock)**：4 层测试金字塔矩阵，嵌入式 SQLite 真实实例校验，严禁前端伪造 Mock。
 
 <!-- BEGIN:nextjs-agent-rules -->
+
 
 
 
