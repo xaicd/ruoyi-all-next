@@ -37,6 +37,28 @@ async function createMysqlDialect(url: string) {
   })
 }
 
+async function createSqliteDialect(url: string) {
+  const { SqliteDialect } = await import("kysely")
+  const Database = (await import("better-sqlite3")).default
+  const path = await import("path")
+  const fs = await import("fs")
+
+  let dbPath = (url || "file:./data/ruoyi.db").replace(/^file:/, "")
+  if (!dbPath || dbPath === ":memory:") {
+    dbPath = ":memory:"
+  } else {
+    const dir = path.dirname(dbPath)
+    if (dir && dir !== "." && !fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true })
+    }
+  }
+
+  const db = new Database(dbPath)
+  db.pragma("journal_mode = WAL")
+  db.pragma("foreign_keys = ON")
+  return new SqliteDialect({ database: db })
+}
+
 function createDummyDialect() {
   return {
     createAdapter: () => new SqliteAdapter(),
@@ -47,7 +69,7 @@ function createDummyDialect() {
 }
 
 // === 驱动族映射 ===
-const DRIVER_FAMILY: Record<DatabaseDriver, "pg" | "mysql" | "dummy"> = {
+const DRIVER_FAMILY: Record<DatabaseDriver, "pg" | "mysql" | "sqlite" | "dummy"> = {
   postgresql: "pg",
   mysql: "mysql",
   mariadb: "mysql",
@@ -57,7 +79,7 @@ const DRIVER_FAMILY: Record<DatabaseDriver, "pg" | "mysql" | "dummy"> = {
   gaussdb: "pg",
   kingbase: "pg",
   sqlserver: "dummy",  // TODO: 添加 MSSQL dialect
-  sqlite: "dummy",
+  sqlite: "sqlite",
   dm: "dummy",
   oracle: "dummy",
   memory: "dummy",
@@ -86,6 +108,9 @@ export async function getKyselyDb(): Promise<Kysely<DB>> {
       break
     case "mysql":
       dialect = await createMysqlDialect(config.url)
+      break
+    case "sqlite":
+      dialect = await createSqliteDialect(config.url)
       break
     default:
       dialect = createDummyDialect()

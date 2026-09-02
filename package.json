@@ -13,6 +13,7 @@
     "db:down": "docker compose -f deploy/docker-compose.dev.yml stop postgres",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
+    "db:bootstrap:sqlite": "tsx scripts/bootstrap-sqlite.ts",
     "db:backup": "node scripts/backup-db.cjs",
     "db:seed": "tsx scripts/seed-postgresql.ts",
     "db:init:sql": "tsx scripts/build-v1-init-sql.ts",
@@ -63,6 +64,7 @@
   "dependencies": {
     "@prisma/client": "^6.13.0",
     "@puckeditor/core": "0.23.0",
+    "better-sqlite3": "^11.8.1",
     "crypto-js": "^4.2.0",
     "fflate": "^0.8.2",
     "kysely": "^0.29.4",
@@ -75,6 +77,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
     "@types/crypto-js": "^4.2.2",
     "@types/node": "^20.17.0",
     "@types/pg": "^8.11.10",
