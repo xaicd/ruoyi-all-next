@@ -552,7 +552,24 @@ npm run check
 4. **NPC 孵化**：只允许 `npm run project:create -- <目标路径>`；身份只改 `project-profile.json` 与 `public/branding/`。
 5. **后期进化**：P1 `--profile/--bundle`、P2 seam 图、P3 门禁轨迹已落地；P4 由 DigitalStaff 读取本仓 `agent-profile.json`。细则见 `docs/architecture/ruoyi-all-next-harness-evolution.md`。
 
+### 19. 严禁 Token 浪费、零重复代码与“工具先行”低代码架构铁律 (MANDATORY Zero Waste & Tool-First Architecture)
+
+**本模板工程坚决贯彻极简工程哲学，严禁任何形式的 Token 浪费、重复造轮子与生成无意义冗余样板代码：**
+- **严禁 Token 与算力浪费 (Zero Token Waste)**：
+  - 严禁大模型人肉逐行生成几百行千篇一律的重复 CRUD、样板代码、冗余 DDL 或静态 HTML 骨架；
+  - 业务开发与需求实现必须采用 **Schema / DSL 极简声明式驱动**（将大模型输出压缩至 <500 Tokens），由底层通用引擎与脚手架工具自动展开；
+- **架构模式极致复用 (Architectural Pattern Mastery)**：
+  - **持久层**：必须复用泛型 `BaseMapper<T>`、`QueryWrapper<T>` 与 `BaseService<T>`，自动获得多租户隔离、逻辑删除与 8 大基础审计底座字段，严禁手写重复 SQL/CRUD；
+  - **测试层**：必须复用 `TestingKit` 与 4 层金字塔自动化脚手架，严禁复制粘贴重复的 Mock 环境初始化逻辑；
+  - **微服务与跨域**：跨域调用统一走 `Domain Facade` 与自研服务总线，严禁破坏模块隔离；
+- **存量低代码工具优先 (Prioritize Existing Low-Code Tooling)**：
+  - 在编写任何新业务代码前，必须先检索并优先使用模板内已有域能力、脚手架工具（`scripts/scaffold-feature`）、CRUD 生成器与内置 Skills；
+- **缺少工具就造工具 (Build Tools When Missing)**：
+  - 遇到可抽象的高频业务或研发需求，必须优先沉淀为通用工具与生成脚本，让工具自动化执行，**绝不能重复手写无效、低效、无意义代码**；
+  - 沉淀的高价值工具必须结晶沉淀为标准资产，实现“一次造工具，后续业务开发永久受益”。
+
 <!-- BEGIN:nextjs-agent-rules -->
+
 
 # This is NOT the Next.js you know
 
