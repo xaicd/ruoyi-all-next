@@ -119,6 +119,25 @@ export class QueryWrapper<T = any> {
 }
 
 /**
+ * 表列能力探测缓存（模块级共享）
+ *
+ * 按表实际存在的列决定是否启用「逻辑删除过滤 / 租户过滤 / 审计字段自动填充」，
+ * 彻底杜绝向不具备该列的表写入或过滤不存在列（历史缺陷：deleted 写 0/1 与
+ * schema Boolean 类型冲突、引用全库不存在的 deleted_at 列）。
+ */
+const tableColumnCache = new Map<string, Set<string>>();
+
+async function resolveTableColumns(db: Kysely<DB>, tableName: string): Promise<Set<string>> {
+  const cached = tableColumnCache.get(tableName);
+  if (cached) return cached;
+  const tables = await db.introspection.getTables();
+  const target = tables.find((t) => (t as any).name === tableName || (t as any).tableName === tableName);
+  const cols = new Set<string>(((target as any)?.columns || []).map((c: any) => c.name || c.columnName));
+  if (cols.size > 0) tableColumnCache.set(tableName, cols);
+  return cols;
+}
+
+/**
  * 泛型 BaseMapper 底座
  */
 export class BaseMapper<T extends Record<string, any>> {
@@ -137,17 +156,30 @@ export class BaseMapper<T extends Record<string, any>> {
     return db;
   }
 
+  /** 解析当前表实际存在的列集合（带缓存） */
+  private async getColumns(db: Kysely<DB>): Promise<Set<string>> {
+    return resolveTableColumns(db, this.tableName);
+  }
+
+  /** 表是否具备指定列 */
+  private async hasColumn(db: Kysely<DB>, column: string): Promise<boolean> {
+    return (await this.getColumns(db)).has(column);
+  }
+
   /**
-   * 根据 ID 查询单条记录（自动过滤逻辑删除与租户隔离）
+   * 根据 ID 查询单条记录（表存在 deleted/tenant_id 列时自动过滤）
    */
   async selectById(id: string | number): Promise<T | null> {
     const db = await this.getDb();
     const tenantId = getCurrentTenantId();
+    const cols = await this.getColumns(db);
 
     let query = db.selectFrom(this.tableName as any).selectAll().where(this.primaryKey as any, '=', id);
-    query = (query as any).where('deleted', '=', 0);
+    if (cols.has('deleted')) {
+      query = (query as any).where('deleted', '=', false);
+    }
 
-    if (tenantId) {
+    if (tenantId && cols.has('tenant_id')) {
       query = (query as any).where('tenant_id', '=', tenantId);
     }
 
@@ -168,11 +200,22 @@ export class BaseMapper<T extends Record<string, any>> {
    */
   async selectList(wrapper?: QueryWrapper<T>): Promise<T[]> {
     const db = await this.getDb();
+    const rows = await (await this.buildListQuery(wrapper)).execute();
+    return rows as T[];
+  }
+
+  /** 构建带能力探测的列表查询（selectPage 复用以实现 SQL 级分页） */
+  private async buildListQuery(wrapper?: QueryWrapper<T>): Promise<any> {
+    const db = await this.getDb();
     const tenantId = getCurrentTenantId();
+    const cols = await this.getColumns(db);
 
-    let query = db.selectFrom(this.tableName as any).selectAll().where('deleted', '=', 0);
+    let query = db.selectFrom(this.tableName as any).selectAll();
+    if (cols.has('deleted')) {
+      query = (query as any).where('deleted', '=', false);
+    }
 
-    if (tenantId) {
+    if (tenantId && cols.has('tenant_id')) {
       query = (query as any).where('tenant_id', '=', tenantId);
     }
 
@@ -193,48 +236,53 @@ export class BaseMapper<T extends Record<string, any>> {
       }
     }
 
-    const rows = await (query as any).execute();
-    return rows as T[];
+    return query;
   }
 
   /**
-   * MyBatis-Plus 风格通用分页查询
+   * MyBatis-Plus 风格通用分页查询（SQL 级 count + limit/offset，杜绝全量拉取内存分页）
    */
   async selectPage(
     page: { pageNum: number; pageSize: number },
     wrapper?: QueryWrapper<T>
   ): Promise<{ list: T[]; total: number; pageNum: number; pageSize: number }> {
+    const db = await this.getDb();
     const pageNum = Math.max(1, page.pageNum || 1);
     const pageSize = Math.max(1, page.pageSize || 10);
     const offset = (pageNum - 1) * pageSize;
 
-    const all = await this.selectList(wrapper);
-    const total = all.length;
-    const list = all.slice(offset, offset + pageSize);
+    const listQuery = await this.buildListQuery(wrapper);
+    const list = await ((listQuery as any).offset(offset).limit(pageSize) as any).execute();
 
-    return { list, total, pageNum, pageSize };
+    // 总数走 SQL count（复用同一过滤条件）
+    const countQuery = await this.buildListQuery(wrapper);
+    const countRow = await ((countQuery as any).clearSelect().select((eb: any) => eb.fn.countAll<number>('count')) as any).executeTakeFirst();
+    const total = Number((countRow as any)?.count ?? 0);
+
+    return { list: list as T[], total, pageNum, pageSize };
   }
 
   /**
-   * 插入记录（自动填充主键、租户ID、创建人、更新人、创建时间与8大基础审计字段）
+   * 插入记录（按表实际列自动填充主键、租户ID、创建/更新人与时间等审计字段）
    */
   async insert(entity: Partial<T>): Promise<T> {
     const db = await this.getDb();
     const tenantId = getCurrentTenantId();
+    const cols = await this.getColumns(db);
     const now = new Date().toISOString();
 
     const record: any = {
       [this.primaryKey]: entity[this.primaryKey] || `id-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-      tenant_id: entity.tenant_id || tenantId || 'default',
-      created_by: (entity as any).created_by || 'system',
-      created_at: now,
-      updated_by: (entity as any).updated_by || 'system',
-      updated_at: now,
-      deleted: 0,
-      deleted_at: null,
-      remark: (entity as any).remark || null,
       ...entity
     };
+    // 仅当表实际具备对应列时才自动填充（能力探测，防引用不存在列导致写入报错）
+    if (cols.has('tenant_id') && record.tenant_id === undefined) record.tenant_id = tenantId || 'default';
+    if (cols.has('created_by') && record.created_by === undefined) record.created_by = 'system';
+    if (cols.has('created_at') && record.created_at === undefined) record.created_at = now;
+    if (cols.has('updated_by') && record.updated_by === undefined) record.updated_by = 'system';
+    if (cols.has('updated_at') && record.updated_at === undefined) record.updated_at = now;
+    if (cols.has('deleted') && record.deleted === undefined) record.deleted = false;
+    if (cols.has('deleted_at') && record.deleted_at === undefined) record.deleted_at = null;
 
     await (db.insertInto(this.tableName as any) as any).values(record).execute();
     return record as T;
@@ -246,21 +294,21 @@ export class BaseMapper<T extends Record<string, any>> {
   async updateById(id: string | number, entity: Partial<T>): Promise<boolean> {
     const db = await this.getDb();
     const tenantId = getCurrentTenantId();
+    const cols = await this.getColumns(db);
 
-    const updates: any = {
-      ...entity,
-      updated_by: (entity as any).updated_by || 'system',
-      updated_at: new Date().toISOString()
-    };
+    const updates: any = { ...entity };
+    if (cols.has('updated_by') && updates.updated_by === undefined) updates.updated_by = 'system';
+    if (cols.has('updated_at') && updates.updated_at === undefined) updates.updated_at = new Date().toISOString();
     delete updates[this.primaryKey];
 
-    let query = (db.updateTable(this.tableName as any) as any)
-      .set(updates)
-      .where(this.primaryKey, '=', id)
-      .where('deleted', '=', 0);
+    let query = (db.updateTable(this.tableName as any) as any).set(updates).where(this.primaryKey, '=', id);
 
-    if (tenantId) {
-      query = query.where('tenant_id', '=', tenantId);
+    if (cols.has('deleted')) {
+      query = (query as any).where('deleted', '=', false);
+    }
+
+    if (tenantId && cols.has('tenant_id')) {
+      query = (query as any).where('tenant_id', '=', tenantId);
     }
 
     const res = await query.execute();
@@ -268,23 +316,34 @@ export class BaseMapper<T extends Record<string, any>> {
   }
 
   /**
-   * 根据 ID 逻辑删除（更新 deleted=1, deleted_at 与 updated_at）
+   * 根据 ID 逻辑删除（表具备 deleted 列时置 deleted=true，兼容 deleted_at）
    */
   async deleteById(id: string | number): Promise<boolean> {
     const db = await this.getDb();
     const tenantId = getCurrentTenantId();
+    const cols = await this.getColumns(db);
     const now = new Date().toISOString();
 
+    if (!cols.has('deleted')) {
+      // 无逻辑删除列的表降级为物理删除
+      let delQuery = (db.deleteFrom(this.tableName as any) as any).where(this.primaryKey, '=', id);
+      if (tenantId && cols.has('tenant_id')) {
+        delQuery = (delQuery as any).where('tenant_id', '=', tenantId);
+      }
+      const delRes = await delQuery.execute();
+      return delRes.length > 0;
+    }
+
+    const updates: any = { deleted: true };
+    if (cols.has('deleted_at')) updates.deleted_at = now;
+    if (cols.has('updated_at')) updates.updated_at = now;
+
     let query = (db.updateTable(this.tableName as any) as any)
-      .set({
-        deleted: 1,
-        deleted_at: now,
-        updated_at: now
-      })
+      .set(updates)
       .where(this.primaryKey, '=', id);
 
-    if (tenantId) {
-      query = query.where('tenant_id', '=', tenantId);
+    if (tenantId && cols.has('tenant_id')) {
+      query = (query as any).where('tenant_id', '=', tenantId);
     }
 
     const res = await query.execute();
