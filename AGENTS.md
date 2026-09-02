@@ -588,7 +588,22 @@ npm run check
   - **多维竞品横评**：主动从成熟度、轻量性、维护活跃度、Token 消耗比与 License 兼容性进行客观竞品分析；
   - **遴选最高性价比解法**：选择综合 ROI（性价比）最高、改造成本最小的最佳开源方案进行集成适配，实现极致工程效能。
 
+### 20. 需求场景三叉戟分流与存量功能改造铁律 (Requirement Classification & Brownfield Evolution)
+
+**严禁机械教条地“凡开发必先建表”，所有业务需求开发前必须先执行「场景分流决策」：**
+- **场景 A：全新业务域/全新核心实体 (Greenfield)**：
+  - 流程：Schema / DSL 极简定义 -> 实体模型与 8 大审计底座字段注入 -> 自动化 DDL / BaseMapper 展开 -> RESTful 契约与 BFF Route -> 前端页面；
+- **场景 B：存量系统/旧功能/旧接口 业务逻辑改造 (Brownfield Evolution)**：
+  - **严禁擅自改表/破坏既有 DDL**：保持数据表结构稳定，杜绝数据库锁表与历史数据迁移风险；
+  - **开闭原则与无侵入扩展 (OCP)**：通过**策略模式 (Strategy Pattern)、Hook 拦截器、Domain Facade、事件总线 (broker.emit) 或装饰器**进行增量业务扩充，严禁在旧 Service 中塞入大段硬编码 `if-else`；
+  - **契约严格向下兼容 (Backward Compatibility)**：旧接口入参、错误码与返回 DTO 必须 100% 向下兼容，严禁破坏既有前端或外部三方系统的契约；
+- **场景 C：轻量业务属性增量扩展 (Lightweight Extension)**：
+  - **零 DDL 优先**：新增轻量、动态或临时业务属性时，优先复用实体既有的 `metadata` / `extraParams` / JSON 扩展字段，彻底免去 DDL 变更与多端同步负担；
+- **逆向调用链防守与全量回归**：
+  - 修改存量函数或接口前，**必须先执行全文 Grep 扫描全部调用方与依赖方**，评估影响面并跑通存量单元/集成回归测试，确保既有业务功能 100% 零破损！
+
 <!-- BEGIN:nextjs-agent-rules -->
+
 
 
 
