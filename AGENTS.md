@@ -1,6 +1,6 @@
 # ruoyi-all-next 开发工作手册
 
-更新时间：2026-08-25
+更新时间：2026-09-02
 
 本文件是 ruoyi-all-next 的独立开发规范，覆盖架构边界、研发流程、测试门禁、运行部署与交付标准。当前仓库根目录即本项目，命令均在仓库根执行。
 
@@ -9,13 +9,15 @@
 ## 🚨 Top-Priority Universal Directives (最高优先级核心工程铁律 — 所有 IDE / Agent 必读必遵)
 
 > **MANDATORY RULE 0: ZERO TOKEN WASTE, ZERO DUPLICATE CODE & TOOL-FIRST LOW-CODE ARCHITECTURE**
-> 任何 AI Agent / IDE 接入本模板与工程时，**第一优先级必须执行以下 6 项不可动摇的底线法则**：
+> 任何 AI Agent / IDE 接入本模板与工程时，**第一优先级必须执行以下 8 项不可动摇的底线法则**：
 > 1. **严禁 Token 与算力浪费 (Zero Token Waste)**：严禁大模型人肉逐行生成几百行千篇一律的重复 CRUD、样板代码、冗余 DDL 或静态 HTML 骨架；业务开发与需求实现必须采用 **Schema / DSL 极简声明式驱动**（大模型输出压缩至 <500 Tokens），由底层通用引擎自动展开！
 > 2. **架构模式极致复用 (Architectural Pattern Mastery)**：必须复用泛型 `BaseMapper<T>`、`QueryWrapper<T>`、`BaseService<T>` 与 `createBaseSchema`，自动继承多租户隔离、逻辑删除与 8 大基础审计底座字段，严禁手写重复 SQL/CRUD！
 > 3. **存量低代码工具优先 (Prioritize Existing Low-Code Tooling)**：在编写任何代码前，必须优先检索并复用模板内已有域能力、脚手架工具（`scripts/scaffold-feature`）、CRUD 生成器与内置 Skills！
 > 4. **缺少工具就造工具 (Build Tools When Missing)**：遇到可抽象的高频研发需求，必须优先沉淀为通用工具与生成脚本，让工具自动化执行，**绝不能重复手写无效无意义代码**！
 > 5. **开源成熟方案优先与竞品性价比选型 (Open-Source First & Best ROI Selection)**：若自研工具周期过长、复杂度高或 Token 消耗大，**严禁盲目从零造轮子**；必须优先检索开源成熟工业级方案，进行多维竞品横评并遴选出**最高性价比（ROI）与改造成本最小**的方案进行集成！
 > 6. **SpaceX 级全链路测试验证与真实数据库驱动 (SpaceX-Grade Testing & Zero Fake Mock)**：代码变更必须跑通 4 层金字塔测试矩阵（L1单测、L2集成、L3契约、L4 E2E）；100% 由真实数据库/嵌入式 SQLite 支撑，严禁前端伪造 Mock！
+> 7. **本体域全息导航与 API 契约第一切入 (Ontology & API-Contract-First, 详见 §21)**：任意需求必须先在本体域（实体网、Domain Facade、route manifest、权限码）中秒级定位目标域与影响半径，以 API 契约为探针执行 5 步穿透闭环；一切需求终局 100% 收敛于真实 API 支撑，严禁无 API 支撑的假界面与硬编码 Mock！
+> 8. **全工种四类契约族收敛 (All-Role Contract Families, 详见 §22)**：数据同步/ETL、BI 查询、运营编排、运维发布等非编码需求同样必须收敛为可审计契约——API 契约 / 数据契约 / 流程契约 / 预案契约四选一，并过专属质量门禁（数据族=对账+血缘完整；流程族=沙箱+回滚演练）；严禁一次性搬运脚本与口径打架的野 SQL！
 
 ---
 
@@ -626,6 +628,21 @@ npm run check
   - 🏛️ **最符合系统架构 (Architectural Purity)**：跨域调用强制走 Domain Facade / RPC，持久层复用 BaseMapper / QueryWrapper 自动获得 8 大审计底座字段；
   - 🔒 **安全最高防护 (Opt-in Security & Least Privilege)**：API 强制绑定 permission code，参数必接 Validator，防越权与注入；
   - 🧪 **交付质量最高 (SpaceX-Grade Testing & Zero Fake Mock)**：4 层测试金字塔矩阵，嵌入式 SQLite 真实实例校验，严禁前端伪造 Mock。
+
+### 22. 全工种四类契约族大典 (All-Role Contract Families & Job-Function Matrix)
+
+**一切工作终局收敛为四类可验证、可审计契约之一；非编码需求（数据同步、BI 查询、运营编排、运维发布）同样受本体域导航与五维决策约束：**
+
+1. **四类契约族统一理论**：
+   ① **API 契约**：`Command`/`Query`/`Event`/`Stream`（开发工种，详见 §21）；
+   ② **数据契约 (Data Contract)**：Source/Transform/Sink Schema + 增量水位 + 幂等主键 + 质量规则 + 血缘（数据同步/ETL/数仓/BI 工种，落位 `report` 域与数据同步管道）；
+   ③ **流程契约 (Process Contract)**：状态机/BPMN/DAG + 事件/定时/API/人工四类触发器 + 补偿回滚路径（运营编排/审批流/工单工种，落位 `bpm` 域）；
+   ④ **预案契约 (Runbook Contract)**：变更步骤 + 校验点 + 回滚脚本 + 演练记录（DevOps/SRE/DBA 运维工种，对齐 `docs/skills/ruoyi-all-next/devops.SKILL.md`）。
+2. **IT 全工种工作内容矩阵**：产品（需求契约，`product-requirements.SKILL.md`）、设计（设计契约，`ui-design.SKILL.md`/组件复用）、开发（API 契约/5 步穿透）、数据（数据契约/管道 DSL + 指标语义层，`database-design.SKILL.md`）、测试（测试契约/4 层金字塔，`automated-testing.SKILL.md`）、运维（预案契约/Runbook + 灰度回滚，`devops.SKILL.md`）、运营编排（流程契约/状态机 + HITL 人工节点）、安全（安全基线/威胁建模，`security.SKILL.md`）；每族明确契约真源、执行范式与低代码/开源工具优先清单。
+3. **数据同步/ETL 五大铁律**：① 严禁一次性搬运脚本入库；② 必须幂等可重放（按主键/版本 upsert）；③ 必须断点续传（checkpoint/增量水位）；④ 血缘自动登记本体域；⑤ 对账报告即验收（行数/空值/唯一性对账通过才算交付）。工具决策顺序：内置管道 DSL ➔ 开源成熟方案（SeaTunnel/DataX 批量、Flink CDC 实时）➔ 才允许自写代码。
+4. **BI 查询与指标语义层范式**：指标口径定义一次（口径/维度/过滤）、处处复用，严禁各报表各写 SQL 口径打架；即席查询三防线（行级权限 ➔ 超时/限行/只读副本资源隔离 ➔ 全量审计）；AI NL-to-SQL 只允许生成绑定语义层白名单指标的查询，严禁裸拼 SQL。
+5. **运营编排铁律**：编排 = 状态机 DSL + 四类触发器，人工节点复用 HITL 审批；每节点强制携带 traceId 可观测可回放；长流程必须定义补偿/回滚路径；定时任务必须分布式幂等锁防重入。工具决策顺序：`bpm` 域内置编排 ➔ n8n/Node-RED（轻量）➔ Temporal/Camunda（企业级）。
+6. **五维决策普适化与专属质量门禁**：五维帕累托从编码需求普适至全工种；每族契约配专属门禁——数据族 = 对账通过 + 血缘完整 + 质量规则 100% 执行；流程族 = 沙箱演练 + 回滚演练双通过；预案族 = 预演环境演练 + 回滚计时达标；API 族 = 4 层测试全绿。本体域一等公民同步扩展登记**数据资产**（表/管道/指标/报表）、**流程拓扑**与**预案库**。
 
 <!-- BEGIN:nextjs-agent-rules -->
 
