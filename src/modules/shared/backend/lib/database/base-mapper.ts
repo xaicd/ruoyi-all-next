@@ -216,7 +216,7 @@ export class BaseMapper<T extends Record<string, any>> {
   }
 
   /**
-   * 插入记录（自动填充主键、租户ID、创建时间与审计字段）
+   * 插入记录（自动填充主键、租户ID、创建人、更新人、创建时间与8大基础审计字段）
    */
   async insert(entity: Partial<T>): Promise<T> {
     const db = await this.getDb();
@@ -225,22 +225,23 @@ export class BaseMapper<T extends Record<string, any>> {
 
     const record: any = {
       [this.primaryKey]: entity[this.primaryKey] || `id-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-      deleted: 0,
+      tenant_id: entity.tenant_id || tenantId || 'default',
+      created_by: (entity as any).created_by || 'system',
       created_at: now,
+      updated_by: (entity as any).updated_by || 'system',
       updated_at: now,
+      deleted: 0,
+      deleted_at: null,
+      remark: (entity as any).remark || null,
       ...entity
     };
-
-    if (tenantId && !record.tenant_id) {
-      record.tenant_id = tenantId;
-    }
 
     await (db.insertInto(this.tableName as any) as any).values(record).execute();
     return record as T;
   }
 
   /**
-   * 根据 ID 更新记录
+   * 根据 ID 更新记录（自动更新 updated_at 与 updated_by）
    */
   async updateById(id: string | number, entity: Partial<T>): Promise<boolean> {
     const db = await this.getDb();
@@ -248,6 +249,7 @@ export class BaseMapper<T extends Record<string, any>> {
 
     const updates: any = {
       ...entity,
+      updated_by: (entity as any).updated_by || 'system',
       updated_at: new Date().toISOString()
     };
     delete updates[this.primaryKey];
@@ -266,14 +268,19 @@ export class BaseMapper<T extends Record<string, any>> {
   }
 
   /**
-   * 根据 ID 逻辑删除
+   * 根据 ID 逻辑删除（更新 deleted=1, deleted_at 与 updated_at）
    */
   async deleteById(id: string | number): Promise<boolean> {
     const db = await this.getDb();
     const tenantId = getCurrentTenantId();
+    const now = new Date().toISOString();
 
     let query = (db.updateTable(this.tableName as any) as any)
-      .set({ deleted: 1, updated_at: new Date().toISOString() })
+      .set({
+        deleted: 1,
+        deleted_at: now,
+        updated_at: now
+      })
       .where(this.primaryKey, '=', id);
 
     if (tenantId) {
@@ -283,6 +290,7 @@ export class BaseMapper<T extends Record<string, any>> {
     const res = await query.execute();
     return res.length > 0;
   }
+
 }
 
 /**
