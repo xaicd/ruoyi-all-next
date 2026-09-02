@@ -602,17 +602,25 @@ npm run check
 - **逆向调用链防守与全量回归**：
   - 修改存量函数或接口前，**必须先执行全文 Grep 扫描全部调用方与依赖方**，评估影响面并跑通存量单元/集成回归测试，确保既有业务功能 100% 零破损！
 
-### 21. 业务域与 API 契约驱动“多维最优解”执行大典 (Ontology & API-Contract-First Optimal Execution)
+### 21. 业务域与全协议 API 契约驱动“多维最优解”执行大典 (Ontology & Polyglot API-Contract-First Execution)
 
-**本工程所有研发与功能变更以「业务域与 API Contract 契约网」为唯一真源，任意需求必须以 API 契约为探针精准导航并执行五维最优解：**
-- **1. API 契约第一切入点与 5 步全息穿透闭环 (API-Contract-First 5-Step Traceability)**：
-  - **API 是业务最显式、最标准、最直接的暴露面与契约中枢**。任何需求进入时，统一执行 API 5 步穿透闭环：
-    ① **【API 路由定位】**：从 `domain-catalog.json` 与路由清单中秒级锚定目标端点（URL/Method/RPC）；
-    ② **【契约剖析 (Contract Diff)】**：提取 Request/Response DTO、校验器（Validator）与权限码（Permission Code）；
-    ③ **【向下垂直穿透 (Trace Down)】**：从 BFF Route -> Controller -> Service 业务逻辑 -> Domain Facade / RPC -> BaseMapper / DAL 存储底座；
-    ④ **【向上逆向影响面 (Blast Radius)】**：检索所有前端页面/CPC 客户端调用点与跨域消费方，评估破坏性变更风险；
-    ⑤ **【契约化测试回归】**：以 API 契约与 DTO 为基准，自动生成/执行 L2 集成测试与 L3 E2E 验收，确保零破坏。
-- **2. 五维帕累托最优决策执行法则 (5-Dimension Pareto Optimal Decision)**：
+**本工程所有研发与功能变更以「业务域与全协议 API 契约网」为唯一真源，任意需求必须以全协议 API 为探针精准导航并执行五维最优解：**
+- **1. 全协议通信矩阵认知与统一契约映射 (Polyglot Protocol Matrix & Adapter Pattern)**：
+  - **API 是跨边界通信的统一行为契约**，本工程无缝适配 5 大通信协议簇：
+    ① **Web 互联网应用层**：`HTTP/1.1`, `HTTP/2`, `HTTP/3 (QUIC)`, `RESTful`, `WebSocket`, `SSE`；
+    ② **高性能微服务 RPC 层**：`gRPC (HTTP/2 + Protobuf)`, `Apache Dubbo`, `Thrift`, `JSON-RPC`；
+    ③ **异步消息与事件总线层 (MQ)**：`MQTT (EMQX)`, `NATS (Request-Reply / JetStream)`, `Kafka`, `RabbitMQ`；
+    ④ **数据存储与网络套接字层 (DB Wire & Socket)**：`MySQL Socket/Protocol`, `PostgreSQL Wire`, `Redis RESP`, `Raw TCP/UDP`；
+    ⑤ **边缘物联与硬件总线层 (IoT & Hardware)**：`Bluetooth Low Energy (BLE 蓝牙)`, `Modbus RTU/TCP`, `RS485/COM 串口`, `CAN Bus`；
+  - **协议适配器标准化**：底层多模协议统一在领域契约（Contract）中抽象为强类型 `Command`、`Query`、`Event` 与 `Stream`；
+- **2. API 契约第一切入点与 5 步全息穿透闭环 (API-Contract-First 5-Step Traceability)**：
+  - 无论底层采用何种协议，需求进入时统一执行 5 步穿透：
+    ① **【协议与端点定位】**：确定协议类型（HTTP/gRPC/MQTT/BLE/Socket），秒级锁定目标契约；
+    ② **【契约剖析 (Contract Diff)】**：提取 Request/Response DTO、Protobuf Schema、校验规则与权限码；
+    ③ **【向下垂直穿透 (Trace Down)】**：从 Protocol Adapter -> Service 业务逻辑 -> Domain Facade / RPC -> BaseMapper / DAL 存储底座；
+    ④ **【向上逆向影响面 (Blast Radius)】**：检索所有前端/移动端/硬件端调用点与跨服务调用方，评估破坏性风险；
+    ⑤ **【契约化测试回归】**：以协议契约为基准，自动生成/执行集成与 E2E 验证，确保零破坏。
+- **3. 五维帕累托最优决策执行法则 (5-Dimension Pareto Optimal Decision)**：
   - 💰 **最省 Token 算力 (Minimum Cost)**：极简 Schema/DSL 驱动，杜绝长篇样板生成；优先使用 `scaffold-feature` 与存量领域 Facade；
   - 🛡️ **风险最低与零破坏 (Minimum Risk & Zero Breakage)**：开闭原则扩展，旧接口契约 100% 向下兼容；轻量字段复用 `metadata` 零迁移；
   - 🏛️ **最符合系统架构 (Architectural Purity)**：跨域调用强制走 Domain Facade / RPC，持久层复用 BaseMapper / QueryWrapper 自动获得 8 大审计底座字段；
@@ -620,6 +628,7 @@ npm run check
   - 🧪 **交付质量最高 (SpaceX-Grade Testing & Zero Fake Mock)**：4 层测试金字塔矩阵，嵌入式 SQLite 真实实例校验，严禁前端伪造 Mock。
 
 <!-- BEGIN:nextjs-agent-rules -->
+
 
 
 
