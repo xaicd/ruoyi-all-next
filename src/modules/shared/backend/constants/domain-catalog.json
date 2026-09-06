@@ -3,7 +3,9 @@
   "description": "Native domain pack/run/deploy catalog. Source of truth for route manifests, BFF upstream switching, and domain images.",
   "layers": {
     "foundation": {
-      "modules": ["shared"],
+      "modules": [
+        "shared"
+      ],
       "deployable": false,
       "invoke": "sdk",
       "description": "Runtime SDK packed into every process. Never a microservice, never RPC.",
@@ -15,103 +17,351 @@
       },
       "capabilities": [
         {
-          "id": "domain-log", "tier": "L2-aspect", "dir": "src/modules/shared/backend/lib/domain-log.ts",
-          "contract": ["domainLog.event", "domainLog.audit", "getDomainEventBuffer", "getDomainAuditBuffer"],
-          "swappable": false, "fallback": "in-memory buffer",
-          "stability": "stable", "fanIn": 420, "state": "load-bearing",
-          "scope": "几乎所有 service 层", "changeRisk": "极高：扇入最广，签名/语义变更波及全域",
-          "dependents": ["几乎所有 <domain>/backend/services/*"]
+          "id": "domain-log",
+          "tier": "L2-aspect",
+          "dir": "src/modules/shared/backend/lib/domain-log.ts",
+          "contract": [
+            "domainLog.event",
+            "domainLog.audit",
+            "getDomainEventBuffer",
+            "getDomainAuditBuffer"
+          ],
+          "swappable": false,
+          "fallback": "in-memory buffer",
+          "stability": "stable",
+          "fanIn": 420,
+          "state": "load-bearing",
+          "scope": "几乎所有 service 层",
+          "changeRisk": "极高：扇入最广，签名/语义变更波及全域",
+          "dependents": [
+            "src/modules/ai/backend/services/ai-api-key.service.ts",
+            "src/modules/ai/backend/services/ai-chat-conversation.service.ts",
+            "src/modules/ai/backend/services/ai-chat-message.service.ts",
+            "src/modules/ai/backend/services/ai-chat-role.service.ts",
+            "src/modules/ai/backend/services/ai-image.service.ts",
+            "src/modules/ai/backend/services/ai-knowledge-document.service.ts",
+            "src/modules/ai/backend/services/ai-knowledge-segment.service.ts",
+            "src/modules/ai/backend/services/ai-knowledge.service.ts",
+            "src/modules/ai/backend/services/ai-mind-map.service.ts",
+            "src/modules/ai/backend/services/ai-music.service.ts",
+            "src/modules/ai/backend/services/ai-tool.service.ts",
+            "src/modules/ai/backend/services/ai-workflow.service.ts",
+            "…(+408 more)"
+          ]
         },
         {
-          "id": "database", "tier": "L0-driver", "dir": "src/modules/shared/backend/lib/database",
-          "contract": ["getDataSourceConfig", "getProtocolFamily", "getKyselyDb", "hasRealDatabase", "BaseMapper", "QueryWrapper", "BaseService", "dynamic-table.*", "resetDataSourceConfig"],
-          "swappable": { "env": "DB_DRIVER", "urlAutodetect": "DATABASE_URL", "default": "memory", "prod": ["postgresql", "mysql", "mariadb", "sqlserver", "sqlite", "tidb", "oceanbase", "opengauss", "gaussdb", "kingbase", "dm", "oracle"], "fallback": "memory→sqlite族", "productionGuard": "assertProductionDataSourceConfiguration()" },
-          "stability": "stable", "fanIn": 71, "state": "load-bearing",
+          "id": "database",
+          "tier": "L0-driver",
+          "dir": "src/modules/shared/backend/lib/database",
+          "contract": [
+            "getDataSourceConfig",
+            "getProtocolFamily",
+            "getKyselyDb",
+            "hasRealDatabase",
+            "BaseMapper",
+            "QueryWrapper",
+            "BaseService",
+            "dynamic-table.*",
+            "resetDataSourceConfig"
+          ],
+          "swappable": {
+            "env": "DB_DRIVER",
+            "urlAutodetect": "DATABASE_URL",
+            "default": "memory",
+            "prod": [
+              "postgresql",
+              "mysql",
+              "mariadb",
+              "sqlserver",
+              "sqlite",
+              "tidb",
+              "oceanbase",
+              "opengauss",
+              "gaussdb",
+              "kingbase",
+              "dm",
+              "oracle"
+            ],
+            "fallback": "memory→sqlite族",
+            "productionGuard": "assertProductionDataSourceConfiguration()"
+          },
+          "stability": "stable",
+          "fanIn": 74,
+          "state": "load-bearing",
           "changeRisk": "高：全库方言 + 71 扇入，改方言映射需回归国产库",
-          "dependents": ["*/backend/repositories/*", "online/adapters/persistence/schema-ddl", "各域 service"]
+          "dependents": [
+            "src/modules/aigw/backend/repositories/aigw-access-token.repository.ts",
+            "src/modules/aigw/backend/repositories/aigw-carrier.repository.ts",
+            "src/modules/aigw/backend/repositories/aigw-channel.repository.ts",
+            "src/modules/aigw/backend/repositories/aigw-enterprise.repository.ts",
+            "src/modules/aigw/backend/repositories/aigw-isv-app.repository.ts",
+            "src/modules/aigw/backend/repositories/aigw-ledger.repository.ts",
+            "src/modules/aigw/backend/repositories/aigw-model.repository.ts",
+            "src/modules/aigw/backend/repositories/aigw-quota.repository.ts",
+            "src/modules/aigw/backend/repositories/aigw-seat.repository.ts",
+            "src/modules/aigw/backend/repositories/aigw-settlement.repository.ts",
+            "src/modules/aigw/backend/repositories/aigw-split.repository.ts",
+            "src/modules/aigw/backend/repositories/aigw-tariff.repository.ts",
+            "…(+62 more)"
+          ]
         },
         {
-          "id": "biz-tenant", "tier": "L2-aspect", "dir": "src/modules/shared/backend/lib/biz-tenant.ts",
-          "contract": ["getTenantContext", "runWithTenant", "tenant-scope.*"],
-          "swappable": false, "fallback": "default tenant",
-          "stability": "stable", "fanIn": 34, "state": "load-bearing",
-          "scope": "多租户隔离路径(查询/写入自动注入 tenant_id)", "changeRisk": "高：34 扇入 + 租户隔离语义，破坏=越权风险",
-          "dependents": ["database/tenant-isolation-plugin", "各域 service/repository"]
+          "id": "biz-tenant",
+          "tier": "L2-aspect",
+          "dir": "src/modules/shared/backend/lib/biz-tenant.ts",
+          "contract": [
+            "getTenantContext",
+            "runWithTenant",
+            "tenant-scope.*"
+          ],
+          "swappable": false,
+          "fallback": "default tenant",
+          "stability": "stable",
+          "fanIn": 46,
+          "state": "load-bearing",
+          "scope": "多租户隔离路径(查询/写入自动注入 tenant_id)",
+          "changeRisk": "高：34 扇入 + 租户隔离语义，破坏=越权风险",
+          "dependents": [
+            "src/app/api/v1/admin/system/menus/route.ts",
+            "src/app/api/v1/admin/system/menus/sidebar/route.ts",
+            "src/modules/aigw/backend/repositories/aigw-access-token.repository.ts",
+            "src/modules/aigw/backend/repositories/aigw-enterprise.repository.ts",
+            "src/modules/aigw/backend/repositories/aigw-quota.repository.ts",
+            "src/modules/aigw/backend/repositories/aigw-seat.repository.ts",
+            "src/modules/aigw/backend/repositories/aigw-sku.repository.ts",
+            "src/modules/aigw/backend/repositories/aigw-tariff.repository.ts",
+            "src/modules/aigw/backend/repositories/aigw-usage.repository.ts",
+            "src/modules/aigw/frontend/cpc-pages/workspace.cpc-page.tsx",
+            "src/modules/infra/backend/services/codegen-templates/repository.template.ts",
+            "src/modules/shared/backend/auth/guards.ts",
+            "…(+34 more)"
+          ]
         },
         {
-          "id": "cache", "tier": "L0-driver", "dir": "src/modules/shared/backend/lib/cache",
-          "contract": ["getCache", "getCacheDriverName", "resetCache", "CacheDriver"],
-          "swappable": { "env": "CACHE_DRIVER", "default": "memory", "prod": "redis", "prodUrlEnv": ["CACHE_REDIS_URL", "REDIS_URL"], "fallback": "in-memory(类H2)", "optionalDep": "ioredis(懒加载)" },
-          "stability": "stable", "fanIn": 0, "state": "provisioned",
+          "id": "cache",
+          "tier": "L0-driver",
+          "dir": "src/modules/shared/backend/lib/cache",
+          "contract": [
+            "getCache",
+            "getCacheDriverName",
+            "resetCache",
+            "CacheDriver"
+          ],
+          "swappable": {
+            "env": "CACHE_DRIVER",
+            "default": "memory",
+            "prod": "redis",
+            "prodUrlEnv": [
+              "CACHE_REDIS_URL",
+              "REDIS_URL"
+            ],
+            "fallback": "in-memory(类H2)",
+            "optionalDep": "ioredis(懒加载)"
+          },
+          "stability": "stable",
+          "fanIn": 0,
+          "state": "provisioned",
           "changeRisk": "低(暂无消费方)：是新域需要分布式缓存时应采用的接缝",
           "dependents": []
         },
         {
-          "id": "storage", "tier": "L0-driver", "dir": "src/modules/shared/backend/lib/storage",
-          "contract": ["getStorage", "getStorageDriverName", "resetStorage", "StorageDriver"],
-          "swappable": { "env": "STORAGE_DRIVER", "default": "local", "prod": "s3(AWS/MinIO/OSS)", "prodEnv": ["S3_BUCKET", "S3_ENDPOINT", "S3_REGION"], "fallback": "local disk(.data/uploads)", "optionalDep": "@aws-sdk/client-s3(懒加载)" },
-          "stability": "stable", "fanIn": 1, "state": "load-bearing",
+          "id": "storage",
+          "tier": "L0-driver",
+          "dir": "src/modules/shared/backend/lib/storage",
+          "contract": [
+            "getStorage",
+            "getStorageDriverName",
+            "resetStorage",
+            "StorageDriver"
+          ],
+          "swappable": {
+            "env": "STORAGE_DRIVER",
+            "default": "local",
+            "prod": "s3(AWS/MinIO/OSS)",
+            "prodEnv": [
+              "S3_BUCKET",
+              "S3_ENDPOINT",
+              "S3_REGION"
+            ],
+            "fallback": "local disk(.data/uploads)",
+            "optionalDep": "@aws-sdk/client-s3(懒加载)"
+          },
+          "stability": "stable",
+          "fanIn": 1,
+          "state": "load-bearing",
           "changeRisk": "低：目前仅 infra/file.service 消费",
-          "dependents": ["infra/backend/services/file.service"]
+          "dependents": [
+            "src/modules/infra/backend/services/file.service.ts"
+          ]
         },
         {
-          "id": "mq", "tier": "L0-driver", "dir": "src/modules/shared/backend/lib/mq",
-          "contract": ["getMq", "getMqDriverName", "resetMq", "MqDriver"],
-          "swappable": { "env": "MQ_DRIVER", "default": "memory", "prod": "redis(Pub/Sub)", "prodUrlEnv": ["MQ_REDIS_URL", "REDIS_URL"], "fallback": "进程内 pub/sub", "optionalDep": "ioredis(懒加载)" },
-          "stability": "stable", "fanIn": 0, "state": "provisioned",
+          "id": "mq",
+          "tier": "L0-driver",
+          "dir": "src/modules/shared/backend/lib/mq",
+          "contract": [
+            "getMq",
+            "getMqDriverName",
+            "resetMq",
+            "MqDriver"
+          ],
+          "swappable": {
+            "env": "MQ_DRIVER",
+            "default": "memory",
+            "prod": "redis(Pub/Sub)",
+            "prodUrlEnv": [
+              "MQ_REDIS_URL",
+              "REDIS_URL"
+            ],
+            "fallback": "进程内 pub/sub",
+            "optionalDep": "ioredis(懒加载)"
+          },
+          "stability": "stable",
+          "fanIn": 0,
+          "state": "provisioned",
           "changeRisk": "低(暂无消费方)：是新域需要跨进程消息时应采用的接缝；平级 platform-mq.ts 为同步基元(向下兼容)",
           "dependents": []
         },
         {
-          "id": "event-bus", "tier": "L1-fabric", "dir": "src/modules/shared/backend/lib/event-bus.ts",
-          "contract": ["eventBus.publish", "eventBus.broadcast", "eventBus.emit", "eventBus.subscribe", "eventBus.publishReliable"],
-          "swappable": false, "fallback": "in-process fan-out(+ nats-fabric 接缝)",
-          "stability": "stable", "fanIn": 1, "state": "load-bearing",
+          "id": "event-bus",
+          "tier": "L1-fabric",
+          "dir": "src/modules/shared/backend/lib/event-bus.ts",
+          "contract": [
+            "eventBus.publish",
+            "eventBus.broadcast",
+            "eventBus.emit",
+            "eventBus.subscribe",
+            "eventBus.publishReliable"
+          ],
+          "swappable": false,
+          "fallback": "in-process fan-out(+ nats-fabric 接缝)",
+          "stability": "stable",
+          "fanIn": 1,
+          "state": "load-bearing",
           "changeRisk": "中：被 service-broker 编织，域应通过它发领域事件(架构文档强制)",
-          "dependents": ["service-broker"]
+          "dependents": [
+            "src/modules/shared/backend/lib/service-broker.ts"
+          ]
         },
         {
-          "id": "service-broker", "tier": "L1-fabric", "dir": "src/modules/shared/backend/lib/service-broker.ts",
-          "contract": ["broker.call", "broker.emit", "broker.broadcast(+ broker-cache/context/invoke/registry/resilience/validator)"],
-          "swappable": false, "fallback": "in-process(local sdk) → nats-rr(remote)",
-          "stability": "stable", "fanIn": 0, "state": "provisioned",
+          "id": "service-broker",
+          "tier": "L1-fabric",
+          "dir": "src/modules/shared/backend/lib/service-broker.ts",
+          "contract": [
+            "broker.call",
+            "broker.emit",
+            "broker.broadcast(+ broker-cache/context/invoke/registry/resilience/validator)"
+          ],
+          "swappable": false,
+          "fallback": "in-process(local sdk) → nats-rr(remote)",
+          "stability": "stable",
+          "fanIn": 2,
+          "state": "load-bearing",
           "changeRisk": "中：跨域调用统一入口，域拆分/远程化时的核心接缝(依赖 event-bus + messaging-protocol)",
-          "dependents": ["(拆域后)各域 facade 消费方"]
+          "dependents": [
+            "src/modules/shared/backend/lib/rpc-facade.ts",
+            "src/modules/shared/backend/lib/service-bus.ts"
+          ]
         },
         {
-          "id": "messaging-protocol", "tier": "L1-fabric", "dir": "src/modules/shared/backend/lib/messaging-protocol.ts",
-          "contract": ["Command/Query/Event/Stream 信封", "contractVersion 契约版本", "headerKeys(traceId/tenantId/actorId/idempotencyKey)"],
-          "swappable": false, "fallback": "v1 in-process",
-          "stability": "versioned-contract", "fanIn": 0, "state": "provisioned",
+          "id": "messaging-protocol",
+          "tier": "L1-fabric",
+          "dir": "src/modules/shared/backend/lib/messaging-protocol.ts",
+          "contract": [
+            "Command/Query/Event/Stream 信封",
+            "contractVersion 契约版本",
+            "headerKeys(traceId/tenantId/actorId/idempotencyKey)"
+          ],
+          "swappable": false,
+          "fallback": "v1 in-process",
+          "stability": "versioned-contract",
+          "fanIn": 5,
+          "state": "load-bearing",
           "changeRisk": "高(契约级)：变更必须 contractVersion 递增 + 向下兼容 + grep 全量 dependents",
-          "dependents": ["event-bus", "service-broker", "transactional-outbox"]
+          "dependents": [
+            "src/modules/shared/backend/lib/event-bus.ts",
+            "src/modules/shared/backend/lib/nats-fabric.ts",
+            "src/modules/shared/backend/lib/nats-stream.ts",
+            "src/modules/shared/backend/lib/service-broker.ts",
+            "src/modules/shared/backend/lib/transactional-outbox.ts"
+          ]
         },
         {
-          "id": "transactional-outbox", "tier": "L1-fabric", "dir": "src/modules/shared/backend/lib/transactional-outbox.ts",
-          "contract": ["runUnitOfWork", "appendOutbox", "outbox-store/outbox-kysely-store"],
-          "swappable": false, "fallback": "kysely outbox 表",
-          "stability": "stable", "fanIn": 0, "state": "provisioned",
+          "id": "transactional-outbox",
+          "tier": "L1-fabric",
+          "dir": "src/modules/shared/backend/lib/transactional-outbox.ts",
+          "contract": [
+            "runUnitOfWork",
+            "appendOutbox",
+            "outbox-store/outbox-kysely-store"
+          ],
+          "swappable": false,
+          "fallback": "kysely outbox 表",
+          "stability": "stable",
+          "fanIn": 4,
+          "state": "load-bearing",
           "changeRisk": "中：可靠事件(publishReliable)的落地，依赖 database + messaging-protocol",
-          "dependents": ["event-bus.publishReliable"]
+          "dependents": [
+            "src/modules/shared/backend/lib/event-bus.ts",
+            "src/modules/shared/backend/lib/outbox-kysely-store.ts",
+            "src/modules/shared/backend/lib/outbox-store.ts",
+            "src/modules/shared/backend/lib/service-broker.ts"
+          ]
         },
         {
-          "id": "trace-context", "tier": "L2-aspect", "dir": "src/modules/shared/backend/lib/trace-context.ts",
-          "contract": ["getTraceId", "runWithTrace(traceId 透传)"],
-          "swappable": false, "fallback": "AsyncLocalStorage",
-          "stability": "stable", "fanIn": 1, "state": "load-bearing",
-          "scope": "全链路 traceId 透传(编排/消息节点必带)", "changeRisk": "中：隐式全局切面",
-          "dependents": ["messaging-protocol", "domain-log(关联 traceId)"]
+          "id": "trace-context",
+          "tier": "L2-aspect",
+          "dir": "src/modules/shared/backend/lib/trace-context.ts",
+          "contract": [
+            "getTraceId",
+            "runWithTrace(traceId 透传)"
+          ],
+          "swappable": false,
+          "fallback": "AsyncLocalStorage",
+          "stability": "stable",
+          "fanIn": 8,
+          "state": "load-bearing",
+          "scope": "全链路 traceId 透传(编排/消息节点必带)",
+          "changeRisk": "中：隐式全局切面",
+          "dependents": [
+            "src/app/api/v1/admin/system/auth/route.ts",
+            "src/modules/shared/backend/http/admin-route.ts",
+            "src/modules/shared/backend/http/api-error.ts",
+            "src/modules/shared/backend/http/app-route.ts",
+            "src/modules/shared/backend/lib/event-bus.ts",
+            "src/modules/shared/backend/lib/observability.ts",
+            "src/modules/shared/backend/lib/service-broker.ts",
+            "src/modules/shared/backend/lib/transactional-outbox.ts"
+          ]
         }
       ]
     },
     "platform": {
-      "domains": ["system", "infra"],
+      "domains": [
+        "system",
+        "infra"
+      ],
       "deployable": true,
       "defaultColocateWith": "bff",
       "publicRpc": "system: getDictDataByType + getPermissionInfoByUser; infra: none"
     },
     "business": {
-      "domains": ["online", "bpm", "pay", "report", "mp", "mall", "member", "crm", "erp", "wms", "mes", "ai", "aigw", "iot", "im"],
+      "domains": [
+        "online",
+        "bpm",
+        "pay",
+        "report",
+        "mp",
+        "mall",
+        "member",
+        "crm",
+        "erp",
+        "wms",
+        "mes",
+        "ai",
+        "aigw",
+        "iot",
+        "im"
+      ],
       "deployable": true
     }
   },
@@ -133,7 +383,13 @@
       "protocol": "grpc",
       "serialization": "protobuf"
     },
-    "rejected": ["dubbo", "thrift", "hessian", "moleculer", "nestjs"]
+    "rejected": [
+      "dubbo",
+      "thrift",
+      "hessian",
+      "moleculer",
+      "nestjs"
+    ]
   },
   "messaging": {
     "protocolVersion": "v1",
@@ -156,16 +412,28 @@
       "kind": "platform",
       "stage": "A",
       "contractVersion": "v1",
-      "publicPrefixes": ["/api/v1/admin/system"],
+      "publicPrefixes": [
+        "/api/v1/admin/system"
+      ],
       "implementation": "local-ts",
       "upstreamEnv": "RUOYI_DOMAIN_SYSTEM_UPSTREAM",
       "defaultPort": 3210,
       "packable": true,
       "packKind": "api-only",
-      "dependsOnModules": ["shared"],
+      "dependsOnModules": [
+        "shared"
+      ],
       "independentDatabase": false,
-      "auth": { "audience": "admin", "tenantPolicy": "required" },
-      "resilience": { "timeoutMs": 5000, "retryMaxAttempts": 1, "safeMethodsOnly": true, "idempotencyRequired": false }
+      "auth": {
+        "audience": "admin",
+        "tenantPolicy": "required"
+      },
+      "resilience": {
+        "timeoutMs": 5000,
+        "retryMaxAttempts": 1,
+        "safeMethodsOnly": true,
+        "idempotencyRequired": false
+      }
     },
     {
       "name": "infra",
@@ -173,16 +441,28 @@
       "kind": "platform",
       "stage": "A",
       "contractVersion": "v1",
-      "publicPrefixes": ["/api/v1/admin/infra"],
+      "publicPrefixes": [
+        "/api/v1/admin/infra"
+      ],
       "implementation": "local-ts",
       "upstreamEnv": "RUOYI_DOMAIN_INFRA_UPSTREAM",
       "defaultPort": 3211,
       "packable": true,
       "packKind": "api-only",
-      "dependsOnModules": ["shared"],
+      "dependsOnModules": [
+        "shared"
+      ],
       "independentDatabase": false,
-      "auth": { "audience": "admin", "tenantPolicy": "required" },
-      "resilience": { "timeoutMs": 8000, "retryMaxAttempts": 1, "safeMethodsOnly": true, "idempotencyRequired": false }
+      "auth": {
+        "audience": "admin",
+        "tenantPolicy": "required"
+      },
+      "resilience": {
+        "timeoutMs": 8000,
+        "retryMaxAttempts": 1,
+        "safeMethodsOnly": true,
+        "idempotencyRequired": false
+      }
     },
     {
       "name": "online",
@@ -190,17 +470,29 @@
       "kind": "business",
       "stage": "B",
       "contractVersion": "v1",
-      "publicPrefixes": ["/api/v1/admin/online"],
+      "publicPrefixes": [
+        "/api/v1/admin/online"
+      ],
       "implementation": "local-ts",
       "upstreamEnv": "RUOYI_DOMAIN_ONLINE_UPSTREAM",
       "defaultPort": 3212,
       "packable": true,
       "packKind": "api-only",
-      "dependsOnModules": ["shared"],
+      "dependsOnModules": [
+        "shared"
+      ],
       "independentDatabase": false,
       "manifestMode": "handwritten",
-      "auth": { "audience": "admin", "tenantPolicy": "required" },
-      "resilience": { "timeoutMs": 15000, "retryMaxAttempts": 1, "safeMethodsOnly": true, "idempotencyRequired": true }
+      "auth": {
+        "audience": "admin",
+        "tenantPolicy": "required"
+      },
+      "resilience": {
+        "timeoutMs": 15000,
+        "retryMaxAttempts": 1,
+        "safeMethodsOnly": true,
+        "idempotencyRequired": true
+      }
     },
     {
       "name": "bpm",
@@ -208,16 +500,28 @@
       "kind": "business",
       "stage": "A",
       "contractVersion": "v1",
-      "publicPrefixes": ["/api/v1/admin/bpm"],
+      "publicPrefixes": [
+        "/api/v1/admin/bpm"
+      ],
       "implementation": "local-ts",
       "upstreamEnv": "RUOYI_DOMAIN_BPM_UPSTREAM",
       "defaultPort": 3213,
       "packable": true,
       "packKind": "api-only",
-      "dependsOnModules": ["shared"],
+      "dependsOnModules": [
+        "shared"
+      ],
       "independentDatabase": false,
-      "auth": { "audience": "admin", "tenantPolicy": "required" },
-      "resilience": { "timeoutMs": 8000, "retryMaxAttempts": 1, "safeMethodsOnly": true, "idempotencyRequired": true }
+      "auth": {
+        "audience": "admin",
+        "tenantPolicy": "required"
+      },
+      "resilience": {
+        "timeoutMs": 8000,
+        "retryMaxAttempts": 1,
+        "safeMethodsOnly": true,
+        "idempotencyRequired": true
+      }
     },
     {
       "name": "pay",
@@ -225,16 +529,30 @@
       "kind": "business",
       "stage": "B",
       "contractVersion": "v1",
-      "publicPrefixes": ["/api/v1/admin/pay", "/api/v1/app/pay", "/api/v1/open/pay"],
+      "publicPrefixes": [
+        "/api/v1/admin/pay",
+        "/api/v1/app/pay",
+        "/api/v1/open/pay"
+      ],
       "implementation": "local-ts",
       "upstreamEnv": "RUOYI_DOMAIN_PAY_UPSTREAM",
       "defaultPort": 3214,
       "packable": true,
       "packKind": "api-only",
-      "dependsOnModules": ["shared"],
+      "dependsOnModules": [
+        "shared"
+      ],
       "independentDatabase": false,
-      "auth": { "audience": "admin", "tenantPolicy": "required" },
-      "resilience": { "timeoutMs": 5000, "retryMaxAttempts": 1, "safeMethodsOnly": true, "idempotencyRequired": true }
+      "auth": {
+        "audience": "admin",
+        "tenantPolicy": "required"
+      },
+      "resilience": {
+        "timeoutMs": 5000,
+        "retryMaxAttempts": 1,
+        "safeMethodsOnly": true,
+        "idempotencyRequired": true
+      }
     },
     {
       "name": "report",
@@ -242,16 +560,28 @@
       "kind": "business",
       "stage": "A",
       "contractVersion": "v1",
-      "publicPrefixes": ["/api/v1/admin/report"],
+      "publicPrefixes": [
+        "/api/v1/admin/report"
+      ],
       "implementation": "local-ts",
       "upstreamEnv": "RUOYI_DOMAIN_REPORT_UPSTREAM",
       "defaultPort": 3215,
       "packable": true,
       "packKind": "api-only",
-      "dependsOnModules": ["shared"],
+      "dependsOnModules": [
+        "shared"
+      ],
       "independentDatabase": false,
-      "auth": { "audience": "admin", "tenantPolicy": "required" },
-      "resilience": { "timeoutMs": 15000, "retryMaxAttempts": 1, "safeMethodsOnly": true, "idempotencyRequired": false }
+      "auth": {
+        "audience": "admin",
+        "tenantPolicy": "required"
+      },
+      "resilience": {
+        "timeoutMs": 15000,
+        "retryMaxAttempts": 1,
+        "safeMethodsOnly": true,
+        "idempotencyRequired": false
+      }
     },
     {
       "name": "mp",
@@ -259,16 +589,28 @@
       "kind": "business",
       "stage": "B",
       "contractVersion": "v1",
-      "publicPrefixes": ["/api/v1/admin/mp"],
+      "publicPrefixes": [
+        "/api/v1/admin/mp"
+      ],
       "implementation": "local-ts",
       "upstreamEnv": "RUOYI_DOMAIN_MP_UPSTREAM",
       "defaultPort": 3216,
       "packable": true,
       "packKind": "api-only",
-      "dependsOnModules": ["shared"],
+      "dependsOnModules": [
+        "shared"
+      ],
       "independentDatabase": false,
-      "auth": { "audience": "admin", "tenantPolicy": "required" },
-      "resilience": { "timeoutMs": 8000, "retryMaxAttempts": 1, "safeMethodsOnly": true, "idempotencyRequired": true }
+      "auth": {
+        "audience": "admin",
+        "tenantPolicy": "required"
+      },
+      "resilience": {
+        "timeoutMs": 8000,
+        "retryMaxAttempts": 1,
+        "safeMethodsOnly": true,
+        "idempotencyRequired": true
+      }
     },
     {
       "name": "mall",
@@ -276,16 +618,29 @@
       "kind": "business",
       "stage": "B",
       "contractVersion": "v1",
-      "publicPrefixes": ["/api/v1/admin/mall", "/api/v1/app/mall"],
+      "publicPrefixes": [
+        "/api/v1/admin/mall",
+        "/api/v1/app/mall"
+      ],
       "implementation": "local-ts",
       "upstreamEnv": "RUOYI_DOMAIN_MALL_UPSTREAM",
       "defaultPort": 3217,
       "packable": true,
       "packKind": "api-only",
-      "dependsOnModules": ["shared"],
+      "dependsOnModules": [
+        "shared"
+      ],
       "independentDatabase": false,
-      "auth": { "audience": "admin", "tenantPolicy": "required" },
-      "resilience": { "timeoutMs": 5000, "retryMaxAttempts": 1, "safeMethodsOnly": true, "idempotencyRequired": true }
+      "auth": {
+        "audience": "admin",
+        "tenantPolicy": "required"
+      },
+      "resilience": {
+        "timeoutMs": 5000,
+        "retryMaxAttempts": 1,
+        "safeMethodsOnly": true,
+        "idempotencyRequired": true
+      }
     },
     {
       "name": "member",
@@ -293,16 +648,29 @@
       "kind": "business",
       "stage": "A",
       "contractVersion": "v1",
-      "publicPrefixes": ["/api/v1/admin/member", "/api/v1/app/member"],
+      "publicPrefixes": [
+        "/api/v1/admin/member",
+        "/api/v1/app/member"
+      ],
       "implementation": "local-ts",
       "upstreamEnv": "RUOYI_DOMAIN_MEMBER_UPSTREAM",
       "defaultPort": 3218,
       "packable": true,
       "packKind": "api-only",
-      "dependsOnModules": ["shared"],
+      "dependsOnModules": [
+        "shared"
+      ],
       "independentDatabase": false,
-      "auth": { "audience": "admin", "tenantPolicy": "required" },
-      "resilience": { "timeoutMs": 5000, "retryMaxAttempts": 1, "safeMethodsOnly": true, "idempotencyRequired": false }
+      "auth": {
+        "audience": "admin",
+        "tenantPolicy": "required"
+      },
+      "resilience": {
+        "timeoutMs": 5000,
+        "retryMaxAttempts": 1,
+        "safeMethodsOnly": true,
+        "idempotencyRequired": false
+      }
     },
     {
       "name": "crm",
@@ -310,16 +678,28 @@
       "kind": "business",
       "stage": "B",
       "contractVersion": "v1",
-      "publicPrefixes": ["/api/v1/admin/crm"],
+      "publicPrefixes": [
+        "/api/v1/admin/crm"
+      ],
       "implementation": "local-ts",
       "upstreamEnv": "RUOYI_DOMAIN_CRM_UPSTREAM",
       "defaultPort": 3219,
       "packable": true,
       "packKind": "api-only",
-      "dependsOnModules": ["shared"],
+      "dependsOnModules": [
+        "shared"
+      ],
       "independentDatabase": false,
-      "auth": { "audience": "admin", "tenantPolicy": "required" },
-      "resilience": { "timeoutMs": 5000, "retryMaxAttempts": 1, "safeMethodsOnly": true, "idempotencyRequired": true }
+      "auth": {
+        "audience": "admin",
+        "tenantPolicy": "required"
+      },
+      "resilience": {
+        "timeoutMs": 5000,
+        "retryMaxAttempts": 1,
+        "safeMethodsOnly": true,
+        "idempotencyRequired": true
+      }
     },
     {
       "name": "erp",
@@ -327,16 +707,28 @@
       "kind": "business",
       "stage": "B",
       "contractVersion": "v1",
-      "publicPrefixes": ["/api/v1/admin/erp"],
+      "publicPrefixes": [
+        "/api/v1/admin/erp"
+      ],
       "implementation": "local-ts",
       "upstreamEnv": "RUOYI_DOMAIN_ERP_UPSTREAM",
       "defaultPort": 3220,
       "packable": true,
       "packKind": "api-only",
-      "dependsOnModules": ["shared"],
+      "dependsOnModules": [
+        "shared"
+      ],
       "independentDatabase": false,
-      "auth": { "audience": "admin", "tenantPolicy": "required" },
-      "resilience": { "timeoutMs": 8000, "retryMaxAttempts": 1, "safeMethodsOnly": true, "idempotencyRequired": true }
+      "auth": {
+        "audience": "admin",
+        "tenantPolicy": "required"
+      },
+      "resilience": {
+        "timeoutMs": 8000,
+        "retryMaxAttempts": 1,
+        "safeMethodsOnly": true,
+        "idempotencyRequired": true
+      }
     },
     {
       "name": "wms",
@@ -344,16 +736,28 @@
       "kind": "business",
       "stage": "B",
       "contractVersion": "v1",
-      "publicPrefixes": ["/api/v1/admin/wms"],
+      "publicPrefixes": [
+        "/api/v1/admin/wms"
+      ],
       "implementation": "local-ts",
       "upstreamEnv": "RUOYI_DOMAIN_WMS_UPSTREAM",
       "defaultPort": 3221,
       "packable": true,
       "packKind": "api-only",
-      "dependsOnModules": ["shared"],
+      "dependsOnModules": [
+        "shared"
+      ],
       "independentDatabase": false,
-      "auth": { "audience": "admin", "tenantPolicy": "required" },
-      "resilience": { "timeoutMs": 8000, "retryMaxAttempts": 1, "safeMethodsOnly": true, "idempotencyRequired": true }
+      "auth": {
+        "audience": "admin",
+        "tenantPolicy": "required"
+      },
+      "resilience": {
+        "timeoutMs": 8000,
+        "retryMaxAttempts": 1,
+        "safeMethodsOnly": true,
+        "idempotencyRequired": true
+      }
     },
     {
       "name": "mes",
@@ -361,16 +765,28 @@
       "kind": "business",
       "stage": "B",
       "contractVersion": "v1",
-      "publicPrefixes": ["/api/v1/admin/mes"],
+      "publicPrefixes": [
+        "/api/v1/admin/mes"
+      ],
       "implementation": "local-ts",
       "upstreamEnv": "RUOYI_DOMAIN_MES_UPSTREAM",
       "defaultPort": 3222,
       "packable": true,
       "packKind": "api-only",
-      "dependsOnModules": ["shared"],
+      "dependsOnModules": [
+        "shared"
+      ],
       "independentDatabase": false,
-      "auth": { "audience": "admin", "tenantPolicy": "required" },
-      "resilience": { "timeoutMs": 8000, "retryMaxAttempts": 1, "safeMethodsOnly": true, "idempotencyRequired": true }
+      "auth": {
+        "audience": "admin",
+        "tenantPolicy": "required"
+      },
+      "resilience": {
+        "timeoutMs": 8000,
+        "retryMaxAttempts": 1,
+        "safeMethodsOnly": true,
+        "idempotencyRequired": true
+      }
     },
     {
       "name": "ai",
@@ -378,16 +794,29 @@
       "kind": "business",
       "stage": "B",
       "contractVersion": "v1",
-      "publicPrefixes": ["/api/v1/admin/ai", "/api/v1/open/ai"],
+      "publicPrefixes": [
+        "/api/v1/admin/ai",
+        "/api/v1/open/ai"
+      ],
       "implementation": "local-ts",
       "upstreamEnv": "RUOYI_DOMAIN_AI_UPSTREAM",
       "defaultPort": 3223,
       "packable": true,
       "packKind": "api-only",
-      "dependsOnModules": ["shared"],
+      "dependsOnModules": [
+        "shared"
+      ],
       "independentDatabase": false,
-      "auth": { "audience": "admin", "tenantPolicy": "required" },
-      "resilience": { "timeoutMs": 15000, "retryMaxAttempts": 1, "safeMethodsOnly": true, "idempotencyRequired": true }
+      "auth": {
+        "audience": "admin",
+        "tenantPolicy": "required"
+      },
+      "resilience": {
+        "timeoutMs": 15000,
+        "retryMaxAttempts": 1,
+        "safeMethodsOnly": true,
+        "idempotencyRequired": true
+      }
     },
     {
       "name": "aigw",
@@ -395,16 +824,29 @@
       "kind": "business",
       "stage": "B",
       "contractVersion": "v1",
-      "publicPrefixes": ["/api/v1/admin/aigw", "/api/v1/open/aigw"],
+      "publicPrefixes": [
+        "/api/v1/admin/aigw",
+        "/api/v1/open/aigw"
+      ],
       "implementation": "local-ts",
       "upstreamEnv": "RUOYI_DOMAIN_AIGW_UPSTREAM",
       "defaultPort": 3226,
       "packable": true,
       "packKind": "api-only",
-      "dependsOnModules": ["shared"],
+      "dependsOnModules": [
+        "shared"
+      ],
       "independentDatabase": false,
-      "auth": { "audience": "admin", "tenantPolicy": "required" },
-      "resilience": { "timeoutMs": 15000, "retryMaxAttempts": 1, "safeMethodsOnly": true, "idempotencyRequired": true }
+      "auth": {
+        "audience": "admin",
+        "tenantPolicy": "required"
+      },
+      "resilience": {
+        "timeoutMs": 15000,
+        "retryMaxAttempts": 1,
+        "safeMethodsOnly": true,
+        "idempotencyRequired": true
+      }
     },
     {
       "name": "iot",
@@ -412,16 +854,28 @@
       "kind": "business",
       "stage": "B",
       "contractVersion": "v1",
-      "publicPrefixes": ["/api/v1/admin/iot"],
+      "publicPrefixes": [
+        "/api/v1/admin/iot"
+      ],
       "implementation": "local-ts",
       "upstreamEnv": "RUOYI_DOMAIN_IOT_UPSTREAM",
       "defaultPort": 3224,
       "packable": true,
       "packKind": "api-only",
-      "dependsOnModules": ["shared"],
+      "dependsOnModules": [
+        "shared"
+      ],
       "independentDatabase": false,
-      "auth": { "audience": "admin", "tenantPolicy": "required" },
-      "resilience": { "timeoutMs": 5000, "retryMaxAttempts": 1, "safeMethodsOnly": true, "idempotencyRequired": true }
+      "auth": {
+        "audience": "admin",
+        "tenantPolicy": "required"
+      },
+      "resilience": {
+        "timeoutMs": 5000,
+        "retryMaxAttempts": 1,
+        "safeMethodsOnly": true,
+        "idempotencyRequired": true
+      }
     },
     {
       "name": "im",
@@ -429,16 +883,28 @@
       "kind": "business",
       "stage": "B",
       "contractVersion": "v1",
-      "publicPrefixes": ["/api/v1/admin/im"],
+      "publicPrefixes": [
+        "/api/v1/admin/im"
+      ],
       "implementation": "local-ts",
       "upstreamEnv": "RUOYI_DOMAIN_IM_UPSTREAM",
       "defaultPort": 3225,
       "packable": true,
       "packKind": "api-only",
-      "dependsOnModules": ["shared"],
+      "dependsOnModules": [
+        "shared"
+      ],
       "independentDatabase": false,
-      "auth": { "audience": "admin", "tenantPolicy": "required" },
-      "resilience": { "timeoutMs": 5000, "retryMaxAttempts": 1, "safeMethodsOnly": true, "idempotencyRequired": true }
+      "auth": {
+        "audience": "admin",
+        "tenantPolicy": "required"
+      },
+      "resilience": {
+        "timeoutMs": 5000,
+        "retryMaxAttempts": 1,
+        "safeMethodsOnly": true,
+        "idempotencyRequired": true
+      }
     }
   ]
 }
