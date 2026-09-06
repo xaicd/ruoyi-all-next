@@ -63,6 +63,26 @@ Next.js 16 (App Router) + React 19 + TypeScript + **Kysely**（运行时数据�
 
 各能力经 `index.ts` barrel 暴露。四大**可切换中间件**见 §5。
 
+> **本体建模视角**：基础设施域**不按业务域的「边界/端口/RPC」建模**，而按「**契约面 + 可切换 + 被依赖(扇入 fanIn) + 稳定等级**」建模。机器真源在 `domain-catalog.json → layers.foundation.capabilities[]`（下表是其人读投影，随代码演进由扫描更新，勿手改 fanIn/dependents）。
+>
+> **节点分三层**：`L0-driver`（可切换资源，必有本地兜底）· `L1-fabric`（域间通信编织，高扇入、契约版本化）· `L2-aspect`（横切全局，隐式贯穿所有调用）。
+>
+> **state 是本体核心信号**：`load-bearing`=已被真实消费、改动破坏性大；`provisioned`=已就绪但消费方尚未接入，是新域应主动采用的接缝。fanIn=真实 import 计数(排测试/自引)，客观反映破坏半径。
+
+| 能力 | tier | fanIn | state | 可切换(env) | changeRisk |
+|---|---|---:|---|---|---|
+| `domain-log` | L2-aspect | **420** | load-bearing | 否 | 极高（扇入最广，签名变更波及全域） |
+| `database` | L0-driver | 71 | load-bearing | `DB_DRIVER`（全库+国产库） | 高（方言映射改动需回归国产库） |
+| `biz-tenant` | L2-aspect | 34 | load-bearing | 否 | 高（租户隔离，破坏=越权风险） |
+| `storage` | L0-driver | 1 | load-bearing | `STORAGE_DRIVER` local↔s3 | 低（仅 file.service 消费） |
+| `event-bus` | L1-fabric | 1 | load-bearing | 否 | 中（被 service-broker 编织，域发领域事件必经） |
+| `trace-context` | L2-aspect | 1 | load-bearing | 否 | 中（全链路 traceId 透传） |
+| `cache` | L0-driver | 0 | **provisioned** | `CACHE_DRIVER` memory↔redis | 低（新域需分布式缓存时采用） |
+| `mq` | L0-driver | 0 | **provisioned** | `MQ_DRIVER` memory↔redis | 低（新域需跨进程消息时采用） |
+| `service-broker` | L1-fabric | 0 | **provisioned** | 否（local sdk↔nats-rr） | 中（拆域/远程化核心接缝） |
+| `messaging-protocol` | L1-fabric | 0 | **provisioned** | 否 | 高（契约级，变更须 contractVersion 递增+兼容） |
+| `transactional-outbox` | L1-fabric | 0 | **provisioned** | 否 | 中（可靠事件落地，依赖 database+messaging-protocol） |
+
 **database/**（`index.ts` 汇出）
 - `datasource-manager.ts` —— env→驱动解析：`getDataSourceConfig()`、`getProtocolFamily()`、`getCompatibilityTier()`、`isMemoryMode()`、`assertProductionDataSourceConfiguration()`、`resetDataSourceConfig()`；`DRIVER_PROTOCOL_MAP`（含国产库 达梦/金仓/高斯/OceanBase/TiDB 映射到 postgresql/mysql/proprietary）。
 - `kysely-client.ts` —— `getKyselyDb()`、`hasRealDatabase()`、`destroyKyselyDb()`。
@@ -184,3 +204,13 @@ DATABASE_URL=file:./data/ruoyi.db DB_DRIVER=sqlite npm run dev   # next dev -p 3
 - **本页 = 真源的人读投影**：本页任何一节若与 `domain-catalog.json` / `seam-graph.json` / lib barrel 不一致，以**真源为准**并立即回写本页；域名等机器字段**勿在本页手改**，改真源后重生成。
 - **基线只增不破**：进化只做增量扩展；既有域契约、审计底座 8 字段、可切换 env 语义向下兼容，破坏性变更须退回规划阶段（三阶段门禁）。
 - **进化即沉淀**：解决复杂问题后不结晶 SKILL / 不回写基座，视为进化未完成。
+
+### 10.4 基础设施域（foundation）专属进化规则
+
+基础设施域高扇入、被所有域依赖，破坏面远大于业务域，进化须**更谨慎**，按节点层级分规则：
+
+- **新增 L0-driver 能力**：必走六件套 —— `<x>-driver.ts` 接口 → `memory/local` 默认零配置驱动 → 生产驱动(懒加载可选依赖) → `<x>-manager.ts`(`get<X>/reset<X>/get<X>DriverName`) → `ENV` 开关 → 本地兜底；`__tests__` 覆盖「默认路径 + 切换选驱动」；在 `foundation.capabilities[]` 注册（`tier=L0-driver`, `state=provisioned`, 填 `swappable` 五元组）。
+- **改 L1-fabric 契约**：动的是所有域的"通信神经"。`messaging-protocol` 等契约变更**必须 `contractVersion` 递增 + 向下兼容**，改前 grep 全量 `dependents` 评估爆炸半径；跑 `npm run domain:seams` 重生成能力三角。
+- **加/改 L2-aspect 切面**：隐式全局（不出现在业务签名里）。必须声明 `scope`（作用路径）与"是否默认开启"，**严禁悄改全局调用语义**（如 traceId 透传、审计、租户隔离）；`domain-log`(fanIn 420)/`biz-tenant`(fanIn 34) 这类高扇入切面变更等同破坏性变更，须退回规划阶段。
+- **state 跃迁必回写**：`provisioned` 能力一旦被首个消费方接入，其 `state` 改为 `load-bearing` 并更新 `fanIn/dependents`（本页表 + catalog 同步）——让"这个能力现在改起来危不危险"始终有客观真源。
+- **只增不破**：既有 `swappable` 的 ENV 语义与默认值向下兼容；删除/重命名 barrel 导出属破坏性变更，须评估全部 `dependents`。
