@@ -36,15 +36,15 @@
 **「C 端」= 多端概念，不是单一前台**（对齐仓库 `clients/` 现状 + 用户 steering）：
 - **B 端（管理后台）**：管理员运营后台。
 - **C 端（面向用户，多渠道）**：
-  - **Web/H5 前台**（`clients/h5`，或 Next 内 C 端路由组 `/store`）；
+  - **Web/H5 前台**（`clients/h5`，或 Next 内 C 端路由组 `/portal`）；
   - **PC 端**（桌面：`clients/desktop-pc`（Tauri），或 PC Web 前台）；
   - **App 端**（移动：`clients/uniapp`（小程序/App）、`clients/flutter`、`clients/expo`）。
 
 - **R16（本仓侧 — 让各端有确定、可预览/可寻址的入口）**：ruoyi-all-next SHALL 让 B 端与各 C 端渠道有**确定入口**，供平台预览 UI 分别指向：
   - B 端：现有 `/login` → `/admin/*`。
-  - C 端 Web/H5：Next 内 C 端路由组（如 `/store`，含登录/首页/用户中心）——同一 dev server 可与 B 端一起预览（不同路径）。
+  - C 端 Web/H5：Next 内 C 端路由组（如 `/portal`，含登录/首页/用户中心）——同一 dev server 可与 B 端一起预览（不同路径）。
   - C 端 PC/App（uniapp/flutter/expo/desktop-pc）：为**独立客户端包**，非本 Next 应用同源路由；其"预览"形态是**各自的运行/构建产物**（如 H5 build、Expo Web、Uniapp H5 预览），入口由各 client 的启动脚本/产物 URL 提供，遵循 `clients/README` 约定（启动先读 `/api/v1/open/meta/project-profile`）。
-  - **本阶段（阶段 1）最小交付**：先让 **C 端 Web/H5** 有一个可访问的落地/登录页路径（`/store`），使"C 端预览"有实际可指 URL；PC/App 各端预览为**后续阶段**（expo 在阶段 3），此处仅确立"多端渠道"模型。
+  - **本阶段（阶段 1）最小交付**：先让 **C 端 Web/H5** 有一个可访问的落地/登录页路径（`/portal`），使"C 端预览"有实际可指 URL；PC/App 各端预览为**后续阶段**（expo 在阶段 3），此处仅确立"多端渠道"模型。
 - **R17（平台侧 — 对话框「多端命名预览入口」，主仓 DigitalStaff，属另一 spec/阶段）**：平台预览抽屉/对话框 SHALL 支持一个项目**多个命名预览入口（按渠道：B 端 / C 端 Web / PC / App…）**，并**根据项目实际探测结果**决定展示哪些（探测：项目 `clients/` 实际存在哪些渠道 + `open/meta/client-channels` 声明 + 路由/端口约定）。同源渠道（B 端/C 端 Web）走"同预览地址跳不同路径"，独立客户端渠道（App/PC 包）走各自产物 URL。**落在主仓预览 UI，不在本仓阶段 1 范围**，此处仅登记关联，避免需求丢失。
 - **验收挂钩**：本仓侧见 A8（C 端 Web 有可预览入口）；多端渠道模型见 R16；平台侧多入口 UI 由主仓 spec 承接 R17。
 
@@ -85,7 +85,7 @@
 ### 3.5 🆕 预览免输入登录（预置演示凭据，用户 steering 硬要求）
 > 目标：预览环境下打开登录页即可一键进入，**不让人手输账号密码**（避免体验断在登录页）。
 - **R18** — THE `scripts/bootstrap-sqlite.ts` SHALL 预置一个**演示 C 端会员**（如 `demo / demo123`，ACTIVE），随 `member_user` 建表一并 seed；B 端演示管理员 `admin / admin123` 已有。
-- **R19** — THE C 端登录页（`/store` 登录）与 B 端登录页（`/login`）SHALL 在**预览/演示环境**下默认**预填**演示账号与密码（input 带默认值），用户点"登录"即可进入，无需输入。
+- **R19** — THE C 端登录页（`/portal` 登录）与 B 端登录页（`/login`）SHALL 在**预览/演示环境**下默认**预填**演示账号与密码（input 带默认值），用户点"登录"即可进入，无需输入。
 - **R20** — THE 预填行为 SHALL 仅在预览/演示场景生效（如通过 `NEXT_PUBLIC_DEMO_LOGIN=1` / 非生产 env 开关控制），**生产环境不得预填明文凭据**（安全兜底）。
 - **R21** — 演示会员 SHALL 有最小可用的资料（昵称/等级），使登录后用户中心/外观预览有真实内容可看。
 
@@ -122,8 +122,8 @@
 | A5 | admin 端登录 / member admin CRUD 回归不破 |
 | A6 | service 层单测全绿；`tsc` / lint 无新增错误 |
 | A7 | 🆕 **SQLite 模板预览端到端**：以内置 SQLite（`data/ruoyi.db`）启动，注册→登录→取 profile→读/写 appearance 全链路真实跑通，无"表不存在/方言不兼容"错误（对齐 NFR6） |
-| A8 | 🆕 **C 端有可预览入口**：C 端存在一个明确、可访问的落地/登录页路径（如 `/store`），供平台"C 端预览"指向（对齐 R16；平台侧多入口 UI 由主仓 spec 承接 R17） |
-| A9 | 🆕 **预览免输入登录**：预览环境下打开 `/store` 登录页与 `/login`，账号密码已默认预填（demo/demo123、admin/admin123），点"登录"即进，无需手输（R18-R21）；生产环境不预填 |
+| A8 | 🆕 **C 端有可预览入口**：C 端存在一个明确、可访问的落地/登录页路径（如 `/portal`），供平台"C 端预览"指向（对齐 R16；平台侧多入口 UI 由主仓 spec 承接 R17） |
+| A9 | 🆕 **预览免输入登录**：预览环境下打开 `/portal` 登录页与 `/login`，账号密码已默认预填（demo/demo123、admin/admin123），点"登录"即进，无需手输（R18-R21）；生产环境不预填 |
 
 ---
 

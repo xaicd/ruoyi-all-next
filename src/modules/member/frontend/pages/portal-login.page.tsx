@@ -9,10 +9,10 @@ import {
   DEMO_CREDENTIALS,
   isDemoMode,
   type Appearance,
-} from "./store-shared"
+} from "./portal-shared"
 
 /** C 端登录/注册页。预览（demo）模式下默认预填 demo/demo123，点"登录"即进，无需输入。 */
-export default function StoreLoginPage() {
+export default function PortalLoginPage() {
   const [appearance, setAppearance] = useState<Appearance | null>(null)
   const [mode, setMode] = useState<"login" | "register">("login")
   const demo = isDemoMode()
@@ -35,7 +35,7 @@ export default function StoreLoginPage() {
         await memberRegister({ account, password, nickname: nickname || undefined })
       }
       await memberLogin(account, password)
-      window.location.href = "/store/profile"
+      window.location.href = "/portal/profile"
     } catch (err: any) {
       setError(err?.message || "操作失败")
     } finally {
