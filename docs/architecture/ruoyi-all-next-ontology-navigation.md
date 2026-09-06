@@ -221,3 +221,16 @@ DATABASE_URL=file:./data/ruoyi.db DB_DRIVER=sqlite npm run dev   # next dev -p 3
   - `npm run foundation:ontology:check` —— 只对账不写，catalog 与真实代码漂移则退出码 2（可接入 `check:gates` 门禁），并提示该跃迁的能力；
   - 回写后同步本页 §3 能力表（人读投影须等于机器真源）。新增能力节点在 `capabilities[]` 注册后，`fanIn/state/dependents` 交给脚本维护，人工只填 `contract/swappable/stability/changeRisk`。
 - **只增不破**：既有 `swappable` 的 ENV 语义与默认值向下兼容；删除/重命名 barrel 导出属破坏性变更，须评估全部 `dependents`。
+
+
+---
+
+## 11. 老系统迁移（100+ 微服务 → 本体域数字镜像）
+
+本底座的终极用途之一：承接大型老系统（Spring Cloud / Node / Dubbo + MySQL / Redis / Kafka / Hazelcast）迁移。**本体域是老系统的数字镜像 + 体检，不是重写计划书**——如实映射，默认 `keep` 不动代码，只对有经济价值处标 `optimize` 才改造。
+
+- **方法论**：`docs/architecture/legacy-migration-playbook.md`（5 步穿透 / 中间件锚点 / gap 处置 / 分批盘点）。
+- **映射契约 schema**：`src/modules/shared/contract/ontology-mapping.schema.json`（`legacyService → ontologyDomain/catalogDomain → entity/action/eventMap → fidelity + valueTag`）。
+- **首个样板**：`src/modules/shared/contract/mappings/ecommerce.mapping.json`（ecommerce 本体域 ↔ ruoyi mall/pay，含实体/action 对齐、事件从状态机派生、system/infra 标注为跨域底座；已结构校验通过）。
+- **关键映射结论**：mall+pay ≈ 电商本体域骨架子集（`IssueCoupon↔mall.issueCoupon` 逐字对齐）；system/infra 是**跨域公共底座**（不属电商域）；事件两边形状不同（本体域=状态机生命周期事件，业务侧=动词事件），用 `eventMap.derivedFromAction` 从 action 状态迁移派生打通。
+- **中间件映射**：MySQL→database / Redis→cache / Kafka/Redis-PubSub→mq / Hazelcast→cache / 文件→storage（换环境只改 env，见 §5）。

@@ -13,6 +13,7 @@ DigitalStaff Native / Cursor / 其他 Agent 应按下面顺序加载。`inject` 
 | 55 | seam-graph | `src/modules/shared/contract/seam-graph.json` | 无 | 发现域能力三角色（由 catalog 生成） |
 | 60 | domain-catalog | `src/modules/shared/backend/constants/domain-catalog.json` | 无 | 涉及域边界时 |
 | 100 | skill | `.agents/skills/<name>/SKILL.md` | 见各 Skill description | 任务匹配时 `loadSkill` |
+| 120 | legacy-migration | `docs/architecture/legacy-migration-playbook.md` + `src/modules/shared/contract/ontology-mapping.schema.json` | 老系统迁移/服务盘点任务时 | 迁移 100+ 微服务、按本体域数字化映射时 |
 | 150 | project-identity | `src/modules/shared/contract/project-profile.json` | 无 | 改品牌、租户显示名、登录文案 |
 | 200 | gates | `AGENTS.md` 对应章节 | 无 | 引用章节，不整篇复制 |
 

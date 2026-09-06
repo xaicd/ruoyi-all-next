@@ -1,0 +1,150 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ruoyi-all-next/contract/ontology-mapping.schema.json",
+  "title": "本体域 ↔ 老系统迁移映射契约",
+  "description": "把 100+ 微服务老系统『如实数字化』映射进本体域的机器可读契约。定位=老系统的数字镜像+体检报告，不是重写计划书：默认原样映射(as-is/keep)，只对有经济价值处标注 optimize，问题只记录不强制动。每个 mapping 文件对应一个本体域(如 ecommerce)，聚合若干老服务的映射。",
+  "type": "object",
+  "required": ["version", "ontologyDomain", "catalogDomains", "legacyServices"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "integer", "description": "契约版本，破坏性变更时递增" },
+    "generatedNote": {
+      "type": "string",
+      "description": "说明：本契约如实记录老系统现状，fidelity/valueTag 是判断，entity/action/eventMap 是映射；勿臆造老系统接口，以真实盘点为准"
+    },
+    "ontologyDomain": {
+      "type": "object",
+      "description": "目标本体域(数字化语义锚)——对应 DigitalStaff 平台 ontology 种子域",
+      "required": ["id", "displayName"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "description": "本体域 id，如 ecommerce" },
+        "displayName": { "type": "string" },
+        "source": { "type": "string", "description": "本体域定义来源路径，如 backend/modules/ontology/services/schemas/ecommerce.schema.js" },
+        "entityCount": { "type": "integer" },
+        "actionCount": { "type": "integer" }
+      }
+    },
+    "catalogDomains": {
+      "type": "array",
+      "description": "该本体域映射到 domain-catalog.json 的哪几个业务域(如 ecommerce → [mall, pay])",
+      "items": { "type": "string" }
+    },
+    "crossDomainBaseline": {
+      "type": "array",
+      "description": "被本体域引用但不属于它的跨域底座/邻域(如 system/infra 公共底座、fintech/logistics 邻域)。仅登记边界，不纳入本域实体",
+      "items": {
+        "type": "object",
+        "required": ["catalogDomain", "role"],
+        "additionalProperties": false,
+        "properties": {
+          "catalogDomain": { "type": "string" },
+          "role": { "type": "string", "enum": ["shared-baseline", "neighbor-domain"], "description": "shared-baseline=跨域公共底座(system/infra); neighbor-domain=通过跨域关系相连的邻域(fintech/logistics/erp)" },
+          "via": { "type": "string", "description": "连接方式，如跨域关系 SETTLED_IN_FINTECH，或『公共底座直用』" },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "legacyServices": {
+      "type": "array",
+      "description": "该本体域覆盖的老系统微服务清单(如实盘点)",
+      "items": { "$ref": "#/definitions/legacyService" }
+    }
+  },
+  "definitions": {
+    "legacyService": {
+      "type": "object",
+      "description": "一个老微服务的如实数字化映射",
+      "required": ["name", "stack", "fidelity", "valueTag", "catalogDomain"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "description": "老服务名(原样)" },
+        "stack": { "type": "string", "enum": ["springcloud", "node", "dubbo", "other"], "description": "老服务技术栈" },
+        "middleware": {
+          "type": "array",
+          "description": "老服务使用的中间件(如实记录)，映射到底座可切换驱动",
+          "items": { "type": "string", "enum": ["mysql", "redis", "kafka", "hazelcast", "other"] }
+        },
+        "catalogDomain": { "type": "string", "description": "映射到 domain-catalog 的哪个业务域" },
+        "legacyEndpoints": {
+          "type": "array",
+          "description": "老服务对外接口(如实抄，供绞杀者代理/对账用；可后填)",
+          "items": {
+            "type": "object",
+            "required": ["path"],
+            "additionalProperties": false,
+            "properties": {
+              "path": { "type": "string" },
+              "protocol": { "type": "string", "enum": ["rest", "dubbo-rpc", "grpc", "mq"] },
+              "note": { "type": "string" }
+            }
+          }
+        },
+        "entityMap": {
+          "type": "array",
+          "description": "本体域实体 ↔ 老服务数据表/模块表 的映射",
+          "items": {
+            "type": "object",
+            "required": ["ontologyEntity", "target"],
+            "additionalProperties": false,
+            "properties": {
+              "ontologyEntity": { "type": "string", "description": "本体域实体 typeName，如 Product/Order/Payment" },
+              "target": { "type": "string", "description": "映射目标：ruoyi 模块表/service 或老系统表名" },
+              "fidelity": { "type": "string", "enum": ["as-is", "adapted", "gap"], "default": "as-is" },
+              "note": { "type": "string" }
+            }
+          }
+        },
+        "actionMap": {
+          "type": "array",
+          "description": "本体域 action ↔ 老服务接口/ruoyi action 的映射",
+          "items": {
+            "type": "object",
+            "required": ["ontologyAction", "target"],
+            "additionalProperties": false,
+            "properties": {
+              "ontologyAction": { "type": "string", "description": "本体域 action name，如 IssueCoupon/PayOrder" },
+              "target": { "type": "string", "description": "映射目标 action/接口，如 mall.issueCoupon" },
+              "fidelity": { "type": "string", "enum": ["as-is", "adapted", "gap"], "default": "as-is" },
+              "note": { "type": "string" }
+            }
+          }
+        },
+        "eventMap": {
+          "type": "array",
+          "description": "事件映射。本体域事件多为状态机生命周期事件(XActivated/Completed...)，老系统/ruoyi 多为业务动词事件(OrderPaid/RefundApproved)；此处记录二者对应及派生关系",
+          "items": {
+            "type": "object",
+            "required": ["semanticEvent"],
+            "additionalProperties": false,
+            "properties": {
+              "semanticEvent": { "type": "string", "description": "语义事件名(业务动词)，如 OrderPaid" },
+              "derivedFromAction": { "type": "string", "description": "从哪个本体 action 的 stateTransition 派生，如 PayOrder(pending_payment→paid)" },
+              "ontologyLifecycleEvent": { "type": "string", "description": "对应的本体状态机生命周期事件，如 OrderProcessing" },
+              "legacyTopic": { "type": "string", "description": "老系统对应的 Kafka topic/消息(如实抄)，如 order.paid" },
+              "fidelity": { "type": "string", "enum": ["as-is", "adapted", "gap"], "default": "as-is" },
+              "note": { "type": "string" }
+            }
+          }
+        },
+        "fidelity": {
+          "type": "string",
+          "enum": ["as-is", "adapted", "gap"],
+          "description": "整体映射保真度：as-is=原样映射(默认); adapted=有适配; gap=有缺口需补"
+        },
+        "valueTag": {
+          "type": "string",
+          "enum": ["keep", "optimize", "problem"],
+          "description": "价值标注(驱动是否投入)：keep=照搬跑着(默认，大多数如此); optimize=有经济价值才优化; problem=发现的问题(仅记录，不强制动)"
+        },
+        "migrationStatus": {
+          "type": "string",
+          "enum": ["planned", "mapping", "mapped", "migrated", "deferred"],
+          "default": "planned",
+          "description": "迁移进度：planned待盘点/mapping映射中/mapped已登记映射/migrated已落库跑通/deferred暂缓"
+        },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}
