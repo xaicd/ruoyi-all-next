@@ -441,6 +441,7 @@ model MemberUser {
   avatarUrl    String?   @map("avatar_url") @db.VarChar(500)
   status       String    @default("ACTIVE") @db.VarChar(10)
   memberLevel  String    @default("normal") @map("member_level") @db.VarChar(30)
+  extraFields  Json?     @map("extra_fields")
   tenantId     String    @default("default") @map("tenant_id") @db.VarChar(64)
   createdBy    String    @default("system") @map("created_by") @db.VarChar(64)
   createdAt    DateTime  @default(now()) @map("created_at")

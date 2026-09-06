@@ -203,6 +203,7 @@ export async function bootstrapSqlite(targetPath = DB_PATH) {
       avatar_url TEXT,
       status TEXT DEFAULT 'ACTIVE',
       member_level TEXT DEFAULT 'normal',
+      extra_fields TEXT,
       tenant_id TEXT DEFAULT 'default',
       created_by TEXT DEFAULT 'system',
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,

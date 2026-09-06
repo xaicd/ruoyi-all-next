@@ -301,6 +301,7 @@ export interface MemberUserTable {
   avatar_url: string | null
   status: Generated<string>
   member_level: Generated<string>
+  extra_fields: string | null
   tenant_id: Generated<string>
   created_by: Generated<string>
   created_at: Generated<Date>
