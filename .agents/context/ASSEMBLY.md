@@ -8,6 +8,7 @@ DigitalStaff Native / Cursor / 其他 Agent 应按下面顺序加载。`inject` 
 |---|---|---|---|---|
 | -100 | identity | `.agents/context/IDENTITY.md` | 无 | 每次进入本仓库 |
 | 0 | soul | `.agents/context/SOUL.md` | 无 | 每次进入本仓库 |
+| 40 | ontology-navigation | `docs/architecture/ruoyi-all-next-ontology-navigation.md` | 无 | 每次进入本仓库（导航总纲：定位模块/工具/预览/skills + 新应用派生 + 基座自进化） |
 | 50 | agent-profile | `src/modules/shared/contract/agent-profile.json` | 无 | 孵化、NPC、架构演进 |
 | 55 | seam-graph | `src/modules/shared/contract/seam-graph.json` | 无 | 发现域能力三角色（由 catalog 生成） |
 | 60 | domain-catalog | `src/modules/shared/backend/constants/domain-catalog.json` | 无 | 涉及域边界时 |
