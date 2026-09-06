@@ -57,14 +57,14 @@ T7 权限码/契约  T8 单测  T9 SQLite 端到端预览(A7)  T10 门禁(tsc/li
 - MemberAuthService（注册去重 R2 / 登录成败 R4 / 哈希校验）、MemberProfileService（读写）、AppearanceService（默认 merge / 序列化往返）。
 - 参照现有 `member.module.service.test.ts` / `infra-services.test.ts`。
 
-## T8b — 🆕 C 端 Web 入口 `/store`（R16/A8）+ 双端同源预览
-- 新建 C 端路由组：`src/app/(store-pages)/store/page.tsx`（落地/首页）、`.../store/login/page.tsx`（登录）、`.../store/profile/page.tsx`（用户中心，消费 profile API + appearance 主题）。
+## T8b — 🆕 C 端 Web 入口 `/portal`（R16/A8）+ 双端同源预览
+- 新建 C 端路由组：`src/app/(portal-pages)/portal/page.tsx`（落地/首页）、`.../portal/login/page.tsx`（登录）、`.../portal/profile/page.tsx`（用户中心，消费 profile API + appearance 主题）。
 - C 端页面消费 `open/meta/appearance`（Logo/主色/圆角/排版）→ 注入 CSS 变量，体现"可配置化"。
-- 结果：同一 Next dev server 下，B 端 `/login`→`/admin`、C 端 `/store`——平台"双预览"可分别指向（同地址不同路径）。
+- 结果：同一 Next dev server 下，B 端 `/login`→`/admin`、C 端 `/portal`——平台"双预览"可分别指向（同地址不同路径）。
 
 ## T8c — 🆕 预览免输入登录（R18-R21/A9）
 - `bootstrap-sqlite.ts`：seed 演示会员 `demo/demo123`（member_user，ACTIVE，含昵称/等级）；`admin/admin123` 已有。
-- C 端 `/store/login` 与 B 端 `/login` 登录页：预览/演示环境下（`NEXT_PUBLIC_DEMO_LOGIN=1` 或非 production）**默认预填**账号密码，用户点"登录"即进；生产不预填（R20 安全兜底）。
+- C 端 `/portal/login` 与 B 端 `/login` 登录页：预览/演示环境下（`NEXT_PUBLIC_DEMO_LOGIN=1` 或非 production）**默认预填**账号密码，用户点"登录"即进；生产不预填（R20 安全兜底）。
 - 验收：预览打开两个登录页，凭据已带、一点即进。
 
 ## T9 — 🆕 SQLite 端到端预览（A7，硬验收）

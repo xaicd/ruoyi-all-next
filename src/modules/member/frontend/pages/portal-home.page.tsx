@@ -1,10 +1,10 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
-import { fetchAppearance, appearanceStyle, getToken, type Appearance } from "./store-shared"
+import { fetchAppearance, appearanceStyle, getToken, type Appearance } from "./portal-shared"
 
-/** C 端前台首页（落地）。消费外观配置呈现品牌/主题，供"C 端预览"指向 /store。 */
-export default function StoreHomePage() {
+/** C 端前台首页（落地）。消费外观配置呈现品牌/主题，供"C 端预览"指向 /portal。 */
+export default function PortalHomePage() {
   const [appearance, setAppearance] = useState<Appearance | null>(null)
   const [loggedIn, setLoggedIn] = useState(false)
 
@@ -26,12 +26,12 @@ export default function StoreHomePage() {
           <span className="text-lg font-bold">{appearance?.siteName ?? "商城"}</span>
         </div>
         <nav className="flex items-center gap-3 text-sm">
-          <a href="/store" className="text-slate-600 hover:text-slate-900">首页</a>
+          <a href="/portal" className="text-slate-600 hover:text-slate-900">首页</a>
           {loggedIn ? (
-            <a href="/store/profile" className="text-slate-600 hover:text-slate-900">我的</a>
+            <a href="/portal/profile" className="text-slate-600 hover:text-slate-900">我的</a>
           ) : (
             <a
-              href="/store/login"
+              href="/portal/login"
               className="px-3 py-1.5 text-white"
               style={{ background: "var(--brand)", borderRadius: "var(--radius)" }}
             >
@@ -50,14 +50,14 @@ export default function StoreHomePage() {
         </p>
         <div className="mt-8 flex justify-center gap-3">
           <a
-            href="/store/login"
+            href="/portal/login"
             className="px-5 py-2.5 text-white font-medium"
             style={{ background: "var(--brand)", borderRadius: "var(--radius)" }}
           >
             进入
           </a>
           <a
-            href="/store/profile"
+            href="/portal/profile"
             className="px-5 py-2.5 font-medium border border-slate-300"
             style={{ borderRadius: "var(--radius)" }}
           >

@@ -9,10 +9,10 @@ import {
   clearToken,
   type Appearance,
   type MemberPublic,
-} from "./store-shared"
+} from "./portal-shared"
 
-/** C 端用户中心。需登录；未登录跳转 /store/login。消费外观主题呈现。 */
-export default function StoreProfilePage() {
+/** C 端用户中心。需登录；未登录跳转 /portal/login。消费外观主题呈现。 */
+export default function PortalProfilePage() {
   const [appearance, setAppearance] = useState<Appearance | null>(null)
   const [member, setMember] = useState<MemberPublic | null>(null)
   const [error, setError] = useState("")
@@ -20,7 +20,7 @@ export default function StoreProfilePage() {
   useEffect(() => {
     fetchAppearance().then(setAppearance).catch(() => {})
     if (!getToken()) {
-      window.location.href = "/store/login"
+      window.location.href = "/portal/login"
       return
     }
     fetchProfile()
@@ -30,20 +30,20 @@ export default function StoreProfilePage() {
         // token 失效 → 回登录
         if (String(e?.message || "").includes("登录") || String(e?.message || "").includes("401")) {
           clearToken()
-          window.location.href = "/store/login"
+          window.location.href = "/portal/login"
         }
       })
   }, [])
 
   const logout = () => {
     clearToken()
-    window.location.href = "/store"
+    window.location.href = "/portal"
   }
 
   return (
     <div style={appearanceStyle(appearance)} className="min-h-screen bg-slate-50">
       <header className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-white">
-        <a href="/store" className="text-lg font-bold">{appearance?.siteName ?? "商城"}</a>
+        <a href="/portal" className="text-lg font-bold">{appearance?.siteName ?? "商城"}</a>
         <button onClick={logout} className="text-sm text-slate-500 hover:text-slate-800">退出登录</button>
       </header>
 
