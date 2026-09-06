@@ -430,6 +430,29 @@ model Setting {
   @@map("setting")
 }
 
+/// C 端会员用户（app 端注册/登录主体）。SQLite 侧建表见 scripts/bootstrap-sqlite.ts（运行时真源）。
+model MemberUser {
+  id           String    @id @default(cuid())
+  account      String    @unique @db.VarChar(64)
+  email        String?   @unique @db.VarChar(120)
+  passwordHash String    @map("password_hash") @db.VarChar(200)
+  passwordSalt String    @map("password_salt") @db.VarChar(100)
+  nickname     String    @db.VarChar(60)
+  avatarUrl    String?   @map("avatar_url") @db.VarChar(500)
+  status       String    @default("ACTIVE") @db.VarChar(10)
+  memberLevel  String    @default("normal") @map("member_level") @db.VarChar(30)
+  tenantId     String    @default("default") @map("tenant_id") @db.VarChar(64)
+  createdBy    String    @default("system") @map("created_by") @db.VarChar(64)
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedBy    String    @default("system") @map("updated_by") @db.VarChar(64)
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  deleted      Int       @default(0)
+  deletedAt    DateTime? @map("deleted_at")
+  remark       String?   @db.VarChar(500)
+
+  @@map("member_user")
+}
+
 /// BPM 审批任务
 model ApprovalTask {
   id            String    @id

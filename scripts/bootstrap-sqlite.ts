@@ -191,7 +191,40 @@ export async function bootstrapSqlite(targetPath = DB_PATH) {
       deleted_at DATETIME,
       remark TEXT
     );
+
+    -- 🆕 C 端会员用户（app 端注册/登录主体，8 大审计底座字段）
+    CREATE TABLE IF NOT EXISTS member_user (
+      id TEXT PRIMARY KEY,
+      account TEXT UNIQUE NOT NULL,
+      email TEXT,
+      password_hash TEXT NOT NULL,
+      password_salt TEXT NOT NULL,
+      nickname TEXT NOT NULL,
+      avatar_url TEXT,
+      status TEXT DEFAULT 'ACTIVE',
+      member_level TEXT DEFAULT 'normal',
+      tenant_id TEXT DEFAULT 'default',
+      created_by TEXT DEFAULT 'system',
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_by TEXT DEFAULT 'system',
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      deleted INTEGER DEFAULT 0,
+      deleted_at DATETIME,
+      remark TEXT
+    );
   `);
+
+  // 🆕 预置演示 C 端会员（预览免输入登录：demo / demo123）
+  const memberCount = db.prepare('SELECT count(*) as count FROM member_user').get() as { count: number };
+  if (memberCount.count === 0) {
+    console.log('[Bootstrap-SQLite] 注入演示 C 端会员账号 (demo / demo123)...');
+    const mSalt = 'coolie_member_2026';
+    const mPwd = passwordHash('demo123', mSalt);
+    db.prepare(`
+      INSERT INTO member_user (id, account, email, password_hash, password_salt, nickname, member_level, status, tenant_id, created_by, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, 'normal', 'ACTIVE', 'default', 'system', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    `).run('member-demo-01', 'demo', 'demo@example.com', mPwd, mSalt, '演示用户');
+  }
 
   // 检查是否需要填充种子用户
   const userCount = db.prepare('SELECT count(*) as count FROM system_user').get() as { count: number };

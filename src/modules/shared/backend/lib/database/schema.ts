@@ -270,6 +270,47 @@ export interface InfraConfigTable {
   deleted: Generated<boolean>
 }
 
+// 🆕 system_config：SQLite bootstrap 实际存在的通用配置表（key/value:TEXT）。
+// 注意与 infra_config 区分：SQLite 下只有 system_config；appearance 等运行时配置存这里。
+export interface SystemConfigTable {
+  id: Generated<string>
+  category: Generated<string>
+  name: string
+  key: string
+  value: string
+  type: Generated<string>
+  visible: Generated<boolean>
+  tenant_id: Generated<string>
+  created_by: Generated<string>
+  created_at: Generated<Date>
+  updated_by: Generated<string>
+  updated_at: Generated<Date>
+  deleted: Generated<boolean>
+  deleted_at: Date | null
+  remark: string | null
+}
+
+// 🆕 member_user：C 端会员用户（app 端注册/登录主体）
+export interface MemberUserTable {
+  id: string
+  account: string
+  email: string | null
+  password_hash: string
+  password_salt: string
+  nickname: string
+  avatar_url: string | null
+  status: Generated<string>
+  member_level: Generated<string>
+  tenant_id: Generated<string>
+  created_by: Generated<string>
+  created_at: Generated<Date>
+  updated_by: Generated<string>
+  updated_at: Generated<Date>
+  deleted: Generated<boolean>
+  deleted_at: Date | null
+  remark: string | null
+}
+
 export interface InfraJobTable {
   id: Generated<string>
   name: string
@@ -423,6 +464,8 @@ export interface DB {
 
   // Infra
   infra_config: InfraConfigTable
+  system_config: SystemConfigTable
+  member_user: MemberUserTable
   infra_job: InfraJobTable
   infra_job_log: InfraJobLogTable
   infra_api_access_log: InfraApiAccessLogTable

@@ -80,6 +80,8 @@ export const PERMISSIONS = {
   SYSTEM_IP_AREA_VIEW: "system:ip-area:view",
   INFRA_CONFIG_VIEW: "infra:config:view",
   INFRA_CONFIG_UPDATE: "infra:config:update",
+  INFRA_APPEARANCE_QUERY: "infra:appearance:query",
+  INFRA_APPEARANCE_UPDATE: "infra:appearance:update",
   INFRA_JOB_VIEW: "infra:job:view",
   INFRA_JOB_OPERATE: "infra:job:operate",
   INFRA_JOB_LOG_VIEW: "infra:job-log:view",
