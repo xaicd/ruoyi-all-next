@@ -106,6 +106,8 @@ export const PERMISSIONS = {
   INFRA_CODEGEN_DELETE: "infra:codegen:delete",
   INFRA_CODEGEN_PREVIEW: "infra:codegen:preview",
   INFRA_CODEGEN_DOWNLOAD: "infra:codegen:download",
+  ONLINE_PAGE_SCHEMA_QUERY: "online:page-schema:query",
+  ONLINE_PAGE_SCHEMA_UPDATE: "online:page-schema:update",
   INFRA_ONLINE_DEFINITION_QUERY: "infra:online-definition:query",
   INFRA_ONLINE_DEFINITION_CREATE: "infra:online-definition:create",
   INFRA_ONLINE_DEFINITION_UPDATE: "infra:online-definition:update",

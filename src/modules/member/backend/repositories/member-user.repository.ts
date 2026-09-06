@@ -17,6 +17,7 @@ export type MemberUserRow = {
   avatarUrl: string | null
   status: "ACTIVE" | "DISABLED"
   memberLevel: string
+  extraFields: Record<string, unknown>
   createdAt: string
   updatedAt: string
 }
@@ -34,6 +35,17 @@ export type CreateMemberUserData = {
 export type UpdateMemberProfileData = {
   nickname?: string
   avatarUrl?: string | null
+  extraFields?: Record<string, unknown>
+}
+
+function parseExtra(raw: unknown): Record<string, unknown> {
+  if (!raw) return {}
+  if (typeof raw === "object") return raw as Record<string, unknown>
+  try {
+    return JSON.parse(String(raw)) as Record<string, unknown>
+  } catch {
+    return {}
+  }
 }
 
 // === 内存兜底（仅无真实库时） ===
@@ -55,6 +67,7 @@ function mapRow(row: any): MemberUserRow {
     avatarUrl: row.avatar_url ?? null,
     status: (row.status as "ACTIVE" | "DISABLED") ?? "ACTIVE",
     memberLevel: row.member_level ?? "normal",
+    extraFields: parseExtra(row.extra_fields),
     createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : String(row.created_at),
     updatedAt: row.updated_at instanceof Date ? row.updated_at.toISOString() : String(row.updated_at),
   }
@@ -122,6 +135,7 @@ export const MemberUserRepository = {
       avatarUrl: data.avatarUrl ?? null,
       status: "ACTIVE",
       memberLevel: data.memberLevel ?? "normal",
+      extraFields: {},
       createdAt: now,
       updatedAt: now,
     }
@@ -136,6 +150,7 @@ export const MemberUserRepository = {
       const u: Record<string, any> = { updated_at: new Date().toISOString() }
       if (patch.nickname !== undefined) u.nickname = patch.nickname
       if (patch.avatarUrl !== undefined) u.avatar_url = patch.avatarUrl
+      if (patch.extraFields !== undefined) u.extra_fields = JSON.stringify(patch.extraFields)
       const row = await db
         .updateTable("member_user")
         .set(u)
@@ -149,6 +164,7 @@ export const MemberUserRepository = {
     if (!m) throw new Error("会员不存在")
     if (patch.nickname !== undefined) m.nickname = patch.nickname
     if (patch.avatarUrl !== undefined) m.avatarUrl = patch.avatarUrl
+    if (patch.extraFields !== undefined) m.extraFields = patch.extraFields
     m.updatedAt = new Date().toISOString()
     return m
   },
