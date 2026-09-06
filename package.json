@@ -46,6 +46,8 @@
     "domain:manifests": "node scripts/write-domain-manifests.cjs",
     "domain:contracts": "node scripts/write-domain-contracts.cjs",
     "domain:seams": "node scripts/write-seam-graph.cjs",
+    "foundation:ontology": "node scripts/foundation-ontology.cjs",
+    "foundation:ontology:check": "node scripts/foundation-ontology.cjs --check",
     "domain:check": "node scripts/check-domain-pack.cjs",
     "harness:check": "node scripts/check-harness-bundle.cjs",
     "domain:dev": "node scripts/pack-domain.cjs --dev --materialize",

@@ -69,19 +69,23 @@ Next.js 16 (App Router) + React 19 + TypeScript + **Kysely**（运行时数据�
 >
 > **state 是本体核心信号**：`load-bearing`=已被真实消费、改动破坏性大；`provisioned`=已就绪但消费方尚未接入，是新域应主动采用的接缝。fanIn=真实 import 计数(排测试/自引)，客观反映破坏半径。
 
+> 下表 fanIn/state 由 `npm run foundation:ontology` **扫描真实 import 自动生成**（勿手改）；改代码后刷新、`npm run foundation:ontology:check` 门禁对账漂移。
+
 | 能力 | tier | fanIn | state | 可切换(env) | changeRisk |
 |---|---|---:|---|---|---|
 | `domain-log` | L2-aspect | **420** | load-bearing | 否 | 极高（扇入最广，签名变更波及全域） |
-| `database` | L0-driver | 71 | load-bearing | `DB_DRIVER`（全库+国产库） | 高（方言映射改动需回归国产库） |
-| `biz-tenant` | L2-aspect | 34 | load-bearing | 否 | 高（租户隔离，破坏=越权风险） |
+| `database` | L0-driver | 74 | load-bearing | `DB_DRIVER`（全库+国产库） | 高（方言映射改动需回归国产库） |
+| `biz-tenant` | L2-aspect | 46 | load-bearing | 否 | 高（租户隔离，破坏=越权风险） |
+| `trace-context` | L2-aspect | 8 | load-bearing | 否 | 中（全链路 traceId 透传） |
+| `messaging-protocol` | L1-fabric | 5 | load-bearing | 否 | 高（契约级，变更须 contractVersion 递增+兼容） |
+| `transactional-outbox` | L1-fabric | 4 | load-bearing | 否 | 中（可靠事件落地，依赖 database+messaging-protocol） |
+| `service-broker` | L1-fabric | 2 | load-bearing | 否（local sdk↔nats-rr） | 中（拆域/远程化核心接缝） |
 | `storage` | L0-driver | 1 | load-bearing | `STORAGE_DRIVER` local↔s3 | 低（仅 file.service 消费） |
 | `event-bus` | L1-fabric | 1 | load-bearing | 否 | 中（被 service-broker 编织，域发领域事件必经） |
-| `trace-context` | L2-aspect | 1 | load-bearing | 否 | 中（全链路 traceId 透传） |
 | `cache` | L0-driver | 0 | **provisioned** | `CACHE_DRIVER` memory↔redis | 低（新域需分布式缓存时采用） |
 | `mq` | L0-driver | 0 | **provisioned** | `MQ_DRIVER` memory↔redis | 低（新域需跨进程消息时采用） |
-| `service-broker` | L1-fabric | 0 | **provisioned** | 否（local sdk↔nats-rr） | 中（拆域/远程化核心接缝） |
-| `messaging-protocol` | L1-fabric | 0 | **provisioned** | 否 | 高（契约级，变更须 contractVersion 递增+兼容） |
-| `transactional-outbox` | L1-fabric | 0 | **provisioned** | 否 | 中（可靠事件落地，依赖 database+messaging-protocol） |
+
+> **本体洞察（扫描修正了初版手工估算）**：L1-fabric 的 `event-bus/messaging-protocol/service-broker/transactional-outbox` 实际已在 fabric 层内部相互编织（真实 import），是 **load-bearing** 而非"就绪待接入"。真正尚未被消费的仅 `cache`/`mq`（本次新建）——它们是新域需要分布式缓存/跨进程消息时应主动采用的接缝。**这正是自动扫描的价值：人工估算会漏掉别名 `@/` 与 lib 内部相对 import。**
 
 **database/**（`index.ts` 汇出）
 - `datasource-manager.ts` —— env→驱动解析：`getDataSourceConfig()`、`getProtocolFamily()`、`getCompatibilityTier()`、`isMemoryMode()`、`assertProductionDataSourceConfiguration()`、`resetDataSourceConfig()`；`DRIVER_PROTOCOL_MAP`（含国产库 达梦/金仓/高斯/OceanBase/TiDB 映射到 postgresql/mysql/proprietary）。
@@ -212,5 +216,8 @@ DATABASE_URL=file:./data/ruoyi.db DB_DRIVER=sqlite npm run dev   # next dev -p 3
 - **新增 L0-driver 能力**：必走六件套 —— `<x>-driver.ts` 接口 → `memory/local` 默认零配置驱动 → 生产驱动(懒加载可选依赖) → `<x>-manager.ts`(`get<X>/reset<X>/get<X>DriverName`) → `ENV` 开关 → 本地兜底；`__tests__` 覆盖「默认路径 + 切换选驱动」；在 `foundation.capabilities[]` 注册（`tier=L0-driver`, `state=provisioned`, 填 `swappable` 五元组）。
 - **改 L1-fabric 契约**：动的是所有域的"通信神经"。`messaging-protocol` 等契约变更**必须 `contractVersion` 递增 + 向下兼容**，改前 grep 全量 `dependents` 评估爆炸半径；跑 `npm run domain:seams` 重生成能力三角。
 - **加/改 L2-aspect 切面**：隐式全局（不出现在业务签名里）。必须声明 `scope`（作用路径）与"是否默认开启"，**严禁悄改全局调用语义**（如 traceId 透传、审计、租户隔离）；`domain-log`(fanIn 420)/`biz-tenant`(fanIn 34) 这类高扇入切面变更等同破坏性变更，须退回规划阶段。
-- **state 跃迁必回写**：`provisioned` 能力一旦被首个消费方接入，其 `state` 改为 `load-bearing` 并更新 `fanIn/dependents`（本页表 + catalog 同步）——让"这个能力现在改起来危不危险"始终有客观真源。
+- **state 跃迁自动检测 + 回写**：`provisioned` 能力一旦被首个消费方接入，`fanIn>0` → `state` 自动跃迁 `load-bearing`。**由扫描脚本闭环，不靠手记**：
+  - `npm run foundation:ontology` —— 扫描真实 import(含 `@/` 别名与 lib 内部相对 import)，把最新 `fanIn/state/dependents` 回写 catalog；
+  - `npm run foundation:ontology:check` —— 只对账不写，catalog 与真实代码漂移则退出码 2（可接入 `check:gates` 门禁），并提示该跃迁的能力；
+  - 回写后同步本页 §3 能力表（人读投影须等于机器真源）。新增能力节点在 `capabilities[]` 注册后，`fanIn/state/dependents` 交给脚本维护，人工只填 `contract/swappable/stability/changeRisk`。
 - **只增不破**：既有 `swappable` 的 ENV 语义与默认值向下兼容；删除/重命名 barrel 导出属破坏性变更，须评估全部 `dependents`。
