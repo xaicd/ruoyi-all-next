@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "name": "RuoYi Portal",
+    "slug": "ruoyi-portal",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "web": {
+      "output": "single",
+      "bundler": "metro"
+    },
+    "extra": {
+      "apiBase": "http://localhost:3000"
+    }
+  }
+}
