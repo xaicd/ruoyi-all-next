@@ -18,6 +18,8 @@ export const memberLoginSchema = z.object({
 export const memberProfileUpdateSchema = z.object({
   nickname: z.string().trim().min(1).max(60).optional(),
   avatarUrl: z.string().trim().url("头像地址无效").max(500).optional(),
+  /** 动态字段值（客户在后台加的字段），键为字段 code */
+  extraFields: z.record(z.string(), z.unknown()).optional(),
 })
 
 export type MemberRegisterInput = z.infer<typeof memberRegisterSchema>

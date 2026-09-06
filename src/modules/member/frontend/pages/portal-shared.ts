@@ -23,6 +23,7 @@ export type MemberPublic = {
   avatarUrl: string | null
   memberLevel: string
   status: string
+  extraFields?: Record<string, unknown>
 }
 
 export function getToken(): string | null {
@@ -77,6 +78,17 @@ export async function fetchProfile(): Promise<MemberPublic> {
   return parse<MemberPublic>(res)
 }
 
+/** 更新资料（含动态字段 extraFields） */
+export async function updateProfile(patch: { nickname?: string; avatarUrl?: string; extraFields?: Record<string, unknown> }): Promise<MemberPublic> {
+  const token = getToken()
+  const res = await fetch("/api/v1/app/member/user/profile", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+    body: JSON.stringify(patch),
+  })
+  return parse<MemberPublic>(res)
+}
+
 /** 预览免输入登录：demo 模式下的默认演示凭据 */
 export const DEMO_CREDENTIALS = { account: "demo", password: "demo123" }
 export function isDemoMode(): boolean {
@@ -93,4 +105,31 @@ export function appearanceStyle(a: Appearance | null): React.CSSProperties {
     "--radius": `${a.radius}px`,
     fontFamily: a.fontFamily,
   }
+}
+
+
+// === 🆕 端无关页面 Schema（Schema 驱动渲染器消费） ===
+
+export type FieldDef = {
+  code: string
+  label: string
+  type: "text" | "textarea" | "number" | "boolean" | "date" | "select" | "image"
+  required?: boolean
+  showInList?: boolean
+  showInForm?: boolean
+  options?: Array<{ label: string; value: string }>
+  placeholder?: string
+  sort?: number
+}
+
+export type PageSchema = {
+  entity: string
+  title: string
+  fields: FieldDef[]
+}
+
+/** 拉取某实体的页面 Schema（C 端只读，端无关；Web/Expo 渲染器共用） */
+export async function fetchPageSchema(entity: string): Promise<PageSchema> {
+  const res = await fetch(`/api/v1/open/meta/page-schema/${encodeURIComponent(entity)}`)
+  return parse<PageSchema>(res)
 }
