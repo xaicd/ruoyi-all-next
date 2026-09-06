@@ -3,7 +3,7 @@
  */
 
 import { InfraFileRepository } from "@/modules/infra/backend/repositories/file.repository"
-import { deleteLocalFile, putLocalFile } from "@/modules/infra/backend/lib/file-storage"
+import { getStorage } from "@/modules/shared/backend/lib/storage"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 
 export class InfraFileService {
@@ -25,7 +25,7 @@ export class InfraFileService {
     let url = input.url
     let size = input.size
     if (input.contentBase64) {
-      const stored = await putLocalFile({ key: input.path, bytes: Buffer.from(input.contentBase64, "base64") })
+      const stored = await getStorage().put({ key: input.path, bytes: Buffer.from(input.contentBase64, "base64"), contentType: input.type })
       path = stored.path
       url = stored.url
       size = stored.size
@@ -39,7 +39,7 @@ export class InfraFileService {
   static async delete(id: string) {
     const file = await InfraFileRepository.findById(id)
     if (!file) throw new Error(`文件不存在: ${id}`)
-    await deleteLocalFile(file.path)
+    await getStorage().delete(file.path)
     await InfraFileRepository.delete(id)
     domainLog.event("infra.file.delete", { fileId: id, path: file.path })
     domainLog.audit("infra.file.delete", { targetType: "FILE", targetId: id })
