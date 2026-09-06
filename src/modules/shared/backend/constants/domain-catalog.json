@@ -6,7 +6,103 @@
       "modules": ["shared"],
       "deployable": false,
       "invoke": "sdk",
-      "description": "Runtime SDK packed into every process. Never a microservice, never RPC."
+      "description": "Runtime SDK packed into every process. Never a microservice, never RPC.",
+      "ontologyNote": "基础设施域按『契约面 + 可切换 + 被依赖(扇入) + 稳定等级』建模，而非业务域的『边界/端口/RPC』。节点分三层 L0-driver(可切换资源) / L1-fabric(域间通信编织) / L2-aspect(横切全局)。fanIn 为真实 import 计数(排除测试/自引)，是改动破坏半径的客观信号；state=load-bearing(已承重, 改=破坏性) 或 provisioned(已就绪但消费方尚未接入, 是新域应采用的接缝)。真源勿手改 fanIn/dependents，随代码演进由扫描更新。",
+      "capabilityTiers": {
+        "L0-driver": "直连外部资源、必须可切换且有本地零配置兜底(interface + manager get/reset + memory默认驱动 + prod驱动 + ENV开关)",
+        "L1-fabric": "域间通信的神经，无外部资源但高扇入；契约必须版本化(contractVersion)、向下兼容",
+        "L2-aspect": "贯穿所有调用的切面，隐式全局(不出现在业务签名里)；改动前必须评估 scope 与全量 dependents"
+      },
+      "capabilities": [
+        {
+          "id": "domain-log", "tier": "L2-aspect", "dir": "src/modules/shared/backend/lib/domain-log.ts",
+          "contract": ["domainLog.event", "domainLog.audit", "getDomainEventBuffer", "getDomainAuditBuffer"],
+          "swappable": false, "fallback": "in-memory buffer",
+          "stability": "stable", "fanIn": 420, "state": "load-bearing",
+          "scope": "几乎所有 service 层", "changeRisk": "极高：扇入最广，签名/语义变更波及全域",
+          "dependents": ["几乎所有 <domain>/backend/services/*"]
+        },
+        {
+          "id": "database", "tier": "L0-driver", "dir": "src/modules/shared/backend/lib/database",
+          "contract": ["getDataSourceConfig", "getProtocolFamily", "getKyselyDb", "hasRealDatabase", "BaseMapper", "QueryWrapper", "BaseService", "dynamic-table.*", "resetDataSourceConfig"],
+          "swappable": { "env": "DB_DRIVER", "urlAutodetect": "DATABASE_URL", "default": "memory", "prod": ["postgresql", "mysql", "mariadb", "sqlserver", "sqlite", "tidb", "oceanbase", "opengauss", "gaussdb", "kingbase", "dm", "oracle"], "fallback": "memory→sqlite族", "productionGuard": "assertProductionDataSourceConfiguration()" },
+          "stability": "stable", "fanIn": 71, "state": "load-bearing",
+          "changeRisk": "高：全库方言 + 71 扇入，改方言映射需回归国产库",
+          "dependents": ["*/backend/repositories/*", "online/adapters/persistence/schema-ddl", "各域 service"]
+        },
+        {
+          "id": "biz-tenant", "tier": "L2-aspect", "dir": "src/modules/shared/backend/lib/biz-tenant.ts",
+          "contract": ["getTenantContext", "runWithTenant", "tenant-scope.*"],
+          "swappable": false, "fallback": "default tenant",
+          "stability": "stable", "fanIn": 34, "state": "load-bearing",
+          "scope": "多租户隔离路径(查询/写入自动注入 tenant_id)", "changeRisk": "高：34 扇入 + 租户隔离语义，破坏=越权风险",
+          "dependents": ["database/tenant-isolation-plugin", "各域 service/repository"]
+        },
+        {
+          "id": "cache", "tier": "L0-driver", "dir": "src/modules/shared/backend/lib/cache",
+          "contract": ["getCache", "getCacheDriverName", "resetCache", "CacheDriver"],
+          "swappable": { "env": "CACHE_DRIVER", "default": "memory", "prod": "redis", "prodUrlEnv": ["CACHE_REDIS_URL", "REDIS_URL"], "fallback": "in-memory(类H2)", "optionalDep": "ioredis(懒加载)" },
+          "stability": "stable", "fanIn": 0, "state": "provisioned",
+          "changeRisk": "低(暂无消费方)：是新域需要分布式缓存时应采用的接缝",
+          "dependents": []
+        },
+        {
+          "id": "storage", "tier": "L0-driver", "dir": "src/modules/shared/backend/lib/storage",
+          "contract": ["getStorage", "getStorageDriverName", "resetStorage", "StorageDriver"],
+          "swappable": { "env": "STORAGE_DRIVER", "default": "local", "prod": "s3(AWS/MinIO/OSS)", "prodEnv": ["S3_BUCKET", "S3_ENDPOINT", "S3_REGION"], "fallback": "local disk(.data/uploads)", "optionalDep": "@aws-sdk/client-s3(懒加载)" },
+          "stability": "stable", "fanIn": 1, "state": "load-bearing",
+          "changeRisk": "低：目前仅 infra/file.service 消费",
+          "dependents": ["infra/backend/services/file.service"]
+        },
+        {
+          "id": "mq", "tier": "L0-driver", "dir": "src/modules/shared/backend/lib/mq",
+          "contract": ["getMq", "getMqDriverName", "resetMq", "MqDriver"],
+          "swappable": { "env": "MQ_DRIVER", "default": "memory", "prod": "redis(Pub/Sub)", "prodUrlEnv": ["MQ_REDIS_URL", "REDIS_URL"], "fallback": "进程内 pub/sub", "optionalDep": "ioredis(懒加载)" },
+          "stability": "stable", "fanIn": 0, "state": "provisioned",
+          "changeRisk": "低(暂无消费方)：是新域需要跨进程消息时应采用的接缝；平级 platform-mq.ts 为同步基元(向下兼容)",
+          "dependents": []
+        },
+        {
+          "id": "event-bus", "tier": "L1-fabric", "dir": "src/modules/shared/backend/lib/event-bus.ts",
+          "contract": ["eventBus.publish", "eventBus.broadcast", "eventBus.emit", "eventBus.subscribe", "eventBus.publishReliable"],
+          "swappable": false, "fallback": "in-process fan-out(+ nats-fabric 接缝)",
+          "stability": "stable", "fanIn": 1, "state": "load-bearing",
+          "changeRisk": "中：被 service-broker 编织，域应通过它发领域事件(架构文档强制)",
+          "dependents": ["service-broker"]
+        },
+        {
+          "id": "service-broker", "tier": "L1-fabric", "dir": "src/modules/shared/backend/lib/service-broker.ts",
+          "contract": ["broker.call", "broker.emit", "broker.broadcast(+ broker-cache/context/invoke/registry/resilience/validator)"],
+          "swappable": false, "fallback": "in-process(local sdk) → nats-rr(remote)",
+          "stability": "stable", "fanIn": 0, "state": "provisioned",
+          "changeRisk": "中：跨域调用统一入口，域拆分/远程化时的核心接缝(依赖 event-bus + messaging-protocol)",
+          "dependents": ["(拆域后)各域 facade 消费方"]
+        },
+        {
+          "id": "messaging-protocol", "tier": "L1-fabric", "dir": "src/modules/shared/backend/lib/messaging-protocol.ts",
+          "contract": ["Command/Query/Event/Stream 信封", "contractVersion 契约版本", "headerKeys(traceId/tenantId/actorId/idempotencyKey)"],
+          "swappable": false, "fallback": "v1 in-process",
+          "stability": "versioned-contract", "fanIn": 0, "state": "provisioned",
+          "changeRisk": "高(契约级)：变更必须 contractVersion 递增 + 向下兼容 + grep 全量 dependents",
+          "dependents": ["event-bus", "service-broker", "transactional-outbox"]
+        },
+        {
+          "id": "transactional-outbox", "tier": "L1-fabric", "dir": "src/modules/shared/backend/lib/transactional-outbox.ts",
+          "contract": ["runUnitOfWork", "appendOutbox", "outbox-store/outbox-kysely-store"],
+          "swappable": false, "fallback": "kysely outbox 表",
+          "stability": "stable", "fanIn": 0, "state": "provisioned",
+          "changeRisk": "中：可靠事件(publishReliable)的落地，依赖 database + messaging-protocol",
+          "dependents": ["event-bus.publishReliable"]
+        },
+        {
+          "id": "trace-context", "tier": "L2-aspect", "dir": "src/modules/shared/backend/lib/trace-context.ts",
+          "contract": ["getTraceId", "runWithTrace(traceId 透传)"],
+          "swappable": false, "fallback": "AsyncLocalStorage",
+          "stability": "stable", "fanIn": 1, "state": "load-bearing",
+          "scope": "全链路 traceId 透传(编排/消息节点必带)", "changeRisk": "中：隐式全局切面",
+          "dependents": ["messaging-protocol", "domain-log(关联 traceId)"]
+        }
+      ]
     },
     "platform": {
       "domains": ["system", "infra"],
