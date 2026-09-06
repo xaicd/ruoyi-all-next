@@ -20,6 +20,7 @@ export type MemberPublic = {
   avatarUrl: string | null
   memberLevel: string
   status: string
+  extraFields: Record<string, unknown>
 }
 
 function toPublic(row: MemberUserRow): MemberPublic {
@@ -31,6 +32,7 @@ function toPublic(row: MemberUserRow): MemberPublic {
     avatarUrl: row.avatarUrl,
     memberLevel: row.memberLevel,
     status: row.status,
+    extraFields: row.extraFields ?? {},
   }
 }
 
