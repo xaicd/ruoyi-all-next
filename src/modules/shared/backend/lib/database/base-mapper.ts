@@ -176,7 +176,7 @@ export class BaseMapper<T extends Record<string, any>> {
 
     let query = db.selectFrom(this.tableName as any).selectAll().where(this.primaryKey as any, '=', id);
     if (cols.has('deleted')) {
-      query = (query as any).where('deleted', '=', false);
+      query = (query as any).where('deleted', '=', 0);
     }
 
     if (tenantId && cols.has('tenant_id')) {
@@ -200,19 +200,18 @@ export class BaseMapper<T extends Record<string, any>> {
    */
   async selectList(wrapper?: QueryWrapper<T>): Promise<T[]> {
     const db = await this.getDb();
-    const rows = await (await this.buildListQuery(wrapper)).execute();
+    const tenantId = getCurrentTenantId();
+    const cols = await this.getColumns(db);
+    const query = this.buildListQuery(db, cols, tenantId, wrapper);
+    const rows = await query.execute();
     return rows as T[];
   }
 
-  /** 构建带能力探测的列表查询（selectPage 复用以实现 SQL 级分页） */
-  private async buildListQuery(wrapper?: QueryWrapper<T>): Promise<any> {
-    const db = await this.getDb();
-    const tenantId = getCurrentTenantId();
-    const cols = await this.getColumns(db);
-
+  /** 构建带能力探测的列表查询（同步构造 QueryBuilder，防止 async 返回 thenable 触发 Kysely preventAwait） */
+  private buildListQuery(db: Kysely<DB>, cols: Set<string>, tenantId: string | undefined, wrapper?: QueryWrapper<T>): any {
     let query = db.selectFrom(this.tableName as any).selectAll();
     if (cols.has('deleted')) {
-      query = (query as any).where('deleted', '=', false);
+      query = (query as any).where('deleted', '=', 0);
     }
 
     if (tenantId && cols.has('tenant_id')) {
@@ -247,20 +246,23 @@ export class BaseMapper<T extends Record<string, any>> {
     wrapper?: QueryWrapper<T>
   ): Promise<{ list: T[]; total: number; pageNum: number; pageSize: number }> {
     const db = await this.getDb();
+    const tenantId = getCurrentTenantId();
+    const cols = await this.getColumns(db);
     const pageNum = Math.max(1, page.pageNum || 1);
     const pageSize = Math.max(1, page.pageSize || 10);
     const offset = (pageNum - 1) * pageSize;
 
-    const listQuery = await this.buildListQuery(wrapper);
+    const listQuery = this.buildListQuery(db, cols, tenantId, wrapper);
     const list = await ((listQuery as any).offset(offset).limit(pageSize) as any).execute();
 
     // 总数走 SQL count（复用同一过滤条件）
-    const countQuery = await this.buildListQuery(wrapper);
+    const countQuery = this.buildListQuery(db, cols, tenantId, wrapper);
     const countRow = await ((countQuery as any).clearSelect().select((eb: any) => eb.fn.countAll<number>('count')) as any).executeTakeFirst();
     const total = Number((countRow as any)?.count ?? 0);
 
     return { list: list as T[], total, pageNum, pageSize };
   }
+
 
   /**
    * 插入记录（按表实际列自动填充主键、租户ID、创建/更新人与时间等审计字段）
@@ -281,7 +283,7 @@ export class BaseMapper<T extends Record<string, any>> {
     if (cols.has('created_at') && record.created_at === undefined) record.created_at = now;
     if (cols.has('updated_by') && record.updated_by === undefined) record.updated_by = 'system';
     if (cols.has('updated_at') && record.updated_at === undefined) record.updated_at = now;
-    if (cols.has('deleted') && record.deleted === undefined) record.deleted = false;
+    if (cols.has('deleted') && record.deleted === undefined) record.deleted = 0;
     if (cols.has('deleted_at') && record.deleted_at === undefined) record.deleted_at = null;
 
     await (db.insertInto(this.tableName as any) as any).values(record).execute();
@@ -304,7 +306,7 @@ export class BaseMapper<T extends Record<string, any>> {
     let query = (db.updateTable(this.tableName as any) as any).set(updates).where(this.primaryKey, '=', id);
 
     if (cols.has('deleted')) {
-      query = (query as any).where('deleted', '=', false);
+      query = (query as any).where('deleted', '=', 0);
     }
 
     if (tenantId && cols.has('tenant_id')) {
@@ -316,7 +318,7 @@ export class BaseMapper<T extends Record<string, any>> {
   }
 
   /**
-   * 根据 ID 逻辑删除（表具备 deleted 列时置 deleted=true，兼容 deleted_at）
+   * 根据 ID 逻辑删除（表具备 deleted 列时置 deleted=1，兼容 deleted_at）
    */
   async deleteById(id: string | number): Promise<boolean> {
     const db = await this.getDb();
@@ -334,7 +336,7 @@ export class BaseMapper<T extends Record<string, any>> {
       return delRes.length > 0;
     }
 
-    const updates: any = { deleted: true };
+    const updates: any = { deleted: 1 };
     if (cols.has('deleted_at')) updates.deleted_at = now;
     if (cols.has('updated_at')) updates.updated_at = now;
 
