@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Puck, Render, type Data } from "@puckeditor/core"
 import "@puckeditor/core/puck.css"
+import { apiPath } from "@/modules/shared/frontend/lib/request"
 
 // === 物料组件定义 ===
 
@@ -325,7 +326,7 @@ export default function PageBuilderPage() {
   const handleSave = async () => {
     const dataStr = JSON.stringify(pageData)
     try {
-      const res = await fetch("/api/v1/admin/infra/pages", {
+      const res = await fetch(apiPath("/api/v1/admin/infra/pages"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: pageName, slug: pageName.toLowerCase().replace(/\s+/g, "-"), data: dataStr, status: "PUBLISHED" }),

@@ -7,6 +7,7 @@ import { Card } from "@/modules/shared/frontend/components/ui/card"
 import { Input } from "@/modules/shared/frontend/components/ui/input"
 import { Label } from "@/modules/shared/frontend/components/ui/label"
 import { Textarea } from "@/modules/shared/frontend/components/ui/textarea"
+import { apiPath } from "@/modules/shared/frontend/lib/request"
 
 type TemplateCategory = "CRUD" | "TREE" | "SINGLETON" | "WORKFLOW" | "DOMAIN" | "FOUNDATION"
 type TemplateType = "BACKEND" | "FRONTEND" | "API" | "SQL"
@@ -303,7 +304,7 @@ export default function InfraTemplateEnginePage() {
       if (templateCodes.length === 0) {
         throw new Error("当前导出模式下没有可导出的模板")
       }
-      const response = await fetch("/api/admin/infra/codegen/export", {
+      const response = await fetch(apiPath("/api/admin/infra/codegen/export"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
