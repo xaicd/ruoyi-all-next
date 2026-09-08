@@ -30,8 +30,25 @@ type RequestOptions = {
   noAuth?: boolean
 }
 
+/**
+ * 预览子路径前缀（B2：同域名 path 前缀预览）。
+ *
+ * 由 next.config.mjs 通过 NEXT_PUBLIC_BASE_PATH 注入。Next.js 的 basePath 会自动给
+ * Link/router/_next/API routes 加前缀，但**不会**改写代码里手写的 `fetch("/api/...")` 字符串，
+ * 因此这些手写请求必须用 apiPath() 拼上前缀。未配置时返回原路径，行为不变。
+ */
+export const BASE_PATH = (process.env.NEXT_PUBLIC_BASE_PATH || "").replace(/\/+$/, "")
+
+/** 给以 / 开头的同源路径拼上预览子路径前缀（幂等：已带前缀则不重复拼） */
+export function apiPath(path: string): string {
+  if (!BASE_PATH) return path
+  if (typeof path !== "string" || !path.startsWith("/")) return path
+  if (path === BASE_PATH || path.startsWith(BASE_PATH + "/")) return path
+  return BASE_PATH + path
+}
+
 class RequestClient {
-  private baseUrl = ""
+  private baseUrl = BASE_PATH
 
   private getToken(): string | null {
     if (typeof window === "undefined") return null
@@ -43,8 +60,9 @@ class RequestClient {
     localStorage.removeItem("ruoyi_token")
     localStorage.removeItem("ruoyi_user")
     const current = window.location.pathname
-    if (current !== "/login") {
-      window.location.href = "/login?redirect=" + encodeURIComponent(current)
+    const loginPath = apiPath("/login")
+    if (current !== loginPath) {
+      window.location.href = loginPath + "?redirect=" + encodeURIComponent(current)
     }
   }
 

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { apiPath } from "@/modules/shared/frontend/lib/request"
 
 type EnterpriseQuota = {
   enterpriseName: string
@@ -172,7 +173,7 @@ export function EnterprisePortalCpcPage() {
                 }
 
                 try {
-                  const res = await fetch("/api/v1/auth/switch-tenant", {
+                  const res = await fetch(apiPath("/api/v1/auth/switch-tenant"), {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ tenantId: targetId }),
