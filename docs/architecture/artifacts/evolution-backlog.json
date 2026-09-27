@@ -1,15 +1,15 @@
 {
   "version": 1,
   "kind": "evolution-backlog",
-  "generatedAt": "2026-09-18T10:22:59.602Z",
-  "head": "8fa9369",
+  "generatedAt": "2026-09-27T15:48:50.539Z",
+  "head": "c6352c0",
   "note": "Aggregated from real gate artifacts. Read-only signal for external agents; no agent loop runs in this repository (AGENTS.md §18).",
   "summary": {
     "blocker": 0,
     "high": 0,
     "medium": 11,
-    "low": 19,
-    "total": 30
+    "low": 20,
+    "total": 31
   },
   "items": [
     {
@@ -146,6 +146,18 @@
       "evidence": "stage=B, kind=business; §8 requires at least one key-path automated test per domain",
       "command": "npm test -- --run src/modules/pay",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
+    },
+    {
+      "id": "gate-trace-stale",
+      "severity": "low",
+      "section": "AGENTS.md §6",
+      "title": "Gate trace is older than HEAD",
+      "files": [
+        "docs/architecture/artifacts/harness-trace-latest.json"
+      ],
+      "evidence": "trace.head=8fa9369, current HEAD=c6352c0",
+      "command": "npm run check",
+      "action": "Re-run the gates so the recorded evidence matches the current revision."
     },
     {
       "id": "oversized-src/modules/aigw/backend/repositories/aigw-access-token.repository.ts",
