@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-16T03:05:15.149Z",
-  "routeCount": 847,
-  "operationCount": 2029,
+  "generatedAt": "2026-09-18T09:30:15.510Z",
+  "routeCount": 892,
+  "operationCount": 2103,
   "routes": [
     {
       "path": "/api/v1/admin/ai/ai-api-key",
@@ -292,38 +292,6 @@
       "source": "src/app/api/v1/admin/ai/ai-mind-map/[id]/route.ts"
     },
     {
-      "path": "/api/v1/admin/ai/ai-model",
-      "operations": [
-        {
-          "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "POST",
-          "protection": "proxy-authenticated"
-        }
-      ],
-      "source": "src/app/api/v1/admin/ai/ai-model/route.ts"
-    },
-    {
-      "path": "/api/v1/admin/ai/ai-model/[id]",
-      "operations": [
-        {
-          "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
-        }
-      ],
-      "source": "src/app/api/v1/admin/ai/ai-model/[id]/route.ts"
-    },
-    {
       "path": "/api/v1/admin/ai/ai-music",
       "operations": [
         {
@@ -452,7 +420,17 @@
       "source": "src/app/api/v1/admin/ai/ai-write/[id]/route.ts"
     },
     {
-      "path": "/api/v1/admin/ai/chats",
+      "path": "/api/v1/admin/aigw/auth/agent-verify",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "proxy-authenticated"
+        }
+      ],
+      "source": "src/app/api/v1/admin/aigw/auth/agent-verify/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/aigw/carriers",
       "operations": [
         {
           "method": "GET",
@@ -463,13 +441,39 @@
           "protection": "proxy-authenticated"
         }
       ],
-      "source": "src/app/api/v1/admin/ai/chats/route.ts"
+      "source": "src/app/api/v1/admin/aigw/carriers/route.ts"
     },
     {
-      "path": "/api/v1/admin/ai/chats/[id]",
+      "path": "/api/v1/admin/aigw/channels",
       "operations": [
         {
           "method": "GET",
+          "protection": "wrapper"
+        },
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/aigw/channels/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/aigw/contracts",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "proxy-authenticated"
+        },
+        {
+          "method": "POST",
           "protection": "proxy-authenticated"
         },
         {
@@ -481,10 +485,30 @@
           "protection": "proxy-authenticated"
         }
       ],
-      "source": "src/app/api/v1/admin/ai/chats/[id]/route.ts"
+      "source": "src/app/api/v1/admin/aigw/contracts/route.ts"
     },
     {
-      "path": "/api/v1/admin/ai/models",
+      "path": "/api/v1/admin/aigw/dashboard",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "proxy-authenticated"
+        }
+      ],
+      "source": "src/app/api/v1/admin/aigw/dashboard/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/aigw/demo/execute",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "proxy-authenticated"
+        }
+      ],
+      "source": "src/app/api/v1/admin/aigw/demo/execute/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/aigw/enterprises",
       "operations": [
         {
           "method": "GET",
@@ -495,13 +519,17 @@
           "protection": "proxy-authenticated"
         }
       ],
-      "source": "src/app/api/v1/admin/ai/models/route.ts"
+      "source": "src/app/api/v1/admin/aigw/enterprises/route.ts"
     },
     {
-      "path": "/api/v1/admin/ai/models/[id]",
+      "path": "/api/v1/admin/aigw/invoices",
       "operations": [
         {
           "method": "GET",
+          "protection": "proxy-authenticated"
+        },
+        {
+          "method": "POST",
           "protection": "proxy-authenticated"
         },
         {
@@ -513,7 +541,227 @@
           "protection": "proxy-authenticated"
         }
       ],
-      "source": "src/app/api/v1/admin/ai/models/[id]/route.ts"
+      "source": "src/app/api/v1/admin/aigw/invoices/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/aigw/isv-apps",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "proxy-authenticated"
+        },
+        {
+          "method": "POST",
+          "protection": "proxy-authenticated"
+        },
+        {
+          "method": "PUT",
+          "protection": "proxy-authenticated"
+        },
+        {
+          "method": "DELETE",
+          "protection": "proxy-authenticated"
+        }
+      ],
+      "source": "src/app/api/v1/admin/aigw/isv-apps/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/aigw/ledgers",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "proxy-authenticated"
+        }
+      ],
+      "source": "src/app/api/v1/admin/aigw/ledgers/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/aigw/mcp-hub",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "proxy-authenticated"
+        },
+        {
+          "method": "POST",
+          "protection": "proxy-authenticated"
+        },
+        {
+          "method": "PUT",
+          "protection": "proxy-authenticated"
+        },
+        {
+          "method": "DELETE",
+          "protection": "proxy-authenticated"
+        }
+      ],
+      "source": "src/app/api/v1/admin/aigw/mcp-hub/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/aigw/models",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        },
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/aigw/models/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/aigw/pipelines",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "proxy-authenticated"
+        },
+        {
+          "method": "POST",
+          "protection": "proxy-authenticated"
+        },
+        {
+          "method": "PUT",
+          "protection": "proxy-authenticated"
+        },
+        {
+          "method": "DELETE",
+          "protection": "proxy-authenticated"
+        }
+      ],
+      "source": "src/app/api/v1/admin/aigw/pipelines/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/aigw/quotas",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "proxy-authenticated"
+        },
+        {
+          "method": "POST",
+          "protection": "proxy-authenticated"
+        },
+        {
+          "method": "PUT",
+          "protection": "proxy-authenticated"
+        },
+        {
+          "method": "DELETE",
+          "protection": "proxy-authenticated"
+        }
+      ],
+      "source": "src/app/api/v1/admin/aigw/quotas/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/aigw/seats",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "proxy-authenticated"
+        },
+        {
+          "method": "POST",
+          "protection": "proxy-authenticated"
+        }
+      ],
+      "source": "src/app/api/v1/admin/aigw/seats/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/aigw/skus",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        },
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/aigw/skus/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/aigw/tariffs",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "proxy-authenticated"
+        }
+      ],
+      "source": "src/app/api/v1/admin/aigw/tariffs/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/aigw/tenant-members",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "proxy-authenticated"
+        },
+        {
+          "method": "POST",
+          "protection": "proxy-authenticated"
+        },
+        {
+          "method": "PUT",
+          "protection": "proxy-authenticated"
+        },
+        {
+          "method": "DELETE",
+          "protection": "proxy-authenticated"
+        }
+      ],
+      "source": "src/app/api/v1/admin/aigw/tenant-members/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/aigw/tokens",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        },
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/aigw/tokens/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/aigw/usages",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/aigw/usages/route.ts"
     },
     {
       "path": "/api/v1/admin/bpm/bpm-category",
@@ -3724,6 +3972,20 @@
         }
       ],
       "source": "src/app/api/v1/admin/infra/api-error-logs/export/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/infra/appearance",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/infra/appearance/route.ts"
     },
     {
       "path": "/api/v1/admin/infra/audit-log-retention",
@@ -11244,6 +11506,24 @@
       "source": "src/app/api/v1/admin/online/definitions/codegen/download/route.ts"
     },
     {
+      "path": "/api/v1/admin/online/page-schema/[entity]",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        },
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/online/page-schema/[entity]/route.ts"
+    },
+    {
       "path": "/api/v1/admin/pay/orders",
       "operations": [
         {
@@ -12015,6 +12295,10 @@
         {
           "method": "GET",
           "protection": "wrapper"
+        },
+        {
+          "method": "POST",
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/system/mail-template/route.ts"
@@ -12066,7 +12350,7 @@
       "operations": [
         {
           "method": "GET",
-          "protection": "wrapper"
+          "protection": "proxy-authenticated"
         },
         {
           "method": "POST",
@@ -12208,11 +12492,11 @@
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         },
         {
           "method": "POST",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/system/online-users/route.ts"
@@ -12221,16 +12505,8 @@
       "path": "/api/v1/admin/system/online-users/[id]",
       "operations": [
         {
-          "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
           "method": "DELETE",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/system/online-users/[id]/route.ts"
@@ -12264,6 +12540,28 @@
         }
       ],
       "source": "src/app/api/v1/admin/system/operate-logs/export/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/system/partners",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        },
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/system/partners/route.ts"
     },
     {
       "path": "/api/v1/admin/system/permissions/assign-role-menu",
@@ -12379,6 +12677,10 @@
         {
           "method": "GET",
           "protection": "wrapper"
+        },
+        {
+          "method": "POST",
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/system/sms-template/route.ts"
@@ -12430,6 +12732,10 @@
       "operations": [
         {
           "method": "GET",
+          "protection": "wrapper"
+        },
+        {
+          "method": "POST",
           "protection": "wrapper"
         }
       ],
@@ -12616,57 +12922,23 @@
       "source": "src/app/api/v1/admin/system/users/[id]/route.ts"
     },
     {
-      "path": "/api/v1/admin/wms/operations/checkin",
-      "operations": [
-        {
-          "method": "POST",
-          "protection": "wrapper"
-        }
-      ],
-      "source": "src/app/api/v1/admin/wms/operations/checkin/route.ts"
-    },
-    {
-      "path": "/api/v1/admin/wms/warehouses",
-      "operations": [
-        {
-          "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "POST",
-          "protection": "proxy-authenticated"
-        }
-      ],
-      "source": "src/app/api/v1/admin/wms/warehouses/route.ts"
-    },
-    {
-      "path": "/api/v1/admin/wms/warehouses/[id]",
-      "operations": [
-        {
-          "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
-        }
-      ],
-      "source": "src/app/api/v1/admin/wms/warehouses/[id]/route.ts"
-    },
-    {
       "path": "/api/v1/admin/wms/wms-check-order",
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         },
         {
           "method": "POST",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/wms/wms-check-order/route.ts"
@@ -12676,50 +12948,82 @@
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         },
         {
           "method": "POST",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/wms/wms-check-order-detail/route.ts"
     },
     {
-      "path": "/api/v1/admin/wms/wms-check-order-detail/[id]",
+      "path": "/api/v1/admin/wms/wms-check-order-detail/export",
       "operations": [
         {
-          "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
+          "method": "POST",
+          "protection": "wrapper"
         }
       ],
-      "source": "src/app/api/v1/admin/wms/wms-check-order-detail/[id]/route.ts"
+      "source": "src/app/api/v1/admin/wms/wms-check-order-detail/export/route.ts"
     },
     {
-      "path": "/api/v1/admin/wms/wms-check-order/[id]",
+      "path": "/api/v1/admin/wms/wms-check-order-detail/import",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-check-order-detail/import/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-check-order-detail/import-template",
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         }
       ],
-      "source": "src/app/api/v1/admin/wms/wms-check-order/[id]/route.ts"
+      "source": "src/app/api/v1/admin/wms/wms-check-order-detail/import-template/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-check-order/export",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-check-order/export/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-check-order/import",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-check-order/import/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-check-order/import-template",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-check-order/import-template/route.ts"
     },
     {
       "path": "/api/v1/admin/wms/wms-home-statistics",
@@ -12736,33 +13040,23 @@
       "source": "src/app/api/v1/admin/wms/wms-home-statistics/route.ts"
     },
     {
-      "path": "/api/v1/admin/wms/wms-home-statistics/[id]",
-      "operations": [
-        {
-          "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
-        }
-      ],
-      "source": "src/app/api/v1/admin/wms/wms-home-statistics/[id]/route.ts"
-    },
-    {
       "path": "/api/v1/admin/wms/wms-inventory",
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         },
         {
           "method": "POST",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/wms/wms-inventory/route.ts"
@@ -12772,61 +13066,101 @@
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         },
         {
           "method": "POST",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/wms/wms-inventory-history/route.ts"
     },
     {
-      "path": "/api/v1/admin/wms/wms-inventory-history/[id]",
+      "path": "/api/v1/admin/wms/wms-inventory-history/export",
       "operations": [
         {
-          "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
+          "method": "POST",
+          "protection": "wrapper"
         }
       ],
-      "source": "src/app/api/v1/admin/wms/wms-inventory-history/[id]/route.ts"
+      "source": "src/app/api/v1/admin/wms/wms-inventory-history/export/route.ts"
     },
     {
-      "path": "/api/v1/admin/wms/wms-inventory/[id]",
+      "path": "/api/v1/admin/wms/wms-inventory-history/import",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-inventory-history/import/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-inventory-history/import-template",
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         }
       ],
-      "source": "src/app/api/v1/admin/wms/wms-inventory/[id]/route.ts"
+      "source": "src/app/api/v1/admin/wms/wms-inventory-history/import-template/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-inventory/export",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-inventory/export/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-inventory/import",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-inventory/import/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-inventory/import-template",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-inventory/import-template/route.ts"
     },
     {
       "path": "/api/v1/admin/wms/wms-item",
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         },
         {
           "method": "POST",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/wms/wms-item/route.ts"
@@ -12836,157 +13170,257 @@
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         },
         {
           "method": "POST",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/wms/wms-item-brand/route.ts"
     },
     {
-      "path": "/api/v1/admin/wms/wms-item-brand/[id]",
+      "path": "/api/v1/admin/wms/wms-item-brand/export",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-item-brand/export/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-item-brand/import",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-item-brand/import/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-item-brand/import-template",
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         }
       ],
-      "source": "src/app/api/v1/admin/wms/wms-item-brand/[id]/route.ts"
+      "source": "src/app/api/v1/admin/wms/wms-item-brand/import-template/route.ts"
     },
     {
       "path": "/api/v1/admin/wms/wms-item-category",
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         },
         {
           "method": "POST",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/wms/wms-item-category/route.ts"
     },
     {
-      "path": "/api/v1/admin/wms/wms-item-category/[id]",
+      "path": "/api/v1/admin/wms/wms-item-category/export",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-item-category/export/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-item-category/import",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-item-category/import/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-item-category/import-template",
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         }
       ],
-      "source": "src/app/api/v1/admin/wms/wms-item-category/[id]/route.ts"
+      "source": "src/app/api/v1/admin/wms/wms-item-category/import-template/route.ts"
     },
     {
       "path": "/api/v1/admin/wms/wms-item-sku",
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         },
         {
           "method": "POST",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/wms/wms-item-sku/route.ts"
     },
     {
-      "path": "/api/v1/admin/wms/wms-item-sku/[id]",
+      "path": "/api/v1/admin/wms/wms-item-sku/export",
       "operations": [
         {
-          "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
+          "method": "POST",
+          "protection": "wrapper"
         }
       ],
-      "source": "src/app/api/v1/admin/wms/wms-item-sku/[id]/route.ts"
+      "source": "src/app/api/v1/admin/wms/wms-item-sku/export/route.ts"
     },
     {
-      "path": "/api/v1/admin/wms/wms-item/[id]",
+      "path": "/api/v1/admin/wms/wms-item-sku/import",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-item-sku/import/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-item-sku/import-template",
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         }
       ],
-      "source": "src/app/api/v1/admin/wms/wms-item/[id]/route.ts"
+      "source": "src/app/api/v1/admin/wms/wms-item-sku/import-template/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-item/export",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-item/export/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-item/import",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-item/import/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-item/import-template",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-item/import-template/route.ts"
     },
     {
       "path": "/api/v1/admin/wms/wms-merchant",
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         },
         {
           "method": "POST",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/wms/wms-merchant/route.ts"
     },
     {
-      "path": "/api/v1/admin/wms/wms-merchant/[id]",
+      "path": "/api/v1/admin/wms/wms-merchant/export",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-merchant/export/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-merchant/import",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-merchant/import/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-merchant/import-template",
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         }
       ],
-      "source": "src/app/api/v1/admin/wms/wms-merchant/[id]/route.ts"
+      "source": "src/app/api/v1/admin/wms/wms-merchant/import-template/route.ts"
     },
     {
       "path": "/api/v1/admin/wms/wms-movement-order",
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         },
         {
           "method": "POST",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/wms/wms-movement-order/route.ts"
@@ -12996,61 +13430,101 @@
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         },
         {
           "method": "POST",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/wms/wms-movement-order-detail/route.ts"
     },
     {
-      "path": "/api/v1/admin/wms/wms-movement-order-detail/[id]",
+      "path": "/api/v1/admin/wms/wms-movement-order-detail/export",
       "operations": [
         {
-          "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
+          "method": "POST",
+          "protection": "wrapper"
         }
       ],
-      "source": "src/app/api/v1/admin/wms/wms-movement-order-detail/[id]/route.ts"
+      "source": "src/app/api/v1/admin/wms/wms-movement-order-detail/export/route.ts"
     },
     {
-      "path": "/api/v1/admin/wms/wms-movement-order/[id]",
+      "path": "/api/v1/admin/wms/wms-movement-order-detail/import",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-movement-order-detail/import/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-movement-order-detail/import-template",
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         }
       ],
-      "source": "src/app/api/v1/admin/wms/wms-movement-order/[id]/route.ts"
+      "source": "src/app/api/v1/admin/wms/wms-movement-order-detail/import-template/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-movement-order/export",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-movement-order/export/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-movement-order/import",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-movement-order/import/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-movement-order/import-template",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-movement-order/import-template/route.ts"
     },
     {
       "path": "/api/v1/admin/wms/wms-receipt-order",
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         },
         {
           "method": "POST",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/wms/wms-receipt-order/route.ts"
@@ -13060,61 +13534,101 @@
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         },
         {
           "method": "POST",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/wms/wms-receipt-order-detail/route.ts"
     },
     {
-      "path": "/api/v1/admin/wms/wms-receipt-order-detail/[id]",
+      "path": "/api/v1/admin/wms/wms-receipt-order-detail/export",
       "operations": [
         {
-          "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
+          "method": "POST",
+          "protection": "wrapper"
         }
       ],
-      "source": "src/app/api/v1/admin/wms/wms-receipt-order-detail/[id]/route.ts"
+      "source": "src/app/api/v1/admin/wms/wms-receipt-order-detail/export/route.ts"
     },
     {
-      "path": "/api/v1/admin/wms/wms-receipt-order/[id]",
+      "path": "/api/v1/admin/wms/wms-receipt-order-detail/import",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-receipt-order-detail/import/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-receipt-order-detail/import-template",
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         }
       ],
-      "source": "src/app/api/v1/admin/wms/wms-receipt-order/[id]/route.ts"
+      "source": "src/app/api/v1/admin/wms/wms-receipt-order-detail/import-template/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-receipt-order/export",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-receipt-order/export/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-receipt-order/import",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-receipt-order/import/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-receipt-order/import-template",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-receipt-order/import-template/route.ts"
     },
     {
       "path": "/api/v1/admin/wms/wms-shipment-order",
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         },
         {
           "method": "POST",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/wms/wms-shipment-order/route.ts"
@@ -13124,82 +13638,134 @@
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         },
         {
           "method": "POST",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/wms/wms-shipment-order-detail/route.ts"
     },
     {
-      "path": "/api/v1/admin/wms/wms-shipment-order-detail/[id]",
+      "path": "/api/v1/admin/wms/wms-shipment-order-detail/export",
       "operations": [
         {
-          "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
+          "method": "POST",
+          "protection": "wrapper"
         }
       ],
-      "source": "src/app/api/v1/admin/wms/wms-shipment-order-detail/[id]/route.ts"
+      "source": "src/app/api/v1/admin/wms/wms-shipment-order-detail/export/route.ts"
     },
     {
-      "path": "/api/v1/admin/wms/wms-shipment-order/[id]",
+      "path": "/api/v1/admin/wms/wms-shipment-order-detail/import",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-shipment-order-detail/import/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-shipment-order-detail/import-template",
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         }
       ],
-      "source": "src/app/api/v1/admin/wms/wms-shipment-order/[id]/route.ts"
+      "source": "src/app/api/v1/admin/wms/wms-shipment-order-detail/import-template/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-shipment-order/export",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-shipment-order/export/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-shipment-order/import",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-shipment-order/import/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-shipment-order/import-template",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-shipment-order/import-template/route.ts"
     },
     {
       "path": "/api/v1/admin/wms/wms-warehouse",
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         },
         {
           "method": "POST",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
+        },
+        {
+          "method": "PUT",
+          "protection": "wrapper"
+        },
+        {
+          "method": "DELETE",
+          "protection": "wrapper"
         }
       ],
       "source": "src/app/api/v1/admin/wms/wms-warehouse/route.ts"
     },
     {
-      "path": "/api/v1/admin/wms/wms-warehouse/[id]",
+      "path": "/api/v1/admin/wms/wms-warehouse/export",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-warehouse/export/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-warehouse/import",
+      "operations": [
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/wms/wms-warehouse/import/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/wms/wms-warehouse/import-template",
       "operations": [
         {
           "method": "GET",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "PUT",
-          "protection": "proxy-authenticated"
-        },
-        {
-          "method": "DELETE",
-          "protection": "proxy-authenticated"
+          "protection": "wrapper"
         }
       ],
-      "source": "src/app/api/v1/admin/wms/wms-warehouse/[id]/route.ts"
+      "source": "src/app/api/v1/admin/wms/wms-warehouse/import-template/route.ts"
     }
   ]
 }

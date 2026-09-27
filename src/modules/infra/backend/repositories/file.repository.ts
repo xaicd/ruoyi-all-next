@@ -92,3 +92,4 @@ async function deleteInDb(id: string): Promise<void> {
 function mapRow(row: any): InfraFileRow {
   return { id: row.id, configId: row.config_id, name: row.name, path: row.path, url: row.url, type: row.type, size: row.size, createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : String(row.created_at) }
 }
+export const infraFileRepository = InfraFileRepository

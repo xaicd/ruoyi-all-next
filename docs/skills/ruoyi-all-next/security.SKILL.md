@@ -23,13 +23,19 @@ description: 身份鉴权、SQL 防注入、敏感脱敏、防重放、接口限
 - Admin 端与 Member 端 Token 体系完全隔离，签名密钥与有效载荷独立。
 - 禁止信任调用方伪造的 `x-user-id` 或 `x-tenant-id` Header（必须从验证通过的 JWT 中解析）。
 
-### 2. 开放接口防重放 (HMAC + Nonce + Timestamp)
+### 2. 多租户防越权（Data Isolation）
+- 业务数据访问租户唯一来源 = 全局上下文 `getCurrentTenantId()`（`shared/backend/lib/biz-tenant.ts`，由 `withAdminRoute` 自动注入），禁止显式 tenantId 参数透传（断链=跨租户泄露，AGENTS.md §4.8）。
+- Repository 查询/更新/删除必须按当前租户过滤，insert 必须落真实租户值；内存与真实库实现同语义。
+- 无上下文场景（open/relay/内部任务）：租户从已验证的资源归属取（如 API Token.tenantId），禁止落默认值。
+- 生产 `TENANT_MODE=required` 兜底：缺租户上下文直接抛错，杜绝静默全量返回。
+
+### 3. 开放接口防重放 (HMAC + Nonce + Timestamp)
 - 开放接口 (`/api/v1/open`) 必须包含：
   - `X-Timestamp`：请求时间戳（服务器时钟漂移容忍 <= 300 秒）。
   - `X-Nonce`：一次性随机串（Redis 记录 5 分钟排重）。
   - `X-Signature`：基于 Secret 计算的 HMAC-SHA256 签名。
 
-### 3. SQL 注入防御 (SQL Injection Prevention)
+### 4. SQL 注入防御 (SQL Injection Prevention)
 - 所有查询必须走 Prisma / Kysely 参数化查询。
 - 动态排序（OrderBy）字段必须通过严格的白名单枚举校验：
   ```typescript
@@ -37,11 +43,11 @@ description: 身份鉴权、SQL 防注入、敏感脱敏、防重放、接口限
   const sortField = ALLOWED_SORT_FIELDS.includes(input.sortBy) ? input.sortBy : "create_time"
   ```
 
-### 4. 敏感数据脱敏与保护 (Data Masking)
+### 5. 敏感数据脱敏与保护 (Data Masking)
 - 手机号（前 3 后 4 脱敏：`138****1234`）、身份证号、银行卡号在日志与列表响应中脱敏展示。
 - 密码必须使用强散列（Bcrypt / Argon2）加盐存储，严禁明文存储。
 
-### 5. 审计日志 (Audit Logging)
+### 6. 审计日志 (Audit Logging)
 - 密码修改、权限变更、租户配置、资金结算等敏感操作必须记录独立 Audit 审计日志，包含操作人、IP、时间、变更前后 Diff。
 
 ## 4. 绝对禁止项

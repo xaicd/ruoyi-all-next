@@ -136,3 +136,4 @@ async function deleteInDb(id: string): Promise<void> {
 function mapRow(row: any): InfraConfigRow {
   return { id: row.id, category: row.category, name: row.name, configKey: row.config_key, value: row.value, visible: Boolean(row.visible), remark: row.remark, createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : String(row.created_at), updatedAt: row.updated_at instanceof Date ? row.updated_at.toISOString() : String(row.updated_at) }
 }
+export const infraConfigRepository = InfraConfigRepository

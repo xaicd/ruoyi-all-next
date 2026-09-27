@@ -135,3 +135,5 @@ function mapTypeRow(row: any): SystemDictTypeRow {
 function mapDataRow(row: any): SystemDictDataRow {
   return { id: row.id, dictTypeId: row.dict_type_id, label: row.label, value: row.value, sort: row.sort, status: row.status, colorType: row.color_type, remark: row.remark, createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : String(row.created_at), updatedAt: row.updated_at instanceof Date ? row.updated_at.toISOString() : String(row.updated_at) }
 }
+export const systemDictTypeRepository = SystemDictTypeRepository
+export const systemDictDataRepository = SystemDictDataRepository

@@ -85,3 +85,4 @@ export const InfraPageRepository = {
     MEMORY_STORE.splice(idx, 1)
   },
 }
+export const infraPageRepository = InfraPageRepository

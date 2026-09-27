@@ -25,6 +25,7 @@ describe("rpc action contracts", () => {
       "ping",
       "getDictDataByType",
       "resolveTenantEntitlement",
+      "resolveTenantIdByCode",
       "listUsers",
       "createUser",
       "listRoles",

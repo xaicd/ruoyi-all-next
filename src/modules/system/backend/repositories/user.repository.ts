@@ -389,3 +389,4 @@ function deleteInMemory(id: string, tenantId?: string): void {
   MEMORY_STORE.splice(idx, 1)
   MEMORY_USER_POSTS.delete(id)
 }
+export const systemUserRepository = SystemUserRepository

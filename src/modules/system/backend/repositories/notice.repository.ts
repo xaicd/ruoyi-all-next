@@ -94,3 +94,4 @@ export const SystemNoticeRepository = {
     MEMORY_STORE.splice(idx, 1)
   },
 }
+export const systemNoticeRepository = SystemNoticeRepository

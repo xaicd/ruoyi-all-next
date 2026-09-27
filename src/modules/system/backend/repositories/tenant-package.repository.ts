@@ -184,3 +184,4 @@ function mapRow(row: any, menuIds: Map<string, string[]>): TenantPackageRow {
 export const SystemTenantPackageRepository = TenantPackageRepository
 export const systemTenantPackageRepository = TenantPackageRepository
 
+export const tenantPackageRepository = TenantPackageRepository

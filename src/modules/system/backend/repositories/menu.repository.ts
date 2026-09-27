@@ -209,3 +209,4 @@ function mapDbRow(row: any): SystemMenuRow {
     updatedAt: row.updated_at instanceof Date ? row.updated_at.toISOString() : String(row.updated_at),
   }
 }
+export const systemMenuRepository = SystemMenuRepository

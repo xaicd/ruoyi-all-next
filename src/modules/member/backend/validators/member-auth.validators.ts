@@ -1,17 +1,27 @@
 import { z } from "zod"
 
+/**
+ * 租户标识：会员按租户隔离（AGENTS.md §4.8），未认证入口没有租户上下文，
+ * 只能靠调用方提供租户编码定位租户 —— 对齐管理端登录的 tenantCode 约定。
+ */
+const tenantCodeField = z.string().trim().min(1, "租户标识不能为空").max(32)
+
 /** C 端会员注册（账号密码，自包含，无外部依赖） */
 export const memberRegisterSchema = z.object({
   account: z.string().trim().min(3, "账号至少 3 位").max(64, "账号过长"),
   email: z.string().trim().email("邮箱格式不正确").max(120).optional(),
   password: z.string().min(6, "密码至少 6 位").max(64, "密码过长"),
   nickname: z.string().trim().min(1, "昵称不能为空").max(60).optional(),
+  /** 注册必须能定位租户；不传则回落当前上下文，两者皆无时报错而非落到隐式默认租户 */
+  tenantCode: tenantCodeField.optional(),
 })
 
 /** C 端会员登录 */
 export const memberLoginSchema = z.object({
   account: z.string().trim().min(1, "请输入账号"),
   password: z.string().min(1, "请输入密码"),
+  /** 账号在多个租户下同名时必须提供，否则租户无法唯一定位 */
+  tenantCode: tenantCodeField.optional(),
 })
 
 /** 更新个人资料（不含账号/密码） */

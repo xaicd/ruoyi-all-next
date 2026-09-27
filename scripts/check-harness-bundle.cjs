@@ -117,4 +117,31 @@ for (const [layer, spec] of Object.entries(layers)) {
   }
 }
 
+const surface = profile.consumptionSurface
+if (!surface) fail("agent-profile.json must declare consumptionSurface (how external agents consume this repo)")
+
+const compatRel = surface.compatManifest
+if (!compatRel) fail("consumptionSurface.compatManifest is required")
+const compatFull = path.join(ROOT, ...compatRel.split("/"))
+if (!fs.existsSync(compatFull)) fail(`consumptionSurface.compatManifest missing on disk: ${compatRel}`)
+const compat = JSON.parse(fs.readFileSync(compatFull, "utf8"))
+if (compat.kind !== "compat-manifest") fail(`${compatRel} kind must be compat-manifest`)
+
+const mcpServerRel = compat.consumptionSurface?.mcp?.server
+if (!mcpServerRel) fail(`${compatRel} must declare consumptionSurface.mcp.server`)
+if (!fs.existsSync(path.join(ROOT, ...mcpServerRel.split("/")))) fail(`MCP server missing: ${mcpServerRel}`)
+
+const skillsSource = surface.skills?.source
+if (skillsSource !== profile.npc?.skillsDir) {
+  fail(`consumptionSurface.skills.source "${skillsSource}" != npc.skillsDir "${profile.npc?.skillsDir}"`)
+}
+const skillsMirror = surface.skills?.mirror
+if (skillsMirror && !fs.existsSync(path.join(ROOT, ...skillsMirror.split("/")))) {
+  fail(`consumptionSurface.skills.mirror missing on disk: ${skillsMirror}`)
+}
+const skillsSync = String(surface.skills?.sync || "").replace(/^npm run\s+/, "")
+if (!skillsSync || !pkg.scripts?.[skillsSync]) {
+  fail(`consumptionSurface.skills.sync must name an existing npm script, got "${surface.skills?.sync}"`)
+}
+
 console.log(`[harness-bundle] PASS: workspace-bundle, ${graph.domains.length} seams, hatch P1, ${seenSkills.size} layer skills`)

@@ -245,3 +245,4 @@ function deleteInMemory(id: string, tenantId?: string): void {
   if (MEMORY_STORE[idx].code === "super_admin") throw new Error("不允许删除超级管理员角色")
   MEMORY_STORE.splice(idx, 1)
 }
+export const systemRoleRepository = SystemRoleRepository

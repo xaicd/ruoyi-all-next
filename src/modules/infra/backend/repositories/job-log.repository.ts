@@ -63,3 +63,4 @@ export const InfraJobLogRepository = {
 export function resetJobLogMemory() {
   MEMORY_STORE.length = 0
 }
+export const infraJobLogRepository = InfraJobLogRepository

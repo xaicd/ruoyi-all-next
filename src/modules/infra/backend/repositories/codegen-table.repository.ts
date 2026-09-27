@@ -182,3 +182,4 @@ export function toCodegenColumnConfig(col: ColumnInfo): CodegenColumnConfig {
     formValidation: col.nullable ? null : "required",
   }
 }
+export const codegenTableRepository = CodegenTableRepository

@@ -170,6 +170,22 @@ export class SystemTenantService {
     return enrichTenantEntitlements(tenant)
   }
 
+  /**
+   * 平台面：按租户编码解析租户 id。
+   *
+   * 未认证登录（C 端会员等外部入口）没有租户上下文，只能依赖调用方提供的租户标识；
+   * 该方法只做「编码 → 已存在租户 id」的查表，不授予任何数据访问权，也不返回租户其他信息。
+   * 由 shared 助手调用；业务域禁止直连平台面（microservice:check 强制）。
+   */
+  static async resolveTenantIdByCode(input: { tenantCode: string }): Promise<{ tenantId: string | null }> {
+    const tenant = await SystemTenantRepository.findByTenantCode(input.tenantCode)
+    domainLog.event("system.tenant.resolve-id-by-code", {
+      tenantCode: input.tenantCode,
+      found: Boolean(tenant),
+    })
+    return { tenantId: tenant?.id ?? null }
+  }
+
   static async getSubscriptionHistory(id: string) {
     const tenant = await SystemTenantRepository.findById(id)
     if (!tenant) throw new Error(`租户不存在: ${id}`)

@@ -3,6 +3,7 @@ import { registerActionSchema } from "@/modules/shared/backend/lib/broker-valida
 import {
   getDictDataByTypeSchema,
   resolveTenantEntitlementSchema,
+  resolveTenantIdByCodeSchema,
   userListQuerySchema,
   createUserSchema,
   roleListQuerySchema,
@@ -78,6 +79,7 @@ export const SYSTEM_ACTION_SCHEMAS = {
   "system.ping": systemPingSchema,
   "system.getDictDataByType": getDictDataByTypeSchema,
   "system.resolveTenantEntitlement": resolveTenantEntitlementSchema,
+  "system.resolveTenantIdByCode": resolveTenantIdByCodeSchema,
   "system.listUsers": userListQuerySchema,
   "system.createUser": createUserSchema,
   "system.listRoles": roleListQuerySchema,

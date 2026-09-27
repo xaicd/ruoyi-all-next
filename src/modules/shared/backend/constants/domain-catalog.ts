@@ -104,23 +104,14 @@ export type DomainCatalog = {
 
 export const DOMAIN_CATALOG: DomainCatalog = catalogJson as DomainCatalog
 
-export const NATIVE_DOMAIN_NAMES = [
-  "system",
-  "infra",
-  "bpm",
-  "pay",
-  "report",
-  "mp",
-  "mall",
-  "member",
-  "crm",
-  "erp",
-  "wms",
-  "mes",
-  "ai",
-  "iot",
-  "im",
-] as const
+/**
+ * Derived from catalog layer declarations so it can never drift again.
+ * A hand-written copy previously omitted `online` and `aigw`.
+ */
+export const NATIVE_DOMAIN_NAMES: readonly string[] = [
+  ...DOMAIN_CATALOG.layers.platform.domains,
+  ...DOMAIN_CATALOG.layers.business.domains,
+]
 
 export function listDomainCatalog(): DomainCatalogEntry[] {
   return DOMAIN_CATALOG.domains

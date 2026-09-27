@@ -27,8 +27,32 @@ if (!fs.existsSync(policyPath)) fail("missing admin route policy")
 
 const proxySource = fs.readFileSync(proxyPath, "utf8")
 const policySource = fs.readFileSync(policyPath, "utf8")
-if (!proxySource.includes("/api/v1/admin/:path*") || !proxySource.includes("requireAdminAuth")) {
-  fail("proxy must protect every /api/v1/admin route with requireAdminAuth")
+
+// Assert the invariant (every /api/v1/admin/** request reaches requireAdminAuth) instead of
+// matching one literal matcher string. proxy.ts legitimately uses a broader
+// matcher ["/api/v1/:path*"] plus an explicit in-handler admin prefix guard.
+const matcherBlock = /matcher:\s*\[([^\]]*)\]/.exec(proxySource)
+if (!matcherBlock) fail("proxy.ts must declare a matcher array")
+
+const patterns = matcherBlock[1]
+  .split(",")
+  .map((entry) => entry.trim().replace(/^["'`]|["'`]$/g, ""))
+  .filter(Boolean)
+
+const ADMIN_PREFIX = "/api/v1/admin/"
+const coversAdmin = patterns.some((pattern) => {
+  const staticPrefix = pattern.split(/[:*]/)[0]
+  return ADMIN_PREFIX.startsWith(staticPrefix)
+})
+if (!coversAdmin) {
+  fail(`proxy matcher ${JSON.stringify(patterns)} does not cover ${ADMIN_PREFIX}** routes`)
+}
+
+if (!proxySource.includes("requireAdminAuth")) {
+  fail("proxy must call requireAdminAuth for admin routes")
+}
+if (!proxySource.includes("/api/v1/admin")) {
+  fail("proxy must explicitly scope the admin path prefix before requireAdminAuth")
 }
 if (!policySource.includes("ADMIN_PUBLIC_ROUTE_EXCEPTIONS") || !policySource.includes('"authenticated"')) {
   fail("admin route policy must default to authenticated")

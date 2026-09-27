@@ -77,3 +77,4 @@ export const SystemNotifyMessageRepository = {
     MEMORY_STORE.splice(idx, 1)
   },
 }
+export const systemNotifyMessageRepository = SystemNotifyMessageRepository

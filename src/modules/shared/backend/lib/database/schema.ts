@@ -290,7 +290,7 @@ export interface SystemConfigTable {
   remark: string | null
 }
 
-// 🆕 member_user：C 端会员用户（app 端注册/登录主体）
+// 🆕 member_user：C 端会员用户（app 端注册/登录主体）。tenant_id 无数据库默认值：必须由调用方显式写入（§4.8）。
 export interface MemberUserTable {
   id: string
   account: string
@@ -302,7 +302,7 @@ export interface MemberUserTable {
   status: Generated<string>
   member_level: Generated<string>
   extra_fields: string | null
-  tenant_id: Generated<string>
+  tenant_id: string
   created_by: Generated<string>
   created_at: Generated<Date>
   updated_by: Generated<string>

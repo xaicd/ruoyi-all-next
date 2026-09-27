@@ -118,3 +118,4 @@ async function deleteInDb(id: string): Promise<void> {
 function mapRow(row: any): InfraJobRow {
   return { id: row.id, name: row.name, handlerName: row.handler_name, handlerParam: row.handler_param, cronExpression: row.cron_expression, retryCount: row.retry_count, retryInterval: row.retry_interval, status: row.status, createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : String(row.created_at), updatedAt: row.updated_at instanceof Date ? row.updated_at.toISOString() : String(row.updated_at) }
 }
+export const infraJobRepository = InfraJobRepository

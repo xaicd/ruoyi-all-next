@@ -151,3 +151,4 @@ async function deleteInDb(id: string, tenantId?: string): Promise<void> {
 function mapDbRow(row: any): SystemPostRow {
   return { id: row.id, name: row.name, code: row.code, sort: row.sort, status: row.status, remark: row.remark, tenantId: row.tenant_id, createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : String(row.created_at), updatedAt: row.updated_at instanceof Date ? row.updated_at.toISOString() : String(row.updated_at) }
 }
+export const systemPostRepository = SystemPostRepository

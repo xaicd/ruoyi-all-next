@@ -90,3 +90,4 @@ export const SystemAreaRepository = {
     MEMORY_STORE.splice(idx, 1)
   },
 }
+export const systemAreaRepository = SystemAreaRepository

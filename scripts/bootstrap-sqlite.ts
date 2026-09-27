@@ -195,7 +195,7 @@ export async function bootstrapSqlite(targetPath = DB_PATH) {
     -- 🆕 C 端会员用户（app 端注册/登录主体，8 大审计底座字段）
     CREATE TABLE IF NOT EXISTS member_user (
       id TEXT PRIMARY KEY,
-      account TEXT UNIQUE NOT NULL,
+      account TEXT NOT NULL,
       email TEXT,
       password_hash TEXT NOT NULL,
       password_salt TEXT NOT NULL,
@@ -204,7 +204,7 @@ export async function bootstrapSqlite(targetPath = DB_PATH) {
       status TEXT DEFAULT 'ACTIVE',
       member_level TEXT DEFAULT 'normal',
       extra_fields TEXT,
-      tenant_id TEXT DEFAULT 'default',
+      tenant_id TEXT NOT NULL,
       created_by TEXT DEFAULT 'system',
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       updated_by TEXT DEFAULT 'system',
@@ -213,6 +213,9 @@ export async function bootstrapSqlite(targetPath = DB_PATH) {
       deleted_at DATETIME,
       remark TEXT
     );
+    CREATE UNIQUE INDEX IF NOT EXISTS member_user_tenant_account_key ON member_user(tenant_id, account);
+    CREATE UNIQUE INDEX IF NOT EXISTS member_user_tenant_email_key ON member_user(tenant_id, email);
+    CREATE INDEX IF NOT EXISTS member_user_tenant_id_idx ON member_user(tenant_id);
   `);
 
   // 🆕 预置演示 C 端会员（预览免输入登录：demo / demo123）

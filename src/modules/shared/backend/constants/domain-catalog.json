@@ -117,7 +117,7 @@
           "swappable": false,
           "fallback": "default tenant",
           "stability": "stable",
-          "fanIn": 46,
+          "fanIn": 48,
           "state": "load-bearing",
           "scope": "多租户隔离路径(查询/写入自动注入 tenant_id)",
           "changeRisk": "高：34 扇入 + 租户隔离语义，破坏=越权风险",
@@ -133,8 +133,8 @@
             "src/modules/aigw/backend/repositories/aigw-usage.repository.ts",
             "src/modules/aigw/frontend/cpc-pages/workspace.cpc-page.tsx",
             "src/modules/infra/backend/services/codegen-templates/repository.template.ts",
-            "src/modules/shared/backend/auth/guards.ts",
-            "…(+34 more)"
+            "src/modules/member/backend/repositories/member-user.repository.ts",
+            "…(+36 more)"
           ]
         },
         {

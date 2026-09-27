@@ -30,6 +30,7 @@
           "ping",
           "getDictDataByType",
           "resolveTenantEntitlement",
+          "resolveTenantIdByCode",
           "listUsers",
           "createUser",
           "listRoles",
@@ -449,7 +450,7 @@
       },
       "provider": {
         "servicesDir": "src/modules/member/backend/services",
-        "repositoriesDir": null,
+        "repositoriesDir": "src/modules/member/backend/repositories",
         "methods": [
           "ping",
           "listUsers",
@@ -643,7 +644,6 @@
       "consumer": {
         "adminApi": "src/app/api/v1/admin/ai",
         "openApi": "src/app/api/v1/open/ai",
-        "frontendApi": "src/modules/ai/frontend/api",
         "adminPages": "src/app/(admin-pages)/admin/ai",
         "modulePages": "src/modules/ai/frontend/pages"
       },

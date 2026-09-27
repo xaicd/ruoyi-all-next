@@ -1,3 +1,8 @@
+---
+name: database-compatibility
+description: 多数据库兼容策略：兼容等级（Tier-A/B/C）声明、方言差异隔离、降级路径与跨库迁移。涉及数据库选型、兼容等级评估或迁移时启用。
+---
+
 # database-compatibility
 
 ## Purpose

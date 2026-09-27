@@ -1,3 +1,8 @@
+---
+name: ui-framework-governance
+description: 管理端页面模板、结构与交互治理：筛选区/工具栏/表格区/分页区结构、shared/template 复用、权限可见性一致性与空/错/载三态。新增后台页面或组件、评审 UI 规范时启用。
+---
+
 # ui-framework-governance
 
 ## Purpose

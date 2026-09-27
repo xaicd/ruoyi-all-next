@@ -24,6 +24,10 @@ message ResolveTenantEntitlementRequest {
   string tenant_id = 1 [json_name = "tenantId"];
 }
 
+message ResolveTenantIdByCodeRequest {
+  string tenant_code = 1 [json_name = "tenantCode"];
+}
+
 message ListUsersRequest {
   int32 page = 1;
   int32 page_size = 2 [json_name = "pageSize"];
@@ -632,6 +636,7 @@ service SystemService {
   rpc Ping(PingRequest) returns (JsonReply);
   rpc GetDictDataByType(GetDictDataByTypeRequest) returns (JsonReply);
   rpc ResolveTenantEntitlement(ResolveTenantEntitlementRequest) returns (JsonReply);
+  rpc ResolveTenantIdByCode(ResolveTenantIdByCodeRequest) returns (JsonReply);
   rpc ListUsers(ListUsersRequest) returns (JsonReply);
   rpc CreateUser(CreateUserRequest) returns (JsonReply);
   rpc ListRoles(ListRolesRequest) returns (JsonReply);

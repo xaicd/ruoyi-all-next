@@ -6,7 +6,7 @@
     "description": "system/infra are not a public microservice surface. Business domains may call public methods only. platform is for shared/online/report. Everything else is BFF-local.",
     "system": {
       "public": ["getDictDataByType", "getPermissionInfoByUser"],
-      "platform": ["ping", "resolveTenantEntitlement"]
+      "platform": ["ping", "resolveTenantEntitlement", "resolveTenantIdByCode"]
     },
     "infra": {
       "public": [],
@@ -43,6 +43,13 @@
           "module": "tenant-entitlement.service",
           "schema": "resolveTenantEntitlementSchema",
           "fields": [{ "name": "tenantId", "type": "string" }]
+        },
+        {
+          "method": "resolveTenantIdByCode",
+          "service": "SystemTenantService",
+          "module": "tenant.service",
+          "schema": "resolveTenantIdByCodeSchema",
+          "fields": [{ "name": "tenantCode", "type": "string" }]
         },
         {
           "method": "listUsers",

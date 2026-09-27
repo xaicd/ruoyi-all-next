@@ -69,3 +69,4 @@ export const SystemPermissionRepository = {
 
 
 }
+export const systemPermissionRepository = SystemPermissionRepository

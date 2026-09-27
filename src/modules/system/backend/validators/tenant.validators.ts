@@ -15,6 +15,11 @@ export const resolveTenantEntitlementSchema = z.object({
   tenantId: z.string().trim().min(1, "tenantId 不能为空"),
 })
 
+/** 平台面：未认证登录场景用租户编码解析租户 id（shared 调用，业务域禁止直连平台面） */
+export const resolveTenantIdByCodeSchema = z.object({
+  tenantCode: z.string().trim().min(1, "tenantCode 不能为空").max(32),
+})
+
 export const tenantListQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(100).default(20),

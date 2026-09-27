@@ -74,3 +74,4 @@ export const CrmCustomerRepository = {
     MEMORY_STORE.splice(idx, 1)
   },
 }
+export const crmCustomerRepository = CrmCustomerRepository

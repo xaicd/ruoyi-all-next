@@ -54,6 +54,22 @@
     "generated": true,
     "rule": "Generated from catalog + contract. Do not hand-edit domain names."
   },
+  "consumptionSurface": {
+    "note": "How an external agent consumes this repository. Domain names stay in domain-catalog.json; tool and skill surfaces are declared once in the compat manifest.",
+    "compatManifest": "src/modules/shared/contract/compat-manifest.json",
+    "declaredIn": "src/modules/shared/contract/compat-manifest.json",
+    "mcp": {
+      "start": "npm run mcp:serve",
+      "transport": "stdio",
+      "declaredIn": "src/modules/shared/contract/compat-manifest.json"
+    },
+    "skills": {
+      "source": ".agents/skills",
+      "mirror": "docs/skills/ruoyi-all-next",
+      "sync": "npm run skills:sync",
+      "generated": true
+    }
+  },
   "seams": [
     {
       "id": "domain-facade",

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { NATIVE_DOMAIN_NAMES, isFoundationModule, listDomainCatalog, listPlatformDomains, moduleLayerOf } from "../../constants/domain-catalog"
+import { NATIVE_DOMAIN_NAMES, isFoundationModule, listDomainCatalog, listFoundationModules, listPlatformDomains, moduleLayerOf } from "../../constants/domain-catalog"
 import {
   buildDomainPackPlan,
   matchPathToDomain,
@@ -7,10 +7,17 @@ import {
 } from "../domain-pack"
 
 describe("domain pack catalog", () => {
-  it("covers every native domain plus online", () => {
+  it("keeps catalog entries and layer declarations in sync", () => {
     const names = listDomainCatalog().map((domain) => domain.name)
-    expect(names).toEqual(expect.arrayContaining([...NATIVE_DOMAIN_NAMES, "online"]))
+    expect(names).toEqual(expect.arrayContaining([...NATIVE_DOMAIN_NAMES]))
     expect(new Set(names).size).toBe(names.length)
+
+    const declared = new Set(NATIVE_DOMAIN_NAMES)
+    expect(names.filter((name) => !declared.has(name))).toEqual([])
+
+    for (const moduleName of listFoundationModules()) {
+      expect(names).not.toContain(moduleName)
+    }
   })
 
   it("separates foundation, platform, and business layers", () => {

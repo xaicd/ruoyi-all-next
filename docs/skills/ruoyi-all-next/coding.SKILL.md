@@ -29,9 +29,10 @@ src/modules/{domain}/
 │   ├── services/{entity}.service.ts    ← 核心业务逻辑 (事务、状态机、审计)
 │   └── services/__tests__/{entity}.test.ts ← Vitest 自动化测试
 └── frontend/
-    ├── api/{entity}.api.ts            ← 前端 API 封装
+    ├── api/{entity}.api.ts            ← 前端 API 封装 (三端共用 SDK)
     ├── components/{Entity}Form.tsx    ← 弹窗/表单组件
-    └── pages/{entity}-list.page.tsx   ← 列表管理页
+    ├── pages/{entity}-list.page.tsx   ← 🔴 Admin 运营管理端页面
+    └── cpc-pages/{feature}.cpc-page.tsx ← 🟢 CPC 客户/政企挂载/C端 PC 页面
 ```
 
 ## 4. 标准分层职责清单
@@ -47,3 +48,18 @@ src/modules/{domain}/
 - 严禁使用 `any` 糊弄类型边界。
 - 严禁在业务代码中使用 `console.log`（必须使用统一结构化 logger）。
 - 严禁跳过 Validator 将未清洗参数直接传入 Service。
+- **严禁仅生成无操作按钮/无弹窗的只读骨架页面**：所有交付管理页必须具备完整 CRUD 按钮、搜索重置栏与新增/编辑弹窗。
+
+## 6. 前端开箱即用交付门禁（Production-Ready Frontend）
+1. **工具栏**：必须包含 `+ 新增` 按钮、查询、重置与刷新；
+2. **状态与复制**：实体状态必须用色彩分明的 Badge 呈现（如 ACTIVE/DISABLED），关键 Key/Token 必须有快捷复制；
+3. **操作列（Actions）**：每行必须具备 `[编辑]`、`[启用/禁用]`、`[删除]` 及业务专有按钮（如探测/测试）；
+4. **弹窗表单（Modal Form）**：新增与编辑必须有完备的弹窗组件，带必填校验与友好错误提示。
+
+## 7. 履约与业务流严格隔离规范 (Fulfillment Domain Isolation)
+涉及交易、订单、预约与履约逻辑时，必须严格区隔三大履约域：
+1. **到店核销域 (`IN_STORE_VERIFICATION`)**：露营、民宿、酒店、体验活动、采摘等，严禁填快递地址或计算物流运费，支付成功后自动签发核销码；
+2. **餐饮堂食/外卖域 (`RESTAURANT_DINE_IN`)**：外卖配送与到店自提/堂食；
+3. **实物电商配送域 (`PHYSICAL_DELIVERY`)**：农副特产等实物包裹，走地址选择与运费计算。
+
+

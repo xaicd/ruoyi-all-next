@@ -222,11 +222,58 @@ CI 前置检查：
 2. npm run ruoyi:governance:check
 3. npm run domain:check
 4. npm run microservice:check
-5. 合并前建议执行 strict：
+5. npm run harness:check
+6. npm run admin:routes:check
+7. npm run foundation:ontology:check
+8. npm run skills:check
+9. npm run compat:check
+10. npm run standards:check
+11. npm run evolution:backlog（非门禁：把上述证据聚合为进化待办，永不失败）
+12. 合并前建议执行 strict：
 	- npm run ruoyi:matrix:check:strict
 	- npm run ruoyi:governance:check:strict
 
-一键门禁：`npm run check`（含 matrix、governance、domain、microservice）。
+一键门禁：`npm run check`（先执行 `contracts:sync` 幂等再生成契约，再依次跑上述 10 道门禁，随后生成进化待办，最后写 `docs/architecture/artifacts/harness-trace-latest.json`）。
+
+注意：`gen/**` 被 `.gitignore` 排除，干净检出上 `domain:check` / `microservice:check` 依赖的 Go 桩须由 `contracts:sync` 先生成，故这两道门禁不可单独在干净检出上直接执行。
+
+### 6.3 工程规范机检（`standards:check`）
+
+`AGENTS.md` 的散文条款只有变成可执行检查才算“沉淀”。`scripts/check-engineering-standards.cjs` 用规则注册表承载，每条规则声明一种模式：
+
+| 模式 | 语义 |
+|---|---|
+| `enforce` | 有违规即失败 |
+| `ratchet` | 冻结既有欠债于 `docs/architecture/artifacts/engineering-standards-baseline.json`，**只拦新增**；修复后跑 `npm run standards:baseline` 并复核增量 |
+| `report` | 仅供人工判断，永不失败 |
+
+当前规则：§3.2 顶层目录约束（enforce）、§3.2/§14.3 禁止平铺 `modules/<domain>/services`（enforce）、§4.7 对象单例 Repository/Service 双导出（enforce，类与 `MEMORY_*`/`SEED_*` 常量不在范围内）、§4.5 后端禁 `console.*`（ratchet，日志实现与 codegen 模板豁免）、§4.8 业务仓储租户作用域（report）。
+
+判定要点：规则必须贴合条款本意，误报会逼出无意义豁免。`§4.7` 只约束对象单例模式（`export const XxxRepository = {...}` 需配 `export const xxxRepository`），`export class XxxService` 这类单一标识符由消费端一致以 PascalCase 引用，不属于条款范围。新增规则前必须先在真实代码库跑 `--audit`，确认当前符合度再决定 enforce / ratchet / report。
+
+新增规范条款时必须同时给出机检规则或说明为何只能人工判断；禁止口头规范。
+
+### 6.4 进化回流闭环（`evolution:backlog`）
+
+本仓库**不托管 Agent Loop**（§18）。闭环由「门禁产出证据 → 聚合为待办 → 外部 Agent 消费并修复 → 重跑门禁」构成，模型始终在仓外：
+
+```
+npm run check                 # 门禁产出证据 + 轨迹
+  ├─ docs/architecture/artifacts/harness-trace-latest.json
+  └─ docs/architecture/artifacts/evolution-backlog.json
+        ↑ scripts/build-evolution-backlog.cjs 聚合：
+          门禁轨迹状态 / standards report 项与冻结欠债 /
+          各域测试覆盖（§8）/ 超 200 行文件（§11.2）/ TODO 标记（§12）
+        ↓ 外部 Agent 读取（MCP 工具 ruoyi_evolution_backlog）
+        修复 → 再跑 npm run check 验证
+```
+
+铁律：
+
+1. 待办项必须可追溯到真实产物，并携带**验证该修复的确切命令**；禁止凭空生成任务。
+2. 待办**永不失败构建**——它暴露欠债，不隐藏也不阻断；阻断只由门禁负责。
+3. 领域知识只在 Skill、契约与门禁里沉淀；禁止把「智能进化」实现为运行时自修改。
+4. 待办项被修复后，应通过新增/收紧机检规则固化，而不是靠记忆维持。
 
 ## 6.1 多模型三阶段协作规范（强制）
 

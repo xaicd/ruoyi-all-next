@@ -1,0 +1,343 @@
+/**
+ * Engineering-standards gate (AGENTS.md prose -> machine check).
+ *
+ * A rule must be machine-checkable to count as "settled". Each rule declares a mode:
+ *
+ *   enforce  violations fail the build outright
+ *   ratchet  existing debt is frozen in a reviewed baseline; only NEW debt fails
+ *   report   printed for humans, never fails (needs judgement, not a boolean)
+ *
+ * Usage:
+ *   node scripts/check-engineering-standards.cjs               # gate (used by npm run check)
+ *   node scripts/check-engineering-standards.cjs --json        # machine-readable, for MCP
+ *   node scripts/check-engineering-standards.cjs --audit       # print every rule, never fail
+ *   node scripts/check-engineering-standards.cjs --write-baseline
+ */
+
+const fs = require("fs")
+const path = require("path")
+const { ROOT, loadCatalog } = require("./lib/domain-catalog.cjs")
+
+const BASELINE_REL = "docs/architecture/artifacts/engineering-standards-baseline.json"
+const SRC = "src"
+
+const asJson = process.argv.includes("--json")
+const auditOnly = process.argv.includes("--audit")
+const writeBaseline = process.argv.includes("--write-baseline")
+
+// Logger implementations and code generators are where console output legitimately lives;
+// codegen-templates emit code as strings, so their console.* is generated text, not repo code.
+const CONSOLE_EXEMPT = new Set([
+  "src/modules/shared/backend/lib/observability.ts",
+  "src/modules/shared/backend/lib/exception-analyzer.ts",
+])
+const CONSOLE_EXEMPT_DIRS = ["codegen-templates"]
+const CONSOLE_PATTERN = /console\.(log|warn|error|info|debug)\s*\(/
+
+// Port/hexagonal interface files only *declare* repository signatures (they even take tenantId
+// as an input); they are type declarations, not implementations, so tenant scoping does not apply.
+const TENANT_SCOPE_EXEMPT_DIRS = ["/ports/"]
+
+function abs(rel) {
+  return path.join(ROOT, ...rel.split("/"))
+}
+
+function toRel(full) {
+  return path.relative(ROOT, full).replace(/\\/g, "/")
+}
+
+function walk(dirRel, predicate) {
+  const root = abs(dirRel)
+  if (!fs.existsSync(root)) return []
+  const out = []
+  const visit = (dir) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name)
+      if (entry.isDirectory()) {
+        if (entry.name === "node_modules" || entry.name === ".next") continue
+        visit(full)
+      } else if (predicate(entry.name)) {
+        out.push(full)
+      }
+    }
+  }
+  visit(root)
+  return out.sort()
+}
+
+function isTestFile(file) {
+  return file.includes("__tests__") || /\.(test|spec)\./.test(file)
+}
+
+function isCodegenTemplate(file) {
+  return CONSOLE_EXEMPT_DIRS.some((dir) => file.includes(`/${dir}/`))
+}
+
+const RULES = [
+  {
+    id: "src-top-level-layout",
+    section: "AGENTS.md §3.2",
+    mode: "enforce",
+    description: "src/ only allows app/ and modules/ at the top level",
+    run() {
+      const allowed = new Set(["app", "modules"])
+      return fs
+        .readdirSync(abs(SRC), { withFileTypes: true })
+        .filter((entry) => entry.isDirectory() && !allowed.has(entry.name))
+        .map((entry) => ({ file: `${SRC}/${entry.name}`, detail: "unexpected top-level directory under src/" }))
+    },
+  },
+  {
+    id: "no-flat-domain-services",
+    section: "AGENTS.md §3.2 / §14.3",
+    mode: "enforce",
+    description: "domain code must live in backend/services, never src/modules/<domain>/services",
+    run() {
+      const modulesRoot = abs(`${SRC}/modules`)
+      return fs
+        .readdirSync(modulesRoot, { withFileTypes: true })
+        .filter((entry) => entry.isDirectory())
+        .filter((entry) => fs.existsSync(path.join(modulesRoot, entry.name, "services")))
+        .map((entry) => ({
+          file: `${SRC}/modules/${entry.name}/services`,
+          detail: "flat services/ directory; move to backend/services/",
+        }))
+    },
+  },
+  {
+    id: "backend-no-console",
+    section: "AGENTS.md §4.5",
+    mode: "ratchet",
+    description: "backend business code must not use console.* (logger impls and codegen templates exempt)",
+    run() {
+      const files = walk(`${SRC}/modules`, (name) => /\.tsx?$/.test(name)).filter(
+        (file) =>
+          toRel(file).includes("/backend/") &&
+          !isTestFile(toRel(file)) &&
+          !isCodegenTemplate(toRel(file)) &&
+          !CONSOLE_EXEMPT.has(toRel(file)),
+      )
+      const violations = []
+      for (const file of files) {
+        const rel = toRel(file)
+        const lines = fs.readFileSync(file, "utf8").split("\n")
+        lines.forEach((line, index) => {
+          if (CONSOLE_PATTERN.test(line)) {
+            violations.push({ file: rel, detail: `console.* at line ${index + 1}` })
+          }
+        })
+      }
+      return violations
+    },
+  },
+  {
+    id: "repository-service-dual-export",
+    section: "AGENTS.md §4.7",
+    mode: "enforce",
+    description: "object-singleton repositories and services must export both PascalCase and camelCase",
+    run() {
+      const files = walk(
+        `${SRC}/modules`,
+        (name) => /\.(repository|service)\.ts$/.test(name),
+      ).filter((file) => !isTestFile(toRel(file)))
+
+      const violations = []
+      for (const file of files) {
+        const rel = toRel(file)
+        const source = fs.readFileSync(file, "utf8")
+        const exported = new Set(
+          [...source.matchAll(/export\s+const\s+([A-Za-z_$][\w$]*)/g)].map((match) => match[1]),
+        )
+        for (const name of exported) {
+          // In scope: the object-singleton pattern from AGENTS.md §4.7
+          //   export const AigwUsageRepository = { ... }
+          //   export const aigwUsageRepository = AigwUsageRepository
+          // Out of scope: SCREAMING_SNAKE_CASE constants (MEMORY_X / SEED_X) and classes,
+          // which are single identifiers consumed consistently in PascalCase.
+          if (!/^[A-Z][A-Za-z0-9]*$/.test(name) || !/[a-z]/.test(name)) continue
+          // `AigwEnterpriseRepositorySingleton = new AigwEnterpriseRepository()` is paired with
+          // `aigwEnterpriseRepository` (named after the class, not the const), which still gives
+          // consumers the camelCase entry point the rule exists to guarantee.
+          const stem = name.replace(/(Singleton|Instance|Impl)$/, "")
+          const camel = `${stem[0].toLowerCase()}${stem.slice(1)}`
+          if (!exported.has(camel)) {
+            violations.push({ file: rel, detail: `missing camelCase alias export for ${name}` })
+          }
+        }
+      }
+      return violations
+    },
+  },
+  {
+    id: "business-repository-tenant-scope",
+    section: "AGENTS.md §4.8",
+    mode: "report",
+    description: "business-domain repositories should reference tenant scope (needs human judgement)",
+    run() {
+      const businessDomains = new Set(
+        loadCatalog()
+          .domains.filter((domain) => domain.kind === "business")
+          .map((domain) => domain.name),
+      )
+      const files = walk(`${SRC}/modules`, (name) => /\.repository\.ts$/.test(name)).filter(
+        (file) => !isTestFile(toRel(file)) && !TENANT_SCOPE_EXEMPT_DIRS.some((dir) => toRel(file).includes(dir)),
+      )
+      const violations = []
+      for (const file of files) {
+        const rel = toRel(file)
+        const domain = rel.split("/")[2]
+        if (!businessDomains.has(domain)) continue
+        const source = fs.readFileSync(file, "utf8")
+        // Accepts both context-based (getCurrentTenantId) and explicit tenantId parameters;
+        // the explicit form is the deprecated long-term pattern, reported separately by reviewers.
+        if (/tenant/i.test(source)) continue
+        violations.push({ file: rel, detail: "no tenant reference found at all" })
+      }
+      return violations
+    },
+  },
+]
+
+function countByFile(violations) {
+  const counts = {}
+  for (const violation of violations) {
+    counts[violation.file] = (counts[violation.file] || 0) + 1
+  }
+  return counts
+}
+
+function loadBaseline() {
+  const full = abs(BASELINE_REL)
+  if (!fs.existsSync(full)) return { version: 1, kind: "engineering-standards-baseline", rules: {} }
+  return JSON.parse(fs.readFileSync(full, "utf8"))
+}
+
+const results = RULES.map((rule) => ({ rule, violations: rule.run() }))
+
+if (writeBaseline) {
+  const rules = {}
+  for (const { rule, violations } of results) {
+    if (rule.mode !== "ratchet") continue
+    rules[rule.id] = { accepted: countByFile(violations) }
+  }
+  const baseline = {
+    version: 1,
+    kind: "engineering-standards-baseline",
+    note: "Frozen engineering-standards debt. Ratchet rules fail on NEW debt only. Regenerate with `npm run standards:baseline` and review the delta.",
+    rules,
+  }
+  const full = abs(BASELINE_REL)
+  fs.mkdirSync(path.dirname(full), { recursive: true })
+  fs.writeFileSync(full, `${JSON.stringify(baseline, null, 2)}\n`)
+  console.log(`[standards] wrote ${BASELINE_REL}`)
+  for (const { rule, violations } of results) {
+    if (rule.mode === "ratchet") {
+      console.log(`  - ${rule.id}: froze ${violations.length} accepted violation(s) across ${Object.keys(countByFile(violations)).length} file(s)`)
+    }
+  }
+  process.exit(0)
+}
+
+const baseline = loadBaseline()
+const failures = []
+const report = []
+
+for (const { rule, violations } of results) {
+  const entry = {
+    id: rule.id,
+    section: rule.section,
+    mode: rule.mode,
+    description: rule.description,
+    violations: violations.length,
+  }
+
+  if (rule.mode === "enforce") {
+    report.push({ ...entry, status: violations.length === 0 ? "pass" : "fail" })
+    if (violations.length > 0) failures.push({ rule, violations })
+    continue
+  }
+
+  if (rule.mode === "report") {
+    report.push({ ...entry, status: "report" })
+    continue
+  }
+
+  const accepted = baseline.rules?.[rule.id]?.accepted || {}
+  const current = countByFile(violations)
+  const newDebt = []
+  for (const [file, count] of Object.entries(current)) {
+    const allowed = accepted[file] || 0
+    if (count > allowed) newDebt.push({ file, count, allowed })
+  }
+
+  report.push({
+    ...entry,
+    status: newDebt.length === 0 ? "pass" : "fail",
+    acceptedFiles: Object.keys(accepted).length,
+    newDebt: newDebt.length,
+  })
+  if (newDebt.length > 0) failures.push({ rule, violations, newDebt })
+}
+
+if (asJson) {
+  console.log(
+    JSON.stringify(
+      {
+        kind: "engineering-standards-report",
+        baseline: BASELINE_REL,
+        passed: failures.length === 0,
+        rules: report,
+        reportOnly: results
+          .filter(({ rule }) => rule.mode === "report")
+          .flatMap(({ rule, violations }) => violations.map((v) => ({ rule: rule.id, ...v }))),
+      },
+      null,
+      2,
+    ),
+  )
+  process.exit(failures.length === 0 ? 0 : 1)
+}
+
+console.log(`[standards] engineering standards from AGENTS.md`)
+
+for (const entry of report) {
+  const marker = entry.status === "pass" ? "PASS" : entry.status === "report" ? "INFO" : "FAIL"
+  console.log(
+    `  ${marker}  ${entry.id} (${entry.mode}) — ${entry.section}: ${entry.description}` +
+      (entry.mode === "ratchet" ? ` [accepted files: ${entry.acceptedFiles ?? 0}, new debt: ${entry.newDebt ?? 0}]` : ""),
+  )
+}
+
+const reported = results.filter(({ rule }) => rule.mode === "report")
+for (const { rule, violations } of reported) {
+  if (violations.length === 0) continue
+  console.log(`  INFO  ${rule.id}: ${violations.length} item(s) need human judgement, e.g.`)
+  for (const violation of violations.slice(0, 5)) console.log(`          ${violation.file} — ${violation.detail}`)
+  if (violations.length > 5) console.log(`          … +${violations.length - 5} more`)
+}
+
+if (auditOnly) {
+  console.log(`[standards] audit complete (${results.reduce((total, r) => total + r.violations.length, 0)} total findings)`)
+  process.exit(0)
+}
+
+if (failures.length > 0) {
+  console.error(`[standards] FAIL`)
+  for (const { rule, violations, newDebt } of failures) {
+    console.error(`  ${rule.id} (${rule.section}):`)
+    if (rule.mode === "enforce") {
+      for (const violation of violations.slice(0, 20)) {
+        console.error(`    - ${violation.file} — ${violation.detail}`)
+      }
+      if (violations.length > 20) console.error(`    … +${violations.length - 20} more`)
+    } else {
+      for (const debt of newDebt) {
+        console.error(`    - ${debt.file}: ${debt.count} violation(s), baseline accepts ${debt.allowed}`)
+      }
+      console.error(`    fix the new debt, or re-baseline with "npm run standards:baseline" and review the delta`)
+    }
+  }
+  process.exit(1)
+}
+
+console.log(`[standards] PASS: ${report.length} rules enforced/reported`)

@@ -1,3 +1,8 @@
+---
+name: microservice-evolution
+description: 域从模块化单体向可拆分单体、再到微服务的演进设计：阶段判定（A/B/C）、跨域超时重试熔断、拆分顺序与回滚路径。涉及域拆分、独立发布或阶段演进时启用。
+---
+
 # microservice-evolution
 
 ## Purpose

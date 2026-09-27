@@ -4,6 +4,7 @@ const { execSync } = require("child_process")
 const { ROOT } = require("./lib/domain-catalog.cjs")
 
 const ARTIFACT_REL = "docs/architecture/artifacts/harness-trace-latest.json"
+const BACKLOG_REL = "docs/architecture/artifacts/evolution-backlog.json"
 
 function tryGit(command) {
   try {
@@ -48,14 +49,20 @@ function buildTrace(status = "pass") {
     head: tryGit("git rev-parse --short HEAD"),
     dirty,
     gates: [
-      "ruoyi:matrix:check",
-      "ruoyi:governance:check",
       "domain:check",
       "microservice:check",
       "harness:check",
+      "admin:routes:check",
+      "foundation:ontology:check",
+      "skills:check",
+      "compat:check",
+      "standards:check",
+      "ruoyi:matrix:check",
+      "ruoyi:governance:check",
     ],
     sprintProd: latestSprintLog(),
     seamGraph: "src/modules/shared/contract/seam-graph.json",
+    backlog: BACKLOG_REL,
     hatch: hatchSnapshot(),
     note: "Last successful npm run check stamp. Session events stay in DigitalStaff Native.",
   }

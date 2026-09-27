@@ -5,6 +5,8 @@ Skill 写法见 [skill-authoring.SKILL.md](./skill-authoring.SKILL.md)。
 
 冲突时：**本仓库 Skill + AGENTS.md + 本仓库文档 > 外部 GitHub Skill**。
 
+真源：`.agents/skills/<name>/SKILL.md`（`agent-profile.json` 的 `npc.skillsDir`）。本目录下的 `*.SKILL.md` 是 `npm run skills:sync` 生成的逐字节镜像，**禁止手改**，`npm run check` 会拦下漂移。
+
 ## 1. 交付管道
 
 按阶段推进，不允许跳过门禁宣称完成。
@@ -32,6 +34,7 @@ Skill 写法见 [skill-authoring.SKILL.md](./skill-authoring.SKILL.md)。
 | 新增/修改 Skill | skill-authoring |
 | 新业务项目孵化、DigitalStaff NPC 模板、DeepSeek Harness 进化 | agent-harness、product-requirements |
 | 新功能、客户端、业务项目初始化 | product-requirements |
+| 新功能一站式交付（RBAC + 全动词 API + 页面 + 权限 + 测试） | new-feature |
 | 管理端/C 端页面或视觉 | ui-design、ui-framework-governance、ui-ux-pro-max |
 | 新 HTTP/RPC、改 DTO | api-design |
 | 表、迁移、多数据库 | database-design、database-compatibility |

@@ -113,3 +113,4 @@ export const SystemNotifyTemplateRepository = {
     MEMORY_STORE.splice(idx, 1)
   },
 }
+export const systemNotifyTemplateRepository = SystemNotifyTemplateRepository

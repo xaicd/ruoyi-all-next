@@ -39,3 +39,4 @@ export const PayRefundRepository = {
     return MEMORY_STORE.find((r) => r.id === id) ?? null
   },
 }
+export const payRefundRepository = PayRefundRepository
