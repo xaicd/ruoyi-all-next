@@ -16,7 +16,7 @@
       "react": "19.3.0",
       "kysely": "^0.29.4",
       "zod": "^4.6.5",
-      "@prisma/client": "^6.13.0",
+      "@prisma/client": "^7.10.0",
       "typescript": "^5.9.2"
     }
   },

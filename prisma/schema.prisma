@@ -8,9 +8,9 @@ generator client {
 
 // Prisma schema 与迁移默认使用 PostgreSQL。运行时驱动选择由 DB_DRIVER 管理；
 // MySQL 等异构数据库需要独立 schema 与迁移历史，不能动态切换 Prisma provider。
+// 注: Prisma ORM v7 起连接串不再放在此处, 见仓库根 prisma.config.ts。
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 // ============================================================

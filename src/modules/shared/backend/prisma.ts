@@ -1,88 +1,28 @@
 import { PrismaClient } from "@prisma/client"
+import { PrismaPg } from "@prisma/adapter-pg"
 
 declare global {
   // eslint-disable-next-line no-var
   var __ruoyiAllNextPrisma__: PrismaClient | undefined
 }
 
-type MockModel = {
-  findMany: (args?: any) => Promise<any[]>
-  findFirst: (args?: any) => Promise<any>
-  findUnique: (args?: any) => Promise<any>
-  count: (args?: any) => Promise<number>
-  create: (args?: any) => Promise<any>
-  update: (args?: any) => Promise<any>
-  upsert: (args?: any) => Promise<any>
-  deleteMany: (args?: any) => Promise<{ count: number }>
-  groupBy: (args?: any) => Promise<any[]>
-}
-
-function createMockModel(): MockModel {
-  return {
-    async findMany() {
-      return []
-    },
-    async findFirst() {
-      return null
-    },
-    async findUnique() {
-      return null
-    },
-    async count() {
-      return 0
-    },
-    async create(args?: any) {
-      return args?.data ?? {}
-    },
-    async update(args?: any) {
-      return args?.data ?? {}
-    },
-    async upsert(args?: any) {
-      return args?.update ?? args?.create ?? {}
-    },
-    async deleteMany() {
-      return { count: 0 }
-    },
-    async groupBy() {
-      return []
-    },
-  }
-}
-
-function createMockPrismaClient() {
-  const modelProxy = new Proxy(createMockModel(), {
-    get(target, prop, receiver) {
-      if (typeof prop === "string" && prop in target) {
-        return Reflect.get(target, prop, receiver)
-      }
-      return async () => null
-    },
-  })
-
-  return new Proxy(
-    {},
-    {
-      get(_target, prop) {
-        if (typeof prop === "string" && prop.startsWith("$")) {
-          return async () => undefined
-        }
-        return modelProxy
-      },
-    },
-  ) as unknown as PrismaClient
-}
-
-function createClientSafely(): PrismaClient {
+function createClient(): PrismaClient {
   try {
+    // Prisma ORM v7 起, 连接不再由 schema 提供, 必须显式传入驱动适配器。
+    // 适配器是惰性的: 缺少 DATABASE_URL 时构造仍会成功, 查询阶段才抛错 ——
+    // 因此已不存在"无库时静默返回空结果"的路径, 配置错误会在使用点显性暴露。
     return new PrismaClient({
+      adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL ?? "" }),
       log: process.env.NODE_ENV === "development" ? ["warn", "error"] : ["error"],
     })
-  } catch {
-    return createMockPrismaClient()
+  } catch (error) {
+    // 构造失败属配置错误, 此处刻意不降级为空实现(mock): 静默返回空结果会把配置故障
+    // 伪装成"没有数据", 比直接失败危险得多。
+    throw new Error(`[ruoyiPrisma] PrismaClient 构造失败: ${String(error)}`)
   }
 }
 
-export const ruoyiPrisma = globalThis.__ruoyiAllNextPrisma__ ?? createClientSafely()
+export const ruoyiPrisma = globalThis.__ruoyiAllNextPrisma__ ?? createClient()
 
 if (process.env.NODE_ENV !== "production") {
   globalThis.__ruoyiAllNextPrisma__ = ruoyiPrisma
