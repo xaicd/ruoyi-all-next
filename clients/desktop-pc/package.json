@@ -1,5 +1,5 @@
 {
-  "name": "agent-zqall",
+  "name": "@ruoyi/client-desktop-pc",
   "version": "0.1.0",
   "private": true,
   "scripts": {
