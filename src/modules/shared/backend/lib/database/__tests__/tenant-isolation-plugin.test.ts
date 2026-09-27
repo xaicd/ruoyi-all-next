@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { DummyDriver, Kysely, SqliteAdapter, SqliteIntrospector, SqliteQueryCompiler, type ColumnNode, type InsertQueryNode, type PrimitiveValueListNode, type SelectQueryNode, type ValueNode } from "kysely"
+import { DummyDriver, Kysely, SqliteAdapter, SqliteIntrospector, SqliteQueryCompiler, type ColumnNode, type InsertQueryNode, type PrimitiveValueListNode, type SelectQueryNode, type ValueNode, type ValuesNode } from "kysely"
 import { TenantIsolationPlugin } from "../tenant-isolation-plugin"
 import { runWithTenantContext } from "../../biz-tenant"
 
@@ -89,9 +89,11 @@ describe("TenantIsolationPlugin", () => {
     runWithTenantContext({ tenantId: "t-4", isPlatform: false }, () => {
       const node = db.insertInto("ai_usage" as any).values({ id: "x1", model: "m" }).compile().query as InsertQueryNode
       const out = plugin.transformQuery({ queryId, node }) as InsertQueryNode
-      const values = out.values as PrimitiveValueListNode
-      expect(values.columns.some((c: ColumnNode) => c.column?.name === "tenant_id")).toBe(true)
-      expect((values.values[0][values.values[0].length - 1] as ValueNode).value).toBe("t-4")
+      // 当前 Kysely: 列在 InsertQueryNode.columns, 值在 ValuesNode.values, 每行为 PrimitiveValueListNode
+      const columns = out.columns as readonly ColumnNode[]
+      const rows = (out.values as ValuesNode).values as readonly PrimitiveValueListNode[]
+      expect(columns.some((c) => c.column?.name === "tenant_id")).toBe(true)
+      expect(rows[0].values[rows[0].values.length - 1]).toBe("t-4")
     })
   })
 
@@ -99,7 +101,9 @@ describe("TenantIsolationPlugin", () => {
     runWithTenantContext({ tenantId: "t-5", isPlatform: false }, () => {
       const node = db.selectFrom("not_in_tenant_list" as any).selectAll().compile().query
       const out = plugin.transformQuery({ queryId, node })
-      expect(out).toBe(node)
+      // 断言「未被改写」而非引用相等: 插件必须递归进入子查询以保护其中的白名单表,
+      // 因此无法保证逐字返回同一对象引用。
+      expect(out).toEqual(node)
     })
   })
 

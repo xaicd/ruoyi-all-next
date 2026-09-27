@@ -4,7 +4,12 @@ import { MpAccountService } from "../account.service"
 import { MpFanService } from "../fan.service"
 import { MpMessageService } from "../message.service"
 
-describe("mp services", () => {
+// 本文件是 PostgreSQL 集成测试: 服务层直接经 ruoyiPrisma 落库, 依赖真实数据库。
+// 未配置 DATABASE_URL 时跳过, 否则在默认本地环境下必然红灯(并非真实缺陷)。
+// 运行方式: DATABASE_URL=postgresql://<user>:<pass>@<host>:<port>/<db> npm test
+const describeWithDatabase = process.env.DATABASE_URL ? describe : describe.skip
+
+describeWithDatabase("mp services", () => {
   it("lists persisted accounts and fans from the database", async () => {
     await ruoyiPrisma.setting.upsert({
       where: { key: "mp.accounts" },

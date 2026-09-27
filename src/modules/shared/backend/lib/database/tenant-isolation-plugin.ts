@@ -13,16 +13,17 @@
  */
 
 import {
-  AndNode,
   BinaryOperationNode,
   ColumnNode,
   DeleteQueryNode,
   InsertQueryNode,
   OperationNodeTransformer,
+  OperatorNode,
   PrimitiveValueListNode,
   SelectQueryNode,
   UpdateQueryNode,
   ValueNode,
+  ValuesNode,
   WhereNode,
   type ColumnNode as ColumnNodeType,
   type ExpressionNode,
@@ -81,8 +82,12 @@ function tableNameOf(table: unknown): string | undefined {
   if (!table || typeof table !== "object") return undefined
   const node = table as { kind?: string }
   if (node.kind === "TableNode") {
-    const t = (table as TableNode).table as IdentifierNode
-    return typeof t === "string" ? t : t?.name
+    // 当前 Kysely 的 TableNode.table 是 SchemableIdentifierNode(内层才是 IdentifierNode),
+    // 早期版本直接就是 IdentifierNode —— 统一递归解析, 避免取 .name 得到 undefined。
+    return tableNameOf((table as TableNode).table)
+  }
+  if (node.kind === "SchemableIdentifierNode") {
+    return tableNameOf((table as { identifier: unknown }).identifier)
   }
   if (node.kind === "SchemaNode") {
     const t = (table as { table: unknown }).table as TableNode
@@ -125,7 +130,14 @@ function containsColumn(expression: ExpressionNode | undefined, column: string):
 }
 
 function tenantPredicate(tenantId: string): ExpressionNode {
-  return BinaryOperationNode.create(ColumnNode.create("tenant_id"), "=", ValueNode.create(tenantId))
+  // 当前 Kysely 的 BinaryOperationNode.create 第二个参数要求 OperatorNode(而非原始字符串),
+  // 传 "=" 会让 Postgres 编译器查不到对应 visitor 并抛
+  // "this[#visitors][node.kind] is not a function"。
+  return BinaryOperationNode.create(
+    ColumnNode.create("tenant_id"),
+    OperatorNode.create("="),
+    ValueNode.create(tenantId),
+  )
 }
 
 class TenantIsolationTransformer extends OperationNodeTransformer {
@@ -137,7 +149,7 @@ class TenantIsolationTransformer extends OperationNodeTransformer {
     const table = mainTableOf(node.from)
     if (table && TENANT_TABLES.has(table) && !containsColumn(node.where, "tenant_id")) {
       const predicate = tenantPredicate(this.tenantId)
-      return { ...node, where: node.where ? WhereNode.create(AndNode.create(node.where, predicate)) : WhereNode.create(predicate) }
+      return { ...node, where: node.where ? WhereNode.cloneWithOperation(node.where, "And", predicate) : WhereNode.create(predicate) }
     }
     return super.transformSelectQuery(node)
   }
@@ -146,40 +158,48 @@ class TenantIsolationTransformer extends OperationNodeTransformer {
     const table = mainTableOf(node.table)
     if (table && TENANT_TABLES.has(table) && !containsColumn(node.where, "tenant_id")) {
       const predicate = tenantPredicate(this.tenantId)
-      return { ...node, where: node.where ? WhereNode.create(AndNode.create(node.where, predicate)) : WhereNode.create(predicate) }
+      return { ...node, where: node.where ? WhereNode.cloneWithOperation(node.where, "And", predicate) : WhereNode.create(predicate) }
     }
     return super.transformUpdateQuery(node)
   }
 
   override transformDeleteQuery(node: DeleteQueryNode): DeleteQueryNode {
-    const table = mainTableOf(node.table)
+    // 当前 Kysely 的 DeleteQueryNode 用 from(FromNode) 而非 table,
+    // 早期版本取 node.table 会得到 undefined 从而永远不注入。
+    const table = mainTableOf(node.from)
     if (table && TENANT_TABLES.has(table) && !containsColumn(node.where, "tenant_id")) {
       const predicate = tenantPredicate(this.tenantId)
-      return { ...node, where: node.where ? WhereNode.create(AndNode.create(node.where, predicate)) : WhereNode.create(predicate) }
+      return { ...node, where: node.where ? WhereNode.cloneWithOperation(node.where, "And", predicate) : WhereNode.create(predicate) }
     }
     return super.transformDeleteQuery(node)
   }
 
   override transformInsertQuery(node: InsertQueryNode): InsertQueryNode {
     const table = tableNameOf(node.into)
-    if (table && TENANT_TABLES.has(table) && node.values && node.values.kind === "PrimitiveValueListNode") {
-      const values = node.values as PrimitiveValueListNode
-      const columns = values.columns as ColumnNodeType[]
-      if (!columns.some((c) => c.column?.name === "tenant_id")) {
-        const columnNode = ColumnNode.create("tenant_id")
-        const valueNode = ValueNode.create(this.tenantId)
-        const nextValues: PrimitiveValueListNode = {
-          ...values,
-          columns: [...columns, columnNode],
-          values:
-            values.values.length === 0
-              ? [[valueNode]]
-              : values.values.map((row) => [...row, valueNode]),
-        }
-        return { ...node, values: nextValues }
-      }
+    if (!table || !TENANT_TABLES.has(table)) return super.transformInsertQuery(node)
+
+    // 当前 Kysely 把插入列放在 InsertQueryNode.columns, 值放在 ValuesNode.values,
+    // 且每行为 PrimitiveValueListNode(其 values 是原始值而非 ValueNode)。
+    // 早期版本假设 values 自身即 PrimitiveValueListNode 且带 columns, 因此从不注入。
+    const columns = node.columns as ReadonlyArray<ColumnNodeType> | undefined
+    const values = node.values as ValuesNode | undefined
+    if (!columns || !values || values.kind !== "ValuesNode") return super.transformInsertQuery(node)
+    if (columns.some((c) => c.column?.name === "tenant_id")) return super.transformInsertQuery(node)
+    if (values.values.length === 0 || !values.values.every((row) => row.kind === "PrimitiveValueListNode")) {
+      return super.transformInsertQuery(node)
     }
-    return super.transformInsertQuery(node)
+
+    return {
+      ...node,
+      columns: [...columns, ColumnNode.create("tenant_id")],
+      values: {
+        ...values,
+        values: values.values.map((row) => ({
+          ...(row as PrimitiveValueListNode),
+          values: [...(row as PrimitiveValueListNode).values, this.tenantId],
+        })),
+      },
+    }
   }
 }
 

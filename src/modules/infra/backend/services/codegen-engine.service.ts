@@ -7,6 +7,7 @@
  */
 
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
+import type { CodegenTemplate } from "../../contract/codegen.types"
 import {
   type CodegenConfig,
   type CodegenOutput,
@@ -93,6 +94,21 @@ export const CodegenEngineService = {
       filename: o.path,
       content: o.content,
     }))
+  },
+
+  /**
+   * 获取可用模板列表
+   *
+   * 注: a09918c 将本服务由静态类重构为对象单例时遗漏了此方法, 而调用方
+   * CodegenTableService.listCodegenCatalog() 仍在引用, 导致
+   * infra.listCodegenCatalog 门面方法运行时抛错。此处按原实现恢复。
+   */
+  listTemplates(): Array<{ id: CodegenTemplate; name: string; description: string }> {
+    return [
+      { id: "CRUD", name: "标准 CRUD", description: "列表、字段配置、筛选、表单、导入导出、权限与审阅 ZIP。" },
+      { id: "TREE", name: "树形 CRUD", description: "在标准 CRUD 上增加父子树约束与树形数据输出。" },
+      { id: "MASTER_DETAIL", name: "主子表", description: "输出主记录与子定义绑定的嵌套配置和事务扩展点。" },
+    ]
   },
 }
 

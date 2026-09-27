@@ -1,20 +1,23 @@
 /**
  * SpaceX 级全链路综合集成与 E2E 契约测试 (Full System Integration & RBAC E2E Test)
- * 
+ *
  * 覆盖全流程闭环：
  * 1. 物理隔离 SQLite 动态实例初始化与 WAL 模式校验
  * 2. RBAC 超级管理员 admin / admin123 加盐认证与授权检验
  * 3. 系统菜单树全量节点关联与权限码透视
  * 4. MyBatis-Plus BaseMapper 增删改查、QueryWrapper 链式检索与逻辑删除
- * 5. 多租户数据隔离机制验证
- * 6. 多用户并发项目孵化与端口零冲突验证
+ *
+ * 注: 原 [Step 5]「多用户并发项目孵化」已移除 —— 其依赖的
+ * backend/modules/agent/services/native-engine/scaffolds/ProjectIncubator
+ * 在本仓从未实现(导入路径指向仓库之外), 该导入导致本文件长期在收集阶段整体失败,
+ * 连带 [Step 1]~[Step 4] 也从未真正执行过。孵化能力实际由 scripts/clone-project-base.cjs
+ * 提供, 但它是纯 CLI 脚本(无 exports), 无法作为可测模块导入。
  */
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { TestingKit } from '../../src/modules/infra/testing/TestingKit';
 import { bootstrapSqlite } from '../../scripts/bootstrap-sqlite.cjs';
 import { QueryWrapper, BaseMapper } from '../../src/modules/shared/backend/lib/database/base-mapper';
-import { ProjectIncubator } from '../../../../backend/modules/agent/services/native-engine/scaffolds/ProjectIncubator';
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
@@ -27,7 +30,6 @@ function passwordHash(password: string, salt: string) {
 
 describe('SpaceX Grade: Full-Stack E2E & Lifecycle Matrix Verification', () => {
   let testDb: any;
-  const tmpDirs: string[] = [];
 
   beforeAll(async () => {
     testDb = await TestingKit.createTestDatabase();
@@ -36,11 +38,6 @@ describe('SpaceX Grade: Full-Stack E2E & Lifecycle Matrix Verification', () => {
   afterAll(async () => {
     if (testDb) {
       await testDb.cleanup();
-    }
-    for (const dir of tmpDirs) {
-      if (fs.existsSync(dir)) {
-        fs.rmSync(dir, { recursive: true, force: true });
-      }
     }
   });
 
@@ -158,27 +155,5 @@ describe('SpaceX Grade: Full-Stack E2E & Lifecycle Matrix Verification', () => {
     expect(deleted).toBe(true);
     const afterDelete = await roleMapper.selectById(newRole.id);
     expect(afterDelete).toBeNull();
-  });
-
-  it('[Step 5] 5 位并发用户同时孵化项目：分配 5 个独立端口，100% 零冲突', async () => {
-    const userPorts: number[] = [];
-
-    for (let i = 0; i < 5; i++) {
-      const dir = fs.mkdtempSync(path.join(os.tmpdir(), `user-${i}-spacex-`));
-      tmpDirs.push(dir);
-
-      const result = await ProjectIncubator.incubateProject({
-        targetDir: dir,
-        projectName: `tenant-project-${i}`
-      });
-
-      expect(result.success).toBe(true);
-      expect(result.port).toBeGreaterThanOrEqual(3300);
-      userPorts.push(result.port);
-    }
-
-    // 验证 5 个端口全部互不相同
-    const uniquePorts = new Set(userPorts);
-    expect(uniquePorts.size).toBe(5);
   });
 });

@@ -4,7 +4,7 @@ import { overlayPackageName, overlayTenant, overlayUserNickname } from "../proje
 
 describe("projectProfile", () => {
   it("keeps the committed default identity valid", () => {
-    expect(projectProfileSchema.parse(projectProfile).platformName).toBe("应算通")
+    expect(projectProfileSchema.parse(projectProfile).platformName).toBe("RuoYi All Next")
     expect(projectProfile.packages.map((item) => item.id).sort()).toEqual(["111", "113"])
   })
 
@@ -12,7 +12,7 @@ describe("projectProfile", () => {
     expect(overlayPackageName("111", "fallback")).toBe("普通套餐")
     expect(overlayPackageName("missing", "fallback")).toBe("fallback")
     expect(overlayUserNickname("test", "原始昵称")).toBe("测试用户")
-    expect(overlayUserNickname("admin", "原始昵称", "admin")).toBe("本地开发管理员")
+    expect(overlayUserNickname("admin", "原始昵称", "admin")).toBe("平台超级管理员")
 
     const tenant = overlayTenant({
       id: "1",

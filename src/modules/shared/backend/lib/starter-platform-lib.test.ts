@@ -8,7 +8,7 @@ import { clearWebsocketHub, listWebsocketMessages, websocketConnect, websocketSe
 import { clearMonitorStore, listTracerSpans, monitorIncrement, monitorRead, tracerRecord } from "./platform-monitor"
 import { dictTranslate, excelToCsv } from "./platform-excel-dict"
 import { clearTenantContext, getTenantContext, setTenantContext } from "./biz-tenant"
-import { buildDataPermissionScope, hasDataPermission } from "./biz-data-permission"
+import { hasTenantAccessPermission, type PartnerDataScope } from "./biz-data-permission"
 import { resolveIpArea } from "./biz-ip-area"
 
 describe("starter platform libs", () => {
@@ -60,8 +60,10 @@ describe("starter platform libs", () => {
     setTenantContext({ tenantId: "t-1", isPlatform: false })
     expect(getTenantContext()?.tenantId).toBe("t-1")
 
-    const scope = buildDataPermissionScope("SD-JN")
-    expect(hasDataPermission(scope, "SD-JN-ZQ")).toBe(true)
+    // 数据权限模型已由 orgCode 前缀层级匹配改为显式租户白名单, 见 biz-data-permission.ts
+    const scope: PartnerDataScope = { scopeType: "CUSTOM", allowedTenantIds: ["SD-JN-ZQ"] }
+    expect(hasTenantAccessPermission(scope, "SD-JN-ZQ")).toBe(true)
+    expect(hasTenantAccessPermission(scope, "SD-JN")).toBe(false)
 
     expect(resolveIpArea("127.0.0.1").province).toBe("Local")
   })
