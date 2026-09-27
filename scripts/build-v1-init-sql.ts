@@ -25,7 +25,7 @@ async function main() {
   console.log("[BUILD-V1-INIT] Generating V1 PostgreSQL full initialization SQL...")
 
   // 1. 获取纯净 DDL
-  const ddl = execSync("npx prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script", { encoding: "utf-8" })
+  const ddl = execSync("npx prisma migrate diff --from-empty --to-schema prisma/schema.prisma --script", { encoding: "utf-8" })
 
   // 2. 组装全量纯净 SEED 数据
   const fullMenus = withAiMenuCatalog(withAigwMenuCatalog(withOnlineMenuCatalog(SEED_MENUS)))

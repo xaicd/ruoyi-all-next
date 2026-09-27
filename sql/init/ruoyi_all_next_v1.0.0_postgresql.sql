@@ -1,8 +1,11 @@
 -- ==============================================================================
 -- ruoyi-all-next 第一版权威全量初始化 SQL (V1.0.0 PostgreSQL)
--- 生成时间: 2026-08-24T15:28:59.944Z
+-- 生成时间: 2026-09-27T16:36:31.437Z
 -- 包含: 全 15 域完整 DDL + 工整 4 字符系统菜单 + 平台超管 + 完整业务种子数据
 -- ==============================================================================
+
+-- CreateSchema
+CREATE SCHEMA IF NOT EXISTS "public";
 
 -- CreateTable
 CREATE TABLE "system_user" (
@@ -332,6 +335,30 @@ CREATE TABLE "setting" (
     "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "setting_pkey" PRIMARY KEY ("key")
+);
+
+-- CreateTable
+CREATE TABLE "member_user" (
+    "id" TEXT NOT NULL,
+    "account" VARCHAR(64) NOT NULL,
+    "email" VARCHAR(120),
+    "password_hash" VARCHAR(200) NOT NULL,
+    "password_salt" VARCHAR(100) NOT NULL,
+    "nickname" VARCHAR(60) NOT NULL,
+    "avatar_url" VARCHAR(500),
+    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
+    "member_level" VARCHAR(30) NOT NULL DEFAULT 'normal',
+    "extra_fields" JSONB,
+    "tenant_id" VARCHAR(64) NOT NULL,
+    "created_by" VARCHAR(64) NOT NULL DEFAULT 'system',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_by" VARCHAR(64) NOT NULL DEFAULT 'system',
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" INTEGER NOT NULL DEFAULT 0,
+    "deleted_at" TIMESTAMP(3),
+    "remark" VARCHAR(500),
+
+    CONSTRAINT "member_user_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -982,6 +1009,12 @@ CREATE UNIQUE INDEX "admin_username_key" ON "admin"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "admin_phone_key" ON "admin"("phone");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "member_user_tenant_id_account_key" ON "member_user"("tenant_id", "account");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "member_user_tenant_id_email_key" ON "member_user"("tenant_id", "email");
 
 -- CreateIndex
 CREATE INDEX "approval_task_biz_type_idx" ON "approval_task"("biz_type");
