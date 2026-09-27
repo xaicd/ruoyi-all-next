@@ -170,3 +170,9 @@ npm run audit-logs:retention        # 仅预览保留策略候选日志（需环
 - [数据库兼容规范](docs/architecture/ruoyi-all-next-database-compatibility.md)
 - [开发规范](AGENTS.md)
 - [审计日志运维](docs/operations/audit-log-operations.md)
+
+## 许可证
+
+本项目基于 [MIT License](LICENSE) 开源，Copyright (c) 2026 xaicd。
+
+本项目自 RuoYi-Vue-Pro 全量迁移而来，上游项目同为 MIT 协议。

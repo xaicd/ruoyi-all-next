@@ -2,6 +2,7 @@
   "name": "agent-zqall",
   "private": true,
   "version": "0.1.0",
+  "license": "MIT",
   "engines": {
     "node": "^20.19.0 || ^22.12.0 || >=24.0.0"
   },
