@@ -310,7 +310,7 @@ export const ADMIN_MENU: AdminMenuItem[] = [
       {
         key: "wms-warehouses",
         label: "仓库管理",
-        path: "/admin/wms/warehouses",
+        path: "/admin/wms/wms-warehouse",
         requiredPermission: PERMISSIONS.WMS_WAREHOUSE_VIEW,
       },
     ],

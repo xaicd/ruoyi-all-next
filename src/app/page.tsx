@@ -14,7 +14,7 @@ const coreDomains = [
   { id: "bpm", name: "工作流中心", path: "/admin/bpm/models", desc: "BPMN 2.0 流程建模、动态表单设计与多级审批流转", tag: "Workflow" },
   { id: "crm", name: "客户关系", path: "/admin/crm/customers", desc: "线索公海池、客户商机跟进、合同回款与销售漏斗", tag: "CRM" },
   { id: "erp", name: "企业资源", path: "/admin/erp/purchase-orders", desc: "采购入库、销售出库、多仓调拨与财务凭证管理", tag: "ERP" },
-  { id: "wms", name: "仓储物流", path: "/admin/wms/warehouses", desc: "库区库位建模、入库质检、出库拣货与批次条码追踪", tag: "WMS" },
+  { id: "wms", name: "仓储物流", path: "/admin/wms/wms-warehouse", desc: "库区库位建模、入库质检、出库拣货与批次条码追踪", tag: "WMS" },
   { id: "mes", name: "制造执行", path: "/admin/mes/work-orders", desc: "工单排产、工艺路线、工序报工与生产线实时看板", tag: "MES" },
   { id: "iot", name: "IoT 物联网", path: "/admin/iot/devices", desc: "设备物模型定义、遥测数据上报、在线状态与告警规则", tag: "IoT" },
   { id: "im", name: "实时通信", path: "/admin/im/conversations", desc: "WebSocket 多端长连接、单聊群聊会话与敏感词风控", tag: "IM" },
