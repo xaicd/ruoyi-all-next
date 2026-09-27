@@ -5,19 +5,19 @@
 
 ARG RUOYI_PACK_DOMAIN=pay
 
-FROM node:20-alpine AS deps
+FROM node:24-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json* .npmrc ./
 RUN npm ci --legacy-peer-deps || npm install --legacy-peer-deps
 
-FROM node:20-alpine AS packer
+FROM node:24-alpine AS packer
 WORKDIR /app
 ARG RUOYI_PACK_DOMAIN
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN node scripts/pack-domain.cjs ${RUOYI_PACK_DOMAIN} --materialize
 
-FROM node:20-alpine AS builder
+FROM node:24-alpine AS builder
 WORKDIR /app
 ARG RUOYI_PACK_DOMAIN
 ENV RUOYI_PACK_DOMAIN=${RUOYI_PACK_DOMAIN}
@@ -27,7 +27,7 @@ COPY --from=deps /app/node_modules ./node_modules
 RUN npx prisma generate
 RUN npx next build
 
-FROM node:20-alpine AS runner
+FROM node:24-alpine AS runner
 WORKDIR /app
 ARG RUOYI_PACK_DOMAIN
 ENV NODE_ENV=production
