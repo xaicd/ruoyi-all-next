@@ -4,16 +4,16 @@
 
 ## 1. 项目定位
 
-基于 Next.js 15 的全栈企业级应用平台，从 RuoYi-Vue-Pro (Spring Boot) + yudao-ui-admin-vue3 全量迁移而来。采用模块化单体架构，具备向微服务平滑演进的能力。
+基于 Next.js 16 的全栈企业级应用平台，从 RuoYi-Vue-Pro (Spring Boot) + yudao-ui-admin-vue3 全量迁移而来。采用模块化单体架构，具备向微服务平滑演进的能力。
 
 ## 2. 技术栈
 
 | 层 | 技术 | 说明 |
 |---|---|---|
-| 框架 | Next.js 15 (App Router) | 全栈 React 框架 |
+| 框架 | Next.js 16 (App Router) | 全栈 React 框架 |
 | 语言 | TypeScript 5 | 全栈类型安全 |
-| 数据库 | PostgreSQL + Prisma | ORM + 多数据库兼容 |
-| 校验 | Zod | 运行时类型校验 |
+| 数据库 | PostgreSQL + Prisma 7 | ORM + 多数据库兼容 |
+| 校验 | Zod 4 | 运行时类型校验 |
 | UI | React 19 + Tailwind CSS | 组件化 + 原子 CSS |
 | 测试 | Vitest | 单元/集成测试 |
 | 部署 | Docker + K8s | 容器化部署 |

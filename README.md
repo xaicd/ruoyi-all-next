@@ -1,14 +1,14 @@
 # ruoyi-all-next
 
-基于 Next.js 15 的企业级全栈管理平台，从 RuoYi-Vue-Pro 全量迁移。
+基于 Next.js 16 的企业级全栈管理平台，从 RuoYi-Vue-Pro 全量迁移。
 
 ## 技术栈
 
-- **框架**: Next.js 15 (App Router)
+- **框架**: Next.js 16 (App Router)
 - **语言**: TypeScript 5
-- **数据库**: PostgreSQL（默认，Prisma Schema/Migration）+ Kysely（运行时查询）
+- **数据库**: PostgreSQL（默认，Prisma 7 Schema/Migration）+ Kysely（运行时查询）
 - **运行时方言**: PostgreSQL 默认；MySQL/MariaDB 等需维护独立 Prisma schema 与迁移历史后启用
-- **校验**: Zod
+- **校验**: Zod 4
 - **UI**: React 19 + Tailwind CSS
 
 ## 快速启动
