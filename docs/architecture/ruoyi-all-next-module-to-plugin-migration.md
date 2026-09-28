@@ -1,0 +1,75 @@
+# Module 架构 → Plugin 架构 迁移设计
+
+> 参考实现：Paperclip（`paperclipai/paperclip`，本地 fork 见 `workspace/xaicd/coolie`）
+> 状态：**设计草案**。本文只做架构分析与路线，不含实现承诺。
+
+## 1. 两种架构的本质差异
+
+| 维度 | 本仓现状（module） | Paperclip（plugin） |
+|---|---|---|
+| 组合方式 | **静态**：域代码编译进同一个 Next 应用；路由与门面都是源码 import | **动态**：manifest 声明 + 外部包 + 运行时加载（`packagePath`） |
+| 契约真源 | Domain Facade + `.proto` + `actions.ts` | `PaperclipPluginManifestV1`（一份 JSON 声明） |
+| 隔离级别 | 逻辑隔离（Facade / broker），**单进程** | 进程隔离（`entrypoints.worker`） |
+| 数据 | 单库单 schema，`prisma/migrations` 全量 | 插件**自有 namespace + 自有 migrations**，host 代跑并记录 |
+| UI | App Router 文件路径（`src/app/(admin-pages)/admin/<domain>/…`） | `ui.slots[]` 声明 + `exportName`，host 从插件 UI bundle 解析组件挂载 |
+| 权限 | permission code（`constants/permissions.ts`） | **capability** 声明，运行时强制 |
+| 状态存储 | 各域自有业务表 | `plugin_state` 五段复合键 scoped KV（pluginId/scopeKind/scopeId/namespace/stateKey） |
+| 生命周期 | 编译期，装什么编译什么 | install / upgrade / enable / disable + `installOrder` |
+
+## 2. 本仓已有的「准插件」资产（迁移的最大有利条件）
+
+这些不是要新建的，而是**已经具备、只需改接法**：
+
+| 已有资产 | 在插件架构中的对应物 |
+|---|---|
+| Domain Facade（`<domain>.facade.ts`） | 插件对外 API 边界——**已经是边界了** |
+| route manifest + `.proto` + `actions.ts` | manifest 的 `apiRoutes` / `tools` 声明 |
+| `domain-catalog.json` | plugin registry（域的权威清单） |
+| seam-graph / capability seam | capability 声明与依赖图 |
+| broker / serviceBus（`ruoyi.cmd.<domain>.<method>`） | 与外部 worker 通信——**subject 寻址已同构** |
+| 本体域导航 + `foundation:ontology:check` | Paperclip 亦以 `packages/ontology-core` 承载本体（概念同源） |
+
+**结论**：本仓缺的不是「域边界」，而是**运行时装载层**。
+
+## 3. 五个硬缺口（真插件化必须解决）
+
+1. **动态 API 装载**
+   App Router 是文件系统静态路由，插件无法在运行时注册路由。
+   → 需要统一 catch-all 网关（如 `src/app/api/plugins/[...path]/route.ts`）按 manifest 分发到插件 worker。
+   Paperclip 的做法：`/api/plugins/:pluginId/api/*` + `auth` / `checkoutPolicy` / `companyResolution` 声明。
+
+2. **UI 动态挂载**
+   页面不能运行时注册。
+   → 需要 **slot 宿主** + 插件 UI bundle 的解析挂载。
+   Paperclip 的做法：`ui/src/plugins/slots.tsx` 提供 `registerPluginReactComponent` / `registerPluginWebComponent` / `resolveRegisteredPluginComponent`，按 `exportName` 解析；并有 UI 源码抽取机制。
+
+3. **数据隔离**
+   从「单 schema 全量迁移」到「插件 namespace + 自有迁移」。
+   → host 需派生 namespace、代跑迁移、记录 `plugin_migration`（checksum + status）。
+   Paperclip 的做法：`database.namespaceSlug` + `migrationsDir` + `coreReadTables` 白名单。
+
+4. **权限 → capability**
+   → 把 `permissions.ts` 的 code 体系与 manifest `capabilities` 建立映射，并在调用点做**交集强制**（声明是请求，不是授权）。
+
+5. **构建产物形态**
+   `domain:pack` 现在产出「可独立构建的域包」；插件需要的是「运行时产物 + manifest」。
+   → 复用现有打包链，补一个 manifest 输出即可（见 P0）。
+
+## 4. 分阶段路线（不破坏现有域，双轨并行）
+
+| 阶段 | 内容 | 风险 |
+|---|---|---|
+| **P0** | **manifest 生成器**：把 `domain-catalog` + route manifest + Facade/proto 归拢为每个域一份 `plugin.manifest.json`。**不改任何运行方式** | 零（只增产物） |
+| **P1** | 加 **API 网关**与 **slot 宿主**；**新域**以插件方式接入，老域继续走静态路由 | 低（双轨互不影响） |
+| **P2** | 插件化域引入 **namespace 迁移**与 **capability 强制** | 中（数据面） |
+| **P3** | 域逐个迁到 **worker 入口**（进程隔离）；broker 从进程内切到跨进程（本仓已有 RPC 通道，接口不变） | 高（需按 §6.1 独立测试 + 灰度回滚） |
+
+## 5. 建议
+
+1. **不要一次性重写。** Facade + 契约 + broker + seam-graph 已把插件架构的前置条件完成了大半，
+   真正的增量只有「装载层」。按 P0→P3 推进，每阶段都能独立验收。
+2. **P0 优先且应立刻做**：它零风险、产出可评审资产，且是后续所有阶段的地基。
+3. **与现有治理门禁对齐**：新引入的 manifest 必须纳入 `compat:check` / `foundation:ontology:check`
+   口径，否则又是一个「写进 AGENTS.md 但没人执行」的条款（§6.3 的教训）。
+4. **不要为了插件化牺牲已有能力**：本仓的 `BaseMapper` / `QueryWrapper` / 8 大审计底座字段
+   是 §19 明确要求复用的资产，插件化必须继续复用，不得借重构之名回退。
