@@ -3,8 +3,10 @@ import { describe, expect, it } from "vitest"
 import { applyActionSchema, getActionSchema } from "@/modules/shared/backend/lib/broker-validator"
 import { ensureContractActions, resetContractActions } from "@/modules/shared/backend/lib/contract-actions"
 import {
+  DISPATCH_REQUIRED_CAPABILITY,
   getPluginByDomain,
   listPlugins,
+  pluginCanDispatch,
   resolvePluginDispatch,
 } from "../plugin-registry"
 
@@ -54,6 +56,19 @@ describe("plugin-registry", () => {
     const resolved = resolvePluginDispatch(["pay", "definitelyNotDeclared"])
     expect(resolved).toMatchObject({ ok: false, status: 404 })
     if (!resolved.ok) expect(resolved.error).toContain("未声明")
+  })
+
+  it("能力强制生效：声明是请求，判定在网关", () => {
+    // 现状：全部已登记域都推导出 facade.invoke（因为它们都有 facade）——
+    // 这条同时防住"以后新增域忘了声明能力却被放开派发"
+    for (const plugin of listPlugins()) {
+      expect(pluginCanDispatch(plugin), `${plugin.domain} 应声明 ${DISPATCH_REQUIRED_CAPABILITY}`).toBe(true)
+    }
+
+    // 反例：能力声明被抹掉后必须被拒（纯函数使其可测；走注册表无法构造该反例）
+    expect(pluginCanDispatch({ capabilities: [] })).toBe(false)
+    expect(pluginCanDispatch({ capabilities: ["api.routes.register", "cmd.dispatch"] })).toBe(false)
+    expect(pluginCanDispatch({ capabilities: [DISPATCH_REQUIRED_CAPABILITY] })).toBe(true)
   })
 
   it("网关派发链第一环可用：manifest 声明的 action 能被注册并按声明校验", async () => {
