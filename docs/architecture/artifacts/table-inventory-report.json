@@ -1,0 +1,52 @@
+{
+  "generatedAt": "2026-09-28T08:49:31.595Z",
+  "note": "只报告不设门禁：三份来源互相矛盾，需先确定权威真源，再谈表归属/namespace 隔离。",
+  "counts": {
+    "prisma": 54,
+    "migrations": 77,
+    "sqliteBootstrap": 10,
+    "union": 78
+  },
+  "onlyIn": {
+    "prisma": [],
+    "migrations": [
+      "aigw_carrier_agent",
+      "aigw_isv_app",
+      "aigw_mcp_asset",
+      "aigw_member_allocation",
+      "aigw_tenant_quota_ledger",
+      "system_tenant_package_ai_quota",
+      "system_tenant_package_ai_seat",
+      "system_tenant_package_ai_tariff",
+      "ys_channel_node",
+      "ys_contract",
+      "ys_dispatch_limit",
+      "ys_enterprise_account",
+      "ys_invoice_payment",
+      "ys_ledger_entry",
+      "ys_meter_record",
+      "ys_operation_scheme",
+      "ys_policy",
+      "ys_product_sku",
+      "ys_quota_account",
+      "ys_seat",
+      "ys_settlement_batch",
+      "ys_split_pipeline",
+      "ys_tariff_rule"
+    ],
+    "sqliteBootstrap": [
+      "system_config"
+    ]
+  },
+  "inAllThree": [
+    "member_user",
+    "system_dept",
+    "system_dict_data",
+    "system_dict_type",
+    "system_menu",
+    "system_role",
+    "system_role_menu",
+    "system_user",
+    "system_user_role"
+  ]
+}
