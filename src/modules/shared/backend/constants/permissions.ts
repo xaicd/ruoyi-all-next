@@ -264,6 +264,8 @@ export const PERMISSIONS = {
   // entitlement/meter/scheme/split/settlement 同属「catalog 域清单之外」的既有情形，
   // 需在后续批次统一收敛。
   PLATFORM_PLUGIN_QUERY: "platform:plugin:query",
+  /** 插件安装/同步等写操作。与查询分开，遵循最小权限。 */
+  PLATFORM_PLUGIN_MANAGE: "platform:plugin:manage",
 } as const
 
 export type PermissionCode = (typeof PERMISSIONS)[keyof typeof PERMISSIONS]

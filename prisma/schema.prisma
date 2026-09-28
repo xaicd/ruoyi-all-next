@@ -1130,3 +1130,81 @@ model AiChatMessage {
 }
 
 
+
+// ============================================================
+// PLUGIN 域 —— §6.2 可安装插件
+//
+// 注意: 与 §6.1 的 Platform Module(即 src/modules/<domain>)是**两个不同的扩展类**。
+// 域是可信/进程内/一方表; 插件是 capability-gated/独立 worker/通用扩展表。
+// 因此插件**不给每个插件开自己的表**, 而是统一落 plugin_state 的 scoped KV,
+// 且首个插件系统不允许任意第三方迁移 —— 见 Paperclip PLUGIN_SPEC §21.1/§21.5
+// 与 docs/architecture/ruoyi-all-next-module-to-plugin-migration.md
+// ============================================================
+
+/// 已安装插件(实例级)。对应 PLUGIN_SPEC §21.3 的 plugins
+model Plugin {
+  id           String    @id @default(cuid())
+  pluginKey    String    @unique @map("plugin_key") @db.VarChar(128)
+  packageName  String    @map("package_name") @db.VarChar(200)
+  packagePath  String?   @map("package_path") @db.VarChar(500)
+  version      String    @db.VarChar(50)
+  apiVersion   Int       @map("api_version")
+  categories   String[]
+  manifestJson Json      @map("manifest_json")
+  /// installed | ready | error | upgrade_pending (§21.3)
+  status       String    @default("installed") @db.VarChar(20)
+  installOrder Int?      @map("install_order")
+  lastError    String?   @map("last_error") @db.VarChar(1000)
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  deleted      Boolean   @default(false)
+
+  states       PluginState[]
+  configs      PluginConfig[]
+
+  @@index([status])
+  @@map("plugin")
+}
+
+/// 插件状态(五段复合键 scoped KV)。对应 PLUGIN_SPEC §21.3 的 plugin_state
+///
+/// 这是插件数据的**默认落点**: §21.1 要求"插件数据先落通用扩展表, 并先 scope 到既有对象",
+/// 而不是给插件开自有表(§21.5 首个插件系统不允许任意第三方迁移)。
+model PluginState {
+  id         String   @id @default(cuid())
+  pluginId   String   @map("plugin_id")
+  /// instance | tenant | project | agent | issue | run (§21.3)
+  scopeKind  String   @map("scope_kind") @db.VarChar(30)
+  /// 作用域对象标识; **instance 作用域用空串而非 NULL** ——
+  /// PG 的唯一索引视 NULL 互不相等, 用 NULL 会让 instance 作用域失去唯一性保证。
+  scopeId    String   @default("") @map("scope_id") @db.VarChar(128)
+  namespace  String   @default("default") @db.VarChar(100)
+  stateKey   String   @map("state_key") @db.VarChar(200)
+  valueJson  Json     @map("value_json")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  plugin     Plugin   @relation(fields: [pluginId], references: [id], onDelete: Cascade)
+
+  @@unique([pluginId, scopeKind, scopeId, namespace, stateKey])
+  @@map("plugin_state")
+}
+
+/// 插件按租户配置。对应 PLUGIN_SPEC §21.3 的 plugin_config
+///
+/// 偏离说明: Paperclip 用 company_id, 本仓用 tenant_id(本仓的多租户术语);
+/// 且按 AGENTS.md §4.8, 租户必须取自全局上下文, 禁止由调用方显式透传。
+model PluginConfig {
+  id         String   @id @default(cuid())
+  pluginId   String   @map("plugin_id")
+  tenantId   String   @map("tenant_id") @db.VarChar(64)
+  configJson Json     @map("config_json")
+  lastError  String?  @map("last_error") @db.VarChar(1000)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  plugin     Plugin   @relation(fields: [pluginId], references: [id], onDelete: Cascade)
+
+  @@unique([pluginId, tenantId])
+  @@map("plugin_config")
+}
