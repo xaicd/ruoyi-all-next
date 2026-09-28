@@ -1,0 +1,861 @@
+{
+  "$schema": "ruoyi-plugin-manifest/v1",
+  "id": "ruoyi.system",
+  "apiVersion": 1,
+  "displayName": "系统管理",
+  "kind": "platform",
+  "stage": "A",
+  "owner": "system",
+  "contractVersion": "v1",
+  "implementation": "local-ts",
+  "minimumHostVersion": "1.0.0",
+  "capabilities": [
+    "api.routes.register",
+    "facade.invoke",
+    "rpc.serve",
+    "cmd.dispatch",
+    "pack.independent"
+  ],
+  "entrypoints": {
+    "facade": [
+      "src/modules/system/contract/system.facade.ts"
+    ],
+    "proto": "src/modules/system/contract/system.proto",
+    "actions": "src/modules/system/contract/actions.ts"
+  },
+  "apiRoutes": {
+    "publicPrefix": [
+      "/api/v1/admin/system"
+    ],
+    "adminPrefix": "/api/v1/admin/system"
+  },
+  "auth": {
+    "audience": "admin",
+    "tenantPolicy": "required"
+  },
+  "messaging": {
+    "queueGroup": "ruoyi.system",
+    "commandSubject": "ruoyi.cmd.system.>",
+    "eventSubject": "ruoyi.evt.system.>"
+  },
+  "invoke": {
+    "colocated": "sdk",
+    "remote": "rpc",
+    "protocol": "nats-rr",
+    "serialization": "json"
+  },
+  "upstream": {
+    "env": "RUOYI_DOMAIN_SYSTEM_UPSTREAM",
+    "protocol": "http",
+    "defaultPort": 3210
+  },
+  "resilience": {
+    "timeoutMs": 5000,
+    "retry": {
+      "maxAttempts": 1,
+      "safeMethodsOnly": true
+    },
+    "idempotencyRequired": false
+  },
+  "facadeMethods": [
+    "ping",
+    "getDictDataByType",
+    "resolveTenantEntitlement",
+    "resolveTenantIdByCode",
+    "listUsers",
+    "createUser",
+    "listRoles",
+    "createRole",
+    "listMenus",
+    "treeMenus",
+    "createMenu",
+    "listDepts",
+    "treeDepts",
+    "createDept",
+    "listPosts",
+    "createPost",
+    "listDictTypes",
+    "createDictType",
+    "listTenants",
+    "createTenant",
+    "getUser",
+    "updateUser",
+    "deleteUser",
+    "resetUserPassword",
+    "updateUserStatus",
+    "getRole",
+    "updateRole",
+    "deleteRole",
+    "updateRoleStatus",
+    "getMenu",
+    "updateMenu",
+    "deleteMenu",
+    "getDept",
+    "updateDept",
+    "deleteDept",
+    "getPost",
+    "updatePost",
+    "deletePost",
+    "getDictType",
+    "updateDictType",
+    "deleteDictType",
+    "getTenant",
+    "updateTenant",
+    "deleteTenant",
+    "updateTenantStatus",
+    "listDictData",
+    "createDictData",
+    "getDictData",
+    "updateDictData",
+    "deleteDictData",
+    "listTenantPackages",
+    "createTenantPackage",
+    "getTenantPackage",
+    "updateTenantPackage",
+    "deleteTenantPackage",
+    "assignTenantPackage",
+    "getTenantSubscriptions",
+    "getRoleMenus",
+    "assignRoleMenu",
+    "assignUserRole",
+    "pageLoginLogs",
+    "getLoginLog",
+    "exportLoginLogs",
+    "pageOperateLogs",
+    "getOperateLog",
+    "exportOperateLogs",
+    "listOnlineUsers",
+    "forceLogoutOnlineUser",
+    "pageNotices",
+    "createNotice",
+    "getNotice",
+    "updateNotice",
+    "deleteNotice",
+    "listOauth2Clients",
+    "listOauth2Tokens",
+    "listSocialUsers",
+    "createSocialUser",
+    "listMailAccounts",
+    "createMailAccount",
+    "listMailLogs",
+    "listSmsChannels",
+    "createSmsChannel",
+    "listSmsLogs",
+    "pageNotifyMessages",
+    "createNotifyMessage",
+    "pageNotifyTemplates",
+    "createNotifyTemplate",
+    "pageIpAreas",
+    "pageAreas",
+    "createArea",
+    "getArea",
+    "updateArea",
+    "deleteArea",
+    "login",
+    "getPermissionInfoByUser",
+    "refreshAccessToken",
+    "logout",
+    "generateCaptcha",
+    "verifyCaptcha",
+    "getUserProfile",
+    "updateUserProfile",
+    "getSidebarNav",
+    "openOauth2Token",
+    "getOauth2UserInfo",
+    "listMailTemplates",
+    "createMailTemplate",
+    "getMailTemplate",
+    "updateMailTemplate",
+    "deleteMailTemplate",
+    "listSmsTemplates",
+    "createSmsTemplate",
+    "getSmsTemplate",
+    "updateSmsTemplate",
+    "deleteSmsTemplate",
+    "listSocialClients",
+    "createSocialClient",
+    "getSocialClient",
+    "updateSocialClient",
+    "deleteSocialClient"
+  ],
+  "rpc": [
+    {
+      "service": "SystemService",
+      "method": "Ping"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetDictDataByType"
+    },
+    {
+      "service": "SystemService",
+      "method": "ResolveTenantEntitlement"
+    },
+    {
+      "service": "SystemService",
+      "method": "ResolveTenantIdByCode"
+    },
+    {
+      "service": "SystemService",
+      "method": "ListUsers"
+    },
+    {
+      "service": "SystemService",
+      "method": "CreateUser"
+    },
+    {
+      "service": "SystemService",
+      "method": "ListRoles"
+    },
+    {
+      "service": "SystemService",
+      "method": "CreateRole"
+    },
+    {
+      "service": "SystemService",
+      "method": "ListMenus"
+    },
+    {
+      "service": "SystemService",
+      "method": "TreeMenus"
+    },
+    {
+      "service": "SystemService",
+      "method": "CreateMenu"
+    },
+    {
+      "service": "SystemService",
+      "method": "ListDepts"
+    },
+    {
+      "service": "SystemService",
+      "method": "TreeDepts"
+    },
+    {
+      "service": "SystemService",
+      "method": "CreateDept"
+    },
+    {
+      "service": "SystemService",
+      "method": "ListPosts"
+    },
+    {
+      "service": "SystemService",
+      "method": "CreatePost"
+    },
+    {
+      "service": "SystemService",
+      "method": "ListDictTypes"
+    },
+    {
+      "service": "SystemService",
+      "method": "CreateDictType"
+    },
+    {
+      "service": "SystemService",
+      "method": "ListTenants"
+    },
+    {
+      "service": "SystemService",
+      "method": "CreateTenant"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetUser"
+    },
+    {
+      "service": "SystemService",
+      "method": "UpdateUser"
+    },
+    {
+      "service": "SystemService",
+      "method": "DeleteUser"
+    },
+    {
+      "service": "SystemService",
+      "method": "ResetUserPassword"
+    },
+    {
+      "service": "SystemService",
+      "method": "UpdateUserStatus"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetRole"
+    },
+    {
+      "service": "SystemService",
+      "method": "UpdateRole"
+    },
+    {
+      "service": "SystemService",
+      "method": "DeleteRole"
+    },
+    {
+      "service": "SystemService",
+      "method": "UpdateRoleStatus"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetMenu"
+    },
+    {
+      "service": "SystemService",
+      "method": "UpdateMenu"
+    },
+    {
+      "service": "SystemService",
+      "method": "DeleteMenu"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetDept"
+    },
+    {
+      "service": "SystemService",
+      "method": "UpdateDept"
+    },
+    {
+      "service": "SystemService",
+      "method": "DeleteDept"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetPost"
+    },
+    {
+      "service": "SystemService",
+      "method": "UpdatePost"
+    },
+    {
+      "service": "SystemService",
+      "method": "DeletePost"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetDictType"
+    },
+    {
+      "service": "SystemService",
+      "method": "UpdateDictType"
+    },
+    {
+      "service": "SystemService",
+      "method": "DeleteDictType"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetTenant"
+    },
+    {
+      "service": "SystemService",
+      "method": "UpdateTenant"
+    },
+    {
+      "service": "SystemService",
+      "method": "DeleteTenant"
+    },
+    {
+      "service": "SystemService",
+      "method": "UpdateTenantStatus"
+    },
+    {
+      "service": "SystemService",
+      "method": "ListDictData"
+    },
+    {
+      "service": "SystemService",
+      "method": "CreateDictData"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetDictData"
+    },
+    {
+      "service": "SystemService",
+      "method": "UpdateDictData"
+    },
+    {
+      "service": "SystemService",
+      "method": "DeleteDictData"
+    },
+    {
+      "service": "SystemService",
+      "method": "ListTenantPackages"
+    },
+    {
+      "service": "SystemService",
+      "method": "CreateTenantPackage"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetTenantPackage"
+    },
+    {
+      "service": "SystemService",
+      "method": "UpdateTenantPackage"
+    },
+    {
+      "service": "SystemService",
+      "method": "DeleteTenantPackage"
+    },
+    {
+      "service": "SystemService",
+      "method": "AssignTenantPackage"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetTenantSubscriptions"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetRoleMenus"
+    },
+    {
+      "service": "SystemService",
+      "method": "AssignRoleMenu"
+    },
+    {
+      "service": "SystemService",
+      "method": "AssignUserRole"
+    },
+    {
+      "service": "SystemService",
+      "method": "PageLoginLogs"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetLoginLog"
+    },
+    {
+      "service": "SystemService",
+      "method": "ExportLoginLogs"
+    },
+    {
+      "service": "SystemService",
+      "method": "PageOperateLogs"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetOperateLog"
+    },
+    {
+      "service": "SystemService",
+      "method": "ExportOperateLogs"
+    },
+    {
+      "service": "SystemService",
+      "method": "ListOnlineUsers"
+    },
+    {
+      "service": "SystemService",
+      "method": "ForceLogoutOnlineUser"
+    },
+    {
+      "service": "SystemService",
+      "method": "PageNotices"
+    },
+    {
+      "service": "SystemService",
+      "method": "CreateNotice"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetNotice"
+    },
+    {
+      "service": "SystemService",
+      "method": "UpdateNotice"
+    },
+    {
+      "service": "SystemService",
+      "method": "DeleteNotice"
+    },
+    {
+      "service": "SystemService",
+      "method": "ListOauth2Clients"
+    },
+    {
+      "service": "SystemService",
+      "method": "ListOauth2Tokens"
+    },
+    {
+      "service": "SystemService",
+      "method": "ListSocialUsers"
+    },
+    {
+      "service": "SystemService",
+      "method": "CreateSocialUser"
+    },
+    {
+      "service": "SystemService",
+      "method": "ListMailAccounts"
+    },
+    {
+      "service": "SystemService",
+      "method": "CreateMailAccount"
+    },
+    {
+      "service": "SystemService",
+      "method": "ListMailLogs"
+    },
+    {
+      "service": "SystemService",
+      "method": "ListSmsChannels"
+    },
+    {
+      "service": "SystemService",
+      "method": "CreateSmsChannel"
+    },
+    {
+      "service": "SystemService",
+      "method": "ListSmsLogs"
+    },
+    {
+      "service": "SystemService",
+      "method": "PageNotifyMessages"
+    },
+    {
+      "service": "SystemService",
+      "method": "CreateNotifyMessage"
+    },
+    {
+      "service": "SystemService",
+      "method": "PageNotifyTemplates"
+    },
+    {
+      "service": "SystemService",
+      "method": "CreateNotifyTemplate"
+    },
+    {
+      "service": "SystemService",
+      "method": "PageIpAreas"
+    },
+    {
+      "service": "SystemService",
+      "method": "PageAreas"
+    },
+    {
+      "service": "SystemService",
+      "method": "CreateArea"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetArea"
+    },
+    {
+      "service": "SystemService",
+      "method": "UpdateArea"
+    },
+    {
+      "service": "SystemService",
+      "method": "DeleteArea"
+    },
+    {
+      "service": "SystemService",
+      "method": "Login"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetPermissionInfoByUser"
+    },
+    {
+      "service": "SystemService",
+      "method": "RefreshAccessToken"
+    },
+    {
+      "service": "SystemService",
+      "method": "Logout"
+    },
+    {
+      "service": "SystemService",
+      "method": "GenerateCaptcha"
+    },
+    {
+      "service": "SystemService",
+      "method": "VerifyCaptcha"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetUserProfile"
+    },
+    {
+      "service": "SystemService",
+      "method": "UpdateUserProfile"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetSidebarNav"
+    },
+    {
+      "service": "SystemService",
+      "method": "OpenOauth2Token"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetOauth2UserInfo"
+    },
+    {
+      "service": "SystemService",
+      "method": "ListMailTemplates"
+    },
+    {
+      "service": "SystemService",
+      "method": "CreateMailTemplate"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetMailTemplate"
+    },
+    {
+      "service": "SystemService",
+      "method": "UpdateMailTemplate"
+    },
+    {
+      "service": "SystemService",
+      "method": "DeleteMailTemplate"
+    },
+    {
+      "service": "SystemService",
+      "method": "ListSmsTemplates"
+    },
+    {
+      "service": "SystemService",
+      "method": "CreateSmsTemplate"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetSmsTemplate"
+    },
+    {
+      "service": "SystemService",
+      "method": "UpdateSmsTemplate"
+    },
+    {
+      "service": "SystemService",
+      "method": "DeleteSmsTemplate"
+    },
+    {
+      "service": "SystemService",
+      "method": "ListSocialClients"
+    },
+    {
+      "service": "SystemService",
+      "method": "CreateSocialClient"
+    },
+    {
+      "service": "SystemService",
+      "method": "GetSocialClient"
+    },
+    {
+      "service": "SystemService",
+      "method": "UpdateSocialClient"
+    },
+    {
+      "service": "SystemService",
+      "method": "DeleteSocialClient"
+    }
+  ],
+  "actions": [
+    "system.ping",
+    "system.getDictDataByType",
+    "system.resolveTenantEntitlement",
+    "system.resolveTenantIdByCode",
+    "system.listUsers",
+    "system.createUser",
+    "system.listRoles",
+    "system.createRole",
+    "system.listMenus",
+    "system.treeMenus",
+    "system.createMenu",
+    "system.listDepts",
+    "system.treeDepts",
+    "system.createDept",
+    "system.listPosts",
+    "system.createPost",
+    "system.listDictTypes",
+    "system.createDictType",
+    "system.listTenants",
+    "system.createTenant",
+    "system.getUser",
+    "system.updateUser",
+    "system.deleteUser",
+    "system.resetUserPassword",
+    "system.updateUserStatus",
+    "system.getRole",
+    "system.updateRole",
+    "system.deleteRole",
+    "system.updateRoleStatus",
+    "system.getMenu",
+    "system.updateMenu",
+    "system.deleteMenu",
+    "system.getDept",
+    "system.updateDept",
+    "system.deleteDept",
+    "system.getPost",
+    "system.updatePost",
+    "system.deletePost",
+    "system.getDictType",
+    "system.updateDictType",
+    "system.deleteDictType",
+    "system.getTenant",
+    "system.updateTenant",
+    "system.deleteTenant",
+    "system.updateTenantStatus",
+    "system.listDictData",
+    "system.createDictData",
+    "system.getDictData",
+    "system.updateDictData",
+    "system.deleteDictData",
+    "system.listTenantPackages",
+    "system.createTenantPackage",
+    "system.getTenantPackage",
+    "system.updateTenantPackage",
+    "system.deleteTenantPackage",
+    "system.assignTenantPackage",
+    "system.getTenantSubscriptions",
+    "system.getRoleMenus",
+    "system.assignRoleMenu",
+    "system.assignUserRole",
+    "system.pageLoginLogs",
+    "system.getLoginLog",
+    "system.exportLoginLogs",
+    "system.pageOperateLogs",
+    "system.getOperateLog",
+    "system.exportOperateLogs",
+    "system.listOnlineUsers",
+    "system.forceLogoutOnlineUser",
+    "system.pageNotices",
+    "system.createNotice",
+    "system.getNotice",
+    "system.updateNotice",
+    "system.deleteNotice",
+    "system.listOauth2Clients",
+    "system.listOauth2Tokens",
+    "system.listSocialUsers",
+    "system.createSocialUser",
+    "system.listMailAccounts",
+    "system.createMailAccount",
+    "system.listMailLogs",
+    "system.listSmsChannels",
+    "system.createSmsChannel",
+    "system.listSmsLogs",
+    "system.pageNotifyMessages",
+    "system.createNotifyMessage",
+    "system.pageNotifyTemplates",
+    "system.createNotifyTemplate",
+    "system.pageIpAreas",
+    "system.pageAreas",
+    "system.createArea",
+    "system.getArea",
+    "system.updateArea",
+    "system.deleteArea",
+    "system.login",
+    "system.getPermissionInfoByUser",
+    "system.refreshAccessToken",
+    "system.logout",
+    "system.generateCaptcha",
+    "system.verifyCaptcha",
+    "system.getUserProfile",
+    "system.updateUserProfile",
+    "system.getSidebarNav",
+    "system.openOauth2Token",
+    "system.getOauth2UserInfo",
+    "system.listMailTemplates",
+    "system.createMailTemplate",
+    "system.getMailTemplate",
+    "system.updateMailTemplate",
+    "system.deleteMailTemplate",
+    "system.listSmsTemplates",
+    "system.createSmsTemplate",
+    "system.getSmsTemplate",
+    "system.updateSmsTemplate",
+    "system.deleteSmsTemplate",
+    "system.listSocialClients",
+    "system.createSocialClient",
+    "system.getSocialClient",
+    "system.updateSocialClient",
+    "system.deleteSocialClient"
+  ],
+  "permissions": [
+    "system:dept:create",
+    "system:dept:delete",
+    "system:dept:query",
+    "system:dept:update",
+    "system:dict:create",
+    "system:dict:delete",
+    "system:dict:query",
+    "system:dict:update",
+    "system:ip-area:view",
+    "system:login-log:export",
+    "system:login-log:query",
+    "system:mail-account:create",
+    "system:mail-account:view",
+    "system:mail-log:view",
+    "system:mail-template:delete",
+    "system:mail-template:query",
+    "system:mail-template:update",
+    "system:menu:create",
+    "system:menu:delete",
+    "system:menu:query",
+    "system:menu:update",
+    "system:notice:create",
+    "system:notice:delete",
+    "system:notice:query",
+    "system:notice:update",
+    "system:notify-message:create",
+    "system:notify-message:view",
+    "system:notify-template:create",
+    "system:notify-template:view",
+    "system:oauth2-client:query",
+    "system:oauth2-token:page",
+    "system:online-user:force-logout",
+    "system:online-user:view",
+    "system:operate-log:export",
+    "system:operate-log:query",
+    "system:post:create",
+    "system:post:delete",
+    "system:post:query",
+    "system:post:update",
+    "system:role:create",
+    "system:role:delete",
+    "system:role:query",
+    "system:role:update",
+    "system:sms-channel:create",
+    "system:sms-channel:view",
+    "system:sms-log:query",
+    "system:sms-log:view",
+    "system:sms-template:delete",
+    "system:sms-template:query",
+    "system:sms-template:update",
+    "system:social-client:delete",
+    "system:social-client:query",
+    "system:social-client:update",
+    "system:social-user:create",
+    "system:social-user:view",
+    "system:tenant-package:create",
+    "system:tenant-package:delete",
+    "system:tenant-package:query",
+    "system:tenant-package:update",
+    "system:tenant:assign-package",
+    "system:tenant:create",
+    "system:tenant:delete",
+    "system:tenant:query",
+    "system:tenant:update",
+    "system:tenant:update-status",
+    "system:user:create",
+    "system:user:delete",
+    "system:user:export",
+    "system:user:import",
+    "system:user:query",
+    "system:user:update"
+  ],
+  "dependsOn": [
+    "shared"
+  ],
+  "pack": {
+    "enabled": true,
+    "kind": "api-only",
+    "independentDatabase": false
+  }
+}

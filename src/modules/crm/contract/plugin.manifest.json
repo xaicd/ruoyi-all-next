@@ -1,0 +1,103 @@
+{
+  "$schema": "ruoyi-plugin-manifest/v1",
+  "id": "ruoyi.crm",
+  "apiVersion": 1,
+  "displayName": "客户中心",
+  "kind": "business",
+  "stage": "B",
+  "owner": "crm",
+  "contractVersion": "v1",
+  "implementation": "local-ts",
+  "minimumHostVersion": "1.0.0",
+  "capabilities": [
+    "api.routes.register",
+    "facade.invoke",
+    "rpc.serve",
+    "cmd.dispatch",
+    "pack.independent"
+  ],
+  "entrypoints": {
+    "facade": [
+      "src/modules/crm/contract/crm.facade.ts"
+    ],
+    "proto": "src/modules/crm/contract/crm.proto",
+    "actions": "src/modules/crm/contract/actions.ts"
+  },
+  "apiRoutes": {
+    "publicPrefix": [
+      "/api/v1/admin/crm"
+    ],
+    "adminPrefix": "/api/v1/admin/crm"
+  },
+  "auth": {
+    "audience": "admin",
+    "tenantPolicy": "required"
+  },
+  "messaging": {
+    "queueGroup": "ruoyi.crm",
+    "commandSubject": "ruoyi.cmd.crm.>",
+    "eventSubject": "ruoyi.evt.crm.>"
+  },
+  "invoke": {
+    "colocated": "sdk",
+    "remote": "rpc",
+    "protocol": "nats-rr",
+    "serialization": "json"
+  },
+  "upstream": {
+    "env": "RUOYI_DOMAIN_CRM_UPSTREAM",
+    "protocol": "http",
+    "defaultPort": 3219
+  },
+  "resilience": {
+    "timeoutMs": 5000,
+    "retry": {
+      "maxAttempts": 1,
+      "safeMethodsOnly": true
+    },
+    "idempotencyRequired": true
+  },
+  "facadeMethods": [
+    "ping",
+    "listCustomers",
+    "listClues",
+    "createFollowup"
+  ],
+  "rpc": [
+    {
+      "service": "CrmService",
+      "method": "Ping"
+    },
+    {
+      "service": "CrmService",
+      "method": "ListCustomers"
+    },
+    {
+      "service": "CrmService",
+      "method": "ListClues"
+    },
+    {
+      "service": "CrmService",
+      "method": "CreateFollowup"
+    }
+  ],
+  "actions": [
+    "crm.ping",
+    "crm.listCustomers",
+    "crm.listClues",
+    "crm.createFollowup"
+  ],
+  "permissions": [
+    "crm:clue:view",
+    "crm:customer:view",
+    "crm:followup:create"
+  ],
+  "dependsOn": [
+    "shared"
+  ],
+  "pack": {
+    "enabled": true,
+    "kind": "api-only",
+    "independentDatabase": false
+  }
+}

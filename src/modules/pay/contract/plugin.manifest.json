@@ -1,0 +1,121 @@
+{
+  "$schema": "ruoyi-plugin-manifest/v1",
+  "id": "ruoyi.pay",
+  "apiVersion": 1,
+  "displayName": "支付中心",
+  "kind": "business",
+  "stage": "B",
+  "owner": "pay",
+  "contractVersion": "v1",
+  "implementation": "local-ts",
+  "minimumHostVersion": "1.0.0",
+  "capabilities": [
+    "api.routes.register",
+    "facade.invoke",
+    "rpc.serve",
+    "cmd.dispatch",
+    "pack.independent"
+  ],
+  "entrypoints": {
+    "facade": [
+      "src/modules/pay/contract/pay.facade.ts"
+    ],
+    "proto": "src/modules/pay/contract/pay.proto",
+    "actions": "src/modules/pay/contract/actions.ts"
+  },
+  "apiRoutes": {
+    "publicPrefix": [
+      "/api/v1/admin/pay",
+      "/api/v1/app/pay",
+      "/api/v1/open/pay"
+    ],
+    "adminPrefix": "/api/v1/admin/pay"
+  },
+  "auth": {
+    "audience": "admin",
+    "tenantPolicy": "required"
+  },
+  "messaging": {
+    "queueGroup": "ruoyi.pay",
+    "commandSubject": "ruoyi.cmd.pay.>",
+    "eventSubject": "ruoyi.evt.pay.>"
+  },
+  "invoke": {
+    "colocated": "sdk",
+    "remote": "rpc",
+    "protocol": "nats-rr",
+    "serialization": "json"
+  },
+  "upstream": {
+    "env": "RUOYI_DOMAIN_PAY_UPSTREAM",
+    "protocol": "http",
+    "defaultPort": 3214
+  },
+  "resilience": {
+    "timeoutMs": 5000,
+    "retry": {
+      "maxAttempts": 1,
+      "safeMethodsOnly": true
+    },
+    "idempotencyRequired": true
+  },
+  "facadeMethods": [
+    "ping",
+    "listOrders",
+    "createOrder",
+    "createRefund",
+    "listRefunds"
+  ],
+  "rpc": [
+    {
+      "service": "PayService",
+      "method": "Ping"
+    },
+    {
+      "service": "PayService",
+      "method": "ListOrders"
+    },
+    {
+      "service": "PayService",
+      "method": "CreateOrder"
+    },
+    {
+      "service": "PayService",
+      "method": "CreateRefund"
+    },
+    {
+      "service": "PayService",
+      "method": "ListRefunds"
+    }
+  ],
+  "actions": [
+    "pay.ping",
+    "pay.listOrders",
+    "pay.createOrder",
+    "pay.createRefund",
+    "pay.listRefunds"
+  ],
+  "permissions": [
+    "pay:channel:create",
+    "pay:channel:delete",
+    "pay:channel:query",
+    "pay:channel:update",
+    "pay:notify:query",
+    "pay:order:query",
+    "pay:refund:query",
+    "pay:transfer:query",
+    "pay:wallet-recharge-package:create",
+    "pay:wallet-recharge-package:delete",
+    "pay:wallet-recharge-package:query",
+    "pay:wallet-recharge-package:update",
+    "pay:wallet:query"
+  ],
+  "dependsOn": [
+    "shared"
+  ],
+  "pack": {
+    "enabled": true,
+    "kind": "api-only",
+    "independentDatabase": false
+  }
+}

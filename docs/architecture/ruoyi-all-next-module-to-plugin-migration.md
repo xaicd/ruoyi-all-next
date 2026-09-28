@@ -59,10 +59,35 @@
 
 | 阶段 | 内容 | 风险 |
 |---|---|---|
-| **P0** | **manifest 生成器**：把 `domain-catalog` + route manifest + Facade/proto 归拢为每个域一份 `plugin.manifest.json`。**不改任何运行方式** | 零（只增产物） |
+| **P0 ✅** | **manifest 生成器**：把 `domain-catalog` + route manifest + Facade/proto/actions/permissions 归拢为每个域一份 `plugin.manifest.json`。**不改任何运行方式** | 零（只增产物） |
 | **P1** | 加 **API 网关**与 **slot 宿主**；**新域**以插件方式接入，老域继续走静态路由 | 低（双轨互不影响） |
 | **P2** | 插件化域引入 **namespace 迁移**与 **capability 强制** | 中（数据面） |
 | **P3** | 域逐个迁到 **worker 入口**（进程隔离）；broker 从进程内切到跨进程（本仓已有 RPC 通道，接口不变） | 高（需按 §6.1 独立测试 + 灰度回滚） |
+
+### P0 实现说明（已完成）
+
+产物：`src/modules/<domain>/contract/plugin.manifest.json`（16 份；`online` 为 handwritten 跳过）。
+生成入口与 route manifest 共用同一条管线：`npm run domain:manifests`
+（`scripts/lib/domain-catalog.cjs` 的 `writeGeneratedPluginManifests`）。
+
+**设计要点：不引入第二份真源。** 每个字段都从仓库既有文件解析而来：
+
+| manifest 字段 | 真源 |
+|---|---|
+| `kind/stage/owner/auth/messaging/invoke/pack/dependsOn/upstream` | `domain-catalog.json` |
+| `displayName` | `admin-menu.ts` 顶层 `key`+`label` |
+| `facadeMethods` | `<domain>*.facade.ts` 的 `*_FACADE_METHODS` |
+| `rpc` | `<domain>.proto` 的 `service`/`rpc` |
+| `actions` | `actions.ts` 的 `"<domain>.*"` 键 |
+| `permissions` | `permissions.ts` 中 `<domain>:<res>:` 前缀的权限码 |
+| `capabilities` | **由上述真实声明推导**（有 facade → `facade.invoke`，有 proto → `rpc.serve`，有 actions → `cmd.dispatch`，`packable` → `pack.independent`） |
+
+**已知限制**：`aigw` / `mall` 的 `displayName` 回退为域名——这两个域不在 `admin-menu.ts`
+顶层（`aigw` 的标签在自己的 `contract/menu-catalog.ts` 里）。为两个域写一套「按域解析
+各自菜单目录」的机制超出 P0 范围，留待 P1 统一。
+
+**副产品**：该 manifest 顺带量化了各域真实体量（如 `system` 119 个 facade 方法 / 71 个权限码，
+`infra` 47 / 36），可作为域拆分与能力盘点的输入。
 
 ## 5. 建议
 

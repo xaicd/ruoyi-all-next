@@ -1,6 +1,11 @@
-const fs = require("fs")
-const { writeGeneratedManifests } = require("./lib/domain-catalog.cjs")
+const { writeGeneratedManifests, writeGeneratedPluginManifests } = require("./lib/domain-catalog.cjs")
 
-const written = writeGeneratedManifests()
-console.log(`[domain-manifests] wrote ${written.length} route manifests:`)
-for (const file of written) console.log(`  ${file}`)
+const routeManifests = writeGeneratedManifests()
+console.log(`[domain-manifests] wrote ${routeManifests.length} route manifests:`)
+for (const file of routeManifests) console.log(`  ${file}`)
+
+// P0: 插件化声明面。全部字段由既有真源(domain-catalog / facade / proto / actions / permissions)
+// 聚合而来, 不是第二份真源 —— 详见 docs/architecture/ruoyi-all-next-module-to-plugin-migration.md
+const pluginManifests = writeGeneratedPluginManifests()
+console.log(`[domain-manifests] wrote ${pluginManifests.length} plugin manifests:`)
+for (const file of pluginManifests) console.log(`  ${file}`)

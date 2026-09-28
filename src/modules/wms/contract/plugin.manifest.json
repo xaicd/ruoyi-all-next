@@ -1,0 +1,96 @@
+{
+  "$schema": "ruoyi-plugin-manifest/v1",
+  "id": "ruoyi.wms",
+  "apiVersion": 1,
+  "displayName": "仓储中心",
+  "kind": "business",
+  "stage": "B",
+  "owner": "wms",
+  "contractVersion": "v1",
+  "implementation": "local-ts",
+  "minimumHostVersion": "1.0.0",
+  "capabilities": [
+    "api.routes.register",
+    "facade.invoke",
+    "rpc.serve",
+    "cmd.dispatch",
+    "pack.independent"
+  ],
+  "entrypoints": {
+    "facade": [
+      "src/modules/wms/contract/wms.facade.ts"
+    ],
+    "proto": "src/modules/wms/contract/wms.proto",
+    "actions": "src/modules/wms/contract/actions.ts"
+  },
+  "apiRoutes": {
+    "publicPrefix": [
+      "/api/v1/admin/wms"
+    ],
+    "adminPrefix": "/api/v1/admin/wms"
+  },
+  "auth": {
+    "audience": "admin",
+    "tenantPolicy": "required"
+  },
+  "messaging": {
+    "queueGroup": "ruoyi.wms",
+    "commandSubject": "ruoyi.cmd.wms.>",
+    "eventSubject": "ruoyi.evt.wms.>"
+  },
+  "invoke": {
+    "colocated": "sdk",
+    "remote": "rpc",
+    "protocol": "nats-rr",
+    "serialization": "json"
+  },
+  "upstream": {
+    "env": "RUOYI_DOMAIN_WMS_UPSTREAM",
+    "protocol": "http",
+    "defaultPort": 3221
+  },
+  "resilience": {
+    "timeoutMs": 8000,
+    "retry": {
+      "maxAttempts": 1,
+      "safeMethodsOnly": true
+    },
+    "idempotencyRequired": true
+  },
+  "facadeMethods": [
+    "ping",
+    "listWarehouses",
+    "checkin"
+  ],
+  "rpc": [
+    {
+      "service": "WmsService",
+      "method": "Ping"
+    },
+    {
+      "service": "WmsService",
+      "method": "ListWarehouses"
+    },
+    {
+      "service": "WmsService",
+      "method": "Checkin"
+    }
+  ],
+  "actions": [
+    "wms.ping",
+    "wms.listWarehouses",
+    "wms.checkin"
+  ],
+  "permissions": [
+    "wms:operation:checkin",
+    "wms:warehouse:view"
+  ],
+  "dependsOn": [
+    "shared"
+  ],
+  "pack": {
+    "enabled": true,
+    "kind": "api-only",
+    "independentDatabase": false
+  }
+}

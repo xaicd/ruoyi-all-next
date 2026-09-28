@@ -1,0 +1,103 @@
+{
+  "$schema": "ruoyi-plugin-manifest/v1",
+  "id": "ruoyi.bpm",
+  "apiVersion": 1,
+  "displayName": "流程中心",
+  "kind": "business",
+  "stage": "A",
+  "owner": "bpm",
+  "contractVersion": "v1",
+  "implementation": "local-ts",
+  "minimumHostVersion": "1.0.0",
+  "capabilities": [
+    "api.routes.register",
+    "facade.invoke",
+    "rpc.serve",
+    "cmd.dispatch",
+    "pack.independent"
+  ],
+  "entrypoints": {
+    "facade": [
+      "src/modules/bpm/contract/bpm.facade.ts"
+    ],
+    "proto": "src/modules/bpm/contract/bpm.proto",
+    "actions": "src/modules/bpm/contract/actions.ts"
+  },
+  "apiRoutes": {
+    "publicPrefix": [
+      "/api/v1/admin/bpm"
+    ],
+    "adminPrefix": "/api/v1/admin/bpm"
+  },
+  "auth": {
+    "audience": "admin",
+    "tenantPolicy": "required"
+  },
+  "messaging": {
+    "queueGroup": "ruoyi.bpm",
+    "commandSubject": "ruoyi.cmd.bpm.>",
+    "eventSubject": "ruoyi.evt.bpm.>"
+  },
+  "invoke": {
+    "colocated": "sdk",
+    "remote": "rpc",
+    "protocol": "nats-rr",
+    "serialization": "json"
+  },
+  "upstream": {
+    "env": "RUOYI_DOMAIN_BPM_UPSTREAM",
+    "protocol": "http",
+    "defaultPort": 3213
+  },
+  "resilience": {
+    "timeoutMs": 8000,
+    "retry": {
+      "maxAttempts": 1,
+      "safeMethodsOnly": true
+    },
+    "idempotencyRequired": true
+  },
+  "facadeMethods": [
+    "ping",
+    "listDefinitions",
+    "listTasks",
+    "actionTask"
+  ],
+  "rpc": [
+    {
+      "service": "BpmService",
+      "method": "Ping"
+    },
+    {
+      "service": "BpmService",
+      "method": "ListDefinitions"
+    },
+    {
+      "service": "BpmService",
+      "method": "ListTasks"
+    },
+    {
+      "service": "BpmService",
+      "method": "ActionTask"
+    }
+  ],
+  "actions": [
+    "bpm.ping",
+    "bpm.listDefinitions",
+    "bpm.listTasks",
+    "bpm.actionTask"
+  ],
+  "permissions": [
+    "bpm:process-definition:view",
+    "bpm:task:approve",
+    "bpm:task:view"
+  ],
+  "dependsOn": [
+    "shared"
+  ],
+  "pack": {
+    "enabled": true,
+    "kind": "api-only",
+    "independentDatabase": false
+  }
+}
