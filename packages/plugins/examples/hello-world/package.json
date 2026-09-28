@@ -1,0 +1,17 @@
+{
+  "name": "@ruoyi/plugin-hello-world",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Reference plugin: the minimal shape a ruoyi-all-next plugin package must have.",
+  "type": "module",
+  "ruoyiPlugin": {
+    "manifest": "./plugin.manifest.json",
+    "worker": "./worker.js"
+  },
+  "dependencies": {
+    "@ruoyi/plugin-sdk": "*"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  }
+}

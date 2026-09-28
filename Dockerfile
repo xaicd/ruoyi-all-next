@@ -6,6 +6,11 @@
 FROM node:24-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json* .npmrc ./
+# npm workspaces 要求各成员的 package.json 在 install 时已存在，
+# 否则 npm ci 会因 workspace glob 指向不存在的目录而失败。
+# 只拷 package.json（源码与 node_modules 由 .dockerignore / 后续 COPY 处理）。
+COPY packages/plugins/sdk/package.json ./packages/plugins/sdk/package.json
+COPY packages/plugins/examples/hello-world/package.json ./packages/plugins/examples/hello-world/package.json
 RUN npm ci --legacy-peer-deps || npm install --legacy-peer-deps
 
 # Stage 2: 构建

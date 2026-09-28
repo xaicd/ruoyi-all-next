@@ -1,0 +1,20 @@
+{
+  "name": "@ruoyi/plugin-sdk",
+  "version": "0.1.0",
+  "description": "SDK for authoring ruoyi-all-next plugins: worker protocol framing and the definePlugin/runWorker entry.",
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.js",
+    "./protocol": "./src/protocol.js"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  }
+}
