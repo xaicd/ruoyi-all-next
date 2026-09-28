@@ -1,4 +1,8 @@
-const { writeGeneratedManifests, writeGeneratedPluginManifests } = require("./lib/domain-catalog.cjs")
+const {
+  writeGeneratedManifests,
+  writeGeneratedPluginManifests,
+  writeGeneratedPluginRegistry,
+} = require("./lib/domain-catalog.cjs")
 
 const routeManifests = writeGeneratedManifests()
 console.log(`[domain-manifests] wrote ${routeManifests.length} route manifests:`)
@@ -9,3 +13,6 @@ for (const file of routeManifests) console.log(`  ${file}`)
 const pluginManifests = writeGeneratedPluginManifests()
 console.log(`[domain-manifests] wrote ${pluginManifests.length} plugin manifests:`)
 for (const file of pluginManifests) console.log(`  ${file}`)
+
+// P1: 各域 manifest 的静态索引(供运行时加载)
+console.log(`[domain-manifests] wrote plugin registry: ${writeGeneratedPluginRegistry()}`)

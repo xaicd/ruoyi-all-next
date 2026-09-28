@@ -1,5 +1,6 @@
 {
   "$schema": "ruoyi-plugin-manifest/v1",
+  "domain": "mes",
   "id": "ruoyi.mes",
   "apiVersion": 1,
   "displayName": "制造中心",

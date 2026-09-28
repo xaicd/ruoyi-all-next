@@ -60,7 +60,7 @@
 | 阶段 | 内容 | 风险 |
 |---|---|---|
 | **P0 ✅** | **manifest 生成器**：把 `domain-catalog` + route manifest + Facade/proto/actions/permissions 归拢为每个域一份 `plugin.manifest.json`。**不改任何运行方式** | 零（只增产物） |
-| **P1** | 加 **API 网关**与 **slot 宿主**；**新域**以插件方式接入，老域继续走静态路由 | 低（双轨互不影响） |
+| **P1 ◐** | **API 网关**已完成；**slot 宿主暂缓**（理由见下）。新域以插件方式接入，老域继续走静态路由 | 低（双轨互不影响） |
 | **P2** | 插件化域引入 **namespace 迁移**与 **capability 强制** | 中（数据面） |
 | **P3** | 域逐个迁到 **worker 入口**（进程隔离）；broker 从进程内切到跨进程（本仓已有 RPC 通道，接口不变） | 高（需按 §6.1 独立测试 + 灰度回滚） |
 
@@ -88,6 +88,35 @@
 
 **副产品**：该 manifest 顺带量化了各域真实体量（如 `system` 119 个 facade 方法 / 71 个权限码，
 `infra` 47 / 36），可作为域拆分与能力盘点的输入。
+
+### P1 实现说明（网关已完成，slot 宿主暂缓）
+
+**已完成 —— 插件 API 网关**
+
+| 件 | 位置 |
+|---|---|
+| 静态注册表索引（生成物） | `src/modules/shared/contract/plugin-registry.generated.ts` |
+| 注册表与路由解析 | `src/modules/shared/backend/plugins/plugin-registry.ts` |
+| 网关 | `GET /api/v1/admin/plugins`；`GET`、`POST` `/api/v1/admin/plugins/<domain>[/<method>]` |
+
+**复用而非新造**：派发链完全走既有原语 ——
+`ensureContractActions(domain)` 注册该域 action schema →
+`applyActionSchema('<domain>.<method>')` 按声明校验入参（满足 §4.3）→
+`invokeAction(domain, method)` 走既有的同进程 SDK / 跨进程 RPC 双模。
+
+**两个刻意的决定**：
+
+1. **挂在 `/api/v1/admin/` 下，而不是新开 `/api/plugins/`。**
+   `src/proxy.ts` 的 matcher 只覆盖 `/api/v1/**`；新开前缀会落在默认鉴权与
+   `admin:routes:check` 基线之外，等于凭空造一个未受保护的新攻击面。
+   现两条路由在基线中均为 `wrapper`（最强保护类）。
+2. **方法必须已在 manifest 声明。** 未声明的 `<domain>/<method>` 直接 404，
+   不落到 `invokeAction` 的动态兜底上 —— 否则「声明面」形同虚设，可被绕过。
+
+**slot 宿主为什么暂缓**：本仓目前**不存在任何插件 UI bundle**（没有外置插件包）。
+此时实现 slot 宿主就是**无人使用的脚手架** —— 这正是本仓 §19 禁止、
+也是我在 rome-all 那份「4 层测试脚手架」上刚批评过的问题（无引用 + 依赖缺失）。
+等第一个真实插件 UI 出现时再实现，届时才有可验证的对象。
 
 ## 5. 建议
 

@@ -1,5 +1,6 @@
 {
   "$schema": "ruoyi-plugin-manifest/v1",
+  "domain": "mp",
   "id": "ruoyi.mp",
   "apiVersion": 1,
   "displayName": "微信公号",

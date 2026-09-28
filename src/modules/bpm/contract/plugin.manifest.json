@@ -1,5 +1,6 @@
 {
   "$schema": "ruoyi-plugin-manifest/v1",
+  "domain": "bpm",
   "id": "ruoyi.bpm",
   "apiVersion": 1,
   "displayName": "流程中心",

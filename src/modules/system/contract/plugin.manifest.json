@@ -1,5 +1,6 @@
 {
   "$schema": "ruoyi-plugin-manifest/v1",
+  "domain": "system",
   "id": "ruoyi.system",
   "apiVersion": 1,
   "displayName": "系统管理",

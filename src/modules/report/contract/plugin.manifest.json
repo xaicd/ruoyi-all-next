@@ -1,5 +1,6 @@
 {
   "$schema": "ruoyi-plugin-manifest/v1",
+  "domain": "report",
   "id": "ruoyi.report",
   "apiVersion": 1,
   "displayName": "报表中心",

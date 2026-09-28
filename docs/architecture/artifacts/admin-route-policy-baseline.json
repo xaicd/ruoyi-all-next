@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-27T16:03:28.233Z",
-  "routeCount": 892,
-  "operationCount": 2103,
+  "generatedAt": "2026-09-28T08:31:45.220Z",
+  "routeCount": 894,
+  "operationCount": 2106,
   "routes": [
     {
       "path": "/api/v1/admin/ai/ai-api-key",
@@ -11894,6 +11894,30 @@
         }
       ],
       "source": "src/app/api/v1/admin/pay/refunds/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/plugins",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/plugins/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/plugins/[...path]",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        },
+        {
+          "method": "POST",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/plugins/[...path]/route.ts"
     },
     {
       "path": "/api/v1/admin/report/boards",

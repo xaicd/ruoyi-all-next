@@ -259,6 +259,11 @@ export const PERMISSIONS = {
   SETTLEMENT_INVOICE_VIEW: "settlement:invoice:query",
   SETTLEMENT_INVOICE_CREATE: "settlement:invoice:create",
   SETTLEMENT_INVOICE_UPDATE: "settlement:invoice:update",
+  // 平台级插件网关（module→plugin 迁移 P1）。
+  // plugin 属平台能力而非某个业务域，故用 platform 前缀；与既有
+  // entitlement/meter/scheme/split/settlement 同属「catalog 域清单之外」的既有情形，
+  // 需在后续批次统一收敛。
+  PLATFORM_PLUGIN_QUERY: "platform:plugin:query",
 } as const
 
 export type PermissionCode = (typeof PERMISSIONS)[keyof typeof PERMISSIONS]

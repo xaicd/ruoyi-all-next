@@ -1,5 +1,6 @@
 {
   "$schema": "ruoyi-plugin-manifest/v1",
+  "domain": "iot",
   "id": "ruoyi.iot",
   "apiVersion": 1,
   "displayName": "物联中台",
