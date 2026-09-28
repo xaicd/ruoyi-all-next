@@ -136,7 +136,54 @@ core platform modules → built-in first-party plugins → installed plugins。
 - 只支持 `<domain>/<method>` 两级；Paperclip 的是插件自有 `apiRoutes` 子路径（含
   `auth` / `checkoutPolicy` / `companyResolution` 声明）。子路径属 P4。
 
-## 5. 建议
+## 5. 包结构对照：插件真正的交付面
+
+精读 Paperclip 的包组织后，发现**我此前的 P0 产物形状与插件交付契约并不一致**，这里如实记录。
+
+### 5.1 Paperclip 的包结构
+
+| 项 | 做法 |
+|---|---|
+| 包管理 | **pnpm workspace**（`pnpm-workspace.yaml`），`packageManager: pnpm@9.15.4` |
+| workspace globs | `packages/*`、`packages/adapters/*`、`packages/plugins/*`、`packages/plugins/examples/*`、`server`、`ui`、`cli`、`clients/api-client`、`clients/h5` |
+| **负向排除** | `"!packages/plugins/sandbox-providers/**"`、`"!packages/plugins/examples/plugin-orchestration-smoke-example"` —— 附注释说明是为了**避免 lockfile churn** |
+| 插件包形态 | `packages/plugins/plugin-<name>/`，`"type": "module"`，`files: ["dist","migrations","README.md"]`，`engines.node >= 24.11.0`，`peerDependencies: { react: ">=18" }` |
+| **入口契约** | `package.json` 里的 **`paperclipPlugin`** 指针：`{ manifest: "./dist/manifest.js", worker: "./dist/worker.js", ui: "./dist/ui/" }`；host 由 `plugin-loader.ts` 读该键定位入口 |
+| 产物 | **预构建 ESM**：`dist/manifest.js` + `dist/worker.js` + `dist/ui/`（`esbuild.config.mjs` 或 `tsc`） |
+| SDK | `@paperclipai/plugin-sdk`，**子路径 exports**：`.`、`./protocol`、`./types`、`./ui`、`./ui/hooks`、`./ui/types`、`./testing`、`./bundlers`、`./dev-server` |
+| 脚手架 | `packages/plugins/create-paperclip-plugin` 生成上述 `paperclipPlugin` 块 |
+| 版本/覆盖治理 | 根 workspace manifest 的 `patchedDependencies` 与 `overrides`，每条附**理由注释**（如 CodeMirror 必须单副本、Lezer NodeProp ID 必须同源） |
+
+### 5.2 本仓的包组织
+
+| 项 | 现状 |
+|---|---|
+| 包管理 | **npm 单包**（`package-lock.json`，`workspaces: null`，无 `packageManager`） |
+| `clients/*` | 目录式独立包（`@ruoyi/client-h5` 等），**游离于任何 workspace**；`clients/expo` 还有自己的 lockfile |
+| 域声明面 | 在 **app 源码树内**：`src/modules/<domain>/contract/plugin.manifest.json` |
+| 插件入口契约 | **无**（没有 `paperclipPlugin` 之类的指针，也没有预构建 dist） |
+| SDK | 无独立包（`shared` 是源码内模块，非可发布包） |
+
+### 5.3 由此得出的三个诚实结论
+
+1. **我 P0 的产物不是插件交付契约，而是源内声明面。**
+   Paperclip 的 manifest 是**构建产物**（`dist/manifest.js`），由 `package.json.paperclipPlugin` 指向；
+   我产出的是源码树里的 JSON。对 Platform Module 而言源内声明是合理的，但**它不能被"安装"**。
+
+2. **把它命名为 `plugin.manifest.json` 会误导** —— 依 §6.1/§6.2，本仓的域是 **Platform Module**，
+   不是 Plugin。用一个只属于 §6.2 的词命名 §6.1 的声明面，正是规范刻意分开的那件事。
+   建议：要么改名为 `module.manifest.json`（准确），要么在文件内显式标注「§6.1 Platform Module 声明，非可安装插件」。
+   本文档保留现状不改名，但把结论记录在此，避免后来者误以为它已可用于插件安装。
+
+3. **真要引入 §6.2 插件，先得补包基础设施。** 最小前置是二者之一：
+   - **workspace 化**（npm/pnpm workspaces）+ `packages/plugins/*`，插件作为 workspace 成员；
+   - 或 **实例插件目录 + 运行时安装**（Paperclip 的
+     `~/.paperclip/instances/default/plugins/` 形态：包安装目录与插件数据目录分离）。
+
+   无论哪条，都要先有 `paperclipPlugin` 式入口指针 + 预构建 dist + 独立 SDK 包，
+   而这些本仓目前一个都没有。
+
+## 6. 建议
 
 1. **不要把域改造成插件。** 它们是 §6.1 的 Platform Module，改造会丢掉一方表、事务与直接 DB 集成，
    而 Paperclip 的插件模型恰恰**不允许**这些东西（§15.2 禁直接 DB 访问、§21.5 禁任意迁移）。
@@ -145,3 +192,7 @@ core platform modules → built-in first-party plugins → installed plugins。
 4. **UI slot 宿主（P4）在出现第一个真实插件 UI 前不实现** —— 无验证对象，只会得到无人使用的脚手架。
 5. 新引入的 manifest 必须纳入 `compat:check` / `foundation:ontology:check` 口径，否则重演「写进 AGENTS.md 却没人执行」。
 6. **不要为了插件化牺牲已有能力**：`BaseMapper` / `QueryWrapper` / 8 大审计底座字段是 §19 明确要求复用的资产。
+7. **先把命名与交付面分清**（见 §5.3）：域的声明面按 §6.1 定位，不要用只属于 §6.2 的 `plugin` 词汇；
+   真要可安装的插件，先补包基础设施（workspace 或实例插件目录 + `paperclipPlugin` 式入口 + 预构建 dist + 独立 SDK 包）。
+8. **借鉴 Paperclip 的 workspace 治理手法**：glob 负向排除并**写明理由**（lockfile churn），
+   `patchedDependencies` / `overrides` 每条附原因——这类注释是后来者唯一的上下文来源。
