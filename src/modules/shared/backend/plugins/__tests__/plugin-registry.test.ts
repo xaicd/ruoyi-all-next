@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest"
 
+import { applyActionSchema, getActionSchema } from "@/modules/shared/backend/lib/broker-validator"
+import { ensureContractActions, resetContractActions } from "@/modules/shared/backend/lib/contract-actions"
 import {
   getPluginByDomain,
   listPlugins,
@@ -52,5 +54,23 @@ describe("plugin-registry", () => {
     const resolved = resolvePluginDispatch(["pay", "definitelyNotDeclared"])
     expect(resolved).toMatchObject({ ok: false, status: 404 })
     if (!resolved.ok) expect(resolved.error).toContain("未声明")
+  })
+
+  it("网关派发链第一环可用：manifest 声明的 action 能被注册并按声明校验", async () => {
+    resetContractActions()
+    // 网关 POST 的第一步，正是按 manifest.domain 注册该域 action schema
+    await ensureContractActions("pay")
+
+    // manifest 里声明过的 action 必须真的能取到 schema —— 否则 applyActionSchema
+    // 会静默放行(params ?? {})，声明面就失去校验意义
+    const pay = getPluginByDomain("pay")!
+    expect(pay.actions.length).toBeGreaterThan(0)
+    for (const action of pay.actions) {
+      expect(getActionSchema(action), `${action} 应有已注册的 schema`).toBeDefined()
+    }
+
+    // 校验生效：合法入参通过、非法入参抛 ValidationError
+    expect(() => applyActionSchema("pay.listOrders", { page: 1, pageSize: 10 })).not.toThrow()
+    expect(() => applyActionSchema("pay.listOrders", { page: "not-a-number" })).toThrow(/ValidationError/)
   })
 })
