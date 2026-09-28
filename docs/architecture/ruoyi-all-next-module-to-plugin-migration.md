@@ -95,9 +95,19 @@
 
 | 件 | 位置 |
 |---|---|
-| 静态注册表索引（生成物） | `src/modules/shared/contract/plugin-registry.generated.ts` |
-| 注册表与路由解析 | `src/modules/shared/backend/plugins/plugin-registry.ts` |
+| 静态注册表索引（生成物） | `src/app/api/v1/admin/plugins/_lib/plugin-registry.generated.ts` |
+| 注册表与路由解析 | `src/app/api/v1/admin/plugins/_lib/plugin-registry.ts` |
 | 网关 | `GET /api/v1/admin/plugins`；`GET`、`POST` `/api/v1/admin/plugins/<domain>[/<method>]` |
+
+**为什么注册表住在 `src/app`（组合根）而不是 `modules/shared`**：这是初版实现的一个
+**分层错误**，已修正。`shared` 是 L0 基础 SDK，其依赖纪律是「**只允许依赖 `system`/`infra`
+的平台/公开面**（如 `tenant-resolver.ts` 依赖 `systemPlatformFacade`），其余一律走
+`import(\`@/modules/${domain}/...\`)` 动态导入」——见 §3.3。而注册表静态 import 全部 16 个域，
+放进 `shared` 会把依赖方向倒过来（foundation → 全部业务域）。
+
+更关键的是它有**实害**：`domain:pack` 只打包 `[domain, ...dependsOnModules]`（即 domain + shared），
+索引若在 `shared` 内，打包后会 import 到未随包拷贝的其它域而**构建失败**。
+组合根聚合全部域是它的本职，且插件网关不属于任何单域的 apiRouteDirs，不会进入域包。
 
 **复用而非新造**：派发链完全走既有原语 ——
 `ensureContractActions(domain)` 注册该域 action schema →

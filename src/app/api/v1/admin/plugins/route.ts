@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
-import { listPlugins } from "@/modules/shared/backend/plugins/plugin-registry"
+import { listPlugins } from "./_lib/plugin-registry"
 
 /**
  * GET /api/v1/admin/plugins

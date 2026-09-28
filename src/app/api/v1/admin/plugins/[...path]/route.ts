@@ -5,7 +5,7 @@ import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { applyActionSchema } from "@/modules/shared/backend/lib/broker-validator"
 import { invokeAction } from "@/modules/shared/backend/lib/broker-invoke"
 import { ensureContractActions } from "@/modules/shared/backend/lib/contract-actions"
-import { getPluginByDomain, resolvePluginDispatch } from "@/modules/shared/backend/plugins/plugin-registry"
+import { getPluginByDomain, resolvePluginDispatch } from "../_lib/plugin-registry"
 
 /**
  * 插件 API 网关（module→plugin 迁移 P1）。

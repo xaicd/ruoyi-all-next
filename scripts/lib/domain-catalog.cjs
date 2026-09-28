@@ -265,7 +265,13 @@ function writeGeneratedPluginManifests() {
 }
 
 function pluginRegistryPath() {
-  return path.join(ROOT, "src", "modules", "shared", "contract", "plugin-registry.generated.ts")
+  // 刻意放在组合根(src/app)而非 modules/shared:
+  // 1) 分层: shared 是 L0 基础 SDK, 从不静态依赖具体域(既有姿势是动态 import);
+  //    本索引静态 import 全部域, 住在 shared 会把依赖方向倒过来。
+  // 2) 实害: domain:pack 只打包 [domain, ...dependsOnModules], 即仅 domain + shared。
+  //    索引若在 shared 内, 打包后会 import 到未随包拷贝的其它域 -> 构建失败。
+  // 网关本身不属于任何单域的 apiRouteDirs, 故不会进入域包。
+  return path.join(ROOT, "src", "app", "api", "v1", "admin", "plugins", "_lib", "plugin-registry.generated.ts")
 }
 
 /**

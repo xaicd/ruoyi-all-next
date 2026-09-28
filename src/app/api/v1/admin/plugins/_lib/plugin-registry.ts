@@ -1,12 +1,20 @@
 /**
- * 插件注册表（module→plugin 迁移 P1）。
+ * 插件注册表（module→plugin 迁移 P1/P2）。
  *
- * 数据来自生成的静态索引 `plugin-registry.generated.ts`（由 `npm run domain:manifests`
+ * 数据来自同目录的生成物 `plugin-registry.generated.ts`（由 `npm run domain:manifests`
  * 产出）。本文件**不维护任何清单** —— 清单只在生成物里，避免出现第二份真源。
+ *
+ * 为什么住在 src/app（组合根）而不是 modules/shared：
+ * 1. **分层**：`shared` 是 L0 基础 SDK，从不静态依赖具体域（既有姿势是
+ *    `import(\`@/modules/${domain}/...\`)` 动态导入）。本索引静态 import 全部 16 个域，
+ *    放进 `shared` 会把依赖方向倒过来（foundation → 全部域）。
+ * 2. **实害**：`domain:pack` 只打包 `[domain, ...dependsOnModules]`（即 domain + shared）。
+ *    索引若在 `shared` 内，打包后会 import 到未随包拷贝的其它域而构建失败。
+ *    网关不属于任何单域的 apiRouteDirs，故不会进入域包。
  *
  * 设计见 docs/architecture/ruoyi-all-next-module-to-plugin-migration.md。
  */
-import { PLUGIN_MANIFESTS } from "@/modules/shared/contract/plugin-registry.generated"
+import { PLUGIN_MANIFESTS } from "./plugin-registry.generated"
 
 export type PluginManifest = (typeof PLUGIN_MANIFESTS)[number]
 
@@ -43,7 +51,7 @@ export function pluginCanDispatch(plugin: Pick<PluginManifest, "capabilities">):
 /**
  * 把网关的 `[...path]` 解析为 `<domain>/<method>`。
  *
- * 只支持两级：更深的路径属于「插件自有子路由」，P1 不承诺（需要 P2 的 apiRoutes 声明面）。
+ * 只支持两级：更深的路径属于「插件自有子路由」，当前不承诺（需要 apiRoutes 声明面）。
  * 两道拒绝，避免声明面被绕过：
  *   1. 能力：未声明 `facade.invoke` 的插件不可被派发（403）
  *   2. 方法：未在 manifest facadeMethods 内的方法直接 404，不落到 `invokeAction` 的动态兜底
