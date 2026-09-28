@@ -125,6 +125,10 @@ melos_*.log
 
 # 本地文件存储（infra LOCAL adapter）
 .data/
+
+# 实例级插件目录（§6.2 Plugin 的安装位置，与 §6.1 Platform Module 的源码内声明面不同）
+# 默认 RUOYI_PLUGIN_DIR 落在此处；插件包是运行时装进来的，不入库
+.ruoyi/
 # 用户上传 & TTS 临时语音文件（运行时生成，禁止入库）
 public/uploads/
 public/sounds/
