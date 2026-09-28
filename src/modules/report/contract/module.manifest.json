@@ -1,12 +1,12 @@
 {
-  "$schema": "ruoyi-plugin-manifest/v1",
-  "domain": "wms",
-  "id": "ruoyi.wms",
+  "$schema": "ruoyi-module-manifest/v1",
+  "domain": "report",
+  "id": "ruoyi.report",
   "apiVersion": 1,
-  "displayName": "仓储中心",
+  "displayName": "报表中心",
   "kind": "business",
-  "stage": "B",
-  "owner": "wms",
+  "stage": "A",
+  "owner": "report",
   "contractVersion": "v1",
   "implementation": "local-ts",
   "minimumHostVersion": "1.0.0",
@@ -19,25 +19,25 @@
   ],
   "entrypoints": {
     "facade": [
-      "src/modules/wms/contract/wms.facade.ts"
+      "src/modules/report/contract/report.facade.ts"
     ],
-    "proto": "src/modules/wms/contract/wms.proto",
-    "actions": "src/modules/wms/contract/actions.ts"
+    "proto": "src/modules/report/contract/report.proto",
+    "actions": "src/modules/report/contract/actions.ts"
   },
   "apiRoutes": {
     "publicPrefix": [
-      "/api/v1/admin/wms"
+      "/api/v1/admin/report"
     ],
-    "adminPrefix": "/api/v1/admin/wms"
+    "adminPrefix": "/api/v1/admin/report"
   },
   "auth": {
     "audience": "admin",
     "tenantPolicy": "required"
   },
   "messaging": {
-    "queueGroup": "ruoyi.wms",
-    "commandSubject": "ruoyi.cmd.wms.>",
-    "eventSubject": "ruoyi.evt.wms.>"
+    "queueGroup": "ruoyi.report",
+    "commandSubject": "ruoyi.cmd.report.>",
+    "eventSubject": "ruoyi.evt.report.>"
   },
   "invoke": {
     "colocated": "sdk",
@@ -46,45 +46,45 @@
     "serialization": "json"
   },
   "upstream": {
-    "env": "RUOYI_DOMAIN_WMS_UPSTREAM",
+    "env": "RUOYI_DOMAIN_REPORT_UPSTREAM",
     "protocol": "http",
-    "defaultPort": 3221
+    "defaultPort": 3215
   },
   "resilience": {
-    "timeoutMs": 8000,
+    "timeoutMs": 15000,
     "retry": {
       "maxAttempts": 1,
       "safeMethodsOnly": true
     },
-    "idempotencyRequired": true
+    "idempotencyRequired": false
   },
   "facadeMethods": [
     "ping",
-    "listWarehouses",
-    "checkin"
+    "listBoards",
+    "exportBoard"
   ],
   "rpc": [
     {
-      "service": "WmsService",
+      "service": "ReportService",
       "method": "Ping"
     },
     {
-      "service": "WmsService",
-      "method": "ListWarehouses"
+      "service": "ReportService",
+      "method": "ListBoards"
     },
     {
-      "service": "WmsService",
-      "method": "Checkin"
+      "service": "ReportService",
+      "method": "ExportBoard"
     }
   ],
   "actions": [
-    "wms.ping",
-    "wms.listWarehouses",
-    "wms.checkin"
+    "report.ping",
+    "report.listBoards",
+    "report.exportBoard"
   ],
   "permissions": [
-    "wms:operation:checkin",
-    "wms:warehouse:view"
+    "report:board:view",
+    "report:custom-sql:execute"
   ],
   "dependsOn": [
     "shared"

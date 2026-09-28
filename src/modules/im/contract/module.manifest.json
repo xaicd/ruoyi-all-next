@@ -1,12 +1,12 @@
 {
-  "$schema": "ruoyi-plugin-manifest/v1",
-  "domain": "crm",
-  "id": "ruoyi.crm",
+  "$schema": "ruoyi-module-manifest/v1",
+  "domain": "im",
+  "id": "ruoyi.im",
   "apiVersion": 1,
-  "displayName": "客户中心",
+  "displayName": "消息中心",
   "kind": "business",
   "stage": "B",
-  "owner": "crm",
+  "owner": "im",
   "contractVersion": "v1",
   "implementation": "local-ts",
   "minimumHostVersion": "1.0.0",
@@ -19,25 +19,25 @@
   ],
   "entrypoints": {
     "facade": [
-      "src/modules/crm/contract/crm.facade.ts"
+      "src/modules/im/contract/im.facade.ts"
     ],
-    "proto": "src/modules/crm/contract/crm.proto",
-    "actions": "src/modules/crm/contract/actions.ts"
+    "proto": "src/modules/im/contract/im.proto",
+    "actions": "src/modules/im/contract/actions.ts"
   },
   "apiRoutes": {
     "publicPrefix": [
-      "/api/v1/admin/crm"
+      "/api/v1/admin/im"
     ],
-    "adminPrefix": "/api/v1/admin/crm"
+    "adminPrefix": "/api/v1/admin/im"
   },
   "auth": {
     "audience": "admin",
     "tenantPolicy": "required"
   },
   "messaging": {
-    "queueGroup": "ruoyi.crm",
-    "commandSubject": "ruoyi.cmd.crm.>",
-    "eventSubject": "ruoyi.evt.crm.>"
+    "queueGroup": "ruoyi.im",
+    "commandSubject": "ruoyi.cmd.im.>",
+    "eventSubject": "ruoyi.evt.im.>"
   },
   "invoke": {
     "colocated": "sdk",
@@ -46,9 +46,9 @@
     "serialization": "json"
   },
   "upstream": {
-    "env": "RUOYI_DOMAIN_CRM_UPSTREAM",
+    "env": "RUOYI_DOMAIN_IM_UPSTREAM",
     "protocol": "http",
-    "defaultPort": 3219
+    "defaultPort": 3225
   },
   "resilience": {
     "timeoutMs": 5000,
@@ -60,38 +60,31 @@
   },
   "facadeMethods": [
     "ping",
-    "listCustomers",
-    "listClues",
-    "createFollowup"
+    "listConversations",
+    "auditMessage"
   ],
   "rpc": [
     {
-      "service": "CrmService",
+      "service": "ImService",
       "method": "Ping"
     },
     {
-      "service": "CrmService",
-      "method": "ListCustomers"
+      "service": "ImService",
+      "method": "ListConversations"
     },
     {
-      "service": "CrmService",
-      "method": "ListClues"
-    },
-    {
-      "service": "CrmService",
-      "method": "CreateFollowup"
+      "service": "ImService",
+      "method": "AuditMessage"
     }
   ],
   "actions": [
-    "crm.ping",
-    "crm.listCustomers",
-    "crm.listClues",
-    "crm.createFollowup"
+    "im.ping",
+    "im.listConversations",
+    "im.auditMessage"
   ],
   "permissions": [
-    "crm:clue:view",
-    "crm:customer:view",
-    "crm:followup:create"
+    "im:conversation:view",
+    "im:message:audit"
   ],
   "dependsOn": [
     "shared"

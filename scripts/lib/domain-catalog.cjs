@@ -88,7 +88,7 @@ function writeGeneratedManifests() {
 }
 
 // ---------------------------------------------------------------------------
-// Plugin manifest (P0): aggregate already-existing contract sources — never a
+// Module manifest (P0): aggregate already-existing contract sources — never a
 // second source of truth. Every field below is parsed out of a file that the
 // repo already maintains, so drift is impossible by construction.
 // ---------------------------------------------------------------------------
@@ -180,11 +180,11 @@ function deriveCapabilities(domain, sources) {
   return capabilities
 }
 
-function toPluginManifest(domain, sources, labels = new Map()) {
+function toModuleManifest(domain, sources, labels = new Map()) {
   const methods = [...new Set(sources.facades.flatMap((surface) => surface.methods))]
   return {
-    $schema: "ruoyi-plugin-manifest/v1",
-    /** 解析主键：网关按它把 /plugins/<domain>/<method> 路由到对应域。 */
+    $schema: "ruoyi-module-manifest/v1",
+    /** 解析主键：网关按它把 /modules/<domain>/<method> 路由到对应域。 */
     domain: domain.name,
     // 对齐 Paperclip 的 `<org>.<name>` 命名习惯
     id: `ruoyi.${domain.name}`,
@@ -240,11 +240,11 @@ function toPluginManifest(domain, sources, labels = new Map()) {
   }
 }
 
-function pluginManifestPath(domainName) {
-  return path.join(ROOT, "src", "modules", domainName, "contract", "plugin.manifest.json")
+function moduleManifestPath(domainName) {
+  return path.join(ROOT, "src", "modules", domainName, "contract", "module.manifest.json")
 }
 
-function writeGeneratedPluginManifests() {
+function writeGeneratedModuleManifests() {
   const permissionsByDomain = readPermissionsByDomain()
   const labels = readDomainLabels()
   const written = []
@@ -256,22 +256,22 @@ function writeGeneratedPluginManifests() {
       actions: readActionKeys(domain.name),
       permissions: permissionsByDomain.get(domain.name) || [],
     }
-    const target = pluginManifestPath(domain.name)
+    const target = moduleManifestPath(domain.name)
     fs.mkdirSync(path.dirname(target), { recursive: true })
-    fs.writeFileSync(target, `${JSON.stringify(toPluginManifest(domain, sources, labels), null, 2)}\n`)
+    fs.writeFileSync(target, `${JSON.stringify(toModuleManifest(domain, sources, labels), null, 2)}\n`)
     written.push(path.relative(ROOT, target).replace(/\\/g, "/"))
   }
   return written
 }
 
-function pluginRegistryPath() {
+function moduleRegistryPath() {
   // 刻意放在组合根(src/app)而非 modules/shared:
   // 1) 分层: shared 是 L0 基础 SDK, 从不静态依赖具体域(既有姿势是动态 import);
   //    本索引静态 import 全部域, 住在 shared 会把依赖方向倒过来。
   // 2) 实害: domain:pack 只打包 [domain, ...dependsOnModules], 即仅 domain + shared。
   //    索引若在 shared 内, 打包后会 import 到未随包拷贝的其它域 -> 构建失败。
   // 网关本身不属于任何单域的 apiRouteDirs, 故不会进入域包。
-  return path.join(ROOT, "src", "app", "api", "v1", "admin", "plugins", "_lib", "plugin-registry.generated.ts")
+  return path.join(ROOT, "src", "app", "api", "v1", "admin", "modules", "_lib", "module-registry.generated.ts")
 }
 
 /**
@@ -279,9 +279,9 @@ function pluginRegistryPath() {
  * 必须静态 import 而非运行时 fs 读盘：Next.js standalone 产物不会把 src 下的
  * JSON 当作可 fs 读取的资源，运行时读盘在生产会拿不到文件。
  */
-function toPluginRegistrySource(domains) {
+function toModuleRegistrySource(domains) {
   const imports = domains.map(
-    (domain, index) => `import manifest${index} from "@/modules/${domain.name}/contract/plugin.manifest.json"`,
+    (domain, index) => `import manifest${index} from "@/modules/${domain.name}/contract/module.manifest.json"`,
   )
   const entries = domains.map((_, index) => `  manifest${index},`)
   return [
@@ -290,18 +290,18 @@ function toPluginRegistrySource(domains) {
     "",
     ...imports,
     "",
-    "export const PLUGIN_MANIFESTS = [",
+    "export const MODULE_MANIFESTS = [",
     ...entries,
     "] as const",
     "",
   ].join("\n")
 }
 
-function writeGeneratedPluginRegistry() {
+function writeGeneratedModuleRegistry() {
   const domains = listDomains().filter((domain) => domain.manifestMode !== "handwritten")
-  const target = pluginRegistryPath()
+  const target = moduleRegistryPath()
   fs.mkdirSync(path.dirname(target), { recursive: true })
-  fs.writeFileSync(target, toPluginRegistrySource(domains))
+  fs.writeFileSync(target, toModuleRegistrySource(domains))
   return path.relative(ROOT, target).replace(/\\/g, "/")
 }
 
@@ -319,10 +319,10 @@ module.exports = {
   readActionKeys,
   readPermissionsByDomain,
   readDomainLabels,
-  toPluginManifest,
-  pluginManifestPath,
-  writeGeneratedPluginManifests,
-  pluginRegistryPath,
-  toPluginRegistrySource,
-  writeGeneratedPluginRegistry,
+  toModuleManifest,
+  moduleManifestPath,
+  writeGeneratedModuleManifests,
+  moduleRegistryPath,
+  toModuleRegistrySource,
+  writeGeneratedModuleRegistry,
 }

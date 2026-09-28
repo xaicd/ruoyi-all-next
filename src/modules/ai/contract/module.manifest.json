@@ -1,5 +1,5 @@
 {
-  "$schema": "ruoyi-plugin-manifest/v1",
+  "$schema": "ruoyi-module-manifest/v1",
   "domain": "ai",
   "id": "ruoyi.ai",
   "apiVersion": 1,

@@ -1,12 +1,12 @@
 {
-  "$schema": "ruoyi-plugin-manifest/v1",
-  "domain": "mes",
-  "id": "ruoyi.mes",
+  "$schema": "ruoyi-module-manifest/v1",
+  "domain": "crm",
+  "id": "ruoyi.crm",
   "apiVersion": 1,
-  "displayName": "制造中心",
+  "displayName": "客户中心",
   "kind": "business",
   "stage": "B",
-  "owner": "mes",
+  "owner": "crm",
   "contractVersion": "v1",
   "implementation": "local-ts",
   "minimumHostVersion": "1.0.0",
@@ -19,25 +19,25 @@
   ],
   "entrypoints": {
     "facade": [
-      "src/modules/mes/contract/mes.facade.ts"
+      "src/modules/crm/contract/crm.facade.ts"
     ],
-    "proto": "src/modules/mes/contract/mes.proto",
-    "actions": "src/modules/mes/contract/actions.ts"
+    "proto": "src/modules/crm/contract/crm.proto",
+    "actions": "src/modules/crm/contract/actions.ts"
   },
   "apiRoutes": {
     "publicPrefix": [
-      "/api/v1/admin/mes"
+      "/api/v1/admin/crm"
     ],
-    "adminPrefix": "/api/v1/admin/mes"
+    "adminPrefix": "/api/v1/admin/crm"
   },
   "auth": {
     "audience": "admin",
     "tenantPolicy": "required"
   },
   "messaging": {
-    "queueGroup": "ruoyi.mes",
-    "commandSubject": "ruoyi.cmd.mes.>",
-    "eventSubject": "ruoyi.evt.mes.>"
+    "queueGroup": "ruoyi.crm",
+    "commandSubject": "ruoyi.cmd.crm.>",
+    "eventSubject": "ruoyi.evt.crm.>"
   },
   "invoke": {
     "colocated": "sdk",
@@ -46,12 +46,12 @@
     "serialization": "json"
   },
   "upstream": {
-    "env": "RUOYI_DOMAIN_MES_UPSTREAM",
+    "env": "RUOYI_DOMAIN_CRM_UPSTREAM",
     "protocol": "http",
-    "defaultPort": 3222
+    "defaultPort": 3219
   },
   "resilience": {
-    "timeoutMs": 8000,
+    "timeoutMs": 5000,
     "retry": {
       "maxAttempts": 1,
       "safeMethodsOnly": true
@@ -60,31 +60,38 @@
   },
   "facadeMethods": [
     "ping",
-    "listWorkOrders",
-    "reportWork"
+    "listCustomers",
+    "listClues",
+    "createFollowup"
   ],
   "rpc": [
     {
-      "service": "MesService",
+      "service": "CrmService",
       "method": "Ping"
     },
     {
-      "service": "MesService",
-      "method": "ListWorkOrders"
+      "service": "CrmService",
+      "method": "ListCustomers"
     },
     {
-      "service": "MesService",
-      "method": "ReportWork"
+      "service": "CrmService",
+      "method": "ListClues"
+    },
+    {
+      "service": "CrmService",
+      "method": "CreateFollowup"
     }
   ],
   "actions": [
-    "mes.ping",
-    "mes.listWorkOrders",
-    "mes.reportWork"
+    "crm.ping",
+    "crm.listCustomers",
+    "crm.listClues",
+    "crm.createFollowup"
   ],
   "permissions": [
-    "mes:work-order:report",
-    "mes:work-order:view"
+    "crm:clue:view",
+    "crm:customer:view",
+    "crm:followup:create"
   ],
   "dependsOn": [
     "shared"

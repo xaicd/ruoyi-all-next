@@ -1,5 +1,5 @@
 /**
- * 生成物漂移检查：提交的 route/plugin manifest 是否与生成器当前输出一致。
+ * 生成物漂移检查：提交的 route/module manifest 是否与生成器当前输出一致。
  *
  * 为什么需要它：`npm run check` 里的 contracts:sync 会**重新生成** manifest，
  * 所以生成物永远是"新鲜"的 —— 手改生成物、或改了真源却忘了重新生成并提交，
@@ -21,10 +21,10 @@ const {
   readActionKeys,
   readPermissionsByDomain,
   readDomainLabels,
-  toPluginManifest,
-  pluginManifestPath,
-  pluginRegistryPath,
-  toPluginRegistrySource,
+  toModuleManifest,
+  moduleManifestPath,
+  moduleRegistryPath,
+  toModuleRegistrySource,
 } = require("./lib/domain-catalog.cjs")
 
 const readIfExists = (file) => (fs.existsSync(file) ? fs.readFileSync(file, "utf8") : null)
@@ -47,23 +47,23 @@ for (const domain of listDomains()) {
   if (routeActual === null) drifted.push(`${rel(routeTarget)}: 缺失（运行 npm run domain:manifests）`)
   else if (routeActual !== routeExpected) drifted.push(`${rel(routeTarget)}: 与真源不一致`)
 
-  // 2) plugin manifest（JSON）
+  // 2) module manifest（JSON）
   const sources = {
     facades: readFacadeSurfaces(domain.name),
     rpcs: readProtoRpcs(domain.name),
     actions: readActionKeys(domain.name),
     permissions: permissionsByDomain.get(domain.name) || [],
   }
-  const pluginTarget = pluginManifestPath(domain.name)
-  const pluginExpected = `${JSON.stringify(toPluginManifest(domain, sources, labels), null, 2)}\n`
-  const pluginActual = readIfExists(pluginTarget)
-  if (pluginActual === null) drifted.push(`${rel(pluginTarget)}: 缺失（运行 npm run domain:manifests）`)
-  else if (pluginActual !== pluginExpected) drifted.push(`${rel(pluginTarget)}: 与真源不一致`)
+  const moduleTarget = moduleManifestPath(domain.name)
+  const moduleExpected = `${JSON.stringify(toModuleManifest(domain, sources, labels), null, 2)}\n`
+  const moduleActual = readIfExists(moduleTarget)
+  if (moduleActual === null) drifted.push(`${rel(moduleTarget)}: 缺失（运行 npm run domain:manifests）`)
+  else if (moduleActual !== moduleExpected) drifted.push(`${rel(moduleTarget)}: 与真源不一致`)
 }
 
-// 3) plugin registry 静态索引
-const registryTarget = pluginRegistryPath()
-const registryExpected = toPluginRegistrySource(
+// 3) module registry 静态索引
+const registryTarget = moduleRegistryPath()
+const registryExpected = toModuleRegistrySource(
   listDomains().filter((domain) => domain.manifestMode !== "handwritten"),
 )
 const registryActual = readIfExists(registryTarget)
@@ -77,4 +77,4 @@ if (drifted.length > 0) {
   process.exit(1)
 }
 
-console.log(`[domain-manifests:check] PASS: ${checked} 个域的 route/plugin manifest 与真源一致`)
+console.log(`[domain-manifests:check] PASS: ${checked} 个域的 route/module manifest 与真源一致`)

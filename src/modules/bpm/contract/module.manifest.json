@@ -1,12 +1,12 @@
 {
-  "$schema": "ruoyi-plugin-manifest/v1",
-  "domain": "mall",
-  "id": "ruoyi.mall",
+  "$schema": "ruoyi-module-manifest/v1",
+  "domain": "bpm",
+  "id": "ruoyi.bpm",
   "apiVersion": 1,
-  "displayName": "mall",
+  "displayName": "流程中心",
   "kind": "business",
-  "stage": "B",
-  "owner": "mall",
+  "stage": "A",
+  "owner": "bpm",
   "contractVersion": "v1",
   "implementation": "local-ts",
   "minimumHostVersion": "1.0.0",
@@ -19,26 +19,25 @@
   ],
   "entrypoints": {
     "facade": [
-      "src/modules/mall/contract/mall.facade.ts"
+      "src/modules/bpm/contract/bpm.facade.ts"
     ],
-    "proto": "src/modules/mall/contract/mall.proto",
-    "actions": "src/modules/mall/contract/actions.ts"
+    "proto": "src/modules/bpm/contract/bpm.proto",
+    "actions": "src/modules/bpm/contract/actions.ts"
   },
   "apiRoutes": {
     "publicPrefix": [
-      "/api/v1/admin/mall",
-      "/api/v1/app/mall"
+      "/api/v1/admin/bpm"
     ],
-    "adminPrefix": "/api/v1/admin/mall"
+    "adminPrefix": "/api/v1/admin/bpm"
   },
   "auth": {
     "audience": "admin",
     "tenantPolicy": "required"
   },
   "messaging": {
-    "queueGroup": "ruoyi.mall",
-    "commandSubject": "ruoyi.cmd.mall.>",
-    "eventSubject": "ruoyi.evt.mall.>"
+    "queueGroup": "ruoyi.bpm",
+    "commandSubject": "ruoyi.cmd.bpm.>",
+    "eventSubject": "ruoyi.evt.bpm.>"
   },
   "invoke": {
     "colocated": "sdk",
@@ -47,12 +46,12 @@
     "serialization": "json"
   },
   "upstream": {
-    "env": "RUOYI_DOMAIN_MALL_UPSTREAM",
+    "env": "RUOYI_DOMAIN_BPM_UPSTREAM",
     "protocol": "http",
-    "defaultPort": 3217
+    "defaultPort": 3213
   },
   "resilience": {
-    "timeoutMs": 5000,
+    "timeoutMs": 8000,
     "retry": {
       "maxAttempts": 1,
       "safeMethodsOnly": true
@@ -61,38 +60,38 @@
   },
   "facadeMethods": [
     "ping",
-    "listProducts",
-    "listOrders",
-    "issueCoupon"
+    "listDefinitions",
+    "listTasks",
+    "actionTask"
   ],
   "rpc": [
     {
-      "service": "MallService",
+      "service": "BpmService",
       "method": "Ping"
     },
     {
-      "service": "MallService",
-      "method": "ListProducts"
+      "service": "BpmService",
+      "method": "ListDefinitions"
     },
     {
-      "service": "MallService",
-      "method": "ListOrders"
+      "service": "BpmService",
+      "method": "ListTasks"
     },
     {
-      "service": "MallService",
-      "method": "IssueCoupon"
+      "service": "BpmService",
+      "method": "ActionTask"
     }
   ],
   "actions": [
-    "mall.ping",
-    "mall.listProducts",
-    "mall.listOrders",
-    "mall.issueCoupon"
+    "bpm.ping",
+    "bpm.listDefinitions",
+    "bpm.listTasks",
+    "bpm.actionTask"
   ],
   "permissions": [
-    "mall:coupon:issue",
-    "mall:order:view",
-    "mall:product:view"
+    "bpm:process-definition:view",
+    "bpm:task:approve",
+    "bpm:task:view"
   ],
   "dependsOn": [
     "shared"

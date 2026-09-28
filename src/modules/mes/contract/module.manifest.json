@@ -1,12 +1,12 @@
 {
-  "$schema": "ruoyi-plugin-manifest/v1",
-  "domain": "erp",
-  "id": "ruoyi.erp",
+  "$schema": "ruoyi-module-manifest/v1",
+  "domain": "mes",
+  "id": "ruoyi.mes",
   "apiVersion": 1,
-  "displayName": "经营中台",
+  "displayName": "制造中心",
   "kind": "business",
   "stage": "B",
-  "owner": "erp",
+  "owner": "mes",
   "contractVersion": "v1",
   "implementation": "local-ts",
   "minimumHostVersion": "1.0.0",
@@ -19,25 +19,25 @@
   ],
   "entrypoints": {
     "facade": [
-      "src/modules/erp/contract/erp.facade.ts"
+      "src/modules/mes/contract/mes.facade.ts"
     ],
-    "proto": "src/modules/erp/contract/erp.proto",
-    "actions": "src/modules/erp/contract/actions.ts"
+    "proto": "src/modules/mes/contract/mes.proto",
+    "actions": "src/modules/mes/contract/actions.ts"
   },
   "apiRoutes": {
     "publicPrefix": [
-      "/api/v1/admin/erp"
+      "/api/v1/admin/mes"
     ],
-    "adminPrefix": "/api/v1/admin/erp"
+    "adminPrefix": "/api/v1/admin/mes"
   },
   "auth": {
     "audience": "admin",
     "tenantPolicy": "required"
   },
   "messaging": {
-    "queueGroup": "ruoyi.erp",
-    "commandSubject": "ruoyi.cmd.erp.>",
-    "eventSubject": "ruoyi.evt.erp.>"
+    "queueGroup": "ruoyi.mes",
+    "commandSubject": "ruoyi.cmd.mes.>",
+    "eventSubject": "ruoyi.evt.mes.>"
   },
   "invoke": {
     "colocated": "sdk",
@@ -46,9 +46,9 @@
     "serialization": "json"
   },
   "upstream": {
-    "env": "RUOYI_DOMAIN_ERP_UPSTREAM",
+    "env": "RUOYI_DOMAIN_MES_UPSTREAM",
     "protocol": "http",
-    "defaultPort": 3220
+    "defaultPort": 3222
   },
   "resilience": {
     "timeoutMs": 8000,
@@ -60,38 +60,31 @@
   },
   "facadeMethods": [
     "ping",
-    "listProducts",
-    "listOrders",
-    "adjustStock"
+    "listWorkOrders",
+    "reportWork"
   ],
   "rpc": [
     {
-      "service": "ErpService",
+      "service": "MesService",
       "method": "Ping"
     },
     {
-      "service": "ErpService",
-      "method": "ListProducts"
+      "service": "MesService",
+      "method": "ListWorkOrders"
     },
     {
-      "service": "ErpService",
-      "method": "ListOrders"
-    },
-    {
-      "service": "ErpService",
-      "method": "AdjustStock"
+      "service": "MesService",
+      "method": "ReportWork"
     }
   ],
   "actions": [
-    "erp.ping",
-    "erp.listProducts",
-    "erp.listOrders",
-    "erp.adjustStock"
+    "mes.ping",
+    "mes.listWorkOrders",
+    "mes.reportWork"
   ],
   "permissions": [
-    "erp:order:view",
-    "erp:product:view",
-    "erp:stock:adjust"
+    "mes:work-order:report",
+    "mes:work-order:view"
   ],
   "dependsOn": [
     "shared"
