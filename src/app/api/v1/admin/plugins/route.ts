@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 
-import { listPluginCatalog } from "./_lib/plugin-catalog"
+import { listPluginCatalog, listPluginUiSlots } from "./_lib/plugin-catalog"
 import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
 import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { PluginRegistryService } from "@/modules/shared/backend/plugins/plugin-registry.service"
@@ -28,6 +28,8 @@ export const GET = withAdminRoute(
       data: {
         pluginDir: resolvePluginDir(),
         plugins: await listPluginCatalog(),
+        // 插件声明的 UI 槽位（宿主页面经 PluginSlotHost 挂载）
+        uiSlots: await listPluginUiSlots(),
       },
     })
   },

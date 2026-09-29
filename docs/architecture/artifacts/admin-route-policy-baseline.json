@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-29T09:07:07.273Z",
-  "routeCount": 896,
-  "operationCount": 2113,
+  "generatedAt": "2026-09-29T13:19:48.701Z",
+  "routeCount": 897,
+  "operationCount": 2114,
   "routes": [
     {
       "path": "/api/v1/admin/ai/ai-api-key",
@@ -11958,6 +11958,16 @@
         }
       ],
       "source": "src/app/api/v1/admin/plugins/[pluginKey]/api/[...path]/route.ts"
+    },
+    {
+      "path": "/api/v1/admin/plugins/[pluginKey]/ui/[...path]",
+      "operations": [
+        {
+          "method": "GET",
+          "protection": "wrapper"
+        }
+      ],
+      "source": "src/app/api/v1/admin/plugins/[pluginKey]/ui/[...path]/route.ts"
     },
     {
       "path": "/api/v1/admin/report/boards",

@@ -10,12 +10,14 @@
     "automation"
   ],
   "capabilities": [
+    "api.routes.register",
     "plugin.state.read",
-    "api.routes.register"
+    "ui.page.register"
   ],
   "entrypoints": {
     "worker": "./worker.js",
-    "merged": "./merged.js"
+    "merged": "./merged.js",
+    "ui": "./ui"
   },
   "apiRoutes": [
     {
@@ -27,5 +29,15 @@
   ],
   "migrations": {
     "dir": "./migrations"
+  },
+  "ui": {
+    "slots": [
+      {
+        "type": "dashboardWidget",
+        "id": "hello-widget",
+        "displayName": "Hello 组件",
+        "exportName": "HelloWidget"
+      }
+    ]
   }
 }

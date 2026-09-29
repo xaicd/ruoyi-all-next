@@ -17,6 +17,7 @@
  */
 import { listModules } from "@/app/api/v1/admin/modules/_lib/module-registry"
 import { PluginRegistryService } from "@/modules/shared/backend/plugins/plugin-registry.service"
+import { resolveUiSlots } from "@/modules/shared/backend/plugins/ui-slots"
 
 export type PluginKind = "builtin" | "installed"
 
@@ -58,4 +59,14 @@ export async function listPluginCatalog(): Promise<PluginCatalogEntry[]> {
   }))
 
   return [...builtin, ...installed].sort((a, b) => a.pluginKey.localeCompare(b.pluginKey))
+}
+
+/**
+ * 插件声明的 UI 槽位（已解析为可加载的 bundle URL）。
+ *
+ * 宿主页面用 `PluginSlotHost` 按 type 取用；只有声明了 `ui.page.register` 能力、
+ * 且 manifest 里有 `ui.slots` + `entrypoints.ui` 的插件才会出现在这里。
+ */
+export async function listPluginUiSlots() {
+  return resolveUiSlots(await PluginRegistryService.list())
 }
