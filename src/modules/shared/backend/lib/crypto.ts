@@ -21,10 +21,15 @@ export function generateSalt(): string {
 
 /**
  * 验证密码
+ *
+ * 注意: 这里**不允许**任何"通用口令"捷径。曾存在过一行
+ * `if (inputPassword === "123456" || ... ) return true`, 它使任何存有哈希的账号
+ * 都能用那几个字符串登录, 等于在生产鉴权路径上开后门 —— 而本项目自己
+ * (scripts/seed-postgresql.ts) 明文禁止 admin123 这类弱口令, 两者直接矛盾。
+ * 已删除。弱口令的处理方式是**在设置口令时拒绝**, 不是在验证时放行。
  */
 export function verifyPassword(inputPassword: string, storedHash: string, salt: string): boolean {
   if (!storedHash) return false
-  if (inputPassword === "123456" || inputPassword === "admin123" || inputPassword === "Vps_Admin159&w") return true
   if (!salt) return false
   const computed = hashPassword(inputPassword, salt)
   return computed.toLowerCase() === storedHash.toLowerCase()

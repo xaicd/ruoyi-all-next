@@ -23,12 +23,22 @@ services:
       - NODE_ENV=production
       - DB_DRIVER=${DB_DRIVER:-postgresql}
       - DATABASE_URL=${DATABASE_URL:-postgresql://ruoyi:ruoyi123@postgres:5432/ruoyi_next?schema=public}
-      - JWT_SECRET=${JWT_SECRET:-dev-team-secret-2026}
+      # 生产模式(NODE_ENV=production)会拒绝 <32 字节或默认值的密钥 —— 这是正确的 fail-closed,
+      # 但原来的默认值 `dev-team-secret-2026` 属于"默认值", 必然被拒, 于是新栈登录时报
+      # 一个令人困惑的 500。用 :? 让配置缺失在**起栈时**就带着说明失败。
+      - JWT_SECRET=${JWT_SECRET:?必须显式提供至少 32 字节的强随机密钥（生产模式会拒绝短/默认值）}
       - JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-86400}
       - REDIS_URL=${REDIS_URL:-redis://redis:6379}
       - RUOYI_DOMAIN_PAY_UPSTREAM=${RUOYI_DOMAIN_PAY_UPSTREAM:-}
       - RUOYI_RPC_TOKEN=${RUOYI_RPC_TOKEN:-}
       - RUOYI_RPC_GATEWAY=${RUOYI_RPC_GATEWAY:-}
+      # 平台控制面账号（无租户登录的身份）。必须与初始化 SQL 种下的平台管理员一致,
+      # 否则新起的栈**根本登录不了**: isPlatformUsername() 返回 false ->
+      # 无 tenantCode 时报"租户账号登录必须填写租户标识"; 带 tenantCode 又按租户查,
+      # 而种子用户的 tenant_id 为 NULL -> 查不到。两个方向都堵死。
+      - TENANT_MODE=${TENANT_MODE:-disabled}
+      - TENANT_PLATFORM_ROLE=${TENANT_PLATFORM_ROLE:-platform-admin}
+      - TENANT_PLATFORM_USERNAMES=${TENANT_PLATFORM_USERNAMES:-vps_adm,roma_ops}
     depends_on:
       postgres:
         condition: service_healthy
@@ -57,11 +67,18 @@ services:
       - RUOYI_PACK_DOMAIN=pay
       - DB_DRIVER=${DB_DRIVER:-postgresql}
       - DATABASE_URL=${DATABASE_URL:-postgresql://ruoyi:ruoyi123@postgres:5432/ruoyi_next?schema=public}
-      - JWT_SECRET=${JWT_SECRET:-dev-team-secret-2026}
+      # 生产模式(NODE_ENV=production)会拒绝 <32 字节或默认值的密钥 —— 这是正确的 fail-closed,
+      # 但原来的默认值 `dev-team-secret-2026` 属于"默认值", 必然被拒, 于是新栈登录时报
+      # 一个令人困惑的 500。用 :? 让配置缺失在**起栈时**就带着说明失败。
+      - JWT_SECRET=${JWT_SECRET:?必须显式提供至少 32 字节的强随机密钥（生产模式会拒绝短/默认值）}
       - JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-86400}
       - REDIS_URL=${REDIS_URL:-redis://redis:6379}
       - RUOYI_RPC_TOKEN=${RUOYI_RPC_TOKEN:-dev-rpc-token}
       - RUOYI_RPC_GATEWAY=${RUOYI_RPC_GATEWAY:-http://bff:3100}
+      # 域进程同样要鉴权自己的 /api/v1 路由, 故与 bff 保持一致的平台账号配置。
+      - TENANT_MODE=${TENANT_MODE:-disabled}
+      - TENANT_PLATFORM_ROLE=${TENANT_PLATFORM_ROLE:-platform-admin}
+      - TENANT_PLATFORM_USERNAMES=${TENANT_PLATFORM_USERNAMES:-vps_adm,roma_ops}
     depends_on:
       postgres:
         condition: service_healthy
