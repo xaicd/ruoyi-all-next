@@ -6,6 +6,8 @@ const routesRoot = path.join(root, "src", "app", "api", "v1", "admin")
 const outputPath = path.join(root, "docs", "architecture", "artifacts", "admin-route-policy-baseline.json")
 const HTTP_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE"]
 
+const { resolveRouteSource } = require("./lib/route-source.cjs")
+
 function walk(dir, files = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const target = path.join(dir, entry.name)
@@ -28,7 +30,7 @@ function protectionForMethod(source, method) {
 
 function collect() {
   return walk(routesRoot).map((file) => {
-    const source = fs.readFileSync(file, "utf8")
+    const source = resolveRouteSource(file)
     const relative = path.relative(routesRoot, file).replace(/\\/g, "/").replace(/\/route\.ts$/, "")
     const operations = HTTP_METHODS
       .map((method) => ({ method, protection: protectionForMethod(source, method) }))

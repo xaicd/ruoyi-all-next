@@ -1,31 +1,3 @@
-import { NextResponse } from "next/server"
-import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
-import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { PayChannelService } from "@/modules/pay/backend/services/pay-channel.service"
-
-type RouteContext = { params: Promise<{ id: string }> }
-
-export const GET = withAdminRoute(async (_request, _auth, context: RouteContext) => {
-  try {
-    const { id } = await context.params
-    const data = await PayChannelService.get(id)
-    if (!data) return NextResponse.json({ success: false, error: "不存在" }, { status: 404 })
-    return NextResponse.json({ success: true, data })
-  } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }
-}, { permission: PERMISSIONS.PAY_CHANNEL_VIEW })
-
-export const PUT = withAdminRoute(async (request, _auth, context: RouteContext) => {
-  try {
-    const { id } = await context.params
-    const data = await PayChannelService.update({ ...await request.json(), id })
-    return NextResponse.json({ success: true, data })
-  } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }
-}, { permission: PERMISSIONS.PAY_CHANNEL_UPDATE })
-
-export const DELETE = withAdminRoute(async (_request, _auth, context: RouteContext) => {
-  try {
-    const { id } = await context.params
-    const data = await PayChannelService.delete(id)
-    return NextResponse.json({ success: true, data })
-  } catch (error: any) { return NextResponse.json({ success: false, error: error?.message }, { status: 400 }) }
-}, { permission: PERMISSIONS.PAY_CHANNEL_DELETE })
+// 路由逻辑在域内: src/modules/pay/routes/admin/pay-channel/[id]/route.ts
+// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
+export * from "@/modules/pay/routes/admin/pay-channel/[id]/route"

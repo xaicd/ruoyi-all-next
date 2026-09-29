@@ -3,6 +3,7 @@ const path = require("path")
 
 const ROOT = path.resolve(__dirname, "..")
 const catalogPath = path.join(ROOT, "src", "modules", "shared", "backend", "constants", "microservice-governance.json")
+const { resolveRouteSource } = require("./lib/route-source.cjs")
 const catalog = JSON.parse(fs.readFileSync(catalogPath, "utf8"))
 
 function fail(message) {
@@ -180,13 +181,13 @@ if (reportSqlTest.includes("DataSourceConfigRepository")) fail("report custom-sq
 if (!reportSqlTest.includes("infraPlatformFacade")) fail("report custom-sql test must assert infraPlatformFacade tenant scope")
 
 const payOrdersPath = path.join(ROOT, "src", "app", "api", "v1", "admin", "pay", "orders", "route.ts")
-const payOrders = fs.readFileSync(payOrdersPath, "utf8")
+const payOrders = resolveRouteSource(payOrdersPath)
 if (!payOrders.includes("PAY_ACTION_SCHEMAS") || !payOrders.includes("parseActionQuery")) {
   fail("pay orders route must parse query with PAY_ACTION_SCHEMAS via parseActionQuery")
 }
 
 const payRefundsPath = path.join(ROOT, "src", "app", "api", "v1", "admin", "pay", "refunds", "route.ts")
-const payRefunds = fs.readFileSync(payRefundsPath, "utf8")
+const payRefunds = resolveRouteSource(payRefundsPath)
 if (!payRefunds.includes("PAY_ACTION_SCHEMAS") || !payRefunds.includes("parseActionQuery")) {
   fail("pay refunds route must parse query with PAY_ACTION_SCHEMAS via parseActionQuery")
 }
