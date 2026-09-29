@@ -32,6 +32,11 @@ RUN rm -rf node_modules/@ruoyi node_modules/.pnpm/node_modules/@ruoyi
 FROM node:24-alpine AS packer
 WORKDIR /app
 ARG RUOYI_PACK_DOMAIN
+# 【未验证项·迁移到 pnpm 后的已知风险】与 Dockerfile 同理:
+# pnpm 的 node_modules 大量使用符号链接, BuildKit 跨阶段 COPY 解析这类链接会报
+# "evalSymlinksInScope: too many links"(npm 阶段已实测过该报错)。
+# 若在此处失败, 标准解法: `pnpm deploy --prod` 产出自包含目录, 或在 .npmrc 设 node-linker=hoisted。
+# 本条未实测(镜像构建卡在更早的 apk 阶段, 属环境网络问题), 故标注而非声称通过。
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN node scripts/pack-domain.cjs ${RUOYI_PACK_DOMAIN} --materialize
