@@ -1,3 +1,32 @@
-// 路由逻辑在域内: src/modules/aigw/routes/admin/carriers/route.ts
-// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
-export * from "@/modules/aigw/routes/admin/carriers/route"
+import { NextResponse } from "next/server"
+import { aigwCarrierRepository } from "@/modules/aigw/backend/repositories/aigw-carrier.repository"
+
+export async function GET(request: Request) {
+  const url = new URL(request.url)
+  const page = Number(url.searchParams.get("page") || "1")
+  const pageSize = Number(url.searchParams.get("pageSize") || "20")
+
+  const result = await aigwCarrierRepository.page(page, pageSize)
+  return NextResponse.json({
+    code: 0,
+    msg: "success",
+    data: result,
+  })
+}
+
+export async function POST(request: Request) {
+  const body = await request.json()
+  const result = await aigwCarrierRepository.create({
+    carrierCode: body.carrierCode,
+    carrierName: body.carrierName,
+    province: body.province,
+    revenueShareRatio: body.revenueShareRatio,
+    contactName: body.contactName,
+    contactPhone: body.contactPhone,
+  })
+  return NextResponse.json({
+    code: 0,
+    msg: "success",
+    data: result,
+  })
+}

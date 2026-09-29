@@ -1,3 +1,27 @@
-// 路由逻辑在域内: src/modules/mes/routes/admin/mes-md-product-sip/route.ts
-// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
-export * from "@/modules/mes/routes/admin/mes-md-product-sip/route"
+import { NextResponse } from "next/server"
+import { MesMdProductSipService } from "@/modules/mes/backend/services/mes-md-product-sip.service"
+
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const input = {
+      page: Number(searchParams.get("page") || 1),
+      pageSize: Number(searchParams.get("pageSize") || 20),
+      keyword: searchParams.get("keyword") || undefined,
+    }
+    const data = await MesMdProductSipService.page(input)
+    return NextResponse.json({ success: true, data })
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error?.message || "查询失败" }, { status: 400 })
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json()
+    const data = await MesMdProductSipService.create(body)
+    return NextResponse.json({ success: true, data }, { status: 201 })
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error?.message || "创建失败" }, { status: 400 })
+  }
+}

@@ -1,3 +1,11 @@
-// 路由逻辑在域内: src/modules/infra/routes/admin/api-error-logs/route.ts
-// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
-export * from "@/modules/infra/routes/admin/api-error-logs/route"
+import { NextResponse } from "next/server"
+import { ApiErrorLogService } from "@/modules/infra/backend/services/api-error-log.service"
+import { INFRA_ACTION_SCHEMAS } from "@/modules/infra/contract/actions"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+import { parseActionQuery } from "@/modules/shared/backend/http/parse-action-input"
+
+export const GET = withAdminRoute(async (request) => {
+  const input = parseActionQuery(INFRA_ACTION_SCHEMAS["infra.pageApiErrorLogs"], request)
+  return NextResponse.json({ success: true, data: await ApiErrorLogService.page(input) })
+}, { permission: PERMISSIONS.INFRA_API_ERROR_LOG_QUERY })

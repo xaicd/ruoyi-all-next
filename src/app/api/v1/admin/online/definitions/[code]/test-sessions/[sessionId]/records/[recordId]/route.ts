@@ -1,3 +1,19 @@
-// 路由逻辑在域内: src/modules/online/routes/admin/definitions/[code]/test-sessions/[sessionId]/records/[recordId]/route.ts
-// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
-export * from "@/modules/online/routes/admin/definitions/[code]/test-sessions/[sessionId]/records/[recordId]/route"
+import { NextResponse } from "next/server"
+import { OnlineDefinitionService } from "@/modules/online/backend/services"
+import { updateOnlineRuntimeRecordSchema } from "@/modules/online/backend/validators"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+
+type RouteContext = { params: Promise<{ code: string; sessionId: string; recordId: string }> }
+
+export const PUT = withAdminRoute(async (request, auth, context: RouteContext) => {
+  const { code, sessionId, recordId } = await context.params
+  const input = updateOnlineRuntimeRecordSchema.parse(await request.json())
+  return NextResponse.json({ success: true, data: await OnlineDefinitionService.updateTestRecord(auth, code, sessionId, recordId, input) })
+}, { permission: PERMISSIONS.INFRA_ONLINE_DEFINITION_TEST })
+
+export const DELETE = withAdminRoute(async (_request, auth, context: RouteContext) => {
+  const { code, sessionId, recordId } = await context.params
+  await OnlineDefinitionService.deleteTestRecord(auth, code, sessionId, recordId)
+  return NextResponse.json({ success: true })
+}, { permission: PERMISSIONS.INFRA_ONLINE_DEFINITION_TEST })

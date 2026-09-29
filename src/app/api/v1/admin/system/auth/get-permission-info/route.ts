@@ -1,3 +1,11 @@
-// 路由逻辑在域内: src/modules/system/routes/admin/auth/get-permission-info/route.ts
-// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
-export * from "@/modules/system/routes/admin/auth/get-permission-info/route"
+import { NextResponse } from "next/server"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+import { parseActionBody } from "@/modules/shared/backend/http/parse-action-input"
+import { SYSTEM_ACTION_SCHEMAS } from "@/modules/system/contract/actions"
+import { SystemAuthService } from "@/modules/system/backend/services/auth.service"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+
+export const GET = withAdminRoute(async (_request, auth) => {
+  const data = await SystemAuthService.getPermissionInfoByUser(parseActionBody(SYSTEM_ACTION_SCHEMAS["system.getPermissionInfoByUser"], { userId: auth.userId }))
+  return NextResponse.json({ success: true, data })
+}, { permission: PERMISSIONS.SYSTEM_USER_VIEW })

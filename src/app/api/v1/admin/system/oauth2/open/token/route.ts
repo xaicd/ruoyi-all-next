@@ -1,3 +1,10 @@
-// 路由逻辑在域内: src/modules/system/routes/admin/oauth2/open/token/route.ts
-// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
-export * from "@/modules/system/routes/admin/oauth2/open/token/route"
+import { NextResponse } from "next/server"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+import { parseActionBody } from "@/modules/shared/backend/http/parse-action-input"
+import { SYSTEM_ACTION_SCHEMAS } from "@/modules/system/contract/actions"
+import { SystemOauth2Service } from "@/modules/system/backend/services/oauth2.service"
+
+export const POST = withAdminRoute(async (request) => {
+  const data = await SystemOauth2Service.openToken(parseActionBody(SYSTEM_ACTION_SCHEMAS["system.openOauth2Token"], await request.json()))
+  return NextResponse.json({ success: true, data }, { headers: { Deprecation: "true" } })
+}, { platformOnly: true })

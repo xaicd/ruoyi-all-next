@@ -1,3 +1,16 @@
-// 路由逻辑在域内: src/modules/member/routes/app/auth/login/route.ts
-// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
-export * from "@/modules/member/routes/app/auth/login/route"
+import { NextResponse } from "next/server"
+import { MemberAuthService } from "@/modules/member/backend/services/member-auth.service"
+import { memberLoginSchema } from "@/modules/member/backend/validators/member-auth.validators"
+import { handleApiError } from "@/modules/shared/backend/http/api-error"
+
+/** C 端会员登录 POST /api/v1/app/member/auth/login → { token, expiresIn, member } */
+export async function POST(request: Request) {
+  try {
+    const body = await request.json().catch(() => ({}))
+    const input = memberLoginSchema.parse(body)
+    const result = await MemberAuthService.login(input)
+    return NextResponse.json({ success: true, data: result })
+  } catch (error) {
+    return handleApiError(error, { request })
+  }
+}

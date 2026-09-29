@@ -1,3 +1,13 @@
-// 路由逻辑在域内: src/modules/online/routes/admin/definitions/[code]/draft/route.ts
-// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
-export * from "@/modules/online/routes/admin/definitions/[code]/draft/route"
+import { NextResponse } from "next/server"
+import { OnlineDefinitionService } from "@/modules/online/backend/services"
+import { updateOnlineRevisionSchema } from "@/modules/online/backend/validators"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+
+type RouteContext = { params: Promise<{ code: string }> }
+
+export const PUT = withAdminRoute(async (request, auth, context: RouteContext) => {
+  const { code } = await context.params
+  const input = updateOnlineRevisionSchema.parse(await request.json())
+  return NextResponse.json({ success: true, data: await OnlineDefinitionService.updateDraft(auth, code, input) })
+}, { permission: PERMISSIONS.INFRA_ONLINE_DEFINITION_UPDATE })

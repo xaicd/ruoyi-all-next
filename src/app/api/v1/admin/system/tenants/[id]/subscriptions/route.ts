@@ -1,3 +1,13 @@
-// 路由逻辑在域内: src/modules/system/routes/admin/tenants/[id]/subscriptions/route.ts
-// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
-export * from "@/modules/system/routes/admin/tenants/[id]/subscriptions/route"
+import { NextResponse } from "next/server"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+import { parseActionBody } from "@/modules/shared/backend/http/parse-action-input"
+import { SYSTEM_ACTION_SCHEMAS } from "@/modules/system/contract/actions"
+import { SystemTenantService } from "@/modules/system/backend/services/tenant.service"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+
+type RouteContext = { params: Promise<{ id: string }> }
+
+export const GET = withAdminRoute(async (_request, _auth, context: RouteContext) => {
+  const { id } = await context.params
+  return NextResponse.json({ success: true, data: await SystemTenantService.getTenantSubscriptions(parseActionBody(SYSTEM_ACTION_SCHEMAS["system.getTenantSubscriptions"], { id })) })
+}, { permission: PERMISSIONS.SYSTEM_TENANT_VIEW, platformOnly: true })

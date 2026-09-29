@@ -1,3 +1,23 @@
-// 路由逻辑在域内: src/modules/erp/routes/admin/products/route.ts
-// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
-export * from "@/modules/erp/routes/admin/products/route"
+import { NextResponse } from "next/server"
+import { ProductsService } from "@/modules/erp/backend/services/products.service"
+import { ERP_ACTION_SCHEMAS } from "@/modules/erp/contract/actions"
+import { parseActionQuery } from "@/modules/shared/backend/http/parse-action-input"
+
+export async function GET(request: Request) {
+  try {
+    const data = await ProductsService.page(parseActionQuery(ERP_ACTION_SCHEMAS["erp.listProducts"], request))
+    return NextResponse.json({ success: true, data })
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error?.message || "查询失败" }, { status: 400 })
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json()
+    const data = await ProductsService.create(body)
+    return NextResponse.json({ success: true, data }, { status: 201 })
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error?.message || "创建失败" }, { status: 400 })
+  }
+}

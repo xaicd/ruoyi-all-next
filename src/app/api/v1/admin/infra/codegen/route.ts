@@ -1,3 +1,18 @@
-// 路由逻辑在域内: src/modules/infra/routes/admin/codegen/route.ts
-// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
-export * from "@/modules/infra/routes/admin/codegen/route"
+import { NextResponse } from "next/server"
+import { CodegenTableService } from "@/modules/infra/backend/services/codegen-table.service"
+import { INFRA_ACTION_SCHEMAS } from "@/modules/infra/contract/actions"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+import { parseActionQuery } from "@/modules/shared/backend/http/parse-action-input"
+
+export const GET = withAdminRoute(async (request, auth) => {
+  const input = parseActionQuery(INFRA_ACTION_SCHEMAS["infra.listCodegenTables"], request)
+  const data = await CodegenTableService.listCodegenTables({ ...input, tenantId: input.tenantId ?? auth.tenantId })
+  return NextResponse.json({ success: true, data })
+}, { permission: PERMISSIONS.INFRA_CODEGEN_QUERY })
+
+export const DELETE = withAdminRoute(async (request, auth) => {
+  const input = parseActionQuery(INFRA_ACTION_SCHEMAS["infra.deleteCodegenTables"], request)
+  const data = await CodegenTableService.deleteCodegenTables({ ...input, tenantId: input.tenantId ?? auth.tenantId })
+  return NextResponse.json({ success: true, data })
+}, { permission: PERMISSIONS.INFRA_CODEGEN_DELETE })

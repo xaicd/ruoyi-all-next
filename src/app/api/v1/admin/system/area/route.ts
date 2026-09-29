@@ -1,3 +1,13 @@
-// 路由逻辑在域内: src/modules/system/routes/admin/area/route.ts
-// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
-export * from "@/modules/system/routes/admin/area/route"
+import { NextResponse } from "next/server"
+import { parseActionBody, parseActionQuery } from "@/modules/shared/backend/http/parse-action-input"
+import { SYSTEM_ACTION_SCHEMAS } from "@/modules/system/contract/actions"
+import { AreaService } from "@/modules/system/backend/services/area.service"
+
+export async function GET(request: Request) {
+  return NextResponse.json({ success: true, data: await AreaService.page(parseActionQuery(SYSTEM_ACTION_SCHEMAS["system.pageAreas"], request)) })
+}
+
+export async function POST(request: Request) {
+  const data = await AreaService.createArea(parseActionBody(SYSTEM_ACTION_SCHEMAS["system.createArea"], await request.json()))
+  return NextResponse.json({ success: true, data }, { status: 201 })
+}

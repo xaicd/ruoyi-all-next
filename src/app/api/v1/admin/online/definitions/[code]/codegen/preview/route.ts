@@ -1,3 +1,13 @@
-// 路由逻辑在域内: src/modules/online/routes/admin/definitions/[code]/codegen/preview/route.ts
-// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
-export * from "@/modules/online/routes/admin/definitions/[code]/codegen/preview/route"
+import { NextResponse } from "next/server"
+import { OnlineDefinitionService } from "@/modules/online/backend/services"
+import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
+import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+
+type RouteContext = { params: Promise<{ code: string }> }
+
+/** Preview shared RuoYi CRUD output from the tenant-scoped immutable Published Release. */
+export const POST = withAdminRoute(async (_request, auth, context: RouteContext) => {
+  const { code } = await context.params
+  const result = await OnlineDefinitionService.previewGeneratedCode(auth, code)
+  return NextResponse.json({ success: true, data: { releaseId: result.releaseId, schemaRevision: result.schemaRevision, files: result.files.map(({ path, type, content }) => ({ path, type, content })) } })
+}, { permission: PERMISSIONS.INFRA_ONLINE_DEFINITION_GENERATE })

@@ -1,3 +1,9 @@
-// 路由逻辑在域内: src/modules/member/routes/app/auth/logout/route.ts
-// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
-export * from "@/modules/member/routes/app/auth/logout/route"
+import { NextResponse } from "next/server"
+import { MemberAuthService } from "@/modules/member/backend/services/member-auth.service"
+import { withAppRoute } from "@/modules/shared/backend/http/app-route"
+
+/** C 端会员登出 POST /api/v1/app/member/auth/logout（需登录） */
+export const POST = withAppRoute(async (_request, auth) => {
+  const result = await MemberAuthService.logout(auth.memberId ?? auth.userId)
+  return NextResponse.json({ success: true, data: result })
+})
