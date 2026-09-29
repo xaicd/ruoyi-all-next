@@ -1,6 +1,6 @@
 -- ==============================================================================
 -- ruoyi-all-next 第一版权威全量初始化 SQL (V1.0.0 PostgreSQL)
--- 生成时间: 2026-09-29T04:19:15.193Z
+-- 生成时间: 2026-09-29T06:20:34.936Z
 -- 包含: 全 15 域完整 DDL + 工整 4 字符系统菜单 + 平台超管 + 完整业务种子数据
 -- ==============================================================================
 
@@ -8,313 +8,7 @@
 CREATE SCHEMA IF NOT EXISTS "public";
 
 -- CreateTable
-CREATE TABLE "system_user" (
-    "id" TEXT NOT NULL,
-    "username" VARCHAR(30) NOT NULL,
-    "nickname" VARCHAR(30) NOT NULL,
-    "password" VARCHAR(100) NOT NULL,
-    "salt" VARCHAR(100) NOT NULL,
-    "phone" VARCHAR(20),
-    "email" VARCHAR(50),
-    "avatar" VARCHAR(500),
-    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
-    "dept_id" TEXT,
-    "remark" VARCHAR(500),
-    "login_ip" VARCHAR(50),
-    "login_date" TIMESTAMP(3),
-    "tenant_id" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "system_user_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "system_role" (
-    "id" TEXT NOT NULL,
-    "name" VARCHAR(30) NOT NULL,
-    "code" VARCHAR(100) NOT NULL,
-    "sort" INTEGER NOT NULL DEFAULT 0,
-    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
-    "remark" VARCHAR(500),
-    "data_scope" VARCHAR(20) NOT NULL DEFAULT 'ALL',
-    "tenant_id" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "system_role_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "system_user_role" (
-    "id" TEXT NOT NULL,
-    "user_id" TEXT NOT NULL,
-    "role_id" TEXT NOT NULL,
-
-    CONSTRAINT "system_user_role_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "system_menu" (
-    "id" TEXT NOT NULL,
-    "name" VARCHAR(50) NOT NULL,
-    "permission" VARCHAR(100),
-    "type" VARCHAR(10) NOT NULL,
-    "parent_id" TEXT,
-    "path" VARCHAR(200),
-    "component" VARCHAR(200),
-    "icon" VARCHAR(100),
-    "sort" INTEGER NOT NULL DEFAULT 0,
-    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
-    "visible" BOOLEAN NOT NULL DEFAULT true,
-    "keep_alive" BOOLEAN NOT NULL DEFAULT true,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "system_menu_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "system_role_menu" (
-    "id" TEXT NOT NULL,
-    "role_id" TEXT NOT NULL,
-    "menu_id" TEXT NOT NULL,
-
-    CONSTRAINT "system_role_menu_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "system_dept" (
-    "id" TEXT NOT NULL,
-    "name" VARCHAR(50) NOT NULL,
-    "parent_id" TEXT,
-    "sort" INTEGER NOT NULL DEFAULT 0,
-    "leader_id" TEXT,
-    "phone" VARCHAR(20),
-    "email" VARCHAR(50),
-    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
-    "tenant_id" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "system_dept_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "system_post" (
-    "id" TEXT NOT NULL,
-    "name" VARCHAR(50) NOT NULL,
-    "code" VARCHAR(64) NOT NULL,
-    "sort" INTEGER NOT NULL DEFAULT 0,
-    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
-    "remark" VARCHAR(500),
-    "tenant_id" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "system_post_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "system_user_post" (
-    "id" TEXT NOT NULL,
-    "user_id" TEXT NOT NULL,
-    "post_id" TEXT NOT NULL,
-
-    CONSTRAINT "system_user_post_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "system_dict_type" (
-    "id" TEXT NOT NULL,
-    "name" VARCHAR(100) NOT NULL,
-    "type" VARCHAR(100) NOT NULL,
-    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
-    "remark" VARCHAR(500),
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "system_dict_type_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "system_dict_data" (
-    "id" TEXT NOT NULL,
-    "dict_type_id" TEXT NOT NULL,
-    "label" VARCHAR(100) NOT NULL,
-    "value" VARCHAR(100) NOT NULL,
-    "sort" INTEGER NOT NULL DEFAULT 0,
-    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
-    "color_type" VARCHAR(20),
-    "remark" VARCHAR(500),
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "system_dict_data_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "system_tenant" (
-    "id" TEXT NOT NULL,
-    "tenant_code" VARCHAR(32) NOT NULL,
-    "name" VARCHAR(50) NOT NULL,
-    "contact_name" VARCHAR(30),
-    "contact_phone" VARCHAR(20),
-    "domain" VARCHAR(100),
-    "package_id" TEXT,
-    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
-    "effective_at" TIMESTAMP(3) NOT NULL,
-    "expire_time" TIMESTAMP(3),
-    "account_limit" INTEGER,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "system_tenant_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "system_tenant_subscription" (
-    "id" TEXT NOT NULL,
-    "tenant_id" TEXT NOT NULL,
-    "package_id" TEXT NOT NULL,
-    "effective_at" TIMESTAMP(3) NOT NULL,
-    "expire_at" TIMESTAMP(3),
-    "account_limit" INTEGER,
-    "status" VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
-    "change_type" VARCHAR(20) NOT NULL,
-    "remark" VARCHAR(500),
-    "created_by" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "system_tenant_subscription_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "system_tenant_package" (
-    "id" TEXT NOT NULL,
-    "name" VARCHAR(50) NOT NULL,
-    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
-    "account_limit" INTEGER,
-    "remark" VARCHAR(500),
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "system_tenant_package_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "system_tenant_package_menu" (
-    "id" TEXT NOT NULL,
-    "package_id" TEXT NOT NULL,
-    "menu_id" TEXT NOT NULL,
-
-    CONSTRAINT "system_tenant_package_menu_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "system_notice" (
-    "id" TEXT NOT NULL,
-    "title" VARCHAR(100) NOT NULL,
-    "content" TEXT NOT NULL,
-    "type" VARCHAR(10) NOT NULL,
-    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "system_notice_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "system_area" (
-    "id" TEXT NOT NULL,
-    "name" VARCHAR(50) NOT NULL,
-    "parent_id" TEXT,
-    "level" INTEGER NOT NULL DEFAULT 1,
-    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "system_area_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "system_notify_template" (
-    "id" TEXT NOT NULL,
-    "code" VARCHAR(64) NOT NULL,
-    "name" VARCHAR(100) NOT NULL,
-    "channel" VARCHAR(10) NOT NULL,
-    "content" TEXT NOT NULL DEFAULT '',
-    "params" TEXT NOT NULL DEFAULT '[]',
-    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "system_notify_template_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "system_notify_message" (
-    "id" TEXT NOT NULL,
-    "template_code" VARCHAR(64) NOT NULL,
-    "template_name" VARCHAR(100) NOT NULL,
-    "channel" VARCHAR(10) NOT NULL,
-    "receiver" VARCHAR(100) NOT NULL,
-    "content" TEXT NOT NULL DEFAULT '',
-    "read_status" BOOLEAN NOT NULL DEFAULT false,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "system_notify_message_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "system_login_log" (
-    "id" TEXT NOT NULL,
-    "user_id" TEXT,
-    "username" VARCHAR(50) NOT NULL,
-    "user_ip" VARCHAR(50) NOT NULL,
-    "user_agent" VARCHAR(500),
-    "result" VARCHAR(10) NOT NULL,
-    "remark" VARCHAR(500),
-    "tenant_id" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "system_login_log_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "system_operate_log" (
-    "id" TEXT NOT NULL,
-    "user_id" TEXT,
-    "module" VARCHAR(50) NOT NULL,
-    "name" VARCHAR(100) NOT NULL,
-    "type" VARCHAR(20) NOT NULL,
-    "request_method" VARCHAR(10) NOT NULL,
-    "request_url" VARCHAR(500) NOT NULL,
-    "content" TEXT,
-    "result_code" INTEGER NOT NULL DEFAULT 0,
-    "duration" INTEGER NOT NULL DEFAULT 0,
-    "user_ip" VARCHAR(50),
-    "tenant_id" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "system_operate_log_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "admin" (
+CREATE TABLE "public"."admin" (
     "id" TEXT NOT NULL,
     "username" VARCHAR(100) NOT NULL,
     "phone" VARCHAR(20),
@@ -328,41 +22,227 @@ CREATE TABLE "admin" (
 );
 
 -- CreateTable
-CREATE TABLE "setting" (
-    "key" VARCHAR(200) NOT NULL,
-    "value" JSONB NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "setting_pkey" PRIMARY KEY ("key")
-);
-
--- CreateTable
-CREATE TABLE "member_user" (
+CREATE TABLE "public"."ai_access_token" (
     "id" TEXT NOT NULL,
-    "account" VARCHAR(64) NOT NULL,
-    "email" VARCHAR(120),
-    "password_hash" VARCHAR(200) NOT NULL,
-    "password_salt" VARCHAR(100) NOT NULL,
-    "nickname" VARCHAR(60) NOT NULL,
-    "avatar_url" VARCHAR(500),
-    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
-    "member_level" VARCHAR(30) NOT NULL DEFAULT 'normal',
-    "extra_fields" JSONB,
-    "tenant_id" VARCHAR(64) NOT NULL,
-    "created_by" VARCHAR(64) NOT NULL DEFAULT 'system',
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_by" VARCHAR(64) NOT NULL DEFAULT 'system',
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" INTEGER NOT NULL DEFAULT 0,
-    "deleted_at" TIMESTAMP(3),
-    "remark" VARCHAR(500),
+    "name" VARCHAR(100) NOT NULL,
+    "key" VARCHAR(100) NOT NULL,
+    "status" VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+    "remain_quota" BIGINT NOT NULL DEFAULT 500000,
+    "unlimited" BOOLEAN NOT NULL DEFAULT false,
+    "models" JSONB NOT NULL DEFAULT '[]',
+    "ip_allowlist" JSONB NOT NULL DEFAULT '[]',
+    "group" VARCHAR(50) NOT NULL DEFAULT 'default',
+    "expires_at" TIMESTAMPTZ(6),
+    "tenant_id" TEXT,
+    "created_by" VARCHAR(64),
+    "updated_by" VARCHAR(64),
+    "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
 
-    CONSTRAINT "member_user_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "ai_access_token_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "approval_task" (
+CREATE TABLE "public"."ai_channel" (
+    "id" TEXT NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
+    "provider" VARCHAR(50) NOT NULL,
+    "base_url" VARCHAR(500),
+    "api_key" VARCHAR(500),
+    "models" JSONB NOT NULL DEFAULT '[]',
+    "model_map" JSONB NOT NULL DEFAULT '{}',
+    "weight" INTEGER NOT NULL DEFAULT 100,
+    "priority" INTEGER NOT NULL DEFAULT 1,
+    "status" VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+    "auto_disable" BOOLEAN NOT NULL DEFAULT true,
+    "fail_count" INTEGER NOT NULL DEFAULT 0,
+    "protocol" VARCHAR(20) NOT NULL DEFAULT 'openai',
+    "tenant_id" TEXT,
+    "created_by" VARCHAR(64),
+    "updated_by" VARCHAR(64),
+    "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "ai_channel_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."ai_chat_conversation" (
+    "id" TEXT NOT NULL,
+    "user_id" TEXT NOT NULL,
+    "title" VARCHAR(200) NOT NULL,
+    "model" VARCHAR(100) NOT NULL,
+    "system_prompt" TEXT,
+    "pinned" BOOLEAN NOT NULL DEFAULT false,
+    "tenant_id" TEXT,
+    "created_by" VARCHAR(64),
+    "updated_by" VARCHAR(64),
+    "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "ai_chat_conversation_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."ai_chat_message" (
+    "id" TEXT NOT NULL,
+    "conversation_id" TEXT NOT NULL,
+    "role" VARCHAR(20) NOT NULL,
+    "content" TEXT NOT NULL,
+    "tokens" INTEGER NOT NULL DEFAULT 0,
+    "tenant_id" TEXT,
+    "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "ai_chat_message_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."ai_model" (
+    "id" TEXT NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
+    "model_key" VARCHAR(100) NOT NULL,
+    "provider" VARCHAR(50) NOT NULL,
+    "input_ratio" DOUBLE PRECISION NOT NULL DEFAULT 1.0,
+    "output_ratio" DOUBLE PRECISION NOT NULL DEFAULT 2.0,
+    "status" VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+    "sort" INTEGER NOT NULL DEFAULT 0,
+    "description" VARCHAR(500),
+    "tenant_id" TEXT,
+    "created_by" VARCHAR(64),
+    "updated_by" VARCHAR(64),
+    "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "ai_model_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."ai_usage" (
+    "id" TEXT NOT NULL,
+    "token_id" TEXT,
+    "channel_id" TEXT,
+    "model" VARCHAR(100) NOT NULL,
+    "prompt_tokens" INTEGER NOT NULL DEFAULT 0,
+    "completion_tokens" INTEGER NOT NULL DEFAULT 0,
+    "total_tokens" INTEGER NOT NULL DEFAULT 0,
+    "success" BOOLEAN NOT NULL DEFAULT true,
+    "latency_ms" INTEGER NOT NULL DEFAULT 0,
+    "error" VARCHAR(500),
+    "tenant_id" TEXT,
+    "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "ai_usage_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."aigw_carrier_agent" (
+    "id" VARCHAR(64) NOT NULL,
+    "carrier_code" VARCHAR(64) NOT NULL,
+    "carrier_name" VARCHAR(128) NOT NULL,
+    "province" VARCHAR(64) NOT NULL,
+    "revenue_share_ratio" DECIMAL(5,2) NOT NULL DEFAULT 30.00,
+    "contact_name" VARCHAR(64),
+    "contact_phone" VARCHAR(32),
+    "status" VARCHAR(32) NOT NULL DEFAULT 'ACTIVE',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "aigw_carrier_agent_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."aigw_isv_app" (
+    "id" VARCHAR(64) NOT NULL,
+    "app_code" VARCHAR(64) NOT NULL,
+    "app_name" VARCHAR(100) NOT NULL,
+    "vendor" VARCHAR(100) NOT NULL,
+    "app_type" VARCHAR(30) NOT NULL,
+    "icon" VARCHAR(20) DEFAULT '🤖',
+    "version" VARCHAR(30) DEFAULT 'v1.0.0',
+    "description" TEXT,
+    "default_model" VARCHAR(100) DEFAULT 'deepseek-v3-moma',
+    "revenue_share_ratio" DECIMAL(5,2) DEFAULT 30.00,
+    "active_users" INTEGER DEFAULT 0,
+    "status" VARCHAR(20) DEFAULT 'ACTIVE',
+    "tenant_id" VARCHAR(64) NOT NULL DEFAULT '0',
+    "created_by" VARCHAR(64) DEFAULT '',
+    "updated_by" VARCHAR(64) DEFAULT '',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "aigw_isv_app_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."aigw_mcp_asset" (
+    "id" VARCHAR(64) NOT NULL,
+    "mcp_code" VARCHAR(64) NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
+    "category" VARCHAR(50) NOT NULL,
+    "icon" VARCHAR(20) DEFAULT '⚡',
+    "version" VARCHAR(30) DEFAULT 'v1.0.0',
+    "description" TEXT,
+    "endpoint" VARCHAR(255) NOT NULL,
+    "authorized_count" INTEGER DEFAULT 0,
+    "status" VARCHAR(20) DEFAULT 'ACTIVE',
+    "is_official" BOOLEAN DEFAULT true,
+    "tenant_id" VARCHAR(64) NOT NULL DEFAULT '0',
+    "created_by" VARCHAR(64) DEFAULT '',
+    "updated_by" VARCHAR(64) DEFAULT '',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "aigw_mcp_asset_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."aigw_member_allocation" (
+    "id" VARCHAR(64) NOT NULL,
+    "tenant_id" VARCHAR(64) NOT NULL DEFAULT '0',
+    "enterprise_name" VARCHAR(100) NOT NULL,
+    "department" VARCHAR(100) NOT NULL,
+    "member_name" VARCHAR(50) NOT NULL,
+    "phone" VARCHAR(20) NOT NULL,
+    "monthly_token_cap" BIGINT DEFAULT 10000000,
+    "used_tokens" BIGINT DEFAULT 0,
+    "allocated_beans" INTEGER DEFAULT 10000,
+    "used_beans" INTEGER DEFAULT 0,
+    "authorized_apps" TEXT[] DEFAULT ARRAY[]::TEXT[],
+    "status" VARCHAR(20) DEFAULT 'ACTIVE',
+    "created_by" VARCHAR(64) DEFAULT '',
+    "updated_by" VARCHAR(64) DEFAULT '',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "aigw_member_allocation_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."aigw_tenant_quota_ledger" (
+    "id" VARCHAR(64) NOT NULL,
+    "tenant_id" VARCHAR(64) NOT NULL,
+    "change_type" VARCHAR(64) NOT NULL,
+    "delta_tokens" BIGINT NOT NULL,
+    "balance_after" BIGINT NOT NULL,
+    "model_pattern" VARCHAR(128) DEFAULT '*',
+    "ref_id" VARCHAR(128),
+    "operator_id" VARCHAR(64),
+    "remark" VARCHAR(512),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "aigw_tenant_quota_ledger_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."approval_task" (
     "id" TEXT NOT NULL,
     "biz_type" VARCHAR(100) NOT NULL,
     "title" VARCHAR(500),
@@ -377,7 +257,54 @@ CREATE TABLE "approval_task" (
 );
 
 -- CreateTable
-CREATE TABLE "infra_config" (
+CREATE TABLE "public"."infra_api_access_log" (
+    "id" TEXT NOT NULL,
+    "user_id" TEXT,
+    "application_name" VARCHAR(50) NOT NULL,
+    "request_method" VARCHAR(10) NOT NULL,
+    "request_url" VARCHAR(500) NOT NULL,
+    "request_params" TEXT,
+    "response_body" TEXT,
+    "result_code" INTEGER NOT NULL DEFAULT 0,
+    "duration" INTEGER NOT NULL DEFAULT 0,
+    "user_ip" VARCHAR(50),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "trace_id" VARCHAR(64),
+    "tenant_id" VARCHAR(64),
+    "user_agent" VARCHAR(500),
+    "operation" VARCHAR(200),
+
+    CONSTRAINT "infra_api_access_log_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."infra_api_error_log" (
+    "id" TEXT NOT NULL,
+    "user_id" TEXT,
+    "application_name" VARCHAR(50) NOT NULL,
+    "request_method" VARCHAR(10) NOT NULL,
+    "request_url" VARCHAR(500) NOT NULL,
+    "request_params" TEXT,
+    "exception_name" VARCHAR(200) NOT NULL,
+    "exception_message" TEXT NOT NULL,
+    "exception_stack" TEXT,
+    "status" VARCHAR(20) NOT NULL DEFAULT 'UNPROCESSED',
+    "user_ip" VARCHAR(50),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "trace_id" VARCHAR(64),
+    "tenant_id" VARCHAR(64),
+    "user_agent" VARCHAR(500),
+    "error_code" VARCHAR(64),
+    "root_cause" TEXT,
+    "processed_at" TIMESTAMP(3),
+    "processed_by" TEXT,
+    "process_note" VARCHAR(500),
+
+    CONSTRAINT "infra_api_error_log_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."infra_config" (
     "id" TEXT NOT NULL,
     "category" VARCHAR(50) NOT NULL DEFAULT 'DEFAULT',
     "name" VARCHAR(100) NOT NULL,
@@ -393,7 +320,53 @@ CREATE TABLE "infra_config" (
 );
 
 -- CreateTable
-CREATE TABLE "infra_job" (
+CREATE TABLE "public"."infra_data_source_config" (
+    "id" TEXT NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
+    "driver" VARCHAR(30) NOT NULL,
+    "url" VARCHAR(1024) NOT NULL,
+    "username" VARCHAR(255) NOT NULL,
+    "encrypted_password" VARCHAR(2048) NOT NULL,
+    "remark" VARCHAR(500),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "tenant_id" TEXT,
+
+    CONSTRAINT "infra_data_source_config_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."infra_file" (
+    "id" TEXT NOT NULL,
+    "config_id" TEXT NOT NULL,
+    "name" VARCHAR(200),
+    "path" VARCHAR(500) NOT NULL,
+    "url" VARCHAR(1024) NOT NULL,
+    "type" VARCHAR(100),
+    "size" INTEGER NOT NULL DEFAULT 0,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "infra_file_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."infra_file_config" (
+    "id" TEXT NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
+    "storage" VARCHAR(20) NOT NULL,
+    "config" TEXT NOT NULL,
+    "master" BOOLEAN NOT NULL DEFAULT false,
+    "remark" VARCHAR(500),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "infra_file_config_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."infra_job" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(100) NOT NULL,
     "handler_name" VARCHAR(200) NOT NULL,
@@ -410,7 +383,7 @@ CREATE TABLE "infra_job" (
 );
 
 -- CreateTable
-CREATE TABLE "infra_job_log" (
+CREATE TABLE "public"."infra_job_log" (
     "id" TEXT NOT NULL,
     "job_id" TEXT NOT NULL,
     "handler_name" VARCHAR(200) NOT NULL,
@@ -425,100 +398,17 @@ CREATE TABLE "infra_job_log" (
 );
 
 -- CreateTable
-CREATE TABLE "infra_api_access_log" (
+CREATE TABLE "public"."infra_message_inbox" (
     "id" TEXT NOT NULL,
-    "trace_id" VARCHAR(64),
-    "user_id" TEXT,
-    "tenant_id" VARCHAR(64),
-    "application_name" VARCHAR(50) NOT NULL,
-    "request_method" VARCHAR(10) NOT NULL,
-    "request_url" VARCHAR(500) NOT NULL,
-    "request_params" TEXT,
-    "response_body" TEXT,
-    "result_code" INTEGER NOT NULL DEFAULT 0,
-    "duration" INTEGER NOT NULL DEFAULT 0,
-    "user_ip" VARCHAR(50),
-    "user_agent" VARCHAR(500),
-    "operation" VARCHAR(200),
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "consumer" VARCHAR(120) NOT NULL,
+    "event_id" VARCHAR(64) NOT NULL,
+    "processed_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "infra_api_access_log_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "infra_message_inbox_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "infra_api_error_log" (
-    "id" TEXT NOT NULL,
-    "trace_id" VARCHAR(64),
-    "user_id" TEXT,
-    "tenant_id" VARCHAR(64),
-    "application_name" VARCHAR(50) NOT NULL,
-    "request_method" VARCHAR(10) NOT NULL,
-    "request_url" VARCHAR(500) NOT NULL,
-    "request_params" TEXT,
-    "exception_name" VARCHAR(200) NOT NULL,
-    "exception_message" TEXT NOT NULL,
-    "exception_stack" TEXT,
-    "error_code" VARCHAR(64),
-    "root_cause" TEXT,
-    "status" VARCHAR(20) NOT NULL DEFAULT 'UNPROCESSED',
-    "processed_at" TIMESTAMP(3),
-    "processed_by" TEXT,
-    "process_note" VARCHAR(500),
-    "user_ip" VARCHAR(50),
-    "user_agent" VARCHAR(500),
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "infra_api_error_log_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "infra_file_config" (
-    "id" TEXT NOT NULL,
-    "name" VARCHAR(100) NOT NULL,
-    "storage" VARCHAR(20) NOT NULL,
-    "config" TEXT NOT NULL,
-    "master" BOOLEAN NOT NULL DEFAULT false,
-    "remark" VARCHAR(500),
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "infra_file_config_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "infra_data_source_config" (
-    "id" TEXT NOT NULL,
-    "tenant_id" TEXT,
-    "name" VARCHAR(100) NOT NULL,
-    "driver" VARCHAR(30) NOT NULL,
-    "url" VARCHAR(1024) NOT NULL,
-    "username" VARCHAR(255) NOT NULL,
-    "encrypted_password" VARCHAR(2048) NOT NULL,
-    "remark" VARCHAR(500),
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "infra_data_source_config_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "infra_file" (
-    "id" TEXT NOT NULL,
-    "config_id" TEXT NOT NULL,
-    "name" VARCHAR(200),
-    "path" VARCHAR(500) NOT NULL,
-    "url" VARCHAR(1024) NOT NULL,
-    "type" VARCHAR(100),
-    "size" INTEGER NOT NULL DEFAULT 0,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "infra_file_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "infra_message_outbox" (
+CREATE TABLE "public"."infra_message_outbox" (
     "id" TEXT NOT NULL,
     "event_id" VARCHAR(64) NOT NULL,
     "subject" VARCHAR(200) NOT NULL,
@@ -536,17 +426,47 @@ CREATE TABLE "infra_message_outbox" (
 );
 
 -- CreateTable
-CREATE TABLE "infra_message_inbox" (
+CREATE TABLE "public"."member_user" (
     "id" TEXT NOT NULL,
-    "consumer" VARCHAR(120) NOT NULL,
-    "event_id" VARCHAR(64) NOT NULL,
-    "processed_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "account" VARCHAR(64) NOT NULL,
+    "email" VARCHAR(120),
+    "password_hash" VARCHAR(200) NOT NULL,
+    "password_salt" VARCHAR(100) NOT NULL,
+    "nickname" VARCHAR(60) NOT NULL,
+    "avatar_url" VARCHAR(500),
+    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
+    "member_level" VARCHAR(30) NOT NULL DEFAULT 'normal',
+    "extra_fields" JSONB,
+    "tenant_id" VARCHAR(64) NOT NULL,
+    "created_by" VARCHAR(64) NOT NULL DEFAULT 'system',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_by" VARCHAR(64) NOT NULL DEFAULT 'system',
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" INTEGER NOT NULL DEFAULT 0,
+    "deleted_at" TIMESTAMP(3),
+    "remark" VARCHAR(500),
 
-    CONSTRAINT "infra_message_inbox_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "member_user_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "online_definition" (
+CREATE TABLE "public"."online_action" (
+    "id" TEXT NOT NULL,
+    "revision_id" TEXT NOT NULL,
+    "tenant_id" TEXT NOT NULL,
+    "code" VARCHAR(64) NOT NULL,
+    "action_type" VARCHAR(30) NOT NULL,
+    "handler_key" VARCHAR(100),
+    "config" JSONB NOT NULL DEFAULT '{}',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "online_action_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."online_definition" (
     "id" TEXT NOT NULL,
     "tenant_id" TEXT NOT NULL,
     "code" VARCHAR(64) NOT NULL,
@@ -566,7 +486,125 @@ CREATE TABLE "online_definition" (
 );
 
 -- CreateTable
-CREATE TABLE "online_revision" (
+CREATE TABLE "public"."online_field" (
+    "id" TEXT NOT NULL,
+    "revision_id" TEXT NOT NULL,
+    "tenant_id" TEXT NOT NULL,
+    "code" VARCHAR(64) NOT NULL,
+    "label" VARCHAR(100) NOT NULL,
+    "field_type" VARCHAR(30) NOT NULL,
+    "required" BOOLEAN NOT NULL DEFAULT false,
+    "length" INTEGER,
+    "sort" INTEGER NOT NULL DEFAULT 0,
+    "default_value" TEXT,
+    "config" JSONB NOT NULL DEFAULT '{}',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "online_field_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."online_index" (
+    "id" TEXT NOT NULL,
+    "revision_id" TEXT NOT NULL,
+    "tenant_id" TEXT NOT NULL,
+    "code" VARCHAR(64) NOT NULL,
+    "fields_json" JSONB NOT NULL,
+    "unique" BOOLEAN NOT NULL DEFAULT false,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "online_index_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."online_managed_table" (
+    "id" TEXT NOT NULL,
+    "tenant_id" TEXT NOT NULL,
+    "definition_id" TEXT NOT NULL,
+    "physical_table_name" VARCHAR(64) NOT NULL,
+    "schema_revision" INTEGER NOT NULL DEFAULT 0,
+    "model_fingerprint" VARCHAR(64) NOT NULL,
+    "last_plan_id" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "online_managed_table_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."online_policy" (
+    "id" TEXT NOT NULL,
+    "revision_id" TEXT NOT NULL,
+    "tenant_id" TEXT NOT NULL,
+    "code" VARCHAR(64) NOT NULL,
+    "policy_type" VARCHAR(30) NOT NULL,
+    "subject_config" JSONB NOT NULL DEFAULT '{}',
+    "rule_config" JSONB NOT NULL DEFAULT '{}',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "online_policy_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."online_record" (
+    "id" TEXT NOT NULL,
+    "tenant_id" TEXT NOT NULL,
+    "definition_id" TEXT NOT NULL,
+    "release_id" TEXT NOT NULL,
+    "test_session_id" TEXT NOT NULL,
+    "schema_revision" INTEGER NOT NULL,
+    "data_json" JSONB NOT NULL,
+    "created_by" TEXT NOT NULL,
+    "updated_by" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "online_record_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."online_relation" (
+    "id" TEXT NOT NULL,
+    "revision_id" TEXT NOT NULL,
+    "tenant_id" TEXT NOT NULL,
+    "code" VARCHAR(64) NOT NULL,
+    "relation_type" VARCHAR(30) NOT NULL,
+    "target_definition_code" VARCHAR(64),
+    "config" JSONB NOT NULL DEFAULT '{}',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "target_release_id" TEXT,
+
+    CONSTRAINT "online_relation_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."online_release" (
+    "id" TEXT NOT NULL,
+    "definition_id" TEXT NOT NULL,
+    "revision_id" TEXT NOT NULL,
+    "tenant_id" TEXT NOT NULL,
+    "release_no" INTEGER NOT NULL,
+    "snapshot_json" JSONB NOT NULL,
+    "schema_revision" INTEGER NOT NULL,
+    "checksum" VARCHAR(64) NOT NULL,
+    "released_by" TEXT NOT NULL,
+    "released_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "rollback_of_release_id" TEXT,
+
+    CONSTRAINT "online_release_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."online_revision" (
     "id" TEXT NOT NULL,
     "definition_id" TEXT NOT NULL,
     "tenant_id" TEXT NOT NULL,
@@ -588,156 +626,7 @@ CREATE TABLE "online_revision" (
 );
 
 -- CreateTable
-CREATE TABLE "online_field" (
-    "id" TEXT NOT NULL,
-    "revision_id" TEXT NOT NULL,
-    "tenant_id" TEXT NOT NULL,
-    "code" VARCHAR(64) NOT NULL,
-    "label" VARCHAR(100) NOT NULL,
-    "field_type" VARCHAR(30) NOT NULL,
-    "required" BOOLEAN NOT NULL DEFAULT false,
-    "length" INTEGER,
-    "sort" INTEGER NOT NULL DEFAULT 0,
-    "default_value" TEXT,
-    "config" JSONB NOT NULL DEFAULT '{}',
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "online_field_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "online_index" (
-    "id" TEXT NOT NULL,
-    "revision_id" TEXT NOT NULL,
-    "tenant_id" TEXT NOT NULL,
-    "code" VARCHAR(64) NOT NULL,
-    "fields_json" JSONB NOT NULL,
-    "unique" BOOLEAN NOT NULL DEFAULT false,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "online_index_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "online_relation" (
-    "id" TEXT NOT NULL,
-    "revision_id" TEXT NOT NULL,
-    "tenant_id" TEXT NOT NULL,
-    "code" VARCHAR(64) NOT NULL,
-    "relation_type" VARCHAR(30) NOT NULL,
-    "target_definition_code" VARCHAR(64),
-    "target_release_id" TEXT,
-    "config" JSONB NOT NULL DEFAULT '{}',
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "online_relation_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "online_view" (
-    "id" TEXT NOT NULL,
-    "revision_id" TEXT NOT NULL,
-    "tenant_id" TEXT NOT NULL,
-    "code" VARCHAR(64) NOT NULL,
-    "kind" VARCHAR(30) NOT NULL,
-    "puck_data_json" JSONB,
-    "component_config_json" JSONB NOT NULL DEFAULT '{}',
-    "version" INTEGER NOT NULL DEFAULT 1,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "online_view_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "online_action" (
-    "id" TEXT NOT NULL,
-    "revision_id" TEXT NOT NULL,
-    "tenant_id" TEXT NOT NULL,
-    "code" VARCHAR(64) NOT NULL,
-    "action_type" VARCHAR(30) NOT NULL,
-    "handler_key" VARCHAR(100),
-    "config" JSONB NOT NULL DEFAULT '{}',
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "online_action_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "online_policy" (
-    "id" TEXT NOT NULL,
-    "revision_id" TEXT NOT NULL,
-    "tenant_id" TEXT NOT NULL,
-    "code" VARCHAR(64) NOT NULL,
-    "policy_type" VARCHAR(30) NOT NULL,
-    "subject_config" JSONB NOT NULL DEFAULT '{}',
-    "rule_config" JSONB NOT NULL DEFAULT '{}',
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "online_policy_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "online_workflow_binding" (
-    "id" TEXT NOT NULL,
-    "revision_id" TEXT NOT NULL,
-    "tenant_id" TEXT NOT NULL,
-    "provider" VARCHAR(50) NOT NULL,
-    "process_key" VARCHAR(100) NOT NULL,
-    "status_field" VARCHAR(64) NOT NULL,
-    "config" JSONB NOT NULL DEFAULT '{}',
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "online_workflow_binding_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "online_release" (
-    "id" TEXT NOT NULL,
-    "definition_id" TEXT NOT NULL,
-    "revision_id" TEXT NOT NULL,
-    "tenant_id" TEXT NOT NULL,
-    "release_no" INTEGER NOT NULL,
-    "snapshot_json" JSONB NOT NULL,
-    "schema_revision" INTEGER NOT NULL,
-    "checksum" VARCHAR(64) NOT NULL,
-    "released_by" TEXT NOT NULL,
-    "released_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "rollback_of_release_id" TEXT,
-
-    CONSTRAINT "online_release_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "online_managed_table" (
-    "id" TEXT NOT NULL,
-    "tenant_id" TEXT NOT NULL,
-    "definition_id" TEXT NOT NULL,
-    "physical_table_name" VARCHAR(64) NOT NULL,
-    "schema_revision" INTEGER NOT NULL DEFAULT 0,
-    "model_fingerprint" VARCHAR(64) NOT NULL,
-    "last_plan_id" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "online_managed_table_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "online_schema_change" (
+CREATE TABLE "public"."online_schema_change" (
     "id" TEXT NOT NULL,
     "definition_id" TEXT NOT NULL,
     "revision_id" TEXT NOT NULL,
@@ -757,7 +646,7 @@ CREATE TABLE "online_schema_change" (
 );
 
 -- CreateTable
-CREATE TABLE "online_test_session" (
+CREATE TABLE "public"."online_test_session" (
     "id" TEXT NOT NULL,
     "definition_id" TEXT NOT NULL,
     "revision_id" TEXT NOT NULL,
@@ -774,142 +663,40 @@ CREATE TABLE "online_test_session" (
 );
 
 -- CreateTable
-CREATE TABLE "online_record" (
+CREATE TABLE "public"."online_view" (
     "id" TEXT NOT NULL,
+    "revision_id" TEXT NOT NULL,
     "tenant_id" TEXT NOT NULL,
-    "definition_id" TEXT NOT NULL,
-    "release_id" TEXT NOT NULL,
-    "test_session_id" TEXT NOT NULL,
-    "schema_revision" INTEGER NOT NULL,
-    "data_json" JSONB NOT NULL,
-    "created_by" TEXT NOT NULL,
-    "updated_by" TEXT NOT NULL,
+    "code" VARCHAR(64) NOT NULL,
+    "kind" VARCHAR(30) NOT NULL,
+    "puck_data_json" JSONB,
+    "component_config_json" JSONB NOT NULL DEFAULT '{}',
+    "version" INTEGER NOT NULL DEFAULT 1,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
 
-    CONSTRAINT "online_record_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "online_view_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "ai_channel" (
+CREATE TABLE "public"."online_workflow_binding" (
     "id" TEXT NOT NULL,
-    "name" VARCHAR(100) NOT NULL,
+    "revision_id" TEXT NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "provider" VARCHAR(50) NOT NULL,
-    "base_url" VARCHAR(500),
-    "api_key" VARCHAR(500),
-    "models" JSONB NOT NULL DEFAULT '[]',
-    "model_map" JSONB NOT NULL DEFAULT '{}',
-    "weight" INTEGER NOT NULL DEFAULT 100,
-    "priority" INTEGER NOT NULL DEFAULT 1,
-    "status" VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
-    "auto_disable" BOOLEAN NOT NULL DEFAULT true,
-    "fail_count" INTEGER NOT NULL DEFAULT 0,
-    "protocol" VARCHAR(20) NOT NULL DEFAULT 'openai',
-    "tenant_id" TEXT,
-    "created_by" VARCHAR(64),
-    "updated_by" VARCHAR(64),
+    "process_key" VARCHAR(100) NOT NULL,
+    "status_field" VARCHAR(64) NOT NULL,
+    "config" JSONB NOT NULL DEFAULT '{}',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
 
-    CONSTRAINT "ai_channel_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "online_workflow_binding_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "ai_access_token" (
-    "id" TEXT NOT NULL,
-    "name" VARCHAR(100) NOT NULL,
-    "key" VARCHAR(100) NOT NULL,
-    "status" VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
-    "remain_quota" BIGINT NOT NULL DEFAULT 500000,
-    "unlimited" BOOLEAN NOT NULL DEFAULT false,
-    "models" JSONB NOT NULL DEFAULT '[]',
-    "ip_allowlist" JSONB NOT NULL DEFAULT '[]',
-    "group" VARCHAR(50) NOT NULL DEFAULT 'default',
-    "expires_at" TIMESTAMP(3),
-    "tenant_id" TEXT,
-    "created_by" VARCHAR(64),
-    "updated_by" VARCHAR(64),
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "ai_access_token_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "ai_usage" (
-    "id" TEXT NOT NULL,
-    "token_id" TEXT,
-    "channel_id" TEXT,
-    "model" VARCHAR(100) NOT NULL,
-    "prompt_tokens" INTEGER NOT NULL DEFAULT 0,
-    "completion_tokens" INTEGER NOT NULL DEFAULT 0,
-    "total_tokens" INTEGER NOT NULL DEFAULT 0,
-    "success" BOOLEAN NOT NULL DEFAULT true,
-    "latency_ms" INTEGER NOT NULL DEFAULT 0,
-    "error" VARCHAR(500),
-    "tenant_id" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "ai_usage_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "ai_model" (
-    "id" TEXT NOT NULL,
-    "name" VARCHAR(100) NOT NULL,
-    "model_key" VARCHAR(100) NOT NULL,
-    "provider" VARCHAR(50) NOT NULL,
-    "input_ratio" DOUBLE PRECISION NOT NULL DEFAULT 1.0,
-    "output_ratio" DOUBLE PRECISION NOT NULL DEFAULT 2.0,
-    "status" VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
-    "sort" INTEGER NOT NULL DEFAULT 0,
-    "description" VARCHAR(500),
-    "tenant_id" TEXT,
-    "created_by" VARCHAR(64),
-    "updated_by" VARCHAR(64),
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "ai_model_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "ai_chat_conversation" (
-    "id" TEXT NOT NULL,
-    "user_id" TEXT NOT NULL,
-    "title" VARCHAR(200) NOT NULL,
-    "model" VARCHAR(100) NOT NULL,
-    "system_prompt" TEXT,
-    "pinned" BOOLEAN NOT NULL DEFAULT false,
-    "tenant_id" TEXT,
-    "created_by" VARCHAR(64),
-    "updated_by" VARCHAR(64),
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "ai_chat_conversation_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "ai_chat_message" (
-    "id" TEXT NOT NULL,
-    "conversation_id" TEXT NOT NULL,
-    "role" VARCHAR(20) NOT NULL,
-    "content" TEXT NOT NULL,
-    "tokens" INTEGER NOT NULL DEFAULT 0,
-    "tenant_id" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "ai_chat_message_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "plugin" (
+CREATE TABLE "public"."plugin" (
     "id" TEXT NOT NULL,
     "plugin_key" VARCHAR(128) NOT NULL,
     "package_name" VARCHAR(200) NOT NULL,
@@ -929,7 +716,20 @@ CREATE TABLE "plugin" (
 );
 
 -- CreateTable
-CREATE TABLE "plugin_state" (
+CREATE TABLE "public"."plugin_config" (
+    "id" TEXT NOT NULL,
+    "plugin_id" TEXT NOT NULL,
+    "tenant_id" VARCHAR(64) NOT NULL,
+    "config_json" JSONB NOT NULL,
+    "last_error" VARCHAR(1000),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "plugin_config_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."plugin_state" (
     "id" TEXT NOT NULL,
     "plugin_id" TEXT NOT NULL,
     "scope_kind" VARCHAR(30) NOT NULL,
@@ -944,494 +744,1200 @@ CREATE TABLE "plugin_state" (
 );
 
 -- CreateTable
-CREATE TABLE "plugin_config" (
-    "id" TEXT NOT NULL,
-    "plugin_id" TEXT NOT NULL,
-    "tenant_id" VARCHAR(64) NOT NULL,
-    "config_json" JSONB NOT NULL,
-    "last_error" VARCHAR(1000),
+CREATE TABLE "public"."setting" (
+    "key" VARCHAR(200) NOT NULL,
+    "value" JSONB NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "plugin_config_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "setting_pkey" PRIMARY KEY ("key")
+);
+
+-- CreateTable
+CREATE TABLE "public"."system_dept" (
+    "id" TEXT NOT NULL,
+    "name" VARCHAR(50) NOT NULL,
+    "parent_id" TEXT,
+    "sort" INTEGER NOT NULL DEFAULT 0,
+    "leader_id" TEXT,
+    "phone" VARCHAR(20),
+    "email" VARCHAR(50),
+    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
+    "tenant_id" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "system_dept_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."system_dict_data" (
+    "id" TEXT NOT NULL,
+    "dict_type_id" TEXT NOT NULL,
+    "label" VARCHAR(100) NOT NULL,
+    "value" VARCHAR(100) NOT NULL,
+    "sort" INTEGER NOT NULL DEFAULT 0,
+    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
+    "color_type" VARCHAR(20),
+    "remark" VARCHAR(500),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "system_dict_data_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."system_dict_type" (
+    "id" TEXT NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
+    "type" VARCHAR(100) NOT NULL,
+    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
+    "remark" VARCHAR(500),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "system_dict_type_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."system_login_log" (
+    "id" TEXT NOT NULL,
+    "user_id" TEXT,
+    "username" VARCHAR(50) NOT NULL,
+    "user_ip" VARCHAR(50) NOT NULL,
+    "user_agent" VARCHAR(500),
+    "result" VARCHAR(10) NOT NULL,
+    "remark" VARCHAR(500),
+    "tenant_id" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "system_login_log_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."system_menu" (
+    "id" TEXT NOT NULL,
+    "name" VARCHAR(50) NOT NULL,
+    "permission" VARCHAR(100),
+    "type" VARCHAR(10) NOT NULL,
+    "parent_id" TEXT,
+    "path" VARCHAR(200),
+    "component" VARCHAR(200),
+    "icon" VARCHAR(100),
+    "sort" INTEGER NOT NULL DEFAULT 0,
+    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
+    "visible" BOOLEAN NOT NULL DEFAULT true,
+    "keep_alive" BOOLEAN NOT NULL DEFAULT true,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "system_menu_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."system_notice" (
+    "id" TEXT NOT NULL,
+    "title" VARCHAR(100) NOT NULL,
+    "content" TEXT NOT NULL,
+    "type" VARCHAR(10) NOT NULL,
+    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "system_notice_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."system_operate_log" (
+    "id" TEXT NOT NULL,
+    "user_id" TEXT,
+    "module" VARCHAR(50) NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
+    "type" VARCHAR(20) NOT NULL,
+    "request_method" VARCHAR(10) NOT NULL,
+    "request_url" VARCHAR(500) NOT NULL,
+    "content" TEXT,
+    "result_code" INTEGER NOT NULL DEFAULT 0,
+    "duration" INTEGER NOT NULL DEFAULT 0,
+    "user_ip" VARCHAR(50),
+    "tenant_id" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "system_operate_log_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."system_post" (
+    "id" TEXT NOT NULL,
+    "name" VARCHAR(50) NOT NULL,
+    "code" VARCHAR(64) NOT NULL,
+    "sort" INTEGER NOT NULL DEFAULT 0,
+    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
+    "remark" VARCHAR(500),
+    "tenant_id" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "system_post_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."system_role" (
+    "id" TEXT NOT NULL,
+    "name" VARCHAR(30) NOT NULL,
+    "code" VARCHAR(100) NOT NULL,
+    "sort" INTEGER NOT NULL DEFAULT 0,
+    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
+    "remark" VARCHAR(500),
+    "data_scope" VARCHAR(20) NOT NULL DEFAULT 'ALL',
+    "tenant_id" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "system_role_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."system_role_menu" (
+    "id" TEXT NOT NULL,
+    "role_id" TEXT NOT NULL,
+    "menu_id" TEXT NOT NULL,
+
+    CONSTRAINT "system_role_menu_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."system_tenant" (
+    "id" TEXT NOT NULL,
+    "name" VARCHAR(50) NOT NULL,
+    "contact_name" VARCHAR(30),
+    "contact_phone" VARCHAR(20),
+    "domain" VARCHAR(100),
+    "package_id" TEXT,
+    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
+    "expire_time" TIMESTAMP(3),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "tenant_code" VARCHAR(32) NOT NULL,
+    "effective_at" TIMESTAMP(3) NOT NULL,
+    "account_limit" INTEGER,
+
+    CONSTRAINT "system_tenant_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."system_tenant_package" (
+    "id" TEXT NOT NULL,
+    "name" VARCHAR(50) NOT NULL,
+    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
+    "remark" VARCHAR(500),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "account_limit" INTEGER,
+
+    CONSTRAINT "system_tenant_package_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."system_tenant_package_ai_quota" (
+    "id" VARCHAR(64) NOT NULL,
+    "package_id" VARCHAR(64) NOT NULL,
+    "model_pattern" VARCHAR(128) NOT NULL DEFAULT '*',
+    "quota_tokens" BIGINT NOT NULL,
+    "refresh_cycle" VARCHAR(32) NOT NULL DEFAULT 'MONTHLY',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "system_tenant_package_ai_quota_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."system_tenant_package_ai_seat" (
+    "id" VARCHAR(64) NOT NULL,
+    "package_id" VARCHAR(64) NOT NULL,
+    "seat_type" VARCHAR(32) NOT NULL DEFAULT 'STANDARD',
+    "max_seats" INTEGER NOT NULL DEFAULT 5,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "system_tenant_package_ai_seat_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."system_tenant_package_ai_tariff" (
+    "id" VARCHAR(64) NOT NULL,
+    "package_id" VARCHAR(64) NOT NULL,
+    "tariff_id" VARCHAR(64) NOT NULL,
+    "overage_policy" VARCHAR(32) NOT NULL DEFAULT 'BLOCK',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "system_tenant_package_ai_tariff_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."system_tenant_package_menu" (
+    "id" TEXT NOT NULL,
+    "package_id" TEXT NOT NULL,
+    "menu_id" TEXT NOT NULL,
+
+    CONSTRAINT "system_tenant_package_menu_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."system_tenant_subscription" (
+    "id" TEXT NOT NULL,
+    "tenant_id" TEXT NOT NULL,
+    "package_id" TEXT NOT NULL,
+    "effective_at" TIMESTAMP(3) NOT NULL,
+    "expire_at" TIMESTAMP(3),
+    "account_limit" INTEGER,
+    "status" VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+    "change_type" VARCHAR(20) NOT NULL,
+    "remark" VARCHAR(500),
+    "created_by" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "system_tenant_subscription_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."system_user" (
+    "id" TEXT NOT NULL,
+    "username" VARCHAR(30) NOT NULL,
+    "nickname" VARCHAR(30) NOT NULL,
+    "password" VARCHAR(100) NOT NULL,
+    "phone" VARCHAR(20),
+    "email" VARCHAR(50),
+    "avatar" VARCHAR(500),
+    "status" VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
+    "dept_id" TEXT,
+    "remark" VARCHAR(500),
+    "login_ip" VARCHAR(50),
+    "login_date" TIMESTAMP(3),
+    "tenant_id" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "salt" VARCHAR(100),
+
+    CONSTRAINT "system_user_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."system_user_post" (
+    "id" TEXT NOT NULL,
+    "user_id" TEXT NOT NULL,
+    "post_id" TEXT NOT NULL,
+
+    CONSTRAINT "system_user_post_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."system_user_role" (
+    "id" TEXT NOT NULL,
+    "user_id" TEXT NOT NULL,
+    "role_id" TEXT NOT NULL,
+
+    CONSTRAINT "system_user_role_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."ys_channel_node" (
+    "id" VARCHAR(64) NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
+    "code" VARCHAR(64) NOT NULL,
+    "node_type" VARCHAR(30) NOT NULL,
+    "parent_id" VARCHAR(64),
+    "manager_name" VARCHAR(50),
+    "manager_phone" VARCHAR(20),
+    "commission_rate" DOUBLE PRECISION DEFAULT 0.10,
+    "status" VARCHAR(20) DEFAULT 'ACTIVE',
+    "tenant_id" VARCHAR(64),
+    "created_by" VARCHAR(64),
+    "updated_by" VARCHAR(64),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "ys_channel_node_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."ys_contract" (
+    "id" VARCHAR(64) NOT NULL,
+    "contract_no" VARCHAR(64) NOT NULL,
+    "title" VARCHAR(100) NOT NULL,
+    "enterprise_id" VARCHAR(64) NOT NULL,
+    "scheme_id" VARCHAR(64) NOT NULL,
+    "sku_id" VARCHAR(64) NOT NULL,
+    "amount_cny" DOUBLE PRECISION DEFAULT 10000.0,
+    "payment_terms_days" INTEGER DEFAULT 30,
+    "start_date" TIMESTAMP(3) NOT NULL,
+    "end_date" TIMESTAMP(3) NOT NULL,
+    "status" VARCHAR(20) DEFAULT 'ACTIVE',
+    "tenant_id" VARCHAR(64),
+    "created_by" VARCHAR(64),
+    "updated_by" VARCHAR(64),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "ys_contract_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."ys_dispatch_limit" (
+    "id" VARCHAR(64) NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
+    "target_type" VARCHAR(30) NOT NULL,
+    "target_id" VARCHAR(64) NOT NULL,
+    "max_concurrency" INTEGER DEFAULT 50,
+    "rate_per_min" INTEGER DEFAULT 200,
+    "exhaust_action" VARCHAR(30) DEFAULT 'DEGRADE_BASIC',
+    "status" VARCHAR(20) DEFAULT 'ACTIVE',
+    "tenant_id" VARCHAR(64),
+    "created_by" VARCHAR(64),
+    "updated_by" VARCHAR(64),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "ys_dispatch_limit_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."ys_enterprise_account" (
+    "id" VARCHAR(64) NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
+    "code" VARCHAR(64) NOT NULL,
+    "credit_code" VARCHAR(50),
+    "province" VARCHAR(50) DEFAULT '广东',
+    "city" VARCHAR(50) DEFAULT '广州',
+    "industry" VARCHAR(50) DEFAULT '互联网/软件',
+    "contact_name" VARCHAR(50),
+    "contact_phone" VARCHAR(20),
+    "status" VARCHAR(20) DEFAULT 'ACTIVE',
+    "tenant_id" VARCHAR(64),
+    "created_by" VARCHAR(64),
+    "updated_by" VARCHAR(64),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "ys_enterprise_account_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."ys_invoice_payment" (
+    "id" VARCHAR(64) NOT NULL,
+    "invoice_no" VARCHAR(64) NOT NULL,
+    "contract_id" VARCHAR(64),
+    "batch_id" VARCHAR(64),
+    "enterprise_id" VARCHAR(64) NOT NULL,
+    "amount_cny" DOUBLE PRECISION NOT NULL,
+    "invoice_title" VARCHAR(100) NOT NULL,
+    "tax_no" VARCHAR(50),
+    "invoice_type" VARCHAR(30) DEFAULT 'SINGLE_GENERAL',
+    "payment_status" VARCHAR(20) DEFAULT 'UNPAID',
+    "paid_at" TIMESTAMP(3),
+    "tenant_id" VARCHAR(64),
+    "created_by" VARCHAR(64),
+    "updated_by" VARCHAR(64),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "ys_invoice_payment_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."ys_ledger_entry" (
+    "id" VARCHAR(64) NOT NULL,
+    "batch_id" VARCHAR(64) NOT NULL,
+    "party_type" VARCHAR(30) NOT NULL,
+    "subject_code" VARCHAR(50) NOT NULL,
+    "direction" VARCHAR(10) DEFAULT 'CREDIT',
+    "amount_cny" DOUBLE PRECISION NOT NULL,
+    "tax_cny" DOUBLE PRECISION DEFAULT 0.0,
+    "status" VARCHAR(20) DEFAULT 'POSTED',
+    "tenant_id" VARCHAR(64),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "ys_ledger_entry_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."ys_meter_record" (
+    "id" VARCHAR(64) NOT NULL,
+    "request_id" VARCHAR(100) NOT NULL,
+    "enterprise_id" VARCHAR(64) NOT NULL,
+    "seat_id" VARCHAR(64),
+    "app_type" VARCHAR(30) NOT NULL,
+    "model" VARCHAR(100) NOT NULL,
+    "prompt_tokens" INTEGER NOT NULL DEFAULT 0,
+    "completion_tokens" INTEGER NOT NULL DEFAULT 0,
+    "total_tokens" INTEGER NOT NULL DEFAULT 0,
+    "time_slot" VARCHAR(20) DEFAULT 'PEAK',
+    "operator_site" VARCHAR(50) DEFAULT '广东移动智算中心',
+    "cost_cny" DOUBLE PRECISION DEFAULT 0.0,
+    "tenant_id" VARCHAR(64),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "ys_meter_record_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."ys_operation_scheme" (
+    "id" VARCHAR(64) NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
+    "code" VARCHAR(64) NOT NULL,
+    "template_code" VARCHAR(50) NOT NULL,
+    "collector_party" VARCHAR(50) DEFAULT 'OPERATOR',
+    "invoicer_party" VARCHAR(50) DEFAULT 'OPERATOR',
+    "billing_structure" VARCHAR(50) DEFAULT 'TWO_PART',
+    "split_pipeline_id" VARCHAR(64),
+    "description" VARCHAR(500),
+    "version" VARCHAR(20) DEFAULT 'v1.0.0',
+    "status" VARCHAR(20) DEFAULT 'ACTIVE',
+    "tenant_id" VARCHAR(64),
+    "created_by" VARCHAR(64),
+    "updated_by" VARCHAR(64),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "ys_operation_scheme_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."ys_policy" (
+    "id" VARCHAR(64) NOT NULL,
+    "enterprise_id" VARCHAR(64) NOT NULL,
+    "post_code" VARCHAR(50) NOT NULL,
+    "post_name" VARCHAR(100) NOT NULL,
+    "mode" VARCHAR(30) DEFAULT 'POOL_SHARED',
+    "monthly_token_cap" BIGINT DEFAULT 20000000,
+    "daily_token_cap" BIGINT DEFAULT 1000000,
+    "allowed_apps" JSONB DEFAULT '["WORKBUDDY", "QODER", "TRAE"]',
+    "status" VARCHAR(20) DEFAULT 'ACTIVE',
+    "tenant_id" VARCHAR(64),
+    "created_by" VARCHAR(64),
+    "updated_by" VARCHAR(64),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "ys_policy_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."ys_product_sku" (
+    "id" VARCHAR(64) NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
+    "sku_code" VARCHAR(64) NOT NULL,
+    "package_type" VARCHAR(30) NOT NULL,
+    "price_cny" DOUBLE PRECISION DEFAULT 10000.0,
+    "included_seats" INTEGER DEFAULT 20,
+    "included_tokens" BIGINT DEFAULT 100000000,
+    "overage_token_price" DOUBLE PRECISION DEFAULT 0.0001,
+    "boss_product_code" VARCHAR(64),
+    "allowed_apps" JSONB DEFAULT '["WORKBUDDY", "QODER", "TRAE"]',
+    "status" VARCHAR(20) DEFAULT 'ACTIVE',
+    "tenant_id" VARCHAR(64),
+    "created_by" VARCHAR(64),
+    "updated_by" VARCHAR(64),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "ys_product_sku_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."ys_quota_account" (
+    "id" VARCHAR(64) NOT NULL,
+    "enterprise_id" VARCHAR(64) NOT NULL,
+    "total_quota" BIGINT DEFAULT 100000000,
+    "used_quota" BIGINT DEFAULT 0,
+    "frozen_quota" BIGINT DEFAULT 0,
+    "warn_threshold" INTEGER DEFAULT 80,
+    "auto_throttle" BOOLEAN DEFAULT true,
+    "status" VARCHAR(20) DEFAULT 'ACTIVE',
+    "tenant_id" VARCHAR(64),
+    "created_by" VARCHAR(64),
+    "updated_by" VARCHAR(64),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "ys_quota_account_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."ys_seat" (
+    "id" VARCHAR(64) NOT NULL,
+    "enterprise_id" VARCHAR(64) NOT NULL,
+    "user_id" VARCHAR(64),
+    "user_name" VARCHAR(64) NOT NULL,
+    "user_email" VARCHAR(100),
+    "app_type" VARCHAR(30) NOT NULL,
+    "vendor_seat_id" VARCHAR(100),
+    "monthly_token_cap" BIGINT DEFAULT 10000000,
+    "status" VARCHAR(20) DEFAULT 'ACTIVE',
+    "tenant_id" VARCHAR(64),
+    "created_by" VARCHAR(64),
+    "updated_by" VARCHAR(64),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "ys_seat_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."ys_settlement_batch" (
+    "id" VARCHAR(64) NOT NULL,
+    "batch_no" VARCHAR(64) NOT NULL,
+    "settlement_month" VARCHAR(20) NOT NULL,
+    "enterprise_id" VARCHAR(64) NOT NULL,
+    "total_tokens" BIGINT DEFAULT 0,
+    "total_amount_cny" DOUBLE PRECISION DEFAULT 0.0,
+    "operator_amount_cny" DOUBLE PRECISION DEFAULT 0.0,
+    "vendor_amount_cny" DOUBLE PRECISION DEFAULT 0.0,
+    "platform_amount_cny" DOUBLE PRECISION DEFAULT 0.0,
+    "channel_amount_cny" DOUBLE PRECISION DEFAULT 0.0,
+    "reconcile_status" VARCHAR(30) DEFAULT 'MATCHED',
+    "status" VARCHAR(20) DEFAULT 'DRAFT',
+    "tenant_id" VARCHAR(64),
+    "created_by" VARCHAR(64),
+    "updated_by" VARCHAR(64),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "ys_settlement_batch_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."ys_split_pipeline" (
+    "id" VARCHAR(64) NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
+    "pipeline_code" VARCHAR(64) NOT NULL,
+    "operator_ratio" DOUBLE PRECISION DEFAULT 0.48,
+    "vendor_ratio" DOUBLE PRECISION DEFAULT 0.38,
+    "platform_ratio" DOUBLE PRECISION DEFAULT 0.14,
+    "min_guarantee_cny" DOUBLE PRECISION DEFAULT 0.0,
+    "rules_config" JSONB DEFAULT '{}',
+    "status" VARCHAR(20) DEFAULT 'ACTIVE',
+    "tenant_id" VARCHAR(64),
+    "created_by" VARCHAR(64),
+    "updated_by" VARCHAR(64),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "ys_split_pipeline_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."ys_tariff_rule" (
+    "id" VARCHAR(64) NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
+    "slot_type" VARCHAR(20) NOT NULL,
+    "start_time" VARCHAR(10) NOT NULL,
+    "end_time" VARCHAR(10) NOT NULL,
+    "rate_ratio" DOUBLE PRECISION DEFAULT 1.0,
+    "allow_batch_task" BOOLEAN DEFAULT true,
+    "status" VARCHAR(20) DEFAULT 'ACTIVE',
+    "tenant_id" VARCHAR(64),
+    "created_by" VARCHAR(64),
+    "updated_by" VARCHAR(64),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "ys_tariff_rule_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "system_user_username_key" ON "system_user"("username");
+CREATE UNIQUE INDEX "admin_phone_key" ON "public"."admin"("phone" ASC);
 
 -- CreateIndex
-CREATE INDEX "system_user_tenant_id_idx" ON "system_user"("tenant_id");
+CREATE UNIQUE INDEX "admin_username_key" ON "public"."admin"("username" ASC);
 
 -- CreateIndex
-CREATE INDEX "system_user_dept_id_idx" ON "system_user"("dept_id");
+CREATE UNIQUE INDEX "idx_ai_access_token_key" ON "public"."ai_access_token"("key" ASC);
 
 -- CreateIndex
-CREATE INDEX "system_user_status_idx" ON "system_user"("status");
+CREATE INDEX "idx_ai_access_token_tenant" ON "public"."ai_access_token"("tenant_id" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "system_role_code_key" ON "system_role"("code");
+CREATE INDEX "idx_ai_channel_tenant" ON "public"."ai_channel"("tenant_id" ASC);
 
 -- CreateIndex
-CREATE INDEX "system_role_tenant_id_idx" ON "system_role"("tenant_id");
+CREATE INDEX "idx_ai_chat_conversation_tenant" ON "public"."ai_chat_conversation"("tenant_id" ASC, "user_id" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "system_user_role_user_id_role_id_key" ON "system_user_role"("user_id", "role_id");
+CREATE INDEX "idx_ai_chat_message_conversation" ON "public"."ai_chat_message"("conversation_id" ASC, "created_at" ASC);
 
 -- CreateIndex
-CREATE INDEX "system_menu_parent_id_idx" ON "system_menu"("parent_id");
+CREATE UNIQUE INDEX "idx_ai_model_key" ON "public"."ai_model"("model_key" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "system_role_menu_role_id_menu_id_key" ON "system_role_menu"("role_id", "menu_id");
+CREATE INDEX "idx_ai_model_tenant" ON "public"."ai_model"("tenant_id" ASC);
 
 -- CreateIndex
-CREATE INDEX "system_dept_parent_id_idx" ON "system_dept"("parent_id");
+CREATE INDEX "idx_ai_usage_tenant" ON "public"."ai_usage"("tenant_id" ASC, "created_at" ASC);
 
 -- CreateIndex
-CREATE INDEX "system_dept_tenant_id_idx" ON "system_dept"("tenant_id");
+CREATE UNIQUE INDEX "aigw_carrier_agent_carrier_code_province_key" ON "public"."aigw_carrier_agent"("carrier_code" ASC, "province" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "system_post_code_key" ON "system_post"("code");
+CREATE UNIQUE INDEX "aigw_isv_app_app_code_key" ON "public"."aigw_isv_app"("app_code" ASC);
 
 -- CreateIndex
-CREATE INDEX "system_post_tenant_id_idx" ON "system_post"("tenant_id");
+CREATE INDEX "idx_aigw_isv_tenant_code" ON "public"."aigw_isv_app"("tenant_id" ASC, "app_code" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "system_user_post_user_id_post_id_key" ON "system_user_post"("user_id", "post_id");
+CREATE INDEX "idx_aigw_isv_tenant_status" ON "public"."aigw_isv_app"("tenant_id" ASC, "status" ASC, "created_at" DESC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "system_dict_type_type_key" ON "system_dict_type"("type");
+CREATE UNIQUE INDEX "aigw_mcp_asset_mcp_code_key" ON "public"."aigw_mcp_asset"("mcp_code" ASC);
 
 -- CreateIndex
-CREATE INDEX "system_dict_data_dict_type_id_idx" ON "system_dict_data"("dict_type_id");
+CREATE INDEX "idx_aigw_mcp_tenant_code" ON "public"."aigw_mcp_asset"("tenant_id" ASC, "mcp_code" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "system_tenant_tenant_code_key" ON "system_tenant"("tenant_code");
+CREATE INDEX "idx_aigw_mcp_tenant_status" ON "public"."aigw_mcp_asset"("tenant_id" ASC, "status" ASC, "created_at" DESC);
 
 -- CreateIndex
-CREATE INDEX "system_tenant_package_id_idx" ON "system_tenant"("package_id");
+CREATE INDEX "idx_aigw_member_tenant_phone" ON "public"."aigw_member_allocation"("tenant_id" ASC, "phone" ASC);
 
 -- CreateIndex
-CREATE INDEX "system_tenant_subscription_tenant_id_created_at_idx" ON "system_tenant_subscription"("tenant_id", "created_at");
+CREATE INDEX "idx_aigw_member_tenant_status" ON "public"."aigw_member_allocation"("tenant_id" ASC, "status" ASC, "created_at" DESC);
 
 -- CreateIndex
-CREATE INDEX "system_tenant_subscription_status_idx" ON "system_tenant_subscription"("status");
+CREATE INDEX "aigw_tenant_quota_ledger_created_at_idx" ON "public"."aigw_tenant_quota_ledger"("created_at" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "system_tenant_package_name_key" ON "system_tenant_package"("name");
+CREATE INDEX "aigw_tenant_quota_ledger_tenant_id_idx" ON "public"."aigw_tenant_quota_ledger"("tenant_id" ASC);
 
 -- CreateIndex
-CREATE INDEX "system_tenant_package_status_idx" ON "system_tenant_package"("status");
+CREATE INDEX "approval_task_biz_type_idx" ON "public"."approval_task"("biz_type" ASC);
 
 -- CreateIndex
-CREATE INDEX "system_tenant_package_menu_menu_id_idx" ON "system_tenant_package_menu"("menu_id");
+CREATE INDEX "approval_task_created_at_idx" ON "public"."approval_task"("created_at" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "system_tenant_package_menu_package_id_menu_id_key" ON "system_tenant_package_menu"("package_id", "menu_id");
+CREATE INDEX "approval_task_status_idx" ON "public"."approval_task"("status" ASC);
 
 -- CreateIndex
-CREATE INDEX "system_area_parent_id_idx" ON "system_area"("parent_id");
+CREATE INDEX "infra_api_access_log_created_at_idx" ON "public"."infra_api_access_log"("created_at" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "system_notify_template_code_key" ON "system_notify_template"("code");
+CREATE INDEX "infra_api_access_log_tenant_id_created_at_idx" ON "public"."infra_api_access_log"("tenant_id" ASC, "created_at" ASC);
 
 -- CreateIndex
-CREATE INDEX "system_notify_message_template_code_idx" ON "system_notify_message"("template_code");
+CREATE INDEX "infra_api_access_log_trace_id_idx" ON "public"."infra_api_access_log"("trace_id" ASC);
 
 -- CreateIndex
-CREATE INDEX "system_login_log_user_id_idx" ON "system_login_log"("user_id");
+CREATE INDEX "infra_api_access_log_user_id_idx" ON "public"."infra_api_access_log"("user_id" ASC);
 
 -- CreateIndex
-CREATE INDEX "system_login_log_created_at_idx" ON "system_login_log"("created_at");
+CREATE INDEX "infra_api_error_log_created_at_idx" ON "public"."infra_api_error_log"("created_at" ASC);
 
 -- CreateIndex
-CREATE INDEX "system_operate_log_user_id_idx" ON "system_operate_log"("user_id");
+CREATE INDEX "infra_api_error_log_status_created_at_idx" ON "public"."infra_api_error_log"("status" ASC, "created_at" ASC);
 
 -- CreateIndex
-CREATE INDEX "system_operate_log_module_idx" ON "system_operate_log"("module");
+CREATE INDEX "infra_api_error_log_status_idx" ON "public"."infra_api_error_log"("status" ASC);
 
 -- CreateIndex
-CREATE INDEX "system_operate_log_created_at_idx" ON "system_operate_log"("created_at");
+CREATE INDEX "infra_api_error_log_tenant_id_created_at_idx" ON "public"."infra_api_error_log"("tenant_id" ASC, "created_at" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "admin_username_key" ON "admin"("username");
+CREATE INDEX "infra_api_error_log_trace_id_idx" ON "public"."infra_api_error_log"("trace_id" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "admin_phone_key" ON "admin"("phone");
+CREATE INDEX "infra_api_error_log_user_id_idx" ON "public"."infra_api_error_log"("user_id" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "member_user_tenant_id_account_key" ON "member_user"("tenant_id", "account");
+CREATE UNIQUE INDEX "infra_config_config_key_key" ON "public"."infra_config"("config_key" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "member_user_tenant_id_email_key" ON "member_user"("tenant_id", "email");
+CREATE INDEX "infra_data_source_config_deleted_idx" ON "public"."infra_data_source_config"("deleted" ASC);
 
 -- CreateIndex
-CREATE INDEX "approval_task_biz_type_idx" ON "approval_task"("biz_type");
+CREATE INDEX "infra_data_source_config_name_idx" ON "public"."infra_data_source_config"("name" ASC);
 
 -- CreateIndex
-CREATE INDEX "approval_task_status_idx" ON "approval_task"("status");
+CREATE INDEX "infra_data_source_config_tenant_deleted_updated_idx" ON "public"."infra_data_source_config"("tenant_id" ASC, "deleted" ASC, "updated_at" DESC);
 
 -- CreateIndex
-CREATE INDEX "approval_task_created_at_idx" ON "approval_task"("created_at");
+CREATE INDEX "infra_file_config_id_idx" ON "public"."infra_file"("config_id" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "infra_config_config_key_key" ON "infra_config"("config_key");
+CREATE INDEX "infra_job_log_created_at_idx" ON "public"."infra_job_log"("created_at" ASC);
 
 -- CreateIndex
-CREATE INDEX "infra_job_log_job_id_idx" ON "infra_job_log"("job_id");
+CREATE INDEX "infra_job_log_job_id_idx" ON "public"."infra_job_log"("job_id" ASC);
 
 -- CreateIndex
-CREATE INDEX "infra_job_log_created_at_idx" ON "infra_job_log"("created_at");
+CREATE UNIQUE INDEX "infra_message_inbox_consumer_event_id_key" ON "public"."infra_message_inbox"("consumer" ASC, "event_id" ASC);
 
 -- CreateIndex
-CREATE INDEX "infra_api_access_log_user_id_idx" ON "infra_api_access_log"("user_id");
+CREATE UNIQUE INDEX "infra_message_outbox_event_id_key" ON "public"."infra_message_outbox"("event_id" ASC);
 
 -- CreateIndex
-CREATE INDEX "infra_api_access_log_trace_id_idx" ON "infra_api_access_log"("trace_id");
+CREATE INDEX "infra_message_outbox_status_created_at_idx" ON "public"."infra_message_outbox"("status" ASC, "created_at" ASC);
 
 -- CreateIndex
-CREATE INDEX "infra_api_access_log_tenant_id_created_at_idx" ON "infra_api_access_log"("tenant_id", "created_at");
+CREATE INDEX "infra_message_outbox_tenant_id_status_idx" ON "public"."infra_message_outbox"("tenant_id" ASC, "status" ASC);
 
 -- CreateIndex
-CREATE INDEX "infra_api_access_log_created_at_idx" ON "infra_api_access_log"("created_at");
+CREATE UNIQUE INDEX "member_user_tenant_id_account_key" ON "public"."member_user"("tenant_id" ASC, "account" ASC);
 
 -- CreateIndex
-CREATE INDEX "infra_api_error_log_user_id_idx" ON "infra_api_error_log"("user_id");
+CREATE UNIQUE INDEX "member_user_tenant_id_email_key" ON "public"."member_user"("tenant_id" ASC, "email" ASC);
 
 -- CreateIndex
-CREATE INDEX "infra_api_error_log_trace_id_idx" ON "infra_api_error_log"("trace_id");
+CREATE INDEX "member_user_tenant_id_idx" ON "public"."member_user"("tenant_id" ASC);
 
 -- CreateIndex
-CREATE INDEX "infra_api_error_log_tenant_id_created_at_idx" ON "infra_api_error_log"("tenant_id", "created_at");
+CREATE UNIQUE INDEX "online_action_tenant_id_revision_id_code_key" ON "public"."online_action"("tenant_id" ASC, "revision_id" ASC, "code" ASC);
 
 -- CreateIndex
-CREATE INDEX "infra_api_error_log_status_idx" ON "infra_api_error_log"("status");
+CREATE UNIQUE INDEX "online_definition_current_draft_revision_id_key" ON "public"."online_definition"("current_draft_revision_id" ASC);
 
 -- CreateIndex
-CREATE INDEX "infra_api_error_log_created_at_idx" ON "infra_api_error_log"("created_at");
+CREATE UNIQUE INDEX "online_definition_published_release_id_key" ON "public"."online_definition"("published_release_id" ASC);
 
 -- CreateIndex
-CREATE INDEX "infra_data_source_config_name_idx" ON "infra_data_source_config"("name");
+CREATE UNIQUE INDEX "online_definition_tenant_id_code_key" ON "public"."online_definition"("tenant_id" ASC, "code" ASC);
 
 -- CreateIndex
-CREATE INDEX "infra_data_source_config_deleted_idx" ON "infra_data_source_config"("deleted");
+CREATE INDEX "online_definition_tenant_id_status_updated_at_idx" ON "public"."online_definition"("tenant_id" ASC, "status" ASC, "updated_at" ASC);
 
 -- CreateIndex
-CREATE INDEX "infra_data_source_config_tenant_id_deleted_updated_at_idx" ON "infra_data_source_config"("tenant_id", "deleted", "updated_at");
+CREATE UNIQUE INDEX "online_field_tenant_id_revision_id_code_key" ON "public"."online_field"("tenant_id" ASC, "revision_id" ASC, "code" ASC);
 
 -- CreateIndex
-CREATE INDEX "infra_file_config_id_idx" ON "infra_file"("config_id");
+CREATE INDEX "online_field_tenant_id_revision_id_sort_idx" ON "public"."online_field"("tenant_id" ASC, "revision_id" ASC, "sort" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "infra_message_outbox_event_id_key" ON "infra_message_outbox"("event_id");
+CREATE UNIQUE INDEX "online_index_tenant_id_revision_id_code_key" ON "public"."online_index"("tenant_id" ASC, "revision_id" ASC, "code" ASC);
 
 -- CreateIndex
-CREATE INDEX "infra_message_outbox_status_created_at_idx" ON "infra_message_outbox"("status", "created_at");
+CREATE UNIQUE INDEX "online_managed_table_definition_id_key" ON "public"."online_managed_table"("definition_id" ASC);
 
 -- CreateIndex
-CREATE INDEX "infra_message_outbox_tenant_id_status_idx" ON "infra_message_outbox"("tenant_id", "status");
+CREATE UNIQUE INDEX "online_managed_table_physical_table_name_key" ON "public"."online_managed_table"("physical_table_name" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "infra_message_inbox_consumer_event_id_key" ON "infra_message_inbox"("consumer", "event_id");
+CREATE INDEX "online_managed_table_tenant_id_physical_table_name_idx" ON "public"."online_managed_table"("tenant_id" ASC, "physical_table_name" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "online_definition_current_draft_revision_id_key" ON "online_definition"("current_draft_revision_id");
+CREATE UNIQUE INDEX "online_policy_tenant_id_revision_id_code_key" ON "public"."online_policy"("tenant_id" ASC, "revision_id" ASC, "code" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "online_definition_published_release_id_key" ON "online_definition"("published_release_id");
+CREATE INDEX "online_record_tenant_definition_release_updated_at_idx" ON "public"."online_record"("tenant_id" ASC, "definition_id" ASC, "release_id" ASC, "updated_at" ASC);
 
 -- CreateIndex
-CREATE INDEX "online_definition_tenant_id_status_updated_at_idx" ON "online_definition"("tenant_id", "status", "updated_at");
+CREATE INDEX "online_record_tenant_test_session_updated_at_idx" ON "public"."online_record"("tenant_id" ASC, "test_session_id" ASC, "updated_at" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "online_definition_tenant_id_code_key" ON "online_definition"("tenant_id", "code");
+CREATE UNIQUE INDEX "online_relation_tenant_id_revision_id_code_key" ON "public"."online_relation"("tenant_id" ASC, "revision_id" ASC, "code" ASC);
 
 -- CreateIndex
-CREATE INDEX "online_revision_tenant_id_definition_id_status_idx" ON "online_revision"("tenant_id", "definition_id", "status");
+CREATE INDEX "online_relation_tenant_id_target_release_id_idx" ON "public"."online_relation"("tenant_id" ASC, "target_release_id" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "online_revision_tenant_id_definition_id_sequence_key" ON "online_revision"("tenant_id", "definition_id", "sequence");
+CREATE UNIQUE INDEX "online_release_tenant_id_definition_id_release_no_key" ON "public"."online_release"("tenant_id" ASC, "definition_id" ASC, "release_no" ASC);
 
 -- CreateIndex
-CREATE INDEX "online_field_tenant_id_revision_id_sort_idx" ON "online_field"("tenant_id", "revision_id", "sort");
+CREATE INDEX "online_release_tenant_id_definition_id_released_at_idx" ON "public"."online_release"("tenant_id" ASC, "definition_id" ASC, "released_at" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "online_field_tenant_id_revision_id_code_key" ON "online_field"("tenant_id", "revision_id", "code");
+CREATE UNIQUE INDEX "online_revision_tenant_id_definition_id_sequence_key" ON "public"."online_revision"("tenant_id" ASC, "definition_id" ASC, "sequence" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "online_index_tenant_id_revision_id_code_key" ON "online_index"("tenant_id", "revision_id", "code");
+CREATE INDEX "online_revision_tenant_id_definition_id_status_idx" ON "public"."online_revision"("tenant_id" ASC, "definition_id" ASC, "status" ASC);
 
 -- CreateIndex
-CREATE INDEX "online_relation_tenant_id_target_release_id_idx" ON "online_relation"("tenant_id", "target_release_id");
+CREATE INDEX "online_schema_change_tenant_id_definition_id_status_idx" ON "public"."online_schema_change"("tenant_id" ASC, "definition_id" ASC, "status" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "online_relation_tenant_id_revision_id_code_key" ON "online_relation"("tenant_id", "revision_id", "code");
+CREATE INDEX "online_test_session_tenant_id_definition_id_started_at_idx" ON "public"."online_test_session"("tenant_id" ASC, "definition_id" ASC, "started_at" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "online_view_tenant_id_revision_id_code_key" ON "online_view"("tenant_id", "revision_id", "code");
+CREATE UNIQUE INDEX "online_view_tenant_id_revision_id_code_key" ON "public"."online_view"("tenant_id" ASC, "revision_id" ASC, "code" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "online_action_tenant_id_revision_id_code_key" ON "online_action"("tenant_id", "revision_id", "code");
+CREATE UNIQUE INDEX "online_workflow_binding_tenant_id_revision_id_process_key_key" ON "public"."online_workflow_binding"("tenant_id" ASC, "revision_id" ASC, "process_key" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "online_policy_tenant_id_revision_id_code_key" ON "online_policy"("tenant_id", "revision_id", "code");
+CREATE UNIQUE INDEX "plugin_plugin_key_key" ON "public"."plugin"("plugin_key" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "online_workflow_binding_tenant_id_revision_id_process_key_key" ON "online_workflow_binding"("tenant_id", "revision_id", "process_key");
+CREATE INDEX "plugin_status_idx" ON "public"."plugin"("status" ASC);
 
 -- CreateIndex
-CREATE INDEX "online_release_tenant_id_definition_id_released_at_idx" ON "online_release"("tenant_id", "definition_id", "released_at");
+CREATE UNIQUE INDEX "plugin_config_plugin_tenant_key" ON "public"."plugin_config"("plugin_id" ASC, "tenant_id" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "online_release_tenant_id_definition_id_release_no_key" ON "online_release"("tenant_id", "definition_id", "release_no");
+CREATE UNIQUE INDEX "plugin_state_scope_key" ON "public"."plugin_state"("plugin_id" ASC, "scope_kind" ASC, "scope_id" ASC, "namespace" ASC, "state_key" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "online_managed_table_definition_id_key" ON "online_managed_table"("definition_id");
+CREATE INDEX "system_dept_parent_id_idx" ON "public"."system_dept"("parent_id" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "online_managed_table_physical_table_name_key" ON "online_managed_table"("physical_table_name");
+CREATE INDEX "system_dept_tenant_id_idx" ON "public"."system_dept"("tenant_id" ASC);
 
 -- CreateIndex
-CREATE INDEX "online_managed_table_tenant_id_physical_table_name_idx" ON "online_managed_table"("tenant_id", "physical_table_name");
+CREATE INDEX "system_dict_data_dict_type_id_idx" ON "public"."system_dict_data"("dict_type_id" ASC);
 
 -- CreateIndex
-CREATE INDEX "online_schema_change_tenant_id_definition_id_status_idx" ON "online_schema_change"("tenant_id", "definition_id", "status");
+CREATE UNIQUE INDEX "system_dict_type_type_key" ON "public"."system_dict_type"("type" ASC);
 
 -- CreateIndex
-CREATE INDEX "online_test_session_tenant_id_definition_id_started_at_idx" ON "online_test_session"("tenant_id", "definition_id", "started_at");
+CREATE INDEX "system_login_log_created_at_idx" ON "public"."system_login_log"("created_at" ASC);
 
 -- CreateIndex
-CREATE INDEX "online_record_tenant_id_definition_id_release_id_updated_at_idx" ON "online_record"("tenant_id", "definition_id", "release_id", "updated_at");
+CREATE INDEX "system_login_log_user_id_idx" ON "public"."system_login_log"("user_id" ASC);
 
 -- CreateIndex
-CREATE INDEX "online_record_tenant_id_test_session_id_updated_at_idx" ON "online_record"("tenant_id", "test_session_id", "updated_at");
+CREATE INDEX "system_menu_parent_id_idx" ON "public"."system_menu"("parent_id" ASC);
 
 -- CreateIndex
-CREATE INDEX "ai_channel_tenant_id_idx" ON "ai_channel"("tenant_id");
+CREATE INDEX "system_operate_log_created_at_idx" ON "public"."system_operate_log"("created_at" ASC);
 
 -- CreateIndex
-CREATE INDEX "ai_channel_status_priority_idx" ON "ai_channel"("status", "priority");
+CREATE INDEX "system_operate_log_module_idx" ON "public"."system_operate_log"("module" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "ai_access_token_key_key" ON "ai_access_token"("key");
+CREATE INDEX "system_operate_log_user_id_idx" ON "public"."system_operate_log"("user_id" ASC);
 
 -- CreateIndex
-CREATE INDEX "ai_access_token_tenant_id_idx" ON "ai_access_token"("tenant_id");
+CREATE UNIQUE INDEX "system_post_code_key" ON "public"."system_post"("code" ASC);
 
 -- CreateIndex
-CREATE INDEX "ai_access_token_key_idx" ON "ai_access_token"("key");
+CREATE INDEX "system_post_tenant_id_idx" ON "public"."system_post"("tenant_id" ASC);
 
 -- CreateIndex
-CREATE INDEX "ai_usage_tenant_id_created_at_idx" ON "ai_usage"("tenant_id", "created_at");
+CREATE UNIQUE INDEX "system_role_code_key" ON "public"."system_role"("code" ASC);
 
 -- CreateIndex
-CREATE INDEX "ai_usage_token_id_idx" ON "ai_usage"("token_id");
+CREATE INDEX "system_role_tenant_id_idx" ON "public"."system_role"("tenant_id" ASC);
 
 -- CreateIndex
-CREATE INDEX "ai_usage_channel_id_idx" ON "ai_usage"("channel_id");
+CREATE UNIQUE INDEX "system_role_menu_role_id_menu_id_key" ON "public"."system_role_menu"("role_id" ASC, "menu_id" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "ai_model_model_key_key" ON "ai_model"("model_key");
+CREATE INDEX "system_tenant_effective_at_expire_time_idx" ON "public"."system_tenant"("effective_at" ASC, "expire_time" ASC);
 
 -- CreateIndex
-CREATE INDEX "ai_model_tenant_id_idx" ON "ai_model"("tenant_id");
+CREATE INDEX "system_tenant_package_package_id_idx" ON "public"."system_tenant"("package_id" ASC);
 
 -- CreateIndex
-CREATE INDEX "ai_model_status_idx" ON "ai_model"("status");
+CREATE UNIQUE INDEX "system_tenant_tenant_code_key" ON "public"."system_tenant"("tenant_code" ASC);
 
 -- CreateIndex
-CREATE INDEX "ai_chat_conversation_tenant_id_user_id_idx" ON "ai_chat_conversation"("tenant_id", "user_id");
+CREATE UNIQUE INDEX "system_tenant_package_name_key" ON "public"."system_tenant_package"("name" ASC);
 
 -- CreateIndex
-CREATE INDEX "ai_chat_message_conversation_id_created_at_idx" ON "ai_chat_message"("conversation_id", "created_at");
+CREATE INDEX "system_tenant_package_status_idx" ON "public"."system_tenant_package"("status" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "plugin_plugin_key_key" ON "plugin"("plugin_key");
+CREATE INDEX "system_tenant_package_ai_quota_package_id_idx" ON "public"."system_tenant_package_ai_quota"("package_id" ASC);
 
 -- CreateIndex
-CREATE INDEX "plugin_status_idx" ON "plugin"("status");
+CREATE INDEX "system_tenant_package_ai_seat_package_id_idx" ON "public"."system_tenant_package_ai_seat"("package_id" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "plugin_state_plugin_id_scope_kind_scope_id_namespace_state__key" ON "plugin_state"("plugin_id", "scope_kind", "scope_id", "namespace", "state_key");
+CREATE INDEX "system_tenant_package_ai_tariff_package_id_idx" ON "public"."system_tenant_package_ai_tariff"("package_id" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "plugin_config_plugin_id_tenant_id_key" ON "plugin_config"("plugin_id", "tenant_id");
+CREATE INDEX "system_tenant_package_menu_menu_id_idx" ON "public"."system_tenant_package_menu"("menu_id" ASC);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "system_tenant_package_menu_package_id_menu_id_key" ON "public"."system_tenant_package_menu"("package_id" ASC, "menu_id" ASC);
+
+-- CreateIndex
+CREATE INDEX "system_tenant_subscription_status_idx" ON "public"."system_tenant_subscription"("status" ASC);
+
+-- CreateIndex
+CREATE INDEX "system_tenant_subscription_tenant_id_created_at_idx" ON "public"."system_tenant_subscription"("tenant_id" ASC, "created_at" DESC);
+
+-- CreateIndex
+CREATE INDEX "system_user_dept_id_idx" ON "public"."system_user"("dept_id" ASC);
+
+-- CreateIndex
+CREATE INDEX "system_user_status_idx" ON "public"."system_user"("status" ASC);
+
+-- CreateIndex
+CREATE INDEX "system_user_tenant_id_idx" ON "public"."system_user"("tenant_id" ASC);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "system_user_username_key" ON "public"."system_user"("username" ASC);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "system_user_post_user_id_post_id_key" ON "public"."system_user_post"("user_id" ASC, "post_id" ASC);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "system_user_role_user_id_role_id_key" ON "public"."system_user_role"("user_id" ASC, "role_id" ASC);
+
+-- CreateIndex
+CREATE INDEX "idx_ys_channel_tenant_parent" ON "public"."ys_channel_node"("tenant_id" ASC, "parent_id" ASC);
+
+-- CreateIndex
+CREATE INDEX "idx_ys_contract_tenant_ent" ON "public"."ys_contract"("tenant_id" ASC, "enterprise_id" ASC);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ys_contract_contract_no_key" ON "public"."ys_contract"("contract_no" ASC);
+
+-- CreateIndex
+CREATE INDEX "idx_ys_dispatch_tenant" ON "public"."ys_dispatch_limit"("tenant_id" ASC);
+
+-- CreateIndex
+CREATE INDEX "idx_ys_enterprise_code" ON "public"."ys_enterprise_account"("code" ASC);
+
+-- CreateIndex
+CREATE INDEX "idx_ys_enterprise_tenant" ON "public"."ys_enterprise_account"("tenant_id" ASC);
+
+-- CreateIndex
+CREATE INDEX "idx_ys_invoice_tenant_ent" ON "public"."ys_invoice_payment"("tenant_id" ASC, "enterprise_id" ASC);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ys_invoice_payment_invoice_no_key" ON "public"."ys_invoice_payment"("invoice_no" ASC);
+
+-- CreateIndex
+CREATE INDEX "idx_ys_ledger_tenant_batch" ON "public"."ys_ledger_entry"("tenant_id" ASC, "batch_id" ASC);
+
+-- CreateIndex
+CREATE INDEX "idx_ys_meter_req" ON "public"."ys_meter_record"("request_id" ASC);
+
+-- CreateIndex
+CREATE INDEX "idx_ys_meter_tenant_ent_created" ON "public"."ys_meter_record"("tenant_id" ASC, "enterprise_id" ASC, "created_at" ASC);
+
+-- CreateIndex
+CREATE INDEX "idx_ys_scheme_tenant" ON "public"."ys_operation_scheme"("tenant_id" ASC);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ys_operation_scheme_code_key" ON "public"."ys_operation_scheme"("code" ASC);
+
+-- CreateIndex
+CREATE INDEX "idx_ys_policy_tenant_ent" ON "public"."ys_policy"("tenant_id" ASC, "enterprise_id" ASC);
+
+-- CreateIndex
+CREATE INDEX "idx_ys_sku_tenant" ON "public"."ys_product_sku"("tenant_id" ASC);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ys_product_sku_sku_code_key" ON "public"."ys_product_sku"("sku_code" ASC);
+
+-- CreateIndex
+CREATE INDEX "idx_ys_quota_tenant" ON "public"."ys_quota_account"("tenant_id" ASC);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ys_quota_account_enterprise_id_key" ON "public"."ys_quota_account"("enterprise_id" ASC);
+
+-- CreateIndex
+CREATE INDEX "idx_ys_seat_tenant_ent" ON "public"."ys_seat"("tenant_id" ASC, "enterprise_id" ASC);
+
+-- CreateIndex
+CREATE INDEX "idx_ys_batch_tenant_ent_month" ON "public"."ys_settlement_batch"("tenant_id" ASC, "enterprise_id" ASC, "settlement_month" ASC);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ys_settlement_batch_batch_no_key" ON "public"."ys_settlement_batch"("batch_no" ASC);
+
+-- CreateIndex
+CREATE INDEX "idx_ys_split_tenant" ON "public"."ys_split_pipeline"("tenant_id" ASC);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ys_split_pipeline_pipeline_code_key" ON "public"."ys_split_pipeline"("pipeline_code" ASC);
+
+-- CreateIndex
+CREATE INDEX "idx_ys_tariff_tenant" ON "public"."ys_tariff_rule"("tenant_id" ASC);
 
 -- AddForeignKey
-ALTER TABLE "system_user" ADD CONSTRAINT "system_user_dept_id_fkey" FOREIGN KEY ("dept_id") REFERENCES "system_dept"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."infra_data_source_config" ADD CONSTRAINT "infra_data_source_config_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."system_tenant"("id") ON DELETE RESTRICT ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "system_user_role" ADD CONSTRAINT "system_user_role_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "system_user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."infra_job_log" ADD CONSTRAINT "infra_job_log_job_id_fkey" FOREIGN KEY ("job_id") REFERENCES "public"."infra_job"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "system_user_role" ADD CONSTRAINT "system_user_role_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "system_role"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_action" ADD CONSTRAINT "online_action_revision_id_fkey" FOREIGN KEY ("revision_id") REFERENCES "public"."online_revision"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "system_menu" ADD CONSTRAINT "system_menu_parent_id_fkey" FOREIGN KEY ("parent_id") REFERENCES "system_menu"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."online_action" ADD CONSTRAINT "online_action_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "system_role_menu" ADD CONSTRAINT "system_role_menu_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "system_role"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_definition" ADD CONSTRAINT "online_definition_current_draft_revision_id_fkey" FOREIGN KEY ("current_draft_revision_id") REFERENCES "public"."online_revision"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "system_role_menu" ADD CONSTRAINT "system_role_menu_menu_id_fkey" FOREIGN KEY ("menu_id") REFERENCES "system_menu"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_definition" ADD CONSTRAINT "online_definition_published_release_id_fkey" FOREIGN KEY ("published_release_id") REFERENCES "public"."online_release"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "system_dept" ADD CONSTRAINT "system_dept_parent_id_fkey" FOREIGN KEY ("parent_id") REFERENCES "system_dept"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."online_definition" ADD CONSTRAINT "online_definition_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "system_user_post" ADD CONSTRAINT "system_user_post_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "system_user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_field" ADD CONSTRAINT "online_field_revision_id_fkey" FOREIGN KEY ("revision_id") REFERENCES "public"."online_revision"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "system_user_post" ADD CONSTRAINT "system_user_post_post_id_fkey" FOREIGN KEY ("post_id") REFERENCES "system_post"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_field" ADD CONSTRAINT "online_field_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "system_dict_data" ADD CONSTRAINT "system_dict_data_dict_type_id_fkey" FOREIGN KEY ("dict_type_id") REFERENCES "system_dict_type"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_index" ADD CONSTRAINT "online_index_revision_id_fkey" FOREIGN KEY ("revision_id") REFERENCES "public"."online_revision"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "system_tenant" ADD CONSTRAINT "system_tenant_package_id_fkey" FOREIGN KEY ("package_id") REFERENCES "system_tenant_package"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_index" ADD CONSTRAINT "online_index_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "system_tenant_subscription" ADD CONSTRAINT "system_tenant_subscription_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_managed_table" ADD CONSTRAINT "online_managed_table_definition_id_fkey" FOREIGN KEY ("definition_id") REFERENCES "public"."online_definition"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "system_tenant_subscription" ADD CONSTRAINT "system_tenant_subscription_package_id_fkey" FOREIGN KEY ("package_id") REFERENCES "system_tenant_package"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_managed_table" ADD CONSTRAINT "online_managed_table_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "system_tenant_package_menu" ADD CONSTRAINT "system_tenant_package_menu_package_id_fkey" FOREIGN KEY ("package_id") REFERENCES "system_tenant_package"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."online_policy" ADD CONSTRAINT "online_policy_revision_id_fkey" FOREIGN KEY ("revision_id") REFERENCES "public"."online_revision"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "system_tenant_package_menu" ADD CONSTRAINT "system_tenant_package_menu_menu_id_fkey" FOREIGN KEY ("menu_id") REFERENCES "system_menu"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_policy" ADD CONSTRAINT "online_policy_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "infra_job_log" ADD CONSTRAINT "infra_job_log_job_id_fkey" FOREIGN KEY ("job_id") REFERENCES "infra_job"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_record" ADD CONSTRAINT "online_record_definition_id_fkey" FOREIGN KEY ("definition_id") REFERENCES "public"."online_definition"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "infra_data_source_config" ADD CONSTRAINT "infra_data_source_config_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_record" ADD CONSTRAINT "online_record_release_id_fkey" FOREIGN KEY ("release_id") REFERENCES "public"."online_release"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_definition" ADD CONSTRAINT "online_definition_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_record" ADD CONSTRAINT "online_record_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_definition" ADD CONSTRAINT "online_definition_current_draft_revision_id_fkey" FOREIGN KEY ("current_draft_revision_id") REFERENCES "online_revision"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."online_record" ADD CONSTRAINT "online_record_test_session_id_fkey" FOREIGN KEY ("test_session_id") REFERENCES "public"."online_test_session"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_definition" ADD CONSTRAINT "online_definition_published_release_id_fkey" FOREIGN KEY ("published_release_id") REFERENCES "online_release"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."online_relation" ADD CONSTRAINT "online_relation_revision_id_fkey" FOREIGN KEY ("revision_id") REFERENCES "public"."online_revision"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_revision" ADD CONSTRAINT "online_revision_definition_id_fkey" FOREIGN KEY ("definition_id") REFERENCES "online_definition"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."online_relation" ADD CONSTRAINT "online_relation_target_release_id_fkey" FOREIGN KEY ("target_release_id") REFERENCES "public"."online_release"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_revision" ADD CONSTRAINT "online_revision_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_relation" ADD CONSTRAINT "online_relation_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_field" ADD CONSTRAINT "online_field_revision_id_fkey" FOREIGN KEY ("revision_id") REFERENCES "online_revision"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."online_release" ADD CONSTRAINT "online_release_definition_id_fkey" FOREIGN KEY ("definition_id") REFERENCES "public"."online_definition"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_field" ADD CONSTRAINT "online_field_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_release" ADD CONSTRAINT "online_release_revision_id_fkey" FOREIGN KEY ("revision_id") REFERENCES "public"."online_revision"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_index" ADD CONSTRAINT "online_index_revision_id_fkey" FOREIGN KEY ("revision_id") REFERENCES "online_revision"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."online_release" ADD CONSTRAINT "online_release_rollback_of_release_id_fkey" FOREIGN KEY ("rollback_of_release_id") REFERENCES "public"."online_release"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_index" ADD CONSTRAINT "online_index_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_release" ADD CONSTRAINT "online_release_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_relation" ADD CONSTRAINT "online_relation_revision_id_fkey" FOREIGN KEY ("revision_id") REFERENCES "online_revision"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."online_revision" ADD CONSTRAINT "online_revision_definition_id_fkey" FOREIGN KEY ("definition_id") REFERENCES "public"."online_definition"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_relation" ADD CONSTRAINT "online_relation_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_revision" ADD CONSTRAINT "online_revision_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_relation" ADD CONSTRAINT "online_relation_target_release_id_fkey" FOREIGN KEY ("target_release_id") REFERENCES "online_release"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_schema_change" ADD CONSTRAINT "online_schema_change_definition_id_fkey" FOREIGN KEY ("definition_id") REFERENCES "public"."online_definition"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_view" ADD CONSTRAINT "online_view_revision_id_fkey" FOREIGN KEY ("revision_id") REFERENCES "online_revision"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."online_schema_change" ADD CONSTRAINT "online_schema_change_revision_id_fkey" FOREIGN KEY ("revision_id") REFERENCES "public"."online_revision"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_view" ADD CONSTRAINT "online_view_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_schema_change" ADD CONSTRAINT "online_schema_change_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_action" ADD CONSTRAINT "online_action_revision_id_fkey" FOREIGN KEY ("revision_id") REFERENCES "online_revision"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."online_test_session" ADD CONSTRAINT "online_test_session_definition_id_fkey" FOREIGN KEY ("definition_id") REFERENCES "public"."online_definition"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_action" ADD CONSTRAINT "online_action_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_test_session" ADD CONSTRAINT "online_test_session_release_id_fkey" FOREIGN KEY ("release_id") REFERENCES "public"."online_release"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_policy" ADD CONSTRAINT "online_policy_revision_id_fkey" FOREIGN KEY ("revision_id") REFERENCES "online_revision"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."online_test_session" ADD CONSTRAINT "online_test_session_revision_id_fkey" FOREIGN KEY ("revision_id") REFERENCES "public"."online_revision"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_policy" ADD CONSTRAINT "online_policy_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_test_session" ADD CONSTRAINT "online_test_session_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_workflow_binding" ADD CONSTRAINT "online_workflow_binding_revision_id_fkey" FOREIGN KEY ("revision_id") REFERENCES "online_revision"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."online_view" ADD CONSTRAINT "online_view_revision_id_fkey" FOREIGN KEY ("revision_id") REFERENCES "public"."online_revision"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_workflow_binding" ADD CONSTRAINT "online_workflow_binding_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_view" ADD CONSTRAINT "online_view_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_release" ADD CONSTRAINT "online_release_definition_id_fkey" FOREIGN KEY ("definition_id") REFERENCES "online_definition"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."online_workflow_binding" ADD CONSTRAINT "online_workflow_binding_revision_id_fkey" FOREIGN KEY ("revision_id") REFERENCES "public"."online_revision"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_release" ADD CONSTRAINT "online_release_revision_id_fkey" FOREIGN KEY ("revision_id") REFERENCES "online_revision"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."online_workflow_binding" ADD CONSTRAINT "online_workflow_binding_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_release" ADD CONSTRAINT "online_release_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."plugin_config" ADD CONSTRAINT "plugin_config_plugin_id_fkey" FOREIGN KEY ("plugin_id") REFERENCES "public"."plugin"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_release" ADD CONSTRAINT "online_release_rollback_of_release_id_fkey" FOREIGN KEY ("rollback_of_release_id") REFERENCES "online_release"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."plugin_state" ADD CONSTRAINT "plugin_state_plugin_id_fkey" FOREIGN KEY ("plugin_id") REFERENCES "public"."plugin"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_managed_table" ADD CONSTRAINT "online_managed_table_definition_id_fkey" FOREIGN KEY ("definition_id") REFERENCES "online_definition"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."system_dept" ADD CONSTRAINT "system_dept_parent_id_fkey" FOREIGN KEY ("parent_id") REFERENCES "public"."system_dept"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_managed_table" ADD CONSTRAINT "online_managed_table_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."system_dict_data" ADD CONSTRAINT "system_dict_data_dict_type_id_fkey" FOREIGN KEY ("dict_type_id") REFERENCES "public"."system_dict_type"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_schema_change" ADD CONSTRAINT "online_schema_change_definition_id_fkey" FOREIGN KEY ("definition_id") REFERENCES "online_definition"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."system_menu" ADD CONSTRAINT "system_menu_parent_id_fkey" FOREIGN KEY ("parent_id") REFERENCES "public"."system_menu"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_schema_change" ADD CONSTRAINT "online_schema_change_revision_id_fkey" FOREIGN KEY ("revision_id") REFERENCES "online_revision"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."system_role_menu" ADD CONSTRAINT "system_role_menu_menu_id_fkey" FOREIGN KEY ("menu_id") REFERENCES "public"."system_menu"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_schema_change" ADD CONSTRAINT "online_schema_change_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."system_role_menu" ADD CONSTRAINT "system_role_menu_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "public"."system_role"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_test_session" ADD CONSTRAINT "online_test_session_definition_id_fkey" FOREIGN KEY ("definition_id") REFERENCES "online_definition"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."system_tenant" ADD CONSTRAINT "system_tenant_package_id_fkey" FOREIGN KEY ("package_id") REFERENCES "public"."system_tenant_package"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_test_session" ADD CONSTRAINT "online_test_session_revision_id_fkey" FOREIGN KEY ("revision_id") REFERENCES "online_revision"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."system_tenant_package_menu" ADD CONSTRAINT "system_tenant_package_menu_menu_id_fkey" FOREIGN KEY ("menu_id") REFERENCES "public"."system_menu"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_test_session" ADD CONSTRAINT "online_test_session_release_id_fkey" FOREIGN KEY ("release_id") REFERENCES "online_release"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."system_tenant_package_menu" ADD CONSTRAINT "system_tenant_package_menu_package_id_fkey" FOREIGN KEY ("package_id") REFERENCES "public"."system_tenant_package"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_test_session" ADD CONSTRAINT "online_test_session_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."system_tenant_subscription" ADD CONSTRAINT "system_tenant_subscription_package_id_fkey" FOREIGN KEY ("package_id") REFERENCES "public"."system_tenant_package"("id") ON DELETE RESTRICT ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "online_record" ADD CONSTRAINT "online_record_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "system_tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."system_tenant_subscription" ADD CONSTRAINT "system_tenant_subscription_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."system_tenant"("id") ON DELETE RESTRICT ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "online_record" ADD CONSTRAINT "online_record_definition_id_fkey" FOREIGN KEY ("definition_id") REFERENCES "online_definition"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."system_user" ADD CONSTRAINT "system_user_dept_id_fkey" FOREIGN KEY ("dept_id") REFERENCES "public"."system_dept"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_record" ADD CONSTRAINT "online_record_release_id_fkey" FOREIGN KEY ("release_id") REFERENCES "online_release"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."system_user_post" ADD CONSTRAINT "system_user_post_post_id_fkey" FOREIGN KEY ("post_id") REFERENCES "public"."system_post"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "online_record" ADD CONSTRAINT "online_record_test_session_id_fkey" FOREIGN KEY ("test_session_id") REFERENCES "online_test_session"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."system_user_post" ADD CONSTRAINT "system_user_post_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."system_user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ai_usage" ADD CONSTRAINT "ai_usage_token_id_fkey" FOREIGN KEY ("token_id") REFERENCES "ai_access_token"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."system_user_role" ADD CONSTRAINT "system_user_role_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "public"."system_role"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ai_usage" ADD CONSTRAINT "ai_usage_channel_id_fkey" FOREIGN KEY ("channel_id") REFERENCES "ai_channel"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "ai_chat_message" ADD CONSTRAINT "ai_chat_message_conversation_id_fkey" FOREIGN KEY ("conversation_id") REFERENCES "ai_chat_conversation"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "plugin_state" ADD CONSTRAINT "plugin_state_plugin_id_fkey" FOREIGN KEY ("plugin_id") REFERENCES "plugin"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "plugin_config" ADD CONSTRAINT "plugin_config_plugin_id_fkey" FOREIGN KEY ("plugin_id") REFERENCES "plugin"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."system_user_role" ADD CONSTRAINT "system_user_role_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."system_user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 
 

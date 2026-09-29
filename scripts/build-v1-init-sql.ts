@@ -21,11 +21,42 @@ function escapeSql(str: any): string {
   return "'" + String(str).replace(/'/g, "''") + "'"
 }
 
+/** 从 DATABASE_URL 派生影子库连接串（库名后加 _shadow），供 migrate diff 重放迁移。 */
+function deriveShadowUrl(databaseUrl: string | undefined): string {
+  const raw = databaseUrl?.trim()
+  if (!raw) return ""
+  try {
+    const url = new URL(raw)
+    const database = url.pathname.replace(/^\//, "")
+    if (!database) return ""
+    url.pathname = `/${database}_shadow`
+    return url.toString()
+  } catch {
+    return ""
+  }
+}
+
 async function main() {
   console.log("[BUILD-V1-INIT] Generating V1 PostgreSQL full initialization SQL...")
 
   // 1. 获取纯净 DDL
-  const ddl = execSync("npx prisma migrate diff --from-empty --to-schema prisma/schema.prisma --script", { encoding: "utf-8" })
+  //
+  // **必须从 migrations 推导, 不能从 prisma/schema.prisma 推导。**
+  // 两者并不一致: 有 23 张表只存在于 migrations(15 张 ys_* 应算通业务表、5 张 aigw 表、
+  // 3 张 system_tenant_package_ai_*)，从 schema 生成的 init SQL 会**少建这 23 张表**
+  // （实测 57 表 vs migrations 的 78 表），于是拆分栈/容器初始化出来的库缺表。
+  // `--to-migrations` 需要影子库重放迁移, 故这里派生一个 <库名>_shadow。
+  const shadowUrl = process.env.SHADOW_DATABASE_URL?.trim() || deriveShadowUrl(process.env.DATABASE_URL)
+  if (!shadowUrl) {
+    throw new Error(
+      "build:init-sql 需要 DATABASE_URL（或显式 SHADOW_DATABASE_URL）：DDL 由 migrations 推导，" +
+        "prisma 需要影子库重放迁移。本地可先 `docker compose -f deploy/docker-compose.dev.yml up -d postgres`。",
+    )
+  }
+  const ddl = execSync("npx prisma migrate diff --from-empty --to-migrations prisma/migrations --script", {
+    encoding: "utf-8",
+    env: { ...process.env, SHADOW_DATABASE_URL: shadowUrl },
+  })
 
   // 2. 组装全量纯净 SEED 数据
   const fullMenus = withAiMenuCatalog(withAigwMenuCatalog(withOnlineMenuCatalog(SEED_MENUS)))

@@ -12,5 +12,10 @@ export default defineConfig({
   },
   datasource: {
     url: process.env.DATABASE_URL ?? "",
+    // 仅 `prisma migrate diff --to-migrations` 需要（它要重放迁移到影子库）。
+    // 注意**必须条件式带上**：Prisma 会校验该字段不能为空字符串，
+    // 写成 `shadowDatabaseUrl: process.env.SHADOW_DATABASE_URL ?? ""` 会让
+    // 未设置该变量的所有 prisma 命令（migrate status / resolve / deploy）直接报错。
+    ...(process.env.SHADOW_DATABASE_URL ? { shadowDatabaseUrl: process.env.SHADOW_DATABASE_URL } : {}),
   },
 })

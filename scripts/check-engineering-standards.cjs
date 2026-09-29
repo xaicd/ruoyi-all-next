@@ -297,11 +297,11 @@ const RULES = [
       // 外键必须**按所属表**解析：只在 CREATE TABLE 块内收集。
       // (第一版按列名全局匹配 -> 300 条误报: A 表里同名的普通列会被拿去和 B 表的外键比对。)
       const foreignKeysByTable = new Map()
-      for (const match of sql.matchAll(/CREATE TABLE "([^"]+)" \(([\s\S]*?)\n\);/g)) {
+      for (const match of sql.matchAll(/CREATE TABLE (?:"public"\.)?"([^"]+)" \(([\s\S]*?)\n\);/g)) {
         const [, tableName, body] = match
         tables.set(tableName, new Set([...body.matchAll(/^\s*"([a-z_]+)"\s/gm)].map((m) => m[1])))
         const fks = []
-        for (const fk of body.matchAll(/FOREIGN KEY \("([a-z_]+)"\) REFERENCES "([^"]+)"\(/g)) {
+        for (const fk of body.matchAll(/FOREIGN KEY \("([a-z_]+)"\) REFERENCES (?:"public"\.)?"([^"]+)"\(/g)) {
           fks.push({ column: fk[1], references: fk[2] })
         }
         if (fks.length > 0) foreignKeysByTable.set(tableName, fks)
@@ -313,7 +313,7 @@ const RULES = [
       const dangling = []
 
       // 按语句顺序扫描：INSERT 语句与 CREATE/FOREIGN KEY 都在同一份文件里
-      for (const match of sql.matchAll(/INSERT INTO "([^"]+)" \(([^)]*)\) VALUES\n([\s\S]*?);\n/g)) {
+      for (const match of sql.matchAll(/INSERT INTO (?:"public"\.)?"([^"]+)" \(([^)]*)\) VALUES\n([\s\S]*?);\n/g)) {
         const [, table, columnList, values] = match
         const columns = columnList.split(",").map((c) => c.trim().replace(/"/g, ""))
         // 生成器每条记录写一行 —— 按行切分才不会被行内的 NOW() 等函数调用括号截断。
