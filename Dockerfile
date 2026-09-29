@@ -5,7 +5,9 @@
 # Stage 1: 依赖安装
 FROM node:24-alpine AS deps
 WORKDIR /app
-COPY package.json package-lock.json* .npmrc ./
+# pnpm 迁移后锁文件是 pnpm-lock.yaml（package-lock.json 已删除）——
+# 必须把锁文件与 pnpm-workspace.yaml 一起拷进来，否则 --frozen-lockfile 无锁可依。
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 # 构建工具只装在 deps 阶段（最终 runner 镜像不含它们）。
 # 原因: better-sqlite3 的安装脚本是 `prebuild-install || node-gyp rebuild`，
 # 一旦从 GitHub 拉预编译包超时, 就会回退到源码编译 —— 而 alpine 默认没有
