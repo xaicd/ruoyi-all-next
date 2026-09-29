@@ -267,6 +267,34 @@ const RULES = [
               detail: `facade method "${domain.name}.${method}" has no service/target mapping in rpc-actions.json`,
             })
           }
+
+          // 光有映射还不够: 映射指向的 service/target 必须真的存在, 否则调用时
+          // 一样抛 "Method X not found in Y service"。这一层才拦住"声明+映射都齐、
+          // 但目标写错/改名"的情形。
+          for (const action of rpcActions.domains?.[domain.name]?.actions ?? []) {
+            if (!action.service) continue
+            if (declaration[1] && !declaration[1].includes(`"${action.method}"`)) continue
+            const moduleRel = action.module
+              ? `${SRC}/modules/${domain.name}/backend/services/${action.module}.ts`
+              : `${SRC}/modules/${domain.name}/backend/services/index.ts`
+            const moduleFile = abs(moduleRel)
+            const orIndex = abs(`${SRC}/modules/${domain.name}/backend/services/index.ts`)
+            const candidate = fs.existsSync(moduleFile) ? moduleFile : orIndex
+            if (!fs.existsSync(candidate)) {
+              violations.push({ file: toRel(file), detail: `"${domain.name}.${action.method}" 的 module 文件不存在: ${moduleRel}` })
+              continue
+            }
+            const source = fs.readFileSync(candidate, "utf8")
+            const target = action.target ?? action.method
+            const declared = new RegExp(`export (const|class) ${action.service}\\b`).test(source)
+            const hasMethod = new RegExp(`\\b${target}\\s*\\(`).test(source)
+            if (!declared || !hasMethod) {
+              violations.push({
+                file: toRel(file),
+                detail: `"${domain.name}.${action.method}" -> ${action.service}.${target} 在 ${toRel(candidate)} 中${declared ? "缺少该方法" : "不存在该 service 导出"}`,
+              })
+            }
+          }
         }
       }
       return violations.sort((a, b) => a.file.localeCompare(b.file) || a.detail.localeCompare(b.detail))

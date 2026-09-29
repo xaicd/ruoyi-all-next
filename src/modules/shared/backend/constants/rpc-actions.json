@@ -690,11 +690,11 @@
     "bpm": {
       "actions": [
         { "method": "ping", "schema": "ping" },
-        { "method": "listDefinitions", "schema": "bpmPageQuerySchema", "fieldsRef": "pageQuery" },
-        { "method": "listTasks", "schema": "bpmPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listDefinitions",  "service": "BpmProcessService", "module": "process.service","schema": "bpmPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listTasks",  "service": "BpmProcessService", "module": "process.service","schema": "bpmPageQuerySchema", "fieldsRef": "pageQuery" },
         {
           "method": "actionTask",
-          "schema": "bpmTaskActionSchema",
+           "service": "BpmProcessService", "module": "process.service","schema": "bpmTaskActionSchema",
           "fields": [
             { "name": "taskId", "type": "string" },
             { "name": "action", "type": "string" },
@@ -763,10 +763,10 @@
     "report": {
       "actions": [
         { "method": "ping", "schema": "ping" },
-        { "method": "listBoards", "schema": "reportPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listBoards",  "service": "ReportService", "module": "index","schema": "reportPageQuerySchema", "fieldsRef": "pageQuery" },
         {
           "method": "exportBoard",
-          "schema": "reportExportSchema",
+           "service": "ReportService", "module": "index","schema": "reportExportSchema",
           "fields": [
             { "name": "boardId", "type": "string" },
             { "name": "format", "type": "string" },
@@ -779,11 +779,11 @@
     "mp": {
       "actions": [
         { "method": "ping", "schema": "ping" },
-        { "method": "listAccounts", "schema": "mpPageQuerySchema", "fieldsRef": "pageQuery" },
-        { "method": "listFans", "schema": "mpPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listAccounts",  "service": "MpService", "module": "index","schema": "mpPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listFans",  "service": "MpService", "module": "index","schema": "mpPageQuerySchema", "fieldsRef": "pageQuery" },
         {
           "method": "sendMessage",
-          "schema": "mpSendMessageSchema",
+           "service": "MpService", "module": "index","schema": "mpSendMessageSchema",
           "fields": [
             { "name": "accountId", "type": "string" },
             { "name": "content", "type": "string" }
@@ -794,11 +794,11 @@
     "mall": {
       "actions": [
         { "method": "ping", "schema": "ping" },
-        { "method": "listProducts", "schema": "mallPageQuerySchema", "fieldsRef": "pageQuery" },
-        { "method": "listOrders", "schema": "mallPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listProducts",  "service": "MallService", "module": "index","schema": "mallPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listOrders",  "service": "MallService", "module": "index","schema": "mallPageQuerySchema", "fieldsRef": "pageQuery" },
         {
           "method": "issueCoupon",
-          "schema": "mallCouponIssueSchema",
+           "service": "MallService", "module": "index","schema": "mallCouponIssueSchema",
           "fields": [
             { "name": "couponTemplateId", "type": "string" },
             { "name": "targetUserId", "type": "string" },
@@ -810,7 +810,7 @@
     "member": {
       "actions": [
         { "method": "ping", "schema": "ping" },
-        { "method": "listUsers", "schema": "memberPageQuerySchema", "fields": [
+        { "method": "listUsers",  "service": "MemberService", "module": "index","schema": "memberPageQuerySchema", "fields": [
             { "name": "page", "type": "int32" },
             { "name": "pageSize", "type": "int32" },
             { "name": "keyword", "type": "string", "optional": true },
@@ -818,7 +818,7 @@
           ] },
         {
           "method": "updateUser",
-          "schema": "memberUserUpdateSchema",
+           "service": "MemberService", "module": "index","schema": "memberUserUpdateSchema",
           "fields": [
             { "name": "id", "type": "string" },
             { "name": "nickname", "type": "string", "optional": true },
@@ -826,10 +826,10 @@
             { "name": "levelId", "type": "string", "optional": true }
           ]
         },
-        { "method": "listLevels", "schema": "memberPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listLevels",  "service": "MemberService", "module": "index","schema": "memberPageQuerySchema", "fieldsRef": "pageQuery" },
         {
           "method": "createLevel",
-          "schema": "memberLevelCreateSchema",
+           "service": "MemberService", "module": "index","schema": "memberLevelCreateSchema",
           "fields": [
             { "name": "name", "type": "string" },
             { "name": "minPoint", "type": "int32" },
@@ -837,10 +837,10 @@
             { "name": "icon", "type": "string", "optional": true }
           ]
         },
-        { "method": "listPoints", "schema": "memberPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listPoints",  "service": "MemberService", "module": "index","schema": "memberPageQuerySchema", "fieldsRef": "pageQuery" },
         {
           "method": "adjustPoint",
-          "schema": "memberPointAdjustSchema",
+           "service": "MemberService", "module": "index","schema": "memberPointAdjustSchema",
           "fields": [
             { "name": "userId", "type": "string" },
             { "name": "point", "type": "int32" },
@@ -852,11 +852,11 @@
     "crm": {
       "actions": [
         { "method": "ping", "schema": "ping" },
-        { "method": "listCustomers", "schema": "crmPageQuerySchema", "fieldsRef": "pageQuery" },
-        { "method": "listClues", "schema": "crmPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listCustomers",  "service": "CrmService", "module": "index","schema": "crmPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listClues",  "service": "CrmService", "module": "index","schema": "crmPageQuerySchema", "fieldsRef": "pageQuery" },
         {
           "method": "createFollowup",
-          "schema": "crmFollowupSchema",
+           "service": "CrmService", "module": "index","schema": "crmFollowupSchema",
           "fields": [
             { "name": "customerId", "type": "string" },
             { "name": "content", "type": "string" }
@@ -867,11 +867,11 @@
     "erp": {
       "actions": [
         { "method": "ping", "schema": "ping" },
-        { "method": "listProducts", "schema": "erpPageQuerySchema", "fieldsRef": "pageQuery" },
-        { "method": "listOrders", "schema": "erpPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listProducts",  "service": "ErpService", "module": "index","schema": "erpPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listOrders",  "service": "ErpService", "module": "index","schema": "erpPageQuerySchema", "fieldsRef": "pageQuery" },
         {
           "method": "adjustStock",
-          "schema": "erpStockAdjustmentSchema",
+           "service": "ErpService", "module": "index","schema": "erpStockAdjustmentSchema",
           "fields": [
             { "name": "productId", "type": "string" },
             { "name": "delta", "type": "int32" },
@@ -883,10 +883,10 @@
     "wms": {
       "actions": [
         { "method": "ping", "schema": "ping" },
-        { "method": "listWarehouses", "schema": "wmsPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listWarehouses",  "service": "WmsService", "module": "index","schema": "wmsPageQuerySchema", "fieldsRef": "pageQuery" },
         {
           "method": "checkin",
-          "schema": "wmsCheckinSchema",
+           "service": "WmsService", "module": "index","schema": "wmsCheckinSchema",
           "fields": [
             { "name": "warehouseId", "type": "string" },
             { "name": "quantity", "type": "int32" },
@@ -898,10 +898,10 @@
     "mes": {
       "actions": [
         { "method": "ping", "schema": "ping" },
-        { "method": "listWorkOrders", "schema": "mesPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listWorkOrders",  "service": "MesService", "module": "index","schema": "mesPageQuerySchema", "fieldsRef": "pageQuery" },
         {
           "method": "reportWork",
-          "schema": "mesReportWorkSchema",
+           "service": "MesService", "module": "index","schema": "mesReportWorkSchema",
           "fields": [
             { "name": "workOrderId", "type": "string" },
             { "name": "outputQty", "type": "int32" },
@@ -914,10 +914,10 @@
     "ai": {
       "actions": [
         { "method": "ping", "schema": "ping" },
-        { "method": "listModels", "schema": "aiPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listModels",  "service": "AiService", "module": "index","schema": "aiPageQuerySchema", "fieldsRef": "pageQuery" },
         {
           "method": "createModel",
-          "schema": "aiModelCreateSchema",
+           "service": "AiService", "module": "index","schema": "aiModelCreateSchema",
           "fields": [
             { "name": "name", "type": "string" },
             { "name": "platform", "type": "string" },
@@ -928,25 +928,25 @@
             { "name": "maxTokens", "type": "int32", "optional": true }
           ]
         },
-        { "method": "listChats", "schema": "aiPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listChats",  "service": "AiService", "module": "index","schema": "aiPageQuerySchema", "fieldsRef": "pageQuery" },
         {
           "method": "deleteChat",
-          "schema": "aiChatDeleteSchema",
+           "service": "AiService", "module": "index","schema": "aiChatDeleteSchema",
           "fields": [{ "name": "chatId", "type": "string" }]
         },
         {
           "method": "relayChatCompletion",
-          "schema": "aiRelayChatSchema",
+           "service": "AiService", "module": "index","schema": "aiRelayChatSchema",
           "fields": [
             { "name": "apiKey", "type": "string" },
             { "name": "model", "type": "string" },
             { "name": "messages", "type": "json" }
           ]
         },
-        { "method": "listPublicModels", "schema": "empty" },
+        { "method": "listPublicModels",  "service": "AiService", "module": "index","schema": "empty" },
         {
           "method": "embed",
-          "schema": "aiEmbeddingSchema",
+           "service": "AiService", "module": "index","schema": "aiEmbeddingSchema",
           "fields": [
             { "name": "apiKey", "type": "string" },
             { "name": "model", "type": "string", "optional": true },
@@ -1045,7 +1045,7 @@
 
       "actions": [
         { "method": "ping", "schema": "ping" },
-        { "method": "listDevices", "schema": "iotPageQuerySchema", "fields": [
+        { "method": "listDevices",  "service": "IotService", "module": "index","schema": "iotPageQuerySchema", "fields": [
             { "name": "page", "type": "int32" },
             { "name": "pageSize", "type": "int32" },
             { "name": "keyword", "type": "string", "optional": true },
@@ -1053,7 +1053,7 @@
           ] },
         {
           "method": "createDevice",
-          "schema": "iotDeviceCreateSchema",
+           "service": "IotService", "module": "index","schema": "iotDeviceCreateSchema",
           "fields": [
             { "name": "name", "type": "string" },
             { "name": "deviceKey", "type": "string" },
@@ -1062,10 +1062,10 @@
             { "name": "remark", "type": "string", "optional": true }
           ]
         },
-        { "method": "listAlerts", "schema": "iotPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listAlerts",  "service": "IotService", "module": "index","schema": "iotPageQuerySchema", "fieldsRef": "pageQuery" },
         {
           "method": "handleAlert",
-          "schema": "iotAlertHandleSchema",
+           "service": "IotService", "module": "index","schema": "iotAlertHandleSchema",
           "fields": [
             { "name": "alertId", "type": "string" },
             { "name": "resolution", "type": "string" }
@@ -1076,10 +1076,10 @@
     "im": {
       "actions": [
         { "method": "ping", "schema": "ping" },
-        { "method": "listConversations", "schema": "imPageQuerySchema", "fieldsRef": "pageQuery" },
+        { "method": "listConversations",  "service": "ImService", "module": "index","schema": "imPageQuerySchema", "fieldsRef": "pageQuery" },
         {
           "method": "auditMessage",
-          "schema": "imMessageAuditSchema",
+           "service": "ImService", "module": "index","schema": "imMessageAuditSchema",
           "fields": [
             { "name": "conversationId", "type": "string" },
             { "name": "messageId", "type": "string" },
