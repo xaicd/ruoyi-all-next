@@ -46,17 +46,23 @@ async function main() {
 
   let seedSql = `\n\n-- ==============================================================================\n-- SEED DATA (第一版全量初始数据 - 全部 4 字符工整菜单与系统初始配置)\n-- ==============================================================================\n\n`
 
-  // 租户 (ID=1 默认系统租户)
-  seedSql += `-- 1. 默认系统租户\n`
-  seedSql += `INSERT INTO "system_tenant" ("id", "name", "package_id", "contact_user_name", "contact_mobile", "status", "expire_time", "account_count", "created_at", "updated_at") VALUES\n`
-  seedSql += `('1', '系统默认租户', '1', '管理员', '13800000000', 'ACTIVE', '2099-12-31 23:59:59', 100, NOW(), NOW())\nON CONFLICT ("id") DO NOTHING;\n\n`
-
-  // 租户套餐
-  seedSql += `-- 2. 租户套餐\n`
+  // 租户套餐（必须先于租户插入：system_tenant.package_id 外键指向它）
+  seedSql += `-- 1. 租户套餐\n`
   const pkgValues = SEED_TENANT_PACKAGES.map((pkg: any) =>
     `(${escapeSql(pkg.id)}, ${escapeSql(pkg.name)}, ${escapeSql(pkg.status)}, ${escapeSql(JSON.stringify(pkg.menuIds))}, ${escapeSql(pkg.remark)}, NOW(), NOW())`
   ).join(",\n")
   seedSql += `INSERT INTO "system_tenant_package" ("id", "name", "status", "menu_ids", "remark", "created_at", "updated_at") VALUES\n${pkgValues}\nON CONFLICT ("id") DO NOTHING;\n\n`
+
+  // 租户 (ID=1 默认系统租户)
+  //
+  // 这段曾经用 contact_user_name / contact_mobile / account_count 三个**已不存在的列名**，
+  // 且 package_id 写成 '1'（套餐实际是 '111'）、又插在套餐之前 —— 三者叠加导致
+  // 生成的 init SQL 在全新库上必然失败（column "contact_user_name" does not exist）。
+  // 列名与取值以迁移 20260821000000（id='1' -> tenant_code='default'）和
+  // src/modules/system/backend/repositories/tenant.repository.ts 的内存种子为准。
+  seedSql += `-- 2. 默认系统租户（package_id='111'，须在上面的套餐之后）\n`
+  seedSql += `INSERT INTO "system_tenant" ("id", "tenant_code", "name", "contact_name", "contact_phone", "package_id", "status", "effective_at", "expire_time", "account_limit", "created_at", "updated_at") VALUES\n`
+  seedSql += `('1', 'default', '系统默认租户', '管理员', '13800000000', '111', 'ACTIVE', NOW(), '2099-12-31 23:59:59', 100, NOW(), NOW())\nON CONFLICT ("id") DO NOTHING;\n\n`
 
   // 部门
   seedSql += `-- 3. 组织部门\n`

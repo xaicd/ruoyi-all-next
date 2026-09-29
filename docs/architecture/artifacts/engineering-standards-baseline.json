@@ -30,6 +30,11 @@
         "src/modules/report/contract/report.facade.ts": 2,
         "src/modules/wms/contract/wms.facade.ts": 2
       }
+    },
+    "init-sql-seed-columns": {
+      "accepted": {
+        "sql/init/ruoyi_all_next_v1.0.0_postgresql.sql": 7
+      }
     }
   }
 }

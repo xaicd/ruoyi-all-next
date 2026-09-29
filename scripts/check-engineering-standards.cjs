@@ -272,6 +272,47 @@ const RULES = [
       return violations.sort((a, b) => a.file.localeCompare(b.file) || a.detail.localeCompare(b.detail))
     },
   },
+  {
+    id: "init-sql-seed-columns",
+    section: "AGENTS.md §9.2",
+    mode: "ratchet",
+    description:
+      "seed INSERTs in the generated V1 init SQL must reference columns that exist in its own DDL",
+    run() {
+      // 为什么需要这条: sql/init/*.sql 是 AGENTS.md §9.2 认定的"唯一官方标准初始化入口",
+      // 但它的**建表部分是每次 build:init-sql 重新生成的**, 而**种子 INSERT 是手写的** ——
+      // schema 演进后没人跑过它, 于是列名大面积漂移, 整份 SQL 在全新库上必然中途失败
+      // (实测: column "contact_user_name" does not exist)。
+      // 这条门禁让"手写种子"与"生成 DDL"之间不可能再静默漂移。
+      const sqlRel = "sql/init/ruoyi_all_next_v1.0.0_postgresql.sql"
+      const sqlFile = abs(sqlRel)
+      if (!fs.existsSync(sqlFile)) return []
+
+      const sql = fs.readFileSync(sqlFile, "utf8")
+      const tables = new Map()
+      for (const match of sql.matchAll(/CREATE TABLE "([^"]+)" \(([\s\S]*?)\n\);/g)) {
+        tables.set(match[1], new Set([...match[2].matchAll(/^\s*"([a-z_]+)"\s/gm)].map((m) => m[1])))
+      }
+
+      const violations = []
+      for (const match of sql.matchAll(/INSERT INTO "([^"]+)" \(([^)]*)\)/g)) {
+        const [, table, columnList] = match
+        const columns = tables.get(table)
+        if (!columns) {
+          violations.push({ file: sqlRel, detail: `INSERT into unknown table "${table}"` })
+          continue
+        }
+        const missing = columnList
+          .split(",")
+          .map((column) => column.trim().replace(/"/g, ""))
+          .filter((column) => column && !columns.has(column))
+        if (missing.length > 0) {
+          violations.push({ file: sqlRel, detail: `INSERT into "${table}" uses missing column(s): ${missing.join(", ")}` })
+        }
+      }
+      return violations.sort((a, b) => a.detail.localeCompare(b.detail))
+    },
+  },
 ]
 
 function countByFile(violations) {

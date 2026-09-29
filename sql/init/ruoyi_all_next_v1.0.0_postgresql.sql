@@ -1,6 +1,6 @@
 -- ==============================================================================
 -- ruoyi-all-next 第一版权威全量初始化 SQL (V1.0.0 PostgreSQL)
--- 生成时间: 2026-09-27T16:36:31.437Z
+-- 生成时间: 2026-09-29T04:07:47.437Z
 -- 包含: 全 15 域完整 DDL + 工整 4 字符系统菜单 + 平台超管 + 完整业务种子数据
 -- ==============================================================================
 
@@ -908,6 +908,54 @@ CREATE TABLE "ai_chat_message" (
     CONSTRAINT "ai_chat_message_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "plugin" (
+    "id" TEXT NOT NULL,
+    "plugin_key" VARCHAR(128) NOT NULL,
+    "package_name" VARCHAR(200) NOT NULL,
+    "package_path" VARCHAR(500),
+    "version" VARCHAR(50) NOT NULL,
+    "api_version" INTEGER NOT NULL,
+    "categories" TEXT[],
+    "manifest_json" JSONB NOT NULL,
+    "status" VARCHAR(20) NOT NULL DEFAULT 'installed',
+    "install_order" INTEGER,
+    "last_error" VARCHAR(1000),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "plugin_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "plugin_state" (
+    "id" TEXT NOT NULL,
+    "plugin_id" TEXT NOT NULL,
+    "scope_kind" VARCHAR(30) NOT NULL,
+    "scope_id" VARCHAR(128) NOT NULL DEFAULT '',
+    "namespace" VARCHAR(100) NOT NULL DEFAULT 'default',
+    "state_key" VARCHAR(200) NOT NULL,
+    "value_json" JSONB NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "plugin_state_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "plugin_config" (
+    "id" TEXT NOT NULL,
+    "plugin_id" TEXT NOT NULL,
+    "tenant_id" VARCHAR(64) NOT NULL,
+    "config_json" JSONB NOT NULL,
+    "last_error" VARCHAR(1000),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "plugin_config_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "system_user_username_key" ON "system_user"("username");
 
@@ -1196,6 +1244,18 @@ CREATE INDEX "ai_chat_conversation_tenant_id_user_id_idx" ON "ai_chat_conversati
 -- CreateIndex
 CREATE INDEX "ai_chat_message_conversation_id_created_at_idx" ON "ai_chat_message"("conversation_id", "created_at");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "plugin_plugin_key_key" ON "plugin"("plugin_key");
+
+-- CreateIndex
+CREATE INDEX "plugin_status_idx" ON "plugin"("status");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "plugin_state_plugin_id_scope_kind_scope_id_namespace_state__key" ON "plugin_state"("plugin_id", "scope_kind", "scope_id", "namespace", "state_key");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "plugin_config_plugin_id_tenant_id_key" ON "plugin_config"("plugin_id", "tenant_id");
+
 -- AddForeignKey
 ALTER TABLE "system_user" ADD CONSTRAINT "system_user_dept_id_fkey" FOREIGN KEY ("dept_id") REFERENCES "system_dept"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
@@ -1367,22 +1427,28 @@ ALTER TABLE "ai_usage" ADD CONSTRAINT "ai_usage_channel_id_fkey" FOREIGN KEY ("c
 -- AddForeignKey
 ALTER TABLE "ai_chat_message" ADD CONSTRAINT "ai_chat_message_conversation_id_fkey" FOREIGN KEY ("conversation_id") REFERENCES "ai_chat_conversation"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
+-- AddForeignKey
+ALTER TABLE "plugin_state" ADD CONSTRAINT "plugin_state_plugin_id_fkey" FOREIGN KEY ("plugin_id") REFERENCES "plugin"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "plugin_config" ADD CONSTRAINT "plugin_config_plugin_id_fkey" FOREIGN KEY ("plugin_id") REFERENCES "plugin"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
 
 
 -- ==============================================================================
 -- SEED DATA (第一版全量初始数据 - 全部 4 字符工整菜单与系统初始配置)
 -- ==============================================================================
 
--- 1. 默认系统租户
-INSERT INTO "system_tenant" ("id", "name", "package_id", "contact_user_name", "contact_mobile", "status", "expire_time", "account_count", "created_at", "updated_at") VALUES
-('1', '系统默认租户', '1', '管理员', '13800000000', 'ACTIVE', '2099-12-31 23:59:59', 100, NOW(), NOW())
-ON CONFLICT ("id") DO NOTHING;
-
--- 2. 租户套餐
+-- 1. 租户套餐
 INSERT INTO "system_tenant_package" ("id", "name", "status", "menu_ids", "remark", "created_at", "updated_at") VALUES
 ('111', 'RoMA 智算运营旗舰套餐', 'ACTIVE', '["1","100","1001","1002","1003","1004","1005","1006","101","1007","1008","1009","1010","102","103","1011","1012","1013","1014","104","1015","1016","1017","1018","105","106","107","108","500","501","aigw-dir","aigw-routing-dir","aigw-identity-dir","aigw-app-dir","aigw-settlement-dir","aigw-workbench","aigw-dashboard","aigw-playground","aigw-channels","aigw-models","aigw-tokens","aigw-usages","aigw-enterprises","aigw-tenant-members","aigw-seats","aigw-quotas","aigw-isv-apps","aigw-mcp-hub","aigw-chats","aigw-tariffs","aigw-skus","aigw-pipelines","aigw-contracts","aigw-invoices","ai-app-dir","ai-app-chat-conversation","ai-app-chat-role","ai-app-knowledge","ai-app-image","ai-app-mind-map","ai-app-write","ai-app-workflow"]', '默认租户旗舰套餐：开通系统管理、智汇应用、模型中台与算力调度、在线建模等全套核心业务能力', NOW(), NOW()),
 ('112', '政企算力自服务专区套餐', 'ACTIVE', '["1","100","103","107","aigw-dir","aigw-partner-portal","aigw-tokens","aigw-usages","ai-app-dir","ai-app-chat-conversation","ai-app-chat-role","ai-app-knowledge","ai-app-image","ai-app-mind-map","ai-app-write","ai-app-workflow"]', '面向政企客户内网挂载：开通算力资产大盘、员工管理、AI 协同工作台与私有 MCP 挂载', NOW(), NOW()),
 ('113', '极简体验套餐', 'ACTIVE', '["ai-app-dir","ai-app-chat-conversation","ai-app-chat-role"]', '轻量体验套餐：仅开通 AI 对话聊天与智能角色', NOW(), NOW())
+ON CONFLICT ("id") DO NOTHING;
+
+-- 2. 默认系统租户（package_id='111'，须在上面的套餐之后）
+INSERT INTO "system_tenant" ("id", "tenant_code", "name", "contact_name", "contact_phone", "package_id", "status", "effective_at", "expire_time", "account_limit", "created_at", "updated_at") VALUES
+('1', 'default', '系统默认租户', '管理员', '13800000000', '111', 'ACTIVE', NOW(), '2099-12-31 23:59:59', 100, NOW(), NOW())
 ON CONFLICT ("id") DO NOTHING;
 
 -- 3. 组织部门
