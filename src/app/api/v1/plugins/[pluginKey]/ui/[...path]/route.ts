@@ -3,8 +3,6 @@ import path from "node:path"
 
 import { NextResponse } from "next/server"
 
-import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
 import { PluginRepository } from "@/modules/shared/backend/plugins/plugin.repository"
 import { PLUGIN_UI_PREFIX, resolveBundleFile } from "@/modules/shared/backend/plugins/ui-slots"
 import type { PluginManifest } from "@/modules/shared/backend/plugins/types"
@@ -18,7 +16,7 @@ import type { PluginManifest } from "@/modules/shared/backend/plugins/types"
  * 安全：resolveBundleFile 会确认解析后的路径**没有逃出 bundle 目录**，
  * 因此 URL 里的 `../` 读不走插件包外的文件。
  *
- * 放在 /api/v1/admin 下：复用既有 proxy 鉴权与路由保护基线（与插件 API 挂载同一考虑）。
+ * 放在 /api/v1/plugins 下（非 admin 前缀）：proxy 不放压，插件的 public 页面也能取到自己的 bundle。
  */
 const CONTENT_TYPES: Record<string, string> = {
   ".js": "text/javascript; charset=utf-8",
@@ -65,4 +63,4 @@ async function handle(request: Request) {
   })
 }
 
-export const GET = withAdminRoute(handle, { permission: PERMISSIONS.PLATFORM_PLUGIN_QUERY })
+export const GET = handle

@@ -4,9 +4,11 @@
  * 这是「路由跟着包走」的关键一步 —— 插件把路由声明写在 manifest 里、处理器写在包内，
  * 由宿主统一挂载，因此插件目录可以完全自包含（不必把路由文件塞进 app/）。
  *
- * 挂载前缀: `/api/v1/admin/plugins/<pluginKey>/api<path>`
- *   为什么放在 /api/v1/admin 下: 该前缀已在 proxy 的鉴权 matcher 与路由保护基线内。
- *   若照搬 Paperclip 的 /api/plugins/*，会多出一个**未鉴权**前缀，必须同时改造 proxy 与基线。
+ * 挂载前缀: `/api/v1/plugins/<pluginKey>/api<path>`
+ *   为什么**不**放在 /api/v1/admin 下: admin 前缀由 proxy 的 perimeter 统一要求管理员鉴权，
+ *   而插件的 auth 是**运行期按 manifest 声明**的（operator/company/public），静态的
+ *   "精确路径+方法"白名单表达不了。放在非 admin 前缀下，proxy 直接放行，
+ *   由**本挂载点**按声明鉴权 —— 也与 Paperclip 的 /api/plugins/* 形态一致。
  *
  * 支撑范围（诚实标注，不静默降级）:
  *   - 运行形态: 目前只支持 merged（同进程）。isolated 需要 worker 协议新增路由转发方法，**尚未实现**，
@@ -16,7 +18,7 @@
  */
 import type { PluginApiRouteDeclaration, PluginManifest } from "./types"
 
-export const PLUGIN_ROUTE_PREFIX = "/api/v1/admin/plugins"
+export const PLUGIN_ROUTE_PREFIX = "/api/v1/plugins"
 
 export function pluginRoutePath(pluginKey: string, declarationPath: string): string {
   const suffix = declarationPath.startsWith("/") ? declarationPath : `/${declarationPath}`
@@ -53,6 +55,7 @@ export function resolvePluginRoute(input: {
   if (!capabilities.includes("api.routes.register")) {
     return { ok: false, status: 403, error: `插件未声明 api.routes.register 能力` }
   }
+  // isolated 形态的路由转发需要 worker 协议新增方法，尚未实现 —— 明确 501，不假装支持
   if (runtimeMode === "isolated") {
     return {
       ok: false,
@@ -67,13 +70,6 @@ export function resolvePluginRoute(input: {
   )
   if (!declaration) {
     return { ok: false, status: 404, error: `插件未声明该路由: ${method} ${want}` }
-  }
-  if (declaration.auth !== "operator") {
-    return {
-      ok: false,
-      status: 501,
-      error: `auth="${declaration.auth}" 尚未支持：该路径需先进 proxy 的公开策略，否则会被外围拦掉`,
-    }
   }
   return { ok: true, declaration }
 }

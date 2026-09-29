@@ -39,8 +39,8 @@ function record(overrides: Record<string, unknown> = {}) {
 
 describe("插件 UI 宿主（服务端解析与投送）", () => {
   it("bundle URL 按约定拼装", () => {
-    expect(pluginUiBundleUrl("vendor.p")).toBe("/api/v1/admin/plugins/vendor.p/ui")
-    expect(pluginUiBundleUrl("vendor.p", "/HelloWidget.js")).toBe("/api/v1/admin/plugins/vendor.p/ui/HelloWidget.js")
+    expect(pluginUiBundleUrl("vendor.p")).toBe("/api/v1/plugins/vendor.p/ui")
+    expect(pluginUiBundleUrl("vendor.p", "/HelloWidget.js")).toBe("/api/v1/plugins/vendor.p/ui/HelloWidget.js")
   })
 
   it("能读到插件包里真实存在的 bundle 文件", () => {
@@ -85,7 +85,7 @@ describe("插件 UI 宿主（服务端解析与投送）", () => {
       type: "dashboardWidget",
       exportName: "W1",
       bundleDir: "./ui",
-      bundleUrl: "/api/v1/admin/plugins/vendor.a/ui",
+      bundleUrl: "/api/v1/plugins/vendor.a/ui",
     })
   })
 

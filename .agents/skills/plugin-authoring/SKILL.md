@@ -252,10 +252,9 @@ curl /api/v1/admin/plugins
 - **插件 UI slot host 尚未实现**：manifest 可声明 `ui.slots`，宿主会校验，但**还不会渲染**。
 - §13 可选方法（`onEvent` / `runJob` / `handleWebhook` / `getData` / `performAction` / `executeTool`）及其声明面未实现。
 - manifest 的 `apiRoutes` **已可挂载** ✅ —— 宿主把它们挂到
-  `/api/v1/admin/plugins/<pluginKey>/api<path>`，处理器由插件导出（见下）。
-  当前**只支持 `auth: "operator"` 与 `merged` 形态**：isolated 形态需要 worker 协议新增
-  路由转发方法（未实现，会得到 501）；`public` / `company` 需要先把该路径纳入 proxy 的
-  公开策略，否则会在到达挂载层之前被外围拦掉（同样返回 501 并说明原因）。
+  `/api/v1/plugins/<pluginKey>/api<path>`（**非 admin 前缀**，见下方说明），处理器由插件导出。
+  `auth` 三种声明**都支持**：`operator` → 管理员鉴权、`company` → 会员鉴权、`public` → 不鉴权。
+  仍未支持：`isolated` 形态的路由转发（需要 worker 协议新增方法，会得到 **501** 并说明原因）。
 
 ### 怎么声明与实现路由
 
@@ -280,6 +279,13 @@ export default definePlugin({
 
 约定：**路由声明与处理器都留在插件包内**，宿主只做挂载 —— 这样插件目录才是自包含的，
 不必把路由文件塞进宿主 `app/`。
+
+**为什么挂载点不在 `/api/v1/admin` 下**：admin 前缀由 proxy 的 perimeter 统一要求管理员鉴权，
+而你的 `auth` 是**运行期按 manifest 声明**的 —— 静态的"精确路径 + 方法"白名单表达不了动态声明。
+放在 `/api/v1/plugins/` 下（proxy 不放压），由**挂载点按声明鉴权**。
+所以：**声明什么就查什么**，既不因为"是插件"而默认放行，也不因为路径在 admin 下而一律收紧。
+
+UI bundle 也走同一前缀：`/api/v1/plugins/<pluginKey>/ui/<path>`（这样 `public` 页面的插件也能取到自己的 bundle）。
 - 插件升级审批流（§15.3）未实现。
 
 ### 第一方插件的自带迁移（已实现，但有严格边界）

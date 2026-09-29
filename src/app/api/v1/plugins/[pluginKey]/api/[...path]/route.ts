@@ -1,30 +1,27 @@
 import { NextResponse } from "next/server"
 
-import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
+import { requireAdminAuth, requireAppAuth } from "@/modules/shared/backend/auth/guards"
 import { PLUGIN_ROUTE_PREFIX, resolvePluginRoute } from "@/modules/shared/backend/plugins/route-mount"
 import { PluginRepository } from "@/modules/shared/backend/plugins/plugin.repository"
 import { pluginRuntimeManager } from "@/modules/shared/backend/plugins/runtime-manager"
 import type { PluginManifest } from "@/modules/shared/backend/plugins/types"
 
 /**
- * 插件自有 API 的挂载点：`/api/v1/admin/plugins/<pluginKey>/api<path>`
+ * 插件自有 API 的挂载点：`/api/v1/plugins/<pluginKey>/api<path>`
  *
- * 存在的意义：插件把路由**声明**在 manifest、处理器写在**包内**，由宿主统一挂载 ——
- * 这样插件目录才能完全自包含，不必把路由文件塞进 app/。
- * 本文件是宿主侧唯一的挂载实现，不含任何插件业务逻辑。
+ * **为什么不挂在 /api/v1/admin 下**：admin 前缀由 proxy 的 perimeter 统一要求管理员鉴权，
+ * 而插件的 auth 是**运行期按 manifest 声明**的（operator / company / public）——
+ * 静态的"精确路径 + 方法"白名单表达不了动态声明。放在非 admin 前缀下，proxy 直接放行
+ * （proxy 只对 /api/v1/admin/ 施压），由**本挂载点**按声明鉴权。
  *
- * 鉴权走 `withAdminRoute`（本仓约定：admin 路由不得直接 requireAdminAuth ——
- * 那种写法会被 admin:routes:manifest 判定为 legacy-direct-guard 并让门禁失败）。
- * 当前只支持 manifest 里 `auth: "operator"` 的声明；其余声明在 resolvePluginRoute 里
- * 明确返回 501 并说明原因，不静默降级。
- *
- * 形状说明：不依赖 Next 的 ctx.params（withAdminRoute 的签名是 (request, auth)），
- * 直接从 URL 解析 pluginKey 与子路径 —— 少一层耦合。
+ * 三种声明对应三个现成守卫：
+ *   operator -> requireAdminAuth   company -> requireAppAuth   public -> 不鉴权
+ * 这也是唯一诚实的做法：不能因为"路径在 admin 下"就给所有插件路由强加管理员鉴权，
+ * 也不能因为"是插件"就默认放行。
  */
 async function handle(request: Request) {
-  const pathname = new URL(request.url).pathname
-  const rest = pathname.slice(`${PLUGIN_ROUTE_PREFIX}/`.length)
+  const url = new URL(request.url)
+  const rest = url.pathname.slice(`${PLUGIN_ROUTE_PREFIX}/`.length)
   const [pluginKey, ...tail] = rest.split("/")
   const pathPart = tail.join("/").replace(/^api\/?/, "")
 
@@ -46,9 +43,12 @@ async function handle(request: Request) {
     )
   }
 
-  const url = new URL(request.url)
-  const body = ["GET", "HEAD"].includes(request.method) ? undefined : await request.json().catch(() => undefined)
+  // 按声明鉴权 —— 声明什么就查什么，不静默放宽也不一律收紧
+  const declared = resolution.declaration!.auth
+  if (declared === "operator") await requireAdminAuth(request)
+  else if (declared === "company") requireAppAuth(request)
 
+  const body = ["GET", "HEAD"].includes(request.method) ? undefined : await request.json().catch(() => undefined)
   try {
     const result = await pluginRuntimeManager.invokeRoute(pluginKey, resolution.declaration!.routeKey, {
       method: request.method,
@@ -65,8 +65,8 @@ async function handle(request: Request) {
   }
 }
 
-export const GET = withAdminRoute(handle, { permission: PERMISSIONS.PLATFORM_PLUGIN_QUERY })
-export const POST = withAdminRoute(handle, { permission: PERMISSIONS.PLATFORM_PLUGIN_QUERY })
-export const PUT = withAdminRoute(handle, { permission: PERMISSIONS.PLATFORM_PLUGIN_QUERY })
-export const PATCH = withAdminRoute(handle, { permission: PERMISSIONS.PLATFORM_PLUGIN_QUERY })
-export const DELETE = withAdminRoute(handle, { permission: PERMISSIONS.PLATFORM_PLUGIN_QUERY })
+export const GET = handle
+export const POST = handle
+export const PUT = handle
+export const PATCH = handle
+export const DELETE = handle

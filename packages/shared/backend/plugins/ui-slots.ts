@@ -19,7 +19,7 @@ import path from "node:path"
 import type { PluginManifest, PluginUiSlotType } from "./types"
 
 export const UI_SLOT_CAPABILITY = "ui.page.register"
-export const PLUGIN_UI_PREFIX = "/api/v1/admin/plugins"
+export const PLUGIN_UI_PREFIX = "/api/v1/plugins"
 
 export type ResolvedUiSlot = {
   pluginKey: string

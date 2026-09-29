@@ -36,7 +36,7 @@ function resolve(overrides: Partial<Parameters<typeof resolvePluginRoute>[0]> = 
 
 describe("宿主挂载插件声明的 apiRoutes", () => {
   it("挂载路径按约定拼装", () => {
-    expect(pluginRoutePath(KEY, "/hello")).toBe("/api/v1/admin/plugins/ruoyi.hello-world/api/hello")
+    expect(pluginRoutePath(KEY, "/hello")).toBe("/api/v1/plugins/ruoyi.hello-world/api/hello")
   })
 
   it("已声明 + 有 api.routes.register 能力 + merged 形态 -> 放行", () => {
@@ -67,11 +67,13 @@ describe("宿主挂载插件声明的 apiRoutes", () => {
     expect(result.error).toContain("isolated")
   })
 
-  it("auth 非 operator -> 501 并说明原因（不假装支持）", () => {
-    const withPublic = { ...manifest, apiRoutes: [{ routeKey: "hello", method: "GET", path: "/hello", auth: "public" }] } as unknown as PluginManifest
-    const result = resolve({ manifest: withPublic })
-    expect(result.status).toBe(501)
-    expect(result.error).toContain("public")
+  it("三种 auth 声明都被接受（鉴权交给挂载点按声明执行，不再 501）", () => {
+    for (const auth of ["operator", "company", "public"] as const) {
+      const m = { ...manifest, apiRoutes: [{ routeKey: "hello", method: "GET", path: "/hello", auth }] } as unknown as PluginManifest
+      const result = resolve({ manifest: m })
+      expect(result.ok).toBe(true)
+      expect(result.declaration?.auth).toBe(auth)
+    }
   })
 
   it("真插件的 merged 形态能被直接调用（路由处理器在包内，不在 app/）", async () => {
@@ -86,7 +88,7 @@ describe("宿主挂载插件声明的 apiRoutes", () => {
 
     const result = await plugin.invokeRoute("hello", {
       method: "GET",
-      path: "/api/v1/admin/plugins/ruoyi.hello-world/api/hello",
+      path: "/api/v1/plugins/ruoyi.hello-world/api/hello",
       query: { who: "test" },
       body: undefined,
       headers: {},
