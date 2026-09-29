@@ -1,12 +1,3 @@
-import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
-import { csvResponse } from "@/modules/shared/backend/http/csv-download"
-import { parseActionQuery } from "@/modules/shared/backend/http/parse-action-input"
-import { SYSTEM_ACTION_SCHEMAS } from "@/modules/system/contract/actions"
-import { LoginLogService } from "@/modules/system/backend/services/login-log.service"
-import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-
-export const GET = withAdminRoute(async (request) => {
-  const input = parseActionQuery(SYSTEM_ACTION_SCHEMAS["system.exportLoginLogs"], request)
-  const rows = await LoginLogService.exportLoginLogs({ ...input, page: 1, pageSize: 10_000 })
-  return csvResponse("login-logs.csv", ["ID", "用户名", "结果", "IP", "租户", "说明", "时间"], rows.map((row) => [row.id, row.username, row.result, row.userIp, row.tenantId, row.remark, row.createdAt]))
-}, { permission: PERMISSIONS.SYSTEM_LOGIN_LOG_EXPORT })
+// 路由逻辑在域内: src/modules/system/routes/admin/login-logs/export/route.ts
+// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
+export * from "@/modules/system/routes/admin/login-logs/export/route"

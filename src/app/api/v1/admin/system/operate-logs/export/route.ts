@@ -1,12 +1,3 @@
-import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
-import { csvResponse } from "@/modules/shared/backend/http/csv-download"
-import { parseActionQuery } from "@/modules/shared/backend/http/parse-action-input"
-import { SYSTEM_ACTION_SCHEMAS } from "@/modules/system/contract/actions"
-import { OperateLogService } from "@/modules/system/backend/services/operate-log.service"
-import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-
-export const GET = withAdminRoute(async (request) => {
-  const input = parseActionQuery(SYSTEM_ACTION_SCHEMAS["system.exportOperateLogs"], request)
-  const rows = await OperateLogService.exportOperateLogs({ ...input, page: 1, pageSize: 10_000 })
-  return csvResponse("operate-logs.csv", ["ID", "模块", "操作", "类型", "方法", "路径", "状态", "耗时(ms)", "IP", "时间"], rows.map((row) => [row.id, row.module, row.name, row.type, row.requestMethod, row.requestUrl, row.resultCode, row.duration, row.userIp, row.createdAt]))
-}, { permission: PERMISSIONS.SYSTEM_OPERATE_LOG_EXPORT })
+// 路由逻辑在域内: src/modules/system/routes/admin/operate-logs/export/route.ts
+// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
+export * from "@/modules/system/routes/admin/operate-logs/export/route"

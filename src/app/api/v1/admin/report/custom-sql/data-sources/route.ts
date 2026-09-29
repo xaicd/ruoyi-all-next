@@ -1,10 +1,3 @@
-import { NextResponse } from "next/server"
-import { CustomSqlReportService } from "@/modules/report/backend/services/custom-sql-report.service"
-import { ApiError } from "@/modules/shared/backend/http/api-error"
-import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
-
-export const GET = withAdminRoute(async (_request, auth) => {
-  if (!auth.tenantId) throw new ApiError("FORBIDDEN", "AUTO报表必须在租户上下文中使用")
-  return NextResponse.json({ success: true, data: await CustomSqlReportService.dataSources(auth.tenantId) })
-}, { permission: PERMISSIONS.REPORT_CUSTOM_SQL_EXECUTE })
+// 路由逻辑在域内: src/modules/report/routes/admin/custom-sql/data-sources/route.ts
+// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
+export * from "@/modules/report/routes/admin/custom-sql/data-sources/route"

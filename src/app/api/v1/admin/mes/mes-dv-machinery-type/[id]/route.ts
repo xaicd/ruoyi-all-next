@@ -1,36 +1,3 @@
-import { NextResponse } from "next/server"
-import { MesDvMachineryTypeService } from "@/modules/mes/backend/services/mes-dv-machinery-type.service"
-
-type RouteContext = { params: Promise<{ id: string }> }
-
-export async function GET(request: Request, context: RouteContext) {
-  try {
-    const { id } = await context.params
-    const data = await MesDvMachineryTypeService.get(id)
-    if (!data) return NextResponse.json({ success: false, error: "不存在" }, { status: 404 })
-    return NextResponse.json({ success: true, data })
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
-  }
-}
-
-export async function PUT(request: Request, context: RouteContext) {
-  try {
-    const { id } = await context.params
-    const body = await request.json()
-    const data = await MesDvMachineryTypeService.update({ ...body, id })
-    return NextResponse.json({ success: true, data })
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
-  }
-}
-
-export async function DELETE(request: Request, context: RouteContext) {
-  try {
-    const { id } = await context.params
-    const data = await MesDvMachineryTypeService.delete(id)
-    return NextResponse.json({ success: true, data })
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
-  }
-}
+// 路由逻辑在域内: src/modules/mes/routes/admin/mes-dv-machinery-type/[id]/route.ts
+// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
+export * from "@/modules/mes/routes/admin/mes-dv-machinery-type/[id]/route"

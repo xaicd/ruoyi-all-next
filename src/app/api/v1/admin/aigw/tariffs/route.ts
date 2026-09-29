@@ -1,12 +1,3 @@
-import { NextRequest, NextResponse } from "next/server"
-import { aigwTariffService } from "@/modules/aigw/backend/services"
-
-export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url)
-  const page = Number(searchParams.get("page") || "1")
-  const pageSize = Number(searchParams.get("pageSize") || "20")
-  const tenantId = req.headers.get("x-tenant-id") || "1"
-
-  const data = await aigwTariffService.getPage(tenantId, page, pageSize)
-  return NextResponse.json({ code: 0, msg: "success", data })
-}
+// 路由逻辑在域内: src/modules/aigw/routes/admin/tariffs/route.ts
+// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
+export * from "@/modules/aigw/routes/admin/tariffs/route"

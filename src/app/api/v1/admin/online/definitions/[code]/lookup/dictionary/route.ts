@@ -1,19 +1,3 @@
-import { NextResponse } from "next/server"
-import { z } from "zod"
-import { OnlineDefinitionService } from "@/modules/online/backend/services"
-import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
-
-const querySchema = z.object({ field: z.string().regex(/^[a-z][a-z0-9_]{1,63}$/) })
-type RouteContext = { params: Promise<{ code: string }> }
-
-/**
- * Release-scoped dictionary options for generated Online pages.
- * The caller chooses a field, never an arbitrary system dictionary type.
- */
-export const GET = withAdminRoute(async (request, auth, context: RouteContext) => {
-  const { code } = await context.params
-  const { field } = querySchema.parse(Object.fromEntries(new URL(request.url).searchParams))
-  const data = await OnlineDefinitionService.lookupDictionaryOptions(auth, code, field)
-  return NextResponse.json({ success: true, data })
-}, { permission: PERMISSIONS.INFRA_ONLINE_DEFINITION_QUERY })
+// 路由逻辑在域内: src/modules/online/routes/admin/definitions/[code]/lookup/dictionary/route.ts
+// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
+export * from "@/modules/online/routes/admin/definitions/[code]/lookup/dictionary/route"
