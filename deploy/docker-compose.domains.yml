@@ -82,6 +82,12 @@ services:
       - POSTGRES_DB=${PG_DB:-ruoyi_next}
     volumes:
       - pg_data_domains:/var/lib/postgresql/data
+      # 首次初始化空数据卷时自动执行官方全量初始化 SQL。
+      # 此前拆分栈起在**空库**上: 连登录都做不到(域日志实测
+      # relation "infra_api_access_log" does not exist), 所以"拆分运行可独立部署"
+      # 一直只是纸面结论。用 postgres 官方的 initdb 挂载点, 幂等语义由 Docker 保证
+      # (数据卷非空则跳过)。
+      - ../sql/init:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${PG_USER:-ruoyi}"]
       interval: 10s
