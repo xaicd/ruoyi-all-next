@@ -53,9 +53,54 @@ function copyIfExists(from, to) {
   return true
 }
 
+/**
+ * 从种子模块出发，扫描非测试源码里的 `@/modules/<name>/` 引用，推导出需要的模块闭包。
+ *
+ * 为什么不能硬编码成 [domain, "shared"]：`shared` 虽然是 L0，但它按设计要调
+ * `system` 的平台面（鉴权 resolveTenantEntitlement，见 AGENTS.md §3.3），
+ * 还引用了 `infra` 的 file-storage。硬编码会让每个域包都**编译不过**
+ * （Turbopack: Can't resolve '@/modules/system/contract/system.platform.facade'），
+ * 这正是拆分运行长期跑不通的原因。
+ *
+ * 测试文件不算依赖：打包本就排除 __tests__，而 shared 对 pay 的引用只出现在测试里。
+ */
+function expandModuleClosure(seedModules) {
+  const seen = new Set(seedModules)
+  const queue = [...seedModules]
+
+  while (queue.length > 0) {
+    const current = queue.pop()
+    const dir = path.join(ROOT, "src", "modules", current)
+    if (!fs.existsSync(dir)) continue
+
+    for (const file of walkSourceFiles(dir)) {
+      const source = fs.readFileSync(file, "utf8")
+      for (const match of source.matchAll(/@\/modules\/([a-z0-9_-]+)\//g)) {
+        const dependency = match[1]
+        if (seen.has(dependency)) continue
+        seen.add(dependency)
+        queue.push(dependency)
+      }
+    }
+  }
+
+  return [...seen].sort()
+}
+
+function walkSourceFiles(dir) {
+  const out = []
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name === "node_modules" || entry.name === "__tests__" || entry.name === ".next-ruoyi") continue
+    const full = path.join(dir, entry.name)
+    if (entry.isDirectory()) out.push(...walkSourceFiles(full))
+    else if (/\.tsx?$/.test(entry.name)) out.push(full)
+  }
+  return out
+}
+
 function buildPlan(domain) {
   const apiRouteDirs = domain.publicPrefixes.map((prefix) => prefix.replace(/^\/api/, "src/app/api"))
-  const modules = Array.from(new Set([domain.name, ...domain.dependsOnModules]))
+  const modules = expandModuleClosure(Array.from(new Set([domain.name, ...domain.dependsOnModules])))
   const files = [
     "package.json",
     "package-lock.json",
@@ -128,7 +173,11 @@ function materialize(plan, outDir) {
   const rootModules = path.join(ROOT, "node_modules")
   const packModules = path.join(outDir, "node_modules")
   if (fs.existsSync(rootModules) && !fs.existsSync(packModules)) {
-    fs.symlinkSync(rootModules, packModules, process.platform === "win32" ? "junction" : "dir")
+    // 相对符号链接，不用绝对路径：绝对路径会把本机路径烘进打包产物，
+    // 产物一换机器/进容器就失效，而且在 Dockerfile.domain 里 COPY 到 /app 后
+    // 会变成 /app/node_modules -> 自身，导致构建报 "evalSymlinksInScope: too many links"。
+    const relativeTarget = path.relative(path.dirname(packModules), rootModules)
+    fs.symlinkSync(relativeTarget, packModules, process.platform === "win32" ? "junction" : "dir")
   }
   fs.mkdirSync(path.join(outDir, "public"), { recursive: true })
 

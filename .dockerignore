@@ -6,7 +6,9 @@ node_modules
 !.env.example
 deploy
 docs
-scripts
+# scripts/ 必须进构建上下文：Dockerfile.domain 的 packer 阶段要跑
+# `node scripts/pack-domain.cjs <domain> --materialize`。
+# 此前把 scripts 整个排除，导致域镜像**根本构建不出来**（拆分运行从未跑通）。
 *.md
 .vscode
 .kiro

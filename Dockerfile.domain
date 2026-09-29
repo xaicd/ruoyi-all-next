@@ -8,7 +8,22 @@ ARG RUOYI_PACK_DOMAIN=pay
 FROM node:24-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json* .npmrc ./
+# 构建工具只装在 deps 阶段（最终 runner 镜像不含它们）。
+# 原因: better-sqlite3 的安装脚本是 `prebuild-install || node-gyp rebuild`，
+# 一旦从 GitHub 拉预编译包超时, 就会回退到源码编译 —— 而 alpine 默认没有
+# python3/make/g++, 于是整个镜像构建失败。装上这三样让回退路径真正可用,
+# 构建就不再单点依赖一次外部下载。
+RUN apk add --no-cache python3 make g++
+# 与 Dockerfile 同理：npm workspaces 要求各成员的 package.json 在 install 时已存在，
+# 否则 npm ci 会因 workspace glob 指向不存在的目录而失败（本文件此前漏了这一步）。
+COPY packages/plugins/sdk/package.json ./packages/plugins/sdk/package.json
+COPY packages/plugins/examples/hello-world/package.json ./packages/plugins/examples/hello-world/package.json
 RUN npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+# npm workspaces 会在 node_modules/@ruoyi 下建立指向 ../../packages/... 的符号链接。
+# BuildKit 的 COPY 解析「落在被复制目录之外」的链接时会报
+# "evalSymlinksInScope: too many links"，导致下一阶段的 COPY --from=deps 失败。
+# 域构建不依赖这些插件包（plugin SDK 只给插件作者使用），故在 deps 层裁掉。
+RUN rm -rf node_modules/@ruoyi
 
 FROM node:24-alpine AS packer
 WORKDIR /app
@@ -23,6 +38,11 @@ ARG RUOYI_PACK_DOMAIN
 ENV RUOYI_PACK_DOMAIN=${RUOYI_PACK_DOMAIN}
 ENV NEXT_TELEMETRY_DISABLED=1
 COPY --from=packer /app/dist/domain-packs/${RUOYI_PACK_DOMAIN} ./
+# 打包产物把 node_modules 做成了符号链接（供本地 `domain:dev` 直接跑）。
+# 在镜像里这个链接要么自引用、要么指向不存在的路径，且 deps 阶段已提供真实
+# node_modules —— 必须先删掉，否则下一步 COPY 会遍历它并报
+# "evalSymlinksInScope: too many links"。注意用 rm -f（删链接本身，不递归目标）。
+RUN rm -f node_modules
 COPY --from=deps /app/node_modules ./node_modules
 RUN npx prisma generate
 RUN npx next build
