@@ -1873,5 +1873,32 @@ export const SEED_DICT_TYPES: SystemDictTypeRow[] = [
     "remark": "Flowable 评论类型",
     "createdAt": "2026-01-01T00:00:00.000Z",
     "updatedAt": "2026-01-01T00:00:00.000Z"
-  }
+  },
+  {
+    "id": "1061100",
+    "name": "菜单类型",
+    "type": "system_menu_type",
+    "status": "ACTIVE",
+    "remark": "目录/菜单/按钮（字典项原有引用，类型行此前缺失）",
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "1061101",
+    "name": "数据范围",
+    "type": "system_data_scope",
+    "status": "ACTIVE",
+    "remark": "全部/指定部门/本部门/本部门及以下/仅本人（类型行此前缺失）",
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "1061102",
+    "name": "领料出库状态",
+    "type": "mes_wm_issue_status",
+    "status": "ACTIVE",
+    "remark": "领料出库单状态（类型行此前缺失）",
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
 ]

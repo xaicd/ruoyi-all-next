@@ -277,39 +277,87 @@ const RULES = [
     section: "AGENTS.md §9.2",
     mode: "ratchet",
     description:
-      "seed INSERTs in the generated V1 init SQL must reference columns that exist in its own DDL",
+      "the generated V1 init SQL must be self-consistent: seed INSERTs must use existing columns AND not reference parent rows that do not exist yet",
     run() {
       // 为什么需要这条: sql/init/*.sql 是 AGENTS.md §9.2 认定的"唯一官方标准初始化入口",
       // 但它的**建表部分是每次 build:init-sql 重新生成的**, 而**种子 INSERT 是手写的** ——
-      // schema 演进后没人跑过它, 于是列名大面积漂移, 整份 SQL 在全新库上必然中途失败
-      // (实测: column "contact_user_name" does not exist)。
-      // 这条门禁让"手写种子"与"生成 DDL"之间不可能再静默漂移。
+      // schema 演进后没人跑过它, 于是整份 SQL 在全新库上必然中途失败。
+      //
+      // 两类实际抓到过的缺陷:
+      //   1) 列漂移: INSERT 用了已不存在的列 (column "contact_user_name" does not exist)
+      //   2) 缺父行: INSERT 引用了不存在/尚未插入的父行 (FK 违反)
+      //      —— 实测抓到 aigw-seats 菜单未登记、3 个字典类型从未定义。
+      // 第 2 类必须**按语句顺序**判定: 引用后面才插入的行同样会在真实执行时失败。
       const sqlRel = "sql/init/ruoyi_all_next_v1.0.0_postgresql.sql"
       const sqlFile = abs(sqlRel)
       if (!fs.existsSync(sqlFile)) return []
 
       const sql = fs.readFileSync(sqlFile, "utf8")
       const tables = new Map()
+      // 外键必须**按所属表**解析：只在 CREATE TABLE 块内收集。
+      // (第一版按列名全局匹配 -> 300 条误报: A 表里同名的普通列会被拿去和 B 表的外键比对。)
+      const foreignKeysByTable = new Map()
       for (const match of sql.matchAll(/CREATE TABLE "([^"]+)" \(([\s\S]*?)\n\);/g)) {
-        tables.set(match[1], new Set([...match[2].matchAll(/^\s*"([a-z_]+)"\s/gm)].map((m) => m[1])))
+        const [, tableName, body] = match
+        tables.set(tableName, new Set([...body.matchAll(/^\s*"([a-z_]+)"\s/gm)].map((m) => m[1])))
+        const fks = []
+        for (const fk of body.matchAll(/FOREIGN KEY \("([a-z_]+)"\) REFERENCES "([^"]+)"\(/g)) {
+          fks.push({ column: fk[1], references: fk[2] })
+        }
+        if (fks.length > 0) foreignKeysByTable.set(tableName, fks)
       }
 
       const violations = []
-      for (const match of sql.matchAll(/INSERT INTO "([^"]+)" \(([^)]*)\)/g)) {
-        const [, table, columnList] = match
-        const columns = tables.get(table)
-        if (!columns) {
+      // 每张表已插入的 id（按出现顺序累积）+ 该表所有 INSERT 引用过的外键值
+      const insertedIds = new Map()
+      const dangling = []
+
+      // 按语句顺序扫描：INSERT 语句与 CREATE/FOREIGN KEY 都在同一份文件里
+      for (const match of sql.matchAll(/INSERT INTO "([^"]+)" \(([^)]*)\) VALUES\n([\s\S]*?);\n/g)) {
+        const [, table, columnList, values] = match
+        const columns = columnList.split(",").map((c) => c.trim().replace(/"/g, ""))
+        // 生成器每条记录写一行 —— 按行切分才不会被行内的 NOW() 等函数调用括号截断。
+        const rows = values
+          .split("\n")
+          .map((line) => line.trim())
+          .filter((line) => line.startsWith("("))
+          .map((line) => line.replace(/^\(/, "").replace(/\),?$/, ""))
+
+        if (!tables.has(table)) {
           violations.push({ file: sqlRel, detail: `INSERT into unknown table "${table}"` })
           continue
         }
-        const missing = columnList
-          .split(",")
-          .map((column) => column.trim().replace(/"/g, ""))
-          .filter((column) => column && !columns.has(column))
+        const missing = columns.filter((c) => c && !tables.get(table).has(c))
         if (missing.length > 0) {
           violations.push({ file: sqlRel, detail: `INSERT into "${table}" uses missing column(s): ${missing.join(", ")}` })
         }
+
+        const idIndex = columns.indexOf("id")
+        const seen = insertedIds.get(table) ?? new Set()
+        for (const row of rows) {
+          const cells = row.match(/'(?:[^']|'')*'|NULL|TRUE|FALSE|[^,]+/g) ?? []
+          // 先校验外键：父行必须**已经**插入过
+          for (const fk of foreignKeysByTable.get(table) ?? []) {
+            if (!columns.includes(fk.column)) continue
+            const index = columns.indexOf(fk.column)
+            const raw = (cells[index] ?? "").trim()
+            const value = raw.startsWith("'") ? raw.slice(1, -1).replace(/''/g, "'") : raw
+            if (!value || value === "NULL") continue
+            const parents = insertedIds.get(fk.references)
+            if (parents && !parents.has(value)) {
+              dangling.push(`INSERT into "${table}" references ${fk.references}.${fk.column}="${value}" which is not inserted yet`)
+            }
+          }
+          if (idIndex >= 0) {
+            const raw = (cells[idIndex] ?? "").trim()
+            const value = raw.startsWith("'") ? raw.slice(1, -1) : raw
+            if (value) seen.add(value)
+          }
+        }
+        insertedIds.set(table, seen)
       }
+
+      for (const detail of [...new Set(dangling)].sort()) violations.push({ file: sqlRel, detail })
       return violations.sort((a, b) => a.detail.localeCompare(b.detail))
     },
   },

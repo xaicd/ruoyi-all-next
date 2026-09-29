@@ -208,7 +208,7 @@ export const SEED_DICT_DATA: SystemDictDataRow[] = [
   },
   {
     "id": "29",
-    "dictTypeId": "system_menu_type",
+    "dictTypeId": "1061100",
     "label": "目录",
     "value": "1",
     "sort": 1,
@@ -220,7 +220,7 @@ export const SEED_DICT_DATA: SystemDictDataRow[] = [
   },
   {
     "id": "30",
-    "dictTypeId": "system_menu_type",
+    "dictTypeId": "1061100",
     "label": "菜单",
     "value": "2",
     "sort": 2,
@@ -232,7 +232,7 @@ export const SEED_DICT_DATA: SystemDictDataRow[] = [
   },
   {
     "id": "31",
-    "dictTypeId": "system_menu_type",
+    "dictTypeId": "1061100",
     "label": "按钮",
     "value": "3",
     "sort": 3,
@@ -268,7 +268,7 @@ export const SEED_DICT_DATA: SystemDictDataRow[] = [
   },
   {
     "id": "34",
-    "dictTypeId": "system_data_scope",
+    "dictTypeId": "1061101",
     "label": "全部数据权限",
     "value": "1",
     "sort": 1,
@@ -280,7 +280,7 @@ export const SEED_DICT_DATA: SystemDictDataRow[] = [
   },
   {
     "id": "35",
-    "dictTypeId": "system_data_scope",
+    "dictTypeId": "1061101",
     "label": "指定部门数据权限",
     "value": "2",
     "sort": 2,
@@ -292,7 +292,7 @@ export const SEED_DICT_DATA: SystemDictDataRow[] = [
   },
   {
     "id": "36",
-    "dictTypeId": "system_data_scope",
+    "dictTypeId": "1061101",
     "label": "本部门数据权限",
     "value": "3",
     "sort": 3,
@@ -304,7 +304,7 @@ export const SEED_DICT_DATA: SystemDictDataRow[] = [
   },
   {
     "id": "37",
-    "dictTypeId": "system_data_scope",
+    "dictTypeId": "1061101",
     "label": "本部门及以下数据权限",
     "value": "4",
     "sort": 4,
@@ -316,7 +316,7 @@ export const SEED_DICT_DATA: SystemDictDataRow[] = [
   },
   {
     "id": "38",
-    "dictTypeId": "system_data_scope",
+    "dictTypeId": "1061101",
     "label": "仅本人数据权限",
     "value": "5",
     "sort": 5,
@@ -9232,7 +9232,7 @@ export const SEED_DICT_DATA: SystemDictDataRow[] = [
   },
   {
     "id": "3220",
-    "dictTypeId": "mes_wm_issue_status",
+    "dictTypeId": "1061102",
     "label": "草稿",
     "value": "0",
     "sort": 1,
@@ -9244,7 +9244,7 @@ export const SEED_DICT_DATA: SystemDictDataRow[] = [
   },
   {
     "id": "3221",
-    "dictTypeId": "mes_wm_issue_status",
+    "dictTypeId": "1061102",
     "label": "已完成",
     "value": "4",
     "sort": 2,

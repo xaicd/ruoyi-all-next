@@ -1,6 +1,6 @@
 -- ==============================================================================
 -- ruoyi-all-next 第一版权威全量初始化 SQL (V1.0.0 PostgreSQL)
--- 生成时间: 2026-09-29T04:13:18.117Z
+-- 生成时间: 2026-09-29T04:19:15.193Z
 -- 包含: 全 15 域完整 DDL + 工整 4 字符系统菜单 + 平台超管 + 完整业务种子数据
 -- ==============================================================================
 
@@ -3244,7 +3244,10 @@ INSERT INTO "system_dict_type" ("id", "name", "type", "status", "remark", "creat
 ('1061096', 'IM 通话参与角色', 'im_rtc_participant_role', 'ACTIVE', '1=发起人；2=被邀请者；3=主动加入者', NOW(), NOW()),
 ('1061097', 'IM 通话参与状态', 'im_rtc_participant_status', 'ACTIVE', '10=邀请中；20=已加入；30=已拒绝；40=未应答；50=已离开', NOW(), NOW()),
 ('1061098', 'IM 频道素材内容类型', 'im_channel_material_type', 'ACTIVE', '1=站内富文本 / 2=外链', NOW(), NOW()),
-('1061099', '流程评论类型', 'bpm_comment_type', 'ACTIVE', 'Flowable 评论类型', NOW(), NOW())
+('1061099', '流程评论类型', 'bpm_comment_type', 'ACTIVE', 'Flowable 评论类型', NOW(), NOW()),
+('1061100', '菜单类型', 'system_menu_type', 'ACTIVE', '目录/菜单/按钮（字典项原有引用，类型行此前缺失）', NOW(), NOW()),
+('1061101', '数据范围', 'system_data_scope', 'ACTIVE', '全部/指定部门/本部门/本部门及以下/仅本人（类型行此前缺失）', NOW(), NOW()),
+('1061102', '领料出库状态', 'mes_wm_issue_status', 'ACTIVE', '领料出库单状态（类型行此前缺失）', NOW(), NOW())
 ON CONFLICT ("id") DO NOTHING;
 
 -- 8. 数据字典项
@@ -3266,16 +3269,16 @@ INSERT INTO "system_dict_data" ("id", "dict_type_id", "label", "value", "sort", 
 ('23', '9', '导入', '6', 6, 'ACTIVE', 'default', '导入操作', NOW(), NOW()),
 ('27', '10', '开启', '0', 1, 'ACTIVE', 'primary', '开启状态', NOW(), NOW()),
 ('28', '10', '关闭', '1', 2, 'ACTIVE', 'info', '关闭状态', NOW(), NOW()),
-('29', 'system_menu_type', '目录', '1', 1, 'ACTIVE', NULL, '目录', NOW(), NOW()),
-('30', 'system_menu_type', '菜单', '2', 2, 'ACTIVE', NULL, '菜单', NOW(), NOW()),
-('31', 'system_menu_type', '按钮', '3', 3, 'ACTIVE', NULL, '按钮', NOW(), NOW()),
+('29', '1061100', '目录', '1', 1, 'ACTIVE', NULL, '目录', NOW(), NOW()),
+('30', '1061100', '菜单', '2', 2, 'ACTIVE', NULL, '菜单', NOW(), NOW()),
+('31', '1061100', '按钮', '3', 3, 'ACTIVE', NULL, '按钮', NOW(), NOW()),
 ('32', '145', '内置', '1', 1, 'ACTIVE', 'danger', '内置角色', NOW(), NOW()),
 ('33', '145', '自定义', '2', 2, 'ACTIVE', 'primary', '自定义角色', NOW(), NOW()),
-('34', 'system_data_scope', '全部数据权限', '1', 1, 'ACTIVE', NULL, '全部数据权限', NOW(), NOW()),
-('35', 'system_data_scope', '指定部门数据权限', '2', 2, 'ACTIVE', NULL, '指定部门数据权限', NOW(), NOW()),
-('36', 'system_data_scope', '本部门数据权限', '3', 3, 'ACTIVE', NULL, '本部门数据权限', NOW(), NOW()),
-('37', 'system_data_scope', '本部门及以下数据权限', '4', 4, 'ACTIVE', NULL, '本部门及以下数据权限', NOW(), NOW()),
-('38', 'system_data_scope', '仅本人数据权限', '5', 5, 'ACTIVE', NULL, '仅本人数据权限', NOW(), NOW()),
+('34', '1061101', '全部数据权限', '1', 1, 'ACTIVE', NULL, '全部数据权限', NOW(), NOW()),
+('35', '1061101', '指定部门数据权限', '2', 2, 'ACTIVE', NULL, '指定部门数据权限', NOW(), NOW()),
+('36', '1061101', '本部门数据权限', '3', 3, 'ACTIVE', NULL, '本部门数据权限', NOW(), NOW()),
+('37', '1061101', '本部门及以下数据权限', '4', 4, 'ACTIVE', NULL, '本部门及以下数据权限', NOW(), NOW()),
+('38', '1061101', '仅本人数据权限', '5', 5, 'ACTIVE', NULL, '仅本人数据权限', NOW(), NOW()),
 ('39', '104', '成功', '0', 0, 'ACTIVE', 'success', '登陆结果 - 成功', NOW(), NOW()),
 ('40', '104', '账号或密码不正确', '10', 10, 'ACTIVE', 'primary', '登陆结果 - 账号或密码不正确', NOW(), NOW()),
 ('41', '104', '用户被禁用', '20', 20, 'ACTIVE', 'warning', '登陆结果 - 用户被禁用', NOW(), NOW()),
@@ -4018,8 +4021,8 @@ INSERT INTO "system_dict_data" ("id", "dict_type_id", "label", "value", "sort", 
 ('3217', '2068', '已审批', '3', 4, 'ACTIVE', 'success', NULL, NOW(), NOW()),
 ('3218', '2068', '已完成', '4', 5, 'ACTIVE', 'success', NULL, NOW(), NOW()),
 ('3219', '2068', '已取消', '5', 6, 'ACTIVE', 'danger', NULL, NOW(), NOW()),
-('3220', 'mes_wm_issue_status', '草稿', '0', 1, 'ACTIVE', 'info', '草稿状态，未完成', NOW(), NOW()),
-('3221', 'mes_wm_issue_status', '已完成', '4', 2, 'ACTIVE', 'success', '已完成出库', NOW(), NOW()),
+('3220', '1061102', '草稿', '0', 1, 'ACTIVE', 'info', '草稿状态，未完成', NOW(), NOW()),
+('3221', '1061102', '已完成', '4', 2, 'ACTIVE', 'success', '已完成出库', NOW(), NOW()),
 ('3222', '2069', '草稿', '0', 1, 'ACTIVE', 'info', '草稿状态，可编辑', NOW(), NOW()),
 ('3223', '2069', '待拣货', '2', 2, 'ACTIVE', 'warning', '审批中，可执行拣货', NOW(), NOW()),
 ('3224', '2069', '待执行领出', '3', 3, 'ACTIVE', 'primary', '已审批，拣货完成', NOW(), NOW()),
