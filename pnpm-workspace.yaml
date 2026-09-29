@@ -1,11 +1,12 @@
 # pnpm workspace 定义（本文件是 workspace 成员的唯一真源，取代 package.json 的 workspaces 字段）。
 #
-# 为什么先只放插件包、暂不含 clients/expo：
-#   clients/expo 是独立 App（自带 metro/babel 工具链与自己的 lock），把它并进来会让根 install
-#   连带安装整套 Expo 依赖。迁移分两步走：先把插件子工作区切到 pnpm 并验证通过，再决定 expo 是否并入。
+# 成员: 插件包 + 客户端。
+# clients/expo 是本仓唯一的独立客户端 App；并进工作区后由根 pnpm 统一解析与安装，
+# 它的自带 lock 已删除（pnpm-lock.yaml 是唯一锁文件）。
 packages:
   - "packages/plugins/*"
   - "packages/plugins/examples/*"
+  - "clients/expo"
 
 # 允许执行构建脚本的原生/工具依赖。
 # pnpm 默认拦截依赖的 install/postinstall 脚本（供应链防护），与 npm 11 的行为类似但配置方式不同：
