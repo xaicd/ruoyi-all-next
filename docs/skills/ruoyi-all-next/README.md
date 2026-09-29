@@ -58,6 +58,7 @@ Skill 写法见 [skill-authoring.SKILL.md](./skill-authoring.SKILL.md)。
 | database-compatibility.SKILL.md | 数据库兼容等级 |
 | ui-framework-governance.SKILL.md | 管理端模板结构 |
 | microservice-evolution.SKILL.md | A/B/C 拆分 |
+| plugin-authoring.SKILL.md | 可安装插件：包结构 / manifest / capability / worker 协议 |
 | agent-harness.SKILL.md | NPC 工作区模板与 Harness 思想进化 |
 | ../../../.kiro/steering/ui-ux-pro-max/SKILL.md | 视觉/UX 检索 |
 

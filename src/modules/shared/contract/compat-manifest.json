@@ -47,7 +47,7 @@
     "skills": {
       "sourceDir": ".agents/skills",
       "mirrorDir": "docs/skills/ruoyi-all-next",
-      "count": 16
+      "count": 17
     },
     "mcp": {
       "server": "scripts/mcp/ruoyi-mcp-server.cjs",

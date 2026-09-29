@@ -315,6 +315,7 @@ npm run check                 # 门禁产出证据 + 轨迹
 4. microservice-evolution：docs/skills/ruoyi-all-next/microservice-evolution.SKILL.md
 5. ui-ux-pro-max：.kiro/steering/ui-ux-pro-max/SKILL.md
 6. agent-harness：.agents/skills/agent-harness/SKILL.md
+7. plugin-authoring：.agents/skills/plugin-authoring/SKILL.md
 
 启用规则：
 
@@ -324,6 +325,7 @@ npm run check                 # 门禁产出证据 + 轨迹
 4. 涉及域拆分、独立发布或阶段演进时，启用 microservice-evolution。
 5. 涉及 C 端页面、视觉设计、UX 交互或前端组件开发时，必须启用 ui-ux-pro-max。
 6. 涉及新业务项目孵化、DigitalStaff NPC 模板、DeepSeek Harness 学习或基座智能进化时，启用 agent-harness。
+7. 涉及编写/安装/排障/评审 §6.2 可安装插件（插件包结构、manifest、capability、worker 协议、生命周期状态）时，必须启用 plugin-authoring。注意先判断该扩展应落 Platform Module 还是 Plugin —— 域**不得**改造成插件。
 
 
 ## 7. 扫描与迁移节奏（证据驱动）
