@@ -10,10 +10,19 @@
     "automation"
   ],
   "capabilities": [
-    "plugin.state.read"
+    "plugin.state.read",
+    "api.routes.register"
   ],
   "entrypoints": {
     "worker": "./worker.js",
     "merged": "./merged.js"
-  }
+  },
+  "apiRoutes": [
+    {
+      "routeKey": "hello",
+      "method": "GET",
+      "path": "/hello",
+      "auth": "operator"
+    }
+  ]
 }

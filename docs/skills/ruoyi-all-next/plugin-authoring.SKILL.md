@@ -251,5 +251,33 @@ curl /api/v1/admin/plugins
 
 - **插件 UI slot host 尚未实现**：manifest 可声明 `ui.slots`，宿主会校验，但**还不会渲染**。
 - §13 可选方法（`onEvent` / `runJob` / `handleWebhook` / `getData` / `performAction` / `executeTool`）及其声明面未实现。
-- manifest 的 `apiRoutes` 已在校验范围内，但**宿主尚未挂载**这些路由。
+- manifest 的 `apiRoutes` **已可挂载** ✅ —— 宿主把它们挂到
+  `/api/v1/admin/plugins/<pluginKey>/api<path>`，处理器由插件导出（见下）。
+  当前**只支持 `auth: "operator"` 与 `merged` 形态**：isolated 形态需要 worker 协议新增
+  路由转发方法（未实现，会得到 501）；`public` / `company` 需要先把该路径纳入 proxy 的
+  公开策略，否则会在到达挂载层之前被外围拦掉（同样返回 501 并说明原因）。
+
+### 怎么声明与实现路由
+
+manifest：
+
+```json
+"capabilities": ["api.routes.register"],
+"apiRoutes": [{ "routeKey": "hello", "method": "GET", "path": "/hello", "auth": "operator" }]
+```
+
+插件入口导出同名 `routeKey` 的处理器（合并形态）：
+
+```js
+export default definePlugin({
+  routes: {
+    async hello({ method, path, query, body, headers, pluginKey }) {
+      return { status: 200, body: { ok: true } }
+    },
+  },
+})
+```
+
+约定：**路由声明与处理器都留在插件包内**，宿主只做挂载 —— 这样插件目录才是自包含的，
+不必把路由文件塞进宿主 `app/`。
 - 插件升级审批流（§15.3）未实现。

@@ -48,6 +48,17 @@ export class PluginRuntimeManager {
     return this.merged.get(pluginKey) ?? pluginWorkerManager.get(pluginKey)
   }
 
+  /**
+   * 调用插件自带的路由处理器。
+   * 目前只有 merged 形态支持（isolated 需要 worker 协议新增路由转发方法，尚未实现）；
+   * 调用方（route-mount）会先按形态判定并给出明确错误，不静默降级。
+   */
+  async invokeRoute(pluginKey: string, routeKey: string, input: Parameters<import("./merged-runtime").MergedPlugin["invokeRoute"]>[1]) {
+    const instance = this.merged.get(pluginKey)
+    if (!instance) throw new Error(`插件 ${pluginKey} 不是 merged 形态或未运行，无法调用其路由`)
+    return instance.invokeRoute(routeKey, input)
+  }
+
   modeOf(pluginKey: string): PluginRuntimeMode | undefined {
     if (this.merged.has(pluginKey)) return "merged"
     return pluginWorkerManager.get(pluginKey) ? "isolated" : undefined

@@ -15,10 +15,21 @@ import { pathToFileURL } from "node:url"
 
 import type { WorkerHealthResult, WorkerInitializeInput } from "./worker-protocol"
 
+type PluginRouteHandler = (input: {
+  method: string
+  path: string
+  query: Record<string, string>
+  body: unknown
+  headers: Record<string, string>
+  pluginKey: string
+}) => Promise<{ status?: number; body?: unknown }> | { status?: number; body?: unknown }
+
 type MergedHandlers = {
   setup?: (ctx: Record<string, unknown>) => void | Promise<void>
   onHealth?: () => WorkerHealthResult | Promise<WorkerHealthResult>
   onShutdown?: () => void | Promise<void>
+  /** 插件自带的 API 路由处理器，键为 manifest 里 apiRoutes[].routeKey。 */
+  routes?: Record<string, PluginRouteHandler>
 }
 
 /**
@@ -111,5 +122,19 @@ export class MergedPlugin {
       this.started = false
       this.handlers = null
     }
+  }
+
+  /**
+   * 调用插件声明的 API 路由处理器（由宿主挂载层调用）。
+   *
+   * 与 worker 形态的关系: 合并形态下就是一次普通函数调用; 独立形态应当走
+   * worker 协议转发（该能力尚未实现 —— 见宿主挂载层对非 merged 形态的明确报错，
+   * 不静默降级、也不假装支持）。
+   */
+  async invokeRoute(routeKey: string, input: Parameters<PluginRouteHandler>[0]) {
+    if (!this.started) throw new Error("插件尚未 initialize")
+    const handler = this.handlers?.routes?.[routeKey]
+    if (!handler) throw new Error(`插件未导出路由处理器: ${routeKey}`)
+    return handler(input)
   }
 }
