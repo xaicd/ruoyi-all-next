@@ -1,0 +1,374 @@
+{
+  "$schema": "ruoyi-plugin-manifest/v1",
+  "id": "ruoyi.pay",
+  "apiVersion": 1,
+  "version": "0.1.0",
+  "displayName": "pay",
+  "description": "pay 域（由 scripts/scaffold-domain-plugin.cjs 生成的第一方插件声明）",
+  "author": "RuoYi All Next",
+  "categories": [
+    "automation"
+  ],
+  "capabilities": [
+    "api.routes.register"
+  ],
+  "entrypoints": {
+    "merged": "./plugin-entry.ts"
+  },
+  "apiRoutes": [
+    {
+      "routeKey": "admin:orders:get",
+      "method": "GET",
+      "path": "/orders",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-channel/[id]:delete",
+      "method": "DELETE",
+      "path": "/pay-channel/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-channel/[id]:get",
+      "method": "GET",
+      "path": "/pay-channel/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-channel/[id]:put",
+      "method": "PUT",
+      "path": "/pay-channel/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-channel:get",
+      "method": "GET",
+      "path": "/pay-channel",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-channel:post",
+      "method": "POST",
+      "path": "/pay-channel",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-demo-order/[id]:delete",
+      "method": "DELETE",
+      "path": "/pay-demo-order/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-demo-order/[id]:get",
+      "method": "GET",
+      "path": "/pay-demo-order/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-demo-order/[id]:put",
+      "method": "PUT",
+      "path": "/pay-demo-order/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-demo-order:get",
+      "method": "GET",
+      "path": "/pay-demo-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-demo-order:post",
+      "method": "POST",
+      "path": "/pay-demo-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-demo-withdraw/[id]:delete",
+      "method": "DELETE",
+      "path": "/pay-demo-withdraw/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-demo-withdraw/[id]:get",
+      "method": "GET",
+      "path": "/pay-demo-withdraw/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-demo-withdraw/[id]:put",
+      "method": "PUT",
+      "path": "/pay-demo-withdraw/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-demo-withdraw:get",
+      "method": "GET",
+      "path": "/pay-demo-withdraw",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-demo-withdraw:post",
+      "method": "POST",
+      "path": "/pay-demo-withdraw",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-notify/[id]:delete",
+      "method": "DELETE",
+      "path": "/pay-notify/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-notify/[id]:get",
+      "method": "GET",
+      "path": "/pay-notify/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-notify/[id]:put",
+      "method": "PUT",
+      "path": "/pay-notify/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-notify:get",
+      "method": "GET",
+      "path": "/pay-notify",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-notify:post",
+      "method": "POST",
+      "path": "/pay-notify",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-order/[id]:delete",
+      "method": "DELETE",
+      "path": "/pay-order/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-order/[id]:get",
+      "method": "GET",
+      "path": "/pay-order/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-order/[id]:put",
+      "method": "PUT",
+      "path": "/pay-order/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-order:get",
+      "method": "GET",
+      "path": "/pay-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-order:post",
+      "method": "POST",
+      "path": "/pay-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-refund/[id]:delete",
+      "method": "DELETE",
+      "path": "/pay-refund/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-refund/[id]:get",
+      "method": "GET",
+      "path": "/pay-refund/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-refund/[id]:put",
+      "method": "PUT",
+      "path": "/pay-refund/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-refund:get",
+      "method": "GET",
+      "path": "/pay-refund",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-refund:post",
+      "method": "POST",
+      "path": "/pay-refund",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-transfer/[id]:delete",
+      "method": "DELETE",
+      "path": "/pay-transfer/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-transfer/[id]:get",
+      "method": "GET",
+      "path": "/pay-transfer/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-transfer/[id]:put",
+      "method": "PUT",
+      "path": "/pay-transfer/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-transfer:get",
+      "method": "GET",
+      "path": "/pay-transfer",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-transfer:post",
+      "method": "POST",
+      "path": "/pay-transfer",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-wallet-recharge-package/[id]:delete",
+      "method": "DELETE",
+      "path": "/pay-wallet-recharge-package/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-wallet-recharge-package/[id]:get",
+      "method": "GET",
+      "path": "/pay-wallet-recharge-package/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-wallet-recharge-package/[id]:put",
+      "method": "PUT",
+      "path": "/pay-wallet-recharge-package/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-wallet-recharge-package:get",
+      "method": "GET",
+      "path": "/pay-wallet-recharge-package",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-wallet-recharge-package:post",
+      "method": "POST",
+      "path": "/pay-wallet-recharge-package",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-wallet-recharge/[id]:delete",
+      "method": "DELETE",
+      "path": "/pay-wallet-recharge/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-wallet-recharge/[id]:get",
+      "method": "GET",
+      "path": "/pay-wallet-recharge/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-wallet-recharge/[id]:put",
+      "method": "PUT",
+      "path": "/pay-wallet-recharge/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-wallet-recharge:get",
+      "method": "GET",
+      "path": "/pay-wallet-recharge",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-wallet-recharge:post",
+      "method": "POST",
+      "path": "/pay-wallet-recharge",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-wallet-transaction/[id]:delete",
+      "method": "DELETE",
+      "path": "/pay-wallet-transaction/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-wallet-transaction/[id]:get",
+      "method": "GET",
+      "path": "/pay-wallet-transaction/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-wallet-transaction/[id]:put",
+      "method": "PUT",
+      "path": "/pay-wallet-transaction/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-wallet-transaction:get",
+      "method": "GET",
+      "path": "/pay-wallet-transaction",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-wallet-transaction:post",
+      "method": "POST",
+      "path": "/pay-wallet-transaction",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-wallet/[id]:delete",
+      "method": "DELETE",
+      "path": "/pay-wallet/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-wallet/[id]:get",
+      "method": "GET",
+      "path": "/pay-wallet/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-wallet/[id]:put",
+      "method": "PUT",
+      "path": "/pay-wallet/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-wallet:get",
+      "method": "GET",
+      "path": "/pay-wallet",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-wallet:post",
+      "method": "POST",
+      "path": "/pay-wallet",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:refunds:get",
+      "method": "GET",
+      "path": "/refunds",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "app:cashier:post",
+      "method": "POST",
+      "path": "/cashier",
+      "auth": "company"
+    },
+    {
+      "routeKey": "open:notify:post",
+      "method": "POST",
+      "path": "/notify",
+      "auth": "public"
+    }
+  ]
+}

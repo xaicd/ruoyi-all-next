@@ -15,7 +15,8 @@ const path = require("path")
 const ROOT = path.resolve(__dirname, "..", "..")
 
 /**
- * 别名解析必须与 tsconfig 的 paths 保持一致。
+ * 别名解析必须与 tsconfig 的 paths 保持一致。另: 域被改造成**第一方插件**后目录会搬到
+ * packages/plugins/plugin-<name>（见 scripts/scaffold-domain-plugin.cjs），因此还要有插件回退。
  *
  * 各域与 shared 已迁到 packages/ 下（`@/modules/shared/* -> packages/shared/*`、
  * `@/modules/* -> packages/domains/*`），若这里仍按 `@/ -> src/` 解析，
@@ -36,6 +37,18 @@ function resolveAlias(specifier, fromFile) {
   return path.resolve(path.dirname(fromFile), specifier)
 }
 
+/**
+ * 域已改造成第一方插件时的路径变体:
+ *   packages/domains/<name>/<rest>  ->  packages/plugins/plugin-<name>/<rest>
+ * 目录搬家不应让门禁"看不见"路由源码（否则会静默退化成"检查通过"）。
+ */
+function pluginVariant(base) {
+  const domainsDir = path.join(ROOT, "packages", "domains")
+  if (!base.startsWith(domainsDir + path.sep)) return null
+  const [first, ...rest] = base.slice(domainsDir.length + 1).split(path.sep)
+  return path.join(ROOT, "packages", "plugins", `plugin-${first}`, ...rest)
+}
+
 function resolveRouteSource(file, depth = 0) {
   const source = fs.readFileSync(file, "utf8")
   if (depth >= 5) return source // 防御成环
@@ -47,7 +60,10 @@ function resolveRouteSource(file, depth = 0) {
   const base = resolveAlias(specifier, file)
   if (!base) return source
 
-  for (const candidate of [`${base}.ts`, `${base}.tsx`, path.join(base, "index.ts")]) {
+  const fallback = pluginVariant(base)
+  const candidates = [`${base}.ts`, `${base}.tsx`, path.join(base, "index.ts")]
+  if (fallback) candidates.push(`${fallback}.ts`, `${fallback}.tsx`, path.join(fallback, "index.ts"))
+  for (const candidate of candidates) {
     if (fs.existsSync(candidate)) return resolveRouteSource(candidate, depth + 1)
   }
   return source

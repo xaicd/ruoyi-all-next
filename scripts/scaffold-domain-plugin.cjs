@@ -37,9 +37,12 @@ if (!domain) {
   process.exit(1)
 }
 
-const domainDir = path.join(ROOT, "packages", "domains", domain)
+// 接受"域名"或"路径": 迁移到 packages/plugins/ 之后目录已经变了, 工具不该假定位置
+const domainDir = path.isAbsolute(domain) || domain.includes("/")
+  ? path.resolve(ROOT, domain)
+  : path.join(ROOT, "packages", "domains", domain)
 if (!fs.existsSync(domainDir)) {
-  console.error(`找不到域目录: packages/domains/${domain}`)
+  console.error(`找不到域目录: ${domain}`)
   process.exit(1)
 }
 
@@ -78,17 +81,19 @@ for (const surface of ["admin", "app", "open"]) {
 }
 
 if (declarations.length === 0) {
-  console.error(`域 ${domain} 下没有可转换的路由（packages/domains/${domain}/routes/**）`)
+  console.error(`域 ${domain} 下没有可转换的路由（${path.relative(ROOT, domainDir)}/routes/...）`)
   process.exit(1)
 }
 
+// 域名 = 目录名去掉 plugin- 前缀（目录位置/命名不应影响插件身份）
+const domainName = path.basename(domainDir).replace(/^plugin-/, "")
 const manifest = {
   $schema: "ruoyi-plugin-manifest/v1",
-  id: `ruoyi.${domain}`,
+  id: `ruoyi.${domainName}`,
   apiVersion: 1,
   version: "0.1.0",
-  displayName: domain,
-  description: `${domain} 域（由 scripts/scaffold-domain-plugin.cjs 生成的第一方插件声明）`,
+  displayName: domainName,
+  description: `${domainName} 域（由 scripts/scaffold-domain-plugin.cjs 生成的第一方插件声明）`,
   author: "RuoYi All Next",
   categories: ["automation"],
   capabilities: ["api.routes.register"],
@@ -98,7 +103,7 @@ const manifest = {
 
 const entryLines = [
   "/**",
-  ` * ${domain} 域的**插件入口**（合并/同进程形态）。由 scripts/scaffold-domain-plugin.cjs 生成。`,
+  ` * ${domainName} 域的**插件入口**（合并/同进程形态）。由 scripts/scaffold-domain-plugin.cjs 生成。`,
   " *",
   " * 设计要点: 不重写业务逻辑 —— 处理器仍是包内 routes 目录下那些已被",
   " * withAdminRoute / withAppRoute 包装过的函数（鉴权/权限码/schema 校验都在里面），",
@@ -109,7 +114,7 @@ const entryLines = [
   " */",
   'import { definePlugin } from "@ruoyi/plugin-sdk"',
   "",
-  ...modules.map((m) => `import * as ${m.alias} from "@/modules/${domain}/routes/${m.surface}/${m.rel === "root" ? "route" : `${m.rel}/route`}"`),
+  ...modules.map((m) => `import * as ${m.alias} from "@/modules/${domainName}/routes/${m.surface}/${m.rel === "root" ? "route" : `${m.rel}/route`}"`),
   "",
   "async function invoke(handler: (request: Request, context?: unknown) => Promise<Response> | Response, input: any) {",
   "  const url = new URL(`http://plugin.invalid${input.path}`)",
@@ -142,8 +147,8 @@ const entryLines = [
 
 console.log(`[scaffold-domain-plugin] ${domain}`)
 console.log(`  路由声明: ${declarations.length} 条   静态 import: ${modules.length} 个`)
-console.log(`  -> packages/domains/${domain}/plugin.manifest.json`)
-console.log(`  -> packages/domains/${domain}/plugin-entry.ts`)
+console.log(`  -> ${path.relative(ROOT, domainDir)}/plugin.manifest.json`)
+console.log(`  -> ${path.relative(ROOT, domainDir)}/plugin-entry.ts`)
 console.log("")
 console.log("  ⚠️  以下步骤本工具**不做**，需要显式完成（它们会牵动互相引用的登记与门禁）:")
 console.log("     1. 从 packages/shared/backend/constants/domain-catalog.json 移除该域")

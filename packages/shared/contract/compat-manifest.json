@@ -10,7 +10,9 @@
     "note": "templateVersion tracks the TEMPLATE, not the hatched project. package.json version is the project's own and is deliberately not compared."
   },
   "toolchain": {
-    "engine": { "node": "^20.19.0 || ^22.12.0 || >=24.0.0" },
+    "engine": {
+      "node": "^20.19.0 || ^22.12.0 || >=24.0.0"
+    },
     "verified": {
       "next": "^16.3.6",
       "react": "19.3.0",
@@ -24,7 +26,7 @@
     "domainCatalog": {
       "path": "packages/shared/backend/constants/domain-catalog.json",
       "version": 1,
-      "domains": 17
+      "domains": 16
     },
     "rpcActions": {
       "path": "packages/shared/backend/constants/rpc-actions.json",
@@ -43,7 +45,9 @@
     }
   },
   "consumptionSurface": {
-    "discovery": ["packages/shared/contract/agent-profile.json"],
+    "discovery": [
+      "packages/shared/contract/agent-profile.json"
+    ],
     "skills": {
       "sourceDir": ".agents/skills",
       "mirrorDir": "docs/skills/ruoyi-all-next",
@@ -52,7 +56,10 @@
     "mcp": {
       "server": "scripts/mcp/ruoyi-mcp-server.cjs",
       "transport": "stdio",
-      "protocolVersions": ["2025-06-18", "2024-11-05"],
+      "protocolVersions": [
+        "2025-06-18",
+        "2024-11-05"
+      ],
       "tools": [
         "ruoyi_domain_list",
         "ruoyi_domain_seam",

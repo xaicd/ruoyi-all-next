@@ -303,41 +303,6 @@
       "rolesComplete": true
     },
     {
-      "name": "pay",
-      "kind": "business",
-      "stage": "B",
-      "definition": {
-        "dir": "packages/domains/pay/contract",
-        "facades": [
-          "packages/domains/pay/contract/pay.facade.ts"
-        ],
-        "actions": [
-          "packages/domains/pay/contract/actions.ts"
-        ],
-        "proto": "packages/domains/pay/contract/pay.proto",
-        "manifest": "packages/domains/pay/contract/route.manifest.yaml"
-      },
-      "provider": {
-        "servicesDir": "packages/domains/pay/backend/services",
-        "repositoriesDir": "packages/domains/pay/backend/repositories",
-        "methods": [
-          "ping",
-          "listOrders",
-          "createOrder",
-          "createRefund",
-          "listRefunds"
-        ]
-      },
-      "consumer": {
-        "adminApi": "src/app/api/v1/admin/pay",
-        "appApi": "src/app/api/v1/app/pay",
-        "openApi": "src/app/api/v1/open/pay",
-        "adminPages": "src/app/(admin-pages)/admin/pay",
-        "modulePages": "packages/domains/pay/frontend/pages"
-      },
-      "rolesComplete": true
-    },
-    {
       "name": "report",
       "kind": "business",
       "stage": "A",
