@@ -8,7 +8,7 @@
 import { existsSync } from "node:fs"
 import path from "node:path"
 
-import { resolvePluginDir, scanPluginPackages } from "./package-scanner"
+import { resolvePluginDir, scanAllPluginPackages } from "./package-scanner"
 import { PluginRepository } from "./plugin.repository"
 import { isTrustedPlugin, runPluginMigrations } from "./plugin-migrations"
 import { pluginRuntimeManager } from "./runtime-manager"
@@ -49,8 +49,10 @@ export const PluginRegistryService = {
    * 不该造成注册表被抹掉。
    */
   async syncFromDisk(pluginDir: string = resolvePluginDir()): Promise<PluginSyncResult> {
+    // 多根发现: 实例插件目录 + 仓内第一方插件(packages/plugins/**)。
+    // "缺失即移除" 只在**实例目录存在**时执行 —— 否则目录未挂载会把第一方插件也判为缺失。
     const dirExists = existsSync(pluginDir)
-    const discovered = dirExists ? scanPluginPackages(pluginDir) : []
+    const discovered = scanAllPluginPackages([pluginDir])
 
     const accepted = discovered.filter((item) => item.manifest)
     const rejected: PluginSyncRejection[] = discovered

@@ -16,6 +16,11 @@ import type { PluginManifest, PluginPackagePointer } from "./types"
 /** 插件包 package.json 中的入口指针键名。 */
 export const PLUGIN_POINTER_KEY = "ruoyiPlugin"
 
+/** 仓内第一方插件根（Paperclip 的 packages/plugins/* 形态）。 */
+export function firstPartyPluginRoots(repoRoot: string = process.cwd()): string[] {
+  return [path.join(repoRoot, "packages", "plugins")]
+}
+
 /** 插件目录：可用 RUOYI_PLUGIN_DIR 覆盖；默认落在仓库内的 .ruoyi/plugins（已 gitignore）。 */
 export function resolvePluginDir(env: NodeJS.ProcessEnv = process.env): string {
   const configured = env.RUOYI_PLUGIN_DIR?.trim()
@@ -122,6 +127,97 @@ export function scanPluginPackage(packageDir: string): DiscoveredPlugin | undefi
     ...(errors.length === 0 ? { manifest: validation.manifest } : {}),
     errors,
   }
+}
+
+/**
+ * 扫描**全部**插件来源：实例插件目录 + 仓内第一方插件根。
+ *
+ * 为什么要多根：第一方插件（例如某个域改造而来的插件）应该**留在仓内开发**
+ * —— 这与 Paperclip 把第一方插件放在 `packages/plugins/*` 是同一做法；
+ * 实例目录留给运行时装入的第三方插件。
+ *
+ * 识别方式是"目录里的 package.json 有没有 ruoyiPlugin 指针"，不做路径硬编码排除 ——
+ * 因此 packages/plugins/sdk 这类没有指针的目录会被自然跳过。
+ */
+export type PluginScanRoot = {
+  dir: string
+  /**
+   * 该根下"不是插件的目录"要不要作为**被拒插件**报出来。
+   *
+   * 两个根的语义本就不同：
+   *   - 实例插件目录（运行时装入第三方插件）：放进去的每个子目录**都应该是插件**，
+   *     不合格就要报出来（rejected），否则操作员不知道装失败了。
+   *   - 仓内第一方插件根（packages/plugins/**）：这里同时住着 sdk 这类**普通的包**，
+   *     它们不是"被拒的插件"，不该出现在 rejected 里制造噪音 —— 静默跳过即可。
+   */
+  reportSkipped: boolean
+}
+
+export function scanAllPluginPackages(
+  roots: Array<string | PluginScanRoot> = [
+    { dir: resolvePluginDir(), reportSkipped: true },
+    ...firstPartyPluginRoots().map((dir) => ({ dir, reportSkipped: false })),
+  ],
+): DiscoveredPlugin[] {
+  const discovered: DiscoveredPlugin[] = []
+  const seenDirs = new Set<string>()
+
+  for (const root of roots) {
+    const { dir: rootDir, reportSkipped } = typeof root === "string" ? { dir: root, reportSkipped: false } : root
+    if (!existsSync(rootDir)) continue
+    const candidates = reportSkipped
+      ? readdirSync(rootDir, { withFileTypes: true })
+          .filter((entry) => entry.isDirectory() && !entry.name.startsWith(".") && entry.name !== "node_modules")
+          .map((entry) => path.join(rootDir, entry.name))
+      : walkCandidateDirs(rootDir, 0)
+
+    for (const dir of candidates) {
+      const resolved = path.resolve(dir)
+      if (seenDirs.has(resolved)) continue
+      seenDirs.add(resolved)
+      const found = scanPluginPackage(dir)
+      if (!found) continue
+      if (!reportSkipped && found.errors.length > 0) continue // 该根下只认"确实是插件"的目录
+      discovered.push(found)
+    }
+  }
+
+  // 跨来源的 id 冲突同样要拦（两个根里放了同一个插件 id 是配置错误）
+  const idOwners = new Map<string, string>()
+  for (const item of discovered) {
+    if (!item.manifest) continue
+    const previous = idOwners.get(item.manifest.id)
+    if (previous) {
+      item.errors.push(`插件 id "${item.manifest.id}" 与 ${previous} 冲突`)
+      delete item.manifest
+    } else {
+      idOwners.set(item.manifest.id, item.packageName)
+    }
+  }
+
+  return discovered.sort((a, b) => a.packageDir.localeCompare(b.packageDir))
+}
+
+/** 在一个根目录下找候选插件目录（根自身 + 往下若干层，跳过 node_modules 等）。 */
+function walkCandidateDirs(root: string, depth: number, maxDepth = 3): string[] {
+  if (depth > maxDepth) return []
+  const out: string[] = []
+  // 注意: 不要给 entries 标注 ReturnType<typeof readdirSync> —— readdirSync 重载的返回类型
+  // 不一致（Dirent<string> vs Dirent<NonSharedBuffer>），显式标注会引入类型错。
+  let entries
+  try {
+    entries = readdirSync(root, { withFileTypes: true })
+  } catch {
+    return []
+  }
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue
+    if (entry.name.startsWith(".") || entry.name === "node_modules" || entry.name === "dist") continue
+    const full = path.join(root, entry.name)
+    out.push(full)
+    out.push(...walkCandidateDirs(full, depth + 1, maxDepth))
+  }
+  return out
 }
 
 /** 扫描插件目录下的全部插件包，并检查跨包 id 冲突。 */
