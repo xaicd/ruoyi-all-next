@@ -1196,6 +1196,24 @@ model PluginState {
   @@map("plugin_state")
 }
 
+/// 第一方插件自带迁移的应用记录。
+///
+/// 只记"哪个插件的哪个迁移文件已应用过"，用于幂等；**不记 checksum** ——
+/// 迁移是插件自己的资产，宿主不假定它们不可变（改了文件就按新文件重新应用，
+/// 是否安全由插件作者负责，宿主只保证不重复执行同名文件）。
+model PluginMigration {
+  id        String   @id @default(cuid())
+  pluginKey String   @map("plugin_key") @db.VarChar(128)
+  /// 迁移文件名（如 001_init.sql）
+  name      String   @db.VarChar(200)
+  /// 执行时所在的 schema（plugin_<key>），便于排查
+  schema    String   @db.VarChar(100)
+  appliedAt DateTime @default(now()) @map("applied_at")
+
+  @@unique([pluginKey, name])
+  @@map("plugin_migration")
+}
+
 /// 插件按租户配置。对应 PLUGIN_SPEC §21.3 的 plugin_config
 ///
 /// 术语说明: 本仓统一用 tenant_id（多租户术语），不用 company_id;

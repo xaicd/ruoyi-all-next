@@ -98,6 +98,16 @@ export interface PluginManifest {
     /** 预构建 UI bundle 目录，相对插件包根（宿主不编译，只静态分发）。 */
     ui?: string
   }
+  /**
+   * 第一方插件自带的迁移目录（相对插件包根，必须留在包内）。
+   *
+   * 只有**宿主信任**的插件才会被执行（见 RUOYI_TRUSTED_PLUGIN_KEYS）—— 信任是运营的授权，
+   * 不能由 manifest 自封。第三方插件仍走 plugin_state 扩展表那条路（§21.5）。
+   *
+   * 执行时严格隔离在插件自己的 schema（`plugin_<key>`）里，宿主表不可见 ——
+   * 否则一个插件就能 DROP 宿主表。详见 plugin-migrations.ts。
+   */
+  migrations?: { dir: string }
   instanceConfigSchema?: Record<string, unknown>
   apiRoutes?: PluginApiRouteDeclaration[]
   ui?: { slots: PluginUiSlotDeclaration[] }

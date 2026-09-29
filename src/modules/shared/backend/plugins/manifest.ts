@@ -33,6 +33,7 @@ const manifestSchema = z.object({
     merged: pointerFreeString.optional(),
     ui: pointerFreeString.optional(),
   }),
+  migrations: z.object({ dir: pointerFreeString }).optional(),
   instanceConfigSchema: z.record(z.string(), z.unknown()).optional(),
   apiRoutes: z
     .array(

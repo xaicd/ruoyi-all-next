@@ -10,6 +10,7 @@ import path from "node:path"
 
 import { resolvePluginDir, scanPluginPackages } from "./package-scanner"
 import { PluginRepository } from "./plugin.repository"
+import { isTrustedPlugin, runPluginMigrations } from "./plugin-migrations"
 import { pluginRuntimeManager } from "./runtime-manager"
 import type { PluginManifest, PluginRuntimeMode } from "./types"
 
@@ -35,6 +36,8 @@ export type PluginReconcileResult = PluginSyncResult & {
   running: string[]
   /** 各插件实际采用的形态。 */
   modes?: Record<string, PluginRuntimeMode>
+  /** 各插件自带迁移的执行结果（仅声明了 migrations 的插件有）。 */
+  migrations?: Record<string, Awaited<ReturnType<typeof runPluginMigrations>>>
 }
 
 export const PluginRegistryService = {
@@ -98,6 +101,8 @@ export const PluginRegistryService = {
     const failed: Array<{ pluginKey: string; error: string }> = []
     /** 本轮各插件实际采用的运行形态（供返回与诊断）。 */
     const runningModes = new Map<string, PluginRuntimeMode>()
+    /** 本轮各插件自带迁移的执行结果。 */
+    const migrationResults = new Map<string, Awaited<ReturnType<typeof runPluginMigrations>>>()
 
     for (const record of records) {
       const manifest = record.manifestJson as unknown as PluginManifest | null
@@ -137,6 +142,19 @@ export const PluginRegistryService = {
       }
 
       try {
+        // 自带迁移必须先于运行时：插件启动时可能就要读自己的表。
+        // 不信任的插件不执行其迁移（第三方走 plugin_state 扩展表），但**不影响它被安装** ——
+        // 所以这里只记录结果，不因为"跳过迁移"而把插件标成 error。
+        if (manifest?.migrations?.dir) {
+          const migration = await runPluginMigrations({
+            pluginKey: record.pluginKey,
+            packagePath: record.packagePath as string,
+            dir: manifest.migrations.dir,
+            trusted: isTrustedPlugin(record.pluginKey),
+          })
+          migrationResults.set(record.pluginKey, migration)
+        }
+
         await pluginRuntimeManager.start(record.pluginKey, mode, resolvedEntry, record.packagePath as string, {
           manifest,
           config: {},
@@ -154,7 +172,7 @@ export const PluginRegistryService = {
       }
     }
 
-    return { ...sync, started, failed, running: pluginRuntimeManager.list(), modes: Object.fromEntries(runningModes) }
+    return { ...sync, started, failed, running: pluginRuntimeManager.list(), modes: Object.fromEntries(runningModes), migrations: Object.fromEntries(migrationResults) }
   },
 }
 

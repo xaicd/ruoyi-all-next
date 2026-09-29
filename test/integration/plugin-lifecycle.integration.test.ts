@@ -17,6 +17,8 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest"
 import { pluginRegistryService } from "@/modules/shared/backend/plugins/plugin-registry.service"
 import { pluginRuntimeManager } from "@/modules/shared/backend/plugins/runtime-manager"
 import { listPluginCatalog } from "@/app/api/v1/admin/plugins/_lib/plugin-catalog"
+import { pluginSchemaName, runPluginMigrations } from "@/modules/shared/backend/plugins/plugin-migrations"
+import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
 import { PluginRepository } from "@/modules/shared/backend/plugins/plugin.repository"
 import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
 
@@ -141,6 +143,52 @@ describe.skipIf(!HAS_DB)("插件安装 → ready 端到端（真实 PG + 真实 
 
     // 复位，避免影响后续用例
     await PluginRepository.setMode(GOOD_KEY, "isolated")
+  })
+
+  it("第一方插件自带迁移：表落在插件自己的 schema，宿主 public 里看不到，且幂等", async () => {
+    const pluginKey = "ruoyi.hello-world"
+    const schema = pluginSchemaName(pluginKey)
+
+    // 先清掉上一次的口径，保证断言确定
+    await ruoyiPrisma.pluginMigration.deleteMany({ where: { pluginKey } })
+    await ruoyiPrisma.$executeRawUnsafe(`DROP SCHEMA IF EXISTS "${schema}" CASCADE`)
+
+    // 1) 不信任 -> 跳过，并给出原因（第三方插件的路径）
+    const untrusted = await runPluginMigrations({
+      pluginKey, packagePath: EXAMPLE_SRC, dir: "./migrations", trusted: false,
+    })
+    expect(untrusted.applied).toEqual([])
+    expect(untrusted.skippedReason).toContain("未信任")
+
+    // 2) 信任 -> 真的执行
+    const first = await runPluginMigrations({
+      pluginKey, packagePath: EXAMPLE_SRC, dir: "./migrations", trusted: true,
+    })
+    expect(first.applied).toEqual(["001_init.sql"])
+    expect(first.schema).toBe(schema)
+
+    // 关键断言: 落子在插件的 schema 里
+    const inPluginSchema = await ruoyiPrisma.$queryRawUnsafe<Array<{ n: bigint }>>(
+      `SELECT count(*) AS n FROM information_schema.tables WHERE table_schema = '${schema}' AND table_name = 'hello_items'`,
+    )
+    expect(Number(inPluginSchema[0].n)).toBe(1)
+
+    // 关键断言: 宿主 public 里**没有**这张表（隔离生效）
+    const inPublic = await ruoyiPrisma.$queryRawUnsafe<Array<{ n: bigint }>>(
+      `SELECT count(*) AS n FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'hello_items'`,
+    )
+    expect(Number(inPublic[0].n)).toBe(0)
+
+    // 3) 幂等: 再跑一次不会重复执行
+    const second = await runPluginMigrations({
+      pluginKey, packagePath: EXAMPLE_SRC, dir: "./migrations", trusted: true,
+    })
+    expect(second.applied).toEqual([])
+    expect(second.skipped).toEqual(["001_init.sql"])
+
+    // 收尾
+    await ruoyiPrisma.pluginMigration.deleteMany({ where: { pluginKey } })
+    await ruoyiPrisma.$executeRawUnsafe(`DROP SCHEMA IF EXISTS "${schema}" CASCADE`)
   })
 
   it("插件包从磁盘移除 → 得到诚实处理（不谎报 ready）", async () => {

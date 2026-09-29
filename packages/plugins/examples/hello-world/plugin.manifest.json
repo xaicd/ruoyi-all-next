@@ -24,5 +24,8 @@
       "path": "/hello",
       "auth": "operator"
     }
-  ]
+  ],
+  "migrations": {
+    "dir": "./migrations"
+  }
 }
