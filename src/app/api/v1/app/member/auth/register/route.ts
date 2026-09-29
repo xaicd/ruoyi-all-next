@@ -1,16 +1,3 @@
-import { NextResponse } from "next/server"
-import { MemberAuthService } from "@/modules/member/backend/services/member-auth.service"
-import { memberRegisterSchema } from "@/modules/member/backend/validators/member-auth.validators"
-import { handleApiError } from "@/modules/shared/backend/http/api-error"
-
-/** C 端会员注册（账号密码，无需登录） POST /api/v1/app/member/auth/register */
-export async function POST(request: Request) {
-  try {
-    const body = await request.json().catch(() => ({}))
-    const input = memberRegisterSchema.parse(body)
-    const member = await MemberAuthService.register(input)
-    return NextResponse.json({ success: true, data: member })
-  } catch (error) {
-    return handleApiError(error, { request })
-  }
-}
+// 路由逻辑在域内: src/modules/member/routes/app/auth/register/route.ts
+// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
+export * from "@/modules/member/routes/app/auth/register/route"

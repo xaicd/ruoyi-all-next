@@ -1,14 +1,3 @@
-import { NextResponse } from "next/server"
-import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
-import { parseActionBody } from "@/modules/shared/backend/http/parse-action-input"
-import { SYSTEM_ACTION_SCHEMAS } from "@/modules/system/contract/actions"
-import { SystemOnlineUserService } from "@/modules/system/backend/services/online-user.service"
-import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-
-type RouteContext = { params: Promise<{ id: string }> }
-
-export const DELETE = withAdminRoute(async (_request, auth, context: RouteContext) => {
-  const { id } = await context.params
-  const input = parseActionBody(SYSTEM_ACTION_SCHEMAS["system.forceLogoutOnlineUser"], { sessionId: id })
-  return NextResponse.json({ success: true, data: await SystemOnlineUserService.forceLogoutOnlineUser({ ...input, operatorId: auth.userId }) })
-}, { permission: PERMISSIONS.SYSTEM_ONLINE_USER_FORCE_LOGOUT })
+// 路由逻辑在域内: src/modules/system/routes/admin/online-users/[id]/route.ts
+// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
+export * from "@/modules/system/routes/admin/online-users/[id]/route"

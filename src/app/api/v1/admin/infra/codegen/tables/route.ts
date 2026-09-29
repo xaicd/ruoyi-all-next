@@ -1,15 +1,3 @@
-import { NextResponse } from "next/server"
-import { CodegenTableService } from "@/modules/infra/backend/services/codegen-table.service"
-import { INFRA_ACTION_SCHEMAS } from "@/modules/infra/contract/actions"
-import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { ApiError } from "@/modules/shared/backend/http/api-error"
-import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
-import { parseActionBody } from "@/modules/shared/backend/http/parse-action-input"
-
-export const GET = withAdminRoute(async (request, auth) => {
-  if (!auth.tenantId) throw new ApiError("FORBIDDEN", "Online 设计表必须在租户上下文中选择")
-  const query = Object.fromEntries(new URL(request.url).searchParams)
-  const input = parseActionBody(INFRA_ACTION_SCHEMAS["infra.listCodegenCandidates"], { ...query, tenantId: auth.tenantId })
-  const data = await CodegenTableService.listCodegenCandidates({ ...input, tenantId: auth.tenantId })
-  return NextResponse.json({ success: true, data })
-}, { permission: PERMISSIONS.INFRA_CODEGEN_QUERY })
+// 路由逻辑在域内: src/modules/infra/routes/admin/codegen/tables/route.ts
+// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
+export * from "@/modules/infra/routes/admin/codegen/tables/route"

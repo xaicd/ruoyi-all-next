@@ -1,22 +1,3 @@
-import { OnlineDefinitionService } from "@/modules/online/backend/services"
-import { batchDownloadOnlineCodeSchema } from "@/modules/online/backend/validators"
-import { PERMISSIONS } from "@/modules/shared/backend/constants/permissions"
-import { withAdminRoute } from "@/modules/shared/backend/http/admin-route"
-import { strToU8, zipSync } from "fflate"
-
-/** Builds one review ZIP from selected tenant-scoped, immutable Published Releases. */
-export const POST = withAdminRoute(async (request, auth) => {
-  const input = batchDownloadOnlineCodeSchema.parse(await request.json())
-  const results = await OnlineDefinitionService.generateCodeBatch(auth, input)
-  const archive: Record<string, Uint8Array> = {}
-  for (const result of results) {
-    const prefix = `online-${result.code}-release-${result.schemaRevision}`
-    for (const file of result.files) archive[`${prefix}/${file.path}`] = strToU8(file.content)
-  }
-  return new Response(zipSync(archive), {
-    headers: {
-      "Content-Type": "application/zip",
-      "Content-Disposition": "attachment; filename=online-codegen-batch.zip",
-    },
-  })
-}, { permission: PERMISSIONS.INFRA_ONLINE_DEFINITION_GENERATE })
+// 路由逻辑在域内: src/modules/online/routes/admin/definitions/codegen/download/route.ts
+// 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
+export * from "@/modules/online/routes/admin/definitions/codegen/download/route"
