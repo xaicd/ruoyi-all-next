@@ -334,6 +334,12 @@
         "im"
       ],
       "deployable": true
+    },
+    "plugin": {
+      "domains": [
+        "pay"
+      ],
+      "description": "第一方插件: 保留域级特征(可独立打包), 但不属于平台/业务层"
     }
   },
   "rpc": {
@@ -489,6 +495,37 @@
       },
       "resilience": {
         "timeoutMs": 8000,
+        "retryMaxAttempts": 1,
+        "safeMethodsOnly": true,
+        "idempotencyRequired": true
+      }
+    },
+    {
+      "name": "pay",
+      "owner": "pay",
+      "kind": "plugin",
+      "stage": "B",
+      "contractVersion": "v1",
+      "publicPrefixes": [
+        "/api/v1/admin/pay",
+        "/api/v1/app/pay",
+        "/api/v1/open/pay"
+      ],
+      "implementation": "local-ts",
+      "upstreamEnv": "RUOYI_DOMAIN_PAY_UPSTREAM",
+      "defaultPort": 3214,
+      "packable": true,
+      "packKind": "api-only",
+      "dependsOnModules": [
+        "shared"
+      ],
+      "independentDatabase": false,
+      "auth": {
+        "audience": "admin",
+        "tenantPolicy": "required"
+      },
+      "resilience": {
+        "timeoutMs": 5000,
         "retryMaxAttempts": 1,
         "safeMethodsOnly": true,
         "idempotencyRequired": true

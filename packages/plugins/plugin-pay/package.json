@@ -1,0 +1,16 @@
+{
+  "name": "@ruoyi/plugin-pay",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "ruoyiPlugin": {
+    "manifest": "./plugin.manifest.json",
+    "merged": "./plugin-entry.ts"
+  },
+  "dependencies": {
+    "@ruoyi/plugin-sdk": "workspace:*",
+    "next": "^16.3.6",
+    "react": "19.3.0",
+    "zod": "^4.6.5"
+  }
+}

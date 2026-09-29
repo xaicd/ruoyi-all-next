@@ -296,6 +296,21 @@ importers:
         specifier: workspace:*
         version: link:../../sdk
 
+  packages/plugins/plugin-pay:
+    dependencies:
+      '@ruoyi/plugin-sdk':
+        specifier: workspace:*
+        version: link:../sdk
+      next:
+        specifier: ^16.3.6
+        version: 16.3.6(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      react:
+        specifier: 19.3.0
+        version: 19.3.0
+      zod:
+        specifier: ^4.6.5
+        version: 4.6.5
+
   packages/plugins/sdk: {}
 
 packages:

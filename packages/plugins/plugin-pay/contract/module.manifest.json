@@ -4,7 +4,7 @@
   "id": "ruoyi.pay",
   "apiVersion": 1,
   "displayName": "支付中心",
-  "kind": "business",
+  "kind": "plugin",
   "stage": "B",
   "owner": "pay",
   "contractVersion": "v1",
@@ -19,10 +19,10 @@
   ],
   "entrypoints": {
     "facade": [
-      "packages/domains/pay/contract/pay.facade.ts"
+      "packages/plugins/plugin-pay/contract/pay.facade.ts"
     ],
-    "proto": "packages/domains/pay/contract/pay.proto",
-    "actions": "packages/domains/pay/contract/actions.ts"
+    "proto": "packages/plugins/plugin-pay/contract/pay.proto",
+    "actions": "packages/plugins/plugin-pay/contract/actions.ts"
   },
   "apiRoutes": {
     "publicPrefix": [

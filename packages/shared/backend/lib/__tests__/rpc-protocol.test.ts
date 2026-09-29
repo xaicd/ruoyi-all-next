@@ -27,11 +27,12 @@ describe("module layers", () => {
     expect(rpcPolicy().local.mode).toBe("sdk")
   })
 
-  it("classifies system/infra as platform and pay as business", () => {
-    expect(listPlatformDomains().map((domain) => domain.name)).toEqual(["system", "infra"])
+  it("classifies system/infra as platform and pay as a first-party plugin", () => {
+    expect(listPlatformDomains().map((domain) => domain.name).sort()).toEqual(["infra", "system"])
     expect(moduleLayerOf("system")).toBe("platform")
-    expect(moduleLayerOf("pay")).toBe("business")
-    expect(listBusinessDomains().some((domain) => domain.name === "pay")).toBe(true)
+    // pay 已改造成第一方插件: 保留域级特征（可独立打包/被 broker 寻址），但不属于模块层
+    expect(moduleLayerOf("pay")).toBeUndefined()
+    expect(listBusinessDomains().some((domain) => domain.name === "pay")).toBe(false)
   })
 })
 

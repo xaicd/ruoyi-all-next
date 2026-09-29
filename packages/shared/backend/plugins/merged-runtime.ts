@@ -40,6 +40,8 @@ type MergedHandlers = {
  * 直接报 "A dynamic import callback was not specified."（脱离上下文的 import 拿不到回调）。
  * 本仓已有大量"变量式动态 import"的先例（如按域名加载 backend/services），运行时可用。
  */
+import { firstPartyPluginEntry } from "./first-party-entries"
+
 async function importFromPath(specifier: string): Promise<Record<string, unknown>> {
   return import(/* webpackIgnore: true */ /* @vite-ignore */ specifier) as Promise<Record<string, unknown>>
 }
@@ -71,7 +73,10 @@ export class MergedPlugin {
 
     let loaded: Record<string, unknown>
     try {
-      loaded = await importFromPath(pathToFileURL(this.entryPath).href)
+      // 仓内第一方插件是 TS: 运行期 import 加载不了（Node 不认 TS），必须走静态表；
+      // 第三方插件是已编译的 JS，走运行期 import。两者语义相同, 只有"怎么拿进来"不同。
+      const firstParty = firstPartyPluginEntry(this.pluginKey)
+      loaded = firstParty ? await firstParty() : await importFromPath(pathToFileURL(this.entryPath).href)
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)
       this.lastError = message

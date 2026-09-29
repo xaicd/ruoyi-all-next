@@ -41,6 +41,12 @@
       ],
       "@/modules/*": [
         "packages/domains/*"
+      ],
+      "@/modules/pay/*": [
+        "packages/plugins/plugin-pay/*"
+      ],
+      "@/modules/pay": [
+        "packages/plugins/plugin-pay"
       ]
     }
   },

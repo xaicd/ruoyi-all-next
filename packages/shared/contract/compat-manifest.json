@@ -26,7 +26,7 @@
     "domainCatalog": {
       "path": "packages/shared/backend/constants/domain-catalog.json",
       "version": 1,
-      "domains": 16
+      "domains": 17
     },
     "rpcActions": {
       "path": "packages/shared/backend/constants/rpc-actions.json",

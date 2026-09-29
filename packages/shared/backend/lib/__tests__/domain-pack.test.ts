@@ -23,7 +23,8 @@ describe("domain pack catalog", () => {
   it("separates foundation, platform, and business layers", () => {
     expect(isFoundationModule("shared")).toBe(true)
     expect(listPlatformDomains().map((domain) => domain.name)).toEqual(["system", "infra"])
-    expect(moduleLayerOf("pay")).toBe("business")
+    // pay 已改造成第一方插件: 保留域级特征但不属于任何模块层
+expect(moduleLayerOf("pay")).toBeUndefined()
   })
 
   it("gives each packable domain a unique port, upstream env, and public prefix", () => {

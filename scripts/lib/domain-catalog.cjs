@@ -72,7 +72,7 @@ ${modules}
 }
 
 function manifestPath(domainName) {
-  return path.join(ROOT, "packages", "domains", domainName, "contract", "route.manifest.yaml")
+  return path.join(domainPathOf(ROOT, domainName), "contract", "route.manifest.yaml")
 }
 
 function writeGeneratedManifests() {
@@ -93,7 +93,29 @@ function writeGeneratedManifests() {
 // repo already maintains, so drift is impossible by construction.
 // ---------------------------------------------------------------------------
 
-const CONTRACT_DIR = (domainName) => path.join(ROOT, "packages", "domains", domainName, "contract")
+/**
+ * 域的实际目录（相对仓库根，posix 风格）。
+ *
+ * 域被改造成**第一方插件**后目录会搬到 packages/plugins/plugin-<name>。
+ * 生成器与门禁必须共用这一个解析器 —— 否则会出现"代码搬走了、生成物还写在旧路径"，
+ * 旧目录被重建，解析器又会误判"域还在原地"（实测踩过：残留的 contract/ 目录让
+ * seam 图一直指向旧路径并报 triangle incomplete）。
+ */
+function domainDirOf(root, name) {
+  // 插件位置**优先**: 只要有 packages/plugins/plugin-<name> 就以它为准。
+  // 不能反过来靠"旧目录是否存在"判断 —— 旧目录可能被残留生成物重建，导致解析器
+  // 误判域还在原地（实测踩过这个反馈回路）。
+  const plugin = path.join(root, "packages", "plugins", `plugin-${name}`)
+  if (fs.existsSync(plugin)) return path.posix.join("packages", "plugins", `plugin-${name}`)
+  return path.posix.join("packages", "domains", name)
+}
+
+/** 绝对路径版本的域目录。 */
+function domainPathOf(root, name) {
+  return path.join(root, domainDirOf(root, name))
+}
+
+const CONTRACT_DIR = (domainName) => path.join(domainPathOf(ROOT, domainName), "contract")
 
 function readTextIfExists(file) {
   return fs.existsSync(file) ? fs.readFileSync(file, "utf8") : ""
@@ -198,12 +220,12 @@ function toModuleManifest(domain, sources, labels = new Map()) {
     minimumHostVersion: "1.0.0",
     capabilities: deriveCapabilities(domain, sources),
     entrypoints: {
-      facade: sources.facades.map((surface) => `packages/domains/${domain.name}/contract/${surface.file}`),
+      facade: sources.facades.map((surface) => `${domainDirOf(ROOT, domain.name)}/contract/${surface.file}`),
       proto: fs.existsSync(path.join(CONTRACT_DIR(domain.name), `${domain.name}.proto`))
-        ? `packages/domains/${domain.name}/contract/${domain.name}.proto`
+        ? `${domainDirOf(ROOT, domain.name)}/contract/${domain.name}.proto`
         : null,
       actions: fs.existsSync(path.join(CONTRACT_DIR(domain.name), "actions.ts"))
-        ? `packages/domains/${domain.name}/contract/actions.ts`
+        ? `${domainDirOf(ROOT, domain.name)}/contract/actions.ts`
         : null,
     },
     apiRoutes: {
@@ -241,7 +263,7 @@ function toModuleManifest(domain, sources, labels = new Map()) {
 }
 
 function moduleManifestPath(domainName) {
-  return path.join(ROOT, "packages", "domains", domainName, "contract", "module.manifest.json")
+  return path.join(domainPathOf(ROOT, domainName), "contract", "module.manifest.json")
 }
 
 function writeGeneratedModuleManifests() {
@@ -306,6 +328,8 @@ function writeGeneratedModuleRegistry() {
 }
 
 module.exports = {
+  domainDirOf,
+  domainPathOf,
   ROOT,
   CATALOG_PATH,
   loadCatalog,

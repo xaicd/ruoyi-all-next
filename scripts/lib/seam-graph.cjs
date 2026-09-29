@@ -7,17 +7,28 @@ const path = require("path")
 const { ROOT, loadCatalog } = require("./domain-catalog.cjs")
 const { loadRpcActions } = require("./rpc-contracts.cjs")
 
+/**
+ * 域的实际目录。域被改造成**第一方插件**后目录会搬到 packages/plugins/plugin-<name>，
+ * 写死 packages/domains/<name> 会让 seam 图看不见它的契约，从而报 "triangle incomplete"。
+ */
+function domainDirOf(root, name) {
+  // 插件位置优先（理由同 domain-catalog.cjs: 对残留旧目录免疫）
+  const plugin = path.join("packages", "plugins", `plugin-${name}`)
+  if (fs.existsSync(path.join(root, plugin))) return plugin.replace(/\\/g, "/")
+  return path.join("packages", "domains", name).replace(/\\/g, "/")
+}
+
 const SEAM_GRAPH_REL = path.join("packages", "shared", "contract", "seam-graph.json").replace(/\\/g, "/")
 
 const CONSUMER_SLOTS = [
   ["adminApi", (name) => `src/app/api/v1/admin/${name}`],
   ["appApi", (name) => `src/app/api/v1/app/${name}`],
   ["openApi", (name) => `src/app/api/v1/open/${name}`],
-  ["frontendApi", (name) => `packages/domains/${name}/frontend/api`],
+  ["frontendApi", (name) => `${domainDirOf(ROOT, name)}/frontend/api`],
   ["adminPages", (name) => `src/app/(admin-pages)/admin/${name}`],
-  ["modulePages", (name) => `packages/domains/${name}/frontend/pages`],
+  ["modulePages", (name) => `${domainDirOf(ROOT, name)}/frontend/pages`],
   ["cpcPages", (name) => `src/app/(cpc-pages)/cpc/${name}`],
-  ["moduleCpcPages", (name) => `packages/domains/${name}/frontend/cpc-pages`],
+  ["moduleCpcPages", (name) => `${domainDirOf(ROOT, name)}/frontend/cpc-pages`],
 ]
 
 function toPosix(rel) {
@@ -49,9 +60,10 @@ function methodsFor(rpcActions, domainName) {
 
 function buildDomainSeam(root, domain, rpcActions) {
   const name = domain.name
-  const contractDir = `packages/domains/${name}/contract`
-  const servicesDir = `packages/domains/${name}/backend/services`
-  const repositoriesDir = `packages/domains/${name}/backend/repositories`
+  const base = domainDirOf(root, name)
+  const contractDir = `${base}/contract`
+  const servicesDir = `${base}/backend/services`
+  const repositoriesDir = `${base}/backend/repositories`
 
   const facades = listDirFiles(root, contractDir, (file) => file.endsWith(".facade.ts"))
   const actions = listDirFiles(root, contractDir, (file) => file === "actions.ts" || file.endsWith(".actions.ts"))

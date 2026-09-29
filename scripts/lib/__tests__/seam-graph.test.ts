@@ -19,7 +19,8 @@ describe("seam-graph", () => {
     const pay = graph.domains.find((item) => item.name === "pay")
     expect(pay).toBeTruthy()
     expect(pay.definition.facades.some((file) => file.endsWith("pay.facade.ts"))).toBe(true)
-    expect(pay.provider.servicesDir).toBe("packages/domains/pay/backend/services")
+    // pay 已改造成第一方插件，目录随之迁移
+expect(pay.provider.servicesDir).toBe("packages/plugins/plugin-pay/backend/services")
     expect(pay.provider.methods).toEqual(rpc.domains.pay.actions.map((item) => item.method))
     expect(pay.consumer.adminApi).toBe("src/app/api/v1/admin/pay")
     expect(SEAM_GRAPH_REL).toBe("packages/shared/contract/seam-graph.json")

@@ -222,7 +222,8 @@ go 1.22
 }
 
 function contractPaths(domain) {
-  const dir = path.join(ROOT, "packages", "domains", domain, "contract")
+  // 用共享解析器: 域改造成插件后目录在 packages/plugins/plugin-*，不能写死旧路径
+  const dir = path.join(require("./domain-catalog.cjs").domainPathOf(ROOT, domain), "contract")
   return {
     dir,
     actions: path.join(dir, "actions.ts"),

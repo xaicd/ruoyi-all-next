@@ -1,6 +1,8 @@
 import catalogJson from "./domain-catalog.json"
 
-export type DomainKind = "platform" | "business"
+// "plugin": 第一方插件 —— 保留域级特征（可独立打包/被 broker 寻址），
+// 但不属于平台层或业务层，单独成层。
+export type DomainKind = "platform" | "business" | "plugin"
 export type ModuleLayer = "foundation" | "platform" | "business"
 export type DomainStage = "A" | "B" | "C"
 export type DomainImplementation = "local-ts" | "remote-http" | "remote-go"
@@ -111,6 +113,8 @@ export const DOMAIN_CATALOG: DomainCatalog = catalogJson as DomainCatalog
 export const NATIVE_DOMAIN_NAMES: readonly string[] = [
   ...DOMAIN_CATALOG.layers.platform.domains,
   ...DOMAIN_CATALOG.layers.business.domains,
+  // 第一方插件仍是本仓原生能力，只是不属于平台层或业务层，单独成层
+  ...((DOMAIN_CATALOG.layers as { plugin?: { domains: string[] } }).plugin?.domains ?? []),
 ]
 
 export function listDomainCatalog(): DomainCatalogEntry[] {
@@ -148,7 +152,8 @@ export function isFoundationModule(name: string): boolean {
 export function moduleLayerOf(name: string): ModuleLayer | undefined {
   if (isFoundationModule(name)) return "foundation"
   const domain = getDomainCatalogEntry(name)
-  return domain?.kind
+  if (!domain || domain.kind === "plugin") return undefined // 插件不属于任何模块层
+  return domain.kind
 }
 
 export function rpcPolicy(): DomainRpcPolicy {

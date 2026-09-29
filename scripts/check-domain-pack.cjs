@@ -32,7 +32,8 @@ for (const domain of domains) {
   ports.add(domain.defaultPort)
   envs.add(domain.upstreamEnv)
 
-  const moduleDir = path.join("packages", "domains", domain.name)
+  // 域可能是第一方插件(目录在 packages/plugins/plugin-*)，用共享解析器
+  const moduleDir = require("./lib/domain-catalog.cjs").domainDirOf(ROOT, domain.name)
   if (!exists(moduleDir)) fail(`missing module directory ${moduleDir}`)
 
   for (const prefix of domain.publicPrefixes) {
