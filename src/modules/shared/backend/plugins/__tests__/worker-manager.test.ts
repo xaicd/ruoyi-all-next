@@ -91,7 +91,7 @@ describe("PluginWorker", () => {
     await worker.stop()
   })
 
-  it("§12.5 停机阶梯：不回应 shutdown 时升级到 SIGTERM 并真正退出", async () => {
+  it("停机阶梯：不回应 shutdown 时升级到 SIGTERM 并真正退出", async () => {
     const { entry, dir } = writeStubbornWorker()
     const worker = new PluginWorker("stubborn", entry, dir, { gracefulShutdownMs: 150, sigtermGraceMs: 1_000 })
     await worker.start(initInput("stubborn"))
@@ -102,7 +102,7 @@ describe("PluginWorker", () => {
     expect(isAlive(pid)).toBe(false)
   })
 
-  it("§12.5 阶梯末端：连 SIGTERM 也忽略时升级到 SIGKILL", async () => {
+  it("阶梯末端：连 SIGTERM 也忽略时升级到 SIGKILL", async () => {
     const { entry, dir } = writeStubbornWorker({ ignoreSigterm: true })
     const worker = new PluginWorker("unkillable", entry, dir, { gracefulShutdownMs: 150, sigtermGraceMs: 250 })
     await worker.start(initInput("unkillable"))
@@ -139,7 +139,7 @@ describe("PluginWorkerManager", () => {
 
     await manager.stop("ruoyi.hello-world")
 
-    // 进程应已退出（§12.5 阶梯走完），PID 不再存活
+    // 进程应已退出（停机阶梯走完），PID 不再存活
     await new Promise((resolve) => setTimeout(resolve, 100))
     let alive = true
     try {

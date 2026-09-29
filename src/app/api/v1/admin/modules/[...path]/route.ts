@@ -10,7 +10,7 @@ import { getModuleByDomain, resolveModuleDispatch } from "../_lib/module-registr
 /**
  * 模块 API 网关。
  *
- * 注: 派发对象是 **Platform Module 的 facade**(Paperclip PLUGIN_SPEC §6.1),
+ * 注: 派发对象是 **Platform Module 的 facade**,
  * 不是 §6.2 的可安装 Plugin —— 故路径与方法一律用 module/域 语义。
  *
  *   GET  /api/v1/admin/modules/<domain>             → 该模块的 manifest

@@ -1,7 +1,7 @@
 /**
- * 插件 manifest 校验（Paperclip PLUGIN_SPEC §10.1 规则 + §15 capability 规则）。
+ * 插件 manifest 校验。
  *
- * 校验发生在**安装期**（§8.3：读并校验 manifest → 拒绝不兼容 apiVersion → 向操作员展示申请的 capability）。
+ * 校验发生在**安装期**：读并校验 manifest → 拒绝不兼容 apiVersion → 向操作员展示申请的 capability）。
  * 所有失败都聚合成错误清单返回，而不是抛首个错 —— 插件作者需要一次看到全部问题。
  */
 import { z } from "zod"
@@ -76,19 +76,19 @@ export function parsePluginManifest(input: unknown): ManifestValidation {
   const data = parsed.data
   const errors: string[] = []
 
-  // §8.3 步骤 4：拒绝不兼容的插件 API 版本（精确匹配，不做范围推断）
+  // 拒绝不兼容的插件 API 版本（精确匹配，不做范围推断）
   if (data.apiVersion !== PLUGIN_API_VERSION) {
     errors.push(
       `apiVersion ${data.apiVersion} 与宿主支持的 ${PLUGIN_API_VERSION} 不兼容，拒绝安装`,
     )
   }
 
-  // §15：capability 必须静态可见。未知能力一律拒绝；
-  // §15.2 的禁忌能力单独给出明确理由，而不是笼统的"未知能力"。
+  // capability 必须静态可见。未知能力一律拒绝；
+  // 禁忌能力单独给出明确理由，而不是笼统的"未知能力"。
   const seen = new Set<string>()
   for (const capability of data.capabilities) {
     if ((FORBIDDEN_CAPABILITIES as readonly string[]).includes(capability)) {
-      errors.push(`capability "${capability}" 属 §15.2 禁忌能力，宿主不提供`)
+      errors.push(`capability "${capability}" 属禁忌能力，宿主不提供`)
       continue
     }
     if (!(KNOWN_CAPABILITIES as readonly string[]).includes(capability)) {
@@ -102,14 +102,14 @@ export function parsePluginManifest(input: unknown): ManifestValidation {
     seen.add(capability)
   }
 
-  // §9：同一 manifest 内重复 slot id 必须在安装期拒绝（跨插件重复由宿主命名空间化，无需检查）
+  // 同一 manifest 内重复 slot id 必须在安装期拒绝（跨插件重复由宿主命名空间化，无需检查）
   if (data.ui) {
     const slotIds = new Set<string>()
     for (const slot of data.ui.slots) {
       if (slotIds.has(slot.id)) errors.push(`ui.slots 内重复 id: "${slot.id}"`)
       slotIds.add(slot.id)
     }
-    // §10.1：声明了 ui.slots 就必须有 entrypoints.ui，否则宿主无处加载组件
+    // 声明了 ui.slots 就必须有 entrypoints.ui，否则宿主无处加载组件
     if (!data.entrypoints.ui) {
       errors.push("声明了 ui.slots 但缺少 entrypoints.ui（宿主无法定位 UI bundle）")
     }

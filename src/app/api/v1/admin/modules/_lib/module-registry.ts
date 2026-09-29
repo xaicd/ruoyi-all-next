@@ -12,7 +12,7 @@
  *    索引若在 `shared` 内，打包后会 import 到未随包拷贝的其它域而构建失败。
  *    网关不属于任何单域的 apiRouteDirs，故不会进入域包。
  *
- * 定位: 本仓的域是 Paperclip PLUGIN_SPEC §6.1 的 **Platform Module**（可信/进程内/显式注册面），
+ * 定位: 本仓的域是 **Platform Module**（可信/进程内/显式注册面），
  * 不是 §6.2 的可安装 Plugin。故本文件与产物一律用 module 命名。
  * 设计见 docs/architecture/ruoyi-all-next-module-to-plugin-migration.md。
  */

@@ -1,5 +1,5 @@
 /**
- * 参考插件 worker：实现 PLUGIN_SPEC §13 的三个必选方法。
+ * 参考插件 worker：实现三个必选方法（initialize / health / shutdown）。
  *
  * 刻意保持最小 —— 新作者应当能照着它写出自己的第一个插件。
  * 注意 stdout 只走协议，诊断信息一律写 stderr（宿主只从 stdout 解析 JSON-RPC）。

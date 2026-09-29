@@ -2,7 +2,7 @@
  * 插件注册表服务：把磁盘上的插件包同步为实例级安装记录，并可启动 worker。
  *
  * 状态机：磁盘扫描通过 → `installed`；worker 起来且 initialize 成功 → `ready`；
- * 任一步失败 → `error`（§21.3）。启停 worker 的副作用只在 `reconcile()` 里发生，
+ * 任一步失败 → `error`。启停 worker 的副作用只在 `reconcile()` 里发生，
  * 单纯的 `syncFromDisk()` 只碰数据库。
  */
 import { existsSync } from "node:fs"
@@ -86,7 +86,7 @@ export const PluginRegistryService = {
    * 与 `syncFromDisk` 分开是因为后者只碰数据库、不出进程；启停进程的副作用
    * 应当是一个显式动作，而不是"读一下列表"的副作用。
    *
-   * §12.4 失败隔离：单个 worker 启动失败只把它自己标 `error`，循环继续 ——
+   * 失败隔离：单个 worker 启动失败只把它自己标 `error`，循环继续 ——
    * 不中断、不连带其它插件。
    */
   async reconcile(pluginDir: string = resolvePluginDir()): Promise<PluginReconcileResult> {

@@ -1,11 +1,11 @@
 /**
  * 插件作者入口：`definePlugin()` 声明生命周期钩子，`runWorker()` 把它接到宿主协议上。
  *
- * 覆盖面说明（不夸大）：本文件只实现 PLUGIN_SPEC §13 的**三个必选方法**
- * （initialize / health / shutdown）与一个极小的 `ctx`。§14 的完整 SDK 面
- * （ctx.config / events / jobs / http / secrets / state / entities / …）尚未实现，
- * 对应 §13 的可选方法（onEvent / runJob / handleWebhook / getData / performAction /
- * executeTool）也一并留待后续增量 —— 在实现之前不在此声明，避免给出"声明了但没人兑现"的 API。
+ * 覆盖面说明（不夸大）：本文件只实现**三个必选方法**（initialize / health / shutdown）
+ * 与一个极小的 `ctx`。完整 SDK 面（ctx.config / events / jobs / http / secrets / state /
+ * entities 等）与对应的可选方法（onEvent / runJob / handleWebhook / getData /
+ * performAction / executeTool）留待后续增量 —— 在实现之前不在此声明，
+ * 避免给出"声明了但没人兑现"的 API。
  *
  * 用法：
  *   import { definePlugin, runWorker } from "@ruoyi/plugin-sdk"
@@ -67,7 +67,7 @@ export function runWorker(plugin, options = {}) {
         return
       }
       case "shutdown": {
-        // §12.5 步骤 1-2：先回应，再自行退出；宿主等不到就升级到 SIGTERM/SIGKILL
+        // 停机阶梯第 1-2 步：先回应，再自行退出；宿主等不到就升级到 SIGTERM/SIGKILL
         reply(request.id, { result: { ok: true } })
         try {
           await plugin.onShutdown?.()

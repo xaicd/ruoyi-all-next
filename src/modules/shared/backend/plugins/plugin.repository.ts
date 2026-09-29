@@ -1,11 +1,11 @@
 /**
- * 插件注册表持久化（PLUGIN_SPEC §21.3 的 plugin 表）。
+ * 插件注册表持久化。
  *
  * 落位说明：本文件**刻意不放在 `backend/repositories/` 下**。那里是**业务域仓储**，
  * `business-repository-tenant-scope` 规则（AGENTS.md §4.8）针对的是它们；
- * 而插件安装是**实例级**的（§8：installation is global to the instance，
+ * 而插件安装是**实例级**的（installation is global to the instance，
  * 无 per-company install 表），`plugin` 表本就没有 tenant_id。放这里语义才准确。
- * 按租户配置在 `plugin_config`，其租户一律取自全局上下文（§4.8）。
+ * 按租户配置在 `plugin_config`，其租户一律取自全局上下文（AGENTS.md §4.8）。
  */
 import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
 
@@ -58,7 +58,7 @@ export const PluginRepository = {
     })
   },
 
-  /** 推进生命周期状态（§21.3 的 installed | ready | error | upgrade_pending）。 */
+  /** 推进生命周期状态（installed | ready | error | upgrade_pending）。 */
   async setStatus(pluginKey: string, status: string, lastError: string | null = null) {
     return ruoyiPrisma.plugin.updateMany({ where: { pluginKey }, data: { status, lastError } })
   },

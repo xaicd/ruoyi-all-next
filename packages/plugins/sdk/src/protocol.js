@@ -8,7 +8,7 @@
  *
  * 纯 JS + 同名 .d.ts：不给插件作者加构建步骤，同时保留类型提示。
  *
- * 传输：stdio 上的逐行 JSON-RPC（PLUGIN_SPEC §12.1）。一行一个 JSON 对象，`\n` 分隔。
+ * 传输：stdio 上的逐行 JSON-RPC。一行一个 JSON 对象，`\n` 分隔。
  */
 
 export function encode(message) {
@@ -36,7 +36,7 @@ export function decode(buffer) {
   return { messages, rest }
 }
 
-/** PLUGIN_SPEC §13 的三个必选方法。 */
+/** 三个必选方法：worker 未实现其中任何一个即不合格。 */
 export const REQUIRED_METHODS = Object.freeze(["initialize", "health", "shutdown"])
 
 /** JSON-RPC 标准错误码。 */

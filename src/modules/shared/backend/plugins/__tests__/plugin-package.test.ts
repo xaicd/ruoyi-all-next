@@ -83,13 +83,13 @@ describe("plugin manifest 校验", () => {
     if (result.ok) expect(result.manifest.capabilities).toEqual(["plugin.state.read"])
   })
 
-  it("apiVersion 不匹配即拒绝（§8.3 步骤 4，精确匹配不做范围推断）", () => {
+  it("apiVersion 不匹配即拒绝（精确匹配不做范围推断）", () => {
     const result = parsePluginManifest({ ...base, apiVersion: PLUGIN_API_VERSION + 1 })
     expect(result.ok).toBe(false)
     if (!result.ok) expect(result.errors.join()).toContain("不兼容")
   })
 
-  it("§15.2 禁忌能力被拒，且给出的是明确理由而非「未知能力」", () => {
+  it("禁忌能力被拒，且给出的是明确理由而非「未知能力」", () => {
     const result = parsePluginManifest({ ...base, capabilities: ["database.direct"] })
     expect(result.ok).toBe(false)
     if (!result.ok) {
@@ -104,7 +104,7 @@ describe("plugin manifest 校验", () => {
     if (!result.ok) expect(result.errors.join()).toContain("不在宿主能力白名单内")
   })
 
-  it("同一 manifest 内重复 slot id 被拒（§9）", () => {
+  it("同一 manifest 内重复 slot id 被拒", () => {
     const result = parsePluginManifest({
       ...base,
       entrypoints: { worker: "./dist/worker.js", ui: "./dist/ui" },

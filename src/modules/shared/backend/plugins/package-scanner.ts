@@ -1,10 +1,8 @@
 /**
  * 插件包发现与扫描。
  *
- * 部署模型（对齐 Paperclip §8.1 的实例插件目录，而不是 workspace 成员）：
- * 插件包放在一个**实例级目录**下，宿主扫描它；宿主源码树不含插件代码。
- * 选这个模型是因为本仓是 npm 单包（无 workspaces），改成 workspace 会牵动
- * lockfile / Docker / domain:pack 三条既有链路。
+ * 部署模型：插件包放在一个**实例级目录**下，宿主扫描它；宿主源码树不含插件代码。
+ * 开发期的第一方插件另放 `packages/plugins/*`（见 packages/plugins/examples/hello-world）。
  *
  * 安全要点：`ruoyiPlugin.manifest` 指针**来自插件包自己**，因此解析后必须确认
  * 仍落在该插件包目录内 —— 否则一个恶意包可以用 `../../` 让宿主读取任意文件。
@@ -15,7 +13,7 @@ import path from "node:path"
 import { parsePluginManifest } from "./manifest"
 import type { PluginManifest, PluginPackagePointer } from "./types"
 
-/** 插件包 package.json 中的入口指针键名（对应 Paperclip 的 `paperclipPlugin`）。 */
+/** 插件包 package.json 中的入口指针键名。 */
 export const PLUGIN_POINTER_KEY = "ruoyiPlugin"
 
 /** 插件目录：可用 RUOYI_PLUGIN_DIR 覆盖；默认落在仓库内的 .ruoyi/plugins（已 gitignore）。 */

@@ -1,9 +1,9 @@
 /**
- * Plugin Worker 运行时（Paperclip PLUGIN_SPEC §12）。
+ * Plugin Worker 运行时。
  *
- * §12.1 进程模型：**一插件一 worker 进程**，host↔worker 走 stdio 逐行 JSON-RPC。
- * 这是 §6.2 Plugin 与 §6.1 Platform Module 的根本分野 —— 插件代码不跑在宿主进程里，
- * 因此单个插件崩溃/挂死不会带走核心服务（§12.4 失败隔离）。
+ * 进程模型：**一插件一 worker 进程**，host↔worker 走 stdio 逐行 JSON-RPC。
+ * 这是 Plugin 与 Platform Module 的根本分野 —— 插件代码不跑在宿主进程里，
+ * 因此单个插件崩溃/挂死不会带走核心服务（失败隔离）。
  *
  * 本文件只做进程与协议；不解释业务语义。
  */
@@ -41,7 +41,7 @@ export class PluginWorker {
     private readonly cwd: string,
     limits: Partial<typeof WORKER_LIMITS> = {},
   ) {
-    // 时限可注入：§12.5 末句要求停机限期可按插件配置；测试也需要用短时限
+    // 时限可注入：停机限期本就该可按插件配置；测试也需要用短时限
     // 才能覆盖"阶梯升级"这条路径，而不必让整个测试套件等满 15 秒。
     this.limits = { ...WORKER_LIMITS, ...limits }
   }
@@ -54,7 +54,7 @@ export class PluginWorker {
     return Boolean(this.child) && this.exitReason === null
   }
 
-  /** 启动进程并完成 §13.1 initialize。任一环节失败都抛出，由调用方标记该插件 error。 */
+  /** 启动进程并完成 initialize。任一环节失败都抛出，由调用方标记该插件 error。 */
   async start(initialize: WorkerInitializeInput): Promise<void> {
     if (!existsSync(this.workerPath)) {
       throw new Error(`worker 入口不存在: ${this.workerPath}`)
@@ -79,11 +79,11 @@ export class PluginWorker {
       this.failAll(new Error(`worker 进程已退出 (${this.exitReason})`))
     })
 
-    // §13.1：initialize 必须成功，否则这个 worker 不合格
+    // initialize 必须成功，否则这个 worker 不合格
     await this.request("initialize", initialize, this.limits.initializeTimeoutMs)
   }
 
-  /** §13.2 health()。 */
+  /** health()。 */
   async health(): Promise<WorkerHealthResult> {
     const result = (await this.request("health", undefined)) as WorkerHealthResult | undefined
     if (!result || typeof result.status !== "string") {
@@ -120,7 +120,7 @@ export class PluginWorker {
   }
 
   /**
-   * 停机阶梯（§12.5）：
+   * 停机阶梯：
    *   1. shutdown()
    *   2. 等 worker 自行退出（gracefulShutdownMs）
    *   3. 未退出 → SIGTERM，再等 sigtermGraceMs
@@ -186,7 +186,7 @@ export class PluginWorker {
 
 /**
  * 多插件 worker 池。失败隔离在**这里**体现：单个 worker 的任何异常只影响它自己，
- * 不遍历、不连带其它 worker（§12.4：do not drop other plugins or core services）。
+ * 不遍历、不连带其它 worker（do not drop other plugins or core services）。
  */
 export class PluginWorkerManager {
   private readonly workers = new Map<string, PluginWorker>()

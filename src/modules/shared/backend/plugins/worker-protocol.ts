@@ -1,26 +1,26 @@
 /**
- * Host ↔ Plugin Worker 协议（Paperclip PLUGIN_SPEC §13 的 required 子集）。
+ * Host ↔ Plugin Worker 协议。
  *
- * 传输：host 与 worker 之间走 **stdio 上的逐行 JSON-RPC**（§12.1）。
+ * 传输：host 与 worker 之间走 **stdio 上的逐行 JSON-RPC**。
  * 一行一个 JSON 对象，`\n` 分隔 —— 不用 Content-Length 头，因为 stdio 是可读流，
  * 行分隔对日志混排与截断都更健壮。
  *
- * §13 规定三个**必选**方法；其余（onEvent/runJob/handleWebhook/getData/performAction/
+ * 三个**必选**方法如下；其余（onEvent/runJob/handleWebhook/getData/performAction/
  * executeTool、jobs/webhooks/tools 声明面）属后续增量，本文件不提前声明未实现的能力。
  */
 
-/** §13 required。worker 未实现其中任何一个即视为不合格 worker。 */
+/** 必选方法。worker 未实现其中任何一个即视为不合格 worker。 */
 export const REQUIRED_WORKER_METHODS = ["initialize", "health", "shutdown"] as const
 
 export type RequiredWorkerMethod = (typeof REQUIRED_WORKER_METHODS)[number]
 
-/** 进程行为参数。权威数值取自 §12.5 与健康检查需要。 */
+/** 进程行为参数（请求超时 / 停机阶梯时限）。 */
 export const WORKER_LIMITS = {
   /** host → worker 单次请求的等待上限。避免一个不响应的 worker 挂住宿主。 */
   requestTimeoutMs: 15_000,
-  /** §12.5 步骤 2：收到 shutdown() 后给 worker 的自行退出时间。 */
+  /** 停机阶梯第 2 步：收到 shutdown() 后给 worker 的自行退出时间。 */
   gracefulShutdownMs: 10_000,
-  /** §12.5 步骤 4：SIGTERM 之后到 SIGKILL 的等待。 */
+  /** 停机阶梯第 4 步：SIGTERM 之后到 SIGKILL 的等待。 */
   sigtermGraceMs: 5_000,
   /** 启动后等待 initialize 成功的时间。 */
   initializeTimeoutMs: 20_000,
@@ -39,7 +39,7 @@ export type JsonRpcSuccess = { jsonrpc: "2.0"; id: number; result?: unknown }
 export type JsonRpcFailure = { jsonrpc: "2.0"; id: number; error: { code: number; message: string } }
 export type JsonRpcMessage = JsonRpcSuccess | JsonRpcFailure
 
-/** worker 启动时收到的上下文（§13.1：manifest / 已解析配置 / 实例信息 / 宿主 API 版本）。 */
+/** worker 启动时收到的上下文：manifest / 已解析配置 / 实例信息 / 宿主 API 版本。 */
 export type WorkerInitializeInput = {
   manifest: unknown
   config: Record<string, unknown>
@@ -47,7 +47,7 @@ export type WorkerInitializeInput = {
   instance: { pluginKey: string; packagePath: string }
 }
 
-/** §13.2 health() 的返回形状。 */
+/** health() 的返回形状。 */
 export type WorkerHealthResult = {
   status: "ok" | "degraded" | "error"
   message?: string

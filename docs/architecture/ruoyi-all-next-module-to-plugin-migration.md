@@ -1,7 +1,8 @@
 # Module 架构 → Plugin 架构 迁移设计
 
 > 参考实现：Paperclip（`paperclipai/paperclip`，本地 fork 见 `workspace/xaicd/coolie`）
-> 权威规范：`doc/plugins/PLUGIN_SPEC.md`（1846 行）
+> 设计依据：Paperclip 的 `doc/plugins/PLUGIN_SPEC.md`（1846 行）—— **该文件在 coolie fork 内，不在本仓**；
+> 本仓代码不引用它的章节号，实现理由一律写在代码注释里，本文只承担血缘记录与取舍分析。
 > 状态：**设计草案**。本文只做架构分析与路线，不含实现承诺。
 
 ## 0. 先修正框架：本仓的 domain 对应的是 Platform Module，不是 Plugin

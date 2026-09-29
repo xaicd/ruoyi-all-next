@@ -169,7 +169,7 @@ function readDomainLabels() {
 
 /**
  * capability 由「真实声明」推导，而不是手工编造：
- * 声明是请求，不是授权 —— 与 Paperclip manifest 的语义一致。
+ * 声明是请求，不是授权 —— 插件 manifest 的 capability 也是同一语义。
  */
 function deriveCapabilities(domain, sources) {
   const capabilities = ["api.routes.register"]
@@ -186,7 +186,7 @@ function toModuleManifest(domain, sources, labels = new Map()) {
     $schema: "ruoyi-module-manifest/v1",
     /** 解析主键：网关按它把 /modules/<domain>/<method> 路由到对应域。 */
     domain: domain.name,
-    // 对齐 Paperclip 的 `<org>.<name>` 命名习惯
+    // `<org>.<name>` 命名习惯（与插件 id 一致）
     id: `ruoyi.${domain.name}`,
     apiVersion: 1,
     displayName: labels.get(domain.name) || domain.name,
