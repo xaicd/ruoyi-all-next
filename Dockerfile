@@ -17,15 +17,21 @@ RUN apk add --no-cache python3 make g++
 # 只拷 package.json（源码与 node_modules 由 .dockerignore / 后续 COPY 处理）。
 COPY packages/plugins/sdk/package.json ./packages/plugins/sdk/package.json
 COPY packages/plugins/examples/hello-world/package.json ./packages/plugins/examples/hello-world/package.json
-# 包管理器切到 pnpm（corepack 用 package.json 的 packageManager 字段选版本）。
+# 包管理器切到 pnpm。corepack 的 shim 会读 package.json 的 packageManager 字段选版本，
+# 故只需 enable，不必再 prepare（少一步不确定性）。
 # --frozen-lockfile: CI/镜像构建必须用锁文件，不允许隐式升级依赖。
-RUN corepack enable && corepack prepare --activate
+RUN corepack enable
 RUN pnpm install --frozen-lockfile
-# npm workspaces 会在 node_modules/@ruoyi 下建立指向 ../../packages/... 的符号链接。
-# BuildKit 的 COPY 解析「落在被复制目录之外」的链接时会报
-# "evalSymlinksInScope: too many links"，导致下一阶段的 COPY --from=deps 失败。
-# 应用构建不依赖这些插件包（plugin SDK 只给插件作者使用），故在 deps 层裁掉。
-RUN rm -rf node_modules/@ruoyi node_modules/.pnpm/node_modules/@ruoyi
+# 【未验证项·迁移到 pnpm 后的已知风险】
+# pnpm 的 node_modules 布局**大量使用符号链接**（node_modules/.pnpm + 成员链接）。
+# npm 阶段我们已实测过: BuildKit 的跨阶段 COPY 解析这类链接时会报
+#   "evalSymlinksInScope: too many links"
+# 因此下面这步 `COPY --from=deps /app/node_modules` 在 pnpm 布局下有较大概率失败。
+# 若构建在此处失败，两条标准解法（择一，不要用 hack）:
+#   1) pnpm 官方做法: 用 `pnpm deploy --prod --filter <pkg> <outdir>` 产出自包含目录再 COPY
+#   2) 退化为扁平布局: .npmrc 加 `node-linker=hoisted`（放弃 pnpm 严格布局，换取可 COPY）
+# 本条在本机未能实测（镜像构建卡在更早的 apk 阶段，属环境网络问题），故如实标注而不是声称通过。
+RUN rm -rf node_modules/@ruoyi node_modules/.pnpm/node_modules/@ruoyi node_modules/.pnpm/node_modules/@ruoyi
 
 # Stage 2: 构建
 FROM node:24-alpine AS builder
