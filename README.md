@@ -15,7 +15,9 @@
 
 ```bash
 # 1. 安装依赖
-npm install
+# 包管理器：pnpm workspaces（工作区成员定义见 pnpm-workspace.yaml）
+# 若本机没有 pnpm：corepack enable && corepack prepare --activate
+pnpm install
 
 # 2. 启动开发服务器（内存模式，无需数据库）
 npm run dev

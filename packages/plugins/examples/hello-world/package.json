@@ -10,7 +10,7 @@
     "merged": "./merged.js"
   },
   "dependencies": {
-    "@ruoyi/plugin-sdk": "*"
+    "@ruoyi/plugin-sdk": "workspace:*"
   },
   "engines": {
     "node": ">=20.19.0"

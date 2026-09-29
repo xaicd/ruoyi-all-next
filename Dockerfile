@@ -17,12 +17,15 @@ RUN apk add --no-cache python3 make g++
 # 只拷 package.json（源码与 node_modules 由 .dockerignore / 后续 COPY 处理）。
 COPY packages/plugins/sdk/package.json ./packages/plugins/sdk/package.json
 COPY packages/plugins/examples/hello-world/package.json ./packages/plugins/examples/hello-world/package.json
-RUN npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+# 包管理器切到 pnpm（corepack 用 package.json 的 packageManager 字段选版本）。
+# --frozen-lockfile: CI/镜像构建必须用锁文件，不允许隐式升级依赖。
+RUN corepack enable && corepack prepare --activate
+RUN pnpm install --frozen-lockfile
 # npm workspaces 会在 node_modules/@ruoyi 下建立指向 ../../packages/... 的符号链接。
 # BuildKit 的 COPY 解析「落在被复制目录之外」的链接时会报
 # "evalSymlinksInScope: too many links"，导致下一阶段的 COPY --from=deps 失败。
 # 应用构建不依赖这些插件包（plugin SDK 只给插件作者使用），故在 deps 层裁掉。
-RUN rm -rf node_modules/@ruoyi
+RUN rm -rf node_modules/@ruoyi node_modules/.pnpm/node_modules/@ruoyi
 
 # Stage 2: 构建
 FROM node:24-alpine AS builder

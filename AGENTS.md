@@ -55,6 +55,19 @@
 
 低代码域 `online` 已在 catalog 业务层登记，跨域必须走 Domain Facade，不得直接 import 其他域 Service。`shared` 是核心基础 SDK，不是域、不是微服务。
 
+## 2.1 包管理器与工作区（强制）
+
+1. 包管理器统一为 **pnpm workspaces**；锁文件真源是 `pnpm-lock.yaml`（**不再有 `package-lock.json`**）。
+2. 工作区成员的真源是 `pnpm-workspace.yaml`，**不是** `package.json` 的 `workspaces` 字段（迁移时已移除，避免两处真源）。
+3. 工作区内部依赖必须写 **`workspace:*`** 协议。
+   注意 pnpm 10+ 起旧的 `"*"` + `link-workspace-packages=true` 组合**已失效**，会让 pnpm 去 registry 找未发布的工作区包并报 404。
+4. 依赖的构建脚本（原生/工具依赖）必须登记在 `pnpm-workspace.yaml` 的 **`allowBuilds`**。
+   pnpm 12 已用 `allowBuilds`（pkg→true 映射）取代 `onlyBuiltDependencies`；漏登记会让
+   better-sqlite3 没有二进制、prisma 没有引擎、esbuild 没有可执行文件，构建与测试随之失败。
+5. CI/镜像构建一律用 `pnpm install --frozen-lockfile`（Dockerfile 已切）。
+6. 脚本仍可用 `pnpm run <script>` 或 `npm run <script>`（后者在 pnpm 布局下同样可用），
+   但**安装与锁文件操作只允许用 pnpm**。
+
 ## 3. 架构总览
 
 ### 3.1 分层架构

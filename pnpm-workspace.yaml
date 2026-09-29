@@ -1,0 +1,18 @@
+# pnpm workspace 定义（本文件是 workspace 成员的唯一真源，取代 package.json 的 workspaces 字段）。
+#
+# 为什么先只放插件包、暂不含 clients/expo：
+#   clients/expo 是独立 App（自带 metro/babel 工具链与自己的 lock），把它并进来会让根 install
+#   连带安装整套 Expo 依赖。迁移分两步走：先把插件子工作区切到 pnpm 并验证通过，再决定 expo 是否并入。
+packages:
+  - "packages/plugins/*"
+  - "packages/plugins/examples/*"
+
+# 允许执行构建脚本的原生/工具依赖。
+# pnpm 默认拦截依赖的 install/postinstall 脚本（供应链防护），与 npm 11 的行为类似但配置方式不同：
+# 未被列出的包其脚本会被跳过 —— 那会导致 better-sqlite3 没有二进制、prisma 没有引擎、
+# esbuild 没有可执行文件，进而构建与测试失败。
+allowBuilds:
+  '@prisma/engines': true
+  better-sqlite3: true
+  esbuild: true
+  prisma: true
