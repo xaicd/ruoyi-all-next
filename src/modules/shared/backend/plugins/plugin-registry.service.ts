@@ -10,8 +10,8 @@ import path from "node:path"
 
 import { resolvePluginDir, scanPluginPackages } from "./package-scanner"
 import { PluginRepository } from "./plugin.repository"
-import type { PluginManifest } from "./types"
-import { pluginWorkerManager as PluginWorkerManagerSingleton } from "./worker-manager"
+import { pluginRuntimeManager } from "./runtime-manager"
+import type { PluginManifest, PluginRuntimeMode } from "./types"
 
 export type PluginSyncRejection = { packageName: string; errors: string[] }
 
@@ -31,8 +31,10 @@ export type PluginReconcileResult = PluginSyncResult & {
   started: string[]
   /** 启动失败的插件及原因（状态已标 error）。 */
   failed: Array<{ pluginKey: string; error: string }>
-  /** 当前存活的 worker。 */
+  /** 当前存活的插件运行时（两种形态合并计）。 */
   running: string[]
+  /** 各插件实际采用的形态。 */
+  modes?: Record<string, PluginRuntimeMode>
 }
 
 export const PluginRegistryService = {
@@ -94,34 +96,57 @@ export const PluginRegistryService = {
     const records = await PluginRepository.listAll()
     const started: string[] = []
     const failed: Array<{ pluginKey: string; error: string }> = []
+    /** 本轮各插件实际采用的运行形态（供返回与诊断）。 */
+    const runningModes = new Map<string, PluginRuntimeMode>()
 
     for (const record of records) {
       const manifest = record.manifestJson as unknown as PluginManifest | null
-      const workerEntry = manifest?.entrypoints?.worker
-      if (!workerEntry || !record.packagePath) {
-        failed.push({ pluginKey: record.pluginKey, error: "manifest 缺少 entrypoints.worker 或包路径未知" })
-        await PluginRepository.setStatus(record.pluginKey, "error", "manifest 缺少 entrypoints.worker")
+      const declared = manifest?.entrypoints
+      const wantsMerged = record.runtimeMode === "merged"
+
+      // 形态选择规则（不静默降级，任何一种不匹配都给出可执行的错误）：
+      //   1. 运营把该插件配成 merged，但 manifest 没声明 merged 入口 -> 报错（配置错，不猜）
+      //   2. 插件只声明了 merged 入口 -> 只能按 merged 跑（没有 worker 可起）
+      //   3. 其余 -> 按运营配置（默认 isolated）
+      let mode: PluginRuntimeMode = wantsMerged ? "merged" : "isolated"
+      let reason = ""
+      if (wantsMerged && !declared?.merged) {
+        reason = "已配置为 merged 运行形态，但 manifest 未声明 entrypoints.merged"
+      } else if (!declared?.worker && declared?.merged) {
+        mode = "merged"
+      }
+      const entryPath = mode === "merged" ? declared?.merged : declared?.worker
+      if (!reason && (!entryPath || !record.packagePath)) {
+        reason = mode === "merged" ? "manifest 缺少 entrypoints.merged 或包路径未知" : "manifest 缺少 entrypoints.worker 或包路径未知"
+      }
+
+      if (reason) {
+        failed.push({ pluginKey: record.pluginKey, error: reason })
+        await PluginRepository.setStatus(record.pluginKey, "error", reason)
         continue
       }
 
-      const workerPath = path.resolve(record.packagePath, workerEntry)
-      const inside = workerPath.startsWith(path.resolve(record.packagePath) + path.sep)
+      const resolvedEntry = path.resolve(record.packagePath as string, entryPath as string)
+      const inside = resolvedEntry.startsWith(path.resolve(record.packagePath as string) + path.sep)
       if (!inside) {
-        // 与包扫描同一道防线：worker 路径同样不许越出插件包目录
-        failed.push({ pluginKey: record.pluginKey, error: "entrypoints.worker 越出插件包目录" })
-        await PluginRepository.setStatus(record.pluginKey, "error", "entrypoints.worker 越出插件包目录")
+        // 与包扫描同一道防线：入口路径同样不许越出插件包目录
+        const message = `entrypoints.${mode === "merged" ? "merged" : "worker"} 越出插件包目录`
+        failed.push({ pluginKey: record.pluginKey, error: message })
+        await PluginRepository.setStatus(record.pluginKey, "error", message)
         continue
       }
 
       try {
-        await PluginWorkerManagerSingleton.start(record.pluginKey, workerPath, record.packagePath, {
+        await pluginRuntimeManager.start(record.pluginKey, mode, resolvedEntry, record.packagePath as string, {
           manifest,
           config: {},
           hostApiVersion: 1,
-          instance: { pluginKey: record.pluginKey, packagePath: record.packagePath },
+          instance: { pluginKey: record.pluginKey, packagePath: record.packagePath as string },
+          mode,
         })
         await PluginRepository.setStatus(record.pluginKey, "ready", null)
         started.push(record.pluginKey)
+        runningModes.set(record.pluginKey, mode)
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error)
         failed.push({ pluginKey: record.pluginKey, error: message })
@@ -129,7 +154,7 @@ export const PluginRegistryService = {
       }
     }
 
-    return { ...sync, started, failed, running: PluginWorkerManagerSingleton.list() }
+    return { ...sync, started, failed, running: pluginRuntimeManager.list(), modes: Object.fromEntries(runningModes) }
   },
 }
 

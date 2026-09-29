@@ -58,6 +58,11 @@ export const PluginRepository = {
     })
   },
 
+  /** 设置运行形态（isolated | merged）。属运营选择，不由 manifest 决定。 */
+  async setMode(pluginKey: string, mode: "isolated" | "merged") {
+    return ruoyiPrisma.plugin.updateMany({ where: { pluginKey }, data: { runtimeMode: mode } })
+  },
+
   /** 推进生命周期状态（installed | ready | error | upgrade_pending）。 */
   async setStatus(pluginKey: string, status: string, lastError: string | null = null) {
     return ruoyiPrisma.plugin.updateMany({ where: { pluginKey }, data: { status, lastError } })

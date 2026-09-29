@@ -33,7 +33,10 @@ export class PluginWorker {
   private nextId = 1
   private readonly pending = new Map<number, Pending>()
   private exitReason: string | null = null
-  private readonly limits: typeof WORKER_LIMITS
+  // 注意: 不能写成 `typeof WORKER_LIMITS` —— 那是 as const 字面量类型,
+  // 会让 request() 的默认参数被推成字面量 15000, 于是传别的时限就报类型错。
+  // 这里把各字段放宽为 number。
+  private readonly limits: Record<keyof typeof WORKER_LIMITS, number>
 
   constructor(
     readonly pluginKey: string,

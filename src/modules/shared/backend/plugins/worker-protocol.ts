@@ -45,6 +45,8 @@ export type WorkerInitializeInput = {
   config: Record<string, unknown>
   hostApiVersion: number
   instance: { pluginKey: string; packagePath: string }
+  /** 本次以哪种形态运行（插件可据此调整，例如日志通道）。 */
+  mode?: "isolated" | "merged"
 }
 
 /** health() 的返回形状。 */

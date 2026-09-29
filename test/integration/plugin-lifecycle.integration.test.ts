@@ -15,7 +15,7 @@ import path from "node:path"
 import { afterAll, beforeAll, describe, expect, it } from "vitest"
 
 import { pluginRegistryService } from "@/modules/shared/backend/plugins/plugin-registry.service"
-import { pluginWorkerManager } from "@/modules/shared/backend/plugins/worker-manager"
+import { pluginRuntimeManager } from "@/modules/shared/backend/plugins/runtime-manager"
 import { PluginRepository } from "@/modules/shared/backend/plugins/plugin.repository"
 import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
 
@@ -30,10 +30,10 @@ const BROKEN_KEY = "ruoyi.broken-worker"
 
 function copyExamplePlugin(targetName: string): string {
   const dir = path.join(PLUGIN_DIR, targetName)
-  fs.mkdirSync(dir, { recursive: true })
-  for (const file of ["package.json", "plugin.manifest.json", "worker.js"]) {
-    fs.copyFileSync(path.join(EXAMPLE_SRC, file), path.join(dir, file))
-  }
+  // 整个包目录一起拷 —— 早先写死 [package.json, plugin.manifest.json, worker.js] 三个文件,
+  // 示例插件新增 merged.js 后漏拷, 于是 manifest 声明的 merged 入口不存在、包被拒,
+  // 测试报 "expected 0 to be 1"。整目录拷贝就不会再漏。
+  fs.cpSync(EXAMPLE_SRC, dir, { recursive: true })
   return dir
 }
 
@@ -60,7 +60,7 @@ describe.skipIf(!HAS_DB)("插件安装 → ready 端到端（真实 PG + 真实 
   })
 
   afterAll(async () => {
-    await pluginWorkerManager.stopAll()
+    await pluginRuntimeManager.stopAll()
     fs.rmSync(PLUGIN_DIR, { recursive: true, force: true })
     await purgeTestRecords()
   })
@@ -79,7 +79,7 @@ describe.skipIf(!HAS_DB)("插件安装 → ready 端到端（真实 PG + 真实 
     expect(record!.lastError).toBeNull()
 
     // 不只是状态字段为 ready —— 进程确实在跑，且健康检查真的应答
-    const worker = pluginWorkerManager.get(GOOD_KEY)
+    const worker = pluginRuntimeManager.get(GOOD_KEY)
     expect(worker?.running).toBe(true)
     expect((await worker!.health()).status).toBe("ok")
   })
@@ -97,7 +97,25 @@ describe.skipIf(!HAS_DB)("插件安装 → ready 端到端（真实 PG + 真实 
     // 失败隔离：合法插件不受坏包影响，仍然是 ready
     const good = await PluginRepository.findByKey(GOOD_KEY)
     expect(good!.status).toBe("ready")
-    expect(pluginWorkerManager.get(GOOD_KEY)?.running).toBe(true)
+    expect(pluginRuntimeManager.get(GOOD_KEY)?.running).toBe(true)
+  })
+
+  it("把插件切成 merged 形态 → 同进程运行、状态仍为 ready（一个插件两种形态）", async () => {
+    copyExamplePlugin("hello-world")
+    // 先按默认形态装一次，拿到记录
+    await pluginRegistryService.reconcile(PLUGIN_DIR)
+    await PluginRepository.setMode(GOOD_KEY, "merged")
+
+    const result = await pluginRegistryService.reconcile(PLUGIN_DIR)
+    expect(result.modes?.[GOOD_KEY]).toBe("merged")
+    expect(pluginRuntimeManager.modeOf(GOOD_KEY)).toBe("merged")
+
+    const record = await PluginRepository.findByKey(GOOD_KEY)
+    expect(record!.status).toBe("ready")
+    expect((await pluginRuntimeManager.get(GOOD_KEY)!.health()).status).toBe("ok")
+
+    // 复位，避免影响后续用例
+    await PluginRepository.setMode(GOOD_KEY, "isolated")
   })
 
   it("插件包从磁盘移除 → 得到诚实处理（不谎报 ready）", async () => {

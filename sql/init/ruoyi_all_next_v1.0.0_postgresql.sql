@@ -1,6 +1,6 @@
 -- ==============================================================================
 -- ruoyi-all-next 第一版权威全量初始化 SQL (V1.0.0 PostgreSQL)
--- 生成时间: 2026-09-29T06:29:25.492Z
+-- 生成时间: 2026-09-29T06:57:55.181Z
 -- 包含: 全 15 域完整 DDL + 工整 4 字符系统菜单 + 平台超管 + 完整业务种子数据
 -- ==============================================================================
 
@@ -711,6 +711,7 @@ CREATE TABLE "public"."plugin" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "runtime_mode" VARCHAR(20) NOT NULL DEFAULT 'isolated',
 
     CONSTRAINT "plugin_pkey" PRIMARY KEY ("id")
 );

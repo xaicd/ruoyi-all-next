@@ -49,10 +49,12 @@ function readPointer(pkg: Record<string, unknown>): PluginPackagePointer | undef
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return undefined
   const pointer = raw as Record<string, unknown>
   const manifest = typeof pointer.manifest === "string" ? pointer.manifest : ""
-  const worker = typeof pointer.worker === "string" ? pointer.worker : ""
+  const worker = typeof pointer.worker === "string" ? pointer.worker : undefined
+  const merged = typeof pointer.merged === "string" ? pointer.merged : undefined
   const ui = typeof pointer.ui === "string" ? pointer.ui : undefined
-  if (!manifest || !worker) return undefined
-  return { manifest, worker, ...(ui ? { ui } : {}) }
+  // worker / merged 至少一个 —— 只有 ui 之类而没有可运行入口的包不算插件。
+  if (!manifest || (!worker && !merged)) return undefined
+  return { manifest, ...(worker ? { worker } : {}), ...(merged ? { merged } : {}), ...(ui ? { ui } : {}) }
 }
 
 /**
@@ -82,7 +84,7 @@ export function scanPluginPackage(packageDir: string): DiscoveredPlugin | undefi
     return {
       packageDir,
       packageName,
-      errors: [`package.json 缺少合法的 ${PLUGIN_POINTER_KEY} 指针（需 manifest 与 worker）`],
+      errors: [`package.json 缺少合法的 ${PLUGIN_POINTER_KEY} 指针（需 manifest，以及 worker/merged 至少一个）`],
     }
   }
 
@@ -104,7 +106,7 @@ export function scanPluginPackage(packageDir: string): DiscoveredPlugin | undefi
 
   const errors: string[] = []
   // 入口文件必须真实存在，否则安装成功但启动必失败
-  for (const [key, relative] of Object.entries({ worker: pointer.worker, ui: pointer.ui })) {
+  for (const [key, relative] of Object.entries({ worker: pointer.worker, merged: pointer.merged, ui: pointer.ui })) {
     if (!relative) continue
     const resolved = resolveInside(packageDir, relative)
     if (!resolved) errors.push(`${PLUGIN_POINTER_KEY}.${key} 越出插件包目录: ${relative}`)

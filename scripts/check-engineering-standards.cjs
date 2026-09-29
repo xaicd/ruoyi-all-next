@@ -31,6 +31,9 @@ const writeBaseline = process.argv.includes("--write-baseline")
 const CONSOLE_EXEMPT = new Set([
   "src/modules/shared/backend/lib/observability.ts",
   "src/modules/shared/backend/lib/exception-analyzer.ts",
+  // 合并形态插件的宿主侧日志出口: 插件在**宿主进程内**运行, 没有 stderr 管道可接
+  // （独立形态由 worker-manager 收 stderr）, 这里就是它的日志边界。
+  "src/modules/shared/backend/plugins/merged-runtime.ts",
 ])
 const CONSOLE_EXEMPT_DIRS = ["codegen-templates"]
 const CONSOLE_PATTERN = /console\.(log|warn|error|info|debug)\s*\(/

@@ -42,8 +42,11 @@ description: 编写、安装、排障与评审 §6.2 可安装插件（插件包
 <插件目录>/<你的插件>/
 ├── package.json          ← 必须含 ruoyiPlugin 指针
 ├── plugin.manifest.json  ← 必须；必须是 JSON（不能是 .js）
-├── worker.js             ← 必须；worker 入口
+├── worker.js             ← 可选；独立运行入口（out-of-process，stdio JSON-RPC）
+├── merged.js             ← 可选；合并运行入口（in-process，宿主直接 import）
 └── (可选) ui/            ← 预构建 UI bundle；宿主不编译，只静态分发
+
+**worker 与 merged 至少声明一个**；两个都声明 = 该插件同时支持两种形态。
 ```
 
 `package.json` 的入口指针（键名固定 **`ruoyiPlugin`**）：
@@ -54,7 +57,8 @@ description: 编写、安装、排障与评审 §6.2 可安装插件（插件包
   "type": "module",
   "ruoyiPlugin": {
     "manifest": "./plugin.manifest.json",
-    "worker": "./worker.js"
+    "worker": "./worker.js",
+    "merged": "./merged.js"
   }
 }
 ```
@@ -147,6 +151,44 @@ runWorker(plugin)
 
 **宿主侧时限（可配）：** 单请求 15s；`initialize` 20s；停机阶梯 `shutdown()` → 10s → SIGTERM → 5s → SIGKILL。
 
+## 6.5 运行形态：独立（isolated）与合并（merged）
+
+**一份业务逻辑，两种跑法** —— 与域的双模 Facade（同进程 SDK ↔ 跨进程 RPC）是同一个原则。
+你在 SDK 里只写一份 handler，两种形态由**宿主**按插件实例的 `runtimeMode` 决定：
+
+| | `isolated`（默认） | `merged` |
+|---|---|---|
+| 进程 | 独立子进程 | 与宿主同进程 |
+| 传输 | stdio 逐行 JSON-RPC | 直接函数调用 |
+| 隔离 | ✅ 插件崩溃/挂死**只影响自己**（宿主有超时与停机阶梯） | ❌ 插件崩溃/死循环**会带走宿主** |
+| 入口 | `entrypoints.worker` | `entrypoints.merged` |
+| 适用 | 第三方 / 来源不完全可信 | 第一方 / 自研，且要零 IPC 开销 |
+
+**关键约束：能不能合并是运营的选择，不是插件说了算。**
+宿主侧的 `plugin.runtime_mode` 决定形态；你只能通过"是否声明 merged 入口"表达**能力**：
+
+- 只声明 `worker` → 只能独立跑
+- 只声明 `merged` → 只能合并跑
+- 两个都声明 → 由运营按插件配置选择（默认 isolated）
+
+宿主对不匹配的配置**报错而不静默降级**：比如运营把插件配成 `merged`，而 manifest 没声明
+`merged` 入口 → 该插件状态置 `error` 并给出明确原因。
+
+**合并入口的写法**：不要 import SDK 的 `runWorker`（那是 stdio 专用），
+只要把 handler 对象**导出**即可：
+
+```js
+import { definePlugin } from "@ruoyi/plugin-sdk"
+
+export default definePlugin({
+  async setup(ctx) { ctx.logger.info("ready") },   // ctx.mode === "merged"
+  async onHealth() { return { status: "ok" } },
+  async onShutdown() {},
+})
+```
+
+宿主接受 `default` 或 `plugin` 具名导出。
+
 ## 7. 生命周期状态机
 
 ```
@@ -196,7 +238,11 @@ curl /api/v1/admin/plugins
 1. 禁止把 manifest 写成 `.js` 模块（只接受 JSON）。
 2. 禁止用 `../` 让 manifest / worker 越出插件包目录。
 3. 禁止往 stdout 写非协议内容。
-4. 禁止在 worker 里直连数据库（含用宿主的 DB 客户端）—— 宿主不提供，申请 `database.direct` 会被拒。
+4. 禁止直连**宿主**数据库（含用宿主的 DB 客户端）—— capability `database.direct` 会被拒。
+   **但这不是说插件永远不能有自己的存储**：插件自有数据的默认落点是宿主的通用扩展表
+   （`plugin_state` / `plugin_config`，按插件与租户隔离，宿主保证作用域）。
+   "插件拥有独立库"是另一件独立的事（独立库名 + 自己的表结构），需要宿主在**供给凭据与
+   生命周期**上配套；在当前版本尚未提供，届时会以独立 capability 开放，而不是把宿主库连接串给你。
 5. 禁止假设 cap A 能换 cap B 的权限：只声明你要用的。
 6. 禁止把域的能力塞进插件来实现（该走 Platform Module）。
 7. 禁止为"以后可能需要"声明白名单外的能力 —— 拒装。

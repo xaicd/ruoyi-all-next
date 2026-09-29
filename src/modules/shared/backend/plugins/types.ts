@@ -84,8 +84,17 @@ export interface PluginManifest {
   minimumHostVersion?: string
   capabilities: PluginCapability[]
   entrypoints: {
-    /** worker 入口，相对插件包根。 */
-    worker: string
+    /**
+     * 独立运行入口（out-of-process worker，stdio JSON-RPC）。
+     * 与 `merged` **至少声明一个** —— 两个都声明表示该插件同时支持两种形态。
+     */
+    worker?: string
+    /**
+     * 合并运行入口（in-process，宿主直接 import 该模块并调用其 handler）。
+     * 代价: 失去进程隔离, 插件崩溃会带走宿主 —— 故是否合并是**运营显式选择**,
+     * 由插件实例的 runtime mode 决定（见 plugins.mode），不是 manifest 单方面说了算。
+     */
+    merged?: string
     /** 预构建 UI bundle 目录，相对插件包根（宿主不编译，只静态分发）。 */
     ui?: string
   }
@@ -94,9 +103,13 @@ export interface PluginManifest {
   ui?: { slots: PluginUiSlotDeclaration[] }
 }
 
-/** 插件包 package.json 里的入口指针。 */
+/** 插件包 package.json 里的入口指针（worker / merged 至少一个）。 */
 export interface PluginPackagePointer {
   manifest: string
-  worker: string
+  worker?: string
+  merged?: string
   ui?: string
 }
+
+/** 插件运行形态。 */
+export type PluginRuntimeMode = "isolated" | "merged"

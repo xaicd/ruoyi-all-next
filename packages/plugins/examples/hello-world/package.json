@@ -6,7 +6,8 @@
   "type": "module",
   "ruoyiPlugin": {
     "manifest": "./plugin.manifest.json",
-    "worker": "./worker.js"
+    "worker": "./worker.js",
+    "merged": "./merged.js"
   },
   "dependencies": {
     "@ruoyi/plugin-sdk": "*"

@@ -29,7 +29,8 @@ const manifestSchema = z.object({
   minimumHostVersion: z.string().regex(SEMVER_PATTERN).optional(),
   capabilities: z.array(z.string()).default([]),
   entrypoints: z.object({
-    worker: pointerFreeString,
+    worker: pointerFreeString.optional(),
+    merged: pointerFreeString.optional(),
     ui: pointerFreeString.optional(),
   }),
   instanceConfigSchema: z.record(z.string(), z.unknown()).optional(),
@@ -75,6 +76,11 @@ export function parsePluginManifest(input: unknown): ManifestValidation {
 
   const data = parsed.data
   const errors: string[] = []
+
+  // 至少要有一种可运行形态: 独立 worker 或合并加载。
+  if (!data.entrypoints.worker && !data.entrypoints.merged) {
+    errors.push("entrypoints 至少要声明 worker（独立运行）或 merged（合并运行）之一")
+  }
 
   // 拒绝不兼容的插件 API 版本（精确匹配，不做范围推断）
   if (data.apiVersion !== PLUGIN_API_VERSION) {
