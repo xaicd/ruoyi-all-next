@@ -16,6 +16,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest"
 
 import { pluginRegistryService } from "@/modules/shared/backend/plugins/plugin-registry.service"
 import { pluginRuntimeManager } from "@/modules/shared/backend/plugins/runtime-manager"
+import { listPluginCatalog } from "@/app/api/v1/admin/plugins/_lib/plugin-catalog"
 import { PluginRepository } from "@/modules/shared/backend/plugins/plugin.repository"
 import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
 
@@ -98,6 +99,30 @@ describe.skipIf(!HAS_DB)("插件安装 → ready 端到端（真实 PG + 真实 
     const good = await PluginRepository.findByKey(GOOD_KEY)
     expect(good!.status).toBe("ready")
     expect(pluginRuntimeManager.get(GOOD_KEY)?.running).toBe(true)
+  })
+
+  it("统一视图：内置插件(域)与已安装插件出现在同一张表，kind 可区分", async () => {
+    copyExamplePlugin("hello-world")
+    await pluginRegistryService.reconcile(PLUGIN_DIR)
+
+    const catalog = await listPluginCatalog()
+
+    // 内置插件 = 有 module.manifest.json 的域（由域契约派生，不落库）。
+    // 注意是 16 不是 17: `online` 域的 manifestMode 是 handwritten，生成器会跳过它，
+    // 因此它没有 module.manifest.json、也就进不了域注册表 —— 这是**已知缺口**，
+    // 不是本用例的口径问题；修它要给 online 补生成式模块声明（会让它的手写 manifest 与生成物并存）。
+    const builtin = catalog.filter((entry) => entry.kind === "builtin")
+    expect(builtin.length).toBeGreaterThanOrEqual(16)
+    expect(builtin.map((entry) => entry.pluginKey)).toContain("ruoyi.system")
+    // 内置插件随宿主发布，恒为 ready、恒为同进程
+    for (const entry of builtin) {
+      expect(entry.status).toBe("ready")
+      expect(entry.runtimeMode).toBe("merged")
+    }
+
+    // 真实插件包是 kind=installed
+    const installed = catalog.filter((entry) => entry.kind === "installed")
+    expect(installed.map((entry) => entry.pluginKey)).toContain(GOOD_KEY)
   })
 
   it("把插件切成 merged 形态 → 同进程运行、状态仍为 ready（一个插件两种形态）", async () => {

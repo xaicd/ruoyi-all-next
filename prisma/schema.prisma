@@ -1153,6 +1153,9 @@ model Plugin {
   manifestJson Json      @map("manifest_json")
   /// installed | ready | error | upgrade_pending (§21.3)
   status       String    @default("installed") @db.VarChar(20)
+  /// 插件来源: builtin(内置/平台模块, 如各业务域) | installed(外部安装的插件包)。
+  /// 统一注册表把两者放在一起管理, 但 builtin 由代码/契约派生, 不落库(见注册表服务)。
+  kind         String    @default("installed") @db.VarChar(20)
   /// 运行形态: isolated(独立进程, 默认) | merged(同进程加载)。
   /// 合并会让插件崩溃带走宿主, 故属**运营显式选择**, 不是插件 manifest 单方面决定。
   runtimeMode  String    @default("isolated") @map("runtime_mode") @db.VarChar(20)
