@@ -11,6 +11,7 @@
 #   npm run domain:up -- pay
 # ============================================================
 
+name: ruoyi-domains
 services:
   bff:
     image: ${REGISTRY:-registry.local}/ruoyi-all-next:${TAG:-latest}
