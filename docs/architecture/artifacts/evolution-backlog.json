@@ -1,15 +1,15 @@
 {
   "version": 1,
   "kind": "evolution-backlog",
-  "generatedAt": "2026-09-29T04:08:32.679Z",
-  "head": "2e82f6b",
+  "generatedAt": "2026-09-29T04:14:36.190Z",
+  "head": "8f841d5",
   "note": "Aggregated from real gate artifacts. Read-only signal for external agents; no agent loop runs in this repository (AGENTS.md §18).",
   "summary": {
     "blocker": 0,
     "high": 0,
     "medium": 11,
-    "low": 22,
-    "total": 33
+    "low": 21,
+    "total": 32
   },
   "items": [
     {
@@ -155,7 +155,7 @@
       "files": [
         "docs/architecture/artifacts/harness-trace-latest.json"
       ],
-      "evidence": "trace.head=b74b0f4, current HEAD=2e82f6b",
+      "evidence": "trace.head=2e82f6b, current HEAD=8f841d5",
       "command": "npm run check",
       "action": "Re-run the gates so the recorded evidence matches the current revision."
     },
@@ -380,16 +380,6 @@
       "title": "facade-method-dispatch-mapped: 12 file(s) carry frozen debt",
       "files": [],
       "evidence": "baseline accepts debt in 12 file(s); new debt is already blocked",
-      "command": "npm run standards:baseline",
-      "action": "Burn the frozen debt down, then re-baseline so the rule can move from ratchet to enforce."
-    },
-    {
-      "id": "standards-debt-init-sql-seed-columns",
-      "severity": "low",
-      "section": "AGENTS.md §9.2",
-      "title": "init-sql-seed-columns: 1 file(s) carry frozen debt",
-      "files": [],
-      "evidence": "baseline accepts debt in 1 file(s); new debt is already blocked",
       "command": "npm run standards:baseline",
       "action": "Burn the frozen debt down, then re-baseline so the rule can move from ratchet to enforce."
     },

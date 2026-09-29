@@ -47,11 +47,14 @@ async function main() {
   let seedSql = `\n\n-- ==============================================================================\n-- SEED DATA (第一版全量初始数据 - 全部 4 字符工整菜单与系统初始配置)\n-- ==============================================================================\n\n`
 
   // 租户套餐（必须先于租户插入：system_tenant.package_id 外键指向它）
+  //
+  // 注意：套餐与菜单的绑定**不在本表**（menu_ids 列已不存在），而在
+  // system_tenant_package_menu 关联表，且必须在菜单插入之后写 —— 见下面 "6b"。
   seedSql += `-- 1. 租户套餐\n`
   const pkgValues = SEED_TENANT_PACKAGES.map((pkg: any) =>
-    `(${escapeSql(pkg.id)}, ${escapeSql(pkg.name)}, ${escapeSql(pkg.status)}, ${escapeSql(JSON.stringify(pkg.menuIds))}, ${escapeSql(pkg.remark)}, NOW(), NOW())`
+    `(${escapeSql(pkg.id)}, ${escapeSql(pkg.name)}, ${escapeSql(pkg.status)}, ${escapeSql(pkg.remark)}, NOW(), NOW())`
   ).join(",\n")
-  seedSql += `INSERT INTO "system_tenant_package" ("id", "name", "status", "menu_ids", "remark", "created_at", "updated_at") VALUES\n${pkgValues}\nON CONFLICT ("id") DO NOTHING;\n\n`
+  seedSql += `INSERT INTO "system_tenant_package" ("id", "name", "status", "remark", "created_at", "updated_at") VALUES\n${pkgValues}\nON CONFLICT ("id") DO NOTHING;\n\n`
 
   // 租户 (ID=1 默认系统租户)
   //
@@ -69,7 +72,7 @@ async function main() {
   const deptValues = SEED_DEPTS.map((d: any) =>
     `(${escapeSql(d.id)}, ${escapeSql(d.name)}, ${escapeSql(d.parentId)}, ${escapeSql(d.sort)}, ${escapeSql(d.leaderUserId)}, ${escapeSql(d.phone)}, ${escapeSql(d.email)}, ${escapeSql(d.status)}, NOW(), NOW())`
   ).join(",\n")
-  seedSql += `INSERT INTO "system_dept" ("id", "name", "parent_id", "sort", "leader_user_id", "phone", "email", "status", "created_at", "updated_at") VALUES\n${deptValues}\nON CONFLICT ("id") DO NOTHING;\n\n`
+  seedSql += `INSERT INTO "system_dept" ("id", "name", "parent_id", "sort", "leader_id", "phone", "email", "status", "created_at", "updated_at") VALUES\n${deptValues}\nON CONFLICT ("id") DO NOTHING;\n\n`
 
   // 岗位
   seedSql += `-- 4. 岗位信息\n`
@@ -81,9 +84,9 @@ async function main() {
   // 角色
   seedSql += `-- 5. 角色信息 (含超级管理员、平台运营、渠道代理商)\n`
   const roleValues = SEED_ROLES.map((r: any) =>
-    `(${escapeSql(r.id)}, ${escapeSql(r.name)}, ${escapeSql(r.code)}, ${escapeSql(r.sort)}, ${escapeSql(r.dataScope)}, ${escapeSql(r.status)}, ${escapeSql(r.type)}, ${escapeSql(r.remark)}, NOW(), NOW())`
+    `(${escapeSql(r.id)}, ${escapeSql(r.name)}, ${escapeSql(r.code)}, ${escapeSql(r.sort)}, ${escapeSql(r.dataScope)}, ${escapeSql(r.status)}, ${escapeSql(r.remark)}, NOW(), NOW())`
   ).join(",\n")
-  seedSql += `INSERT INTO "system_role" ("id", "name", "code", "sort", "data_scope", "status", "type", "remark", "created_at", "updated_at") VALUES\n${roleValues}\nON CONFLICT ("id") DO NOTHING;\n\n`
+  seedSql += `INSERT INTO "system_role" ("id", "name", "code", "sort", "data_scope", "status", "remark", "created_at", "updated_at") VALUES\n${roleValues}\nON CONFLICT ("id") DO NOTHING;\n\n`
 
   // 菜单 (工整 4 字符)
   seedSql += `-- 6. 系统菜单与权限点 (已全面工整为 4 字符)\n`
@@ -91,6 +94,19 @@ async function main() {
     `(${escapeSql(m.id)}, ${escapeSql(m.name)}, ${escapeSql(m.permission)}, ${escapeSql(m.type)}, ${escapeSql(m.parentId)}, ${escapeSql(m.path)}, ${escapeSql(m.component)}, ${escapeSql(m.icon)}, ${escapeSql(m.sort)}, ${escapeSql(m.status)}, ${m.visible ? 'TRUE' : 'FALSE'}, ${m.keepAlive ? 'TRUE' : 'FALSE'}, NOW(), NOW())`
   ).join(",\n")
   seedSql += `INSERT INTO "system_menu" ("id", "name", "permission", "type", "parent_id", "path", "component", "icon", "sort", "status", "visible", "keep_alive", "created_at", "updated_at") VALUES\n${menuValues}\nON CONFLICT ("id") DO UPDATE SET "name" = EXCLUDED."name", "path" = EXCLUDED."path", "component" = EXCLUDED."component", "permission" = EXCLUDED."permission";\n\n`
+
+  // 套餐与菜单的绑定（menu_ids 列已不存在，改为关联表）。
+  // 必须放在菜单插入之后：menu_id 外键指向 system_menu(id)。
+  seedSql += `-- 6b. 租户套餐菜单绑定\n`
+  const pkgMenuValues = SEED_TENANT_PACKAGES.flatMap((pkg: any, packageIndex: number) =>
+    (pkg.menuIds ?? []).map(
+      (menuId: string, menuIndex: number) =>
+        `('tpm-${packageIndex + 1}-${menuIndex + 1}', ${escapeSql(pkg.id)}, ${escapeSql(menuId)})`,
+    ),
+  ).join(",\n")
+  if (pkgMenuValues) {
+    seedSql += `INSERT INTO "system_tenant_package_menu" ("id", "package_id", "menu_id") VALUES\n${pkgMenuValues}\nON CONFLICT ("id") DO NOTHING;\n\n`
+  }
 
   // 字典类型
   seedSql += `-- 7. 数据字典类型\n`
@@ -102,9 +118,9 @@ async function main() {
   // 字典数据
   seedSql += `-- 8. 数据字典项\n`
   const dictDataValues = SEED_DICT_DATA.map((dd: any) =>
-    `(${escapeSql(dd.id)}, ${escapeSql(dd.dictType)}, ${escapeSql(dd.label)}, ${escapeSql(dd.value)}, ${escapeSql(dd.sort)}, ${escapeSql(dd.status)}, ${escapeSql(dd.colorType)}, ${escapeSql(dd.cssClass)}, ${escapeSql(dd.remark)}, NOW(), NOW())`
+    `(${escapeSql(dd.id)}, ${escapeSql(dd.dictTypeId)}, ${escapeSql(dd.label)}, ${escapeSql(dd.value)}, ${escapeSql(dd.sort)}, ${escapeSql(dd.status)}, ${escapeSql(dd.colorType)}, ${escapeSql(dd.remark)}, NOW(), NOW())`
   ).join(",\n")
-  seedSql += `INSERT INTO "system_dict_data" ("id", "dict_type", "label", "value", "sort", "status", "color_type", "css_class", "remark", "created_at", "updated_at") VALUES\n${dictDataValues}\nON CONFLICT ("id") DO NOTHING;\n\n`
+  seedSql += `INSERT INTO "system_dict_data" ("id", "dict_type_id", "label", "value", "sort", "status", "color_type", "remark", "created_at", "updated_at") VALUES\n${dictDataValues}\nON CONFLICT ("id") DO NOTHING;\n\n`
 
   // 初始超级管理员与系统运维用户 (vps_adm 与 roma_ops)
   seedSql += `-- 9. 平台超级管理员与系统运维用户 (vps_adm & roma_ops)\n`
@@ -112,24 +128,24 @@ async function main() {
   const md5 = (value: string) => createHash("md5").update(value).digest("hex")
   const encPwd = md5(md5("Vps_Admin159&w") + salt)
 
-  seedSql += `INSERT INTO "system_user" ("id", "username", "password", "nickname", "remark", "dept_id", "post_ids", "email", "mobile", "sex", "avatar", "status", "login_ip", "login_date", "created_at", "updated_at") VALUES\n`
-  seedSql += `('1', 'vps_adm', '${encPwd}', '平台超级管理员', '系统首创平台管理员', '100', '["1"]', 'vps_adm@roma.vip', '13800138000', 1, '', 'ACTIVE', '127.0.0.1', NOW(), NOW(), NOW()),\n`
-  seedSql += `('2', 'roma_ops', '${encPwd}', '系统运维管理员', '系统内置高安全运维账号', '100', '["1"]', 'roma_ops@roma.vip', '13800138001', 1, '', 'ACTIVE', '127.0.0.1', NOW(), NOW(), NOW())\n`
+  seedSql += `INSERT INTO "system_user" ("id", "username", "password", "salt", "nickname", "remark", "dept_id", "email", "phone", "avatar", "status", "login_ip", "login_date", "created_at", "updated_at") VALUES\n`
+  seedSql += `('1', 'vps_adm', '${encPwd}', '${salt}', '平台超级管理员', '系统首创平台管理员', '100', 'vps_adm@roma.vip', '13800138000', '', 'ACTIVE', '127.0.0.1', NOW(), NOW(), NOW()),\n`
+  seedSql += `('2', 'roma_ops', '${encPwd}', '${salt}', '系统运维管理员', '系统内置高安全运维账号', '100', 'roma_ops@roma.vip', '13800138001', '', 'ACTIVE', '127.0.0.1', NOW(), NOW(), NOW())\n`
   seedSql += `ON CONFLICT ("id") DO UPDATE SET "username" = EXCLUDED."username", "password" = EXCLUDED."password", "nickname" = EXCLUDED."nickname";\n\n`
 
   // 用户与角色关联 (给 vps_adm 和 admin 绑定 super_admin 角色)
   seedSql += `-- 10. 用户角色关联\n`
-  seedSql += `INSERT INTO "system_user_role" ("id", "user_id", "role_id", "created_at", "updated_at") VALUES\n`
-  seedSql += `('ur-1', '1', '1', NOW(), NOW()),\n`
-  seedSql += `('ur-2', '2', '1', NOW(), NOW())\n`
+  seedSql += `INSERT INTO "system_user_role" ("id", "user_id", "role_id") VALUES\n`
+  seedSql += `('ur-1', '1', '1'),\n`
+  seedSql += `('ur-2', '2', '1')\n`
   seedSql += `ON CONFLICT ("id") DO NOTHING;\n\n`
 
   // 角色与所有菜单绑定
   seedSql += `-- 11. 超级管理员角色绑定全部菜单权限\n`
   const roleMenuValues = orderedMenus.map((m: any, idx: number) =>
-    `('rm-${idx + 1}', '1', ${escapeSql(m.id)}, NOW(), NOW())`
+    `('rm-${idx + 1}', '1', ${escapeSql(m.id)})`
   ).join(",\n")
-  seedSql += `INSERT INTO "system_role_menu" ("id", "role_id", "menu_id", "created_at", "updated_at") VALUES\n${roleMenuValues}\nON CONFLICT ("id") DO NOTHING;\n\n`
+  seedSql += `INSERT INTO "system_role_menu" ("id", "role_id", "menu_id") VALUES\n${roleMenuValues}\nON CONFLICT ("id") DO NOTHING;\n\n`
 
   // 写入第一版完整初始化 SQL 文件
   const initDir = resolve(__dirname, "../sql/init")
