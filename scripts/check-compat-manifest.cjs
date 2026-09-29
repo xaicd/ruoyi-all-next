@@ -11,7 +11,7 @@ const fs = require("fs")
 const path = require("path")
 const { ROOT, loadCatalog } = require("./lib/domain-catalog.cjs")
 
-const MANIFEST_REL = "src/modules/shared/contract/compat-manifest.json"
+const MANIFEST_REL = "packages/shared/contract/compat-manifest.json"
 
 function fail(message) {
   throw new Error(`[compat-manifest] ${message}`)
@@ -70,13 +70,13 @@ if (contracts.messagingProtocol !== catalog.messaging?.protocolVersion) {
   )
 }
 
-const rpcActions = readJson(contracts.rpcActions?.path || "src/modules/shared/backend/constants/rpc-actions.json")
+const rpcActions = readJson(contracts.rpcActions?.path || "packages/shared/backend/constants/rpc-actions.json")
 const rpcDomainCount = Object.keys(rpcActions.domains || {}).length
 if (contracts.rpcActions?.domains !== rpcDomainCount) {
   fail(`contracts.rpcActions.domains is ${contracts.rpcActions?.domains} but rpc-actions.json has ${rpcDomainCount}`)
 }
 
-const agentProfile = readJson(contracts.agentProfile?.path || "src/modules/shared/contract/agent-profile.json")
+const agentProfile = readJson(contracts.agentProfile?.path || "packages/shared/contract/agent-profile.json")
 if (agentProfile.version !== contracts.agentProfile?.version) {
   fail(`contracts.agentProfile.version is ${contracts.agentProfile?.version} but agent-profile.json has ${agentProfile.version}`)
 }

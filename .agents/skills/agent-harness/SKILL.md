@@ -15,7 +15,7 @@ description: 将 ruoyi-all-next 作为 DigitalStaff NPC 工作区模板，并按
 ## 2. 权威依据
 
 - `docs/architecture/ruoyi-all-next-harness-evolution.md`
-- `src/modules/shared/contract/agent-profile.json`
+- `packages/shared/contract/agent-profile.json`
 - `.agents/context/ASSEMBLY.md`
 - `AGENTS.md` §16（ProjectReactor）、§17（基座/业务边界）
 - DigitalStaff：`docs/design/deepseek_harness_analysis.md`（Harness 侧，勿复制进本仓）

@@ -7,17 +7,17 @@ const path = require("path")
 const { ROOT, loadCatalog } = require("./domain-catalog.cjs")
 const { loadRpcActions } = require("./rpc-contracts.cjs")
 
-const SEAM_GRAPH_REL = path.join("src", "modules", "shared", "contract", "seam-graph.json").replace(/\\/g, "/")
+const SEAM_GRAPH_REL = path.join("packages", "shared", "contract", "seam-graph.json").replace(/\\/g, "/")
 
 const CONSUMER_SLOTS = [
   ["adminApi", (name) => `src/app/api/v1/admin/${name}`],
   ["appApi", (name) => `src/app/api/v1/app/${name}`],
   ["openApi", (name) => `src/app/api/v1/open/${name}`],
-  ["frontendApi", (name) => `src/modules/${name}/frontend/api`],
+  ["frontendApi", (name) => `packages/domains/${name}/frontend/api`],
   ["adminPages", (name) => `src/app/(admin-pages)/admin/${name}`],
-  ["modulePages", (name) => `src/modules/${name}/frontend/pages`],
+  ["modulePages", (name) => `packages/domains/${name}/frontend/pages`],
   ["cpcPages", (name) => `src/app/(cpc-pages)/cpc/${name}`],
-  ["moduleCpcPages", (name) => `src/modules/${name}/frontend/cpc-pages`],
+  ["moduleCpcPages", (name) => `packages/domains/${name}/frontend/cpc-pages`],
 ]
 
 function toPosix(rel) {
@@ -49,9 +49,9 @@ function methodsFor(rpcActions, domainName) {
 
 function buildDomainSeam(root, domain, rpcActions) {
   const name = domain.name
-  const contractDir = `src/modules/${name}/contract`
-  const servicesDir = `src/modules/${name}/backend/services`
-  const repositoriesDir = `src/modules/${name}/backend/repositories`
+  const contractDir = `packages/domains/${name}/contract`
+  const servicesDir = `packages/domains/${name}/backend/services`
+  const repositoriesDir = `packages/domains/${name}/backend/repositories`
 
   const facades = listDirFiles(root, contractDir, (file) => file.endsWith(".facade.ts"))
   const actions = listDirFiles(root, contractDir, (file) => file === "actions.ts" || file.endsWith(".actions.ts"))
@@ -102,7 +102,7 @@ function buildSeamGraph({ root = ROOT, catalog, rpcActions } = {}) {
     version: 1,
     kind: "capability-seam-graph",
     generated: true,
-    source: "src/modules/shared/backend/constants/domain-catalog.json",
+    source: "packages/shared/backend/constants/domain-catalog.json",
     generatedBy: "scripts/lib/seam-graph.cjs",
     note: "Do not hand-edit domain names. Run npm run domain:seams after catalog/contract changes.",
     domains,

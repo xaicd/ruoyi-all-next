@@ -13,7 +13,7 @@ description: 单元测试、集成测试、契约测试、权限测试与门禁�
 ## 2. 权威依据
 - `AGENTS.md` §6 (能力同步与治理门禁)
 - `AGENTS.md` §8 (测试规范：每个新域至少 1 条关键路径自动化测试)
-- 域测试目录：`src/modules/<domain>/backend/services/__tests__/`
+- 域测试目录：`packages/domains/<domain>/backend/services/__tests__/`
 
 ## 3. 测试覆盖四必测用例
 
@@ -57,7 +57,7 @@ describe("EntityService Core Capabilities", () => {
 ## 4. 常用测试与门禁命令
 ```bash
 # 运行指定测试文件
-npx vitest run src/modules/<domain>/backend/services/__tests__/
+npx vitest run packages/domains/<domain>/backend/services/__tests__/
 
 # 运行全量单元测试
 npm test

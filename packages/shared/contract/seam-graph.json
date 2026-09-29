@@ -1,0 +1,758 @@
+{
+  "version": 1,
+  "kind": "capability-seam-graph",
+  "generated": true,
+  "source": "packages/shared/backend/constants/domain-catalog.json",
+  "generatedBy": "scripts/lib/seam-graph.cjs",
+  "note": "Do not hand-edit domain names. Run npm run domain:seams after catalog/contract changes.",
+  "domains": [
+    {
+      "name": "system",
+      "kind": "platform",
+      "stage": "A",
+      "definition": {
+        "dir": "packages/domains/system/contract",
+        "facades": [
+          "packages/domains/system/contract/system.facade.ts",
+          "packages/domains/system/contract/system.platform.facade.ts",
+          "packages/domains/system/contract/system.public.facade.ts"
+        ],
+        "actions": [
+          "packages/domains/system/contract/actions.ts"
+        ],
+        "proto": "packages/domains/system/contract/system.proto",
+        "manifest": "packages/domains/system/contract/route.manifest.yaml"
+      },
+      "provider": {
+        "servicesDir": "packages/domains/system/backend/services",
+        "repositoriesDir": "packages/domains/system/backend/repositories",
+        "methods": [
+          "ping",
+          "getDictDataByType",
+          "resolveTenantEntitlement",
+          "resolveTenantIdByCode",
+          "listUsers",
+          "createUser",
+          "listRoles",
+          "createRole",
+          "listMenus",
+          "treeMenus",
+          "createMenu",
+          "listDepts",
+          "treeDepts",
+          "createDept",
+          "listPosts",
+          "createPost",
+          "listDictTypes",
+          "createDictType",
+          "listTenants",
+          "createTenant",
+          "getUser",
+          "updateUser",
+          "deleteUser",
+          "resetUserPassword",
+          "updateUserStatus",
+          "getRole",
+          "updateRole",
+          "deleteRole",
+          "updateRoleStatus",
+          "getMenu",
+          "updateMenu",
+          "deleteMenu",
+          "getDept",
+          "updateDept",
+          "deleteDept",
+          "getPost",
+          "updatePost",
+          "deletePost",
+          "getDictType",
+          "updateDictType",
+          "deleteDictType",
+          "getTenant",
+          "updateTenant",
+          "deleteTenant",
+          "updateTenantStatus",
+          "listDictData",
+          "createDictData",
+          "getDictData",
+          "updateDictData",
+          "deleteDictData",
+          "listTenantPackages",
+          "createTenantPackage",
+          "getTenantPackage",
+          "updateTenantPackage",
+          "deleteTenantPackage",
+          "assignTenantPackage",
+          "getTenantSubscriptions",
+          "getRoleMenus",
+          "assignRoleMenu",
+          "assignUserRole",
+          "pageLoginLogs",
+          "getLoginLog",
+          "exportLoginLogs",
+          "pageOperateLogs",
+          "getOperateLog",
+          "exportOperateLogs",
+          "listOnlineUsers",
+          "forceLogoutOnlineUser",
+          "pageNotices",
+          "createNotice",
+          "getNotice",
+          "updateNotice",
+          "deleteNotice",
+          "listOauth2Clients",
+          "listOauth2Tokens",
+          "listSocialUsers",
+          "createSocialUser",
+          "listMailAccounts",
+          "createMailAccount",
+          "listMailLogs",
+          "listSmsChannels",
+          "createSmsChannel",
+          "listSmsLogs",
+          "pageNotifyMessages",
+          "createNotifyMessage",
+          "pageNotifyTemplates",
+          "createNotifyTemplate",
+          "pageIpAreas",
+          "pageAreas",
+          "createArea",
+          "getArea",
+          "updateArea",
+          "deleteArea",
+          "login",
+          "getPermissionInfoByUser",
+          "refreshAccessToken",
+          "logout",
+          "generateCaptcha",
+          "verifyCaptcha",
+          "getUserProfile",
+          "updateUserProfile",
+          "getSidebarNav",
+          "openOauth2Token",
+          "getOauth2UserInfo",
+          "listMailTemplates",
+          "createMailTemplate",
+          "getMailTemplate",
+          "updateMailTemplate",
+          "deleteMailTemplate",
+          "listSmsTemplates",
+          "createSmsTemplate",
+          "getSmsTemplate",
+          "updateSmsTemplate",
+          "deleteSmsTemplate",
+          "listSocialClients",
+          "createSocialClient",
+          "getSocialClient",
+          "updateSocialClient",
+          "deleteSocialClient"
+        ]
+      },
+      "consumer": {
+        "adminApi": "src/app/api/v1/admin/system",
+        "adminPages": "src/app/(admin-pages)/admin/system",
+        "modulePages": "packages/domains/system/frontend/pages",
+        "moduleCpcPages": "packages/domains/system/frontend/cpc-pages"
+      },
+      "rolesComplete": true
+    },
+    {
+      "name": "infra",
+      "kind": "platform",
+      "stage": "A",
+      "definition": {
+        "dir": "packages/domains/infra/contract",
+        "facades": [
+          "packages/domains/infra/contract/infra.facade.ts",
+          "packages/domains/infra/contract/infra.platform.facade.ts",
+          "packages/domains/infra/contract/infra.public.facade.ts"
+        ],
+        "actions": [
+          "packages/domains/infra/contract/actions.ts"
+        ],
+        "proto": "packages/domains/infra/contract/infra.proto",
+        "manifest": "packages/domains/infra/contract/route.manifest.yaml"
+      },
+      "provider": {
+        "servicesDir": "packages/domains/infra/backend/services",
+        "repositoriesDir": "packages/domains/infra/backend/repositories",
+        "methods": [
+          "ping",
+          "updateConfig",
+          "previewCodegen",
+          "generateCodegen",
+          "previewTemplate",
+          "generateTemplate",
+          "listQueryDataSources",
+          "getQueryConnection",
+          "listConfigs",
+          "getConfigByKey",
+          "createConfig",
+          "listJobs",
+          "createJob",
+          "listFiles",
+          "recordFile",
+          "pageDataSourceConfigs",
+          "getConfig",
+          "updateConfigItem",
+          "deleteConfig",
+          "getJob",
+          "updateJob",
+          "deleteJob",
+          "triggerJob",
+          "updateJobStatus",
+          "getFile",
+          "deleteFile",
+          "listPages",
+          "getPage",
+          "getPageBySlug",
+          "pageApiErrorLogs",
+          "getApiErrorLog",
+          "processApiErrorLog",
+          "pageApiAccessLogs",
+          "getApiAccessLog",
+          "testDataSourceConnection",
+          "listCodegenTables",
+          "getCodegenTable",
+          "updateCodegenTable",
+          "deleteCodegenTable",
+          "deleteCodegenTables",
+          "exportApiAccessLogs",
+          "exportApiErrorLogs",
+          "runAuditLogRetention",
+          "listCodegenCandidates",
+          "importCodegenTables",
+          "generateCodegenArchive",
+          "listCodegenCatalog"
+        ]
+      },
+      "consumer": {
+        "adminApi": "src/app/api/v1/admin/infra",
+        "frontendApi": "packages/domains/infra/frontend/api",
+        "adminPages": "src/app/(admin-pages)/admin/infra",
+        "modulePages": "packages/domains/infra/frontend/pages"
+      },
+      "rolesComplete": true
+    },
+    {
+      "name": "online",
+      "kind": "business",
+      "stage": "B",
+      "definition": {
+        "dir": "packages/domains/online/contract",
+        "facades": [
+          "packages/domains/online/contract/online.facade.ts"
+        ],
+        "actions": [
+          "packages/domains/online/contract/actions.ts"
+        ],
+        "proto": "packages/domains/online/contract/online.proto",
+        "manifest": "packages/domains/online/contract/route.manifest.yaml"
+      },
+      "provider": {
+        "servicesDir": "packages/domains/online/backend/services",
+        "repositoriesDir": null,
+        "methods": [
+          "ping",
+          "pageDefinitions",
+          "resolvePublishedRelease",
+          "resolveCodegenImport",
+          "pageManagedRecords",
+          "getManagedRecord",
+          "createManagedRecord",
+          "updateManagedRecord",
+          "deleteManagedRecord"
+        ]
+      },
+      "consumer": {
+        "adminApi": "src/app/api/v1/admin/online",
+        "modulePages": "packages/domains/online/frontend/pages"
+      },
+      "rolesComplete": true
+    },
+    {
+      "name": "bpm",
+      "kind": "business",
+      "stage": "A",
+      "definition": {
+        "dir": "packages/domains/bpm/contract",
+        "facades": [
+          "packages/domains/bpm/contract/bpm.facade.ts"
+        ],
+        "actions": [
+          "packages/domains/bpm/contract/actions.ts"
+        ],
+        "proto": "packages/domains/bpm/contract/bpm.proto",
+        "manifest": "packages/domains/bpm/contract/route.manifest.yaml"
+      },
+      "provider": {
+        "servicesDir": "packages/domains/bpm/backend/services",
+        "repositoriesDir": null,
+        "methods": [
+          "ping",
+          "listDefinitions",
+          "listTasks",
+          "actionTask"
+        ]
+      },
+      "consumer": {
+        "adminApi": "src/app/api/v1/admin/bpm",
+        "adminPages": "src/app/(admin-pages)/admin/bpm",
+        "modulePages": "packages/domains/bpm/frontend/pages"
+      },
+      "rolesComplete": true
+    },
+    {
+      "name": "pay",
+      "kind": "business",
+      "stage": "B",
+      "definition": {
+        "dir": "packages/domains/pay/contract",
+        "facades": [
+          "packages/domains/pay/contract/pay.facade.ts"
+        ],
+        "actions": [
+          "packages/domains/pay/contract/actions.ts"
+        ],
+        "proto": "packages/domains/pay/contract/pay.proto",
+        "manifest": "packages/domains/pay/contract/route.manifest.yaml"
+      },
+      "provider": {
+        "servicesDir": "packages/domains/pay/backend/services",
+        "repositoriesDir": "packages/domains/pay/backend/repositories",
+        "methods": [
+          "ping",
+          "listOrders",
+          "createOrder",
+          "createRefund",
+          "listRefunds"
+        ]
+      },
+      "consumer": {
+        "adminApi": "src/app/api/v1/admin/pay",
+        "appApi": "src/app/api/v1/app/pay",
+        "openApi": "src/app/api/v1/open/pay",
+        "adminPages": "src/app/(admin-pages)/admin/pay",
+        "modulePages": "packages/domains/pay/frontend/pages"
+      },
+      "rolesComplete": true
+    },
+    {
+      "name": "report",
+      "kind": "business",
+      "stage": "A",
+      "definition": {
+        "dir": "packages/domains/report/contract",
+        "facades": [
+          "packages/domains/report/contract/report.facade.ts"
+        ],
+        "actions": [
+          "packages/domains/report/contract/actions.ts"
+        ],
+        "proto": "packages/domains/report/contract/report.proto",
+        "manifest": "packages/domains/report/contract/route.manifest.yaml"
+      },
+      "provider": {
+        "servicesDir": "packages/domains/report/backend/services",
+        "repositoriesDir": null,
+        "methods": [
+          "ping",
+          "listBoards",
+          "exportBoard"
+        ]
+      },
+      "consumer": {
+        "adminApi": "src/app/api/v1/admin/report",
+        "adminPages": "src/app/(admin-pages)/admin/report",
+        "modulePages": "packages/domains/report/frontend/pages"
+      },
+      "rolesComplete": true
+    },
+    {
+      "name": "mp",
+      "kind": "business",
+      "stage": "B",
+      "definition": {
+        "dir": "packages/domains/mp/contract",
+        "facades": [
+          "packages/domains/mp/contract/mp.facade.ts"
+        ],
+        "actions": [
+          "packages/domains/mp/contract/actions.ts"
+        ],
+        "proto": "packages/domains/mp/contract/mp.proto",
+        "manifest": "packages/domains/mp/contract/route.manifest.yaml"
+      },
+      "provider": {
+        "servicesDir": "packages/domains/mp/backend/services",
+        "repositoriesDir": null,
+        "methods": [
+          "ping",
+          "listAccounts",
+          "listFans",
+          "sendMessage"
+        ]
+      },
+      "consumer": {
+        "adminApi": "src/app/api/v1/admin/mp",
+        "adminPages": "src/app/(admin-pages)/admin/mp",
+        "modulePages": "packages/domains/mp/frontend/pages"
+      },
+      "rolesComplete": true
+    },
+    {
+      "name": "mall",
+      "kind": "business",
+      "stage": "B",
+      "definition": {
+        "dir": "packages/domains/mall/contract",
+        "facades": [
+          "packages/domains/mall/contract/mall.facade.ts"
+        ],
+        "actions": [
+          "packages/domains/mall/contract/actions.ts"
+        ],
+        "proto": "packages/domains/mall/contract/mall.proto",
+        "manifest": "packages/domains/mall/contract/route.manifest.yaml"
+      },
+      "provider": {
+        "servicesDir": "packages/domains/mall/backend/services",
+        "repositoriesDir": null,
+        "methods": [
+          "ping",
+          "listProducts",
+          "listOrders",
+          "issueCoupon"
+        ]
+      },
+      "consumer": {
+        "adminApi": "src/app/api/v1/admin/mall",
+        "appApi": "src/app/api/v1/app/mall",
+        "adminPages": "src/app/(admin-pages)/admin/mall",
+        "modulePages": "packages/domains/mall/frontend/pages"
+      },
+      "rolesComplete": true
+    },
+    {
+      "name": "member",
+      "kind": "business",
+      "stage": "A",
+      "definition": {
+        "dir": "packages/domains/member/contract",
+        "facades": [
+          "packages/domains/member/contract/member.facade.ts"
+        ],
+        "actions": [
+          "packages/domains/member/contract/actions.ts"
+        ],
+        "proto": "packages/domains/member/contract/member.proto",
+        "manifest": "packages/domains/member/contract/route.manifest.yaml"
+      },
+      "provider": {
+        "servicesDir": "packages/domains/member/backend/services",
+        "repositoriesDir": "packages/domains/member/backend/repositories",
+        "methods": [
+          "ping",
+          "listUsers",
+          "updateUser",
+          "listLevels",
+          "createLevel",
+          "listPoints",
+          "adjustPoint"
+        ]
+      },
+      "consumer": {
+        "adminApi": "src/app/api/v1/admin/member",
+        "appApi": "src/app/api/v1/app/member",
+        "adminPages": "src/app/(admin-pages)/admin/member",
+        "modulePages": "packages/domains/member/frontend/pages"
+      },
+      "rolesComplete": true
+    },
+    {
+      "name": "crm",
+      "kind": "business",
+      "stage": "B",
+      "definition": {
+        "dir": "packages/domains/crm/contract",
+        "facades": [
+          "packages/domains/crm/contract/crm.facade.ts"
+        ],
+        "actions": [
+          "packages/domains/crm/contract/actions.ts"
+        ],
+        "proto": "packages/domains/crm/contract/crm.proto",
+        "manifest": "packages/domains/crm/contract/route.manifest.yaml"
+      },
+      "provider": {
+        "servicesDir": "packages/domains/crm/backend/services",
+        "repositoriesDir": "packages/domains/crm/backend/repositories",
+        "methods": [
+          "ping",
+          "listCustomers",
+          "listClues",
+          "createFollowup"
+        ]
+      },
+      "consumer": {
+        "adminApi": "src/app/api/v1/admin/crm",
+        "adminPages": "src/app/(admin-pages)/admin/crm",
+        "modulePages": "packages/domains/crm/frontend/pages"
+      },
+      "rolesComplete": true
+    },
+    {
+      "name": "erp",
+      "kind": "business",
+      "stage": "B",
+      "definition": {
+        "dir": "packages/domains/erp/contract",
+        "facades": [
+          "packages/domains/erp/contract/erp.facade.ts"
+        ],
+        "actions": [
+          "packages/domains/erp/contract/actions.ts"
+        ],
+        "proto": "packages/domains/erp/contract/erp.proto",
+        "manifest": "packages/domains/erp/contract/route.manifest.yaml"
+      },
+      "provider": {
+        "servicesDir": "packages/domains/erp/backend/services",
+        "repositoriesDir": null,
+        "methods": [
+          "ping",
+          "listProducts",
+          "listOrders",
+          "adjustStock"
+        ]
+      },
+      "consumer": {
+        "adminApi": "src/app/api/v1/admin/erp",
+        "adminPages": "src/app/(admin-pages)/admin/erp",
+        "modulePages": "packages/domains/erp/frontend/pages"
+      },
+      "rolesComplete": true
+    },
+    {
+      "name": "wms",
+      "kind": "business",
+      "stage": "B",
+      "definition": {
+        "dir": "packages/domains/wms/contract",
+        "facades": [
+          "packages/domains/wms/contract/wms.facade.ts"
+        ],
+        "actions": [
+          "packages/domains/wms/contract/actions.ts",
+          "packages/domains/wms/contract/wms-check-order-detail.actions.ts",
+          "packages/domains/wms/contract/wms-check-order.actions.ts",
+          "packages/domains/wms/contract/wms-inventory-history.actions.ts",
+          "packages/domains/wms/contract/wms-inventory.actions.ts",
+          "packages/domains/wms/contract/wms-item-brand.actions.ts",
+          "packages/domains/wms/contract/wms-item-category.actions.ts",
+          "packages/domains/wms/contract/wms-item-sku.actions.ts",
+          "packages/domains/wms/contract/wms-item.actions.ts",
+          "packages/domains/wms/contract/wms-merchant.actions.ts",
+          "packages/domains/wms/contract/wms-movement-order-detail.actions.ts",
+          "packages/domains/wms/contract/wms-movement-order.actions.ts",
+          "packages/domains/wms/contract/wms-receipt-order-detail.actions.ts",
+          "packages/domains/wms/contract/wms-receipt-order.actions.ts",
+          "packages/domains/wms/contract/wms-shipment-order-detail.actions.ts",
+          "packages/domains/wms/contract/wms-shipment-order.actions.ts",
+          "packages/domains/wms/contract/wms-warehouse.actions.ts"
+        ],
+        "proto": "packages/domains/wms/contract/wms.proto",
+        "manifest": "packages/domains/wms/contract/route.manifest.yaml"
+      },
+      "provider": {
+        "servicesDir": "packages/domains/wms/backend/services",
+        "repositoriesDir": "packages/domains/wms/backend/repositories",
+        "methods": [
+          "ping",
+          "listWarehouses",
+          "checkin"
+        ]
+      },
+      "consumer": {
+        "adminApi": "src/app/api/v1/admin/wms",
+        "frontendApi": "packages/domains/wms/frontend/api",
+        "adminPages": "src/app/(admin-pages)/admin/wms",
+        "modulePages": "packages/domains/wms/frontend/pages"
+      },
+      "rolesComplete": true
+    },
+    {
+      "name": "mes",
+      "kind": "business",
+      "stage": "B",
+      "definition": {
+        "dir": "packages/domains/mes/contract",
+        "facades": [
+          "packages/domains/mes/contract/mes.facade.ts"
+        ],
+        "actions": [
+          "packages/domains/mes/contract/actions.ts"
+        ],
+        "proto": "packages/domains/mes/contract/mes.proto",
+        "manifest": "packages/domains/mes/contract/route.manifest.yaml"
+      },
+      "provider": {
+        "servicesDir": "packages/domains/mes/backend/services",
+        "repositoriesDir": null,
+        "methods": [
+          "ping",
+          "listWorkOrders",
+          "reportWork"
+        ]
+      },
+      "consumer": {
+        "adminApi": "src/app/api/v1/admin/mes",
+        "adminPages": "src/app/(admin-pages)/admin/mes",
+        "modulePages": "packages/domains/mes/frontend/pages"
+      },
+      "rolesComplete": true
+    },
+    {
+      "name": "ai",
+      "kind": "business",
+      "stage": "B",
+      "definition": {
+        "dir": "packages/domains/ai/contract",
+        "facades": [
+          "packages/domains/ai/contract/ai.facade.ts"
+        ],
+        "actions": [
+          "packages/domains/ai/contract/actions.ts"
+        ],
+        "proto": "packages/domains/ai/contract/ai.proto",
+        "manifest": "packages/domains/ai/contract/route.manifest.yaml"
+      },
+      "provider": {
+        "servicesDir": "packages/domains/ai/backend/services",
+        "repositoriesDir": null,
+        "methods": [
+          "ping",
+          "listModels",
+          "createModel",
+          "listChats",
+          "deleteChat",
+          "relayChatCompletion",
+          "listPublicModels",
+          "embed"
+        ]
+      },
+      "consumer": {
+        "adminApi": "src/app/api/v1/admin/ai",
+        "openApi": "src/app/api/v1/open/ai",
+        "adminPages": "src/app/(admin-pages)/admin/ai",
+        "modulePages": "packages/domains/ai/frontend/pages"
+      },
+      "rolesComplete": true
+    },
+    {
+      "name": "aigw",
+      "kind": "business",
+      "stage": "B",
+      "definition": {
+        "dir": "packages/domains/aigw/contract",
+        "facades": [
+          "packages/domains/aigw/contract/aigw.facade.ts"
+        ],
+        "actions": [
+          "packages/domains/aigw/contract/actions.ts"
+        ],
+        "proto": "packages/domains/aigw/contract/aigw.proto",
+        "manifest": "packages/domains/aigw/contract/route.manifest.yaml"
+      },
+      "provider": {
+        "servicesDir": "packages/domains/aigw/backend/services",
+        "repositoriesDir": "packages/domains/aigw/backend/repositories",
+        "methods": [
+          "ping",
+          "listChannels",
+          "createChannel",
+          "listTokens",
+          "createToken",
+          "listModels",
+          "relayChat",
+          "listPublicModels",
+          "embed"
+        ]
+      },
+      "consumer": {
+        "adminApi": "src/app/api/v1/admin/aigw",
+        "openApi": "src/app/api/v1/open/aigw",
+        "frontendApi": "packages/domains/aigw/frontend/api",
+        "adminPages": "src/app/(admin-pages)/admin/aigw",
+        "modulePages": "packages/domains/aigw/frontend/pages",
+        "cpcPages": "src/app/(cpc-pages)/cpc/aigw",
+        "moduleCpcPages": "packages/domains/aigw/frontend/cpc-pages"
+      },
+      "rolesComplete": true
+    },
+    {
+      "name": "iot",
+      "kind": "business",
+      "stage": "B",
+      "definition": {
+        "dir": "packages/domains/iot/contract",
+        "facades": [
+          "packages/domains/iot/contract/iot.facade.ts"
+        ],
+        "actions": [
+          "packages/domains/iot/contract/actions.ts"
+        ],
+        "proto": "packages/domains/iot/contract/iot.proto",
+        "manifest": "packages/domains/iot/contract/route.manifest.yaml"
+      },
+      "provider": {
+        "servicesDir": "packages/domains/iot/backend/services",
+        "repositoriesDir": null,
+        "methods": [
+          "ping",
+          "listDevices",
+          "createDevice",
+          "listAlerts",
+          "handleAlert"
+        ]
+      },
+      "consumer": {
+        "adminApi": "src/app/api/v1/admin/iot",
+        "adminPages": "src/app/(admin-pages)/admin/iot",
+        "modulePages": "packages/domains/iot/frontend/pages"
+      },
+      "rolesComplete": true
+    },
+    {
+      "name": "im",
+      "kind": "business",
+      "stage": "B",
+      "definition": {
+        "dir": "packages/domains/im/contract",
+        "facades": [
+          "packages/domains/im/contract/im.facade.ts"
+        ],
+        "actions": [
+          "packages/domains/im/contract/actions.ts"
+        ],
+        "proto": "packages/domains/im/contract/im.proto",
+        "manifest": "packages/domains/im/contract/route.manifest.yaml"
+      },
+      "provider": {
+        "servicesDir": "packages/domains/im/backend/services",
+        "repositoriesDir": null,
+        "methods": [
+          "ping",
+          "listConversations",
+          "auditMessage"
+        ]
+      },
+      "consumer": {
+        "adminApi": "src/app/api/v1/admin/im",
+        "adminPages": "src/app/(admin-pages)/admin/im",
+        "modulePages": "packages/domains/im/frontend/pages"
+      },
+      "rolesComplete": true
+    }
+  ]
+}

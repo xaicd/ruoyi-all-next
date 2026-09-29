@@ -20,8 +20,8 @@ for (const root of roots) {
   // 1. 删除老目录
   removeDirOrFile(path.join(root, "src/app/api/v1/admin/wms/warehouses"))
   removeDirOrFile(path.join(root, "src/app/api/v1/admin/wms/operations"))
-  removeDirOrFile(path.join(root, "src/modules/wms/backend/services/warehouses.service.ts"))
-  removeDirOrFile(path.join(root, "src/modules/wms/frontend/pages/warehouses.page.tsx"))
+  removeDirOrFile(path.join(root, "packages/domains/wms/backend/services/warehouses.service.ts"))
+  removeDirOrFile(path.join(root, "packages/domains/wms/frontend/pages/warehouses.page.tsx"))
 
   // 2. 删除所有废弃的 [id] 子路由目录
   const wmsApiDir = path.join(root, "src/app/api/v1/admin/wms")

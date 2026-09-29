@@ -16,7 +16,9 @@ const fs = require("fs")
 const path = require("path")
 const { ROOT, CATALOG_PATH, loadCatalog } = require("./domain-catalog.cjs")
 
-const SRC_DIR = path.join(ROOT, "src")
+// 扫描根：应用层在 src/，各域与 shared 已迁到 packages/（见 pnpm-workspace.yaml）。
+// 只扫 src/ 会让 domain 侧的消费方全部漏掉 —— 实测表现为所有能力 fanIn 掉到 0。
+const SCAN_DIRS = [path.join(ROOT, "src"), path.join(ROOT, "packages")]
 const DEPENDENTS_MAX = 12
 
 /** 递归收集 src 下所有 .ts/.tsx（排除测试与声明文件），返回 {relPosix, text}。 */
@@ -34,14 +36,14 @@ function collectSourceFiles() {
       }
     }
   }
-  walk(SRC_DIR)
+  for (const dir of SCAN_DIRS) walk(dir)
   return out
 }
 
 /** 能力目标标识：去掉扩展名的 repo 相对路径（不含 src/ 前缀差异），用于精确比对 import 目标。 */
 function capabilityKey(capDir) {
-  // "src/modules/shared/backend/lib/cache"        → "src/modules/shared/backend/lib/cache"
-  // "src/modules/shared/backend/lib/domain-log.ts" → "src/modules/shared/backend/lib/domain-log"
+  // "packages/shared/backend/lib/cache"        → "packages/shared/backend/lib/cache"
+  // "packages/shared/backend/lib/domain-log.ts" → "packages/shared/backend/lib/domain-log"
   return capDir.replace(/\\/g, "/").replace(/\.tsx?$/, "")
 }
 

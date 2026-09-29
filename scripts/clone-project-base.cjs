@@ -23,10 +23,10 @@ const {
 const { writeSeamGraph } = require("./lib/seam-graph.cjs")
 
 const SOURCE_ROOT = path.resolve(__dirname, "..")
-const CATALOG_REL = path.join("src", "modules", "shared", "backend", "constants", "domain-catalog.json")
-const RPC_ACTIONS_REL = path.join("src", "modules", "shared", "backend", "constants", "rpc-actions.json")
-const AGENT_PROFILE_REL = path.join("src", "modules", "shared", "contract", "agent-profile.json")
-const HATCH_MANIFEST_REL = path.join("src", "modules", "shared", "contract", "hatch-manifest.json")
+const CATALOG_REL = path.join("packages", "shared", "backend", "constants", "domain-catalog.json")
+const RPC_ACTIONS_REL = path.join("packages", "shared", "backend", "constants", "rpc-actions.json")
+const AGENT_PROFILE_REL = path.join("packages", "shared", "contract", "agent-profile.json")
+const HATCH_MANIFEST_REL = path.join("packages", "shared", "contract", "hatch-manifest.json")
 
 // 默认基准标识符 (对标 Yudao 的 GROUP_ID, ARTIFACT_ID, TITLE)
 const BASE_PROJECT_NAME = "ruoyi-all-next"

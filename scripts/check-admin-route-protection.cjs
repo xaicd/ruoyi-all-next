@@ -4,7 +4,7 @@ const path = require("path")
 const root = path.resolve(__dirname, "..")
 const adminRoot = path.join(root, "src", "app", "api", "v1", "admin")
 const proxyPath = path.join(root, "src", "proxy.ts")
-const policyPath = path.join(root, "src", "modules", "shared", "backend", "lib", "admin-route-policy.ts")
+const policyPath = path.join(root, "packages", "shared", "backend", "lib", "admin-route-policy.ts")
 
 function countRoutes(dir) {
   let count = 0

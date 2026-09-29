@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { TestingKit } from '../../src/modules/infra/testing/TestingKit';
+import { TestingKit } from '../../packages/domains/infra/testing/TestingKit';
 
 describe('L2 Integration: SQLite RBAC Database Flow', () => {
   let dbContext: Awaited<ReturnType<typeof TestingKit.createTestDatabase>>;

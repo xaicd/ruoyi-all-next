@@ -7,9 +7,9 @@ import { SEED_DEPTS } from "../prisma/data/depts.seed-data"
 import { SEED_DICT_DATA } from "../prisma/data/dict-data.seed-data"
 import { SEED_DICT_TYPES } from "../prisma/data/dict-types.seed-data"
 import { SEED_MENUS } from "../prisma/data/menus.seed-data"
-import { withOnlineMenuCatalog } from "../src/modules/online/contract/menu-catalog"
-import { withAigwMenuCatalog } from "../src/modules/aigw/contract/menu-catalog"
-import { withAiMenuCatalog } from "../src/modules/ai/contract/menu-catalog"
+import { withOnlineMenuCatalog } from "../packages/domains/online/contract/menu-catalog"
+import { withAigwMenuCatalog } from "../packages/domains/aigw/contract/menu-catalog"
+import { withAiMenuCatalog } from "../packages/domains/ai/contract/menu-catalog"
 import { SEED_POSTS } from "../prisma/data/posts.seed-data"
 import { SEED_ROLES } from "../prisma/data/roles.seed-data"
 import { SEED_TENANT_PACKAGES } from "../prisma/data/tenant-packages.seed-data"
@@ -93,7 +93,7 @@ async function main() {
   // 且 package_id 写成 '1'（套餐实际是 '111'）、又插在套餐之前 —— 三者叠加导致
   // 生成的 init SQL 在全新库上必然失败（column "contact_user_name" does not exist）。
   // 列名与取值以迁移 20260821000000（id='1' -> tenant_code='default'）和
-  // src/modules/system/backend/repositories/tenant.repository.ts 的内存种子为准。
+  // packages/domains/system/backend/repositories/tenant.repository.ts 的内存种子为准。
   seedSql += `-- 2. 默认系统租户（package_id='111'，须在上面的套餐之后）\n`
   seedSql += `INSERT INTO "system_tenant" ("id", "tenant_code", "name", "contact_name", "contact_phone", "package_id", "status", "effective_at", "expire_time", "account_limit", "created_at", "updated_at") VALUES\n`
   seedSql += `('1', 'default', '系统默认租户', '管理员', '13800000000', '111', 'ACTIVE', NOW(), '2099-12-31 23:59:59', 100, NOW(), NOW())\nON CONFLICT ("id") DO NOTHING;\n\n`

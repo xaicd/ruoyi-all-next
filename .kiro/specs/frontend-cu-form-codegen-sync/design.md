@@ -6,7 +6,7 @@
 ## Architecture
 以 `AGENTS.md` §14.2 为权威，并同步 `.kiro/steering/module-structure.md`：
 ```text
-src/modules/{domain}[/{subModule}]/frontend/
+packages/domains/{domain}[/{subModule}]/frontend/
 ├── api/{entity}.api.ts
 ├── components/{PascalEntity}Form.tsx
 └── pages/{entity}-list.page.tsx

@@ -1,0 +1,97 @@
+{
+  "$schema": "ruoyi-module-manifest/v1",
+  "domain": "im",
+  "id": "ruoyi.im",
+  "apiVersion": 1,
+  "displayName": "消息中心",
+  "kind": "business",
+  "stage": "B",
+  "owner": "im",
+  "contractVersion": "v1",
+  "implementation": "local-ts",
+  "minimumHostVersion": "1.0.0",
+  "capabilities": [
+    "api.routes.register",
+    "facade.invoke",
+    "rpc.serve",
+    "cmd.dispatch",
+    "pack.independent"
+  ],
+  "entrypoints": {
+    "facade": [
+      "packages/domains/im/contract/im.facade.ts"
+    ],
+    "proto": "packages/domains/im/contract/im.proto",
+    "actions": "packages/domains/im/contract/actions.ts"
+  },
+  "apiRoutes": {
+    "publicPrefix": [
+      "/api/v1/admin/im"
+    ],
+    "adminPrefix": "/api/v1/admin/im"
+  },
+  "auth": {
+    "audience": "admin",
+    "tenantPolicy": "required"
+  },
+  "messaging": {
+    "queueGroup": "ruoyi.im",
+    "commandSubject": "ruoyi.cmd.im.>",
+    "eventSubject": "ruoyi.evt.im.>"
+  },
+  "invoke": {
+    "colocated": "sdk",
+    "remote": "rpc",
+    "protocol": "nats-rr",
+    "serialization": "json"
+  },
+  "upstream": {
+    "env": "RUOYI_DOMAIN_IM_UPSTREAM",
+    "protocol": "http",
+    "defaultPort": 3225
+  },
+  "resilience": {
+    "timeoutMs": 5000,
+    "retry": {
+      "maxAttempts": 1,
+      "safeMethodsOnly": true
+    },
+    "idempotencyRequired": true
+  },
+  "facadeMethods": [
+    "ping",
+    "listConversations",
+    "auditMessage"
+  ],
+  "rpc": [
+    {
+      "service": "ImService",
+      "method": "Ping"
+    },
+    {
+      "service": "ImService",
+      "method": "ListConversations"
+    },
+    {
+      "service": "ImService",
+      "method": "AuditMessage"
+    }
+  ],
+  "actions": [
+    "im.ping",
+    "im.listConversations",
+    "im.auditMessage"
+  ],
+  "permissions": [
+    "im:conversation:view",
+    "im:message:audit"
+  ],
+  "dependsOn": [
+    "shared"
+  ],
+  "pack": {
+    "enabled": true,
+    "kind": "api-only",
+    "independentDatabase": false
+  }
+}

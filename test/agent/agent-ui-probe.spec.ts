@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { TestingKit } from '../../src/modules/infra/testing/TestingKit';
+import { TestingKit } from '../../packages/domains/infra/testing/TestingKit';
 
 test.describe('L4 Agent: Autonomous UI Health & Self-Healing Probe', () => {
   const config = TestingKit.getAgentPlaywrightProbeConfig();

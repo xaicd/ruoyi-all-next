@@ -9,7 +9,7 @@ const PROFILES = Object.freeze(["minimal", "standard", "vertical", "creator"])
 const PLATFORM_COMPANIONS = Object.freeze(["online", "ai", "aigw"])
 
 const DOMAIN_PATH_PREFIXES = Object.freeze([
-  "src/modules/",
+  "packages/domains/",
   "src/app/api/v1/admin/",
   "src/app/api/v1/app/",
   "src/app/api/v1/open/",

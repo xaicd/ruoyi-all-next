@@ -163,7 +163,7 @@ ruoyi-all-next/
 ### 阶段 A：模块化单体（代码仍按此组织）
 
 - 所有域共享一个 Next.js 代码库
-- 域代码落在 `src/modules/<domain>`
+- 域代码落在 `packages/domains/<domain>`
 - 未配置 upstream 时，BFF 同进程处理全部 API
 
 ### 阶段 B：可拆分单体（打包/运行/部署已接通）
@@ -205,7 +205,7 @@ await eventBus.publish({
 
 ## 7. 多端能力
 
-权威标准：`docs/architecture/ruoyi-all-next-client-channels.md`（契约 `src/modules/shared/contract/client-channels.json`）。
+权威标准：`docs/architecture/ruoyi-all-next-client-channels.md`（契约 `packages/shared/contract/client-channels.json`）。
 
 | API 面 | URL 前缀 | 鉴权 | 使用渠道 |
 |---|---|---|---|

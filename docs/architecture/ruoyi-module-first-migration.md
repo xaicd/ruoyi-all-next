@@ -12,15 +12,15 @@ RuoYi（Java）通常通过新增 module 承载新业务域，避免核心目录
 
 ruoyi-all-next 对齐策略：
 
-1. 新业务域直接进入 `src/modules/<domain>`。
+1. 新业务域直接进入 `packages/domains/<domain>`。
 2. 顶层 `src/backend/*` 只保留过渡门面。
 3. 当域达到拆分阈值，直接从模块目录迁出为独立 app/service。
 
 ## 3. 已完成示例
 
 1. mp：已目录化拆分（子服务 + 兼容门面）。
-2. crm：已迁移到 `src/modules/crm/backend/*`，旧路径保留 re-export。
-3. erp：已迁移到 `src/modules/erp/backend/*`，旧路径保留 re-export。
+2. crm：已迁移到 `packages/domains/crm/backend/*`，旧路径保留 re-export。
+3. erp：已迁移到 `packages/domains/erp/backend/*`，旧路径保留 re-export。
 
 ## 4. 拆分阈值建议
 

@@ -74,8 +74,8 @@
 2. 已完成：`/api/admin/system/oauth2/clients` 与 `/api/admin/system/oauth2/tokens`（OAuth2 列表最小闭环）。
 3. 已完成：后台页面、权限码与 system 域日志测试接入。
 4. 已完成：`/api/admin/system/auth/captcha`（生成 + 校验）与 `/api/admin/system/oauth2/open/token`、`/api/admin/system/oauth2/user/info`（open/user 授权细节最小闭环）。
-5. 已完成：`/admin/system/oauth2-clients`、`/admin/system/oauth2-tokens` 页面入口迁移到 `src/modules/system/frontend/pages/*`，`src/app` 仅保留 re-export 兼容门面。
-6. 已完成：`SystemAuthService`、`SystemCaptchaService`、`SystemOauth2Service` 迁移到 `src/modules/system/backend/services/*`，`src/backend/services/system-*.service.ts` 仅保留兼容门面导出。
+5. 已完成：`/admin/system/oauth2-clients`、`/admin/system/oauth2-tokens` 页面入口迁移到 `packages/domains/system/frontend/pages/*`，`src/app` 仅保留 re-export 兼容门面。
+6. 已完成：`SystemAuthService`、`SystemCaptchaService`、`SystemOauth2Service` 迁移到 `packages/domains/system/backend/services/*`，`src/backend/services/system-*.service.ts` 仅保留兼容门面导出。
 7. 下一步：接真实 token/session 持久层并补失败日志查询链路。
 
 ### SYS-2 用户组织权限主链
@@ -98,8 +98,8 @@
 1. 已完成：`/api/admin/system/users`、`/api/admin/system/depts`、`/api/admin/system/posts`、`/api/admin/system/roles`、`/api/admin/system/menus`（列表最小闭环）。
 2. 已完成：`/api/admin/system/permissions/assign-user-role` 与 `/api/admin/system/permissions/assign-role-menu`（分配动作最小闭环）。
 3. 已完成：后台页面、权限码、菜单与 system 域日志测试接入。
-4. 已完成：`/admin/system/users`、`/admin/system/roles`、`/admin/system/menus`、`/admin/system/depts`、`/admin/system/posts`、`/admin/system/online-users`、`/admin/system/login-logs`、`/admin/system/operate-logs` 页面入口迁移到 `src/modules/system/frontend/pages/*`，`src/app` 仅保留 re-export 兼容门面。
-5. 已完成：`SystemUserService`、`SystemRoleService`、`SystemMenuService`、`SystemDeptService`、`SystemPostService`、`SystemPermissionService`、`SystemOnlineUserService`、`SystemLoginLogService`、`SystemOperateLogService` 迁移到 `src/modules/system/backend/services/*`，`src/backend/services/system-*.service.ts` 仅保留兼容门面导出。
+4. 已完成：`/admin/system/users`、`/admin/system/roles`、`/admin/system/menus`、`/admin/system/depts`、`/admin/system/posts`、`/admin/system/online-users`、`/admin/system/login-logs`、`/admin/system/operate-logs` 页面入口迁移到 `packages/domains/system/frontend/pages/*`，`src/app` 仅保留 re-export 兼容门面。
+5. 已完成：`SystemUserService`、`SystemRoleService`、`SystemMenuService`、`SystemDeptService`、`SystemPostService`、`SystemPermissionService`、`SystemOnlineUserService`、`SystemLoginLogService`、`SystemOperateLogService` 迁移到 `packages/domains/system/backend/services/*`，`src/backend/services/system-*.service.ts` 仅保留兼容门面导出。
 6. 下一步：补 dept/post 与数据范围策略，接入真实关系表持久层。
 
 ### SYS-3 租户与租户套餐
@@ -117,8 +117,8 @@
 1. 已完成：`/api/admin/system/tenants` 与 `/api/admin/system/tenant-packages`（列表最小闭环）。
 2. 已完成：后台页面、权限码、菜单挂载与日志事件接入。
 3. 已完成：`/api/admin/system/tenants/update-status` 与 `/api/admin/system/tenants/assign-package`（写接口最小闭环）。
-4. 已完成：`/admin/system/tenants`、`/admin/system/tenant-packages` 页面入口迁移到 `src/modules/system/frontend/pages/*`，`src/app` 仅保留 re-export 兼容门面。
-5. 已完成：`SystemTenantService` 与 `SystemTenantPackageService` 迁移到 `src/modules/system/backend/services/*`，`src/backend/services/system-*.service.ts` 仅保留兼容门面导出。
+4. 已完成：`/admin/system/tenants`、`/admin/system/tenant-packages` 页面入口迁移到 `packages/domains/system/frontend/pages/*`，`src/app` 仅保留 re-export 兼容门面。
+5. 已完成：`SystemTenantService` 与 `SystemTenantPackageService` 迁移到 `packages/domains/system/backend/services/*`，`src/backend/services/system-*.service.ts` 仅保留兼容门面导出。
 6. 下一步：接入真实租户隔离持久层（含跨租户写保护与套餐权限约束）。
 
 ### SYS-4 字典/通知/日志
@@ -141,7 +141,7 @@
 3. 已完成：后台页面、权限码、菜单挂载与专项测试接入。
 4. 已完成：notify 模板/消息写接口（`POST /api/admin/system/notify/templates`、`POST /api/admin/system/notify/messages`）与审计接入。
 5. 已完成：登录日志与操作日志筛选 + 导出能力（`/api/admin/system/login-logs/export`、`/api/admin/system/operate-logs/export`）。
-6. 已完成：SYS-4 服务与页面入口迁移到 `src/modules/system`，`src/backend` 与 `src/app` 保留兼容门面（modules-first 增量整改）。
+6. 已完成：SYS-4 服务与页面入口迁移到 `packages/domains/system`，`src/backend` 与 `src/app` 保留兼容门面（modules-first 增量整改）。
 7. 下一步：补 dict type/data 分层与 notice 发布状态流转，作为 system 模块化重构的一部分接真实持久层。
 
 ### SYS-5 扩展能力
@@ -161,7 +161,7 @@
 1. 已完成：`/api/admin/system/sms/channels`、`/api/admin/system/sms/logs`（含渠道创建）。
 2. 已完成：`/api/admin/system/mail/accounts`、`/api/admin/system/mail/logs`（含账号创建）。
 3. 已完成：`/api/admin/system/social/users`（含社交用户创建）与 `/api/admin/system/ip/areas`。
-4. 已完成：SYS-5 代码优先落位 `src/modules/system`，`src/backend` 仅保留兼容门面，按 modules-first 增量整改。
+4. 已完成：SYS-5 代码优先落位 `packages/domains/system`，`src/backend` 仅保留兼容门面，按 modules-first 增量整改。
 5. 下一步：补 sms/mail/social 的模板配置与回执明细，接真实持久层与脱敏策略。
 
 ## 5. infra 任务包
@@ -226,7 +226,7 @@
 1. 已完成：`/api/admin/infra/db-configs`（数据源配置列表最小闭环）。
 2. 已完成：`/api/admin/infra/codegen`（代码生成列表最小闭环）。
 3. 已完成：后台页面、权限码、菜单与 infra 域日志测试接入。
-4. 已完成：INF-1 ~ INF-4 代码优先落位 `src/modules/infra`，`src/backend` 与 `src/app` 仅保留兼容门面，按 modules-first 增量整改。
+4. 已完成：INF-1 ~ INF-4 代码优先落位 `packages/domains/infra`，`src/backend` 与 `src/app` 仅保留兼容门面，按 modules-first 增量整改。
 5. 下一步：补代码生成预览/下载与数据源新增编辑能力，并接真实持久层。
 
 ## 6. 统一验收模板

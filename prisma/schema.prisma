@@ -1134,7 +1134,7 @@ model AiChatMessage {
 // ============================================================
 // PLUGIN 域 —— §6.2 可安装插件
 //
-// 注意: 与 §6.1 的 Platform Module(即 src/modules/<domain>)是**两个不同的扩展类**。
+// 注意: 与 §6.1 的 Platform Module(即 packages/domains/<domain>)是**两个不同的扩展类**。
 // 域是可信/进程内/一方表; 插件是 capability-gated/独立 worker/通用扩展表。
 // 因此插件**不给每个插件开自己的表**, 而是统一落 plugin_state 的 scoped KV,
 // 且首个插件系统不允许任意第三方迁移（插件数据先走通用扩展表，scoped 到既有对象）

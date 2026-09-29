@@ -19,10 +19,10 @@ describe("seam-graph", () => {
     const pay = graph.domains.find((item) => item.name === "pay")
     expect(pay).toBeTruthy()
     expect(pay.definition.facades.some((file) => file.endsWith("pay.facade.ts"))).toBe(true)
-    expect(pay.provider.servicesDir).toBe("src/modules/pay/backend/services")
+    expect(pay.provider.servicesDir).toBe("packages/domains/pay/backend/services")
     expect(pay.provider.methods).toEqual(rpc.domains.pay.actions.map((item) => item.method))
     expect(pay.consumer.adminApi).toBe("src/app/api/v1/admin/pay")
-    expect(SEAM_GRAPH_REL).toBe("src/modules/shared/contract/seam-graph.json")
+    expect(SEAM_GRAPH_REL).toBe("packages/shared/contract/seam-graph.json")
   })
 
   it("does not invent domains that are absent from catalog", () => {

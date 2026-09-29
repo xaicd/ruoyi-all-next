@@ -54,9 +54,9 @@ const RENAME_MAP = {
 const TARGET_FILES = [
   path.resolve(__dirname, '../prisma/data/menus.seed-data.ts'),
   path.resolve(__dirname, '../scripts/seed-output/menus.seed.ts'),
-  path.resolve(__dirname, '../src/modules/online/contract/menu-catalog.ts'),
-  path.resolve(__dirname, '../src/modules/aigw/contract/menu-catalog.ts'),
-  path.resolve(__dirname, '../src/modules/shared/backend/constants/admin-menu.ts'),
+  path.resolve(__dirname, '../packages/domains/online/contract/menu-catalog.ts'),
+  path.resolve(__dirname, '../packages/domains/aigw/contract/menu-catalog.ts'),
+  path.resolve(__dirname, '../packages/shared/backend/constants/admin-menu.ts'),
 ]
 
 console.log('[MENU-AUDITOR] Starting comprehensive menu audit & format...')

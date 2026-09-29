@@ -12,7 +12,7 @@
 6. **独立部署后**：同一 Facade 切到 RPC。默认协议是自研 NATS request-reply + JSON；阶段 C 跨语言 typed RPC 才用 gRPC + protobuf。
 7. **不采用** Dubbo、Thrift、Hessian 作为默认真源。
 
-权威清单：`src/modules/shared/backend/constants/domain-catalog.json` 的 `layers` 与 `rpc`。
+权威清单：`packages/shared/backend/constants/domain-catalog.json` 的 `layers` 与 `rpc`。
 
 ## 2. 三层模块
 
@@ -105,17 +105,17 @@ broker.start({ RUOYI_PACK_DOMAIN: "pay", RUOYI_RPC_PROTOCOL: "grpc" })
 
 ## 6. 代码入口
 
-1. 分层与协议策略：`src/modules/shared/backend/constants/domain-catalog.json`
-2. 双模与 codec：`src/modules/shared/backend/lib/rpc-protocol.ts`
-3. Facade：`src/modules/shared/backend/lib/rpc-facade.ts`；参考域 `src/modules/pay/contract/pay.facade.ts`
-4. 远程 adapter：`src/modules/shared/backend/lib/rpc-transport.ts`
-5. 自研 gRPC unary：`src/modules/shared/backend/lib/grpc-fabric.ts`
-6. 契约 action schema：`src/modules/<domain>/contract/actions.ts`（由 `rpc-actions.json` 生成）
-7. 域 Facade：`src/modules/<domain>/contract/<domain>.facade.ts`
-8. Go proto：`src/modules/<domain>/contract/<domain>.proto`（`npm run domain:contracts`）
+1. 分层与协议策略：`packages/shared/backend/constants/domain-catalog.json`
+2. 双模与 codec：`packages/shared/backend/lib/rpc-protocol.ts`
+3. Facade：`packages/shared/backend/lib/rpc-facade.ts`；参考域 `packages/domains/pay/contract/pay.facade.ts`
+4. 远程 adapter：`packages/shared/backend/lib/rpc-transport.ts`
+5. 自研 gRPC unary：`packages/shared/backend/lib/grpc-fabric.ts`
+6. 契约 action schema：`packages/domains/<domain>/contract/actions.ts`（由 `rpc-actions.json` 生成）
+7. 域 Facade：`packages/domains/<domain>/contract/<domain>.facade.ts`
+8. Go proto：`packages/domains/<domain>/contract/<domain>.proto`（`npm run domain:contracts`）
 9. Go 客户端桩：`gen/go/<domain>/v1/service.go`（无 grpc-go 运行时，注入 `Invoker`）
-10. Broker 分发：`src/modules/shared/backend/lib/service-broker.ts`；`rpc-actions.json` 的 `service`/`module`/`target` 指定落到哪个 Service 文件
-11. 跨进程 RPC：`src/modules/shared/backend/lib/rpc-http.ts`，入口 `POST /api/internal/rpc`
+10. Broker 分发：`packages/shared/backend/lib/service-broker.ts`；`rpc-actions.json` 的 `service`/`module`/`target` 指定落到哪个 Service 文件
+11. 跨进程 RPC：`packages/shared/backend/lib/rpc-http.ts`，入口 `POST /api/internal/rpc`
 12. 门禁：`npm run microservice:check` 与 `npm run domain:check`
 13. 低代码：Online 预览/下载走 `infraPlatformFacade.previewCodegen` / `generateCodegen`；字典走 `systemPublicFacade.getDictDataByType`；模板引擎 Facade 预置与 codegen ZIP / module-pack 输出 `createDomainFacade` 与 `*.rpc.ts`
 

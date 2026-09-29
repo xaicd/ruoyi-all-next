@@ -33,7 +33,7 @@
 
 1. 本规范作用于本仓库根目录（即 ruoyi-all-next）。
 2. all-next 当前阶段只允许建设 RuoYi 原生域，不接收非原生扩展域。
-3. 原生域清单、规模证据、迁移阶段以扫描结果为准。权威运行时清单：`src/modules/shared/backend/constants/domain-catalog.json`。
+3. 原生域清单、规模证据、迁移阶段以扫描结果为准。权威运行时清单：`packages/shared/backend/constants/domain-catalog.json`。
 
 原生域（15）：
 
@@ -73,24 +73,24 @@
 ### 3.1 分层架构
 
 1. Route 层：`src/app/api/v1/**/route.ts`（另有内部 RPC：`src/app/api/internal/rpc/route.ts` 与开放接口 `src/app/api/v1/open/**`）
-2. Service 层：`src/modules/<domain>/backend/services/**`
-3. Validator 层：`src/modules/<domain>/backend/validators/**`
+2. Service 层：`packages/domains/<domain>/backend/services/**`
+3. Validator 层：`packages/domains/<domain>/backend/validators/**`
 4. Page 层（Admin 运营后台 vs CPC 客户/政企 PC 双轨）：
-   - Admin 运营后台：`src/app/(admin-pages)/admin/**` + `src/modules/<domain>/frontend/pages/**`
-   - CPC 客户/政企/C端 PC：`src/app/(cpc-pages)/cpc/**` + `src/modules/<domain>/frontend/cpc-pages/**`
-5. 基座层：`src/modules/shared/backend/constants`、`src/modules/shared/backend/lib`
-6. Contract 层：`src/modules/<domain>/contract/`（Facade、actions、proto、route manifest）
+   - Admin 运营后台：`src/app/(admin-pages)/admin/**` + `packages/domains/<domain>/frontend/pages/**`
+   - CPC 客户/政企/C端 PC：`src/app/(cpc-pages)/cpc/**` + `packages/domains/<domain>/frontend/cpc-pages/**`
+5. 基座层：`packages/shared/backend/constants`、`packages/shared/backend/lib`
+6. Contract 层：`packages/domains/<domain>/contract/`（Facade、actions、proto、route manifest）
 
 ### 3.2 目录约束
 
-1. 新增业务域必须落在 `src/modules/<domain>/`。
-2. 公共基座（constants/lib/templates）统一放 `src/modules/shared/`。
+1. 新增业务域必须落在 `packages/domains/<domain>/`。
+2. 公共基座（constants/lib/templates）统一放 `packages/shared/`。
 3. src 下只允许两个顶层目录：app（Next.js路由）和 modules（全部业务+基座）。
 4. 禁止在 src 下新建 backend/、frontend/、components/、lib/ 等平铺目录。
-5. 通用模板统一放 `src/modules/shared/frontend/templates`。
+5. 通用模板统一放 `packages/shared/frontend/templates`。
 6. **前端双轨页面规范（强制）**：
-   - `src/modules/<domain>/frontend/pages/` 专用于 **Admin 运营管理端页面**；
-   - `src/modules/<domain>/frontend/cpc-pages/` 专用于 **Client PC（面向客户、政企内网挂载大盘、C 端员工协同工作台）页面**；
+   - `packages/domains/<domain>/frontend/pages/` 专用于 **Admin 运营管理端页面**；
+   - `packages/domains/<domain>/frontend/cpc-pages/` 专用于 **Client PC（面向客户、政企内网挂载大盘、C 端员工协同工作台）页面**；
    - 严禁将客户/政企/C 端 PC 页面混入 `frontend/pages/` 中，必须严格收敛在 `frontend/cpc-pages/` 下，实现 Admin 与 Client PC 物理级解耦；
 7. C 端与桌面壳必须落在仓库根 `clients/<channel>/`，一渠道一包；当前只保留 `expo`（其余渠道 h5/uniapp/flutter/desktop-pc 已按决策删除）。
 8. 独立客户端包内固定 `app/`、`shared/`、`modules/<domain>/`；域名与 `domain-catalog.json` 一致，禁止把新域堆进 `app`、`shared` 或根 `pages`。细则见 docs/architecture/ruoyi-all-next-client-channels.md。
@@ -159,7 +159,7 @@
 
 ### 4.8 多租户隔离规范（强制）
 
-**租户来源唯一权威 = 全局上下文 `getCurrentTenantId()`**（`src/modules/shared/backend/lib/biz-tenant.ts`，由 `withAdminRoute` 对每个 admin 请求自动注入 `runWithTenantContext`）。禁止用"显式 tenantId 参数透传"作为长期姿势——透传断链即数据泄露，已在 aigw usages 域实证。
+**租户来源唯一权威 = 全局上下文 `getCurrentTenantId()`**（`packages/shared/backend/lib/biz-tenant.ts`，由 `withAdminRoute` 对每个 admin 请求自动注入 `runWithTenantContext`）。禁止用"显式 tenantId 参数透传"作为长期姿势——透传断链即数据泄露，已在 aigw usages 域实证。
 
 1. **Repository 取租户（强制）**：所有业务表 Repository 在查询（select/update/delete）与写入（insert）时，一律从全局上下文取租户，禁止依赖调用方显式传 `tenantId` 参数。对齐 system 域先例（`user/role/post/dept.repository.ts` 的 `currentTenantId()` helper）：
    ```ts
@@ -219,7 +219,7 @@
    - 单元格: `px-5 py-3 text-xs text-slate-600`
    - 操作列: 固定 `text-right whitespace-nowrap min-w-[190px]`，按钮为 `[编辑]` (Blue)、`[启用/停用]` (Amber/Emerald)、`[删除]` (Rose)。
 4. **Codegen Engine 低代码模板**：
-   - 代码生成器模板 (`src/modules/infra/backend/services/codegen-engine.service.ts`) 与生成脚手架必须硬化使用上述 DOM 结构与 Token，确保生成的代码开箱与原生模版 100% 视觉一致。
+   - 代码生成器模板 (`packages/domains/infra/backend/services/codegen-engine.service.ts`) 与生成脚手架必须硬化使用上述 DOM 结构与 Token，确保生成的代码开箱与原生模版 100% 视觉一致。
 
 ## 6. 能力同步与治理门禁
 
@@ -368,9 +368,9 @@ npm run check                 # 门禁产出证据 + 轨迹
 
 建议命令：
 
-1. npm test -- --run src/modules/infra/backend/services/__tests__/template-engine.service.test.ts
-2. npm test -- --run src/modules/shared/backend/lib/__tests__/rpc-protocol.test.ts
-3. npm test -- --run src/modules/infra/backend/services/__tests__/codegen-engine.rpc.test.ts
+1. npm test -- --run packages/domains/infra/backend/services/__tests__/template-engine.service.test.ts
+2. npm test -- --run packages/shared/backend/lib/__tests__/rpc-protocol.test.ts
+3. npm test -- --run packages/domains/infra/backend/services/__tests__/codegen-engine.rpc.test.ts
 4. npm test
 
 ## 9. 本地开发与运行步骤
@@ -465,7 +465,7 @@ npm run check                 # 门禁产出证据 + 轨迹
 ## 13. 参考文档
 
 1. README.md
-2. src/modules/README.md
+2. packages/domains/README.md
 3. docs/architecture/ruoyi-native-capabilities-catalog.md
 4. docs/architecture/ruoyi-full-migration-board.md
 5. docs/architecture/system-core-implementation-checklist.md
@@ -489,7 +489,7 @@ npm run check                 # 门禁产出证据 + 轨迹
 
 ### 14.1 生成器入口
 
-- 引擎：`src/modules/infra/backend/services/codegen-engine.service.ts`
+- 引擎：`packages/domains/infra/backend/services/codegen-engine.service.ts`
 - 前端页面：`/admin/infra/codegen`
 - API：`/api/v1/admin/infra/codegen`（导入表、预览、下载 ZIP）
 - 注入脚本：`scripts/inject-codegen-output.cjs`
@@ -499,7 +499,7 @@ npm run check                 # 门禁产出证据 + 轨迹
 代码生成器对每张表输出以下文件，严格遵循 modules-first 分层：
 
 ```
-src/modules/{domain}/
+packages/domains/{domain}/
 ├── contract/
 │   └── {kebab}.actions.ts            ← ACTION_SCHEMAS（HTTP 与 broker 共用）
 ├── backend/
@@ -580,7 +580,7 @@ node scripts/inject-codegen-output.cjs tmp/codegen-{ClassName}
   - `minimal`：shared + system + infra + 平台伴生域 `online/ai/aigw`（菜单目录与 codegen Facade 依赖，不能裁）。
   - `vertical`：minimal + `--bundle` 业务域白名单。
   - `creator`：等同 standard（含 online/codegen）。
-  - 产物写入 `src/modules/shared/contract/hatch-manifest.json`。Prisma 迁移仍为全量基座表。
+  - 产物写入 `packages/shared/contract/hatch-manifest.json`。Prisma 迁移仍为全量基座表。
 - **自动化工作流水线（全托管零配置）：**
   1. **反应堆克隆与包名重塑**：自动将 `ruoyi-all-next` 转换为目标工程名，重塑 `package.json`（自动分配独立 `PORT=3200` 避开冲突）；
   2. **二进制防损坏保护**：图片、字体、压缩包与数据库 dump 文件走二进制流白名单拷贝，绝不进行文本正则替换；
@@ -596,18 +596,18 @@ node scripts/inject-codegen-output.cjs tmp/codegen-{ClassName}
 
 | 目录属性 | 包含文件与路径 | 职责定位与变更权限 | 升级与反哺规则 |
 |---|---|---|---|
-| 🟢 **业务开发区<br>(Business Zone)** | • `src/modules/<domain>/`<br>• `src/app/api/v1/admin/<domain>/`<br>• `src/app/(admin-pages)/admin/<domain>/`<br>• `clients/<channel>/modules/<domain>/` | **具体业务开发区域**。<br>包含业务 DTO、Validator、Repository、Service、前端页面与弹窗组件。按域完全自包含。 | **单模块热拔插移植**：将业务域移植回基座时，按「五要素清单」整包拷贝，不影响其他业务域。 |
-| 🛡️ **基座公共内核<br>(Core Base Zone)** | • `src/modules/shared/`<br>• `src/modules/system/` (公开面外)<br>• `src/modules/infra/` (公开面外)<br>• `scripts/`, `deploy/`, `prisma/data/` | **通用技术底座与公共 SDK**。<br>包含通信总线、RBAC 鉴权、签名加密、Kysely 引擎、Docker 编排。 | **基座版本化升级（Base Upgrade）**：通过基座版本升级统一更新，严禁在业务开发中向 `shared` 堆砌业务逻辑。 |
-| 📋 **全局路由与契约<br>(Registry Zone)** | • `src/modules/shared/backend/constants/domain-catalog.json`<br>• `src/modules/shared/backend/constants/permissions.ts`<br>• `prisma/schema.prisma` | **全局权威契约与数据模型**。<br>记录系统全部合法域、RBAC 权限白名单与 Prisma 模型。 | **追加式维护（Append-Only）**：新业务仅可在此追加条目，严禁破坏既有数据字典与权限语义。 |
+| 🟢 **业务开发区<br>(Business Zone)** | • `packages/domains/<domain>/`<br>• `src/app/api/v1/admin/<domain>/`<br>• `src/app/(admin-pages)/admin/<domain>/`<br>• `clients/<channel>/modules/<domain>/` | **具体业务开发区域**。<br>包含业务 DTO、Validator、Repository、Service、前端页面与弹窗组件。按域完全自包含。 | **单模块热拔插移植**：将业务域移植回基座时，按「五要素清单」整包拷贝，不影响其他业务域。 |
+| 🛡️ **基座公共内核<br>(Core Base Zone)** | • `packages/shared/`<br>• `packages/domains/system/` (公开面外)<br>• `packages/domains/infra/` (公开面外)<br>• `scripts/`, `deploy/`, `prisma/data/` | **通用技术底座与公共 SDK**。<br>包含通信总线、RBAC 鉴权、签名加密、Kysely 引擎、Docker 编排。 | **基座版本化升级（Base Upgrade）**：通过基座版本升级统一更新，严禁在业务开发中向 `shared` 堆砌业务逻辑。 |
+| 📋 **全局路由与契约<br>(Registry Zone)** | • `packages/shared/backend/constants/domain-catalog.json`<br>• `packages/shared/backend/constants/permissions.ts`<br>• `prisma/schema.prisma` | **全局权威契约与数据模型**。<br>记录系统全部合法域、RBAC 权限白名单与 Prisma 模型。 | **追加式维护（Append-Only）**：新业务仅可在此追加条目，严禁破坏既有数据字典与权限语义。 |
 
 #### 17.2 业务功能反哺与移植「标准五要素清单」（The 5-Element Porting Package）
 
 当衍生业务工程孵化出通用功能并需移植回基座时，仅需同步以下 5 项：
-1. **模块目录**：`src/modules/{domain}/`（前后端业务代码与 Contract）
+1. **模块目录**：`packages/domains/{domain}/`（前后端业务代码与 Contract）
 2. **Next.js 路由**：`src/app/api/v1/admin/{domain}/` 与 `src/app/(admin-pages)/admin/{domain}/`
 3. **数据库增量迁移**：`prisma/migrations/2026MMDD000000_{feature}/` 与 `prisma/schema.prisma` 新增模型
-4. **权限码追加**：`src/modules/shared/backend/constants/permissions.ts`
-5. **Catalog 登记**：`src/modules/shared/backend/constants/domain-catalog.json`
+4. **权限码追加**：`packages/shared/backend/constants/permissions.ts`
+5. **Catalog 登记**：`packages/shared/backend/constants/domain-catalog.json`
 
 #### 17.3 移植合规门禁三步法
 ```bash
@@ -627,7 +627,7 @@ npm run check
 本仓库是 **Workspace Bundle**（业务工程模板），不是 Agent 运行时。公式：`NPC = Model + DigitalStaff Native + 本仓库`。
 
 1. **学思想，不搬框架**：吸收插件化域、Capability Seam、Profile/Bundle/Patch、Prompt 分段组装、可追溯轨迹。禁止引入 Cordis、禁止在 `src/` 实现 Agent Loop、禁止运行时自挂载插件。
-2. **机器可读入口**：`src/modules/shared/contract/agent-profile.json`。域名真源仍是 `domain-catalog.json`。
+2. **机器可读入口**：`packages/shared/contract/agent-profile.json`。域名真源仍是 `domain-catalog.json`。
 3. **提示分段**：`.agents/context/ASSEMBLY.md`。禁止把本文件整篇灌进每一次模型请求。
 4. **NPC 孵化**：只允许 `npm run project:create -- <目标路径>`；身份只改 `project-profile.json` 与 `public/branding/`。
 5. **后期进化**：P1 `--profile/--bundle`、P2 seam 图、P3 门禁轨迹已落地；P4 由 DigitalStaff 读取本仓 `agent-profile.json`。细则见 `docs/architecture/ruoyi-all-next-harness-evolution.md`。

@@ -17,7 +17,7 @@
 **User Story:** 作为客户端开发者，我希望 API 的语言和部署位置变化不影响页面。
 
 #### Acceptance Criteria
-1. EACH 可拆分域 SHALL 在 `src/modules/<domain>/contract/` 维护版本化 Contract 与 route manifest。
+1. EACH 可拆分域 SHALL 在 `packages/domains/<domain>/contract/` 维护版本化 Contract 与 route manifest。
 2. THE Contract SHALL 定义 operation ID、命令 DTO、View DTO、分页、统一错误和认证/权限语义；不得以表结构或 ORM 类型替代。
 3. WHEN Contract 存在破坏性变更 THEN 系统必须发布新版本或明确 deprecated 生命周期，不得静默改变 v1。
 4. THE frontend SHALL 只依赖 contract-derived DTO 和 API Port，不得依赖 Next backend TypeScript 类型。

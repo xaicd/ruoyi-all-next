@@ -2,7 +2,7 @@ const fs = require("fs")
 const path = require("path")
 
 const ROOT = path.resolve(__dirname, "../..")
-const CATALOG_PATH = path.join(ROOT, "src", "modules", "shared", "backend", "constants", "domain-catalog.json")
+const CATALOG_PATH = path.join(ROOT, "packages", "shared", "backend", "constants", "domain-catalog.json")
 
 function loadCatalog() {
   return JSON.parse(fs.readFileSync(CATALOG_PATH, "utf8"))
@@ -26,7 +26,7 @@ function toYaml(domain) {
     .filter((value, index, list) => list.indexOf(value) === index)
     .map((name) => `    - ${name}`)
     .join("\n")
-  return `# Generated from src/modules/shared/backend/constants/domain-catalog.json
+  return `# Generated from packages/shared/backend/constants/domain-catalog.json
 # Do not hand-edit pack/upstream fields. Run: npm run domain:manifests
 domain: ${domain.name}
 owner: ${domain.owner}
@@ -72,7 +72,7 @@ ${modules}
 }
 
 function manifestPath(domainName) {
-  return path.join(ROOT, "src", "modules", domainName, "contract", "route.manifest.yaml")
+  return path.join(ROOT, "packages", "domains", domainName, "contract", "route.manifest.yaml")
 }
 
 function writeGeneratedManifests() {
@@ -93,7 +93,7 @@ function writeGeneratedManifests() {
 // repo already maintains, so drift is impossible by construction.
 // ---------------------------------------------------------------------------
 
-const CONTRACT_DIR = (domainName) => path.join(ROOT, "src", "modules", domainName, "contract")
+const CONTRACT_DIR = (domainName) => path.join(ROOT, "packages", "domains", domainName, "contract")
 
 function readTextIfExists(file) {
   return fs.existsSync(file) ? fs.readFileSync(file, "utf8") : ""
@@ -143,7 +143,7 @@ function readActionKeys(domainName) {
 /** 权限码 `<domain>:<resource>:<action>`，按域名归组（单次解析，供所有域复用）。 */
 function readPermissionsByDomain() {
   const source = readTextIfExists(
-    path.join(ROOT, "src", "modules", "shared", "backend", "constants", "permissions.ts"),
+    path.join(ROOT, "packages", "shared", "backend", "constants", "permissions.ts"),
   )
   const byDomain = new Map()
   for (const match of source.matchAll(/"([a-z0-9-]+):([a-z0-9-]+):([a-z0-9-]+)"/g)) {
@@ -158,7 +158,7 @@ function readPermissionsByDomain() {
 /** 域名 → 中文标签。真源：admin-menu.ts 的顶层条目（key=域名, label=中文）。 */
 function readDomainLabels() {
   const source = readTextIfExists(
-    path.join(ROOT, "src", "modules", "shared", "backend", "constants", "admin-menu.ts"),
+    path.join(ROOT, "packages", "shared", "backend", "constants", "admin-menu.ts"),
   )
   const labels = new Map()
   for (const match of source.matchAll(/^ {4}key: "([a-z0-9-]+)",\n {4}label: "([^"]+)",/gm)) {
@@ -198,12 +198,12 @@ function toModuleManifest(domain, sources, labels = new Map()) {
     minimumHostVersion: "1.0.0",
     capabilities: deriveCapabilities(domain, sources),
     entrypoints: {
-      facade: sources.facades.map((surface) => `src/modules/${domain.name}/contract/${surface.file}`),
+      facade: sources.facades.map((surface) => `packages/domains/${domain.name}/contract/${surface.file}`),
       proto: fs.existsSync(path.join(CONTRACT_DIR(domain.name), `${domain.name}.proto`))
-        ? `src/modules/${domain.name}/contract/${domain.name}.proto`
+        ? `packages/domains/${domain.name}/contract/${domain.name}.proto`
         : null,
       actions: fs.existsSync(path.join(CONTRACT_DIR(domain.name), "actions.ts"))
-        ? `src/modules/${domain.name}/contract/actions.ts`
+        ? `packages/domains/${domain.name}/contract/actions.ts`
         : null,
     },
     apiRoutes: {
@@ -241,7 +241,7 @@ function toModuleManifest(domain, sources, labels = new Map()) {
 }
 
 function moduleManifestPath(domainName) {
-  return path.join(ROOT, "src", "modules", domainName, "contract", "module.manifest.json")
+  return path.join(ROOT, "packages", "domains", domainName, "contract", "module.manifest.json")
 }
 
 function writeGeneratedModuleManifests() {

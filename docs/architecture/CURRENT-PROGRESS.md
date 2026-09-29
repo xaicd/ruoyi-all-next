@@ -111,7 +111,7 @@
 
 ### P0-HOTFIX：种子数据对齐原版
 - ✅ 从 ruoyi-vue-pro/sql 提取完整种子数据（scripts/seed-output/）
-- ✅ 生成 seed-data 模块（src/modules/shared/backend/seed-data/）
+- ✅ 生成 seed-data 模块（packages/shared/backend/seed-data/）
 - ✅ Post Repository MEMORY_STORE 已接入种子数据（4 条）
 - ✅ Dept Repository MEMORY_STORE 已接入种子数据（16 条）
 - ✅ Menu Repository MEMORY_STORE 已接入由 RuoYi SQL 全量生成的种子数据（1441 条）
@@ -200,15 +200,15 @@
 - 架构文档：docs/architecture/ruoyi-all-next-architecture.md
 - 开发规范：AGENTS.md
 - Prisma Schema：prisma/schema.prisma
-- 数据库基础设施：src/modules/shared/backend/lib/database/
-- User Repository：src/modules/system/backend/repositories/user.repository.ts
-- User Service：src/modules/system/backend/services/user.service.ts
+- 数据库基础设施：packages/shared/backend/lib/database/
+- User Repository：packages/domains/system/backend/repositories/user.repository.ts
+- User Service：packages/domains/system/backend/services/user.service.ts
 - User API：src/app/api/v1/admin/system/users/route.ts
-- User Page：src/modules/system/frontend/pages/users.page.tsx
-- 权限码：src/modules/shared/backend/constants/permissions.ts
+- User Page：packages/domains/system/frontend/pages/users.page.tsx
+- 权限码：packages/shared/backend/constants/permissions.ts
 - DB 配置示例：.env.example
 - 迁移脚本：scripts/migrate-api-routes-to-v1.cjs
-- 低代码引擎：src/modules/infra/backend/services/codegen-engine.service.ts
+- 低代码引擎：packages/domains/infra/backend/services/codegen-engine.service.ts
 
 ## 新对话启动指令
 
@@ -217,4 +217,4 @@
 2. docs/architecture/ruoyi-all-next-architecture.md
 3. AGENTS.md
 4. prisma/schema.prisma
-5. src/modules/shared/backend/lib/database/index.ts
+5. packages/shared/backend/lib/database/index.ts

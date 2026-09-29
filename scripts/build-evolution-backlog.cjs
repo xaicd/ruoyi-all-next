@@ -22,7 +22,7 @@ const ARTIFACT_REL = "docs/architecture/artifacts/evolution-backlog.json"
 const TRACE_REL = "docs/architecture/artifacts/harness-trace-latest.json"
 
 const SEVERITY_ORDER = { blocker: 0, high: 1, medium: 2, low: 3 }
-const SRC_MODULES = "src/modules"
+const SRC_MODULES = "packages/domains"
 const OVERSIZED_FILE_LINES = 200
 const MIN_DOMAIN_TESTS = 2
 
@@ -180,7 +180,7 @@ function collectThinDomainTests() {
   const domains = loadCatalog().domains
   const items = []
   for (const domain of domains) {
-    const dir = `src/modules/${domain.name}`
+    const dir = `packages/domains/${domain.name}`
     if (!fs.existsSync(abs(dir))) continue
     const tests = walk(dir, (name) => /\.test\.ts$/.test(name))
     if (tests.length >= MIN_DOMAIN_TESTS) continue
@@ -191,7 +191,7 @@ function collectThinDomainTests() {
       title: `${domain.name}: only ${tests.length} test file(s)`,
       files: tests.map(toRel),
       evidence: `stage=${domain.stage}, kind=${domain.kind}; §8 requires at least one key-path automated test per domain`,
-      command: `npm test -- --run src/modules/${domain.name}`,
+      command: `npm test -- --run packages/domains/${domain.name}`,
       action: "Add key-path, permission-denial and transaction-rollback tests for this domain.",
     })
   }

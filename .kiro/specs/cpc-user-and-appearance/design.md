@@ -8,7 +8,7 @@
 ## 1. 架构总览（遵循 module-structure.md）
 
 ```
-src/modules/member/                      # C 端用户（复用现有模块，新增 app 侧能力，不动 admin CRUD）
+packages/domains/member/                      # C 端用户（复用现有模块，新增 app 侧能力，不动 admin CRUD）
   backend/
     repositories/member-user.repository.ts   [新] Kysely 落库（member_user）
     services/member-auth.service.ts            [新] register/login/logout（真实，非 mock）
@@ -16,11 +16,11 @@ src/modules/member/                      # C 端用户（复用现有模块，�
     validators/member-auth.validators.ts       [新] zod: register/login/updateProfile
   contract/actions.ts                          [改] +app 动作声明（register/login/profile）
 
-src/modules/infra/                        # 站点/主题配置（复用现有 config 能力）
+packages/domains/infra/                        # 站点/主题配置（复用现有 config 能力）
   backend/services/appearance.service.ts       [新] get/update SiteAppearance（存 system_config）
   backend/validators/appearance.validators.ts  [新] zod SiteAppearance + 默认值
 
-src/modules/shared/backend/http/
+packages/shared/backend/http/
   app-route.ts                                 [新] withAppRoute（对标 withAdminRoute）
 
 src/app/api/v1/

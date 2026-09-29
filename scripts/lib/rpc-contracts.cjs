@@ -2,7 +2,7 @@ const fs = require("fs")
 const path = require("path")
 const { ROOT, listDomains } = require("./domain-catalog.cjs")
 
-const ACTIONS_PATH = path.join(ROOT, "src", "modules", "shared", "backend", "constants", "rpc-actions.json")
+const ACTIONS_PATH = path.join(ROOT, "packages", "shared", "backend", "constants", "rpc-actions.json")
 
 function loadRpcActions() {
   return JSON.parse(fs.readFileSync(ACTIONS_PATH, "utf8"))
@@ -132,7 +132,7 @@ package ruoyi.${domain}.v1;
 
 option go_package = "${catalog.goModule}/${domain}/v1;${domain}v1";
 
-// Generated from src/modules/shared/backend/constants/rpc-actions.json
+// Generated from packages/shared/backend/constants/rpc-actions.json
 // Do not hand-edit. Run: npm run domain:contracts
 // gRPC path: /ruoyi.${domain}.v1.${service}/<Method>
 
@@ -222,7 +222,7 @@ go 1.22
 }
 
 function contractPaths(domain) {
-  const dir = path.join(ROOT, "src", "modules", domain, "contract")
+  const dir = path.join(ROOT, "packages", "domains", domain, "contract")
   return {
     dir,
     actions: path.join(dir, "actions.ts"),

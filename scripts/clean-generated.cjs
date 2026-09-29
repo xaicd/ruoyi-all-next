@@ -8,7 +8,8 @@ const path = require("path")
 
 const APP_API = path.join(__dirname, "..", "src", "app", "api", "admin")
 const APP_PAGES = path.join(__dirname, "..", "src", "app", "(admin)", "admin")
-const MODULES = path.join(__dirname, "..", "src", "modules")
+// 各域与 shared 已迁到 packages/（见 pnpm-workspace.yaml）
+const MODULES = path.join(__dirname, "..", "packages")
 
 // Domains that had code generated
 const DOMAINS = ["system","infra","bpm","pay","report","mp","mall","member","crm","erp","wms","mes","ai","iot","im"]

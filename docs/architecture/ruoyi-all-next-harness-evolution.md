@@ -2,7 +2,7 @@
 
 更新时间：2026-08-25
 
-本仓库学习 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 的设计决策，把底座做成 **Agent 可读、可组合、可追溯** 的业务工程模板。权威机器契约：`src/modules/shared/contract/agent-profile.json`。
+本仓库学习 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 的设计决策，把底座做成 **Agent 可读、可组合、可追溯** 的业务工程模板。权威机器契约：`packages/shared/contract/agent-profile.json`。
 
 ## 1. 三层定位（禁止混角色）
 
@@ -29,7 +29,7 @@ dsh 口号是 **Everything is a Plugin / Every run is traceable**。对应到本
 
 | dsh 决策 | 本仓库落点 | 后期进化方向 |
 |---|---|---|
-| Everything is a Plugin | `src/modules/<domain>/` + Domain Facade；无特权核心可打补丁 | 域按 Bundle 组合，而不是永远整仓克隆 |
+| Everything is a Plugin | `packages/domains/<domain>/` + Domain Facade；无特权核心可打补丁 | 域按 Bundle 组合，而不是永远整仓克隆 |
 | Capability Seam（定义 / 提供者 / 消费者） | Contract Facade + Service + Route；跨域只走 Facade | `agent-profile.json` 暴露 seam 图，NPC 先发现再调用 |
 | Profile + Bundle + Patch | `project-profile.json` + `domain-catalog.json` + ProjectReactor | `project:create --profile/--bundle` 按需叠域 |
 | Prompt Section Assembly | `.agents/context/*` + Skill 注册表 + AGENTS.md | DigitalStaff 按 order 组装，禁止把 AGENTS.md 当唯一大字符串 |
@@ -73,7 +73,7 @@ npm run project:create -- <路径> --profile vertical --bundle mall,crm
 | `vertical` | minimal + `--bundle` 白名单 | NPC 按本体域孵化 |
 | `creator` | 等同 standard | 低代码与代码生成并存 |
 
-`online/ai/aigw` 是 **平台伴生域**：system 菜单目录与 infra codegen 通过 Facade 依赖它们，P1 不能从 minimal 裁掉。Prisma 迁移仍部署全量基座表；裁剪的是代码目录与 catalog 发现面。产物：`src/modules/shared/contract/hatch-manifest.json`。
+`online/ai/aigw` 是 **平台伴生域**：system 菜单目录与 infra codegen 通过 Facade 依赖它们，P1 不能从 minimal 裁掉。Prisma 迁移仍部署全量基座表；裁剪的是代码目录与 catalog 发现面。产物：`packages/shared/contract/hatch-manifest.json`。
 
 身份补丁只允许改 `project-profile.json` 与 `public/branding/`，禁止改权限语义、RPC subject、租户隔离规则。
 
@@ -101,7 +101,7 @@ dsh：一个能力必须同时有 Service Definition、Provider、Consumer。本
 | 0 | 行为约束 | `.agents/context/SOUL.md` |
 | 50 | 域与缝 | `domain-catalog.json` + `agent-profile.json` + `seam-graph.json` |
 | 100 | 当前任务 Skill | `.agents/skills/<name>/SKILL.md`（按需 `loadSkill`） |
-| 150 | 项目身份 | `src/modules/shared/contract/project-profile.json` |
+| 150 | 项目身份 | `packages/shared/contract/project-profile.json` |
 | 200 | 门禁与禁止项 | AGENTS.md 对应章节的短引用，不整篇复制 |
 
 模型可见的输入必须能从仓库文件重建（对标 dsh：Model-visible means logged）。
@@ -153,9 +153,9 @@ NPC 角色与 Skill 映射（DigitalStaff L0–L8 对基座 Skill；真源在本
 
 ## 10. 权威文件
 
-- 机器契约：`src/modules/shared/contract/agent-profile.json`
+- 机器契约：`packages/shared/contract/agent-profile.json`
 - 提示分段：`.agents/context/`
 - Skill：`docs/skills/ruoyi-all-next/agent-harness.SKILL.md`
 - 孵化：AGENTS.md §16、`scripts/clone-project-base.cjs`
-- 域真源：`src/modules/shared/backend/constants/domain-catalog.json`
+- 域真源：`packages/shared/backend/constants/domain-catalog.json`
 - 参考实现（Harness 侧，勿复制进本仓）：DigitalStaff `docs/design/deepseek_harness_analysis.md`

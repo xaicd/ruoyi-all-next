@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { QueryWrapper } from '../../src/modules/shared/backend/lib/database/base-mapper';
+import { QueryWrapper } from '../../packages/shared/backend/lib/database/base-mapper';
 
 interface MockUser {
   id: string;

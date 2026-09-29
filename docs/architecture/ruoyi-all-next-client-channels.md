@@ -1,6 +1,6 @@
 # 多端能力标准
 
-权威契约：`src/modules/shared/contract/client-channels.json`  
+权威契约：`packages/shared/contract/client-channels.json`  
 公开查询：`GET /api/v1/open/meta/client-channels`、`GET /api/v1/open/meta/project-profile`
 
 本底座的多端能力是**同一套版本化 API + 同一份品牌身份**，不是每个端再复制一套后台。当前已交付管理端 PC；H5、uni-app、Flutter、桌面客户端先落标准和工作区，未宣称功能完成。
@@ -44,7 +44,7 @@
 
 | 渠道 | 包 | 源码根 |
 |---|---|---|
-| admin-web | 仓库内 `src/modules/<domain>/frontend` | 不进 `clients/` |
+| admin-web | 仓库内 `packages/domains/<domain>/frontend` | 不进 `clients/` |
 | expo | `@ruoyi/client-expo` | `clients/expo/src` |
 
 包内固定三层：
@@ -66,9 +66,9 @@
 1. 后端新增域，只在实际用到该域的客户端包里加 `modules/<domain>`，不要一次建 15 个空目录。
 2. 禁止把新域页面堆进 `app/`、`shared/`、uni-app 根 `pages/`（`pages/` 只允许路由壳）。
 3. 域与域禁止互相 import 内部实现，只能依赖 `shared`。
-4. 管理端继续走 `src/modules/<domain>/frontend`，不要在 `clients/` 再复制 Admin。
+4. 管理端继续走 `packages/domains/<domain>/frontend`，不要在 `clients/` 再复制 Admin。
 
-磁盘布局由 `src/modules/shared/contract/client-package-layout.ts` 校验。
+磁盘布局由 `packages/shared/contract/client-package-layout.ts` 校验。
 
 ## 5. 尚未交付
 

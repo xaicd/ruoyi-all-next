@@ -21,6 +21,9 @@ const { ROOT, loadCatalog } = require("./lib/domain-catalog.cjs")
 const BASELINE_REL = "docs/architecture/artifacts/engineering-standards-baseline.json"
 const GOVERNANCE_DOC = "docs/architecture/ruoyi-all-next-domain-governance.md"
 const SRC = "src"
+// 各域与 shared 已迁到 packages/（见 pnpm-workspace.yaml 与 AGENTS.md §3.2）。
+const DOMAINS = "packages/domains"
+const SHARED = "packages/shared"
 
 const asJson = process.argv.includes("--json")
 const auditOnly = process.argv.includes("--audit")
@@ -29,11 +32,11 @@ const writeBaseline = process.argv.includes("--write-baseline")
 // Logger implementations and code generators are where console output legitimately lives;
 // codegen-templates emit code as strings, so their console.* is generated text, not repo code.
 const CONSOLE_EXEMPT = new Set([
-  "src/modules/shared/backend/lib/observability.ts",
-  "src/modules/shared/backend/lib/exception-analyzer.ts",
+  "packages/shared/backend/lib/observability.ts",
+  "packages/shared/backend/lib/exception-analyzer.ts",
   // 合并形态插件的宿主侧日志出口: 插件在**宿主进程内**运行, 没有 stderr 管道可接
   // （独立形态由 worker-manager 收 stderr）, 这里就是它的日志边界。
-  "src/modules/shared/backend/plugins/merged-runtime.ts",
+  "packages/shared/backend/plugins/merged-runtime.ts",
 ])
 const CONSOLE_EXEMPT_DIRS = ["codegen-templates"]
 const CONSOLE_PATTERN = /console\.(log|warn|error|info|debug)\s*\(/
@@ -84,7 +87,8 @@ const RULES = [
     mode: "enforce",
     description: "src/ only allows app/ and modules/ at the top level",
     run() {
-      const allowed = new Set(["app", "modules"])
+      // src/ 现在只应有 app —— 各域与 shared 已迁到 packages/（见 pnpm-workspace.yaml 与 AGENTS.md §3.2）。
+      const allowed = new Set(["app"])
       return fs
         .readdirSync(abs(SRC), { withFileTypes: true })
         .filter((entry) => entry.isDirectory() && !allowed.has(entry.name))
@@ -95,15 +99,15 @@ const RULES = [
     id: "no-flat-domain-services",
     section: "AGENTS.md §3.2 / §14.3",
     mode: "enforce",
-    description: "domain code must live in backend/services, never src/modules/<domain>/services",
+    description: "domain code must live in backend/services, never packages/domains/<domain>/services",
     run() {
-      const modulesRoot = abs(`${SRC}/modules`)
+      const modulesRoot = abs(`${DOMAINS}`)
       return fs
         .readdirSync(modulesRoot, { withFileTypes: true })
         .filter((entry) => entry.isDirectory())
         .filter((entry) => fs.existsSync(path.join(modulesRoot, entry.name, "services")))
         .map((entry) => ({
-          file: `${SRC}/modules/${entry.name}/services`,
+          file: `${DOMAINS}/${entry.name}/services`,
           detail: "flat services/ directory; move to backend/services/",
         }))
     },
@@ -114,7 +118,7 @@ const RULES = [
     mode: "ratchet",
     description: "backend business code must not use console.* (logger impls and codegen templates exempt)",
     run() {
-      const files = walk(`${SRC}/modules`, (name) => /\.tsx?$/.test(name)).filter(
+      const files = walk(`${DOMAINS}`, (name) => /\.tsx?$/.test(name)).filter(
         (file) =>
           toRel(file).includes("/backend/") &&
           !isTestFile(toRel(file)) &&
@@ -141,7 +145,7 @@ const RULES = [
     description: "object-singleton repositories and services must export both PascalCase and camelCase",
     run() {
       const files = walk(
-        `${SRC}/modules`,
+        `${DOMAINS}`,
         (name) => /\.(repository|service)\.ts$/.test(name),
       ).filter((file) => !isTestFile(toRel(file)))
 
@@ -183,7 +187,7 @@ const RULES = [
           .domains.filter((domain) => domain.kind === "business")
           .map((domain) => domain.name),
       )
-      const files = walk(`${SRC}/modules`, (name) => /\.repository\.ts$/.test(name)).filter(
+      const files = walk(`${DOMAINS}`, (name) => /\.repository\.ts$/.test(name)).filter(
         (file) => !isTestFile(toRel(file)) && !TENANT_SCOPE_EXEMPT_DIRS.some((dir) => toRel(file).includes(dir)),
       )
       const violations = []
@@ -239,10 +243,10 @@ const RULES = [
     run() {
       // 声明了 facade 方法却没有派发映射 = 调用时抛 "Method X not found in Y service"。
       // 只声明不兑现的 facade 会让"域可拆分"变成纸面结论, 所以必须机器可见。
-      const catalogRel = "src/modules/shared/backend/constants/rpc-actions.json"
+      const catalogRel = "packages/shared/backend/constants/rpc-actions.json"
       const rpcActions = JSON.parse(fs.readFileSync(abs(catalogRel), "utf8"))
       const violations = []
-      const modulesRoot = abs(`${SRC}/modules`)
+      const modulesRoot = abs(`${DOMAINS}`)
 
       for (const domain of fs.readdirSync(modulesRoot, { withFileTypes: true })) {
         if (!domain.isDirectory()) continue
@@ -278,10 +282,10 @@ const RULES = [
             if (!action.service) continue
             if (declaration[1] && !declaration[1].includes(`"${action.method}"`)) continue
             const moduleRel = action.module
-              ? `${SRC}/modules/${domain.name}/backend/services/${action.module}.ts`
-              : `${SRC}/modules/${domain.name}/backend/services/index.ts`
+              ? `${DOMAINS}/${domain.name}/backend/services/${action.module}.ts`
+              : `${DOMAINS}/${domain.name}/backend/services/index.ts`
             const moduleFile = abs(moduleRel)
-            const orIndex = abs(`${SRC}/modules/${domain.name}/backend/services/index.ts`)
+            const orIndex = abs(`${DOMAINS}/${domain.name}/backend/services/index.ts`)
             const candidate = fs.existsSync(moduleFile) ? moduleFile : orIndex
             if (!fs.existsSync(candidate)) {
               violations.push({ file: toRel(file), detail: `"${domain.name}.${action.method}" 的 module 文件不存在: ${moduleRel}` })

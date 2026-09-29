@@ -60,8 +60,8 @@ description: 管理端与 C 端 UI/UX 设计。融合 Vercel、ui-ux-pro-max、S
 
 ## 6. Admin 运营后台 vs CPC 客户/政企 PC 双轨前端规范 (强制)
 1. **目录结构物理级解耦**：
-   - `src/modules/<domain>/frontend/pages/` 专用于 **Admin 运营后台**（带侧边栏、系统级权限与高级配置）；
-   - `src/modules/<domain>/frontend/cpc-pages/` 专用于 **Client PC（面向客户、政企内网挂载自服务大盘、C 端员工 AI 工作台）**；
+   - `packages/domains/<domain>/frontend/pages/` 专用于 **Admin 运营后台**（带侧边栏、系统级权限与高级配置）；
+   - `packages/domains/<domain>/frontend/cpc-pages/` 专用于 **Client PC（面向客户、政企内网挂载自服务大盘、C 端员工 AI 工作台）**；
    - 严禁将面向政企挂载或 C 端用户的页面混入 `frontend/pages/` 中。
 2. **App Router 路由组对齐**：
    - 运营后台：`src/app/(admin-pages)/admin/<domain>/<feature>/page.tsx`

@@ -10,7 +10,7 @@
 
 100+ 服务迁移的真正难点不是写代码，是**认知与对账**：哪个服务对应什么业务语义、边界怎么切、和目标差多少、怎么分批。本体域（DigitalStaff 平台 `ontology` 的种子域，如 `ecommerce` 17 实体/24 action）提供一个**稳定的语义坐标系**：每个老服务往本体域上一贴，就知道它是什么、缺什么。
 
-- **映射真源**：`src/modules/shared/contract/ontology-mapping.schema.json`（契约 schema）+ `src/modules/shared/contract/mappings/<domain>.mapping.json`（每个本体域一个实例）。
+- **映射真源**：`packages/shared/contract/ontology-mapping.schema.json`（契约 schema）+ `packages/shared/contract/mappings/<domain>.mapping.json`（每个本体域一个实例）。
 - **首个样板**：`mappings/ecommerce.mapping.json`（ecommerce ↔ ruoyi mall/pay，已结构校验通过）。
 
 ---
@@ -39,7 +39,7 @@
 2. **如实映射**（不重写）：把老服务的**表→`entityMap`、接口→`actionMap`、Kafka topic→`eventMap`、中间件→§2 锚点**，逐条抄进契约。保真度标 `fidelity`：`as-is`（原样）/`adapted`（边界/形状不同）/`gap`（缺口）。
 3. **登记契约**：写入 `mappings/<domain>.mapping.json`，跑结构校验（见 §5）。
 4. **标价值** `valueTag`：`keep`（照搬跑着，**默认**）/ `optimize`（有经济价值才优化）/ `problem`（发现的问题，**仅记录不强制动**）。`migrationStatus` 记进度。
-5. **只对 `optimize` 动手**：`keep` 的照原样迁（落 `src/modules/<域>` 或保持老服务被绞杀者代理）；只有标了 `optimize` 的才投入改造，过门禁（tsc 零增量 / vitest / 真实数据库）。
+5. **只对 `optimize` 动手**：`keep` 的照原样迁（落 `packages/domains/<域>` 或保持老服务被绞杀者代理）；只有标了 `optimize` 的才投入改造，过门禁（tsc 零增量 / vitest / 真实数据库）。
 
 ---
 

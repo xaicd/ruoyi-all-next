@@ -23,7 +23,7 @@ graph TD
 
 | 序号 | 任务项 | 具体实施细节 | 交付产物 |
 | :--- | :--- | :--- | :--- |
-| **1.1** | **核心与业务模块分层** | 确立 `system` + `infra` + `shared` 为不可裁剪的基础内核；将 `crm/erp/wms/mes/iot/mall/pay` 等 15 个领域模块抽取为独立按需扩展包。 | `src/modules/` 核心目录收敛，体积降至 <20MB |
+| **1.1** | **核心与业务模块分层** | 确立 `system` + `infra` + `shared` 为不可裁剪的基础内核；将 `crm/erp/wms/mes/iot/mall/pay` 等 15 个领域模块抽取为独立按需扩展包。 | `packages/domains/` 核心目录收敛，体积降至 <20MB |
 | **1.2** | **构建配置与脚本清理** | 剔除冗余的历史全量扫描脚本（如 `scan-ruoyi-full-capabilities.ts` 等 10+ 脚本），仅保留核心 `dev`, `build`, `start`, `db:init`。 | 极简 `package.json` |
 | **1.3** | **Next.js 16 独立运行配置** | 优化 `next.config.mjs`，支持独立 standalone 模式与全栈 API 同构路由，单端口 (3200) 运行。 | `next.config.mjs` |
 
@@ -44,7 +44,7 @@ graph TD
 | 序号 | 任务项 | 具体实施细节 | 交付产物 |
 | :--- | :--- | :--- | :--- |
 | **3.1** | **注册 ENTERPRISE_RUOYI 脚手架** | 在 `backend/modules/agent/services/native-engine/scaffolds/ScaffoldRegistry.js` 中注册 `ruoyi-all-next` 模板基线。 | `ScaffoldRegistry.js` 扩展 |
-| **3.2** | **省 Token 提示词规约注入** | 配置 `scaffoldPrompt`，告知大模型：“系统、权限与基础框架已预热就绪，LLM 仅需在 `src/modules/{domain}/` 生成专属业务 Schema、API 与前端页面”。 | `SystemPromptAssembler.js` 适配 |
+| **3.2** | **省 Token 提示词规约注入** | 配置 `scaffoldPrompt`，告知大模型：“系统、权限与基础框架已预热就绪，LLM 仅需在 `packages/domains/{domain}/` 生成专属业务 Schema、API 与前端页面”。 | `SystemPromptAssembler.js` 适配 |
 | **3.3** | **增量差异补丁 (Diff Patch) 闭环** | 支持用户后续追问“在用户表加一个工号字段并显示在列表”，AI 仅输出局部 SEARCH-REPLACE diff。 | 增量修改无感知应用 |
 
 ---

@@ -1,7 +1,7 @@
 import fs from "node:fs"
 import path from "node:path"
 
-import { DEFAULT_NEXT_REACT_TEMPLATE_PRESETS } from "../src/modules/infra/backend/services/template-engine-presets"
+import { DEFAULT_NEXT_REACT_TEMPLATE_PRESETS } from "../packages/domains/infra/backend/services/template-engine-presets"
 
 type Vars = Record<string, string | number | boolean | null | undefined>
 

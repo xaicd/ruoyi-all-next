@@ -14,4 +14,4 @@
 
 ## 机器可读入口
 
-先读 `src/modules/shared/contract/agent-profile.json`，再读生成的 `seam-graph.json` 与 `domain-catalog.json`。域名与可拆分边界以 catalog 为准，不要在对话里发明新域。
+先读 `packages/shared/contract/agent-profile.json`，再读生成的 `seam-graph.json` 与 `domain-catalog.json`。域名与可拆分边界以 catalog 为准，不要在对话里发明新域。

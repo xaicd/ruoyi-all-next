@@ -6,7 +6,7 @@
 
 | 项 | 位置 | 何时生效 |
 |---|---|---|
-| 平台名称、简称、登录文案、版权 | `src/modules/shared/contract/project-profile.json` | 刷新页面 |
+| 平台名称、简称、登录文案、版权 | `packages/shared/contract/project-profile.json` | 刷新页面 |
 | Logo / Favicon | `public/branding/logo.svg`、`public/branding/favicon.svg` | 刷新页面 |
 | 默认租户名称、编码、联系人 | 同上 JSON 的 `tenants` | `npm run db:seed` |
 | 租户套餐显示名 | 同上 JSON 的 `packages`（id 保持 `111` / `113`） | `npm run db:seed` |

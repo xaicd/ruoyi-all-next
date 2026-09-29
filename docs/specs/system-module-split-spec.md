@@ -29,9 +29,9 @@ spec.json 定义:
   featureListPascal = "Users"
 
 生成产物:
-  src/modules/system/backend/services/user.service.ts     ← export class SystemUserService
-  src/modules/system/backend/validators/user.validators.ts ← export const userListQuerySchema
-  src/modules/system/frontend/pages/users.page.tsx        ← export default function SystemUsersPage()
+  packages/domains/system/backend/services/user.service.ts     ← export class SystemUserService
+  packages/domains/system/backend/validators/user.validators.ts ← export const userListQuerySchema
+  packages/domains/system/frontend/pages/users.page.tsx        ← export default function SystemUsersPage()
   src/app/(admin-pages)/admin/system/users/page.tsx       ← export { default } from "@/modules/system/frontend/pages/users.page"
   src/app/api/v1/admin/system/users/route.ts              ← import { SystemUserService } from "@/modules/system/backend/services"
 ```
@@ -56,7 +56,7 @@ spec.json 定义:
 ## 最终目录结构 (system 模块)
 
 ```
-src/modules/system/
+packages/domains/system/
 ├── backend/
 │   ├── services/
 │   │   ├── index.ts                    ← 24 个 Service 类统一 re-export

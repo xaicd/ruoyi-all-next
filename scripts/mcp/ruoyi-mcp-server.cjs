@@ -23,7 +23,7 @@ const SERVER_VERSION = "1.0.0"
 const SUPPORTED_PROTOCOL_VERSIONS = ["2025-06-18", "2024-11-05"]
 const GATE_TIMEOUT_MS = 120000
 
-const CONTRACT_DIR = "src/modules/shared/contract"
+const CONTRACT_DIR = "packages/shared/contract"
 const GATES = Object.freeze({
   domain: "domain:check",
   harness: "harness:check",
@@ -130,7 +130,7 @@ const TOOLS = [
       additionalProperties: false,
     },
     run(args) {
-      const actions = readJson("src/modules/shared/backend/constants/rpc-actions.json").domains || {}
+      const actions = readJson("packages/shared/backend/constants/rpc-actions.json").domains || {}
       const method = String(args.method || "").trim().toLowerCase()
       const limit = Number.isInteger(args.limit) && args.limit > 0 ? args.limit : 25
 

@@ -13,7 +13,7 @@ function fail(message) {
 }
 
 const domains = listDomains()
-const hatchManifestPath = path.join(ROOT, "src", "modules", "shared", "contract", "hatch-manifest.json")
+const hatchManifestPath = path.join(ROOT, "packages", "shared", "contract", "hatch-manifest.json")
 const hatch = fs.existsSync(hatchManifestPath) ? JSON.parse(fs.readFileSync(hatchManifestPath, "utf8")) : null
 if (!hatch?.pruned && domains.length < 16) fail(`expected at least 16 packable domains, found ${domains.length}`)
 if (hatch?.pruned && Array.isArray(hatch.domains)) {
@@ -32,7 +32,7 @@ for (const domain of domains) {
   ports.add(domain.defaultPort)
   envs.add(domain.upstreamEnv)
 
-  const moduleDir = path.join("src", "modules", domain.name)
+  const moduleDir = path.join("packages", "domains", domain.name)
   if (!exists(moduleDir)) fail(`missing module directory ${moduleDir}`)
 
   for (const prefix of domain.publicPrefixes) {

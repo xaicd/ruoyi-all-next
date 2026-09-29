@@ -1,7 +1,7 @@
 /**
  * 插件生命周期端到端：真实插件目录 + 真实 PG + 真实 worker 进程。
  *
- * 为什么单列这个文件：插件系统的单测（`src/modules/shared/backend/plugins/__tests__/`）
+ * 为什么单列这个文件：插件系统的单测（`packages/shared/backend/plugins/__tests__/`）
  * 只覆盖到协议与纯函数层面，"装一个插件进去它到底会不会变成 ready" 从来没被验证过 ——
  * 服务级测试用的是内存/桩，而 PluginRepository 直接走 ruoyiPrisma，没有内存回退。
  *

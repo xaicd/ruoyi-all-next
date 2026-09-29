@@ -100,8 +100,8 @@ export * from "./role.validators"
 
 ## 共享常量
 
-- 权限常量: `src/modules/shared/backend/constants/permissions.ts`
-- 菜单配置: `src/modules/shared/backend/constants/admin-menu.ts`
+- 权限常量: `packages/shared/backend/constants/permissions.ts`
+- 菜单配置: `packages/shared/backend/constants/admin-menu.ts`
 
 新增 feature 时必须同步更新这两个文件。
 

@@ -212,7 +212,7 @@ METHOD\nPATH\nQUERY\nTIMESTAMP\nNONCE\nCONTENT-SHA256
 新增或调整后的目标位置：
 
 ```text
-src/modules/shared/backend/
+packages/shared/backend/
 ├── auth/
 │   ├── jwt.ts                     # JWT 签发、严格验签、配置校验
 │   ├── guards.ts                  # requireAdminAuth / requireAppAuth
@@ -315,7 +315,7 @@ prisma/
 npx tsc --noEmit
 npx prisma validate
 npx prisma generate
-npx vitest run src/modules/shared/backend
+npx vitest run packages/shared/backend
 npm run build
 ```
 

@@ -57,4 +57,4 @@
 - 支付伪签名、过期签名和跨副本并发重放均不能改变订单状态。
 
 ## 关联文件
-`src/modules/shared/backend/auth/guards.ts`、`src/modules/shared/backend/lib/database/datasource-manager.ts`、`src/modules/shared/backend/lib/cache-store.ts`、`src/modules/shared/backend/lib/event-bus.ts`、`src/modules/shared/backend/lib/protection-idempotent.ts`、`src/modules/shared/backend/lib/protection-lock.ts`、`src/modules/shared/backend/lib/rate-limiter.ts`、`deploy/docker-compose.prod.yml`、`scripts/health-check.sh`。
+`packages/shared/backend/auth/guards.ts`、`packages/shared/backend/lib/database/datasource-manager.ts`、`packages/shared/backend/lib/cache-store.ts`、`packages/shared/backend/lib/event-bus.ts`、`packages/shared/backend/lib/protection-idempotent.ts`、`packages/shared/backend/lib/protection-lock.ts`、`packages/shared/backend/lib/rate-limiter.ts`、`deploy/docker-compose.prod.yml`、`scripts/health-check.sh`。

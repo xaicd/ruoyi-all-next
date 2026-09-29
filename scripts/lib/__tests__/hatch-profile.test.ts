@@ -48,8 +48,8 @@ describe("hatch-profile", () => {
     expect(plan.includeClients).toBe(false)
     expect(plan.domains).toEqual(["system", "infra", ...PLATFORM_COMPANIONS])
     expect(plan.excludedDomains).toEqual(["mall", "crm", "pay"])
-    expect(shouldSkipRelPath("src/modules/mall", plan)).toBe(true)
-    expect(shouldSkipRelPath("src/modules/system", plan)).toBe(false)
+    expect(shouldSkipRelPath("packages/domains/mall", plan)).toBe(true)
+    expect(shouldSkipRelPath("packages/domains/system", plan)).toBe(false)
     // 原断言 clients/h5/... 应被跳过 —— h5/uniapp/flutter/desktop-pc 已删除，
     // 本仓只保留 clients/expo，故不再有客户端渠道级的跳过路径。
   })

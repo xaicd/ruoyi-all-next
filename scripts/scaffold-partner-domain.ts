@@ -1,7 +1,7 @@
 import fs from "node:fs"
 import path from "node:path"
-import { CodegenEngineService } from "../src/modules/infra/backend/services/codegen-engine.service"
-import type { CodegenConfig } from "../src/modules/infra/backend/services/codegen-templates"
+import { CodegenEngineService } from "../packages/domains/infra/backend/services/codegen-engine.service"
+import type { CodegenConfig } from "../packages/domains/infra/backend/services/codegen-templates"
 
 const PARTNER_TABLES: CodegenConfig[] = [
   // 1. 渠道代理商主档案表

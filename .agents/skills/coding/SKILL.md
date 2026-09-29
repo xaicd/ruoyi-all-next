@@ -18,7 +18,7 @@ description: Modules-First 分层编码、CRUD 生成规范、事务与状态机
 
 ## 3. 标准 Modules-First 目录规范
 ```
-src/modules/{domain}/
+packages/domains/{domain}/
 ├── contract/
 │   ├── {entity}.actions.ts            ← 契约 Schema (HTTP 与 Broker 共享)
 │   └── {domain}.facade.ts            ← 领域门面 (对外暴露的唯一同步入口)

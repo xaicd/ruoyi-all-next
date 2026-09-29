@@ -1,7 +1,7 @@
 /**
  * 解析路由文件的「真实来源」。
  *
- * 背景：路由逻辑可以放在域内（`src/modules/<domain>/routes/**`），
+ * 背景：路由逻辑可以放在域内（`packages/domains/<domain>/routes/**`），
  * `src/app/.../route.ts` 只留一行 `export * from "@/modules/..."` 作为 Next.js 的挂载点。
  * 此时只看挂载点文件无法判定保护方式/解析方式，会把本该是 withAdminRoute 的操作
  * 降级成 proxy-authenticated —— 保护本身没变，但**可审计性变弱**。
@@ -14,6 +14,28 @@ const path = require("path")
 
 const ROOT = path.resolve(__dirname, "..", "..")
 
+/**
+ * 别名解析必须与 tsconfig 的 paths 保持一致。
+ *
+ * 各域与 shared 已迁到 packages/ 下（`@/modules/shared/* -> packages/shared/*`、
+ * `@/modules/* -> packages/domains/*`），若这里仍按 `@/ -> src/` 解析，
+ * 就会跟不到真实来源 —— 实测表现为"路由内容检查全部失败"。
+ */
+const ALIASES = [
+  ["@/modules/shared", path.join(ROOT, "packages", "shared")],
+  ["@/modules/", path.join(ROOT, "packages", "domains")],
+  ["@/", path.join(ROOT, "src")],
+]
+
+function resolveAlias(specifier, fromFile) {
+  for (const [prefix, target] of ALIASES) {
+    if (specifier.startsWith(prefix)) {
+      return path.join(target, specifier.slice(prefix.length))
+    }
+  }
+  return path.resolve(path.dirname(fromFile), specifier)
+}
+
 function resolveRouteSource(file, depth = 0) {
   const source = fs.readFileSync(file, "utf8")
   if (depth >= 5) return source // 防御成环
@@ -22,9 +44,8 @@ function resolveRouteSource(file, depth = 0) {
   if (!match) return source
 
   const specifier = match[1]
-  const base = specifier.startsWith("@/")
-    ? path.join(ROOT, "src", specifier.slice(2))
-    : path.resolve(path.dirname(file), specifier)
+  const base = resolveAlias(specifier, file)
+  if (!base) return source
 
   for (const candidate of [`${base}.ts`, `${base}.tsx`, path.join(base, "index.ts")]) {
     if (fs.existsSync(candidate)) return resolveRouteSource(candidate, depth + 1)

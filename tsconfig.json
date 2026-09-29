@@ -27,11 +27,14 @@
       "@/*": [
         "src/*"
       ],
-      "@/shared/*": [
-        "src/modules/shared/*"
+      "@/modules/shared": [
+        "./packages/shared"
       ],
-      "@prisma/*": [
-        "prisma/*"
+      "@/modules/shared/*": [
+        "./packages/shared/*"
+      ],
+      "@/modules/*": [
+        "./packages/domains/*"
       ]
     }
   },

@@ -8,7 +8,7 @@
 
 原因：
 
-1. 当前真源是 Next.js BFF + `src/modules/<domain>`，再叠加一套 Nest 模块/DI，会变成双框架。
+1. 当前真源是 Next.js BFF + `packages/domains/<domain>`，再叠加一套 Nest 模块/DI，会变成双框架。
 2. NestJS NATS transporter **不使用 NATS 原生 Request-Reply**，而是自研 publish + inbox。Go 服务无法直接对接，除非复刻 Nest 信封。
 3. 项目演进目标是 TS adapter 可替换为 Go。跨语言总线必须是 **NATS subject + 自有 header**，不能绑在 `@nestjs/microservices` 上。
 4. Nest 真正有价值的是约束：`MessagePattern`（同步命令）、`EventPattern`（异步事件）、Queue Group、Header、通配符。这些已经落到 `serviceBus` / `eventBus` / `messaging-protocol.ts`。
@@ -42,12 +42,12 @@
 
 ## 4. 代码入口
 
-1. 协议：`src/modules/shared/backend/lib/messaging-protocol.ts`
-2. 命令：`src/modules/shared/backend/lib/service-bus.ts`
-3. 事件：`src/modules/shared/backend/lib/event-bus.ts`
-4. 目录：`src/modules/shared/backend/constants/domain-catalog.json` 的 `messaging` 段
-5. 每域声明：`src/modules/<domain>/contract/route.manifest.yaml` 的 `messaging` 段
+1. 协议：`packages/shared/backend/lib/messaging-protocol.ts`
+2. 命令：`packages/shared/backend/lib/service-bus.ts`
+3. 事件：`packages/shared/backend/lib/event-bus.ts`
+4. 目录：`packages/shared/backend/constants/domain-catalog.json` 的 `messaging` 段
+5. 每域声明：`packages/domains/<domain>/contract/route.manifest.yaml` 的 `messaging` 段
 6. Broker 与治理清单：`docs/architecture/ruoyi-all-next-microservice-governance.md`
-7. 自研 NATS 语义：`src/modules/shared/backend/lib/nats-fabric.ts`、`nats-stream.ts`
-8. 可靠事件：`src/modules/shared/backend/lib/transactional-outbox.ts`、`outbox-store.ts`、`outbox-kysely-store.ts`
+7. 自研 NATS 语义：`packages/shared/backend/lib/nats-fabric.ts`、`nats-stream.ts`
+8. 可靠事件：`packages/shared/backend/lib/transactional-outbox.ts`、`outbox-store.ts`、`outbox-kysely-store.ts`
 9. 模块分层与 SDK/RPC 双模：`docs/architecture/ruoyi-all-next-module-rpc.md`

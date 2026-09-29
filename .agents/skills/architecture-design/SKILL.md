@@ -16,7 +16,7 @@ description: 架构演进、单体与微服务拆分、前后端分离、网关�
 - `AGENTS.md` §6.1 (microservice-evolution 治理)
 - `docs/architecture/ruoyi-all-next-architecture.md`
 - `docs/architecture/ruoyi-all-next-microservice-governance.md`
-- `src/modules/shared/backend/constants/domain-catalog.json`
+- `packages/shared/backend/constants/domain-catalog.json`
 
 ## 3. 三阶段演化路径 (Evolution Stages)
 

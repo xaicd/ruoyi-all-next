@@ -9,7 +9,7 @@
 |---|---|---|---|
 | **L1 单元** | 纯逻辑，无网络、无数据库 | `src/**/__tests__/*.test.ts`（69 个）、`test/unit/`（2 个） | vitest |
 | **L2 集成** | 真实数据库读写 | `test/integration/`、以及服务层的 `*-services.test.ts` | vitest |
-| **L3 契约** | RPC / Facade / 路由契约 | `src/modules/shared/backend/lib/__tests__/rpc-protocol.test.ts` 等 | vitest |
+| **L3 契约** | RPC / Facade / 路由契约 | `packages/shared/backend/lib/__tests__/rpc-protocol.test.ts` 等 | vitest |
 | **L4 E2E** | 浏览器端到端与 Agent UI 探针 | `test/e2e/`、`test/agent/` | Playwright |
 
 ## 2. 命令
@@ -35,7 +35,7 @@ npm run test:all      # test:matrix 串 playwright
   afterEach(() => restoreNetwork())
   ```
 
-- **L2 真实库**：`src/modules/infra/testing/TestingKit`
+- **L2 真实库**：`packages/domains/infra/testing/TestingKit`
   - `createTestDatabase()` —— 真嵌入式 SQLite（WAL + 外键），带种子数据，返回 `{ db, dbPath, cleanup }`。
     **这是真实数据库，不是伪造 mock**；不要另写内存假实现。
   - `createMockUserContext()` —— 标准用户/租户上下文
@@ -62,7 +62,7 @@ npm run test:all      # test:matrix 串 playwright
    npx tsc -p tsconfig.vitest.json --noEmit   # 诊断用；当前非全绿，未接入门禁
    ```
 
-   另有一批更大的欠账在构建触及范围之外：`src/modules/**/backend/services/*.rpc.ts`
+   另有一批更大的欠账在构建触及范围之外：`packages/domains/**/backend/services/*.rpc.ts`
    存在约 200 个类型错误（`Property 'registerHandler' does not exist`、`Cannot find name 'bus'`）。
    这些文件不被任何路由引用，因此 `next build` 不会检查到它们。全量口径：
    `npx tsc -p tsconfig.vitest.json --noEmit` 若把 `src/**/*.ts` 全量纳入为 293 个错误。

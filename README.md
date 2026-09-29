@@ -90,7 +90,7 @@ npm run dev
 
 本仓库就是业务系统的默认底座：每个新项目复制一次代码，只改展示身份，不要再搭一套后台。
 
-1. 改 `src/modules/shared/contract/project-profile.json`：平台名称、简称、登录文案、默认租户名、套餐名、管理员昵称。
+1. 改 `packages/shared/contract/project-profile.json`：平台名称、简称、登录文案、默认租户名、套餐名、管理员昵称。
 2. 替换 `public/branding/logo.svg` 与 `public/branding/favicon.svg`。
 3. 在 `.env.local` 填写本项目自己的 `ADMIN_BOOTSTRAP_USERNAME` / `ADMIN_BOOTSTRAP_PASSWORD` / `ADMIN_BOOTSTRAP_SALT`。
 4. 执行一次 `npm run db:migrate` 与 `npm run db:seed`。

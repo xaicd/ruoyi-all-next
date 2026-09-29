@@ -6,9 +6,9 @@
  *
  * 与仓库既有底座的分工：
  * - L1 单元：本文件负责断网（保证 hermetic）
- * - L2 集成：`src/modules/infra/testing/TestingKit` 的 createTestDatabase()
+ * - L2 集成：`packages/domains/infra/testing/TestingKit` 的 createTestDatabase()
  *           提供真实嵌入式 SQLite + 种子数据（真实数据库，不是伪造 mock）
- * - L3 契约：见 src/modules/shared/backend/lib/__tests__/rpc-protocol.test.ts
+ * - L3 契约：见 packages/shared/backend/lib/__tests__/rpc-protocol.test.ts
  * - L4 E2E：playwright.config.ts + test/e2e、test/agent
  *
  * 用法：

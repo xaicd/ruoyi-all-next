@@ -1,3 +1,3 @@
-// 路由逻辑在域内: src/modules/ai/routes/admin/ai-knowledge/route.ts
+// 路由逻辑在域内: packages/domains/ai/routes/admin/ai-knowledge/route.ts
 // 本文件只是 Next.js 的挂载点（app/ 必须存在），保持一行转发，不要在此写业务。
 export * from "@/modules/ai/routes/admin/ai-knowledge/route"

@@ -11,7 +11,7 @@ const ROOT = path.resolve(__dirname, "../../..")
 
 describe("agent-profile workspace bundle", () => {
   const profile = JSON.parse(
-    readFileSync(path.join(ROOT, "src/modules/shared/contract/agent-profile.json"), "utf8"),
+    readFileSync(path.join(ROOT, "packages/shared/contract/agent-profile.json"), "utf8"),
   )
 
   it("declares workspace-bundle and refuses to host the agent loop", () => {

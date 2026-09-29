@@ -1,0 +1,97 @@
+{
+  "$schema": "ruoyi-module-manifest/v1",
+  "domain": "report",
+  "id": "ruoyi.report",
+  "apiVersion": 1,
+  "displayName": "报表中心",
+  "kind": "business",
+  "stage": "A",
+  "owner": "report",
+  "contractVersion": "v1",
+  "implementation": "local-ts",
+  "minimumHostVersion": "1.0.0",
+  "capabilities": [
+    "api.routes.register",
+    "facade.invoke",
+    "rpc.serve",
+    "cmd.dispatch",
+    "pack.independent"
+  ],
+  "entrypoints": {
+    "facade": [
+      "packages/domains/report/contract/report.facade.ts"
+    ],
+    "proto": "packages/domains/report/contract/report.proto",
+    "actions": "packages/domains/report/contract/actions.ts"
+  },
+  "apiRoutes": {
+    "publicPrefix": [
+      "/api/v1/admin/report"
+    ],
+    "adminPrefix": "/api/v1/admin/report"
+  },
+  "auth": {
+    "audience": "admin",
+    "tenantPolicy": "required"
+  },
+  "messaging": {
+    "queueGroup": "ruoyi.report",
+    "commandSubject": "ruoyi.cmd.report.>",
+    "eventSubject": "ruoyi.evt.report.>"
+  },
+  "invoke": {
+    "colocated": "sdk",
+    "remote": "rpc",
+    "protocol": "nats-rr",
+    "serialization": "json"
+  },
+  "upstream": {
+    "env": "RUOYI_DOMAIN_REPORT_UPSTREAM",
+    "protocol": "http",
+    "defaultPort": 3215
+  },
+  "resilience": {
+    "timeoutMs": 15000,
+    "retry": {
+      "maxAttempts": 1,
+      "safeMethodsOnly": true
+    },
+    "idempotencyRequired": false
+  },
+  "facadeMethods": [
+    "ping",
+    "listBoards",
+    "exportBoard"
+  ],
+  "rpc": [
+    {
+      "service": "ReportService",
+      "method": "Ping"
+    },
+    {
+      "service": "ReportService",
+      "method": "ListBoards"
+    },
+    {
+      "service": "ReportService",
+      "method": "ExportBoard"
+    }
+  ],
+  "actions": [
+    "report.ping",
+    "report.listBoards",
+    "report.exportBoard"
+  ],
+  "permissions": [
+    "report:board:view",
+    "report:custom-sql:execute"
+  ],
+  "dependsOn": [
+    "shared"
+  ],
+  "pack": {
+    "enabled": true,
+    "kind": "api-only",
+    "independentDatabase": false
+  }
+}

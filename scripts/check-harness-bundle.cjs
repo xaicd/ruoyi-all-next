@@ -8,7 +8,7 @@ function fail(message) {
   throw new Error(`[harness-bundle] ${message}`)
 }
 
-const AGENT_PROFILE_REL = "src/modules/shared/contract/agent-profile.json"
+const AGENT_PROFILE_REL = "packages/shared/contract/agent-profile.json"
 const profilePath = path.join(ROOT, ...AGENT_PROFILE_REL.split("/"))
 if (!fs.existsSync(profilePath)) fail(`missing ${AGENT_PROFILE_REL}`)
 
@@ -24,7 +24,7 @@ const requiredSections = [
   { name: "soul", path: ".agents/context/SOUL.md" },
   { name: "seams", path: AGENT_PROFILE_REL },
   { name: "seam-graph", path: SEAM_GRAPH_REL },
-  { name: "catalog", path: "src/modules/shared/backend/constants/domain-catalog.json" },
+  { name: "catalog", path: "packages/shared/backend/constants/domain-catalog.json" },
 ]
 for (const section of requiredSections) {
   const declared = (profile.promptAssembly?.sections || []).find((item) => item.name === section.name)

@@ -34,7 +34,7 @@ flowchart TD
 ---
 
 ### 第 1 步：RBAC 数据库菜单与权限持久化 (Database RBAC)
-1. **代码层常量声明**：在 `src/modules/shared/backend/constants/permissions.ts` 中声明 4 级增删改查权限码：
+1. **代码层常量声明**：在 `packages/shared/backend/constants/permissions.ts` 中声明 4 级增删改查权限码：
    - `{DOMAIN}_{ENTITY}_VIEW`: `"{domain}:{entity}:view"`
    - `{DOMAIN}_{ENTITY}_CREATE`: `"{domain}:{entity}:create"`
    - `{DOMAIN}_{ENTITY}_UPDATE`: `"{domain}:{entity}:update"`
@@ -88,7 +88,7 @@ flowchart TD
 
 ### 第 6 步：前端开箱即用 UI 与弹窗交互 (Frontend UI Standard)
 严格遵循 `channels.page.tsx` UI Design System：
-1. **API Client 封装**：`src/modules/{domain}/frontend/api/{entity}.api.ts` 使用 `request.get(url, { params })` / `request.post(url, data)`；
+1. **API Client 封装**：`packages/domains/{domain}/frontend/api/{entity}.api.ts` 使用 `request.get(url, { params })` / `request.post(url, data)`；
 2. **顶部工具栏与按钮顺序**：标题 `text-xl font-bold tracking-tight text-slate-900`，`[刷新]`(白色描边 `bg-white border-slate-300`) 在左，`[+ 新增]`(Blue `bg-blue-600`) 在右；
 3. **搜索栏 Container**：`p-3.5 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3`，`bg-slate-900` 查询 + `bg-slate-100` 重置，右侧统计数据；
 4. **严格单行排版（whitespace-nowrap）**：`bg-slate-50/80` 表头，`px-5 py-3 text-xs` 单元格；
@@ -111,4 +111,4 @@ flowchart TD
    npm run domain:manifests
    npm run check
    ```
-3. **自动化单元测试**：编写并运行 `src/modules/{domain}/backend/services/__tests__/{entity}.service.test.ts` 确保 100% 绿灯。
+3. **自动化单元测试**：编写并运行 `packages/domains/{domain}/backend/services/__tests__/{entity}.service.test.ts` 确保 100% 绿灯。

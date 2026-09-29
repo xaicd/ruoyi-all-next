@@ -70,7 +70,7 @@ function expandModuleClosure(seedModules) {
 
   while (queue.length > 0) {
     const current = queue.pop()
-    const dir = path.join(ROOT, "src", "modules", current)
+    const dir = path.join(ROOT, "packages", "domains", current)
     if (!fs.existsSync(dir)) continue
 
     for (const file of walkSourceFiles(dir)) {
@@ -119,7 +119,7 @@ function buildPlan(domain) {
     "src/app/healthz",
     "src/app/readyz",
     "src/app/api/internal",
-    ...modules.map((name) => `src/modules/${name}`),
+    ...modules.map((name) => `packages/domains/${name}`),
     ...apiRouteDirs,
   ]
   return { domain: domain.name, defaultPort: domain.defaultPort, upstreamEnv: domain.upstreamEnv, files, dirs, apiRouteDirs, modules }

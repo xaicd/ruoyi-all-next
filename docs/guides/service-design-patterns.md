@@ -7,7 +7,7 @@
 ## 1. 适用范围
 
 1. 适用于 apps/ruoyi/ruoyi-all-next 下所有 Service 实现。
-2. 包含 src/modules/<domain>/backend/services/** 与兼容门面 src/backend/services/**。
+2. 包含 packages/domains/<domain>/backend/services/** 与兼容门面 src/backend/services/**。
 3. Route、Page、Validator 不直接承载本规范中的模式职责。
 
 ## 2. Service 层职责边界

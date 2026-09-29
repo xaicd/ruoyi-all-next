@@ -15,9 +15,9 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { TestingKit } from '../../src/modules/infra/testing/TestingKit';
+import { TestingKit } from '../../packages/domains/infra/testing/TestingKit';
 import { bootstrapSqlite } from '../../scripts/bootstrap-sqlite.cjs';
-import { QueryWrapper, BaseMapper } from '../../src/modules/shared/backend/lib/database/base-mapper';
+import { QueryWrapper, BaseMapper } from '../../packages/shared/backend/lib/database/base-mapper';
 import fs from 'fs';
 import path from 'path';
 import os from 'os';

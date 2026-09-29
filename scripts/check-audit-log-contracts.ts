@@ -1,5 +1,5 @@
-import { registerAuditLogApiContracts, registerCoreApiContracts } from "../src/modules/shared/backend/lib/core-api-contracts"
-import { apiRegistry } from "../src/modules/shared/backend/lib/api-registry"
+import { registerAuditLogApiContracts, registerCoreApiContracts } from "../packages/shared/backend/lib/core-api-contracts"
+import { apiRegistry } from "../packages/shared/backend/lib/api-registry"
 
 const expected = [
   "GET:/api/v1/admin/infra/api-access-log", "GET:/api/v1/admin/infra/api-access-log/{id}", "GET:/api/v1/admin/infra/api-access-log/export",

@@ -30,7 +30,7 @@
 ### 4.1 目录建议
 
 ```text
-apps/ruoyi/ruoyi-all-next/src/modules/infra/
+apps/ruoyi/ruoyi-all-next/packages/domains/infra/
   backend/
     services/
       codegen.service.ts

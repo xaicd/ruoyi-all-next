@@ -7,7 +7,7 @@
 对标 [Moleculer](https://github.com/moleculerjs/moleculer) 与 [NestJS NATS](https://docs.nestjs.com/microservices/nats) 的**架构与治理能力**，不引入它们的 Node 运行时。
 
 1. Next.js 仍是 Gateway / BFF。
-2. `src/modules/<domain>` 仍是 Service。
+2. `packages/domains/<domain>` 仍是 Service。
 3. `broker` 承担 Moleculer ServiceBroker。
 4. 阶段 C 的 Transporter **语义**对齐 NATS（subject、inbox request-reply、queue group、header、至少一次投递），由本仓库自研，不引入 nats.io 服务端或客户端。
 5. `shared` 是核心基础 SDK，不是 Service。业务域跨进程才走 RPC；同进程走 Facade 内存调用。
@@ -17,7 +17,7 @@
 | Moleculer | NestJS NATS | ruoyi-all-next |
 |---|---|---|
 | Node | microservice instance | `RUOYI_PACK_DOMAIN` 或 `all-next` |
-| Service | handler module | `src/modules/<domain>` |
+| Service | handler module | `packages/domains/<domain>` |
 | ServiceBroker | ClientProxy + microservice | `broker` |
 | API Gateway | HTTP 应用 | Next Route + domain pack / upstream |
 | Transporter | `Transport.NATS` | 自研 `nats-fabric` / `nats-stream`（无 nats.io） |
@@ -34,7 +34,7 @@
 | remote ClientProxy | gRPC / NATS client | 跨进程 `invokeMode=rpc` + Domain Facade |
 | generated actions | generated message patterns | 低代码模板 / codegen ZIP 输出 Facade + `*.rpc.ts` |
 
-权威清单：`src/modules/shared/backend/constants/microservice-governance.json`  
+权威清单：`packages/shared/backend/constants/microservice-governance.json`  
 分层与协议：`docs/architecture/ruoyi-all-next-module-rpc.md`  
 门禁：`npm run microservice:check`
 

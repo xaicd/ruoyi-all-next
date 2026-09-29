@@ -2,7 +2,7 @@
  * inject-seed-to-repositories.cjs
  * 
  * 读取 scripts/seed-output/*.seed.ts 中的种子数据，
- * 生成 src/modules/shared/backend/seed-data/ 下的 TypeScript 文件，
+ * 生成 packages/shared/backend/seed-data/ 下的 TypeScript 文件，
  * 各 Repository 通过 import 引用这些种子数据初始化 MEMORY_STORE。
  * 
  * Usage: node scripts/inject-seed-to-repositories.cjs
@@ -13,7 +13,7 @@ const path = require('path')
 
 const ROOT = path.resolve(__dirname, '..')
 const SEED_DIR = path.join(ROOT, 'scripts', 'seed-output')
-const OUT_DIR = path.join(ROOT, 'src', 'modules', 'shared', 'backend', 'seed-data')
+const OUT_DIR = path.join(ROOT, 'packages', 'shared', 'backend', 'seed-data')
 
 // Ensure output dir
 fs.mkdirSync(OUT_DIR, { recursive: true })
@@ -200,5 +200,5 @@ genMenus()
 genDictTypes()
 genDictData()
 genIndex()
-console.log('\n✅ All seed-data generated in src/modules/shared/backend/seed-data/')
+console.log('\n✅ All seed-data generated in packages/shared/backend/seed-data/')
 console.log('\nNext: update repositories to import from seed-data.')

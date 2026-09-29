@@ -1,8 +1,8 @@
 {
   "version": 1,
   "kind": "evolution-backlog",
-  "generatedAt": "2026-09-29T10:33:26.272Z",
-  "head": "e13e0dd",
+  "generatedAt": "2026-09-29T11:59:47.743Z",
+  "head": "1bcfa39",
   "note": "Aggregated from real gate artifacts. Read-only signal for external agents; no agent loop runs in this repository (AGENTS.md §18).",
   "summary": {
     "blocker": 0,
@@ -18,12 +18,12 @@
       "section": "AGENTS.md §4.8",
       "title": "business-repository-tenant-scope: 4 item(s) need human judgement",
       "files": [
-        "src/modules/aigw/backend/repositories/aigw-carrier.repository.ts",
-        "src/modules/crm/backend/repositories/customer.repository.ts",
-        "src/modules/pay/backend/repositories/order.repository.ts",
-        "src/modules/pay/backend/repositories/refund.repository.ts"
+        "packages/domains/aigw/backend/repositories/aigw-carrier.repository.ts",
+        "packages/domains/crm/backend/repositories/customer.repository.ts",
+        "packages/domains/pay/backend/repositories/order.repository.ts",
+        "packages/domains/pay/backend/repositories/refund.repository.ts"
       ],
-      "evidence": "business-domain repositories should reference tenant scope (needs human judgement) — e.g. src/modules/aigw/backend/repositories/aigw-carrier.repository.ts (no tenant reference found at all); src/modules/crm/backend/repositories/customer.repository.ts (no tenant reference found at all); src/modules/pay/backend/repositories/order.repository.ts (no tenant reference found at all); +1 more",
+      "evidence": "business-domain repositories should reference tenant scope (needs human judgement) — e.g. packages/domains/aigw/backend/repositories/aigw-carrier.repository.ts (no tenant reference found at all); packages/domains/crm/backend/repositories/customer.repository.ts (no tenant reference found at all); packages/domains/pay/backend/repositories/order.repository.ts (no tenant reference found at all); +1 more",
       "command": "node scripts/check-engineering-standards.cjs --audit",
       "action": "Decide per file whether it is a real gap or an accepted exception; if the rule needs a documented exemption, add it to the rule rather than the code."
     },
@@ -33,10 +33,10 @@
       "section": "AGENTS.md §8",
       "title": "ai: only 1 test file(s)",
       "files": [
-        "src/modules/ai/backend/services/__tests__/ai.module.service.test.ts"
+        "packages/domains/ai/backend/services/__tests__/ai.module.service.test.ts"
       ],
       "evidence": "stage=B, kind=business; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run src/modules/ai",
+      "command": "npm test -- --run packages/domains/ai",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
     },
     {
@@ -45,10 +45,10 @@
       "section": "AGENTS.md §8",
       "title": "bpm: only 1 test file(s)",
       "files": [
-        "src/modules/bpm/backend/services/__tests__/process.service.test.ts"
+        "packages/domains/bpm/backend/services/__tests__/process.service.test.ts"
       ],
       "evidence": "stage=A, kind=business; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run src/modules/bpm",
+      "command": "npm test -- --run packages/domains/bpm",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
     },
     {
@@ -57,10 +57,10 @@
       "section": "AGENTS.md §8",
       "title": "crm: only 1 test file(s)",
       "files": [
-        "src/modules/crm/backend/services/__tests__/crm.module.service.test.ts"
+        "packages/domains/crm/backend/services/__tests__/crm.module.service.test.ts"
       ],
       "evidence": "stage=B, kind=business; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run src/modules/crm",
+      "command": "npm test -- --run packages/domains/crm",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
     },
     {
@@ -69,10 +69,10 @@
       "section": "AGENTS.md §8",
       "title": "erp: only 1 test file(s)",
       "files": [
-        "src/modules/erp/backend/services/__tests__/erp.module.service.test.ts"
+        "packages/domains/erp/backend/services/__tests__/erp.module.service.test.ts"
       ],
       "evidence": "stage=B, kind=business; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run src/modules/erp",
+      "command": "npm test -- --run packages/domains/erp",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
     },
     {
@@ -81,10 +81,10 @@
       "section": "AGENTS.md §8",
       "title": "im: only 1 test file(s)",
       "files": [
-        "src/modules/im/backend/services/__tests__/im.module.service.test.ts"
+        "packages/domains/im/backend/services/__tests__/im.module.service.test.ts"
       ],
       "evidence": "stage=B, kind=business; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run src/modules/im",
+      "command": "npm test -- --run packages/domains/im",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
     },
     {
@@ -93,10 +93,10 @@
       "section": "AGENTS.md §8",
       "title": "iot: only 1 test file(s)",
       "files": [
-        "src/modules/iot/backend/services/__tests__/iot.module.service.test.ts"
+        "packages/domains/iot/backend/services/__tests__/iot.module.service.test.ts"
       ],
       "evidence": "stage=B, kind=business; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run src/modules/iot",
+      "command": "npm test -- --run packages/domains/iot",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
     },
     {
@@ -105,10 +105,10 @@
       "section": "AGENTS.md §8",
       "title": "mall: only 1 test file(s)",
       "files": [
-        "src/modules/mall/backend/services/__tests__/mall.module.service.test.ts"
+        "packages/domains/mall/backend/services/__tests__/mall.module.service.test.ts"
       ],
       "evidence": "stage=B, kind=business; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run src/modules/mall",
+      "command": "npm test -- --run packages/domains/mall",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
     },
     {
@@ -117,10 +117,10 @@
       "section": "AGENTS.md §8",
       "title": "mes: only 1 test file(s)",
       "files": [
-        "src/modules/mes/backend/services/__tests__/mes.module.service.test.ts"
+        "packages/domains/mes/backend/services/__tests__/mes.module.service.test.ts"
       ],
       "evidence": "stage=B, kind=business; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run src/modules/mes",
+      "command": "npm test -- --run packages/domains/mes",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
     },
     {
@@ -129,10 +129,10 @@
       "section": "AGENTS.md §8",
       "title": "mp: only 1 test file(s)",
       "files": [
-        "src/modules/mp/backend/services/__tests__/mp-services.test.ts"
+        "packages/domains/mp/backend/services/__tests__/mp-services.test.ts"
       ],
       "evidence": "stage=B, kind=business; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run src/modules/mp",
+      "command": "npm test -- --run packages/domains/mp",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
     },
     {
@@ -141,10 +141,10 @@
       "section": "AGENTS.md §8",
       "title": "pay: only 1 test file(s)",
       "files": [
-        "src/modules/pay/backend/services/__tests__/pay.module.service.test.ts"
+        "packages/domains/pay/backend/services/__tests__/pay.module.service.test.ts"
       ],
       "evidence": "stage=B, kind=business; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run src/modules/pay",
+      "command": "npm test -- --run packages/domains/pay",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
     },
     {
@@ -155,209 +155,209 @@
       "files": [
         "docs/architecture/artifacts/harness-trace-latest.json"
       ],
-      "evidence": "trace.head=61381eb, current HEAD=e13e0dd",
+      "evidence": "trace.head=e13e0dd, current HEAD=1bcfa39",
       "command": "npm run check",
       "action": "Re-run the gates so the recorded evidence matches the current revision."
     },
     {
-      "id": "oversized-src/modules/aigw/backend/repositories/aigw-access-token.repository.ts",
+      "id": "oversized-packages/domains/aigw/backend/repositories/aigw-access-token.repository.ts",
       "severity": "low",
       "section": "AGENTS.md §11",
       "title": "aigw-access-token.repository.ts: 203 lines",
       "files": [
-        "src/modules/aigw/backend/repositories/aigw-access-token.repository.ts"
+        "packages/domains/aigw/backend/repositories/aigw-access-token.repository.ts"
       ],
       "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
       "command": "npm run standards:check",
       "action": "Split into sub-services, keeping the domain facade as the single entry point."
     },
     {
-      "id": "oversized-src/modules/aigw/backend/repositories/aigw-sku.repository.ts",
+      "id": "oversized-packages/domains/aigw/backend/repositories/aigw-sku.repository.ts",
       "severity": "low",
       "section": "AGENTS.md §11",
       "title": "aigw-sku.repository.ts: 227 lines",
       "files": [
-        "src/modules/aigw/backend/repositories/aigw-sku.repository.ts"
+        "packages/domains/aigw/backend/repositories/aigw-sku.repository.ts"
       ],
       "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
       "command": "npm run standards:check",
       "action": "Split into sub-services, keeping the domain facade as the single entry point."
     },
     {
-      "id": "oversized-src/modules/infra/backend/services/codegen-table.service.ts",
+      "id": "oversized-packages/domains/infra/backend/services/codegen-table.service.ts",
       "severity": "low",
       "section": "AGENTS.md §11",
       "title": "codegen-table.service.ts: 283 lines",
       "files": [
-        "src/modules/infra/backend/services/codegen-table.service.ts"
+        "packages/domains/infra/backend/services/codegen-table.service.ts"
       ],
       "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
       "command": "npm run standards:check",
       "action": "Split into sub-services, keeping the domain facade as the single entry point."
     },
     {
-      "id": "oversized-src/modules/infra/backend/services/schema-reader.service.ts",
+      "id": "oversized-packages/domains/infra/backend/services/schema-reader.service.ts",
       "severity": "low",
       "section": "AGENTS.md §11",
       "title": "schema-reader.service.ts: 446 lines",
       "files": [
-        "src/modules/infra/backend/services/schema-reader.service.ts"
+        "packages/domains/infra/backend/services/schema-reader.service.ts"
       ],
       "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
       "command": "npm run standards:check",
       "action": "Split into sub-services, keeping the domain facade as the single entry point."
     },
     {
-      "id": "oversized-src/modules/infra/backend/services/template-engine.service.ts",
+      "id": "oversized-packages/domains/infra/backend/services/template-engine.service.ts",
       "severity": "low",
       "section": "AGENTS.md §11",
       "title": "template-engine.service.ts: 245 lines",
       "files": [
-        "src/modules/infra/backend/services/template-engine.service.ts"
+        "packages/domains/infra/backend/services/template-engine.service.ts"
       ],
       "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
       "command": "npm run standards:check",
       "action": "Split into sub-services, keeping the domain facade as the single entry point."
     },
     {
-      "id": "oversized-src/modules/member/backend/repositories/member-user.repository.ts",
+      "id": "oversized-packages/domains/member/backend/repositories/member-user.repository.ts",
       "severity": "low",
       "section": "AGENTS.md §11",
       "title": "member-user.repository.ts: 215 lines",
       "files": [
-        "src/modules/member/backend/repositories/member-user.repository.ts"
+        "packages/domains/member/backend/repositories/member-user.repository.ts"
       ],
       "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
       "command": "npm run standards:check",
       "action": "Split into sub-services, keeping the domain facade as the single entry point."
     },
     {
-      "id": "oversized-src/modules/online/backend/adapters/persistence/online-definition.repository.ts",
+      "id": "oversized-packages/domains/online/backend/adapters/persistence/online-definition.repository.ts",
       "severity": "low",
       "section": "AGENTS.md §11",
       "title": "online-definition.repository.ts: 518 lines",
       "files": [
-        "src/modules/online/backend/adapters/persistence/online-definition.repository.ts"
+        "packages/domains/online/backend/adapters/persistence/online-definition.repository.ts"
       ],
       "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
       "command": "npm run standards:check",
       "action": "Split into sub-services, keeping the domain facade as the single entry point."
     },
     {
-      "id": "oversized-src/modules/online/backend/adapters/persistence/online-schema-plan.repository.ts",
+      "id": "oversized-packages/domains/online/backend/adapters/persistence/online-schema-plan.repository.ts",
       "severity": "low",
       "section": "AGENTS.md §11",
       "title": "online-schema-plan.repository.ts: 245 lines",
       "files": [
-        "src/modules/online/backend/adapters/persistence/online-schema-plan.repository.ts"
+        "packages/domains/online/backend/adapters/persistence/online-schema-plan.repository.ts"
       ],
       "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
       "command": "npm run standards:check",
       "action": "Split into sub-services, keeping the domain facade as the single entry point."
     },
     {
-      "id": "oversized-src/modules/online/backend/services/online-definition.service.ts",
+      "id": "oversized-packages/domains/online/backend/services/online-definition.service.ts",
       "severity": "low",
       "section": "AGENTS.md §11",
       "title": "online-definition.service.ts: 244 lines",
       "files": [
-        "src/modules/online/backend/services/online-definition.service.ts"
+        "packages/domains/online/backend/services/online-definition.service.ts"
       ],
       "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
       "command": "npm run standards:check",
       "action": "Split into sub-services, keeping the domain facade as the single entry point."
     },
     {
-      "id": "oversized-src/modules/system/backend/repositories/menu.repository.ts",
+      "id": "oversized-packages/domains/system/backend/repositories/menu.repository.ts",
       "severity": "low",
       "section": "AGENTS.md §11",
       "title": "menu.repository.ts: 213 lines",
       "files": [
-        "src/modules/system/backend/repositories/menu.repository.ts"
+        "packages/domains/system/backend/repositories/menu.repository.ts"
       ],
       "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
       "command": "npm run standards:check",
       "action": "Split into sub-services, keeping the domain facade as the single entry point."
     },
     {
-      "id": "oversized-src/modules/system/backend/repositories/partner.repository.ts",
+      "id": "oversized-packages/domains/system/backend/repositories/partner.repository.ts",
       "severity": "low",
       "section": "AGENTS.md §11",
       "title": "partner.repository.ts: 299 lines",
       "files": [
-        "src/modules/system/backend/repositories/partner.repository.ts"
+        "packages/domains/system/backend/repositories/partner.repository.ts"
       ],
       "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
       "command": "npm run standards:check",
       "action": "Split into sub-services, keeping the domain facade as the single entry point."
     },
     {
-      "id": "oversized-src/modules/system/backend/repositories/role.repository.ts",
+      "id": "oversized-packages/domains/system/backend/repositories/role.repository.ts",
       "severity": "low",
       "section": "AGENTS.md §11",
       "title": "role.repository.ts: 249 lines",
       "files": [
-        "src/modules/system/backend/repositories/role.repository.ts"
+        "packages/domains/system/backend/repositories/role.repository.ts"
       ],
       "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
       "command": "npm run standards:check",
       "action": "Split into sub-services, keeping the domain facade as the single entry point."
     },
     {
-      "id": "oversized-src/modules/system/backend/repositories/user.repository.ts",
+      "id": "oversized-packages/domains/system/backend/repositories/user.repository.ts",
       "severity": "low",
       "section": "AGENTS.md §11",
       "title": "user.repository.ts: 393 lines",
       "files": [
-        "src/modules/system/backend/repositories/user.repository.ts"
+        "packages/domains/system/backend/repositories/user.repository.ts"
       ],
       "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
       "command": "npm run standards:check",
       "action": "Split into sub-services, keeping the domain facade as the single entry point."
     },
     {
-      "id": "oversized-src/modules/system/backend/services/auth.service.ts",
+      "id": "oversized-packages/domains/system/backend/services/auth.service.ts",
       "severity": "low",
       "section": "AGENTS.md §11",
       "title": "auth.service.ts: 249 lines",
       "files": [
-        "src/modules/system/backend/services/auth.service.ts"
+        "packages/domains/system/backend/services/auth.service.ts"
       ],
       "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
       "command": "npm run standards:check",
       "action": "Split into sub-services, keeping the domain facade as the single entry point."
     },
     {
-      "id": "oversized-src/modules/system/backend/services/oauth2.service.ts",
+      "id": "oversized-packages/domains/system/backend/services/oauth2.service.ts",
       "severity": "low",
       "section": "AGENTS.md §11",
       "title": "oauth2.service.ts: 205 lines",
       "files": [
-        "src/modules/system/backend/services/oauth2.service.ts"
+        "packages/domains/system/backend/services/oauth2.service.ts"
       ],
       "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
       "command": "npm run standards:check",
       "action": "Split into sub-services, keeping the domain facade as the single entry point."
     },
     {
-      "id": "oversized-src/modules/system/backend/services/tenant.service.ts",
+      "id": "oversized-packages/domains/system/backend/services/tenant.service.ts",
       "severity": "low",
       "section": "AGENTS.md §11",
       "title": "tenant.service.ts: 265 lines",
       "files": [
-        "src/modules/system/backend/services/tenant.service.ts"
+        "packages/domains/system/backend/services/tenant.service.ts"
       ],
       "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
       "command": "npm run standards:check",
       "action": "Split into sub-services, keeping the domain facade as the single entry point."
     },
     {
-      "id": "oversized-src/modules/system/backend/services/user.service.ts",
+      "id": "oversized-packages/domains/system/backend/services/user.service.ts",
       "severity": "low",
       "section": "AGENTS.md §11",
       "title": "user.service.ts: 244 lines",
       "files": [
-        "src/modules/system/backend/services/user.service.ts"
+        "packages/domains/system/backend/services/user.service.ts"
       ],
       "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
       "command": "npm run standards:check",
@@ -377,18 +377,15 @@
       "id": "todo-markers",
       "severity": "low",
       "section": "AGENTS.md §12",
-      "title": "8 TODO/FIXME marker(s) in src",
+      "title": "5 TODO/FIXME marker(s) in src",
       "files": [
-        "src/modules/mall/routes/app/products/route.ts",
-        "src/modules/member/routes/app/profile/route.ts",
-        "src/modules/member/routes/app/profile/route.ts",
-        "src/modules/pay/routes/app/cashier/route.ts",
-        "src/modules/pay/routes/open/notify/route.ts",
-        "src/modules/shared/backend/lib/audit-log.ts",
-        "src/modules/shared/backend/lib/database/kysely-client.ts",
-        "src/modules/shared/backend/lib/exception-analyzer.ts"
+        "packages/domains/mall/routes/app/products/route.ts",
+        "packages/domains/member/routes/app/profile/route.ts",
+        "packages/domains/member/routes/app/profile/route.ts",
+        "packages/domains/pay/routes/app/cashier/route.ts",
+        "packages/domains/pay/routes/open/notify/route.ts"
       ],
-      "evidence": "src/modules/mall/routes/app/products/route.ts — line 19: // TODO: 调用 MallProductService.listForApp(input, auth); src/modules/member/routes/app/profile/route.ts — line 13: // TODO: 调用 MemberService.getProfile(auth.userId); src/modules/member/routes/app/profile/route.ts — line 33: // TODO: 调用 MemberService.updateProfile(auth.userId, body); src/modules/pay/routes/app/cashier/route.ts — line 14: // TODO: 调用 PayService.createOrderFromApp(auth.userId, body); src/modules/pay/routes/open/notify/route.ts — line 11: // TODO: 验证签名 + 解析回调数据 + 更新订单状态",
+      "evidence": "packages/domains/mall/routes/app/products/route.ts — line 19: // TODO: 调用 MallProductService.listForApp(input, auth); packages/domains/member/routes/app/profile/route.ts — line 13: // TODO: 调用 MemberService.getProfile(auth.userId); packages/domains/member/routes/app/profile/route.ts — line 33: // TODO: 调用 MemberService.updateProfile(auth.userId, body); packages/domains/pay/routes/app/cashier/route.ts — line 14: // TODO: 调用 PayService.createOrderFromApp(auth.userId, body); packages/domains/pay/routes/open/notify/route.ts — line 11: // TODO: 验证签名 + 解析回调数据 + 更新订单状态",
       "command": "grep -rn 'TODO\\|FIXME' src --include=*.ts",
       "action": "Resolve each marker or convert it into a tracked backlog item."
     }

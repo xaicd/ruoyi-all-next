@@ -17,7 +17,7 @@ Paperclip 在 `§6 Extension Classes` 明确划分了**两个**扩展类，定�
 | 数据 | 一方表（first-party tables） | 通用扩展表（`plugin_state` 等），**不允许任意迁移** |
 | 定位 | 需要直接进程/DB 集成的宿主内部系统 | 全局安装的**加法式**扩展 |
 
-**本仓 `src/modules/<domain>` 对应的是 §6.1 Platform Module**（可信、进程内、有独立业务表、需要直接 DB 集成），
+**本仓 `packages/domains/<domain>` 对应的是 §6.1 Platform Module**（可信、进程内、有独立业务表、需要直接 DB 集成），
 而不是 §6.2 Plugin。
 
 因此「把 module 架构改成 plugin 架构」这个命题需要重构：**不是把域改造成插件，而是并列引入第二个扩展类**。
@@ -98,7 +98,7 @@ core platform modules → built-in first-party plugins → installed plugins。
 
 ### P0 实现说明
 
-产物：`src/modules/<domain>/contract/plugin.manifest.json`（16 份；`online` 为 handwritten 跳过）。
+产物：`packages/domains/<domain>/contract/plugin.manifest.json`（16 份；`online` 为 handwritten 跳过）。
 入口：`npm run domain:manifests`（与 route manifest 同一条管线）。
 漂移门禁：`npm run domain:manifests:check`，置于 `check` 的 `contracts:sync` **之前**
 （因为 `contracts:sync` 会重新生成，放其后永远通过）。
@@ -161,7 +161,7 @@ core platform modules → built-in first-party plugins → installed plugins。
 |---|---|
 | 包管理 | **npm 单包**（`package-lock.json`，`workspaces: null`，无 `packageManager`） |
 | `clients/*` | 目录式独立包（`@ruoyi/client-h5` 等），**游离于任何 workspace**；`clients/expo` 还有自己的 lockfile |
-| 域声明面 | 在 **app 源码树内**：`src/modules/<domain>/contract/plugin.manifest.json` |
+| 域声明面 | 在 **app 源码树内**：`packages/domains/<domain>/contract/plugin.manifest.json` |
 | 插件入口契约 | **无**（没有 `paperclipPlugin` 之类的指针，也没有预构建 dist） |
 | SDK | 无独立包（`shared` 是源码内模块，非可发布包） |
 

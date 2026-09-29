@@ -64,5 +64,5 @@ Skill 写法见 [skill-authoring.SKILL.md](./skill-authoring.SKILL.md)。
 
 ## 5. 客户端
 
-H5 / uni-app / Flutter / desktop-pc 走同一管道。渠道契约：`src/modules/shared/contract/client-channels.json`。  
+H5 / uni-app / Flutter / desktop-pc 走同一管道。渠道契约：`packages/shared/contract/client-channels.json`。  
 目录：`clients/<channel>/{app,shared,modules/<domain>}`。禁止为客户端另开 API 前缀。

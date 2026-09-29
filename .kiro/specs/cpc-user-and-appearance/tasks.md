@@ -82,16 +82,16 @@ T7 权限码/契约  T8 单测  T9 SQLite 端到端预览(A7)  T10 门禁(tsc/li
 | `prisma/schema.prisma` | 改（+MemberUser model） |
 | `prisma/migrations/*_add_member_user/` | 新（PG migration） |
 | `scripts/bootstrap-sqlite.ts` | 改（+member_user 建表 + 可选 seed） |
-| `src/modules/shared/backend/lib/database/schema.ts` | 改（登记 member_user 表类型） |
-| `src/modules/shared/backend/http/app-route.ts` | 新 |
-| `src/modules/member/backend/repositories/member-user.repository.ts` | 新 |
-| `src/modules/member/backend/services/member-auth.service.ts` | 新 |
-| `src/modules/member/backend/services/member-profile.service.ts` | 新 |
-| `src/modules/member/backend/validators/member-auth.validators.ts` | 新 |
-| `src/modules/member/contract/actions.ts` | 改（+app 动作） |
-| `src/modules/infra/backend/services/appearance.service.ts` | 新 |
-| `src/modules/infra/backend/validators/appearance.validators.ts` | 新 |
-| `src/modules/shared/backend/constants/permissions.ts` | 改（+2 权限码） |
+| `packages/shared/backend/lib/database/schema.ts` | 改（登记 member_user 表类型） |
+| `packages/shared/backend/http/app-route.ts` | 新 |
+| `packages/domains/member/backend/repositories/member-user.repository.ts` | 新 |
+| `packages/domains/member/backend/services/member-auth.service.ts` | 新 |
+| `packages/domains/member/backend/services/member-profile.service.ts` | 新 |
+| `packages/domains/member/backend/validators/member-auth.validators.ts` | 新 |
+| `packages/domains/member/contract/actions.ts` | 改（+app 动作） |
+| `packages/domains/infra/backend/services/appearance.service.ts` | 新 |
+| `packages/domains/infra/backend/validators/appearance.validators.ts` | 新 |
+| `packages/shared/backend/constants/permissions.ts` | 改（+2 权限码） |
 | `src/app/api/v1/app/member/auth/{register,login,logout}/route.ts` | 新 |
 | `src/app/api/v1/app/member/user/profile/route.ts` | 改（stub→真实） |
 | `src/app/api/v1/admin/infra/appearance/route.ts` | 新 |

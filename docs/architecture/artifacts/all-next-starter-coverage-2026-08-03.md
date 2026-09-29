@@ -35,9 +35,9 @@
   - apps/ruoyi-all-next/src/backend/lib/web-crypto.ts
   - apps/ruoyi-all-next/src/backend/lib/web-swagger.ts
   - apps/ruoyi-all-next/src/backend/lib/web-xss.ts
-  - apps/ruoyi-all-next/src/modules/infra/backend/services/__tests__/infra-services.test.ts
-  - apps/ruoyi-all-next/src/modules/infra/backend/services/api-log.service.ts
-  - apps/ruoyi-all-next/src/modules/infra/frontend/pages/api-logs.page.tsx
+  - apps/ruoyi-all-next/packages/domains/infra/backend/services/__tests__/infra-services.test.ts
+  - apps/ruoyi-all-next/packages/domains/infra/backend/services/api-log.service.ts
+  - apps/ruoyi-all-next/packages/domains/infra/frontend/pages/api-logs.page.tsx
 
 ## security
 
@@ -94,9 +94,9 @@
   - apps/ruoyi-all-next/src/backend/services/index.ts
   - apps/ruoyi-all-next/src/backend/services/infra-log-audit.test.ts
   - apps/ruoyi-all-next/src/backend/services/infra-redis.service.ts
-  - apps/ruoyi-all-next/src/modules/infra/backend/services/index.ts
-  - apps/ruoyi-all-next/src/modules/infra/backend/services/redis.service.ts
-  - apps/ruoyi-all-next/src/modules/infra/frontend/pages/redis.page.tsx
+  - apps/ruoyi-all-next/packages/domains/infra/backend/services/index.ts
+  - apps/ruoyi-all-next/packages/domains/infra/backend/services/redis.service.ts
+  - apps/ruoyi-all-next/packages/domains/infra/frontend/pages/redis.page.tsx
 
 ## protection
 
@@ -138,10 +138,10 @@
   - apps/ruoyi-all-next/src/backend/services/index.ts
   - apps/ruoyi-all-next/src/backend/services/infra-job-center.service.ts
   - apps/ruoyi-all-next/src/backend/services/infra-log-audit.test.ts
-  - apps/ruoyi-all-next/src/modules/infra/backend/services/__tests__/infra-services.test.ts
-  - apps/ruoyi-all-next/src/modules/infra/backend/services/index.ts
-  - apps/ruoyi-all-next/src/modules/infra/backend/services/job-center.service.ts
-  - apps/ruoyi-all-next/src/modules/infra/frontend/pages/job-center.page.tsx
+  - apps/ruoyi-all-next/packages/domains/infra/backend/services/__tests__/infra-services.test.ts
+  - apps/ruoyi-all-next/packages/domains/infra/backend/services/index.ts
+  - apps/ruoyi-all-next/packages/domains/infra/backend/services/job-center.service.ts
+  - apps/ruoyi-all-next/packages/domains/infra/frontend/pages/job-center.page.tsx
 
 ## mq
 
@@ -163,21 +163,21 @@
   - apps/ruoyi-all-next/src/backend/lib/platform-excel-dict.ts
   - apps/ruoyi-all-next/src/backend/lib/platform-websocket.ts
   - apps/ruoyi-all-next/src/backend/validators/infra.validator.ts
-  - apps/ruoyi-all-next/src/modules/bpm/backend/services/process.service.ts
-  - apps/ruoyi-all-next/src/modules/infra/backend/services/__tests__/template-engine.service.test.ts
-  - apps/ruoyi-all-next/src/modules/infra/backend/services/template-engine-presets.ts
-  - apps/ruoyi-all-next/src/modules/infra/backend/services/template-presets/index.ts
-  - apps/ruoyi-all-next/src/modules/infra/backend/services/template-presets/next-react-admin-workflow-client.template.ts
-  - apps/ruoyi-all-next/src/modules/infra/backend/services/template-presets/next-react-admin-workflow-route.template.ts
-  - apps/ruoyi-all-next/src/modules/infra/backend/services/template-presets/next-react-admin-workflow-service.template.ts
-  - apps/ruoyi-all-next/src/modules/infra/backend/services/template-presets/next-react-admin-workflow-validator.template.ts
-  - apps/ruoyi-all-next/src/modules/infra/frontend/pages/template-engine.page.tsx
-  - apps/ruoyi-all-next/src/modules/system/backend/services/auth.service.ts
-  - apps/ruoyi-all-next/src/modules/system/backend/services/dept.service.ts
-  - apps/ruoyi-all-next/src/modules/system/backend/services/login-log.service.ts
-  - apps/ruoyi-all-next/src/modules/system/backend/services/menu.service.ts
-  - apps/ruoyi-all-next/src/modules/system/backend/services/online-user.service.ts
-  - apps/ruoyi-all-next/src/modules/system/backend/services/operate-log.service.ts
+  - apps/ruoyi-all-next/packages/domains/bpm/backend/services/process.service.ts
+  - apps/ruoyi-all-next/packages/domains/infra/backend/services/__tests__/template-engine.service.test.ts
+  - apps/ruoyi-all-next/packages/domains/infra/backend/services/template-engine-presets.ts
+  - apps/ruoyi-all-next/packages/domains/infra/backend/services/template-presets/index.ts
+  - apps/ruoyi-all-next/packages/domains/infra/backend/services/template-presets/next-react-admin-workflow-client.template.ts
+  - apps/ruoyi-all-next/packages/domains/infra/backend/services/template-presets/next-react-admin-workflow-route.template.ts
+  - apps/ruoyi-all-next/packages/domains/infra/backend/services/template-presets/next-react-admin-workflow-service.template.ts
+  - apps/ruoyi-all-next/packages/domains/infra/backend/services/template-presets/next-react-admin-workflow-validator.template.ts
+  - apps/ruoyi-all-next/packages/domains/infra/frontend/pages/template-engine.page.tsx
+  - apps/ruoyi-all-next/packages/domains/system/backend/services/auth.service.ts
+  - apps/ruoyi-all-next/packages/domains/system/backend/services/dept.service.ts
+  - apps/ruoyi-all-next/packages/domains/system/backend/services/login-log.service.ts
+  - apps/ruoyi-all-next/packages/domains/system/backend/services/menu.service.ts
+  - apps/ruoyi-all-next/packages/domains/system/backend/services/online-user.service.ts
+  - apps/ruoyi-all-next/packages/domains/system/backend/services/operate-log.service.ts
 
 ## monitor
 
@@ -189,9 +189,9 @@
   - apps/ruoyi-all-next/src/backend/lib/__tests__/starter-platform-lib.test.ts
   - apps/ruoyi-all-next/src/backend/lib/platform-monitor.ts
   - apps/ruoyi-all-next/src/backend/services/infra-log-audit.test.ts
-  - apps/ruoyi-all-next/src/modules/infra/backend/services/redis.service.ts
-  - apps/ruoyi-all-next/src/modules/infra/backend/services/template-presets/next-react-admin-domain-api-index.template.ts
-  - apps/ruoyi-all-next/src/modules/infra/backend/services/template-presets/next-react-admin-report-page.template.ts
+  - apps/ruoyi-all-next/packages/domains/infra/backend/services/redis.service.ts
+  - apps/ruoyi-all-next/packages/domains/infra/backend/services/template-presets/next-react-admin-domain-api-index.template.ts
+  - apps/ruoyi-all-next/packages/domains/infra/backend/services/template-presets/next-react-admin-report-page.template.ts
 
 ## excel
 
@@ -211,10 +211,10 @@
   - apps/ruoyi-all-next/src/backend/services/system-dict.service.ts
   - apps/ruoyi-all-next/src/backend/services/system-log-audit.test.ts
   - apps/ruoyi-all-next/src/backend/validators/system.validator.ts
-  - apps/ruoyi-all-next/src/modules/system/backend/services/__tests__/system-persistence-services.test.ts
-  - apps/ruoyi-all-next/src/modules/system/backend/services/dict.service.ts
-  - apps/ruoyi-all-next/src/modules/system/backend/services/index.ts
-  - apps/ruoyi-all-next/src/modules/system/frontend/pages/dicts.page.tsx
+  - apps/ruoyi-all-next/packages/domains/system/backend/services/__tests__/system-persistence-services.test.ts
+  - apps/ruoyi-all-next/packages/domains/system/backend/services/dict.service.ts
+  - apps/ruoyi-all-next/packages/domains/system/backend/services/index.ts
+  - apps/ruoyi-all-next/packages/domains/system/frontend/pages/dicts.page.tsx
 
 ## biz-tenant
 
@@ -238,10 +238,10 @@
   - apps/ruoyi-all-next/src/backend/services/system-tenant-package.service.ts
   - apps/ruoyi-all-next/src/backend/services/system-tenant.service.ts
   - apps/ruoyi-all-next/src/backend/validators/system.validator.ts
-  - apps/ruoyi-all-next/src/modules/system/backend/services/__tests__/tenant-package.service.test.ts
-  - apps/ruoyi-all-next/src/modules/system/backend/services/__tests__/tenant.service.test.ts
-  - apps/ruoyi-all-next/src/modules/system/backend/services/index.ts
-  - apps/ruoyi-all-next/src/modules/system/backend/services/tenant-package.service.ts
+  - apps/ruoyi-all-next/packages/domains/system/backend/services/__tests__/tenant-package.service.test.ts
+  - apps/ruoyi-all-next/packages/domains/system/backend/services/__tests__/tenant.service.test.ts
+  - apps/ruoyi-all-next/packages/domains/system/backend/services/index.ts
+  - apps/ruoyi-all-next/packages/domains/system/backend/services/tenant-package.service.ts
 
 ## biz-data-permission
 

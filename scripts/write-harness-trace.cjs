@@ -27,7 +27,7 @@ function latestSprintLog() {
 }
 
 function hatchSnapshot() {
-  const rel = "src/modules/shared/contract/hatch-manifest.json"
+  const rel = "packages/shared/contract/hatch-manifest.json"
   const full = path.join(ROOT, ...rel.split("/"))
   if (!fs.existsSync(full)) return null
   const hatch = JSON.parse(fs.readFileSync(full, "utf8"))
@@ -61,7 +61,7 @@ function buildTrace(status = "pass") {
       "ruoyi:governance:check",
     ],
     sprintProd: latestSprintLog(),
-    seamGraph: "src/modules/shared/contract/seam-graph.json",
+    seamGraph: "packages/shared/contract/seam-graph.json",
     backlog: BACKLOG_REL,
     hatch: hatchSnapshot(),
     note: "Last successful npm run check stamp. Session events stay in DigitalStaff Native.",

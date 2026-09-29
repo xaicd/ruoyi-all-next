@@ -21,7 +21,7 @@ description: 编写、安装、排障与评审 §6.2 可安装插件（插件包
 |---|---|---|
 | 信任 | 可信 | **capability 受限** |
 | 进程 | 与宿主同进程 | **独立 worker 进程** |
-| 落位 | `src/modules/<domain>/` | 实例插件目录（`RUOYI_PLUGIN_DIR`） |
+| 落位 | `packages/domains/<domain>/` | 实例插件目录（`RUOYI_PLUGIN_DIR`） |
 | 声明面 | `contract/module.manifest.json`（**派生生成**，勿手改） | 插件包内 `plugin.manifest.json`（**手写**） |
 | 调用方式 | Domain Facade / broker / serviceBus | capability 白名单内的宿主 API |
 | 数据库 | 自有表 + 迁移 | **禁止直连 DB**，走宿主扩展表 |

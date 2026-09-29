@@ -17,7 +17,7 @@ Next.js 16 (App Router) + React 19 + TypeScript + **Kysely**（运行时数据�
 | 路径 | 职责 |
 |---|---|
 | `src/app/` | Next App Router。路由组：`(admin-pages)/`(B 端后台)、`(portal-pages)/`(C 端门户)、`(cpc-pages)/`；`api/v1/...`(路由处理器，`admin/*` 写、`open/*` 公开读)；`login/`、`healthz/`、`readyz/`。 |
-| `src/modules/` | ⭐ **核心**。18 业务域 + 1 个跨切面 `shared` 模块（见 §2）。 |
+| `packages/domains/` | ⭐ **核心**。18 业务域 + 1 个跨切面 `shared` 模块（见 §2）。 |
 | `clients/` | 多端脚手架子工程：`expo/`(RN，Schema 驱动，可 web-export 预览)、`h5/`、`uniapp/`、`desktop-pc/`、`flutter/`。 |
 | `scripts/` | ~50 构建/脚手架/治理脚本。关键：`bootstrap-sqlite.ts`(零配置建库)、`scaffold-feature.ts`(域脚手架)、`pack-domain.cjs`/`domain-up.cjs`(域打包/拆分运行)。 |
 | `docs/` | `architecture/`(40+ 架构文档 + 本页) · `skills/ruoyi-all-next/`(SKILL 镜像) · `features/` · `guides/` · `operations/` · `spec(s)/`。 |
@@ -32,8 +32,8 @@ Next.js 16 (App Router) + React 19 + TypeScript + **Kysely**（运行时数据�
 ## 2. 本体域：域目录与能力三角（机器真源 + 本页人读索引）
 
 **机器可读真源**（勿手改域名，改后跑 `npm run domain:seams` 重新生成）：
-- `src/modules/shared/backend/constants/domain-catalog.json` —— 域目录真源（分层、RPC、消息、每域端口/前缀/依赖/鉴权/弹性）。
-- `src/modules/shared/contract/seam-graph.json` —— 每域**能力三角**（契约定义 `definition` / 提供方 `provider` / 消费方 `consumer`），由 catalog 生成。
+- `packages/shared/backend/constants/domain-catalog.json` —— 域目录真源（分层、RPC、消息、每域端口/前缀/依赖/鉴权/弹性）。
+- `packages/shared/contract/seam-graph.json` —— 每域**能力三角**（契约定义 `definition` / 提供方 `provider` / 消费方 `consumer`），由 catalog 生成。
 
 **分层（来自 domain-catalog.json）**：
 - `foundation`：`shared`（打进每个进程的运行时 SDK，**永不做微服务、永不 RPC**，`facadeRequired`）。
@@ -55,11 +55,11 @@ Next.js 16 (App Router) + React 19 + TypeScript + **Kysely**（运行时数据�
 | **report** | business | 报表 / BI | |
 | **ai / aigw** | business | AI 能力 / AI 网关（new-api 式） | |
 
-> 布局与命名的**权威**定义见 `.kiro/steering/module-structure.md`（六边形分层 Ports/Adapters/Application、`page.tsx` 纯桥接）与 `src/modules/README.md`（module-first：新业务只落 `src/modules/<domain>/`，旧路径仅 re-export）。
+> 布局与命名的**权威**定义见 `.kiro/steering/module-structure.md`（六边形分层 Ports/Adapters/Application、`page.tsx` 纯桥接）与 `packages/domains/README.md`（module-first：新业务只落 `packages/domains/<domain>/`，旧路径仅 re-export）。
 
 ---
 
-## 3. 跨切面基础设施 —— `src/modules/shared/backend/lib/`
+## 3. 跨切面基础设施 —— `packages/shared/backend/lib/`
 
 各能力经 `index.ts` barrel 暴露。四大**可切换中间件**见 §5。
 
@@ -105,19 +105,19 @@ Next.js 16 (App Router) + React 19 + TypeScript + **Kysely**（运行时数据�
 **加字段两条互补路径**：
 
 **(a) 零 DDL JSON 路径（默认、跨库、预览安全）** —— 字段值存实体 `extra_fields` JSON 列；页面布局是 `PageSchema` JSON 存 `system_config`（键 `page.schema.<entity>`）。
-- 代码：`src/modules/online/backend/services/page-schema.service.ts`（`PageSchemaService.get/update/addField`，`hasRealDatabase()?Kysely:内存兜底`）；校验 `.../validators/page-schema.validators.ts`（`pageSchemaSchema`/`fieldDefSchema`/`FieldDef`）。加字段 = 往 `fields[]` 追加，不 ALTER TABLE。
+- 代码：`packages/domains/online/backend/services/page-schema.service.ts`（`PageSchemaService.get/update/addField`，`hasRealDatabase()?Kysely:内存兜底`）；校验 `.../validators/page-schema.validators.ts`（`pageSchemaSchema`/`fieldDefSchema`/`FieldDef`）。加字段 = 往 `fields[]` 追加，不 ALTER TABLE。
 
-**(b) "加字段就真加列"（真 DDL）** —— `src/modules/online/backend/adapters/persistence/schema-ddl.ts`：
+**(b) "加字段就真加列"（真 DDL）** —— `packages/domains/online/backend/adapters/persistence/schema-ddl.ts`：
 - 流程：`PageSchemaService.update()` 校验后调 `ensureColumns(entity, fields)` → 逐字段 `ensureColumn`（先 `listColumns(table)` 幂等检查，再 `sql.raw("ALTER TABLE ... ADD COLUMN ...")`）。
 - 方言：`columnType()` 按 `getProtocolFamily()` 把 `FieldDef.type`(text/number/boolean/date/select/image...) 映射到 sqlite/postgresql/mysql/sqlserver/proprietary(达梦/Oracle) 的列类型；`listColumns()` 分别用 `pragma_table_info`/`information_schema.columns`/`USER_TAB_COLUMNS`。
 - 安全：`assertSafeIdentifier()` 白名单 `^[a-zA-Z][a-zA-Z0-9_]{0,39}$` 防注入。
 - 预览兜底：纯内存(`hasRealDatabase()===false`)时 `ensureColumns` 抛错被 `update` 捕获、记 `online.pageSchema.ddlSkipped` 并仍持久化 JSON schema —— **预览不因缺库而挂**。
 
 **Schema 渲染器（一份 PageSchema → 多端渲染）**：
-- Portal Web：`src/modules/member/frontend/components/SchemaFieldRenderer.tsx`（导出 `SchemaForm`/`SchemaDetailView`），被 `portal-profile.page.tsx` 消费。
+- Portal Web：`packages/domains/member/frontend/components/SchemaFieldRenderer.tsx`（导出 `SchemaForm`/`SchemaDetailView`），被 `portal-profile.page.tsx` 消费。
 - Expo(RN)：`clients/expo/src/SchemaFieldRenderer.tsx`（同 `SchemaForm`/`SchemaDetailView` 接口），拉 `open/meta/page-schema/member_user`。online 加个字段，移动端表单**零改代码**多出该字段。
 
-**外观配置（WordPress 式后台配置→C 端渲染）**：`src/modules/infra/backend/services/appearance.service.ts`（`AppearanceService.get/update/getPublic`，`SiteAppearance` JSON 存 `system_config` 键 `site.appearance`）；校验 `appearance.validators.ts`（`siteAppearanceSchema`/`DEFAULT_APPEARANCE`）；API `api/v1/admin/infra/appearance`(写) + `api/v1/open/meta/appearance`(公开读)。
+**外观配置（WordPress 式后台配置→C 端渲染）**：`packages/domains/infra/backend/services/appearance.service.ts`（`AppearanceService.get/update/getPublic`，`SiteAppearance` JSON 存 `system_config` 键 `site.appearance`）；校验 `appearance.validators.ts`（`siteAppearanceSchema`/`DEFAULT_APPEARANCE`）；API `api/v1/admin/infra/appearance`(写) + `api/v1/open/meta/appearance`(公开读)。
 
 ---
 
@@ -173,12 +173,12 @@ DATABASE_URL=file:./data/ruoyi.db DB_DRIVER=sqlite npm run dev   # next dev -p 3
 基于本模板孵化的每个新线上应用**默认就是本体域的成员**，派生时：
 
 1. **继承基线**：直接获得 `shared` SDK（4 层可切换中间件 + broker/事件总线/审计底座 + 8 大审计字段）、低码引擎(online)、RBAC(system)、外观(infra)、C 端(member)、多端脚手架(clients)。
-2. **增量建域**：新业务只在 `src/modules/<新域>/` 落地（`contract/`+`backend/`+`frontend/` 三件套），跑 `npm run scaffold` 生成骨架；在 `domain-catalog.json` 注册新域（层/端口/前缀/依赖/鉴权），跑 `npm run domain:seams` 重生成 `seam-graph.json`。
+2. **增量建域**：新业务只在 `packages/domains/<新域>/` 落地（`contract/`+`backend/`+`frontend/` 三件套），跑 `npm run scaffold` 生成骨架；在 `domain-catalog.json` 注册新域（层/端口/前缀/依赖/鉴权），跑 `npm run domain:seams` 重生成 `seam-graph.json`。
 3. **复用而非重写**：数据访问走 `BaseMapper`/`getKyselyDb`+`dynamic-table`；跨域走 `broker.call`/`eventBus`（禁反向依赖、禁裸 SQL、禁绕过 facade）；字段扩展优先 `extra_fields`/PageSchema，需真列才走 `schema-ddl`。
 4. **换库/换中间件零改码**：新应用部署到独立环境时，仅改 env(`DB_DRIVER`/`CACHE_DRIVER`/`STORAGE_DRIVER`/`MQ_DRIVER` + 连接串) 即切生产中间件（含国产数据库）。
 5. **门禁一致**：tsc 零增量、vitest 4 层金字塔、`ruoyi:*:check` 治理门禁、真实数据库驱动零假 Mock。
 
-> 一句话：**新应用 = 本体域基线（不动） + `src/modules/<新域>` 增量 + `domain-catalog` 注册**。地图、能力、门禁全继承，无需给客户额外说明。
+> 一句话：**新应用 = 本体域基线（不动） + `packages/domains/<新域>` 增量 + `domain-catalog` 注册**。地图、能力、门禁全继承，无需给客户额外说明。
 
 ---
 
@@ -190,10 +190,10 @@ DATABASE_URL=file:./data/ruoyi.db DB_DRIVER=sqlite npm run dev   # next dev -p 3
 
 | 进化类型 | 真源（写这里） | 回写动作 | 一致性门禁 |
 |---|---|---|---|
-| **新增/调整业务域** | `src/modules/shared/backend/constants/domain-catalog.json` | 注册域（层/端口/前缀/依赖/鉴权/弹性） | `npm run domain:seams` 重生成 `seam-graph.json`；`npm run *:scan/check` 校验 |
-| **新增跨切面能力** | `src/modules/shared/backend/lib/<能力>/`（含 `index.ts` barrel） | 加驱动/管理器（按 §5 可切换范式），并在本页 §3/§5 登记一行 | tsc 零增量；`__tests__` 覆盖 |
+| **新增/调整业务域** | `packages/shared/backend/constants/domain-catalog.json` | 注册域（层/端口/前缀/依赖/鉴权/弹性） | `npm run domain:seams` 重生成 `seam-graph.json`；`npm run *:scan/check` 校验 |
+| **新增跨切面能力** | `packages/shared/backend/lib/<能力>/`（含 `index.ts` barrel） | 加驱动/管理器（按 §5 可切换范式），并在本页 §3/§5 登记一行 | tsc 零增量；`__tests__` 覆盖 |
 | **沉淀高频研发经验** | `.agents/skills/<name>/SKILL.md` | 用 `skill-authoring` 结晶新 SKILL；在 §7 索引补一行 | `.agents/context/ASSEMBLY.md` 注册 order（若需自动加载） |
-| **能力/架构画像变更** | `src/modules/shared/contract/{agent-profile,project-profile}.json` | 更新画像；本页对应节同步 | 与 `AGENTS.md`/catalog 冲突时以后者为准 |
+| **能力/架构画像变更** | `packages/shared/contract/{agent-profile,project-profile}.json` | 更新画像；本页对应节同步 | 与 `AGENTS.md`/catalog 冲突时以后者为准 |
 
 ### 10.2 进化闭环（每轮进化必走）
 
@@ -230,7 +230,7 @@ DATABASE_URL=file:./data/ruoyi.db DB_DRIVER=sqlite npm run dev   # next dev -p 3
 本底座的终极用途之一：承接大型老系统（Spring Cloud / Node / Dubbo + MySQL / Redis / Kafka / Hazelcast）迁移。**本体域是老系统的数字镜像 + 体检，不是重写计划书**——如实映射，默认 `keep` 不动代码，只对有经济价值处标 `optimize` 才改造。
 
 - **方法论**：`docs/architecture/legacy-migration-playbook.md`（5 步穿透 / 中间件锚点 / gap 处置 / 分批盘点）。
-- **映射契约 schema**：`src/modules/shared/contract/ontology-mapping.schema.json`（`legacyService → ontologyDomain/catalogDomain → entity/action/eventMap → fidelity + valueTag`）。
-- **首个样板**：`src/modules/shared/contract/mappings/ecommerce.mapping.json`（ecommerce 本体域 ↔ ruoyi mall/pay，含实体/action 对齐、事件从状态机派生、system/infra 标注为跨域底座；已结构校验通过）。
+- **映射契约 schema**：`packages/shared/contract/ontology-mapping.schema.json`（`legacyService → ontologyDomain/catalogDomain → entity/action/eventMap → fidelity + valueTag`）。
+- **首个样板**：`packages/shared/contract/mappings/ecommerce.mapping.json`（ecommerce 本体域 ↔ ruoyi mall/pay，含实体/action 对齐、事件从状态机派生、system/infra 标注为跨域底座；已结构校验通过）。
 - **关键映射结论**：mall+pay ≈ 电商本体域骨架子集（`IssueCoupon↔mall.issueCoupon` 逐字对齐）；system/infra 是**跨域公共底座**（不属电商域）；事件两边形状不同（本体域=状态机生命周期事件，业务侧=动词事件），用 `eventMap.derivedFromAction` 从 action 状态迁移派生打通。
 - **中间件映射**：MySQL→database / Redis→cache / Kafka/Redis-PubSub→mq / Hazelcast→cache / 文件→storage（换环境只改 env，见 §5）。

@@ -1,5 +1,5 @@
 /**
- * Host ↔ Worker 协议帧（与宿主 src/modules/shared/backend/plugins/worker-protocol.ts 对齐）。
+ * Host ↔ Worker 协议帧（与宿主 packages/shared/backend/plugins/worker-protocol.ts 对齐）。
  *
  * 为什么这里有一份独立实现而不是共享类型：SDK 是**独立包**，不能 import 宿主源码；
  * 而让宿主去依赖一个未构建的 workspace 包会把 Next 构建拖进 workspace 编译链。

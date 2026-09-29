@@ -1,0 +1,395 @@
+{
+  "$schema": "ruoyi-module-manifest/v1",
+  "domain": "infra",
+  "id": "ruoyi.infra",
+  "apiVersion": 1,
+  "displayName": "基础设施",
+  "kind": "platform",
+  "stage": "A",
+  "owner": "infra",
+  "contractVersion": "v1",
+  "implementation": "local-ts",
+  "minimumHostVersion": "1.0.0",
+  "capabilities": [
+    "api.routes.register",
+    "facade.invoke",
+    "rpc.serve",
+    "cmd.dispatch",
+    "pack.independent"
+  ],
+  "entrypoints": {
+    "facade": [
+      "packages/domains/infra/contract/infra.facade.ts"
+    ],
+    "proto": "packages/domains/infra/contract/infra.proto",
+    "actions": "packages/domains/infra/contract/actions.ts"
+  },
+  "apiRoutes": {
+    "publicPrefix": [
+      "/api/v1/admin/infra"
+    ],
+    "adminPrefix": "/api/v1/admin/infra"
+  },
+  "auth": {
+    "audience": "admin",
+    "tenantPolicy": "required"
+  },
+  "messaging": {
+    "queueGroup": "ruoyi.infra",
+    "commandSubject": "ruoyi.cmd.infra.>",
+    "eventSubject": "ruoyi.evt.infra.>"
+  },
+  "invoke": {
+    "colocated": "sdk",
+    "remote": "rpc",
+    "protocol": "nats-rr",
+    "serialization": "json"
+  },
+  "upstream": {
+    "env": "RUOYI_DOMAIN_INFRA_UPSTREAM",
+    "protocol": "http",
+    "defaultPort": 3211
+  },
+  "resilience": {
+    "timeoutMs": 8000,
+    "retry": {
+      "maxAttempts": 1,
+      "safeMethodsOnly": true
+    },
+    "idempotencyRequired": false
+  },
+  "facadeMethods": [
+    "ping",
+    "updateConfig",
+    "previewCodegen",
+    "generateCodegen",
+    "previewTemplate",
+    "generateTemplate",
+    "listQueryDataSources",
+    "getQueryConnection",
+    "listConfigs",
+    "getConfigByKey",
+    "createConfig",
+    "listJobs",
+    "createJob",
+    "listFiles",
+    "recordFile",
+    "pageDataSourceConfigs",
+    "getConfig",
+    "updateConfigItem",
+    "deleteConfig",
+    "getJob",
+    "updateJob",
+    "deleteJob",
+    "triggerJob",
+    "updateJobStatus",
+    "getFile",
+    "deleteFile",
+    "listPages",
+    "getPage",
+    "getPageBySlug",
+    "pageApiErrorLogs",
+    "getApiErrorLog",
+    "processApiErrorLog",
+    "pageApiAccessLogs",
+    "getApiAccessLog",
+    "testDataSourceConnection",
+    "listCodegenTables",
+    "getCodegenTable",
+    "updateCodegenTable",
+    "deleteCodegenTable",
+    "deleteCodegenTables",
+    "exportApiAccessLogs",
+    "exportApiErrorLogs",
+    "runAuditLogRetention",
+    "listCodegenCandidates",
+    "importCodegenTables",
+    "generateCodegenArchive",
+    "listCodegenCatalog"
+  ],
+  "rpc": [
+    {
+      "service": "InfraService",
+      "method": "Ping"
+    },
+    {
+      "service": "InfraService",
+      "method": "UpdateConfig"
+    },
+    {
+      "service": "InfraService",
+      "method": "PreviewCodegen"
+    },
+    {
+      "service": "InfraService",
+      "method": "GenerateCodegen"
+    },
+    {
+      "service": "InfraService",
+      "method": "PreviewTemplate"
+    },
+    {
+      "service": "InfraService",
+      "method": "GenerateTemplate"
+    },
+    {
+      "service": "InfraService",
+      "method": "ListQueryDataSources"
+    },
+    {
+      "service": "InfraService",
+      "method": "GetQueryConnection"
+    },
+    {
+      "service": "InfraService",
+      "method": "ListConfigs"
+    },
+    {
+      "service": "InfraService",
+      "method": "GetConfigByKey"
+    },
+    {
+      "service": "InfraService",
+      "method": "CreateConfig"
+    },
+    {
+      "service": "InfraService",
+      "method": "ListJobs"
+    },
+    {
+      "service": "InfraService",
+      "method": "CreateJob"
+    },
+    {
+      "service": "InfraService",
+      "method": "ListFiles"
+    },
+    {
+      "service": "InfraService",
+      "method": "RecordFile"
+    },
+    {
+      "service": "InfraService",
+      "method": "PageDataSourceConfigs"
+    },
+    {
+      "service": "InfraService",
+      "method": "GetConfig"
+    },
+    {
+      "service": "InfraService",
+      "method": "UpdateConfigItem"
+    },
+    {
+      "service": "InfraService",
+      "method": "DeleteConfig"
+    },
+    {
+      "service": "InfraService",
+      "method": "GetJob"
+    },
+    {
+      "service": "InfraService",
+      "method": "UpdateJob"
+    },
+    {
+      "service": "InfraService",
+      "method": "DeleteJob"
+    },
+    {
+      "service": "InfraService",
+      "method": "TriggerJob"
+    },
+    {
+      "service": "InfraService",
+      "method": "UpdateJobStatus"
+    },
+    {
+      "service": "InfraService",
+      "method": "GetFile"
+    },
+    {
+      "service": "InfraService",
+      "method": "DeleteFile"
+    },
+    {
+      "service": "InfraService",
+      "method": "ListPages"
+    },
+    {
+      "service": "InfraService",
+      "method": "GetPage"
+    },
+    {
+      "service": "InfraService",
+      "method": "GetPageBySlug"
+    },
+    {
+      "service": "InfraService",
+      "method": "PageApiErrorLogs"
+    },
+    {
+      "service": "InfraService",
+      "method": "GetApiErrorLog"
+    },
+    {
+      "service": "InfraService",
+      "method": "ProcessApiErrorLog"
+    },
+    {
+      "service": "InfraService",
+      "method": "PageApiAccessLogs"
+    },
+    {
+      "service": "InfraService",
+      "method": "GetApiAccessLog"
+    },
+    {
+      "service": "InfraService",
+      "method": "TestDataSourceConnection"
+    },
+    {
+      "service": "InfraService",
+      "method": "ListCodegenTables"
+    },
+    {
+      "service": "InfraService",
+      "method": "GetCodegenTable"
+    },
+    {
+      "service": "InfraService",
+      "method": "UpdateCodegenTable"
+    },
+    {
+      "service": "InfraService",
+      "method": "DeleteCodegenTable"
+    },
+    {
+      "service": "InfraService",
+      "method": "DeleteCodegenTables"
+    },
+    {
+      "service": "InfraService",
+      "method": "ExportApiAccessLogs"
+    },
+    {
+      "service": "InfraService",
+      "method": "ExportApiErrorLogs"
+    },
+    {
+      "service": "InfraService",
+      "method": "RunAuditLogRetention"
+    },
+    {
+      "service": "InfraService",
+      "method": "ListCodegenCandidates"
+    },
+    {
+      "service": "InfraService",
+      "method": "ImportCodegenTables"
+    },
+    {
+      "service": "InfraService",
+      "method": "GenerateCodegenArchive"
+    },
+    {
+      "service": "InfraService",
+      "method": "ListCodegenCatalog"
+    }
+  ],
+  "actions": [
+    "infra.ping",
+    "infra.updateConfig",
+    "infra.previewCodegen",
+    "infra.generateCodegen",
+    "infra.previewTemplate",
+    "infra.generateTemplate",
+    "infra.listQueryDataSources",
+    "infra.getQueryConnection",
+    "infra.listConfigs",
+    "infra.getConfigByKey",
+    "infra.createConfig",
+    "infra.listJobs",
+    "infra.createJob",
+    "infra.listFiles",
+    "infra.recordFile",
+    "infra.pageDataSourceConfigs",
+    "infra.getConfig",
+    "infra.updateConfigItem",
+    "infra.deleteConfig",
+    "infra.getJob",
+    "infra.updateJob",
+    "infra.deleteJob",
+    "infra.triggerJob",
+    "infra.updateJobStatus",
+    "infra.getFile",
+    "infra.deleteFile",
+    "infra.listPages",
+    "infra.getPage",
+    "infra.getPageBySlug",
+    "infra.pageApiErrorLogs",
+    "infra.getApiErrorLog",
+    "infra.processApiErrorLog",
+    "infra.pageApiAccessLogs",
+    "infra.getApiAccessLog",
+    "infra.testDataSourceConnection",
+    "infra.listCodegenTables",
+    "infra.getCodegenTable",
+    "infra.updateCodegenTable",
+    "infra.deleteCodegenTable",
+    "infra.deleteCodegenTables",
+    "infra.exportApiAccessLogs",
+    "infra.exportApiErrorLogs",
+    "infra.runAuditLogRetention",
+    "infra.listCodegenCandidates",
+    "infra.importCodegenTables",
+    "infra.generateCodegenArchive",
+    "infra.listCodegenCatalog"
+  ],
+  "permissions": [
+    "infra:api-access-log:export",
+    "infra:api-access-log:query",
+    "infra:api-error-log:export",
+    "infra:api-error-log:query",
+    "infra:api-error-log:update-status",
+    "infra:appearance:query",
+    "infra:appearance:update",
+    "infra:audit-log:retention",
+    "infra:codegen:create",
+    "infra:codegen:delete",
+    "infra:codegen:download",
+    "infra:codegen:preview",
+    "infra:codegen:query",
+    "infra:codegen:update",
+    "infra:config:update",
+    "infra:config:view",
+    "infra:data-source-config:create",
+    "infra:data-source-config:delete",
+    "infra:data-source-config:query",
+    "infra:data-source-config:test",
+    "infra:data-source-config:update",
+    "infra:file-config:view",
+    "infra:file:view",
+    "infra:job-log:view",
+    "infra:job:operate",
+    "infra:job:view",
+    "infra:online-definition:create",
+    "infra:online-definition:delete",
+    "infra:online-definition:generate",
+    "infra:online-definition:migrate",
+    "infra:online-definition:publish",
+    "infra:online-definition:query",
+    "infra:online-definition:test",
+    "infra:online-definition:update",
+    "infra:redis:view",
+    "infra:swagger:view"
+  ],
+  "dependsOn": [
+    "shared"
+  ],
+  "pack": {
+    "enabled": true,
+    "kind": "api-only",
+    "independentDatabase": false
+  }
+}
