@@ -53,6 +53,16 @@ message RelayChatRequest {
   json messages = 3;
 }
 
+message ListPublicModelsRequest {
+
+}
+
+message EmbedRequest {
+  string api_key = 1 [json_name = "apiKey"];
+  optional string model = 2;
+  json input = 3;
+}
+
 service AigwService {
   rpc Ping(PingRequest) returns (JsonReply);
   rpc ListChannels(ListChannelsRequest) returns (JsonReply);
@@ -61,4 +71,6 @@ service AigwService {
   rpc CreateToken(CreateTokenRequest) returns (JsonReply);
   rpc ListModels(ListModelsRequest) returns (JsonReply);
   rpc RelayChat(RelayChatRequest) returns (JsonReply);
+  rpc ListPublicModels(ListPublicModelsRequest) returns (JsonReply);
+  rpc Embed(EmbedRequest) returns (JsonReply);
 }

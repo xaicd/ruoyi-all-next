@@ -5,6 +5,8 @@ import {
   aigwChannelCreateSchema,
   aigwTokenCreateSchema,
   aigwRelayChatSchema,
+  aigwListPublicModelsSchema,
+  aigwEmbedSchema,
 } from "../backend/validators"
 
 export const aigwPingSchema = z.object({
@@ -19,6 +21,8 @@ export const AIGW_ACTION_SCHEMAS = {
   "aigw.createToken": aigwTokenCreateSchema,
   "aigw.listModels": aigwPageQuerySchema,
   "aigw.relayChat": aigwRelayChatSchema,
+  "aigw.listPublicModels": aigwListPublicModelsSchema,
+  "aigw.embed": aigwEmbedSchema,
 } as const
 
 export function registerActionSchemas() {

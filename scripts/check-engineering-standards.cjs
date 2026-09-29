@@ -19,6 +19,7 @@ const path = require("path")
 const { ROOT, loadCatalog } = require("./lib/domain-catalog.cjs")
 
 const BASELINE_REL = "docs/architecture/artifacts/engineering-standards-baseline.json"
+const GOVERNANCE_DOC = "docs/architecture/ruoyi-all-next-domain-governance.md"
 const SRC = "src"
 
 const asJson = process.argv.includes("--json")
@@ -194,6 +195,81 @@ const RULES = [
         violations.push({ file: rel, detail: "no tenant reference found at all" })
       }
       return violations
+    },
+  },
+  {
+    id: "domain-governance-coverage",
+    section: "AGENTS.md §6",
+    mode: "enforce",
+    description:
+      "every domain in domain-catalog.json must have a governance row (stage / Skill binding / TestRefs / SplitNote)",
+    run() {
+      // 为什么需要这条: 本仓的 ruoyi:governance:check 在 standalone 项目里是空转
+      // ([SKIP] script omitted), 于是"新注册一个域但漏登记治理"没有任何门禁拦得住 ——
+      // aigw 就这么漂了很久。这里把它变成真检查。
+      const docRel = `${GOVERNANCE_DOC}`
+      const doc = abs(docRel)
+      if (!fs.existsSync(doc)) return [{ file: docRel, detail: "governance doc is missing" }]
+
+      const names = new Set(loadCatalog().domains.map((domain) => domain.name))
+      const covered = new Set()
+      for (const line of fs.readFileSync(doc, "utf8").split(/\r?\n/)) {
+        if (!line.startsWith("|")) continue
+        const first = line.slice(1).split("|")[0].trim()
+        if (names.has(first)) covered.add(first)
+      }
+      return [...names]
+        .filter((name) => !covered.has(name))
+        .sort()
+        .map((name) => ({
+          file: docRel,
+          detail: `domain "${name}" is registered in domain-catalog.json but has no governance row`,
+        }))
+    },
+  },
+  {
+    id: "facade-method-dispatch-mapped",
+    section: "AGENTS.md §3.3",
+    mode: "ratchet",
+    description:
+      "every method a domain facade declares must be dispatchable (mapped in rpc-actions.json, or built-in ping)",
+    run() {
+      // 声明了 facade 方法却没有派发映射 = 调用时抛 "Method X not found in Y service"。
+      // 只声明不兑现的 facade 会让"域可拆分"变成纸面结论, 所以必须机器可见。
+      const catalogRel = "src/modules/shared/backend/constants/rpc-actions.json"
+      const rpcActions = JSON.parse(fs.readFileSync(abs(catalogRel), "utf8"))
+      const violations = []
+      const modulesRoot = abs(`${SRC}/modules`)
+
+      for (const domain of fs.readdirSync(modulesRoot, { withFileTypes: true })) {
+        if (!domain.isDirectory()) continue
+        const contractDir = path.join(modulesRoot, domain.name, "contract")
+        if (!fs.existsSync(contractDir)) continue
+
+        const mapped = new Set(
+          (rpcActions.domains?.[domain.name]?.actions ?? [])
+            .filter((action) => action.service || action.target)
+            .map((action) => action.method),
+        )
+
+        for (const entry of fs.readdirSync(contractDir)) {
+          if (!/\.facade\.ts$/.test(entry)) continue
+          const file = path.join(contractDir, entry)
+          const source = fs.readFileSync(file, "utf8")
+          const declaration = source.match(/FACADE_METHODS\s*=\s*\[([^\]]*)\]\s*as const/)
+          if (!declaration) continue
+
+          for (const [, method] of declaration[1].matchAll(/"([^"]+)"/g)) {
+            if (method === "ping") continue // 内建方法, 无需映射
+            if (mapped.has(method)) continue
+            violations.push({
+              file: toRel(file),
+              detail: `facade method "${domain.name}.${method}" has no service/target mapping in rpc-actions.json`,
+            })
+          }
+        }
+      }
+      return violations.sort((a, b) => a.file.localeCompare(b.file) || a.detail.localeCompare(b.detail))
     },
   },
 ]

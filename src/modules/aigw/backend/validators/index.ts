@@ -49,6 +49,16 @@ export const aigwRelayChatSchema = z.object({
   stream: z.boolean().optional(),
 })
 
+/** 公开模型列表：无入参。跨域/网关调用时 applyActionSchema 会传 {}。 */
+export const aigwListPublicModelsSchema = z.object({})
+
+/** 文本向量化。 */
+export const aigwEmbedSchema = z.object({
+  apiKey: z.string().min(1),
+  model: z.string().optional(),
+  input: z.union([z.string(), z.array(z.string())]),
+})
+
 // === Entitlement 扩展通用属性 ===
 
 export const createEnterpriseSchema = z.object({

@@ -1,15 +1,15 @@
 {
   "version": 1,
   "kind": "evolution-backlog",
-  "generatedAt": "2026-09-29T01:45:03.622Z",
-  "head": "2314ce8",
+  "generatedAt": "2026-09-29T03:05:09.226Z",
+  "head": "28c4b45",
   "note": "Aggregated from real gate artifacts. Read-only signal for external agents; no agent loop runs in this repository (AGENTS.md §18).",
   "summary": {
     "blocker": 0,
     "high": 0,
     "medium": 11,
-    "low": 20,
-    "total": 31
+    "low": 21,
+    "total": 32
   },
   "items": [
     {
@@ -155,7 +155,7 @@
       "files": [
         "docs/architecture/artifacts/harness-trace-latest.json"
       ],
-      "evidence": "trace.head=f7f525a, current HEAD=2314ce8",
+      "evidence": "trace.head=2314ce8, current HEAD=28c4b45",
       "command": "npm run check",
       "action": "Re-run the gates so the recorded evidence matches the current revision."
     },
@@ -370,6 +370,16 @@
       "title": "backend-no-console: 8 file(s) carry frozen debt",
       "files": [],
       "evidence": "baseline accepts debt in 8 file(s); new debt is already blocked",
+      "command": "npm run standards:baseline",
+      "action": "Burn the frozen debt down, then re-baseline so the rule can move from ratchet to enforce."
+    },
+    {
+      "id": "standards-debt-facade-method-dispatch-mapped",
+      "severity": "low",
+      "section": "AGENTS.md §3.3",
+      "title": "facade-method-dispatch-mapped: 12 file(s) carry frozen debt",
+      "files": [],
+      "evidence": "baseline accepts debt in 12 file(s); new debt is already blocked",
       "command": "npm run standards:baseline",
       "action": "Burn the frozen debt down, then re-baseline so the rule can move from ratchet to enforce."
     },

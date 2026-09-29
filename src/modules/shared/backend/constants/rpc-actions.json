@@ -958,9 +958,19 @@
     "aigw": {
       "actions": [
         { "method": "ping", "schema": "ping" },
-        { "method": "listChannels", "schema": "aigwPageQuerySchema", "fieldsRef": "pageQuery" },
+        {
+          "method": "listChannels",
+          "service": "AigwChannelService",
+          "module": "aigw-channel.service",
+          "target": "page",
+          "schema": "aigwPageQuerySchema",
+          "fieldsRef": "pageQuery"
+        },
         {
           "method": "createChannel",
+          "service": "AigwChannelService",
+          "module": "aigw-channel.service",
+          "target": "create",
           "schema": "aigwChannelCreateSchema",
           "fields": [
             { "name": "name", "type": "string" },
@@ -970,23 +980,63 @@
             { "name": "models", "type": "json" }
           ]
         },
-        { "method": "listTokens", "schema": "aigwPageQuerySchema", "fieldsRef": "pageQuery" },
+        {
+          "method": "listTokens",
+          "service": "AigwAccessTokenService",
+          "module": "aigw-access-token.service",
+          "target": "page",
+          "schema": "aigwPageQuerySchema",
+          "fieldsRef": "pageQuery"
+        },
         {
           "method": "createToken",
+          "service": "AigwAccessTokenService",
+          "module": "aigw-access-token.service",
+          "target": "create",
           "schema": "aigwTokenCreateSchema",
           "fields": [
             { "name": "name", "type": "string" },
             { "name": "remainQuota", "type": "int32", "optional": true }
           ]
         },
-        { "method": "listModels", "schema": "aigwPageQuerySchema", "fieldsRef": "pageQuery" },
+        {
+          "method": "listModels",
+          "service": "AigwModelService",
+          "module": "aigw-model.service",
+          "target": "page",
+          "schema": "aigwPageQuerySchema",
+          "fieldsRef": "pageQuery"
+        },
         {
           "method": "relayChat",
+          "service": "AigwRelayService",
+          "module": "aigw-relay.service",
+          "target": "relayChatCompletion",
           "schema": "aigwRelayChatSchema",
           "fields": [
             { "name": "apiKey", "type": "string" },
             { "name": "model", "type": "string" },
             { "name": "messages", "type": "json" }
+          ]
+        },
+        {
+          "method": "listPublicModels",
+          "service": "AigwRelayService",
+          "module": "aigw-relay.service",
+          "target": "listPublicModels",
+          "schema": "aigwListPublicModelsSchema",
+          "fields": []
+        },
+        {
+          "method": "embed",
+          "service": "AigwRelayService",
+          "module": "aigw-relay.service",
+          "target": "embed",
+          "schema": "aigwEmbedSchema",
+          "fields": [
+            { "name": "apiKey", "type": "string" },
+            { "name": "model", "type": "string", "optional": true },
+            { "name": "input", "type": "json" }
           ]
         }
       ]

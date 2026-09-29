@@ -66,7 +66,9 @@
     "listTokens",
     "createToken",
     "listModels",
-    "relayChat"
+    "relayChat",
+    "listPublicModels",
+    "embed"
   ],
   "rpc": [
     {
@@ -96,6 +98,14 @@
     {
       "service": "AigwService",
       "method": "RelayChat"
+    },
+    {
+      "service": "AigwService",
+      "method": "ListPublicModels"
+    },
+    {
+      "service": "AigwService",
+      "method": "Embed"
     }
   ],
   "actions": [
@@ -105,7 +115,9 @@
     "aigw.listTokens",
     "aigw.createToken",
     "aigw.listModels",
-    "aigw.relayChat"
+    "aigw.relayChat",
+    "aigw.listPublicModels",
+    "aigw.embed"
   ],
   "permissions": [
     "aigw:channel:create",

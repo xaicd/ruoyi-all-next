@@ -1,6 +1,19 @@
 import type { AiPageQueryInput, AiModelCreateInput, AiChatDeleteInput } from "../validators"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
-import { AigwRelayService } from "@/modules/aigw/backend/services"
+import type { BrokerCallResult } from "@/modules/shared/backend/lib/broker-context"
+import { aigwFacade } from "@/modules/aigw/contract/aigw.facade"
+
+/**
+ * 解包跨域 facade 返回值。
+ *
+ * Domain Facade 返回的是 `BrokerCallResult` 信封（success/data/error/traceId），
+ * 不是业务结果本身。跨域调用必须显式解包并把失败转成异常 —— 否则失败会被当成
+ * "拿到一个信封对象"静默吞掉。（同一模式见 infra/backend/services/codegen-table.service.ts）
+ */
+async function unwrapFacade<T>(result: BrokerCallResult, message: string): Promise<T> {
+  if (!result.success) throw new Error(`${message}: ${result.error ?? "未知错误"}`)
+  return result.data as T
+}
 
 
 type AiModel = {
@@ -77,21 +90,30 @@ export class AiService {
     return { chatId: input.chatId, deleted: true }
   }
 
-  static relayChatCompletion(input: {
+  static async relayChatCompletion(input: {
     apiKey: string
     model: string
     messages: { role: string; content: string }[]
     stream?: boolean
   }) {
-    return AigwRelayService.relayChatCompletion(input)
+    return unwrapFacade(
+      await aigwFacade.relayChat(input, { caller: "ai.relayChatCompletion" }),
+      "aigw relayChat 调用失败",
+    )
   }
 
-  static listPublicModels() {
-    return AigwRelayService.listPublicModels()
+  static async listPublicModels() {
+    return unwrapFacade(
+      await aigwFacade.listPublicModels({}, { caller: "ai.listPublicModels" }),
+      "aigw listPublicModels 调用失败",
+    )
   }
 
-  static embed(input: { apiKey: string; model?: string; input: string | string[] }) {
-    return AigwRelayService.embed(input)
+  static async embed(input: { apiKey: string; model?: string; input: string | string[] }) {
+    return unwrapFacade(
+      await aigwFacade.embed(input, { caller: "ai.embed" }),
+      "aigw embed 调用失败",
+    )
   }
 }
 

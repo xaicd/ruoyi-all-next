@@ -14,6 +14,22 @@
         "src/modules/aigw/backend/repositories/aigw-split.repository.ts": 1,
         "src/modules/aigw/backend/repositories/aigw-tariff.repository.ts": 1
       }
+    },
+    "facade-method-dispatch-mapped": {
+      "accepted": {
+        "src/modules/ai/contract/ai.facade.ts": 7,
+        "src/modules/bpm/contract/bpm.facade.ts": 3,
+        "src/modules/crm/contract/crm.facade.ts": 3,
+        "src/modules/erp/contract/erp.facade.ts": 3,
+        "src/modules/im/contract/im.facade.ts": 2,
+        "src/modules/iot/contract/iot.facade.ts": 4,
+        "src/modules/mall/contract/mall.facade.ts": 3,
+        "src/modules/member/contract/member.facade.ts": 6,
+        "src/modules/mes/contract/mes.facade.ts": 2,
+        "src/modules/mp/contract/mp.facade.ts": 3,
+        "src/modules/report/contract/report.facade.ts": 2,
+        "src/modules/wms/contract/wms.facade.ts": 2
+      }
     }
   }
 }
