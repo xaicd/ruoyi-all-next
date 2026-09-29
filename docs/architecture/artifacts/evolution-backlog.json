@@ -1,8 +1,8 @@
 {
   "version": 1,
   "kind": "evolution-backlog",
-  "generatedAt": "2026-09-29T09:02:34.200Z",
-  "head": "d9fc4a8",
+  "generatedAt": "2026-09-29T09:22:53.293Z",
+  "head": "e147144",
   "note": "Aggregated from real gate artifacts. Read-only signal for external agents; no agent loop runs in this repository (AGENTS.md §18).",
   "summary": {
     "blocker": 0,
@@ -155,7 +155,7 @@
       "files": [
         "docs/architecture/artifacts/harness-trace-latest.json"
       ],
-      "evidence": "trace.head=2556122, current HEAD=d9fc4a8",
+      "evidence": "trace.head=d9fc4a8, current HEAD=e147144",
       "command": "npm run check",
       "action": "Re-run the gates so the recorded evidence matches the current revision."
     },
@@ -377,15 +377,18 @@
       "id": "todo-markers",
       "severity": "low",
       "section": "AGENTS.md §12",
-      "title": "5 TODO/FIXME marker(s) in src",
+      "title": "8 TODO/FIXME marker(s) in src",
       "files": [
+        "src/modules/mall/routes/app/products/route.ts",
+        "src/modules/member/routes/app/profile/route.ts",
+        "src/modules/member/routes/app/profile/route.ts",
         "src/modules/pay/routes/app/cashier/route.ts",
         "src/modules/pay/routes/open/notify/route.ts",
         "src/modules/shared/backend/lib/audit-log.ts",
         "src/modules/shared/backend/lib/database/kysely-client.ts",
         "src/modules/shared/backend/lib/exception-analyzer.ts"
       ],
-      "evidence": "src/modules/pay/routes/app/cashier/route.ts — line 14: // TODO: 调用 PayService.createOrderFromApp(auth.userId, body); src/modules/pay/routes/open/notify/route.ts — line 11: // TODO: 验证签名 + 解析回调数据 + 更新订单状态; src/modules/shared/backend/lib/audit-log.ts — line 14: * TODO: 对接数据库或日志总线。; src/modules/shared/backend/lib/database/kysely-client.ts — line 81: sqlserver: \"dummy\",  // TODO: 添加 MSSQL dialect; src/modules/shared/backend/lib/exception-analyzer.ts — line 161: // TODO: 阶段B 发送真实告警",
+      "evidence": "src/modules/mall/routes/app/products/route.ts — line 19: // TODO: 调用 MallProductService.listForApp(input, auth); src/modules/member/routes/app/profile/route.ts — line 13: // TODO: 调用 MemberService.getProfile(auth.userId); src/modules/member/routes/app/profile/route.ts — line 33: // TODO: 调用 MemberService.updateProfile(auth.userId, body); src/modules/pay/routes/app/cashier/route.ts — line 14: // TODO: 调用 PayService.createOrderFromApp(auth.userId, body); src/modules/pay/routes/open/notify/route.ts — line 11: // TODO: 验证签名 + 解析回调数据 + 更新订单状态",
       "command": "grep -rn 'TODO\\|FIXME' src --include=*.ts",
       "action": "Resolve each marker or convert it into a tracked backlog item."
     }

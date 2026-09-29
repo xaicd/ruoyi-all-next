@@ -145,14 +145,14 @@ if (guardsSource.includes("TenantEntitlementService")) fail("shared guards must 
 if (!guardsSource.includes("systemPlatformFacade")) fail("shared guards must call tenant entitlement through systemPlatformFacade")
 
 const codegenTablesPath = path.join(ROOT, "src", "app", "api", "v1", "admin", "infra", "codegen", "tables", "route.ts")
-const codegenTables = fs.readFileSync(codegenTablesPath, "utf8")
+const codegenTables = resolveRouteSource(codegenTablesPath)
 if (codegenTables.includes("OnlineDefinitionService") || codegenTables.includes("KyselyOnlineRuntimeRepository") || codegenTables.includes("onlineFacade")) {
   fail("infra codegen tables route must not import online Service/Repository/Facade; use CodegenTableService")
 }
 if (!codegenTables.includes("CodegenTableService")) fail("infra codegen tables route must call CodegenTableService")
 
 const codegenImportPath = path.join(ROOT, "src", "app", "api", "v1", "admin", "infra", "codegen", "import", "route.ts")
-const codegenImport = fs.readFileSync(codegenImportPath, "utf8")
+const codegenImport = resolveRouteSource(codegenImportPath)
 if (codegenImport.includes("OnlineDefinitionService") || codegenImport.includes("KyselyOnlineRuntimeRepository") || codegenImport.includes("onlineFacade")) {
   fail("infra codegen import route must not import online Service/Repository/Facade; use CodegenTableService")
 }
@@ -221,7 +221,7 @@ for (const [label, relPath, token] of [
 }
 
 function mustUseActionSchemas(label, relPath, token) {
-  const source = fs.readFileSync(path.join(ROOT, relPath), "utf8")
+  const source = resolveRouteSource(path.join(ROOT, relPath))
   if (!source.includes(token) || !source.includes("parseActionQuery") && !source.includes("parseActionBody")) {
     fail(`${label} must parse with ${token} via parseActionQuery/parseActionBody`)
   }
@@ -286,7 +286,7 @@ for (const [label, relPath, token] of [
   mustUseActionSchemas(label, relPath, token)
 }
 
-const codegenRoute = fs.readFileSync(path.join(ROOT, "src/app/api/v1/admin/infra/codegen/route.ts"), "utf8")
+const codegenRoute = resolveRouteSource(path.join(ROOT, "src/app/api/v1/admin/infra/codegen/route.ts"))
 if (codegenRoute.includes("CodegenTableRepository")) fail("infra codegen route must not import CodegenTableRepository; use CodegenTableService")
 for (const [label, file] of [
   ["infra codegen preview route", "src/app/api/v1/admin/infra/codegen/preview/route.ts"],
@@ -294,7 +294,7 @@ for (const [label, file] of [
   ["infra codegen tables route", "src/app/api/v1/admin/infra/codegen/tables/route.ts"],
   ["infra codegen download route", "src/app/api/v1/admin/infra/codegen/[id]/download/route.ts"],
 ]) {
-  const source = fs.readFileSync(path.join(ROOT, file), "utf8")
+  const source = resolveRouteSource(path.join(ROOT, file))
   if (source.includes("CodegenTableRepository")) fail(`${label} must not import CodegenTableRepository; use CodegenTableService`)
 }
 if (!codegenRoute.includes("CodegenTableService")) fail("infra codegen route must call CodegenTableService")
@@ -304,7 +304,7 @@ for (const relPath of [
   "src/app/api/v1/admin/infra/pages/[id]/route.ts",
   "src/app/api/v1/admin/infra/pages/render/[slug]/route.ts",
 ]) {
-  const source = fs.readFileSync(path.join(ROOT, relPath), "utf8")
+  const source = resolveRouteSource(path.join(ROOT, relPath))
   if (source.includes("InfraPageRepository")) fail(`${relPath} must not import InfraPageRepository; use InfraPageService`)
   if (!source.includes("InfraPageService")) fail(`${relPath} must call InfraPageService`)
 }
