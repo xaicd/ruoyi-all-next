@@ -13,21 +13,27 @@
       "prefix": "/api/v1/admin",
       "auth": "admin-jwt",
       "audience": "admin",
-      "usedBy": ["admin-web", "desktop-pc"]
+      "usedBy": [
+        "admin-web"
+      ]
     },
     {
       "id": "app",
       "prefix": "/api/v1/app",
       "auth": "member-jwt",
       "audience": "app",
-      "usedBy": ["h5", "uniapp", "flutter"]
+      "usedBy": [
+        "expo"
+      ]
     },
     {
       "id": "open",
       "prefix": "/api/v1/open",
       "auth": "public-or-signature",
       "audience": "open",
-      "usedBy": ["admin-web", "h5", "uniapp", "flutter", "desktop-pc"]
+      "usedBy": [
+        "admin-web"
+      ]
     },
     {
       "id": "internal",
@@ -46,62 +52,33 @@
       "workspace": "src/app",
       "runtime": "next-app-router",
       "status": "ga",
-      "platforms": ["windows", "macos", "linux"],
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
       "tokenStore": "localStorage",
       "packageKind": "in-repo-admin",
       "notes": "当前管理后台真源。域 UI 落在 src/modules/<domain>/frontend，不进 clients/。"
     },
     {
-      "id": "h5",
-      "name": "C 端 H5",
-      "kind": "web",
-      "surface": "app",
-      "workspace": "clients/h5",
-      "runtime": "uni-app-h5-or-next",
-      "status": "standard-only",
-      "platforms": ["mobile-browser", "wechat-webview"],
-      "tokenStore": "httpOnly-or-memory",
-      "packageKind": "standalone",
-      "notes": "独立包 clients/h5。会员 JWT 走 /api/v1/app。页面可与 uni-app 共用视图，禁止另写一套 DTO。"
-    },
-    {
-      "id": "uniapp",
-      "name": "uni-app 小程序/App",
-      "kind": "mini-program",
-      "surface": "app",
-      "workspace": "clients/uniapp",
-      "runtime": "uni-app",
-      "status": "standard-only",
-      "platforms": ["mp-weixin", "mp-alipay", "app-plus", "h5"],
-      "tokenStore": "uni.storage",
-      "packageKind": "standalone",
-      "notes": "独立包 clients/uniapp。pages 只做路由壳，实现放 src/modules/<domain>。"
-    },
-    {
-      "id": "flutter",
-      "name": "Flutter App",
+      "id": "expo",
+      "name": "Expo 移动端",
       "kind": "native",
       "surface": "app",
-      "workspace": "clients/flutter",
-      "runtime": "flutter",
+      "workspace": "clients/expo",
+      "runtime": "expo",
       "status": "standard-only",
-      "platforms": ["android", "ios"],
-      "tokenStore": "secure-storage",
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "tokenStore": "expo-secure-store",
       "packageKind": "standalone",
-      "notes": "独立包 clients/flutter。源码根是 lib/，域目录与后端 domain-catalog 同名。"
-    },
-    {
-      "id": "desktop-pc",
-      "name": "跨平台 PC 客户端",
-      "kind": "desktop",
-      "surface": "admin",
-      "workspace": "clients/desktop-pc",
-      "runtime": "tauri",
-      "status": "standard-only",
-      "platforms": ["windows", "macos", "linux"],
-      "tokenStore": "os-keychain",
-      "packageKind": "standalone",
-      "notes": "独立包 clients/desktop-pc。src-tauri 只做壳，业务 UI 按 modules/<domain> 或嵌入 admin-web。"
+      "notes": "本仓唯一的独立客户端包。按自身实际结构要求 src/shared（共享 DTO/API 层），不强制 app/modules —— 它是 src/App.tsx 经典结构，未使用 Expo Router。",
+      "requiredSourceDirs": [
+        "shared"
+      ]
     }
   ],
   "rules": [
@@ -115,21 +92,32 @@
     "本标准不表示 H5 / uni-app / Flutter / 桌面客户端已经交付。"
   ],
   "packageLayout": {
-    "requiredSourceDirs": ["app", "shared", "modules"],
-    "moduleSubdirs": ["api", "models", "pages", "components"],
+    "requiredSourceDirs": [
+      "app",
+      "shared",
+      "modules"
+    ],
+    "moduleSubdirs": [
+      "api",
+      "models",
+      "pages",
+      "components"
+    ],
     "sourceRootByRuntime": {
       "next-app-router": "src",
       "uni-app-h5-or-next": "src",
       "uni-app": "src",
       "flutter": "lib",
-      "tauri": "src"
+      "tauri": "src",
+      "expo": "src"
     },
     "manifestByRuntime": {
       "next-app-router": "package.json",
       "uni-app-h5-or-next": "package.json",
       "uni-app": "package.json",
       "flutter": "pubspec.yaml",
-      "tauri": "package.json"
+      "tauri": "package.json",
+      "expo": "app.json"
     }
   }
 }

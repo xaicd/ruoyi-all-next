@@ -39,7 +39,7 @@
       "note": "Do not duplicate domain names here. Catalog is the runtime source of truth."
     },
     "clients": {
-      "channels": ["h5", "uniapp", "flutter", "desktop-pc"]
+      "channels": ["expo"]
     }
   },
   "profiles": {

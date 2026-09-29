@@ -59,16 +59,10 @@ restoredCount += copyDirRecursive(
 
 // 4. Clients
 restoredCount += copyDirRecursive(
-  path.join(baseRepo, `clients/h5/src/modules/${targetDomain}`),
-  path.join(sourceRoot, `clients/h5/src/modules/${targetDomain}`)
 )
 restoredCount += copyDirRecursive(
-  path.join(baseRepo, `clients/uniapp/src/modules/${targetDomain}`),
-  path.join(sourceRoot, `clients/uniapp/src/modules/${targetDomain}`)
 )
 restoredCount += copyDirRecursive(
-  path.join(baseRepo, `clients/flutter/lib/modules/${targetDomain}`),
-  path.join(sourceRoot, `clients/flutter/lib/modules/${targetDomain}`)
 )
 
 console.log(`[DOMAIN-RESTORE] Successfully restored domain [${targetDomain}] (${restoredCount} files copied from base repo)!`)

@@ -15,10 +15,6 @@ const DOMAIN_PATH_PREFIXES = Object.freeze([
   "src/app/api/v1/open/",
   "src/app/(admin-pages)/admin/",
   "src/app/(cpc-pages)/cpc/",
-  "clients/h5/src/modules/",
-  "clients/uniapp/src/modules/",
-  "clients/desktop-pc/src/modules/",
-  "clients/flutter/modules/",
 ])
 
 function splitCsv(value) {

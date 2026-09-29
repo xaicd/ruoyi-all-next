@@ -41,9 +41,6 @@ for (const domain of DOMAINS_TO_PRUNE) {
   // 3. Admin 页面入口目录
   removedCount += removePath(`src/app/(admin-pages)/admin/${domain}`)
   // 4. Clients 跨端多端目录
-  removedCount += removePath(`clients/h5/src/modules/${domain}`)
-  removedCount += removePath(`clients/uniapp/src/modules/${domain}`)
-  removedCount += removePath(`clients/flutter/lib/modules/${domain}`)
 }
 
 // 清理临时脚本与缓存

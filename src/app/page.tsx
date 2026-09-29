@@ -24,10 +24,6 @@ const coreDomains = [
 
 const clientChannels = [
   { id: "admin-web", name: "管理端 PC", stack: "Next.js 15 App Router", role: "企业管理后台 (生产就绪)" },
-  { id: "h5", name: "C 端 H5", stack: "React 18 + Vite + Tailwind", role: "移动触屏端 (标准化包)" },
-  { id: "uniapp", name: "小程序 / 跨端", stack: "Vue 3 + TS + UniApp", role: "微信/多端小程序 (标准化包)" },
-  { id: "flutter", name: "Flutter 原生 App", stack: "Flutter 3.x + Dart + Dio", role: "Android / iOS (标准化包)" },
-  { id: "desktop-pc", name: "跨平台桌面端", stack: "Tauri 2.0 + Rust + Vite", role: "Windows / macOS (标准化包)" },
 ]
 
 export default function HomePage() {
@@ -221,7 +217,7 @@ export default function HomePage() {
               <div className="text-xs font-bold text-blue-600 font-mono">02 / CROSS-PLATFORM</div>
               <h3 className="mt-2 text-base font-bold text-slate-900">全端多渠道独立客户端包</h3>
               <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-                独立包组织（clients/h5, uniapp, flutter, desktop-pc），统一消费 /api/v1/app 面与共享 DTO 契约，避免各端逻辑分叉。
+                独立包组织（clients/expo），统一消费 /api/v1/app 面与共享 DTO 契约，避免各端逻辑分叉。
               </p>
             </div>
 

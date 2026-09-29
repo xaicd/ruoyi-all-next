@@ -13,7 +13,8 @@ const ALLOWED_MODULE_DIRS = new Set(DOMAIN_CATALOG.domains.map((domain) => domai
 
 export function requiredSourceDirPaths(channel: ClientChannel, repoRoot: string): string[] {
   const sourceRoot = join(repoRoot, channel.workspace, sourceRootForChannel(channel))
-  return clientChannels.packageLayout.requiredSourceDirs.map((dir) => join(sourceRoot, dir))
+  const dirs = channel.requiredSourceDirs ?? clientChannels.packageLayout.requiredSourceDirs
+  return dirs.map((dir) => join(sourceRoot, dir))
 }
 
 export function collectClientPackageLayoutErrors(repoRoot: string): string[] {

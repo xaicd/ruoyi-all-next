@@ -146,7 +146,7 @@ core platform modules → built-in first-party plugins → installed plugins。
 | 项 | 做法 |
 |---|---|
 | 包管理 | **pnpm workspace**（`pnpm-workspace.yaml`），`packageManager: pnpm@9.15.4` |
-| workspace globs | `packages/*`、`packages/adapters/*`、`packages/plugins/*`、`packages/plugins/examples/*`、`server`、`ui`、`cli`、`clients/api-client`、`clients/h5` |
+| workspace globs | `packages/*`、`packages/adapters/*`、`packages/plugins/*`、`packages/plugins/examples/*`、`server`、`ui`、`cli`、`clients/api-client`、`clients/expo` |
 | **负向排除** | `"!packages/plugins/sandbox-providers/**"`、`"!packages/plugins/examples/plugin-orchestration-smoke-example"` —— 附注释说明是为了**避免 lockfile churn** |
 | 插件包形态 | `packages/plugins/plugin-<name>/`，`"type": "module"`，`files: ["dist","migrations","README.md"]`，`engines.node >= 24.11.0`，`peerDependencies: { react: ">=18" }` |
 | **入口契约** | `package.json` 里的 **`paperclipPlugin`** 指针：`{ manifest: "./dist/manifest.js", worker: "./dist/worker.js", ui: "./dist/ui/" }`；host 由 `plugin-loader.ts` 读该键定位入口 |

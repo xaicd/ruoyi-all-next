@@ -13,9 +13,6 @@ import { generateListPage } from "./frontend-list.template"
 import { generateAppPage } from "./frontend-page.template"
 import { generateTest } from "./test.template"
 import { generateRbacSql } from "./rbac-sql.template"
-import { generateClientH5 } from "./client-h5.template"
-import { generateClientUniApp } from "./client-uniapp.template"
-import { generateClientFlutter } from "./client-flutter.template"
 
 export * from "./common"
 export * from "./types.template"
@@ -31,9 +28,6 @@ export * from "./frontend-list.template"
 export * from "./frontend-page.template"
 export * from "./test.template"
 export * from "./rbac-sql.template"
-export * from "./client-h5.template"
-export * from "./client-uniapp.template"
-export * from "./client-flutter.template"
 
 export interface GenerateCodesOptions {
   includeClients?: boolean
@@ -76,13 +70,9 @@ export function generateAllCodegenOutputs(config: CodegenConfig, options?: Gener
     },
   )
 
-  if (options?.includeClients !== false) {
-    outputs.push(
-      ...generateClientH5(config),
-      ...generateClientUniApp(config),
-      ...generateClientFlutter(config),
-    )
-  }
+  // 客户端渠道模板（h5 / uniapp / flutter）已随这些渠道一并移除：
+  // 本仓只保留 clients/expo 一个客户端。includeClients 选项保留以兼容调用方，
+  // 但当前没有可生成的客户端目标（若将来新增渠道，在此恢复对应模板）。
 
   return outputs
 }

@@ -10,14 +10,11 @@
 | 渠道 | 工作区 | API 面 | 鉴权 | 状态 |
 |---|---|---|---|---|
 | 管理端 PC | `src/app` | `/api/v1/admin` | 管理员 JWT + 权限码 | 已交付 |
-| C 端 H5 | `clients/h5` | `/api/v1/app` | 会员 JWT | 仅标准 |
-| uni-app | `clients/uniapp` | `/api/v1/app` | 会员 JWT | 仅标准 |
-| Flutter App | `clients/flutter` | `/api/v1/app` | 会员 JWT | 仅标准 |
-| 跨平台 PC 客户端 | `clients/desktop-pc` | `/api/v1/admin` | 管理员 JWT + 权限码 | 仅标准 |
+| Expo 移动端 | `clients/expo` | `/api/v1/app` | 会员 JWT | 仅标准 |
 
 公开元数据、错误码、OpenAPI、支付回调走 `/api/v1/open`。服务间调用走 `/api/internal`，浏览器与 App 不得使用。
 
-请求头 `X-Client-Channel` 取值必须是上表渠道 id：`admin-web`、`h5`、`uniapp`、`flutter`、`desktop-pc`。
+请求头 `X-Client-Channel` 取值必须是上表渠道 id：`admin-web`、`expo`。
 
 ## 2. 强制规则
 
@@ -48,10 +45,7 @@
 | 渠道 | 包 | 源码根 |
 |---|---|---|
 | admin-web | 仓库内 `src/modules/<domain>/frontend` | 不进 `clients/` |
-| h5 | `@ruoyi/client-h5` | `clients/h5/src` |
-| uniapp | `@ruoyi/client-uniapp` | `clients/uniapp/src` |
-| flutter | `ruoyi_client_flutter` | `clients/flutter/lib` |
-| desktop-pc | `@ruoyi/client-desktop-pc` | `clients/desktop-pc/src` |
+| expo | `@ruoyi/client-expo` | `clients/expo/src` |
 
 包内固定三层：
 

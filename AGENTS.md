@@ -79,7 +79,7 @@
    - `src/modules/<domain>/frontend/pages/` 专用于 **Admin 运营管理端页面**；
    - `src/modules/<domain>/frontend/cpc-pages/` 专用于 **Client PC（面向客户、政企内网挂载大盘、C 端员工协同工作台）页面**；
    - 严禁将客户/政企/C 端 PC 页面混入 `frontend/pages/` 中，必须严格收敛在 `frontend/cpc-pages/` 下，实现 Admin 与 Client PC 物理级解耦；
-7. C 端与桌面壳必须落在仓库根 `clients/<channel>/`，一渠道一包：`h5`、`uniapp`、`flutter`、`desktop-pc`。
+7. C 端与桌面壳必须落在仓库根 `clients/<channel>/`，一渠道一包；当前只保留 `expo`（其余渠道 h5/uniapp/flutter/desktop-pc 已按决策删除）。
 8. 独立客户端包内固定 `app/`、`shared/`、`modules/<domain>/`；域名与 `domain-catalog.json` 一致，禁止把新域堆进 `app`、`shared` 或根 `pages`。细则见 docs/architecture/ruoyi-all-next-client-channels.md。
 
 ### 3.3 可替换后端与微服务边界（强制）

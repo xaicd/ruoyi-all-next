@@ -3,9 +3,9 @@ import { clientChannels, clientChannelsSchema, getClientChannel, listClientChann
 import { toPublicProjectProfile } from "../project-profile"
 
 describe("clientChannels", () => {
-  it("keeps the five required channels on the published API surfaces", () => {
+  it("keeps the declared channels on the published API surfaces", () => {
     const catalog = clientChannelsSchema.parse(clientChannels)
-    expect(catalog.channels.map((item) => item.id)).toEqual(["admin-web", "h5", "uniapp", "flutter", "desktop-pc"])
+    expect(catalog.channels.map((item) => item.id)).toEqual(["admin-web", "expo"])
     expect(catalog.surfaces.map((item) => item.prefix)).toEqual([
       "/api/v1/admin",
       "/api/v1/app",
@@ -13,13 +13,9 @@ describe("clientChannels", () => {
       "/api/internal",
     ])
     expect(getClientChannel("admin-web").status).toBe("ga")
-    expect(listClientChannelsBySurface("app").map((item) => item.id)).toEqual(["h5", "uniapp", "flutter"])
-    expect(catalog.channels.filter((item) => item.packageKind === "standalone").map((item) => item.id)).toEqual([
-      "h5",
-      "uniapp",
-      "flutter",
-      "desktop-pc",
-    ])
+    expect(listClientChannelsBySurface("app").map((item) => item.id)).toEqual(["expo"])
+    // 只保留 expo 一个独立客户端包（h5/uniapp/flutter/desktop-pc 已删除）
+    expect(catalog.channels.filter((item) => item.packageKind === "standalone").map((item) => item.id)).toEqual(["expo"])
     expect(catalog.packageLayout.requiredSourceDirs).toEqual(["app", "shared", "modules"])
   })
 

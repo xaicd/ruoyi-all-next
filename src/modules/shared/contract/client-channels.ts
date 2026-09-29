@@ -10,7 +10,7 @@ const surfaceSchema = z.object({
 })
 
 const channelSchema = z.object({
-  id: z.enum(["admin-web", "h5", "uniapp", "flutter", "desktop-pc"]),
+  id: z.enum(["admin-web", "expo"]),
   name: z.string().min(1).max(32),
   kind: z.enum(["web", "mini-program", "native", "desktop"]),
   surface: z.enum(["admin", "app", "open", "internal"]),
@@ -21,6 +21,8 @@ const channelSchema = z.object({
   tokenStore: z.string().min(1),
   packageKind: z.enum(["in-repo-admin", "standalone"]),
   notes: z.string().min(1),
+  /** 覆盖 packageLayout.requiredSourceDirs（各渠道源码结构本就不同，默认仍是 app/shared/modules）。 */
+  requiredSourceDirs: z.array(z.string().min(1)).optional(),
 })
 
 const packageLayoutSchema = z.object({
@@ -40,7 +42,7 @@ export const clientChannelsSchema = z.object({
     openapiPath: z.string().startsWith("/api/v1/open/"),
   }),
   surfaces: z.array(surfaceSchema).length(4),
-  channels: z.array(channelSchema).length(5),
+  channels: z.array(channelSchema).min(1),
   rules: z.array(z.string().min(1)).min(1),
   packageLayout: packageLayoutSchema,
 }).superRefine((catalog, ctx) => {

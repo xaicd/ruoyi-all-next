@@ -50,7 +50,8 @@ describe("hatch-profile", () => {
     expect(plan.excludedDomains).toEqual(["mall", "crm", "pay"])
     expect(shouldSkipRelPath("src/modules/mall", plan)).toBe(true)
     expect(shouldSkipRelPath("src/modules/system", plan)).toBe(false)
-    expect(shouldSkipRelPath("clients/h5/src/modules/wms/api.ts", plan)).toBe(true)
+    // 原断言 clients/h5/... 应被跳过 —— h5/uniapp/flutter/desktop-pc 已删除，
+    // 本仓只保留 clients/expo，故不再有客户端渠道级的跳过路径。
   })
 
   it("vertical requires bundle and always keeps companions", () => {

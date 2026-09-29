@@ -90,19 +90,8 @@ describe("Modular Codegen Engine with Templates", () => {
     expect(listPage?.content).toContain("编辑")
     expect(listPage?.content).toContain("删除")
 
-    // 10. Multi-Channel Clients (H5, UniApp, Flutter)
-    const h5Api = outputs.find((o) => o.path.includes("clients/h5/src/modules/wms/api/wms-warehouse.api.ts"))
-    expect(h5Api).toBeDefined()
-    expect(h5Api?.content).toContain("WmsWarehouseH5Api")
-
-    const uniappPage = outputs.find((o) => o.path.includes("clients/uniapp/src/modules/wms/pages/wms-warehouse.vue"))
-    expect(uniappPage).toBeDefined()
-    expect(uniappPage?.content).toContain("<template>")
-    expect(uniappPage?.content).toContain("fetchWmsWarehouseList")
-
-    const flutterModel = outputs.find((o) => o.path.includes("clients/flutter/lib/modules/wms/models/wms_warehouse_model.dart"))
-    expect(flutterModel).toBeDefined()
-    expect(flutterModel?.content).toContain("class WmsWarehouseModel")
+    // 原「10. Multi-Channel Clients (H5, UniApp, Flutter)」断言已随这些客户端渠道一并移除 ——
+    // 本仓只保留 clients/expo，代码生成器不再产出 h5/uniapp/flutter 目标。
   })
 
   it("supports preview and ZIP entry building", async () => {
