@@ -1,10 +1,19 @@
 import { mkdir, unlink, writeFile } from "node:fs/promises"
 import path from "node:path"
 
-const DEFAULT_DIR = ".data/uploads"
+/**
+ * 默认上传目录。
+ *
+ * 必须写成 `path.join(process.cwd(), ...)` 这种**静态可圈定**的形式，不能用相对字符串：
+ * 相对值要到运行时才解析，Turbopack 无法确定范围，就会把**整个项目**纳入 file tracing
+ * （Next 会明确警告 "Dynamic filesystem access causes tracing of the whole project"），
+ * 构建图因此膨胀、构建时间从 ~45s 涨到数分钟，并可能在资源紧张时让 loader 子进程超时崩溃。
+ * 行为不变：默认仍是 仓库根/.data/uploads。
+ */
+const DEFAULT_DIR = path.join(process.cwd(), ".data", "uploads")
 
 export function resolveFileStorageDir() {
-  return path.resolve(process.env.FILE_STORAGE_DIR || DEFAULT_DIR)
+  return process.env.FILE_STORAGE_DIR ? path.resolve(process.env.FILE_STORAGE_DIR) : DEFAULT_DIR
 }
 
 function safeRelativeKey(key: string) {
