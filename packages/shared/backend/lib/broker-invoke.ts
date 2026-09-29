@@ -1,4 +1,5 @@
 import rpcActions from "../constants/rpc-actions.json"
+import { DOMAIN_SERVICE_LOADERS } from "./domain-service-loaders"
 
 type ServiceResolver = (method: string, payload: unknown) => Promise<unknown>
 
@@ -41,10 +42,13 @@ function resolveActionSpec(domain: string, method: string): RpcActionSpec {
 }
 
 async function loadDomainServices(domain: string, moduleName?: string): Promise<Record<string, unknown>> {
-  if (moduleName) {
-    return import(`@/modules/${domain}/backend/services/${moduleName}`) as Promise<Record<string, unknown>>
-  }
-  return import(`@/modules/${domain}/backend/services`) as Promise<Record<string, unknown>>
+  // 静态两级 loader 映射（见 domain-service-loaders.ts 的说明）。
+  // 必须保留"按 module 加载"的能力: 域 index 并不重导出所有子服务,
+  // 只加载 index 会让 spec.module 指向的服务找不到（实测 rpc-protocol 测试 6 例失败）。
+  const byModule = DOMAIN_SERVICE_LOADERS[domain]
+  if (!byModule) throw new Error(`Method not found in ${domain} service: 该域没有 services loader`)
+  const loader = (moduleName && byModule[moduleName]) || byModule.index
+  return loader()
 }
 
 function readMethod(holder: unknown, method: string): ((input: unknown) => Promise<unknown>) | undefined {
