@@ -10,6 +10,9 @@ const PLATFORM_COMPANIONS = Object.freeze(["online", "ai", "aigw"])
 
 const DOMAIN_PATH_PREFIXES = Object.freeze([
   "packages/domains/",
+  // 域迁成第一方插件后目录在 packages/plugins/plugin-<name>。
+  // 漏了这条，被排除的域在 project:create 时**不会被跳过**，会被原样拷进新工程。
+  "packages/plugins/plugin-",
   "src/app/api/v1/admin/",
   "src/app/api/v1/app/",
   "src/app/api/v1/open/",
@@ -102,8 +105,18 @@ function catalogDomainNames(catalog) {
   return (catalog.domains || []).map((item) => item.name)
 }
 
+/**
+ * 业务域 = 业务层 ∪ 插件层。
+ *
+ * 域迁成第一方插件后会被移出 layers.business 放进 layers.plugin；
+ * 只读 business 会让 standard profile 只剩 system/infra —— 孵出来的新工程**没有任何业务域**。
+ * 语义上"插件层"就是"可插拔的业务域"，两者必须合并看待。
+ */
 function businessDomainNames(catalog) {
-  return catalog.layers?.business?.domains || []
+  return [
+    ...(catalog.layers?.business?.domains || []),
+    ...(catalog.layers?.plugin?.domains || []),
+  ]
 }
 
 function platformDomainNames(catalog) {
@@ -190,6 +203,11 @@ function pruneCatalog(catalog, plan) {
   const next = JSON.parse(JSON.stringify(catalog))
   next.domains = (catalog.domains || []).filter((item) => keep.has(item.name))
   next.layers.business.domains = (catalog.layers?.business?.domains || []).filter((name) => keep.has(name))
+  // 插件层同样要裁 —— 否则新工程的 catalog 会留着"目录已被删掉的域"，
+  // 门禁要么直接失败，要么静默对不上。
+  if (next.layers.plugin) {
+    next.layers.plugin.domains = (catalog.layers?.plugin?.domains || []).filter((name) => keep.has(name))
+  }
   return next
 }
 

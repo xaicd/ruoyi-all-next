@@ -23,6 +23,19 @@ const GOVERNANCE_DOC = "docs/architecture/ruoyi-all-next-domain-governance.md"
 const SRC = "src"
 // 各域与 shared 已迁到 packages/（见 pnpm-workspace.yaml 与 AGENTS.md §3.2）。
 const DOMAINS = "packages/domains"
+// 域迁成第一方插件后代码在 packages/plugins/plugin-* —— 只扫 packages/domains
+// 会让这些规则对已迁域**完全失效**（而且 check 仍是绿的，静默退化）。
+const PLUGINS = "packages/plugins"
+/** 域代码的两处根。sdk 是插件 SDK 包，不是插件，排除。 */
+function domainRoots() {
+  return [DOMAINS, PLUGINS]
+}
+/** 在"域代码的两个根"里递归收集文件（排除 packages/plugins/sdk）。 */
+function walkDomains(predicate) {
+  return domainRoots()
+    .flatMap((root) => walk(root, predicate))
+    .filter((file) => !toRel(file).startsWith("packages/plugins/sdk/"))
+}
 const SHARED = "packages/shared"
 
 const asJson = process.argv.includes("--json")
@@ -118,7 +131,7 @@ const RULES = [
     mode: "ratchet",
     description: "backend business code must not use console.* (logger impls and codegen templates exempt)",
     run() {
-      const files = walk(`${DOMAINS}`, (name) => /\.tsx?$/.test(name)).filter(
+      const files = walkDomains((name) => /\.tsx?$/.test(name)).filter(
         (file) =>
           toRel(file).includes("/backend/") &&
           !isTestFile(toRel(file)) &&
@@ -144,10 +157,9 @@ const RULES = [
     mode: "enforce",
     description: "object-singleton repositories and services must export both PascalCase and camelCase",
     run() {
-      const files = walk(
-        `${DOMAINS}`,
-        (name) => /\.(repository|service)\.ts$/.test(name),
-      ).filter((file) => !isTestFile(toRel(file)))
+      const files = walkDomains((name) => /\.(repository|service)\.ts$/.test(name)).filter(
+        (file) => !isTestFile(toRel(file)),
+      )
 
       const violations = []
       for (const file of files) {
@@ -187,7 +199,7 @@ const RULES = [
           .domains.filter((domain) => domain.kind === "business")
           .map((domain) => domain.name),
       )
-      const files = walk(`${DOMAINS}`, (name) => /\.repository\.ts$/.test(name)).filter(
+      const files = walkDomains((name) => /\.repository\.ts$/.test(name)).filter(
         (file) => !isTestFile(toRel(file)) && !TENANT_SCOPE_EXEMPT_DIRS.some((dir) => toRel(file).includes(dir)),
       )
       const violations = []

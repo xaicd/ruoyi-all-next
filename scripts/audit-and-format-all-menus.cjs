@@ -51,11 +51,13 @@ const RENAME_MAP = {
 }
 
 // 需处理的种子和配置文件清单
+const { domainDirOf } = require("./lib/domain-catalog.cjs")
+
 const TARGET_FILES = [
   path.resolve(__dirname, '../prisma/data/menus.seed-data.ts'),
   path.resolve(__dirname, '../scripts/seed-output/menus.seed.ts'),
-  path.resolve(__dirname, '../packages/domains/online/contract/menu-catalog.ts'),
-  path.resolve(__dirname, '../packages/domains/aigw/contract/menu-catalog.ts'),
+  path.resolve(__dirname, '..', domainDirOf(path.resolve(__dirname, '..'), 'online'), 'contract/menu-catalog.ts'),
+  path.resolve(__dirname, '..', domainDirOf(path.resolve(__dirname, '..'), 'aigw'), 'contract/menu-catalog.ts'),
   path.resolve(__dirname, '../packages/shared/backend/constants/admin-menu.ts'),
 ]
 

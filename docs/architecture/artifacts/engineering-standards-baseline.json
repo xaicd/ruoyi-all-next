@@ -5,14 +5,14 @@
   "rules": {
     "backend-no-console": {
       "accepted": {
-        "packages/domains/aigw/backend/repositories/aigw-carrier.repository.ts": 2,
-        "packages/domains/aigw/backend/repositories/aigw-enterprise.repository.ts": 3,
-        "packages/domains/aigw/backend/repositories/aigw-ledger.repository.ts": 2,
-        "packages/domains/aigw/backend/repositories/aigw-quota.repository.ts": 2,
-        "packages/domains/aigw/backend/repositories/aigw-seat.repository.ts": 2,
-        "packages/domains/aigw/backend/repositories/aigw-settlement.repository.ts": 1,
-        "packages/domains/aigw/backend/repositories/aigw-split.repository.ts": 1,
-        "packages/domains/aigw/backend/repositories/aigw-tariff.repository.ts": 1
+        "packages/plugins/plugin-aigw/backend/repositories/aigw-carrier.repository.ts": 2,
+        "packages/plugins/plugin-aigw/backend/repositories/aigw-enterprise.repository.ts": 3,
+        "packages/plugins/plugin-aigw/backend/repositories/aigw-ledger.repository.ts": 2,
+        "packages/plugins/plugin-aigw/backend/repositories/aigw-quota.repository.ts": 2,
+        "packages/plugins/plugin-aigw/backend/repositories/aigw-seat.repository.ts": 2,
+        "packages/plugins/plugin-aigw/backend/repositories/aigw-settlement.repository.ts": 1,
+        "packages/plugins/plugin-aigw/backend/repositories/aigw-split.repository.ts": 1,
+        "packages/plugins/plugin-aigw/backend/repositories/aigw-tariff.repository.ts": 1
       }
     },
     "facade-method-dispatch-mapped": {

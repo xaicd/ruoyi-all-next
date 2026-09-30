@@ -154,7 +154,7 @@ export async function POST(request: Request) {
           beansDeducted: `${beans} 粒移动豆`,
           balanceAfter: ledger.balanceAfter,
           codeAuditResult: {
-            targetFile: "packages/domains/aigw/backend/services/settlement-engine.service.ts",
+            targetFile: "packages/plugins/plugin-aigw/backend/services/settlement-engine.service.ts",
             vulnerabilitiesFound: [
               { level: "HIGH", issue: "并发扣费场景下存在竞态条件 (Race Condition)", fix: "引入物理台账 balanceAfter 悲观锁校验" },
             ],
