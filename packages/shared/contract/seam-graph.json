@@ -329,9 +329,9 @@
         ]
       },
       "consumer": {
-        "adminApi": "src/app/api/v1/admin/pay",
-        "appApi": "src/app/api/v1/app/pay",
-        "openApi": "src/app/api/v1/open/pay",
+        "adminApi": "src/app/api/v1/plugins/ruoyi.pay/api",
+        "appApi": "src/app/api/v1/plugins/ruoyi.pay/api",
+        "openApi": "src/app/api/v1/plugins/ruoyi.pay/api",
         "adminPages": "src/app/(admin-pages)/admin/pay",
         "modulePages": "packages/plugins/plugin-pay/frontend/pages"
       },

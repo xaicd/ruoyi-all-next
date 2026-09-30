@@ -4,6 +4,21 @@ const { ROOT, listDomains, toYaml, manifestPath } = require("./lib/domain-catalo
 const { loadRpcActions, renderDomain, contractPaths } = require("./lib/rpc-contracts.cjs")
 const { assertSeamGraphMatches, SEAM_GRAPH_REL } = require("./lib/seam-graph.cjs")
 
+/**
+ * 读取第一方插件的 manifest 路由声明。
+ * 域被改造成插件后目录在 packages/plugins/plugin-<name>，用共享解析器定位。
+ */
+function pluginRoutesOf(domainName) {
+  const dir = require("./lib/domain-catalog.cjs").domainPathOf(ROOT, domainName)
+  const manifestFile = path.join(dir, "plugin.manifest.json")
+  if (!fs.existsSync(manifestFile)) return []
+  try {
+    return JSON.parse(fs.readFileSync(manifestFile, "utf8")).apiRoutes || []
+  } catch {
+    return []
+  }
+}
+
 function exists(target) {
   return fs.existsSync(path.join(ROOT, target))
 }
@@ -37,6 +52,17 @@ for (const domain of domains) {
   if (!exists(moduleDir)) fail(`missing module directory ${moduleDir}`)
 
   for (const prefix of domain.publicPrefixes) {
+    if (domain.kind === "plugin") {
+      // 插件类域的路由由宿主按 manifest 挂载在 /api/v1/plugins/<id>/api，
+      // 不再有 src/app/api/v1/<surface>/<domain> 目录。改为校验 manifest **真的**
+      // 按该面声明了路由 —— 否则这个 publicPrefix 就是一句空承诺。
+      const surface = (prefix.match(/\/(admin|app|open)\//) || [])[1]
+      const declared = pluginRoutesOf(domain.name)
+      if (surface && !declared.some((route) => String(route.routeKey).startsWith(`${surface}:`))) {
+        fail(`plugin domain ${domain.name} declares publicPrefix ${prefix} but manifest declares no ${surface} routes`)
+      }
+      continue
+    }
     const apiDir = prefix.replace(/^\/api/, "src/app/api")
     if (!exists(apiDir)) fail(`publicPrefix ${prefix} has no API directory ${apiDir}`)
   }

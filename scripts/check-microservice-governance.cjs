@@ -191,14 +191,22 @@ const reportSqlTest = fs.readFileSync(reportSqlTestPath, "utf8")
 if (reportSqlTest.includes("DataSourceConfigRepository")) fail("report custom-sql test must spy infraPlatformFacade, not import infra repository")
 if (!reportSqlTest.includes("infraPlatformFacade")) fail("report custom-sql test must assert infraPlatformFacade tenant scope")
 
+// pay 已改造成第一方插件: 其路由不再有 Next 转发文件, 直接读插件内的真实路由源码
+function domainRouteSourceOrPlugin(nextRel, pluginRel) {
+  const nextPath = path.join(ROOT, nextRel)
+  if (fs.existsSync(nextPath)) return resolveRouteSource(nextPath)
+  const pluginPath = path.join(domainPathOf(ROOT, "pay"), pluginRel)
+  if (fs.existsSync(pluginPath)) return fs.readFileSync(pluginPath, "utf8")
+  return ""
+}
 const payOrdersPath = path.join(ROOT, "src", "app", "api", "v1", "admin", "pay", "orders", "route.ts")
-const payOrders = resolveRouteSource(payOrdersPath)
+const payOrders = domainRouteSourceOrPlugin("src/app/api/v1/admin/pay/orders/route.ts", "routes/admin/orders/route.ts")
 if (!payOrders.includes("PAY_ACTION_SCHEMAS") || !payOrders.includes("parseActionQuery")) {
   fail("pay orders route must parse query with PAY_ACTION_SCHEMAS via parseActionQuery")
 }
 
 const payRefundsPath = path.join(ROOT, "src", "app", "api", "v1", "admin", "pay", "refunds", "route.ts")
-const payRefunds = resolveRouteSource(payRefundsPath)
+const payRefunds = domainRouteSourceOrPlugin("src/app/api/v1/admin/pay/refunds/route.ts", "routes/admin/refunds/route.ts")
 if (!payRefunds.includes("PAY_ACTION_SCHEMAS") || !payRefunds.includes("parseActionQuery")) {
   fail("pay refunds route must parse query with PAY_ACTION_SCHEMAS via parseActionQuery")
 }

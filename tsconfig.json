@@ -57,7 +57,8 @@
     "next.config.mjs",
     "**/*.mts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    ".next-ruoyi/dev/dev/types/**/*.ts"
   ],
   "exclude": [
     "**/__tests__/**",

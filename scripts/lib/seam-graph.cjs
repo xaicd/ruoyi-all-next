@@ -20,6 +20,17 @@ function domainDirOf(root, name) {
 
 const SEAM_GRAPH_REL = path.join("packages", "shared", "contract", "seam-graph.json").replace(/\\/g, "/")
 
+/** 插件 id 约定: 第一方插件 id = ruoyi.<域名>（见 scripts/scaffold-domain-plugin.cjs）。 */
+function pluginIdOf(name) {
+  return `ruoyi.${name}`
+}
+
+/** 该域在 catalog 里的 kind（plugin / business / platform）。 */
+function domainKindOf(name) {
+  const catalog = loadCatalog()
+  return (catalog.domains || []).find((item) => item.name === name)?.kind
+}
+
 const CONSUMER_SLOTS = [
   ["adminApi", (name) => `src/app/api/v1/admin/${name}`],
   ["appApi", (name) => `src/app/api/v1/app/${name}`],
@@ -71,7 +82,16 @@ function buildDomainSeam(root, domain, rpcActions) {
   const manifests = listDirFiles(root, contractDir, (file) => file === "route.manifest.yaml")
 
   const consumer = {}
+  // 插件类域的路由由宿主按 manifest 挂载在 /api/v1/plugins/<id>/api，
+  // 不再有 src/app/api/v1/<surface>/<domain> 目录 —— 消费面必须按插件挂载点记，
+  // 否则 seam 三角判不出来（实测：切掉 Next 转发文件后 rolesComplete 变 false）。
+  const domainKind = domainKindOf(name)
+  const pluginApiSlots = new Set(["adminApi", "appApi", "openApi"])
   for (const [key, relOf] of CONSUMER_SLOTS) {
+    if (domainKind === "plugin" && pluginApiSlots.has(key)) {
+      consumer[key] = `src/app/api/v1/plugins/${pluginIdOf(name)}/api`
+      continue
+    }
     const rel = relOf(name)
     if (existsRel(root, rel)) consumer[key] = rel
   }

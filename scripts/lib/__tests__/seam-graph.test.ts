@@ -22,7 +22,8 @@ describe("seam-graph", () => {
     // pay 已改造成第一方插件，目录随之迁移
 expect(pay.provider.servicesDir).toBe("packages/plugins/plugin-pay/backend/services")
     expect(pay.provider.methods).toEqual(rpc.domains.pay.actions.map((item) => item.method))
-    expect(pay.consumer.adminApi).toBe("src/app/api/v1/admin/pay")
+    // pay 已改造成第一方插件: API 消费面是宿主的插件挂载点，不再是 Next 目录
+expect(pay.consumer.adminApi).toBe("src/app/api/v1/plugins/ruoyi.pay/api")
     expect(SEAM_GRAPH_REL).toBe("packages/shared/contract/seam-graph.json")
   })
 
