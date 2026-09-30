@@ -1,0 +1,3891 @@
+{
+  "$schema": "ruoyi-plugin-manifest/v1",
+  "id": "ruoyi.mes",
+  "apiVersion": 1,
+  "version": "0.1.0",
+  "displayName": "mes",
+  "description": "mes 域（由 scripts/scaffold-domain-plugin.cjs 生成的第一方插件声明）",
+  "author": "RuoYi All Next",
+  "categories": [
+    "automation"
+  ],
+  "capabilities": [
+    "api.routes.register"
+  ],
+  "entrypoints": {
+    "merged": "./plugin-entry.ts"
+  },
+  "domain": {
+    "kind": "business",
+    "stage": "B",
+    "contractVersion": "v1",
+    "publicPrefixes": [
+      "/api/v1/admin/mes"
+    ],
+    "upstreamEnv": "RUOYI_DOMAIN_MES_UPSTREAM",
+    "defaultPort": 3222,
+    "packable": true,
+    "independentDatabase": false,
+    "dependsOnModules": [
+      "shared"
+    ],
+    "auth": {
+      "audience": "admin",
+      "tenantPolicy": "required"
+    },
+    "resilience": {
+      "timeoutMs": 8000,
+      "retryMaxAttempts": 1,
+      "safeMethodsOnly": true,
+      "idempotencyRequired": true
+    }
+  },
+  "apiRoutes": [
+    {
+      "routeKey": "admin:mes-cal-calendar/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-cal-calendar/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-calendar/[id]:get",
+      "method": "GET",
+      "path": "/mes-cal-calendar/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-calendar/[id]:put",
+      "method": "PUT",
+      "path": "/mes-cal-calendar/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-calendar:get",
+      "method": "GET",
+      "path": "/mes-cal-calendar",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-calendar:post",
+      "method": "POST",
+      "path": "/mes-cal-calendar",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-holiday/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-cal-holiday/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-holiday/[id]:get",
+      "method": "GET",
+      "path": "/mes-cal-holiday/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-holiday/[id]:put",
+      "method": "PUT",
+      "path": "/mes-cal-holiday/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-holiday:get",
+      "method": "GET",
+      "path": "/mes-cal-holiday",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-holiday:post",
+      "method": "POST",
+      "path": "/mes-cal-holiday",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-plan-shift/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-cal-plan-shift/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-plan-shift/[id]:get",
+      "method": "GET",
+      "path": "/mes-cal-plan-shift/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-plan-shift/[id]:put",
+      "method": "PUT",
+      "path": "/mes-cal-plan-shift/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-plan-shift:get",
+      "method": "GET",
+      "path": "/mes-cal-plan-shift",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-plan-shift:post",
+      "method": "POST",
+      "path": "/mes-cal-plan-shift",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-plan-team/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-cal-plan-team/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-plan-team/[id]:get",
+      "method": "GET",
+      "path": "/mes-cal-plan-team/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-plan-team/[id]:put",
+      "method": "PUT",
+      "path": "/mes-cal-plan-team/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-plan-team:get",
+      "method": "GET",
+      "path": "/mes-cal-plan-team",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-plan-team:post",
+      "method": "POST",
+      "path": "/mes-cal-plan-team",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-plan/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-cal-plan/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-plan/[id]:get",
+      "method": "GET",
+      "path": "/mes-cal-plan/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-plan/[id]:put",
+      "method": "PUT",
+      "path": "/mes-cal-plan/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-plan:get",
+      "method": "GET",
+      "path": "/mes-cal-plan",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-plan:post",
+      "method": "POST",
+      "path": "/mes-cal-plan",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-team-member/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-cal-team-member/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-team-member/[id]:get",
+      "method": "GET",
+      "path": "/mes-cal-team-member/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-team-member/[id]:put",
+      "method": "PUT",
+      "path": "/mes-cal-team-member/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-team-member:get",
+      "method": "GET",
+      "path": "/mes-cal-team-member",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-team-member:post",
+      "method": "POST",
+      "path": "/mes-cal-team-member",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-team-shift/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-cal-team-shift/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-team-shift/[id]:get",
+      "method": "GET",
+      "path": "/mes-cal-team-shift/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-team-shift/[id]:put",
+      "method": "PUT",
+      "path": "/mes-cal-team-shift/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-team-shift:get",
+      "method": "GET",
+      "path": "/mes-cal-team-shift",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-team-shift:post",
+      "method": "POST",
+      "path": "/mes-cal-team-shift",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-team/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-cal-team/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-team/[id]:get",
+      "method": "GET",
+      "path": "/mes-cal-team/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-team/[id]:put",
+      "method": "PUT",
+      "path": "/mes-cal-team/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-team:get",
+      "method": "GET",
+      "path": "/mes-cal-team",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-cal-team:post",
+      "method": "POST",
+      "path": "/mes-cal-team",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-plan-machinery/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-dv-check-plan-machinery/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-plan-machinery/[id]:get",
+      "method": "GET",
+      "path": "/mes-dv-check-plan-machinery/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-plan-machinery/[id]:put",
+      "method": "PUT",
+      "path": "/mes-dv-check-plan-machinery/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-plan-machinery:get",
+      "method": "GET",
+      "path": "/mes-dv-check-plan-machinery",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-plan-machinery:post",
+      "method": "POST",
+      "path": "/mes-dv-check-plan-machinery",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-plan-subject/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-dv-check-plan-subject/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-plan-subject/[id]:get",
+      "method": "GET",
+      "path": "/mes-dv-check-plan-subject/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-plan-subject/[id]:put",
+      "method": "PUT",
+      "path": "/mes-dv-check-plan-subject/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-plan-subject:get",
+      "method": "GET",
+      "path": "/mes-dv-check-plan-subject",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-plan-subject:post",
+      "method": "POST",
+      "path": "/mes-dv-check-plan-subject",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-plan/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-dv-check-plan/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-plan/[id]:get",
+      "method": "GET",
+      "path": "/mes-dv-check-plan/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-plan/[id]:put",
+      "method": "PUT",
+      "path": "/mes-dv-check-plan/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-plan:get",
+      "method": "GET",
+      "path": "/mes-dv-check-plan",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-plan:post",
+      "method": "POST",
+      "path": "/mes-dv-check-plan",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-record-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-dv-check-record-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-record-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-dv-check-record-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-record-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-dv-check-record-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-record-line:get",
+      "method": "GET",
+      "path": "/mes-dv-check-record-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-record-line:post",
+      "method": "POST",
+      "path": "/mes-dv-check-record-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-record/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-dv-check-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-record/[id]:get",
+      "method": "GET",
+      "path": "/mes-dv-check-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-record/[id]:put",
+      "method": "PUT",
+      "path": "/mes-dv-check-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-record:get",
+      "method": "GET",
+      "path": "/mes-dv-check-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-check-record:post",
+      "method": "POST",
+      "path": "/mes-dv-check-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-machinery-type/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-dv-machinery-type/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-machinery-type/[id]:get",
+      "method": "GET",
+      "path": "/mes-dv-machinery-type/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-machinery-type/[id]:put",
+      "method": "PUT",
+      "path": "/mes-dv-machinery-type/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-machinery-type:get",
+      "method": "GET",
+      "path": "/mes-dv-machinery-type",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-machinery-type:post",
+      "method": "POST",
+      "path": "/mes-dv-machinery-type",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-machinery/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-dv-machinery/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-machinery/[id]:get",
+      "method": "GET",
+      "path": "/mes-dv-machinery/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-machinery/[id]:put",
+      "method": "PUT",
+      "path": "/mes-dv-machinery/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-machinery:get",
+      "method": "GET",
+      "path": "/mes-dv-machinery",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-machinery:post",
+      "method": "POST",
+      "path": "/mes-dv-machinery",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-mainten-record-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-dv-mainten-record-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-mainten-record-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-dv-mainten-record-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-mainten-record-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-dv-mainten-record-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-mainten-record-line:get",
+      "method": "GET",
+      "path": "/mes-dv-mainten-record-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-mainten-record-line:post",
+      "method": "POST",
+      "path": "/mes-dv-mainten-record-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-mainten-record/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-dv-mainten-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-mainten-record/[id]:get",
+      "method": "GET",
+      "path": "/mes-dv-mainten-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-mainten-record/[id]:put",
+      "method": "PUT",
+      "path": "/mes-dv-mainten-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-mainten-record:get",
+      "method": "GET",
+      "path": "/mes-dv-mainten-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-mainten-record:post",
+      "method": "POST",
+      "path": "/mes-dv-mainten-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-repair-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-dv-repair-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-repair-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-dv-repair-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-repair-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-dv-repair-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-repair-line:get",
+      "method": "GET",
+      "path": "/mes-dv-repair-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-repair-line:post",
+      "method": "POST",
+      "path": "/mes-dv-repair-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-repair/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-dv-repair/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-repair/[id]:get",
+      "method": "GET",
+      "path": "/mes-dv-repair/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-repair/[id]:put",
+      "method": "PUT",
+      "path": "/mes-dv-repair/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-repair:get",
+      "method": "GET",
+      "path": "/mes-dv-repair",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-repair:post",
+      "method": "POST",
+      "path": "/mes-dv-repair",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-subject/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-dv-subject/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-subject/[id]:get",
+      "method": "GET",
+      "path": "/mes-dv-subject/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-subject/[id]:put",
+      "method": "PUT",
+      "path": "/mes-dv-subject/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-subject:get",
+      "method": "GET",
+      "path": "/mes-dv-subject",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-dv-subject:post",
+      "method": "POST",
+      "path": "/mes-dv-subject",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-home-statistics/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-home-statistics/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-home-statistics/[id]:get",
+      "method": "GET",
+      "path": "/mes-home-statistics/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-home-statistics/[id]:put",
+      "method": "PUT",
+      "path": "/mes-home-statistics/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-home-statistics:get",
+      "method": "GET",
+      "path": "/mes-home-statistics",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-home-statistics:post",
+      "method": "POST",
+      "path": "/mes-home-statistics",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-auto-code-part/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-md-auto-code-part/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-auto-code-part/[id]:get",
+      "method": "GET",
+      "path": "/mes-md-auto-code-part/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-auto-code-part/[id]:put",
+      "method": "PUT",
+      "path": "/mes-md-auto-code-part/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-auto-code-part:get",
+      "method": "GET",
+      "path": "/mes-md-auto-code-part",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-auto-code-part:post",
+      "method": "POST",
+      "path": "/mes-md-auto-code-part",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-auto-code-record/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-md-auto-code-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-auto-code-record/[id]:get",
+      "method": "GET",
+      "path": "/mes-md-auto-code-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-auto-code-record/[id]:put",
+      "method": "PUT",
+      "path": "/mes-md-auto-code-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-auto-code-record:get",
+      "method": "GET",
+      "path": "/mes-md-auto-code-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-auto-code-record:post",
+      "method": "POST",
+      "path": "/mes-md-auto-code-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-auto-code-rule/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-md-auto-code-rule/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-auto-code-rule/[id]:get",
+      "method": "GET",
+      "path": "/mes-md-auto-code-rule/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-auto-code-rule/[id]:put",
+      "method": "PUT",
+      "path": "/mes-md-auto-code-rule/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-auto-code-rule:get",
+      "method": "GET",
+      "path": "/mes-md-auto-code-rule",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-auto-code-rule:post",
+      "method": "POST",
+      "path": "/mes-md-auto-code-rule",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-client/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-md-client/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-client/[id]:get",
+      "method": "GET",
+      "path": "/mes-md-client/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-client/[id]:put",
+      "method": "PUT",
+      "path": "/mes-md-client/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-client:get",
+      "method": "GET",
+      "path": "/mes-md-client",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-client:post",
+      "method": "POST",
+      "path": "/mes-md-client",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-item-batch-config/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-md-item-batch-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-item-batch-config/[id]:get",
+      "method": "GET",
+      "path": "/mes-md-item-batch-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-item-batch-config/[id]:put",
+      "method": "PUT",
+      "path": "/mes-md-item-batch-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-item-batch-config:get",
+      "method": "GET",
+      "path": "/mes-md-item-batch-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-item-batch-config:post",
+      "method": "POST",
+      "path": "/mes-md-item-batch-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-item-type/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-md-item-type/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-item-type/[id]:get",
+      "method": "GET",
+      "path": "/mes-md-item-type/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-item-type/[id]:put",
+      "method": "PUT",
+      "path": "/mes-md-item-type/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-item-type:get",
+      "method": "GET",
+      "path": "/mes-md-item-type",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-item-type:post",
+      "method": "POST",
+      "path": "/mes-md-item-type",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-item/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-md-item/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-item/[id]:get",
+      "method": "GET",
+      "path": "/mes-md-item/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-item/[id]:put",
+      "method": "PUT",
+      "path": "/mes-md-item/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-item:get",
+      "method": "GET",
+      "path": "/mes-md-item",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-item:post",
+      "method": "POST",
+      "path": "/mes-md-item",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-product-bom/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-md-product-bom/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-product-bom/[id]:get",
+      "method": "GET",
+      "path": "/mes-md-product-bom/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-product-bom/[id]:put",
+      "method": "PUT",
+      "path": "/mes-md-product-bom/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-product-bom:get",
+      "method": "GET",
+      "path": "/mes-md-product-bom",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-product-bom:post",
+      "method": "POST",
+      "path": "/mes-md-product-bom",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-product-sip/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-md-product-sip/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-product-sip/[id]:get",
+      "method": "GET",
+      "path": "/mes-md-product-sip/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-product-sip/[id]:put",
+      "method": "PUT",
+      "path": "/mes-md-product-sip/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-product-sip:get",
+      "method": "GET",
+      "path": "/mes-md-product-sip",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-product-sip:post",
+      "method": "POST",
+      "path": "/mes-md-product-sip",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-product-sop/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-md-product-sop/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-product-sop/[id]:get",
+      "method": "GET",
+      "path": "/mes-md-product-sop/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-product-sop/[id]:put",
+      "method": "PUT",
+      "path": "/mes-md-product-sop/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-product-sop:get",
+      "method": "GET",
+      "path": "/mes-md-product-sop",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-product-sop:post",
+      "method": "POST",
+      "path": "/mes-md-product-sop",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-unit-measure/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-md-unit-measure/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-unit-measure/[id]:get",
+      "method": "GET",
+      "path": "/mes-md-unit-measure/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-unit-measure/[id]:put",
+      "method": "PUT",
+      "path": "/mes-md-unit-measure/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-unit-measure:get",
+      "method": "GET",
+      "path": "/mes-md-unit-measure",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-unit-measure:post",
+      "method": "POST",
+      "path": "/mes-md-unit-measure",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-vendor/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-md-vendor/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-vendor/[id]:get",
+      "method": "GET",
+      "path": "/mes-md-vendor/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-vendor/[id]:put",
+      "method": "PUT",
+      "path": "/mes-md-vendor/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-vendor:get",
+      "method": "GET",
+      "path": "/mes-md-vendor",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-vendor:post",
+      "method": "POST",
+      "path": "/mes-md-vendor",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workshop/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-md-workshop/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workshop/[id]:get",
+      "method": "GET",
+      "path": "/mes-md-workshop/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workshop/[id]:put",
+      "method": "PUT",
+      "path": "/mes-md-workshop/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workshop:get",
+      "method": "GET",
+      "path": "/mes-md-workshop",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workshop:post",
+      "method": "POST",
+      "path": "/mes-md-workshop",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workstation-machine/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-md-workstation-machine/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workstation-machine/[id]:get",
+      "method": "GET",
+      "path": "/mes-md-workstation-machine/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workstation-machine/[id]:put",
+      "method": "PUT",
+      "path": "/mes-md-workstation-machine/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workstation-machine:get",
+      "method": "GET",
+      "path": "/mes-md-workstation-machine",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workstation-machine:post",
+      "method": "POST",
+      "path": "/mes-md-workstation-machine",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workstation-tool/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-md-workstation-tool/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workstation-tool/[id]:get",
+      "method": "GET",
+      "path": "/mes-md-workstation-tool/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workstation-tool/[id]:put",
+      "method": "PUT",
+      "path": "/mes-md-workstation-tool/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workstation-tool:get",
+      "method": "GET",
+      "path": "/mes-md-workstation-tool",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workstation-tool:post",
+      "method": "POST",
+      "path": "/mes-md-workstation-tool",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workstation-worker/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-md-workstation-worker/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workstation-worker/[id]:get",
+      "method": "GET",
+      "path": "/mes-md-workstation-worker/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workstation-worker/[id]:put",
+      "method": "PUT",
+      "path": "/mes-md-workstation-worker/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workstation-worker:get",
+      "method": "GET",
+      "path": "/mes-md-workstation-worker",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workstation-worker:post",
+      "method": "POST",
+      "path": "/mes-md-workstation-worker",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workstation/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-md-workstation/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workstation/[id]:get",
+      "method": "GET",
+      "path": "/mes-md-workstation/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workstation/[id]:put",
+      "method": "PUT",
+      "path": "/mes-md-workstation/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workstation:get",
+      "method": "GET",
+      "path": "/mes-md-workstation",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-md-workstation:post",
+      "method": "POST",
+      "path": "/mes-md-workstation",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-andon-config/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-pro-andon-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-andon-config/[id]:get",
+      "method": "GET",
+      "path": "/mes-pro-andon-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-andon-config/[id]:put",
+      "method": "PUT",
+      "path": "/mes-pro-andon-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-andon-config:get",
+      "method": "GET",
+      "path": "/mes-pro-andon-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-andon-config:post",
+      "method": "POST",
+      "path": "/mes-pro-andon-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-andon-record/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-pro-andon-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-andon-record/[id]:get",
+      "method": "GET",
+      "path": "/mes-pro-andon-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-andon-record/[id]:put",
+      "method": "PUT",
+      "path": "/mes-pro-andon-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-andon-record:get",
+      "method": "GET",
+      "path": "/mes-pro-andon-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-andon-record:post",
+      "method": "POST",
+      "path": "/mes-pro-andon-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-card-process/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-pro-card-process/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-card-process/[id]:get",
+      "method": "GET",
+      "path": "/mes-pro-card-process/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-card-process/[id]:put",
+      "method": "PUT",
+      "path": "/mes-pro-card-process/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-card-process:get",
+      "method": "GET",
+      "path": "/mes-pro-card-process",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-card-process:post",
+      "method": "POST",
+      "path": "/mes-pro-card-process",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-card/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-pro-card/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-card/[id]:get",
+      "method": "GET",
+      "path": "/mes-pro-card/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-card/[id]:put",
+      "method": "PUT",
+      "path": "/mes-pro-card/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-card:get",
+      "method": "GET",
+      "path": "/mes-pro-card",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-card:post",
+      "method": "POST",
+      "path": "/mes-pro-card",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-feedback/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-pro-feedback/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-feedback/[id]:get",
+      "method": "GET",
+      "path": "/mes-pro-feedback/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-feedback/[id]:put",
+      "method": "PUT",
+      "path": "/mes-pro-feedback/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-feedback:get",
+      "method": "GET",
+      "path": "/mes-pro-feedback",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-feedback:post",
+      "method": "POST",
+      "path": "/mes-pro-feedback",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-process-content/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-pro-process-content/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-process-content/[id]:get",
+      "method": "GET",
+      "path": "/mes-pro-process-content/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-process-content/[id]:put",
+      "method": "PUT",
+      "path": "/mes-pro-process-content/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-process-content:get",
+      "method": "GET",
+      "path": "/mes-pro-process-content",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-process-content:post",
+      "method": "POST",
+      "path": "/mes-pro-process-content",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-process/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-pro-process/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-process/[id]:get",
+      "method": "GET",
+      "path": "/mes-pro-process/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-process/[id]:put",
+      "method": "PUT",
+      "path": "/mes-pro-process/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-process:get",
+      "method": "GET",
+      "path": "/mes-pro-process",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-process:post",
+      "method": "POST",
+      "path": "/mes-pro-process",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-route-process/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-pro-route-process/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-route-process/[id]:get",
+      "method": "GET",
+      "path": "/mes-pro-route-process/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-route-process/[id]:put",
+      "method": "PUT",
+      "path": "/mes-pro-route-process/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-route-process:get",
+      "method": "GET",
+      "path": "/mes-pro-route-process",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-route-process:post",
+      "method": "POST",
+      "path": "/mes-pro-route-process",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-route-product-bom/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-pro-route-product-bom/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-route-product-bom/[id]:get",
+      "method": "GET",
+      "path": "/mes-pro-route-product-bom/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-route-product-bom/[id]:put",
+      "method": "PUT",
+      "path": "/mes-pro-route-product-bom/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-route-product-bom:get",
+      "method": "GET",
+      "path": "/mes-pro-route-product-bom",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-route-product-bom:post",
+      "method": "POST",
+      "path": "/mes-pro-route-product-bom",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-route-product/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-pro-route-product/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-route-product/[id]:get",
+      "method": "GET",
+      "path": "/mes-pro-route-product/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-route-product/[id]:put",
+      "method": "PUT",
+      "path": "/mes-pro-route-product/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-route-product:get",
+      "method": "GET",
+      "path": "/mes-pro-route-product",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-route-product:post",
+      "method": "POST",
+      "path": "/mes-pro-route-product",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-route/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-pro-route/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-route/[id]:get",
+      "method": "GET",
+      "path": "/mes-pro-route/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-route/[id]:put",
+      "method": "PUT",
+      "path": "/mes-pro-route/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-route:get",
+      "method": "GET",
+      "path": "/mes-pro-route",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-route:post",
+      "method": "POST",
+      "path": "/mes-pro-route",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-task-issue/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-pro-task-issue/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-task-issue/[id]:get",
+      "method": "GET",
+      "path": "/mes-pro-task-issue/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-task-issue/[id]:put",
+      "method": "PUT",
+      "path": "/mes-pro-task-issue/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-task-issue:get",
+      "method": "GET",
+      "path": "/mes-pro-task-issue",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-task-issue:post",
+      "method": "POST",
+      "path": "/mes-pro-task-issue",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-task/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-pro-task/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-task/[id]:get",
+      "method": "GET",
+      "path": "/mes-pro-task/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-task/[id]:put",
+      "method": "PUT",
+      "path": "/mes-pro-task/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-task:get",
+      "method": "GET",
+      "path": "/mes-pro-task",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-task:post",
+      "method": "POST",
+      "path": "/mes-pro-task",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-work-order-bom/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-pro-work-order-bom/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-work-order-bom/[id]:get",
+      "method": "GET",
+      "path": "/mes-pro-work-order-bom/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-work-order-bom/[id]:put",
+      "method": "PUT",
+      "path": "/mes-pro-work-order-bom/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-work-order-bom:get",
+      "method": "GET",
+      "path": "/mes-pro-work-order-bom",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-work-order-bom:post",
+      "method": "POST",
+      "path": "/mes-pro-work-order-bom",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-work-order/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-pro-work-order/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-work-order/[id]:get",
+      "method": "GET",
+      "path": "/mes-pro-work-order/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-work-order/[id]:put",
+      "method": "PUT",
+      "path": "/mes-pro-work-order/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-work-order:get",
+      "method": "GET",
+      "path": "/mes-pro-work-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-work-order:post",
+      "method": "POST",
+      "path": "/mes-pro-work-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-work-record/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-pro-work-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-work-record/[id]:get",
+      "method": "GET",
+      "path": "/mes-pro-work-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-work-record/[id]:put",
+      "method": "PUT",
+      "path": "/mes-pro-work-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-work-record:get",
+      "method": "GET",
+      "path": "/mes-pro-work-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-pro-work-record:post",
+      "method": "POST",
+      "path": "/mes-pro-work-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-defect-record/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-qc-defect-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-defect-record/[id]:get",
+      "method": "GET",
+      "path": "/mes-qc-defect-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-defect-record/[id]:put",
+      "method": "PUT",
+      "path": "/mes-qc-defect-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-defect-record:get",
+      "method": "GET",
+      "path": "/mes-qc-defect-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-defect-record:post",
+      "method": "POST",
+      "path": "/mes-qc-defect-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-defect/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-qc-defect/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-defect/[id]:get",
+      "method": "GET",
+      "path": "/mes-qc-defect/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-defect/[id]:put",
+      "method": "PUT",
+      "path": "/mes-qc-defect/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-defect:get",
+      "method": "GET",
+      "path": "/mes-qc-defect",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-defect:post",
+      "method": "POST",
+      "path": "/mes-qc-defect",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-indicator-result/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-qc-indicator-result/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-indicator-result/[id]:get",
+      "method": "GET",
+      "path": "/mes-qc-indicator-result/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-indicator-result/[id]:put",
+      "method": "PUT",
+      "path": "/mes-qc-indicator-result/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-indicator-result:get",
+      "method": "GET",
+      "path": "/mes-qc-indicator-result",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-indicator-result:post",
+      "method": "POST",
+      "path": "/mes-qc-indicator-result",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-indicator/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-qc-indicator/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-indicator/[id]:get",
+      "method": "GET",
+      "path": "/mes-qc-indicator/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-indicator/[id]:put",
+      "method": "PUT",
+      "path": "/mes-qc-indicator/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-indicator:get",
+      "method": "GET",
+      "path": "/mes-qc-indicator",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-indicator:post",
+      "method": "POST",
+      "path": "/mes-qc-indicator",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-ipqc-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-qc-ipqc-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-ipqc-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-qc-ipqc-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-ipqc-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-qc-ipqc-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-ipqc-line:get",
+      "method": "GET",
+      "path": "/mes-qc-ipqc-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-ipqc-line:post",
+      "method": "POST",
+      "path": "/mes-qc-ipqc-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-ipqc/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-qc-ipqc/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-ipqc/[id]:get",
+      "method": "GET",
+      "path": "/mes-qc-ipqc/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-ipqc/[id]:put",
+      "method": "PUT",
+      "path": "/mes-qc-ipqc/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-ipqc:get",
+      "method": "GET",
+      "path": "/mes-qc-ipqc",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-ipqc:post",
+      "method": "POST",
+      "path": "/mes-qc-ipqc",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-iqc-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-qc-iqc-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-iqc-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-qc-iqc-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-iqc-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-qc-iqc-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-iqc-line:get",
+      "method": "GET",
+      "path": "/mes-qc-iqc-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-iqc-line:post",
+      "method": "POST",
+      "path": "/mes-qc-iqc-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-iqc/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-qc-iqc/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-iqc/[id]:get",
+      "method": "GET",
+      "path": "/mes-qc-iqc/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-iqc/[id]:put",
+      "method": "PUT",
+      "path": "/mes-qc-iqc/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-iqc:get",
+      "method": "GET",
+      "path": "/mes-qc-iqc",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-iqc:post",
+      "method": "POST",
+      "path": "/mes-qc-iqc",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-oqc-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-qc-oqc-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-oqc-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-qc-oqc-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-oqc-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-qc-oqc-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-oqc-line:get",
+      "method": "GET",
+      "path": "/mes-qc-oqc-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-oqc-line:post",
+      "method": "POST",
+      "path": "/mes-qc-oqc-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-oqc/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-qc-oqc/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-oqc/[id]:get",
+      "method": "GET",
+      "path": "/mes-qc-oqc/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-oqc/[id]:put",
+      "method": "PUT",
+      "path": "/mes-qc-oqc/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-oqc:get",
+      "method": "GET",
+      "path": "/mes-qc-oqc",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-oqc:post",
+      "method": "POST",
+      "path": "/mes-qc-oqc",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-pending-inspect/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-qc-pending-inspect/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-pending-inspect/[id]:get",
+      "method": "GET",
+      "path": "/mes-qc-pending-inspect/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-pending-inspect/[id]:put",
+      "method": "PUT",
+      "path": "/mes-qc-pending-inspect/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-pending-inspect:get",
+      "method": "GET",
+      "path": "/mes-qc-pending-inspect",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-pending-inspect:post",
+      "method": "POST",
+      "path": "/mes-qc-pending-inspect",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-rqc-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-qc-rqc-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-rqc-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-qc-rqc-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-rqc-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-qc-rqc-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-rqc-line:get",
+      "method": "GET",
+      "path": "/mes-qc-rqc-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-rqc-line:post",
+      "method": "POST",
+      "path": "/mes-qc-rqc-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-rqc/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-qc-rqc/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-rqc/[id]:get",
+      "method": "GET",
+      "path": "/mes-qc-rqc/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-rqc/[id]:put",
+      "method": "PUT",
+      "path": "/mes-qc-rqc/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-rqc:get",
+      "method": "GET",
+      "path": "/mes-qc-rqc",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-rqc:post",
+      "method": "POST",
+      "path": "/mes-qc-rqc",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-template-indicator/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-qc-template-indicator/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-template-indicator/[id]:get",
+      "method": "GET",
+      "path": "/mes-qc-template-indicator/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-template-indicator/[id]:put",
+      "method": "PUT",
+      "path": "/mes-qc-template-indicator/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-template-indicator:get",
+      "method": "GET",
+      "path": "/mes-qc-template-indicator",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-template-indicator:post",
+      "method": "POST",
+      "path": "/mes-qc-template-indicator",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-template-item/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-qc-template-item/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-template-item/[id]:get",
+      "method": "GET",
+      "path": "/mes-qc-template-item/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-template-item/[id]:put",
+      "method": "PUT",
+      "path": "/mes-qc-template-item/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-template-item:get",
+      "method": "GET",
+      "path": "/mes-qc-template-item",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-template-item:post",
+      "method": "POST",
+      "path": "/mes-qc-template-item",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-template/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-qc-template/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-template/[id]:get",
+      "method": "GET",
+      "path": "/mes-qc-template/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-template/[id]:put",
+      "method": "PUT",
+      "path": "/mes-qc-template/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-template:get",
+      "method": "GET",
+      "path": "/mes-qc-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-qc-template:post",
+      "method": "POST",
+      "path": "/mes-qc-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-tm-tool-type/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-tm-tool-type/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-tm-tool-type/[id]:get",
+      "method": "GET",
+      "path": "/mes-tm-tool-type/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-tm-tool-type/[id]:put",
+      "method": "PUT",
+      "path": "/mes-tm-tool-type/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-tm-tool-type:get",
+      "method": "GET",
+      "path": "/mes-tm-tool-type",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-tm-tool-type:post",
+      "method": "POST",
+      "path": "/mes-tm-tool-type",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-tm-tool/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-tm-tool/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-tm-tool/[id]:get",
+      "method": "GET",
+      "path": "/mes-tm-tool/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-tm-tool/[id]:put",
+      "method": "PUT",
+      "path": "/mes-tm-tool/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-tm-tool:get",
+      "method": "GET",
+      "path": "/mes-tm-tool",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-tm-tool:post",
+      "method": "POST",
+      "path": "/mes-tm-tool",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-arrival-notice-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-arrival-notice-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-arrival-notice-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-arrival-notice-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-arrival-notice-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-arrival-notice-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-arrival-notice-line:get",
+      "method": "GET",
+      "path": "/mes-wm-arrival-notice-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-arrival-notice-line:post",
+      "method": "POST",
+      "path": "/mes-wm-arrival-notice-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-arrival-notice/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-arrival-notice/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-arrival-notice/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-arrival-notice/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-arrival-notice/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-arrival-notice/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-arrival-notice:get",
+      "method": "GET",
+      "path": "/mes-wm-arrival-notice",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-arrival-notice:post",
+      "method": "POST",
+      "path": "/mes-wm-arrival-notice",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-barcode-config/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-barcode-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-barcode-config/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-barcode-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-barcode-config/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-barcode-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-barcode-config:get",
+      "method": "GET",
+      "path": "/mes-wm-barcode-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-barcode-config:post",
+      "method": "POST",
+      "path": "/mes-wm-barcode-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-barcode/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-barcode/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-barcode/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-barcode/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-barcode/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-barcode/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-barcode:get",
+      "method": "GET",
+      "path": "/mes-wm-barcode",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-barcode:post",
+      "method": "POST",
+      "path": "/mes-wm-barcode",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-batch/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-batch/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-batch/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-batch/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-batch/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-batch/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-batch:get",
+      "method": "GET",
+      "path": "/mes-wm-batch",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-batch:post",
+      "method": "POST",
+      "path": "/mes-wm-batch",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-item-consume-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-item-consume-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-item-consume-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-item-consume-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-item-consume-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-item-consume-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-item-consume-line:get",
+      "method": "GET",
+      "path": "/mes-wm-item-consume-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-item-consume-line:post",
+      "method": "POST",
+      "path": "/mes-wm-item-consume-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-item-receipt-detail/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-item-receipt-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-item-receipt-detail/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-item-receipt-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-item-receipt-detail/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-item-receipt-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-item-receipt-detail:get",
+      "method": "GET",
+      "path": "/mes-wm-item-receipt-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-item-receipt-detail:post",
+      "method": "POST",
+      "path": "/mes-wm-item-receipt-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-item-receipt-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-item-receipt-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-item-receipt-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-item-receipt-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-item-receipt-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-item-receipt-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-item-receipt-line:get",
+      "method": "GET",
+      "path": "/mes-wm-item-receipt-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-item-receipt-line:post",
+      "method": "POST",
+      "path": "/mes-wm-item-receipt-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-item-receipt/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-item-receipt/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-item-receipt/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-item-receipt/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-item-receipt/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-item-receipt/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-item-receipt:get",
+      "method": "GET",
+      "path": "/mes-wm-item-receipt",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-item-receipt:post",
+      "method": "POST",
+      "path": "/mes-wm-item-receipt",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-material-stock/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-material-stock/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-material-stock/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-material-stock/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-material-stock/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-material-stock/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-material-stock:get",
+      "method": "GET",
+      "path": "/mes-wm-material-stock",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-material-stock:post",
+      "method": "POST",
+      "path": "/mes-wm-material-stock",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-misc-issue-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-misc-issue-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-misc-issue-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-misc-issue-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-misc-issue-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-misc-issue-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-misc-issue-line:get",
+      "method": "GET",
+      "path": "/mes-wm-misc-issue-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-misc-issue-line:post",
+      "method": "POST",
+      "path": "/mes-wm-misc-issue-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-misc-issue/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-misc-issue/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-misc-issue/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-misc-issue/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-misc-issue/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-misc-issue/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-misc-issue:get",
+      "method": "GET",
+      "path": "/mes-wm-misc-issue",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-misc-issue:post",
+      "method": "POST",
+      "path": "/mes-wm-misc-issue",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-misc-receipt-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-misc-receipt-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-misc-receipt-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-misc-receipt-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-misc-receipt-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-misc-receipt-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-misc-receipt-line:get",
+      "method": "GET",
+      "path": "/mes-wm-misc-receipt-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-misc-receipt-line:post",
+      "method": "POST",
+      "path": "/mes-wm-misc-receipt-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-misc-receipt/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-misc-receipt/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-misc-receipt/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-misc-receipt/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-misc-receipt/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-misc-receipt/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-misc-receipt:get",
+      "method": "GET",
+      "path": "/mes-wm-misc-receipt",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-misc-receipt:post",
+      "method": "POST",
+      "path": "/mes-wm-misc-receipt",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-issue-detail/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-outsource-issue-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-issue-detail/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-outsource-issue-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-issue-detail/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-outsource-issue-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-issue-detail:get",
+      "method": "GET",
+      "path": "/mes-wm-outsource-issue-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-issue-detail:post",
+      "method": "POST",
+      "path": "/mes-wm-outsource-issue-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-issue-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-outsource-issue-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-issue-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-outsource-issue-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-issue-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-outsource-issue-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-issue-line:get",
+      "method": "GET",
+      "path": "/mes-wm-outsource-issue-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-issue-line:post",
+      "method": "POST",
+      "path": "/mes-wm-outsource-issue-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-issue/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-outsource-issue/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-issue/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-outsource-issue/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-issue/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-outsource-issue/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-issue:get",
+      "method": "GET",
+      "path": "/mes-wm-outsource-issue",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-issue:post",
+      "method": "POST",
+      "path": "/mes-wm-outsource-issue",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-receipt-detail/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-outsource-receipt-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-receipt-detail/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-outsource-receipt-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-receipt-detail/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-outsource-receipt-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-receipt-detail:get",
+      "method": "GET",
+      "path": "/mes-wm-outsource-receipt-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-receipt-detail:post",
+      "method": "POST",
+      "path": "/mes-wm-outsource-receipt-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-receipt-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-outsource-receipt-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-receipt-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-outsource-receipt-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-receipt-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-outsource-receipt-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-receipt-line:get",
+      "method": "GET",
+      "path": "/mes-wm-outsource-receipt-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-receipt-line:post",
+      "method": "POST",
+      "path": "/mes-wm-outsource-receipt-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-receipt/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-outsource-receipt/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-receipt/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-outsource-receipt/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-receipt/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-outsource-receipt/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-receipt:get",
+      "method": "GET",
+      "path": "/mes-wm-outsource-receipt",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-outsource-receipt:post",
+      "method": "POST",
+      "path": "/mes-wm-outsource-receipt",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-package-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-package-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-package-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-package-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-package-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-package-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-package-line:get",
+      "method": "GET",
+      "path": "/mes-wm-package-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-package-line:post",
+      "method": "POST",
+      "path": "/mes-wm-package-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-package/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-package/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-package/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-package/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-package/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-package/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-package:get",
+      "method": "GET",
+      "path": "/mes-wm-package",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-package:post",
+      "method": "POST",
+      "path": "/mes-wm-package",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-issue-detail/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-product-issue-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-issue-detail/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-product-issue-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-issue-detail/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-product-issue-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-issue-detail:get",
+      "method": "GET",
+      "path": "/mes-wm-product-issue-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-issue-detail:post",
+      "method": "POST",
+      "path": "/mes-wm-product-issue-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-issue-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-product-issue-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-issue-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-product-issue-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-issue-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-product-issue-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-issue-line:get",
+      "method": "GET",
+      "path": "/mes-wm-product-issue-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-issue-line:post",
+      "method": "POST",
+      "path": "/mes-wm-product-issue-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-issue/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-product-issue/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-issue/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-product-issue/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-issue/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-product-issue/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-issue:get",
+      "method": "GET",
+      "path": "/mes-wm-product-issue",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-issue:post",
+      "method": "POST",
+      "path": "/mes-wm-product-issue",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-produce-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-product-produce-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-produce-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-product-produce-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-produce-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-product-produce-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-produce-line:get",
+      "method": "GET",
+      "path": "/mes-wm-product-produce-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-produce-line:post",
+      "method": "POST",
+      "path": "/mes-wm-product-produce-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-receipt-detail/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-product-receipt-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-receipt-detail/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-product-receipt-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-receipt-detail/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-product-receipt-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-receipt-detail:get",
+      "method": "GET",
+      "path": "/mes-wm-product-receipt-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-receipt-detail:post",
+      "method": "POST",
+      "path": "/mes-wm-product-receipt-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-receipt-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-product-receipt-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-receipt-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-product-receipt-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-receipt-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-product-receipt-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-receipt-line:get",
+      "method": "GET",
+      "path": "/mes-wm-product-receipt-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-receipt-line:post",
+      "method": "POST",
+      "path": "/mes-wm-product-receipt-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-receipt/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-product-receipt/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-receipt/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-product-receipt/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-receipt/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-product-receipt/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-receipt:get",
+      "method": "GET",
+      "path": "/mes-wm-product-receipt",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-receipt:post",
+      "method": "POST",
+      "path": "/mes-wm-product-receipt",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-sales-detail/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-product-sales-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-sales-detail/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-product-sales-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-sales-detail/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-product-sales-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-sales-detail:get",
+      "method": "GET",
+      "path": "/mes-wm-product-sales-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-sales-detail:post",
+      "method": "POST",
+      "path": "/mes-wm-product-sales-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-sales-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-product-sales-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-sales-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-product-sales-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-sales-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-product-sales-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-sales-line:get",
+      "method": "GET",
+      "path": "/mes-wm-product-sales-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-sales-line:post",
+      "method": "POST",
+      "path": "/mes-wm-product-sales-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-sales/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-product-sales/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-sales/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-product-sales/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-sales/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-product-sales/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-sales:get",
+      "method": "GET",
+      "path": "/mes-wm-product-sales",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-product-sales:post",
+      "method": "POST",
+      "path": "/mes-wm-product-sales",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-issue-detail/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-return-issue-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-issue-detail/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-return-issue-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-issue-detail/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-return-issue-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-issue-detail:get",
+      "method": "GET",
+      "path": "/mes-wm-return-issue-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-issue-detail:post",
+      "method": "POST",
+      "path": "/mes-wm-return-issue-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-issue-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-return-issue-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-issue-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-return-issue-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-issue-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-return-issue-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-issue-line:get",
+      "method": "GET",
+      "path": "/mes-wm-return-issue-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-issue-line:post",
+      "method": "POST",
+      "path": "/mes-wm-return-issue-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-issue/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-return-issue/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-issue/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-return-issue/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-issue/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-return-issue/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-issue:get",
+      "method": "GET",
+      "path": "/mes-wm-return-issue",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-issue:post",
+      "method": "POST",
+      "path": "/mes-wm-return-issue",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-sales-detail/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-return-sales-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-sales-detail/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-return-sales-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-sales-detail/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-return-sales-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-sales-detail:get",
+      "method": "GET",
+      "path": "/mes-wm-return-sales-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-sales-detail:post",
+      "method": "POST",
+      "path": "/mes-wm-return-sales-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-sales-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-return-sales-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-sales-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-return-sales-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-sales-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-return-sales-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-sales-line:get",
+      "method": "GET",
+      "path": "/mes-wm-return-sales-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-sales-line:post",
+      "method": "POST",
+      "path": "/mes-wm-return-sales-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-sales/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-return-sales/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-sales/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-return-sales/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-sales/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-return-sales/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-sales:get",
+      "method": "GET",
+      "path": "/mes-wm-return-sales",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-sales:post",
+      "method": "POST",
+      "path": "/mes-wm-return-sales",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-vendor-detail/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-return-vendor-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-vendor-detail/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-return-vendor-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-vendor-detail/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-return-vendor-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-vendor-detail:get",
+      "method": "GET",
+      "path": "/mes-wm-return-vendor-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-vendor-detail:post",
+      "method": "POST",
+      "path": "/mes-wm-return-vendor-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-vendor-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-return-vendor-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-vendor-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-return-vendor-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-vendor-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-return-vendor-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-vendor-line:get",
+      "method": "GET",
+      "path": "/mes-wm-return-vendor-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-vendor-line:post",
+      "method": "POST",
+      "path": "/mes-wm-return-vendor-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-vendor/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-return-vendor/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-vendor/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-return-vendor/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-vendor/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-return-vendor/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-vendor:get",
+      "method": "GET",
+      "path": "/mes-wm-return-vendor",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-return-vendor:post",
+      "method": "POST",
+      "path": "/mes-wm-return-vendor",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-sales-notice-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-sales-notice-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-sales-notice-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-sales-notice-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-sales-notice-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-sales-notice-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-sales-notice-line:get",
+      "method": "GET",
+      "path": "/mes-wm-sales-notice-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-sales-notice-line:post",
+      "method": "POST",
+      "path": "/mes-wm-sales-notice-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-sales-notice/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-sales-notice/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-sales-notice/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-sales-notice/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-sales-notice/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-sales-notice/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-sales-notice:get",
+      "method": "GET",
+      "path": "/mes-wm-sales-notice",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-sales-notice:post",
+      "method": "POST",
+      "path": "/mes-wm-sales-notice",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-sn/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-sn/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-sn/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-sn/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-sn/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-sn/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-sn:get",
+      "method": "GET",
+      "path": "/mes-wm-sn",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-sn:post",
+      "method": "POST",
+      "path": "/mes-wm-sn",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-plan-param/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-stock-taking-plan-param/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-plan-param/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-stock-taking-plan-param/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-plan-param/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-stock-taking-plan-param/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-plan-param:get",
+      "method": "GET",
+      "path": "/mes-wm-stock-taking-plan-param",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-plan-param:post",
+      "method": "POST",
+      "path": "/mes-wm-stock-taking-plan-param",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-plan/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-stock-taking-plan/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-plan/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-stock-taking-plan/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-plan/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-stock-taking-plan/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-plan:get",
+      "method": "GET",
+      "path": "/mes-wm-stock-taking-plan",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-plan:post",
+      "method": "POST",
+      "path": "/mes-wm-stock-taking-plan",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-task-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-stock-taking-task-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-task-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-stock-taking-task-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-task-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-stock-taking-task-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-task-line:get",
+      "method": "GET",
+      "path": "/mes-wm-stock-taking-task-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-task-line:post",
+      "method": "POST",
+      "path": "/mes-wm-stock-taking-task-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-task-result/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-stock-taking-task-result/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-task-result/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-stock-taking-task-result/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-task-result/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-stock-taking-task-result/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-task-result:get",
+      "method": "GET",
+      "path": "/mes-wm-stock-taking-task-result",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-task-result:post",
+      "method": "POST",
+      "path": "/mes-wm-stock-taking-task-result",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-task/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-stock-taking-task/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-task/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-stock-taking-task/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-task/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-stock-taking-task/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-task:get",
+      "method": "GET",
+      "path": "/mes-wm-stock-taking-task",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-stock-taking-task:post",
+      "method": "POST",
+      "path": "/mes-wm-stock-taking-task",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-transfer-detail/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-transfer-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-transfer-detail/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-transfer-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-transfer-detail/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-transfer-detail/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-transfer-detail:get",
+      "method": "GET",
+      "path": "/mes-wm-transfer-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-transfer-detail:post",
+      "method": "POST",
+      "path": "/mes-wm-transfer-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-transfer-line/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-transfer-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-transfer-line/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-transfer-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-transfer-line/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-transfer-line/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-transfer-line:get",
+      "method": "GET",
+      "path": "/mes-wm-transfer-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-transfer-line:post",
+      "method": "POST",
+      "path": "/mes-wm-transfer-line",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-transfer/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-transfer/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-transfer/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-transfer/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-transfer/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-transfer/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-transfer:get",
+      "method": "GET",
+      "path": "/mes-wm-transfer",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-transfer:post",
+      "method": "POST",
+      "path": "/mes-wm-transfer",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-warehouse-area/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-warehouse-area/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-warehouse-area/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-warehouse-area/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-warehouse-area/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-warehouse-area/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-warehouse-area:get",
+      "method": "GET",
+      "path": "/mes-wm-warehouse-area",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-warehouse-area:post",
+      "method": "POST",
+      "path": "/mes-wm-warehouse-area",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-warehouse-location/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-warehouse-location/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-warehouse-location/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-warehouse-location/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-warehouse-location/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-warehouse-location/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-warehouse-location:get",
+      "method": "GET",
+      "path": "/mes-wm-warehouse-location",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-warehouse-location:post",
+      "method": "POST",
+      "path": "/mes-wm-warehouse-location",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-warehouse/[id]:delete",
+      "method": "DELETE",
+      "path": "/mes-wm-warehouse/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-warehouse/[id]:get",
+      "method": "GET",
+      "path": "/mes-wm-warehouse/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-warehouse/[id]:put",
+      "method": "PUT",
+      "path": "/mes-wm-warehouse/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-warehouse:get",
+      "method": "GET",
+      "path": "/mes-wm-warehouse",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mes-wm-warehouse:post",
+      "method": "POST",
+      "path": "/mes-wm-warehouse",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:work-orders/[id]:delete",
+      "method": "DELETE",
+      "path": "/work-orders/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:work-orders/[id]:get",
+      "method": "GET",
+      "path": "/work-orders/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:work-orders/[id]:put",
+      "method": "PUT",
+      "path": "/work-orders/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:work-orders/report:post",
+      "method": "POST",
+      "path": "/work-orders/report",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:work-orders:get",
+      "method": "GET",
+      "path": "/work-orders",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:work-orders:post",
+      "method": "POST",
+      "path": "/work-orders",
+      "auth": "operator"
+    }
+  ]
+}

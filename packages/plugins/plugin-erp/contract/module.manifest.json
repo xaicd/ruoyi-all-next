@@ -1,0 +1,104 @@
+{
+  "$schema": "ruoyi-module-manifest/v1",
+  "domain": "erp",
+  "id": "ruoyi.erp",
+  "apiVersion": 1,
+  "displayName": "经营中台",
+  "kind": "plugin",
+  "stage": "B",
+  "owner": "erp",
+  "contractVersion": "v1",
+  "implementation": "local-ts",
+  "minimumHostVersion": "1.0.0",
+  "capabilities": [
+    "api.routes.register",
+    "facade.invoke",
+    "rpc.serve",
+    "cmd.dispatch",
+    "pack.independent"
+  ],
+  "entrypoints": {
+    "facade": [
+      "packages/plugins/plugin-erp/contract/erp.facade.ts"
+    ],
+    "proto": "packages/plugins/plugin-erp/contract/erp.proto",
+    "actions": "packages/plugins/plugin-erp/contract/actions.ts"
+  },
+  "apiRoutes": {
+    "publicPrefix": [
+      "/api/v1/admin/erp"
+    ],
+    "adminPrefix": "/api/v1/admin/erp"
+  },
+  "auth": {
+    "audience": "admin",
+    "tenantPolicy": "required"
+  },
+  "messaging": {
+    "queueGroup": "ruoyi.erp",
+    "commandSubject": "ruoyi.cmd.erp.>",
+    "eventSubject": "ruoyi.evt.erp.>"
+  },
+  "invoke": {
+    "colocated": "sdk",
+    "remote": "rpc",
+    "protocol": "nats-rr",
+    "serialization": "json"
+  },
+  "upstream": {
+    "env": "RUOYI_DOMAIN_ERP_UPSTREAM",
+    "protocol": "http",
+    "defaultPort": 3220
+  },
+  "resilience": {
+    "timeoutMs": 8000,
+    "retry": {
+      "maxAttempts": 1,
+      "safeMethodsOnly": true
+    },
+    "idempotencyRequired": true
+  },
+  "facadeMethods": [
+    "ping",
+    "listProducts",
+    "listOrders",
+    "adjustStock"
+  ],
+  "rpc": [
+    {
+      "service": "ErpService",
+      "method": "Ping"
+    },
+    {
+      "service": "ErpService",
+      "method": "ListProducts"
+    },
+    {
+      "service": "ErpService",
+      "method": "ListOrders"
+    },
+    {
+      "service": "ErpService",
+      "method": "AdjustStock"
+    }
+  ],
+  "actions": [
+    "erp.ping",
+    "erp.listProducts",
+    "erp.listOrders",
+    "erp.adjustStock"
+  ],
+  "permissions": [
+    "erp:order:view",
+    "erp:product:view",
+    "erp:stock:adjust"
+  ],
+  "dependsOn": [
+    "shared"
+  ],
+  "pack": {
+    "enabled": true,
+    "kind": "api-only",
+    "independentDatabase": false
+  }
+}

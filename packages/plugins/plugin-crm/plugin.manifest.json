@@ -1,0 +1,855 @@
+{
+  "$schema": "ruoyi-plugin-manifest/v1",
+  "id": "ruoyi.crm",
+  "apiVersion": 1,
+  "version": "0.1.0",
+  "displayName": "crm",
+  "description": "crm 域（由 scripts/scaffold-domain-plugin.cjs 生成的第一方插件声明）",
+  "author": "RuoYi All Next",
+  "categories": [
+    "automation"
+  ],
+  "capabilities": [
+    "api.routes.register"
+  ],
+  "entrypoints": {
+    "merged": "./plugin-entry.ts"
+  },
+  "domain": {
+    "kind": "business",
+    "stage": "B",
+    "contractVersion": "v1",
+    "publicPrefixes": [
+      "/api/v1/admin/crm"
+    ],
+    "upstreamEnv": "RUOYI_DOMAIN_CRM_UPSTREAM",
+    "defaultPort": 3219,
+    "packable": true,
+    "independentDatabase": false,
+    "dependsOnModules": [
+      "shared"
+    ],
+    "auth": {
+      "audience": "admin",
+      "tenantPolicy": "required"
+    },
+    "resilience": {
+      "timeoutMs": 5000,
+      "retryMaxAttempts": 1,
+      "safeMethodsOnly": true,
+      "idempotencyRequired": true
+    }
+  },
+  "apiRoutes": [
+    {
+      "routeKey": "admin:clues/[id]:delete",
+      "method": "DELETE",
+      "path": "/clues/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:clues/[id]:get",
+      "method": "GET",
+      "path": "/clues/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:clues/[id]:put",
+      "method": "PUT",
+      "path": "/clues/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:clues:get",
+      "method": "GET",
+      "path": "/clues",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:clues:post",
+      "method": "POST",
+      "path": "/clues",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-business-status/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-business-status/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-business-status/[id]:get",
+      "method": "GET",
+      "path": "/crm-business-status/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-business-status/[id]:put",
+      "method": "PUT",
+      "path": "/crm-business-status/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-business-status:get",
+      "method": "GET",
+      "path": "/crm-business-status",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-business-status:post",
+      "method": "POST",
+      "path": "/crm-business-status",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-business/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-business/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-business/[id]:get",
+      "method": "GET",
+      "path": "/crm-business/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-business/[id]:put",
+      "method": "PUT",
+      "path": "/crm-business/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-business:get",
+      "method": "GET",
+      "path": "/crm-business",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-business:post",
+      "method": "POST",
+      "path": "/crm-business",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-clue/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-clue/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-clue/[id]:get",
+      "method": "GET",
+      "path": "/crm-clue/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-clue/[id]:put",
+      "method": "PUT",
+      "path": "/crm-clue/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-clue:get",
+      "method": "GET",
+      "path": "/crm-clue",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-clue:post",
+      "method": "POST",
+      "path": "/crm-clue",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-contact/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-contact/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-contact/[id]:get",
+      "method": "GET",
+      "path": "/crm-contact/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-contact/[id]:put",
+      "method": "PUT",
+      "path": "/crm-contact/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-contact:get",
+      "method": "GET",
+      "path": "/crm-contact",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-contact:post",
+      "method": "POST",
+      "path": "/crm-contact",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-contract-config/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-contract-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-contract-config/[id]:get",
+      "method": "GET",
+      "path": "/crm-contract-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-contract-config/[id]:put",
+      "method": "PUT",
+      "path": "/crm-contract-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-contract-config:get",
+      "method": "GET",
+      "path": "/crm-contract-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-contract-config:post",
+      "method": "POST",
+      "path": "/crm-contract-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-contract/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-contract/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-contract/[id]:get",
+      "method": "GET",
+      "path": "/crm-contract/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-contract/[id]:put",
+      "method": "PUT",
+      "path": "/crm-contract/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-contract:get",
+      "method": "GET",
+      "path": "/crm-contract",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-contract:post",
+      "method": "POST",
+      "path": "/crm-contract",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-customer-limit-config/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-customer-limit-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-customer-limit-config/[id]:get",
+      "method": "GET",
+      "path": "/crm-customer-limit-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-customer-limit-config/[id]:put",
+      "method": "PUT",
+      "path": "/crm-customer-limit-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-customer-limit-config:get",
+      "method": "GET",
+      "path": "/crm-customer-limit-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-customer-limit-config:post",
+      "method": "POST",
+      "path": "/crm-customer-limit-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-customer-pool-config/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-customer-pool-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-customer-pool-config/[id]:get",
+      "method": "GET",
+      "path": "/crm-customer-pool-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-customer-pool-config/[id]:put",
+      "method": "PUT",
+      "path": "/crm-customer-pool-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-customer-pool-config:get",
+      "method": "GET",
+      "path": "/crm-customer-pool-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-customer-pool-config:post",
+      "method": "POST",
+      "path": "/crm-customer-pool-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-customer/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-customer/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-customer/[id]:get",
+      "method": "GET",
+      "path": "/crm-customer/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-customer/[id]:put",
+      "method": "PUT",
+      "path": "/crm-customer/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-customer:get",
+      "method": "GET",
+      "path": "/crm-customer",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-customer:post",
+      "method": "POST",
+      "path": "/crm-customer",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-follow-up-record/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-follow-up-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-follow-up-record/[id]:get",
+      "method": "GET",
+      "path": "/crm-follow-up-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-follow-up-record/[id]:put",
+      "method": "PUT",
+      "path": "/crm-follow-up-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-follow-up-record:get",
+      "method": "GET",
+      "path": "/crm-follow-up-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-follow-up-record:post",
+      "method": "POST",
+      "path": "/crm-follow-up-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-operate-log/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-operate-log/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-operate-log/[id]:get",
+      "method": "GET",
+      "path": "/crm-operate-log/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-operate-log/[id]:put",
+      "method": "PUT",
+      "path": "/crm-operate-log/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-operate-log:get",
+      "method": "GET",
+      "path": "/crm-operate-log",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-operate-log:post",
+      "method": "POST",
+      "path": "/crm-operate-log",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-performance-config/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-performance-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-performance-config/[id]:get",
+      "method": "GET",
+      "path": "/crm-performance-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-performance-config/[id]:put",
+      "method": "PUT",
+      "path": "/crm-performance-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-performance-config:get",
+      "method": "GET",
+      "path": "/crm-performance-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-performance-config:post",
+      "method": "POST",
+      "path": "/crm-performance-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-permission/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-permission/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-permission/[id]:get",
+      "method": "GET",
+      "path": "/crm-permission/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-permission/[id]:put",
+      "method": "PUT",
+      "path": "/crm-permission/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-permission:get",
+      "method": "GET",
+      "path": "/crm-permission",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-permission:post",
+      "method": "POST",
+      "path": "/crm-permission",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-product-category/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-product-category/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-product-category/[id]:get",
+      "method": "GET",
+      "path": "/crm-product-category/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-product-category/[id]:put",
+      "method": "PUT",
+      "path": "/crm-product-category/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-product-category:get",
+      "method": "GET",
+      "path": "/crm-product-category",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-product-category:post",
+      "method": "POST",
+      "path": "/crm-product-category",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-product/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-product/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-product/[id]:get",
+      "method": "GET",
+      "path": "/crm-product/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-product/[id]:put",
+      "method": "PUT",
+      "path": "/crm-product/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-product:get",
+      "method": "GET",
+      "path": "/crm-product",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-product:post",
+      "method": "POST",
+      "path": "/crm-product",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-receivable-plan/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-receivable-plan/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-receivable-plan/[id]:get",
+      "method": "GET",
+      "path": "/crm-receivable-plan/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-receivable-plan/[id]:put",
+      "method": "PUT",
+      "path": "/crm-receivable-plan/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-receivable-plan:get",
+      "method": "GET",
+      "path": "/crm-receivable-plan",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-receivable-plan:post",
+      "method": "POST",
+      "path": "/crm-receivable-plan",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-receivable/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-receivable/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-receivable/[id]:get",
+      "method": "GET",
+      "path": "/crm-receivable/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-receivable/[id]:put",
+      "method": "PUT",
+      "path": "/crm-receivable/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-receivable:get",
+      "method": "GET",
+      "path": "/crm-receivable",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-receivable:post",
+      "method": "POST",
+      "path": "/crm-receivable",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-customer/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-statistics-customer/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-customer/[id]:get",
+      "method": "GET",
+      "path": "/crm-statistics-customer/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-customer/[id]:put",
+      "method": "PUT",
+      "path": "/crm-statistics-customer/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-customer:get",
+      "method": "GET",
+      "path": "/crm-statistics-customer",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-customer:post",
+      "method": "POST",
+      "path": "/crm-statistics-customer",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-funnel/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-statistics-funnel/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-funnel/[id]:get",
+      "method": "GET",
+      "path": "/crm-statistics-funnel/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-funnel/[id]:put",
+      "method": "PUT",
+      "path": "/crm-statistics-funnel/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-funnel:get",
+      "method": "GET",
+      "path": "/crm-statistics-funnel",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-funnel:post",
+      "method": "POST",
+      "path": "/crm-statistics-funnel",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-performance-target/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-statistics-performance-target/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-performance-target/[id]:get",
+      "method": "GET",
+      "path": "/crm-statistics-performance-target/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-performance-target/[id]:put",
+      "method": "PUT",
+      "path": "/crm-statistics-performance-target/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-performance-target:get",
+      "method": "GET",
+      "path": "/crm-statistics-performance-target",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-performance-target:post",
+      "method": "POST",
+      "path": "/crm-statistics-performance-target",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-performance/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-statistics-performance/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-performance/[id]:get",
+      "method": "GET",
+      "path": "/crm-statistics-performance/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-performance/[id]:put",
+      "method": "PUT",
+      "path": "/crm-statistics-performance/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-performance:get",
+      "method": "GET",
+      "path": "/crm-statistics-performance",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-performance:post",
+      "method": "POST",
+      "path": "/crm-statistics-performance",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-portrait/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-statistics-portrait/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-portrait/[id]:get",
+      "method": "GET",
+      "path": "/crm-statistics-portrait/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-portrait/[id]:put",
+      "method": "PUT",
+      "path": "/crm-statistics-portrait/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-portrait:get",
+      "method": "GET",
+      "path": "/crm-statistics-portrait",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-portrait:post",
+      "method": "POST",
+      "path": "/crm-statistics-portrait",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-product/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-statistics-product/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-product/[id]:get",
+      "method": "GET",
+      "path": "/crm-statistics-product/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-product/[id]:put",
+      "method": "PUT",
+      "path": "/crm-statistics-product/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-product:get",
+      "method": "GET",
+      "path": "/crm-statistics-product",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-product:post",
+      "method": "POST",
+      "path": "/crm-statistics-product",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-rank/[id]:delete",
+      "method": "DELETE",
+      "path": "/crm-statistics-rank/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-rank/[id]:get",
+      "method": "GET",
+      "path": "/crm-statistics-rank/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-rank/[id]:put",
+      "method": "PUT",
+      "path": "/crm-statistics-rank/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-rank:get",
+      "method": "GET",
+      "path": "/crm-statistics-rank",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:crm-statistics-rank:post",
+      "method": "POST",
+      "path": "/crm-statistics-rank",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:customers/[id]:delete",
+      "method": "DELETE",
+      "path": "/customers/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:customers/[id]:get",
+      "method": "GET",
+      "path": "/customers/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:customers/[id]:put",
+      "method": "PUT",
+      "path": "/customers/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:customers:get",
+      "method": "GET",
+      "path": "/customers",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:customers:post",
+      "method": "POST",
+      "path": "/customers",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:followups/[id]:delete",
+      "method": "DELETE",
+      "path": "/followups/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:followups/[id]:get",
+      "method": "GET",
+      "path": "/followups/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:followups/[id]:put",
+      "method": "PUT",
+      "path": "/followups/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:followups:get",
+      "method": "GET",
+      "path": "/followups",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:followups:post",
+      "method": "POST",
+      "path": "/followups",
+      "auth": "operator"
+    }
+  ]
+}

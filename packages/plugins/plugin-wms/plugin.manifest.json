@@ -1,0 +1,729 @@
+{
+  "$schema": "ruoyi-plugin-manifest/v1",
+  "id": "ruoyi.wms",
+  "apiVersion": 1,
+  "version": "0.1.0",
+  "displayName": "wms",
+  "description": "wms 域（由 scripts/scaffold-domain-plugin.cjs 生成的第一方插件声明）",
+  "author": "RuoYi All Next",
+  "categories": [
+    "automation"
+  ],
+  "capabilities": [
+    "api.routes.register"
+  ],
+  "entrypoints": {
+    "merged": "./plugin-entry.ts"
+  },
+  "domain": {
+    "kind": "business",
+    "stage": "B",
+    "contractVersion": "v1",
+    "publicPrefixes": [
+      "/api/v1/admin/wms"
+    ],
+    "upstreamEnv": "RUOYI_DOMAIN_WMS_UPSTREAM",
+    "defaultPort": 3221,
+    "packable": true,
+    "independentDatabase": false,
+    "dependsOnModules": [
+      "shared"
+    ],
+    "auth": {
+      "audience": "admin",
+      "tenantPolicy": "required"
+    },
+    "resilience": {
+      "timeoutMs": 8000,
+      "retryMaxAttempts": 1,
+      "safeMethodsOnly": true,
+      "idempotencyRequired": true
+    }
+  },
+  "apiRoutes": [
+    {
+      "routeKey": "admin:wms-check-order-detail/export:post",
+      "method": "POST",
+      "path": "/wms-check-order-detail/export",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-check-order-detail/import-template:get",
+      "method": "GET",
+      "path": "/wms-check-order-detail/import-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-check-order-detail/import:post",
+      "method": "POST",
+      "path": "/wms-check-order-detail/import",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-check-order-detail:delete",
+      "method": "DELETE",
+      "path": "/wms-check-order-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-check-order-detail:get",
+      "method": "GET",
+      "path": "/wms-check-order-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-check-order-detail:post",
+      "method": "POST",
+      "path": "/wms-check-order-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-check-order-detail:put",
+      "method": "PUT",
+      "path": "/wms-check-order-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-check-order/export:post",
+      "method": "POST",
+      "path": "/wms-check-order/export",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-check-order/import-template:get",
+      "method": "GET",
+      "path": "/wms-check-order/import-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-check-order/import:post",
+      "method": "POST",
+      "path": "/wms-check-order/import",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-check-order:delete",
+      "method": "DELETE",
+      "path": "/wms-check-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-check-order:get",
+      "method": "GET",
+      "path": "/wms-check-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-check-order:post",
+      "method": "POST",
+      "path": "/wms-check-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-check-order:put",
+      "method": "PUT",
+      "path": "/wms-check-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-home-statistics:get",
+      "method": "GET",
+      "path": "/wms-home-statistics",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-home-statistics:post",
+      "method": "POST",
+      "path": "/wms-home-statistics",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-inventory-history/export:post",
+      "method": "POST",
+      "path": "/wms-inventory-history/export",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-inventory-history/import-template:get",
+      "method": "GET",
+      "path": "/wms-inventory-history/import-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-inventory-history/import:post",
+      "method": "POST",
+      "path": "/wms-inventory-history/import",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-inventory-history:delete",
+      "method": "DELETE",
+      "path": "/wms-inventory-history",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-inventory-history:get",
+      "method": "GET",
+      "path": "/wms-inventory-history",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-inventory-history:post",
+      "method": "POST",
+      "path": "/wms-inventory-history",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-inventory-history:put",
+      "method": "PUT",
+      "path": "/wms-inventory-history",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-inventory/export:post",
+      "method": "POST",
+      "path": "/wms-inventory/export",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-inventory/import-template:get",
+      "method": "GET",
+      "path": "/wms-inventory/import-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-inventory/import:post",
+      "method": "POST",
+      "path": "/wms-inventory/import",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-inventory:delete",
+      "method": "DELETE",
+      "path": "/wms-inventory",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-inventory:get",
+      "method": "GET",
+      "path": "/wms-inventory",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-inventory:post",
+      "method": "POST",
+      "path": "/wms-inventory",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-inventory:put",
+      "method": "PUT",
+      "path": "/wms-inventory",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item-brand/export:post",
+      "method": "POST",
+      "path": "/wms-item-brand/export",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item-brand/import-template:get",
+      "method": "GET",
+      "path": "/wms-item-brand/import-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item-brand/import:post",
+      "method": "POST",
+      "path": "/wms-item-brand/import",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item-brand:delete",
+      "method": "DELETE",
+      "path": "/wms-item-brand",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item-brand:get",
+      "method": "GET",
+      "path": "/wms-item-brand",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item-brand:post",
+      "method": "POST",
+      "path": "/wms-item-brand",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item-brand:put",
+      "method": "PUT",
+      "path": "/wms-item-brand",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item-category/export:post",
+      "method": "POST",
+      "path": "/wms-item-category/export",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item-category/import-template:get",
+      "method": "GET",
+      "path": "/wms-item-category/import-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item-category/import:post",
+      "method": "POST",
+      "path": "/wms-item-category/import",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item-category:delete",
+      "method": "DELETE",
+      "path": "/wms-item-category",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item-category:get",
+      "method": "GET",
+      "path": "/wms-item-category",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item-category:post",
+      "method": "POST",
+      "path": "/wms-item-category",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item-category:put",
+      "method": "PUT",
+      "path": "/wms-item-category",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item-sku/export:post",
+      "method": "POST",
+      "path": "/wms-item-sku/export",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item-sku/import-template:get",
+      "method": "GET",
+      "path": "/wms-item-sku/import-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item-sku/import:post",
+      "method": "POST",
+      "path": "/wms-item-sku/import",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item-sku:delete",
+      "method": "DELETE",
+      "path": "/wms-item-sku",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item-sku:get",
+      "method": "GET",
+      "path": "/wms-item-sku",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item-sku:post",
+      "method": "POST",
+      "path": "/wms-item-sku",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item-sku:put",
+      "method": "PUT",
+      "path": "/wms-item-sku",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item/export:post",
+      "method": "POST",
+      "path": "/wms-item/export",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item/import-template:get",
+      "method": "GET",
+      "path": "/wms-item/import-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item/import:post",
+      "method": "POST",
+      "path": "/wms-item/import",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item:delete",
+      "method": "DELETE",
+      "path": "/wms-item",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item:get",
+      "method": "GET",
+      "path": "/wms-item",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item:post",
+      "method": "POST",
+      "path": "/wms-item",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-item:put",
+      "method": "PUT",
+      "path": "/wms-item",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-merchant/export:post",
+      "method": "POST",
+      "path": "/wms-merchant/export",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-merchant/import-template:get",
+      "method": "GET",
+      "path": "/wms-merchant/import-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-merchant/import:post",
+      "method": "POST",
+      "path": "/wms-merchant/import",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-merchant:delete",
+      "method": "DELETE",
+      "path": "/wms-merchant",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-merchant:get",
+      "method": "GET",
+      "path": "/wms-merchant",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-merchant:post",
+      "method": "POST",
+      "path": "/wms-merchant",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-merchant:put",
+      "method": "PUT",
+      "path": "/wms-merchant",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-movement-order-detail/export:post",
+      "method": "POST",
+      "path": "/wms-movement-order-detail/export",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-movement-order-detail/import-template:get",
+      "method": "GET",
+      "path": "/wms-movement-order-detail/import-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-movement-order-detail/import:post",
+      "method": "POST",
+      "path": "/wms-movement-order-detail/import",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-movement-order-detail:delete",
+      "method": "DELETE",
+      "path": "/wms-movement-order-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-movement-order-detail:get",
+      "method": "GET",
+      "path": "/wms-movement-order-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-movement-order-detail:post",
+      "method": "POST",
+      "path": "/wms-movement-order-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-movement-order-detail:put",
+      "method": "PUT",
+      "path": "/wms-movement-order-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-movement-order/export:post",
+      "method": "POST",
+      "path": "/wms-movement-order/export",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-movement-order/import-template:get",
+      "method": "GET",
+      "path": "/wms-movement-order/import-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-movement-order/import:post",
+      "method": "POST",
+      "path": "/wms-movement-order/import",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-movement-order:delete",
+      "method": "DELETE",
+      "path": "/wms-movement-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-movement-order:get",
+      "method": "GET",
+      "path": "/wms-movement-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-movement-order:post",
+      "method": "POST",
+      "path": "/wms-movement-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-movement-order:put",
+      "method": "PUT",
+      "path": "/wms-movement-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-receipt-order-detail/export:post",
+      "method": "POST",
+      "path": "/wms-receipt-order-detail/export",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-receipt-order-detail/import-template:get",
+      "method": "GET",
+      "path": "/wms-receipt-order-detail/import-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-receipt-order-detail/import:post",
+      "method": "POST",
+      "path": "/wms-receipt-order-detail/import",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-receipt-order-detail:delete",
+      "method": "DELETE",
+      "path": "/wms-receipt-order-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-receipt-order-detail:get",
+      "method": "GET",
+      "path": "/wms-receipt-order-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-receipt-order-detail:post",
+      "method": "POST",
+      "path": "/wms-receipt-order-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-receipt-order-detail:put",
+      "method": "PUT",
+      "path": "/wms-receipt-order-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-receipt-order/export:post",
+      "method": "POST",
+      "path": "/wms-receipt-order/export",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-receipt-order/import-template:get",
+      "method": "GET",
+      "path": "/wms-receipt-order/import-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-receipt-order/import:post",
+      "method": "POST",
+      "path": "/wms-receipt-order/import",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-receipt-order:delete",
+      "method": "DELETE",
+      "path": "/wms-receipt-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-receipt-order:get",
+      "method": "GET",
+      "path": "/wms-receipt-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-receipt-order:post",
+      "method": "POST",
+      "path": "/wms-receipt-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-receipt-order:put",
+      "method": "PUT",
+      "path": "/wms-receipt-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-shipment-order-detail/export:post",
+      "method": "POST",
+      "path": "/wms-shipment-order-detail/export",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-shipment-order-detail/import-template:get",
+      "method": "GET",
+      "path": "/wms-shipment-order-detail/import-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-shipment-order-detail/import:post",
+      "method": "POST",
+      "path": "/wms-shipment-order-detail/import",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-shipment-order-detail:delete",
+      "method": "DELETE",
+      "path": "/wms-shipment-order-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-shipment-order-detail:get",
+      "method": "GET",
+      "path": "/wms-shipment-order-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-shipment-order-detail:post",
+      "method": "POST",
+      "path": "/wms-shipment-order-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-shipment-order-detail:put",
+      "method": "PUT",
+      "path": "/wms-shipment-order-detail",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-shipment-order/export:post",
+      "method": "POST",
+      "path": "/wms-shipment-order/export",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-shipment-order/import-template:get",
+      "method": "GET",
+      "path": "/wms-shipment-order/import-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-shipment-order/import:post",
+      "method": "POST",
+      "path": "/wms-shipment-order/import",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-shipment-order:delete",
+      "method": "DELETE",
+      "path": "/wms-shipment-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-shipment-order:get",
+      "method": "GET",
+      "path": "/wms-shipment-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-shipment-order:post",
+      "method": "POST",
+      "path": "/wms-shipment-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-shipment-order:put",
+      "method": "PUT",
+      "path": "/wms-shipment-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-warehouse/export:post",
+      "method": "POST",
+      "path": "/wms-warehouse/export",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-warehouse/import-template:get",
+      "method": "GET",
+      "path": "/wms-warehouse/import-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-warehouse/import:post",
+      "method": "POST",
+      "path": "/wms-warehouse/import",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-warehouse:delete",
+      "method": "DELETE",
+      "path": "/wms-warehouse",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-warehouse:get",
+      "method": "GET",
+      "path": "/wms-warehouse",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-warehouse:post",
+      "method": "POST",
+      "path": "/wms-warehouse",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:wms-warehouse:put",
+      "method": "PUT",
+      "path": "/wms-warehouse",
+      "auth": "operator"
+    }
+  ]
+}

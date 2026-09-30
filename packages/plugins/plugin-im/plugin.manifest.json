@@ -1,0 +1,981 @@
+{
+  "$schema": "ruoyi-plugin-manifest/v1",
+  "id": "ruoyi.im",
+  "apiVersion": 1,
+  "version": "0.1.0",
+  "displayName": "im",
+  "description": "im 域（由 scripts/scaffold-domain-plugin.cjs 生成的第一方插件声明）",
+  "author": "RuoYi All Next",
+  "categories": [
+    "automation"
+  ],
+  "capabilities": [
+    "api.routes.register"
+  ],
+  "entrypoints": {
+    "merged": "./plugin-entry.ts"
+  },
+  "domain": {
+    "kind": "business",
+    "stage": "B",
+    "contractVersion": "v1",
+    "publicPrefixes": [
+      "/api/v1/admin/im"
+    ],
+    "upstreamEnv": "RUOYI_DOMAIN_IM_UPSTREAM",
+    "defaultPort": 3225,
+    "packable": true,
+    "independentDatabase": false,
+    "dependsOnModules": [
+      "shared"
+    ],
+    "auth": {
+      "audience": "admin",
+      "tenantPolicy": "required"
+    },
+    "resilience": {
+      "timeoutMs": 5000,
+      "retryMaxAttempts": 1,
+      "safeMethodsOnly": true,
+      "idempotencyRequired": true
+    }
+  },
+  "apiRoutes": [
+    {
+      "routeKey": "admin:conversations/[id]:delete",
+      "method": "DELETE",
+      "path": "/conversations/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:conversations/[id]:get",
+      "method": "GET",
+      "path": "/conversations/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:conversations/[id]:put",
+      "method": "PUT",
+      "path": "/conversations/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:conversations:get",
+      "method": "GET",
+      "path": "/conversations",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:conversations:post",
+      "method": "POST",
+      "path": "/conversations",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-manager/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-channel-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-manager/[id]:get",
+      "method": "GET",
+      "path": "/im-channel-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-manager/[id]:put",
+      "method": "PUT",
+      "path": "/im-channel-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-manager:get",
+      "method": "GET",
+      "path": "/im-channel-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-manager:post",
+      "method": "POST",
+      "path": "/im-channel-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-material-manager/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-channel-material-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-material-manager/[id]:get",
+      "method": "GET",
+      "path": "/im-channel-material-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-material-manager/[id]:put",
+      "method": "PUT",
+      "path": "/im-channel-material-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-material-manager:get",
+      "method": "GET",
+      "path": "/im-channel-material-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-material-manager:post",
+      "method": "POST",
+      "path": "/im-channel-material-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-material/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-channel-material/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-material/[id]:get",
+      "method": "GET",
+      "path": "/im-channel-material/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-material/[id]:put",
+      "method": "PUT",
+      "path": "/im-channel-material/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-material:get",
+      "method": "GET",
+      "path": "/im-channel-material",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-material:post",
+      "method": "POST",
+      "path": "/im-channel-material",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-message-manager/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-channel-message-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-message-manager/[id]:get",
+      "method": "GET",
+      "path": "/im-channel-message-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-message-manager/[id]:put",
+      "method": "PUT",
+      "path": "/im-channel-message-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-message-manager:get",
+      "method": "GET",
+      "path": "/im-channel-message-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-message-manager:post",
+      "method": "POST",
+      "path": "/im-channel-message-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-message/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-channel-message/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-message/[id]:get",
+      "method": "GET",
+      "path": "/im-channel-message/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-message/[id]:put",
+      "method": "PUT",
+      "path": "/im-channel-message/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-message:get",
+      "method": "GET",
+      "path": "/im-channel-message",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-channel-message:post",
+      "method": "POST",
+      "path": "/im-channel-message",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-conversation-read/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-conversation-read/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-conversation-read/[id]:get",
+      "method": "GET",
+      "path": "/im-conversation-read/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-conversation-read/[id]:put",
+      "method": "PUT",
+      "path": "/im-conversation-read/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-conversation-read:get",
+      "method": "GET",
+      "path": "/im-conversation-read",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-conversation-read:post",
+      "method": "POST",
+      "path": "/im-conversation-read",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-pack-item-manager/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-face-pack-item-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-pack-item-manager/[id]:get",
+      "method": "GET",
+      "path": "/im-face-pack-item-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-pack-item-manager/[id]:put",
+      "method": "PUT",
+      "path": "/im-face-pack-item-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-pack-item-manager:get",
+      "method": "GET",
+      "path": "/im-face-pack-item-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-pack-item-manager:post",
+      "method": "POST",
+      "path": "/im-face-pack-item-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-pack-manager/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-face-pack-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-pack-manager/[id]:get",
+      "method": "GET",
+      "path": "/im-face-pack-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-pack-manager/[id]:put",
+      "method": "PUT",
+      "path": "/im-face-pack-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-pack-manager:get",
+      "method": "GET",
+      "path": "/im-face-pack-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-pack-manager:post",
+      "method": "POST",
+      "path": "/im-face-pack-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-pack/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-face-pack/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-pack/[id]:get",
+      "method": "GET",
+      "path": "/im-face-pack/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-pack/[id]:put",
+      "method": "PUT",
+      "path": "/im-face-pack/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-pack:get",
+      "method": "GET",
+      "path": "/im-face-pack",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-pack:post",
+      "method": "POST",
+      "path": "/im-face-pack",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-user-item-manager/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-face-user-item-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-user-item-manager/[id]:get",
+      "method": "GET",
+      "path": "/im-face-user-item-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-user-item-manager/[id]:put",
+      "method": "PUT",
+      "path": "/im-face-user-item-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-user-item-manager:get",
+      "method": "GET",
+      "path": "/im-face-user-item-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-user-item-manager:post",
+      "method": "POST",
+      "path": "/im-face-user-item-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-user-item/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-face-user-item/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-user-item/[id]:get",
+      "method": "GET",
+      "path": "/im-face-user-item/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-user-item/[id]:put",
+      "method": "PUT",
+      "path": "/im-face-user-item/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-user-item:get",
+      "method": "GET",
+      "path": "/im-face-user-item",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-face-user-item:post",
+      "method": "POST",
+      "path": "/im-face-user-item",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-friend-manager/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-friend-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-friend-manager/[id]:get",
+      "method": "GET",
+      "path": "/im-friend-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-friend-manager/[id]:put",
+      "method": "PUT",
+      "path": "/im-friend-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-friend-manager:get",
+      "method": "GET",
+      "path": "/im-friend-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-friend-manager:post",
+      "method": "POST",
+      "path": "/im-friend-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-friend-request-manager/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-friend-request-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-friend-request-manager/[id]:get",
+      "method": "GET",
+      "path": "/im-friend-request-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-friend-request-manager/[id]:put",
+      "method": "PUT",
+      "path": "/im-friend-request-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-friend-request-manager:get",
+      "method": "GET",
+      "path": "/im-friend-request-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-friend-request-manager:post",
+      "method": "POST",
+      "path": "/im-friend-request-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-friend-request/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-friend-request/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-friend-request/[id]:get",
+      "method": "GET",
+      "path": "/im-friend-request/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-friend-request/[id]:put",
+      "method": "PUT",
+      "path": "/im-friend-request/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-friend-request:get",
+      "method": "GET",
+      "path": "/im-friend-request",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-friend-request:post",
+      "method": "POST",
+      "path": "/im-friend-request",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-friend/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-friend/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-friend/[id]:get",
+      "method": "GET",
+      "path": "/im-friend/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-friend/[id]:put",
+      "method": "PUT",
+      "path": "/im-friend/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-friend:get",
+      "method": "GET",
+      "path": "/im-friend",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-friend:post",
+      "method": "POST",
+      "path": "/im-friend",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-manager/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-group-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-manager/[id]:get",
+      "method": "GET",
+      "path": "/im-group-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-manager/[id]:put",
+      "method": "PUT",
+      "path": "/im-group-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-manager:get",
+      "method": "GET",
+      "path": "/im-group-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-manager:post",
+      "method": "POST",
+      "path": "/im-group-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-member-manager/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-group-member-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-member-manager/[id]:get",
+      "method": "GET",
+      "path": "/im-group-member-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-member-manager/[id]:put",
+      "method": "PUT",
+      "path": "/im-group-member-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-member-manager:get",
+      "method": "GET",
+      "path": "/im-group-member-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-member-manager:post",
+      "method": "POST",
+      "path": "/im-group-member-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-member/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-group-member/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-member/[id]:get",
+      "method": "GET",
+      "path": "/im-group-member/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-member/[id]:put",
+      "method": "PUT",
+      "path": "/im-group-member/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-member:get",
+      "method": "GET",
+      "path": "/im-group-member",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-member:post",
+      "method": "POST",
+      "path": "/im-group-member",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-message-manager/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-group-message-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-message-manager/[id]:get",
+      "method": "GET",
+      "path": "/im-group-message-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-message-manager/[id]:put",
+      "method": "PUT",
+      "path": "/im-group-message-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-message-manager:get",
+      "method": "GET",
+      "path": "/im-group-message-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-message-manager:post",
+      "method": "POST",
+      "path": "/im-group-message-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-message/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-group-message/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-message/[id]:get",
+      "method": "GET",
+      "path": "/im-group-message/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-message/[id]:put",
+      "method": "PUT",
+      "path": "/im-group-message/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-message:get",
+      "method": "GET",
+      "path": "/im-group-message",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-message:post",
+      "method": "POST",
+      "path": "/im-group-message",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-request-manager/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-group-request-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-request-manager/[id]:get",
+      "method": "GET",
+      "path": "/im-group-request-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-request-manager/[id]:put",
+      "method": "PUT",
+      "path": "/im-group-request-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-request-manager:get",
+      "method": "GET",
+      "path": "/im-group-request-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-request-manager:post",
+      "method": "POST",
+      "path": "/im-group-request-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-request/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-group-request/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-request/[id]:get",
+      "method": "GET",
+      "path": "/im-group-request/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-request/[id]:put",
+      "method": "PUT",
+      "path": "/im-group-request/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-request:get",
+      "method": "GET",
+      "path": "/im-group-request",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group-request:post",
+      "method": "POST",
+      "path": "/im-group-request",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-group/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group/[id]:get",
+      "method": "GET",
+      "path": "/im-group/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group/[id]:put",
+      "method": "PUT",
+      "path": "/im-group/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group:get",
+      "method": "GET",
+      "path": "/im-group",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-group:post",
+      "method": "POST",
+      "path": "/im-group",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-private-message-manager/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-private-message-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-private-message-manager/[id]:get",
+      "method": "GET",
+      "path": "/im-private-message-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-private-message-manager/[id]:put",
+      "method": "PUT",
+      "path": "/im-private-message-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-private-message-manager:get",
+      "method": "GET",
+      "path": "/im-private-message-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-private-message-manager:post",
+      "method": "POST",
+      "path": "/im-private-message-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-private-message/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-private-message/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-private-message/[id]:get",
+      "method": "GET",
+      "path": "/im-private-message/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-private-message/[id]:put",
+      "method": "PUT",
+      "path": "/im-private-message/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-private-message:get",
+      "method": "GET",
+      "path": "/im-private-message",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-private-message:post",
+      "method": "POST",
+      "path": "/im-private-message",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-rtc-call-manager/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-rtc-call-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-rtc-call-manager/[id]:get",
+      "method": "GET",
+      "path": "/im-rtc-call-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-rtc-call-manager/[id]:put",
+      "method": "PUT",
+      "path": "/im-rtc-call-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-rtc-call-manager:get",
+      "method": "GET",
+      "path": "/im-rtc-call-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-rtc-call-manager:post",
+      "method": "POST",
+      "path": "/im-rtc-call-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-rtc-call/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-rtc-call/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-rtc-call/[id]:get",
+      "method": "GET",
+      "path": "/im-rtc-call/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-rtc-call/[id]:put",
+      "method": "PUT",
+      "path": "/im-rtc-call/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-rtc-call:get",
+      "method": "GET",
+      "path": "/im-rtc-call",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-rtc-call:post",
+      "method": "POST",
+      "path": "/im-rtc-call",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-rtc-live-kit/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-rtc-live-kit/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-rtc-live-kit/[id]:get",
+      "method": "GET",
+      "path": "/im-rtc-live-kit/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-rtc-live-kit/[id]:put",
+      "method": "PUT",
+      "path": "/im-rtc-live-kit/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-rtc-live-kit:get",
+      "method": "GET",
+      "path": "/im-rtc-live-kit",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-rtc-live-kit:post",
+      "method": "POST",
+      "path": "/im-rtc-live-kit",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-sensitive-word-manager/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-sensitive-word-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-sensitive-word-manager/[id]:get",
+      "method": "GET",
+      "path": "/im-sensitive-word-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-sensitive-word-manager/[id]:put",
+      "method": "PUT",
+      "path": "/im-sensitive-word-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-sensitive-word-manager:get",
+      "method": "GET",
+      "path": "/im-sensitive-word-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-sensitive-word-manager:post",
+      "method": "POST",
+      "path": "/im-sensitive-word-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-statistics-manager/[id]:delete",
+      "method": "DELETE",
+      "path": "/im-statistics-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-statistics-manager/[id]:get",
+      "method": "GET",
+      "path": "/im-statistics-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-statistics-manager/[id]:put",
+      "method": "PUT",
+      "path": "/im-statistics-manager/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-statistics-manager:get",
+      "method": "GET",
+      "path": "/im-statistics-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:im-statistics-manager:post",
+      "method": "POST",
+      "path": "/im-statistics-manager",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:messages/audit:post",
+      "method": "POST",
+      "path": "/messages/audit",
+      "auth": "operator"
+    }
+  ]
+}

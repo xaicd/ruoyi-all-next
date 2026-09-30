@@ -1,0 +1,495 @@
+{
+  "$schema": "ruoyi-plugin-manifest/v1",
+  "id": "ruoyi.mp",
+  "apiVersion": 1,
+  "version": "0.1.0",
+  "displayName": "mp",
+  "description": "mp 域（由 scripts/scaffold-domain-plugin.cjs 生成的第一方插件声明）",
+  "author": "RuoYi All Next",
+  "categories": [
+    "automation"
+  ],
+  "capabilities": [
+    "api.routes.register"
+  ],
+  "entrypoints": {
+    "merged": "./plugin-entry.ts"
+  },
+  "domain": {
+    "kind": "business",
+    "stage": "B",
+    "contractVersion": "v1",
+    "publicPrefixes": [
+      "/api/v1/admin/mp"
+    ],
+    "upstreamEnv": "RUOYI_DOMAIN_MP_UPSTREAM",
+    "defaultPort": 3216,
+    "packable": true,
+    "independentDatabase": false,
+    "dependsOnModules": [
+      "shared"
+    ],
+    "auth": {
+      "audience": "admin",
+      "tenantPolicy": "required"
+    },
+    "resilience": {
+      "timeoutMs": 8000,
+      "retryMaxAttempts": 1,
+      "safeMethodsOnly": true,
+      "idempotencyRequired": true
+    }
+  },
+  "apiRoutes": [
+    {
+      "routeKey": "admin:accounts/[id]:delete",
+      "method": "DELETE",
+      "path": "/accounts/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:accounts/[id]:get",
+      "method": "GET",
+      "path": "/accounts/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:accounts/[id]:put",
+      "method": "PUT",
+      "path": "/accounts/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:accounts:get",
+      "method": "GET",
+      "path": "/accounts",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:accounts:post",
+      "method": "POST",
+      "path": "/accounts",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:fans/[id]:delete",
+      "method": "DELETE",
+      "path": "/fans/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:fans/[id]:get",
+      "method": "GET",
+      "path": "/fans/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:fans/[id]:put",
+      "method": "PUT",
+      "path": "/fans/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:fans:get",
+      "method": "GET",
+      "path": "/fans",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:fans:post",
+      "method": "POST",
+      "path": "/fans",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:messages/[id]:delete",
+      "method": "DELETE",
+      "path": "/messages/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:messages/[id]:get",
+      "method": "GET",
+      "path": "/messages/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:messages/[id]:put",
+      "method": "PUT",
+      "path": "/messages/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:messages:get",
+      "method": "GET",
+      "path": "/messages",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:messages:post",
+      "method": "POST",
+      "path": "/messages",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-account/[id]:delete",
+      "method": "DELETE",
+      "path": "/mp-account/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-account/[id]:get",
+      "method": "GET",
+      "path": "/mp-account/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-account/[id]:put",
+      "method": "PUT",
+      "path": "/mp-account/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-account:get",
+      "method": "GET",
+      "path": "/mp-account",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-account:post",
+      "method": "POST",
+      "path": "/mp-account",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-auto-reply/[id]:delete",
+      "method": "DELETE",
+      "path": "/mp-auto-reply/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-auto-reply/[id]:get",
+      "method": "GET",
+      "path": "/mp-auto-reply/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-auto-reply/[id]:put",
+      "method": "PUT",
+      "path": "/mp-auto-reply/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-auto-reply:get",
+      "method": "GET",
+      "path": "/mp-auto-reply",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-auto-reply:post",
+      "method": "POST",
+      "path": "/mp-auto-reply",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-draft/[id]:delete",
+      "method": "DELETE",
+      "path": "/mp-draft/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-draft/[id]:get",
+      "method": "GET",
+      "path": "/mp-draft/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-draft/[id]:put",
+      "method": "PUT",
+      "path": "/mp-draft/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-draft:get",
+      "method": "GET",
+      "path": "/mp-draft",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-draft:post",
+      "method": "POST",
+      "path": "/mp-draft",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-free-publish/[id]:delete",
+      "method": "DELETE",
+      "path": "/mp-free-publish/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-free-publish/[id]:get",
+      "method": "GET",
+      "path": "/mp-free-publish/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-free-publish/[id]:put",
+      "method": "PUT",
+      "path": "/mp-free-publish/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-free-publish:get",
+      "method": "GET",
+      "path": "/mp-free-publish",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-free-publish:post",
+      "method": "POST",
+      "path": "/mp-free-publish",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-material/[id]:delete",
+      "method": "DELETE",
+      "path": "/mp-material/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-material/[id]:get",
+      "method": "GET",
+      "path": "/mp-material/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-material/[id]:put",
+      "method": "PUT",
+      "path": "/mp-material/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-material:get",
+      "method": "GET",
+      "path": "/mp-material",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-material:post",
+      "method": "POST",
+      "path": "/mp-material",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-menu/[id]:delete",
+      "method": "DELETE",
+      "path": "/mp-menu/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-menu/[id]:get",
+      "method": "GET",
+      "path": "/mp-menu/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-menu/[id]:put",
+      "method": "PUT",
+      "path": "/mp-menu/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-menu:get",
+      "method": "GET",
+      "path": "/mp-menu",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-menu:post",
+      "method": "POST",
+      "path": "/mp-menu",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-message-template/[id]:delete",
+      "method": "DELETE",
+      "path": "/mp-message-template/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-message-template/[id]:get",
+      "method": "GET",
+      "path": "/mp-message-template/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-message-template/[id]:put",
+      "method": "PUT",
+      "path": "/mp-message-template/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-message-template:get",
+      "method": "GET",
+      "path": "/mp-message-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-message-template:post",
+      "method": "POST",
+      "path": "/mp-message-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-message/[id]:delete",
+      "method": "DELETE",
+      "path": "/mp-message/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-message/[id]:get",
+      "method": "GET",
+      "path": "/mp-message/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-message/[id]:put",
+      "method": "PUT",
+      "path": "/mp-message/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-message:get",
+      "method": "GET",
+      "path": "/mp-message",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-message:post",
+      "method": "POST",
+      "path": "/mp-message",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-open/[id]:delete",
+      "method": "DELETE",
+      "path": "/mp-open/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-open/[id]:get",
+      "method": "GET",
+      "path": "/mp-open/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-open/[id]:put",
+      "method": "PUT",
+      "path": "/mp-open/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-open:get",
+      "method": "GET",
+      "path": "/mp-open",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-open:post",
+      "method": "POST",
+      "path": "/mp-open",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-statistics/[id]:delete",
+      "method": "DELETE",
+      "path": "/mp-statistics/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-statistics/[id]:get",
+      "method": "GET",
+      "path": "/mp-statistics/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-statistics/[id]:put",
+      "method": "PUT",
+      "path": "/mp-statistics/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-statistics:get",
+      "method": "GET",
+      "path": "/mp-statistics",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-statistics:post",
+      "method": "POST",
+      "path": "/mp-statistics",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-tag/[id]:delete",
+      "method": "DELETE",
+      "path": "/mp-tag/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-tag/[id]:get",
+      "method": "GET",
+      "path": "/mp-tag/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-tag/[id]:put",
+      "method": "PUT",
+      "path": "/mp-tag/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-tag:get",
+      "method": "GET",
+      "path": "/mp-tag",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-tag:post",
+      "method": "POST",
+      "path": "/mp-tag",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-user/[id]:delete",
+      "method": "DELETE",
+      "path": "/mp-user/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-user/[id]:get",
+      "method": "GET",
+      "path": "/mp-user/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-user/[id]:put",
+      "method": "PUT",
+      "path": "/mp-user/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-user:get",
+      "method": "GET",
+      "path": "/mp-user",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:mp-user:post",
+      "method": "POST",
+      "path": "/mp-user",
+      "auth": "operator"
+    }
+  ]
+}

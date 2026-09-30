@@ -16,7 +16,7 @@
 const fs = require("fs")
 const path = require("path")
 const { spawnSync } = require("child_process")
-const { ROOT, loadCatalog } = require("./lib/domain-catalog.cjs")
+const { ROOT, loadCatalog, domainDirOf } = require("./lib/domain-catalog.cjs")
 
 const ARTIFACT_REL = "docs/architecture/artifacts/evolution-backlog.json"
 const TRACE_REL = "docs/architecture/artifacts/harness-trace-latest.json"
@@ -180,7 +180,8 @@ function collectThinDomainTests() {
   const domains = loadCatalog().domains
   const items = []
   for (const domain of domains) {
-    const dir = `packages/domains/${domain.name}`
+    // 域可能是第一方插件(目录在 packages/plugins/plugin-*)，用共享解析器
+    const dir = domainDirOf(ROOT, domain.name)
     if (!fs.existsSync(abs(dir))) continue
     const tests = walk(dir, (name) => /\.test\.ts$/.test(name))
     if (tests.length >= MIN_DOMAIN_TESTS) continue
@@ -191,7 +192,7 @@ function collectThinDomainTests() {
       title: `${domain.name}: only ${tests.length} test file(s)`,
       files: tests.map(toRel),
       evidence: `stage=${domain.stage}, kind=${domain.kind}; §8 requires at least one key-path automated test per domain`,
-      command: `npm test -- --run packages/domains/${domain.name}`,
+      command: `npm test -- --run ${domainDirOf(ROOT, domain.name)}`,
       action: "Add key-path, permission-denial and transaction-rollback tests for this domain.",
     })
   }

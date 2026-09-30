@@ -1,0 +1,144 @@
+{
+  "$schema": "ruoyi-module-manifest/v1",
+  "domain": "ai",
+  "id": "ruoyi.ai",
+  "apiVersion": 1,
+  "displayName": "模型中台",
+  "kind": "plugin",
+  "stage": "B",
+  "owner": "ai",
+  "contractVersion": "v1",
+  "implementation": "local-ts",
+  "minimumHostVersion": "1.0.0",
+  "capabilities": [
+    "api.routes.register",
+    "facade.invoke",
+    "rpc.serve",
+    "cmd.dispatch",
+    "pack.independent"
+  ],
+  "entrypoints": {
+    "facade": [
+      "packages/plugins/plugin-ai/contract/ai.facade.ts"
+    ],
+    "proto": "packages/plugins/plugin-ai/contract/ai.proto",
+    "actions": "packages/plugins/plugin-ai/contract/actions.ts"
+  },
+  "apiRoutes": {
+    "publicPrefix": [
+      "/api/v1/admin/ai",
+      "/api/v1/open/ai"
+    ],
+    "adminPrefix": "/api/v1/admin/ai"
+  },
+  "auth": {
+    "audience": "admin",
+    "tenantPolicy": "required"
+  },
+  "messaging": {
+    "queueGroup": "ruoyi.ai",
+    "commandSubject": "ruoyi.cmd.ai.>",
+    "eventSubject": "ruoyi.evt.ai.>"
+  },
+  "invoke": {
+    "colocated": "sdk",
+    "remote": "rpc",
+    "protocol": "nats-rr",
+    "serialization": "json"
+  },
+  "upstream": {
+    "env": "RUOYI_DOMAIN_AI_UPSTREAM",
+    "protocol": "http",
+    "defaultPort": 3223
+  },
+  "resilience": {
+    "timeoutMs": 15000,
+    "retry": {
+      "maxAttempts": 1,
+      "safeMethodsOnly": true
+    },
+    "idempotencyRequired": true
+  },
+  "facadeMethods": [
+    "ping",
+    "listModels",
+    "createModel",
+    "listChats",
+    "deleteChat",
+    "relayChatCompletion",
+    "listPublicModels",
+    "embed"
+  ],
+  "rpc": [
+    {
+      "service": "AiService",
+      "method": "Ping"
+    },
+    {
+      "service": "AiService",
+      "method": "ListModels"
+    },
+    {
+      "service": "AiService",
+      "method": "CreateModel"
+    },
+    {
+      "service": "AiService",
+      "method": "ListChats"
+    },
+    {
+      "service": "AiService",
+      "method": "DeleteChat"
+    },
+    {
+      "service": "AiService",
+      "method": "RelayChatCompletion"
+    },
+    {
+      "service": "AiService",
+      "method": "ListPublicModels"
+    },
+    {
+      "service": "AiService",
+      "method": "Embed"
+    }
+  ],
+  "actions": [
+    "ai.ping",
+    "ai.listModels",
+    "ai.createModel",
+    "ai.listChats",
+    "ai.deleteChat",
+    "ai.relayChatCompletion",
+    "ai.listPublicModels",
+    "ai.embed"
+  ],
+  "permissions": [
+    "ai:api-key:create",
+    "ai:api-key:delete",
+    "ai:api-key:query",
+    "ai:api-key:update",
+    "ai:channel:create",
+    "ai:channel:delete",
+    "ai:channel:query",
+    "ai:channel:update",
+    "ai:chat:delete",
+    "ai:chat:view",
+    "ai:model:create",
+    "ai:model:view",
+    "ai:playground:query",
+    "ai:token:create",
+    "ai:token:delete",
+    "ai:token:query",
+    "ai:token:update",
+    "ai:usage:query"
+  ],
+  "dependsOn": [
+    "shared"
+  ],
+  "pack": {
+    "enabled": true,
+    "kind": "api-only",
+    "independentDatabase": false
+  }
+}

@@ -1,0 +1,181 @@
+#!/usr/bin/env node
+/**
+ * 把一个业务域完整迁移成**第一方插件**（执行 scaffold 打印的那份清单）。
+ *
+ * 为什么要有这个脚本: 迁移涉及 6 件事、每件都会牵动互相引用的登记与门禁，
+ * 手敲 13 遍必然漏项。把"清单"做成可执行的东西，才谈得上"工具先行"。
+ *
+ * 用法:
+ *   node scripts/migrate-domain-to-plugin.cjs bpm                # dry-run
+ *   node scripts/migrate-domain-to-plugin.cjs bpm --write        # 落盘
+ *   node scripts/migrate-domain-to-plugin.cjs bpm mp member --write
+ *
+ * 明确**不做**: system / infra。它们是 platform 地基，不是可插拔的业务能力 ——
+ * 降成插件会破坏 moduleLayerOf / isFoundationModule 语义。
+ */
+
+const fs = require("node:fs")
+const path = require("node:path")
+const { execFileSync } = require("node:child_process")
+
+const ROOT = path.resolve(__dirname, "..")
+const PROTECTED = new Set(["system", "infra"])
+
+const args = process.argv.slice(2)
+const write = args.includes("--write")
+const names = args.filter((a) => !a.startsWith("-"))
+
+if (names.length === 0) {
+  console.error("用法: node scripts/migrate-domain-to-plugin.cjs <domain...> [--write]")
+  process.exit(1)
+}
+
+const catalogPath = path.join(ROOT, "packages/shared/backend/constants/domain-catalog.json")
+const governancePath = path.join(ROOT, "docs/architecture/ruoyi-all-next-domain-governance.md")
+const entriesPath = path.join(ROOT, "packages/shared/backend/plugins/first-party-entries.ts")
+const tsconfigPath = path.join(ROOT, "tsconfig.json")
+const vitestPath = path.join(ROOT, "vitest.config.ts")
+
+const read = (p) => fs.readFileSync(p, "utf8")
+const writeFile = (p, s) => fs.writeFileSync(p, s)
+
+const catalog = JSON.parse(read(catalogPath))
+const byName = new Map(catalog.domains.map((d) => [d.name, d]))
+
+/**
+ * 待删除的 Next 转发文件。
+ *
+ * 匹配规则: 域名的位置**固定**，即 src/app/api/v1/<surface>/<domain>/…。
+ * 绝不要用"路径里含域名"的子串模式 —— 实测会把
+ * src/app/api/v1/admin/mes/work-orders/report/route.ts 这种误删
+ * （父目录恰好与某个域名同名）。域名出现在中间段时，子串匹配是错的。
+ */
+function nextRouteFilesOf(domain) {
+  const out = []
+  for (const surface of ["admin", "app", "open"]) {
+    const dir = path.join(ROOT, "src", "app", "api", "v1", surface, domain)
+    if (fs.existsSync(dir)) walk(dir, out)
+  }
+  return out
+}
+function walk(dir, out) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name)
+    if (entry.isDirectory()) walk(full, out)
+    else if (entry.name === "route.ts") out.push(full)
+  }
+}
+
+for (const name of names) {
+  const entry = byName.get(name)
+  if (!entry) {
+    console.error(`✗ ${name}: 不在 domain-catalog.json 里`)
+    process.exit(1)
+  }
+  if (PROTECTED.has(name)) {
+    console.error(`✗ ${name}: system/infra 是 platform 地基，不允许迁成插件`)
+    process.exit(1)
+  }
+  if (entry.kind === "plugin") {
+    console.error(`✗ ${name}: 已经是插件了`)
+    process.exit(1)
+  }
+}
+
+console.log(`[migrate-domain-to-plugin] ${write ? "落盘" : "dry-run"} · ${names.length} 个域\n`)
+
+const plan = []
+for (const name of names) {
+  const from = path.join("packages", "domains", name)
+  const to = path.join("packages", "plugins", `plugin-${name}`)
+  const files = nextRouteFilesOf(name)
+  plan.push({ name, from, to, files, entry: byName.get(name) })
+  console.log(`  ${name}`)
+  console.log(`      目录  ${from} -> ${to}`)
+  console.log(`      删 Next 转发 ${files.length} 个（按 /api/v1/<surface>/${name}/ 固定段匹配）`)
+}
+
+if (!write) {
+  console.log("\n  (dry-run: 未写入任何文件。加 --write 执行)")
+  process.exit(0)
+}
+
+for (const { name, from, to, files } of plan) {
+  console.log(`\n== ${name} ==`)
+
+  // 1) 生成插件声明与入口（在域目录里生成，再整体搬走）
+  execFileSync("node", [path.join("scripts", "scaffold-domain-plugin.cjs"), from, "--write"], { cwd: ROOT, stdio: "ignore" })
+  console.log("   1/7 已生成 plugin.manifest.json + plugin-entry.ts")
+
+  // 2) 搬家（并确保旧目录清干净 —— 残留会让路径解析器误判域还在原地）
+  fs.mkdirSync(path.dirname(path.join(ROOT, to)), { recursive: true })
+  fs.renameSync(path.join(ROOT, from), path.join(ROOT, to))
+  fs.rmSync(path.join(ROOT, from), { recursive: true, force: true })
+  console.log(`   2/7 已移到 ${to}`)
+
+  // 3) package.json: ruoyiPlugin 指针 + plugin-sdk 依赖
+  const pkgPath = path.join(ROOT, to, "package.json")
+  const pkg = fs.existsSync(pkgPath) ? JSON.parse(read(pkgPath)) : { name: `@ruoyi/plugin-${name}`, version: "0.1.0", private: true, type: "module" }
+  pkg.name = pkg.name || `@ruoyi/plugin-${name}`
+  pkg.ruoyiPlugin = { manifest: "./plugin.manifest.json", merged: "./plugin-entry.ts" }
+  pkg.dependencies = { ...(pkg.dependencies || {}), "@ruoyi/plugin-sdk": "workspace:*" }
+  writeFile(pkgPath, JSON.stringify(pkg, null, 2) + "\n")
+  console.log("   3/7 已加 ruoyiPlugin 指针与 @ruoyi/plugin-sdk 依赖")
+
+  // 4) 宿主静态入口表
+  let entries = read(entriesPath)
+  const line = `  "ruoyi.${name}": () => import("@/modules/${name}/plugin-entry"),`
+  if (!entries.includes(line)) {
+    entries = entries.replace(/(\n\}\n)/, `\n${line}$1`)
+    writeFile(entriesPath, entries)
+  }
+  console.log("   4/7 已登记静态入口")
+
+  // 5) catalog: 保留该域，kind 改 plugin，从 platform/business 移入 plugin 层
+  const cat = JSON.parse(read(catalogPath))
+  const target = cat.domains.find((d) => d.name === name)
+  target.kind = "plugin"
+  for (const layer of ["platform", "business"]) cat.layers[layer].domains = cat.layers[layer].domains.filter((d) => d !== name)
+  cat.layers.plugin = cat.layers.plugin || { domains: [], description: "第一方插件: 保留域级特征(可独立打包), 但不属于平台/业务层" }
+  if (!cat.layers.plugin.domains.includes(name)) cat.layers.plugin.domains.push(name)
+  cat.layers.plugin.domains.sort()
+  writeFile(catalogPath, JSON.stringify(cat, null, 2) + "\n")
+
+  // 6) 治理行改为插件语义
+  let gov = read(governancePath)
+  const govRow = gov.split("\n").find((l) => l.startsWith(`| ${name} `))
+  if (govRow) {
+    const cells = govRow.split("|")
+    cells[7] = cells[7].replace(from.replace(/\//g, "/"), to)
+    cells[9] = ` **第一方插件**(kind=plugin): 保留域级特征(可 API-only 独立打包/运行/部署, \`npm run domain:up -- ${name}\`), 同时支持合并运行; 路由经 /api/v1/plugins/ruoyi.${name}/api/** 挂载 `
+    gov = gov.replace(govRow, cells.join("|"))
+    writeFile(governancePath, gov)
+  }
+  console.log("   5/7 catalog 与治理表已改为插件语义")
+
+  // 7) 别名（tsconfig + vitest）
+  const ts = JSON.parse(read(tsconfigPath))
+  ts.compilerOptions.paths[`@/modules/${name}/*`] = [`${to}/*`]
+  ts.compilerOptions.paths[`@/modules/${name}`] = [to]
+  writeFile(tsconfigPath, JSON.stringify(ts, null, 2) + "\n")
+
+  let vt = read(vitestPath)
+  const vtLine = `      "@/modules/${name}": path.resolve(__dirname, "${to}"),`
+  if (!vt.includes(vtLine)) {
+    vt = vt.replace(/(      "@\/modules": path\.resolve\(__dirname, "packages\/domains"\),)/, `${vtLine}\n$1`)
+    writeFile(vitestPath, vt)
+  }
+  console.log("   6/7 已加 tsconfig + vitest 别名")
+
+  // 8) 删除 Next 转发文件（精确列表，删的是生成声明时用过的那些）
+  for (const file of files) fs.rmSync(file, { force: true })
+  for (const surface of ["admin", "app", "open"]) {
+    const dir = path.join(ROOT, "src", "app", "api", "v1", surface, name)
+    if (fs.existsSync(dir)) fs.rmSync(dir, { recursive: true, force: true })
+  }
+  console.log(`   7/7 已删 ${files.length} 个 Next 转发文件`)
+}
+
+console.log("\n下一步（脚本不做，因为会改生成物与基线）:")
+console.log("  pnpm run domain:contracts && pnpm run domain:seams && pnpm run domain:manifests && pnpm run admin:routes:manifest")
+console.log("  pnpm run check && npx vitest run && pnpm run build")

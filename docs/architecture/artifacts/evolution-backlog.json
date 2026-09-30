@@ -1,40 +1,27 @@
 {
   "version": 1,
   "kind": "evolution-backlog",
-  "generatedAt": "2026-09-30T04:38:19.320Z",
-  "head": "07a20bd6",
+  "generatedAt": "2026-09-30T04:58:17.545Z",
+  "head": "eb01ff9b",
   "note": "Aggregated from real gate artifacts. Read-only signal for external agents; no agent loop runs in this repository (AGENTS.md §18).",
   "summary": {
     "blocker": 0,
     "high": 0,
     "medium": 10,
-    "low": 19,
-    "total": 29
+    "low": 12,
+    "total": 22
   },
   "items": [
-    {
-      "id": "standards-report-business-repository-tenant-scope",
-      "severity": "medium",
-      "section": "AGENTS.md §4.8",
-      "title": "business-repository-tenant-scope: 2 item(s) need human judgement",
-      "files": [
-        "packages/domains/aigw/backend/repositories/aigw-carrier.repository.ts",
-        "packages/domains/crm/backend/repositories/customer.repository.ts"
-      ],
-      "evidence": "business-domain repositories should reference tenant scope (needs human judgement) — e.g. packages/domains/aigw/backend/repositories/aigw-carrier.repository.ts (no tenant reference found at all); packages/domains/crm/backend/repositories/customer.repository.ts (no tenant reference found at all)",
-      "command": "node scripts/check-engineering-standards.cjs --audit",
-      "action": "Decide per file whether it is a real gap or an accepted exception; if the rule needs a documented exemption, add it to the rule rather than the code."
-    },
     {
       "id": "thin-tests-ai",
       "severity": "medium",
       "section": "AGENTS.md §8",
       "title": "ai: only 1 test file(s)",
       "files": [
-        "packages/domains/ai/backend/services/__tests__/ai.module.service.test.ts"
+        "packages/plugins/plugin-ai/backend/services/__tests__/ai.module.service.test.ts"
       ],
-      "evidence": "stage=B, kind=business; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run packages/domains/ai",
+      "evidence": "stage=B, kind=plugin; §8 requires at least one key-path automated test per domain",
+      "command": "npm test -- --run packages/plugins/plugin-ai",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
     },
     {
@@ -43,10 +30,10 @@
       "section": "AGENTS.md §8",
       "title": "bpm: only 1 test file(s)",
       "files": [
-        "packages/domains/bpm/backend/services/__tests__/process.service.test.ts"
+        "packages/plugins/plugin-bpm/backend/services/__tests__/process.service.test.ts"
       ],
-      "evidence": "stage=A, kind=business; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run packages/domains/bpm",
+      "evidence": "stage=A, kind=plugin; §8 requires at least one key-path automated test per domain",
+      "command": "npm test -- --run packages/plugins/plugin-bpm",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
     },
     {
@@ -55,10 +42,10 @@
       "section": "AGENTS.md §8",
       "title": "crm: only 1 test file(s)",
       "files": [
-        "packages/domains/crm/backend/services/__tests__/crm.module.service.test.ts"
+        "packages/plugins/plugin-crm/backend/services/__tests__/crm.module.service.test.ts"
       ],
-      "evidence": "stage=B, kind=business; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run packages/domains/crm",
+      "evidence": "stage=B, kind=plugin; §8 requires at least one key-path automated test per domain",
+      "command": "npm test -- --run packages/plugins/plugin-crm",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
     },
     {
@@ -67,10 +54,10 @@
       "section": "AGENTS.md §8",
       "title": "erp: only 1 test file(s)",
       "files": [
-        "packages/domains/erp/backend/services/__tests__/erp.module.service.test.ts"
+        "packages/plugins/plugin-erp/backend/services/__tests__/erp.module.service.test.ts"
       ],
-      "evidence": "stage=B, kind=business; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run packages/domains/erp",
+      "evidence": "stage=B, kind=plugin; §8 requires at least one key-path automated test per domain",
+      "command": "npm test -- --run packages/plugins/plugin-erp",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
     },
     {
@@ -79,10 +66,10 @@
       "section": "AGENTS.md §8",
       "title": "im: only 1 test file(s)",
       "files": [
-        "packages/domains/im/backend/services/__tests__/im.module.service.test.ts"
+        "packages/plugins/plugin-im/backend/services/__tests__/im.module.service.test.ts"
       ],
-      "evidence": "stage=B, kind=business; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run packages/domains/im",
+      "evidence": "stage=B, kind=plugin; §8 requires at least one key-path automated test per domain",
+      "command": "npm test -- --run packages/plugins/plugin-im",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
     },
     {
@@ -91,10 +78,10 @@
       "section": "AGENTS.md §8",
       "title": "iot: only 1 test file(s)",
       "files": [
-        "packages/domains/iot/backend/services/__tests__/iot.module.service.test.ts"
+        "packages/plugins/plugin-iot/backend/services/__tests__/iot.module.service.test.ts"
       ],
-      "evidence": "stage=B, kind=business; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run packages/domains/iot",
+      "evidence": "stage=B, kind=plugin; §8 requires at least one key-path automated test per domain",
+      "command": "npm test -- --run packages/plugins/plugin-iot",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
     },
     {
@@ -103,10 +90,10 @@
       "section": "AGENTS.md §8",
       "title": "mall: only 1 test file(s)",
       "files": [
-        "packages/domains/mall/backend/services/__tests__/mall.module.service.test.ts"
+        "packages/plugins/plugin-mall/backend/services/__tests__/mall.module.service.test.ts"
       ],
-      "evidence": "stage=B, kind=business; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run packages/domains/mall",
+      "evidence": "stage=B, kind=plugin; §8 requires at least one key-path automated test per domain",
+      "command": "npm test -- --run packages/plugins/plugin-mall",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
     },
     {
@@ -115,10 +102,10 @@
       "section": "AGENTS.md §8",
       "title": "mes: only 1 test file(s)",
       "files": [
-        "packages/domains/mes/backend/services/__tests__/mes.module.service.test.ts"
+        "packages/plugins/plugin-mes/backend/services/__tests__/mes.module.service.test.ts"
       ],
-      "evidence": "stage=B, kind=business; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run packages/domains/mes",
+      "evidence": "stage=B, kind=plugin; §8 requires at least one key-path automated test per domain",
+      "command": "npm test -- --run packages/plugins/plugin-mes",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
     },
     {
@@ -127,35 +114,23 @@
       "section": "AGENTS.md §8",
       "title": "mp: only 1 test file(s)",
       "files": [
-        "packages/domains/mp/backend/services/__tests__/mp-services.test.ts"
+        "packages/plugins/plugin-mp/backend/services/__tests__/mp-services.test.ts"
       ],
-      "evidence": "stage=B, kind=business; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run packages/domains/mp",
+      "evidence": "stage=B, kind=plugin; §8 requires at least one key-path automated test per domain",
+      "command": "npm test -- --run packages/plugins/plugin-mp",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
     },
     {
-      "id": "oversized-packages/domains/aigw/backend/repositories/aigw-access-token.repository.ts",
-      "severity": "low",
-      "section": "AGENTS.md §11",
-      "title": "aigw-access-token.repository.ts: 203 lines",
+      "id": "thin-tests-pay",
+      "severity": "medium",
+      "section": "AGENTS.md §8",
+      "title": "pay: only 1 test file(s)",
       "files": [
-        "packages/domains/aigw/backend/repositories/aigw-access-token.repository.ts"
+        "packages/plugins/plugin-pay/backend/services/__tests__/pay.module.service.test.ts"
       ],
-      "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
-      "command": "npm run standards:check",
-      "action": "Split into sub-services, keeping the domain facade as the single entry point."
-    },
-    {
-      "id": "oversized-packages/domains/aigw/backend/repositories/aigw-sku.repository.ts",
-      "severity": "low",
-      "section": "AGENTS.md §11",
-      "title": "aigw-sku.repository.ts: 227 lines",
-      "files": [
-        "packages/domains/aigw/backend/repositories/aigw-sku.repository.ts"
-      ],
-      "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
-      "command": "npm run standards:check",
-      "action": "Split into sub-services, keeping the domain facade as the single entry point."
+      "evidence": "stage=B, kind=plugin; §8 requires at least one key-path automated test per domain",
+      "command": "npm test -- --run packages/plugins/plugin-pay",
+      "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
     },
     {
       "id": "oversized-packages/domains/infra/backend/services/codegen-table.service.ts",
@@ -188,54 +163,6 @@
       "title": "template-engine.service.ts: 245 lines",
       "files": [
         "packages/domains/infra/backend/services/template-engine.service.ts"
-      ],
-      "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
-      "command": "npm run standards:check",
-      "action": "Split into sub-services, keeping the domain facade as the single entry point."
-    },
-    {
-      "id": "oversized-packages/domains/member/backend/repositories/member-user.repository.ts",
-      "severity": "low",
-      "section": "AGENTS.md §11",
-      "title": "member-user.repository.ts: 215 lines",
-      "files": [
-        "packages/domains/member/backend/repositories/member-user.repository.ts"
-      ],
-      "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
-      "command": "npm run standards:check",
-      "action": "Split into sub-services, keeping the domain facade as the single entry point."
-    },
-    {
-      "id": "oversized-packages/domains/online/backend/adapters/persistence/online-definition.repository.ts",
-      "severity": "low",
-      "section": "AGENTS.md §11",
-      "title": "online-definition.repository.ts: 518 lines",
-      "files": [
-        "packages/domains/online/backend/adapters/persistence/online-definition.repository.ts"
-      ],
-      "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
-      "command": "npm run standards:check",
-      "action": "Split into sub-services, keeping the domain facade as the single entry point."
-    },
-    {
-      "id": "oversized-packages/domains/online/backend/adapters/persistence/online-schema-plan.repository.ts",
-      "severity": "low",
-      "section": "AGENTS.md §11",
-      "title": "online-schema-plan.repository.ts: 245 lines",
-      "files": [
-        "packages/domains/online/backend/adapters/persistence/online-schema-plan.repository.ts"
-      ],
-      "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
-      "command": "npm run standards:check",
-      "action": "Split into sub-services, keeping the domain facade as the single entry point."
-    },
-    {
-      "id": "oversized-packages/domains/online/backend/services/online-definition.service.ts",
-      "severity": "low",
-      "section": "AGENTS.md §11",
-      "title": "online-definition.service.ts: 244 lines",
-      "files": [
-        "packages/domains/online/backend/services/online-definition.service.ts"
       ],
       "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
       "command": "npm run standards:check",
@@ -346,20 +273,6 @@
       "evidence": "baseline accepts debt in 8 file(s); new debt is already blocked",
       "command": "npm run standards:baseline",
       "action": "Burn the frozen debt down, then re-baseline so the rule can move from ratchet to enforce."
-    },
-    {
-      "id": "todo-markers",
-      "severity": "low",
-      "section": "AGENTS.md §12",
-      "title": "3 TODO/FIXME marker(s) in src",
-      "files": [
-        "packages/domains/mall/routes/app/products/route.ts",
-        "packages/domains/member/routes/app/profile/route.ts",
-        "packages/domains/member/routes/app/profile/route.ts"
-      ],
-      "evidence": "packages/domains/mall/routes/app/products/route.ts — line 19: // TODO: 调用 MallProductService.listForApp(input, auth); packages/domains/member/routes/app/profile/route.ts — line 13: // TODO: 调用 MemberService.getProfile(auth.userId); packages/domains/member/routes/app/profile/route.ts — line 33: // TODO: 调用 MemberService.updateProfile(auth.userId, body)",
-      "command": "grep -rn 'TODO\\|FIXME' src --include=*.ts",
-      "action": "Resolve each marker or convert it into a tracked backlog item."
     }
   ]
 }

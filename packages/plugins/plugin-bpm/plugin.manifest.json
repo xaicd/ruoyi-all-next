@@ -1,0 +1,465 @@
+{
+  "$schema": "ruoyi-plugin-manifest/v1",
+  "id": "ruoyi.bpm",
+  "apiVersion": 1,
+  "version": "0.1.0",
+  "displayName": "bpm",
+  "description": "bpm 域（由 scripts/scaffold-domain-plugin.cjs 生成的第一方插件声明）",
+  "author": "RuoYi All Next",
+  "categories": [
+    "automation"
+  ],
+  "capabilities": [
+    "api.routes.register"
+  ],
+  "entrypoints": {
+    "merged": "./plugin-entry.ts"
+  },
+  "domain": {
+    "kind": "business",
+    "stage": "A",
+    "contractVersion": "v1",
+    "publicPrefixes": [
+      "/api/v1/admin/bpm"
+    ],
+    "upstreamEnv": "RUOYI_DOMAIN_BPM_UPSTREAM",
+    "defaultPort": 3213,
+    "packable": true,
+    "independentDatabase": false,
+    "dependsOnModules": [
+      "shared"
+    ],
+    "auth": {
+      "audience": "admin",
+      "tenantPolicy": "required"
+    },
+    "resilience": {
+      "timeoutMs": 8000,
+      "retryMaxAttempts": 1,
+      "safeMethodsOnly": true,
+      "idempotencyRequired": true
+    }
+  },
+  "apiRoutes": [
+    {
+      "routeKey": "admin:bpm-category/[id]:delete",
+      "method": "DELETE",
+      "path": "/bpm-category/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-category/[id]:get",
+      "method": "GET",
+      "path": "/bpm-category/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-category/[id]:put",
+      "method": "PUT",
+      "path": "/bpm-category/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-category:get",
+      "method": "GET",
+      "path": "/bpm-category",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-category:post",
+      "method": "POST",
+      "path": "/bpm-category",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-comment/[id]:delete",
+      "method": "DELETE",
+      "path": "/bpm-comment/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-comment/[id]:get",
+      "method": "GET",
+      "path": "/bpm-comment/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-comment/[id]:put",
+      "method": "PUT",
+      "path": "/bpm-comment/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-comment:get",
+      "method": "GET",
+      "path": "/bpm-comment",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-comment:post",
+      "method": "POST",
+      "path": "/bpm-comment",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-form/[id]:delete",
+      "method": "DELETE",
+      "path": "/bpm-form/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-form/[id]:get",
+      "method": "GET",
+      "path": "/bpm-form/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-form/[id]:put",
+      "method": "PUT",
+      "path": "/bpm-form/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-form:get",
+      "method": "GET",
+      "path": "/bpm-form",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-form:post",
+      "method": "POST",
+      "path": "/bpm-form",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-model/[id]:delete",
+      "method": "DELETE",
+      "path": "/bpm-model/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-model/[id]:get",
+      "method": "GET",
+      "path": "/bpm-model/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-model/[id]:put",
+      "method": "PUT",
+      "path": "/bpm-model/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-model:get",
+      "method": "GET",
+      "path": "/bpm-model",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-model:post",
+      "method": "POST",
+      "path": "/bpm-model",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-oaleave/[id]:delete",
+      "method": "DELETE",
+      "path": "/bpm-oaleave/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-oaleave/[id]:get",
+      "method": "GET",
+      "path": "/bpm-oaleave/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-oaleave/[id]:put",
+      "method": "PUT",
+      "path": "/bpm-oaleave/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-oaleave:get",
+      "method": "GET",
+      "path": "/bpm-oaleave",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-oaleave:post",
+      "method": "POST",
+      "path": "/bpm-oaleave",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-definition/[id]:delete",
+      "method": "DELETE",
+      "path": "/bpm-process-definition/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-definition/[id]:get",
+      "method": "GET",
+      "path": "/bpm-process-definition/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-definition/[id]:put",
+      "method": "PUT",
+      "path": "/bpm-process-definition/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-definition:get",
+      "method": "GET",
+      "path": "/bpm-process-definition",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-definition:post",
+      "method": "POST",
+      "path": "/bpm-process-definition",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-expression/[id]:delete",
+      "method": "DELETE",
+      "path": "/bpm-process-expression/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-expression/[id]:get",
+      "method": "GET",
+      "path": "/bpm-process-expression/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-expression/[id]:put",
+      "method": "PUT",
+      "path": "/bpm-process-expression/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-expression:get",
+      "method": "GET",
+      "path": "/bpm-process-expression",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-expression:post",
+      "method": "POST",
+      "path": "/bpm-process-expression",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-instance-copy/[id]:delete",
+      "method": "DELETE",
+      "path": "/bpm-process-instance-copy/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-instance-copy/[id]:get",
+      "method": "GET",
+      "path": "/bpm-process-instance-copy/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-instance-copy/[id]:put",
+      "method": "PUT",
+      "path": "/bpm-process-instance-copy/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-instance-copy:get",
+      "method": "GET",
+      "path": "/bpm-process-instance-copy",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-instance-copy:post",
+      "method": "POST",
+      "path": "/bpm-process-instance-copy",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-instance/[id]:delete",
+      "method": "DELETE",
+      "path": "/bpm-process-instance/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-instance/[id]:get",
+      "method": "GET",
+      "path": "/bpm-process-instance/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-instance/[id]:put",
+      "method": "PUT",
+      "path": "/bpm-process-instance/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-instance:get",
+      "method": "GET",
+      "path": "/bpm-process-instance",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-instance:post",
+      "method": "POST",
+      "path": "/bpm-process-instance",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-listener/[id]:delete",
+      "method": "DELETE",
+      "path": "/bpm-process-listener/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-listener/[id]:get",
+      "method": "GET",
+      "path": "/bpm-process-listener/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-listener/[id]:put",
+      "method": "PUT",
+      "path": "/bpm-process-listener/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-listener:get",
+      "method": "GET",
+      "path": "/bpm-process-listener",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-process-listener:post",
+      "method": "POST",
+      "path": "/bpm-process-listener",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-task/[id]:delete",
+      "method": "DELETE",
+      "path": "/bpm-task/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-task/[id]:get",
+      "method": "GET",
+      "path": "/bpm-task/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-task/[id]:put",
+      "method": "PUT",
+      "path": "/bpm-task/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-task:get",
+      "method": "GET",
+      "path": "/bpm-task",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-task:post",
+      "method": "POST",
+      "path": "/bpm-task",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-user-group/[id]:delete",
+      "method": "DELETE",
+      "path": "/bpm-user-group/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-user-group/[id]:get",
+      "method": "GET",
+      "path": "/bpm-user-group/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-user-group/[id]:put",
+      "method": "PUT",
+      "path": "/bpm-user-group/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-user-group:get",
+      "method": "GET",
+      "path": "/bpm-user-group",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bpm-user-group:post",
+      "method": "POST",
+      "path": "/bpm-user-group",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:process-definitions/[id]:delete",
+      "method": "DELETE",
+      "path": "/process-definitions/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:process-definitions/[id]:get",
+      "method": "GET",
+      "path": "/process-definitions/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:process-definitions/[id]:put",
+      "method": "PUT",
+      "path": "/process-definitions/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:process-definitions:get",
+      "method": "GET",
+      "path": "/process-definitions",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:process-definitions:post",
+      "method": "POST",
+      "path": "/process-definitions",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:tasks/[id]:delete",
+      "method": "DELETE",
+      "path": "/tasks/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:tasks/[id]:get",
+      "method": "GET",
+      "path": "/tasks/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:tasks/[id]:put",
+      "method": "PUT",
+      "path": "/tasks/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:tasks:get",
+      "method": "GET",
+      "path": "/tasks",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:tasks:post",
+      "method": "POST",
+      "path": "/tasks",
+      "auth": "operator"
+    }
+  ]
+}

@@ -317,27 +317,26 @@
       "publicRpc": "system: getDictDataByType + getPermissionInfoByUser; infra: none"
     },
     "business": {
-      "domains": [
-        "online",
-        "bpm",
-        "mp",
-        "mall",
-        "member",
-        "crm",
-        "erp",
-        "wms",
-        "mes",
-        "ai",
-        "aigw",
-        "iot",
-        "im"
-      ],
+      "domains": [],
       "deployable": true
     },
     "plugin": {
       "domains": [
+        "ai",
+        "aigw",
+        "bpm",
+        "crm",
+        "erp",
+        "im",
+        "iot",
+        "mall",
+        "member",
+        "mes",
+        "mp",
+        "online",
         "pay",
-        "report"
+        "report",
+        "wms"
       ],
       "description": "第一方插件: 保留域级特征(可独立打包), 但不属于平台/业务层"
     }
@@ -444,7 +443,7 @@
     {
       "name": "online",
       "owner": "infra",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "B",
       "contractVersion": "v1",
       "publicPrefixes": [
@@ -474,7 +473,7 @@
     {
       "name": "bpm",
       "owner": "bpm",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "A",
       "contractVersion": "v1",
       "publicPrefixes": [
@@ -563,7 +562,7 @@
     {
       "name": "mp",
       "owner": "mp",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "B",
       "contractVersion": "v1",
       "publicPrefixes": [
@@ -592,7 +591,7 @@
     {
       "name": "mall",
       "owner": "mall",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "B",
       "contractVersion": "v1",
       "publicPrefixes": [
@@ -622,7 +621,7 @@
     {
       "name": "member",
       "owner": "member",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "A",
       "contractVersion": "v1",
       "publicPrefixes": [
@@ -652,7 +651,7 @@
     {
       "name": "crm",
       "owner": "crm",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "B",
       "contractVersion": "v1",
       "publicPrefixes": [
@@ -681,7 +680,7 @@
     {
       "name": "erp",
       "owner": "erp",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "B",
       "contractVersion": "v1",
       "publicPrefixes": [
@@ -710,7 +709,7 @@
     {
       "name": "wms",
       "owner": "wms",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "B",
       "contractVersion": "v1",
       "publicPrefixes": [
@@ -739,7 +738,7 @@
     {
       "name": "mes",
       "owner": "mes",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "B",
       "contractVersion": "v1",
       "publicPrefixes": [
@@ -768,7 +767,7 @@
     {
       "name": "ai",
       "owner": "ai",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "B",
       "contractVersion": "v1",
       "publicPrefixes": [
@@ -798,7 +797,7 @@
     {
       "name": "aigw",
       "owner": "aigw",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "B",
       "contractVersion": "v1",
       "publicPrefixes": [
@@ -828,7 +827,7 @@
     {
       "name": "iot",
       "owner": "iot",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "B",
       "contractVersion": "v1",
       "publicPrefixes": [
@@ -857,7 +856,7 @@
     {
       "name": "im",
       "owner": "im",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "B",
       "contractVersion": "v1",
       "publicPrefixes": [

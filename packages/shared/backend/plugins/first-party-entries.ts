@@ -18,6 +18,19 @@ type PluginEntryFactory = () => Promise<Record<string, unknown>>
 export const FIRST_PARTY_PLUGIN_ENTRIES: Record<string, PluginEntryFactory> = {
   "ruoyi.pay": () => import("@/modules/pay/plugin-entry"),
   "ruoyi.report": () => import("@/modules/report/plugin-entry"),
+  "ruoyi.bpm": () => import("@/modules/bpm/plugin-entry"),
+  "ruoyi.mp": () => import("@/modules/mp/plugin-entry"),
+  "ruoyi.member": () => import("@/modules/member/plugin-entry"),
+  "ruoyi.iot": () => import("@/modules/iot/plugin-entry"),
+  "ruoyi.erp": () => import("@/modules/erp/plugin-entry"),
+  "ruoyi.im": () => import("@/modules/im/plugin-entry"),
+  "ruoyi.aigw": () => import("@/modules/aigw/plugin-entry"),
+  "ruoyi.ai": () => import("@/modules/ai/plugin-entry"),
+  "ruoyi.crm": () => import("@/modules/crm/plugin-entry"),
+  "ruoyi.wms": () => import("@/modules/wms/plugin-entry"),
+  "ruoyi.online": () => import("@/modules/online/plugin-entry"),
+  "ruoyi.mall": () => import("@/modules/mall/plugin-entry"),
+  "ruoyi.mes": () => import("@/modules/mes/plugin-entry"),
 }
 
 /** 取第一方插件入口工厂；不是第一方插件时返回 undefined（调用方回退到运行期 import）。 */

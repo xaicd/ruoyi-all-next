@@ -1,0 +1,933 @@
+/**
+ * mes 域的**插件入口**（合并/同进程形态）。由 scripts/scaffold-domain-plugin.cjs 生成。
+ *
+ * 设计要点: 不重写业务逻辑 —— 处理器仍是包内 routes 目录下那些已被
+ * withAdminRoute / withAppRoute 包装过的函数（鉴权/权限码/schema 校验都在里面），
+ * 这里只做一层适配: 宿主的 {method,path,query,body,headers} -> Request -> Response -> {status,body}。
+ *
+ * 为什么用静态 import: 仓内第一方插件是 TS, 宿主无法用运行期 import() 加载（Node 不认 TS）,
+ * 而模板字符串动态 import 在 Turbopack 下也无法解析 —— 必须显式列出每条 import。
+ */
+import { definePlugin } from "@ruoyi/plugin-sdk"
+
+import * as route_admin_mes_cal_calendar__id_ from "@/modules/mes/routes/admin/mes-cal-calendar/[id]/route"
+import * as route_admin_mes_cal_calendar from "@/modules/mes/routes/admin/mes-cal-calendar/route"
+import * as route_admin_mes_cal_holiday__id_ from "@/modules/mes/routes/admin/mes-cal-holiday/[id]/route"
+import * as route_admin_mes_cal_holiday from "@/modules/mes/routes/admin/mes-cal-holiday/route"
+import * as route_admin_mes_cal_plan_shift__id_ from "@/modules/mes/routes/admin/mes-cal-plan-shift/[id]/route"
+import * as route_admin_mes_cal_plan_shift from "@/modules/mes/routes/admin/mes-cal-plan-shift/route"
+import * as route_admin_mes_cal_plan_team__id_ from "@/modules/mes/routes/admin/mes-cal-plan-team/[id]/route"
+import * as route_admin_mes_cal_plan_team from "@/modules/mes/routes/admin/mes-cal-plan-team/route"
+import * as route_admin_mes_cal_plan__id_ from "@/modules/mes/routes/admin/mes-cal-plan/[id]/route"
+import * as route_admin_mes_cal_plan from "@/modules/mes/routes/admin/mes-cal-plan/route"
+import * as route_admin_mes_cal_team_member__id_ from "@/modules/mes/routes/admin/mes-cal-team-member/[id]/route"
+import * as route_admin_mes_cal_team_member from "@/modules/mes/routes/admin/mes-cal-team-member/route"
+import * as route_admin_mes_cal_team_shift__id_ from "@/modules/mes/routes/admin/mes-cal-team-shift/[id]/route"
+import * as route_admin_mes_cal_team_shift from "@/modules/mes/routes/admin/mes-cal-team-shift/route"
+import * as route_admin_mes_cal_team__id_ from "@/modules/mes/routes/admin/mes-cal-team/[id]/route"
+import * as route_admin_mes_cal_team from "@/modules/mes/routes/admin/mes-cal-team/route"
+import * as route_admin_mes_dv_check_plan_machinery__id_ from "@/modules/mes/routes/admin/mes-dv-check-plan-machinery/[id]/route"
+import * as route_admin_mes_dv_check_plan_machinery from "@/modules/mes/routes/admin/mes-dv-check-plan-machinery/route"
+import * as route_admin_mes_dv_check_plan_subject__id_ from "@/modules/mes/routes/admin/mes-dv-check-plan-subject/[id]/route"
+import * as route_admin_mes_dv_check_plan_subject from "@/modules/mes/routes/admin/mes-dv-check-plan-subject/route"
+import * as route_admin_mes_dv_check_plan__id_ from "@/modules/mes/routes/admin/mes-dv-check-plan/[id]/route"
+import * as route_admin_mes_dv_check_plan from "@/modules/mes/routes/admin/mes-dv-check-plan/route"
+import * as route_admin_mes_dv_check_record_line__id_ from "@/modules/mes/routes/admin/mes-dv-check-record-line/[id]/route"
+import * as route_admin_mes_dv_check_record_line from "@/modules/mes/routes/admin/mes-dv-check-record-line/route"
+import * as route_admin_mes_dv_check_record__id_ from "@/modules/mes/routes/admin/mes-dv-check-record/[id]/route"
+import * as route_admin_mes_dv_check_record from "@/modules/mes/routes/admin/mes-dv-check-record/route"
+import * as route_admin_mes_dv_machinery_type__id_ from "@/modules/mes/routes/admin/mes-dv-machinery-type/[id]/route"
+import * as route_admin_mes_dv_machinery_type from "@/modules/mes/routes/admin/mes-dv-machinery-type/route"
+import * as route_admin_mes_dv_machinery__id_ from "@/modules/mes/routes/admin/mes-dv-machinery/[id]/route"
+import * as route_admin_mes_dv_machinery from "@/modules/mes/routes/admin/mes-dv-machinery/route"
+import * as route_admin_mes_dv_mainten_record_line__id_ from "@/modules/mes/routes/admin/mes-dv-mainten-record-line/[id]/route"
+import * as route_admin_mes_dv_mainten_record_line from "@/modules/mes/routes/admin/mes-dv-mainten-record-line/route"
+import * as route_admin_mes_dv_mainten_record__id_ from "@/modules/mes/routes/admin/mes-dv-mainten-record/[id]/route"
+import * as route_admin_mes_dv_mainten_record from "@/modules/mes/routes/admin/mes-dv-mainten-record/route"
+import * as route_admin_mes_dv_repair_line__id_ from "@/modules/mes/routes/admin/mes-dv-repair-line/[id]/route"
+import * as route_admin_mes_dv_repair_line from "@/modules/mes/routes/admin/mes-dv-repair-line/route"
+import * as route_admin_mes_dv_repair__id_ from "@/modules/mes/routes/admin/mes-dv-repair/[id]/route"
+import * as route_admin_mes_dv_repair from "@/modules/mes/routes/admin/mes-dv-repair/route"
+import * as route_admin_mes_dv_subject__id_ from "@/modules/mes/routes/admin/mes-dv-subject/[id]/route"
+import * as route_admin_mes_dv_subject from "@/modules/mes/routes/admin/mes-dv-subject/route"
+import * as route_admin_mes_home_statistics__id_ from "@/modules/mes/routes/admin/mes-home-statistics/[id]/route"
+import * as route_admin_mes_home_statistics from "@/modules/mes/routes/admin/mes-home-statistics/route"
+import * as route_admin_mes_md_auto_code_part__id_ from "@/modules/mes/routes/admin/mes-md-auto-code-part/[id]/route"
+import * as route_admin_mes_md_auto_code_part from "@/modules/mes/routes/admin/mes-md-auto-code-part/route"
+import * as route_admin_mes_md_auto_code_record__id_ from "@/modules/mes/routes/admin/mes-md-auto-code-record/[id]/route"
+import * as route_admin_mes_md_auto_code_record from "@/modules/mes/routes/admin/mes-md-auto-code-record/route"
+import * as route_admin_mes_md_auto_code_rule__id_ from "@/modules/mes/routes/admin/mes-md-auto-code-rule/[id]/route"
+import * as route_admin_mes_md_auto_code_rule from "@/modules/mes/routes/admin/mes-md-auto-code-rule/route"
+import * as route_admin_mes_md_client__id_ from "@/modules/mes/routes/admin/mes-md-client/[id]/route"
+import * as route_admin_mes_md_client from "@/modules/mes/routes/admin/mes-md-client/route"
+import * as route_admin_mes_md_item_batch_config__id_ from "@/modules/mes/routes/admin/mes-md-item-batch-config/[id]/route"
+import * as route_admin_mes_md_item_batch_config from "@/modules/mes/routes/admin/mes-md-item-batch-config/route"
+import * as route_admin_mes_md_item_type__id_ from "@/modules/mes/routes/admin/mes-md-item-type/[id]/route"
+import * as route_admin_mes_md_item_type from "@/modules/mes/routes/admin/mes-md-item-type/route"
+import * as route_admin_mes_md_item__id_ from "@/modules/mes/routes/admin/mes-md-item/[id]/route"
+import * as route_admin_mes_md_item from "@/modules/mes/routes/admin/mes-md-item/route"
+import * as route_admin_mes_md_product_bom__id_ from "@/modules/mes/routes/admin/mes-md-product-bom/[id]/route"
+import * as route_admin_mes_md_product_bom from "@/modules/mes/routes/admin/mes-md-product-bom/route"
+import * as route_admin_mes_md_product_sip__id_ from "@/modules/mes/routes/admin/mes-md-product-sip/[id]/route"
+import * as route_admin_mes_md_product_sip from "@/modules/mes/routes/admin/mes-md-product-sip/route"
+import * as route_admin_mes_md_product_sop__id_ from "@/modules/mes/routes/admin/mes-md-product-sop/[id]/route"
+import * as route_admin_mes_md_product_sop from "@/modules/mes/routes/admin/mes-md-product-sop/route"
+import * as route_admin_mes_md_unit_measure__id_ from "@/modules/mes/routes/admin/mes-md-unit-measure/[id]/route"
+import * as route_admin_mes_md_unit_measure from "@/modules/mes/routes/admin/mes-md-unit-measure/route"
+import * as route_admin_mes_md_vendor__id_ from "@/modules/mes/routes/admin/mes-md-vendor/[id]/route"
+import * as route_admin_mes_md_vendor from "@/modules/mes/routes/admin/mes-md-vendor/route"
+import * as route_admin_mes_md_workshop__id_ from "@/modules/mes/routes/admin/mes-md-workshop/[id]/route"
+import * as route_admin_mes_md_workshop from "@/modules/mes/routes/admin/mes-md-workshop/route"
+import * as route_admin_mes_md_workstation_machine__id_ from "@/modules/mes/routes/admin/mes-md-workstation-machine/[id]/route"
+import * as route_admin_mes_md_workstation_machine from "@/modules/mes/routes/admin/mes-md-workstation-machine/route"
+import * as route_admin_mes_md_workstation_tool__id_ from "@/modules/mes/routes/admin/mes-md-workstation-tool/[id]/route"
+import * as route_admin_mes_md_workstation_tool from "@/modules/mes/routes/admin/mes-md-workstation-tool/route"
+import * as route_admin_mes_md_workstation_worker__id_ from "@/modules/mes/routes/admin/mes-md-workstation-worker/[id]/route"
+import * as route_admin_mes_md_workstation_worker from "@/modules/mes/routes/admin/mes-md-workstation-worker/route"
+import * as route_admin_mes_md_workstation__id_ from "@/modules/mes/routes/admin/mes-md-workstation/[id]/route"
+import * as route_admin_mes_md_workstation from "@/modules/mes/routes/admin/mes-md-workstation/route"
+import * as route_admin_mes_pro_andon_config__id_ from "@/modules/mes/routes/admin/mes-pro-andon-config/[id]/route"
+import * as route_admin_mes_pro_andon_config from "@/modules/mes/routes/admin/mes-pro-andon-config/route"
+import * as route_admin_mes_pro_andon_record__id_ from "@/modules/mes/routes/admin/mes-pro-andon-record/[id]/route"
+import * as route_admin_mes_pro_andon_record from "@/modules/mes/routes/admin/mes-pro-andon-record/route"
+import * as route_admin_mes_pro_card_process__id_ from "@/modules/mes/routes/admin/mes-pro-card-process/[id]/route"
+import * as route_admin_mes_pro_card_process from "@/modules/mes/routes/admin/mes-pro-card-process/route"
+import * as route_admin_mes_pro_card__id_ from "@/modules/mes/routes/admin/mes-pro-card/[id]/route"
+import * as route_admin_mes_pro_card from "@/modules/mes/routes/admin/mes-pro-card/route"
+import * as route_admin_mes_pro_feedback__id_ from "@/modules/mes/routes/admin/mes-pro-feedback/[id]/route"
+import * as route_admin_mes_pro_feedback from "@/modules/mes/routes/admin/mes-pro-feedback/route"
+import * as route_admin_mes_pro_process_content__id_ from "@/modules/mes/routes/admin/mes-pro-process-content/[id]/route"
+import * as route_admin_mes_pro_process_content from "@/modules/mes/routes/admin/mes-pro-process-content/route"
+import * as route_admin_mes_pro_process__id_ from "@/modules/mes/routes/admin/mes-pro-process/[id]/route"
+import * as route_admin_mes_pro_process from "@/modules/mes/routes/admin/mes-pro-process/route"
+import * as route_admin_mes_pro_route_process__id_ from "@/modules/mes/routes/admin/mes-pro-route-process/[id]/route"
+import * as route_admin_mes_pro_route_process from "@/modules/mes/routes/admin/mes-pro-route-process/route"
+import * as route_admin_mes_pro_route_product_bom__id_ from "@/modules/mes/routes/admin/mes-pro-route-product-bom/[id]/route"
+import * as route_admin_mes_pro_route_product_bom from "@/modules/mes/routes/admin/mes-pro-route-product-bom/route"
+import * as route_admin_mes_pro_route_product__id_ from "@/modules/mes/routes/admin/mes-pro-route-product/[id]/route"
+import * as route_admin_mes_pro_route_product from "@/modules/mes/routes/admin/mes-pro-route-product/route"
+import * as route_admin_mes_pro_route__id_ from "@/modules/mes/routes/admin/mes-pro-route/[id]/route"
+import * as route_admin_mes_pro_route from "@/modules/mes/routes/admin/mes-pro-route/route"
+import * as route_admin_mes_pro_task_issue__id_ from "@/modules/mes/routes/admin/mes-pro-task-issue/[id]/route"
+import * as route_admin_mes_pro_task_issue from "@/modules/mes/routes/admin/mes-pro-task-issue/route"
+import * as route_admin_mes_pro_task__id_ from "@/modules/mes/routes/admin/mes-pro-task/[id]/route"
+import * as route_admin_mes_pro_task from "@/modules/mes/routes/admin/mes-pro-task/route"
+import * as route_admin_mes_pro_work_order_bom__id_ from "@/modules/mes/routes/admin/mes-pro-work-order-bom/[id]/route"
+import * as route_admin_mes_pro_work_order_bom from "@/modules/mes/routes/admin/mes-pro-work-order-bom/route"
+import * as route_admin_mes_pro_work_order__id_ from "@/modules/mes/routes/admin/mes-pro-work-order/[id]/route"
+import * as route_admin_mes_pro_work_order from "@/modules/mes/routes/admin/mes-pro-work-order/route"
+import * as route_admin_mes_pro_work_record__id_ from "@/modules/mes/routes/admin/mes-pro-work-record/[id]/route"
+import * as route_admin_mes_pro_work_record from "@/modules/mes/routes/admin/mes-pro-work-record/route"
+import * as route_admin_mes_qc_defect_record__id_ from "@/modules/mes/routes/admin/mes-qc-defect-record/[id]/route"
+import * as route_admin_mes_qc_defect_record from "@/modules/mes/routes/admin/mes-qc-defect-record/route"
+import * as route_admin_mes_qc_defect__id_ from "@/modules/mes/routes/admin/mes-qc-defect/[id]/route"
+import * as route_admin_mes_qc_defect from "@/modules/mes/routes/admin/mes-qc-defect/route"
+import * as route_admin_mes_qc_indicator_result__id_ from "@/modules/mes/routes/admin/mes-qc-indicator-result/[id]/route"
+import * as route_admin_mes_qc_indicator_result from "@/modules/mes/routes/admin/mes-qc-indicator-result/route"
+import * as route_admin_mes_qc_indicator__id_ from "@/modules/mes/routes/admin/mes-qc-indicator/[id]/route"
+import * as route_admin_mes_qc_indicator from "@/modules/mes/routes/admin/mes-qc-indicator/route"
+import * as route_admin_mes_qc_ipqc_line__id_ from "@/modules/mes/routes/admin/mes-qc-ipqc-line/[id]/route"
+import * as route_admin_mes_qc_ipqc_line from "@/modules/mes/routes/admin/mes-qc-ipqc-line/route"
+import * as route_admin_mes_qc_ipqc__id_ from "@/modules/mes/routes/admin/mes-qc-ipqc/[id]/route"
+import * as route_admin_mes_qc_ipqc from "@/modules/mes/routes/admin/mes-qc-ipqc/route"
+import * as route_admin_mes_qc_iqc_line__id_ from "@/modules/mes/routes/admin/mes-qc-iqc-line/[id]/route"
+import * as route_admin_mes_qc_iqc_line from "@/modules/mes/routes/admin/mes-qc-iqc-line/route"
+import * as route_admin_mes_qc_iqc__id_ from "@/modules/mes/routes/admin/mes-qc-iqc/[id]/route"
+import * as route_admin_mes_qc_iqc from "@/modules/mes/routes/admin/mes-qc-iqc/route"
+import * as route_admin_mes_qc_oqc_line__id_ from "@/modules/mes/routes/admin/mes-qc-oqc-line/[id]/route"
+import * as route_admin_mes_qc_oqc_line from "@/modules/mes/routes/admin/mes-qc-oqc-line/route"
+import * as route_admin_mes_qc_oqc__id_ from "@/modules/mes/routes/admin/mes-qc-oqc/[id]/route"
+import * as route_admin_mes_qc_oqc from "@/modules/mes/routes/admin/mes-qc-oqc/route"
+import * as route_admin_mes_qc_pending_inspect__id_ from "@/modules/mes/routes/admin/mes-qc-pending-inspect/[id]/route"
+import * as route_admin_mes_qc_pending_inspect from "@/modules/mes/routes/admin/mes-qc-pending-inspect/route"
+import * as route_admin_mes_qc_rqc_line__id_ from "@/modules/mes/routes/admin/mes-qc-rqc-line/[id]/route"
+import * as route_admin_mes_qc_rqc_line from "@/modules/mes/routes/admin/mes-qc-rqc-line/route"
+import * as route_admin_mes_qc_rqc__id_ from "@/modules/mes/routes/admin/mes-qc-rqc/[id]/route"
+import * as route_admin_mes_qc_rqc from "@/modules/mes/routes/admin/mes-qc-rqc/route"
+import * as route_admin_mes_qc_template_indicator__id_ from "@/modules/mes/routes/admin/mes-qc-template-indicator/[id]/route"
+import * as route_admin_mes_qc_template_indicator from "@/modules/mes/routes/admin/mes-qc-template-indicator/route"
+import * as route_admin_mes_qc_template_item__id_ from "@/modules/mes/routes/admin/mes-qc-template-item/[id]/route"
+import * as route_admin_mes_qc_template_item from "@/modules/mes/routes/admin/mes-qc-template-item/route"
+import * as route_admin_mes_qc_template__id_ from "@/modules/mes/routes/admin/mes-qc-template/[id]/route"
+import * as route_admin_mes_qc_template from "@/modules/mes/routes/admin/mes-qc-template/route"
+import * as route_admin_mes_tm_tool_type__id_ from "@/modules/mes/routes/admin/mes-tm-tool-type/[id]/route"
+import * as route_admin_mes_tm_tool_type from "@/modules/mes/routes/admin/mes-tm-tool-type/route"
+import * as route_admin_mes_tm_tool__id_ from "@/modules/mes/routes/admin/mes-tm-tool/[id]/route"
+import * as route_admin_mes_tm_tool from "@/modules/mes/routes/admin/mes-tm-tool/route"
+import * as route_admin_mes_wm_arrival_notice_line__id_ from "@/modules/mes/routes/admin/mes-wm-arrival-notice-line/[id]/route"
+import * as route_admin_mes_wm_arrival_notice_line from "@/modules/mes/routes/admin/mes-wm-arrival-notice-line/route"
+import * as route_admin_mes_wm_arrival_notice__id_ from "@/modules/mes/routes/admin/mes-wm-arrival-notice/[id]/route"
+import * as route_admin_mes_wm_arrival_notice from "@/modules/mes/routes/admin/mes-wm-arrival-notice/route"
+import * as route_admin_mes_wm_barcode_config__id_ from "@/modules/mes/routes/admin/mes-wm-barcode-config/[id]/route"
+import * as route_admin_mes_wm_barcode_config from "@/modules/mes/routes/admin/mes-wm-barcode-config/route"
+import * as route_admin_mes_wm_barcode__id_ from "@/modules/mes/routes/admin/mes-wm-barcode/[id]/route"
+import * as route_admin_mes_wm_barcode from "@/modules/mes/routes/admin/mes-wm-barcode/route"
+import * as route_admin_mes_wm_batch__id_ from "@/modules/mes/routes/admin/mes-wm-batch/[id]/route"
+import * as route_admin_mes_wm_batch from "@/modules/mes/routes/admin/mes-wm-batch/route"
+import * as route_admin_mes_wm_item_consume_line__id_ from "@/modules/mes/routes/admin/mes-wm-item-consume-line/[id]/route"
+import * as route_admin_mes_wm_item_consume_line from "@/modules/mes/routes/admin/mes-wm-item-consume-line/route"
+import * as route_admin_mes_wm_item_receipt_detail__id_ from "@/modules/mes/routes/admin/mes-wm-item-receipt-detail/[id]/route"
+import * as route_admin_mes_wm_item_receipt_detail from "@/modules/mes/routes/admin/mes-wm-item-receipt-detail/route"
+import * as route_admin_mes_wm_item_receipt_line__id_ from "@/modules/mes/routes/admin/mes-wm-item-receipt-line/[id]/route"
+import * as route_admin_mes_wm_item_receipt_line from "@/modules/mes/routes/admin/mes-wm-item-receipt-line/route"
+import * as route_admin_mes_wm_item_receipt__id_ from "@/modules/mes/routes/admin/mes-wm-item-receipt/[id]/route"
+import * as route_admin_mes_wm_item_receipt from "@/modules/mes/routes/admin/mes-wm-item-receipt/route"
+import * as route_admin_mes_wm_material_stock__id_ from "@/modules/mes/routes/admin/mes-wm-material-stock/[id]/route"
+import * as route_admin_mes_wm_material_stock from "@/modules/mes/routes/admin/mes-wm-material-stock/route"
+import * as route_admin_mes_wm_misc_issue_line__id_ from "@/modules/mes/routes/admin/mes-wm-misc-issue-line/[id]/route"
+import * as route_admin_mes_wm_misc_issue_line from "@/modules/mes/routes/admin/mes-wm-misc-issue-line/route"
+import * as route_admin_mes_wm_misc_issue__id_ from "@/modules/mes/routes/admin/mes-wm-misc-issue/[id]/route"
+import * as route_admin_mes_wm_misc_issue from "@/modules/mes/routes/admin/mes-wm-misc-issue/route"
+import * as route_admin_mes_wm_misc_receipt_line__id_ from "@/modules/mes/routes/admin/mes-wm-misc-receipt-line/[id]/route"
+import * as route_admin_mes_wm_misc_receipt_line from "@/modules/mes/routes/admin/mes-wm-misc-receipt-line/route"
+import * as route_admin_mes_wm_misc_receipt__id_ from "@/modules/mes/routes/admin/mes-wm-misc-receipt/[id]/route"
+import * as route_admin_mes_wm_misc_receipt from "@/modules/mes/routes/admin/mes-wm-misc-receipt/route"
+import * as route_admin_mes_wm_outsource_issue_detail__id_ from "@/modules/mes/routes/admin/mes-wm-outsource-issue-detail/[id]/route"
+import * as route_admin_mes_wm_outsource_issue_detail from "@/modules/mes/routes/admin/mes-wm-outsource-issue-detail/route"
+import * as route_admin_mes_wm_outsource_issue_line__id_ from "@/modules/mes/routes/admin/mes-wm-outsource-issue-line/[id]/route"
+import * as route_admin_mes_wm_outsource_issue_line from "@/modules/mes/routes/admin/mes-wm-outsource-issue-line/route"
+import * as route_admin_mes_wm_outsource_issue__id_ from "@/modules/mes/routes/admin/mes-wm-outsource-issue/[id]/route"
+import * as route_admin_mes_wm_outsource_issue from "@/modules/mes/routes/admin/mes-wm-outsource-issue/route"
+import * as route_admin_mes_wm_outsource_receipt_detail__id_ from "@/modules/mes/routes/admin/mes-wm-outsource-receipt-detail/[id]/route"
+import * as route_admin_mes_wm_outsource_receipt_detail from "@/modules/mes/routes/admin/mes-wm-outsource-receipt-detail/route"
+import * as route_admin_mes_wm_outsource_receipt_line__id_ from "@/modules/mes/routes/admin/mes-wm-outsource-receipt-line/[id]/route"
+import * as route_admin_mes_wm_outsource_receipt_line from "@/modules/mes/routes/admin/mes-wm-outsource-receipt-line/route"
+import * as route_admin_mes_wm_outsource_receipt__id_ from "@/modules/mes/routes/admin/mes-wm-outsource-receipt/[id]/route"
+import * as route_admin_mes_wm_outsource_receipt from "@/modules/mes/routes/admin/mes-wm-outsource-receipt/route"
+import * as route_admin_mes_wm_package_line__id_ from "@/modules/mes/routes/admin/mes-wm-package-line/[id]/route"
+import * as route_admin_mes_wm_package_line from "@/modules/mes/routes/admin/mes-wm-package-line/route"
+import * as route_admin_mes_wm_package__id_ from "@/modules/mes/routes/admin/mes-wm-package/[id]/route"
+import * as route_admin_mes_wm_package from "@/modules/mes/routes/admin/mes-wm-package/route"
+import * as route_admin_mes_wm_product_issue_detail__id_ from "@/modules/mes/routes/admin/mes-wm-product-issue-detail/[id]/route"
+import * as route_admin_mes_wm_product_issue_detail from "@/modules/mes/routes/admin/mes-wm-product-issue-detail/route"
+import * as route_admin_mes_wm_product_issue_line__id_ from "@/modules/mes/routes/admin/mes-wm-product-issue-line/[id]/route"
+import * as route_admin_mes_wm_product_issue_line from "@/modules/mes/routes/admin/mes-wm-product-issue-line/route"
+import * as route_admin_mes_wm_product_issue__id_ from "@/modules/mes/routes/admin/mes-wm-product-issue/[id]/route"
+import * as route_admin_mes_wm_product_issue from "@/modules/mes/routes/admin/mes-wm-product-issue/route"
+import * as route_admin_mes_wm_product_produce_line__id_ from "@/modules/mes/routes/admin/mes-wm-product-produce-line/[id]/route"
+import * as route_admin_mes_wm_product_produce_line from "@/modules/mes/routes/admin/mes-wm-product-produce-line/route"
+import * as route_admin_mes_wm_product_receipt_detail__id_ from "@/modules/mes/routes/admin/mes-wm-product-receipt-detail/[id]/route"
+import * as route_admin_mes_wm_product_receipt_detail from "@/modules/mes/routes/admin/mes-wm-product-receipt-detail/route"
+import * as route_admin_mes_wm_product_receipt_line__id_ from "@/modules/mes/routes/admin/mes-wm-product-receipt-line/[id]/route"
+import * as route_admin_mes_wm_product_receipt_line from "@/modules/mes/routes/admin/mes-wm-product-receipt-line/route"
+import * as route_admin_mes_wm_product_receipt__id_ from "@/modules/mes/routes/admin/mes-wm-product-receipt/[id]/route"
+import * as route_admin_mes_wm_product_receipt from "@/modules/mes/routes/admin/mes-wm-product-receipt/route"
+import * as route_admin_mes_wm_product_sales_detail__id_ from "@/modules/mes/routes/admin/mes-wm-product-sales-detail/[id]/route"
+import * as route_admin_mes_wm_product_sales_detail from "@/modules/mes/routes/admin/mes-wm-product-sales-detail/route"
+import * as route_admin_mes_wm_product_sales_line__id_ from "@/modules/mes/routes/admin/mes-wm-product-sales-line/[id]/route"
+import * as route_admin_mes_wm_product_sales_line from "@/modules/mes/routes/admin/mes-wm-product-sales-line/route"
+import * as route_admin_mes_wm_product_sales__id_ from "@/modules/mes/routes/admin/mes-wm-product-sales/[id]/route"
+import * as route_admin_mes_wm_product_sales from "@/modules/mes/routes/admin/mes-wm-product-sales/route"
+import * as route_admin_mes_wm_return_issue_detail__id_ from "@/modules/mes/routes/admin/mes-wm-return-issue-detail/[id]/route"
+import * as route_admin_mes_wm_return_issue_detail from "@/modules/mes/routes/admin/mes-wm-return-issue-detail/route"
+import * as route_admin_mes_wm_return_issue_line__id_ from "@/modules/mes/routes/admin/mes-wm-return-issue-line/[id]/route"
+import * as route_admin_mes_wm_return_issue_line from "@/modules/mes/routes/admin/mes-wm-return-issue-line/route"
+import * as route_admin_mes_wm_return_issue__id_ from "@/modules/mes/routes/admin/mes-wm-return-issue/[id]/route"
+import * as route_admin_mes_wm_return_issue from "@/modules/mes/routes/admin/mes-wm-return-issue/route"
+import * as route_admin_mes_wm_return_sales_detail__id_ from "@/modules/mes/routes/admin/mes-wm-return-sales-detail/[id]/route"
+import * as route_admin_mes_wm_return_sales_detail from "@/modules/mes/routes/admin/mes-wm-return-sales-detail/route"
+import * as route_admin_mes_wm_return_sales_line__id_ from "@/modules/mes/routes/admin/mes-wm-return-sales-line/[id]/route"
+import * as route_admin_mes_wm_return_sales_line from "@/modules/mes/routes/admin/mes-wm-return-sales-line/route"
+import * as route_admin_mes_wm_return_sales__id_ from "@/modules/mes/routes/admin/mes-wm-return-sales/[id]/route"
+import * as route_admin_mes_wm_return_sales from "@/modules/mes/routes/admin/mes-wm-return-sales/route"
+import * as route_admin_mes_wm_return_vendor_detail__id_ from "@/modules/mes/routes/admin/mes-wm-return-vendor-detail/[id]/route"
+import * as route_admin_mes_wm_return_vendor_detail from "@/modules/mes/routes/admin/mes-wm-return-vendor-detail/route"
+import * as route_admin_mes_wm_return_vendor_line__id_ from "@/modules/mes/routes/admin/mes-wm-return-vendor-line/[id]/route"
+import * as route_admin_mes_wm_return_vendor_line from "@/modules/mes/routes/admin/mes-wm-return-vendor-line/route"
+import * as route_admin_mes_wm_return_vendor__id_ from "@/modules/mes/routes/admin/mes-wm-return-vendor/[id]/route"
+import * as route_admin_mes_wm_return_vendor from "@/modules/mes/routes/admin/mes-wm-return-vendor/route"
+import * as route_admin_mes_wm_sales_notice_line__id_ from "@/modules/mes/routes/admin/mes-wm-sales-notice-line/[id]/route"
+import * as route_admin_mes_wm_sales_notice_line from "@/modules/mes/routes/admin/mes-wm-sales-notice-line/route"
+import * as route_admin_mes_wm_sales_notice__id_ from "@/modules/mes/routes/admin/mes-wm-sales-notice/[id]/route"
+import * as route_admin_mes_wm_sales_notice from "@/modules/mes/routes/admin/mes-wm-sales-notice/route"
+import * as route_admin_mes_wm_sn__id_ from "@/modules/mes/routes/admin/mes-wm-sn/[id]/route"
+import * as route_admin_mes_wm_sn from "@/modules/mes/routes/admin/mes-wm-sn/route"
+import * as route_admin_mes_wm_stock_taking_plan_param__id_ from "@/modules/mes/routes/admin/mes-wm-stock-taking-plan-param/[id]/route"
+import * as route_admin_mes_wm_stock_taking_plan_param from "@/modules/mes/routes/admin/mes-wm-stock-taking-plan-param/route"
+import * as route_admin_mes_wm_stock_taking_plan__id_ from "@/modules/mes/routes/admin/mes-wm-stock-taking-plan/[id]/route"
+import * as route_admin_mes_wm_stock_taking_plan from "@/modules/mes/routes/admin/mes-wm-stock-taking-plan/route"
+import * as route_admin_mes_wm_stock_taking_task_line__id_ from "@/modules/mes/routes/admin/mes-wm-stock-taking-task-line/[id]/route"
+import * as route_admin_mes_wm_stock_taking_task_line from "@/modules/mes/routes/admin/mes-wm-stock-taking-task-line/route"
+import * as route_admin_mes_wm_stock_taking_task_result__id_ from "@/modules/mes/routes/admin/mes-wm-stock-taking-task-result/[id]/route"
+import * as route_admin_mes_wm_stock_taking_task_result from "@/modules/mes/routes/admin/mes-wm-stock-taking-task-result/route"
+import * as route_admin_mes_wm_stock_taking_task__id_ from "@/modules/mes/routes/admin/mes-wm-stock-taking-task/[id]/route"
+import * as route_admin_mes_wm_stock_taking_task from "@/modules/mes/routes/admin/mes-wm-stock-taking-task/route"
+import * as route_admin_mes_wm_transfer_detail__id_ from "@/modules/mes/routes/admin/mes-wm-transfer-detail/[id]/route"
+import * as route_admin_mes_wm_transfer_detail from "@/modules/mes/routes/admin/mes-wm-transfer-detail/route"
+import * as route_admin_mes_wm_transfer_line__id_ from "@/modules/mes/routes/admin/mes-wm-transfer-line/[id]/route"
+import * as route_admin_mes_wm_transfer_line from "@/modules/mes/routes/admin/mes-wm-transfer-line/route"
+import * as route_admin_mes_wm_transfer__id_ from "@/modules/mes/routes/admin/mes-wm-transfer/[id]/route"
+import * as route_admin_mes_wm_transfer from "@/modules/mes/routes/admin/mes-wm-transfer/route"
+import * as route_admin_mes_wm_warehouse_area__id_ from "@/modules/mes/routes/admin/mes-wm-warehouse-area/[id]/route"
+import * as route_admin_mes_wm_warehouse_area from "@/modules/mes/routes/admin/mes-wm-warehouse-area/route"
+import * as route_admin_mes_wm_warehouse_location__id_ from "@/modules/mes/routes/admin/mes-wm-warehouse-location/[id]/route"
+import * as route_admin_mes_wm_warehouse_location from "@/modules/mes/routes/admin/mes-wm-warehouse-location/route"
+import * as route_admin_mes_wm_warehouse__id_ from "@/modules/mes/routes/admin/mes-wm-warehouse/[id]/route"
+import * as route_admin_mes_wm_warehouse from "@/modules/mes/routes/admin/mes-wm-warehouse/route"
+import * as route_admin_work_orders__id_ from "@/modules/mes/routes/admin/work-orders/[id]/route"
+import * as route_admin_work_orders_report from "@/modules/mes/routes/admin/work-orders/report/route"
+import * as route_admin_work_orders from "@/modules/mes/routes/admin/work-orders/route"
+
+async function invoke(handler: (request: Request, context?: unknown) => Promise<Response> | Response, input: any) {
+  const url = new URL(`http://plugin.invalid${input.path}`)
+  for (const [key, value] of Object.entries(input.query ?? {})) url.searchParams.set(key, String(value))
+  const request = new Request(url, {
+    method: input.method,
+    headers: input.headers,
+    body: input.body === undefined ? undefined : JSON.stringify(input.body),
+  })
+  const response = await handler(request)
+  const text = await response.text()
+  let body: unknown = text
+  try { body = text ? JSON.parse(text) : null } catch { /* 非 JSON 原样返回 */ }
+  return { status: response.status, body }
+}
+
+export default definePlugin({
+  async setup(ctx) { ctx.logger.info("ready (merged)") },
+  async onHealth() { return { status: "ok" } },
+  async onShutdown() {},
+  routes: {
+    "admin:mes-cal-calendar/[id]:delete": (input: any) => invoke(route_admin_mes_cal_calendar__id_.DELETE, input),
+    "admin:mes-cal-calendar/[id]:get": (input: any) => invoke(route_admin_mes_cal_calendar__id_.GET, input),
+    "admin:mes-cal-calendar/[id]:put": (input: any) => invoke(route_admin_mes_cal_calendar__id_.PUT, input),
+    "admin:mes-cal-calendar:get": (input: any) => invoke(route_admin_mes_cal_calendar.GET, input),
+    "admin:mes-cal-calendar:post": (input: any) => invoke(route_admin_mes_cal_calendar.POST, input),
+    "admin:mes-cal-holiday/[id]:delete": (input: any) => invoke(route_admin_mes_cal_holiday__id_.DELETE, input),
+    "admin:mes-cal-holiday/[id]:get": (input: any) => invoke(route_admin_mes_cal_holiday__id_.GET, input),
+    "admin:mes-cal-holiday/[id]:put": (input: any) => invoke(route_admin_mes_cal_holiday__id_.PUT, input),
+    "admin:mes-cal-holiday:get": (input: any) => invoke(route_admin_mes_cal_holiday.GET, input),
+    "admin:mes-cal-holiday:post": (input: any) => invoke(route_admin_mes_cal_holiday.POST, input),
+    "admin:mes-cal-plan-shift/[id]:delete": (input: any) => invoke(route_admin_mes_cal_plan_shift__id_.DELETE, input),
+    "admin:mes-cal-plan-shift/[id]:get": (input: any) => invoke(route_admin_mes_cal_plan_shift__id_.GET, input),
+    "admin:mes-cal-plan-shift/[id]:put": (input: any) => invoke(route_admin_mes_cal_plan_shift__id_.PUT, input),
+    "admin:mes-cal-plan-shift:get": (input: any) => invoke(route_admin_mes_cal_plan_shift.GET, input),
+    "admin:mes-cal-plan-shift:post": (input: any) => invoke(route_admin_mes_cal_plan_shift.POST, input),
+    "admin:mes-cal-plan-team/[id]:delete": (input: any) => invoke(route_admin_mes_cal_plan_team__id_.DELETE, input),
+    "admin:mes-cal-plan-team/[id]:get": (input: any) => invoke(route_admin_mes_cal_plan_team__id_.GET, input),
+    "admin:mes-cal-plan-team/[id]:put": (input: any) => invoke(route_admin_mes_cal_plan_team__id_.PUT, input),
+    "admin:mes-cal-plan-team:get": (input: any) => invoke(route_admin_mes_cal_plan_team.GET, input),
+    "admin:mes-cal-plan-team:post": (input: any) => invoke(route_admin_mes_cal_plan_team.POST, input),
+    "admin:mes-cal-plan/[id]:delete": (input: any) => invoke(route_admin_mes_cal_plan__id_.DELETE, input),
+    "admin:mes-cal-plan/[id]:get": (input: any) => invoke(route_admin_mes_cal_plan__id_.GET, input),
+    "admin:mes-cal-plan/[id]:put": (input: any) => invoke(route_admin_mes_cal_plan__id_.PUT, input),
+    "admin:mes-cal-plan:get": (input: any) => invoke(route_admin_mes_cal_plan.GET, input),
+    "admin:mes-cal-plan:post": (input: any) => invoke(route_admin_mes_cal_plan.POST, input),
+    "admin:mes-cal-team-member/[id]:delete": (input: any) => invoke(route_admin_mes_cal_team_member__id_.DELETE, input),
+    "admin:mes-cal-team-member/[id]:get": (input: any) => invoke(route_admin_mes_cal_team_member__id_.GET, input),
+    "admin:mes-cal-team-member/[id]:put": (input: any) => invoke(route_admin_mes_cal_team_member__id_.PUT, input),
+    "admin:mes-cal-team-member:get": (input: any) => invoke(route_admin_mes_cal_team_member.GET, input),
+    "admin:mes-cal-team-member:post": (input: any) => invoke(route_admin_mes_cal_team_member.POST, input),
+    "admin:mes-cal-team-shift/[id]:delete": (input: any) => invoke(route_admin_mes_cal_team_shift__id_.DELETE, input),
+    "admin:mes-cal-team-shift/[id]:get": (input: any) => invoke(route_admin_mes_cal_team_shift__id_.GET, input),
+    "admin:mes-cal-team-shift/[id]:put": (input: any) => invoke(route_admin_mes_cal_team_shift__id_.PUT, input),
+    "admin:mes-cal-team-shift:get": (input: any) => invoke(route_admin_mes_cal_team_shift.GET, input),
+    "admin:mes-cal-team-shift:post": (input: any) => invoke(route_admin_mes_cal_team_shift.POST, input),
+    "admin:mes-cal-team/[id]:delete": (input: any) => invoke(route_admin_mes_cal_team__id_.DELETE, input),
+    "admin:mes-cal-team/[id]:get": (input: any) => invoke(route_admin_mes_cal_team__id_.GET, input),
+    "admin:mes-cal-team/[id]:put": (input: any) => invoke(route_admin_mes_cal_team__id_.PUT, input),
+    "admin:mes-cal-team:get": (input: any) => invoke(route_admin_mes_cal_team.GET, input),
+    "admin:mes-cal-team:post": (input: any) => invoke(route_admin_mes_cal_team.POST, input),
+    "admin:mes-dv-check-plan-machinery/[id]:delete": (input: any) => invoke(route_admin_mes_dv_check_plan_machinery__id_.DELETE, input),
+    "admin:mes-dv-check-plan-machinery/[id]:get": (input: any) => invoke(route_admin_mes_dv_check_plan_machinery__id_.GET, input),
+    "admin:mes-dv-check-plan-machinery/[id]:put": (input: any) => invoke(route_admin_mes_dv_check_plan_machinery__id_.PUT, input),
+    "admin:mes-dv-check-plan-machinery:get": (input: any) => invoke(route_admin_mes_dv_check_plan_machinery.GET, input),
+    "admin:mes-dv-check-plan-machinery:post": (input: any) => invoke(route_admin_mes_dv_check_plan_machinery.POST, input),
+    "admin:mes-dv-check-plan-subject/[id]:delete": (input: any) => invoke(route_admin_mes_dv_check_plan_subject__id_.DELETE, input),
+    "admin:mes-dv-check-plan-subject/[id]:get": (input: any) => invoke(route_admin_mes_dv_check_plan_subject__id_.GET, input),
+    "admin:mes-dv-check-plan-subject/[id]:put": (input: any) => invoke(route_admin_mes_dv_check_plan_subject__id_.PUT, input),
+    "admin:mes-dv-check-plan-subject:get": (input: any) => invoke(route_admin_mes_dv_check_plan_subject.GET, input),
+    "admin:mes-dv-check-plan-subject:post": (input: any) => invoke(route_admin_mes_dv_check_plan_subject.POST, input),
+    "admin:mes-dv-check-plan/[id]:delete": (input: any) => invoke(route_admin_mes_dv_check_plan__id_.DELETE, input),
+    "admin:mes-dv-check-plan/[id]:get": (input: any) => invoke(route_admin_mes_dv_check_plan__id_.GET, input),
+    "admin:mes-dv-check-plan/[id]:put": (input: any) => invoke(route_admin_mes_dv_check_plan__id_.PUT, input),
+    "admin:mes-dv-check-plan:get": (input: any) => invoke(route_admin_mes_dv_check_plan.GET, input),
+    "admin:mes-dv-check-plan:post": (input: any) => invoke(route_admin_mes_dv_check_plan.POST, input),
+    "admin:mes-dv-check-record-line/[id]:delete": (input: any) => invoke(route_admin_mes_dv_check_record_line__id_.DELETE, input),
+    "admin:mes-dv-check-record-line/[id]:get": (input: any) => invoke(route_admin_mes_dv_check_record_line__id_.GET, input),
+    "admin:mes-dv-check-record-line/[id]:put": (input: any) => invoke(route_admin_mes_dv_check_record_line__id_.PUT, input),
+    "admin:mes-dv-check-record-line:get": (input: any) => invoke(route_admin_mes_dv_check_record_line.GET, input),
+    "admin:mes-dv-check-record-line:post": (input: any) => invoke(route_admin_mes_dv_check_record_line.POST, input),
+    "admin:mes-dv-check-record/[id]:delete": (input: any) => invoke(route_admin_mes_dv_check_record__id_.DELETE, input),
+    "admin:mes-dv-check-record/[id]:get": (input: any) => invoke(route_admin_mes_dv_check_record__id_.GET, input),
+    "admin:mes-dv-check-record/[id]:put": (input: any) => invoke(route_admin_mes_dv_check_record__id_.PUT, input),
+    "admin:mes-dv-check-record:get": (input: any) => invoke(route_admin_mes_dv_check_record.GET, input),
+    "admin:mes-dv-check-record:post": (input: any) => invoke(route_admin_mes_dv_check_record.POST, input),
+    "admin:mes-dv-machinery-type/[id]:delete": (input: any) => invoke(route_admin_mes_dv_machinery_type__id_.DELETE, input),
+    "admin:mes-dv-machinery-type/[id]:get": (input: any) => invoke(route_admin_mes_dv_machinery_type__id_.GET, input),
+    "admin:mes-dv-machinery-type/[id]:put": (input: any) => invoke(route_admin_mes_dv_machinery_type__id_.PUT, input),
+    "admin:mes-dv-machinery-type:get": (input: any) => invoke(route_admin_mes_dv_machinery_type.GET, input),
+    "admin:mes-dv-machinery-type:post": (input: any) => invoke(route_admin_mes_dv_machinery_type.POST, input),
+    "admin:mes-dv-machinery/[id]:delete": (input: any) => invoke(route_admin_mes_dv_machinery__id_.DELETE, input),
+    "admin:mes-dv-machinery/[id]:get": (input: any) => invoke(route_admin_mes_dv_machinery__id_.GET, input),
+    "admin:mes-dv-machinery/[id]:put": (input: any) => invoke(route_admin_mes_dv_machinery__id_.PUT, input),
+    "admin:mes-dv-machinery:get": (input: any) => invoke(route_admin_mes_dv_machinery.GET, input),
+    "admin:mes-dv-machinery:post": (input: any) => invoke(route_admin_mes_dv_machinery.POST, input),
+    "admin:mes-dv-mainten-record-line/[id]:delete": (input: any) => invoke(route_admin_mes_dv_mainten_record_line__id_.DELETE, input),
+    "admin:mes-dv-mainten-record-line/[id]:get": (input: any) => invoke(route_admin_mes_dv_mainten_record_line__id_.GET, input),
+    "admin:mes-dv-mainten-record-line/[id]:put": (input: any) => invoke(route_admin_mes_dv_mainten_record_line__id_.PUT, input),
+    "admin:mes-dv-mainten-record-line:get": (input: any) => invoke(route_admin_mes_dv_mainten_record_line.GET, input),
+    "admin:mes-dv-mainten-record-line:post": (input: any) => invoke(route_admin_mes_dv_mainten_record_line.POST, input),
+    "admin:mes-dv-mainten-record/[id]:delete": (input: any) => invoke(route_admin_mes_dv_mainten_record__id_.DELETE, input),
+    "admin:mes-dv-mainten-record/[id]:get": (input: any) => invoke(route_admin_mes_dv_mainten_record__id_.GET, input),
+    "admin:mes-dv-mainten-record/[id]:put": (input: any) => invoke(route_admin_mes_dv_mainten_record__id_.PUT, input),
+    "admin:mes-dv-mainten-record:get": (input: any) => invoke(route_admin_mes_dv_mainten_record.GET, input),
+    "admin:mes-dv-mainten-record:post": (input: any) => invoke(route_admin_mes_dv_mainten_record.POST, input),
+    "admin:mes-dv-repair-line/[id]:delete": (input: any) => invoke(route_admin_mes_dv_repair_line__id_.DELETE, input),
+    "admin:mes-dv-repair-line/[id]:get": (input: any) => invoke(route_admin_mes_dv_repair_line__id_.GET, input),
+    "admin:mes-dv-repair-line/[id]:put": (input: any) => invoke(route_admin_mes_dv_repair_line__id_.PUT, input),
+    "admin:mes-dv-repair-line:get": (input: any) => invoke(route_admin_mes_dv_repair_line.GET, input),
+    "admin:mes-dv-repair-line:post": (input: any) => invoke(route_admin_mes_dv_repair_line.POST, input),
+    "admin:mes-dv-repair/[id]:delete": (input: any) => invoke(route_admin_mes_dv_repair__id_.DELETE, input),
+    "admin:mes-dv-repair/[id]:get": (input: any) => invoke(route_admin_mes_dv_repair__id_.GET, input),
+    "admin:mes-dv-repair/[id]:put": (input: any) => invoke(route_admin_mes_dv_repair__id_.PUT, input),
+    "admin:mes-dv-repair:get": (input: any) => invoke(route_admin_mes_dv_repair.GET, input),
+    "admin:mes-dv-repair:post": (input: any) => invoke(route_admin_mes_dv_repair.POST, input),
+    "admin:mes-dv-subject/[id]:delete": (input: any) => invoke(route_admin_mes_dv_subject__id_.DELETE, input),
+    "admin:mes-dv-subject/[id]:get": (input: any) => invoke(route_admin_mes_dv_subject__id_.GET, input),
+    "admin:mes-dv-subject/[id]:put": (input: any) => invoke(route_admin_mes_dv_subject__id_.PUT, input),
+    "admin:mes-dv-subject:get": (input: any) => invoke(route_admin_mes_dv_subject.GET, input),
+    "admin:mes-dv-subject:post": (input: any) => invoke(route_admin_mes_dv_subject.POST, input),
+    "admin:mes-home-statistics/[id]:delete": (input: any) => invoke(route_admin_mes_home_statistics__id_.DELETE, input),
+    "admin:mes-home-statistics/[id]:get": (input: any) => invoke(route_admin_mes_home_statistics__id_.GET, input),
+    "admin:mes-home-statistics/[id]:put": (input: any) => invoke(route_admin_mes_home_statistics__id_.PUT, input),
+    "admin:mes-home-statistics:get": (input: any) => invoke(route_admin_mes_home_statistics.GET, input),
+    "admin:mes-home-statistics:post": (input: any) => invoke(route_admin_mes_home_statistics.POST, input),
+    "admin:mes-md-auto-code-part/[id]:delete": (input: any) => invoke(route_admin_mes_md_auto_code_part__id_.DELETE, input),
+    "admin:mes-md-auto-code-part/[id]:get": (input: any) => invoke(route_admin_mes_md_auto_code_part__id_.GET, input),
+    "admin:mes-md-auto-code-part/[id]:put": (input: any) => invoke(route_admin_mes_md_auto_code_part__id_.PUT, input),
+    "admin:mes-md-auto-code-part:get": (input: any) => invoke(route_admin_mes_md_auto_code_part.GET, input),
+    "admin:mes-md-auto-code-part:post": (input: any) => invoke(route_admin_mes_md_auto_code_part.POST, input),
+    "admin:mes-md-auto-code-record/[id]:delete": (input: any) => invoke(route_admin_mes_md_auto_code_record__id_.DELETE, input),
+    "admin:mes-md-auto-code-record/[id]:get": (input: any) => invoke(route_admin_mes_md_auto_code_record__id_.GET, input),
+    "admin:mes-md-auto-code-record/[id]:put": (input: any) => invoke(route_admin_mes_md_auto_code_record__id_.PUT, input),
+    "admin:mes-md-auto-code-record:get": (input: any) => invoke(route_admin_mes_md_auto_code_record.GET, input),
+    "admin:mes-md-auto-code-record:post": (input: any) => invoke(route_admin_mes_md_auto_code_record.POST, input),
+    "admin:mes-md-auto-code-rule/[id]:delete": (input: any) => invoke(route_admin_mes_md_auto_code_rule__id_.DELETE, input),
+    "admin:mes-md-auto-code-rule/[id]:get": (input: any) => invoke(route_admin_mes_md_auto_code_rule__id_.GET, input),
+    "admin:mes-md-auto-code-rule/[id]:put": (input: any) => invoke(route_admin_mes_md_auto_code_rule__id_.PUT, input),
+    "admin:mes-md-auto-code-rule:get": (input: any) => invoke(route_admin_mes_md_auto_code_rule.GET, input),
+    "admin:mes-md-auto-code-rule:post": (input: any) => invoke(route_admin_mes_md_auto_code_rule.POST, input),
+    "admin:mes-md-client/[id]:delete": (input: any) => invoke(route_admin_mes_md_client__id_.DELETE, input),
+    "admin:mes-md-client/[id]:get": (input: any) => invoke(route_admin_mes_md_client__id_.GET, input),
+    "admin:mes-md-client/[id]:put": (input: any) => invoke(route_admin_mes_md_client__id_.PUT, input),
+    "admin:mes-md-client:get": (input: any) => invoke(route_admin_mes_md_client.GET, input),
+    "admin:mes-md-client:post": (input: any) => invoke(route_admin_mes_md_client.POST, input),
+    "admin:mes-md-item-batch-config/[id]:delete": (input: any) => invoke(route_admin_mes_md_item_batch_config__id_.DELETE, input),
+    "admin:mes-md-item-batch-config/[id]:get": (input: any) => invoke(route_admin_mes_md_item_batch_config__id_.GET, input),
+    "admin:mes-md-item-batch-config/[id]:put": (input: any) => invoke(route_admin_mes_md_item_batch_config__id_.PUT, input),
+    "admin:mes-md-item-batch-config:get": (input: any) => invoke(route_admin_mes_md_item_batch_config.GET, input),
+    "admin:mes-md-item-batch-config:post": (input: any) => invoke(route_admin_mes_md_item_batch_config.POST, input),
+    "admin:mes-md-item-type/[id]:delete": (input: any) => invoke(route_admin_mes_md_item_type__id_.DELETE, input),
+    "admin:mes-md-item-type/[id]:get": (input: any) => invoke(route_admin_mes_md_item_type__id_.GET, input),
+    "admin:mes-md-item-type/[id]:put": (input: any) => invoke(route_admin_mes_md_item_type__id_.PUT, input),
+    "admin:mes-md-item-type:get": (input: any) => invoke(route_admin_mes_md_item_type.GET, input),
+    "admin:mes-md-item-type:post": (input: any) => invoke(route_admin_mes_md_item_type.POST, input),
+    "admin:mes-md-item/[id]:delete": (input: any) => invoke(route_admin_mes_md_item__id_.DELETE, input),
+    "admin:mes-md-item/[id]:get": (input: any) => invoke(route_admin_mes_md_item__id_.GET, input),
+    "admin:mes-md-item/[id]:put": (input: any) => invoke(route_admin_mes_md_item__id_.PUT, input),
+    "admin:mes-md-item:get": (input: any) => invoke(route_admin_mes_md_item.GET, input),
+    "admin:mes-md-item:post": (input: any) => invoke(route_admin_mes_md_item.POST, input),
+    "admin:mes-md-product-bom/[id]:delete": (input: any) => invoke(route_admin_mes_md_product_bom__id_.DELETE, input),
+    "admin:mes-md-product-bom/[id]:get": (input: any) => invoke(route_admin_mes_md_product_bom__id_.GET, input),
+    "admin:mes-md-product-bom/[id]:put": (input: any) => invoke(route_admin_mes_md_product_bom__id_.PUT, input),
+    "admin:mes-md-product-bom:get": (input: any) => invoke(route_admin_mes_md_product_bom.GET, input),
+    "admin:mes-md-product-bom:post": (input: any) => invoke(route_admin_mes_md_product_bom.POST, input),
+    "admin:mes-md-product-sip/[id]:delete": (input: any) => invoke(route_admin_mes_md_product_sip__id_.DELETE, input),
+    "admin:mes-md-product-sip/[id]:get": (input: any) => invoke(route_admin_mes_md_product_sip__id_.GET, input),
+    "admin:mes-md-product-sip/[id]:put": (input: any) => invoke(route_admin_mes_md_product_sip__id_.PUT, input),
+    "admin:mes-md-product-sip:get": (input: any) => invoke(route_admin_mes_md_product_sip.GET, input),
+    "admin:mes-md-product-sip:post": (input: any) => invoke(route_admin_mes_md_product_sip.POST, input),
+    "admin:mes-md-product-sop/[id]:delete": (input: any) => invoke(route_admin_mes_md_product_sop__id_.DELETE, input),
+    "admin:mes-md-product-sop/[id]:get": (input: any) => invoke(route_admin_mes_md_product_sop__id_.GET, input),
+    "admin:mes-md-product-sop/[id]:put": (input: any) => invoke(route_admin_mes_md_product_sop__id_.PUT, input),
+    "admin:mes-md-product-sop:get": (input: any) => invoke(route_admin_mes_md_product_sop.GET, input),
+    "admin:mes-md-product-sop:post": (input: any) => invoke(route_admin_mes_md_product_sop.POST, input),
+    "admin:mes-md-unit-measure/[id]:delete": (input: any) => invoke(route_admin_mes_md_unit_measure__id_.DELETE, input),
+    "admin:mes-md-unit-measure/[id]:get": (input: any) => invoke(route_admin_mes_md_unit_measure__id_.GET, input),
+    "admin:mes-md-unit-measure/[id]:put": (input: any) => invoke(route_admin_mes_md_unit_measure__id_.PUT, input),
+    "admin:mes-md-unit-measure:get": (input: any) => invoke(route_admin_mes_md_unit_measure.GET, input),
+    "admin:mes-md-unit-measure:post": (input: any) => invoke(route_admin_mes_md_unit_measure.POST, input),
+    "admin:mes-md-vendor/[id]:delete": (input: any) => invoke(route_admin_mes_md_vendor__id_.DELETE, input),
+    "admin:mes-md-vendor/[id]:get": (input: any) => invoke(route_admin_mes_md_vendor__id_.GET, input),
+    "admin:mes-md-vendor/[id]:put": (input: any) => invoke(route_admin_mes_md_vendor__id_.PUT, input),
+    "admin:mes-md-vendor:get": (input: any) => invoke(route_admin_mes_md_vendor.GET, input),
+    "admin:mes-md-vendor:post": (input: any) => invoke(route_admin_mes_md_vendor.POST, input),
+    "admin:mes-md-workshop/[id]:delete": (input: any) => invoke(route_admin_mes_md_workshop__id_.DELETE, input),
+    "admin:mes-md-workshop/[id]:get": (input: any) => invoke(route_admin_mes_md_workshop__id_.GET, input),
+    "admin:mes-md-workshop/[id]:put": (input: any) => invoke(route_admin_mes_md_workshop__id_.PUT, input),
+    "admin:mes-md-workshop:get": (input: any) => invoke(route_admin_mes_md_workshop.GET, input),
+    "admin:mes-md-workshop:post": (input: any) => invoke(route_admin_mes_md_workshop.POST, input),
+    "admin:mes-md-workstation-machine/[id]:delete": (input: any) => invoke(route_admin_mes_md_workstation_machine__id_.DELETE, input),
+    "admin:mes-md-workstation-machine/[id]:get": (input: any) => invoke(route_admin_mes_md_workstation_machine__id_.GET, input),
+    "admin:mes-md-workstation-machine/[id]:put": (input: any) => invoke(route_admin_mes_md_workstation_machine__id_.PUT, input),
+    "admin:mes-md-workstation-machine:get": (input: any) => invoke(route_admin_mes_md_workstation_machine.GET, input),
+    "admin:mes-md-workstation-machine:post": (input: any) => invoke(route_admin_mes_md_workstation_machine.POST, input),
+    "admin:mes-md-workstation-tool/[id]:delete": (input: any) => invoke(route_admin_mes_md_workstation_tool__id_.DELETE, input),
+    "admin:mes-md-workstation-tool/[id]:get": (input: any) => invoke(route_admin_mes_md_workstation_tool__id_.GET, input),
+    "admin:mes-md-workstation-tool/[id]:put": (input: any) => invoke(route_admin_mes_md_workstation_tool__id_.PUT, input),
+    "admin:mes-md-workstation-tool:get": (input: any) => invoke(route_admin_mes_md_workstation_tool.GET, input),
+    "admin:mes-md-workstation-tool:post": (input: any) => invoke(route_admin_mes_md_workstation_tool.POST, input),
+    "admin:mes-md-workstation-worker/[id]:delete": (input: any) => invoke(route_admin_mes_md_workstation_worker__id_.DELETE, input),
+    "admin:mes-md-workstation-worker/[id]:get": (input: any) => invoke(route_admin_mes_md_workstation_worker__id_.GET, input),
+    "admin:mes-md-workstation-worker/[id]:put": (input: any) => invoke(route_admin_mes_md_workstation_worker__id_.PUT, input),
+    "admin:mes-md-workstation-worker:get": (input: any) => invoke(route_admin_mes_md_workstation_worker.GET, input),
+    "admin:mes-md-workstation-worker:post": (input: any) => invoke(route_admin_mes_md_workstation_worker.POST, input),
+    "admin:mes-md-workstation/[id]:delete": (input: any) => invoke(route_admin_mes_md_workstation__id_.DELETE, input),
+    "admin:mes-md-workstation/[id]:get": (input: any) => invoke(route_admin_mes_md_workstation__id_.GET, input),
+    "admin:mes-md-workstation/[id]:put": (input: any) => invoke(route_admin_mes_md_workstation__id_.PUT, input),
+    "admin:mes-md-workstation:get": (input: any) => invoke(route_admin_mes_md_workstation.GET, input),
+    "admin:mes-md-workstation:post": (input: any) => invoke(route_admin_mes_md_workstation.POST, input),
+    "admin:mes-pro-andon-config/[id]:delete": (input: any) => invoke(route_admin_mes_pro_andon_config__id_.DELETE, input),
+    "admin:mes-pro-andon-config/[id]:get": (input: any) => invoke(route_admin_mes_pro_andon_config__id_.GET, input),
+    "admin:mes-pro-andon-config/[id]:put": (input: any) => invoke(route_admin_mes_pro_andon_config__id_.PUT, input),
+    "admin:mes-pro-andon-config:get": (input: any) => invoke(route_admin_mes_pro_andon_config.GET, input),
+    "admin:mes-pro-andon-config:post": (input: any) => invoke(route_admin_mes_pro_andon_config.POST, input),
+    "admin:mes-pro-andon-record/[id]:delete": (input: any) => invoke(route_admin_mes_pro_andon_record__id_.DELETE, input),
+    "admin:mes-pro-andon-record/[id]:get": (input: any) => invoke(route_admin_mes_pro_andon_record__id_.GET, input),
+    "admin:mes-pro-andon-record/[id]:put": (input: any) => invoke(route_admin_mes_pro_andon_record__id_.PUT, input),
+    "admin:mes-pro-andon-record:get": (input: any) => invoke(route_admin_mes_pro_andon_record.GET, input),
+    "admin:mes-pro-andon-record:post": (input: any) => invoke(route_admin_mes_pro_andon_record.POST, input),
+    "admin:mes-pro-card-process/[id]:delete": (input: any) => invoke(route_admin_mes_pro_card_process__id_.DELETE, input),
+    "admin:mes-pro-card-process/[id]:get": (input: any) => invoke(route_admin_mes_pro_card_process__id_.GET, input),
+    "admin:mes-pro-card-process/[id]:put": (input: any) => invoke(route_admin_mes_pro_card_process__id_.PUT, input),
+    "admin:mes-pro-card-process:get": (input: any) => invoke(route_admin_mes_pro_card_process.GET, input),
+    "admin:mes-pro-card-process:post": (input: any) => invoke(route_admin_mes_pro_card_process.POST, input),
+    "admin:mes-pro-card/[id]:delete": (input: any) => invoke(route_admin_mes_pro_card__id_.DELETE, input),
+    "admin:mes-pro-card/[id]:get": (input: any) => invoke(route_admin_mes_pro_card__id_.GET, input),
+    "admin:mes-pro-card/[id]:put": (input: any) => invoke(route_admin_mes_pro_card__id_.PUT, input),
+    "admin:mes-pro-card:get": (input: any) => invoke(route_admin_mes_pro_card.GET, input),
+    "admin:mes-pro-card:post": (input: any) => invoke(route_admin_mes_pro_card.POST, input),
+    "admin:mes-pro-feedback/[id]:delete": (input: any) => invoke(route_admin_mes_pro_feedback__id_.DELETE, input),
+    "admin:mes-pro-feedback/[id]:get": (input: any) => invoke(route_admin_mes_pro_feedback__id_.GET, input),
+    "admin:mes-pro-feedback/[id]:put": (input: any) => invoke(route_admin_mes_pro_feedback__id_.PUT, input),
+    "admin:mes-pro-feedback:get": (input: any) => invoke(route_admin_mes_pro_feedback.GET, input),
+    "admin:mes-pro-feedback:post": (input: any) => invoke(route_admin_mes_pro_feedback.POST, input),
+    "admin:mes-pro-process-content/[id]:delete": (input: any) => invoke(route_admin_mes_pro_process_content__id_.DELETE, input),
+    "admin:mes-pro-process-content/[id]:get": (input: any) => invoke(route_admin_mes_pro_process_content__id_.GET, input),
+    "admin:mes-pro-process-content/[id]:put": (input: any) => invoke(route_admin_mes_pro_process_content__id_.PUT, input),
+    "admin:mes-pro-process-content:get": (input: any) => invoke(route_admin_mes_pro_process_content.GET, input),
+    "admin:mes-pro-process-content:post": (input: any) => invoke(route_admin_mes_pro_process_content.POST, input),
+    "admin:mes-pro-process/[id]:delete": (input: any) => invoke(route_admin_mes_pro_process__id_.DELETE, input),
+    "admin:mes-pro-process/[id]:get": (input: any) => invoke(route_admin_mes_pro_process__id_.GET, input),
+    "admin:mes-pro-process/[id]:put": (input: any) => invoke(route_admin_mes_pro_process__id_.PUT, input),
+    "admin:mes-pro-process:get": (input: any) => invoke(route_admin_mes_pro_process.GET, input),
+    "admin:mes-pro-process:post": (input: any) => invoke(route_admin_mes_pro_process.POST, input),
+    "admin:mes-pro-route-process/[id]:delete": (input: any) => invoke(route_admin_mes_pro_route_process__id_.DELETE, input),
+    "admin:mes-pro-route-process/[id]:get": (input: any) => invoke(route_admin_mes_pro_route_process__id_.GET, input),
+    "admin:mes-pro-route-process/[id]:put": (input: any) => invoke(route_admin_mes_pro_route_process__id_.PUT, input),
+    "admin:mes-pro-route-process:get": (input: any) => invoke(route_admin_mes_pro_route_process.GET, input),
+    "admin:mes-pro-route-process:post": (input: any) => invoke(route_admin_mes_pro_route_process.POST, input),
+    "admin:mes-pro-route-product-bom/[id]:delete": (input: any) => invoke(route_admin_mes_pro_route_product_bom__id_.DELETE, input),
+    "admin:mes-pro-route-product-bom/[id]:get": (input: any) => invoke(route_admin_mes_pro_route_product_bom__id_.GET, input),
+    "admin:mes-pro-route-product-bom/[id]:put": (input: any) => invoke(route_admin_mes_pro_route_product_bom__id_.PUT, input),
+    "admin:mes-pro-route-product-bom:get": (input: any) => invoke(route_admin_mes_pro_route_product_bom.GET, input),
+    "admin:mes-pro-route-product-bom:post": (input: any) => invoke(route_admin_mes_pro_route_product_bom.POST, input),
+    "admin:mes-pro-route-product/[id]:delete": (input: any) => invoke(route_admin_mes_pro_route_product__id_.DELETE, input),
+    "admin:mes-pro-route-product/[id]:get": (input: any) => invoke(route_admin_mes_pro_route_product__id_.GET, input),
+    "admin:mes-pro-route-product/[id]:put": (input: any) => invoke(route_admin_mes_pro_route_product__id_.PUT, input),
+    "admin:mes-pro-route-product:get": (input: any) => invoke(route_admin_mes_pro_route_product.GET, input),
+    "admin:mes-pro-route-product:post": (input: any) => invoke(route_admin_mes_pro_route_product.POST, input),
+    "admin:mes-pro-route/[id]:delete": (input: any) => invoke(route_admin_mes_pro_route__id_.DELETE, input),
+    "admin:mes-pro-route/[id]:get": (input: any) => invoke(route_admin_mes_pro_route__id_.GET, input),
+    "admin:mes-pro-route/[id]:put": (input: any) => invoke(route_admin_mes_pro_route__id_.PUT, input),
+    "admin:mes-pro-route:get": (input: any) => invoke(route_admin_mes_pro_route.GET, input),
+    "admin:mes-pro-route:post": (input: any) => invoke(route_admin_mes_pro_route.POST, input),
+    "admin:mes-pro-task-issue/[id]:delete": (input: any) => invoke(route_admin_mes_pro_task_issue__id_.DELETE, input),
+    "admin:mes-pro-task-issue/[id]:get": (input: any) => invoke(route_admin_mes_pro_task_issue__id_.GET, input),
+    "admin:mes-pro-task-issue/[id]:put": (input: any) => invoke(route_admin_mes_pro_task_issue__id_.PUT, input),
+    "admin:mes-pro-task-issue:get": (input: any) => invoke(route_admin_mes_pro_task_issue.GET, input),
+    "admin:mes-pro-task-issue:post": (input: any) => invoke(route_admin_mes_pro_task_issue.POST, input),
+    "admin:mes-pro-task/[id]:delete": (input: any) => invoke(route_admin_mes_pro_task__id_.DELETE, input),
+    "admin:mes-pro-task/[id]:get": (input: any) => invoke(route_admin_mes_pro_task__id_.GET, input),
+    "admin:mes-pro-task/[id]:put": (input: any) => invoke(route_admin_mes_pro_task__id_.PUT, input),
+    "admin:mes-pro-task:get": (input: any) => invoke(route_admin_mes_pro_task.GET, input),
+    "admin:mes-pro-task:post": (input: any) => invoke(route_admin_mes_pro_task.POST, input),
+    "admin:mes-pro-work-order-bom/[id]:delete": (input: any) => invoke(route_admin_mes_pro_work_order_bom__id_.DELETE, input),
+    "admin:mes-pro-work-order-bom/[id]:get": (input: any) => invoke(route_admin_mes_pro_work_order_bom__id_.GET, input),
+    "admin:mes-pro-work-order-bom/[id]:put": (input: any) => invoke(route_admin_mes_pro_work_order_bom__id_.PUT, input),
+    "admin:mes-pro-work-order-bom:get": (input: any) => invoke(route_admin_mes_pro_work_order_bom.GET, input),
+    "admin:mes-pro-work-order-bom:post": (input: any) => invoke(route_admin_mes_pro_work_order_bom.POST, input),
+    "admin:mes-pro-work-order/[id]:delete": (input: any) => invoke(route_admin_mes_pro_work_order__id_.DELETE, input),
+    "admin:mes-pro-work-order/[id]:get": (input: any) => invoke(route_admin_mes_pro_work_order__id_.GET, input),
+    "admin:mes-pro-work-order/[id]:put": (input: any) => invoke(route_admin_mes_pro_work_order__id_.PUT, input),
+    "admin:mes-pro-work-order:get": (input: any) => invoke(route_admin_mes_pro_work_order.GET, input),
+    "admin:mes-pro-work-order:post": (input: any) => invoke(route_admin_mes_pro_work_order.POST, input),
+    "admin:mes-pro-work-record/[id]:delete": (input: any) => invoke(route_admin_mes_pro_work_record__id_.DELETE, input),
+    "admin:mes-pro-work-record/[id]:get": (input: any) => invoke(route_admin_mes_pro_work_record__id_.GET, input),
+    "admin:mes-pro-work-record/[id]:put": (input: any) => invoke(route_admin_mes_pro_work_record__id_.PUT, input),
+    "admin:mes-pro-work-record:get": (input: any) => invoke(route_admin_mes_pro_work_record.GET, input),
+    "admin:mes-pro-work-record:post": (input: any) => invoke(route_admin_mes_pro_work_record.POST, input),
+    "admin:mes-qc-defect-record/[id]:delete": (input: any) => invoke(route_admin_mes_qc_defect_record__id_.DELETE, input),
+    "admin:mes-qc-defect-record/[id]:get": (input: any) => invoke(route_admin_mes_qc_defect_record__id_.GET, input),
+    "admin:mes-qc-defect-record/[id]:put": (input: any) => invoke(route_admin_mes_qc_defect_record__id_.PUT, input),
+    "admin:mes-qc-defect-record:get": (input: any) => invoke(route_admin_mes_qc_defect_record.GET, input),
+    "admin:mes-qc-defect-record:post": (input: any) => invoke(route_admin_mes_qc_defect_record.POST, input),
+    "admin:mes-qc-defect/[id]:delete": (input: any) => invoke(route_admin_mes_qc_defect__id_.DELETE, input),
+    "admin:mes-qc-defect/[id]:get": (input: any) => invoke(route_admin_mes_qc_defect__id_.GET, input),
+    "admin:mes-qc-defect/[id]:put": (input: any) => invoke(route_admin_mes_qc_defect__id_.PUT, input),
+    "admin:mes-qc-defect:get": (input: any) => invoke(route_admin_mes_qc_defect.GET, input),
+    "admin:mes-qc-defect:post": (input: any) => invoke(route_admin_mes_qc_defect.POST, input),
+    "admin:mes-qc-indicator-result/[id]:delete": (input: any) => invoke(route_admin_mes_qc_indicator_result__id_.DELETE, input),
+    "admin:mes-qc-indicator-result/[id]:get": (input: any) => invoke(route_admin_mes_qc_indicator_result__id_.GET, input),
+    "admin:mes-qc-indicator-result/[id]:put": (input: any) => invoke(route_admin_mes_qc_indicator_result__id_.PUT, input),
+    "admin:mes-qc-indicator-result:get": (input: any) => invoke(route_admin_mes_qc_indicator_result.GET, input),
+    "admin:mes-qc-indicator-result:post": (input: any) => invoke(route_admin_mes_qc_indicator_result.POST, input),
+    "admin:mes-qc-indicator/[id]:delete": (input: any) => invoke(route_admin_mes_qc_indicator__id_.DELETE, input),
+    "admin:mes-qc-indicator/[id]:get": (input: any) => invoke(route_admin_mes_qc_indicator__id_.GET, input),
+    "admin:mes-qc-indicator/[id]:put": (input: any) => invoke(route_admin_mes_qc_indicator__id_.PUT, input),
+    "admin:mes-qc-indicator:get": (input: any) => invoke(route_admin_mes_qc_indicator.GET, input),
+    "admin:mes-qc-indicator:post": (input: any) => invoke(route_admin_mes_qc_indicator.POST, input),
+    "admin:mes-qc-ipqc-line/[id]:delete": (input: any) => invoke(route_admin_mes_qc_ipqc_line__id_.DELETE, input),
+    "admin:mes-qc-ipqc-line/[id]:get": (input: any) => invoke(route_admin_mes_qc_ipqc_line__id_.GET, input),
+    "admin:mes-qc-ipqc-line/[id]:put": (input: any) => invoke(route_admin_mes_qc_ipqc_line__id_.PUT, input),
+    "admin:mes-qc-ipqc-line:get": (input: any) => invoke(route_admin_mes_qc_ipqc_line.GET, input),
+    "admin:mes-qc-ipqc-line:post": (input: any) => invoke(route_admin_mes_qc_ipqc_line.POST, input),
+    "admin:mes-qc-ipqc/[id]:delete": (input: any) => invoke(route_admin_mes_qc_ipqc__id_.DELETE, input),
+    "admin:mes-qc-ipqc/[id]:get": (input: any) => invoke(route_admin_mes_qc_ipqc__id_.GET, input),
+    "admin:mes-qc-ipqc/[id]:put": (input: any) => invoke(route_admin_mes_qc_ipqc__id_.PUT, input),
+    "admin:mes-qc-ipqc:get": (input: any) => invoke(route_admin_mes_qc_ipqc.GET, input),
+    "admin:mes-qc-ipqc:post": (input: any) => invoke(route_admin_mes_qc_ipqc.POST, input),
+    "admin:mes-qc-iqc-line/[id]:delete": (input: any) => invoke(route_admin_mes_qc_iqc_line__id_.DELETE, input),
+    "admin:mes-qc-iqc-line/[id]:get": (input: any) => invoke(route_admin_mes_qc_iqc_line__id_.GET, input),
+    "admin:mes-qc-iqc-line/[id]:put": (input: any) => invoke(route_admin_mes_qc_iqc_line__id_.PUT, input),
+    "admin:mes-qc-iqc-line:get": (input: any) => invoke(route_admin_mes_qc_iqc_line.GET, input),
+    "admin:mes-qc-iqc-line:post": (input: any) => invoke(route_admin_mes_qc_iqc_line.POST, input),
+    "admin:mes-qc-iqc/[id]:delete": (input: any) => invoke(route_admin_mes_qc_iqc__id_.DELETE, input),
+    "admin:mes-qc-iqc/[id]:get": (input: any) => invoke(route_admin_mes_qc_iqc__id_.GET, input),
+    "admin:mes-qc-iqc/[id]:put": (input: any) => invoke(route_admin_mes_qc_iqc__id_.PUT, input),
+    "admin:mes-qc-iqc:get": (input: any) => invoke(route_admin_mes_qc_iqc.GET, input),
+    "admin:mes-qc-iqc:post": (input: any) => invoke(route_admin_mes_qc_iqc.POST, input),
+    "admin:mes-qc-oqc-line/[id]:delete": (input: any) => invoke(route_admin_mes_qc_oqc_line__id_.DELETE, input),
+    "admin:mes-qc-oqc-line/[id]:get": (input: any) => invoke(route_admin_mes_qc_oqc_line__id_.GET, input),
+    "admin:mes-qc-oqc-line/[id]:put": (input: any) => invoke(route_admin_mes_qc_oqc_line__id_.PUT, input),
+    "admin:mes-qc-oqc-line:get": (input: any) => invoke(route_admin_mes_qc_oqc_line.GET, input),
+    "admin:mes-qc-oqc-line:post": (input: any) => invoke(route_admin_mes_qc_oqc_line.POST, input),
+    "admin:mes-qc-oqc/[id]:delete": (input: any) => invoke(route_admin_mes_qc_oqc__id_.DELETE, input),
+    "admin:mes-qc-oqc/[id]:get": (input: any) => invoke(route_admin_mes_qc_oqc__id_.GET, input),
+    "admin:mes-qc-oqc/[id]:put": (input: any) => invoke(route_admin_mes_qc_oqc__id_.PUT, input),
+    "admin:mes-qc-oqc:get": (input: any) => invoke(route_admin_mes_qc_oqc.GET, input),
+    "admin:mes-qc-oqc:post": (input: any) => invoke(route_admin_mes_qc_oqc.POST, input),
+    "admin:mes-qc-pending-inspect/[id]:delete": (input: any) => invoke(route_admin_mes_qc_pending_inspect__id_.DELETE, input),
+    "admin:mes-qc-pending-inspect/[id]:get": (input: any) => invoke(route_admin_mes_qc_pending_inspect__id_.GET, input),
+    "admin:mes-qc-pending-inspect/[id]:put": (input: any) => invoke(route_admin_mes_qc_pending_inspect__id_.PUT, input),
+    "admin:mes-qc-pending-inspect:get": (input: any) => invoke(route_admin_mes_qc_pending_inspect.GET, input),
+    "admin:mes-qc-pending-inspect:post": (input: any) => invoke(route_admin_mes_qc_pending_inspect.POST, input),
+    "admin:mes-qc-rqc-line/[id]:delete": (input: any) => invoke(route_admin_mes_qc_rqc_line__id_.DELETE, input),
+    "admin:mes-qc-rqc-line/[id]:get": (input: any) => invoke(route_admin_mes_qc_rqc_line__id_.GET, input),
+    "admin:mes-qc-rqc-line/[id]:put": (input: any) => invoke(route_admin_mes_qc_rqc_line__id_.PUT, input),
+    "admin:mes-qc-rqc-line:get": (input: any) => invoke(route_admin_mes_qc_rqc_line.GET, input),
+    "admin:mes-qc-rqc-line:post": (input: any) => invoke(route_admin_mes_qc_rqc_line.POST, input),
+    "admin:mes-qc-rqc/[id]:delete": (input: any) => invoke(route_admin_mes_qc_rqc__id_.DELETE, input),
+    "admin:mes-qc-rqc/[id]:get": (input: any) => invoke(route_admin_mes_qc_rqc__id_.GET, input),
+    "admin:mes-qc-rqc/[id]:put": (input: any) => invoke(route_admin_mes_qc_rqc__id_.PUT, input),
+    "admin:mes-qc-rqc:get": (input: any) => invoke(route_admin_mes_qc_rqc.GET, input),
+    "admin:mes-qc-rqc:post": (input: any) => invoke(route_admin_mes_qc_rqc.POST, input),
+    "admin:mes-qc-template-indicator/[id]:delete": (input: any) => invoke(route_admin_mes_qc_template_indicator__id_.DELETE, input),
+    "admin:mes-qc-template-indicator/[id]:get": (input: any) => invoke(route_admin_mes_qc_template_indicator__id_.GET, input),
+    "admin:mes-qc-template-indicator/[id]:put": (input: any) => invoke(route_admin_mes_qc_template_indicator__id_.PUT, input),
+    "admin:mes-qc-template-indicator:get": (input: any) => invoke(route_admin_mes_qc_template_indicator.GET, input),
+    "admin:mes-qc-template-indicator:post": (input: any) => invoke(route_admin_mes_qc_template_indicator.POST, input),
+    "admin:mes-qc-template-item/[id]:delete": (input: any) => invoke(route_admin_mes_qc_template_item__id_.DELETE, input),
+    "admin:mes-qc-template-item/[id]:get": (input: any) => invoke(route_admin_mes_qc_template_item__id_.GET, input),
+    "admin:mes-qc-template-item/[id]:put": (input: any) => invoke(route_admin_mes_qc_template_item__id_.PUT, input),
+    "admin:mes-qc-template-item:get": (input: any) => invoke(route_admin_mes_qc_template_item.GET, input),
+    "admin:mes-qc-template-item:post": (input: any) => invoke(route_admin_mes_qc_template_item.POST, input),
+    "admin:mes-qc-template/[id]:delete": (input: any) => invoke(route_admin_mes_qc_template__id_.DELETE, input),
+    "admin:mes-qc-template/[id]:get": (input: any) => invoke(route_admin_mes_qc_template__id_.GET, input),
+    "admin:mes-qc-template/[id]:put": (input: any) => invoke(route_admin_mes_qc_template__id_.PUT, input),
+    "admin:mes-qc-template:get": (input: any) => invoke(route_admin_mes_qc_template.GET, input),
+    "admin:mes-qc-template:post": (input: any) => invoke(route_admin_mes_qc_template.POST, input),
+    "admin:mes-tm-tool-type/[id]:delete": (input: any) => invoke(route_admin_mes_tm_tool_type__id_.DELETE, input),
+    "admin:mes-tm-tool-type/[id]:get": (input: any) => invoke(route_admin_mes_tm_tool_type__id_.GET, input),
+    "admin:mes-tm-tool-type/[id]:put": (input: any) => invoke(route_admin_mes_tm_tool_type__id_.PUT, input),
+    "admin:mes-tm-tool-type:get": (input: any) => invoke(route_admin_mes_tm_tool_type.GET, input),
+    "admin:mes-tm-tool-type:post": (input: any) => invoke(route_admin_mes_tm_tool_type.POST, input),
+    "admin:mes-tm-tool/[id]:delete": (input: any) => invoke(route_admin_mes_tm_tool__id_.DELETE, input),
+    "admin:mes-tm-tool/[id]:get": (input: any) => invoke(route_admin_mes_tm_tool__id_.GET, input),
+    "admin:mes-tm-tool/[id]:put": (input: any) => invoke(route_admin_mes_tm_tool__id_.PUT, input),
+    "admin:mes-tm-tool:get": (input: any) => invoke(route_admin_mes_tm_tool.GET, input),
+    "admin:mes-tm-tool:post": (input: any) => invoke(route_admin_mes_tm_tool.POST, input),
+    "admin:mes-wm-arrival-notice-line/[id]:delete": (input: any) => invoke(route_admin_mes_wm_arrival_notice_line__id_.DELETE, input),
+    "admin:mes-wm-arrival-notice-line/[id]:get": (input: any) => invoke(route_admin_mes_wm_arrival_notice_line__id_.GET, input),
+    "admin:mes-wm-arrival-notice-line/[id]:put": (input: any) => invoke(route_admin_mes_wm_arrival_notice_line__id_.PUT, input),
+    "admin:mes-wm-arrival-notice-line:get": (input: any) => invoke(route_admin_mes_wm_arrival_notice_line.GET, input),
+    "admin:mes-wm-arrival-notice-line:post": (input: any) => invoke(route_admin_mes_wm_arrival_notice_line.POST, input),
+    "admin:mes-wm-arrival-notice/[id]:delete": (input: any) => invoke(route_admin_mes_wm_arrival_notice__id_.DELETE, input),
+    "admin:mes-wm-arrival-notice/[id]:get": (input: any) => invoke(route_admin_mes_wm_arrival_notice__id_.GET, input),
+    "admin:mes-wm-arrival-notice/[id]:put": (input: any) => invoke(route_admin_mes_wm_arrival_notice__id_.PUT, input),
+    "admin:mes-wm-arrival-notice:get": (input: any) => invoke(route_admin_mes_wm_arrival_notice.GET, input),
+    "admin:mes-wm-arrival-notice:post": (input: any) => invoke(route_admin_mes_wm_arrival_notice.POST, input),
+    "admin:mes-wm-barcode-config/[id]:delete": (input: any) => invoke(route_admin_mes_wm_barcode_config__id_.DELETE, input),
+    "admin:mes-wm-barcode-config/[id]:get": (input: any) => invoke(route_admin_mes_wm_barcode_config__id_.GET, input),
+    "admin:mes-wm-barcode-config/[id]:put": (input: any) => invoke(route_admin_mes_wm_barcode_config__id_.PUT, input),
+    "admin:mes-wm-barcode-config:get": (input: any) => invoke(route_admin_mes_wm_barcode_config.GET, input),
+    "admin:mes-wm-barcode-config:post": (input: any) => invoke(route_admin_mes_wm_barcode_config.POST, input),
+    "admin:mes-wm-barcode/[id]:delete": (input: any) => invoke(route_admin_mes_wm_barcode__id_.DELETE, input),
+    "admin:mes-wm-barcode/[id]:get": (input: any) => invoke(route_admin_mes_wm_barcode__id_.GET, input),
+    "admin:mes-wm-barcode/[id]:put": (input: any) => invoke(route_admin_mes_wm_barcode__id_.PUT, input),
+    "admin:mes-wm-barcode:get": (input: any) => invoke(route_admin_mes_wm_barcode.GET, input),
+    "admin:mes-wm-barcode:post": (input: any) => invoke(route_admin_mes_wm_barcode.POST, input),
+    "admin:mes-wm-batch/[id]:delete": (input: any) => invoke(route_admin_mes_wm_batch__id_.DELETE, input),
+    "admin:mes-wm-batch/[id]:get": (input: any) => invoke(route_admin_mes_wm_batch__id_.GET, input),
+    "admin:mes-wm-batch/[id]:put": (input: any) => invoke(route_admin_mes_wm_batch__id_.PUT, input),
+    "admin:mes-wm-batch:get": (input: any) => invoke(route_admin_mes_wm_batch.GET, input),
+    "admin:mes-wm-batch:post": (input: any) => invoke(route_admin_mes_wm_batch.POST, input),
+    "admin:mes-wm-item-consume-line/[id]:delete": (input: any) => invoke(route_admin_mes_wm_item_consume_line__id_.DELETE, input),
+    "admin:mes-wm-item-consume-line/[id]:get": (input: any) => invoke(route_admin_mes_wm_item_consume_line__id_.GET, input),
+    "admin:mes-wm-item-consume-line/[id]:put": (input: any) => invoke(route_admin_mes_wm_item_consume_line__id_.PUT, input),
+    "admin:mes-wm-item-consume-line:get": (input: any) => invoke(route_admin_mes_wm_item_consume_line.GET, input),
+    "admin:mes-wm-item-consume-line:post": (input: any) => invoke(route_admin_mes_wm_item_consume_line.POST, input),
+    "admin:mes-wm-item-receipt-detail/[id]:delete": (input: any) => invoke(route_admin_mes_wm_item_receipt_detail__id_.DELETE, input),
+    "admin:mes-wm-item-receipt-detail/[id]:get": (input: any) => invoke(route_admin_mes_wm_item_receipt_detail__id_.GET, input),
+    "admin:mes-wm-item-receipt-detail/[id]:put": (input: any) => invoke(route_admin_mes_wm_item_receipt_detail__id_.PUT, input),
+    "admin:mes-wm-item-receipt-detail:get": (input: any) => invoke(route_admin_mes_wm_item_receipt_detail.GET, input),
+    "admin:mes-wm-item-receipt-detail:post": (input: any) => invoke(route_admin_mes_wm_item_receipt_detail.POST, input),
+    "admin:mes-wm-item-receipt-line/[id]:delete": (input: any) => invoke(route_admin_mes_wm_item_receipt_line__id_.DELETE, input),
+    "admin:mes-wm-item-receipt-line/[id]:get": (input: any) => invoke(route_admin_mes_wm_item_receipt_line__id_.GET, input),
+    "admin:mes-wm-item-receipt-line/[id]:put": (input: any) => invoke(route_admin_mes_wm_item_receipt_line__id_.PUT, input),
+    "admin:mes-wm-item-receipt-line:get": (input: any) => invoke(route_admin_mes_wm_item_receipt_line.GET, input),
+    "admin:mes-wm-item-receipt-line:post": (input: any) => invoke(route_admin_mes_wm_item_receipt_line.POST, input),
+    "admin:mes-wm-item-receipt/[id]:delete": (input: any) => invoke(route_admin_mes_wm_item_receipt__id_.DELETE, input),
+    "admin:mes-wm-item-receipt/[id]:get": (input: any) => invoke(route_admin_mes_wm_item_receipt__id_.GET, input),
+    "admin:mes-wm-item-receipt/[id]:put": (input: any) => invoke(route_admin_mes_wm_item_receipt__id_.PUT, input),
+    "admin:mes-wm-item-receipt:get": (input: any) => invoke(route_admin_mes_wm_item_receipt.GET, input),
+    "admin:mes-wm-item-receipt:post": (input: any) => invoke(route_admin_mes_wm_item_receipt.POST, input),
+    "admin:mes-wm-material-stock/[id]:delete": (input: any) => invoke(route_admin_mes_wm_material_stock__id_.DELETE, input),
+    "admin:mes-wm-material-stock/[id]:get": (input: any) => invoke(route_admin_mes_wm_material_stock__id_.GET, input),
+    "admin:mes-wm-material-stock/[id]:put": (input: any) => invoke(route_admin_mes_wm_material_stock__id_.PUT, input),
+    "admin:mes-wm-material-stock:get": (input: any) => invoke(route_admin_mes_wm_material_stock.GET, input),
+    "admin:mes-wm-material-stock:post": (input: any) => invoke(route_admin_mes_wm_material_stock.POST, input),
+    "admin:mes-wm-misc-issue-line/[id]:delete": (input: any) => invoke(route_admin_mes_wm_misc_issue_line__id_.DELETE, input),
+    "admin:mes-wm-misc-issue-line/[id]:get": (input: any) => invoke(route_admin_mes_wm_misc_issue_line__id_.GET, input),
+    "admin:mes-wm-misc-issue-line/[id]:put": (input: any) => invoke(route_admin_mes_wm_misc_issue_line__id_.PUT, input),
+    "admin:mes-wm-misc-issue-line:get": (input: any) => invoke(route_admin_mes_wm_misc_issue_line.GET, input),
+    "admin:mes-wm-misc-issue-line:post": (input: any) => invoke(route_admin_mes_wm_misc_issue_line.POST, input),
+    "admin:mes-wm-misc-issue/[id]:delete": (input: any) => invoke(route_admin_mes_wm_misc_issue__id_.DELETE, input),
+    "admin:mes-wm-misc-issue/[id]:get": (input: any) => invoke(route_admin_mes_wm_misc_issue__id_.GET, input),
+    "admin:mes-wm-misc-issue/[id]:put": (input: any) => invoke(route_admin_mes_wm_misc_issue__id_.PUT, input),
+    "admin:mes-wm-misc-issue:get": (input: any) => invoke(route_admin_mes_wm_misc_issue.GET, input),
+    "admin:mes-wm-misc-issue:post": (input: any) => invoke(route_admin_mes_wm_misc_issue.POST, input),
+    "admin:mes-wm-misc-receipt-line/[id]:delete": (input: any) => invoke(route_admin_mes_wm_misc_receipt_line__id_.DELETE, input),
+    "admin:mes-wm-misc-receipt-line/[id]:get": (input: any) => invoke(route_admin_mes_wm_misc_receipt_line__id_.GET, input),
+    "admin:mes-wm-misc-receipt-line/[id]:put": (input: any) => invoke(route_admin_mes_wm_misc_receipt_line__id_.PUT, input),
+    "admin:mes-wm-misc-receipt-line:get": (input: any) => invoke(route_admin_mes_wm_misc_receipt_line.GET, input),
+    "admin:mes-wm-misc-receipt-line:post": (input: any) => invoke(route_admin_mes_wm_misc_receipt_line.POST, input),
+    "admin:mes-wm-misc-receipt/[id]:delete": (input: any) => invoke(route_admin_mes_wm_misc_receipt__id_.DELETE, input),
+    "admin:mes-wm-misc-receipt/[id]:get": (input: any) => invoke(route_admin_mes_wm_misc_receipt__id_.GET, input),
+    "admin:mes-wm-misc-receipt/[id]:put": (input: any) => invoke(route_admin_mes_wm_misc_receipt__id_.PUT, input),
+    "admin:mes-wm-misc-receipt:get": (input: any) => invoke(route_admin_mes_wm_misc_receipt.GET, input),
+    "admin:mes-wm-misc-receipt:post": (input: any) => invoke(route_admin_mes_wm_misc_receipt.POST, input),
+    "admin:mes-wm-outsource-issue-detail/[id]:delete": (input: any) => invoke(route_admin_mes_wm_outsource_issue_detail__id_.DELETE, input),
+    "admin:mes-wm-outsource-issue-detail/[id]:get": (input: any) => invoke(route_admin_mes_wm_outsource_issue_detail__id_.GET, input),
+    "admin:mes-wm-outsource-issue-detail/[id]:put": (input: any) => invoke(route_admin_mes_wm_outsource_issue_detail__id_.PUT, input),
+    "admin:mes-wm-outsource-issue-detail:get": (input: any) => invoke(route_admin_mes_wm_outsource_issue_detail.GET, input),
+    "admin:mes-wm-outsource-issue-detail:post": (input: any) => invoke(route_admin_mes_wm_outsource_issue_detail.POST, input),
+    "admin:mes-wm-outsource-issue-line/[id]:delete": (input: any) => invoke(route_admin_mes_wm_outsource_issue_line__id_.DELETE, input),
+    "admin:mes-wm-outsource-issue-line/[id]:get": (input: any) => invoke(route_admin_mes_wm_outsource_issue_line__id_.GET, input),
+    "admin:mes-wm-outsource-issue-line/[id]:put": (input: any) => invoke(route_admin_mes_wm_outsource_issue_line__id_.PUT, input),
+    "admin:mes-wm-outsource-issue-line:get": (input: any) => invoke(route_admin_mes_wm_outsource_issue_line.GET, input),
+    "admin:mes-wm-outsource-issue-line:post": (input: any) => invoke(route_admin_mes_wm_outsource_issue_line.POST, input),
+    "admin:mes-wm-outsource-issue/[id]:delete": (input: any) => invoke(route_admin_mes_wm_outsource_issue__id_.DELETE, input),
+    "admin:mes-wm-outsource-issue/[id]:get": (input: any) => invoke(route_admin_mes_wm_outsource_issue__id_.GET, input),
+    "admin:mes-wm-outsource-issue/[id]:put": (input: any) => invoke(route_admin_mes_wm_outsource_issue__id_.PUT, input),
+    "admin:mes-wm-outsource-issue:get": (input: any) => invoke(route_admin_mes_wm_outsource_issue.GET, input),
+    "admin:mes-wm-outsource-issue:post": (input: any) => invoke(route_admin_mes_wm_outsource_issue.POST, input),
+    "admin:mes-wm-outsource-receipt-detail/[id]:delete": (input: any) => invoke(route_admin_mes_wm_outsource_receipt_detail__id_.DELETE, input),
+    "admin:mes-wm-outsource-receipt-detail/[id]:get": (input: any) => invoke(route_admin_mes_wm_outsource_receipt_detail__id_.GET, input),
+    "admin:mes-wm-outsource-receipt-detail/[id]:put": (input: any) => invoke(route_admin_mes_wm_outsource_receipt_detail__id_.PUT, input),
+    "admin:mes-wm-outsource-receipt-detail:get": (input: any) => invoke(route_admin_mes_wm_outsource_receipt_detail.GET, input),
+    "admin:mes-wm-outsource-receipt-detail:post": (input: any) => invoke(route_admin_mes_wm_outsource_receipt_detail.POST, input),
+    "admin:mes-wm-outsource-receipt-line/[id]:delete": (input: any) => invoke(route_admin_mes_wm_outsource_receipt_line__id_.DELETE, input),
+    "admin:mes-wm-outsource-receipt-line/[id]:get": (input: any) => invoke(route_admin_mes_wm_outsource_receipt_line__id_.GET, input),
+    "admin:mes-wm-outsource-receipt-line/[id]:put": (input: any) => invoke(route_admin_mes_wm_outsource_receipt_line__id_.PUT, input),
+    "admin:mes-wm-outsource-receipt-line:get": (input: any) => invoke(route_admin_mes_wm_outsource_receipt_line.GET, input),
+    "admin:mes-wm-outsource-receipt-line:post": (input: any) => invoke(route_admin_mes_wm_outsource_receipt_line.POST, input),
+    "admin:mes-wm-outsource-receipt/[id]:delete": (input: any) => invoke(route_admin_mes_wm_outsource_receipt__id_.DELETE, input),
+    "admin:mes-wm-outsource-receipt/[id]:get": (input: any) => invoke(route_admin_mes_wm_outsource_receipt__id_.GET, input),
+    "admin:mes-wm-outsource-receipt/[id]:put": (input: any) => invoke(route_admin_mes_wm_outsource_receipt__id_.PUT, input),
+    "admin:mes-wm-outsource-receipt:get": (input: any) => invoke(route_admin_mes_wm_outsource_receipt.GET, input),
+    "admin:mes-wm-outsource-receipt:post": (input: any) => invoke(route_admin_mes_wm_outsource_receipt.POST, input),
+    "admin:mes-wm-package-line/[id]:delete": (input: any) => invoke(route_admin_mes_wm_package_line__id_.DELETE, input),
+    "admin:mes-wm-package-line/[id]:get": (input: any) => invoke(route_admin_mes_wm_package_line__id_.GET, input),
+    "admin:mes-wm-package-line/[id]:put": (input: any) => invoke(route_admin_mes_wm_package_line__id_.PUT, input),
+    "admin:mes-wm-package-line:get": (input: any) => invoke(route_admin_mes_wm_package_line.GET, input),
+    "admin:mes-wm-package-line:post": (input: any) => invoke(route_admin_mes_wm_package_line.POST, input),
+    "admin:mes-wm-package/[id]:delete": (input: any) => invoke(route_admin_mes_wm_package__id_.DELETE, input),
+    "admin:mes-wm-package/[id]:get": (input: any) => invoke(route_admin_mes_wm_package__id_.GET, input),
+    "admin:mes-wm-package/[id]:put": (input: any) => invoke(route_admin_mes_wm_package__id_.PUT, input),
+    "admin:mes-wm-package:get": (input: any) => invoke(route_admin_mes_wm_package.GET, input),
+    "admin:mes-wm-package:post": (input: any) => invoke(route_admin_mes_wm_package.POST, input),
+    "admin:mes-wm-product-issue-detail/[id]:delete": (input: any) => invoke(route_admin_mes_wm_product_issue_detail__id_.DELETE, input),
+    "admin:mes-wm-product-issue-detail/[id]:get": (input: any) => invoke(route_admin_mes_wm_product_issue_detail__id_.GET, input),
+    "admin:mes-wm-product-issue-detail/[id]:put": (input: any) => invoke(route_admin_mes_wm_product_issue_detail__id_.PUT, input),
+    "admin:mes-wm-product-issue-detail:get": (input: any) => invoke(route_admin_mes_wm_product_issue_detail.GET, input),
+    "admin:mes-wm-product-issue-detail:post": (input: any) => invoke(route_admin_mes_wm_product_issue_detail.POST, input),
+    "admin:mes-wm-product-issue-line/[id]:delete": (input: any) => invoke(route_admin_mes_wm_product_issue_line__id_.DELETE, input),
+    "admin:mes-wm-product-issue-line/[id]:get": (input: any) => invoke(route_admin_mes_wm_product_issue_line__id_.GET, input),
+    "admin:mes-wm-product-issue-line/[id]:put": (input: any) => invoke(route_admin_mes_wm_product_issue_line__id_.PUT, input),
+    "admin:mes-wm-product-issue-line:get": (input: any) => invoke(route_admin_mes_wm_product_issue_line.GET, input),
+    "admin:mes-wm-product-issue-line:post": (input: any) => invoke(route_admin_mes_wm_product_issue_line.POST, input),
+    "admin:mes-wm-product-issue/[id]:delete": (input: any) => invoke(route_admin_mes_wm_product_issue__id_.DELETE, input),
+    "admin:mes-wm-product-issue/[id]:get": (input: any) => invoke(route_admin_mes_wm_product_issue__id_.GET, input),
+    "admin:mes-wm-product-issue/[id]:put": (input: any) => invoke(route_admin_mes_wm_product_issue__id_.PUT, input),
+    "admin:mes-wm-product-issue:get": (input: any) => invoke(route_admin_mes_wm_product_issue.GET, input),
+    "admin:mes-wm-product-issue:post": (input: any) => invoke(route_admin_mes_wm_product_issue.POST, input),
+    "admin:mes-wm-product-produce-line/[id]:delete": (input: any) => invoke(route_admin_mes_wm_product_produce_line__id_.DELETE, input),
+    "admin:mes-wm-product-produce-line/[id]:get": (input: any) => invoke(route_admin_mes_wm_product_produce_line__id_.GET, input),
+    "admin:mes-wm-product-produce-line/[id]:put": (input: any) => invoke(route_admin_mes_wm_product_produce_line__id_.PUT, input),
+    "admin:mes-wm-product-produce-line:get": (input: any) => invoke(route_admin_mes_wm_product_produce_line.GET, input),
+    "admin:mes-wm-product-produce-line:post": (input: any) => invoke(route_admin_mes_wm_product_produce_line.POST, input),
+    "admin:mes-wm-product-receipt-detail/[id]:delete": (input: any) => invoke(route_admin_mes_wm_product_receipt_detail__id_.DELETE, input),
+    "admin:mes-wm-product-receipt-detail/[id]:get": (input: any) => invoke(route_admin_mes_wm_product_receipt_detail__id_.GET, input),
+    "admin:mes-wm-product-receipt-detail/[id]:put": (input: any) => invoke(route_admin_mes_wm_product_receipt_detail__id_.PUT, input),
+    "admin:mes-wm-product-receipt-detail:get": (input: any) => invoke(route_admin_mes_wm_product_receipt_detail.GET, input),
+    "admin:mes-wm-product-receipt-detail:post": (input: any) => invoke(route_admin_mes_wm_product_receipt_detail.POST, input),
+    "admin:mes-wm-product-receipt-line/[id]:delete": (input: any) => invoke(route_admin_mes_wm_product_receipt_line__id_.DELETE, input),
+    "admin:mes-wm-product-receipt-line/[id]:get": (input: any) => invoke(route_admin_mes_wm_product_receipt_line__id_.GET, input),
+    "admin:mes-wm-product-receipt-line/[id]:put": (input: any) => invoke(route_admin_mes_wm_product_receipt_line__id_.PUT, input),
+    "admin:mes-wm-product-receipt-line:get": (input: any) => invoke(route_admin_mes_wm_product_receipt_line.GET, input),
+    "admin:mes-wm-product-receipt-line:post": (input: any) => invoke(route_admin_mes_wm_product_receipt_line.POST, input),
+    "admin:mes-wm-product-receipt/[id]:delete": (input: any) => invoke(route_admin_mes_wm_product_receipt__id_.DELETE, input),
+    "admin:mes-wm-product-receipt/[id]:get": (input: any) => invoke(route_admin_mes_wm_product_receipt__id_.GET, input),
+    "admin:mes-wm-product-receipt/[id]:put": (input: any) => invoke(route_admin_mes_wm_product_receipt__id_.PUT, input),
+    "admin:mes-wm-product-receipt:get": (input: any) => invoke(route_admin_mes_wm_product_receipt.GET, input),
+    "admin:mes-wm-product-receipt:post": (input: any) => invoke(route_admin_mes_wm_product_receipt.POST, input),
+    "admin:mes-wm-product-sales-detail/[id]:delete": (input: any) => invoke(route_admin_mes_wm_product_sales_detail__id_.DELETE, input),
+    "admin:mes-wm-product-sales-detail/[id]:get": (input: any) => invoke(route_admin_mes_wm_product_sales_detail__id_.GET, input),
+    "admin:mes-wm-product-sales-detail/[id]:put": (input: any) => invoke(route_admin_mes_wm_product_sales_detail__id_.PUT, input),
+    "admin:mes-wm-product-sales-detail:get": (input: any) => invoke(route_admin_mes_wm_product_sales_detail.GET, input),
+    "admin:mes-wm-product-sales-detail:post": (input: any) => invoke(route_admin_mes_wm_product_sales_detail.POST, input),
+    "admin:mes-wm-product-sales-line/[id]:delete": (input: any) => invoke(route_admin_mes_wm_product_sales_line__id_.DELETE, input),
+    "admin:mes-wm-product-sales-line/[id]:get": (input: any) => invoke(route_admin_mes_wm_product_sales_line__id_.GET, input),
+    "admin:mes-wm-product-sales-line/[id]:put": (input: any) => invoke(route_admin_mes_wm_product_sales_line__id_.PUT, input),
+    "admin:mes-wm-product-sales-line:get": (input: any) => invoke(route_admin_mes_wm_product_sales_line.GET, input),
+    "admin:mes-wm-product-sales-line:post": (input: any) => invoke(route_admin_mes_wm_product_sales_line.POST, input),
+    "admin:mes-wm-product-sales/[id]:delete": (input: any) => invoke(route_admin_mes_wm_product_sales__id_.DELETE, input),
+    "admin:mes-wm-product-sales/[id]:get": (input: any) => invoke(route_admin_mes_wm_product_sales__id_.GET, input),
+    "admin:mes-wm-product-sales/[id]:put": (input: any) => invoke(route_admin_mes_wm_product_sales__id_.PUT, input),
+    "admin:mes-wm-product-sales:get": (input: any) => invoke(route_admin_mes_wm_product_sales.GET, input),
+    "admin:mes-wm-product-sales:post": (input: any) => invoke(route_admin_mes_wm_product_sales.POST, input),
+    "admin:mes-wm-return-issue-detail/[id]:delete": (input: any) => invoke(route_admin_mes_wm_return_issue_detail__id_.DELETE, input),
+    "admin:mes-wm-return-issue-detail/[id]:get": (input: any) => invoke(route_admin_mes_wm_return_issue_detail__id_.GET, input),
+    "admin:mes-wm-return-issue-detail/[id]:put": (input: any) => invoke(route_admin_mes_wm_return_issue_detail__id_.PUT, input),
+    "admin:mes-wm-return-issue-detail:get": (input: any) => invoke(route_admin_mes_wm_return_issue_detail.GET, input),
+    "admin:mes-wm-return-issue-detail:post": (input: any) => invoke(route_admin_mes_wm_return_issue_detail.POST, input),
+    "admin:mes-wm-return-issue-line/[id]:delete": (input: any) => invoke(route_admin_mes_wm_return_issue_line__id_.DELETE, input),
+    "admin:mes-wm-return-issue-line/[id]:get": (input: any) => invoke(route_admin_mes_wm_return_issue_line__id_.GET, input),
+    "admin:mes-wm-return-issue-line/[id]:put": (input: any) => invoke(route_admin_mes_wm_return_issue_line__id_.PUT, input),
+    "admin:mes-wm-return-issue-line:get": (input: any) => invoke(route_admin_mes_wm_return_issue_line.GET, input),
+    "admin:mes-wm-return-issue-line:post": (input: any) => invoke(route_admin_mes_wm_return_issue_line.POST, input),
+    "admin:mes-wm-return-issue/[id]:delete": (input: any) => invoke(route_admin_mes_wm_return_issue__id_.DELETE, input),
+    "admin:mes-wm-return-issue/[id]:get": (input: any) => invoke(route_admin_mes_wm_return_issue__id_.GET, input),
+    "admin:mes-wm-return-issue/[id]:put": (input: any) => invoke(route_admin_mes_wm_return_issue__id_.PUT, input),
+    "admin:mes-wm-return-issue:get": (input: any) => invoke(route_admin_mes_wm_return_issue.GET, input),
+    "admin:mes-wm-return-issue:post": (input: any) => invoke(route_admin_mes_wm_return_issue.POST, input),
+    "admin:mes-wm-return-sales-detail/[id]:delete": (input: any) => invoke(route_admin_mes_wm_return_sales_detail__id_.DELETE, input),
+    "admin:mes-wm-return-sales-detail/[id]:get": (input: any) => invoke(route_admin_mes_wm_return_sales_detail__id_.GET, input),
+    "admin:mes-wm-return-sales-detail/[id]:put": (input: any) => invoke(route_admin_mes_wm_return_sales_detail__id_.PUT, input),
+    "admin:mes-wm-return-sales-detail:get": (input: any) => invoke(route_admin_mes_wm_return_sales_detail.GET, input),
+    "admin:mes-wm-return-sales-detail:post": (input: any) => invoke(route_admin_mes_wm_return_sales_detail.POST, input),
+    "admin:mes-wm-return-sales-line/[id]:delete": (input: any) => invoke(route_admin_mes_wm_return_sales_line__id_.DELETE, input),
+    "admin:mes-wm-return-sales-line/[id]:get": (input: any) => invoke(route_admin_mes_wm_return_sales_line__id_.GET, input),
+    "admin:mes-wm-return-sales-line/[id]:put": (input: any) => invoke(route_admin_mes_wm_return_sales_line__id_.PUT, input),
+    "admin:mes-wm-return-sales-line:get": (input: any) => invoke(route_admin_mes_wm_return_sales_line.GET, input),
+    "admin:mes-wm-return-sales-line:post": (input: any) => invoke(route_admin_mes_wm_return_sales_line.POST, input),
+    "admin:mes-wm-return-sales/[id]:delete": (input: any) => invoke(route_admin_mes_wm_return_sales__id_.DELETE, input),
+    "admin:mes-wm-return-sales/[id]:get": (input: any) => invoke(route_admin_mes_wm_return_sales__id_.GET, input),
+    "admin:mes-wm-return-sales/[id]:put": (input: any) => invoke(route_admin_mes_wm_return_sales__id_.PUT, input),
+    "admin:mes-wm-return-sales:get": (input: any) => invoke(route_admin_mes_wm_return_sales.GET, input),
+    "admin:mes-wm-return-sales:post": (input: any) => invoke(route_admin_mes_wm_return_sales.POST, input),
+    "admin:mes-wm-return-vendor-detail/[id]:delete": (input: any) => invoke(route_admin_mes_wm_return_vendor_detail__id_.DELETE, input),
+    "admin:mes-wm-return-vendor-detail/[id]:get": (input: any) => invoke(route_admin_mes_wm_return_vendor_detail__id_.GET, input),
+    "admin:mes-wm-return-vendor-detail/[id]:put": (input: any) => invoke(route_admin_mes_wm_return_vendor_detail__id_.PUT, input),
+    "admin:mes-wm-return-vendor-detail:get": (input: any) => invoke(route_admin_mes_wm_return_vendor_detail.GET, input),
+    "admin:mes-wm-return-vendor-detail:post": (input: any) => invoke(route_admin_mes_wm_return_vendor_detail.POST, input),
+    "admin:mes-wm-return-vendor-line/[id]:delete": (input: any) => invoke(route_admin_mes_wm_return_vendor_line__id_.DELETE, input),
+    "admin:mes-wm-return-vendor-line/[id]:get": (input: any) => invoke(route_admin_mes_wm_return_vendor_line__id_.GET, input),
+    "admin:mes-wm-return-vendor-line/[id]:put": (input: any) => invoke(route_admin_mes_wm_return_vendor_line__id_.PUT, input),
+    "admin:mes-wm-return-vendor-line:get": (input: any) => invoke(route_admin_mes_wm_return_vendor_line.GET, input),
+    "admin:mes-wm-return-vendor-line:post": (input: any) => invoke(route_admin_mes_wm_return_vendor_line.POST, input),
+    "admin:mes-wm-return-vendor/[id]:delete": (input: any) => invoke(route_admin_mes_wm_return_vendor__id_.DELETE, input),
+    "admin:mes-wm-return-vendor/[id]:get": (input: any) => invoke(route_admin_mes_wm_return_vendor__id_.GET, input),
+    "admin:mes-wm-return-vendor/[id]:put": (input: any) => invoke(route_admin_mes_wm_return_vendor__id_.PUT, input),
+    "admin:mes-wm-return-vendor:get": (input: any) => invoke(route_admin_mes_wm_return_vendor.GET, input),
+    "admin:mes-wm-return-vendor:post": (input: any) => invoke(route_admin_mes_wm_return_vendor.POST, input),
+    "admin:mes-wm-sales-notice-line/[id]:delete": (input: any) => invoke(route_admin_mes_wm_sales_notice_line__id_.DELETE, input),
+    "admin:mes-wm-sales-notice-line/[id]:get": (input: any) => invoke(route_admin_mes_wm_sales_notice_line__id_.GET, input),
+    "admin:mes-wm-sales-notice-line/[id]:put": (input: any) => invoke(route_admin_mes_wm_sales_notice_line__id_.PUT, input),
+    "admin:mes-wm-sales-notice-line:get": (input: any) => invoke(route_admin_mes_wm_sales_notice_line.GET, input),
+    "admin:mes-wm-sales-notice-line:post": (input: any) => invoke(route_admin_mes_wm_sales_notice_line.POST, input),
+    "admin:mes-wm-sales-notice/[id]:delete": (input: any) => invoke(route_admin_mes_wm_sales_notice__id_.DELETE, input),
+    "admin:mes-wm-sales-notice/[id]:get": (input: any) => invoke(route_admin_mes_wm_sales_notice__id_.GET, input),
+    "admin:mes-wm-sales-notice/[id]:put": (input: any) => invoke(route_admin_mes_wm_sales_notice__id_.PUT, input),
+    "admin:mes-wm-sales-notice:get": (input: any) => invoke(route_admin_mes_wm_sales_notice.GET, input),
+    "admin:mes-wm-sales-notice:post": (input: any) => invoke(route_admin_mes_wm_sales_notice.POST, input),
+    "admin:mes-wm-sn/[id]:delete": (input: any) => invoke(route_admin_mes_wm_sn__id_.DELETE, input),
+    "admin:mes-wm-sn/[id]:get": (input: any) => invoke(route_admin_mes_wm_sn__id_.GET, input),
+    "admin:mes-wm-sn/[id]:put": (input: any) => invoke(route_admin_mes_wm_sn__id_.PUT, input),
+    "admin:mes-wm-sn:get": (input: any) => invoke(route_admin_mes_wm_sn.GET, input),
+    "admin:mes-wm-sn:post": (input: any) => invoke(route_admin_mes_wm_sn.POST, input),
+    "admin:mes-wm-stock-taking-plan-param/[id]:delete": (input: any) => invoke(route_admin_mes_wm_stock_taking_plan_param__id_.DELETE, input),
+    "admin:mes-wm-stock-taking-plan-param/[id]:get": (input: any) => invoke(route_admin_mes_wm_stock_taking_plan_param__id_.GET, input),
+    "admin:mes-wm-stock-taking-plan-param/[id]:put": (input: any) => invoke(route_admin_mes_wm_stock_taking_plan_param__id_.PUT, input),
+    "admin:mes-wm-stock-taking-plan-param:get": (input: any) => invoke(route_admin_mes_wm_stock_taking_plan_param.GET, input),
+    "admin:mes-wm-stock-taking-plan-param:post": (input: any) => invoke(route_admin_mes_wm_stock_taking_plan_param.POST, input),
+    "admin:mes-wm-stock-taking-plan/[id]:delete": (input: any) => invoke(route_admin_mes_wm_stock_taking_plan__id_.DELETE, input),
+    "admin:mes-wm-stock-taking-plan/[id]:get": (input: any) => invoke(route_admin_mes_wm_stock_taking_plan__id_.GET, input),
+    "admin:mes-wm-stock-taking-plan/[id]:put": (input: any) => invoke(route_admin_mes_wm_stock_taking_plan__id_.PUT, input),
+    "admin:mes-wm-stock-taking-plan:get": (input: any) => invoke(route_admin_mes_wm_stock_taking_plan.GET, input),
+    "admin:mes-wm-stock-taking-plan:post": (input: any) => invoke(route_admin_mes_wm_stock_taking_plan.POST, input),
+    "admin:mes-wm-stock-taking-task-line/[id]:delete": (input: any) => invoke(route_admin_mes_wm_stock_taking_task_line__id_.DELETE, input),
+    "admin:mes-wm-stock-taking-task-line/[id]:get": (input: any) => invoke(route_admin_mes_wm_stock_taking_task_line__id_.GET, input),
+    "admin:mes-wm-stock-taking-task-line/[id]:put": (input: any) => invoke(route_admin_mes_wm_stock_taking_task_line__id_.PUT, input),
+    "admin:mes-wm-stock-taking-task-line:get": (input: any) => invoke(route_admin_mes_wm_stock_taking_task_line.GET, input),
+    "admin:mes-wm-stock-taking-task-line:post": (input: any) => invoke(route_admin_mes_wm_stock_taking_task_line.POST, input),
+    "admin:mes-wm-stock-taking-task-result/[id]:delete": (input: any) => invoke(route_admin_mes_wm_stock_taking_task_result__id_.DELETE, input),
+    "admin:mes-wm-stock-taking-task-result/[id]:get": (input: any) => invoke(route_admin_mes_wm_stock_taking_task_result__id_.GET, input),
+    "admin:mes-wm-stock-taking-task-result/[id]:put": (input: any) => invoke(route_admin_mes_wm_stock_taking_task_result__id_.PUT, input),
+    "admin:mes-wm-stock-taking-task-result:get": (input: any) => invoke(route_admin_mes_wm_stock_taking_task_result.GET, input),
+    "admin:mes-wm-stock-taking-task-result:post": (input: any) => invoke(route_admin_mes_wm_stock_taking_task_result.POST, input),
+    "admin:mes-wm-stock-taking-task/[id]:delete": (input: any) => invoke(route_admin_mes_wm_stock_taking_task__id_.DELETE, input),
+    "admin:mes-wm-stock-taking-task/[id]:get": (input: any) => invoke(route_admin_mes_wm_stock_taking_task__id_.GET, input),
+    "admin:mes-wm-stock-taking-task/[id]:put": (input: any) => invoke(route_admin_mes_wm_stock_taking_task__id_.PUT, input),
+    "admin:mes-wm-stock-taking-task:get": (input: any) => invoke(route_admin_mes_wm_stock_taking_task.GET, input),
+    "admin:mes-wm-stock-taking-task:post": (input: any) => invoke(route_admin_mes_wm_stock_taking_task.POST, input),
+    "admin:mes-wm-transfer-detail/[id]:delete": (input: any) => invoke(route_admin_mes_wm_transfer_detail__id_.DELETE, input),
+    "admin:mes-wm-transfer-detail/[id]:get": (input: any) => invoke(route_admin_mes_wm_transfer_detail__id_.GET, input),
+    "admin:mes-wm-transfer-detail/[id]:put": (input: any) => invoke(route_admin_mes_wm_transfer_detail__id_.PUT, input),
+    "admin:mes-wm-transfer-detail:get": (input: any) => invoke(route_admin_mes_wm_transfer_detail.GET, input),
+    "admin:mes-wm-transfer-detail:post": (input: any) => invoke(route_admin_mes_wm_transfer_detail.POST, input),
+    "admin:mes-wm-transfer-line/[id]:delete": (input: any) => invoke(route_admin_mes_wm_transfer_line__id_.DELETE, input),
+    "admin:mes-wm-transfer-line/[id]:get": (input: any) => invoke(route_admin_mes_wm_transfer_line__id_.GET, input),
+    "admin:mes-wm-transfer-line/[id]:put": (input: any) => invoke(route_admin_mes_wm_transfer_line__id_.PUT, input),
+    "admin:mes-wm-transfer-line:get": (input: any) => invoke(route_admin_mes_wm_transfer_line.GET, input),
+    "admin:mes-wm-transfer-line:post": (input: any) => invoke(route_admin_mes_wm_transfer_line.POST, input),
+    "admin:mes-wm-transfer/[id]:delete": (input: any) => invoke(route_admin_mes_wm_transfer__id_.DELETE, input),
+    "admin:mes-wm-transfer/[id]:get": (input: any) => invoke(route_admin_mes_wm_transfer__id_.GET, input),
+    "admin:mes-wm-transfer/[id]:put": (input: any) => invoke(route_admin_mes_wm_transfer__id_.PUT, input),
+    "admin:mes-wm-transfer:get": (input: any) => invoke(route_admin_mes_wm_transfer.GET, input),
+    "admin:mes-wm-transfer:post": (input: any) => invoke(route_admin_mes_wm_transfer.POST, input),
+    "admin:mes-wm-warehouse-area/[id]:delete": (input: any) => invoke(route_admin_mes_wm_warehouse_area__id_.DELETE, input),
+    "admin:mes-wm-warehouse-area/[id]:get": (input: any) => invoke(route_admin_mes_wm_warehouse_area__id_.GET, input),
+    "admin:mes-wm-warehouse-area/[id]:put": (input: any) => invoke(route_admin_mes_wm_warehouse_area__id_.PUT, input),
+    "admin:mes-wm-warehouse-area:get": (input: any) => invoke(route_admin_mes_wm_warehouse_area.GET, input),
+    "admin:mes-wm-warehouse-area:post": (input: any) => invoke(route_admin_mes_wm_warehouse_area.POST, input),
+    "admin:mes-wm-warehouse-location/[id]:delete": (input: any) => invoke(route_admin_mes_wm_warehouse_location__id_.DELETE, input),
+    "admin:mes-wm-warehouse-location/[id]:get": (input: any) => invoke(route_admin_mes_wm_warehouse_location__id_.GET, input),
+    "admin:mes-wm-warehouse-location/[id]:put": (input: any) => invoke(route_admin_mes_wm_warehouse_location__id_.PUT, input),
+    "admin:mes-wm-warehouse-location:get": (input: any) => invoke(route_admin_mes_wm_warehouse_location.GET, input),
+    "admin:mes-wm-warehouse-location:post": (input: any) => invoke(route_admin_mes_wm_warehouse_location.POST, input),
+    "admin:mes-wm-warehouse/[id]:delete": (input: any) => invoke(route_admin_mes_wm_warehouse__id_.DELETE, input),
+    "admin:mes-wm-warehouse/[id]:get": (input: any) => invoke(route_admin_mes_wm_warehouse__id_.GET, input),
+    "admin:mes-wm-warehouse/[id]:put": (input: any) => invoke(route_admin_mes_wm_warehouse__id_.PUT, input),
+    "admin:mes-wm-warehouse:get": (input: any) => invoke(route_admin_mes_wm_warehouse.GET, input),
+    "admin:mes-wm-warehouse:post": (input: any) => invoke(route_admin_mes_wm_warehouse.POST, input),
+    "admin:work-orders/[id]:delete": (input: any) => invoke(route_admin_work_orders__id_.DELETE, input),
+    "admin:work-orders/[id]:get": (input: any) => invoke(route_admin_work_orders__id_.GET, input),
+    "admin:work-orders/[id]:put": (input: any) => invoke(route_admin_work_orders__id_.PUT, input),
+    "admin:work-orders/report:post": (input: any) => invoke(route_admin_work_orders_report.POST, input),
+    "admin:work-orders:get": (input: any) => invoke(route_admin_work_orders.GET, input),
+    "admin:work-orders:post": (input: any) => invoke(route_admin_work_orders.POST, input),
+  },
+})

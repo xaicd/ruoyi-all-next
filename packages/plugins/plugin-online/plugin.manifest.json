@@ -1,0 +1,219 @@
+{
+  "$schema": "ruoyi-plugin-manifest/v1",
+  "id": "ruoyi.online",
+  "apiVersion": 1,
+  "version": "0.1.0",
+  "displayName": "online",
+  "description": "online 域（由 scripts/scaffold-domain-plugin.cjs 生成的第一方插件声明）",
+  "author": "RuoYi All Next",
+  "categories": [
+    "automation"
+  ],
+  "capabilities": [
+    "api.routes.register"
+  ],
+  "entrypoints": {
+    "merged": "./plugin-entry.ts"
+  },
+  "domain": {
+    "kind": "business",
+    "stage": "B",
+    "contractVersion": "v1",
+    "publicPrefixes": [
+      "/api/v1/admin/online"
+    ],
+    "upstreamEnv": "RUOYI_DOMAIN_ONLINE_UPSTREAM",
+    "defaultPort": 3212,
+    "packable": true,
+    "independentDatabase": false,
+    "dependsOnModules": [
+      "shared"
+    ],
+    "auth": {
+      "audience": "admin",
+      "tenantPolicy": "required"
+    },
+    "resilience": {
+      "timeoutMs": 15000,
+      "retryMaxAttempts": 1,
+      "safeMethodsOnly": true,
+      "idempotencyRequired": true
+    }
+  },
+  "apiRoutes": [
+    {
+      "routeKey": "admin:definitions/[code]/archive:post",
+      "method": "POST",
+      "path": "/definitions/[code]/archive",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/[code]/codegen/download:get",
+      "method": "GET",
+      "path": "/definitions/[code]/codegen/download",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/[code]/codegen/preview:post",
+      "method": "POST",
+      "path": "/definitions/[code]/codegen/preview",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/[code]/draft:put",
+      "method": "PUT",
+      "path": "/definitions/[code]/draft",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/[code]/lookup/dictionary:get",
+      "method": "GET",
+      "path": "/definitions/[code]/lookup/dictionary",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/[code]/normalize-system-fields:post",
+      "method": "POST",
+      "path": "/definitions/[code]/normalize-system-fields",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/[code]/publish:post",
+      "method": "POST",
+      "path": "/definitions/[code]/publish",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/[code]/rollback:post",
+      "method": "POST",
+      "path": "/definitions/[code]/rollback",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/[code]:delete",
+      "method": "DELETE",
+      "path": "/definitions/[code]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/[code]:get",
+      "method": "GET",
+      "path": "/definitions/[code]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/[code]:put",
+      "method": "PUT",
+      "path": "/definitions/[code]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/[code]/schema-plans/[planId]/apply:post",
+      "method": "POST",
+      "path": "/definitions/[code]/schema-plans/[planId]/apply",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/[code]/schema-plans/[planId]/approve:post",
+      "method": "POST",
+      "path": "/definitions/[code]/schema-plans/[planId]/approve",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/[code]/schema-plans/[planId]:get",
+      "method": "GET",
+      "path": "/definitions/[code]/schema-plans/[planId]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/[code]/schema-plans:get",
+      "method": "GET",
+      "path": "/definitions/[code]/schema-plans",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/[code]/schema-plans:post",
+      "method": "POST",
+      "path": "/definitions/[code]/schema-plans",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/[code]/test-sessions/[sessionId]/records/[recordId]:delete",
+      "method": "DELETE",
+      "path": "/definitions/[code]/test-sessions/[sessionId]/records/[recordId]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/[code]/test-sessions/[sessionId]/records/[recordId]:put",
+      "method": "PUT",
+      "path": "/definitions/[code]/test-sessions/[sessionId]/records/[recordId]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/[code]/test-sessions/[sessionId]/records:get",
+      "method": "GET",
+      "path": "/definitions/[code]/test-sessions/[sessionId]/records",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/[code]/test-sessions/[sessionId]/records:post",
+      "method": "POST",
+      "path": "/definitions/[code]/test-sessions/[sessionId]/records",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/[code]/test-sessions/[sessionId]:get",
+      "method": "GET",
+      "path": "/definitions/[code]/test-sessions/[sessionId]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/[code]/test-sessions:post",
+      "method": "POST",
+      "path": "/definitions/[code]/test-sessions",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/[code]/validate:post",
+      "method": "POST",
+      "path": "/definitions/[code]/validate",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions/codegen/download:post",
+      "method": "POST",
+      "path": "/definitions/codegen/download",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions:get",
+      "method": "GET",
+      "path": "/definitions",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:definitions:post",
+      "method": "POST",
+      "path": "/definitions",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:page-schema/[entity]:get",
+      "method": "GET",
+      "path": "/page-schema/[entity]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:page-schema/[entity]:post",
+      "method": "POST",
+      "path": "/page-schema/[entity]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:page-schema/[entity]:put",
+      "method": "PUT",
+      "path": "/page-schema/[entity]",
+      "auth": "operator"
+    }
+  ]
+}

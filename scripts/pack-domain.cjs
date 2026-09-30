@@ -1,7 +1,7 @@
 const fs = require("fs")
 const path = require("path")
 const { spawnSync } = require("child_process")
-const { ROOT, listDomains, getDomain } = require("./lib/domain-catalog.cjs")
+const { ROOT, listDomains, getDomain, domainDirOf } = require("./lib/domain-catalog.cjs")
 
 function parseArgs(argv) {
   const args = {
@@ -119,7 +119,8 @@ function buildPlan(domain) {
     "src/app/healthz",
     "src/app/readyz",
     "src/app/api/internal",
-    ...modules.map((name) => `packages/domains/${name}`),
+    // 域可能是第一方插件(目录在 packages/plugins/plugin-*) —— 用共享解析器，别写死
+    ...modules.map((name) => domainDirOf(ROOT, name)),
     ...apiRouteDirs,
   ]
   return { domain: domain.name, defaultPort: domain.defaultPort, upstreamEnv: domain.upstreamEnv, files, dirs, apiRouteDirs, modules }

@@ -1,0 +1,508 @@
+{
+  "$schema": "ruoyi-plugin-manifest/v1",
+  "id": "ruoyi.member",
+  "apiVersion": 1,
+  "version": "0.1.0",
+  "displayName": "member",
+  "description": "member 域（由 scripts/scaffold-domain-plugin.cjs 生成的第一方插件声明）",
+  "author": "RuoYi All Next",
+  "categories": [
+    "automation"
+  ],
+  "capabilities": [
+    "api.routes.register"
+  ],
+  "entrypoints": {
+    "merged": "./plugin-entry.ts"
+  },
+  "domain": {
+    "kind": "business",
+    "stage": "A",
+    "contractVersion": "v1",
+    "publicPrefixes": [
+      "/api/v1/admin/member",
+      "/api/v1/app/member"
+    ],
+    "upstreamEnv": "RUOYI_DOMAIN_MEMBER_UPSTREAM",
+    "defaultPort": 3218,
+    "packable": true,
+    "independentDatabase": false,
+    "dependsOnModules": [
+      "shared"
+    ],
+    "auth": {
+      "audience": "admin",
+      "tenantPolicy": "required"
+    },
+    "resilience": {
+      "timeoutMs": 5000,
+      "retryMaxAttempts": 1,
+      "safeMethodsOnly": true,
+      "idempotencyRequired": false
+    }
+  },
+  "apiRoutes": [
+    {
+      "routeKey": "admin:address/[id]:delete",
+      "method": "DELETE",
+      "path": "/address/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:address/[id]:get",
+      "method": "GET",
+      "path": "/address/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:address/[id]:put",
+      "method": "PUT",
+      "path": "/address/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:address:get",
+      "method": "GET",
+      "path": "/address",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:address:post",
+      "method": "POST",
+      "path": "/address",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:levels/[id]:delete",
+      "method": "DELETE",
+      "path": "/levels/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:levels/[id]:get",
+      "method": "GET",
+      "path": "/levels/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:levels/[id]:put",
+      "method": "PUT",
+      "path": "/levels/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:levels:get",
+      "method": "GET",
+      "path": "/levels",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:levels:post",
+      "method": "POST",
+      "path": "/levels",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-config/[id]:delete",
+      "method": "DELETE",
+      "path": "/member-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-config/[id]:get",
+      "method": "GET",
+      "path": "/member-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-config/[id]:put",
+      "method": "PUT",
+      "path": "/member-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-config:get",
+      "method": "GET",
+      "path": "/member-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-config:post",
+      "method": "POST",
+      "path": "/member-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-experience-record/[id]:delete",
+      "method": "DELETE",
+      "path": "/member-experience-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-experience-record/[id]:get",
+      "method": "GET",
+      "path": "/member-experience-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-experience-record/[id]:put",
+      "method": "PUT",
+      "path": "/member-experience-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-experience-record:get",
+      "method": "GET",
+      "path": "/member-experience-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-experience-record:post",
+      "method": "POST",
+      "path": "/member-experience-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-group/[id]:delete",
+      "method": "DELETE",
+      "path": "/member-group/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-group/[id]:get",
+      "method": "GET",
+      "path": "/member-group/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-group/[id]:put",
+      "method": "PUT",
+      "path": "/member-group/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-group:get",
+      "method": "GET",
+      "path": "/member-group",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-group:post",
+      "method": "POST",
+      "path": "/member-group",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-level-record/[id]:delete",
+      "method": "DELETE",
+      "path": "/member-level-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-level-record/[id]:get",
+      "method": "GET",
+      "path": "/member-level-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-level-record/[id]:put",
+      "method": "PUT",
+      "path": "/member-level-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-level-record:get",
+      "method": "GET",
+      "path": "/member-level-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-level-record:post",
+      "method": "POST",
+      "path": "/member-level-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-level/[id]:delete",
+      "method": "DELETE",
+      "path": "/member-level/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-level/[id]:get",
+      "method": "GET",
+      "path": "/member-level/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-level/[id]:put",
+      "method": "PUT",
+      "path": "/member-level/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-level:get",
+      "method": "GET",
+      "path": "/member-level",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-level:post",
+      "method": "POST",
+      "path": "/member-level",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-point-record/[id]:delete",
+      "method": "DELETE",
+      "path": "/member-point-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-point-record/[id]:get",
+      "method": "GET",
+      "path": "/member-point-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-point-record/[id]:put",
+      "method": "PUT",
+      "path": "/member-point-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-point-record:get",
+      "method": "GET",
+      "path": "/member-point-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-point-record:post",
+      "method": "POST",
+      "path": "/member-point-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-sign-in-config/[id]:delete",
+      "method": "DELETE",
+      "path": "/member-sign-in-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-sign-in-config/[id]:get",
+      "method": "GET",
+      "path": "/member-sign-in-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-sign-in-config/[id]:put",
+      "method": "PUT",
+      "path": "/member-sign-in-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-sign-in-config:get",
+      "method": "GET",
+      "path": "/member-sign-in-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-sign-in-config:post",
+      "method": "POST",
+      "path": "/member-sign-in-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-sign-in-record/[id]:delete",
+      "method": "DELETE",
+      "path": "/member-sign-in-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-sign-in-record/[id]:get",
+      "method": "GET",
+      "path": "/member-sign-in-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-sign-in-record/[id]:put",
+      "method": "PUT",
+      "path": "/member-sign-in-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-sign-in-record:get",
+      "method": "GET",
+      "path": "/member-sign-in-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-sign-in-record:post",
+      "method": "POST",
+      "path": "/member-sign-in-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-tag/[id]:delete",
+      "method": "DELETE",
+      "path": "/member-tag/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-tag/[id]:get",
+      "method": "GET",
+      "path": "/member-tag/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-tag/[id]:put",
+      "method": "PUT",
+      "path": "/member-tag/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-tag:get",
+      "method": "GET",
+      "path": "/member-tag",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-tag:post",
+      "method": "POST",
+      "path": "/member-tag",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-user/[id]:delete",
+      "method": "DELETE",
+      "path": "/member-user/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-user/[id]:get",
+      "method": "GET",
+      "path": "/member-user/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-user/[id]:put",
+      "method": "PUT",
+      "path": "/member-user/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-user:get",
+      "method": "GET",
+      "path": "/member-user",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-user:post",
+      "method": "POST",
+      "path": "/member-user",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:points/[id]:delete",
+      "method": "DELETE",
+      "path": "/points/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:points/[id]:get",
+      "method": "GET",
+      "path": "/points/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:points/[id]:put",
+      "method": "PUT",
+      "path": "/points/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:points:get",
+      "method": "GET",
+      "path": "/points",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:points:post",
+      "method": "POST",
+      "path": "/points",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:users/[id]:delete",
+      "method": "DELETE",
+      "path": "/users/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:users/[id]:get",
+      "method": "GET",
+      "path": "/users/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:users/[id]:put",
+      "method": "PUT",
+      "path": "/users/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:users:get",
+      "method": "GET",
+      "path": "/users",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:users:post",
+      "method": "POST",
+      "path": "/users",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "app:auth/login:post",
+      "method": "POST",
+      "path": "/auth/login",
+      "auth": "company"
+    },
+    {
+      "routeKey": "app:auth/logout:post",
+      "method": "POST",
+      "path": "/auth/logout",
+      "auth": "company"
+    },
+    {
+      "routeKey": "app:auth/register:post",
+      "method": "POST",
+      "path": "/auth/register",
+      "auth": "company"
+    },
+    {
+      "routeKey": "app:profile:get",
+      "method": "GET",
+      "path": "/profile",
+      "auth": "company"
+    },
+    {
+      "routeKey": "app:profile:put",
+      "method": "PUT",
+      "path": "/profile",
+      "auth": "company"
+    },
+    {
+      "routeKey": "app:user/profile:get",
+      "method": "GET",
+      "path": "/user/profile",
+      "auth": "company"
+    },
+    {
+      "routeKey": "app:user/profile:put",
+      "method": "PUT",
+      "path": "/user/profile",
+      "auth": "company"
+    }
+  ]
+}

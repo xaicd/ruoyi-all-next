@@ -35,7 +35,7 @@ let removedCount = 0
 
 for (const domain of DOMAINS_TO_PRUNE) {
   // 1. 业务模块目录
-  removedCount += removePath(`packages/domains/${domain}`)
+  removedCount += removePath(domainDirOf(root, domain))
   // 2. API 路由目录
   removedCount += removePath(`src/app/api/v1/admin/${domain}`)
   // 3. Admin 页面入口目录

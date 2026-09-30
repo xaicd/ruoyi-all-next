@@ -1,0 +1,454 @@
+{
+  "$schema": "ruoyi-plugin-manifest/v1",
+  "id": "ruoyi.ai",
+  "apiVersion": 1,
+  "version": "0.1.0",
+  "displayName": "ai",
+  "description": "ai 域（由 scripts/scaffold-domain-plugin.cjs 生成的第一方插件声明）",
+  "author": "RuoYi All Next",
+  "categories": [
+    "automation"
+  ],
+  "capabilities": [
+    "api.routes.register"
+  ],
+  "entrypoints": {
+    "merged": "./plugin-entry.ts"
+  },
+  "domain": {
+    "kind": "business",
+    "stage": "B",
+    "contractVersion": "v1",
+    "publicPrefixes": [
+      "/api/v1/admin/ai",
+      "/api/v1/open/ai"
+    ],
+    "upstreamEnv": "RUOYI_DOMAIN_AI_UPSTREAM",
+    "defaultPort": 3223,
+    "packable": true,
+    "independentDatabase": false,
+    "dependsOnModules": [
+      "shared"
+    ],
+    "auth": {
+      "audience": "admin",
+      "tenantPolicy": "required"
+    },
+    "resilience": {
+      "timeoutMs": 15000,
+      "retryMaxAttempts": 1,
+      "safeMethodsOnly": true,
+      "idempotencyRequired": true
+    }
+  },
+  "apiRoutes": [
+    {
+      "routeKey": "admin:ai-api-key/[id]:delete",
+      "method": "DELETE",
+      "path": "/ai-api-key/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-api-key/[id]:get",
+      "method": "GET",
+      "path": "/ai-api-key/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-api-key/[id]:put",
+      "method": "PUT",
+      "path": "/ai-api-key/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-api-key:get",
+      "method": "GET",
+      "path": "/ai-api-key",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-api-key:post",
+      "method": "POST",
+      "path": "/ai-api-key",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-chat-conversation/[id]:delete",
+      "method": "DELETE",
+      "path": "/ai-chat-conversation/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-chat-conversation/[id]:get",
+      "method": "GET",
+      "path": "/ai-chat-conversation/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-chat-conversation/[id]:put",
+      "method": "PUT",
+      "path": "/ai-chat-conversation/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-chat-conversation:get",
+      "method": "GET",
+      "path": "/ai-chat-conversation",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-chat-conversation:post",
+      "method": "POST",
+      "path": "/ai-chat-conversation",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-chat-message/[id]:delete",
+      "method": "DELETE",
+      "path": "/ai-chat-message/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-chat-message/[id]:get",
+      "method": "GET",
+      "path": "/ai-chat-message/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-chat-message/[id]:put",
+      "method": "PUT",
+      "path": "/ai-chat-message/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-chat-message:get",
+      "method": "GET",
+      "path": "/ai-chat-message",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-chat-message:post",
+      "method": "POST",
+      "path": "/ai-chat-message",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-chat-role/[id]:delete",
+      "method": "DELETE",
+      "path": "/ai-chat-role/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-chat-role/[id]:get",
+      "method": "GET",
+      "path": "/ai-chat-role/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-chat-role/[id]:put",
+      "method": "PUT",
+      "path": "/ai-chat-role/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-chat-role:get",
+      "method": "GET",
+      "path": "/ai-chat-role",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-chat-role:post",
+      "method": "POST",
+      "path": "/ai-chat-role",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-image/[id]:delete",
+      "method": "DELETE",
+      "path": "/ai-image/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-image/[id]:get",
+      "method": "GET",
+      "path": "/ai-image/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-image/[id]:put",
+      "method": "PUT",
+      "path": "/ai-image/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-image:get",
+      "method": "GET",
+      "path": "/ai-image",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-image:post",
+      "method": "POST",
+      "path": "/ai-image",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-knowledge-document/[id]:delete",
+      "method": "DELETE",
+      "path": "/ai-knowledge-document/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-knowledge-document/[id]:get",
+      "method": "GET",
+      "path": "/ai-knowledge-document/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-knowledge-document/[id]:put",
+      "method": "PUT",
+      "path": "/ai-knowledge-document/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-knowledge-document:get",
+      "method": "GET",
+      "path": "/ai-knowledge-document",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-knowledge-document:post",
+      "method": "POST",
+      "path": "/ai-knowledge-document",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-knowledge-segment/[id]:delete",
+      "method": "DELETE",
+      "path": "/ai-knowledge-segment/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-knowledge-segment/[id]:get",
+      "method": "GET",
+      "path": "/ai-knowledge-segment/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-knowledge-segment/[id]:put",
+      "method": "PUT",
+      "path": "/ai-knowledge-segment/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-knowledge-segment:get",
+      "method": "GET",
+      "path": "/ai-knowledge-segment",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-knowledge-segment:post",
+      "method": "POST",
+      "path": "/ai-knowledge-segment",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-knowledge/[id]:delete",
+      "method": "DELETE",
+      "path": "/ai-knowledge/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-knowledge/[id]:get",
+      "method": "GET",
+      "path": "/ai-knowledge/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-knowledge/[id]:put",
+      "method": "PUT",
+      "path": "/ai-knowledge/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-knowledge:get",
+      "method": "GET",
+      "path": "/ai-knowledge",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-knowledge:post",
+      "method": "POST",
+      "path": "/ai-knowledge",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-mind-map/[id]:delete",
+      "method": "DELETE",
+      "path": "/ai-mind-map/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-mind-map/[id]:get",
+      "method": "GET",
+      "path": "/ai-mind-map/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-mind-map/[id]:put",
+      "method": "PUT",
+      "path": "/ai-mind-map/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-mind-map:get",
+      "method": "GET",
+      "path": "/ai-mind-map",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-mind-map:post",
+      "method": "POST",
+      "path": "/ai-mind-map",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-music/[id]:delete",
+      "method": "DELETE",
+      "path": "/ai-music/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-music/[id]:get",
+      "method": "GET",
+      "path": "/ai-music/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-music/[id]:put",
+      "method": "PUT",
+      "path": "/ai-music/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-music:get",
+      "method": "GET",
+      "path": "/ai-music",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-music:post",
+      "method": "POST",
+      "path": "/ai-music",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-tool/[id]:delete",
+      "method": "DELETE",
+      "path": "/ai-tool/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-tool/[id]:get",
+      "method": "GET",
+      "path": "/ai-tool/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-tool/[id]:put",
+      "method": "PUT",
+      "path": "/ai-tool/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-tool:get",
+      "method": "GET",
+      "path": "/ai-tool",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-tool:post",
+      "method": "POST",
+      "path": "/ai-tool",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-workflow/[id]:delete",
+      "method": "DELETE",
+      "path": "/ai-workflow/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-workflow/[id]:get",
+      "method": "GET",
+      "path": "/ai-workflow/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-workflow/[id]:put",
+      "method": "PUT",
+      "path": "/ai-workflow/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-workflow:get",
+      "method": "GET",
+      "path": "/ai-workflow",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-workflow:post",
+      "method": "POST",
+      "path": "/ai-workflow",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-write/[id]:delete",
+      "method": "DELETE",
+      "path": "/ai-write/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-write/[id]:get",
+      "method": "GET",
+      "path": "/ai-write/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-write/[id]:put",
+      "method": "PUT",
+      "path": "/ai-write/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-write:get",
+      "method": "GET",
+      "path": "/ai-write",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ai-write:post",
+      "method": "POST",
+      "path": "/ai-write",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "open:v1/chat/completions:post",
+      "method": "POST",
+      "path": "/v1/chat/completions",
+      "auth": "public"
+    },
+    {
+      "routeKey": "open:v1/embeddings:post",
+      "method": "POST",
+      "path": "/v1/embeddings",
+      "auth": "public"
+    },
+    {
+      "routeKey": "open:v1/models:get",
+      "method": "GET",
+      "path": "/v1/models",
+      "auth": "public"
+    }
+  ]
+}

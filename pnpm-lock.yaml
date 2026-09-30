@@ -296,6 +296,78 @@ importers:
         specifier: workspace:*
         version: link:../../sdk
 
+  packages/plugins/plugin-ai:
+    dependencies:
+      '@ruoyi/plugin-sdk':
+        specifier: workspace:*
+        version: link:../sdk
+
+  packages/plugins/plugin-aigw:
+    dependencies:
+      '@ruoyi/plugin-sdk':
+        specifier: workspace:*
+        version: link:../sdk
+
+  packages/plugins/plugin-bpm:
+    dependencies:
+      '@ruoyi/plugin-sdk':
+        specifier: workspace:*
+        version: link:../sdk
+
+  packages/plugins/plugin-crm:
+    dependencies:
+      '@ruoyi/plugin-sdk':
+        specifier: workspace:*
+        version: link:../sdk
+
+  packages/plugins/plugin-erp:
+    dependencies:
+      '@ruoyi/plugin-sdk':
+        specifier: workspace:*
+        version: link:../sdk
+
+  packages/plugins/plugin-im:
+    dependencies:
+      '@ruoyi/plugin-sdk':
+        specifier: workspace:*
+        version: link:../sdk
+
+  packages/plugins/plugin-iot:
+    dependencies:
+      '@ruoyi/plugin-sdk':
+        specifier: workspace:*
+        version: link:../sdk
+
+  packages/plugins/plugin-mall:
+    dependencies:
+      '@ruoyi/plugin-sdk':
+        specifier: workspace:*
+        version: link:../sdk
+
+  packages/plugins/plugin-member:
+    dependencies:
+      '@ruoyi/plugin-sdk':
+        specifier: workspace:*
+        version: link:../sdk
+
+  packages/plugins/plugin-mes:
+    dependencies:
+      '@ruoyi/plugin-sdk':
+        specifier: workspace:*
+        version: link:../sdk
+
+  packages/plugins/plugin-mp:
+    dependencies:
+      '@ruoyi/plugin-sdk':
+        specifier: workspace:*
+        version: link:../sdk
+
+  packages/plugins/plugin-online:
+    dependencies:
+      '@ruoyi/plugin-sdk':
+        specifier: workspace:*
+        version: link:../sdk
+
   packages/plugins/plugin-pay:
     dependencies:
       '@ruoyi/plugin-sdk':
@@ -312,6 +384,12 @@ importers:
         version: 4.6.5
 
   packages/plugins/plugin-report:
+    dependencies:
+      '@ruoyi/plugin-sdk':
+        specifier: workspace:*
+        version: link:../sdk
+
+  packages/plugins/plugin-wms:
     dependencies:
       '@ruoyi/plugin-sdk':
         specifier: workspace:*

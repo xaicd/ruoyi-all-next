@@ -1,0 +1,333 @@
+/**
+ * mall 域的**插件入口**（合并/同进程形态）。由 scripts/scaffold-domain-plugin.cjs 生成。
+ *
+ * 设计要点: 不重写业务逻辑 —— 处理器仍是包内 routes 目录下那些已被
+ * withAdminRoute / withAppRoute 包装过的函数（鉴权/权限码/schema 校验都在里面），
+ * 这里只做一层适配: 宿主的 {method,path,query,body,headers} -> Request -> Response -> {status,body}。
+ *
+ * 为什么用静态 import: 仓内第一方插件是 TS, 宿主无法用运行期 import() 加载（Node 不认 TS）,
+ * 而模板字符串动态 import 在 Turbopack 下也无法解析 —— 必须显式列出每条 import。
+ */
+import { definePlugin } from "@ruoyi/plugin-sdk"
+
+import * as route_admin_after_sale__id_ from "@/modules/mall/routes/admin/after-sale/[id]/route"
+import * as route_admin_after_sale from "@/modules/mall/routes/admin/after-sale/route"
+import * as route_admin_article_category__id_ from "@/modules/mall/routes/admin/article-category/[id]/route"
+import * as route_admin_article_category from "@/modules/mall/routes/admin/article-category/route"
+import * as route_admin_article__id_ from "@/modules/mall/routes/admin/article/[id]/route"
+import * as route_admin_article from "@/modules/mall/routes/admin/article/route"
+import * as route_admin_banner__id_ from "@/modules/mall/routes/admin/banner/[id]/route"
+import * as route_admin_banner from "@/modules/mall/routes/admin/banner/route"
+import * as route_admin_bargain_activity__id_ from "@/modules/mall/routes/admin/bargain-activity/[id]/route"
+import * as route_admin_bargain_activity from "@/modules/mall/routes/admin/bargain-activity/route"
+import * as route_admin_bargain_help__id_ from "@/modules/mall/routes/admin/bargain-help/[id]/route"
+import * as route_admin_bargain_help from "@/modules/mall/routes/admin/bargain-help/route"
+import * as route_admin_bargain_record__id_ from "@/modules/mall/routes/admin/bargain-record/[id]/route"
+import * as route_admin_bargain_record from "@/modules/mall/routes/admin/bargain-record/route"
+import * as route_admin_brokerage_record__id_ from "@/modules/mall/routes/admin/brokerage-record/[id]/route"
+import * as route_admin_brokerage_record from "@/modules/mall/routes/admin/brokerage-record/route"
+import * as route_admin_brokerage_user__id_ from "@/modules/mall/routes/admin/brokerage-user/[id]/route"
+import * as route_admin_brokerage_user from "@/modules/mall/routes/admin/brokerage-user/route"
+import * as route_admin_brokerage_withdraw__id_ from "@/modules/mall/routes/admin/brokerage-withdraw/[id]/route"
+import * as route_admin_brokerage_withdraw from "@/modules/mall/routes/admin/brokerage-withdraw/route"
+import * as route_admin_combination_activity__id_ from "@/modules/mall/routes/admin/combination-activity/[id]/route"
+import * as route_admin_combination_activity from "@/modules/mall/routes/admin/combination-activity/route"
+import * as route_admin_combination_record__id_ from "@/modules/mall/routes/admin/combination-record/[id]/route"
+import * as route_admin_combination_record from "@/modules/mall/routes/admin/combination-record/route"
+import * as route_admin_coupon_template__id_ from "@/modules/mall/routes/admin/coupon-template/[id]/route"
+import * as route_admin_coupon_template from "@/modules/mall/routes/admin/coupon-template/route"
+import * as route_admin_coupon__id_ from "@/modules/mall/routes/admin/coupon/[id]/route"
+import * as route_admin_coupon from "@/modules/mall/routes/admin/coupon/route"
+import * as route_admin_coupons_issue from "@/modules/mall/routes/admin/coupons/issue/route"
+import * as route_admin_delivery_express_template__id_ from "@/modules/mall/routes/admin/delivery-express-template/[id]/route"
+import * as route_admin_delivery_express_template from "@/modules/mall/routes/admin/delivery-express-template/route"
+import * as route_admin_delivery_express__id_ from "@/modules/mall/routes/admin/delivery-express/[id]/route"
+import * as route_admin_delivery_express from "@/modules/mall/routes/admin/delivery-express/route"
+import * as route_admin_delivery_pick_up_store__id_ from "@/modules/mall/routes/admin/delivery-pick-up-store/[id]/route"
+import * as route_admin_delivery_pick_up_store from "@/modules/mall/routes/admin/delivery-pick-up-store/route"
+import * as route_admin_discount_activity__id_ from "@/modules/mall/routes/admin/discount-activity/[id]/route"
+import * as route_admin_discount_activity from "@/modules/mall/routes/admin/discount-activity/route"
+import * as route_admin_diy_page__id_ from "@/modules/mall/routes/admin/diy-page/[id]/route"
+import * as route_admin_diy_page from "@/modules/mall/routes/admin/diy-page/route"
+import * as route_admin_diy_template__id_ from "@/modules/mall/routes/admin/diy-template/[id]/route"
+import * as route_admin_diy_template from "@/modules/mall/routes/admin/diy-template/route"
+import * as route_admin_ke_fu_conversation__id_ from "@/modules/mall/routes/admin/ke-fu-conversation/[id]/route"
+import * as route_admin_ke_fu_conversation from "@/modules/mall/routes/admin/ke-fu-conversation/route"
+import * as route_admin_ke_fu_message__id_ from "@/modules/mall/routes/admin/ke-fu-message/[id]/route"
+import * as route_admin_ke_fu_message from "@/modules/mall/routes/admin/ke-fu-message/route"
+import * as route_admin_member_statistics__id_ from "@/modules/mall/routes/admin/member-statistics/[id]/route"
+import * as route_admin_member_statistics from "@/modules/mall/routes/admin/member-statistics/route"
+import * as route_admin_orders__id_ from "@/modules/mall/routes/admin/orders/[id]/route"
+import * as route_admin_orders from "@/modules/mall/routes/admin/orders/route"
+import * as route_admin_pay_statistics__id_ from "@/modules/mall/routes/admin/pay-statistics/[id]/route"
+import * as route_admin_pay_statistics from "@/modules/mall/routes/admin/pay-statistics/route"
+import * as route_admin_point_activity__id_ from "@/modules/mall/routes/admin/point-activity/[id]/route"
+import * as route_admin_point_activity from "@/modules/mall/routes/admin/point-activity/route"
+import * as route_admin_product_brand__id_ from "@/modules/mall/routes/admin/product-brand/[id]/route"
+import * as route_admin_product_brand from "@/modules/mall/routes/admin/product-brand/route"
+import * as route_admin_product_browse_history__id_ from "@/modules/mall/routes/admin/product-browse-history/[id]/route"
+import * as route_admin_product_browse_history from "@/modules/mall/routes/admin/product-browse-history/route"
+import * as route_admin_product_category__id_ from "@/modules/mall/routes/admin/product-category/[id]/route"
+import * as route_admin_product_category from "@/modules/mall/routes/admin/product-category/route"
+import * as route_admin_product_comment__id_ from "@/modules/mall/routes/admin/product-comment/[id]/route"
+import * as route_admin_product_comment from "@/modules/mall/routes/admin/product-comment/route"
+import * as route_admin_product_favorite__id_ from "@/modules/mall/routes/admin/product-favorite/[id]/route"
+import * as route_admin_product_favorite from "@/modules/mall/routes/admin/product-favorite/route"
+import * as route_admin_product_property_value__id_ from "@/modules/mall/routes/admin/product-property-value/[id]/route"
+import * as route_admin_product_property_value from "@/modules/mall/routes/admin/product-property-value/route"
+import * as route_admin_product_property__id_ from "@/modules/mall/routes/admin/product-property/[id]/route"
+import * as route_admin_product_property from "@/modules/mall/routes/admin/product-property/route"
+import * as route_admin_product_spu__id_ from "@/modules/mall/routes/admin/product-spu/[id]/route"
+import * as route_admin_product_spu from "@/modules/mall/routes/admin/product-spu/route"
+import * as route_admin_product_statistics__id_ from "@/modules/mall/routes/admin/product-statistics/[id]/route"
+import * as route_admin_product_statistics from "@/modules/mall/routes/admin/product-statistics/route"
+import * as route_admin_products__id_ from "@/modules/mall/routes/admin/products/[id]/route"
+import * as route_admin_products from "@/modules/mall/routes/admin/products/route"
+import * as route_admin_reward_activity__id_ from "@/modules/mall/routes/admin/reward-activity/[id]/route"
+import * as route_admin_reward_activity from "@/modules/mall/routes/admin/reward-activity/route"
+import * as route_admin_seckill_activity__id_ from "@/modules/mall/routes/admin/seckill-activity/[id]/route"
+import * as route_admin_seckill_activity from "@/modules/mall/routes/admin/seckill-activity/route"
+import * as route_admin_seckill_config__id_ from "@/modules/mall/routes/admin/seckill-config/[id]/route"
+import * as route_admin_seckill_config from "@/modules/mall/routes/admin/seckill-config/route"
+import * as route_admin_trade_config__id_ from "@/modules/mall/routes/admin/trade-config/[id]/route"
+import * as route_admin_trade_config from "@/modules/mall/routes/admin/trade-config/route"
+import * as route_admin_trade_order__id_ from "@/modules/mall/routes/admin/trade-order/[id]/route"
+import * as route_admin_trade_order from "@/modules/mall/routes/admin/trade-order/route"
+import * as route_admin_trade_statistics__id_ from "@/modules/mall/routes/admin/trade-statistics/[id]/route"
+import * as route_admin_trade_statistics from "@/modules/mall/routes/admin/trade-statistics/route"
+import * as route_app_products from "@/modules/mall/routes/app/products/route"
+
+async function invoke(handler: (request: Request, context?: unknown) => Promise<Response> | Response, input: any) {
+  const url = new URL(`http://plugin.invalid${input.path}`)
+  for (const [key, value] of Object.entries(input.query ?? {})) url.searchParams.set(key, String(value))
+  const request = new Request(url, {
+    method: input.method,
+    headers: input.headers,
+    body: input.body === undefined ? undefined : JSON.stringify(input.body),
+  })
+  const response = await handler(request)
+  const text = await response.text()
+  let body: unknown = text
+  try { body = text ? JSON.parse(text) : null } catch { /* 非 JSON 原样返回 */ }
+  return { status: response.status, body }
+}
+
+export default definePlugin({
+  async setup(ctx) { ctx.logger.info("ready (merged)") },
+  async onHealth() { return { status: "ok" } },
+  async onShutdown() {},
+  routes: {
+    "admin:after-sale/[id]:delete": (input: any) => invoke(route_admin_after_sale__id_.DELETE, input),
+    "admin:after-sale/[id]:get": (input: any) => invoke(route_admin_after_sale__id_.GET, input),
+    "admin:after-sale/[id]:put": (input: any) => invoke(route_admin_after_sale__id_.PUT, input),
+    "admin:after-sale:get": (input: any) => invoke(route_admin_after_sale.GET, input),
+    "admin:after-sale:post": (input: any) => invoke(route_admin_after_sale.POST, input),
+    "admin:article-category/[id]:delete": (input: any) => invoke(route_admin_article_category__id_.DELETE, input),
+    "admin:article-category/[id]:get": (input: any) => invoke(route_admin_article_category__id_.GET, input),
+    "admin:article-category/[id]:put": (input: any) => invoke(route_admin_article_category__id_.PUT, input),
+    "admin:article-category:get": (input: any) => invoke(route_admin_article_category.GET, input),
+    "admin:article-category:post": (input: any) => invoke(route_admin_article_category.POST, input),
+    "admin:article/[id]:delete": (input: any) => invoke(route_admin_article__id_.DELETE, input),
+    "admin:article/[id]:get": (input: any) => invoke(route_admin_article__id_.GET, input),
+    "admin:article/[id]:put": (input: any) => invoke(route_admin_article__id_.PUT, input),
+    "admin:article:get": (input: any) => invoke(route_admin_article.GET, input),
+    "admin:article:post": (input: any) => invoke(route_admin_article.POST, input),
+    "admin:banner/[id]:delete": (input: any) => invoke(route_admin_banner__id_.DELETE, input),
+    "admin:banner/[id]:get": (input: any) => invoke(route_admin_banner__id_.GET, input),
+    "admin:banner/[id]:put": (input: any) => invoke(route_admin_banner__id_.PUT, input),
+    "admin:banner:get": (input: any) => invoke(route_admin_banner.GET, input),
+    "admin:banner:post": (input: any) => invoke(route_admin_banner.POST, input),
+    "admin:bargain-activity/[id]:delete": (input: any) => invoke(route_admin_bargain_activity__id_.DELETE, input),
+    "admin:bargain-activity/[id]:get": (input: any) => invoke(route_admin_bargain_activity__id_.GET, input),
+    "admin:bargain-activity/[id]:put": (input: any) => invoke(route_admin_bargain_activity__id_.PUT, input),
+    "admin:bargain-activity:get": (input: any) => invoke(route_admin_bargain_activity.GET, input),
+    "admin:bargain-activity:post": (input: any) => invoke(route_admin_bargain_activity.POST, input),
+    "admin:bargain-help/[id]:delete": (input: any) => invoke(route_admin_bargain_help__id_.DELETE, input),
+    "admin:bargain-help/[id]:get": (input: any) => invoke(route_admin_bargain_help__id_.GET, input),
+    "admin:bargain-help/[id]:put": (input: any) => invoke(route_admin_bargain_help__id_.PUT, input),
+    "admin:bargain-help:get": (input: any) => invoke(route_admin_bargain_help.GET, input),
+    "admin:bargain-help:post": (input: any) => invoke(route_admin_bargain_help.POST, input),
+    "admin:bargain-record/[id]:delete": (input: any) => invoke(route_admin_bargain_record__id_.DELETE, input),
+    "admin:bargain-record/[id]:get": (input: any) => invoke(route_admin_bargain_record__id_.GET, input),
+    "admin:bargain-record/[id]:put": (input: any) => invoke(route_admin_bargain_record__id_.PUT, input),
+    "admin:bargain-record:get": (input: any) => invoke(route_admin_bargain_record.GET, input),
+    "admin:bargain-record:post": (input: any) => invoke(route_admin_bargain_record.POST, input),
+    "admin:brokerage-record/[id]:delete": (input: any) => invoke(route_admin_brokerage_record__id_.DELETE, input),
+    "admin:brokerage-record/[id]:get": (input: any) => invoke(route_admin_brokerage_record__id_.GET, input),
+    "admin:brokerage-record/[id]:put": (input: any) => invoke(route_admin_brokerage_record__id_.PUT, input),
+    "admin:brokerage-record:get": (input: any) => invoke(route_admin_brokerage_record.GET, input),
+    "admin:brokerage-record:post": (input: any) => invoke(route_admin_brokerage_record.POST, input),
+    "admin:brokerage-user/[id]:delete": (input: any) => invoke(route_admin_brokerage_user__id_.DELETE, input),
+    "admin:brokerage-user/[id]:get": (input: any) => invoke(route_admin_brokerage_user__id_.GET, input),
+    "admin:brokerage-user/[id]:put": (input: any) => invoke(route_admin_brokerage_user__id_.PUT, input),
+    "admin:brokerage-user:get": (input: any) => invoke(route_admin_brokerage_user.GET, input),
+    "admin:brokerage-user:post": (input: any) => invoke(route_admin_brokerage_user.POST, input),
+    "admin:brokerage-withdraw/[id]:delete": (input: any) => invoke(route_admin_brokerage_withdraw__id_.DELETE, input),
+    "admin:brokerage-withdraw/[id]:get": (input: any) => invoke(route_admin_brokerage_withdraw__id_.GET, input),
+    "admin:brokerage-withdraw/[id]:put": (input: any) => invoke(route_admin_brokerage_withdraw__id_.PUT, input),
+    "admin:brokerage-withdraw:get": (input: any) => invoke(route_admin_brokerage_withdraw.GET, input),
+    "admin:brokerage-withdraw:post": (input: any) => invoke(route_admin_brokerage_withdraw.POST, input),
+    "admin:combination-activity/[id]:delete": (input: any) => invoke(route_admin_combination_activity__id_.DELETE, input),
+    "admin:combination-activity/[id]:get": (input: any) => invoke(route_admin_combination_activity__id_.GET, input),
+    "admin:combination-activity/[id]:put": (input: any) => invoke(route_admin_combination_activity__id_.PUT, input),
+    "admin:combination-activity:get": (input: any) => invoke(route_admin_combination_activity.GET, input),
+    "admin:combination-activity:post": (input: any) => invoke(route_admin_combination_activity.POST, input),
+    "admin:combination-record/[id]:delete": (input: any) => invoke(route_admin_combination_record__id_.DELETE, input),
+    "admin:combination-record/[id]:get": (input: any) => invoke(route_admin_combination_record__id_.GET, input),
+    "admin:combination-record/[id]:put": (input: any) => invoke(route_admin_combination_record__id_.PUT, input),
+    "admin:combination-record:get": (input: any) => invoke(route_admin_combination_record.GET, input),
+    "admin:combination-record:post": (input: any) => invoke(route_admin_combination_record.POST, input),
+    "admin:coupon-template/[id]:delete": (input: any) => invoke(route_admin_coupon_template__id_.DELETE, input),
+    "admin:coupon-template/[id]:get": (input: any) => invoke(route_admin_coupon_template__id_.GET, input),
+    "admin:coupon-template/[id]:put": (input: any) => invoke(route_admin_coupon_template__id_.PUT, input),
+    "admin:coupon-template:get": (input: any) => invoke(route_admin_coupon_template.GET, input),
+    "admin:coupon-template:post": (input: any) => invoke(route_admin_coupon_template.POST, input),
+    "admin:coupon/[id]:delete": (input: any) => invoke(route_admin_coupon__id_.DELETE, input),
+    "admin:coupon/[id]:get": (input: any) => invoke(route_admin_coupon__id_.GET, input),
+    "admin:coupon/[id]:put": (input: any) => invoke(route_admin_coupon__id_.PUT, input),
+    "admin:coupon:get": (input: any) => invoke(route_admin_coupon.GET, input),
+    "admin:coupon:post": (input: any) => invoke(route_admin_coupon.POST, input),
+    "admin:coupons/issue:post": (input: any) => invoke(route_admin_coupons_issue.POST, input),
+    "admin:delivery-express-template/[id]:delete": (input: any) => invoke(route_admin_delivery_express_template__id_.DELETE, input),
+    "admin:delivery-express-template/[id]:get": (input: any) => invoke(route_admin_delivery_express_template__id_.GET, input),
+    "admin:delivery-express-template/[id]:put": (input: any) => invoke(route_admin_delivery_express_template__id_.PUT, input),
+    "admin:delivery-express-template:get": (input: any) => invoke(route_admin_delivery_express_template.GET, input),
+    "admin:delivery-express-template:post": (input: any) => invoke(route_admin_delivery_express_template.POST, input),
+    "admin:delivery-express/[id]:delete": (input: any) => invoke(route_admin_delivery_express__id_.DELETE, input),
+    "admin:delivery-express/[id]:get": (input: any) => invoke(route_admin_delivery_express__id_.GET, input),
+    "admin:delivery-express/[id]:put": (input: any) => invoke(route_admin_delivery_express__id_.PUT, input),
+    "admin:delivery-express:get": (input: any) => invoke(route_admin_delivery_express.GET, input),
+    "admin:delivery-express:post": (input: any) => invoke(route_admin_delivery_express.POST, input),
+    "admin:delivery-pick-up-store/[id]:delete": (input: any) => invoke(route_admin_delivery_pick_up_store__id_.DELETE, input),
+    "admin:delivery-pick-up-store/[id]:get": (input: any) => invoke(route_admin_delivery_pick_up_store__id_.GET, input),
+    "admin:delivery-pick-up-store/[id]:put": (input: any) => invoke(route_admin_delivery_pick_up_store__id_.PUT, input),
+    "admin:delivery-pick-up-store:get": (input: any) => invoke(route_admin_delivery_pick_up_store.GET, input),
+    "admin:delivery-pick-up-store:post": (input: any) => invoke(route_admin_delivery_pick_up_store.POST, input),
+    "admin:discount-activity/[id]:delete": (input: any) => invoke(route_admin_discount_activity__id_.DELETE, input),
+    "admin:discount-activity/[id]:get": (input: any) => invoke(route_admin_discount_activity__id_.GET, input),
+    "admin:discount-activity/[id]:put": (input: any) => invoke(route_admin_discount_activity__id_.PUT, input),
+    "admin:discount-activity:get": (input: any) => invoke(route_admin_discount_activity.GET, input),
+    "admin:discount-activity:post": (input: any) => invoke(route_admin_discount_activity.POST, input),
+    "admin:diy-page/[id]:delete": (input: any) => invoke(route_admin_diy_page__id_.DELETE, input),
+    "admin:diy-page/[id]:get": (input: any) => invoke(route_admin_diy_page__id_.GET, input),
+    "admin:diy-page/[id]:put": (input: any) => invoke(route_admin_diy_page__id_.PUT, input),
+    "admin:diy-page:get": (input: any) => invoke(route_admin_diy_page.GET, input),
+    "admin:diy-page:post": (input: any) => invoke(route_admin_diy_page.POST, input),
+    "admin:diy-template/[id]:delete": (input: any) => invoke(route_admin_diy_template__id_.DELETE, input),
+    "admin:diy-template/[id]:get": (input: any) => invoke(route_admin_diy_template__id_.GET, input),
+    "admin:diy-template/[id]:put": (input: any) => invoke(route_admin_diy_template__id_.PUT, input),
+    "admin:diy-template:get": (input: any) => invoke(route_admin_diy_template.GET, input),
+    "admin:diy-template:post": (input: any) => invoke(route_admin_diy_template.POST, input),
+    "admin:ke-fu-conversation/[id]:delete": (input: any) => invoke(route_admin_ke_fu_conversation__id_.DELETE, input),
+    "admin:ke-fu-conversation/[id]:get": (input: any) => invoke(route_admin_ke_fu_conversation__id_.GET, input),
+    "admin:ke-fu-conversation/[id]:put": (input: any) => invoke(route_admin_ke_fu_conversation__id_.PUT, input),
+    "admin:ke-fu-conversation:get": (input: any) => invoke(route_admin_ke_fu_conversation.GET, input),
+    "admin:ke-fu-conversation:post": (input: any) => invoke(route_admin_ke_fu_conversation.POST, input),
+    "admin:ke-fu-message/[id]:delete": (input: any) => invoke(route_admin_ke_fu_message__id_.DELETE, input),
+    "admin:ke-fu-message/[id]:get": (input: any) => invoke(route_admin_ke_fu_message__id_.GET, input),
+    "admin:ke-fu-message/[id]:put": (input: any) => invoke(route_admin_ke_fu_message__id_.PUT, input),
+    "admin:ke-fu-message:get": (input: any) => invoke(route_admin_ke_fu_message.GET, input),
+    "admin:ke-fu-message:post": (input: any) => invoke(route_admin_ke_fu_message.POST, input),
+    "admin:member-statistics/[id]:delete": (input: any) => invoke(route_admin_member_statistics__id_.DELETE, input),
+    "admin:member-statistics/[id]:get": (input: any) => invoke(route_admin_member_statistics__id_.GET, input),
+    "admin:member-statistics/[id]:put": (input: any) => invoke(route_admin_member_statistics__id_.PUT, input),
+    "admin:member-statistics:get": (input: any) => invoke(route_admin_member_statistics.GET, input),
+    "admin:member-statistics:post": (input: any) => invoke(route_admin_member_statistics.POST, input),
+    "admin:orders/[id]:delete": (input: any) => invoke(route_admin_orders__id_.DELETE, input),
+    "admin:orders/[id]:get": (input: any) => invoke(route_admin_orders__id_.GET, input),
+    "admin:orders/[id]:put": (input: any) => invoke(route_admin_orders__id_.PUT, input),
+    "admin:orders:get": (input: any) => invoke(route_admin_orders.GET, input),
+    "admin:orders:post": (input: any) => invoke(route_admin_orders.POST, input),
+    "admin:pay-statistics/[id]:delete": (input: any) => invoke(route_admin_pay_statistics__id_.DELETE, input),
+    "admin:pay-statistics/[id]:get": (input: any) => invoke(route_admin_pay_statistics__id_.GET, input),
+    "admin:pay-statistics/[id]:put": (input: any) => invoke(route_admin_pay_statistics__id_.PUT, input),
+    "admin:pay-statistics:get": (input: any) => invoke(route_admin_pay_statistics.GET, input),
+    "admin:pay-statistics:post": (input: any) => invoke(route_admin_pay_statistics.POST, input),
+    "admin:point-activity/[id]:delete": (input: any) => invoke(route_admin_point_activity__id_.DELETE, input),
+    "admin:point-activity/[id]:get": (input: any) => invoke(route_admin_point_activity__id_.GET, input),
+    "admin:point-activity/[id]:put": (input: any) => invoke(route_admin_point_activity__id_.PUT, input),
+    "admin:point-activity:get": (input: any) => invoke(route_admin_point_activity.GET, input),
+    "admin:point-activity:post": (input: any) => invoke(route_admin_point_activity.POST, input),
+    "admin:product-brand/[id]:delete": (input: any) => invoke(route_admin_product_brand__id_.DELETE, input),
+    "admin:product-brand/[id]:get": (input: any) => invoke(route_admin_product_brand__id_.GET, input),
+    "admin:product-brand/[id]:put": (input: any) => invoke(route_admin_product_brand__id_.PUT, input),
+    "admin:product-brand:get": (input: any) => invoke(route_admin_product_brand.GET, input),
+    "admin:product-brand:post": (input: any) => invoke(route_admin_product_brand.POST, input),
+    "admin:product-browse-history/[id]:delete": (input: any) => invoke(route_admin_product_browse_history__id_.DELETE, input),
+    "admin:product-browse-history/[id]:get": (input: any) => invoke(route_admin_product_browse_history__id_.GET, input),
+    "admin:product-browse-history/[id]:put": (input: any) => invoke(route_admin_product_browse_history__id_.PUT, input),
+    "admin:product-browse-history:get": (input: any) => invoke(route_admin_product_browse_history.GET, input),
+    "admin:product-browse-history:post": (input: any) => invoke(route_admin_product_browse_history.POST, input),
+    "admin:product-category/[id]:delete": (input: any) => invoke(route_admin_product_category__id_.DELETE, input),
+    "admin:product-category/[id]:get": (input: any) => invoke(route_admin_product_category__id_.GET, input),
+    "admin:product-category/[id]:put": (input: any) => invoke(route_admin_product_category__id_.PUT, input),
+    "admin:product-category:get": (input: any) => invoke(route_admin_product_category.GET, input),
+    "admin:product-category:post": (input: any) => invoke(route_admin_product_category.POST, input),
+    "admin:product-comment/[id]:delete": (input: any) => invoke(route_admin_product_comment__id_.DELETE, input),
+    "admin:product-comment/[id]:get": (input: any) => invoke(route_admin_product_comment__id_.GET, input),
+    "admin:product-comment/[id]:put": (input: any) => invoke(route_admin_product_comment__id_.PUT, input),
+    "admin:product-comment:get": (input: any) => invoke(route_admin_product_comment.GET, input),
+    "admin:product-comment:post": (input: any) => invoke(route_admin_product_comment.POST, input),
+    "admin:product-favorite/[id]:delete": (input: any) => invoke(route_admin_product_favorite__id_.DELETE, input),
+    "admin:product-favorite/[id]:get": (input: any) => invoke(route_admin_product_favorite__id_.GET, input),
+    "admin:product-favorite/[id]:put": (input: any) => invoke(route_admin_product_favorite__id_.PUT, input),
+    "admin:product-favorite:get": (input: any) => invoke(route_admin_product_favorite.GET, input),
+    "admin:product-favorite:post": (input: any) => invoke(route_admin_product_favorite.POST, input),
+    "admin:product-property-value/[id]:delete": (input: any) => invoke(route_admin_product_property_value__id_.DELETE, input),
+    "admin:product-property-value/[id]:get": (input: any) => invoke(route_admin_product_property_value__id_.GET, input),
+    "admin:product-property-value/[id]:put": (input: any) => invoke(route_admin_product_property_value__id_.PUT, input),
+    "admin:product-property-value:get": (input: any) => invoke(route_admin_product_property_value.GET, input),
+    "admin:product-property-value:post": (input: any) => invoke(route_admin_product_property_value.POST, input),
+    "admin:product-property/[id]:delete": (input: any) => invoke(route_admin_product_property__id_.DELETE, input),
+    "admin:product-property/[id]:get": (input: any) => invoke(route_admin_product_property__id_.GET, input),
+    "admin:product-property/[id]:put": (input: any) => invoke(route_admin_product_property__id_.PUT, input),
+    "admin:product-property:get": (input: any) => invoke(route_admin_product_property.GET, input),
+    "admin:product-property:post": (input: any) => invoke(route_admin_product_property.POST, input),
+    "admin:product-spu/[id]:delete": (input: any) => invoke(route_admin_product_spu__id_.DELETE, input),
+    "admin:product-spu/[id]:get": (input: any) => invoke(route_admin_product_spu__id_.GET, input),
+    "admin:product-spu/[id]:put": (input: any) => invoke(route_admin_product_spu__id_.PUT, input),
+    "admin:product-spu:get": (input: any) => invoke(route_admin_product_spu.GET, input),
+    "admin:product-spu:post": (input: any) => invoke(route_admin_product_spu.POST, input),
+    "admin:product-statistics/[id]:delete": (input: any) => invoke(route_admin_product_statistics__id_.DELETE, input),
+    "admin:product-statistics/[id]:get": (input: any) => invoke(route_admin_product_statistics__id_.GET, input),
+    "admin:product-statistics/[id]:put": (input: any) => invoke(route_admin_product_statistics__id_.PUT, input),
+    "admin:product-statistics:get": (input: any) => invoke(route_admin_product_statistics.GET, input),
+    "admin:product-statistics:post": (input: any) => invoke(route_admin_product_statistics.POST, input),
+    "admin:products/[id]:delete": (input: any) => invoke(route_admin_products__id_.DELETE, input),
+    "admin:products/[id]:get": (input: any) => invoke(route_admin_products__id_.GET, input),
+    "admin:products/[id]:put": (input: any) => invoke(route_admin_products__id_.PUT, input),
+    "admin:products:get": (input: any) => invoke(route_admin_products.GET, input),
+    "admin:products:post": (input: any) => invoke(route_admin_products.POST, input),
+    "admin:reward-activity/[id]:delete": (input: any) => invoke(route_admin_reward_activity__id_.DELETE, input),
+    "admin:reward-activity/[id]:get": (input: any) => invoke(route_admin_reward_activity__id_.GET, input),
+    "admin:reward-activity/[id]:put": (input: any) => invoke(route_admin_reward_activity__id_.PUT, input),
+    "admin:reward-activity:get": (input: any) => invoke(route_admin_reward_activity.GET, input),
+    "admin:reward-activity:post": (input: any) => invoke(route_admin_reward_activity.POST, input),
+    "admin:seckill-activity/[id]:delete": (input: any) => invoke(route_admin_seckill_activity__id_.DELETE, input),
+    "admin:seckill-activity/[id]:get": (input: any) => invoke(route_admin_seckill_activity__id_.GET, input),
+    "admin:seckill-activity/[id]:put": (input: any) => invoke(route_admin_seckill_activity__id_.PUT, input),
+    "admin:seckill-activity:get": (input: any) => invoke(route_admin_seckill_activity.GET, input),
+    "admin:seckill-activity:post": (input: any) => invoke(route_admin_seckill_activity.POST, input),
+    "admin:seckill-config/[id]:delete": (input: any) => invoke(route_admin_seckill_config__id_.DELETE, input),
+    "admin:seckill-config/[id]:get": (input: any) => invoke(route_admin_seckill_config__id_.GET, input),
+    "admin:seckill-config/[id]:put": (input: any) => invoke(route_admin_seckill_config__id_.PUT, input),
+    "admin:seckill-config:get": (input: any) => invoke(route_admin_seckill_config.GET, input),
+    "admin:seckill-config:post": (input: any) => invoke(route_admin_seckill_config.POST, input),
+    "admin:trade-config/[id]:delete": (input: any) => invoke(route_admin_trade_config__id_.DELETE, input),
+    "admin:trade-config/[id]:get": (input: any) => invoke(route_admin_trade_config__id_.GET, input),
+    "admin:trade-config/[id]:put": (input: any) => invoke(route_admin_trade_config__id_.PUT, input),
+    "admin:trade-config:get": (input: any) => invoke(route_admin_trade_config.GET, input),
+    "admin:trade-config:post": (input: any) => invoke(route_admin_trade_config.POST, input),
+    "admin:trade-order/[id]:delete": (input: any) => invoke(route_admin_trade_order__id_.DELETE, input),
+    "admin:trade-order/[id]:get": (input: any) => invoke(route_admin_trade_order__id_.GET, input),
+    "admin:trade-order/[id]:put": (input: any) => invoke(route_admin_trade_order__id_.PUT, input),
+    "admin:trade-order:get": (input: any) => invoke(route_admin_trade_order.GET, input),
+    "admin:trade-order:post": (input: any) => invoke(route_admin_trade_order.POST, input),
+    "admin:trade-statistics/[id]:delete": (input: any) => invoke(route_admin_trade_statistics__id_.DELETE, input),
+    "admin:trade-statistics/[id]:get": (input: any) => invoke(route_admin_trade_statistics__id_.GET, input),
+    "admin:trade-statistics/[id]:put": (input: any) => invoke(route_admin_trade_statistics__id_.PUT, input),
+    "admin:trade-statistics:get": (input: any) => invoke(route_admin_trade_statistics.GET, input),
+    "admin:trade-statistics:post": (input: any) => invoke(route_admin_trade_statistics.POST, input),
+    "app:products:get": (input: any) => invoke(route_app_products.GET, input),
+  },
+})

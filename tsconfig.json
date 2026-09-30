@@ -53,6 +53,84 @@
       ],
       "@/modules/report": [
         "packages/plugins/plugin-report"
+      ],
+      "@/modules/bpm/*": [
+        "packages/plugins/plugin-bpm/*"
+      ],
+      "@/modules/bpm": [
+        "packages/plugins/plugin-bpm"
+      ],
+      "@/modules/mp/*": [
+        "packages/plugins/plugin-mp/*"
+      ],
+      "@/modules/mp": [
+        "packages/plugins/plugin-mp"
+      ],
+      "@/modules/member/*": [
+        "packages/plugins/plugin-member/*"
+      ],
+      "@/modules/member": [
+        "packages/plugins/plugin-member"
+      ],
+      "@/modules/iot/*": [
+        "packages/plugins/plugin-iot/*"
+      ],
+      "@/modules/iot": [
+        "packages/plugins/plugin-iot"
+      ],
+      "@/modules/erp/*": [
+        "packages/plugins/plugin-erp/*"
+      ],
+      "@/modules/erp": [
+        "packages/plugins/plugin-erp"
+      ],
+      "@/modules/im/*": [
+        "packages/plugins/plugin-im/*"
+      ],
+      "@/modules/im": [
+        "packages/plugins/plugin-im"
+      ],
+      "@/modules/aigw/*": [
+        "packages/plugins/plugin-aigw/*"
+      ],
+      "@/modules/aigw": [
+        "packages/plugins/plugin-aigw"
+      ],
+      "@/modules/ai/*": [
+        "packages/plugins/plugin-ai/*"
+      ],
+      "@/modules/ai": [
+        "packages/plugins/plugin-ai"
+      ],
+      "@/modules/crm/*": [
+        "packages/plugins/plugin-crm/*"
+      ],
+      "@/modules/crm": [
+        "packages/plugins/plugin-crm"
+      ],
+      "@/modules/wms/*": [
+        "packages/plugins/plugin-wms/*"
+      ],
+      "@/modules/wms": [
+        "packages/plugins/plugin-wms"
+      ],
+      "@/modules/online/*": [
+        "packages/plugins/plugin-online/*"
+      ],
+      "@/modules/online": [
+        "packages/plugins/plugin-online"
+      ],
+      "@/modules/mall/*": [
+        "packages/plugins/plugin-mall/*"
+      ],
+      "@/modules/mall": [
+        "packages/plugins/plugin-mall"
+      ],
+      "@/modules/mes/*": [
+        "packages/plugins/plugin-mes/*"
+      ],
+      "@/modules/mes": [
+        "packages/plugins/plugin-mes"
       ]
     }
   },

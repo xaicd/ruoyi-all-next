@@ -1,0 +1,645 @@
+{
+  "$schema": "ruoyi-plugin-manifest/v1",
+  "id": "ruoyi.iot",
+  "apiVersion": 1,
+  "version": "0.1.0",
+  "displayName": "iot",
+  "description": "iot 域（由 scripts/scaffold-domain-plugin.cjs 生成的第一方插件声明）",
+  "author": "RuoYi All Next",
+  "categories": [
+    "automation"
+  ],
+  "capabilities": [
+    "api.routes.register"
+  ],
+  "entrypoints": {
+    "merged": "./plugin-entry.ts"
+  },
+  "domain": {
+    "kind": "business",
+    "stage": "B",
+    "contractVersion": "v1",
+    "publicPrefixes": [
+      "/api/v1/admin/iot"
+    ],
+    "upstreamEnv": "RUOYI_DOMAIN_IOT_UPSTREAM",
+    "defaultPort": 3224,
+    "packable": true,
+    "independentDatabase": false,
+    "dependsOnModules": [
+      "shared"
+    ],
+    "auth": {
+      "audience": "admin",
+      "tenantPolicy": "required"
+    },
+    "resilience": {
+      "timeoutMs": 5000,
+      "retryMaxAttempts": 1,
+      "safeMethodsOnly": true,
+      "idempotencyRequired": true
+    }
+  },
+  "apiRoutes": [
+    {
+      "routeKey": "admin:alerts/[id]:delete",
+      "method": "DELETE",
+      "path": "/alerts/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:alerts/[id]:get",
+      "method": "GET",
+      "path": "/alerts/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:alerts/[id]:put",
+      "method": "PUT",
+      "path": "/alerts/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:alerts:get",
+      "method": "GET",
+      "path": "/alerts",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:alerts:post",
+      "method": "POST",
+      "path": "/alerts",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:devices/[id]:delete",
+      "method": "DELETE",
+      "path": "/devices/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:devices/[id]:get",
+      "method": "GET",
+      "path": "/devices/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:devices/[id]:put",
+      "method": "PUT",
+      "path": "/devices/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:devices:get",
+      "method": "GET",
+      "path": "/devices",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:devices:post",
+      "method": "POST",
+      "path": "/devices",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-alert-config/[id]:delete",
+      "method": "DELETE",
+      "path": "/iot-alert-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-alert-config/[id]:get",
+      "method": "GET",
+      "path": "/iot-alert-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-alert-config/[id]:put",
+      "method": "PUT",
+      "path": "/iot-alert-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-alert-config:get",
+      "method": "GET",
+      "path": "/iot-alert-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-alert-config:post",
+      "method": "POST",
+      "path": "/iot-alert-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-alert-record/[id]:delete",
+      "method": "DELETE",
+      "path": "/iot-alert-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-alert-record/[id]:get",
+      "method": "GET",
+      "path": "/iot-alert-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-alert-record/[id]:put",
+      "method": "PUT",
+      "path": "/iot-alert-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-alert-record:get",
+      "method": "GET",
+      "path": "/iot-alert-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-alert-record:post",
+      "method": "POST",
+      "path": "/iot-alert-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-data-rule/[id]:delete",
+      "method": "DELETE",
+      "path": "/iot-data-rule/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-data-rule/[id]:get",
+      "method": "GET",
+      "path": "/iot-data-rule/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-data-rule/[id]:put",
+      "method": "PUT",
+      "path": "/iot-data-rule/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-data-rule:get",
+      "method": "GET",
+      "path": "/iot-data-rule",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-data-rule:post",
+      "method": "POST",
+      "path": "/iot-data-rule",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-data-sink/[id]:delete",
+      "method": "DELETE",
+      "path": "/iot-data-sink/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-data-sink/[id]:get",
+      "method": "GET",
+      "path": "/iot-data-sink/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-data-sink/[id]:put",
+      "method": "PUT",
+      "path": "/iot-data-sink/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-data-sink:get",
+      "method": "GET",
+      "path": "/iot-data-sink",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-data-sink:post",
+      "method": "POST",
+      "path": "/iot-data-sink",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-group/[id]:delete",
+      "method": "DELETE",
+      "path": "/iot-device-group/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-group/[id]:get",
+      "method": "GET",
+      "path": "/iot-device-group/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-group/[id]:put",
+      "method": "PUT",
+      "path": "/iot-device-group/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-group:get",
+      "method": "GET",
+      "path": "/iot-device-group",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-group:post",
+      "method": "POST",
+      "path": "/iot-device-group",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-message/[id]:delete",
+      "method": "DELETE",
+      "path": "/iot-device-message/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-message/[id]:get",
+      "method": "GET",
+      "path": "/iot-device-message/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-message/[id]:put",
+      "method": "PUT",
+      "path": "/iot-device-message/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-message:get",
+      "method": "GET",
+      "path": "/iot-device-message",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-message:post",
+      "method": "POST",
+      "path": "/iot-device-message",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-modbus-config/[id]:delete",
+      "method": "DELETE",
+      "path": "/iot-device-modbus-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-modbus-config/[id]:get",
+      "method": "GET",
+      "path": "/iot-device-modbus-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-modbus-config/[id]:put",
+      "method": "PUT",
+      "path": "/iot-device-modbus-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-modbus-config:get",
+      "method": "GET",
+      "path": "/iot-device-modbus-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-modbus-config:post",
+      "method": "POST",
+      "path": "/iot-device-modbus-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-modbus-point/[id]:delete",
+      "method": "DELETE",
+      "path": "/iot-device-modbus-point/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-modbus-point/[id]:get",
+      "method": "GET",
+      "path": "/iot-device-modbus-point/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-modbus-point/[id]:put",
+      "method": "PUT",
+      "path": "/iot-device-modbus-point/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-modbus-point:get",
+      "method": "GET",
+      "path": "/iot-device-modbus-point",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-modbus-point:post",
+      "method": "POST",
+      "path": "/iot-device-modbus-point",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-property/[id]:delete",
+      "method": "DELETE",
+      "path": "/iot-device-property/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-property/[id]:get",
+      "method": "GET",
+      "path": "/iot-device-property/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-property/[id]:put",
+      "method": "PUT",
+      "path": "/iot-device-property/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-property:get",
+      "method": "GET",
+      "path": "/iot-device-property",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device-property:post",
+      "method": "POST",
+      "path": "/iot-device-property",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device/[id]:delete",
+      "method": "DELETE",
+      "path": "/iot-device/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device/[id]:get",
+      "method": "GET",
+      "path": "/iot-device/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device/[id]:put",
+      "method": "PUT",
+      "path": "/iot-device/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device:get",
+      "method": "GET",
+      "path": "/iot-device",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-device:post",
+      "method": "POST",
+      "path": "/iot-device",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-ota-firmware/[id]:delete",
+      "method": "DELETE",
+      "path": "/iot-ota-firmware/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-ota-firmware/[id]:get",
+      "method": "GET",
+      "path": "/iot-ota-firmware/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-ota-firmware/[id]:put",
+      "method": "PUT",
+      "path": "/iot-ota-firmware/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-ota-firmware:get",
+      "method": "GET",
+      "path": "/iot-ota-firmware",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-ota-firmware:post",
+      "method": "POST",
+      "path": "/iot-ota-firmware",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-ota-task-record/[id]:delete",
+      "method": "DELETE",
+      "path": "/iot-ota-task-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-ota-task-record/[id]:get",
+      "method": "GET",
+      "path": "/iot-ota-task-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-ota-task-record/[id]:put",
+      "method": "PUT",
+      "path": "/iot-ota-task-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-ota-task-record:get",
+      "method": "GET",
+      "path": "/iot-ota-task-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-ota-task-record:post",
+      "method": "POST",
+      "path": "/iot-ota-task-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-ota-task/[id]:delete",
+      "method": "DELETE",
+      "path": "/iot-ota-task/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-ota-task/[id]:get",
+      "method": "GET",
+      "path": "/iot-ota-task/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-ota-task/[id]:put",
+      "method": "PUT",
+      "path": "/iot-ota-task/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-ota-task:get",
+      "method": "GET",
+      "path": "/iot-ota-task",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-ota-task:post",
+      "method": "POST",
+      "path": "/iot-ota-task",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-product-category/[id]:delete",
+      "method": "DELETE",
+      "path": "/iot-product-category/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-product-category/[id]:get",
+      "method": "GET",
+      "path": "/iot-product-category/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-product-category/[id]:put",
+      "method": "PUT",
+      "path": "/iot-product-category/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-product-category:get",
+      "method": "GET",
+      "path": "/iot-product-category",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-product-category:post",
+      "method": "POST",
+      "path": "/iot-product-category",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-product/[id]:delete",
+      "method": "DELETE",
+      "path": "/iot-product/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-product/[id]:get",
+      "method": "GET",
+      "path": "/iot-product/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-product/[id]:put",
+      "method": "PUT",
+      "path": "/iot-product/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-product:get",
+      "method": "GET",
+      "path": "/iot-product",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-product:post",
+      "method": "POST",
+      "path": "/iot-product",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-scene-rule/[id]:delete",
+      "method": "DELETE",
+      "path": "/iot-scene-rule/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-scene-rule/[id]:get",
+      "method": "GET",
+      "path": "/iot-scene-rule/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-scene-rule/[id]:put",
+      "method": "PUT",
+      "path": "/iot-scene-rule/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-scene-rule:get",
+      "method": "GET",
+      "path": "/iot-scene-rule",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-scene-rule:post",
+      "method": "POST",
+      "path": "/iot-scene-rule",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-statistics/[id]:delete",
+      "method": "DELETE",
+      "path": "/iot-statistics/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-statistics/[id]:get",
+      "method": "GET",
+      "path": "/iot-statistics/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-statistics/[id]:put",
+      "method": "PUT",
+      "path": "/iot-statistics/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-statistics:get",
+      "method": "GET",
+      "path": "/iot-statistics",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-statistics:post",
+      "method": "POST",
+      "path": "/iot-statistics",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-thing-model/[id]:delete",
+      "method": "DELETE",
+      "path": "/iot-thing-model/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-thing-model/[id]:get",
+      "method": "GET",
+      "path": "/iot-thing-model/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-thing-model/[id]:put",
+      "method": "PUT",
+      "path": "/iot-thing-model/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-thing-model:get",
+      "method": "GET",
+      "path": "/iot-thing-model",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:iot-thing-model:post",
+      "method": "POST",
+      "path": "/iot-thing-model",
+      "auth": "operator"
+    }
+  ]
+}

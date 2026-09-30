@@ -1,0 +1,1318 @@
+{
+  "$schema": "ruoyi-plugin-manifest/v1",
+  "id": "ruoyi.mall",
+  "apiVersion": 1,
+  "version": "0.1.0",
+  "displayName": "mall",
+  "description": "mall 域（由 scripts/scaffold-domain-plugin.cjs 生成的第一方插件声明）",
+  "author": "RuoYi All Next",
+  "categories": [
+    "automation"
+  ],
+  "capabilities": [
+    "api.routes.register"
+  ],
+  "entrypoints": {
+    "merged": "./plugin-entry.ts"
+  },
+  "domain": {
+    "kind": "business",
+    "stage": "B",
+    "contractVersion": "v1",
+    "publicPrefixes": [
+      "/api/v1/admin/mall",
+      "/api/v1/app/mall"
+    ],
+    "upstreamEnv": "RUOYI_DOMAIN_MALL_UPSTREAM",
+    "defaultPort": 3217,
+    "packable": true,
+    "independentDatabase": false,
+    "dependsOnModules": [
+      "shared"
+    ],
+    "auth": {
+      "audience": "admin",
+      "tenantPolicy": "required"
+    },
+    "resilience": {
+      "timeoutMs": 5000,
+      "retryMaxAttempts": 1,
+      "safeMethodsOnly": true,
+      "idempotencyRequired": true
+    }
+  },
+  "apiRoutes": [
+    {
+      "routeKey": "admin:after-sale/[id]:delete",
+      "method": "DELETE",
+      "path": "/after-sale/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:after-sale/[id]:get",
+      "method": "GET",
+      "path": "/after-sale/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:after-sale/[id]:put",
+      "method": "PUT",
+      "path": "/after-sale/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:after-sale:get",
+      "method": "GET",
+      "path": "/after-sale",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:after-sale:post",
+      "method": "POST",
+      "path": "/after-sale",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:article-category/[id]:delete",
+      "method": "DELETE",
+      "path": "/article-category/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:article-category/[id]:get",
+      "method": "GET",
+      "path": "/article-category/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:article-category/[id]:put",
+      "method": "PUT",
+      "path": "/article-category/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:article-category:get",
+      "method": "GET",
+      "path": "/article-category",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:article-category:post",
+      "method": "POST",
+      "path": "/article-category",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:article/[id]:delete",
+      "method": "DELETE",
+      "path": "/article/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:article/[id]:get",
+      "method": "GET",
+      "path": "/article/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:article/[id]:put",
+      "method": "PUT",
+      "path": "/article/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:article:get",
+      "method": "GET",
+      "path": "/article",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:article:post",
+      "method": "POST",
+      "path": "/article",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:banner/[id]:delete",
+      "method": "DELETE",
+      "path": "/banner/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:banner/[id]:get",
+      "method": "GET",
+      "path": "/banner/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:banner/[id]:put",
+      "method": "PUT",
+      "path": "/banner/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:banner:get",
+      "method": "GET",
+      "path": "/banner",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:banner:post",
+      "method": "POST",
+      "path": "/banner",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bargain-activity/[id]:delete",
+      "method": "DELETE",
+      "path": "/bargain-activity/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bargain-activity/[id]:get",
+      "method": "GET",
+      "path": "/bargain-activity/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bargain-activity/[id]:put",
+      "method": "PUT",
+      "path": "/bargain-activity/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bargain-activity:get",
+      "method": "GET",
+      "path": "/bargain-activity",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bargain-activity:post",
+      "method": "POST",
+      "path": "/bargain-activity",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bargain-help/[id]:delete",
+      "method": "DELETE",
+      "path": "/bargain-help/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bargain-help/[id]:get",
+      "method": "GET",
+      "path": "/bargain-help/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bargain-help/[id]:put",
+      "method": "PUT",
+      "path": "/bargain-help/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bargain-help:get",
+      "method": "GET",
+      "path": "/bargain-help",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bargain-help:post",
+      "method": "POST",
+      "path": "/bargain-help",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bargain-record/[id]:delete",
+      "method": "DELETE",
+      "path": "/bargain-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bargain-record/[id]:get",
+      "method": "GET",
+      "path": "/bargain-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bargain-record/[id]:put",
+      "method": "PUT",
+      "path": "/bargain-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bargain-record:get",
+      "method": "GET",
+      "path": "/bargain-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:bargain-record:post",
+      "method": "POST",
+      "path": "/bargain-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:brokerage-record/[id]:delete",
+      "method": "DELETE",
+      "path": "/brokerage-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:brokerage-record/[id]:get",
+      "method": "GET",
+      "path": "/brokerage-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:brokerage-record/[id]:put",
+      "method": "PUT",
+      "path": "/brokerage-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:brokerage-record:get",
+      "method": "GET",
+      "path": "/brokerage-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:brokerage-record:post",
+      "method": "POST",
+      "path": "/brokerage-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:brokerage-user/[id]:delete",
+      "method": "DELETE",
+      "path": "/brokerage-user/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:brokerage-user/[id]:get",
+      "method": "GET",
+      "path": "/brokerage-user/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:brokerage-user/[id]:put",
+      "method": "PUT",
+      "path": "/brokerage-user/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:brokerage-user:get",
+      "method": "GET",
+      "path": "/brokerage-user",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:brokerage-user:post",
+      "method": "POST",
+      "path": "/brokerage-user",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:brokerage-withdraw/[id]:delete",
+      "method": "DELETE",
+      "path": "/brokerage-withdraw/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:brokerage-withdraw/[id]:get",
+      "method": "GET",
+      "path": "/brokerage-withdraw/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:brokerage-withdraw/[id]:put",
+      "method": "PUT",
+      "path": "/brokerage-withdraw/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:brokerage-withdraw:get",
+      "method": "GET",
+      "path": "/brokerage-withdraw",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:brokerage-withdraw:post",
+      "method": "POST",
+      "path": "/brokerage-withdraw",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:combination-activity/[id]:delete",
+      "method": "DELETE",
+      "path": "/combination-activity/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:combination-activity/[id]:get",
+      "method": "GET",
+      "path": "/combination-activity/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:combination-activity/[id]:put",
+      "method": "PUT",
+      "path": "/combination-activity/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:combination-activity:get",
+      "method": "GET",
+      "path": "/combination-activity",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:combination-activity:post",
+      "method": "POST",
+      "path": "/combination-activity",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:combination-record/[id]:delete",
+      "method": "DELETE",
+      "path": "/combination-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:combination-record/[id]:get",
+      "method": "GET",
+      "path": "/combination-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:combination-record/[id]:put",
+      "method": "PUT",
+      "path": "/combination-record/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:combination-record:get",
+      "method": "GET",
+      "path": "/combination-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:combination-record:post",
+      "method": "POST",
+      "path": "/combination-record",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:coupon-template/[id]:delete",
+      "method": "DELETE",
+      "path": "/coupon-template/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:coupon-template/[id]:get",
+      "method": "GET",
+      "path": "/coupon-template/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:coupon-template/[id]:put",
+      "method": "PUT",
+      "path": "/coupon-template/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:coupon-template:get",
+      "method": "GET",
+      "path": "/coupon-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:coupon-template:post",
+      "method": "POST",
+      "path": "/coupon-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:coupon/[id]:delete",
+      "method": "DELETE",
+      "path": "/coupon/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:coupon/[id]:get",
+      "method": "GET",
+      "path": "/coupon/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:coupon/[id]:put",
+      "method": "PUT",
+      "path": "/coupon/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:coupon:get",
+      "method": "GET",
+      "path": "/coupon",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:coupon:post",
+      "method": "POST",
+      "path": "/coupon",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:coupons/issue:post",
+      "method": "POST",
+      "path": "/coupons/issue",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:delivery-express-template/[id]:delete",
+      "method": "DELETE",
+      "path": "/delivery-express-template/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:delivery-express-template/[id]:get",
+      "method": "GET",
+      "path": "/delivery-express-template/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:delivery-express-template/[id]:put",
+      "method": "PUT",
+      "path": "/delivery-express-template/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:delivery-express-template:get",
+      "method": "GET",
+      "path": "/delivery-express-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:delivery-express-template:post",
+      "method": "POST",
+      "path": "/delivery-express-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:delivery-express/[id]:delete",
+      "method": "DELETE",
+      "path": "/delivery-express/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:delivery-express/[id]:get",
+      "method": "GET",
+      "path": "/delivery-express/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:delivery-express/[id]:put",
+      "method": "PUT",
+      "path": "/delivery-express/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:delivery-express:get",
+      "method": "GET",
+      "path": "/delivery-express",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:delivery-express:post",
+      "method": "POST",
+      "path": "/delivery-express",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:delivery-pick-up-store/[id]:delete",
+      "method": "DELETE",
+      "path": "/delivery-pick-up-store/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:delivery-pick-up-store/[id]:get",
+      "method": "GET",
+      "path": "/delivery-pick-up-store/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:delivery-pick-up-store/[id]:put",
+      "method": "PUT",
+      "path": "/delivery-pick-up-store/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:delivery-pick-up-store:get",
+      "method": "GET",
+      "path": "/delivery-pick-up-store",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:delivery-pick-up-store:post",
+      "method": "POST",
+      "path": "/delivery-pick-up-store",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:discount-activity/[id]:delete",
+      "method": "DELETE",
+      "path": "/discount-activity/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:discount-activity/[id]:get",
+      "method": "GET",
+      "path": "/discount-activity/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:discount-activity/[id]:put",
+      "method": "PUT",
+      "path": "/discount-activity/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:discount-activity:get",
+      "method": "GET",
+      "path": "/discount-activity",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:discount-activity:post",
+      "method": "POST",
+      "path": "/discount-activity",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:diy-page/[id]:delete",
+      "method": "DELETE",
+      "path": "/diy-page/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:diy-page/[id]:get",
+      "method": "GET",
+      "path": "/diy-page/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:diy-page/[id]:put",
+      "method": "PUT",
+      "path": "/diy-page/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:diy-page:get",
+      "method": "GET",
+      "path": "/diy-page",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:diy-page:post",
+      "method": "POST",
+      "path": "/diy-page",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:diy-template/[id]:delete",
+      "method": "DELETE",
+      "path": "/diy-template/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:diy-template/[id]:get",
+      "method": "GET",
+      "path": "/diy-template/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:diy-template/[id]:put",
+      "method": "PUT",
+      "path": "/diy-template/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:diy-template:get",
+      "method": "GET",
+      "path": "/diy-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:diy-template:post",
+      "method": "POST",
+      "path": "/diy-template",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ke-fu-conversation/[id]:delete",
+      "method": "DELETE",
+      "path": "/ke-fu-conversation/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ke-fu-conversation/[id]:get",
+      "method": "GET",
+      "path": "/ke-fu-conversation/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ke-fu-conversation/[id]:put",
+      "method": "PUT",
+      "path": "/ke-fu-conversation/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ke-fu-conversation:get",
+      "method": "GET",
+      "path": "/ke-fu-conversation",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ke-fu-conversation:post",
+      "method": "POST",
+      "path": "/ke-fu-conversation",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ke-fu-message/[id]:delete",
+      "method": "DELETE",
+      "path": "/ke-fu-message/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ke-fu-message/[id]:get",
+      "method": "GET",
+      "path": "/ke-fu-message/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ke-fu-message/[id]:put",
+      "method": "PUT",
+      "path": "/ke-fu-message/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ke-fu-message:get",
+      "method": "GET",
+      "path": "/ke-fu-message",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:ke-fu-message:post",
+      "method": "POST",
+      "path": "/ke-fu-message",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-statistics/[id]:delete",
+      "method": "DELETE",
+      "path": "/member-statistics/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-statistics/[id]:get",
+      "method": "GET",
+      "path": "/member-statistics/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-statistics/[id]:put",
+      "method": "PUT",
+      "path": "/member-statistics/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-statistics:get",
+      "method": "GET",
+      "path": "/member-statistics",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:member-statistics:post",
+      "method": "POST",
+      "path": "/member-statistics",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:orders/[id]:delete",
+      "method": "DELETE",
+      "path": "/orders/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:orders/[id]:get",
+      "method": "GET",
+      "path": "/orders/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:orders/[id]:put",
+      "method": "PUT",
+      "path": "/orders/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:orders:get",
+      "method": "GET",
+      "path": "/orders",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:orders:post",
+      "method": "POST",
+      "path": "/orders",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-statistics/[id]:delete",
+      "method": "DELETE",
+      "path": "/pay-statistics/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-statistics/[id]:get",
+      "method": "GET",
+      "path": "/pay-statistics/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-statistics/[id]:put",
+      "method": "PUT",
+      "path": "/pay-statistics/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-statistics:get",
+      "method": "GET",
+      "path": "/pay-statistics",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:pay-statistics:post",
+      "method": "POST",
+      "path": "/pay-statistics",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:point-activity/[id]:delete",
+      "method": "DELETE",
+      "path": "/point-activity/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:point-activity/[id]:get",
+      "method": "GET",
+      "path": "/point-activity/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:point-activity/[id]:put",
+      "method": "PUT",
+      "path": "/point-activity/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:point-activity:get",
+      "method": "GET",
+      "path": "/point-activity",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:point-activity:post",
+      "method": "POST",
+      "path": "/point-activity",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-brand/[id]:delete",
+      "method": "DELETE",
+      "path": "/product-brand/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-brand/[id]:get",
+      "method": "GET",
+      "path": "/product-brand/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-brand/[id]:put",
+      "method": "PUT",
+      "path": "/product-brand/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-brand:get",
+      "method": "GET",
+      "path": "/product-brand",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-brand:post",
+      "method": "POST",
+      "path": "/product-brand",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-browse-history/[id]:delete",
+      "method": "DELETE",
+      "path": "/product-browse-history/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-browse-history/[id]:get",
+      "method": "GET",
+      "path": "/product-browse-history/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-browse-history/[id]:put",
+      "method": "PUT",
+      "path": "/product-browse-history/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-browse-history:get",
+      "method": "GET",
+      "path": "/product-browse-history",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-browse-history:post",
+      "method": "POST",
+      "path": "/product-browse-history",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-category/[id]:delete",
+      "method": "DELETE",
+      "path": "/product-category/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-category/[id]:get",
+      "method": "GET",
+      "path": "/product-category/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-category/[id]:put",
+      "method": "PUT",
+      "path": "/product-category/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-category:get",
+      "method": "GET",
+      "path": "/product-category",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-category:post",
+      "method": "POST",
+      "path": "/product-category",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-comment/[id]:delete",
+      "method": "DELETE",
+      "path": "/product-comment/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-comment/[id]:get",
+      "method": "GET",
+      "path": "/product-comment/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-comment/[id]:put",
+      "method": "PUT",
+      "path": "/product-comment/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-comment:get",
+      "method": "GET",
+      "path": "/product-comment",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-comment:post",
+      "method": "POST",
+      "path": "/product-comment",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-favorite/[id]:delete",
+      "method": "DELETE",
+      "path": "/product-favorite/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-favorite/[id]:get",
+      "method": "GET",
+      "path": "/product-favorite/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-favorite/[id]:put",
+      "method": "PUT",
+      "path": "/product-favorite/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-favorite:get",
+      "method": "GET",
+      "path": "/product-favorite",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-favorite:post",
+      "method": "POST",
+      "path": "/product-favorite",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-property-value/[id]:delete",
+      "method": "DELETE",
+      "path": "/product-property-value/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-property-value/[id]:get",
+      "method": "GET",
+      "path": "/product-property-value/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-property-value/[id]:put",
+      "method": "PUT",
+      "path": "/product-property-value/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-property-value:get",
+      "method": "GET",
+      "path": "/product-property-value",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-property-value:post",
+      "method": "POST",
+      "path": "/product-property-value",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-property/[id]:delete",
+      "method": "DELETE",
+      "path": "/product-property/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-property/[id]:get",
+      "method": "GET",
+      "path": "/product-property/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-property/[id]:put",
+      "method": "PUT",
+      "path": "/product-property/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-property:get",
+      "method": "GET",
+      "path": "/product-property",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-property:post",
+      "method": "POST",
+      "path": "/product-property",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-spu/[id]:delete",
+      "method": "DELETE",
+      "path": "/product-spu/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-spu/[id]:get",
+      "method": "GET",
+      "path": "/product-spu/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-spu/[id]:put",
+      "method": "PUT",
+      "path": "/product-spu/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-spu:get",
+      "method": "GET",
+      "path": "/product-spu",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-spu:post",
+      "method": "POST",
+      "path": "/product-spu",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-statistics/[id]:delete",
+      "method": "DELETE",
+      "path": "/product-statistics/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-statistics/[id]:get",
+      "method": "GET",
+      "path": "/product-statistics/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-statistics/[id]:put",
+      "method": "PUT",
+      "path": "/product-statistics/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-statistics:get",
+      "method": "GET",
+      "path": "/product-statistics",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:product-statistics:post",
+      "method": "POST",
+      "path": "/product-statistics",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:products/[id]:delete",
+      "method": "DELETE",
+      "path": "/products/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:products/[id]:get",
+      "method": "GET",
+      "path": "/products/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:products/[id]:put",
+      "method": "PUT",
+      "path": "/products/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:products:get",
+      "method": "GET",
+      "path": "/products",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:products:post",
+      "method": "POST",
+      "path": "/products",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:reward-activity/[id]:delete",
+      "method": "DELETE",
+      "path": "/reward-activity/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:reward-activity/[id]:get",
+      "method": "GET",
+      "path": "/reward-activity/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:reward-activity/[id]:put",
+      "method": "PUT",
+      "path": "/reward-activity/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:reward-activity:get",
+      "method": "GET",
+      "path": "/reward-activity",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:reward-activity:post",
+      "method": "POST",
+      "path": "/reward-activity",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:seckill-activity/[id]:delete",
+      "method": "DELETE",
+      "path": "/seckill-activity/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:seckill-activity/[id]:get",
+      "method": "GET",
+      "path": "/seckill-activity/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:seckill-activity/[id]:put",
+      "method": "PUT",
+      "path": "/seckill-activity/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:seckill-activity:get",
+      "method": "GET",
+      "path": "/seckill-activity",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:seckill-activity:post",
+      "method": "POST",
+      "path": "/seckill-activity",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:seckill-config/[id]:delete",
+      "method": "DELETE",
+      "path": "/seckill-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:seckill-config/[id]:get",
+      "method": "GET",
+      "path": "/seckill-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:seckill-config/[id]:put",
+      "method": "PUT",
+      "path": "/seckill-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:seckill-config:get",
+      "method": "GET",
+      "path": "/seckill-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:seckill-config:post",
+      "method": "POST",
+      "path": "/seckill-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:trade-config/[id]:delete",
+      "method": "DELETE",
+      "path": "/trade-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:trade-config/[id]:get",
+      "method": "GET",
+      "path": "/trade-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:trade-config/[id]:put",
+      "method": "PUT",
+      "path": "/trade-config/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:trade-config:get",
+      "method": "GET",
+      "path": "/trade-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:trade-config:post",
+      "method": "POST",
+      "path": "/trade-config",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:trade-order/[id]:delete",
+      "method": "DELETE",
+      "path": "/trade-order/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:trade-order/[id]:get",
+      "method": "GET",
+      "path": "/trade-order/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:trade-order/[id]:put",
+      "method": "PUT",
+      "path": "/trade-order/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:trade-order:get",
+      "method": "GET",
+      "path": "/trade-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:trade-order:post",
+      "method": "POST",
+      "path": "/trade-order",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:trade-statistics/[id]:delete",
+      "method": "DELETE",
+      "path": "/trade-statistics/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:trade-statistics/[id]:get",
+      "method": "GET",
+      "path": "/trade-statistics/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:trade-statistics/[id]:put",
+      "method": "PUT",
+      "path": "/trade-statistics/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:trade-statistics:get",
+      "method": "GET",
+      "path": "/trade-statistics",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:trade-statistics:post",
+      "method": "POST",
+      "path": "/trade-statistics",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "app:products:get",
+      "method": "GET",
+      "path": "/products",
+      "auth": "company"
+    }
+  ]
+}

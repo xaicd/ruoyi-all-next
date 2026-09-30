@@ -41,8 +41,8 @@ let restoredCount = 0
 
 // 1. Modules 目录
 restoredCount += copyDirRecursive(
-  path.join(baseRepo, `packages/domains/${targetDomain}`),
-  path.join(sourceRoot, `packages/domains/${targetDomain}`)
+  path.join(baseRepo, domainDirOf(baseRepo, targetDomain)),
+  path.join(sourceRoot, domainDirOf(sourceRoot, targetDomain))
 )
 
 // 2. API Routes

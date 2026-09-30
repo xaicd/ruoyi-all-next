@@ -236,21 +236,21 @@
     },
     {
       "name": "online",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "B",
       "definition": {
-        "dir": "packages/domains/online/contract",
+        "dir": "packages/plugins/plugin-online/contract",
         "facades": [
-          "packages/domains/online/contract/online.facade.ts"
+          "packages/plugins/plugin-online/contract/online.facade.ts"
         ],
         "actions": [
-          "packages/domains/online/contract/actions.ts"
+          "packages/plugins/plugin-online/contract/actions.ts"
         ],
-        "proto": "packages/domains/online/contract/online.proto",
-        "manifest": "packages/domains/online/contract/route.manifest.yaml"
+        "proto": "packages/plugins/plugin-online/contract/online.proto",
+        "manifest": "packages/plugins/plugin-online/contract/route.manifest.yaml"
       },
       "provider": {
-        "servicesDir": "packages/domains/online/backend/services",
+        "servicesDir": "packages/plugins/plugin-online/backend/services",
         "repositoriesDir": null,
         "methods": [
           "ping",
@@ -265,28 +265,30 @@
         ]
       },
       "consumer": {
-        "adminApi": "src/app/api/v1/admin/online",
-        "modulePages": "packages/domains/online/frontend/pages"
+        "adminApi": "src/app/api/v1/plugins/ruoyi.online/api",
+        "appApi": "src/app/api/v1/plugins/ruoyi.online/api",
+        "openApi": "src/app/api/v1/plugins/ruoyi.online/api",
+        "modulePages": "packages/plugins/plugin-online/frontend/pages"
       },
       "rolesComplete": true
     },
     {
       "name": "bpm",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "A",
       "definition": {
-        "dir": "packages/domains/bpm/contract",
+        "dir": "packages/plugins/plugin-bpm/contract",
         "facades": [
-          "packages/domains/bpm/contract/bpm.facade.ts"
+          "packages/plugins/plugin-bpm/contract/bpm.facade.ts"
         ],
         "actions": [
-          "packages/domains/bpm/contract/actions.ts"
+          "packages/plugins/plugin-bpm/contract/actions.ts"
         ],
-        "proto": "packages/domains/bpm/contract/bpm.proto",
-        "manifest": "packages/domains/bpm/contract/route.manifest.yaml"
+        "proto": "packages/plugins/plugin-bpm/contract/bpm.proto",
+        "manifest": "packages/plugins/plugin-bpm/contract/route.manifest.yaml"
       },
       "provider": {
-        "servicesDir": "packages/domains/bpm/backend/services",
+        "servicesDir": "packages/plugins/plugin-bpm/backend/services",
         "repositoriesDir": null,
         "methods": [
           "ping",
@@ -296,9 +298,11 @@
         ]
       },
       "consumer": {
-        "adminApi": "src/app/api/v1/admin/bpm",
+        "adminApi": "src/app/api/v1/plugins/ruoyi.bpm/api",
+        "appApi": "src/app/api/v1/plugins/ruoyi.bpm/api",
+        "openApi": "src/app/api/v1/plugins/ruoyi.bpm/api",
         "adminPages": "src/app/(admin-pages)/admin/bpm",
-        "modulePages": "packages/domains/bpm/frontend/pages"
+        "modulePages": "packages/plugins/plugin-bpm/frontend/pages"
       },
       "rolesComplete": true
     },
@@ -372,21 +376,21 @@
     },
     {
       "name": "mp",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "B",
       "definition": {
-        "dir": "packages/domains/mp/contract",
+        "dir": "packages/plugins/plugin-mp/contract",
         "facades": [
-          "packages/domains/mp/contract/mp.facade.ts"
+          "packages/plugins/plugin-mp/contract/mp.facade.ts"
         ],
         "actions": [
-          "packages/domains/mp/contract/actions.ts"
+          "packages/plugins/plugin-mp/contract/actions.ts"
         ],
-        "proto": "packages/domains/mp/contract/mp.proto",
-        "manifest": "packages/domains/mp/contract/route.manifest.yaml"
+        "proto": "packages/plugins/plugin-mp/contract/mp.proto",
+        "manifest": "packages/plugins/plugin-mp/contract/route.manifest.yaml"
       },
       "provider": {
-        "servicesDir": "packages/domains/mp/backend/services",
+        "servicesDir": "packages/plugins/plugin-mp/backend/services",
         "repositoriesDir": null,
         "methods": [
           "ping",
@@ -396,29 +400,31 @@
         ]
       },
       "consumer": {
-        "adminApi": "src/app/api/v1/admin/mp",
+        "adminApi": "src/app/api/v1/plugins/ruoyi.mp/api",
+        "appApi": "src/app/api/v1/plugins/ruoyi.mp/api",
+        "openApi": "src/app/api/v1/plugins/ruoyi.mp/api",
         "adminPages": "src/app/(admin-pages)/admin/mp",
-        "modulePages": "packages/domains/mp/frontend/pages"
+        "modulePages": "packages/plugins/plugin-mp/frontend/pages"
       },
       "rolesComplete": true
     },
     {
       "name": "mall",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "B",
       "definition": {
-        "dir": "packages/domains/mall/contract",
+        "dir": "packages/plugins/plugin-mall/contract",
         "facades": [
-          "packages/domains/mall/contract/mall.facade.ts"
+          "packages/plugins/plugin-mall/contract/mall.facade.ts"
         ],
         "actions": [
-          "packages/domains/mall/contract/actions.ts"
+          "packages/plugins/plugin-mall/contract/actions.ts"
         ],
-        "proto": "packages/domains/mall/contract/mall.proto",
-        "manifest": "packages/domains/mall/contract/route.manifest.yaml"
+        "proto": "packages/plugins/plugin-mall/contract/mall.proto",
+        "manifest": "packages/plugins/plugin-mall/contract/route.manifest.yaml"
       },
       "provider": {
-        "servicesDir": "packages/domains/mall/backend/services",
+        "servicesDir": "packages/plugins/plugin-mall/backend/services",
         "repositoriesDir": null,
         "methods": [
           "ping",
@@ -428,31 +434,32 @@
         ]
       },
       "consumer": {
-        "adminApi": "src/app/api/v1/admin/mall",
-        "appApi": "src/app/api/v1/app/mall",
+        "adminApi": "src/app/api/v1/plugins/ruoyi.mall/api",
+        "appApi": "src/app/api/v1/plugins/ruoyi.mall/api",
+        "openApi": "src/app/api/v1/plugins/ruoyi.mall/api",
         "adminPages": "src/app/(admin-pages)/admin/mall",
-        "modulePages": "packages/domains/mall/frontend/pages"
+        "modulePages": "packages/plugins/plugin-mall/frontend/pages"
       },
       "rolesComplete": true
     },
     {
       "name": "member",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "A",
       "definition": {
-        "dir": "packages/domains/member/contract",
+        "dir": "packages/plugins/plugin-member/contract",
         "facades": [
-          "packages/domains/member/contract/member.facade.ts"
+          "packages/plugins/plugin-member/contract/member.facade.ts"
         ],
         "actions": [
-          "packages/domains/member/contract/actions.ts"
+          "packages/plugins/plugin-member/contract/actions.ts"
         ],
-        "proto": "packages/domains/member/contract/member.proto",
-        "manifest": "packages/domains/member/contract/route.manifest.yaml"
+        "proto": "packages/plugins/plugin-member/contract/member.proto",
+        "manifest": "packages/plugins/plugin-member/contract/route.manifest.yaml"
       },
       "provider": {
-        "servicesDir": "packages/domains/member/backend/services",
-        "repositoriesDir": "packages/domains/member/backend/repositories",
+        "servicesDir": "packages/plugins/plugin-member/backend/services",
+        "repositoriesDir": "packages/plugins/plugin-member/backend/repositories",
         "methods": [
           "ping",
           "listUsers",
@@ -464,31 +471,32 @@
         ]
       },
       "consumer": {
-        "adminApi": "src/app/api/v1/admin/member",
-        "appApi": "src/app/api/v1/app/member",
+        "adminApi": "src/app/api/v1/plugins/ruoyi.member/api",
+        "appApi": "src/app/api/v1/plugins/ruoyi.member/api",
+        "openApi": "src/app/api/v1/plugins/ruoyi.member/api",
         "adminPages": "src/app/(admin-pages)/admin/member",
-        "modulePages": "packages/domains/member/frontend/pages"
+        "modulePages": "packages/plugins/plugin-member/frontend/pages"
       },
       "rolesComplete": true
     },
     {
       "name": "crm",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "B",
       "definition": {
-        "dir": "packages/domains/crm/contract",
+        "dir": "packages/plugins/plugin-crm/contract",
         "facades": [
-          "packages/domains/crm/contract/crm.facade.ts"
+          "packages/plugins/plugin-crm/contract/crm.facade.ts"
         ],
         "actions": [
-          "packages/domains/crm/contract/actions.ts"
+          "packages/plugins/plugin-crm/contract/actions.ts"
         ],
-        "proto": "packages/domains/crm/contract/crm.proto",
-        "manifest": "packages/domains/crm/contract/route.manifest.yaml"
+        "proto": "packages/plugins/plugin-crm/contract/crm.proto",
+        "manifest": "packages/plugins/plugin-crm/contract/route.manifest.yaml"
       },
       "provider": {
-        "servicesDir": "packages/domains/crm/backend/services",
-        "repositoriesDir": "packages/domains/crm/backend/repositories",
+        "servicesDir": "packages/plugins/plugin-crm/backend/services",
+        "repositoriesDir": "packages/plugins/plugin-crm/backend/repositories",
         "methods": [
           "ping",
           "listCustomers",
@@ -497,29 +505,31 @@
         ]
       },
       "consumer": {
-        "adminApi": "src/app/api/v1/admin/crm",
+        "adminApi": "src/app/api/v1/plugins/ruoyi.crm/api",
+        "appApi": "src/app/api/v1/plugins/ruoyi.crm/api",
+        "openApi": "src/app/api/v1/plugins/ruoyi.crm/api",
         "adminPages": "src/app/(admin-pages)/admin/crm",
-        "modulePages": "packages/domains/crm/frontend/pages"
+        "modulePages": "packages/plugins/plugin-crm/frontend/pages"
       },
       "rolesComplete": true
     },
     {
       "name": "erp",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "B",
       "definition": {
-        "dir": "packages/domains/erp/contract",
+        "dir": "packages/plugins/plugin-erp/contract",
         "facades": [
-          "packages/domains/erp/contract/erp.facade.ts"
+          "packages/plugins/plugin-erp/contract/erp.facade.ts"
         ],
         "actions": [
-          "packages/domains/erp/contract/actions.ts"
+          "packages/plugins/plugin-erp/contract/actions.ts"
         ],
-        "proto": "packages/domains/erp/contract/erp.proto",
-        "manifest": "packages/domains/erp/contract/route.manifest.yaml"
+        "proto": "packages/plugins/plugin-erp/contract/erp.proto",
+        "manifest": "packages/plugins/plugin-erp/contract/route.manifest.yaml"
       },
       "provider": {
-        "servicesDir": "packages/domains/erp/backend/services",
+        "servicesDir": "packages/plugins/plugin-erp/backend/services",
         "repositoriesDir": null,
         "methods": [
           "ping",
@@ -529,46 +539,48 @@
         ]
       },
       "consumer": {
-        "adminApi": "src/app/api/v1/admin/erp",
+        "adminApi": "src/app/api/v1/plugins/ruoyi.erp/api",
+        "appApi": "src/app/api/v1/plugins/ruoyi.erp/api",
+        "openApi": "src/app/api/v1/plugins/ruoyi.erp/api",
         "adminPages": "src/app/(admin-pages)/admin/erp",
-        "modulePages": "packages/domains/erp/frontend/pages"
+        "modulePages": "packages/plugins/plugin-erp/frontend/pages"
       },
       "rolesComplete": true
     },
     {
       "name": "wms",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "B",
       "definition": {
-        "dir": "packages/domains/wms/contract",
+        "dir": "packages/plugins/plugin-wms/contract",
         "facades": [
-          "packages/domains/wms/contract/wms.facade.ts"
+          "packages/plugins/plugin-wms/contract/wms.facade.ts"
         ],
         "actions": [
-          "packages/domains/wms/contract/actions.ts",
-          "packages/domains/wms/contract/wms-check-order-detail.actions.ts",
-          "packages/domains/wms/contract/wms-check-order.actions.ts",
-          "packages/domains/wms/contract/wms-inventory-history.actions.ts",
-          "packages/domains/wms/contract/wms-inventory.actions.ts",
-          "packages/domains/wms/contract/wms-item-brand.actions.ts",
-          "packages/domains/wms/contract/wms-item-category.actions.ts",
-          "packages/domains/wms/contract/wms-item-sku.actions.ts",
-          "packages/domains/wms/contract/wms-item.actions.ts",
-          "packages/domains/wms/contract/wms-merchant.actions.ts",
-          "packages/domains/wms/contract/wms-movement-order-detail.actions.ts",
-          "packages/domains/wms/contract/wms-movement-order.actions.ts",
-          "packages/domains/wms/contract/wms-receipt-order-detail.actions.ts",
-          "packages/domains/wms/contract/wms-receipt-order.actions.ts",
-          "packages/domains/wms/contract/wms-shipment-order-detail.actions.ts",
-          "packages/domains/wms/contract/wms-shipment-order.actions.ts",
-          "packages/domains/wms/contract/wms-warehouse.actions.ts"
+          "packages/plugins/plugin-wms/contract/actions.ts",
+          "packages/plugins/plugin-wms/contract/wms-check-order-detail.actions.ts",
+          "packages/plugins/plugin-wms/contract/wms-check-order.actions.ts",
+          "packages/plugins/plugin-wms/contract/wms-inventory-history.actions.ts",
+          "packages/plugins/plugin-wms/contract/wms-inventory.actions.ts",
+          "packages/plugins/plugin-wms/contract/wms-item-brand.actions.ts",
+          "packages/plugins/plugin-wms/contract/wms-item-category.actions.ts",
+          "packages/plugins/plugin-wms/contract/wms-item-sku.actions.ts",
+          "packages/plugins/plugin-wms/contract/wms-item.actions.ts",
+          "packages/plugins/plugin-wms/contract/wms-merchant.actions.ts",
+          "packages/plugins/plugin-wms/contract/wms-movement-order-detail.actions.ts",
+          "packages/plugins/plugin-wms/contract/wms-movement-order.actions.ts",
+          "packages/plugins/plugin-wms/contract/wms-receipt-order-detail.actions.ts",
+          "packages/plugins/plugin-wms/contract/wms-receipt-order.actions.ts",
+          "packages/plugins/plugin-wms/contract/wms-shipment-order-detail.actions.ts",
+          "packages/plugins/plugin-wms/contract/wms-shipment-order.actions.ts",
+          "packages/plugins/plugin-wms/contract/wms-warehouse.actions.ts"
         ],
-        "proto": "packages/domains/wms/contract/wms.proto",
-        "manifest": "packages/domains/wms/contract/route.manifest.yaml"
+        "proto": "packages/plugins/plugin-wms/contract/wms.proto",
+        "manifest": "packages/plugins/plugin-wms/contract/route.manifest.yaml"
       },
       "provider": {
-        "servicesDir": "packages/domains/wms/backend/services",
-        "repositoriesDir": "packages/domains/wms/backend/repositories",
+        "servicesDir": "packages/plugins/plugin-wms/backend/services",
+        "repositoriesDir": "packages/plugins/plugin-wms/backend/repositories",
         "methods": [
           "ping",
           "listWarehouses",
@@ -576,30 +588,32 @@
         ]
       },
       "consumer": {
-        "adminApi": "src/app/api/v1/admin/wms",
-        "frontendApi": "packages/domains/wms/frontend/api",
+        "adminApi": "src/app/api/v1/plugins/ruoyi.wms/api",
+        "appApi": "src/app/api/v1/plugins/ruoyi.wms/api",
+        "openApi": "src/app/api/v1/plugins/ruoyi.wms/api",
+        "frontendApi": "packages/plugins/plugin-wms/frontend/api",
         "adminPages": "src/app/(admin-pages)/admin/wms",
-        "modulePages": "packages/domains/wms/frontend/pages"
+        "modulePages": "packages/plugins/plugin-wms/frontend/pages"
       },
       "rolesComplete": true
     },
     {
       "name": "mes",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "B",
       "definition": {
-        "dir": "packages/domains/mes/contract",
+        "dir": "packages/plugins/plugin-mes/contract",
         "facades": [
-          "packages/domains/mes/contract/mes.facade.ts"
+          "packages/plugins/plugin-mes/contract/mes.facade.ts"
         ],
         "actions": [
-          "packages/domains/mes/contract/actions.ts"
+          "packages/plugins/plugin-mes/contract/actions.ts"
         ],
-        "proto": "packages/domains/mes/contract/mes.proto",
-        "manifest": "packages/domains/mes/contract/route.manifest.yaml"
+        "proto": "packages/plugins/plugin-mes/contract/mes.proto",
+        "manifest": "packages/plugins/plugin-mes/contract/route.manifest.yaml"
       },
       "provider": {
-        "servicesDir": "packages/domains/mes/backend/services",
+        "servicesDir": "packages/plugins/plugin-mes/backend/services",
         "repositoriesDir": null,
         "methods": [
           "ping",
@@ -608,29 +622,31 @@
         ]
       },
       "consumer": {
-        "adminApi": "src/app/api/v1/admin/mes",
+        "adminApi": "src/app/api/v1/plugins/ruoyi.mes/api",
+        "appApi": "src/app/api/v1/plugins/ruoyi.mes/api",
+        "openApi": "src/app/api/v1/plugins/ruoyi.mes/api",
         "adminPages": "src/app/(admin-pages)/admin/mes",
-        "modulePages": "packages/domains/mes/frontend/pages"
+        "modulePages": "packages/plugins/plugin-mes/frontend/pages"
       },
       "rolesComplete": true
     },
     {
       "name": "ai",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "B",
       "definition": {
-        "dir": "packages/domains/ai/contract",
+        "dir": "packages/plugins/plugin-ai/contract",
         "facades": [
-          "packages/domains/ai/contract/ai.facade.ts"
+          "packages/plugins/plugin-ai/contract/ai.facade.ts"
         ],
         "actions": [
-          "packages/domains/ai/contract/actions.ts"
+          "packages/plugins/plugin-ai/contract/actions.ts"
         ],
-        "proto": "packages/domains/ai/contract/ai.proto",
-        "manifest": "packages/domains/ai/contract/route.manifest.yaml"
+        "proto": "packages/plugins/plugin-ai/contract/ai.proto",
+        "manifest": "packages/plugins/plugin-ai/contract/route.manifest.yaml"
       },
       "provider": {
-        "servicesDir": "packages/domains/ai/backend/services",
+        "servicesDir": "packages/plugins/plugin-ai/backend/services",
         "repositoriesDir": null,
         "methods": [
           "ping",
@@ -644,31 +660,32 @@
         ]
       },
       "consumer": {
-        "adminApi": "src/app/api/v1/admin/ai",
-        "openApi": "src/app/api/v1/open/ai",
+        "adminApi": "src/app/api/v1/plugins/ruoyi.ai/api",
+        "appApi": "src/app/api/v1/plugins/ruoyi.ai/api",
+        "openApi": "src/app/api/v1/plugins/ruoyi.ai/api",
         "adminPages": "src/app/(admin-pages)/admin/ai",
-        "modulePages": "packages/domains/ai/frontend/pages"
+        "modulePages": "packages/plugins/plugin-ai/frontend/pages"
       },
       "rolesComplete": true
     },
     {
       "name": "aigw",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "B",
       "definition": {
-        "dir": "packages/domains/aigw/contract",
+        "dir": "packages/plugins/plugin-aigw/contract",
         "facades": [
-          "packages/domains/aigw/contract/aigw.facade.ts"
+          "packages/plugins/plugin-aigw/contract/aigw.facade.ts"
         ],
         "actions": [
-          "packages/domains/aigw/contract/actions.ts"
+          "packages/plugins/plugin-aigw/contract/actions.ts"
         ],
-        "proto": "packages/domains/aigw/contract/aigw.proto",
-        "manifest": "packages/domains/aigw/contract/route.manifest.yaml"
+        "proto": "packages/plugins/plugin-aigw/contract/aigw.proto",
+        "manifest": "packages/plugins/plugin-aigw/contract/route.manifest.yaml"
       },
       "provider": {
-        "servicesDir": "packages/domains/aigw/backend/services",
-        "repositoriesDir": "packages/domains/aigw/backend/repositories",
+        "servicesDir": "packages/plugins/plugin-aigw/backend/services",
+        "repositoriesDir": "packages/plugins/plugin-aigw/backend/repositories",
         "methods": [
           "ping",
           "listChannels",
@@ -682,33 +699,34 @@
         ]
       },
       "consumer": {
-        "adminApi": "src/app/api/v1/admin/aigw",
-        "openApi": "src/app/api/v1/open/aigw",
-        "frontendApi": "packages/domains/aigw/frontend/api",
+        "adminApi": "src/app/api/v1/plugins/ruoyi.aigw/api",
+        "appApi": "src/app/api/v1/plugins/ruoyi.aigw/api",
+        "openApi": "src/app/api/v1/plugins/ruoyi.aigw/api",
+        "frontendApi": "packages/plugins/plugin-aigw/frontend/api",
         "adminPages": "src/app/(admin-pages)/admin/aigw",
-        "modulePages": "packages/domains/aigw/frontend/pages",
+        "modulePages": "packages/plugins/plugin-aigw/frontend/pages",
         "cpcPages": "src/app/(cpc-pages)/cpc/aigw",
-        "moduleCpcPages": "packages/domains/aigw/frontend/cpc-pages"
+        "moduleCpcPages": "packages/plugins/plugin-aigw/frontend/cpc-pages"
       },
       "rolesComplete": true
     },
     {
       "name": "iot",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "B",
       "definition": {
-        "dir": "packages/domains/iot/contract",
+        "dir": "packages/plugins/plugin-iot/contract",
         "facades": [
-          "packages/domains/iot/contract/iot.facade.ts"
+          "packages/plugins/plugin-iot/contract/iot.facade.ts"
         ],
         "actions": [
-          "packages/domains/iot/contract/actions.ts"
+          "packages/plugins/plugin-iot/contract/actions.ts"
         ],
-        "proto": "packages/domains/iot/contract/iot.proto",
-        "manifest": "packages/domains/iot/contract/route.manifest.yaml"
+        "proto": "packages/plugins/plugin-iot/contract/iot.proto",
+        "manifest": "packages/plugins/plugin-iot/contract/route.manifest.yaml"
       },
       "provider": {
-        "servicesDir": "packages/domains/iot/backend/services",
+        "servicesDir": "packages/plugins/plugin-iot/backend/services",
         "repositoriesDir": null,
         "methods": [
           "ping",
@@ -719,29 +737,31 @@
         ]
       },
       "consumer": {
-        "adminApi": "src/app/api/v1/admin/iot",
+        "adminApi": "src/app/api/v1/plugins/ruoyi.iot/api",
+        "appApi": "src/app/api/v1/plugins/ruoyi.iot/api",
+        "openApi": "src/app/api/v1/plugins/ruoyi.iot/api",
         "adminPages": "src/app/(admin-pages)/admin/iot",
-        "modulePages": "packages/domains/iot/frontend/pages"
+        "modulePages": "packages/plugins/plugin-iot/frontend/pages"
       },
       "rolesComplete": true
     },
     {
       "name": "im",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "B",
       "definition": {
-        "dir": "packages/domains/im/contract",
+        "dir": "packages/plugins/plugin-im/contract",
         "facades": [
-          "packages/domains/im/contract/im.facade.ts"
+          "packages/plugins/plugin-im/contract/im.facade.ts"
         ],
         "actions": [
-          "packages/domains/im/contract/actions.ts"
+          "packages/plugins/plugin-im/contract/actions.ts"
         ],
-        "proto": "packages/domains/im/contract/im.proto",
-        "manifest": "packages/domains/im/contract/route.manifest.yaml"
+        "proto": "packages/plugins/plugin-im/contract/im.proto",
+        "manifest": "packages/plugins/plugin-im/contract/route.manifest.yaml"
       },
       "provider": {
-        "servicesDir": "packages/domains/im/backend/services",
+        "servicesDir": "packages/plugins/plugin-im/backend/services",
         "repositoriesDir": null,
         "methods": [
           "ping",
@@ -750,9 +770,11 @@
         ]
       },
       "consumer": {
-        "adminApi": "src/app/api/v1/admin/im",
+        "adminApi": "src/app/api/v1/plugins/ruoyi.im/api",
+        "appApi": "src/app/api/v1/plugins/ruoyi.im/api",
+        "openApi": "src/app/api/v1/plugins/ruoyi.im/api",
         "adminPages": "src/app/(admin-pages)/admin/im",
-        "modulePages": "packages/domains/im/frontend/pages"
+        "modulePages": "packages/plugins/plugin-im/frontend/pages"
       },
       "rolesComplete": true
     }
