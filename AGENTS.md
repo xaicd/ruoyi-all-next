@@ -83,8 +83,51 @@
 
 ### 3.2 目录约束
 
-1. 新增业务域必须落在 `packages/domains/<domain>/`。
-2. 公共基座（constants/lib/templates）统一放 `packages/shared/`。
+1. 业务域落在两处之一，**不要凭记忆猜**：
+   - `packages/domains/<domain>/` —— 尚未插件化的域与**平台地基**（`system` / `infra`）；
+   - `packages/plugins/plugin-<domain>/` —— **已插件化的第一方插件**（当前 15 个业务域）。
+   解析域名对应的真实目录一律用共享解析器（脚本侧 `scripts/lib/domain-catalog.cjs` 的
+   `domainDirOf` / `domainPathOf`；服务端 TS 侧 codegen 用 `domainBaseDir`），
+   **禁止写死 `packages/domains/`** —— 写死的后果通常不是报错，而是**静默失效**
+   （生成物落到旧路径、检查器扫不到而被跳过、打包漏拷）。
+2. 公共基座（constants/lib/templates）统一放 `packages/shared/`。`shared` **不是域**，
+   是核心基础 SDK；任何把它当域拼路径的地方都是错的。
+
+#### 3.2.1 第一方插件（强制）
+
+域→插件的迁移是**已落地的常态**，不是实验。要点：
+
+1. **插件身份**：`id = ruoyi.<域名>`；目录 `packages/plugins/plugin-<域名>`；
+   manifest 为 `plugin.manifest.json`，入口 `plugin-entry.ts`；`package.json` 需带
+   `ruoyiPlugin` 指针与 `@ruoyi/plugin-sdk` 依赖。
+2. **插件仍保留域级特征**：manifest 的 `domain` 段携带 `publicPrefixes` / `defaultPort` /
+   `upstreamEnv` / `packable` / `auth` / `resilience`。**不要**把已插件化的域从
+   `domain-catalog.json` 移除 —— 移除等于丢域级特征（broker 会拒收它的 subject、
+   拆分代理与治理门禁也对不上）。正确做法是保留该域、把 `kind` 改为 `"plugin"`，
+   并登记进 `layers.plugin.domains`。`system` / `infra` 是平台地基，**永不**插件化。
+3. **`layers.plugin` 就是"可插拔的业务域"**：凡是要遍历"业务域"的地方
+   （孵化裁剪、跨域分层检查、测试覆盖统计…）都必须把 `layers.business` 与
+   `layers.plugin` **合并**看待。只读 `layers.business` 会让规则**空转**
+   （一个文件都不检查，而门禁仍然是绿的）。
+4. **两种运行形态都受支持**：`merged`（同进程直调）与 `isolated`（worker 进程，
+   经 worker 协议的可选方法 `invokeRoute` 转发）。声明判定与形态无关 ——
+   同一份 manifest、同一份 `routes` handlers，差别只在"代码在哪里跑"。
+5. **仓内第一方插件是 TS，不能用运行期 `import()` 加载**：必须在
+   `packages/shared/backend/plugins/first-party-entries.ts` 登记静态入口
+   （第三方插件产出编译后的 JS，走运行期 import）。
+6. **挂载点**：`/api/v1/plugins/<pluginId>/api/**` 与 `/ui/**`。该前缀**不在** admin 下，
+   proxy 直接放行，由挂载点**按 manifest 的 `auth` 声明**执行守卫
+   （`operator`→`requireAdminAuth`，`company`→`requireAppAuth`，`public`→不鉴权）。
+   禁止"因为路径在 admin 下"就给所有插件路由强加管理员鉴权，也禁止"因为是插件"默认放行。
+7. **迁移一个域**：`node scripts/migrate-domain-to-plugin.cjs <domain> --write`
+   （默认 dry-run）。它执行完整 7 步并打印需要人做的收尾；`scaffold-domain-plugin.cjs`
+   只生成产物、不碰登记与门禁。
+8. **删 Next 转发文件**必须用**固定路径段**（`src/app/api/v1/<surface>/<domain>/`），
+   禁止用"路径里含域名"的子串模式 —— `admin/mes/work-orders/report` 这种会被误删。
+9. **拆分部署不受影响**：proxy 的 `matchRemoteDomainUpstream` 位于鉴权与路由**之前**，
+   按 `publicPrefixes` 转发；因此删掉 Next 转发文件后，`npm run domain:up -- <domain>`
+   的独立部署照样工作（已实测）。
+
 3. src 下只允许两个顶层目录：app（Next.js路由）和 modules（全部业务+基座）。
 4. 禁止在 src 下新建 backend/、frontend/、components/、lib/ 等平铺目录。
 5. 通用模板统一放 `packages/shared/frontend/templates`。

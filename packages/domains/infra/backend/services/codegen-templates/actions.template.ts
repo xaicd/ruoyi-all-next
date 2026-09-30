@@ -5,6 +5,7 @@ import {
   toConstant,
   toKebab,
   toPascal,
+  domainBaseDir,
 } from "./common"
 
 export function generateActions(config: CodegenConfig): CodegenOutput {
@@ -42,5 +43,5 @@ export function registerActionSchemas() {
   return ${camel}ActionSchemas
 }
 `
-  return { path: `packages/domains/${moduleName}${sub}/contract/${kebab}.actions.ts`, content, type: "type" }
+  return { path: `${domainBaseDir(moduleName)}${sub}/contract/${kebab}.actions.ts`, content, type: "type" }
 }

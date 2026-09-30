@@ -3,6 +3,7 @@ import {
   type CodegenOutput,
   toConstant,
   toKebab,
+  domainBaseDir,
 } from "./common"
 
 export function generateRbacSql(config: CodegenConfig): CodegenOutput {
@@ -67,7 +68,7 @@ INSERT INTO system_tenant_package_menu (package_id, menu_id) VALUES
 ON CONFLICT DO NOTHING;
 `
   return {
-    path: `packages/domains/${moduleName}/contract/${kebab}.rbac.sql`,
+    path: `${domainBaseDir(moduleName)}/contract/${kebab}.rbac.sql`,
     content,
     type: "sql",
   }

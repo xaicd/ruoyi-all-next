@@ -1,15 +1,15 @@
 {
   "version": 1,
   "kind": "evolution-backlog",
-  "generatedAt": "2026-09-30T06:07:50.459Z",
-  "head": "9f3f8133",
+  "generatedAt": "2026-09-30T08:23:15.573Z",
+  "head": "794e2b83",
   "note": "Aggregated from real gate artifacts. Read-only signal for external agents; no agent loop runs in this repository (AGENTS.md §18).",
   "summary": {
     "blocker": 0,
     "high": 0,
     "medium": 10,
-    "low": 12,
-    "total": 22
+    "low": 13,
+    "total": 23
   },
   "items": [
     {
@@ -131,6 +131,18 @@
       "evidence": "stage=B, kind=plugin; §8 requires at least one key-path automated test per domain",
       "command": "npm test -- --run packages/plugins/plugin-pay",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
+    },
+    {
+      "id": "gate-trace-stale",
+      "severity": "low",
+      "section": "AGENTS.md §6",
+      "title": "Gate trace is older than HEAD",
+      "files": [
+        "docs/architecture/artifacts/harness-trace-latest.json"
+      ],
+      "evidence": "trace.head=9f3f8133, current HEAD=794e2b83",
+      "command": "npm run check",
+      "action": "Re-run the gates so the recorded evidence matches the current revision."
     },
     {
       "id": "oversized-packages/domains/infra/backend/services/codegen-table.service.ts",

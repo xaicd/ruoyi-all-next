@@ -101,16 +101,39 @@ export function toConstant(str: string): string {
   return toKebab(str).replace(/-/g, "_").toUpperCase()
 }
 
+/**
+ * 域的**真实目录**（生成物的落点）。
+ *
+ * 域被改造成第一方插件后目录在 packages/plugins/plugin-<name>。
+ * 写死 packages/domains 会让生成物落到旧路径 —— 最坏的地方是它**不会报错**:
+ * 代码照写、路径合法，但应用里的 @/modules/<name> 别名指向真实位置，
+ * 于是新功能"生成了却不通"。这里与脚本侧的 domainDirOf 保持同一套判定顺序
+ * （插件优先，避免残留旧目录造成反馈回路）。
+ */
+export function domainBaseDir(moduleName: string): string {
+  const pluginDir = `packages/plugins/plugin-${moduleName}`
+  try {
+    // 服务端专用（生成器只在服务端跑）。用 require 而不是 import 顶层引入,
+    // 避免把 node:fs 带进可能被前端引用的模块图。
+    const fs = require("node:fs") as typeof import("node:fs")
+    const path = require("node:path") as typeof import("node:path")
+    if (fs.existsSync(path.join(process.cwd(), pluginDir))) return pluginDir
+  } catch {
+    // 拿不到文件系统时按旧布局处理，保持纯函数可测
+  }
+  return `packages/domains/${moduleName}`
+}
+
 export function getBackendPath(config: CodegenConfig): string {
   const { moduleName, submodule } = config
   const sub = submodule ? `/${submodule}` : ""
-  return `packages/domains/${moduleName}${sub}/backend`
+  return `${domainBaseDir(moduleName)}${sub}/backend`
 }
 
 export function getFrontendPath(config: CodegenConfig): string {
   const { moduleName, submodule } = config
   const sub = submodule ? `/${submodule}` : ""
-  return `packages/domains/${moduleName}${sub}/frontend`
+  return `${domainBaseDir(moduleName)}${sub}/frontend`
 }
 
 const MANAGED_COLUMNS = new Set([
