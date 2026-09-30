@@ -61,14 +61,17 @@
         "2024-11-05"
       ],
       "tools": [
-        "ruoyi_domain_list",
-        "ruoyi_domain_seam",
         "ruoyi_action_lookup",
-        "ruoyi_skills_list",
+        "ruoyi_codegen_targets",
         "ruoyi_compat_info",
-        "ruoyi_standards_report",
+        "ruoyi_domain_list",
+        "ruoyi_domain_resolve",
+        "ruoyi_domain_seam",
         "ruoyi_evolution_backlog",
-        "ruoyi_gate_run"
+        "ruoyi_gate_run",
+        "ruoyi_plugin_list",
+        "ruoyi_skills_list",
+        "ruoyi_standards_report"
       ]
     },
     "evolution": {

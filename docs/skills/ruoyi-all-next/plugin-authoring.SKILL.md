@@ -13,26 +13,31 @@ description: 编写、安装、排障与评审 §6.2 可安装插件（插件包
 
 **先做这个判断，方向错了后面全错。**
 
-## 2. 第一决策：Plugin 还是 Platform Module
+## 2. 先分清三类东西（旧文档说"不要插件化域"，**已作废**）
 
-本仓有**两个平行的扩展类**，不是同一个东西的两种写法。
+> ⚠️ 本仓已把 **15 个业务域**改造成**第一方插件**（`packages/plugins/plugin-<domain>/`）。
+> 旧版 skill 写的"不要把域改造成插件"是**迁移前**的结论，已不成立。以下为准。
 
-| 维度 | Platform Module（域） | Plugin（插件） |
-|---|---|---|
-| 信任 | 可信 | **capability 受限** |
-| 进程 | 与宿主同进程 | **独立 worker 进程** |
-| 落位 | `packages/domains/<domain>/` | 实例插件目录（`RUOYI_PLUGIN_DIR`） |
-| 声明面 | `contract/module.manifest.json`（**派生生成**，勿手改） | 插件包内 `plugin.manifest.json`（**手写**） |
-| 调用方式 | Domain Facade / broker / serviceBus | capability 白名单内的宿主 API |
-| 数据库 | 自有表 + 迁移 | **禁止直连 DB**，走宿主扩展表 |
-| 谁能加 | 平台研发 | 第三方 / 客户 |
+| | 平台地基 | **第一方插件**（域插件化后的形态） | 第三方插件 |
+|---|---|---|---|
+| 目录 | `packages/domains/<name>/` | `packages/plugins/plugin-<name>/` | 实例插件目录（`RUOYI_PLUGIN_DIR`） |
+| 当前成员 | `system` / `infra`（**永不插件化**） | 15 个业务域 | 客户/外部扩展 |
+| 语言 | TS | **TS**（必须登记静态入口） | 编译后的 JS（运行期 import） |
+| 信任 | 可信 | 可信（第一方） | **capability 受限** |
+| 默认形态 | 同进程 | `merged` | `isolated` |
+| 声明面 | `contract/module.manifest.json`（**派生生成**，勿手改） | `plugin.manifest.json`（**生成**，勿手改）+ `domain` 域级特征段 | `plugin.manifest.json`（**手写**） |
+| 数据库 | 自有表 + 迁移 | 自有表 + 迁移 | **禁止直连 DB**，走宿主扩展表 |
+| 可独立部署 | ✅ `npm run domain:up -- <name>` | ✅ 同上（proxy 按 `publicPrefixes` 转发） | 实例内启停 |
 
 **判断规则：**
 
-- 要改核心业务、要加表、要别的域调用它 → **Platform Module**（走 `new-feature` skill）。
-- 客户定制、按实例启停、来源不完全可信、要进程级隔离 → **Plugin**（本 skill）。
+- 加**新的业务能力** → 走 `new-feature` skill；落在哪个域由该域当前形态决定，**别猜路径**
+  （用 `ruoyi_domain_resolve` / `domainDirOf` 解析）。
+- 把某个**还没插件化的业务域**变成插件 → 见 §12「域 → 插件迁移」。`system`/`infra` 除外。
+- 客户定制、按实例启停、来源不完全可信、要进程级隔离 → **第三方插件**（本 skill 其余章节）。
 
-**不要**把域改造成插件。域是平台的组成部分，插件是可装卸的扩展。
+**铁律：`system` / `infra` 是平台地基，永不插件化** —— 它们没有域级插件语义，
+业务域才需要"可装卸"。
 
 ## 3. 插件包结构
 
@@ -189,6 +194,20 @@ export default definePlugin({
 
 宿主接受 `default` 或 `plugin` 具名导出。
 
+### 两种形态都能对外服务路由
+
+**声明判定与运行形态无关**：同一份 manifest、同一份 `routes` handlers，差别只在
+派发时"代码在哪里跑"：
+
+| 形态 | 路由派发路径 |
+|---|---|
+| `merged` | 宿主同进程直接调用 `routes[routeKey]`（零序列化） |
+| `isolated` | 宿主经 worker 协议的**可选方法** `invokeRoute` 转发（stdio 逐行 JSON-RPC） |
+
+`invokeRoute` 是**可选方法**：没实现它不算不合格 worker，但那种插件在 isolated 形态下
+**路由不可达**（调用返回 `methodNotFound`，而不是静默返回空）。
+如果你声明了 `apiRoutes` 又打算跑 isolated，就必须实现 `routes`。
+
 ## 7. 生命周期状态机
 
 ```
@@ -307,3 +326,66 @@ UI bundle 也走同一前缀：`/api/v1/plugins/<pluginKey>/ui/<path>`（这样 
 3. **幂等**：按文件名记录，同名文件不重复执行。宿主不假定迁移文件不可变。
 
 第三方插件不要用这条路 —— 走 `plugin_state` / `plugin_config` 扩展表。
+
+## 12. 域 → 插件迁移（第一方插件化）
+
+把一个**还没插件化**的业务域改造成第一方插件。`system` / `infra` 永不适用。
+
+**用工具，不要手敲**：
+
+```bash
+node scripts/migrate-domain-to-plugin.cjs <domain>            # dry-run，先看影响面
+node scripts/migrate-domain-to-plugin.cjs <domain> --write    # 落盘（可一次传多个域）
+```
+
+它执行完整 7 步：生成 manifest+入口 → 搬家并清干净旧目录 → package.json 指针与依赖 →
+登记静态入口 → catalog 与治理表改插件语义 → tsconfig+vitest 别名 → 删 Next 转发文件。
+`scaffold-domain-plugin.cjs` 只生成产物、**不碰**登记与门禁，是它的下游。
+
+### 迁移后必须做的收尾
+
+```bash
+pnpm run domain:contracts && pnpm run domain:seams && pnpm run domain:manifests && pnpm run admin:routes:manifest
+pnpm run check && npx vitest run && pnpm run build
+```
+
+### 六条**踩过坑**才写下来的铁律
+
+1. **catalog 保留该域，`kind` 改 `"plugin"`，登记进 `layers.plugin.domains`。**
+   不要把它从 `domain-catalog.json` **移除** —— 移除等于丢掉域级特征，
+   broker 会拒收它的 subject、拆分代理与治理门禁全对不上。
+2. **`layers.plugin` 就是"可插拔的业务域"。** 凡是遍历"业务域"的地方
+   （孵化裁剪、跨域分层检查、测试覆盖统计、机检扫描根…）都必须把
+   `layers.business` 与 `layers.plugin` **合并**看待。只读 business 会让规则
+   **空转**——一个文件都不检查，而门禁仍然是绿的。
+3. **禁止写死 `packages/domains/`。** 一律用共享解析器
+   （脚本侧 `domainDirOf`/`domainPathOf`，服务端 TS 侧 `domainBaseDir`）。
+   写死的后果通常**不是报错，而是静默失效**：生成物落到旧路径、检查器扫不到而被跳过、
+   打包漏拷。判定顺序必须**插件优先** —— 否则残留的旧目录会造成反馈回路
+   （解析器误判域还在原地）。
+4. **搬家后必须清干净旧目录**（含生成物重建出来的），否则第 3 条的反馈回路会真的发生。
+5. **删 Next 转发文件必须用固定路径段**（`src/app/api/v1/<surface>/<domain>/`）。
+   禁止用"路径里含域名"的子串模式 —— `admin/mes/work-orders/report` 这种会被误删。
+6. **仓内 TS 插件必须登记静态入口**（`first-party-entries.ts`）。
+   运行期 `import()` 加载不了 TS；模板串拼路径打包器也追踪不到。
+
+### 迁移后的验证矩阵（必须**全绿**才算完成）
+
+对一个域逐个跑，按**响应体**判定而不是只看状态码：
+
+| 断言 | 期望 |
+|---|---|
+| `operator` 声明 + 无 token | **401**，且响应体是宿主守卫信封（`code: UNAUTHENTICATED`） |
+| `operator` 声明 + 有 token | 不是宿主 401（业务状态码随意） |
+| `company` 声明 + 无 token | 401 |
+| `public` 声明 + 无 token | **不被宿主拦**（处理器自己的 401 不算：那是业务自身的凭据校验） |
+| 未声明的路由 | **404**，且带精确原因 |
+
+另外抽查 1-2 个**已插件化的域**确认无回归；并确认 `npm run domain:up -- <domain>`
+的独立部署仍工作（proxy 的转发在鉴权与路由**之前**，不受删文件影响）。
+
+### AI 侧怎么拿到这些信息（别靠记忆）
+
+- `ruoyi_domain_resolve` —— 域名 → 真实目录 + 是否插件
+- `ruoyi_plugin_list` —— 全部插件 + 声明路由数 + auth 面 + 域级特征
+- `ruoyi_codegen_targets` —— 低代码对该域的**落点**（按真实目录解析）

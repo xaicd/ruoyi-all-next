@@ -16,7 +16,23 @@
 const fs = require("fs")
 const path = require("path")
 const { spawnSync } = require("child_process")
-const { ROOT, loadCatalog } = require("../lib/domain-catalog.cjs")
+const { ROOT, loadCatalog, domainDirOf, domainPathOf } = require("../lib/domain-catalog.cjs")
+
+/** 域代码的两处根: 未插件化的域/地基在 packages/domains，第一方插件在 packages/plugins/plugin-*。 */
+function isPluginDomain(name) {
+  return fs.existsSync(path.join(ROOT, "packages", "plugins", `plugin-${name}`))
+}
+
+/** 读某个第一方插件的 manifest（没有则返回 null）。 */
+function readPluginManifest(name) {
+  const file = path.join(domainPathOf(ROOT, name), "plugin.manifest.json")
+  if (!fs.existsSync(file)) return null
+  try {
+    return JSON.parse(fs.readFileSync(file, "utf8"))
+  } catch {
+    return null
+  }
+}
 
 const SERVER_NAME = "ruoyi-all-next"
 const SERVER_VERSION = "1.0.0"
@@ -73,6 +89,9 @@ const TOOLS = [
       const domains = catalog.domains.map((domain) => ({
         name: domain.name,
         kind: domain.kind,
+        // 真实目录: 域可能已迁成第一方插件。**必须给** —— 否则调用方会去猜
+        // packages/domains/<name>，而"写死路径"的后果通常是静默失效而非报错。
+        dir: domainDirOf(ROOT, domain.name),
         stage: domain.stage,
         contractVersion: domain.contractVersion,
         publicPrefixes: domain.publicPrefixes,
@@ -86,7 +105,10 @@ const TOOLS = [
         layers: {
           foundation: catalog.layers.foundation.modules,
           platform: catalog.layers.platform.domains,
+          // plugin 层 = 已插件化的业务域。遍历"业务域"的调用方必须把 business 与 plugin
+          // **合并**看待；只读 business 会以为这些域不存在（当前 business 可能为空）。
           business: catalog.layers.business.domains,
+          plugin: (catalog.layers.plugin && catalog.layers.plugin.domains) || [],
         },
         count: domains.length,
         domains,
@@ -246,6 +268,109 @@ const TOOLS = [
         timedOut: result.error?.code === "ETIMEDOUT" || false,
         passed: result.status === 0,
         output: truncate(output, 12000),
+      }
+    },
+  },
+  {
+    name: "ruoyi_plugin_list",
+    description:
+      "List every first-party plugin on disk (packages/plugins/plugin-*): id, directory, declared API route count, the auth surfaces it declares (operator/company/public), capabilities, and the domain-level traits carried in its manifest. Use this to answer \"is this domain a plugin\" and \"where does its code live\" without guessing paths.",
+    inputSchema: { type: "object", properties: {}, additionalProperties: false },
+    run() {
+      const pluginsRoot = path.join(ROOT, "packages", "plugins")
+      const dirs = fs.existsSync(pluginsRoot)
+        ? fs.readdirSync(pluginsRoot, { withFileTypes: true })
+            .filter((entry) => entry.isDirectory() && entry.name.startsWith("plugin-"))
+            .map((entry) => entry.name)
+            .sort()
+        : []
+      const plugins = dirs.map((dirName) => {
+        const name = dirName.replace(/^plugin-/, "")
+        const manifest = readPluginManifest(name)
+        const routes = (manifest && manifest.apiRoutes) || []
+        const auth = [...new Set(routes.map((route) => route.auth))].sort()
+        return {
+          id: manifest ? manifest.id : `ruoyi.${name}`,
+          domain: name,
+          dir: `packages/plugins/${dirName}`,
+          routeCount: routes.length,
+          authSurfaces: auth,
+          capabilities: (manifest && manifest.capabilities) || [],
+          entrypoints: (manifest && manifest.entrypoints) || null,
+          domainTraits: (manifest && manifest.domain) || null,
+        }
+      })
+      return { count: plugins.length, plugins }
+    },
+  },
+  {
+    name: "ruoyi_domain_resolve",
+    description:
+      "Resolve a domain name to its real directory and plugin status. ALWAYS call this before building a path by hand: 15 of the business domains live under packages/plugins/plugin-<name>, not packages/domains/<name>, and hardcoding the old path usually fails SILENTLY (generated code lands in a directory the app never imports).",
+    inputSchema: {
+      type: "object",
+      properties: { domain: { type: "string", description: "Domain name, e.g. mall" } },
+      required: ["domain"],
+      additionalProperties: false,
+    },
+    run(args) {
+      const name = String(args.domain || "").trim()
+      if (!name) throw new Error("domain is required")
+      const catalog = loadCatalog()
+      const entry = (catalog.domains || []).find((item) => item.name === name)
+      const manifest = readPluginManifest(name)
+      return {
+        domain: name,
+        registered: Boolean(entry),
+        kind: entry ? entry.kind : null,
+        isPlugin: isPluginDomain(name),
+        dir: domainDirOf(ROOT, name),
+        hasPluginManifest: Boolean(manifest),
+        pluginId: manifest ? manifest.id : null,
+        routeCount: manifest ? ((manifest.apiRoutes || []).length) : 0,
+        note: entry && entry.kind === "plugin"
+          ? "已插件化: 保留域级特征(可独立打包/被 broker 寻址)，但不属于 platform/business 层"
+          : "platform 地基或尚未插件化: 代码在 packages/domains/ 下",
+      }
+    },
+  },
+  {
+    name: "ruoyi_codegen_targets",
+    description:
+      "Return where the low-code code generator will write files for a domain (backend / frontend / contract dirs), resolved against the domain's REAL directory. Use before scaffolding or generating code: writing to a hardcoded packages/domains/<name> for a plugin domain produces code the application never imports.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        domain: { type: "string", description: "Target domain, e.g. mall" },
+        submodule: { type: "string", description: "Optional submodule segment" },
+      },
+      required: ["domain"],
+      additionalProperties: false,
+    },
+    run(args) {
+      const name = String(args.domain || "").trim()
+      if (!name) throw new Error("domain is required")
+      const catalog = loadCatalog()
+      if (!(catalog.domains || []).some((item) => item.name === name)) {
+        throw new Error(`unknown domain "${name}"; see ruoyi_domain_list`)
+      }
+      const sub = args.submodule ? `/${args.submodule}` : ""
+      const base = domainDirOf(ROOT, name)
+      return {
+        domain: name,
+        isPlugin: isPluginDomain(name),
+        base: `${base}${sub}`,
+        paths: {
+          contract: `${base}${sub}/contract`,
+          backend: `${base}${sub}/backend`,
+          frontend: `${base}${sub}/frontend`,
+          api: `src/app/api/v1/admin/${name}${sub}`,
+          adminPage: `src/app/(admin-pages)/admin/${name}${sub}`,
+        },
+        importAlias: `@/modules/${name}${sub ? `${sub}` : ""}`,
+        warning:
+          "插件域的导入别名指向 packages/plugins/plugin-<name>（见 tsconfig paths）。"
+          + "不要手写 packages/domains/<name> —— 生成物会落到应用从不 import 的目录。",
       }
     },
   },

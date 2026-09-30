@@ -12,6 +12,23 @@ description: 全链路一站式新功能研发与交付闭环（融合 .kiro/fea
 
 ---
 
+## 1.5 第 0 步：先解析目标域的**真实目录**（强制）
+
+**本仓 15 个业务域已插件化**，代码在 `packages/plugins/plugin-<domain>/`，
+只有平台地基（`system` / `infra`）还在 `packages/domains/`。
+
+所以**任何时候都不要手写 `packages/domains/{domain}/...`**。先解析：
+
+- MCP：`ruoyi_domain_resolve`（域名 → 真实目录 + 是否插件）
+- MCP：`ruoyi_codegen_targets`（低代码/脚手架在该域的**落点**，按真实目录算）
+- 脚本侧：`scripts/lib/domain-catalog.cjs` 的 `domainDirOf` / `domainPathOf`
+- 服务端 TS 侧：codegen 的 `domainBaseDir`
+
+**写死路径的后果通常不是报错，而是静默失效** —— 文件生成到了应用从不 import 的目录，
+门禁也可能扫不到（检查器只扫已知根，域搬走后规则会**空转**而仍然显示绿）。
+
+下面各步里的 `packages/{domainDir}/...` 一律指**上一步解析出来的真实目录**。
+
 ## 2. 标准七步闭环交付体系 (End-to-End Checklist)
 
 ```mermaid
@@ -88,7 +105,7 @@ flowchart TD
 
 ### 第 6 步：前端开箱即用 UI 与弹窗交互 (Frontend UI Standard)
 严格遵循 `channels.page.tsx` UI Design System：
-1. **API Client 封装**：`packages/domains/{domain}/frontend/api/{entity}.api.ts` 使用 `request.get(url, { params })` / `request.post(url, data)`；
+1. **API Client 封装**：`packages/{domainDir}/frontend/api/{entity}.api.ts` 使用 `request.get(url, { params })` / `request.post(url, data)`；
 2. **顶部工具栏与按钮顺序**：标题 `text-xl font-bold tracking-tight text-slate-900`，`[刷新]`(白色描边 `bg-white border-slate-300`) 在左，`[+ 新增]`(Blue `bg-blue-600`) 在右；
 3. **搜索栏 Container**：`p-3.5 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3`，`bg-slate-900` 查询 + `bg-slate-100` 重置，右侧统计数据；
 4. **严格单行排版（whitespace-nowrap）**：`bg-slate-50/80` 表头，`px-5 py-3 text-xs` 单元格；
@@ -111,4 +128,4 @@ flowchart TD
    npm run domain:manifests
    npm run check
    ```
-3. **自动化单元测试**：编写并运行 `packages/domains/{domain}/backend/services/__tests__/{entity}.service.test.ts` 确保 100% 绿灯。
+3. **自动化单元测试**：编写并运行 `packages/{domainDir}/backend/services/__tests__/{entity}.service.test.ts` 确保 100% 绿灯。
