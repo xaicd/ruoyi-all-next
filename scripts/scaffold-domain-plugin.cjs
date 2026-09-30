@@ -27,6 +27,33 @@
 const fs = require("node:fs")
 const path = require("node:path")
 
+/**
+ * 读取域名在 catalog 里的域级特征。插件身份 = 域身份，这些特征必须随插件带走
+ * （可打包性、默认端口、上行环境变量、公开前缀、租户与弹性策略）。
+ */
+function loadCatalogEntry(name) {
+  try {
+    const catalog = JSON.parse(fs.readFileSync(path.join(ROOT, "packages/shared/backend/constants/domain-catalog.json"), "utf8"))
+    const entry = (catalog.domains || []).find((item) => item.name === name)
+    if (!entry) return null
+    return {
+      kind: entry.kind,
+      stage: entry.stage,
+      contractVersion: entry.contractVersion,
+      publicPrefixes: entry.publicPrefixes,
+      upstreamEnv: entry.upstreamEnv,
+      defaultPort: entry.defaultPort,
+      packable: entry.packable,
+      independentDatabase: entry.independentDatabase,
+      dependsOnModules: entry.dependsOnModules,
+      auth: entry.auth,
+      resilience: entry.resilience,
+    }
+  } catch {
+    return null
+  }
+}
+
 const ROOT = path.resolve(__dirname, "..")
 const SURFACE_AUTH = { admin: "operator", app: "company", open: "public" }
 
@@ -87,17 +114,26 @@ if (declarations.length === 0) {
 
 // 域名 = 目录名去掉 plugin- 前缀（目录位置/命名不应影响插件身份）
 const domainName = path.basename(domainDir).replace(/^plugin-/, "")
+// 域级特征原样带过来。**必须带**: 用户要求插件既"像微服务那样独立"、又能"合并运行"，
+// 所以第一方插件保留可打包性/端口/上行环境变量/公开前缀 —— 拆分代理与治理门禁都靠它。
+// 漏了这段，插件在 catalog 里就没有域语义，publicPrefix 会被判成空承诺。
+const catalogEntry = loadCatalogEntry(domainName)
 const manifest = {
   $schema: "ruoyi-plugin-manifest/v1",
   id: `ruoyi.${domainName}`,
   apiVersion: 1,
   version: "0.1.0",
-  displayName: domainName,
+  displayName: catalogEntry?.displayName ?? domainName,
   description: `${domainName} 域（由 scripts/scaffold-domain-plugin.cjs 生成的第一方插件声明）`,
   author: "RuoYi All Next",
   categories: ["automation"],
+  // 只用**插件 manifest 的白名单**（packages/shared/backend/plugins/types.ts 的
+  // KNOWN_CAPABILITIES）。别抄注册表列表里那些 facade.invoke / rpc.serve / pack.independent ——
+  // 那是**桥接层**描述内置域用的另一套词表，写进 manifest 会被安装期校验直接拒收。
+  // 可打包性等域级信息在下面的 domain 段里，不走 capability。
   capabilities: ["api.routes.register"],
   entrypoints: { merged: "./plugin-entry.ts" },
+  ...(catalogEntry ? { domain: catalogEntry } : {}),
   apiRoutes: declarations,
 }
 
@@ -151,12 +187,17 @@ console.log(`  -> ${path.relative(ROOT, domainDir)}/plugin.manifest.json`)
 console.log(`  -> ${path.relative(ROOT, domainDir)}/plugin-entry.ts`)
 console.log("")
 console.log("  ⚠️  以下步骤本工具**不做**，需要显式完成（它们会牵动互相引用的登记与门禁）:")
-console.log("     1. 从 packages/shared/backend/constants/domain-catalog.json 移除该域")
-console.log("        （并从 docs/architecture/ruoyi-all-next-domain-governance.md 移除其治理行）")
-console.log("     2. 把该域目录移到 packages/plugins/（第一方插件位置，宿主才发现得到）")
+console.log("     1. catalog 里**保留**该域，但把 kind 改成 \"plugin\"，并在 layers.plugin.domains 登记")
+console.log("        （不要移除! 移除等于丢掉域级特征 —— broker 会拒收它的 subject，打包与治理也对不上。")
+console.log("         同时把 docs/architecture/ruoyi-all-next-domain-governance.md 的治理行改为插件语义）")
+console.log("     2. 把该域目录移到 packages/plugins/plugin-<domain>（宿主才发现得到）")
+console.log("        —— 搬完必须清干净旧目录: 残留会让路径解析器误判域还在原地（实测踩过反馈回路）")
 console.log("     3. 在 package.json 里加 ruoyiPlugin 指针与 @ruoyi/plugin-sdk 依赖")
-console.log("     4. 给宿主加**静态 import 表**（仓内 TS 插件不能靠运行期 import() 加载）")
-console.log("     5. 删掉 src/app/api/v1/**/<domain> 下的路由转发文件，验证 /api/v1/plugins/<id>/api/** 可达")
+console.log("     4. 在 packages/shared/backend/plugins/first-party-entries.ts 加一行静态入口")
+console.log("        （仓内 TS 插件不能用运行期 import() 加载，Node 不认 TS、打包器也追不到）")
+console.log("     5. 删掉 src/app/api/v1/**/<domain> 下的路由转发文件，并重生成域清单与路由基线")
+console.log("        （拆分模式下转发仍由 proxy 按 publicPrefixes 完成，删文件不影响独立部署）")
+console.log("     6. 验证三种 auth 声明: operator/company 无 token 必须 401、public 放行、未声明 404")
 console.log("")
 
 if (!write) {
