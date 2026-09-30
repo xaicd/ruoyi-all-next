@@ -128,8 +128,15 @@
    按 `publicPrefixes` 转发；因此删掉 Next 转发文件后，`npm run domain:up -- <domain>`
    的独立部署照样工作（已实测）。
 
-3. src 下只允许两个顶层目录：app（Next.js路由）和 modules（全部业务+基座）。
+3. `src/` 下只允许 `app/`（Next.js 路由 = BFF 层）与 `proxy.ts`。
+   **业务与基座代码一律在 `packages/` 下** —— `src/modules/` 是迁移遗留的空壳，已删除
+   （它与 `@/modules/*` 别名无关，见下）。禁止在 `src` 下重建 `modules/`。
 4. 禁止在 src 下新建 backend/、frontend/、components/、lib/ 等平铺目录。
+
+> **`@/modules/*` 别名 ≠ `src/modules/`**：别名指向 `packages/`（
+> `@/modules/shared`→`packages/shared`、`@/modules/pay`→`packages/plugins/plugin-pay`、
+> 其余未插件化域→`packages/domains/*`）。它只是一个**稳定的导入前缀**，
+> 与文件系统里的 `src/modules` 无关 —— 看到 `@/modules/` 不要去找 `src/modules/`。
 5. 通用模板统一放 `packages/shared/frontend/templates`。
 6. **前端双轨页面规范（强制）**：
    - `packages/domains/<domain>/frontend/pages/` 专用于 **Admin 运营管理端页面**；

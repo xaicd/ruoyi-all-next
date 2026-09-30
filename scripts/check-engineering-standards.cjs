@@ -98,9 +98,11 @@ const RULES = [
     id: "src-top-level-layout",
     section: "AGENTS.md §3.2",
     mode: "enforce",
-    description: "src/ only allows app/ and modules/ at the top level",
+    description: "src/ only allows app/ at the top level (src/modules was a vestigial shim, deleted)",
     run() {
-      // src/ 现在只应有 app —— 各域与 shared 已迁到 packages/（见 pnpm-workspace.yaml 与 AGENTS.md §3.2）。
+      // src/ 只应有 app —— 各域与 shared 已在 packages/ 下（AGENTS.md §3.2）。
+      // 注意: @/modules/* 只是导入前缀, 指向 packages/, 与 src/modules 无关;
+      // 这里仍然禁止 src/modules 被重建。
       const allowed = new Set(["app"])
       return fs
         .readdirSync(abs(SRC), { withFileTypes: true })
@@ -194,9 +196,11 @@ const RULES = [
     mode: "report",
     description: "business-domain repositories should reference tenant scope (needs human judgement)",
     run() {
+      // 业务域 = business ∪ plugin（域插件化后会移出 business 层）。
+      // 只按 kind === "business" 筛会得到空集 —— 规则**空转**而门禁仍绿。
       const businessDomains = new Set(
         loadCatalog()
-          .domains.filter((domain) => domain.kind === "business")
+          .domains.filter((domain) => domain.kind === "business" || domain.kind === "plugin")
           .map((domain) => domain.name),
       )
       const files = walkDomains((name) => /\.repository\.ts$/.test(name)).filter(
@@ -205,7 +209,10 @@ const RULES = [
       const violations = []
       for (const file of files) {
         const rel = toRel(file)
-        const domain = rel.split("/")[2]
+        // 两种布局: packages/domains/<domain>/… 与 packages/plugins/plugin-<domain>/…
+        // 写死 rel.split("/")[2] 对插件路径会取到 "plugins"，于是整条规则静默失效。
+        const parts = rel.split("/")
+        const domain = parts[1] === "plugins" ? parts[2].replace(/^plugin-/, "") : parts[2]
         if (!businessDomains.has(domain)) continue
         const source = fs.readFileSync(file, "utf8")
         // Accepts both context-based (getCurrentTenantId) and explicit tenantId parameters;

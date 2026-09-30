@@ -1,17 +1,32 @@
 {
   "version": 1,
   "kind": "evolution-backlog",
-  "generatedAt": "2026-09-30T08:39:43.887Z",
-  "head": "776a4b67",
+  "generatedAt": "2026-09-30T10:16:36.605Z",
+  "head": "708ba065",
   "note": "Aggregated from real gate artifacts. Read-only signal for external agents; no agent loop runs in this repository (AGENTS.md §18).",
   "summary": {
     "blocker": 0,
     "high": 0,
-    "medium": 10,
-    "low": 13,
+    "medium": 11,
+    "low": 12,
     "total": 23
   },
   "items": [
+    {
+      "id": "standards-report-business-repository-tenant-scope",
+      "severity": "medium",
+      "section": "AGENTS.md §4.8",
+      "title": "business-repository-tenant-scope: 4 item(s) need human judgement",
+      "files": [
+        "packages/plugins/plugin-aigw/backend/repositories/aigw-carrier.repository.ts",
+        "packages/plugins/plugin-crm/backend/repositories/customer.repository.ts",
+        "packages/plugins/plugin-pay/backend/repositories/order.repository.ts",
+        "packages/plugins/plugin-pay/backend/repositories/refund.repository.ts"
+      ],
+      "evidence": "business-domain repositories should reference tenant scope (needs human judgement) — e.g. packages/plugins/plugin-aigw/backend/repositories/aigw-carrier.repository.ts (no tenant reference found at all); packages/plugins/plugin-crm/backend/repositories/customer.repository.ts (no tenant reference found at all); packages/plugins/plugin-pay/backend/repositories/order.repository.ts (no tenant reference found at all); +1 more",
+      "command": "node scripts/check-engineering-standards.cjs --audit",
+      "action": "Decide per file whether it is a real gap or an accepted exception; if the rule needs a documented exemption, add it to the rule rather than the code."
+    },
     {
       "id": "thin-tests-ai",
       "severity": "medium",
@@ -131,18 +146,6 @@
       "evidence": "stage=B, kind=plugin; §8 requires at least one key-path automated test per domain",
       "command": "npm test -- --run packages/plugins/plugin-pay",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
-    },
-    {
-      "id": "gate-trace-stale",
-      "severity": "low",
-      "section": "AGENTS.md §6",
-      "title": "Gate trace is older than HEAD",
-      "files": [
-        "docs/architecture/artifacts/harness-trace-latest.json"
-      ],
-      "evidence": "trace.head=794e2b83, current HEAD=776a4b67",
-      "command": "npm run check",
-      "action": "Re-run the gates so the recorded evidence matches the current revision."
     },
     {
       "id": "oversized-packages/domains/infra/backend/services/codegen-table.service.ts",

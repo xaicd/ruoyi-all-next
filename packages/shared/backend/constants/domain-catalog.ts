@@ -141,8 +141,21 @@ export function listPlatformDomains(): DomainCatalogEntry[] {
   return listDomainCatalog().filter((domain) => domain.kind === "platform")
 }
 
+/**
+ * 业务层（**严格**按 layer 语义，不含已插件化的域）。
+ *
+ * 域被插件化后会移出本层放进 `layers.plugin`。"是否需要把两层合并看待"由**调用方**
+ * 决定（判别标准是"要的是业务域还是可插拔插件"）—— 见 AGENTS.md §3.2.1 第 3 条。
+ * 遍历"业务域"的调用方通常要合并两层; 只读本函数会拿到空集, 而空集**不报错**,
+ * 只是静默什么都不做（孵化裁剪 / 跨域分层检查 / 测试覆盖统计都出过"规则空转但门禁仍绿"）。
+ */
 export function listBusinessDomains(): DomainCatalogEntry[] {
   return listDomainCatalog().filter((domain) => domain.kind === "business")
+}
+
+/** 仅已插件化的业务域（插件层）。 */
+export function listPluginDomains(): DomainCatalogEntry[] {
+  return listDomainCatalog().filter((domain) => domain.kind === "plugin")
 }
 
 export function isFoundationModule(name: string): boolean {
