@@ -15,6 +15,7 @@ export default defineConfig({
       "@/modules/shared": path.resolve(__dirname, "packages/shared"),
       // 已改造成第一方插件的域（目录搬到了 packages/plugins/plugin-*）
       "@/modules/pay": path.resolve(__dirname, "packages/plugins/plugin-pay"),
+      "@/modules/report": path.resolve(__dirname, "packages/plugins/plugin-report"),
       "@/modules": path.resolve(__dirname, "packages/domains"),
       "@": path.resolve(__dirname, "src"),
       "@prisma/data": path.resolve(__dirname, "prisma/data"),

@@ -2,7 +2,7 @@
 # Do not hand-edit pack/upstream fields. Run: npm run domain:manifests
 domain: report
 owner: report
-kind: business
+kind: plugin
 stage: A
 contractVersion: v1
 implementation: local-ts

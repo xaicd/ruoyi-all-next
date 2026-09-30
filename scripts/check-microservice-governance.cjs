@@ -192,21 +192,14 @@ if (reportSqlTest.includes("DataSourceConfigRepository")) fail("report custom-sq
 if (!reportSqlTest.includes("infraPlatformFacade")) fail("report custom-sql test must assert infraPlatformFacade tenant scope")
 
 // pay 已改造成第一方插件: 其路由不再有 Next 转发文件, 直接读插件内的真实路由源码
-function domainRouteSourceOrPlugin(nextRel, pluginRel) {
-  const nextPath = path.join(ROOT, nextRel)
-  if (fs.existsSync(nextPath)) return resolveRouteSource(nextPath)
-  const pluginPath = path.join(domainPathOf(ROOT, "pay"), pluginRel)
-  if (fs.existsSync(pluginPath)) return fs.readFileSync(pluginPath, "utf8")
-  return ""
-}
 const payOrdersPath = path.join(ROOT, "src", "app", "api", "v1", "admin", "pay", "orders", "route.ts")
-const payOrders = domainRouteSourceOrPlugin("src/app/api/v1/admin/pay/orders/route.ts", "routes/admin/orders/route.ts")
+const payOrders = routeSourceOf("src/app/api/v1/admin/pay/orders/route.ts")
 if (!payOrders.includes("PAY_ACTION_SCHEMAS") || !payOrders.includes("parseActionQuery")) {
   fail("pay orders route must parse query with PAY_ACTION_SCHEMAS via parseActionQuery")
 }
 
 const payRefundsPath = path.join(ROOT, "src", "app", "api", "v1", "admin", "pay", "refunds", "route.ts")
-const payRefunds = domainRouteSourceOrPlugin("src/app/api/v1/admin/pay/refunds/route.ts", "routes/admin/refunds/route.ts")
+const payRefunds = routeSourceOf("src/app/api/v1/admin/pay/refunds/route.ts")
 if (!payRefunds.includes("PAY_ACTION_SCHEMAS") || !payRefunds.includes("parseActionQuery")) {
   fail("pay refunds route must parse query with PAY_ACTION_SCHEMAS via parseActionQuery")
 }
@@ -239,8 +232,28 @@ for (const [label, relPath, token] of [
   mustUseActionSchemas(label, relPath, token)
 }
 
+/**
+ * 读取某个 API 路由的源码。
+ *
+ * 域被改造成**第一方插件**后，src/app/api/v1/** 下的 Next 转发文件会被删除，
+ * 真实路由源码搬到 packages/plugins/plugin-<domain>/routes/<surface>/<rest>/route.ts。
+ * 这里按路径形态自动回退，即"域搬到插件目录"不会让这些契约检查静默退化成通过
+ * （找不到文件时 resolveRouteSource 返回空串，检查会**假通过**）。
+ */
+function routeSourceOf(relPath) {
+  const nextFile = path.join(ROOT, relPath)
+  if (fs.existsSync(nextFile)) return resolveRouteSource(nextFile)
+  // src/app/api/v1/<surface>/<domain>/<rest...>/route.ts
+  const parts = relPath.split("/")
+  const [surface, domain] = [parts[4], parts[5]]
+  if (!surface || !domain) return ""
+  const rest = parts.slice(6).join("/")
+  const pluginFile = path.join(domainPathOf(ROOT, domain), "routes", surface, rest)
+  return fs.existsSync(pluginFile) ? fs.readFileSync(pluginFile, "utf8") : ""
+}
+
 function mustUseActionSchemas(label, relPath, token) {
-  const source = resolveRouteSource(path.join(ROOT, relPath))
+  const source = routeSourceOf(relPath)
   if (!source.includes(token) || !source.includes("parseActionQuery") && !source.includes("parseActionBody")) {
     fail(`${label} must parse with ${token} via parseActionQuery/parseActionBody`)
   }

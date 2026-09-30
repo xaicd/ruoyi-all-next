@@ -4,7 +4,7 @@
   "id": "ruoyi.report",
   "apiVersion": 1,
   "displayName": "报表中心",
-  "kind": "business",
+  "kind": "plugin",
   "stage": "A",
   "owner": "report",
   "contractVersion": "v1",
@@ -19,10 +19,10 @@
   ],
   "entrypoints": {
     "facade": [
-      "packages/domains/report/contract/report.facade.ts"
+      "packages/plugins/plugin-report/contract/report.facade.ts"
     ],
-    "proto": "packages/domains/report/contract/report.proto",
-    "actions": "packages/domains/report/contract/actions.ts"
+    "proto": "packages/plugins/plugin-report/contract/report.proto",
+    "actions": "packages/plugins/plugin-report/contract/actions.ts"
   },
   "apiRoutes": {
     "publicPrefix": [

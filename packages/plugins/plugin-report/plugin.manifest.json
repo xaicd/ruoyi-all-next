@@ -1,0 +1,177 @@
+{
+  "$schema": "ruoyi-plugin-manifest/v1",
+  "id": "ruoyi.report",
+  "apiVersion": 1,
+  "version": "0.1.0",
+  "displayName": "report",
+  "description": "report 域（由 scripts/scaffold-domain-plugin.cjs 生成的第一方插件声明）",
+  "author": "RuoYi All Next",
+  "categories": [
+    "automation"
+  ],
+  "capabilities": [
+    "api.routes.register"
+  ],
+  "entrypoints": {
+    "merged": "./plugin-entry.ts"
+  },
+  "domain": {
+    "kind": "business",
+    "stage": "A",
+    "contractVersion": "v1",
+    "publicPrefixes": [
+      "/api/v1/admin/report"
+    ],
+    "upstreamEnv": "RUOYI_DOMAIN_REPORT_UPSTREAM",
+    "defaultPort": 3215,
+    "packable": true,
+    "independentDatabase": false,
+    "dependsOnModules": [
+      "shared"
+    ],
+    "auth": {
+      "audience": "admin",
+      "tenantPolicy": "required"
+    },
+    "resilience": {
+      "timeoutMs": 15000,
+      "retryMaxAttempts": 1,
+      "safeMethodsOnly": true,
+      "idempotencyRequired": false
+    }
+  },
+  "apiRoutes": [
+    {
+      "routeKey": "admin:boards/[id]:delete",
+      "method": "DELETE",
+      "path": "/boards/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:boards/[id]:get",
+      "method": "GET",
+      "path": "/boards/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:boards/[id]:put",
+      "method": "PUT",
+      "path": "/boards/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:boards:get",
+      "method": "GET",
+      "path": "/boards",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:boards:post",
+      "method": "POST",
+      "path": "/boards",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:custom-sql/data-sources:get",
+      "method": "GET",
+      "path": "/custom-sql/data-sources",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:custom-sql/execute:post",
+      "method": "POST",
+      "path": "/custom-sql/execute",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:export/[id]:delete",
+      "method": "DELETE",
+      "path": "/export/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:export/[id]:get",
+      "method": "GET",
+      "path": "/export/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:export/[id]:put",
+      "method": "PUT",
+      "path": "/export/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:export:get",
+      "method": "GET",
+      "path": "/export",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:export:post",
+      "method": "POST",
+      "path": "/export",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:go-view-data/[id]:delete",
+      "method": "DELETE",
+      "path": "/go-view-data/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:go-view-data/[id]:get",
+      "method": "GET",
+      "path": "/go-view-data/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:go-view-data/[id]:put",
+      "method": "PUT",
+      "path": "/go-view-data/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:go-view-data:get",
+      "method": "GET",
+      "path": "/go-view-data",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:go-view-data:post",
+      "method": "POST",
+      "path": "/go-view-data",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:go-view-project/[id]:delete",
+      "method": "DELETE",
+      "path": "/go-view-project/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:go-view-project/[id]:get",
+      "method": "GET",
+      "path": "/go-view-project/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:go-view-project/[id]:put",
+      "method": "PUT",
+      "path": "/go-view-project/[id]",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:go-view-project:get",
+      "method": "GET",
+      "path": "/go-view-project",
+      "auth": "operator"
+    },
+    {
+      "routeKey": "admin:go-view-project:post",
+      "method": "POST",
+      "path": "/go-view-project",
+      "auth": "operator"
+    }
+  ]
+}

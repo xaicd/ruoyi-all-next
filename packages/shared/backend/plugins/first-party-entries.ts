@@ -17,6 +17,7 @@ type PluginEntryFactory = () => Promise<Record<string, unknown>>
 
 export const FIRST_PARTY_PLUGIN_ENTRIES: Record<string, PluginEntryFactory> = {
   "ruoyi.pay": () => import("@/modules/pay/plugin-entry"),
+  "ruoyi.report": () => import("@/modules/report/plugin-entry"),
 }
 
 /** 取第一方插件入口工厂；不是第一方插件时返回 undefined（调用方回退到运行期 import）。 */

@@ -47,6 +47,12 @@
       ],
       "@/modules/pay": [
         "packages/plugins/plugin-pay"
+      ],
+      "@/modules/report/*": [
+        "packages/plugins/plugin-report/*"
+      ],
+      "@/modules/report": [
+        "packages/plugins/plugin-report"
       ]
     }
   },

@@ -339,21 +339,21 @@
     },
     {
       "name": "report",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "A",
       "definition": {
-        "dir": "packages/domains/report/contract",
+        "dir": "packages/plugins/plugin-report/contract",
         "facades": [
-          "packages/domains/report/contract/report.facade.ts"
+          "packages/plugins/plugin-report/contract/report.facade.ts"
         ],
         "actions": [
-          "packages/domains/report/contract/actions.ts"
+          "packages/plugins/plugin-report/contract/actions.ts"
         ],
-        "proto": "packages/domains/report/contract/report.proto",
-        "manifest": "packages/domains/report/contract/route.manifest.yaml"
+        "proto": "packages/plugins/plugin-report/contract/report.proto",
+        "manifest": "packages/plugins/plugin-report/contract/route.manifest.yaml"
       },
       "provider": {
-        "servicesDir": "packages/domains/report/backend/services",
+        "servicesDir": "packages/plugins/plugin-report/backend/services",
         "repositoriesDir": null,
         "methods": [
           "ping",
@@ -362,9 +362,11 @@
         ]
       },
       "consumer": {
-        "adminApi": "src/app/api/v1/admin/report",
+        "adminApi": "src/app/api/v1/plugins/ruoyi.report/api",
+        "appApi": "src/app/api/v1/plugins/ruoyi.report/api",
+        "openApi": "src/app/api/v1/plugins/ruoyi.report/api",
         "adminPages": "src/app/(admin-pages)/admin/report",
-        "modulePages": "packages/domains/report/frontend/pages"
+        "modulePages": "packages/plugins/plugin-report/frontend/pages"
       },
       "rolesComplete": true
     },

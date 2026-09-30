@@ -320,7 +320,6 @@
       "domains": [
         "online",
         "bpm",
-        "report",
         "mp",
         "mall",
         "member",
@@ -337,7 +336,8 @@
     },
     "plugin": {
       "domains": [
-        "pay"
+        "pay",
+        "report"
       ],
       "description": "第一方插件: 保留域级特征(可独立打包), 但不属于平台/业务层"
     }
@@ -534,7 +534,7 @@
     {
       "name": "report",
       "owner": "report",
-      "kind": "business",
+      "kind": "plugin",
       "stage": "A",
       "contractVersion": "v1",
       "publicPrefixes": [
