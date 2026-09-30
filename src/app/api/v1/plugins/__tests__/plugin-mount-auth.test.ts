@@ -28,7 +28,6 @@ vi.mock("@/modules/shared/backend/plugins/plugin.repository", () => ({
 const invokeRoute = vi.fn(async () => ({ status: 200, body: { ok: true } }))
 vi.mock("@/modules/shared/backend/plugins/runtime-manager", () => ({
   pluginRuntimeManager: {
-    modeOf: vi.fn(() => "merged"),
     invokeRoute: (...args: unknown[]) => invokeRoute(...(args as [])),
   },
 }))

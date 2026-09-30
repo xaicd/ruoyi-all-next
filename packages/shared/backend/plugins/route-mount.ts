@@ -10,11 +10,11 @@
  *   "精确路径+方法"白名单表达不了。放在非 admin 前缀下，proxy 直接放行，
  *   由**本挂载点**按声明鉴权 —— 也与 Paperclip 的 /api/plugins/* 形态一致。
  *
- * 支撑范围（诚实标注，不静默降级）:
- *   - 运行形态: 目前只支持 merged（同进程）。isolated 需要 worker 协议新增路由转发方法，**尚未实现**，
- *     调用会得到明确的 501 而不是假装成功。
- *   - auth: 目前只支持 `operator`。`public` / `company` 需要把该路径纳入 proxy 的公开策略，
- *     否则请求在到达本层之前就被 proxy 拦掉，因此暂时明确拒绝这两种声明。
+ * 支撑范围:
+ *   - 运行形态: merged（同进程）与 isolated（worker）**都支持**。声明判定完全一致，
+ *     差别只在派发时走 worker 还是同进程（见 runtime-manager.invokeRoute）。
+ *   - auth: `operator` / `company` / `public` 三种声明都支持，由本挂载点按声明执行守卫
+ *     （挂载点在非 admin 前缀下，proxy 不施加管理员鉴权）。
  */
 import type { PluginApiRouteDeclaration, PluginManifest } from "./types"
 
@@ -47,22 +47,16 @@ export function resolvePluginRoute(input: {
   method: string
   pathname: string
   pluginKey: string
-  runtimeMode: "merged" | "isolated" | undefined
 }): RouteMountResolution {
-  const { manifest, capabilities, method, pathname, pluginKey, runtimeMode } = input
+  const { manifest, capabilities, method, pathname, pluginKey } = input
 
   if (!manifest) return { ok: false, status: 404, error: `未找到插件: ${pluginKey}` }
   if (!capabilities.includes("api.routes.register")) {
     return { ok: false, status: 403, error: `插件未声明 api.routes.register 能力` }
   }
-  // isolated 形态的路由转发需要 worker 协议新增方法，尚未实现 —— 明确 501，不假装支持
-  if (runtimeMode === "isolated") {
-    return {
-      ok: false,
-      status: 501,
-      error: "isolated 形态的插件路由转发尚未实现（需要 worker 协议新增路由方法）",
-    }
-  }
+  // 说明: 这里**不再**按形态拒绝。isolated 形态的路由转发已由 worker 协议的
+  // invokeRoute（可选方法）承载，声明判定与 merged 完全一致 —— 声明什么就认什么，
+  // 差别只在派发时走 worker 还是同进程（见 runtime-manager.invokeRoute）。
 
   const want = pathname.slice(`${PLUGIN_ROUTE_PREFIX}/${pluginKey}/api`.length) || "/"
   const declaration = (manifest.apiRoutes ?? []).find(

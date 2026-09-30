@@ -151,3 +151,50 @@ describe("PluginWorkerManager", () => {
     expect(WORKER_LIMITS.gracefulShutdownMs).toBeGreaterThan(0)
   })
 })
+
+/**
+ * isolated 形态的**路由转发**（worker 协议的可选方法 invokeRoute）。
+ *
+ * 这是插件"能独立运行"与"能对外服务"的交点: 没有它，isolated 插件进程活着
+ * 但路由不可达 —— 对外等于空转，而且宿主只能回 501。
+ * 这里用**真实的示例插件 worker** 走一遍 JSON-RPC 往返，不手搓 fixture。
+ */
+describe("PluginWorker: isolated 路由转发 (invokeRoute)", () => {
+  it("把 routeKey 派发到 worker 的 routes 处理器，并原样带回响应", async () => {
+    const worker = new PluginWorker("ruoyi.hello-world", EXAMPLE_WORKER, EXAMPLE_DIR)
+    await worker.start(initInput())
+    try {
+      const result = (await worker.request("invokeRoute", {
+        routeKey: "hello",
+        request: {
+          method: "GET",
+          path: "/api/v1/plugins/ruoyi.hello-world/api/hello",
+          query: { from: "test" },
+          body: undefined,
+          headers: {},
+          pluginKey: "ruoyi.hello-world",
+        },
+      })) as { status: number; body: Record<string, unknown> }
+
+      expect(result.status).toBe(200)
+      expect(result.body.message).toContain("hello from plugin")
+      // 处理器真的收到了请求上下文（不是被丢弃后返回固定值）
+      expect(result.body.pluginKey).toBe("ruoyi.hello-world")
+      expect(result.body.query).toEqual({ from: "test" })
+    } finally {
+      await worker.stop()
+    }
+  })
+
+  it("未声明的 routeKey -> methodNotFound（明确报错，不静默返回空）", async () => {
+    const worker = new PluginWorker("ruoyi.hello-world", EXAMPLE_WORKER, EXAMPLE_DIR)
+    await worker.start(initInput())
+    try {
+      await expect(
+        worker.request("invokeRoute", { routeKey: "not-implemented", request: {} }),
+      ).rejects.toThrow(/未实现路由|methodNotFound/)
+    } finally {
+      await worker.stop()
+    }
+  })
+})

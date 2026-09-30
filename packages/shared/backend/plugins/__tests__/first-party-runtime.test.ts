@@ -32,7 +32,6 @@ describe("第一方插件: 运行时闭环（pay）", () => {
       method: declaration.method,
       pathname: `/api/v1/plugins/${manifest.id}/api${declaration.path}`,
       pluginKey: manifest.id,
-      runtimeMode: "merged",
     })
     // 声明被接受，且 auth 原样保留（鉴权由挂载点按它执行）
     expect(resolution.ok).toBe(true)
@@ -58,7 +57,6 @@ describe("第一方插件: 运行时闭环（pay）", () => {
       method: "GET",
       pathname: `/api/v1/plugins/${manifest.id}/api/definitely-not-declared`,
       pluginKey: manifest.id,
-      runtimeMode: "merged",
     })
     expect(resolution.ok).toBe(false)
     expect(resolution.status).toBe(404)

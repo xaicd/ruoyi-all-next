@@ -35,7 +35,6 @@ async function handle(request: Request) {
     method: request.method,
     pathname: `${PLUGIN_ROUTE_PREFIX}/${pluginKey}/api${pathPart ? `/${pathPart}` : ""}`,
     pluginKey,
-    runtimeMode: pluginRuntimeManager.modeOf(pluginKey),
   })
   if (!resolution.ok) {
     return NextResponse.json(

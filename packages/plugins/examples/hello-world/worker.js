@@ -18,6 +18,22 @@ const plugin = definePlugin({
   async onShutdown() {
     // 只需快速收尾；宿主给 10s，超时会升级到 SIGTERM/SIGKILL
   },
+
+  // 路由处理器: key 对应 manifest 的 apiRoutes[].routeKey。
+  // isolated 形态下宿主通过 worker 协议的 invokeRoute 派发到这里（逐行 JSON-RPC）。
+  // 没有这段，插件"在跑"但对外路由不可达 —— 等于空转。
+  routes: {
+    async hello(input) {
+      return {
+        status: 200,
+        body: {
+          message: "hello from plugin (isolated)",
+          pluginKey: input.pluginKey,
+          query: input.query,
+        },
+      }
+    },
+  },
 })
 
 runWorker(plugin)

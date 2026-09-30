@@ -76,6 +76,19 @@ export function runWorker(plugin, options = {}) {
         }
         return
       }
+      case "invokeRoute": {
+        // 可选方法: 插件声明了 `routes` 才支持。宿主按 manifest 的 apiRoutes 声明
+        // 先做判定，这里只负责把 routeKey 派发到对应处理器。
+        const { routeKey, request: routeRequest } = request.params ?? {}
+        const handler = plugin.routes?.[routeKey]
+        if (typeof handler !== "function") {
+          replyError(request.id, RPC_ERROR.methodNotFound, `插件未实现路由: ${routeKey}`)
+          return
+        }
+        const result = (await handler(routeRequest)) ?? {}
+        reply(request.id, { result })
+        return
+      }
       default:
         replyError(request.id, RPC_ERROR.methodNotFound, `未实现的方法: ${request.method}`)
     }

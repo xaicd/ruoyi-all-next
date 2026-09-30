@@ -29,7 +29,6 @@ function resolve(overrides: Partial<Parameters<typeof resolvePluginRoute>[0]> = 
     method: "GET",
     pathname: `${PLUGIN_ROUTE_PREFIX}/${KEY}/api/hello`,
     pluginKey: KEY,
-    runtimeMode: "merged",
     ...overrides,
   })
 }
@@ -61,10 +60,13 @@ describe("宿主挂载插件声明的 apiRoutes", () => {
     expect(resolve({ method: "POST" }).status).toBe(404)
   })
 
-  it("isolated 形态 -> 501 并说明原因（不假装支持）", () => {
-    const result = resolve({ runtimeMode: "isolated" })
-    expect(result.status).toBe(501)
-    expect(result.error).toContain("isolated")
+  it("isolated 形态与 merged 的声明判定完全一致（派发差异不在这层）", () => {
+    // isolated 的路由转发由 worker 协议的 invokeRoute 承载；
+    // 声明判定是同一套 —— 声明什么就认什么，形态只影响派发走哪里。
+    const result = resolve({})
+    expect(result.ok).toBe(true)
+    // 声明判定与运行形态无关: 同一个 manifest 声明，两种形态解析出同一条
+    expect(result.declaration).toEqual({ routeKey: "hello", method: "GET", path: "/hello", auth: "operator" })
   })
 
   it("三种 auth 声明都被接受（鉴权交给挂载点按声明执行，不再 501）", () => {

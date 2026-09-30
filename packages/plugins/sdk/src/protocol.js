@@ -39,6 +39,13 @@ export function decode(buffer) {
 /** 三个必选方法：worker 未实现其中任何一个即不合格。 */
 export const REQUIRED_METHODS = Object.freeze(["initialize", "health", "shutdown"])
 
+/**
+ * **可选**方法: 实现了就更强，没实现不算不合格。
+ * 与必选方法分开列出，是为了让"这个插件到底支不支持某能力"有明确答案，
+ * 而不是靠猜 —— 未实现的调用会返回 JSON-RPC methodNotFound。
+ */
+export const OPTIONAL_METHODS = Object.freeze(["invokeRoute"])
+
 /** JSON-RPC 标准错误码。 */
 export const RPC_ERROR = Object.freeze({
   methodNotFound: -32601,

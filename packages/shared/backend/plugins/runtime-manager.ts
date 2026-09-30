@@ -11,6 +11,7 @@
 import { MergedPlugin } from "./merged-runtime"
 import type { PluginRuntimeMode } from "./types"
 import { pluginWorkerManager } from "./worker-manager"
+import type { PluginRouteInvokeRequest, PluginRouteInvokeResult } from "./worker-protocol"
 import type { WorkerHealthResult, WorkerInitializeInput } from "./worker-protocol"
 
 export type PluginRuntime = {
@@ -49,14 +50,25 @@ export class PluginRuntimeManager {
   }
 
   /**
-   * 调用插件自带的路由处理器。
-   * 目前只有 merged 形态支持（isolated 需要 worker 协议新增路由转发方法，尚未实现）；
-   * 调用方（route-mount）会先按形态判定并给出明确错误，不静默降级。
+   * 调用插件自带的路由处理器。**两种形态都支持**，这里按形态分流：
+   *   merged   -> 同进程直接调处理器（零序列化）
+   *   isolated -> 走 worker 协议的 `invokeRoute`（逐行 JSON-RPC）
+   *
+   * 两条路径的语义相同（同一个 manifest 声明、同一个 routeKey、同样的 request/result 形状），
+   * 差别只在"代码在哪里跑"。调用方无需关心形态。
    */
-  async invokeRoute(pluginKey: string, routeKey: string, input: Parameters<import("./merged-runtime").MergedPlugin["invokeRoute"]>[1]) {
+  async invokeRoute(
+    pluginKey: string,
+    routeKey: string,
+    input: PluginRouteInvokeRequest,
+  ): Promise<PluginRouteInvokeResult> {
     const instance = this.merged.get(pluginKey)
-    if (!instance) throw new Error(`插件 ${pluginKey} 不是 merged 形态或未运行，无法调用其路由`)
-    return instance.invokeRoute(routeKey, input)
+    if (instance) return instance.invokeRoute(routeKey, input)
+
+    const worker = pluginWorkerManager.get(pluginKey)
+    if (!worker) throw new Error(`插件 ${pluginKey} 未运行，无法调用其路由`)
+    // worker 未实现 invokeRoute（可选方法）时，协议会回 methodNotFound —— 明确报错，不静默返回空
+    return (await worker.request("invokeRoute", { routeKey, request: input })) as PluginRouteInvokeResult
   }
 
   modeOf(pluginKey: string): PluginRuntimeMode | undefined {

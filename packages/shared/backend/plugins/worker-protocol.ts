@@ -12,6 +12,28 @@
 /** 必选方法。worker 未实现其中任何一个即视为不合格 worker。 */
 export const REQUIRED_WORKER_METHODS = ["initialize", "health", "shutdown"] as const
 
+/**
+ * **可选**方法。实现了就更强，没实现不算不合格。
+ *
+ * `invokeRoute`: isolated（worker）形态的插件路由转发。宿主按 manifest 的 apiRoutes
+ * 声明先判定，再把 routeKey 派发给 worker。没有它，isolated 插件的路由就是不可达的
+ * —— 插件"在跑"但对外等于空转。
+ */
+export const OPTIONAL_WORKER_METHODS = ["invokeRoute"] as const
+
+/** 传给插件路由处理器的请求（与 merged 形态同一形状）。 */
+export type PluginRouteInvokeRequest = {
+  method: string
+  path: string
+  query: Record<string, string>
+  body: unknown
+  headers: Record<string, string>
+  pluginKey: string
+}
+
+/** 插件路由处理器的返回。 */
+export type PluginRouteInvokeResult = { status?: number; body?: unknown }
+
 export type RequiredWorkerMethod = (typeof REQUIRED_WORKER_METHODS)[number]
 
 /** 进程行为参数（请求超时 / 停机阶梯时限）。 */
