@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 
 import { requireAdminAuth, requireAppAuth } from "@/modules/shared/backend/auth/guards"
+import { handleApiError } from "@/modules/shared/backend/http/api-error"
 import { PLUGIN_ROUTE_PREFIX, resolvePluginRoute } from "@/modules/shared/backend/plugins/route-mount"
 import { PluginRepository } from "@/modules/shared/backend/plugins/plugin.repository"
 import { pluginRuntimeManager } from "@/modules/shared/backend/plugins/runtime-manager"
@@ -43,13 +44,15 @@ async function handle(request: Request) {
     )
   }
 
-  // 按声明鉴权 —— 声明什么就查什么，不静默放宽也不一律收紧
+  // 按声明鉴权 —— 声明什么就查什么，不静默放宽也不一律收紧。
+  // try 必须把鉴权也包进去: 守卫按声明抛的是 AuthenticationError(401) /
+  // AuthorizationError(403)，落在 try 之外会直接逃逸成 Next 的 500。
   const declared = resolution.declaration!.auth
-  if (declared === "operator") await requireAdminAuth(request)
-  else if (declared === "company") requireAppAuth(request)
-
   const body = ["GET", "HEAD"].includes(request.method) ? undefined : await request.json().catch(() => undefined)
   try {
+    if (declared === "operator") await requireAdminAuth(request)
+    else if (declared === "company") requireAppAuth(request)
+
     const result = await pluginRuntimeManager.invokeRoute(pluginKey, resolution.declaration!.routeKey, {
       method: request.method,
       path: url.pathname,
@@ -60,8 +63,9 @@ async function handle(request: Request) {
     })
     return NextResponse.json({ success: true, data: result?.body ?? null }, { status: result?.status ?? 200 })
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error)
-    return NextResponse.json({ success: false, error: `插件路由执行失败: ${message}` }, { status: 500 })
+    // 必须走平台统一的错误映射: 守卫按 manifest 声明抛出的是 AuthenticationError(401) /
+    // AuthorizationError(403)，一律当 500 会把"未登录"报成"服务器错误"（实测踩过）。
+    return handleApiError(error, { operation: `plugin.route.execute ${pluginKey}` })
   }
 }
 

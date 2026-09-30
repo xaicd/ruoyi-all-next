@@ -61,4 +61,19 @@ export const SEED_ROLES: SystemRoleRow[] = [
     createdAt: "2026-01-01T00:00:00.000Z",
     updatedAt: "2026-01-01T00:00:00.000Z",
   },
+  {
+    // seed-postgresql.ts 在绑定管理员角色时要求 platform-admin 已经存在
+    // （见其 fail-fast: "super_admin and platform-admin roles must be seeded"），
+    // 但种子数据一直没有它 —— 干净库上跑种子必然回滚。这里补齐。
+    id: "6",
+    name: "平台运维管理员",
+    code: "platform-admin",
+    sort: 6,
+    status: "ACTIVE",
+    dataScope: "ALL",
+    remark: "平台级运维与治理角色：租户编排、平台配置、契约与门禁治理",
+    tenantId: "1",
+    createdAt: "2026-01-01T00:00:00.000Z",
+    updatedAt: "2026-01-01T00:00:00.000Z",
+  },
 ]

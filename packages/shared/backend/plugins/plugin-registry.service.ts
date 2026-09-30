@@ -8,7 +8,7 @@
 import { existsSync } from "node:fs"
 import path from "node:path"
 
-import { resolvePluginDir, scanAllPluginPackages } from "./package-scanner"
+import { firstPartyPluginRoots, resolvePluginDir, scanAllPluginPackages, type PluginScanRoot } from "./package-scanner"
 import { PluginRepository } from "./plugin.repository"
 import { isTrustedPlugin, runPluginMigrations } from "./plugin-migrations"
 import { pluginRuntimeManager } from "./runtime-manager"
@@ -40,6 +40,21 @@ export type PluginReconcileResult = PluginSyncResult & {
   migrations?: Record<string, Awaited<ReturnType<typeof runPluginMigrations>>>
 }
 
+/**
+ * 插件发现的两个根（抽成纯函数是为了可以脱离数据库单测）。
+ *
+ * 必须**显式列出**两个根，不能依赖 `scanAllPluginPackages` 的默认参数:
+ * 传单个根会把默认的第二根整个覆盖掉，仓内第一方插件就永远扫不到。
+ * 症状隐蔽 —— 注册表列表里看得到该 key（以 builtin 形态预置），但 manifestJson 是空的，
+ * 挂载点报 "未找到插件"，而看列表的人以为一切正常。
+ */
+export function pluginScanRoots(pluginDir: string): PluginScanRoot[] {
+  return [
+    { dir: pluginDir, reportSkipped: true },
+    ...firstPartyPluginRoots().map((dir) => ({ dir, reportSkipped: false })),
+  ]
+}
+
 export const PluginRegistryService = {
   /**
    * 同步磁盘插件目录 → 安装记录。
@@ -52,7 +67,12 @@ export const PluginRegistryService = {
     // 多根发现: 实例插件目录 + 仓内第一方插件(packages/plugins/**)。
     // "缺失即移除" 只在**实例目录存在**时执行 —— 否则目录未挂载会把第一方插件也判为缺失。
     const dirExists = existsSync(pluginDir)
-    const discovered = scanAllPluginPackages([pluginDir])
+    // 显式列出两个根，别依赖 scanAllPluginPackages 的默认参数 ——
+    // 传单个根会把默认的第二根整个覆盖掉，仓内第一方插件(packages/plugins/**)就永远扫不到，
+    // 表现为"登记表里有这个 key(builtin)，但 manifestJson 是空的，挂载点报未找到插件"。
+    // reportSkipped 区分两个根的语义: 实例目录里每个子目录都该是插件(不合格要报 rejected)；
+    // 第一方根同住 sdk 这类普通包，静默跳过。
+    const discovered = scanAllPluginPackages(pluginScanRoots(pluginDir))
 
     const accepted = discovered.filter((item) => item.manifest)
     const rejected: PluginSyncRejection[] = discovered
