@@ -372,9 +372,16 @@ function walkTsFiles(dir, acc = []) {
 }
 
 const relFromRoot = (file) => path.relative(ROOT, file).replace(/\\/g, "/")
-const businessDomains = domainCatalog.layers.business.domains
+// 业务域 = business ∪ plugin。域迁成插件后会移出 business 层 ——
+// 只读 business 会让这条分层规则在迁移后**空转**（一个文件都不检查，而 check 仍然绿）。
+const businessDomains = [
+  ...domainCatalog.layers.business.domains,
+  ...(domainCatalog.layers.plugin?.domains || []),
+]
+let layeringCheckedFiles = 0
 for (const domain of businessDomains) {
-  for (const file of walkTsFiles(path.join(ROOT, "packages", "domains", domain))) {
+  for (const file of walkTsFiles(domainPathOf(ROOT, domain))) {
+    layeringCheckedFiles += 1
     const source = fs.readFileSync(file, "utf8")
     const rel = relFromRoot(file)
     if (source.includes("/system/contract/system.facade") || source.includes("/system/contract/system.platform.facade")) {
@@ -388,6 +395,12 @@ for (const domain of businessDomains) {
       fail(`${rel} must not import infra platform facade; only online/report may`)
     }
   }
+}
+
+// 自检: 这条规则曾经因为"扫描根写死 + 业务层为空"而**空转**（一个文件都不查，
+// 而 check 仍然是绿的）。加一条下限断言，让它不可能再静默变成空转。
+if (layeringCheckedFiles === 0) {
+  fail("跨域分层检查没有扫描到任何文件 —— 扫描根或域清单可能又写死了")
 }
 
 for (const file of walkTsFiles(path.join(ROOT, "packages", "shared"))) {

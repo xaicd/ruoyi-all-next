@@ -102,6 +102,10 @@ function writeGeneratedManifests() {
  * seam 图一直指向旧路径并报 triangle incomplete）。
  */
 function domainDirOf(root, name) {
+  // 核心基础 SDK 不是域: shared 在 packages/shared/，不在 packages/domains/ 下。
+  // 漏了这条，依赖闭包会去解析 packages/domains/shared（不存在），
+  // 打包就静默漏掉 shared（"missing" 列表里才有痕迹）。
+  if (name === "shared") return "packages/shared"
   // 插件位置**优先**: 只要有 packages/plugins/plugin-<name> 就以它为准。
   // 不能反过来靠"旧目录是否存在"判断 —— 旧目录可能被残留生成物重建，导致解析器
   // 误判域还在原地（实测踩过这个反馈回路）。

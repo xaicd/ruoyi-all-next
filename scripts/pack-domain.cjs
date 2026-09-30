@@ -1,7 +1,7 @@
 const fs = require("fs")
 const path = require("path")
 const { spawnSync } = require("child_process")
-const { ROOT, listDomains, getDomain, domainDirOf } = require("./lib/domain-catalog.cjs")
+const { ROOT, listDomains, getDomain, domainDirOf, domainPathOf } = require("./lib/domain-catalog.cjs")
 
 function parseArgs(argv) {
   const args = {
@@ -70,7 +70,9 @@ function expandModuleClosure(seedModules) {
 
   while (queue.length > 0) {
     const current = queue.pop()
-    const dir = path.join(ROOT, "packages", "domains", current)
+    // 域可能是第一方插件(目录在 packages/plugins/plugin-*) —— 写死会 continue 掉，
+    // 导致打包时依赖闭包为空、漏拷依赖域
+    const dir = domainPathOf(ROOT, current)
     if (!fs.existsSync(dir)) continue
 
     for (const file of walkSourceFiles(dir)) {
