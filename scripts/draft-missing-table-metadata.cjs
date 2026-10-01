@@ -29,7 +29,7 @@ const KNOWN_DEBT = [
   "aigw_seat",
   "aigw_split_pipeline",
   "aigw_tariff",
-  "system_partner",
+  // system_partner 已补齐元数据（scripts/data/system-tables.ts），不再列入。
 ]
 
 /** 找出查询该表的仓储文件。 */

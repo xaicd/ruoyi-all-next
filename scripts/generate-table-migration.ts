@@ -22,20 +22,37 @@ import type { CodegenConfig } from "../packages/domains/infra/backend/services/c
 const ROOT = path.resolve(__dirname, "..")
 const MIGRATIONS_DIR = path.join(ROOT, "prisma", "migrations")
 
-/** 低代码列类型 → PostgreSQL 类型。与既有迁移的写法保持一致（见 add_plugin_migration）。 */
-function pgType(column: { name: string; type: string; isPk?: boolean }): string {
+/**
+ * 低代码列类型 → PostgreSQL 类型。与既有迁移的写法保持一致（见 add_plugin_migration）。
+ *
+ * `precision`/`scale`/`maxLength` 若在元数据里声明了就**照用** —— 不能一律给默认值：
+ * 例如 `master_pool_tokens` 是 10 亿量级，落到 INTEGER 会**溢出**，必须 BIGINT。
+ */
+function pgType(column: {
+  name: string
+  type: string
+  isPk?: boolean
+  maxLength?: number
+  precision?: number
+  scale?: number
+}): string {
   // 主键走 TEXT，与仓库既有迁移一致（id 是应用侧生成的字符串，不是自增列）。
   if (column.isPk || column.name === "id") return "TEXT"
   switch (column.type) {
     case "varchar":
-      // 外键/租户/编码类给窄一点，正文类宽一些；统一 VARCHAR 避免 TEXT 无法建唯一索引的坑。
+      if (column.maxLength) return `VARCHAR(${column.maxLength})`
+      // 租户/外键类给窄一点，正文类宽一些；统一 VARCHAR 避免 TEXT 无法建唯一索引的坑。
       return column.name === "tenant_id" ? "VARCHAR(64)" : "VARCHAR(255)"
+    case "text":
+      return "TEXT"
     case "int":
       return "INTEGER"
+    case "bigint":
+      return "BIGINT"
     case "timestamp":
       return "TIMESTAMP(3)"
     case "decimal":
-      return "DECIMAL(18,4)"
+      return `DECIMAL(${column.precision ?? 18},${column.scale ?? 4})`
     case "boolean":
       return "BOOLEAN"
     default:

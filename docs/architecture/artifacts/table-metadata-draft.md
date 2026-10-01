@@ -6,7 +6,7 @@
 > 之所以只是草稿: TS 类型不足以确定 PG 类型（`number` 可能是 int 也可能是 decimal；
 > `createdAt: string` 语义上是 timestamp），标 `?` 处需人工判断。
 
-生成时间: 2026-10-01T08:42:30.327Z
+生成时间: 2026-10-01T10:32:27.451Z
 
 ## aigw_contract （已在门禁的已知欠债列表中）
 
@@ -138,18 +138,5 @@
 | `status` | `VARCHAR(255)` | string |
 | `created_at` | `TIMESTAMP(3) ?` | string |
 | `updated_at` | `TIMESTAMP(3) ?` | string |
-
-待确认: 主键、NOT NULL 约束、默认值、索引、审计底座字段是否齐全。
-
-## system_partner （已在门禁的已知欠债列表中）
-
-来源仓储: `packages/domains/system/backend/repositories/partner.repository.ts`
-
-| 列 | 建议 PG 类型 | 依据 |
-|---|---|---|
-| `level` | `? 需确认` | 未知（仅查询里出现） |
-| `status` | `? 需确认` | 未知（仅查询里出现） |
-| `created_at` | `? 需确认` | 未知（仅查询里出现） |
-| `contact_phone` | `? 需确认` | 未知（仅查询里出现） |
 
 待确认: 主键、NOT NULL 约束、默认值、索引、审计底座字段是否齐全。

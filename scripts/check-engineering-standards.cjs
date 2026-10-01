@@ -436,6 +436,7 @@ const RULES = [
       // 已知欠债: 这些表没有**任何**定义来源（连元数据也没有）。
       // 补 DDL 等于凭空造 schema，比留红更危险 —— 所以显式列出、等元数据补齐后从这里删掉。
       // 每张都要能被 `node scripts/report-table-inventory.cjs` 复现。
+      // 已补齐并出列的: system_partner（元数据见 scripts/data/system-tables.ts）。
       const KNOWN_DEBT = new Set([
         "aigw_contract",
         "aigw_enterprise",
@@ -443,7 +444,6 @@ const RULES = [
         "aigw_seat",
         "aigw_split_pipeline",
         "aigw_tariff",
-        "system_partner",
       ])
 
       const created = new Set([
