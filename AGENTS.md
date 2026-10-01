@@ -517,7 +517,18 @@ env -u DATABASE_URL -u DB_DRIVER npx vitest run    # 353 通过 / 0 失败
 新增此类缺口会直接**失败**；已存在的 7 张（`aigw_*` / `system_partner`）在规则里显式列为欠债，
 补齐元数据后从列表删除。
 
-现状盘点：`node scripts/report-table-inventory.cjs`（含"仓储在查但无处创建"一栏）。
+**相关入口**：
+
+| 命令 | 用途 |
+|---|---|
+| `npm run tables:inventory` | 盘点四种来源 + "仓储在查但无处创建" |
+| `npm run tables:migration -- --tables … --export … --name … [--write]` | 元数据 → 建表迁移 |
+| `npm run tables:metadata-draft` | 为缺元数据的表导出**待评审草稿**（`docs/architecture/artifacts/table-metadata-draft.md`） |
+
+草稿工具的存在意义：给这 7 张表补元数据需要人判断 PG 类型（`number` 可能是 int 也可能是
+decimal，`createdAt: string` 语义上是 timestamp）。草稿从仓储的 `*Row` 接口推导列，
+把不确定处标 `?` —— 但它**只产出评审产物，绝不直接进 `scripts/data/`**，
+否则等于凭空造 schema 并自动生成迁移。
 
 ## 10. 构建与部署步骤
 
