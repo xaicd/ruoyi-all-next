@@ -63,8 +63,10 @@ describeWithDatabase("PluginRegistryService", () => {
     writePackage(root, "alpha", `${TEST_PREFIX}alpha`)
     const result = await PluginRegistryService.syncFromDisk(root)
 
-    expect(result.installed).toBe(1)
-    expect(result.rejected).toEqual([])
+    // 断言**状态**而不是全局计数: syncFromDisk 会同时扫描第一方插件根
+    // （packages/plugins/*，当前 16 个），所以 installed 是全域聚合值，
+    // 不是"本次测试造了几个包"。计数写死会让测试随插件数量漂移。
+    expect(result.rejected.filter((item) => item.packageName === "@itest/alpha")).toEqual([])
 
     const record = await PluginRegistryService.get(`${TEST_PREFIX}alpha`)
     expect(record?.status).toBe("installed")
@@ -79,9 +81,10 @@ describeWithDatabase("PluginRegistryService", () => {
     fs.writeFileSync(manifestFile, JSON.stringify({ ...manifest, capabilities: ["made.up"] }))
 
     const result = await PluginRegistryService.syncFromDisk(root)
-    expect(result.installed).toBe(0)
-    expect(result.rejected).toHaveLength(1)
-    expect(result.rejected[0].errors.join()).toContain("白名单")
+    // packageName 来自 package.json 的 name 字段（见 writePackage），不是插件 id。
+    const rejected = result.rejected.filter((item) => item.packageName === "@itest/bad")
+    expect(rejected).toHaveLength(1)
+    expect(rejected[0].errors.join()).toContain("白名单")
     expect(await PluginRegistryService.get(`${TEST_PREFIX}bad`)).toBeNull()
   })
 
@@ -90,10 +93,9 @@ describeWithDatabase("PluginRegistryService", () => {
     await PluginRegistryService.syncFromDisk(root)
 
     fs.rmSync(path.join(root, "gamma"), { recursive: true, force: true })
-    const result = await PluginRegistryService.syncFromDisk(root)
+    await PluginRegistryService.syncFromDisk(root)
 
-    expect(result.removed).toBe(1)
-    // 默认查询按 deleted=false 过滤，故先前的查询应查不到
+    // 同上: removed 是全域聚合值，用状态断言（第一方插件也在这次扫描里，不受影响）
     expect(await PluginRegistryService.get(`${TEST_PREFIX}gamma`)).toBeNull()
   })
 
@@ -103,10 +105,10 @@ describeWithDatabase("PluginRegistryService", () => {
     expect(await PluginRegistryService.get(`${TEST_PREFIX}delta`)).not.toBeNull()
 
     const missing = path.join(root, "not-mounted")
-    const result = await PluginRegistryService.syncFromDisk(missing)
+    await PluginRegistryService.syncFromDisk(missing)
 
-    expect(result.installed).toBe(0)
-    expect(result.removed).toBe(0)
+    // 目录不存在时不得清空注册表 —— 断言记录还在（而不是断言全局计数为 0，
+    // 那会让"第一方插件也没了"和"本次没有新增"变得不可区分）
     expect(await PluginRegistryService.get(`${TEST_PREFIX}delta`)).not.toBeNull()
   })
 })
