@@ -483,7 +483,11 @@ env -u DATABASE_URL -u DB_DRIVER npx vitest run    # 353 通过 / 0 失败
 原因（实测，不是理论）：仓储用 `hasRealDatabase()`（= `driver !== "memory"`）决定
 "查真实库还是走内存回退"。而本仓有三份**互相矛盾**的表定义来源
 （`prisma/schema.prisma` @@map / `prisma/migrations` / `scripts/bootstrap-sqlite.ts`），
-其中**16 张被仓储查询的表在三份里一张都没有定义**（全部是 `wms_*`）。
+其中有一批表被仓储查询、三份里却一张都没有定义（`node scripts/report-table-inventory.cjs`
+会逐张列出）。**已修掉有权威定义可循的部分**（WMS 16 张已补建表迁移、
+`system_config` 已按 sqlite 定义 + Kysely schema 类型移植到 postgres）；
+剩下的 `aigw_*` / `system_partner` **没有定义来源**，补 DDL 等于凭空造 schema，
+故仍留在报告里等真源确定。
 
 于是出现这个**静默陷阱**：你按常规"先配好数据库再跑测试"，测试反而从全绿变成一片红
 （`relation "wms_item" does not exist`），而且看起来像是自己改坏了代码。
