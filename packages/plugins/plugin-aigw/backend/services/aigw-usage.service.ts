@@ -7,7 +7,7 @@ export class AigwUsageService {
   static async page(input: { page?: number; pageSize?: number; keyword?: string; tenantId?: string | null }) {
     const page = input.page ?? 1
     const pageSize = input.pageSize ?? 20
-    const rows = await AigwUsageRepository.findAll({ model: input.keyword, limit: 100, tenantId: input.tenantId })
+    const rows = await AigwUsageRepository.findAll({ model: input.keyword, limit: 100 })
     const start = (page - 1) * pageSize
     const pageRows = rows.slice(start, start + pageSize)
     

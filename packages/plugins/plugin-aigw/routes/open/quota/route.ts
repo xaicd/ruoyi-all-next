@@ -17,7 +17,6 @@ export async function GET(request: Request) {
         tokenId: record.id,
         name: record.name,
         remainQuota: record.remainQuota,
-        totalUsed: record.totalUsed,
         status: record.status,
       },
     })

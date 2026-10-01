@@ -16,7 +16,7 @@
     "merged": "./plugin-entry.ts"
   },
   "domain": {
-    "kind": "business",
+    "kind": "plugin",
     "stage": "B",
     "contractVersion": "v1",
     "publicPrefixes": [
@@ -43,24 +43,6 @@
   },
   "apiRoutes": [
     {
-      "routeKey": "admin:auth/agent-verify:post",
-      "method": "POST",
-      "path": "/auth/agent-verify",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:carriers:get",
-      "method": "GET",
-      "path": "/carriers",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:carriers:post",
-      "method": "POST",
-      "path": "/carriers",
-      "auth": "operator"
-    },
-    {
       "routeKey": "admin:channels:delete",
       "method": "DELETE",
       "path": "/channels",
@@ -85,132 +67,6 @@
       "auth": "operator"
     },
     {
-      "routeKey": "admin:contracts:delete",
-      "method": "DELETE",
-      "path": "/contracts",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:contracts:get",
-      "method": "GET",
-      "path": "/contracts",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:contracts:post",
-      "method": "POST",
-      "path": "/contracts",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:contracts:put",
-      "method": "PUT",
-      "path": "/contracts",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:dashboard:get",
-      "method": "GET",
-      "path": "/dashboard",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:demo/execute:post",
-      "method": "POST",
-      "path": "/demo/execute",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:enterprises:get",
-      "method": "GET",
-      "path": "/enterprises",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:enterprises:post",
-      "method": "POST",
-      "path": "/enterprises",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:invoices:delete",
-      "method": "DELETE",
-      "path": "/invoices",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:invoices:get",
-      "method": "GET",
-      "path": "/invoices",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:invoices:post",
-      "method": "POST",
-      "path": "/invoices",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:invoices:put",
-      "method": "PUT",
-      "path": "/invoices",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:isv-apps:delete",
-      "method": "DELETE",
-      "path": "/isv-apps",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:isv-apps:get",
-      "method": "GET",
-      "path": "/isv-apps",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:isv-apps:post",
-      "method": "POST",
-      "path": "/isv-apps",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:isv-apps:put",
-      "method": "PUT",
-      "path": "/isv-apps",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:ledgers:get",
-      "method": "GET",
-      "path": "/ledgers",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:mcp-hub:delete",
-      "method": "DELETE",
-      "path": "/mcp-hub",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:mcp-hub:get",
-      "method": "GET",
-      "path": "/mcp-hub",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:mcp-hub:post",
-      "method": "POST",
-      "path": "/mcp-hub",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:mcp-hub:put",
-      "method": "PUT",
-      "path": "/mcp-hub",
-      "auth": "operator"
-    },
-    {
       "routeKey": "admin:models:delete",
       "method": "DELETE",
       "path": "/models",
@@ -232,120 +88,6 @@
       "routeKey": "admin:models:put",
       "method": "PUT",
       "path": "/models",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:pipelines:delete",
-      "method": "DELETE",
-      "path": "/pipelines",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:pipelines:get",
-      "method": "GET",
-      "path": "/pipelines",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:pipelines:post",
-      "method": "POST",
-      "path": "/pipelines",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:pipelines:put",
-      "method": "PUT",
-      "path": "/pipelines",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:quotas:delete",
-      "method": "DELETE",
-      "path": "/quotas",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:quotas:get",
-      "method": "GET",
-      "path": "/quotas",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:quotas:post",
-      "method": "POST",
-      "path": "/quotas",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:quotas:put",
-      "method": "PUT",
-      "path": "/quotas",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:seats:get",
-      "method": "GET",
-      "path": "/seats",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:seats:post",
-      "method": "POST",
-      "path": "/seats",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:skus:delete",
-      "method": "DELETE",
-      "path": "/skus",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:skus:get",
-      "method": "GET",
-      "path": "/skus",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:skus:post",
-      "method": "POST",
-      "path": "/skus",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:skus:put",
-      "method": "PUT",
-      "path": "/skus",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:tariffs:get",
-      "method": "GET",
-      "path": "/tariffs",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:tenant-members:delete",
-      "method": "DELETE",
-      "path": "/tenant-members",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:tenant-members:get",
-      "method": "GET",
-      "path": "/tenant-members",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:tenant-members:post",
-      "method": "POST",
-      "path": "/tenant-members",
-      "auth": "operator"
-    },
-    {
-      "routeKey": "admin:tenant-members:put",
-      "method": "PUT",
-      "path": "/tenant-members",
       "auth": "operator"
     },
     {

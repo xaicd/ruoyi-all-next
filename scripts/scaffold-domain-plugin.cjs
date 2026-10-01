@@ -64,10 +64,13 @@ if (!domain) {
   process.exit(1)
 }
 
-// 接受"域名"或"路径": 迁移到 packages/plugins/ 之后目录已经变了, 工具不该假定位置
+// 接受"域名"或"路径": 迁移到 packages/plugins/ 之后目录已经变了, 工具不该假定位置。
+// 传域名时必须走共享解析器 —— 直接拼 packages/domains/<domain> 对 15 个已插件化的域
+// 全都找不到（而且报的是"找不到域目录"，看起来像域名写错了，实际是路径假设错了）。
+const { domainDirOf } = require("./lib/domain-catalog.cjs")
 const domainDir = path.isAbsolute(domain) || domain.includes("/")
   ? path.resolve(ROOT, domain)
-  : path.join(ROOT, "packages", "domains", domain)
+  : path.join(ROOT, domainDirOf(ROOT, domain))
 if (!fs.existsSync(domainDir)) {
   console.error(`找不到域目录: ${domain}`)
   process.exit(1)

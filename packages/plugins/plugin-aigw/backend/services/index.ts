@@ -1,12 +1,7 @@
+// 同 repositories/index.ts: 只保留核心 AI 网关能力。
 export { AigwChannelService } from "./aigw-channel.service"
 export { AigwAccessTokenService } from "./aigw-access-token.service"
 export { AigwModelService } from "./aigw-model.service"
 export { AigwUsageService } from "./aigw-usage.service"
 export { AigwRelayService } from "./aigw-relay.service"
-export { aigwEnterpriseService, AigwEnterpriseService } from "./aigw-enterprise.service"
-export { aigwSeatService, AigwSeatService } from "./aigw-seat.service"
-export { aigwQuotaService, AigwQuotaService } from "./aigw-quota.service"
-export { aigwTariffService, AigwTariffService } from "./aigw-tariff.service"
-export { aigwSplitService, AigwSplitService } from "./aigw-split.service"
-export { aigwSettlementService, AigwSettlementService } from "./aigw-settlement.service"
 export { aigwStore } from "./aigw.store"

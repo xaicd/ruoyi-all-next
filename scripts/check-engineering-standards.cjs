@@ -437,12 +437,10 @@ const RULES = [
       // 补 DDL 等于凭空造 schema，比留红更危险 —— 所以显式列出、等元数据补齐后从这里删掉。
       // 每张都要能被 `node scripts/report-table-inventory.cjs` 复现。
       // 已补齐并出列的: system_partner（元数据见 scripts/data/system-tables.ts）。
-      const KNOWN_DEBT = new Set([
-        "aigw_contract",
-        "aigw_seat",
-        "aigw_split_pipeline",
-        "aigw_tariff",
-      ])
+      // 现在是空的: 此前 7 张（aigw_* / system_partner）已按 AGENTS §9.5 补齐元数据，
+      // 其中 4 张随 aigw 定制业务剥离、仓储一并删除（AGENTS §17.3），已不再被查询。
+      // **不要留陈旧名单** —— 留着的名字会掩盖"同一张表将来又被重新引入"。
+      const KNOWN_DEBT = new Set([])
 
       const created = new Set([
         ...readMetadataTables(),

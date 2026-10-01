@@ -23,11 +23,7 @@ const ARTIFACT = path.join(ROOT, "docs", "architecture", "artifacts", "table-met
 
 /** 已知欠债（与 check-engineering-standards 的 table-definition-coverage 规则保持一致）。 */
 const KNOWN_DEBT = [
-  "aigw_contract",
-  "aigw_seat",
-  "aigw_split_pipeline",
-  "aigw_tariff",
-  // system_partner 已补齐元数据（scripts/data/system-tables.ts），不再列入。
+  // 当前为空 —— 见 check-engineering-standards.cjs 的 table-definition-coverage 规则注释。
 ]
 
 /** 找出查询该表的仓储文件。 */

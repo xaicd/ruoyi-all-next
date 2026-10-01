@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { AigwRelayService } from "@/modules/aigw/backend/services/aigw-relay.service"
 
 export async function GET() {
-  const models = AigwRelayService.listPublicModels()
+  const models = await AigwRelayService.listPublicModels()
   const data = models.map((id) => ({
     id,
     object: "model",

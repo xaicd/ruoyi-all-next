@@ -80,7 +80,8 @@ export class AigwRelayService {
     throw Object.assign(new Error(`上游重试均失败: ${lastError}`), { status: 502 })
   }
 
-  static listPublicModels() {
+  /** 上游 listActiveModels 是 async —— 这里必须一起 async，否则调用方拿到的是 Promise。 */
+  static async listPublicModels() {
     return AigwChannelService.listActiveModels()
   }
 
