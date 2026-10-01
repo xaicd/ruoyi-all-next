@@ -1,30 +1,21 @@
 {
-  "generatedAt": "2026-10-01T00:11:25.758Z",
+  "generatedAt": "2026-10-01T00:39:11.613Z",
   "note": "只报告不设门禁：三份来源互相矛盾，需先确定权威真源，再谈表归属/namespace 隔离。",
   "counts": {
     "prisma": 58,
-    "migrations": 63,
+    "migrations": 79,
     "sqliteBootstrap": 10,
-    "repositories": 16,
-    "union": 67
+    "repositories": 70,
+    "union": 83
   },
   "queriedButNeverCreated": [
-    "wms_check_order",
-    "wms_check_order_detail",
-    "wms_inventory",
-    "wms_inventory_history",
-    "wms_item",
-    "wms_item_brand",
-    "wms_item_category",
-    "wms_item_sku",
-    "wms_merchant",
-    "wms_movement_order",
-    "wms_movement_order_detail",
-    "wms_receipt_order",
-    "wms_receipt_order_detail",
-    "wms_shipment_order",
-    "wms_shipment_order_detail",
-    "wms_warehouse"
+    "aigw_contract",
+    "aigw_enterprise",
+    "aigw_quota",
+    "aigw_seat",
+    "aigw_split_pipeline",
+    "aigw_tariff",
+    "system_partner"
   ],
   "onlyIn": {
     "prisma": [
@@ -40,7 +31,23 @@
       "aigw_tenant_quota_ledger",
       "system_tenant_package_ai_quota",
       "system_tenant_package_ai_seat",
-      "system_tenant_package_ai_tariff"
+      "system_tenant_package_ai_tariff",
+      "wms_check_order",
+      "wms_check_order_detail",
+      "wms_inventory",
+      "wms_inventory_history",
+      "wms_item",
+      "wms_item_brand",
+      "wms_item_category",
+      "wms_item_sku",
+      "wms_merchant",
+      "wms_movement_order",
+      "wms_movement_order_detail",
+      "wms_receipt_order",
+      "wms_receipt_order_detail",
+      "wms_shipment_order",
+      "wms_shipment_order_detail",
+      "wms_warehouse"
     ],
     "sqliteBootstrap": [
       "system_config"

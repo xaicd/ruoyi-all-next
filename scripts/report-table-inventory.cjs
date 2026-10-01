@@ -71,10 +71,16 @@ function readRepositoryTables() {
       if (entry.name === "node_modules" || entry.name === "__tests__") continue
       const full = path.join(dir, entry.name)
       if (entry.isDirectory()) walk(full)
-      else if (entry.name.endsWith(".repository.ts")) {
+      else if (entry.name.endsWith(".repository.ts") || entry.name.endsWith(".service.ts")) {
         const source = fs.readFileSync(full, "utf8")
-        const match = source.match(/const TABLE_NAME\s*=\s*"([a-z0-9_]+)"/)
-        if (match) tables.add(match[1].toLowerCase())
+        // 写法一: codegen 产物的固定约定
+        const named = source.match(/const TABLE_NAME\s*=\s*"([a-z0-9_]+)"/)
+        if (named) tables.add(named[1].toLowerCase())
+        // 写法二: 手写仓储直接走 Kysely 构建器。只认明确指向物理表的调用 ——
+        // 漏掉这些正是"报告看起来完整、实际有洞"的来源（system_config / system_partner 都属此类）。
+        for (const m of source.matchAll(/\.(?:selectFrom|insertInto|updateTable|deleteFrom|into)\("([a-z0-9_]+)"/g)) {
+          tables.add(m[1].toLowerCase())
+        }
       }
     }
   }
