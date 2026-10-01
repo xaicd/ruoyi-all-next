@@ -15,6 +15,13 @@ export interface ConfiguredColumn {
   scale?: number
   enumValues?: string[]
   defaultValueTyped?: unknown
+  /**
+   * 建表时的 SQL 默认值**表达式**（如 `CURRENT_TIMESTAMP`）。
+   * 字面量默认值（数字/布尔/字符串）用 `defaultValueTyped`；这个字段留给无法用字面量
+   * 表达的情况。生成迁移时两者都会输出为 `DEFAULT ...` —— 漏掉默认值等于**静默改语义**
+   * （例如 `auto_throttle` 默认 false 丢了，行的初始状态就变了）。
+   */
+  defaultSql?: string
   formValidation?: "required" | "optional"
   widget?: string
   queryType?: string

@@ -24,8 +24,6 @@ const ARTIFACT = path.join(ROOT, "docs", "architecture", "artifacts", "table-met
 /** 已知欠债（与 check-engineering-standards 的 table-definition-coverage 规则保持一致）。 */
 const KNOWN_DEBT = [
   "aigw_contract",
-  "aigw_enterprise",
-  "aigw_quota",
   "aigw_seat",
   "aigw_split_pipeline",
   "aigw_tariff",

@@ -1,18 +1,16 @@
 {
-  "generatedAt": "2026-10-01T10:34:16.128Z",
+  "generatedAt": "2026-10-01T10:48:25.657Z",
   "note": "只报告不设门禁：三份来源互相矛盾，需先确定权威真源，再谈表归属/namespace 隔离。",
   "counts": {
     "prisma": 58,
-    "migrations": 81,
+    "migrations": 83,
     "sqliteBootstrap": 10,
-    "metadata": 19,
+    "metadata": 21,
     "repositories": 70,
-    "union": 86
+    "union": 88
   },
   "queriedButNeverCreated": [
     "aigw_contract",
-    "aigw_enterprise",
-    "aigw_quota",
     "aigw_seat",
     "aigw_split_pipeline",
     "aigw_tariff"
@@ -25,9 +23,11 @@
     ],
     "migrations": [
       "aigw_carrier_agent",
+      "aigw_enterprise",
       "aigw_isv_app",
       "aigw_mcp_asset",
       "aigw_member_allocation",
+      "aigw_quota",
       "aigw_tenant_quota_ledger",
       "system_partner",
       "system_tenant_package_ai_quota",

@@ -439,8 +439,6 @@ const RULES = [
       // 已补齐并出列的: system_partner（元数据见 scripts/data/system-tables.ts）。
       const KNOWN_DEBT = new Set([
         "aigw_contract",
-        "aigw_enterprise",
-        "aigw_quota",
         "aigw_seat",
         "aigw_split_pipeline",
         "aigw_tariff",

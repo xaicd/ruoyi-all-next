@@ -60,9 +60,31 @@ function pgType(column: {
   }
 }
 
-function columnLine(column: { name: string; type: string; nullable: boolean; isPk?: boolean }): string {
+/** 字面量默认值 -> SQL 片段（字符串要加引号；null 表示 DEFAULT NULL，显式写出）。 */
+function defaultFromLiteral(value: unknown): string | null {
+  if (value === undefined) return null
+  if (value === null) return "NULL"
+  if (typeof value === "number" || typeof value === "boolean") return String(value)
+  return `'${String(value).replace(/'/g, "''")}'`
+}
+
+function columnLine(column: {
+  name: string
+  type: string
+  nullable: boolean
+  isPk?: boolean
+  defaultValueTyped?: unknown
+  defaultSql?: string
+  maxLength?: number
+  precision?: number
+  scale?: number
+}): string {
   const parts = [`    "${column.name}" ${pgType(column)}`]
   if (column.nullable !== true) parts.push("NOT NULL")
+  // 默认值必须一起带上 —— 只建列不建默认值会静默改变语义。
+  const literal = defaultFromLiteral(column.defaultValueTyped)
+  const sqlDefault = column.defaultSql ?? literal
+  if (sqlDefault !== null) parts.push(`DEFAULT ${sqlDefault}`)
   return parts.join(" ")
 }
 
