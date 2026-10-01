@@ -7,6 +7,11 @@ export default defineConfig({
     // 必须包含 packages/** —— 各域与 shared 的测试已随代码迁到 packages/ 下，
     // 漏掉这条会静默地少跑一大半测试而仍然显示通过（实测 300+ -> 29）。
     include: ["src/**/*.test.ts", "scripts/**/*.test.ts", "test/**/*.test.ts", "packages/**/*.test.ts"],
+    // 文件级**串行**。原因: 本仓测试共享**同一个数据库**，并行运行本身就是不安全的 ——
+    // 曾经表现为"plugin-registry 那个用例偶发失败"，实为两个文件各自 syncFromDisk
+    // 逻辑删除对方刚装进去的插件（实测并行下 3/3 必现，串行后 0/3）。
+    // 代价是总耗时变长，换来的是结果可信 —— 测试结果不可信比慢更糟。
+    fileParallelism: false,
   },
   resolve: {
     alias: {
