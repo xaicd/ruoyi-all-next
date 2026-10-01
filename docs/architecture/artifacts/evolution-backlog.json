@@ -1,8 +1,8 @@
 {
   "version": 1,
   "kind": "evolution-backlog",
-  "generatedAt": "2026-10-01T12:52:37.498Z",
-  "head": "8300181b",
+  "generatedAt": "2026-10-01T14:09:05.891Z",
+  "head": "2a5d517d",
   "note": "Aggregated from real gate artifacts. Read-only signal for external agents; no agent loop runs in this repository (AGENTS.md §18).",
   "summary": {
     "blocker": 0,
