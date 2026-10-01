@@ -415,6 +415,54 @@ const RULES = [
       return violations.sort((a, b) => a.detail.localeCompare(b.detail))
     },
   },
+  {
+    id: "table-definition-coverage",
+    section: "AGENTS.md §9.4",
+    mode: "enforce",
+    description:
+      "every table a repository queries must be created somewhere (low-code metadata / prisma migrations / sqlite bootstrap)",
+    run() {
+      // 表定义真源 = 低代码元数据（AGENTS §9.4）；migrations 与 sqlite bootstrap 是它的落地产物。
+      // 这里拦的是**最危险的一类**：仓储在查、却没有任何地方创建 —— 内存回退下全绿，
+      // 一配真实库必然 `relation "..." does not exist`，看起来却像自己改坏了代码。
+      const {
+        readMetadataTables,
+        readMigrationTables,
+        readSqliteBootstrapTables,
+        readPrismaTables,
+        readQueriedTables,
+      } = require("./lib/table-definitions.cjs")
+
+      // 已知欠债: 这些表没有**任何**定义来源（连元数据也没有）。
+      // 补 DDL 等于凭空造 schema，比留红更危险 —— 所以显式列出、等元数据补齐后从这里删掉。
+      // 每张都要能被 `node scripts/report-table-inventory.cjs` 复现。
+      const KNOWN_DEBT = new Set([
+        "aigw_contract",
+        "aigw_enterprise",
+        "aigw_quota",
+        "aigw_seat",
+        "aigw_split_pipeline",
+        "aigw_tariff",
+        "system_partner",
+      ])
+
+      const created = new Set([
+        ...readMetadataTables(),
+        ...readMigrationTables(),
+        ...readSqliteBootstrapTables(),
+        ...readPrismaTables(),
+      ])
+      return [...readQueriedTables()]
+        .filter((table) => !created.has(table) && !KNOWN_DEBT.has(table))
+        .sort()
+        .map((table) => ({
+          file: table,
+          detail:
+            "被仓储查询，但低代码元数据/migrations/sqlite bootstrap 都没有创建它；"
+            + "补元数据后用 scripts/generate-table-migration.ts 生成建表迁移",
+        }))
+    },
+  },
 ]
 
 function countByFile(violations) {

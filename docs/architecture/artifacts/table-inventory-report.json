@@ -1,12 +1,13 @@
 {
-  "generatedAt": "2026-10-01T01:03:44.733Z",
+  "generatedAt": "2026-10-01T08:38:45.203Z",
   "note": "只报告不设门禁：三份来源互相矛盾，需先确定权威真源，再谈表归属/namespace 隔离。",
   "counts": {
     "prisma": 58,
     "migrations": 80,
     "sqliteBootstrap": 10,
+    "metadata": 18,
     "repositories": 70,
-    "union": 83
+    "union": 85
   },
   "queriedButNeverCreated": [
     "aigw_contract",

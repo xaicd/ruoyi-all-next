@@ -16,77 +16,7 @@
 const fs = require("fs")
 const path = require("path")
 
-const ROOT = path.resolve(__dirname, "..")
-
-function readPrismaTables() {
-  const file = path.join(ROOT, "prisma", "schema.prisma")
-  if (!fs.existsSync(file)) return new Set()
-  const source = fs.readFileSync(file, "utf8")
-  const tables = new Set()
-  for (const match of source.matchAll(/@@map\("([a-z0-9_]+)"\)/g)) tables.add(match[1])
-  return tables
-}
-
-function readMigrationTables() {
-  const dir = path.join(ROOT, "prisma", "migrations")
-  const tables = new Set()
-  if (!fs.existsSync(dir)) return tables
-  for (const entry of fs.readdirSync(dir)) {
-    const file = path.join(dir, entry, "migration.sql")
-    if (!fs.existsSync(file)) continue
-    const source = fs.readFileSync(file, "utf8")
-    for (const match of source.matchAll(/CREATE TABLE (?:IF NOT EXISTS )?"?([a-z0-9_]+)"?/gi)) {
-      tables.add(match[1].toLowerCase())
-    }
-  }
-  return tables
-}
-
-function readSqliteBootstrapTables() {
-  const file = path.join(ROOT, "scripts", "bootstrap-sqlite.ts")
-  if (!fs.existsSync(file)) return new Set()
-  const source = fs.readFileSync(file, "utf8")
-  const tables = new Set()
-  for (const match of source.matchAll(/CREATE TABLE (?:IF NOT EXISTS )?["`]?([a-z0-9_]+)/gi)) {
-    tables.add(match[1].toLowerCase())
-  }
-  return tables
-}
-
-/**
- * 第四份来源：**仓储声明的物理表名**（`const TABLE_NAME = "..."`，codegen 产物的固定写法）。
- *
- * 为什么要加这一份：前三份都是"建表的地方"，但真正决定"运行时会不会去查某张表"的是
- * 仓储。若某张表**前三份都没有、仓储却在查**，那么——代码在
- * `hasRealDatabase() === true` 时会去查一张**永远不存在**的表，直接 `relation does not exist`。
- * 这不是理论风险：本地一旦配好 DATABASE_URL，测试就会从 353 全绿变成一片红，
- * 开发者按"常规做法"配库反而踩坑（本仓实测）。
- */
-function readRepositoryTables() {
-  const roots = [path.join(ROOT, "packages"), path.join(ROOT, "src")]
-  const tables = new Set()
-  const walk = (dir) => {
-    if (!fs.existsSync(dir)) return
-    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-      if (entry.name === "node_modules" || entry.name === "__tests__") continue
-      const full = path.join(dir, entry.name)
-      if (entry.isDirectory()) walk(full)
-      else if (entry.name.endsWith(".repository.ts") || entry.name.endsWith(".service.ts")) {
-        const source = fs.readFileSync(full, "utf8")
-        // 写法一: codegen 产物的固定约定
-        const named = source.match(/const TABLE_NAME\s*=\s*"([a-z0-9_]+)"/)
-        if (named) tables.add(named[1].toLowerCase())
-        // 写法二: 手写仓储直接走 Kysely 构建器。只认明确指向物理表的调用 ——
-        // 漏掉这些正是"报告看起来完整、实际有洞"的来源（system_config / system_partner 都属此类）。
-        for (const m of source.matchAll(/\.(?:selectFrom|insertInto|updateTable|deleteFrom|into)\("([a-z0-9_]+)"/g)) {
-          tables.add(m[1].toLowerCase())
-        }
-      }
-    }
-  }
-  for (const root of roots) walk(root)
-  return tables
-}
+const { ROOT, readMetadataTables, readMigrationTables, readSqliteBootstrapTables, readPrismaTables, readQueriedTables } = require("./lib/table-definitions.cjs")
 
 const onlyIn = (a, ...others) => [...a].filter((item) => others.every((set) => !set.has(item))).sort()
 
@@ -94,8 +24,10 @@ function main() {
   const prisma = readPrismaTables()
   const migrations = readMigrationTables()
   const sqlite = readSqliteBootstrapTables()
-  const repositories = readRepositoryTables()
-  const union = new Set([...prisma, ...migrations, ...sqlite])
+  const metadata = readMetadataTables()
+  const repositories = readQueriedTables()
+  // "表在哪儿被建"的三个来源（元数据是**真源**，另两个是它的落地产物）。
+  const union = new Set([...prisma, ...migrations, ...sqlite, ...metadata])
 
   const report = {
     generatedAt: new Date().toISOString(),
@@ -104,6 +36,7 @@ function main() {
       prisma: prisma.size,
       migrations: migrations.size,
       sqliteBootstrap: sqlite.size,
+      metadata: metadata.size,
       repositories: repositories.size,
       union: union.size,
     },

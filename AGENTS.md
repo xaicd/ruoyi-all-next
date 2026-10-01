@@ -310,7 +310,7 @@ CI 前置检查：
 | `ratchet` | 冻结既有欠债于 `docs/architecture/artifacts/engineering-standards-baseline.json`，**只拦新增**；修复后跑 `npm run standards:baseline` 并复核增量 |
 | `report` | 仅供人工判断，永不失败 |
 
-当前规则：§3.2 顶层目录约束（enforce）、§3.2/§14.3 禁止平铺 `modules/<domain>/services`（enforce）、§4.7 对象单例 Repository/Service 双导出（enforce，类与 `MEMORY_*`/`SEED_*` 常量不在范围内）、§4.5 后端禁 `console.*`（ratchet，日志实现与 codegen 模板豁免）、§4.8 业务仓储租户作用域（report）。
+当前规则：§3.2 顶层目录约束（enforce）、§3.2/§14.3 禁止平铺 `modules/<domain>/services`（enforce）、§4.7 对象单例 Repository/Service 双导出（enforce，类与 `MEMORY_*`/`SEED_*` 常量不在范围内）、§4.5 后端禁 `console.*`（ratchet，日志实现与 codegen 模板豁免）、§4.8 业务仓储租户作用域（report）、§9.5 表定义覆盖（enforce，已知欠债在规则内显式列出）。
 
 判定要点：规则必须贴合条款本意，误报会逼出无意义豁免。`§4.7` 只约束对象单例模式（`export const XxxRepository = {...}` 需配 `export const xxxRepository`），`export class XxxService` 这类单一标识符由消费端一致以 PascalCase 引用，不属于条款范围。新增规则前必须先在真实代码库跑 `--audit`，确认当前符合度再决定 enforce / ratchet / report。
 
@@ -492,9 +492,32 @@ env -u DATABASE_URL -u DB_DRIVER npx vitest run    # 353 通过 / 0 失败
 于是出现这个**静默陷阱**：你按常规"先配好数据库再跑测试"，测试反而从全绿变成一片红
 （`relation "wms_item" does not exist`），而且看起来像是自己改坏了代码。
 
-量化查看：`node scripts/report-table-inventory.cjs`（含"仓储在查但无处创建"一栏）。
-权威真源未定之前，这条只报告、不设门禁 —— 与 §6.4 的报告/门禁分工一致；
-真源确定后应升级为 ratchet 门禁，并补齐缺失的建表迁移。
+### 9.5 表定义真源 = **低代码元数据**（已定，2026-10）
+
+本仓的表定义真源**已确定为低代码元数据**（`CodegenConfig`，见 `scripts/data/*-tables.ts`）。
+
+- `packages/shared/backend/constants/...` 之外的表定义**只有这一个源**；
+- `prisma/migrations` 与 `scripts/bootstrap-sqlite.ts` 是它的**落地产物**，不是真源；
+  `prisma/schema.prisma` 的 `@@map` 只用于 Prisma 自身客户端，同样不是真源。
+- **新增/修改表：先写元数据，再生成迁移**：
+
+  ```bash
+  tsx scripts/generate-table-migration.ts --tables scripts/data/<x>-tables.ts --export <X> --name add_<x>_tables --write
+  ```
+
+  已有定义的域（`wms` / `partner`）就这样产出迁移；元数据在 `scripts/data/` 下，
+  **不要**把定义写回 `scripts/scaffold-*.ts` —— 那些脚本导入即执行，会写一堆文件。
+
+- **§14.5 的 codegen 同一份元数据**既生成全栈代码、也生成建表迁移，
+  所以"定义在哪、表就在哪"重新成立。
+
+**谁来保证它不再漂移**：`standards:check` 的 `table-definition-coverage` 规则（enforce）。
+它拦的是最危险的一类：**仓储在查、却没有任何地方创建**的表 ——
+内存回退下全绿，一配真实库必然 `relation "..." does not exist`，看起来却像自己改坏了代码。
+新增此类缺口会直接**失败**；已存在的 7 张（`aigw_*` / `system_partner`）在规则里显式列为欠债，
+补齐元数据后从列表删除。
+
+现状盘点：`node scripts/report-table-inventory.cjs`（含"仓储在查但无处创建"一栏）。
 
 ## 10. 构建与部署步骤
 
