@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest"
+import { hasRealDatabase } from "../database"
 import { eventBus } from "../event-bus"
 import { natsPublish, resetNatsFabric } from "../nats-fabric"
 import { resetNatsStream } from "../nats-stream"
@@ -12,12 +13,15 @@ import {
 } from "../transactional-outbox"
 
 describe("transactional outbox", () => {
-  afterEach(() => {
+  afterEach(async () => {
     resetBroker()
     eventBus.clear()
     resetNatsFabric()
     resetNatsStream()
-    resetOutbox()
+    // 必须 await: 真实库模式下 resetOutbox 会 DELETE outbox/inbox 表 ——
+    // 不 await 的话下一个用例可能在清理完成前就开始，断言"空表"会偶发失败
+    // （此前该 reset 对真实库是空实现，所以没暴露）。
+    await resetOutbox()
   })
 
   it("discards staged events when the unit of work throws", async () => {
@@ -101,7 +105,11 @@ describe("transactional outbox", () => {
 
   it("exposes the same transaction handle for domain writes and rolls it back together", async () => {
     await expect(runUnitOfWork(async (uow) => {
-      expect(uow.db).toEqual({ driver: "memory" })
+      // db 句柄的形状**随运行模式而变**: 内存模式是一个带 driver 标记的哑对象，
+      // 真实库模式是 Kysely 的 Transaction。硬编码内存形态会让这条断言先失败，
+      // 把真正要守的"回滚"断言掩盖掉（原来就是这个问题）。
+      if (hasRealDatabase()) expect(uow.db).toBeTruthy()
+      else expect(uow.db).toEqual({ driver: "memory" })
       uow.appendOutbox({ type: "pay.order.paid", source: "pay", payload: { id: "4" } })
       throw new Error("domain rollback")
     })).rejects.toThrow(/domain rollback/)

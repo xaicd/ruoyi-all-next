@@ -51,10 +51,11 @@ export type OutboxConsumerEvent = {
 let seq = 0
 let remainingPublishFailures = 0
 
-export function resetOutbox() {
+export function resetOutbox(): void | Promise<void> {
   seq = 0
   remainingPublishFailures = 0
-  resetOutboxStore()
+  // 真实库模式下这一步会 DELETE，需要调用方 await（测试的 afterEach 已改）
+  return resetOutboxStore()
 }
 
 export function failNextOutboxPublishes(count: number) {

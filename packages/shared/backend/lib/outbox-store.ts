@@ -21,7 +21,8 @@ export type OutboxStore = {
   save: (record: OutboxRecord) => Promise<void>
   inboxHas: (consumer: string, eventId: string) => Promise<boolean>
   inboxMark: (consumer: string, eventId: string) => Promise<void>
-  reset: () => void
+  /** 允许异步: 真实库 store 的 reset 需要 DELETE，同步签名会把 Promise 丢掉（TS 也不拦）。 */
+  reset: () => void | Promise<void>
 }
 
 function cloneRecord(record: OutboxRecord): OutboxRecord {
@@ -91,8 +92,10 @@ export function getOutboxStore(): OutboxStore {
   return memoryStore
 }
 
-export function resetOutboxStore() {
+export function resetOutboxStore(): void | Promise<void> {
   override = undefined
   memoryStore.reset()
-  kyselyStore?.reset()
+  // 真实库 store 的清理是异步的 —— 必须**向上返回**，否则调用方无从 await，
+  // 清理可能在下一个用例开始后才跑完（TS 不报错，这正是它危险的地方）。
+  return kyselyStore?.reset()
 }
