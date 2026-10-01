@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-30T04:54:52.522Z",
-  "routeCount": 92,
-  "operationCount": 177,
+  "generatedAt": "2026-10-01T12:45:46.122Z",
+  "routeCount": 91,
+  "operationCount": 173,
   "routes": [
     {
       "path": "/api/v1/admin/infra/api-access-log",
@@ -882,28 +882,6 @@
         }
       ],
       "source": "src/app/api/v1/admin/system/operate-logs/export/route.ts"
-    },
-    {
-      "path": "/api/v1/admin/system/partners",
-      "operations": [
-        {
-          "method": "GET",
-          "protection": "wrapper"
-        },
-        {
-          "method": "POST",
-          "protection": "wrapper"
-        },
-        {
-          "method": "PUT",
-          "protection": "wrapper"
-        },
-        {
-          "method": "DELETE",
-          "protection": "wrapper"
-        }
-      ],
-      "source": "src/app/api/v1/admin/system/partners/route.ts"
     },
     {
       "path": "/api/v1/admin/system/permissions/assign-role-menu",

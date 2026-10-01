@@ -40,7 +40,7 @@ const ROMA_FLAGSHIP_MENU_IDS = withAiPackageMenuIds(
 
 // 3. 政企自服务套餐菜单（AI 协同工作台 + 智汇应用 + 基础用户）
 const ENTERPRISE_SELF_MENU_IDS = withAiPackageMenuIds([
-  "1", "100", "103", "107", "aigw-dir", "aigw-partner-portal", "aigw-tokens", "aigw-usages"
+  "1", "100", "103", "107", "aigw-dir", "aigw-tokens", "aigw-usages"
 ])
 
 export const SEED_TENANT_PACKAGES: TenantPackageSeed[] = [

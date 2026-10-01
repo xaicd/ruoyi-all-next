@@ -396,12 +396,6 @@ export const ADMIN_MENU: AdminMenuItem[] = [
             requiredPermission: PERMISSIONS.AIGW_USAGE_VIEW,
           },
           {
-            key: "ai-dashboard",
-            label: "监控大屏",
-            path: "/admin/aigw/dashboard",
-            requiredPermission: PERMISSIONS.AIGW_USAGE_VIEW,
-          },
-          {
             key: "ai-playground",
             label: "联调探测",
             path: "/admin/aigw/playground",
@@ -437,42 +431,12 @@ export const ADMIN_MENU: AdminMenuItem[] = [
         key: "ai-identity-dir",
         label: "企业管理",
         children: [
-          {
-            key: "ai-enterprises",
-            label: "算力开户",
-            path: "/admin/aigw/enterprises",
-            requiredPermission: PERMISSIONS.ENTITLEMENT_ENTERPRISE_VIEW,
-          },
-          {
-            key: "ai-tenant-members",
-            label: "成员席位",
-            path: "/admin/aigw/tenant-members",
-            requiredPermission: PERMISSIONS.ENTITLEMENT_ENTERPRISE_VIEW,
-          },
-          {
-            key: "ai-quotas",
-            label: "配额管控",
-            path: "/admin/aigw/quotas",
-            requiredPermission: PERMISSIONS.ENTITLEMENT_QUOTA_VIEW,
-          },
         ],
       },
       {
         key: "ai-app-dir",
         label: "生态应用",
         children: [
-          {
-            key: "ai-isv-apps",
-            label: "生态应用",
-            path: "/admin/aigw/isv-apps",
-            requiredPermission: PERMISSIONS.AIGW_CHANNEL_VIEW,
-          },
-          {
-            key: "ai-mcp-hub",
-            label: "私有工具",
-            path: "/admin/aigw/mcp-hub",
-            requiredPermission: PERMISSIONS.AIGW_CHANNEL_VIEW,
-          },
           {
             key: "ai-chats",
             label: "对话记录",
@@ -491,54 +455,6 @@ export const ADMIN_MENU: AdminMenuItem[] = [
         key: "ai-settlement-dir",
         label: "资费清分",
         children: [
-          {
-            key: "ai-tariffs",
-            label: "阶梯资费",
-            path: "/admin/aigw/tariffs",
-            requiredPermission: PERMISSIONS.METER_TARIFF_VIEW,
-          },
-          {
-            key: "ai-skus",
-            label: "算力油包",
-            path: "/admin/aigw/skus",
-            requiredPermission: PERMISSIONS.SCHEME_SKU_VIEW,
-          },
-          {
-            key: "ai-pipelines",
-            label: "渠道清分",
-            path: "/admin/aigw/pipelines",
-            requiredPermission: PERMISSIONS.SPLIT_PIPELINE_VIEW,
-          },
-          {
-            key: "ai-contracts",
-            label: "合同账务",
-            path: "/admin/aigw/contracts",
-            requiredPermission: PERMISSIONS.SETTLEMENT_CONTRACT_VIEW,
-          },
-          {
-            key: "ai-invoices",
-            label: "对公发票",
-            path: "/admin/aigw/invoices",
-            requiredPermission: PERMISSIONS.SETTLEMENT_INVOICE_VIEW,
-          },
-          {
-            key: "ai-partner-portal",
-            label: "渠道门户",
-            path: "/admin/aigw/partner-portal",
-            requiredPermission: PERMISSIONS.AIGW_CHANNEL_VIEW,
-          },
-          {
-            key: "ai-partners",
-            label: "代理商户",
-            path: "/admin/aigw/aigw-partner",
-            requiredPermission: PERMISSIONS.AIGW_CHANNEL_VIEW,
-          },
-          {
-            key: "ai-leads",
-            label: "商机报备",
-            path: "/admin/aigw/aigw-partner-lead",
-            requiredPermission: PERMISSIONS.AIGW_CHANNEL_VIEW,
-          },
         ],
       },
     ],

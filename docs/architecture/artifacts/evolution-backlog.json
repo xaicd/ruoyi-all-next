@@ -1,15 +1,15 @@
 {
   "version": 1,
   "kind": "evolution-backlog",
-  "generatedAt": "2026-10-01T11:10:39.650Z",
-  "head": "15487487",
+  "generatedAt": "2026-10-01T12:46:24.718Z",
+  "head": "0de96f2a",
   "note": "Aggregated from real gate artifacts. Read-only signal for external agents; no agent loop runs in this repository (AGENTS.md §18).",
   "summary": {
     "blocker": 0,
     "high": 0,
     "medium": 12,
-    "low": 12,
-    "total": 24
+    "low": 11,
+    "total": 23
   },
   "items": [
     {
@@ -201,18 +201,6 @@
       "title": "menu.repository.ts: 213 lines",
       "files": [
         "packages/domains/system/backend/repositories/menu.repository.ts"
-      ],
-      "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
-      "command": "npm run standards:check",
-      "action": "Split into sub-services, keeping the domain facade as the single entry point."
-    },
-    {
-      "id": "oversized-packages/domains/system/backend/repositories/partner.repository.ts",
-      "severity": "low",
-      "section": "AGENTS.md §11",
-      "title": "partner.repository.ts: 299 lines",
-      "files": [
-        "packages/domains/system/backend/repositories/partner.repository.ts"
       ],
       "evidence": "§11.2 asks for files over 200 lines to be split into sub-services behind the facade",
       "command": "npm run standards:check",

@@ -26,18 +26,6 @@ export const SEED_ROLES: SystemRoleRow[] = [
     updatedAt: "2026-01-01T00:00:00.000Z",
   },
   {
-    id: "3",
-    name: "地市渠道合伙人",
-    code: "aigw_partner",
-    sort: 3,
-    status: "ACTIVE",
-    dataScope: "SELF",
-    remark: "地市生态代理商/ISV：地市商机报备锁定、客户签约开户、20% 算力清分分成提现",
-    tenantId: "1",
-    createdAt: "2026-01-01T00:00:00.000Z",
-    updatedAt: "2026-01-01T00:00:00.000Z",
-  },
-  {
     id: "4",
     name: "政企单位主管",
     code: "enterprise_admin",
