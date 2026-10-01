@@ -1,14 +1,37 @@
 {
-  "generatedAt": "2026-09-28T08:49:31.595Z",
+  "generatedAt": "2026-10-01T00:11:25.758Z",
   "note": "只报告不设门禁：三份来源互相矛盾，需先确定权威真源，再谈表归属/namespace 隔离。",
   "counts": {
-    "prisma": 54,
-    "migrations": 77,
+    "prisma": 58,
+    "migrations": 63,
     "sqliteBootstrap": 10,
-    "union": 78
+    "repositories": 16,
+    "union": 67
   },
+  "queriedButNeverCreated": [
+    "wms_check_order",
+    "wms_check_order_detail",
+    "wms_inventory",
+    "wms_inventory_history",
+    "wms_item",
+    "wms_item_brand",
+    "wms_item_category",
+    "wms_item_sku",
+    "wms_merchant",
+    "wms_movement_order",
+    "wms_movement_order_detail",
+    "wms_receipt_order",
+    "wms_receipt_order_detail",
+    "wms_shipment_order",
+    "wms_shipment_order_detail",
+    "wms_warehouse"
+  ],
   "onlyIn": {
-    "prisma": [],
+    "prisma": [
+      "system_area",
+      "system_notify_message",
+      "system_notify_template"
+    ],
     "migrations": [
       "aigw_carrier_agent",
       "aigw_isv_app",
@@ -17,22 +40,7 @@
       "aigw_tenant_quota_ledger",
       "system_tenant_package_ai_quota",
       "system_tenant_package_ai_seat",
-      "system_tenant_package_ai_tariff",
-      "ys_channel_node",
-      "ys_contract",
-      "ys_dispatch_limit",
-      "ys_enterprise_account",
-      "ys_invoice_payment",
-      "ys_ledger_entry",
-      "ys_meter_record",
-      "ys_operation_scheme",
-      "ys_policy",
-      "ys_product_sku",
-      "ys_quota_account",
-      "ys_seat",
-      "ys_settlement_batch",
-      "ys_split_pipeline",
-      "ys_tariff_rule"
+      "system_tenant_package_ai_tariff"
     ],
     "sqliteBootstrap": [
       "system_config"

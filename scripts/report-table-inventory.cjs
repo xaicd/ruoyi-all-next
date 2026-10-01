@@ -53,18 +53,56 @@ function readSqliteBootstrapTables() {
   return tables
 }
 
+/**
+ * 第四份来源：**仓储声明的物理表名**（`const TABLE_NAME = "..."`，codegen 产物的固定写法）。
+ *
+ * 为什么要加这一份：前三份都是"建表的地方"，但真正决定"运行时会不会去查某张表"的是
+ * 仓储。若某张表**前三份都没有、仓储却在查**，那么——代码在
+ * `hasRealDatabase() === true` 时会去查一张**永远不存在**的表，直接 `relation does not exist`。
+ * 这不是理论风险：本地一旦配好 DATABASE_URL，测试就会从 353 全绿变成一片红，
+ * 开发者按"常规做法"配库反而踩坑（本仓实测）。
+ */
+function readRepositoryTables() {
+  const roots = [path.join(ROOT, "packages"), path.join(ROOT, "src")]
+  const tables = new Set()
+  const walk = (dir) => {
+    if (!fs.existsSync(dir)) return
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (entry.name === "node_modules" || entry.name === "__tests__") continue
+      const full = path.join(dir, entry.name)
+      if (entry.isDirectory()) walk(full)
+      else if (entry.name.endsWith(".repository.ts")) {
+        const source = fs.readFileSync(full, "utf8")
+        const match = source.match(/const TABLE_NAME\s*=\s*"([a-z0-9_]+)"/)
+        if (match) tables.add(match[1].toLowerCase())
+      }
+    }
+  }
+  for (const root of roots) walk(root)
+  return tables
+}
+
 const onlyIn = (a, ...others) => [...a].filter((item) => others.every((set) => !set.has(item))).sort()
 
 function main() {
   const prisma = readPrismaTables()
   const migrations = readMigrationTables()
   const sqlite = readSqliteBootstrapTables()
+  const repositories = readRepositoryTables()
   const union = new Set([...prisma, ...migrations, ...sqlite])
 
   const report = {
     generatedAt: new Date().toISOString(),
     note: "只报告不设门禁：三份来源互相矛盾，需先确定权威真源，再谈表归属/namespace 隔离。",
-    counts: { prisma: prisma.size, migrations: migrations.size, sqliteBootstrap: sqlite.size, union: union.size },
+    counts: {
+      prisma: prisma.size,
+      migrations: migrations.size,
+      sqliteBootstrap: sqlite.size,
+      repositories: repositories.size,
+      union: union.size,
+    },
+    // 仓储在查、但三份建表来源里一张都没定义 —— 这些表在真实库里**永远不存在**。
+    queriedButNeverCreated: [...repositories].filter((t) => !union.has(t)).sort(),
     onlyIn: {
       prisma: onlyIn(prisma, migrations, sqlite),
       migrations: onlyIn(migrations, prisma, sqlite),
@@ -78,7 +116,7 @@ function main() {
     return
   }
 
-  console.log("[table-inventory] 三份表来源对账（只报告，不阻断）")
+  console.log("[table-inventory] 表定义来源对账（只报告，不阻断）")
   console.log(`  prisma/schema.prisma @@map : ${report.counts.prisma}`)
   console.log(`  prisma/migrations          : ${report.counts.migrations}`)
   console.log(`  scripts/bootstrap-sqlite.ts: ${report.counts.sqliteBootstrap}`)
@@ -90,6 +128,17 @@ function main() {
   console.log(`  仅 sqlite bootstrap 有     : ${s.length}`)
   if (m.length > 0) console.log(`    e.g. ${m.slice(0, 8).join(", ")}`)
   if (p.length > 0) console.log(`    prisma 独有 e.g. ${p.slice(0, 8).join(", ")}`)
+
+  // 最要命的一栏：仓储在查、却没有任何地方建它 —— 真实库里必然 relation does not exist。
+  const q = report.queriedButNeverCreated
+  console.log("")
+  console.log(`  仓储声明的物理表           : ${report.counts.repositories}`)
+  console.log(`  ⚠ 仓储在查但**无处创建**   : ${q.length}`)
+  if (q.length > 0) {
+    console.log(`    ${q.slice(0, 10).join(", ")}${q.length > 10 ? ` …(共 ${q.length})` : ""}`)
+    console.log("    这些表只在内存回退下可用。一旦配了 DATABASE_URL 走真实库，")
+    console.log("    查它们必然报 relation does not exist —— 且是静默陷阱：按常规\"先配库\"反而全红。")
+  }
 
   const target = path.join(ROOT, "docs", "architecture", "artifacts", "table-inventory-report.json")
   fs.mkdirSync(path.dirname(target), { recursive: true })

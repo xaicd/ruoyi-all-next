@@ -472,6 +472,26 @@ npm run check                 # 门禁产出证据 + 轨迹
 2. 验证列表、筛选、分页、详情、保存等核心路径。
 3. 校验无权限用户访问被正确拒绝。
 
+### 9.4 跑测试**必须用内存模式**（反直觉，但是实测结论）
+
+**本地跑 `vitest` 不要设 `DATABASE_URL`，也不要设非 memory 的 `DB_DRIVER`。**
+
+```bash
+env -u DATABASE_URL -u DB_DRIVER npx vitest run    # 353 通过 / 0 失败
+```
+
+原因（实测，不是理论）：仓储用 `hasRealDatabase()`（= `driver !== "memory"`）决定
+"查真实库还是走内存回退"。而本仓有三份**互相矛盾**的表定义来源
+（`prisma/schema.prisma` @@map / `prisma/migrations` / `scripts/bootstrap-sqlite.ts`），
+其中**16 张被仓储查询的表在三份里一张都没有定义**（全部是 `wms_*`）。
+
+于是出现这个**静默陷阱**：你按常规"先配好数据库再跑测试"，测试反而从全绿变成一片红
+（`relation "wms_item" does not exist`），而且看起来像是自己改坏了代码。
+
+量化查看：`node scripts/report-table-inventory.cjs`（含"仓储在查但无处创建"一栏）。
+权威真源未定之前，这条只报告、不设门禁 —— 与 §6.4 的报告/门禁分工一致；
+真源确定后应升级为 ratchet 门禁，并补齐缺失的建表迁移。
+
 ## 10. 构建与部署步骤
 
 ### 10.1 预发/生产构建
