@@ -2,6 +2,7 @@
  * SystemPost Repository
  */
 
+import { randomUUID } from "node:crypto"
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
 import type { PageResult } from "@/modules/shared/backend/lib/database"
 import { getCurrentTenantId, isPlatformContext, isTenantRequired } from "@/modules/shared/backend/lib/biz-tenant"
@@ -123,7 +124,7 @@ async function findByCodeFromDb(code: string, tenantId?: string): Promise<System
 
 async function createInDb(data: CreatePostData, tenantId?: string): Promise<SystemPostRow> {
   const db = await getKyselyDb()
-  const row = await db.insertInto("system_post").values({ name: data.name, code: data.code, sort: data.sort ?? 0, status: data.status ?? "ACTIVE", remark: data.remark ?? null, tenant_id: tenantId ?? null, updated_at: new Date(), deleted: false } as any).returningAll().executeTakeFirstOrThrow()
+  const row = await db.insertInto("system_post").values({ id: randomUUID(), name: data.name, code: data.code, sort: data.sort ?? 0, status: data.status ?? "ACTIVE", remark: data.remark ?? null, tenant_id: tenantId ?? null, updated_at: new Date(), deleted: false } as any).returningAll().executeTakeFirstOrThrow()
   return mapDbRow(row)
 }
 
