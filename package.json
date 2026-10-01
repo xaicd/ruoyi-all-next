@@ -80,7 +80,8 @@
     "scaffold": "npx tsx ./scripts/scaffold-feature.ts",
     "tables:inventory": "node scripts/report-table-inventory.cjs",
     "tables:metadata-draft": "node scripts/draft-missing-table-metadata.cjs",
-    "tables:migration": "tsx scripts/generate-table-migration.ts"
+    "tables:migration": "tsx scripts/generate-table-migration.ts",
+    "verify:real-db": "node scripts/verify-real-db.cjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",
