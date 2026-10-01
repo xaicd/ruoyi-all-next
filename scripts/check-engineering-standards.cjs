@@ -461,6 +461,37 @@ const RULES = [
         }))
     },
   },
+  {
+    id: "base-native-domain-boundary",
+    section: "AGENTS.md §2 / §17",
+    mode: "enforce",
+    description: "the base repo only builds RuoYi native domains; custom/vertical business must live in a derived business project",
+    run() {
+      // 基座（本仓）= RuoYi 原生能力。**定制业务不得放进基座** ——
+      // 它属于由基座衍生出的业务工程（例如同源的 rome-all 那一脉），
+      // 否则每次业务改动都要回改基座，基座也就不再是"可复用的底座"。
+      // AGENTS §2 早就写了"不接收非原生扩展域"，但一直只靠人记 —— 这里把它变成机检。
+      const NATIVE_DOMAINS = new Set([
+        "system", "infra", "online", "bpm", "pay", "report", "mp", "mall",
+        "member", "crm", "erp", "wms", "mes", "ai", "iot", "im",
+      ])
+      // 已知越界: 已经在基座里、但属定制业务的域。列出而不直接判死 ——
+      // 剥离它们是一次产品级搬迁（要连表、路由、页面一起挪到业务工程），
+      // 不是重命名；补齐后从这里删掉。
+      const KNOWN_CUSTOM = new Set(["aigw"])
+
+      const { loadCatalog } = require("./lib/domain-catalog.cjs")
+      const catalog = loadCatalog()
+      return (catalog.domains || [])
+        .filter((domain) => !NATIVE_DOMAINS.has(domain.name) && !KNOWN_CUSTOM.has(domain.name))
+        .map((domain) => ({
+          file: domain.name,
+          detail:
+            "不在 AGENTS §2 的 RuoYi 原生域清单内 —— 定制业务应放在由基座衍生的业务工程，"
+            + "而不是基座本身；确属原生能力则把它加进 AGENTS §2 与 NATIVE_DOMAINS",
+        }))
+    },
+  },
 ]
 
 function countByFile(violations) {

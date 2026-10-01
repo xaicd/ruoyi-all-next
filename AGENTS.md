@@ -310,7 +310,7 @@ CI 前置检查：
 | `ratchet` | 冻结既有欠债于 `docs/architecture/artifacts/engineering-standards-baseline.json`，**只拦新增**；修复后跑 `npm run standards:baseline` 并复核增量 |
 | `report` | 仅供人工判断，永不失败 |
 
-当前规则：§3.2 顶层目录约束（enforce）、§3.2/§14.3 禁止平铺 `modules/<domain>/services`（enforce）、§4.7 对象单例 Repository/Service 双导出（enforce，类与 `MEMORY_*`/`SEED_*` 常量不在范围内）、§4.5 后端禁 `console.*`（ratchet，日志实现与 codegen 模板豁免）、§4.8 业务仓储租户作用域（report）、§9.5 表定义覆盖（enforce，已知欠债在规则内显式列出）。
+当前规则：§3.2 顶层目录约束（enforce）、§3.2/§14.3 禁止平铺 `modules/<domain>/services`（enforce）、§4.7 对象单例 Repository/Service 双导出（enforce，类与 `MEMORY_*`/`SEED_*` 常量不在范围内）、§4.5 后端禁 `console.*`（ratchet，日志实现与 codegen 模板豁免）、§4.8 业务仓储租户作用域（report）、§9.5 表定义覆盖（enforce，已知欠债在规则内显式列出）、§2/§17 基座原生域边界（enforce，已知越界在规则内显式列出）。
 
 判定要点：规则必须贴合条款本意，误报会逼出无意义豁免。`§4.7` 只约束对象单例模式（`export const XxxRepository = {...}` 需配 `export const xxxRepository`），`export class XxxService` 这类单一标识符由消费端一致以 PascalCase 引用，不属于条款范围。新增规则前必须先在真实代码库跑 `--audit`，确认当前符合度再决定 enforce / ratchet / report。
 
@@ -724,7 +724,35 @@ node scripts/inject-codegen-output.cjs tmp/codegen-{ClassName}
 4. **权限码追加**：`packages/shared/backend/constants/permissions.ts`
 5. **Catalog 登记**：`packages/shared/backend/constants/domain-catalog.json`
 
-#### 17.3 移植合规门禁三步法
+#### 17.3 基座只建原生域，**定制业务不得进基座**（强制）
+
+基座（本仓）= RuoYi 原生能力。**定制业务属于由基座衍生出的业务工程**（例如同源的
+`rome-all` 那一脉），不属于基座 —— 否则每改一次业务都要回改基座，基座就不再是
+「可复用的底座」。
+
+§2 早就写了「不接收非原生扩展域」，但一直只靠人记。现已机检：
+`standards:check` 的 `base-native-domain-boundary`（enforce）。
+
+**已实测到的越界（2026-10，待剥离）**：
+
+| 位置 | 规模 | 性质 |
+|---|---|---|
+| `plugins/plugin-aigw/` | 102 文件 / 60 条路由 / 20 个页面 | AI 网关渠道业务（企业入驻、配额、坐席、资费、分账、结算） |
+| `domains/system/` 的 `partner` 功能 | repository + service + route | 渠道合作伙伴 |
+| `system_tenant_package_ai_*` 三张表 | 迁移 + 模型 | 租户套餐里的 AI 配额/坐席/资费 |
+
+判定依据不是"看着像业务"，而是业务词汇在**原生域**中的分布（渠道/代理/佣金/推广码/
+算力/坐席/资费/入驻企业）——`plugin-aigw` 命中 16 个文件，`system` 命中 4 个，
+而原生域（user/role/menu/dept/post/dict/config/notice/log）一个都不该有。
+
+**剥离它们不是重命名，是一次产品级搬迁**：表、路由、页面、菜单、权限码要一起挪到
+业务工程，并保持 API 契约不变（§17.2 的五要素清单就是为此设计的）。
+在搬迁完成前，`aigw` 在规则里显式列为已知越界；**新增越界会直接失败**。
+
+> 注意区分：`§2` 的原生域清单里的 `ai` 是原生域；`aigw`（AI 网关 + 渠道/分账）不是。
+> 二者名字相近，不要因为"看起来像同一类"就放行。
+
+#### 17.4 移植合规门禁三步法
 ```bash
 # 1. 部署增量迁移
 npm run db:migrate
