@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-10-01T11:11:51.718Z",
+  "generatedAt": "2026-10-01T12:47:55.502Z",
   "note": "只报告不设门禁：三份来源互相矛盾，需先确定权威真源，再谈表归属/namespace 隔离。",
   "counts": {
     "prisma": 58,
-    "migrations": 81,
+    "migrations": 80,
     "sqliteBootstrap": 10,
-    "metadata": 19,
-    "repositories": 62,
-    "union": 86
+    "metadata": 16,
+    "repositories": 61,
+    "union": 83
   },
   "queriedButNeverCreated": [],
   "onlyIn": {
@@ -22,7 +22,6 @@
       "aigw_mcp_asset",
       "aigw_member_allocation",
       "aigw_tenant_quota_ledger",
-      "system_partner",
       "system_tenant_package_ai_quota",
       "system_tenant_package_ai_seat",
       "system_tenant_package_ai_tariff",

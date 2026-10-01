@@ -740,7 +740,8 @@ node scripts/inject-codegen-output.cjs tmp/codegen-{ClassName}
 | `plugins/plugin-aigw/` | 102 文件 / 60 条路由 / 20 个页面 | AI 网关渠道业务（企业入驻、配额、坐席、资费、分账、结算） | **已剥离**，只留核心 AI 网关（模型/渠道/令牌/用量/转发），路由 60→17 |
 | `domains/system/` 的 `partner` 功能 | repository + service + route + 页面 + 种子 | 渠道合作伙伴 | **已剥离** |
 | `shared/lib/biz-data-permission.ts` | 51 行 | 业务概念（`PartnerDataScope`）混进平台数据权限模型 | **已剥离**（剥离 partner 后已无消费方） |
-| `system_tenant_package_ai_*` 三张表 | 迁移 + `schema.ts` 类型 | 租户套餐里的 AI 配额/坐席/资费 | **待处理**：只在 `schema.ts` 声明，**无任何代码查询**（概念声明了但从未实现） |
+| `system_tenant_package_ai_*` 三张表 | 迁移 + `schema.ts` 类型 | 租户套餐里的 AI 配额/坐席/资费 | **已剥离**：只在 `schema.ts` 声明、无任何代码查询（概念声明了但从未实现），实测空表后 DROP |
+| `aigw_carrier_agent` / `aigw_isv_app` / `aigw_mcp_asset` / `aigw_member_allocation` / `aigw_tenant_quota_ledger` | 迁移（含种子）+ 已删的仓储 | 渠道/ISV/MCP 资产/席位分配 | **待处理**：随 aigw 剥离已成孤儿表，但其中 3 张**有种子数据**（5 行），删除需连种子一起处理 |
 
 判定依据不是"看着像业务"，而是业务词汇在**原生域**中的分布（渠道/代理/佣金/推广码/
 算力/坐席/资费/入驻企业）——`plugin-aigw` 命中 16 个文件，`system` 命中 4 个，
