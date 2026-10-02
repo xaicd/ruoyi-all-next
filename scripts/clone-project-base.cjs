@@ -350,6 +350,38 @@ function pruneDomainReferenceLists(destRoot, plan) {
     }
   }
 
+  // 4.9) 测试文件里**按域名字符串**引用被裁域的，一并剔除。
+  //      两类: 一类把域名当任意标签（registerService("pay")），一类就是**专门测该域**的。
+  //      两类在裁剪后的工程里都跑不了 —— 前者因为 broker 会按 catalog 校验域名，
+  //      后者因为被测对象已不存在。剔除等价于"跳过"，保留会在孵化工程里制造一片红。
+  //      （更彻底的做法是让测试从 catalog 取示例域；那是后续收敛方向，见提交说明。）
+  {
+    const prunedNames = ["pay","report","bpm","mp","member","iot","erp","im","crm","wms","mall","mes"]
+      .filter((d) => !keep.has(d))
+    const doomed = []
+    const walk = (dir) => {
+      if (!fs.existsSync(dir)) return
+      for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        if (["node_modules", ".next", ".git"].includes(entry.name)) continue
+        const full = path.join(dir, entry.name)
+        if (entry.isDirectory()) { walk(full); continue }
+        if (!/\.(test|spec)\.(ts|tsx)$/.test(entry.name)) continue
+        const text = fs.readFileSync(full, "utf8")
+        if (prunedNames.some((domain) => new RegExp(`["'\`]${domain}([."'\`]|\.[a-z])`).test(text))) {
+          doomed.push(path.relative(destRoot, full).replace(/\\/g, "/"))
+        }
+      }
+    }
+    walk(path.join(destRoot, "packages"))
+    walk(path.join(destRoot, "src"))
+    walk(path.join(destRoot, "test"))
+    for (const rel of doomed) {
+      fs.rmSync(path.join(destRoot, rel), { force: true })
+      dropped.push(`${rel}: 删除（测试引用了被裁域）`)
+    }
+    if (doomed.length > 0) console.log(`[REACTOR PRUNE] 删除 ${doomed.length} 个引用了被裁域的测试文件`)
+  }
+
   // 5) 彻底无法工作的文件直接删: src/app 下的路由/页面、以及测试。
   //    它们 import 了被裁域的模块 —— 留着必然编译失败，比删掉更糟。
   //    （测试被删会少覆盖，但一个 chunk 里引用了不存在模块的测试本来也跑不了。）

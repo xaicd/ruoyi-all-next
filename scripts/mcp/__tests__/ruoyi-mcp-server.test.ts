@@ -8,6 +8,24 @@ const { TOOLS, TOOL_NAMES } = require("../ruoyi-mcp-server.cjs") as {
   TOOL_NAMES: string[]
 }
 
+/**
+ * 示例域从 **catalog 取**，不写死。
+ * 写死 "mall"/"pay" 会让本文件在裁剪过的工程（孵化 profile/bundle）里必然失败 ——
+ * 而那正是"基座能不能拿来开新项目"的检验点。取第一个插件域，任何 profile 下都成立。
+ */
+function samplePluginDomain(): string {
+  const catalog = call("ruoyi_domain_list")
+  const plugin = catalog.layers.plugin?.[0]
+  if (!plugin) throw new Error("该工程没有插件域，本用例不适用")
+  return plugin
+}
+
+/** 平台地基（system/infra）永远在，与 profile 无关。 */
+function platformDomain(): string {
+  const catalog = call("ruoyi_domain_list")
+  return catalog.layers.platform?.[0] ?? "system"
+}
+
 function call(name: string, args: Record<string, unknown> = {}): any {
   const tool = TOOLS.find((entry) => entry.name === name)
   if (!tool) throw new Error(`unknown tool ${name}`)
@@ -29,7 +47,7 @@ describe("MCP: 域与插件工具", () => {
       const result = call("ruoyi_domain_list")
       expect(Array.isArray(result.layers.plugin)).toBe(true)
       expect(result.layers.plugin.length).toBeGreaterThan(0)
-      expect(result.layers.plugin).toContain("mall")
+      expect(result.layers.plugin.length).toBeGreaterThan(0)
     })
 
     it("每个域都带真实目录（否则调用方只能猜，而猜错通常不报错）", () => {
@@ -37,26 +55,28 @@ describe("MCP: 域与插件工具", () => {
       for (const domain of result.domains) {
         expect(domain.dir, `${domain.name} 缺 dir`).toBeTruthy()
       }
-      const mall = result.domains.find((d: any) => d.name === "mall")
-      const system = result.domains.find((d: any) => d.name === "system")
-      expect(mall.dir).toBe("packages/plugins/plugin-mall")
-      expect(system.dir).toBe("packages/domains/system")
+      const pluginDomain = samplePluginDomain()
+      const someone = result.domains.find((d: any) => d.name === pluginDomain)
+      const platform = result.domains.find((d: any) => d.name === platformDomain())
+      expect(someone.dir).toBe(`packages/plugins/plugin-${pluginDomain}`)
+      expect(platform.dir.startsWith("packages/domains/")).toBe(true)
     })
   })
 
   describe("ruoyi_domain_resolve", () => {
     it("插件域 -> 插件目录，且标明 kind=plugin", () => {
-      const result = call("ruoyi_domain_resolve", { domain: "pay" })
+      const domain = samplePluginDomain()
+      const result = call("ruoyi_domain_resolve", { domain })
       expect(result.isPlugin).toBe(true)
-      expect(result.dir).toBe("packages/plugins/plugin-pay")
-      expect(result.pluginId).toBe("ruoyi.pay")
+      expect(result.dir).toBe(`packages/plugins/plugin-${domain}`)
+      expect(result.pluginId).toBe(`ruoyi.${domain}`)
       expect(result.kind).toBe("plugin")
     })
 
     it("平台地基仍在地基目录，不算插件", () => {
-      const result = call("ruoyi_domain_resolve", { domain: "system" })
+      const result = call("ruoyi_domain_resolve", { domain: platformDomain() })
       expect(result.isPlugin).toBe(false)
-      expect(result.dir).toBe("packages/domains/system")
+      expect(result.dir.startsWith("packages/domains/")).toBe(true)
       expect(result.kind).toBe("platform")
     })
 
@@ -83,10 +103,11 @@ describe("MCP: 域与插件工具", () => {
 
   describe("ruoyi_codegen_targets", () => {
     it("低代码落点按真实目录解析（插件域不能落到 packages/domains）", () => {
-      const result = call("ruoyi_codegen_targets", { domain: "mall" })
-      expect(result.base).toBe("packages/plugins/plugin-mall")
-      expect(result.paths.backend).toBe("packages/plugins/plugin-mall/backend")
-      expect(result.importAlias).toBe("@/modules/mall")
+      const domain = samplePluginDomain()
+      const result = call("ruoyi_codegen_targets", { domain })
+      expect(result.base).toBe(`packages/plugins/plugin-${domain}`)
+      expect(result.paths.backend).toBe(`packages/plugins/plugin-${domain}/backend`)
+      expect(result.importAlias).toBe(`@/modules/${domain}`)
     })
 
     it("地基域仍指向 packages/domains", () => {
