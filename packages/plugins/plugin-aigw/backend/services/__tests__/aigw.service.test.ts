@@ -42,10 +42,16 @@ describe("AIGW 模型中台网关域服务测试", () => {
   })
 
   it("新建令牌只回一次明文 key", async () => {
-    const created = await AigwAccessTokenService.create({ name: "单元测试临时令牌" })
+    // 名字必须**唯一**: 之前用固定名，共享库里第二次跑就撞 "令牌名称已存在"
+    // （内存模式每次全新所以看不出来，真实库必现）。
+    const tokenName = `单元测试临时令牌-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    const created = await AigwAccessTokenService.create({ name: tokenName })
     expect(created.key).toMatch(/^sk-ruoyi-[0-9a-f]+$/)
 
-    const list = await AigwAccessTokenService.page({ page: 1, pageSize: 20, keyword: "单元测试临时令牌" })
+    const list = await AigwAccessTokenService.page({ page: 1, pageSize: 20, keyword: tokenName })
     expect(list.items[0]?.key).toContain("...")
+
+    // 清理放在**断言之后** —— 放前面会把列表清空，断言自己就挂了（内存模式当场抓到）。
+    await AigwAccessTokenService.delete(created.id)
   })
 })

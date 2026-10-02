@@ -1,10 +1,21 @@
-import { describe, expect, it } from "vitest"
-import { AppearanceService } from "../appearance.service"
+import { beforeEach, describe, expect, it } from "vitest"
+import { APPEARANCE_KEY, AppearanceService } from "../appearance.service"
 import { DEFAULT_APPEARANCE } from "../../validators/appearance.validators"
 
 // 无 DB env → 内存兜底。测试默认值 / 局部更新 merge / 公开脱敏 / 缺字段回填。
 
 describe("AppearanceService", () => {
+  // 用例语义是"**无配置**返回默认值"，所以必须先确保真的没有配置行。
+  // 真实库下配置是持久的 —— 上一个用例写进去的值会留到下一次运行，
+  // 于是这条断言会在**第二次**起失败（内存模式每次全新所以看不出来）。
+  beforeEach(async () => {
+    const { getKyselyDb } = await import("@/modules/shared/backend/lib/database")
+    const { hasRealDatabase } = await import("@/modules/shared/backend/lib/database")
+    if (!hasRealDatabase()) return
+    const db = await getKyselyDb()
+    await db.deleteFrom("system_config").where("key", "=", APPEARANCE_KEY).execute()
+  })
+
   it("无配置返回默认值", async () => {
     const a = await AppearanceService.get()
     expect(a.siteName).toBe(DEFAULT_APPEARANCE.siteName)

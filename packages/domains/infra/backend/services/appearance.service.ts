@@ -16,7 +16,8 @@ import {
   type SiteAppearance,
 } from "@/modules/infra/backend/validators/appearance.validators"
 
-const APPEARANCE_KEY = "site.appearance"
+/** 配置键。**导出**以免测试或调用方各自拼字符串 —— 拼错 key 的清理是静默失效（踩过）。 */
+export const APPEARANCE_KEY = "site.appearance"
 
 // 内存兜底（仅无真实库时）
 let MEMORY_VALUE: string | null = null
