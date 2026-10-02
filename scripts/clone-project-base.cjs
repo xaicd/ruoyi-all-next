@@ -724,7 +724,7 @@ async function runProjectReactor(targetDir, plan, sourceCatalog, options = {}) {
   console.log("")
   console.log("  提示: 启动前若 shell 里已有同名环境变量（尤其 DATABASE_URL / DB_DRIVER /")
   console.log("        TENANT_*），它会**覆盖 .env** —— 那样工程会连到别的库、或把平台")
-  console.log("        管理员当成租户账号，表现为"登录说用户名或密码错误"（实测踩过）。")
+  console.log("        管理员当成租户账号，表现为「登录说用户名或密码错误」（实测踩过）。")
   console.log("================================================================")
   return plan
 }
