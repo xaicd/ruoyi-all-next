@@ -149,6 +149,251 @@ function reactorCopy(src, dest, ctx, rel = "") {
   }
 }
 
+/**
+ * 从孵化产物里剔掉**指向被裁掉的域**的引用。
+ *
+ * 为什么必须做：基座里有若干份"域清单"是**硬编码**的（静态 import 表、loader 表、
+ * 生成的 manifest 索引、tsconfig/vitest 的别名）。catalog 与 rpc-actions 早就裁了，
+ * 但这些清单没有 —— 结果孵化出的工程**指向不存在的模块**：
+ *   - first-party-entries 会"登记了却加载不了"（调用时才炸，最隐蔽）
+ *   - tsconfig/vitest 的别名指向空目录
+ * 这不是理论问题: 实测 minimal 孵化后 first-party-entries 仍列着 15 个插件、实际只有 4 个。
+ */
+function pruneDomainReferenceLists(destRoot, plan) {
+  const keep = new Set(plan.domains)
+  const dropped = []
+  const read = (rel) => (fs.existsSync(path.join(destRoot, rel)) ? fs.readFileSync(path.join(destRoot, rel), "utf8") : null)
+  const write = (rel, text) => fs.writeFileSync(path.join(destRoot, rel), text, "utf8")
+
+  // 1) 静态入口表 / domain loader 表: 形如 `"<domain>": () => import("@/modules/<domain>/…")`
+  for (const rel of [
+    "packages/shared/backend/plugins/first-party-entries.ts",
+    "packages/shared/backend/lib/domain-action-loaders.ts",
+  ]) {
+    const text = read(rel)
+    if (!text) continue
+    const lines = text.split("\n").filter((line) => {
+      // key 里可能带点（如 "ruoyi.pay"）—— 只写 [a-z0-9_]+ 会整行漏掉，
+      // 而漏掉的后果是"登记了却加载不了"，最隐蔽。域取 import 路径里那段。
+      const m = line.match(/^\s*"[a-z0-9_.]+":\s*\(\)\s*=>\s*import\("@\/modules\/([a-z0-9_]+)\//)
+      if (!m) return true
+      if (keep.has(m[1])) return true
+      dropped.push(`${rel}: ${m[1]}`)
+      return false
+    })
+    write(rel, lines.join("\n"))
+  }
+
+  // 2) domain-service-loaders: 形如 `"<domain>": { ... },` 的多行块
+  {
+    const rel = "packages/shared/backend/lib/domain-service-loaders.ts"
+    const text = read(rel)
+    if (text) {
+      const lines = text.split("\n")
+      const out = []
+      let skipping = false
+      let depth = 0
+      for (const line of lines) {
+        const start = line.match(/^\s*"([a-z0-9_]+)":\s*\{/)
+        if (start && !keep.has(start[1])) {
+          dropped.push(`${rel}: ${start[1]}`)
+          skipping = true
+          depth = (line.match(/\{/g) || []).length - (line.match(/\}/g) || []).length
+          if (depth <= 0) skipping = false
+          continue
+        }
+        if (skipping) {
+          depth += (line.match(/\{/g) || []).length - (line.match(/\}/g) || []).length
+          if (depth <= 0) skipping = false
+          continue
+        }
+        out.push(line)
+      }
+      write(rel, out.join("\n"))
+    }
+  }
+
+  // 3) tsconfig paths 与 vitest 别名: 删掉指向被裁域的条目
+  {
+    const rel = "tsconfig.json"
+    const text = read(rel)
+    if (text) {
+      const json = JSON.parse(text)
+      const paths = json.compilerOptions?.paths ?? {}
+      for (const key of Object.keys(paths)) {
+        const m = key.match(/^@\/modules\/([a-z0-9_]+)/)
+        if (m && !keep.has(m[1])) {
+          delete paths[key]
+          dropped.push(`${rel}: ${key}`)
+        }
+      }
+      write(rel, `${JSON.stringify(json, null, 2)}\n`)
+    }
+  }
+  {
+    const rel = "vitest.config.ts"
+    const text = read(rel)
+    if (text) {
+      const lines = text.split("\n").filter((line) => {
+        const m = line.match(/^\s*"@\/modules\/([a-z0-9_]+)(\/\*)?"\s*:/)
+        if (!m) return true
+        if (keep.has(m[1])) return true
+        dropped.push(`${rel}: @/modules/${m[1]}`)
+        return false
+      })
+      write(rel, lines.join("\n"))
+    }
+  }
+
+  // 4) 治理能力清单: 能力把"某域的文件路径 + 标记字符串"写在 ref/marker 里。
+  //    域被裁掉后这些引用解析不了，microservice:check 会失败。
+  //
+  //    这里**不逐个枚举**该裁哪些（枚举必然漏 —— 实测连裁 3 轮才收敛），
+  //    而是按"**裁完之后还能不能解析**"判定: ref 文件不存在、或 marker 不在文件里
+  //    → 该能力属于被裁的域，摘掉。并同步从 required 摘掉，否则会变成另一半失败
+  //    （"required 里的能力必须不是 TODO"）。
+  {
+    const rel = "packages/shared/backend/constants/microservice-governance.json"
+    const text = read(rel)
+    if (text) {
+      const catalog = JSON.parse(text)
+      const stillResolvable = (capability) => {
+        const ref = capability.ref
+        if (!ref) return true
+        const abs = path.join(destRoot, ref)
+        if (!fs.existsSync(abs)) return false
+        if (!capability.marker) return true
+        try {
+          return fs.readFileSync(abs, "utf8").includes(capability.marker)
+        } catch {
+          return false
+        }
+      }
+      const removed = (catalog.capabilities ?? []).filter((c) => !stillResolvable(c)).map((c) => c.id)
+      if (removed.length > 0) {
+        catalog.capabilities = catalog.capabilities.filter(stillResolvable)
+        if (Array.isArray(catalog.required)) catalog.required = catalog.required.filter((id) => !removed.includes(id))
+        write(rel, `${JSON.stringify(catalog, null, 2)}\n`)
+        for (const id of removed) dropped.push(`${rel}: 能力 ${id}（ref/marker 指向被裁域）`)
+      }
+    }
+  }
+
+  // 4.5) 机检基准线: 冻结欠债用的文件路径清单，同样会指向被裁域。
+  {
+    const rel = "docs/architecture/artifacts/engineering-standards-baseline.json"
+    const text = read(rel)
+    if (text) {
+      const pruned = new Set(["pay","report","bpm","mp","member","iot","erp","im","crm","wms","mall","mes"].filter((d) => !keep.has(d)))
+      const json = JSON.parse(text)
+      let hit = 0
+      const scrub = (value) => {
+        if (typeof value === "string") {
+          for (const domain of pruned) {
+            if (value.includes(`plugins/plugin-${domain}/`) || value.includes(`domains/${domain}/`)) { hit++; return undefined }
+          }
+          return value
+        }
+        if (Array.isArray(value)) return value.map(scrub).filter((v) => v !== undefined)
+        if (value && typeof value === "object") {
+          const out = {}
+          for (const [k, v] of Object.entries(value)) {
+            if (typeof k === "string") {
+              let skip = false
+              for (const domain of pruned) {
+                if (k.includes(`plugins/plugin-${domain}/`) || k.includes(`domains/${domain}/`)) { skip = true; hit++; break }
+              }
+              if (skip) continue
+            }
+            const cleaned = scrub(v)
+            if (cleaned !== undefined) out[k] = cleaned
+          }
+          return out
+        }
+        return value
+      }
+      write(rel, `${JSON.stringify(scrub(json), null, 2)}\n`)
+      if (hit > 0) dropped.push(`${rel}: ${hit} 条指向被裁域的路径`)
+    }
+  }
+
+  // 5) 彻底无法工作的文件直接删: src/app 下的路由/页面、以及测试。
+  //    它们 import 了被裁域的模块 —— 留着必然编译失败，比删掉更糟。
+  //    （测试被删会少覆盖，但一个 chunk 里引用了不存在模块的测试本来也跑不了。）
+  {
+    const pruned = new Set(["pay","report","bpm","mp","member","iot","erp","im","crm","wms","mall","mes"].filter((d) => !keep.has(d)))
+    const doomed = []
+    const walk = (dir) => {
+      if (!fs.existsSync(dir)) return
+      for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        if (["node_modules", ".next", ".git"].includes(entry.name)) continue
+        const full = path.join(dir, entry.name)
+        if (entry.isDirectory()) { walk(full); continue }
+        if (!/\.(ts|tsx)$/.test(entry.name)) continue
+        const rel = path.relative(destRoot, full).replace(/\\/g, "/")
+        const isAppOrTest = rel.startsWith("src/app/") || rel.includes("/__tests__/") || rel.startsWith("test/")
+        if (!isAppOrTest) continue
+        const text = fs.readFileSync(full, "utf8")
+        for (const domain of pruned) {
+          if (new RegExp(`@/modules/${domain}[/"]`).test(text)) { doomed.push(rel); break }
+        }
+      }
+    }
+    walk(path.join(destRoot, "src/app"))
+    walk(path.join(destRoot, "packages"))
+    walk(path.join(destRoot, "test"))
+    for (const rel of doomed) {
+      fs.rmSync(path.join(destRoot, rel), { force: true })
+      dropped.push(`${rel}: 删除（引用了被裁域，无法工作）`)
+    }
+    if (doomed.length > 0) console.log(`[REACTOR PRUNE] 删除 ${doomed.length} 个引用了被裁域的路由/测试文件`)
+  }
+
+  if (dropped.length > 0) {
+    console.log(`[REACTOR PRUNE] 剔掉 ${dropped.length} 处指向被裁域的引用`)
+    for (const item of dropped.slice(0, 8)) console.log(`  - ${item}`)
+    if (dropped.length > 8) console.log(`  …(共 ${dropped.length})`)
+  }
+  return dropped
+}
+
+/**
+ * 自检: 孵化产物里**不得**再有指向被裁域的代码引用。
+ * 宁可孵化失败，也不要静默产出一个指向不存在模块的工程。
+ */
+function assertNoStaleDomainReferences(destRoot, plan) {
+  const keep = new Set(plan.domains)
+  const pruned = new Set(["pay","report","bpm","mp","member","iot","erp","im","crm","wms","mall","mes"].filter((d) => !keep.has(d)))
+  const hits = []
+  const walk = (dir) => {
+    if (!fs.existsSync(dir)) return
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (["node_modules", ".next", ".git", "scratch"].includes(entry.name)) continue
+      const full = path.join(dir, entry.name)
+      if (entry.isDirectory()) { walk(full); continue }
+      if (!/\.(ts|tsx|json)$/.test(entry.name)) continue
+      const text = fs.readFileSync(full, "utf8")
+      for (const domain of pruned) {
+        // 代码用 import 路径；JSON 产物（机检基准线等）用相对路径 —— 两种都要认，
+        // 否则会出现"自检通过、但项目自己的门禁照样失败"（实测踩过）。
+        const stale =
+          new RegExp(`@/modules/${domain}[/"]`).test(text) ||
+          new RegExp(`(plugins/plugin-${domain}|domains/${domain})/`).test(text)
+        if (stale) {
+          hits.push(`${path.relative(destRoot, full).replace(/\\/g, "/")} -> ${domain}`)
+          break
+        }
+      }
+    }
+  }
+  walk(path.join(destRoot, "src"))
+  walk(path.join(destRoot, "packages"))
+  if (hits.length > 0) {
+    throw new Error(`孵化产物仍有指向被裁域的引用（${hits.length} 处）:\n  ${hits.slice(0, 6).join("\n  ")}`)
+  }
+  console.log("[REACTOR SELFCHECK] ✅ 无指向被裁域的残留引用")
+}
+
 function applyHatchPatches(destRoot, plan, sourceCatalog) {
   const catalogPath = path.join(destRoot, CATALOG_REL)
   const rpcPath = path.join(destRoot, RPC_ACTIONS_REL)
@@ -166,6 +411,18 @@ function applyHatchPatches(destRoot, plan, sourceCatalog) {
 
   fs.writeFileSync(hatchPath, `${JSON.stringify(buildHatchManifest(plan), null, 2)}\n`, "utf8")
   writeSeamGraph({ root: destRoot, catalog: destCatalog, rpcActions: destRpc })
+  pruneDomainReferenceLists(destRoot, plan)
+
+  // 生成物必须用**生成器**重建，不要手工改 —— 手工改出来的与真源不一致，
+  // 孵化工程的 `check` 会直接报漂移（实测）。这条命令只依赖 node 与 catalog，无需装依赖。
+  try {
+    execSync("node scripts/write-domain-manifests.cjs", { cwd: destRoot, stdio: "pipe" })
+    console.log("[REACTOR GEN] 已用生成器重建域清单（domain:manifests）")
+  } catch (error) {
+    throw new Error(`重建域清单失败（孵化产物会带着漂移的生成物）: ${error.message}`)
+  }
+
+  assertNoStaleDomainReferences(destRoot, plan)
 
   if (fs.existsSync(agentPath)) {
     const agentProfile = JSON.parse(fs.readFileSync(agentPath, "utf8"))

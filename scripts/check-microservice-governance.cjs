@@ -15,7 +15,8 @@ if (!Array.isArray(catalog.capabilities) || catalog.capabilities.length < 20) {
   fail("governance catalog must declare at least 20 Moleculer/Nest NATS capabilities")
 }
 
-const required = ["broker", "gateway", "action", "event", "queueGroup", "registry", "circuitBreaker", "bulkhead", "fallback", "natsAdapter", "jetStream", "outbox", "cacher", "validator", "moduleLayers", "dualInvoke", "rpcCodec", "rpcFacade", "rpcTransport", "grpcAdapter", "protobufCodec", "contractActions", "rpcActionsCatalog", "domainProto", "goStub", "httpRpc", "splitRuntime", "lowcodeTemplates", "schemaConfluence"]
+// required 从真源读（此前硬编码在这里，与 JSON 两处维护 —— 孵化裁剪时必然漏掉一处）
+const required = catalog.required ?? ["broker", "gateway", "action", "event", "queueGroup", "registry", "circuitBreaker", "bulkhead", "fallback", "natsAdapter", "jetStream", "outbox", "cacher", "validator", "moduleLayers", "dualInvoke", "rpcCodec", "rpcFacade", "rpcTransport", "grpcAdapter", "protobufCodec", "contractActions", "rpcActionsCatalog", "domainProto", "goStub", "httpRpc", "splitRuntime", "lowcodeTemplates", "schemaConfluence"]
 for (const id of required) {
   const item = catalog.capabilities.find((capability) => capability.id === id)
   if (!item || item.status === "TODO") fail(`${id} must not be TODO`)
