@@ -702,7 +702,14 @@ async function runProjectReactor(targetDir, plan, sourceCatalog, options = {}) {
   for (const [key, value] of Object.entries(required)) {
     if (!seen.has(key)) kept.push(`${key}=${value}`)
   }
-  fs.writeFileSync(destEnv, kept.filter((line, index, all) => !(line === "" && index === all.length - 1)).join("\n") + "\n", "utf8")
+  const envBody = kept.filter((line, index, all) => !(line === "" && index === all.length - 1)).join("\n") + "\n"
+  fs.writeFileSync(destEnv, envBody, "utf8")
+  // 必需的运行期取值**再写一份到 .env.local** —— Next.js 的优先级是
+  // process.env > .env.local > .env，而"只写 .env"在某些启动路径下没进到 process.env
+  // （实测: .env 里明明有 TENANT_PLATFORM_USERNAMES=admin，运行期读到的却是空，
+  //  于是平台管理员被当成租户账号、报"必须填写租户标识"）。
+  // .env.local 本就是 gitignored 的本地配置，放这里既优先又不入库。
+  fs.writeFileSync(path.join(resolvedTarget, ".env.local"), Object.entries(required).map(([k, v]) => `${k}=${v}`).join("\n") + "\n", "utf8")
 
   await autoProvisionDatabase(targetDbName)
 
