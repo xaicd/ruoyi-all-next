@@ -9,6 +9,7 @@ import { SEED_MENUS } from "../prisma/data/menus.seed-data"
 import { withOnlineMenuCatalog, withOnlinePackageMenuIds } from "@/modules/online/contract/menu-catalog"
 import { withAigwMenuCatalog, withAigwPackageMenuIds } from "@/modules/aigw/contract/menu-catalog"
 import { withAiMenuCatalog } from "@/modules/ai/contract/menu-catalog"
+import { INFRA_CONFIG_DEFAULTS } from "@/modules/infra/backend/repositories/config.repository"
 import { SEED_POSTS } from "../prisma/data/posts.seed-data"
 import { SEED_ROLES } from "../prisma/data/roles.seed-data"
 import { SEED_TENANT_PACKAGES } from "../prisma/data/tenant-packages.seed-data"
@@ -114,6 +115,18 @@ async function main() {
     const bootstrapSalt = requiredEnvironment("ADMIN_BOOTSTRAP_SALT")
     assertStrongBootstrapPassword(bootstrapPassword)
     const legacyDefaultHash = "9486c0e4d342d7b250ac3b27d3f211aa"
+    // infra 默认配置: 取自**内存回退用的同一份常量**（INFRA_CONFIG_DEFAULTS）。
+    // 此前只存在于内存侧，于是同一批用例内存模式全绿、连真实库必挂
+    // （`配置项不存在: sys.application.name`）—— 两条路径必须同一来源。
+    for (const item of INFRA_CONFIG_DEFAULTS) {
+      await client.query(
+        `INSERT INTO infra_config (id, category, name, config_key, value, visible, remark, created_at, updated_at, deleted)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,false)
+         ON CONFLICT (config_key) DO UPDATE SET name = EXCLUDED.name, value = EXCLUDED.value, updated_at = EXCLUDED.updated_at, deleted = false`,
+        [item.id, item.category, item.name, item.configKey, item.value, item.visible, item.remark, item.createdAt, item.updatedAt],
+      )
+    }
+
     await client.query(`UPDATE "system_user" SET status = 'DISABLED', updated_at = $1 WHERE username IN ('admin', 'ruoyi_local_operator') AND username <> $2`, [new Date().toISOString(), bootstrapUsername])
     await client.query(`DELETE FROM system_user_role AS ur USING "system_user" AS u WHERE ur.user_id = u.id AND u.username IN ('admin', 'ruoyi_local_operator') AND u.username <> $1`, [bootstrapUsername])
     const templateUser = SEED_USERS[0]
