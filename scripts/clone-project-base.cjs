@@ -33,6 +33,13 @@ const BASE_PROJECT_NAME = "ruoyi-all-next"
 const BASE_PROJECT_TITLE = "RuoYi All Next"
 const BASE_DB_NAME = "ruoyi_next"
 
+/**
+ * 基座的全部域（**不含 shared** —— shared 是核心 SDK、不是域，AGENTS §3.2）。
+ * 裁剪别名时必须按「是否是被裁的域」判断，而不是「是否在保留集里」；
+ * 后者会误删 @/modules/shared，工程能过门禁却起不来（实测）。
+ */
+const ALL_DOMAINS = ["system","infra","online","ai","aigw","bpm","pay","report","mp","mall","member","crm","erp","wms","mes","iot","im"]
+
 // 二进制白名单后缀（直接二进制复制，严禁文本替换，防止破坏文件结构）
 const BINARY_EXTENSIONS = new Set([
   ".png", ".jpg", ".jpeg", ".gif", ".ico", ".svg",
@@ -220,9 +227,10 @@ function pruneDomainReferenceLists(destRoot, plan) {
     if (text) {
       const json = JSON.parse(text)
       const paths = json.compilerOptions?.paths ?? {}
+      const prunedDomainNames = new Set(ALL_DOMAINS.filter((name) => !keep.has(name)))
       for (const key of Object.keys(paths)) {
         const m = key.match(/^@\/modules\/([a-z0-9_]+)/)
-        if (m && !keep.has(m[1])) {
+        if (m && prunedDomainNames.has(m[1])) {
           delete paths[key]
           dropped.push(`${rel}: ${key}`)
         }
@@ -234,10 +242,11 @@ function pruneDomainReferenceLists(destRoot, plan) {
     const rel = "vitest.config.ts"
     const text = read(rel)
     if (text) {
+      const prunedDomainNames = new Set(ALL_DOMAINS.filter((name) => !keep.has(name)))
       const lines = text.split("\n").filter((line) => {
         const m = line.match(/^\s*"@\/modules\/([a-z0-9_]+)(\/\*)?"\s*:/)
         if (!m) return true
-        if (keep.has(m[1])) return true
+        if (!prunedDomainNames.has(m[1])) return true
         dropped.push(`${rel}: @/modules/${m[1]}`)
         return false
       })
@@ -476,7 +485,14 @@ function renamePathSegments(destRoot, targetName) {
       if (entry.isDirectory()) walk(full)
       if (entry.name.includes(from)) {
         const next = path.join(dir, entry.name.replaceAll(from, to))
-        fs.renameSync(full, next)
+        if (fs.existsSync(next)) {
+          // 目标已存在（对**已孵化过的目录**再跑一次孵化时会发生）——
+          // 直接 renameSync 会 ENOTEMPTY 炸掉。合并后删源，让孵化器**可重复运行**。
+          fs.cpSync(full, next, { recursive: true, force: true })
+          fs.rmSync(full, { recursive: true, force: true })
+        } else {
+          fs.renameSync(full, next)
+        }
         renamed.push(path.relative(destRoot, next).replace(/\\/g, "/"))
       }
     }
