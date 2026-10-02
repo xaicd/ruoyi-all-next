@@ -182,27 +182,33 @@ const onlineAdapterPath = path.join(domainPathOf(ROOT, "online"), "backend", "ap
 const onlineAdapter = fs.readFileSync(onlineAdapterPath, "utf8")
 if (onlineAdapter.includes("codegen-engine.service")) fail("online-codegen.adapter must import codegen types from infra contract, not the engine service")
 
-const reportSqlPath = path.join(domainPathOf(ROOT, "report"), "backend", "services", "custom-sql-report.service.ts")
-const reportSql = fs.readFileSync(reportSqlPath, "utf8")
-if (reportSql.includes("DataSourceConfigRepository")) fail("report custom-sql must not import infra repository; use infraPlatformFacade")
-if (!reportSql.includes("infraPlatformFacade")) fail("report custom-sql must call data sources through infraPlatformFacade")
+// 域可能被裁剪（孵化时的 profile/bundle）—— 检查**存在的域**，不假设存在的域。
+// 少了这个守卫，裁剪过的工程 readFileSync 会直接 ENOENT 崩掉，
+// 而不是"跳过一项不适用的检查"（实测: minimal 孵化后 microservice:check 就是这么挂的）。
+if (hasDomain("report")) {
+  const reportSqlPath = path.join(domainPathOf(ROOT, "report"), "backend", "services", "custom-sql-report.service.ts")
+  const reportSql = fs.readFileSync(reportSqlPath, "utf8")
+  if (reportSql.includes("DataSourceConfigRepository")) fail("report custom-sql must not import infra repository; use infraPlatformFacade")
+  if (!reportSql.includes("infraPlatformFacade")) fail("report custom-sql must call data sources through infraPlatformFacade")
 
-const reportSqlTestPath = path.join(domainPathOf(ROOT, "report"), "backend", "services", "__tests__", "custom-sql-report.service.test.ts")
-const reportSqlTest = fs.readFileSync(reportSqlTestPath, "utf8")
-if (reportSqlTest.includes("DataSourceConfigRepository")) fail("report custom-sql test must spy infraPlatformFacade, not import infra repository")
-if (!reportSqlTest.includes("infraPlatformFacade")) fail("report custom-sql test must assert infraPlatformFacade tenant scope")
-
-// pay 已改造成第一方插件: 其路由不再有 Next 转发文件, 直接读插件内的真实路由源码
-const payOrdersPath = path.join(ROOT, "src", "app", "api", "v1", "admin", "pay", "orders", "route.ts")
-const payOrders = routeSourceOf("src/app/api/v1/admin/pay/orders/route.ts")
-if (!payOrders.includes("PAY_ACTION_SCHEMAS") || !payOrders.includes("parseActionQuery")) {
-  fail("pay orders route must parse query with PAY_ACTION_SCHEMAS via parseActionQuery")
+  const reportSqlTestPath = path.join(domainPathOf(ROOT, "report"), "backend", "services", "__tests__", "custom-sql-report.service.test.ts")
+  const reportSqlTest = fs.readFileSync(reportSqlTestPath, "utf8")
+  if (reportSqlTest.includes("DataSourceConfigRepository")) fail("report custom-sql test must spy infraPlatformFacade, not import infra repository")
+  if (!reportSqlTest.includes("infraPlatformFacade")) fail("report custom-sql test must assert infraPlatformFacade tenant scope")
 }
 
-const payRefundsPath = path.join(ROOT, "src", "app", "api", "v1", "admin", "pay", "refunds", "route.ts")
-const payRefunds = routeSourceOf("src/app/api/v1/admin/pay/refunds/route.ts")
-if (!payRefunds.includes("PAY_ACTION_SCHEMAS") || !payRefunds.includes("parseActionQuery")) {
-  fail("pay refunds route must parse query with PAY_ACTION_SCHEMAS via parseActionQuery")
+// pay 已改造成第一方插件: 其路由不再有 Next 转发文件, 直接读插件内的真实路由源码
+// 同 report: 域可能被裁剪，检查前先确认它在（否则读不到文件会直接崩）。
+if (hasDomain("pay")) {
+  const payOrders = routeSourceOf("src/app/api/v1/admin/pay/orders/route.ts")
+  if (!payOrders.includes("PAY_ACTION_SCHEMAS") || !payOrders.includes("parseActionQuery")) {
+    fail("pay orders route must parse query with PAY_ACTION_SCHEMAS via parseActionQuery")
+  }
+
+  const payRefunds = routeSourceOf("src/app/api/v1/admin/pay/refunds/route.ts")
+  if (!payRefunds.includes("PAY_ACTION_SCHEMAS") || !payRefunds.includes("parseActionQuery")) {
+    fail("pay refunds route must parse query with PAY_ACTION_SCHEMAS via parseActionQuery")
+  }
 }
 
 for (const [label, relPath, token] of [
@@ -230,6 +236,10 @@ for (const [label, relPath, token] of [
   ["iot alerts route", "src/app/api/v1/admin/iot/alerts/route.ts", "IOT_ACTION_SCHEMAS"],
   ["im conversations route", "src/app/api/v1/admin/im/conversations/route.ts", "IM_ACTION_SCHEMAS"],
 ]) {
+  // 域可能被裁剪（孵化 profile/bundle）—— 从路径里取出域名，不在 catalog 里就跳过。
+  // 用"域不在"而不是"文件不存在"作为判据: 后者会把真正的路径写错也一并跳过，掩盖问题。
+  const domainOfRoute = relPath.match(/^src\/app\/api\/v1\/[a-z]+\/([a-z0-9_]+)\//)?.[1]
+  if (domainOfRoute && !hasDomain(domainOfRoute)) continue
   mustUseActionSchemas(label, relPath, token)
 }
 
@@ -316,6 +326,10 @@ for (const [label, relPath, token] of [
   ["infra codegen import route", "src/app/api/v1/admin/infra/codegen/import/route.ts", "INFRA_ACTION_SCHEMAS"],
   ["infra codegen download route", "src/app/api/v1/admin/infra/codegen/[id]/download/route.ts", "INFRA_ACTION_SCHEMAS"],
 ]) {
+  // 域可能被裁剪（孵化 profile/bundle）—— 从路径里取出域名，不在 catalog 里就跳过。
+  // 用"域不在"而不是"文件不存在"作为判据: 后者会把真正的路径写错也一并跳过，掩盖问题。
+  const domainOfRoute = relPath.match(/^src\/app\/api\/v1\/[a-z]+\/([a-z0-9_]+)\//)?.[1]
+  if (domainOfRoute && !hasDomain(domainOfRoute)) continue
   mustUseActionSchemas(label, relPath, token)
 }
 

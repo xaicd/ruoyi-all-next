@@ -317,6 +317,39 @@ function pruneDomainReferenceLists(destRoot, plan) {
     }
   }
 
+  // 4.6) 兼容性契约: 里面有从域集派生的**计数**。裁剪后必须**全部**重算 ——
+  //      逐一补会漏（实测连撞两次: domainCatalog.domains 之后还有 rpcActions.domains）。
+  //      这里按"每个计数都能在真源里数出来"来做，不再枚举。
+  {
+    const rel = "packages/shared/contract/compat-manifest.json"
+    const text = read(rel)
+    if (text) {
+      const manifest = JSON.parse(text)
+      const contracts = manifest.contracts ?? {}
+      const countOf = (sourceRel, pick) => {
+        const source = read(sourceRel)
+        if (!source) return undefined
+        try {
+          return pick(JSON.parse(source))
+        } catch {
+          return undefined
+        }
+      }
+      const expected = {
+        domainCatalog: countOf(CATALOG_REL, (json) => (json.domains ?? []).length),
+        rpcActions: countOf(RPC_ACTIONS_REL, (json) => Object.keys(json.domains ?? {}).length),
+      }
+      for (const [key, actual] of Object.entries(expected)) {
+        const entry = contracts[key]
+        if (!entry || typeof entry.domains !== "number" || actual === undefined || entry.domains === actual) continue
+        const before = entry.domains
+        entry.domains = actual
+        dropped.push(`${rel}: ${key}.domains ${before} -> ${actual}（按裁剪后的真源重算）`)
+      }
+      write(rel, `${JSON.stringify(manifest, null, 2)}\n`)
+    }
+  }
+
   // 5) 彻底无法工作的文件直接删: src/app 下的路由/页面、以及测试。
   //    它们 import 了被裁域的模块 —— 留着必然编译失败，比删掉更糟。
   //    （测试被删会少覆盖，但一个 chunk 里引用了不存在模块的测试本来也跑不了。）
@@ -394,7 +427,33 @@ function assertNoStaleDomainReferences(destRoot, plan) {
   console.log("[REACTOR SELFCHECK] ✅ 无指向被裁域的残留引用")
 }
 
-function applyHatchPatches(destRoot, plan, sourceCatalog) {
+/**
+ * 把路径里出现旧项目名的**目录/文件**改成新名。
+ * 自底向上处理，先改深的，避免改完父目录后子路径失效。
+ */
+function renamePathSegments(destRoot, targetName) {
+  const from = BASE_PROJECT_NAME
+  const to = targetName || BASE_PROJECT_NAME
+  if (!to || from === to) return
+  const renamed = []
+  const walk = (dir) => {
+    if (!fs.existsSync(dir)) return
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (["node_modules", ".git", ".next"].includes(entry.name)) continue
+      const full = path.join(dir, entry.name)
+      if (entry.isDirectory()) walk(full)
+      if (entry.name.includes(from)) {
+        const next = path.join(dir, entry.name.replaceAll(from, to))
+        fs.renameSync(full, next)
+        renamed.push(path.relative(destRoot, next).replace(/\\/g, "/"))
+      }
+    }
+  }
+  walk(destRoot)
+  if (renamed.length > 0) console.log(`[REACTOR RENAME] 重命名 ${renamed.length} 处路径含旧项目名的目录/文件`)
+}
+
+function applyHatchPatches(destRoot, plan, sourceCatalog, targetName) {
   const catalogPath = path.join(destRoot, CATALOG_REL)
   const rpcPath = path.join(destRoot, RPC_ACTIONS_REL)
   const hatchPath = path.join(destRoot, HATCH_MANIFEST_REL)
@@ -411,6 +470,9 @@ function applyHatchPatches(destRoot, plan, sourceCatalog) {
 
   fs.writeFileSync(hatchPath, `${JSON.stringify(buildHatchManifest(plan), null, 2)}\n`, "utf8")
   writeSeamGraph({ root: destRoot, catalog: destCatalog, rpcActions: destRpc })
+  // 路径级重命名: 内容里的项目名被替换了，但**目录/文件名**还叫旧名 ——
+  // 于是契约清单里写着 docs/skills/<新名>，磁盘上却是 docs/skills/<旧名>，门禁当场对不上（实测）。
+  renamePathSegments(destRoot, targetName)
   pruneDomainReferenceLists(destRoot, plan)
 
   // 生成物必须用**生成器**重建，不要手工改 —— 手工改出来的与真源不一致，
@@ -521,7 +583,7 @@ async function runProjectReactor(targetDir, plan, sourceCatalog, options = {}) {
   }
 
   reactorCopy(SOURCE_ROOT, resolvedTarget, ctx)
-  applyHatchPatches(resolvedTarget, plan, sourceCatalog)
+  applyHatchPatches(resolvedTarget, plan, sourceCatalog, targetName)
 
   const destEnv = path.join(resolvedTarget, ".env")
   const srcEnv = path.join(SOURCE_ROOT, ".env")

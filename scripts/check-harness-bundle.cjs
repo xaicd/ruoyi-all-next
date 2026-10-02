@@ -35,8 +35,31 @@ for (const section of requiredSections) {
 
 if (!fs.existsSync(path.join(ROOT, ".agents/context/ASSEMBLY.md"))) fail("missing .agents/context/ASSEMBLY.md")
 if (!fs.existsSync(path.join(ROOT, ".agents/skills/agent-harness/SKILL.md"))) fail("missing agent-harness skill")
-if (!fs.existsSync(path.join(ROOT, "docs/skills/ruoyi-all-next/agent-harness.SKILL.md"))) {
-  fail("missing docs/skills/ruoyi-all-next/agent-harness.SKILL.md")
+/**
+ * 定位技能镜像目录 `docs/skills/<项目名>/`。
+ *
+ * **不要写死项目名** —— 孵化（project:create）只重写内容、不改目录名，
+ * 写死会让孵化出的工程一上来就因"技能目录缺失"而门禁失败（实测）。
+ * 解析顺序: 先按 package.json 的 name，退化为 docs/skills 下唯一存在的目录。
+ */
+function resolveSkillsMirrorDir(root) {
+  try {
+    const pkg = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"))
+    const byName = path.join("docs", "skills", String(pkg.name || "").replace(/^@[^/]+\//, ""))
+    if (fs.existsSync(path.join(root, byName))) return byName
+  } catch {
+    // 读不到 package.json 就退化到扫描
+  }
+  const base = path.join(root, "docs", "skills")
+  if (!fs.existsSync(base)) return "docs/skills"
+  const dirs = fs.readdirSync(base, { withFileTypes: true }).filter((e) => e.isDirectory()).map((e) => e.name)
+  return dirs.length === 1 ? path.join("docs", "skills", dirs[0]) : "docs/skills"
+}
+
+{
+  const mirror = resolveSkillsMirrorDir(ROOT)
+  const skillFile = path.join(ROOT, mirror, "agent-harness.SKILL.md")
+  if (!fs.existsSync(skillFile)) fail(`missing ${mirror}/agent-harness.SKILL.md`)
 }
 
 const agentsMd = fs.readFileSync(path.join(ROOT, "AGENTS.md"), "utf8")
