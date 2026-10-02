@@ -31,8 +31,8 @@
     "audit-logs:retention": "tsx scripts/run-audit-log-retention.ts",
     "init": "echo '[ruoyi-all-next] 本地最小启动无需基础设施初始化；如需接入仓库根初始化，请执行 npm run init:root'",
     "init:root": "node ./scripts/run-root-npm.cjs docker:dev:core && node ./scripts/run-root-npm.cjs db:init:force",
-    "dev": "next dev -p 3200",
-    "build": "next build",
+    "dev": "prisma generate && next dev -p 3200",
+    "build": "prisma generate && next build",
     "start": "node .next-ruoyi/standalone/server.js",
     "lint": "next lint",
     "test": "vitest run",
@@ -81,7 +81,8 @@
     "tables:inventory": "node scripts/report-table-inventory.cjs",
     "tables:metadata-draft": "node scripts/draft-missing-table-metadata.cjs",
     "tables:migration": "tsx scripts/generate-table-migration.ts",
-    "verify:real-db": "node scripts/verify-real-db.cjs"
+    "verify:real-db": "node scripts/verify-real-db.cjs",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",

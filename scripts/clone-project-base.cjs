@@ -549,6 +549,20 @@ function applyHatchPatches(destRoot, plan, sourceCatalog, targetName) {
 /**
  * 自动创建 PostgreSQL 数据库并执行默认 SQL 迁移
  */
+/**
+ * 管理员引导凭据。**种子与 .env 必须用同一份** ——
+ * 否则会出现"种子建的用户名是 admin、而 .env 的平台用户白名单写的是别的"，
+ * 于是工程起得来却登不进去（实测：孵化时继承了源仓库 .env 里的本地值）。
+ */
+function resolveBootstrap() {
+  const { randomBytes } = require("node:crypto")
+  return {
+    username: process.env.ADMIN_BOOTSTRAP_USERNAME || "admin",
+    password: process.env.ADMIN_BOOTSTRAP_PASSWORD || `Vf1!${randomBytes(10).toString("hex")}`,
+    salt: process.env.ADMIN_BOOTSTRAP_SALT || randomBytes(8).toString("hex"),
+  }
+}
+
 async function autoProvisionDatabase(targetDbName) {
   console.log("----------------------------------------------------------------")
   console.log(`[REACTOR DB] 正在连接 PostgreSQL 并自动初始化数据库: ${targetDbName}...`)
@@ -586,7 +600,35 @@ async function autoProvisionDatabase(targetDbName) {
         },
         stdio: "inherit",
       })
-      console.log(`[REACTOR SQL SUCCESS] ✅ 数据库 "${targetDbName}" 全量基础 SQL 与菜单权限已自动就绪！`)
+      // 只跑迁移**不等于**"菜单权限已就绪" —— 用户/角色/菜单这些来自种子脚本。
+      // 此前只有 start.sh 的 dev/infra 模式会做，孵化路径漏了，于是新工程
+      // 能起来却登不进去（system_user 为空），而日志还宣称一切就绪（实测）。
+      console.log(`[REACTOR SEED] 正在注入基础种子数据（管理员/角色/菜单/字典）...`)
+      const { randomBytes } = require("node:crypto")
+      // 管理员凭据要**告诉用户** —— 否则工程起得来、却没人知道怎么登进去（可用性的一部分）。
+      // 未显式提供时生成一个强密码并打印；生产环境应通过环境变量注入，不要用这里的随机值。
+      const bootstrapUsername = resolveBootstrap().username
+      const bootstrapPassword = resolveBootstrap().password
+      const bootstrapSalt = resolveBootstrap().salt
+      execSync("npx tsx scripts/seed-postgresql.ts", {
+        cwd: SOURCE_ROOT,
+        env: {
+          ...process.env,
+          DATABASE_URL: targetDbUrl,
+          // 种子脚本要求这几个存在且密码满足强度（缺一个直接 fail-fast）。
+          ADMIN_BOOTSTRAP_USERNAME: bootstrapUsername,
+          ADMIN_BOOTSTRAP_PASSWORD: bootstrapPassword,
+          ADMIN_BOOTSTRAP_SALT: bootstrapSalt,
+        },
+        stdio: "inherit",
+      })
+      console.log(`[REACTOR SQL SUCCESS] ✅ 数据库 "${targetDbName}" 迁移与基础种子（含菜单权限）已自动就绪！`)
+      console.log("")
+      console.log("  ┌──────────────── 管理员登录凭据 ────────────────┐")
+      console.log(`  │  用户名: ${bootstrapUsername}`)
+      console.log(`  │  密码:   ${bootstrapPassword}`)
+      console.log("  └────────────────────────────────────────────────┘")
+      console.log("  （本地开发用。生产请通过 ADMIN_BOOTSTRAP_* 环境变量注入，勿沿用此随机值。）")
     } catch (migrateErr) {
       console.log(`[REACTOR SQL WARN] 自动部署迁移提示: ${migrateErr.message}`)
     }
@@ -633,15 +675,34 @@ async function runProjectReactor(targetDir, plan, sourceCatalog, options = {}) {
   reactorCopy(SOURCE_ROOT, resolvedTarget, ctx)
   applyHatchPatches(resolvedTarget, plan, sourceCatalog, targetName)
 
+  // .env 不能只是"把源仓库的 .env 拷过来" —— 里面可能有**源仓库本地的取值**
+  // （如 TENANT_PLATFORM_USERNAMES 指向某个本机账号），新工程继承了就会
+  // "起得来、登不进去"（实测）。必需的项这里显式写死，其余保留源的作为基底。
   const destEnv = path.join(resolvedTarget, ".env")
   const srcEnv = path.join(SOURCE_ROOT, ".env")
-  let baseEnv = fs.existsSync(srcEnv) ? fs.readFileSync(srcEnv, "utf8") : ""
-  baseEnv = baseEnv.replace(/ruoyi_next/g, targetDbName)
-  baseEnv = baseEnv.replace(/PORT=3100/g, `PORT=${targetPort}`)
-  if (!baseEnv.includes(`PORT=${targetPort}`)) {
-    baseEnv += `\nPORT=${targetPort}\n`
+  const bootstrap = resolveBootstrap()
+  const required = {
+    DATABASE_URL: `postgresql://ruoyi:ruoyi123@localhost:5433/${targetDbName}?schema=public`,
+    DB_DRIVER: "postgresql",
+    PORT: String(targetPort),
+    JWT_SECRET: require("node:crypto").randomBytes(32).toString("hex"),
+    TENANT_MODE: "disabled",
+    TENANT_PLATFORM_USERNAMES: bootstrap.username,
   }
-  fs.writeFileSync(destEnv, baseEnv, "utf8")
+  const kept = []
+  const seen = new Set()
+  if (fs.existsSync(srcEnv)) {
+    for (const line of fs.readFileSync(srcEnv, "utf8").split("\n")) {
+      const key = line.split("=")[0]?.trim()
+      if (!key || key.startsWith("#")) { kept.push(line); continue }
+      if (key in required) { kept.push(`${key}=${required[key]}`); seen.add(key); continue }
+      kept.push(line)
+    }
+  }
+  for (const [key, value] of Object.entries(required)) {
+    if (!seen.has(key)) kept.push(`${key}=${value}`)
+  }
+  fs.writeFileSync(destEnv, kept.filter((line, index, all) => !(line === "" && index === all.length - 1)).join("\n") + "\n", "utf8")
 
   await autoProvisionDatabase(targetDbName)
 
