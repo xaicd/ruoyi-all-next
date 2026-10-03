@@ -35,6 +35,7 @@ Skill 写法见 [skill-authoring.SKILL.md](./skill-authoring.SKILL.md)。
 | 新业务项目孵化、DigitalStaff NPC 模板、DeepSeek Harness 进化 | agent-harness、product-requirements |
 | 新功能、客户端、业务项目初始化 | product-requirements |
 | 新功能一站式交付（RBAC + 全动词 API + 页面 + 权限 + 测试） | new-feature |
+| 新业务域/新平台（起底座 -> 建表 -> codegen -> 注册插件 -> 编译/打包/预览） | new-business-plugin |
 | 管理端/C 端页面或视觉 | ui-design、ui-framework-governance、ui-ux-pro-max |
 | 新 HTTP/RPC、改 DTO | api-design |
 | 表、迁移、多数据库 | database-design、database-compatibility |
