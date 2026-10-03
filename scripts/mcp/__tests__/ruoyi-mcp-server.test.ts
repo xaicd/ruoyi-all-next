@@ -88,16 +88,20 @@ describe("MCP: 域与插件工具", () => {
   describe("ruoyi_plugin_list", () => {
     it("列出全部插件，且都带真实声明（不是空壳）", () => {
       const result = call("ruoyi_plugin_list")
-      expect(result.count).toBeGreaterThanOrEqual(15)
+      // 数量不写死: 孵化 profile 会裁剪插件域，写死会让本文件在裁剪过的工程里失败。
+      // 用 catalog 的插件层作为期望值 —— 那才是"本工程应有几个插件"的真源。
+      expect(result.count).toBe(call("ruoyi_domain_list").layers.plugin.length)
       for (const plugin of result.plugins) {
         expect(plugin.routeCount, `${plugin.id} 没有路由声明`).toBeGreaterThan(0)
         expect(plugin.capabilities).toContain("api.routes.register")
         expect(plugin.dir.startsWith("packages/plugins/plugin-")).toBe(true)
       }
-      const pay = result.plugins.find((p: any) => p.id === "ruoyi.pay")
-      expect(pay.authSurfaces).toContain("operator")
+      // 断言"某个真实存在的插件"具备域级特征，不写死 ruoyi.pay ——
+      // 裁剪过的工程里 pay 可能不存在（写死会让本文件在裁剪场景失败）。
+      const sample = result.plugins.find((p: any) => p.authSurfaces.includes("operator")) ?? result.plugins[0]
+      expect(sample.authSurfaces.length).toBeGreaterThan(0)
       // 域级特征必须在（拆分代理与治理门禁都靠它）
-      expect(pay.domainTraits.publicPrefixes.length).toBeGreaterThan(0)
+      expect(sample.domainTraits.publicPrefixes.length).toBeGreaterThan(0)
     })
   })
 

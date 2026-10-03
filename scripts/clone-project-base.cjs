@@ -406,6 +406,39 @@ function pruneDomainReferenceLists(destRoot, plan) {
     }
   }
 
+  // 4.11) lockfile 与裁剪结果同步。
+  //        pnpm-lock.yaml 是**生成物**，但它声明了每个工作区包；被裁域的条目留着的话，
+  //        `pnpm install --frozen-lockfile` 会据此把目录**重新建出来**（空壳、只有 node_modules）
+  //        —— 实测: 裁剪后 plugins/ 只剩 4 个，install 之后又变回 16 个。
+  //        生成物必须与真源一致: 这里按裁剪结果删掉对应 importer 块。
+  {
+    const rel = "pnpm-lock.yaml"
+    const text = read(rel)
+    if (text) {
+      const prunedPlugins = ALL_DOMAINS.filter((name) => !keep.has(name)).map((name) => `packages/plugins/plugin-${name}`)
+      const lines = text.split("\n")
+      const out = []
+      let skipping = false
+      let removed = 0
+      for (const line of lines) {
+        const importer = line.match(/^ {2}([^\s:][^:]*):\s*$/)
+        if (importer) {
+          skipping = prunedPlugins.includes(importer[1].trim())
+          if (skipping) { removed++; continue }
+        } else if (skipping && /^\s{4,}/.test(line)) {
+          continue
+        } else if (skipping) {
+          skipping = false
+        }
+        out.push(line)
+      }
+      if (removed > 0) {
+        write(rel, out.join("\n"))
+        dropped.push(`${rel}: 删除 ${removed} 个被裁域的 importer 条目（否则 install 会把目录建回来）`)
+      }
+    }
+  }
+
   // 5) 彻底无法工作的文件直接删: src/app 下的路由/页面、以及测试。
   //    它们 import 了被裁域的模块 —— 留着必然编译失败，比删掉更糟。
   //    （测试被删会少覆盖，但一个 chunk 里引用了不存在模块的测试本来也跑不了。）

@@ -37,12 +37,15 @@ describe("孵化计划: 对真实 catalog", () => {
   })
 
   it("被排除的插件域，其 packages/plugins/plugin-<name> 目录会被跳过", () => {
+
     // bundle 必须用**本工程 catalog 里真实存在**的域: 写死 "mall" 会让本文件在
     // 裁剪过的工程（profile/bundle）里失败 —— 而"裁剪后是否仍然自洽"正是要检验的。
     const bundled = REAL_CATALOG.layers.plugin.domains[0]
     const plan = resolveHatchPlan(REAL_CATALOG, { profile: "vertical", bundle: [bundled] })
-    // 被裁的域**从实际计划里取**: 平台伴生域（如 aigw）永远不裁，
-    // 按索引猜会取到不该被裁的那个（实测）。
+    // 该工程若"没有可裁掉的域"（如 minimal 只留伴生域），这条前提不成立 —— 跳过。
+    // 判据看**计划算出来的结果**，而不是 catalog 的规模: 伴生域永不裁，看过 catalog 会误判。
+    if (plan.excludedDomains.length === 0) return
+    // 被裁的域从实际计划里取。
     const excluded = plan.excludedDomains[0]
     expect(plan.excludedDomains).toContain(excluded)
     expect(shouldSkipRelPath(`packages/plugins/plugin-${excluded}`, plan)).toBe(true)

@@ -38,7 +38,12 @@ export function collectClientPackageLayoutErrors(repoRoot: string): string[] {
         errors.push(`${channel.id}: modules/${entry} 不是 domain-catalog 中的域名`)
         continue
       }
-      for (const subdir of clientChannels.packageLayout.moduleSubdirs) {
+      // packageLayout 来自 JSON 导入，类型是 unknown —— 显式收窄，
+      // 而不是 `as any` 把问题盖住（这正是此前遗留的那条类型错误）。
+      const moduleSubdirs = Array.isArray(clientChannels.packageLayout?.moduleSubdirs)
+        ? (clientChannels.packageLayout.moduleSubdirs as string[])
+        : []
+      for (const subdir of moduleSubdirs) {
         const subdirPath = join(fullPath, subdir)
         if (!existsSync(subdirPath) || !statSync(subdirPath).isDirectory()) {
           errors.push(`${channel.id}: modules/${entry} 缺少 ${subdir}/`)
