@@ -13,6 +13,7 @@ import { generateListPage } from "./frontend-list.template"
 import { generateAppPage } from "./frontend-page.template"
 import { generateTest } from "./test.template"
 import { generateRbacSql } from "./rbac-sql.template"
+import { generateTableDdl } from "./table-ddl.template"
 
 export * from "./common"
 export * from "./types.template"
@@ -59,6 +60,8 @@ export function generateAllCodegenOutputs(config: CodegenConfig, options?: Gener
     generateAppPage(config),
     generateTest(config),
     generateRbacSql(config),
+    // 建表迁移: 没有它，生成的 Repository 会查一张不存在的表（内存回退下看不出来）
+    generateTableDdl(config),
     {
       path: "codegen-manifest.json",
       type: "manifest" as any,

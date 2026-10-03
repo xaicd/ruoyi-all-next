@@ -18,6 +18,7 @@ import fs from "node:fs"
 import path from "node:path"
 
 import type { CodegenConfig } from "../packages/domains/infra/backend/services/codegen-templates"
+import { tableDdl } from "../packages/domains/infra/backend/services/codegen-templates/column-type"
 
 const ROOT = path.resolve(__dirname, "..")
 const MIGRATIONS_DIR = path.join(ROOT, "prisma", "migrations")
@@ -28,79 +29,10 @@ const MIGRATIONS_DIR = path.join(ROOT, "prisma", "migrations")
  * `precision`/`scale`/`maxLength` 若在元数据里声明了就**照用** —— 不能一律给默认值：
  * 例如 `master_pool_tokens` 是 10 亿量级，落到 INTEGER 会**溢出**，必须 BIGINT。
  */
-function pgType(column: {
-  name: string
-  type: string
-  isPk?: boolean
-  maxLength?: number
-  precision?: number
-  scale?: number
-}): string {
-  // 主键走 TEXT，与仓库既有迁移一致（id 是应用侧生成的字符串，不是自增列）。
-  if (column.isPk || column.name === "id") return "TEXT"
-  switch (column.type) {
-    case "varchar":
-      if (column.maxLength) return `VARCHAR(${column.maxLength})`
-      // 租户/外键类给窄一点，正文类宽一些；统一 VARCHAR 避免 TEXT 无法建唯一索引的坑。
-      return column.name === "tenant_id" ? "VARCHAR(64)" : "VARCHAR(255)"
-    case "text":
-      return "TEXT"
-    case "int":
-      return "INTEGER"
-    case "bigint":
-      return "BIGINT"
-    case "timestamp":
-      return "TIMESTAMP(3)"
-    case "decimal":
-      return `DECIMAL(${column.precision ?? 18},${column.scale ?? 4})`
-    case "boolean":
-      return "BOOLEAN"
-    default:
-      return "VARCHAR(255)"
-  }
-}
-
-/** 字面量默认值 -> SQL 片段（字符串要加引号；null 表示 DEFAULT NULL，显式写出）。 */
-function defaultFromLiteral(value: unknown): string | null {
-  if (value === undefined) return null
-  if (value === null) return "NULL"
-  if (typeof value === "number" || typeof value === "boolean") return String(value)
-  return `'${String(value).replace(/'/g, "''")}'`
-}
-
-function columnLine(column: {
-  name: string
-  type: string
-  nullable: boolean
-  isPk?: boolean
-  defaultValueTyped?: unknown
-  defaultSql?: string
-  maxLength?: number
-  precision?: number
-  scale?: number
-}): string {
-  const parts = [`    "${column.name}" ${pgType(column)}`]
-  if (column.nullable !== true) parts.push("NOT NULL")
-  // 默认值必须一起带上 —— 只建列不建默认值会静默改变语义。
-  const literal = defaultFromLiteral(column.defaultValueTyped)
-  const sqlDefault = column.defaultSql ?? literal
-  if (sqlDefault !== null) parts.push(`DEFAULT ${sqlDefault}`)
-  return parts.join(" ")
-}
-
+// 类型映射与 DDL 生成在 codegen 模板侧（**单一真源**）—— 两边各写一份映射迟早漂移。
+// 本文件只做编排: 元数据表定义 -> 迁移文件。
 function tableSql(table: CodegenConfig): string {
-  const columns = table.table.columns ?? []
-  const pk = columns.filter((column) => column.isPk).map((column) => column.name)
-  const lines = columns.map(columnLine)
-  if (pk.length > 0) {
-    lines.push(`    CONSTRAINT "${table.table.name}_pkey" PRIMARY KEY (${pk.map((name) => `"${name}"`).join(", ")})`)
-  }
-  const statements = [`CREATE TABLE "${table.table.name}" (\n${lines.join(",\n")}\n);`]
-  // 多租户过滤（AGENTS §4.8）几乎总是按 tenant_id 走，补索引。
-  if (columns.some((column) => column.name === "tenant_id")) {
-    statements.push(`CREATE INDEX "${table.table.name}_tenant_id_idx" ON "${table.table.name}"("tenant_id");`)
-  }
-  return `-- ${table.table.comment ?? table.businessName}\n${statements.join("\n")}`
+  return tableDdl({ name: table.table.name, comment: table.table.comment, columns: table.table.columns ?? [] })
 }
 
 function main() {
