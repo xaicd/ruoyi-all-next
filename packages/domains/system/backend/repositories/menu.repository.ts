@@ -4,10 +4,8 @@
 
 import { randomUUID } from "node:crypto"
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
+import { withCompanionMenuCatalogs, withCompanionPackageMenuIds } from "@/modules/shared/backend/constants/companion-menu"
 import { SEED_MENUS } from "@prisma/data"
-import { withOnlineMenuCatalog } from "@/modules/online/contract/menu-catalog"
-import { withAigwMenuCatalog } from "@/modules/aigw/contract/menu-catalog"
-import { withAiMenuCatalog } from "@/modules/ai/contract/menu-catalog"
 
 export type SystemMenuRow = {
   id: string
@@ -54,7 +52,7 @@ const LEGACY_PURGE_IDS = new Set([
 ])
 
 // === 内存存储（由 RuoYi 原始 SQL 全量生成 + Online 扩展 + AIGW 模型中台 + AI 应用） ===
-const MEMORY_STORE: SystemMenuRow[] = withAiMenuCatalog(withAigwMenuCatalog(withOnlineMenuCatalog(SEED_MENUS)))
+const MEMORY_STORE: SystemMenuRow[] = withCompanionMenuCatalogs(SEED_MENUS)
 
 let memoryIdSeq = 5000
 

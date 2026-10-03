@@ -3,7 +3,7 @@
  * 域名真源是 domain-catalog.json，本文件只决定「这次克隆保留哪些域」。
  */
 
-const PROFILES = Object.freeze(["minimal", "standard", "vertical", "creator"])
+const PROFILES = Object.freeze(["base", "minimal", "standard", "vertical", "creator"])
 
 /** system/infra 通过 Facade 依赖这些业务域；裁掉会导致基座无法编译。 */
 const PLATFORM_COMPANIONS = Object.freeze(["online", "ai", "aigw"])
@@ -35,7 +35,7 @@ function parseArgv(argv) {
   const args = argv.slice(2)
   const out = {
     target: undefined,
-    profile: "standard",
+    profile: "base",
     bundle: [],
     help: false,
     dryRun: false,
@@ -79,7 +79,9 @@ function parseArgv(argv) {
     throw new Error(`多余位置参数: ${arg}`)
   }
 
-  if (out.bundle.length > 0 && out.profile === "standard") {
+  // 只给 --bundle 不给 --profile 时，自动升到 vertical
+  // （base/standard 都视作"没显式选"，否则 --bundle 会被 base 的校验误拒）
+  if (out.bundle.length > 0 && (out.profile === "base" || out.profile === "standard")) {
     out.profile = "vertical"
   }
 
@@ -88,10 +90,11 @@ function parseArgv(argv) {
 
 function helpText() {
   return `用法:
-  npm run project:create -- <目标路径> [--profile minimal|standard|vertical|creator] [--bundle mall,crm]
+  npm run project:create -- <目标路径> [--profile base|minimal|standard|vertical|creator] [--bundle mall,crm]
 
 Profile:
   standard  整仓（默认，DigitalStaff NPC 全能力模板）
+  base      shared + system + infra（**默认**：最轻，起项目/预览最快；平台伴生域按需动态加载）
   minimal   shared + system + infra + 平台伴生域 (online/ai/aigw)
   vertical  minimal + --bundle 业务域白名单
   creator   等同 standard（含 online/codegen）
@@ -124,7 +127,7 @@ function platformDomainNames(catalog) {
 }
 
 function resolveHatchPlan(catalog, options = {}) {
-  const profile = String(options.profile || "standard").toLowerCase()
+  const profile = String(options.profile || "base").toLowerCase()
   const requestedBundle = unique(options.bundle || [])
 
   if (!PROFILES.includes(profile)) {
@@ -142,8 +145,8 @@ function resolveHatchPlan(catalog, options = {}) {
     throw new Error("vertical profile 必须提供 --bundle（例如 --bundle mall,crm）")
   }
 
-  if (profile === "minimal" && requestedBundle.length > 0) {
-    throw new Error("minimal 不能叠加 --bundle；请改用 --profile vertical --bundle ...")
+  if ((profile === "minimal" || profile === "base") && requestedBundle.length > 0) {
+    throw new Error(`${profile} 不能叠加 --bundle；请改用 --profile vertical --bundle ...`)
   }
 
   const platform = platformDomainNames(catalog)
@@ -153,7 +156,14 @@ function resolveHatchPlan(catalog, options = {}) {
   let selected = []
   let includeClients = true
 
-  if (profile === "minimal") {
+  if (profile === "base") {
+    // 新工程的**默认**形态: 只要平台地基（system + infra）。
+    // 目标是把"起一个工程"做到最轻 —— 加载、运行、预览都快，定制扩展也快；
+    // 需要什么能力再按 --profile / --bundle 逐步加进来。
+    // 为此，平台伴生域（online/ai/aigw）对 system/infra 的依赖已改为**按需动态加载**。
+    selected = unique([...platform])
+    includeClients = false
+  } else if (profile === "minimal") {
     selected = unique([...platform, ...companions])
     includeClients = false
   } else if (profile === "vertical") {

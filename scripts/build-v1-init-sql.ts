@@ -6,10 +6,8 @@ import { createHash } from "node:crypto"
 import { SEED_DEPTS } from "../prisma/data/depts.seed-data"
 import { SEED_DICT_DATA } from "../prisma/data/dict-data.seed-data"
 import { SEED_DICT_TYPES } from "../prisma/data/dict-types.seed-data"
+import { withCompanionMenuCatalogs, withCompanionPackageMenuIds } from "@/modules/shared/backend/constants/companion-menu"
 import { SEED_MENUS } from "../prisma/data/menus.seed-data"
-import { withOnlineMenuCatalog } from "@/modules/online/contract/menu-catalog"
-import { withAigwMenuCatalog } from "@/modules/aigw/contract/menu-catalog"
-import { withAiMenuCatalog } from "@/modules/ai/contract/menu-catalog"
 import { SEED_POSTS } from "../prisma/data/posts.seed-data"
 import { SEED_ROLES } from "../prisma/data/roles.seed-data"
 import { SEED_TENANT_PACKAGES } from "../prisma/data/tenant-packages.seed-data"
@@ -59,7 +57,7 @@ async function main() {
   })
 
   // 2. 组装全量纯净 SEED 数据
-  const fullMenus = withAiMenuCatalog(withAigwMenuCatalog(withOnlineMenuCatalog(SEED_MENUS)))
+  const fullMenus = withCompanionMenuCatalogs((SEED_MENUS)))
 
   // 拓扑排序 Menus
   const ids = new Set(fullMenus.map((m) => m.id))

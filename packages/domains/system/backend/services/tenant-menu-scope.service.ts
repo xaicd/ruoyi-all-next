@@ -1,7 +1,5 @@
+import { withCompanionMenuCatalogs, withCompanionPackageMenuIds } from "@/modules/shared/backend/constants/companion-menu"
 import { SystemMenuRepository, type SystemMenuRow } from "@/modules/system/backend/repositories/menu.repository"
-import { withOnlinePackageMenuIds } from "@/modules/online/contract/menu-catalog"
-import { withAigwPackageMenuIds } from "@/modules/aigw/contract/menu-catalog"
-import { withAiPackageMenuIds } from "@/modules/ai/contract/menu-catalog"
 
 
 
@@ -95,7 +93,7 @@ export async function getTenantPackageCandidateMenuIds(): Promise<string[]> {
 
 /** Effective tenant authorization: package membership intersected with the safe tenant catalog. */
 export async function getTenantAssignableMenuIds(packageMenuIds: Iterable<string>): Promise<Set<string>> {
-  return new Set((await currentScope()).normalize(withAiPackageMenuIds(withAigwPackageMenuIds(withOnlinePackageMenuIds(packageMenuIds)))))
+  return new Set((await currentScope()).normalize(withCompanionPackageMenuIds(packageMenuIds)))
 }
 
 

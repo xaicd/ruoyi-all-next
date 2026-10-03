@@ -5,10 +5,8 @@ import { Client } from "pg"
 import { SEED_DEPTS } from "../prisma/data/depts.seed-data"
 import { SEED_DICT_DATA } from "../prisma/data/dict-data.seed-data"
 import { SEED_DICT_TYPES } from "../prisma/data/dict-types.seed-data"
+import { withCompanionPackageMenuIds } from "@/modules/shared/backend/constants/companion-menu"
 import { SEED_MENUS } from "../prisma/data/menus.seed-data"
-import { withOnlineMenuCatalog, withOnlinePackageMenuIds } from "@/modules/online/contract/menu-catalog"
-import { withAigwMenuCatalog, withAigwPackageMenuIds } from "@/modules/aigw/contract/menu-catalog"
-import { withAiMenuCatalog } from "@/modules/ai/contract/menu-catalog"
 import { INFRA_CONFIG_DEFAULTS } from "@/modules/infra/backend/repositories/config.repository"
 import { SEED_POSTS } from "../prisma/data/posts.seed-data"
 import { SEED_ROLES } from "../prisma/data/roles.seed-data"
@@ -46,11 +44,33 @@ function assertStrongBootstrapPassword(password: string): void {
     throw new Error("ADMIN_BOOTSTRAP_PASSWORD must be at least 12 characters and include uppercase, lowercase, number, and symbol; admin123 is forbidden.")
   }
 }
-function fullMenuCatalog() {
-  return withAiMenuCatalog(withAigwMenuCatalog(withOnlineMenuCatalog(SEED_MENUS)))
+/**
+ * 菜单目录 = 基座菜单 + **各"平台伴生域"自己的菜单**（域若存在才并入）。
+ *
+ * 为什么动态加载: 新工程默认只要 `system` + `infra`（加载/运行/预览都快），
+ * 此时 online/ai/aigw 会被裁掉。静态 import 会让裁剪后的种子直接崩，
+ * 而"该域在不在"只有运行时才知道。
+ */
+async function fullMenuCatalog(): Promise<Array<{ id: string }>> {
+  const companions: Array<[string, string]> = [
+    ["online", "withOnlineMenuCatalog"],
+    ["aigw", "withAigwMenuCatalog"],
+    ["ai", "withAiMenuCatalog"],
+  ]
+  let catalog: Array<{ id: string }> = SEED_MENUS
+  for (const [domain, exportName] of companions) {
+    try {
+      const mod = (await import(`@/modules/${domain}/contract/menu-catalog`)) as Record<string, (menus: never) => never>
+      const wrap = mod[exportName]
+      if (typeof wrap === "function") catalog = wrap(catalog as never) as never
+    } catch {
+      // 该域不在本工程内 —— 跳过它的菜单，属于预期情况
+    }
+  }
+  return catalog
 }
-function insertableMenus() {
-  const catalog = fullMenuCatalog()
+async function insertableMenus() {
+  const catalog = await fullMenuCatalog()
   const ids = new Set(catalog.map((menu) => menu.id))
   const pending = catalog.map((menu) => ({ ...menu, parentId: menu.parentId && ids.has(menu.parentId) ? menu.parentId : null }))
   const ordered: typeof pending = []
@@ -136,13 +156,13 @@ async function main() {
     await client.query(`DELETE FROM system_role_menu WHERE menu_id LIKE 'ys-%' OR menu_id LIKE 'ai-gateway-%' OR menu_id LIKE '90%' OR menu_id LIKE '91%' OR menu_id LIKE '92%' OR menu_id LIKE '93%' OR menu_id LIKE '94%'`)
     await client.query(`DELETE FROM system_tenant_package_menu WHERE menu_id LIKE 'ys-%' OR menu_id LIKE 'ai-gateway-%' OR menu_id LIKE '90%' OR menu_id LIKE '91%' OR menu_id LIKE '92%' OR menu_id LIKE '93%' OR menu_id LIKE '94%'`)
 
-    for (const menu of insertableMenus()) {
+    for (const menu of await insertableMenus()) {
       await client.query(`INSERT INTO system_menu (id, name, permission, type, parent_id, path, component, icon, sort, status, visible, keep_alive, created_at, updated_at, deleted) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,false) ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, permission = EXCLUDED.permission, type = EXCLUDED.type, parent_id = EXCLUDED.parent_id, path = EXCLUDED.path, component = EXCLUDED.component, icon = EXCLUDED.icon, sort = EXCLUDED.sort, status = EXCLUDED.status, visible = EXCLUDED.visible, keep_alive = EXCLUDED.keep_alive, updated_at = EXCLUDED.updated_at, deleted = false`, [menu.id, menu.name, menu.permission, menu.type, menu.parentId, menu.path, menu.component, menu.icon, menu.sort, menu.status, menu.visible, menu.keepAlive, menu.createdAt, menu.updatedAt])
     }
-    const tenantMenuScope = new TenantMenuScope(fullMenuCatalog())
+    const tenantMenuScope = new TenantMenuScope(await fullMenuCatalog())
     for (const pkg of SEED_TENANT_PACKAGES) {
       await client.query(`DELETE FROM system_tenant_package_menu WHERE package_id = $1`, [pkg.id])
-      for (const menuId of tenantMenuScope.normalize(withAigwPackageMenuIds(withOnlinePackageMenuIds(pkg.menuIds)))) await client.query(`INSERT INTO system_tenant_package_menu (id, package_id, menu_id) VALUES ($1,$2,$3) ON CONFLICT (package_id, menu_id) DO NOTHING`, [randomUUID(), pkg.id, menuId])
+      for (const menuId of tenantMenuScope.normalize(withCompanionPackageMenuIds(pkg.menuIds))) await client.query(`INSERT INTO system_tenant_package_menu (id, package_id, menu_id) VALUES ($1,$2,$3) ON CONFLICT (package_id, menu_id) DO NOTHING`, [randomUUID(), pkg.id, menuId])
     }
     // Historical all-next draft packages were not sourced from RuoYi. Keep rows for audit,
     // but remove them from the catalog after the demo tenant is reassigned to package 111.
@@ -155,10 +175,10 @@ async function main() {
     if (!roleId || !platformRoleId) throw new Error("super_admin and platform-admin roles must be seeded")
     for (const assignedRoleId of [roleId, platformRoleId]) {
       await client.query(`INSERT INTO system_user_role (id, user_id, role_id) VALUES ($1,$2,$3) ON CONFLICT (user_id, role_id) DO NOTHING`, [randomUUID(), adminId, assignedRoleId])
-      for (const menu of insertableMenus()) await client.query(`INSERT INTO system_role_menu (id, role_id, menu_id) VALUES ($1,$2,$3) ON CONFLICT (role_id, menu_id) DO NOTHING`, [randomUUID(), assignedRoleId, menu.id])
+      for (const menu of await insertableMenus()) await client.query(`INSERT INTO system_role_menu (id, role_id, menu_id) VALUES ($1,$2,$3) ON CONFLICT (role_id, menu_id) DO NOTHING`, [randomUUID(), assignedRoleId, menu.id])
     }
     await client.query("COMMIT")
-    console.log(`[seed] PostgreSQL catalog seeded: ${SEED_ROLES.length} roles, ${SEED_DEPTS.length} departments, ${SEED_POSTS.length} posts, ${SEED_DICT_TYPES.length} dictionary types, ${SEED_DICT_DATA.length} dictionary entries, and ${fullMenuCatalog().length} menus.`)
+    console.log(`[seed] PostgreSQL catalog seeded: ${SEED_ROLES.length} roles, ${SEED_DEPTS.length} departments, ${SEED_POSTS.length} posts, ${SEED_DICT_TYPES.length} dictionary types, ${SEED_DICT_DATA.length} dictionary entries, and ${(await fullMenuCatalog()).length} menus.`)
   } catch (error) {
     await client.query("ROLLBACK")
     throw error

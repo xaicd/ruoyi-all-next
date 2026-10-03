@@ -1,6 +1,25 @@
-import { withOnlinePackageMenuIds } from "@/modules/online/contract/menu-catalog"
-import { withAigwPackageMenuIds } from "@/modules/aigw/contract/menu-catalog"
-import { withAiPackageMenuIds } from "@/modules/ai/contract/menu-catalog"
+
+/**
+ * 可选域提供的套餐菜单 ID 扩展。
+ *
+ * **不能用静态 import**: 新工程默认只要 `system` + `infra`（加载/运行/预览都快），
+ * 此时 online/aigw/ai 会被裁掉 —— 静态导入会让本文件在模块加载期直接崩。
+ * 这三个域只是"往套餐菜单里追加自己的菜单 ID"，域不在时应退化为**原样返回**。
+ */
+function optionalMenuIds(modulePath: string, exportName: string): (ids: string[]) => string[] {
+  try {
+    // tsx/Next 都会处理 TS 路径；域不存在时 require 抛错 -> 退化为恒等函数
+    const mod = require(modulePath) as Record<string, unknown>
+    const fn = mod[exportName]
+    return typeof fn === "function" ? (fn as (ids: string[]) => string[]) : (ids) => ids
+  } catch {
+    return (ids) => ids
+  }
+}
+
+const withOnlinePackageMenuIds = optionalMenuIds("@/modules/online/contract/menu-catalog", "withOnlinePackageMenuIds")
+const withAigwPackageMenuIds = optionalMenuIds("@/modules/aigw/contract/menu-catalog", "withAigwPackageMenuIds")
+const withAiPackageMenuIds = optionalMenuIds("@/modules/ai/contract/menu-catalog", "withAiPackageMenuIds")
 
 export type TenantPackageSeed = {
   id: string

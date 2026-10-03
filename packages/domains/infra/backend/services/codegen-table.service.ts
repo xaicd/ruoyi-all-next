@@ -4,7 +4,6 @@ import { CodegenEngineService } from "@/modules/infra/backend/services/codegen-e
 import { SchemaReaderService } from "@/modules/infra/backend/services/schema-reader.service"
 import type { CodegenAdvancedConfig, CodegenScene, CodegenTemplate } from "@/modules/infra/contract/codegen.types"
 import type { CodegenCandidateQueryInput, CodegenImportInput } from "@/modules/infra/backend/validators"
-import { onlineFacade } from "@/modules/online/contract/online.facade"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 
 type OnlineDefinitionPage = {
@@ -36,7 +35,26 @@ type CodegenImportPayload = {
   advanced: CodegenAdvancedConfig
 }
 
-async function unwrap<T>(result: { success: boolean; error?: string; data?: unknown }, message: string): Promise<T> {
+/**
+ * 按需获取 online 域的公开面。
+ *
+ * **不能静态导入**: `online` 属"平台伴生域"，孵化时可以裁掉它
+ * （新工程默认只要 system+infra，加载/运行/预览都快）。静态导入会让裁剪后的
+ * 工程直接编译失败 —— 而这些依赖只在实际调用 codegen 时才需要。
+ * 动态导入 + 明确的错误提示，既保住了能力，也让裁剪成为可能。
+ */
+async function requireOnlineFacade() {
+  try {
+    const mod = await import("@/modules/online/contract/online.facade")
+    return mod.onlineFacade
+  } catch {
+    throw new Error("该功能依赖 online 域（低代码在线表单），当前工程未包含它")
+  }
+}
+
+// 这是**同步**解包: 只做 success 判定 + 取 data。签名此前写成 Promise<T> 却返回 T，
+// 属于潜在缺陷（调用方 await 一个非 Promise 值）。这里改回同步签名。
+function unwrap<T>(result: { success: boolean; error?: string; data?: unknown }, message: string): T {
   if (!result.success) throw new Error(result.error ?? message)
   return result.data as T
 }
@@ -46,7 +64,7 @@ async function publishedDefinitions(tenantId: string) {
   let page = 1
   while (true) {
     const data = await unwrap<OnlineDefinitionPage>(
-      await onlineFacade.pageDefinitions({ tenantId, page, pageSize: 100, status: "ACTIVE" }, { caller: "infra.codegen" }),
+      await (await requireOnlineFacade()).pageDefinitions({ tenantId, page, pageSize: 100, status: "ACTIVE" }, { caller: "infra.codegen" }),
       "online pageDefinitions 调用失败",
     )
     items.push(...data.items.filter((item) => item.publishedReleaseId && item.currentRelease))
@@ -158,7 +176,7 @@ export class CodegenTableService {
     const onlineCandidates = await Promise.all(definitions.map(async (definition) => {
       const releaseId = definition.publishedReleaseId!
       const runtime = await unwrap<PublishedRelease>(
-        await onlineFacade.resolvePublishedRelease({ tenantId: input.tenantId, definitionCode: definition.code, releaseId }, { caller: "infra.codegen" }),
+        await (await requireOnlineFacade()).resolvePublishedRelease({ tenantId: input.tenantId, definitionCode: definition.code, releaseId }, { caller: "infra.codegen" }),
         "online resolvePublishedRelease 调用失败",
       )
       return {
@@ -220,7 +238,7 @@ export class CodegenTableService {
       const existing = await CodegenTableRepository.findByOnlineRelease({ tenantId: input.tenantId, definitionCode: candidate.definitionCode, releaseId: candidate.releaseId })
       if (existing) { skipped.push(candidate.definitionCode); continue }
       const payload = await unwrap<CodegenImportPayload>(
-        await onlineFacade.resolveCodegenImport({ tenantId: input.tenantId, definitionCode: candidate.definitionCode, releaseId: candidate.releaseId }, { caller: "infra.codegen" }),
+        await (await requireOnlineFacade()).resolveCodegenImport({ tenantId: input.tenantId, definitionCode: candidate.definitionCode, releaseId: candidate.releaseId }, { caller: "infra.codegen" }),
         "online resolveCodegenImport 调用失败",
       )
       const tableName = onlineStorageName(input.tenantId, payload.definitionCode, payload.releaseId)

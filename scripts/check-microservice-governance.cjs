@@ -176,11 +176,18 @@ if (codegenTableService.includes("OnlineDefinitionService") || codegenTableServi
   fail("CodegenTableService must not import online Service/Repository; use onlineFacade")
 }
 if (!codegenTableService.includes("onlineFacade")) fail("CodegenTableService must call online through onlineFacade")
-if (!codegenTableService.includes("onlineFacade.resolveCodegenImport")) fail("CodegenTableService must call online through onlineFacade.resolveCodegenImport")
+// online 现在通过**按需加载**获得（域可被裁剪），故判据放宽为"经由 online 门面调用"，
+  // 而不绑定具体的取用写法 —— 原判据在线改为动态加载后会误报。
+  if (!codegenTableService.includes("resolveCodegenImport") || !codegenTableService.includes("modules/online/contract/online.facade")) {
+    fail("CodegenTableService must call online through the online facade (resolveCodegenImport)")
+  }
 
-const onlineAdapterPath = path.join(domainPathOf(ROOT, "online"), "backend", "application", "online-codegen.adapter.ts")
-const onlineAdapter = fs.readFileSync(onlineAdapterPath, "utf8")
-if (onlineAdapter.includes("codegen-engine.service")) fail("online-codegen.adapter must import codegen types from infra contract, not the engine service")
+// 同 report/pay: 域可能被裁剪（base profile 只留 system+infra），读前先确认它在。
+if (hasDomain("online")) {
+  const onlineAdapterPath = path.join(domainPathOf(ROOT, "online"), "backend", "application", "online-codegen.adapter.ts")
+  const onlineAdapter = fs.readFileSync(onlineAdapterPath, "utf8")
+  if (onlineAdapter.includes("codegen-engine.service")) fail("online-codegen.adapter must import codegen types from infra contract, not the engine service")
+}
 
 // 域可能被裁剪（孵化时的 profile/bundle）—— 检查**存在的域**，不假设存在的域。
 // 少了这个守卫，裁剪过的工程 readFileSync 会直接 ENOENT 崩掉，
@@ -356,12 +363,15 @@ for (const relPath of [
   if (!source.includes("InfraPageService")) fail(`${relPath} must call InfraPageService`)
 }
 
-const onlineDefinitionPath = path.join(domainPathOf(ROOT, "online"), "backend", "services", "online-definition.service.ts")
-const onlineDefinition = fs.readFileSync(onlineDefinitionPath, "utf8")
-if (onlineDefinition.includes("CodegenEngineService")) fail("online-definition must not import CodegenEngineService; use infraPlatformFacade")
-if (!onlineDefinition.includes("infraPlatformFacade")) fail("online-definition must call infra codegen through infraPlatformFacade")
-if (onlineDefinition.includes("SystemDictService")) fail("online-definition must not import SystemDictService; use systemPublicFacade")
-if (!onlineDefinition.includes("systemPublicFacade")) fail("online-definition must call system dict through systemPublicFacade")
+// 同前: online 可被裁剪（base profile 只留 system+infra），读前先确认它在。
+if (hasDomain("online")) {
+  const onlineDefinitionPath = path.join(domainPathOf(ROOT, "online"), "backend", "services", "online-definition.service.ts")
+  const onlineDefinition = fs.readFileSync(onlineDefinitionPath, "utf8")
+  if (onlineDefinition.includes("CodegenEngineService")) fail("online-definition must not import CodegenEngineService; use infraPlatformFacade")
+  if (!onlineDefinition.includes("infraPlatformFacade")) fail("online-definition must call infra codegen through infraPlatformFacade")
+  if (onlineDefinition.includes("SystemDictService")) fail("online-definition must not import SystemDictService; use systemPublicFacade")
+  if (!onlineDefinition.includes("systemPublicFacade")) fail("online-definition must call system dict through systemPublicFacade")
+}
 
 const exposure = rpcActions.exposure
 if (!exposure?.system || JSON.stringify(exposure.system.public) !== JSON.stringify(["getDictDataByType", "getPermissionInfoByUser"])) {
@@ -414,8 +424,13 @@ for (const domain of businessDomains) {
 
 // 自检: 这条规则曾经因为"扫描根写死 + 业务层为空"而**空转**（一个文件都不查，
 // 而 check 仍然是绿的）。加一条下限断言，让它不可能再静默变成空转。
-if (layeringCheckedFiles === 0) {
-  fail("跨域分层检查没有扫描到任何文件 —— 扫描根或域清单可能又写死了")
+//
+// 但要区分两种情况:
+//   * 工程**压根没有业务/插件域**（如 base profile 只留 system+infra）—— 无事可查，正常
+//   * 工程**有域却一个文件都没扫到** —— 规则空转，必须失败
+const scannableDomains = [...(domainCatalog.layers.business?.domains ?? []), ...(domainCatalog.layers.plugin?.domains ?? [])]
+if (scannableDomains.length > 0 && layeringCheckedFiles === 0) {
+  fail(`跨域分层检查没有扫描到任何文件（本工程有 ${scannableDomains.length} 个业务/插件域）—— 扫描根或域清单可能又写死了`)
 }
 
 for (const file of walkTsFiles(path.join(ROOT, "packages", "shared"))) {
