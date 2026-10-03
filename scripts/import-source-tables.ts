@@ -97,7 +97,10 @@ function parseEntity(file: string): ParsedTable | null {
     const mapped = columnType(javaType)
     if (!mapped) continue
 
-    const comment = javadoc.filter(Boolean).slice(0, 1).join("") || name
+    // 注释进 JSX 前必须干净: 源框架的 javadoc 里常有 `{@link X#y()}` 这类内联标签，
+    // 原样带进去会在**编译期**炸（JSX 把 `{` 当表达式起始）。
+    const rawComment = javadoc.filter(Boolean).slice(0, 1).join("") || name
+    const comment = rawComment.replace(/\{@[a-z]+\s+[^}]*\}/gi, "").replace(/\s+/g, " ").trim() || name
     const isPrimitive = JAVA_PRIMITIVES.has(javaType.trim())
     // 主键判定: 标注了 @TableId，**或者**列名就叫 id —— 后者是稳妥兜底。
     // 漏判的后果不是报错而是"建出来的表没有主键"（实测踩到: 源框架有的实体没写 @TableId）。

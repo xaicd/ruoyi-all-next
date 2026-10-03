@@ -1,0 +1,47 @@
+-- ============================================================
+-- Auto-generated RBAC & Menu Migration for AiWrite（源框架导入） (AiWrite)
+-- ============================================================
+
+-- 1. 插入菜单目录/页面节点 (system_menu)
+INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type, status, permission, create_time, update_time)
+VALUES (
+  'menu-ai-write',
+  'ai-dir',
+  'AiWrite（源框架导入）管理',
+  '/admin/ai/ai-write',
+  'ai/ai-write/index',
+  'table',
+  10,
+  'MENU',
+  'ACTIVE',
+  'ai:ai_write:view',
+  NOW(),
+  NOW()
+)
+ON CONFLICT (id) DO NOTHING;
+
+-- 2. 插入 4 大动词按钮权限
+INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
+('menu-ai-write-query',  'menu-ai-write', '查询AiWrite（源框架导入）', 'BUTTON', 'ACTIVE', 'ai:ai_write:query',  1, NOW(), NOW()),
+('menu-ai-write-create', 'menu-ai-write', '新增AiWrite（源框架导入）', 'BUTTON', 'ACTIVE', 'ai:ai_write:create', 2, NOW(), NOW()),
+('menu-ai-write-update', 'menu-ai-write', '修改AiWrite（源框架导入）', 'BUTTON', 'ACTIVE', 'ai:ai_write:update', 3, NOW(), NOW()),
+('menu-ai-write-delete', 'menu-ai-write', '删除AiWrite（源框架导入）', 'BUTTON', 'ACTIVE', 'ai:ai_write:delete', 4, NOW(), NOW())
+ON CONFLICT (id) DO NOTHING;
+
+-- 3. 关联管理员角色 (system_role_menu)
+INSERT INTO system_role_menu (role_id, menu_id) VALUES
+('1', 'menu-ai-write'),
+('1', 'menu-ai-write-query'),
+('1', 'menu-ai-write-create'),
+('1', 'menu-ai-write-update'),
+('1', 'menu-ai-write-delete')
+ON CONFLICT DO NOTHING;
+
+-- 4. 挂载系统租户套餐 (system_tenant_package_menu，实现租户开户默认立即可见)
+INSERT INTO system_tenant_package_menu (package_id, menu_id) VALUES
+('1', 'menu-ai-write'),
+('1', 'menu-ai-write-query'),
+('1', 'menu-ai-write-create'),
+('1', 'menu-ai-write-update'),
+('1', 'menu-ai-write-delete')
+ON CONFLICT DO NOTHING;

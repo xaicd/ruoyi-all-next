@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { BpmOaleaveService } from "@/modules/bpm/backend/services/bpm-oaleave.service"
+import { BpmOALeaveService } from "@/modules/bpm/backend/services/bpm-oaleave.service"
 
 export async function GET(request: Request) {
   try {
@@ -9,7 +9,7 @@ export async function GET(request: Request) {
       pageSize: Number(searchParams.get("pageSize") || 20),
       keyword: searchParams.get("keyword") || undefined,
     }
-    const data = await BpmOaleaveService.page(input)
+    const data = await BpmOALeaveService.page(input)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message || "查询失败" }, { status: 400 })
@@ -19,7 +19,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const data = await BpmOaleaveService.create(body)
+    const data = await BpmOALeaveService.create(body)
     return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message || "创建失败" }, { status: 400 })

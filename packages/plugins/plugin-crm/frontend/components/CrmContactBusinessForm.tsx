@@ -1,0 +1,112 @@
+"use client"
+
+import React, { useState, useEffect } from "react"
+import { CrmContactBusinessApi } from "../api/crm-contact-business.api"
+import type { CrmContactBusinessCreateDTO, CrmContactBusinessVO } from "@/modules/crm/backend/types/crm-contact-business.types"
+
+interface CrmContactBusinessFormProps {
+  open: boolean
+  initialData?: CrmContactBusinessVO | null
+  onClose: () => void
+  onSuccess: () => void
+}
+
+export function CrmContactBusinessForm({ open, initialData, onClose, onSuccess }: CrmContactBusinessFormProps) {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [formData, setFormData] = useState<Record<string, any>>({})
+
+  useEffect(() => {
+    if (open) {
+      setError(null)
+      setFormData({
+    contact_id: initialData?.contact_id ?? undefined,
+    business_id: initialData?.business_id ?? undefined,
+      })
+    }
+  }, [open, initialData])
+
+  if (!open) return null
+
+  const isEdit = Boolean(initialData?.id)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+    try {
+      if (isEdit && initialData?.id) {
+        await CrmContactBusinessApi.update({ id: initialData.id, ...formData } as any)
+      } else {
+        await CrmContactBusinessApi.create(formData as CrmContactBusinessCreateDTO)
+      }
+      onSuccess()
+      onClose()
+    } catch (err: any) {
+      setError(err?.message || "操作失败")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+          <h3 className="text-sm font-semibold text-slate-800">
+            {isEdit ? "编辑CrmContactBusiness（源框架导入）" : "新增CrmContactBusiness（源框架导入）"}
+          </h3>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
+            {error && (
+              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+            )}
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">联系人编号</label>
+          <input
+            type="number"
+            value={formData.contact_id != null ? String(formData.contact_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, contact_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入联系人编号"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">商机编号</label>
+          <input
+            type="number"
+            value={formData.business_id != null ? String(formData.business_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, business_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入商机编号"
+            
+          />
+        </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-2 px-6 py-3 border-t border-slate-200 bg-slate-50">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
+            >
+              取消
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
+            >
+              {loading ? "保存中..." : "保存"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}

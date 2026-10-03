@@ -1,0 +1,228 @@
+"use client"
+
+import React, { useState, useEffect } from "react"
+import { MesWmMaterialStockApi } from "../api/mes-wm-material-stock.api"
+import type { MesWmMaterialStockCreateDTO, MesWmMaterialStockVO } from "@/modules/mes/backend/types/mes-wm-material-stock.types"
+
+interface MesWmMaterialStockFormProps {
+  open: boolean
+  initialData?: MesWmMaterialStockVO | null
+  onClose: () => void
+  onSuccess: () => void
+}
+
+export function MesWmMaterialStockForm({ open, initialData, onClose, onSuccess }: MesWmMaterialStockFormProps) {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [formData, setFormData] = useState<Record<string, any>>({})
+
+  useEffect(() => {
+    if (open) {
+      setError(null)
+      setFormData({
+    item_type_id: initialData?.item_type_id ?? undefined,
+    item_id: initialData?.item_id ?? undefined,
+    batch_id: initialData?.batch_id ?? undefined,
+    batch_code: initialData?.batch_code ?? "",
+    warehouse_id: initialData?.warehouse_id ?? undefined,
+    location_id: initialData?.location_id ?? undefined,
+    area_id: initialData?.area_id ?? undefined,
+    vendor_id: initialData?.vendor_id ?? undefined,
+    quantity: initialData?.quantity ?? undefined,
+    receipt_time: initialData?.receipt_time ?? "",
+    frozen: initialData?.frozen ?? false,
+      })
+    }
+  }, [open, initialData])
+
+  if (!open) return null
+
+  const isEdit = Boolean(initialData?.id)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+    try {
+      if (isEdit && initialData?.id) {
+        await MesWmMaterialStockApi.update({ id: initialData.id, ...formData } as any)
+      } else {
+        await MesWmMaterialStockApi.create(formData as MesWmMaterialStockCreateDTO)
+      }
+      onSuccess()
+      onClose()
+    } catch (err: any) {
+      setError(err?.message || "操作失败")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+          <h3 className="text-sm font-semibold text-slate-800">
+            {isEdit ? "编辑MesWmMaterialStock（源框架导入）" : "新增MesWmMaterialStock（源框架导入）"}
+          </h3>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
+            {error && (
+              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+            )}
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">物料分类编号</label>
+          <input
+            type="number"
+            value={formData.item_type_id != null ? String(formData.item_type_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, item_type_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入物料分类编号"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">物料编号</label>
+          <input
+            type="number"
+            value={formData.item_id != null ? String(formData.item_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, item_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入物料编号"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">批次编号</label>
+          <input
+            type="number"
+            value={formData.batch_id != null ? String(formData.batch_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, batch_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入批次编号"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">批次号</label>
+          <input
+            type="text"
+            value={formData.batch_code ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, batch_code: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入批次号"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">仓库编号</label>
+          <input
+            type="number"
+            value={formData.warehouse_id != null ? String(formData.warehouse_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, warehouse_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入仓库编号"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">库区编号</label>
+          <input
+            type="number"
+            value={formData.location_id != null ? String(formData.location_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, location_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入库区编号"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">库位编号</label>
+          <input
+            type="number"
+            value={formData.area_id != null ? String(formData.area_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, area_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入库位编号"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">供应商编号</label>
+          <input
+            type="number"
+            value={formData.vendor_id != null ? String(formData.vendor_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, vendor_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入供应商编号"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">在库数量</label>
+          <input
+            type="number"
+            value={formData.quantity != null ? String(formData.quantity) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入在库数量"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">入库时间</label>
+          <input
+            type="text"
+            value={formData.receipt_time ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, receipt_time: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入入库时间"
+            
+          />
+        </div>
+
+        <div className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            id="frozen"
+            checked={Boolean(formData.frozen)}
+            onChange={(e) => setFormData((prev) => ({ ...prev, frozen: e.target.checked }))}
+            className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+          />
+          <label htmlFor="frozen" className="text-xs text-slate-700 font-medium">是否冻结</label>
+        </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-2 px-6 py-3 border-t border-slate-200 bg-slate-50">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
+            >
+              取消
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
+            >
+              {loading ? "保存中..." : "保存"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}

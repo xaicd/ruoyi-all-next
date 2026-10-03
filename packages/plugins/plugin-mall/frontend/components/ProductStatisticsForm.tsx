@@ -1,0 +1,242 @@
+"use client"
+
+import React, { useState, useEffect } from "react"
+import { ProductStatisticsApi } from "../api/product-statistics.api"
+import type { ProductStatisticsCreateDTO, ProductStatisticsVO } from "@/modules/mall/backend/types/product-statistics.types"
+
+interface ProductStatisticsFormProps {
+  open: boolean
+  initialData?: ProductStatisticsVO | null
+  onClose: () => void
+  onSuccess: () => void
+}
+
+export function ProductStatisticsForm({ open, initialData, onClose, onSuccess }: ProductStatisticsFormProps) {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [formData, setFormData] = useState<Record<string, any>>({})
+
+  useEffect(() => {
+    if (open) {
+      setError(null)
+      setFormData({
+    time: initialData?.time ?? "",
+    spu_id: initialData?.spu_id ?? undefined,
+    browse_count: initialData?.browse_count ?? undefined,
+    browse_user_count: initialData?.browse_user_count ?? undefined,
+    favorite_count: initialData?.favorite_count ?? undefined,
+    cart_count: initialData?.cart_count ?? undefined,
+    order_count: initialData?.order_count ?? undefined,
+    order_pay_count: initialData?.order_pay_count ?? undefined,
+    order_pay_price: initialData?.order_pay_price ?? undefined,
+    after_sale_count: initialData?.after_sale_count ?? undefined,
+    after_sale_refund_price: initialData?.after_sale_refund_price ?? undefined,
+    browse_convert_percent: initialData?.browse_convert_percent ?? undefined,
+      })
+    }
+  }, [open, initialData])
+
+  if (!open) return null
+
+  const isEdit = Boolean(initialData?.id)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+    try {
+      if (isEdit && initialData?.id) {
+        await ProductStatisticsApi.update({ id: initialData.id, ...formData } as any)
+      } else {
+        await ProductStatisticsApi.create(formData as ProductStatisticsCreateDTO)
+      }
+      onSuccess()
+      onClose()
+    } catch (err: any) {
+      setError(err?.message || "操作失败")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+          <h3 className="text-sm font-semibold text-slate-800">
+            {isEdit ? "编辑ProductStatistics（源框架导入）" : "新增ProductStatistics（源框架导入）"}
+          </h3>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
+            {error && (
+              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+            )}
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">统计日期</label>
+          <input
+            type="text"
+            value={formData.time ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, time: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入统计日期"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">商品 SPU 编号</label>
+          <input
+            type="number"
+            value={formData.spu_id != null ? String(formData.spu_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, spu_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入商品 SPU 编号"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">浏览量</label>
+          <input
+            type="number"
+            value={formData.browse_count != null ? String(formData.browse_count) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, browse_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入浏览量"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">访客量</label>
+          <input
+            type="number"
+            value={formData.browse_user_count != null ? String(formData.browse_user_count) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, browse_user_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入访客量"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">收藏数量</label>
+          <input
+            type="number"
+            value={formData.favorite_count != null ? String(formData.favorite_count) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, favorite_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入收藏数量"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">加购数量</label>
+          <input
+            type="number"
+            value={formData.cart_count != null ? String(formData.cart_count) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, cart_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入加购数量"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">下单件数</label>
+          <input
+            type="number"
+            value={formData.order_count != null ? String(formData.order_count) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, order_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入下单件数"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">支付件数</label>
+          <input
+            type="number"
+            value={formData.order_pay_count != null ? String(formData.order_pay_count) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, order_pay_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入支付件数"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">支付金额，单位：分</label>
+          <input
+            type="number"
+            value={formData.order_pay_price != null ? String(formData.order_pay_price) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, order_pay_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入支付金额，单位：分"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">退款件数</label>
+          <input
+            type="number"
+            value={formData.after_sale_count != null ? String(formData.after_sale_count) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, after_sale_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入退款件数"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">退款金额，单位：分</label>
+          <input
+            type="number"
+            value={formData.after_sale_refund_price != null ? String(formData.after_sale_refund_price) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, after_sale_refund_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入退款金额，单位：分"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">访客支付转化率（百分比）</label>
+          <input
+            type="number"
+            value={formData.browse_convert_percent != null ? String(formData.browse_convert_percent) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, browse_convert_percent: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入访客支付转化率（百分比）"
+            
+          />
+        </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-2 px-6 py-3 border-t border-slate-200 bg-slate-50">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
+            >
+              取消
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
+            >
+              {loading ? "保存中..." : "保存"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}

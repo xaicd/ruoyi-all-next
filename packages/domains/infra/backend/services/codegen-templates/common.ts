@@ -88,6 +88,21 @@ export interface CodegenOutput {
   type: "type" | "validator" | "repository" | "service" | "rpc" | "route" | "api" | "component" | "page" | "appPage" | "test" | "sql"
 }
 
+/**
+ * 把注释渲染成**安全的 JSX 文本**。
+ *
+ * 列注释来自数据源（表元数据 / 源框架 javadoc），可能含 `{` `}` `<` `>` ——
+ * 直接插进 JSX 会被当成表达式或标签，**编译期**才炸（`Expected '</', got '#'`）。
+ * 这里 KEEP 语义、去掉标记: `{@link X#y()}` 这类 javadoc 内联标签整段去掉。
+ */
+export function jsxText(text: string): string {
+  return (text || "")
+    .replace(/\{@[a-z]+\s+[^}]*\}/gi, "") // javadoc 内联标签整段去掉
+    .replace(/[{}<>]/g, "")                  // 其余 JSX 敏感字符
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
 export function toPascal(str: string): string {
   return str.replace(/(?:^|[_\s-])(\w)/g, (_, c) => c.toUpperCase())
 }

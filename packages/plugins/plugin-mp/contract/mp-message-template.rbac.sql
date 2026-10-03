@@ -1,0 +1,47 @@
+-- ============================================================
+-- Auto-generated RBAC & Menu Migration for MpMessageTemplate（源框架导入） (MpMessageTemplate)
+-- ============================================================
+
+-- 1. 插入菜单目录/页面节点 (system_menu)
+INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type, status, permission, create_time, update_time)
+VALUES (
+  'menu-mp-message-template',
+  'mp-dir',
+  'MpMessageTemplate（源框架导入）管理',
+  '/admin/mp/mp-message-template',
+  'mp/mp-message-template/index',
+  'table',
+  10,
+  'MENU',
+  'ACTIVE',
+  'mp:mp_message_template:view',
+  NOW(),
+  NOW()
+)
+ON CONFLICT (id) DO NOTHING;
+
+-- 2. 插入 4 大动词按钮权限
+INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
+('menu-mp-message-template-query',  'menu-mp-message-template', '查询MpMessageTemplate（源框架导入）', 'BUTTON', 'ACTIVE', 'mp:mp_message_template:query',  1, NOW(), NOW()),
+('menu-mp-message-template-create', 'menu-mp-message-template', '新增MpMessageTemplate（源框架导入）', 'BUTTON', 'ACTIVE', 'mp:mp_message_template:create', 2, NOW(), NOW()),
+('menu-mp-message-template-update', 'menu-mp-message-template', '修改MpMessageTemplate（源框架导入）', 'BUTTON', 'ACTIVE', 'mp:mp_message_template:update', 3, NOW(), NOW()),
+('menu-mp-message-template-delete', 'menu-mp-message-template', '删除MpMessageTemplate（源框架导入）', 'BUTTON', 'ACTIVE', 'mp:mp_message_template:delete', 4, NOW(), NOW())
+ON CONFLICT (id) DO NOTHING;
+
+-- 3. 关联管理员角色 (system_role_menu)
+INSERT INTO system_role_menu (role_id, menu_id) VALUES
+('1', 'menu-mp-message-template'),
+('1', 'menu-mp-message-template-query'),
+('1', 'menu-mp-message-template-create'),
+('1', 'menu-mp-message-template-update'),
+('1', 'menu-mp-message-template-delete')
+ON CONFLICT DO NOTHING;
+
+-- 4. 挂载系统租户套餐 (system_tenant_package_menu，实现租户开户默认立即可见)
+INSERT INTO system_tenant_package_menu (package_id, menu_id) VALUES
+('1', 'menu-mp-message-template'),
+('1', 'menu-mp-message-template-query'),
+('1', 'menu-mp-message-template-create'),
+('1', 'menu-mp-message-template-update'),
+('1', 'menu-mp-message-template-delete')
+ON CONFLICT DO NOTHING;

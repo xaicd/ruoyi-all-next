@@ -1,0 +1,281 @@
+"use client"
+
+import React, { useState, useEffect } from "react"
+import { MpUserApi } from "../api/mp-user.api"
+import type { MpUserCreateDTO, MpUserVO } from "@/modules/mp/backend/types/mp-user.types"
+
+interface MpUserFormProps {
+  open: boolean
+  initialData?: MpUserVO | null
+  onClose: () => void
+  onSuccess: () => void
+}
+
+export function MpUserForm({ open, initialData, onClose, onSuccess }: MpUserFormProps) {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [formData, setFormData] = useState<Record<string, any>>({})
+
+  useEffect(() => {
+    if (open) {
+      setError(null)
+      setFormData({
+    openid: initialData?.openid ?? "",
+    union_id: initialData?.union_id ?? "",
+    subscribe_status: initialData?.subscribe_status ?? undefined,
+    subscribe_time: initialData?.subscribe_time ?? "",
+    unsubscribe_time: initialData?.unsubscribe_time ?? "",
+    nickname: initialData?.nickname ?? "",
+    head_image_url: initialData?.head_image_url ?? "",
+    language: initialData?.language ?? "",
+    country: initialData?.country ?? "",
+    province: initialData?.province ?? "",
+    city: initialData?.city ?? "",
+    remark: initialData?.remark ?? "",
+    tag_ids: initialData?.tag_ids ?? "",
+    account_id: initialData?.account_id ?? undefined,
+    app_id: initialData?.app_id ?? "",
+      })
+    }
+  }, [open, initialData])
+
+  if (!open) return null
+
+  const isEdit = Boolean(initialData?.id)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+    try {
+      if (isEdit && initialData?.id) {
+        await MpUserApi.update({ id: initialData.id, ...formData } as any)
+      } else {
+        await MpUserApi.create(formData as MpUserCreateDTO)
+      }
+      onSuccess()
+      onClose()
+    } catch (err: any) {
+      setError(err?.message || "操作失败")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+          <h3 className="text-sm font-semibold text-slate-800">
+            {isEdit ? "编辑MpUser（源框架导入）" : "新增MpUser（源框架导入）"}
+          </h3>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
+            {error && (
+              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+            )}
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">粉丝标识</label>
+          <input
+            type="text"
+            value={formData.openid ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, openid: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入粉丝标识"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">微信生态唯一标识</label>
+          <input
+            type="text"
+            value={formData.union_id ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, union_id: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入微信生态唯一标识"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">关注状态</label>
+          <input
+            type="number"
+            value={formData.subscribe_status != null ? String(formData.subscribe_status) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, subscribe_status: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入关注状态"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">关注时间</label>
+          <input
+            type="text"
+            value={formData.subscribe_time ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, subscribe_time: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入关注时间"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">取消关注时间</label>
+          <input
+            type="text"
+            value={formData.unsubscribe_time ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, unsubscribe_time: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入取消关注时间"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">昵称</label>
+          <input
+            type="text"
+            value={formData.nickname ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, nickname: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入昵称"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">头像地址</label>
+          <input
+            type="text"
+            value={formData.head_image_url ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, head_image_url: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入头像地址"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">语言</label>
+          <input
+            type="text"
+            value={formData.language ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, language: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入语言"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">国家</label>
+          <input
+            type="text"
+            value={formData.country ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, country: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入国家"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">省份</label>
+          <input
+            type="text"
+            value={formData.province ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, province: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入省份"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">城市</label>
+          <input
+            type="text"
+            value={formData.city ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, city: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入城市"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <input
+            type="text"
+            value={formData.remark ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入备注"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">标签编号数组</label>
+          <input
+            type="text"
+            value={formData.tag_ids ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, tag_ids: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入标签编号数组"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">公众号账号的编号</label>
+          <input
+            type="number"
+            value={formData.account_id != null ? String(formData.account_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, account_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入公众号账号的编号"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">公众号 appId</label>
+          <input
+            type="text"
+            value={formData.app_id ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, app_id: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入公众号 appId"
+            
+          />
+        </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-2 px-6 py-3 border-t border-slate-200 bg-slate-50">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
+            >
+              取消
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
+            >
+              {loading ? "保存中..." : "保存"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}

@@ -1,0 +1,307 @@
+"use client"
+
+import React, { useState, useEffect } from "react"
+import { MesWmBatchApi } from "../api/mes-wm-batch.api"
+import type { MesWmBatchCreateDTO, MesWmBatchVO } from "@/modules/mes/backend/types/mes-wm-batch.types"
+
+interface MesWmBatchFormProps {
+  open: boolean
+  initialData?: MesWmBatchVO | null
+  onClose: () => void
+  onSuccess: () => void
+}
+
+export function MesWmBatchForm({ open, initialData, onClose, onSuccess }: MesWmBatchFormProps) {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [formData, setFormData] = useState<Record<string, any>>({})
+
+  useEffect(() => {
+    if (open) {
+      setError(null)
+      setFormData({
+    code: initialData?.code ?? "",
+    item_id: initialData?.item_id ?? undefined,
+    produce_date: initialData?.produce_date ?? "",
+    expire_date: initialData?.expire_date ?? "",
+    receipt_date: initialData?.receipt_date ?? "",
+    vendor_id: initialData?.vendor_id ?? undefined,
+    client_id: initialData?.client_id ?? undefined,
+    sales_order_code: initialData?.sales_order_code ?? "",
+    purchase_order_code: initialData?.purchase_order_code ?? "",
+    work_order_id: initialData?.work_order_id ?? undefined,
+    task_id: initialData?.task_id ?? undefined,
+    workstation_id: initialData?.workstation_id ?? undefined,
+    tool_id: initialData?.tool_id ?? undefined,
+    mold_id: initialData?.mold_id ?? undefined,
+    lot_number: initialData?.lot_number ?? "",
+    quality_status: initialData?.quality_status ?? undefined,
+    remark: initialData?.remark ?? "",
+      })
+    }
+  }, [open, initialData])
+
+  if (!open) return null
+
+  const isEdit = Boolean(initialData?.id)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+    try {
+      if (isEdit && initialData?.id) {
+        await MesWmBatchApi.update({ id: initialData.id, ...formData } as any)
+      } else {
+        await MesWmBatchApi.create(formData as MesWmBatchCreateDTO)
+      }
+      onSuccess()
+      onClose()
+    } catch (err: any) {
+      setError(err?.message || "操作失败")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+          <h3 className="text-sm font-semibold text-slate-800">
+            {isEdit ? "编辑MesWmBatch（源框架导入）" : "新增MesWmBatch（源框架导入）"}
+          </h3>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
+            {error && (
+              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+            )}
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">批次编码</label>
+          <input
+            type="text"
+            value={formData.code ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入批次编码"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">物料ID</label>
+          <input
+            type="number"
+            value={formData.item_id != null ? String(formData.item_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, item_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入物料ID"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">生产日期</label>
+          <input
+            type="text"
+            value={formData.produce_date ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, produce_date: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入生产日期"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">有效期</label>
+          <input
+            type="text"
+            value={formData.expire_date ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, expire_date: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入有效期"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">入库日期</label>
+          <input
+            type="text"
+            value={formData.receipt_date ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, receipt_date: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入入库日期"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">供应商ID</label>
+          <input
+            type="number"
+            value={formData.vendor_id != null ? String(formData.vendor_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, vendor_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入供应商ID"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">客户ID</label>
+          <input
+            type="number"
+            value={formData.client_id != null ? String(formData.client_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, client_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入客户ID"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">销售订单编号</label>
+          <input
+            type="text"
+            value={formData.sales_order_code ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, sales_order_code: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入销售订单编号"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">采购订单编号</label>
+          <input
+            type="text"
+            value={formData.purchase_order_code ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, purchase_order_code: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入采购订单编号"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">生产工单ID</label>
+          <input
+            type="number"
+            value={formData.work_order_id != null ? String(formData.work_order_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, work_order_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入生产工单ID"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">生产任务ID</label>
+          <input
+            type="number"
+            value={formData.task_id != null ? String(formData.task_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, task_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入生产任务ID"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">工作站ID</label>
+          <input
+            type="number"
+            value={formData.workstation_id != null ? String(formData.workstation_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, workstation_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入工作站ID"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">工具ID</label>
+          <input
+            type="number"
+            value={formData.tool_id != null ? String(formData.tool_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, tool_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入工具ID"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">模具 ID</label>
+          <input
+            type="number"
+            value={formData.mold_id != null ? String(formData.mold_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, mold_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入模具 ID"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">生产批号</label>
+          <input
+            type="text"
+            value={formData.lot_number ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, lot_number: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入生产批号"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">质量状态</label>
+          <input
+            type="number"
+            value={formData.quality_status != null ? String(formData.quality_status) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, quality_status: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入质量状态"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <input
+            type="text"
+            value={formData.remark ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入备注"
+            
+          />
+        </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-2 px-6 py-3 border-t border-slate-200 bg-slate-50">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
+            >
+              取消
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
+            >
+              {loading ? "保存中..." : "保存"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}

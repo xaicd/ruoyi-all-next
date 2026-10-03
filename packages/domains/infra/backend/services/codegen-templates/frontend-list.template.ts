@@ -5,6 +5,7 @@ import {
   getFrontendPath,
   queryColumns,
   toKebab,
+  jsxText,
 } from "./common"
 
 export function generateListPage(config: CodegenConfig): CodegenOutput {
@@ -15,7 +16,7 @@ export function generateListPage(config: CodegenConfig): CodegenOutput {
   const displayCols = formColumns(config).slice(0, 6)
 
   const searchControls = qCols.map((c) => {
-    const label = c.comment || c.name
+    const label = jsxText(c.comment) || c.name
     return `        <div className="flex items-center gap-1.5">
           <label className="text-xs text-slate-500 whitespace-nowrap">${label}:</label>
           <input
@@ -29,7 +30,7 @@ export function generateListPage(config: CodegenConfig): CodegenOutput {
   }).join("\n")
 
   const tableHeaders = displayCols.map((c) =>
-    `                <th className="px-4 py-2.5 text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider">${c.comment || c.name}</th>`
+    `                <th className="px-4 py-2.5 text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider">${jsxText(c.comment) || c.name}</th>`
   ).join("\n")
 
   const tableCells = displayCols.map((c) =>

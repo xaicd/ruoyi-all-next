@@ -1,15 +1,15 @@
 {
   "version": 1,
   "kind": "evolution-backlog",
-  "generatedAt": "2026-10-03T14:31:59.386Z",
-  "head": "70dde1d7",
+  "generatedAt": "2026-10-03T16:06:58.829Z",
+  "head": "36705781",
   "note": "Aggregated from real gate artifacts. Read-only signal for external agents; no agent loop runs in this repository (AGENTS.md §18).",
   "summary": {
     "blocker": 0,
     "high": 0,
-    "medium": 12,
-    "low": 12,
-    "total": 24
+    "medium": 2,
+    "low": 11,
+    "total": 13
   },
   "items": [
     {
@@ -27,18 +27,6 @@
       "action": "Decide per file whether it is a real gap or an accepted exception; if the rule needs a documented exemption, add it to the rule rather than the code."
     },
     {
-      "id": "thin-tests-ai",
-      "severity": "medium",
-      "section": "AGENTS.md §8",
-      "title": "ai: only 1 test file(s)",
-      "files": [
-        "packages/plugins/plugin-ai/backend/services/__tests__/ai.module.service.test.ts"
-      ],
-      "evidence": "stage=B, kind=plugin; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run packages/plugins/plugin-ai",
-      "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
-    },
-    {
       "id": "thin-tests-aigw",
       "severity": "medium",
       "section": "AGENTS.md §8",
@@ -49,126 +37,6 @@
       "evidence": "stage=B, kind=plugin; §8 requires at least one key-path automated test per domain",
       "command": "npm test -- --run packages/plugins/plugin-aigw",
       "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
-    },
-    {
-      "id": "thin-tests-bpm",
-      "severity": "medium",
-      "section": "AGENTS.md §8",
-      "title": "bpm: only 1 test file(s)",
-      "files": [
-        "packages/plugins/plugin-bpm/backend/services/__tests__/process.service.test.ts"
-      ],
-      "evidence": "stage=A, kind=plugin; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run packages/plugins/plugin-bpm",
-      "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
-    },
-    {
-      "id": "thin-tests-crm",
-      "severity": "medium",
-      "section": "AGENTS.md §8",
-      "title": "crm: only 1 test file(s)",
-      "files": [
-        "packages/plugins/plugin-crm/backend/services/__tests__/crm.module.service.test.ts"
-      ],
-      "evidence": "stage=B, kind=plugin; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run packages/plugins/plugin-crm",
-      "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
-    },
-    {
-      "id": "thin-tests-erp",
-      "severity": "medium",
-      "section": "AGENTS.md §8",
-      "title": "erp: only 1 test file(s)",
-      "files": [
-        "packages/plugins/plugin-erp/backend/services/__tests__/erp.module.service.test.ts"
-      ],
-      "evidence": "stage=B, kind=plugin; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run packages/plugins/plugin-erp",
-      "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
-    },
-    {
-      "id": "thin-tests-im",
-      "severity": "medium",
-      "section": "AGENTS.md §8",
-      "title": "im: only 1 test file(s)",
-      "files": [
-        "packages/plugins/plugin-im/backend/services/__tests__/im.module.service.test.ts"
-      ],
-      "evidence": "stage=B, kind=plugin; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run packages/plugins/plugin-im",
-      "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
-    },
-    {
-      "id": "thin-tests-iot",
-      "severity": "medium",
-      "section": "AGENTS.md §8",
-      "title": "iot: only 1 test file(s)",
-      "files": [
-        "packages/plugins/plugin-iot/backend/services/__tests__/iot.module.service.test.ts"
-      ],
-      "evidence": "stage=B, kind=plugin; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run packages/plugins/plugin-iot",
-      "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
-    },
-    {
-      "id": "thin-tests-mall",
-      "severity": "medium",
-      "section": "AGENTS.md §8",
-      "title": "mall: only 1 test file(s)",
-      "files": [
-        "packages/plugins/plugin-mall/backend/services/__tests__/mall.module.service.test.ts"
-      ],
-      "evidence": "stage=B, kind=plugin; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run packages/plugins/plugin-mall",
-      "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
-    },
-    {
-      "id": "thin-tests-mes",
-      "severity": "medium",
-      "section": "AGENTS.md §8",
-      "title": "mes: only 1 test file(s)",
-      "files": [
-        "packages/plugins/plugin-mes/backend/services/__tests__/mes.module.service.test.ts"
-      ],
-      "evidence": "stage=B, kind=plugin; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run packages/plugins/plugin-mes",
-      "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
-    },
-    {
-      "id": "thin-tests-mp",
-      "severity": "medium",
-      "section": "AGENTS.md §8",
-      "title": "mp: only 1 test file(s)",
-      "files": [
-        "packages/plugins/plugin-mp/backend/services/__tests__/mp-services.test.ts"
-      ],
-      "evidence": "stage=B, kind=plugin; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run packages/plugins/plugin-mp",
-      "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
-    },
-    {
-      "id": "thin-tests-pay",
-      "severity": "medium",
-      "section": "AGENTS.md §8",
-      "title": "pay: only 1 test file(s)",
-      "files": [
-        "packages/plugins/plugin-pay/backend/services/__tests__/pay.module.service.test.ts"
-      ],
-      "evidence": "stage=B, kind=plugin; §8 requires at least one key-path automated test per domain",
-      "command": "npm test -- --run packages/plugins/plugin-pay",
-      "action": "Add key-path, permission-denial and transaction-rollback tests for this domain."
-    },
-    {
-      "id": "gate-trace-stale",
-      "severity": "low",
-      "section": "AGENTS.md §6",
-      "title": "Gate trace is older than HEAD",
-      "files": [
-        "docs/architecture/artifacts/harness-trace-latest.json"
-      ],
-      "evidence": "trace.head=a5f40d66, current HEAD=70dde1d7",
-      "command": "npm run check",
-      "action": "Re-run the gates so the recorded evidence matches the current revision."
     },
     {
       "id": "oversized-packages/domains/infra/backend/services/codegen-table.service.ts",

@@ -4,6 +4,7 @@ import {
   formColumns,
   getFrontendPath,
   toKebab,
+  jsxText,
 } from "./common"
 
 export function generateFormComponent(config: CodegenConfig): CodegenOutput {
@@ -13,7 +14,7 @@ export function generateFormComponent(config: CodegenConfig): CodegenOutput {
   const writeCols = formColumns(config)
 
   const formFields = writeCols.map((c) => {
-    const label = c.comment || c.name
+    const label = jsxText(c.comment) || c.name
     if (c.tsType === "boolean") {
       return `        <div className="flex items-center gap-2">
           <input

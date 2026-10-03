@@ -83,18 +83,32 @@ function main() {
   run("npx", ["tsx", "scripts/generate-table-migration.ts", "--tables", tablesFile, "--export", exportName, "--name", `add_${domain}_tables`, "--write"])
 
   step(3, "按表生成全栈代码")
+  // 默认**不覆盖**已有文件（AGENTS §14.6: 生成器禁止覆盖已有 Service/Repository/Page）。
+  // 本仓已有手写代码的域（wms 等）与已迁移的骨架域都靠这道保护。
+  const force = argv.includes("--force")
   let written = 0
+  let skipped = 0
   for (const config of tables) {
     const outputs = CodegenEngineService.generateCodes(config, { includeClients: false })
-    for (const output of outputs) {
+    // 每张表一份独立迁移（带时间戳）会与第 2 步的**合并迁移**重复，只留一份；
+    // codegen-manifest.json 是本次生成的临时清单，也不落地。
+    const kept = outputs.filter((output) => {
+      const normalized = output.path.replace(/\\/g, "/")
+      return !normalized.startsWith("prisma/migrations/") && normalized !== "codegen-manifest.json"
+    })
+    for (const output of kept) {
       const full = path.resolve(ROOT, output.path)
+      if (fs.existsSync(full) && !force) {
+        skipped++
+        continue
+      }
       fs.mkdirSync(path.dirname(full), { recursive: true })
       fs.writeFileSync(full, output.content)
       written++
     }
-    console.log(`  ✓ ${config.className} -> ${outputs.length} 个文件`)
+    console.log(`  ✓ ${config.className} -> 新写 ${kept.length - skipped} / 跳过已有 ${skipped}`)
   }
-  console.log(`  合计 ${written} 个文件`)
+  console.log(`  合计: 新写 ${written} 个文件（跳过 ${skipped} 个已存在；--force 可覆盖）`)
 
   step(4, "注册为第一方插件")
   run("node", ["scripts/migrate-domain-to-plugin.cjs", domain, "--write"])

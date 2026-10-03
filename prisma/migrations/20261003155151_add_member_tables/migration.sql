@@ -1,0 +1,217 @@
+-- 由 scripts/generate-table-migration.ts 生成，请勿手改。
+-- 来源: scripts/data/member-source-tables.ts#MEMBER_TABLES
+-- 背景: 这些表的定义来自低代码 CodegenConfig；此前只生成代码、不生成建表 SQL，
+--       导致"仓储在查但无处创建"。本迁移补齐 DDL。
+-- MemberAddress（源框架导入）
+CREATE TABLE "member_address" (
+    "id" TEXT NOT NULL,
+    "user_id" BIGINT,
+    "name" VARCHAR(255),
+    "mobile" VARCHAR(255),
+    "area_id" BIGINT,
+    "detail_address" VARCHAR(255),
+    "default_status" BOOLEAN,
+    "tenant_id" VARCHAR(64) NOT NULL,
+    "created_by" VARCHAR(255),
+    "created_at" TIMESTAMP(3) NOT NULL,
+    "updated_by" VARCHAR(255),
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+    CONSTRAINT "member_address_pkey" PRIMARY KEY ("id")
+);
+CREATE INDEX "member_address_tenant_id_idx" ON "member_address"("tenant_id");
+
+-- MemberConfig（源框架导入）
+CREATE TABLE "member_config" (
+    "id" TEXT NOT NULL,
+    "point_trade_deduct_enable" BOOLEAN,
+    "point_trade_deduct_unit_price" INTEGER,
+    "point_trade_deduct_max_price" INTEGER,
+    "point_trade_give_point" INTEGER,
+    "tenant_id" VARCHAR(64) NOT NULL,
+    "created_by" VARCHAR(255),
+    "created_at" TIMESTAMP(3) NOT NULL,
+    "updated_by" VARCHAR(255),
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+    CONSTRAINT "member_config_pkey" PRIMARY KEY ("id")
+);
+CREATE INDEX "member_config_tenant_id_idx" ON "member_config"("tenant_id");
+
+-- MemberExperienceRecord（源框架导入）
+CREATE TABLE "member_experience_record" (
+    "id" TEXT NOT NULL,
+    "user_id" BIGINT,
+    "biz_type" INTEGER,
+    "biz_id" VARCHAR(255),
+    "title" VARCHAR(255),
+    "description" VARCHAR(255),
+    "experience" INTEGER,
+    "total_experience" INTEGER,
+    "tenant_id" VARCHAR(64) NOT NULL,
+    "created_by" VARCHAR(255),
+    "created_at" TIMESTAMP(3) NOT NULL,
+    "updated_by" VARCHAR(255),
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+    CONSTRAINT "member_experience_record_pkey" PRIMARY KEY ("id")
+);
+CREATE INDEX "member_experience_record_tenant_id_idx" ON "member_experience_record"("tenant_id");
+
+-- MemberGroup（源框架导入）
+CREATE TABLE "member_group" (
+    "id" TEXT NOT NULL,
+    "name" VARCHAR(255),
+    "remark" VARCHAR(255),
+    "status" INTEGER,
+    "tenant_id" VARCHAR(64) NOT NULL,
+    "created_by" VARCHAR(255),
+    "created_at" TIMESTAMP(3) NOT NULL,
+    "updated_by" VARCHAR(255),
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+    CONSTRAINT "member_group_pkey" PRIMARY KEY ("id")
+);
+CREATE INDEX "member_group_tenant_id_idx" ON "member_group"("tenant_id");
+
+-- MemberLevel（源框架导入）
+CREATE TABLE "member_level" (
+    "id" TEXT NOT NULL,
+    "name" VARCHAR(255),
+    "level" INTEGER,
+    "experience" INTEGER,
+    "discount_percent" INTEGER,
+    "icon" VARCHAR(255),
+    "background_url" VARCHAR(255),
+    "status" INTEGER,
+    "tenant_id" VARCHAR(64) NOT NULL,
+    "created_by" VARCHAR(255),
+    "created_at" TIMESTAMP(3) NOT NULL,
+    "updated_by" VARCHAR(255),
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+    CONSTRAINT "member_level_pkey" PRIMARY KEY ("id")
+);
+CREATE INDEX "member_level_tenant_id_idx" ON "member_level"("tenant_id");
+
+-- MemberLevelRecord（源框架导入）
+CREATE TABLE "member_level_record" (
+    "id" TEXT NOT NULL,
+    "user_id" BIGINT,
+    "level_id" BIGINT,
+    "level" INTEGER,
+    "discount_percent" INTEGER,
+    "experience" INTEGER,
+    "user_experience" INTEGER,
+    "remark" VARCHAR(255),
+    "description" VARCHAR(255),
+    "tenant_id" VARCHAR(64) NOT NULL,
+    "created_by" VARCHAR(255),
+    "created_at" TIMESTAMP(3) NOT NULL,
+    "updated_by" VARCHAR(255),
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+    CONSTRAINT "member_level_record_pkey" PRIMARY KEY ("id")
+);
+CREATE INDEX "member_level_record_tenant_id_idx" ON "member_level_record"("tenant_id");
+
+-- MemberPointRecord（源框架导入）
+CREATE TABLE "member_point_record" (
+    "id" TEXT NOT NULL,
+    "user_id" BIGINT,
+    "biz_id" VARCHAR(255),
+    "biz_type" INTEGER,
+    "title" VARCHAR(255),
+    "description" VARCHAR(255),
+    "point" INTEGER,
+    "total_point" INTEGER,
+    "tenant_id" VARCHAR(64) NOT NULL,
+    "created_by" VARCHAR(255),
+    "created_at" TIMESTAMP(3) NOT NULL,
+    "updated_by" VARCHAR(255),
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+    CONSTRAINT "member_point_record_pkey" PRIMARY KEY ("id")
+);
+CREATE INDEX "member_point_record_tenant_id_idx" ON "member_point_record"("tenant_id");
+
+-- MemberSignInConfig（源框架导入）
+CREATE TABLE "member_sign_in_config" (
+    "id" TEXT NOT NULL,
+    "day" INTEGER,
+    "point" INTEGER,
+    "experience" INTEGER,
+    "status" INTEGER,
+    "tenant_id" VARCHAR(64) NOT NULL,
+    "created_by" VARCHAR(255),
+    "created_at" TIMESTAMP(3) NOT NULL,
+    "updated_by" VARCHAR(255),
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+    CONSTRAINT "member_sign_in_config_pkey" PRIMARY KEY ("id")
+);
+CREATE INDEX "member_sign_in_config_tenant_id_idx" ON "member_sign_in_config"("tenant_id");
+
+-- MemberSignInRecord（源框架导入）
+CREATE TABLE "member_sign_in_record" (
+    "id" TEXT NOT NULL,
+    "user_id" BIGINT,
+    "day" INTEGER,
+    "point" INTEGER,
+    "experience" INTEGER,
+    "tenant_id" VARCHAR(64) NOT NULL,
+    "created_by" VARCHAR(255),
+    "created_at" TIMESTAMP(3) NOT NULL,
+    "updated_by" VARCHAR(255),
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+    CONSTRAINT "member_sign_in_record_pkey" PRIMARY KEY ("id")
+);
+CREATE INDEX "member_sign_in_record_tenant_id_idx" ON "member_sign_in_record"("tenant_id");
+
+-- MemberTag（源框架导入）
+CREATE TABLE "member_tag" (
+    "id" TEXT NOT NULL,
+    "name" VARCHAR(255),
+    "tenant_id" VARCHAR(64) NOT NULL,
+    "created_by" VARCHAR(255),
+    "created_at" TIMESTAMP(3) NOT NULL,
+    "updated_by" VARCHAR(255),
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+    CONSTRAINT "member_tag_pkey" PRIMARY KEY ("id")
+);
+CREATE INDEX "member_tag_tenant_id_idx" ON "member_tag"("tenant_id");
+
+-- MemberUser（源框架导入）
+CREATE TABLE "member_user" (
+    "id" TEXT NOT NULL,
+    "mobile" VARCHAR(255),
+    "email" VARCHAR(255),
+    "password" VARCHAR(255),
+    "status" INTEGER,
+    "register_ip" VARCHAR(255),
+    "register_terminal" INTEGER,
+    "login_ip" VARCHAR(255),
+    "login_date" TIMESTAMP(3),
+    "nickname" VARCHAR(255),
+    "avatar" VARCHAR(255),
+    "name" VARCHAR(255),
+    "sex" INTEGER,
+    "birthday" TIMESTAMP(3),
+    "area_id" INTEGER,
+    "mark" VARCHAR(255),
+    "point" INTEGER,
+    "tag_ids" TEXT,
+    "level_id" BIGINT,
+    "experience" INTEGER,
+    "group_id" BIGINT,
+    "tenant_id" VARCHAR(64) NOT NULL,
+    "created_by" VARCHAR(255),
+    "created_at" TIMESTAMP(3) NOT NULL,
+    "updated_by" VARCHAR(255),
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+    CONSTRAINT "member_user_pkey" PRIMARY KEY ("id")
+);
+CREATE INDEX "member_user_tenant_id_idx" ON "member_user"("tenant_id");

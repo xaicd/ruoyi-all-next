@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server"
-import { BpmOaleaveService } from "@/modules/bpm/backend/services/bpm-oaleave.service"
+import { BpmOALeaveService } from "@/modules/bpm/backend/services/bpm-oaleave.service"
 
 type RouteContext = { params: Promise<{ id: string }> }
 
 export async function GET(request: Request, context: RouteContext) {
   try {
     const { id } = await context.params
-    const data = await BpmOaleaveService.get(id)
+    const data = await BpmOALeaveService.get(id)
     if (!data) return NextResponse.json({ success: false, error: "不存在" }, { status: 404 })
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
@@ -18,7 +18,7 @@ export async function PUT(request: Request, context: RouteContext) {
   try {
     const { id } = await context.params
     const body = await request.json()
-    const data = await BpmOaleaveService.update({ ...body, id })
+    const data = await BpmOALeaveService.update({ ...body, id })
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message }, { status: 400 })
@@ -28,7 +28,7 @@ export async function PUT(request: Request, context: RouteContext) {
 export async function DELETE(request: Request, context: RouteContext) {
   try {
     const { id } = await context.params
-    const data = await BpmOaleaveService.delete(id)
+    const data = await BpmOALeaveService.delete(id)
     return NextResponse.json({ success: true, data })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message }, { status: 400 })

@@ -1,0 +1,229 @@
+"use client"
+
+import React, { useState, useEffect } from "react"
+import { MesProAndonRecordApi } from "../api/mes-pro-andon-record.api"
+import type { MesProAndonRecordCreateDTO, MesProAndonRecordVO } from "@/modules/mes/backend/types/mes-pro-andon-record.types"
+
+interface MesProAndonRecordFormProps {
+  open: boolean
+  initialData?: MesProAndonRecordVO | null
+  onClose: () => void
+  onSuccess: () => void
+}
+
+export function MesProAndonRecordForm({ open, initialData, onClose, onSuccess }: MesProAndonRecordFormProps) {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [formData, setFormData] = useState<Record<string, any>>({})
+
+  useEffect(() => {
+    if (open) {
+      setError(null)
+      setFormData({
+    config_id: initialData?.config_id ?? undefined,
+    workstation_id: initialData?.workstation_id ?? undefined,
+    user_id: initialData?.user_id ?? undefined,
+    work_order_id: initialData?.work_order_id ?? undefined,
+    process_id: initialData?.process_id ?? undefined,
+    reason: initialData?.reason ?? "",
+    level: initialData?.level ?? undefined,
+    status: initialData?.status ?? undefined,
+    handle_time: initialData?.handle_time ?? "",
+    handler_user_id: initialData?.handler_user_id ?? undefined,
+    remark: initialData?.remark ?? "",
+      })
+    }
+  }, [open, initialData])
+
+  if (!open) return null
+
+  const isEdit = Boolean(initialData?.id)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+    try {
+      if (isEdit && initialData?.id) {
+        await MesProAndonRecordApi.update({ id: initialData.id, ...formData } as any)
+      } else {
+        await MesProAndonRecordApi.create(formData as MesProAndonRecordCreateDTO)
+      }
+      onSuccess()
+      onClose()
+    } catch (err: any) {
+      setError(err?.message || "操作失败")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+          <h3 className="text-sm font-semibold text-slate-800">
+            {isEdit ? "编辑MesProAndonRecord（源框架导入）" : "新增MesProAndonRecord（源框架导入）"}
+          </h3>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
+            {error && (
+              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+            )}
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">安灯配置编号</label>
+          <input
+            type="number"
+            value={formData.config_id != null ? String(formData.config_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, config_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入安灯配置编号"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">工作站编号</label>
+          <input
+            type="number"
+            value={formData.workstation_id != null ? String(formData.workstation_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, workstation_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入工作站编号"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">发起用户编号</label>
+          <input
+            type="number"
+            value={formData.user_id != null ? String(formData.user_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入发起用户编号"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">生产工单编号</label>
+          <input
+            type="number"
+            value={formData.work_order_id != null ? String(formData.work_order_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, work_order_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入生产工单编号"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">工序编号</label>
+          <input
+            type="number"
+            value={formData.process_id != null ? String(formData.process_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, process_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入工序编号"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">呼叫原因（快照值，不随配置变更）</label>
+          <input
+            type="text"
+            value={formData.reason ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, reason: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入呼叫原因（快照值，不随配置变更）"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">级别（快照值）</label>
+          <input
+            type="number"
+            value={formData.level != null ? String(formData.level) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, level: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入级别（快照值）"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">处置状态</label>
+          <input
+            type="number"
+            value={formData.status != null ? String(formData.status) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入处置状态"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">处置时间</label>
+          <input
+            type="text"
+            value={formData.handle_time ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, handle_time: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入处置时间"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">处置人编号</label>
+          <input
+            type="number"
+            value={formData.handler_user_id != null ? String(formData.handler_user_id) : ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, handler_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入处置人编号"
+            
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <input
+            type="text"
+            value={formData.remark ?? ""}
+            onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
+            className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="请输入备注"
+            
+          />
+        </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-2 px-6 py-3 border-t border-slate-200 bg-slate-50">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
+            >
+              取消
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
+            >
+              {loading ? "保存中..." : "保存"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
