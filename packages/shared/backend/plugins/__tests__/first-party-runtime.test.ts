@@ -1,10 +1,27 @@
+import fs from "node:fs"
+import path from "node:path"
+
 import { describe, expect, it } from "vitest"
 
 import { MergedPlugin } from "../merged-runtime"
 import { scanPluginPackage } from "../package-scanner"
 import { resolvePluginRoute } from "../route-mount"
 
-const PLUGIN_DIR = `${process.cwd()}/packages/plugins/plugin-pay`
+/**
+ * 被测插件目录从**实际存在**的插件里取，不写死。
+ * 孵化时域会被裁剪（`--profile minimal` / `--bundle`），写死 `plugin-pay`
+ * 会让该用例在裁剪过的工程里必然失败 —— 而"裁剪后是否仍然自洽"正是要检验的东西。
+ */
+const PLUGINS_ROOT = path.join(process.cwd(), "packages", "plugins")
+const PLUGIN_DIR = fs.existsSync(PLUGINS_ROOT)
+  ? (() => {
+      const dir = fs.readdirSync(PLUGINS_ROOT, { withFileTypes: true })
+        .filter((entry) => entry.isDirectory() && entry.name.startsWith("plugin-"))
+        .map((entry) => path.join(PLUGINS_ROOT, entry.name))
+        .find((full) => fs.existsSync(path.join(full, "plugin.manifest.json")))
+      return dir ?? ""
+    })()
+  : ""
 
 /**
  * 第一方插件（pay）的**运行时闭环**证明：
@@ -14,7 +31,7 @@ const PLUGIN_DIR = `${process.cwd()}/packages/plugins/plugin-pay`
  * 入口加载、初始化、路由声明与处理器的对应、以及"声明→放行"的判定。
  * 挂载点的 HTTP 包装（路径拼装、三种 auth 到守卫的映射）由 route-mount 单测覆盖。
  */
-describe("第一方插件: 运行时闭环（pay）", () => {
+describe.skipIf(!PLUGIN_DIR)("第一方插件: 运行时闭环", () => {
   it("启动 -> 声明路由可派发到真实处理器 -> 未声明路由被拒", async () => {
     const found = scanPluginPackage(PLUGIN_DIR)
     expect(found?.manifest).toBeTruthy()

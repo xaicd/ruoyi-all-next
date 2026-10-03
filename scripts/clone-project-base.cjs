@@ -391,6 +391,21 @@ function pruneDomainReferenceLists(destRoot, plan) {
     if (doomed.length > 0) console.log(`[REACTOR PRUNE] 删除 ${doomed.length} 个引用了被裁域的测试文件`)
   }
 
+  // 4.10) 被裁域的插件目录**整个删除**。
+  //        只删文件不够: 目录还在的话，`pnpm install` 会把它当工作区包、往里建 node_modules，
+  //        于是裁剪过的工程里仍有一堆空的 plugin-<domain> 目录 —— 扫描类工具会把它们
+  //        当成插件列出来（实测: minimal 孵化后 MCP 工具列出了 15 个"插件"，其中 11 个是空壳）。
+  {
+    const prunedPlugins = ALL_DOMAINS.filter((name) => !keep.has(name))
+    for (const domain of prunedPlugins) {
+      const dir = path.join(destRoot, "packages", "plugins", `plugin-${domain}`)
+      if (fs.existsSync(dir)) {
+        fs.rmSync(dir, { recursive: true, force: true })
+        dropped.push(`packages/plugins/plugin-${domain}/: 整个删除（被裁域）`)
+      }
+    }
+  }
+
   // 5) 彻底无法工作的文件直接删: src/app 下的路由/页面、以及测试。
   //    它们 import 了被裁域的模块 —— 留着必然编译失败，比删掉更糟。
   //    （测试被删会少覆盖，但一个 chunk 里引用了不存在模块的测试本来也跑不了。）

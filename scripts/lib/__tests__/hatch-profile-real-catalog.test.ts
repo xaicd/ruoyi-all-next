@@ -37,12 +37,18 @@ describe("孵化计划: 对真实 catalog", () => {
   })
 
   it("被排除的插件域，其 packages/plugins/plugin-<name> 目录会被跳过", () => {
-    const plan = resolveHatchPlan(REAL_CATALOG, { profile: "vertical", bundle: ["mall"] })
-    expect(plan.excludedDomains).toContain("pay")
-    expect(shouldSkipRelPath("packages/plugins/plugin-pay", plan)).toBe(true)
-    expect(shouldSkipRelPath("packages/plugins/plugin-pay/backend/services", plan)).toBe(true)
+    // bundle 必须用**本工程 catalog 里真实存在**的域: 写死 "mall" 会让本文件在
+    // 裁剪过的工程（profile/bundle）里失败 —— 而"裁剪后是否仍然自洽"正是要检验的。
+    const bundled = REAL_CATALOG.layers.plugin.domains[0]
+    const plan = resolveHatchPlan(REAL_CATALOG, { profile: "vertical", bundle: [bundled] })
+    // 被裁的域**从实际计划里取**: 平台伴生域（如 aigw）永远不裁，
+    // 按索引猜会取到不该被裁的那个（实测）。
+    const excluded = plan.excludedDomains[0]
+    expect(plan.excludedDomains).toContain(excluded)
+    expect(shouldSkipRelPath(`packages/plugins/plugin-${excluded}`, plan)).toBe(true)
+    expect(shouldSkipRelPath(`packages/plugins/plugin-${excluded}/backend/services`, plan)).toBe(true)
     // 被选中的域不能被跳过
-    expect(shouldSkipRelPath("packages/plugins/plugin-mall", plan)).toBe(false)
+    expect(shouldSkipRelPath(`packages/plugins/plugin-${bundled}`, plan)).toBe(false)
     // 地基仍在 packages/domains/ 下，同样不能被误跳
     expect(shouldSkipRelPath("packages/domains/system", plan)).toBe(false)
   })

@@ -287,10 +287,13 @@ const TOOLS = [
       const plugins = dirs.map((dirName) => {
         const name = dirName.replace(/^plugin-/, "")
         const manifest = readPluginManifest(name)
-        const routes = (manifest && manifest.apiRoutes) || []
+        // 没有有效 manifest 的目录不算插件 —— 否则裁剪过的工程里那些残留空目录
+        // （pnpm 会给工作区包建 node_modules）会被当成"没有路由声明的插件"列出来。
+        if (!manifest) return null
+        const routes = manifest.apiRoutes || []
         const auth = [...new Set(routes.map((route) => route.auth))].sort()
         return {
-          id: manifest ? manifest.id : `ruoyi.${name}`,
+          id: manifest.id,
           domain: name,
           dir: `packages/plugins/${dirName}`,
           routeCount: routes.length,
@@ -300,7 +303,8 @@ const TOOLS = [
           domainTraits: (manifest && manifest.domain) || null,
         }
       })
-      return { count: plugins.length, plugins }
+      const valid = plugins.filter(Boolean)
+      return { count: valid.length, plugins: valid }
     },
   },
   {
