@@ -66,19 +66,72 @@ function walk(dir, out) {
   }
 }
 
+/**
+ * 为一个**尚未登记**的新域补登记（插件语义）。
+ *
+ * 为什么需要: 这条链路的起点是"对话里冒出一个新业务域"（如电商平台要个 `shop`），
+ * 此时域目录刚由元数据 + codegen 生成出来，catalog 里还没有它 ——
+ * 而后面 7 步都要求域已登记。缺这一步，新业务就卡在"代码有了、注册不了"。
+ */
+function registerNewDomain(name) {
+  const catalogPath = path.join(ROOT, "packages", "shared", "backend", "constants", "domain-catalog.json")
+  const catalog = JSON.parse(fs.readFileSync(catalogPath, "utf8"))
+  const ports = (catalog.domains || []).map((item) => item.defaultPort).filter((port) => typeof port === "number")
+  const entry = {
+    name,
+    owner: name,
+    kind: "plugin",
+    stage: "B",
+    contractVersion: "v1",
+    publicPrefixes: [`/api/v1/admin/${name}`, `/api/v1/open/${name}`],
+    implementation: "local-ts",
+    upstreamEnv: `RUOYI_DOMAIN_${name.replace(/[^a-z0-9]/gi, "_").toUpperCase()}_UPSTREAM`,
+    defaultPort: (ports.length ? Math.max(...ports) : 3200) + 1,
+    packable: true,
+    packKind: "api-only",
+    dependsOnModules: ["shared"],
+    independentDatabase: false,
+    auth: { audience: "admin", tenantPolicy: "required" },
+    resilience: { timeoutMs: 15000, retryMaxAttempts: 1, safeMethodsOnly: true, idempotencyRequired: true },
+  }
+  catalog.domains = [...(catalog.domains || []), entry]
+  catalog.layers = catalog.layers || {}
+  catalog.layers.plugin = catalog.layers.plugin || { domains: [], description: "第一方插件: 保留域级特征(可独立打包), 但不属于平台/业务层" }
+  catalog.layers.plugin.domains = [...new Set([...(catalog.layers.plugin.domains || []), name])].sort()
+  return { catalogPath, catalog, entry }
+}
+
 for (const name of names) {
-  const entry = byName.get(name)
+  let entry = byName.get(name)
+  let justRegistered = false
   if (!entry) {
-    console.error(`✗ ${name}: 不在 domain-catalog.json 里`)
-    process.exit(1)
+    // 未登记 —— 但域目录若已存在（元数据 + codegen 刚生成），就补登记而不是报错
+    const domainDir = path.join(ROOT, "packages", "domains", name)
+    if (!fs.existsSync(domainDir)) {
+      console.error(`✗ ${name}: 既不在 domain-catalog.json 里，也没有 packages/domains/${name} 目录`)
+      process.exit(1)
+    }
+    const registered = registerNewDomain(name)
+    if (write) {
+      fs.writeFileSync(registered.catalogPath, `${JSON.stringify(registered.catalog, null, 2)}\n`)
+      console.log(`  ✓ ${name}: 已登记进 catalog（kind=plugin，端口 ${registered.entry.defaultPort}）`)
+    } else {
+      console.log(`  · ${name}: 待登记（kind=plugin，端口 ${registered.entry.defaultPort}）`)
+    }
+    entry = registered.entry
+    byName.set(name, entry)
+    justRegistered = true   // 新登记的本就是 plugin，别再被"已经是插件了"拦住
   }
   if (PROTECTED.has(name)) {
     console.error(`✗ ${name}: system/infra 是 platform 地基，不允许迁成插件`)
     process.exit(1)
   }
-  if (entry.kind === "plugin") {
-    console.error(`✗ ${name}: 已经是插件了`)
-    process.exit(1)
+  // 「已是插件」不等于「迁移完成」—— 判据必须加上"目录是否已经搬过去"，
+  // 否则首次只登记、第二次就报"已经是插件了"，卡在半途无法续跑（实测踩到）。
+  // 已是插件不再报错: 后续 7 步都做成了**幂等**（已搬就跳过 0~2、其余可重复执行），
+  // 所以重跑只会"收敛"，不会破坏现场 —— 这也让"跑到一半"的状态可以续做。
+  if (entry.kind === "plugin" && !justRegistered) {
+    console.log(`  · ${name}: 已是插件，按幂等方式续做/收敛`)
   }
 }
 
@@ -103,15 +156,43 @@ if (!write) {
 for (const { name, from, to, files } of plan) {
   console.log(`\n== ${name} ==`)
 
-  // 1) 生成插件声明与入口（在域目录里生成，再整体搬走）
-  execFileSync("node", [path.join("scripts", "scaffold-domain-plugin.cjs"), from, "--write"], { cwd: ROOT, stdio: "ignore" })
-  console.log("   1/7 已生成 plugin.manifest.json + plugin-entry.ts")
+  // **可续跑**: 若域已在插件目录（此前跑到一半），就跳过 0~2、直接做后续步骤。
+  // 否则"搬完但尾部没做完"的状态无法修复，只能手工收拾（实测踩到）。
+  const alreadyMoved = fs.existsSync(path.join(ROOT, to))
+  if (alreadyMoved) {
+    console.log(`   · 域已在 ${to}（续跑：跳过搬迁与脚手架生成）`)
+  }
 
-  // 2) 搬家（并确保旧目录清干净 —— 残留会让路径解析器误判域还在原地）
-  fs.mkdirSync(path.dirname(path.join(ROOT, to)), { recursive: true })
-  fs.renameSync(path.join(ROOT, from), path.join(ROOT, to))
-  fs.rmSync(path.join(ROOT, from), { recursive: true, force: true })
-  console.log(`   2/7 已移到 ${to}`)
+
+  // 1) 生成插件声明与入口（在域目录里生成，再整体搬走）
+  // 0/7：**新生成的域**（元数据 + codegen）其路由处理器落在 `src/app/api/v1/<surface>/<域>/…`，
+  //      而插件布局要求它们**在域内** `packages/domains/<域>/routes/…`（脚手架正是按后者生成入口的）。
+  //      对**已迁移**的旧域，域内已有 routes/，src/app 下只是转发桩 —— 那种情况不搬，直接删（见 7/7）。
+  const domainRoutesDir = path.join(ROOT, alreadyMoved ? to : from, "routes")
+  if (!alreadyMoved && !fs.existsSync(domainRoutesDir) && files.length > 0) {
+    let moved = 0
+    for (const file of files) {
+      const rel = path.relative(ROOT, file).replace(/\\/g, "/")
+      const match = rel.match(/^src\/app\/api\/v1\/([a-z]+)\/([a-z0-9_]+)\/(.+)\/route\.ts$/)
+      if (!match) continue
+      const target = path.join(ROOT, from, "routes", match[1], match[3], "route.ts")
+      fs.mkdirSync(path.dirname(target), { recursive: true })
+      fs.copyFileSync(file, target)
+      moved++
+    }
+    if (moved > 0) console.log(`   0/7 已把 ${moved} 个路由处理器搬进域内（codegen 产物 -> 插件布局）`)
+  }
+
+  if (!alreadyMoved) {
+    execFileSync("node", [path.join("scripts", "scaffold-domain-plugin.cjs"), from, "--write"], { cwd: ROOT, stdio: "ignore" })
+    console.log("   1/7 已生成 plugin.manifest.json + plugin-entry.ts")
+
+    // 2) 搬家（并确保旧目录清干净 —— 残留会让路径解析器误判域还在原地）
+    fs.mkdirSync(path.dirname(path.join(ROOT, to)), { recursive: true })
+    fs.renameSync(path.join(ROOT, from), path.join(ROOT, to))
+    fs.rmSync(path.join(ROOT, from), { recursive: true, force: true })
+    console.log(`   2/7 已移到 ${to}`)
+  }
 
   // 3) package.json: ruoyiPlugin 指针 + plugin-sdk 依赖
   const pkgPath = path.join(ROOT, to, "package.json")
@@ -133,6 +214,18 @@ for (const { name, from, to, files } of plan) {
 
   // 5) catalog: 保留该域，kind 改 plugin，从 platform/business 移入 plugin 层
   const cat = JSON.parse(read(catalogPath))
+  if (!cat.domains.some((d) => d.name === name)) {
+    const ports = cat.domains.map((d) => d.defaultPort).filter((port) => typeof port === "number")
+    cat.domains.push({
+      name, owner: name, kind: "plugin", stage: "B", contractVersion: "v1",
+      publicPrefixes: [`/api/v1/admin/${name}`, `/api/v1/open/${name}`],
+      implementation: "local-ts", upstreamEnv: `RUOYI_DOMAIN_${name.toUpperCase()}_UPSTREAM`,
+      defaultPort: (ports.length ? Math.max(...ports) : 3200) + 1,
+      packable: true, packKind: "api-only", dependsOnModules: ["shared"], independentDatabase: false,
+      auth: { audience: "admin", tenantPolicy: "required" },
+      resilience: { timeoutMs: 15000, retryMaxAttempts: 1, safeMethodsOnly: true, idempotencyRequired: true },
+    })
+  }
   const target = cat.domains.find((d) => d.name === name)
   target.kind = "plugin"
   for (const layer of ["platform", "business"]) cat.layers[layer].domains = cat.layers[layer].domains.filter((d) => d !== name)
@@ -142,7 +235,8 @@ for (const { name, from, to, files } of plan) {
   writeFile(catalogPath, JSON.stringify(cat, null, 2) + "\n")
 
   // 6) 治理行改为插件语义
-  let gov = read(governancePath)
+  // 治理文档属于**基座自己的**治理材料，孵化的工程里可能不存在 —— 不存在就跳过，别让链条断在这里。
+  let gov = fs.existsSync(governancePath) ? read(governancePath) : ""
   const govRow = gov.split("\n").find((l) => l.startsWith(`| ${name} `))
   if (govRow) {
     const cells = govRow.split("|")

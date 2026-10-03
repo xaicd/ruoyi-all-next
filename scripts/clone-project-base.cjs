@@ -135,7 +135,10 @@ function reactorCopy(src, dest, ctx, rel = "") {
       if (entry.name === "package.json") {
         try {
           const pkg = JSON.parse(fs.readFileSync(srcPath, "utf8"))
-          pkg.name = ctx.targetName
+          // **只改基座自己那份** package.json —— 工作区包（如 @ruoyi/plugin-sdk）
+          // 有各自的包名，一起改会毁掉它们的身份：所有 `workspace:*` 依赖都解析不到
+          // （实测: 孵化后 packages/plugins/sdk 的 name 变成目标工程名，install 直接失败）。
+          if (pkg.name === BASE_PROJECT_NAME) pkg.name = ctx.targetName
           if (pkg.scripts && pkg.scripts.dev) {
             pkg.scripts.dev = pkg.scripts.dev.replace("-p 3100", `-p ${ctx.targetPort}`)
           }
