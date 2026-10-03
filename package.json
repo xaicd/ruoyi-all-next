@@ -84,7 +84,8 @@
     "verify:real-db": "node scripts/verify-real-db.cjs",
     "postinstall": "prisma generate",
     "domains:capabilities": "node scripts/scan-domain-capabilities.cjs",
-    "domains:parity": "node scripts/scan-source-parity.cjs"
+    "domains:parity": "node scripts/scan-source-parity.cjs",
+    "domain:new": "tsx scripts/create-business-domain.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",

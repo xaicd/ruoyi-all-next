@@ -37,7 +37,21 @@ npm run project:create -- <路径> --bundle mall,crm   # 只要地基 + 指定�
 它们的优先级**高于 `.env`**，不清会连到别的库、或把管理员当租户账号，
 表现为「登录说用户名或密码错误」（实测踩过）。
 
-## 3. 建表：先写**元数据**（唯一真源，别手写 DDL）
+## 3. 一条命令走完（推荐）
+
+写下表元数据之后，**其余步骤由一条命令串起来**（每步幂等、可重复运行）：
+
+```bash
+npm run domain:new <域>          # 校验元数据 -> 生成迁移 -> codegen -> 注册插件 -> 重生成 -> 打印后续
+npm run domain:new <域> --dry-run  # 只校验元数据与表清单
+```
+
+它**不做**三件事（都要人或 CI 决定）：不写元数据（字段类型是产品决策）、
+不 `prisma migrate deploy`（目标库由部署决定）、不提交推送。
+
+第 4~7 节是它内部做的事 —— 单独执行其中某步时按那里操作。
+
+## 4. 建表：先写**元数据**（唯一真源，别手写 DDL）
 
 域的表定义写进 `scripts/data/<域>-tables.ts`（`CodegenConfig[]`），列里带上
 `type / tsType / nullable / comment`，需要时补 `maxLength / precision / scale /
@@ -52,7 +66,7 @@ npx tsx scripts/generate-table-migration.ts \
 「仓储在查、却没有任何地方创建」的表 —— 那种表在内存回退下全绿、一连真实库就
 `relation does not exist`，且**静默**。
 
-## 4. 生成完整代码（低代码，别手抄 CRUD）
+## 5. 生成完整代码（低代码，别手抄 CRUD）
 
 ```bash
 npm run scaffold -- --pack service-pattern --module <域>/<功能> --entity <X> ...
@@ -65,7 +79,7 @@ services/rpc/**tests**）、`frontend/`（api/components/pages）、`src/app/api
 
 > 生成物已包含 CRUD 全套与测试。**禁止**再手写一遍 —— AGENTS §19「零重复代码」。
 
-## 5. 注册为第一方插件（一条命令，幂等可续跑）
+## 6. 注册为第一方插件（幂等可续跑）
 
 ```bash
 node scripts/migrate-domain-to-plugin.cjs <域>            # 先 dry-run 看影响面
@@ -80,7 +94,7 @@ node scripts/migrate-domain-to-plugin.cjs <域> --write
 **新域（尚未登记）也支持** —— 它会先按插件语义补登记，再走后续步骤。
 **可重复运行**：已完成的步骤跳过，未完成的续做。
 
-## 6. 重生成 + 门禁（顺序不能错）
+## 7. 重生成 + 门禁（顺序不能错）
 
 ```bash
 npm run domain:contracts && npm run domain:seams && npm run domain:manifests && npm run admin:routes:manifest
@@ -90,7 +104,7 @@ pnpm run check && npx vitest run
 
 **顺序**：`contracts` 会重写 `module.manifest.json`，必须跑在 `manifests` **之前** —— 反了就会一直报漂移。
 
-## 7. 编译 / 打包 / 运行预览
+## 8. 编译 / 打包 / 运行预览
 
 ```bash
 pnpm run build                    # 编译
@@ -103,7 +117,7 @@ pnpm run dev                      # 运行（或 ./start.sh app）
 
 **新域第一次要登记插件**（宿主只挂载已登记的）：`POST /api/v1/admin/plugins`。
 
-## 8. 验收清单（做完逐条打勾）
+## 9. 验收清单（做完逐条打勾）
 
 - [ ] 表元数据已写，迁移已生成**并 `prisma migrate deploy` 到库**
 - [ ] codegen/脚手架产出含 **CRUD + 校验 + 测试**，不是只读骨架
@@ -113,7 +127,7 @@ pnpm run dev                      # 运行（或 ./start.sh app）
 - [ ] `pnpm run build` exit=0
 - [ ] 启动后：登录成功，插件挂载点接口返回 **200**（不是 404/500）
 
-## 9. 禁止项
+## 10. 禁止项
 
 1. 手写重复 CRUD / 重复 DDL —— 用元数据 + 生成器，先检索已有工具。
 2. 写死路径（`packages/domains/...`）—— 用共享解析器；写死的后果通常**不是报错，而是静默失效**。
@@ -121,7 +135,7 @@ pnpm run dev                      # 运行（或 ./start.sh app）
 4. 生成物手改 —— 一律让生成器重建。
 5. 跳过 `npm run check`。
 
-## 10. 权威文档
+## 11. 权威文档
 
 `AGENTS.md`（§3.2 目录与插件、§9.5 表定义真源、§14 代码生成、§17 基座边界、§19 零浪费）、
 `docs/architecture/artifacts/source-parity-report.md`（与源框架的能力对账）、
