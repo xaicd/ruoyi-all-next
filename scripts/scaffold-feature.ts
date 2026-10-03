@@ -138,12 +138,22 @@ function main() {
   // 产出 `packages/domains/system/packages/domains/backend/services/...`）。
   // 从 modulePath 的**首段**取域名 —— 这是它与 domain-catalog 的约定。
   const moduleName = cli.modulePath.split("/")[0]
+  // 模板里还有几个派生变量 —— 都能从既有输入算出来，不该让模板渲染出空段:
+  //   featureKebab   模块路径末段的 kebab 形式（如 `system/user` -> `user`）
+  //   serviceFile / validatorFile  该功能的文件名
+  const toKebab = (value: string) =>
+    value.replace(/([a-z0-9])([A-Z])/g, "$1-$2").replace(/[^a-zA-Z0-9]+/g, "-").toLowerCase().replace(/^-+|-+$/g, "")
+  const featureKebab = toKebab(cli.modulePath.split("/").slice(-1)[0] || cli.entityName)
   const variables: Vars = {
     modulePath: cli.modulePath,
     // 兼容两种写法: 老模板用 {{moduleName}}，新模板用 {{domain}} / {{domainDir}}
     moduleName,
     domain: moduleName,
     domainDir: moduleName,
+    featureKebab,
+    entityKebab: toKebab(cli.entityName),
+    serviceFile: `${featureKebab}.service.ts`,
+    validatorFile: `${featureKebab}.validator.ts`,
     entityName: cli.entityName,
     serviceName: cli.serviceName,
     permissionUpdate: cli.permissionUpdate,
