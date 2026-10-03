@@ -233,7 +233,13 @@ const RULES = [
       // 为什么需要这条: 本仓的 ruoyi:governance:check 在 standalone 项目里是空转
       // ([SKIP] script omitted), 于是"新注册一个域但漏登记治理"没有任何门禁拦得住 ——
       // aigw 就这么漂了很久。这里把它变成真检查。
-      const docRel = `${GOVERNANCE_DOC}`
+      // 文档名**跟着工程名改过**（孵化会重命名整个仓库的标识），写死会让衍生工程里
+      // 这条规则永远报"文档缺失"。动态找: docs/architecture/*-domain-governance.md
+      const archDir = abs("docs/architecture")
+      const candidates = fs.existsSync(archDir)
+        ? fs.readdirSync(archDir).filter((f) => f.endsWith("-domain-governance.md")).sort()
+        : []
+      const docRel = candidates.length > 0 ? `docs/architecture/${candidates[0]}` : `${GOVERNANCE_DOC}`
       const doc = abs(docRel)
       if (!fs.existsSync(doc)) return [{ file: docRel, detail: "governance doc is missing" }]
 

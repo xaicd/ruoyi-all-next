@@ -31,7 +31,12 @@ if (names.length === 0) {
 }
 
 const catalogPath = path.join(ROOT, "packages/shared/backend/constants/domain-catalog.json")
-const governancePath = path.join(ROOT, "docs/architecture/ruoyi-all-next-domain-governance.md")
+// 治理文档名是**跟着工程名改过的**（孵化会重命名），所以动态找而不是写死 ——
+// 写死会让孵化工程里这里读到空文件，后面"补治理行"的分支被静默跳过（实测）。
+const governanceCandidates = fs.existsSync(path.join(ROOT, "docs/architecture"))
+  ? fs.readdirSync(path.join(ROOT, "docs/architecture")).filter((f) => f.endsWith("-domain-governance.md"))
+  : []
+const governancePath = path.join(ROOT, "docs/architecture", governanceCandidates[0] ?? "ruoyi-all-next-domain-governance.md")
 const entriesPath = path.join(ROOT, "packages/shared/backend/plugins/first-party-entries.ts")
 const tsconfigPath = path.join(ROOT, "tsconfig.json")
 const vitestPath = path.join(ROOT, "vitest.config.ts")
