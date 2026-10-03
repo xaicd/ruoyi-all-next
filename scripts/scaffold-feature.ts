@@ -118,7 +118,7 @@ function main() {
   const cli = parseArgs(process.argv.slice(2))
 
   if (process.argv.includes("--help") || process.argv.includes("-h")) {
-    console.log(`用法: npm run scaffold -- [参数]\n\n参数:\n  --pack service-pattern       使用 Service 设计模式组合包\n  --templates code1,code2      指定模板编码列表\n  --module system/user         模块路径变量 modulePath\n  --entity SystemUser          实体名变量 entityName\n  --service SystemUserService  服务名变量 serviceName\n  --permission-update XXX      权限变量 permissionUpdate\n  --out-root <path>            输出根目录（默认 apps/ruoyi/ruoyi-all-next）\n  --force                      覆盖已存在文件\n`) 
+    console.log(`用法: npm run scaffold -- [参数]\n\n参数:\n  --pack service-pattern       使用 Service 设计模式组合包\n  --templates code1,code2      指定模板编码列表\n  --module system/user         模块路径变量 modulePath\n  --entity SystemUser          实体名变量 entityName\n  --service SystemUserService  服务名变量 serviceName\n  --permission-update XXX      权限变量 permissionUpdate\n  --out-root <path>            输出根目录（默认仓库根 "."；模板路径自带 packages/domains/<域>/ 结构）\n  --force                      覆盖已存在文件\n`) 
     return
   }
 
@@ -132,8 +132,18 @@ function main() {
     throw new Error("未找到可用模板，请检查 --pack/--templates 与 --stack")
   }
 
+  // 模板里用的变量比 CLI 传入的多 —— 尤其是 `moduleName`（域目录名）。
+  // 不提供它的话，`packages/domains/{{moduleName}}/…` 会渲染成
+  // `packages/domains//backend/…`（少一段），文件落到错误位置（实测:
+  // 产出 `packages/domains/system/packages/domains/backend/services/...`）。
+  // 从 modulePath 的**首段**取域名 —— 这是它与 domain-catalog 的约定。
+  const moduleName = cli.modulePath.split("/")[0]
   const variables: Vars = {
     modulePath: cli.modulePath,
+    // 兼容两种写法: 老模板用 {{moduleName}}，新模板用 {{domain}} / {{domainDir}}
+    moduleName,
+    domain: moduleName,
+    domainDir: moduleName,
     entityName: cli.entityName,
     serviceName: cli.serviceName,
     permissionUpdate: cli.permissionUpdate,
@@ -159,7 +169,15 @@ function main() {
     written.push(path.relative(cli.outRoot, outputPath))
   }
 
-  console.log(`[ruoyi-all-next] 模板生成完成，共 ${written.length} 个文件:`)
+  // 工程名从 package.json 取，不写死 —— 孵化出的工程不该再自称 ruoyi-all-next。
+  const projectName = (() => {
+    try {
+      return JSON.parse(fs.readFileSync(path.resolve(process.cwd(), "package.json"), "utf8")).name ?? "project"
+    } catch {
+      return "project"
+    }
+  })()
+  console.log(`[${projectName}] 模板生成完成，共 ${written.length} 个文件:`)
   for (const file of written) {
     console.log(`- ${file}`)
   }
