@@ -735,6 +735,13 @@ async function runProjectReactor(targetDir, plan, sourceCatalog, options = {}) {
   console.log(`  1. cd /d "${resolvedTarget}"`)
   console.log("  2. start.bat")
   console.log("  3. 新增表结构后运行 npm run db:migrate")
+  if (plan.excludedDomains.length > 0) {
+    console.log("")
+    console.log("  ⚠ 已知缺口（裁剪场景）: pnpm-lock.yaml 里仍声明着被裁掉的工作区包，")
+    console.log("    因此 `pnpm install` 会把它们的目录**重新建出来**（空壳，只有 node_modules）。")
+    console.log("    已做的兜底: 此类无 manifest 的目录不会被当成插件（MCP/扫描器均已按此判定）。")
+    console.log("    彻底修法: 按裁剪结果同步 lockfile，或裁剪后跑一次 pnpm install 重建 lockfile。")
+  }
   console.log("")
   console.log("  首次启动后需要**登记第一方插件**（走鉴权）:")
   console.log("    curl -X POST -H \"Authorization: Bearer <token>\" \\")
