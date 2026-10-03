@@ -83,7 +83,8 @@
     "tables:migration": "tsx scripts/generate-table-migration.ts",
     "verify:real-db": "node scripts/verify-real-db.cjs",
     "postinstall": "prisma generate",
-    "domains:capabilities": "node scripts/scan-domain-capabilities.cjs"
+    "domains:capabilities": "node scripts/scan-domain-capabilities.cjs",
+    "domains:parity": "node scripts/scan-source-parity.cjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",
