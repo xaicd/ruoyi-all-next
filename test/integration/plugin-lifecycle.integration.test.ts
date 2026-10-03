@@ -28,7 +28,7 @@ const HAS_DB = Boolean(process.env.DATABASE_URL?.trim())
 const REPO_ROOT = process.cwd()
 const PLUGIN_DIR = path.join(REPO_ROOT, ".ruoyi", "plugins-integration")
 const EXAMPLE_SRC = path.join(REPO_ROOT, "packages/plugins/examples/hello-world")
-const GOOD_KEY = "ruoyi.hello-world"
+const GOOD_KEY = "itest.lifecycle.plugin"
 const BROKEN_KEY = "ruoyi.broken-worker"
 
 function copyExamplePlugin(targetName: string): string {
@@ -37,6 +37,13 @@ function copyExamplePlugin(targetName: string): string {
   // 示例插件新增 merged.js 后漏拷, 于是 manifest 声明的 merged 入口不存在、包被拒,
   // 测试报 "expected 0 to be 1"。整目录拷贝就不会再漏。
   fs.cpSync(EXAMPLE_SRC, dir, { recursive: true })
+  // 必须改 id: 示例插件本体就在 `packages/plugins/examples/` 下，**也属于扫描的第一方根**。
+  // 沿用它的 id 会让"包从磁盘移除"这个前提**不成立**（副本删了、原件还在，
+  // 于是记录仍然是 ready）—— 实测就是这么挂的。用本用例自己的 id，前提才为真。
+  const manifestPath = path.join(dir, "plugin.manifest.json")
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"))
+  manifest.id = GOOD_KEY
+  fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2))
   return dir
 }
 
@@ -72,7 +79,9 @@ describe.skipIf(!HAS_DB)("插件安装 → ready 端到端（真实 PG + 真实 
     copyExamplePlugin("hello-world")
 
     const result = await pluginRegistryService.reconcile(PLUGIN_DIR)
-    expect(result.installed).toBe(1)
+    // 断言**自己这个包**的状态，而不是全局计数 —— reconcile 是全实例级的，
+    // 同时会把 16 个第一方插件一并安装，`installed` 永远不是 1（实测 16）。
+    expect(result.rejected.flatMap((r) => r.pluginKey ?? [])).not.toContain(GOOD_KEY)
     // reconcile 遍历的是库中**全部**安装记录（安装是实例级的），故用包含断言
     expect(result.started).toContain(GOOD_KEY)
 

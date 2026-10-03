@@ -18,6 +18,7 @@ import {
   resolveInvokeMode,
 } from "../rpc-protocol"
 import { broker, resetBroker } from "../service-broker"
+import { runWithTenantContext } from "../biz-tenant"
 
 describe("module layers", () => {
   it("keeps shared as undeployable foundation SDK", () => {
@@ -196,17 +197,21 @@ describe("dual-mode broker invoke and facade", () => {
   })
 
   it("exposes login user info on the system public facade", async () => {
-    const { registerActionSchemas } = await import("@/modules/system/contract/actions")
-    const { systemPublicFacade } = await import("@/modules/system/contract/system.public.facade")
-    registerActionSchemas()
-    broker.start({})
-    const listed = await (await import("@/modules/system/contract/system.facade")).systemFacade.listUsers({ page: 1, pageSize: 1 })
-    expect(listed.success, listed.error).toBe(true)
-    const userId = (listed.data as { items: Array<{ id: string }> }).items[0]?.id
-    expect(userId).toBeTruthy()
-    const info = await systemPublicFacade.getPermissionInfoByUser({ userId }, { caller: "bff.auth" })
-    expect(info.success, info.error).toBe(true)
-    expect(info.data).toMatchObject({ user: { id: userId } })
+    // 用户与权限是**租户作用域**的：必须在租户上下文里跑，否则真实库下
+    // getPermissionInfoByUser 会因"账号未绑定租户"失败（内存模式恰好看不出来）。
+    await runWithTenantContext({ tenantId: "1", isPlatform: true }, async () => {
+      const { registerActionSchemas } = await import("@/modules/system/contract/actions")
+      const { systemPublicFacade } = await import("@/modules/system/contract/system.public.facade")
+      registerActionSchemas()
+      broker.start({})
+      const listed = await (await import("@/modules/system/contract/system.facade")).systemFacade.listUsers({ page: 1, pageSize: 1 })
+      expect(listed.success, listed.error).toBe(true)
+      const userId = (listed.data as { items: Array<{ id: string }> }).items[0]?.id
+      expect(userId).toBeTruthy()
+      const info = await systemPublicFacade.getPermissionInfoByUser({ userId }, { caller: "bff.auth" })
+      expect(info.success, info.error).toBe(true)
+      expect(info.data).toMatchObject({ user: { id: userId } })
+    })
   })
 
   it("routes system.resolveTenantEntitlement through the domain facade", async () => {
@@ -236,11 +241,15 @@ describe("dual-mode broker invoke and facade", () => {
   })
 
   it("routes infra listConfigs and listJobs onto config/job services", async () => {
+    // 同上一例: 配置查询也是租户作用域的。
+    await runWithTenantContext({ tenantId: "1", isPlatform: true }, async () => {
     const { registerActionSchemas } = await import("@/modules/infra/contract/actions")
     const { infraFacade } = await import("@/modules/infra/contract/infra.facade")
     registerActionSchemas()
     broker.start({})
-    const configs = await infraFacade.listConfigs({ page: 1, pageSize: 20 })
+    // 用 keyword 精确过滤: 直接断言"第 1 页里有某条"依赖分页顺序，
+    // 配置条数一多就会假失败（实测: 该 key 排在第 20 条之后）。
+    const configs = await infraFacade.listConfigs({ page: 1, pageSize: 20, keyword: "sys.application.name" })
     expect(configs.success, configs.error).toBe(true)
     expect(configs.invokeMode).toBe("sdk")
     const configData = configs.data as { items: Array<{ configKey?: string }>; total: number }
@@ -251,6 +260,7 @@ describe("dual-mode broker invoke and facade", () => {
     const jobData = jobs.data as { items: unknown[]; page: number }
     expect(jobData.page).toBe(1)
     expect(Array.isArray(jobData.items)).toBe(true)
+    })
   })
 
   it("routes system.getUser onto SystemUserService", async () => {
