@@ -478,6 +478,10 @@ const RULES = [
       // 不是重命名；补齐后从这里删掉。
       const KNOWN_CUSTOM = new Set(["aigw"])
 
+      // 这条规矩是给**基座自己**守的。由基座衍生的业务工程里，加定制域正是目的 ——
+      // 判据: hatch-manifest.json 存在 ⇒ 这是孵化出来的工程，不是基座。
+      if (fs.existsSync(abs("packages/shared/contract/hatch-manifest.json"))) return []
+
       const { loadCatalog } = require("./lib/domain-catalog.cjs")
       const catalog = loadCatalog()
       return (catalog.domains || [])

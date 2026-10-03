@@ -73,6 +73,20 @@ function walk(dir, out) {
  * 此时域目录刚由元数据 + codegen 生成出来，catalog 里还没有它 ——
  * 而后面 7 步都要求域已登记。缺这一步，新业务就卡在"代码有了、注册不了"。
  */
+/**
+ * 按**实际生成的路由**推导公开前缀。
+ *
+ * 不能写死 `admin + open`: codegen 生成的路由可能只有 admin 面，
+ * 而 `domain-pack:check` 会校验"声明的公共前缀必须在 manifest 里真有对应路由"——
+ * 多声明一个不存在的面就会被判成空承诺（实测）。
+ */
+function derivePublicPrefixes(name) {
+  const surfaces = ["admin", "app", "open"].filter((surface) =>
+    fs.existsSync(path.join(ROOT, "packages", "domains", name, "routes", surface)) ||
+    fs.existsSync(path.join(ROOT, "packages", "plugins", `plugin-${name}`, "routes", surface)))
+  return (surfaces.length > 0 ? surfaces : ["admin"]).map((surface) => `/api/v1/${surface}/${name}`)
+}
+
 function registerNewDomain(name) {
   const catalogPath = path.join(ROOT, "packages", "shared", "backend", "constants", "domain-catalog.json")
   const catalog = JSON.parse(fs.readFileSync(catalogPath, "utf8"))
@@ -83,7 +97,7 @@ function registerNewDomain(name) {
     kind: "plugin",
     stage: "B",
     contractVersion: "v1",
-    publicPrefixes: [`/api/v1/admin/${name}`, `/api/v1/open/${name}`],
+    publicPrefixes: derivePublicPrefixes(name),
     implementation: "local-ts",
     upstreamEnv: `RUOYI_DOMAIN_${name.replace(/[^a-z0-9]/gi, "_").toUpperCase()}_UPSTREAM`,
     defaultPort: (ports.length ? Math.max(...ports) : 3200) + 1,
@@ -218,7 +232,7 @@ for (const { name, from, to, files } of plan) {
     const ports = cat.domains.map((d) => d.defaultPort).filter((port) => typeof port === "number")
     cat.domains.push({
       name, owner: name, kind: "plugin", stage: "B", contractVersion: "v1",
-      publicPrefixes: [`/api/v1/admin/${name}`, `/api/v1/open/${name}`],
+      publicPrefixes: derivePublicPrefixes(name),
       implementation: "local-ts", upstreamEnv: `RUOYI_DOMAIN_${name.toUpperCase()}_UPSTREAM`,
       defaultPort: (ports.length ? Math.max(...ports) : 3200) + 1,
       packable: true, packKind: "api-only", dependsOnModules: ["shared"], independentDatabase: false,
@@ -228,6 +242,9 @@ for (const { name, from, to, files } of plan) {
   }
   const target = cat.domains.find((d) => d.name === name)
   target.kind = "plugin"
+  // 幂等收敛: publicPrefixes 按**实际路由面**重算 —— 只在首次登记时算的话，
+  // 后续补了路由（或首次算错）就永远修不回来（实测踩到）。
+  target.publicPrefixes = derivePublicPrefixes(name)
   for (const layer of ["platform", "business"]) cat.layers[layer].domains = cat.layers[layer].domains.filter((d) => d !== name)
   cat.layers.plugin = cat.layers.plugin || { domains: [], description: "第一方插件: 保留域级特征(可独立打包), 但不属于平台/业务层" }
   if (!cat.layers.plugin.domains.includes(name)) cat.layers.plugin.domains.push(name)
@@ -238,6 +255,18 @@ for (const { name, from, to, files } of plan) {
   // 治理文档属于**基座自己的**治理材料，孵化的工程里可能不存在 —— 不存在就跳过，别让链条断在这里。
   let gov = fs.existsSync(governancePath) ? read(governancePath) : ""
   const govRow = gov.split("\n").find((l) => l.startsWith(`| ${name} `))
+  if (!govRow && gov) {
+    // 新域没有治理行 —— 补一行（§6 的 domain-governance-coverage 会逐域校验）
+    const header = gov.split("\n").findIndex((l) => l.startsWith("|---"))
+    if (header >= 0) {
+      const cols = gov.split("\n")[header].split("|").length - 2
+      const row = `| ${name} | plugin | B | — | — | ` + Array(Math.max(0, cols - 5)).fill("—").join(" | ")
+      const lines = gov.split("\n")
+      lines.splice(header + 1, 0, row)
+      gov = lines.join("\n")
+      writeFile(governancePath, gov)
+    }
+  }
   if (govRow) {
     const cells = govRow.split("|")
     cells[7] = cells[7].replace(from.replace(/\//g, "/"), to)
@@ -245,6 +274,83 @@ for (const { name, from, to, files } of plan) {
     gov = gov.replace(govRow, cells.join("|"))
     writeFile(governancePath, gov)
   }
+  // 5.5) `rpc-actions.json` 登记本域。
+  //      这份文件**没有任何生成器**（只有校验器在读），不登记的话
+  //      `domain:check` 会直接报 `rpc-actions.json missing domain: <域>`（实测）。
+  //      方法名从域内生成的 actions 契约里派生（`ruoyi.cmd.<域>.<实体>.<方法>`）。
+  const rpcActionsPath = path.join(ROOT, "packages", "shared", "backend", "constants", "rpc-actions.json")
+  if (fs.existsSync(rpcActionsPath)) {
+    const rpc = JSON.parse(read(rpcActionsPath))
+    rpc.domains = rpc.domains || {}
+    if (!rpc.domains[name]) {
+      // 从域内 actions 契约里派生: `"ruoyi.cmd.<域>.<实体>.<方法>": <schema>`
+      // 内联 `z.object(...)` 的（get/delete）没有具名 schema，校验器要求 schema 必须
+      // 落在本域 validators 里，所以这类不写进来；`ping` 由框架内置，也不写。
+      const actions = []
+      const contractDir = path.join(ROOT, to, "contract")
+      if (fs.existsSync(contractDir)) {
+        for (const file of fs.readdirSync(contractDir)) {
+          if (!file.endsWith(".actions.ts")) continue
+          const source = fs.readFileSync(path.join(contractDir, file), "utf8")
+          for (const match of source.matchAll(/"ruoyi\.cmd\.\w+\.(\w+)\.(\w+)":\s*([A-Za-z_][A-Za-z0-9_]*)\s*,/g)) {
+            const entity = match[1]
+            const kebab = entity.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase()
+            actions.push({
+              method: `${entity}.${match[2]}`,
+              service: `${entity}Service`,
+              module: `${kebab}.service`,
+              schema: match[3],
+            })
+          }
+        }
+      }
+      rpc.domains[name] = { actions: actions.sort((a, b) => a.method.localeCompare(b.method)) }
+      writeFile(rpcActionsPath, JSON.stringify(rpc, null, 2) + "\n")
+      console.log(`   5.5/7 已登记 rpc-actions（${actions.length} 个方法）`)
+    }
+  }
+
+  // 5.6) hatch-manifest 与 catalog 对齐。
+  //      它记录的是"孵化时带了哪些域"，`domain-pack:check` 会拿它与 catalog 比对 ——
+  //      新加的域不同步就会报 `hatch-manifest domains must match domain-catalog`（实测）。
+  const hatchManifestPath = path.join(ROOT, "packages", "shared", "contract", "hatch-manifest.json")
+  if (fs.existsSync(hatchManifestPath)) {
+    const manifest = JSON.parse(read(hatchManifestPath))
+    if (Array.isArray(manifest.domains) && !manifest.domains.includes(name)) {
+      manifest.domains = [...manifest.domains, name].sort()
+      if (Array.isArray(manifest.excludedDomains)) {
+        manifest.excludedDomains = manifest.excludedDomains.filter((item) => item !== name)
+      }
+      manifest.note = `${manifest.note ?? ""}（新增域 ${name}: ${new Date().toISOString().slice(0, 10)}）`.trim()
+      writeFile(hatchManifestPath, JSON.stringify(manifest, null, 2) + "\n")
+      console.log("   5.6/7 已同步 hatch-manifest")
+    }
+  }
+
+  // 5.7) compat-manifest 里由域集派生的**计数**要跟着重算。
+  //      它记录"清单说有 N 个域"并与 catalog 比对；加了域不同步就报
+  //      `contracts.domainCatalog.domains is N but catalog has M`（实测）。
+  const compatPath = path.join(ROOT, "packages", "shared", "contract", "compat-manifest.json")
+  if (fs.existsSync(compatPath)) {
+    const compat = JSON.parse(read(compatPath))
+    const expected = {
+      domainCatalog: cat.domains.length,
+      rpcActions: Object.keys(JSON.parse(read(rpcActionsPath)).domains || {}).length,
+    }
+    let touched = false
+    for (const [key, actual] of Object.entries(expected)) {
+      const entry = compat.contracts?.[key]
+      if (entry && typeof entry.domains === "number" && entry.domains !== actual) {
+        entry.domains = actual
+        touched = true
+      }
+    }
+    if (touched) {
+      writeFile(compatPath, JSON.stringify(compat, null, 2) + "\n")
+      console.log("   5.7/7 已重算 compat-manifest 的派生计数")
+    }
+  }
+
   console.log("   5/7 catalog 与治理表已改为插件语义")
 
   // 7) 别名（tsconfig + vitest）
