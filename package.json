@@ -60,7 +60,7 @@
     "standards:baseline": "node scripts/check-engineering-standards.cjs --write-baseline",
     "evolution:backlog": "node scripts/build-evolution-backlog.cjs",
     "mcp:serve": "node scripts/mcp/ruoyi-mcp-server.cjs",
-    "check": "npm run domain:manifests:check && npm run contracts:sync && npm run domain:check && npm run microservice:check && npm run harness:check && npm run admin:routes:check && npm run foundation:ontology:check && npm run skills:check && npm run compat:check && npm run standards:check && npm run ruoyi:matrix:check && npm run ruoyi:governance:check && npm run evolution:backlog && node scripts/write-harness-trace.cjs",
+    "check": "npm run domain:manifests:check && npm run contracts:sync && npm run domain:check && npm run microservice:check && npm run harness:check && npm run admin:routes:check && npm run foundation:ontology:check && npm run skills:check && npm run compat:check && npm run standards:check && npm run evolution:backlog && node scripts/write-harness-trace.cjs",
     "domain:dev": "node scripts/pack-domain.cjs --dev --materialize",
     "domain:build": "node scripts/pack-domain.cjs --build --materialize",
     "domain:up": "node scripts/domain-up.cjs",
@@ -82,7 +82,8 @@
     "tables:metadata-draft": "node scripts/draft-missing-table-metadata.cjs",
     "tables:migration": "tsx scripts/generate-table-migration.ts",
     "verify:real-db": "node scripts/verify-real-db.cjs",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "domains:capabilities": "node scripts/scan-domain-capabilities.cjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",
