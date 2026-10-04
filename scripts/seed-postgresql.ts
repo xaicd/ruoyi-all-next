@@ -177,6 +177,18 @@ async function main() {
       await client.query(`INSERT INTO system_user_role (id, user_id, role_id) VALUES ($1,$2,$3) ON CONFLICT (user_id, role_id) DO NOTHING`, [randomUUID(), adminId, assignedRoleId])
       for (const menu of await insertableMenus()) await client.query(`INSERT INTO system_role_menu (id, role_id, menu_id) VALUES ($1,$2,$3) ON CONFLICT (role_id, menu_id) DO NOTHING`, [randomUUID(), assignedRoleId, menu.id])
     }
+    // 库里可能还有**不是这次种子带来**的菜单 —— 例如按元数据生成的 `domain_rbac_menus`
+    // 迁移（导入业务域时产物）。种子只认识自己的静态目录，不补这一步，那些页面在侧边栏里
+    // 永远点不到（`getEffectiveUserMenuIds` 按 role_menu 过滤）。管理员角色本应看到全部。
+    // 放循环外用 roleId/platformRoleId（循环变量在此不可见）。
+    for (const adminRoleId of [roleId, platformRoleId]) {
+      await client.query(
+        `INSERT INTO system_role_menu (id, role_id, menu_id)
+         SELECT 'rm-seed-' || $1 || '-' || m.id, $1, m.id FROM system_menu m
+         ON CONFLICT (role_id, menu_id) DO NOTHING`,
+        [adminRoleId],
+      )
+    }
     await client.query("COMMIT")
     console.log(`[seed] PostgreSQL catalog seeded: ${SEED_ROLES.length} roles, ${SEED_DEPTS.length} departments, ${SEED_POSTS.length} posts, ${SEED_DICT_TYPES.length} dictionary types, ${SEED_DICT_DATA.length} dictionary entries, and ${(await fullMenuCatalog()).length} menus.`)
   } catch (error) {
