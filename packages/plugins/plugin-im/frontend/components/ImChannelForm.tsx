@@ -53,24 +53,36 @@ export function ImChannelForm({ open, initialData, onClose, onSuccess }: ImChann
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="im-channel-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑IM 频道 DO业务语义：- 频道是运营单向推送的主体；C 端用户不能向频道发消息- 是业务码（API / 字典外露），id 是数字主键给前端会话 targetId 用" : "新增IM 频道 DO业务语义：- 频道是运营单向推送的主体；C 端用户不能向频道发消息- 是业务码（API / 字典外露），id 是数字主键给前端会话 targetId 用"}
+        data-testid="im-channel-form"
+        data-agent-scope="im-channel:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑ImChannel（源框架导入）" : "新增ImChannel（源框架导入）"}
+            {isEdit ? "编辑IM 频道 DO业务语义：- 频道是运营单向推送的主体；C 端用户不能向频道发消息- 是业务码（API / 字典外露），id 是数字主键给前端会话 targetId 用" : "新增IM 频道 DO业务语义：- 频道是运营单向推送的主体；C 端用户不能向频道发消息- 是业务码（API / 字典外露），id 是数字主键给前端会话 targetId 用"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="im-channel-form-close" data-agent-target="im-channel:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="im-channel-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">频道业务码</label>
+          <label htmlFor="im-channel-code" className="block text-xs text-slate-600 mb-1">频道业务码</label>
           <input
             type="text"
+            id="im-channel-code"
+            data-testid="field-code"
+            data-agent-target="im-channel:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="频道业务码"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -80,9 +92,14 @@ export function ImChannelForm({ open, initialData, onClose, onSuccess }: ImChann
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">频道名称</label>
+          <label htmlFor="im-channel-name" className="block text-xs text-slate-600 mb-1">频道名称</label>
           <input
             type="text"
+            id="im-channel-name"
+            data-testid="field-name"
+            data-agent-target="im-channel:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="频道名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -92,9 +109,14 @@ export function ImChannelForm({ open, initialData, onClose, onSuccess }: ImChann
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">频道头像</label>
+          <label htmlFor="im-channel-avatar" className="block text-xs text-slate-600 mb-1">频道头像</label>
           <input
             type="text"
+            id="im-channel-avatar"
+            data-testid="field-avatar"
+            data-agent-target="im-channel:field:avatar"
+            data-agent-state={formData.avatar ? "filled" : "empty"}
+            aria-label="频道头像"
             value={formData.avatar ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, avatar: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -104,9 +126,14 @@ export function ImChannelForm({ open, initialData, onClose, onSuccess }: ImChann
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">排序</label>
+          <label htmlFor="im-channel-sort" className="block text-xs text-slate-600 mb-1">排序</label>
           <input
             type="number"
+            id="im-channel-sort"
+            data-testid="field-sort"
+            data-agent-target="im-channel:field:sort"
+            data-agent-state={formData.sort == null || formData.sort === "" ? "empty" : "filled"}
+            aria-label="排序"
             value={formData.sort != null ? String(formData.sort) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sort: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -116,9 +143,14 @@ export function ImChannelForm({ open, initialData, onClose, onSuccess }: ImChann
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="im-channel-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="im-channel-status"
+            data-testid="field-status"
+            data-agent-target="im-channel:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -132,6 +164,8 @@ export function ImChannelForm({ open, initialData, onClose, onSuccess }: ImChann
             <button
               type="button"
               onClick={onClose}
+              data-testid="im-channel-form-cancel"
+              data-agent-target="im-channel:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -139,6 +173,9 @@ export function ImChannelForm({ open, initialData, onClose, onSuccess }: ImChann
             <button
               type="submit"
               disabled={loading}
+              data-testid="im-channel-form-submit"
+              data-agent-target="im-channel:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

@@ -1,0 +1,231 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesWmStockTakingPlanParam",
+  "kebab": "mes-wm-stock-taking-plan-param",
+  "businessName": "MES 盘点方案参数",
+  "permissionPrefix": "mes:mes_wm_stock_taking_plan_param",
+  "page": {
+    "route": "/admin/mes/mes-wm-stock-taking-plan-param",
+    "title": "MES 盘点方案参数管理",
+    "titleSelector": "[data-testid=\"mes-wm-stock-taking-plan-param-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-wm-stock-taking-plan-param",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-wm-stock-taking-plan-param",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-wm-stock-taking-plan-param/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-wm-stock-taking-plan-param"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-wm-stock-taking-plan-param/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-wm-stock-taking-plan-param/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-wm-stock-taking-plan-param-title\"]",
+    "refresh": "[data-testid=\"mes-wm-stock-taking-plan-param-refresh\"]",
+    "createButton": "[data-testid=\"mes-wm-stock-taking-plan-param-create\"]",
+    "searchForm": "[data-testid=\"mes-wm-stock-taking-plan-param-search\"]",
+    "searchSubmit": "[data-testid=\"mes-wm-stock-taking-plan-param-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-wm-stock-taking-plan-param-search-reset\"]",
+    "total": "[data-testid=\"mes-wm-stock-taking-plan-param-total\"]",
+    "table": "[data-testid=\"mes-wm-stock-taking-plan-param-table\"]",
+    "row": "[data-testid=\"mes-wm-stock-taking-plan-param-row\"]",
+    "editButton": "[data-testid=\"mes-wm-stock-taking-plan-param-edit\"]",
+    "deleteButton": "[data-testid=\"mes-wm-stock-taking-plan-param-delete\"]",
+    "form": "[data-testid=\"mes-wm-stock-taking-plan-param-form\"]",
+    "formError": "[data-testid=\"mes-wm-stock-taking-plan-param-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-wm-stock-taking-plan-param-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-wm-stock-taking-plan-param-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-wm-stock-taking-plan-param-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 盘点方案参数列表",
+    "dialogLabel": {
+      "create": "新增MES 盘点方案参数",
+      "edit": "编辑MES 盘点方案参数"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "plan_id",
+        "label": "盘点方案编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-plan_id",
+        "selector": "[data-testid=\"field-plan_id\"]"
+      },
+      {
+        "name": "type",
+        "label": "参数值类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "value_id",
+        "label": "参数值编号，例如仓库、库区、库位、物料、批次的主键 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-value_id",
+        "selector": "[data-testid=\"field-value_id\"]"
+      },
+      {
+        "name": "value_code",
+        "label": "参数值编码，例如仓库编码、库区编码、库位编码、物料编码、批次编码",
+        "type": "string",
+        "required": false,
+        "testId": "field-value_code",
+        "selector": "[data-testid=\"field-value_code\"]"
+      },
+      {
+        "name": "value_name",
+        "label": "参数值名称，例如仓库名称、库区名称、库位名称、物料名称、批次名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-value_name",
+        "selector": "[data-testid=\"field-value_name\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-wm-stock-taking-plan-param",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-wm-stock-taking-plan-param\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-wm-stock-taking-plan-param-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-wm-stock-taking-plan-param-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-wm-stock-taking-plan-param:search",
+      "reset": "mes-wm-stock-taking-plan-param:reset",
+      "refresh": "mes-wm-stock-taking-plan-param:refresh",
+      "create": "mes-wm-stock-taking-plan-param:create",
+      "edit": "mes-wm-stock-taking-plan-param:edit",
+      "delete": "mes-wm-stock-taking-plan-param:delete",
+      "submit": "mes-wm-stock-taking-plan-param:submit",
+      "cancel": "mes-wm-stock-taking-plan-param:cancel",
+      "close": "mes-wm-stock-taking-plan-param:close",
+      "row": "mes-wm-stock-taking-plan-param:row",
+      "pagination": "mes-wm-stock-taking-plan-param:pagination",
+      "fields": {
+        "plan_id": "mes-wm-stock-taking-plan-param:field:plan_id",
+        "type": "mes-wm-stock-taking-plan-param:field:type",
+        "value_id": "mes-wm-stock-taking-plan-param:field:value_id",
+        "value_code": "mes-wm-stock-taking-plan-param:field:value_code",
+        "value_name": "mes-wm-stock-taking-plan-param:field:value_name",
+        "remark": "mes-wm-stock-taking-plan-param:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-wm-stock-taking-plan-param",
+      "examples": [
+        "mes.mes-wm-stock-taking-plan-param__List__Refresh",
+        "mes.mes-wm-stock-taking-plan-param__ListItem__Open",
+        "mes.mes-wm-stock-taking-plan-param__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

@@ -1,0 +1,330 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mp",
+  "entity": "MpAutoReply",
+  "kebab": "mp-auto-reply",
+  "businessName": "公众号消息自动回复",
+  "permissionPrefix": "mp:mp_auto_reply",
+  "page": {
+    "route": "/admin/mp/mp-auto-reply",
+    "title": "公众号消息自动回复管理",
+    "titleSelector": "[data-testid=\"mp-auto-reply-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mp/api",
+    "bffMount": "/api/v1/admin/mp",
+    "resource": "mp-auto-reply",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mp-auto-reply",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mp-auto-reply/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mp-auto-reply"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mp-auto-reply/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mp-auto-reply/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mp-auto-reply-title\"]",
+    "refresh": "[data-testid=\"mp-auto-reply-refresh\"]",
+    "createButton": "[data-testid=\"mp-auto-reply-create\"]",
+    "searchForm": "[data-testid=\"mp-auto-reply-search\"]",
+    "searchSubmit": "[data-testid=\"mp-auto-reply-search-submit\"]",
+    "searchReset": "[data-testid=\"mp-auto-reply-search-reset\"]",
+    "total": "[data-testid=\"mp-auto-reply-total\"]",
+    "table": "[data-testid=\"mp-auto-reply-table\"]",
+    "row": "[data-testid=\"mp-auto-reply-row\"]",
+    "editButton": "[data-testid=\"mp-auto-reply-edit\"]",
+    "deleteButton": "[data-testid=\"mp-auto-reply-delete\"]",
+    "form": "[data-testid=\"mp-auto-reply-form\"]",
+    "formError": "[data-testid=\"mp-auto-reply-form-error\"]",
+    "formSubmit": "[data-testid=\"mp-auto-reply-form-submit\"]",
+    "formCancel": "[data-testid=\"mp-auto-reply-form-cancel\"]",
+    "formClose": "[data-testid=\"mp-auto-reply-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "公众号消息自动回复列表",
+    "dialogLabel": {
+      "create": "新增公众号消息自动回复",
+      "edit": "编辑公众号消息自动回复"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "account_id",
+        "label": "公众号账号的编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-account_id",
+        "selector": "[data-testid=\"field-account_id\"]"
+      },
+      {
+        "name": "app_id",
+        "label": "公众号 appId",
+        "type": "string",
+        "required": false,
+        "testId": "field-app_id",
+        "selector": "[data-testid=\"field-app_id\"]"
+      },
+      {
+        "name": "type",
+        "label": "回复类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "request_keyword",
+        "label": "请求的关键字",
+        "type": "string",
+        "required": false,
+        "testId": "field-request_keyword",
+        "selector": "[data-testid=\"field-request_keyword\"]"
+      },
+      {
+        "name": "request_match",
+        "label": "请求的关键字的匹配",
+        "type": "number",
+        "required": false,
+        "testId": "field-request_match",
+        "selector": "[data-testid=\"field-request_match\"]"
+      },
+      {
+        "name": "request_message_type",
+        "label": "请求的消息类型",
+        "type": "string",
+        "required": false,
+        "testId": "field-request_message_type",
+        "selector": "[data-testid=\"field-request_message_type\"]"
+      },
+      {
+        "name": "response_message_type",
+        "label": "回复的消息类型",
+        "type": "string",
+        "required": false,
+        "testId": "field-response_message_type",
+        "selector": "[data-testid=\"field-response_message_type\"]"
+      },
+      {
+        "name": "response_content",
+        "label": "回复的消息内容",
+        "type": "string",
+        "required": false,
+        "testId": "field-response_content",
+        "selector": "[data-testid=\"field-response_content\"]"
+      },
+      {
+        "name": "response_media_id",
+        "label": "回复的媒体 id",
+        "type": "string",
+        "required": false,
+        "testId": "field-response_media_id",
+        "selector": "[data-testid=\"field-response_media_id\"]"
+      },
+      {
+        "name": "response_media_url",
+        "label": "回复的媒体 URL",
+        "type": "string",
+        "required": false,
+        "testId": "field-response_media_url",
+        "selector": "[data-testid=\"field-response_media_url\"]"
+      },
+      {
+        "name": "response_title",
+        "label": "回复的标题",
+        "type": "string",
+        "required": false,
+        "testId": "field-response_title",
+        "selector": "[data-testid=\"field-response_title\"]"
+      },
+      {
+        "name": "response_description",
+        "label": "回复的描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-response_description",
+        "selector": "[data-testid=\"field-response_description\"]"
+      },
+      {
+        "name": "response_thumb_media_id",
+        "label": "回复的缩略图的媒体 id，通过素材管理中的接口上传多媒体文件，得到的 id",
+        "type": "string",
+        "required": false,
+        "testId": "field-response_thumb_media_id",
+        "selector": "[data-testid=\"field-response_thumb_media_id\"]"
+      },
+      {
+        "name": "response_thumb_media_url",
+        "label": "回复的缩略图的媒体 URL",
+        "type": "string",
+        "required": false,
+        "testId": "field-response_thumb_media_url",
+        "selector": "[data-testid=\"field-response_thumb_media_url\"]"
+      },
+      {
+        "name": "response_articles",
+        "label": "回复的图文消息",
+        "type": "string",
+        "required": false,
+        "testId": "field-response_articles",
+        "selector": "[data-testid=\"field-response_articles\"]"
+      },
+      {
+        "name": "response_music_url",
+        "label": "回复的音乐链接",
+        "type": "string",
+        "required": false,
+        "testId": "field-response_music_url",
+        "selector": "[data-testid=\"field-response_music_url\"]"
+      },
+      {
+        "name": "response_hq_music_url",
+        "label": "回复的高质量音乐链接",
+        "type": "string",
+        "required": false,
+        "testId": "field-response_hq_music_url",
+        "selector": "[data-testid=\"field-response_hq_music_url\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mp-auto-reply",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mp-auto-reply\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mp-auto-reply-form-overlay\"]",
+      "dialog": "[data-testid=\"mp-auto-reply-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mp-auto-reply:search",
+      "reset": "mp-auto-reply:reset",
+      "refresh": "mp-auto-reply:refresh",
+      "create": "mp-auto-reply:create",
+      "edit": "mp-auto-reply:edit",
+      "delete": "mp-auto-reply:delete",
+      "submit": "mp-auto-reply:submit",
+      "cancel": "mp-auto-reply:cancel",
+      "close": "mp-auto-reply:close",
+      "row": "mp-auto-reply:row",
+      "pagination": "mp-auto-reply:pagination",
+      "fields": {
+        "account_id": "mp-auto-reply:field:account_id",
+        "app_id": "mp-auto-reply:field:app_id",
+        "type": "mp-auto-reply:field:type",
+        "request_keyword": "mp-auto-reply:field:request_keyword",
+        "request_match": "mp-auto-reply:field:request_match",
+        "request_message_type": "mp-auto-reply:field:request_message_type",
+        "response_message_type": "mp-auto-reply:field:response_message_type",
+        "response_content": "mp-auto-reply:field:response_content",
+        "response_media_id": "mp-auto-reply:field:response_media_id",
+        "response_media_url": "mp-auto-reply:field:response_media_url",
+        "response_title": "mp-auto-reply:field:response_title",
+        "response_description": "mp-auto-reply:field:response_description",
+        "response_thumb_media_id": "mp-auto-reply:field:response_thumb_media_id",
+        "response_thumb_media_url": "mp-auto-reply:field:response_thumb_media_url",
+        "response_articles": "mp-auto-reply:field:response_articles",
+        "response_music_url": "mp-auto-reply:field:response_music_url",
+        "response_hq_music_url": "mp-auto-reply:field:response_hq_music_url"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mp.mp-auto-reply",
+      "examples": [
+        "mp.mp-auto-reply__List__Refresh",
+        "mp.mp-auto-reply__ListItem__Open",
+        "mp.mp-auto-reply__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

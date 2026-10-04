@@ -1,0 +1,285 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "DeliveryPickUpStore",
+  "kebab": "delivery-pick-up-store",
+  "businessName": "自提门店",
+  "permissionPrefix": "mall:delivery_pick_up_store",
+  "page": {
+    "route": "/admin/mall/delivery-pick-up-store",
+    "title": "自提门店管理",
+    "titleSelector": "[data-testid=\"delivery-pick-up-store-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "delivery-pick-up-store",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/delivery-pick-up-store",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/delivery-pick-up-store/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/delivery-pick-up-store"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/delivery-pick-up-store/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/delivery-pick-up-store/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"delivery-pick-up-store-title\"]",
+    "refresh": "[data-testid=\"delivery-pick-up-store-refresh\"]",
+    "createButton": "[data-testid=\"delivery-pick-up-store-create\"]",
+    "searchForm": "[data-testid=\"delivery-pick-up-store-search\"]",
+    "searchSubmit": "[data-testid=\"delivery-pick-up-store-search-submit\"]",
+    "searchReset": "[data-testid=\"delivery-pick-up-store-search-reset\"]",
+    "total": "[data-testid=\"delivery-pick-up-store-total\"]",
+    "table": "[data-testid=\"delivery-pick-up-store-table\"]",
+    "row": "[data-testid=\"delivery-pick-up-store-row\"]",
+    "editButton": "[data-testid=\"delivery-pick-up-store-edit\"]",
+    "deleteButton": "[data-testid=\"delivery-pick-up-store-delete\"]",
+    "form": "[data-testid=\"delivery-pick-up-store-form\"]",
+    "formError": "[data-testid=\"delivery-pick-up-store-form-error\"]",
+    "formSubmit": "[data-testid=\"delivery-pick-up-store-form-submit\"]",
+    "formCancel": "[data-testid=\"delivery-pick-up-store-form-cancel\"]",
+    "formClose": "[data-testid=\"delivery-pick-up-store-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "自提门店列表",
+    "dialogLabel": {
+      "create": "新增自提门店",
+      "edit": "编辑自提门店"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "门店名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "introduction",
+        "label": "门店简介",
+        "type": "string",
+        "required": false,
+        "testId": "field-introduction",
+        "selector": "[data-testid=\"field-introduction\"]"
+      },
+      {
+        "name": "phone",
+        "label": "门店手机",
+        "type": "string",
+        "required": false,
+        "testId": "field-phone",
+        "selector": "[data-testid=\"field-phone\"]"
+      },
+      {
+        "name": "area_id",
+        "label": "区域编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-area_id",
+        "selector": "[data-testid=\"field-area_id\"]"
+      },
+      {
+        "name": "detail_address",
+        "label": "门店详细地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-detail_address",
+        "selector": "[data-testid=\"field-detail_address\"]"
+      },
+      {
+        "name": "logo",
+        "label": "门店 logo",
+        "type": "string",
+        "required": false,
+        "testId": "field-logo",
+        "selector": "[data-testid=\"field-logo\"]"
+      },
+      {
+        "name": "opening_time",
+        "label": "营业开始时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-opening_time",
+        "selector": "[data-testid=\"field-opening_time\"]"
+      },
+      {
+        "name": "closing_time",
+        "label": "营业结束时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-closing_time",
+        "selector": "[data-testid=\"field-closing_time\"]"
+      },
+      {
+        "name": "latitude",
+        "label": "纬度",
+        "type": "number",
+        "required": false,
+        "testId": "field-latitude",
+        "selector": "[data-testid=\"field-latitude\"]"
+      },
+      {
+        "name": "longitude",
+        "label": "经度",
+        "type": "number",
+        "required": false,
+        "testId": "field-longitude",
+        "selector": "[data-testid=\"field-longitude\"]"
+      },
+      {
+        "name": "verify_user_ids",
+        "label": "核销员工用户编号数组",
+        "type": "string",
+        "required": false,
+        "testId": "field-verify_user_ids",
+        "selector": "[data-testid=\"field-verify_user_ids\"]"
+      },
+      {
+        "name": "status",
+        "label": "门店状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "delivery-pick-up-store",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"delivery-pick-up-store\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"delivery-pick-up-store-form-overlay\"]",
+      "dialog": "[data-testid=\"delivery-pick-up-store-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "delivery-pick-up-store:search",
+      "reset": "delivery-pick-up-store:reset",
+      "refresh": "delivery-pick-up-store:refresh",
+      "create": "delivery-pick-up-store:create",
+      "edit": "delivery-pick-up-store:edit",
+      "delete": "delivery-pick-up-store:delete",
+      "submit": "delivery-pick-up-store:submit",
+      "cancel": "delivery-pick-up-store:cancel",
+      "close": "delivery-pick-up-store:close",
+      "row": "delivery-pick-up-store:row",
+      "pagination": "delivery-pick-up-store:pagination",
+      "fields": {
+        "name": "delivery-pick-up-store:field:name",
+        "introduction": "delivery-pick-up-store:field:introduction",
+        "phone": "delivery-pick-up-store:field:phone",
+        "area_id": "delivery-pick-up-store:field:area_id",
+        "detail_address": "delivery-pick-up-store:field:detail_address",
+        "logo": "delivery-pick-up-store:field:logo",
+        "opening_time": "delivery-pick-up-store:field:opening_time",
+        "closing_time": "delivery-pick-up-store:field:closing_time",
+        "latitude": "delivery-pick-up-store:field:latitude",
+        "longitude": "delivery-pick-up-store:field:longitude",
+        "verify_user_ids": "delivery-pick-up-store:field:verify_user_ids",
+        "status": "delivery-pick-up-store:field:status"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.delivery-pick-up-store",
+      "examples": [
+        "mall.delivery-pick-up-store__List__Refresh",
+        "mall.delivery-pick-up-store__ListItem__Open",
+        "mall.delivery-pick-up-store__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

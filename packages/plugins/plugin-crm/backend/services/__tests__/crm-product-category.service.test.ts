@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { CrmProductCategoryService } from "../crm-product-category.service"
 
 describe("CrmProductCategoryService", () => {
-  it("should create and query CrmProductCategory（源框架导入）", async () => {
+  it("should create and query 产品分类", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CrmProductCategoryService.create({
-        name: "测试CrmProductCategory（源框架导入）",
+        name: "测试产品分类",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("CrmProductCategoryService", () => {
   
       const updated = await CrmProductCategoryService.update(created.id, {
         id: created.id,
-        name: "更新CrmProductCategory（源框架导入）",
+        name: "更新产品分类",
       } as any)
       expect(updated).toBeDefined()
   

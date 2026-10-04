@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MemberGroupService } from "../member-group.service"
 
 describe("MemberGroupService", () => {
-  it("should create and query MemberGroup（源框架导入）", async () => {
+  it("should create and query 用户分组", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MemberGroupService.create({
-        name: "测试MemberGroup（源框架导入）",
+        name: "测试用户分组",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("MemberGroupService", () => {
   
       const updated = await MemberGroupService.update(created.id, {
         id: created.id,
-        name: "更新MemberGroup（源框架导入）",
+        name: "更新用户分组",
       } as any)
       expect(updated).toBeDefined()
   

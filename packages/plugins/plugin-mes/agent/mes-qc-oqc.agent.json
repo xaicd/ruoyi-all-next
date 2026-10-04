@@ -1,0 +1,429 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesQcOqc",
+  "kebab": "mes-qc-oqc",
+  "businessName": "MES 出货检验单（OQC, Outgoing Quality Control）",
+  "permissionPrefix": "mes:mes_qc_oqc",
+  "page": {
+    "route": "/admin/mes/mes-qc-oqc",
+    "title": "MES 出货检验单（OQC, Outgoing Quality Control）管理",
+    "titleSelector": "[data-testid=\"mes-qc-oqc-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-qc-oqc",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-qc-oqc",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-qc-oqc/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-qc-oqc"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-qc-oqc/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-qc-oqc/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-qc-oqc-title\"]",
+    "refresh": "[data-testid=\"mes-qc-oqc-refresh\"]",
+    "createButton": "[data-testid=\"mes-qc-oqc-create\"]",
+    "searchForm": "[data-testid=\"mes-qc-oqc-search\"]",
+    "searchSubmit": "[data-testid=\"mes-qc-oqc-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-qc-oqc-search-reset\"]",
+    "total": "[data-testid=\"mes-qc-oqc-total\"]",
+    "table": "[data-testid=\"mes-qc-oqc-table\"]",
+    "row": "[data-testid=\"mes-qc-oqc-row\"]",
+    "editButton": "[data-testid=\"mes-qc-oqc-edit\"]",
+    "deleteButton": "[data-testid=\"mes-qc-oqc-delete\"]",
+    "form": "[data-testid=\"mes-qc-oqc-form\"]",
+    "formError": "[data-testid=\"mes-qc-oqc-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-qc-oqc-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-qc-oqc-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-qc-oqc-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 出货检验单（OQC, Outgoing Quality Control）列表",
+    "dialogLabel": {
+      "create": "新增MES 出货检验单（OQC, Outgoing Quality Control）",
+      "edit": "编辑MES 出货检验单（OQC, Outgoing Quality Control）"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "code",
+        "label": "检验单编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-code",
+        "selector": "[data-testid=\"field-code\"]"
+      },
+      {
+        "name": "name",
+        "label": "检验单名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "template_id",
+        "label": "检验模板 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-template_id",
+        "selector": "[data-testid=\"field-template_id\"]"
+      },
+      {
+        "name": "source_doc_type",
+        "label": "来源单据类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-source_doc_type",
+        "selector": "[data-testid=\"field-source_doc_type\"]"
+      },
+      {
+        "name": "source_doc_id",
+        "label": "来源单据 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-source_doc_id",
+        "selector": "[data-testid=\"field-source_doc_id\"]"
+      },
+      {
+        "name": "source_line_id",
+        "label": "来源单据行 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-source_line_id",
+        "selector": "[data-testid=\"field-source_line_id\"]"
+      },
+      {
+        "name": "source_doc_code",
+        "label": "来源单据编号（冗余）",
+        "type": "string",
+        "required": false,
+        "testId": "field-source_doc_code",
+        "selector": "[data-testid=\"field-source_doc_code\"]"
+      },
+      {
+        "name": "client_id",
+        "label": "客户 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-client_id",
+        "selector": "[data-testid=\"field-client_id\"]"
+      },
+      {
+        "name": "batch_code",
+        "label": "批次号",
+        "type": "string",
+        "required": false,
+        "testId": "field-batch_code",
+        "selector": "[data-testid=\"field-batch_code\"]"
+      },
+      {
+        "name": "item_id",
+        "label": "产品物料 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-item_id",
+        "selector": "[data-testid=\"field-item_id\"]"
+      },
+      {
+        "name": "min_check_quantity",
+        "label": "最低检测数",
+        "type": "number",
+        "required": false,
+        "testId": "field-min_check_quantity",
+        "selector": "[data-testid=\"field-min_check_quantity\"]"
+      },
+      {
+        "name": "max_unqualified_quantity",
+        "label": "最大不合格数",
+        "type": "number",
+        "required": false,
+        "testId": "field-max_unqualified_quantity",
+        "selector": "[data-testid=\"field-max_unqualified_quantity\"]"
+      },
+      {
+        "name": "out_quantity",
+        "label": "本次出货数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-out_quantity",
+        "selector": "[data-testid=\"field-out_quantity\"]"
+      },
+      {
+        "name": "check_quantity",
+        "label": "本次检测数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-check_quantity",
+        "selector": "[data-testid=\"field-check_quantity\"]"
+      },
+      {
+        "name": "qualified_quantity",
+        "label": "合格品数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-qualified_quantity",
+        "selector": "[data-testid=\"field-qualified_quantity\"]"
+      },
+      {
+        "name": "unqualified_quantity",
+        "label": "不合格品数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-unqualified_quantity",
+        "selector": "[data-testid=\"field-unqualified_quantity\"]"
+      },
+      {
+        "name": "critical_rate",
+        "label": "致命缺陷率（%）",
+        "type": "number",
+        "required": false,
+        "testId": "field-critical_rate",
+        "selector": "[data-testid=\"field-critical_rate\"]"
+      },
+      {
+        "name": "major_rate",
+        "label": "严重缺陷率（%）",
+        "type": "number",
+        "required": false,
+        "testId": "field-major_rate",
+        "selector": "[data-testid=\"field-major_rate\"]"
+      },
+      {
+        "name": "minor_rate",
+        "label": "轻微缺陷率（%）",
+        "type": "number",
+        "required": false,
+        "testId": "field-minor_rate",
+        "selector": "[data-testid=\"field-minor_rate\"]"
+      },
+      {
+        "name": "critical_quantity",
+        "label": "致命缺陷数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-critical_quantity",
+        "selector": "[data-testid=\"field-critical_quantity\"]"
+      },
+      {
+        "name": "major_quantity",
+        "label": "严重缺陷数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-major_quantity",
+        "selector": "[data-testid=\"field-major_quantity\"]"
+      },
+      {
+        "name": "minor_quantity",
+        "label": "轻微缺陷数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-minor_quantity",
+        "selector": "[data-testid=\"field-minor_quantity\"]"
+      },
+      {
+        "name": "check_result",
+        "label": "检测结果",
+        "type": "number",
+        "required": false,
+        "testId": "field-check_result",
+        "selector": "[data-testid=\"field-check_result\"]"
+      },
+      {
+        "name": "out_date",
+        "label": "出货日期",
+        "type": "string",
+        "required": false,
+        "testId": "field-out_date",
+        "selector": "[data-testid=\"field-out_date\"]"
+      },
+      {
+        "name": "inspect_date",
+        "label": "检测日期",
+        "type": "string",
+        "required": false,
+        "testId": "field-inspect_date",
+        "selector": "[data-testid=\"field-inspect_date\"]"
+      },
+      {
+        "name": "inspector_user_id",
+        "label": "检测人员用户 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-inspector_user_id",
+        "selector": "[data-testid=\"field-inspector_user_id\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-qc-oqc",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-qc-oqc\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-qc-oqc-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-qc-oqc-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-qc-oqc:search",
+      "reset": "mes-qc-oqc:reset",
+      "refresh": "mes-qc-oqc:refresh",
+      "create": "mes-qc-oqc:create",
+      "edit": "mes-qc-oqc:edit",
+      "delete": "mes-qc-oqc:delete",
+      "submit": "mes-qc-oqc:submit",
+      "cancel": "mes-qc-oqc:cancel",
+      "close": "mes-qc-oqc:close",
+      "row": "mes-qc-oqc:row",
+      "pagination": "mes-qc-oqc:pagination",
+      "fields": {
+        "code": "mes-qc-oqc:field:code",
+        "name": "mes-qc-oqc:field:name",
+        "template_id": "mes-qc-oqc:field:template_id",
+        "source_doc_type": "mes-qc-oqc:field:source_doc_type",
+        "source_doc_id": "mes-qc-oqc:field:source_doc_id",
+        "source_line_id": "mes-qc-oqc:field:source_line_id",
+        "source_doc_code": "mes-qc-oqc:field:source_doc_code",
+        "client_id": "mes-qc-oqc:field:client_id",
+        "batch_code": "mes-qc-oqc:field:batch_code",
+        "item_id": "mes-qc-oqc:field:item_id",
+        "min_check_quantity": "mes-qc-oqc:field:min_check_quantity",
+        "max_unqualified_quantity": "mes-qc-oqc:field:max_unqualified_quantity",
+        "out_quantity": "mes-qc-oqc:field:out_quantity",
+        "check_quantity": "mes-qc-oqc:field:check_quantity",
+        "qualified_quantity": "mes-qc-oqc:field:qualified_quantity",
+        "unqualified_quantity": "mes-qc-oqc:field:unqualified_quantity",
+        "critical_rate": "mes-qc-oqc:field:critical_rate",
+        "major_rate": "mes-qc-oqc:field:major_rate",
+        "minor_rate": "mes-qc-oqc:field:minor_rate",
+        "critical_quantity": "mes-qc-oqc:field:critical_quantity",
+        "major_quantity": "mes-qc-oqc:field:major_quantity",
+        "minor_quantity": "mes-qc-oqc:field:minor_quantity",
+        "check_result": "mes-qc-oqc:field:check_result",
+        "out_date": "mes-qc-oqc:field:out_date",
+        "inspect_date": "mes-qc-oqc:field:inspect_date",
+        "inspector_user_id": "mes-qc-oqc:field:inspector_user_id",
+        "status": "mes-qc-oqc:field:status",
+        "remark": "mes-qc-oqc:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-qc-oqc",
+      "examples": [
+        "mes.mes-qc-oqc__List__Refresh",
+        "mes.mes-qc-oqc__ListItem__Open",
+        "mes.mes-qc-oqc__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MemberAddressService } from "../member-address.service"
 
 describe("MemberAddressService", () => {
-  it("should create and query MemberAddress（源框架导入）", async () => {
+  it("should create and query 用户收件地址", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MemberAddressService.create({
         user_id: 1,
@@ -21,7 +21,7 @@ describe("MemberAddressService", () => {
   
       const updated = await MemberAddressService.update(created.id, {
         id: created.id,
-        user_id: "更新MemberAddress（源框架导入）",
+        user_id: "更新用户收件地址",
       } as any)
       expect(updated).toBeDefined()
   

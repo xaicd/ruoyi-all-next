@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { GoViewProjectService } from "../go-view-project.service"
 
 describe("GoViewProjectService", () => {
-  it("should create and query GoViewProject（源框架导入）", async () => {
+  it("should create and query GoView 项目表每个大屏图标，对应一个项目", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await GoViewProjectService.create({
-        name: "测试GoViewProject（源框架导入）",
+        name: "测试GoView 项目表每个大屏图标，对应一个项目",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("GoViewProjectService", () => {
   
       const updated = await GoViewProjectService.update(created.id, {
         id: created.id,
-        name: "更新GoViewProject（源框架导入）",
+        name: "更新GoView 项目表每个大屏图标，对应一个项目",
       } as any)
       expect(updated).toBeDefined()
   

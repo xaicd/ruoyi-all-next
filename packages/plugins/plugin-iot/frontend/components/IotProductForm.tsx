@@ -61,24 +61,36 @@ export function IotProductForm({ open, initialData, onClose, onSuccess }: IotPro
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="iot-product-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑IoT 产品" : "新增IoT 产品"}
+        data-testid="iot-product-form"
+        data-agent-scope="iot-product:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑IotProduct（源框架导入）" : "新增IotProduct（源框架导入）"}
+            {isEdit ? "编辑IoT 产品" : "新增IoT 产品"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="iot-product-form-close" data-agent-target="iot-product:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="iot-product-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品名称</label>
+          <label htmlFor="iot-product-name" className="block text-xs text-slate-600 mb-1">产品名称</label>
           <input
             type="text"
+            id="iot-product-name"
+            data-testid="field-name"
+            data-agent-target="iot-product:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="产品名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -88,9 +100,14 @@ export function IotProductForm({ open, initialData, onClose, onSuccess }: IotPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品标识</label>
+          <label htmlFor="iot-product-product_key" className="block text-xs text-slate-600 mb-1">产品标识</label>
           <input
             type="text"
+            id="iot-product-product_key"
+            data-testid="field-product_key"
+            data-agent-target="iot-product:field:product_key"
+            data-agent-state={formData.product_key ? "filled" : "empty"}
+            aria-label="产品标识"
             value={formData.product_key ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, product_key: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -100,9 +117,14 @@ export function IotProductForm({ open, initialData, onClose, onSuccess }: IotPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品密钥，用于一型一密动态注册</label>
+          <label htmlFor="iot-product-product_secret" className="block text-xs text-slate-600 mb-1">产品密钥，用于一型一密动态注册</label>
           <input
             type="text"
+            id="iot-product-product_secret"
+            data-testid="field-product_secret"
+            data-agent-target="iot-product:field:product_secret"
+            data-agent-state={formData.product_secret ? "filled" : "empty"}
+            aria-label="产品密钥，用于一型一密动态注册"
             value={formData.product_secret ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, product_secret: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -114,18 +136,27 @@ export function IotProductForm({ open, initialData, onClose, onSuccess }: IotPro
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="register_enabled"
+            id="iot-product-register_enabled"
+            data-testid="field-register_enabled"
+            data-agent-target="iot-product:field:register_enabled"
+            data-agent-state={formData.register_enabled ? "on" : "off"}
+            aria-label="是否开启动态注册"
             checked={Boolean(formData.register_enabled)}
             onChange={(e) => setFormData((prev) => ({ ...prev, register_enabled: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="register_enabled" className="text-xs text-slate-700 font-medium">是否开启动态注册</label>
+          <label htmlFor="iot-product-register_enabled" className="text-xs text-slate-700 font-medium">是否开启动态注册</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品分类编号</label>
+          <label htmlFor="iot-product-category_id" className="block text-xs text-slate-600 mb-1">产品分类编号</label>
           <input
             type="number"
+            id="iot-product-category_id"
+            data-testid="field-category_id"
+            data-agent-target="iot-product:field:category_id"
+            data-agent-state={formData.category_id == null || formData.category_id === "" ? "empty" : "filled"}
+            aria-label="产品分类编号"
             value={formData.category_id != null ? String(formData.category_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, category_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -135,9 +166,14 @@ export function IotProductForm({ open, initialData, onClose, onSuccess }: IotPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品图标</label>
+          <label htmlFor="iot-product-icon" className="block text-xs text-slate-600 mb-1">产品图标</label>
           <input
             type="text"
+            id="iot-product-icon"
+            data-testid="field-icon"
+            data-agent-target="iot-product:field:icon"
+            data-agent-state={formData.icon ? "filled" : "empty"}
+            aria-label="产品图标"
             value={formData.icon ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, icon: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -147,9 +183,14 @@ export function IotProductForm({ open, initialData, onClose, onSuccess }: IotPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品图片</label>
+          <label htmlFor="iot-product-pic_url" className="block text-xs text-slate-600 mb-1">产品图片</label>
           <input
             type="text"
+            id="iot-product-pic_url"
+            data-testid="field-pic_url"
+            data-agent-target="iot-product:field:pic_url"
+            data-agent-state={formData.pic_url ? "filled" : "empty"}
+            aria-label="产品图片"
             value={formData.pic_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pic_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -159,9 +200,14 @@ export function IotProductForm({ open, initialData, onClose, onSuccess }: IotPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品描述</label>
+          <label htmlFor="iot-product-description" className="block text-xs text-slate-600 mb-1">产品描述</label>
           <input
             type="text"
+            id="iot-product-description"
+            data-testid="field-description"
+            data-agent-target="iot-product:field:description"
+            data-agent-state={formData.description ? "filled" : "empty"}
+            aria-label="产品描述"
             value={formData.description ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,9 +217,14 @@ export function IotProductForm({ open, initialData, onClose, onSuccess }: IotPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品状态</label>
+          <label htmlFor="iot-product-status" className="block text-xs text-slate-600 mb-1">产品状态</label>
           <input
             type="number"
+            id="iot-product-status"
+            data-testid="field-status"
+            data-agent-target="iot-product:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="产品状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -183,9 +234,14 @@ export function IotProductForm({ open, initialData, onClose, onSuccess }: IotPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备类型</label>
+          <label htmlFor="iot-product-device_type" className="block text-xs text-slate-600 mb-1">设备类型</label>
           <input
             type="number"
+            id="iot-product-device_type"
+            data-testid="field-device_type"
+            data-agent-target="iot-product:field:device_type"
+            data-agent-state={formData.device_type == null || formData.device_type === "" ? "empty" : "filled"}
+            aria-label="设备类型"
             value={formData.device_type != null ? String(formData.device_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, device_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -195,9 +251,14 @@ export function IotProductForm({ open, initialData, onClose, onSuccess }: IotPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">联网方式</label>
+          <label htmlFor="iot-product-net_type" className="block text-xs text-slate-600 mb-1">联网方式</label>
           <input
             type="number"
+            id="iot-product-net_type"
+            data-testid="field-net_type"
+            data-agent-target="iot-product:field:net_type"
+            data-agent-state={formData.net_type == null || formData.net_type === "" ? "empty" : "filled"}
+            aria-label="联网方式"
             value={formData.net_type != null ? String(formData.net_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, net_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -207,9 +268,14 @@ export function IotProductForm({ open, initialData, onClose, onSuccess }: IotPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">协议类型</label>
+          <label htmlFor="iot-product-protocol_type" className="block text-xs text-slate-600 mb-1">协议类型</label>
           <input
             type="text"
+            id="iot-product-protocol_type"
+            data-testid="field-protocol_type"
+            data-agent-target="iot-product:field:protocol_type"
+            data-agent-state={formData.protocol_type ? "filled" : "empty"}
+            aria-label="协议类型"
             value={formData.protocol_type ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, protocol_type: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -219,9 +285,14 @@ export function IotProductForm({ open, initialData, onClose, onSuccess }: IotPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">序列化类型</label>
+          <label htmlFor="iot-product-serialize_type" className="block text-xs text-slate-600 mb-1">序列化类型</label>
           <input
             type="text"
+            id="iot-product-serialize_type"
+            data-testid="field-serialize_type"
+            data-agent-target="iot-product:field:serialize_type"
+            data-agent-state={formData.serialize_type ? "filled" : "empty"}
+            aria-label="序列化类型"
             value={formData.serialize_type ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, serialize_type: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -235,6 +306,8 @@ export function IotProductForm({ open, initialData, onClose, onSuccess }: IotPro
             <button
               type="button"
               onClick={onClose}
+              data-testid="iot-product-form-cancel"
+              data-agent-target="iot-product:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -242,6 +315,9 @@ export function IotProductForm({ open, initialData, onClose, onSuccess }: IotPro
             <button
               type="submit"
               disabled={loading}
+              data-testid="iot-product-form-submit"
+              data-agent-target="iot-product:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

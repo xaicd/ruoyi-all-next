@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MpMenuService } from "../mp-menu.service"
 
 describe("MpMenuService", () => {
-  it("should create and query MpMenu（源框架导入）", async () => {
+  it("should create and query 公众号菜单", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MpMenuService.create({
         account_id: 1,
@@ -21,7 +21,7 @@ describe("MpMenuService", () => {
   
       const updated = await MpMenuService.update(created.id, {
         id: created.id,
-        account_id: "更新MpMenu（源框架导入）",
+        account_id: "更新公众号菜单",
       } as any)
       expect(updated).toBeDefined()
   

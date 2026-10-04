@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for CombinationProduct（源框架导入） (CombinationProduct)
+-- Auto-generated RBAC & Menu Migration for 拼团商品 (CombinationProduct)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-combination-product',
   'mall-dir',
-  'CombinationProduct（源框架导入）管理',
+  '拼团商品管理',
   '/admin/mall/combination-product',
   'mall/combination-product/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-combination-product-query',  'menu-combination-product', '查询CombinationProduct（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:combination_product:query',  1, NOW(), NOW()),
-('menu-combination-product-create', 'menu-combination-product', '新增CombinationProduct（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:combination_product:create', 2, NOW(), NOW()),
-('menu-combination-product-update', 'menu-combination-product', '修改CombinationProduct（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:combination_product:update', 3, NOW(), NOW()),
-('menu-combination-product-delete', 'menu-combination-product', '删除CombinationProduct（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:combination_product:delete', 4, NOW(), NOW())
+('menu-combination-product-query',  'menu-combination-product', '查询拼团商品', 'BUTTON', 'ACTIVE', 'mall:combination_product:query',  1, NOW(), NOW()),
+('menu-combination-product-create', 'menu-combination-product', '新增拼团商品', 'BUTTON', 'ACTIVE', 'mall:combination_product:create', 2, NOW(), NOW()),
+('menu-combination-product-update', 'menu-combination-product', '修改拼团商品', 'BUTTON', 'ACTIVE', 'mall:combination_product:update', 3, NOW(), NOW()),
+('menu-combination-product-delete', 'menu-combination-product', '删除拼团商品', 'BUTTON', 'ACTIVE', 'mall:combination_product:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { CartService } from "../cart.service"
 
 describe("CartService", () => {
-  it("should create and query Cart（源框架导入）", async () => {
+  it("should create and query 购物车的商品信息 DO每个商品，对应一条记录，通过 和 关联", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CartService.create({
         user_id: 1,
@@ -21,7 +21,7 @@ describe("CartService", () => {
   
       const updated = await CartService.update(created.id, {
         id: created.id,
-        user_id: "更新Cart（源框架导入）",
+        user_id: "更新购物车的商品信息 DO每个商品，对应一条记录，通过 和 关联",
       } as any)
       expect(updated).toBeDefined()
   

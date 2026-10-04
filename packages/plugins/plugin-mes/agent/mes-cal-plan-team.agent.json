@@ -1,0 +1,204 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesCalPlanTeam",
+  "kebab": "mes-cal-plan-team",
+  "businessName": "MES 计划班组关联",
+  "permissionPrefix": "mes:mes_cal_plan_team",
+  "page": {
+    "route": "/admin/mes/mes-cal-plan-team",
+    "title": "MES 计划班组关联管理",
+    "titleSelector": "[data-testid=\"mes-cal-plan-team-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-cal-plan-team",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-cal-plan-team",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-cal-plan-team/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-cal-plan-team"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-cal-plan-team/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-cal-plan-team/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-cal-plan-team-title\"]",
+    "refresh": "[data-testid=\"mes-cal-plan-team-refresh\"]",
+    "createButton": "[data-testid=\"mes-cal-plan-team-create\"]",
+    "searchForm": "[data-testid=\"mes-cal-plan-team-search\"]",
+    "searchSubmit": "[data-testid=\"mes-cal-plan-team-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-cal-plan-team-search-reset\"]",
+    "total": "[data-testid=\"mes-cal-plan-team-total\"]",
+    "table": "[data-testid=\"mes-cal-plan-team-table\"]",
+    "row": "[data-testid=\"mes-cal-plan-team-row\"]",
+    "editButton": "[data-testid=\"mes-cal-plan-team-edit\"]",
+    "deleteButton": "[data-testid=\"mes-cal-plan-team-delete\"]",
+    "form": "[data-testid=\"mes-cal-plan-team-form\"]",
+    "formError": "[data-testid=\"mes-cal-plan-team-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-cal-plan-team-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-cal-plan-team-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-cal-plan-team-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 计划班组关联列表",
+    "dialogLabel": {
+      "create": "新增MES 计划班组关联",
+      "edit": "编辑MES 计划班组关联"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "plan_id",
+        "label": "排班计划编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-plan_id",
+        "selector": "[data-testid=\"field-plan_id\"]"
+      },
+      {
+        "name": "team_id",
+        "label": "班组编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-team_id",
+        "selector": "[data-testid=\"field-team_id\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-cal-plan-team",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-cal-plan-team\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-cal-plan-team-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-cal-plan-team-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-cal-plan-team:search",
+      "reset": "mes-cal-plan-team:reset",
+      "refresh": "mes-cal-plan-team:refresh",
+      "create": "mes-cal-plan-team:create",
+      "edit": "mes-cal-plan-team:edit",
+      "delete": "mes-cal-plan-team:delete",
+      "submit": "mes-cal-plan-team:submit",
+      "cancel": "mes-cal-plan-team:cancel",
+      "close": "mes-cal-plan-team:close",
+      "row": "mes-cal-plan-team:row",
+      "pagination": "mes-cal-plan-team:pagination",
+      "fields": {
+        "plan_id": "mes-cal-plan-team:field:plan_id",
+        "team_id": "mes-cal-plan-team:field:team_id",
+        "remark": "mes-cal-plan-team:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-cal-plan-team",
+      "examples": [
+        "mes.mes-cal-plan-team__List__Refresh",
+        "mes.mes-cal-plan-team__ListItem__Open",
+        "mes.mes-cal-plan-team__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

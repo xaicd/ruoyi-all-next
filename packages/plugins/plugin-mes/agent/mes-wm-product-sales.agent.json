@@ -1,0 +1,294 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesWmProductSales",
+  "kebab": "mes-wm-product-sales",
+  "businessName": "MES 销售出库单",
+  "permissionPrefix": "mes:mes_wm_product_sales",
+  "page": {
+    "route": "/admin/mes/mes-wm-product-sales",
+    "title": "MES 销售出库单管理",
+    "titleSelector": "[data-testid=\"mes-wm-product-sales-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-wm-product-sales",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-wm-product-sales",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-wm-product-sales/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-wm-product-sales"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-wm-product-sales/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-wm-product-sales/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-wm-product-sales-title\"]",
+    "refresh": "[data-testid=\"mes-wm-product-sales-refresh\"]",
+    "createButton": "[data-testid=\"mes-wm-product-sales-create\"]",
+    "searchForm": "[data-testid=\"mes-wm-product-sales-search\"]",
+    "searchSubmit": "[data-testid=\"mes-wm-product-sales-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-wm-product-sales-search-reset\"]",
+    "total": "[data-testid=\"mes-wm-product-sales-total\"]",
+    "table": "[data-testid=\"mes-wm-product-sales-table\"]",
+    "row": "[data-testid=\"mes-wm-product-sales-row\"]",
+    "editButton": "[data-testid=\"mes-wm-product-sales-edit\"]",
+    "deleteButton": "[data-testid=\"mes-wm-product-sales-delete\"]",
+    "form": "[data-testid=\"mes-wm-product-sales-form\"]",
+    "formError": "[data-testid=\"mes-wm-product-sales-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-wm-product-sales-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-wm-product-sales-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-wm-product-sales-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 销售出库单列表",
+    "dialogLabel": {
+      "create": "新增MES 销售出库单",
+      "edit": "编辑MES 销售出库单"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "code",
+        "label": "出库单号",
+        "type": "string",
+        "required": false,
+        "testId": "field-code",
+        "selector": "[data-testid=\"field-code\"]"
+      },
+      {
+        "name": "name",
+        "label": "出库单名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "client_id",
+        "label": "客户ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-client_id",
+        "selector": "[data-testid=\"field-client_id\"]"
+      },
+      {
+        "name": "sales_order_code",
+        "label": "销售订单号",
+        "type": "string",
+        "required": false,
+        "testId": "field-sales_order_code",
+        "selector": "[data-testid=\"field-sales_order_code\"]"
+      },
+      {
+        "name": "notice_id",
+        "label": "发货通知单 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-notice_id",
+        "selector": "[data-testid=\"field-notice_id\"]"
+      },
+      {
+        "name": "sales_date",
+        "label": "出库日期",
+        "type": "string",
+        "required": false,
+        "testId": "field-sales_date",
+        "selector": "[data-testid=\"field-sales_date\"]"
+      },
+      {
+        "name": "contact_name",
+        "label": "联系人",
+        "type": "string",
+        "required": false,
+        "testId": "field-contact_name",
+        "selector": "[data-testid=\"field-contact_name\"]"
+      },
+      {
+        "name": "contact_telephone",
+        "label": "联系电话",
+        "type": "string",
+        "required": false,
+        "testId": "field-contact_telephone",
+        "selector": "[data-testid=\"field-contact_telephone\"]"
+      },
+      {
+        "name": "contact_address",
+        "label": "收货地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-contact_address",
+        "selector": "[data-testid=\"field-contact_address\"]"
+      },
+      {
+        "name": "carrier",
+        "label": "承运商",
+        "type": "string",
+        "required": false,
+        "testId": "field-carrier",
+        "selector": "[data-testid=\"field-carrier\"]"
+      },
+      {
+        "name": "shipping_number",
+        "label": "运输单号",
+        "type": "string",
+        "required": false,
+        "testId": "field-shipping_number",
+        "selector": "[data-testid=\"field-shipping_number\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-wm-product-sales",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-wm-product-sales\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-wm-product-sales-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-wm-product-sales-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-wm-product-sales:search",
+      "reset": "mes-wm-product-sales:reset",
+      "refresh": "mes-wm-product-sales:refresh",
+      "create": "mes-wm-product-sales:create",
+      "edit": "mes-wm-product-sales:edit",
+      "delete": "mes-wm-product-sales:delete",
+      "submit": "mes-wm-product-sales:submit",
+      "cancel": "mes-wm-product-sales:cancel",
+      "close": "mes-wm-product-sales:close",
+      "row": "mes-wm-product-sales:row",
+      "pagination": "mes-wm-product-sales:pagination",
+      "fields": {
+        "code": "mes-wm-product-sales:field:code",
+        "name": "mes-wm-product-sales:field:name",
+        "client_id": "mes-wm-product-sales:field:client_id",
+        "sales_order_code": "mes-wm-product-sales:field:sales_order_code",
+        "notice_id": "mes-wm-product-sales:field:notice_id",
+        "sales_date": "mes-wm-product-sales:field:sales_date",
+        "contact_name": "mes-wm-product-sales:field:contact_name",
+        "contact_telephone": "mes-wm-product-sales:field:contact_telephone",
+        "contact_address": "mes-wm-product-sales:field:contact_address",
+        "carrier": "mes-wm-product-sales:field:carrier",
+        "shipping_number": "mes-wm-product-sales:field:shipping_number",
+        "status": "mes-wm-product-sales:field:status",
+        "remark": "mes-wm-product-sales:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-wm-product-sales",
+      "examples": [
+        "mes.mes-wm-product-sales__List__Refresh",
+        "mes.mes-wm-product-sales__ListItem__Open",
+        "mes.mes-wm-product-sales__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

@@ -55,24 +55,36 @@ export function CombinationProductForm({ open, initialData, onClose, onSuccess }
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="combination-product-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑拼团商品" : "新增拼团商品"}
+        data-testid="combination-product-form"
+        data-agent-scope="combination-product:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑CombinationProduct（源框架导入）" : "新增CombinationProduct（源框架导入）"}
+            {isEdit ? "编辑拼团商品" : "新增拼团商品"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="combination-product-form-close" data-agent-target="combination-product:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="combination-product-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">拼团活动编号</label>
+          <label htmlFor="combination-product-activity_id" className="block text-xs text-slate-600 mb-1">拼团活动编号</label>
           <input
             type="number"
+            id="combination-product-activity_id"
+            data-testid="field-activity_id"
+            data-agent-target="combination-product:field:activity_id"
+            data-agent-state={formData.activity_id == null || formData.activity_id === "" ? "empty" : "filled"}
+            aria-label="拼团活动编号"
             value={formData.activity_id != null ? String(formData.activity_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, activity_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -82,9 +94,14 @@ export function CombinationProductForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品 SPU 编号</label>
+          <label htmlFor="combination-product-spu_id" className="block text-xs text-slate-600 mb-1">商品 SPU 编号</label>
           <input
             type="number"
+            id="combination-product-spu_id"
+            data-testid="field-spu_id"
+            data-agent-target="combination-product:field:spu_id"
+            data-agent-state={formData.spu_id == null || formData.spu_id === "" ? "empty" : "filled"}
+            aria-label="商品 SPU 编号"
             value={formData.spu_id != null ? String(formData.spu_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, spu_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -94,9 +111,14 @@ export function CombinationProductForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品 SKU 编号</label>
+          <label htmlFor="combination-product-sku_id" className="block text-xs text-slate-600 mb-1">商品 SKU 编号</label>
           <input
             type="number"
+            id="combination-product-sku_id"
+            data-testid="field-sku_id"
+            data-agent-target="combination-product:field:sku_id"
+            data-agent-state={formData.sku_id == null || formData.sku_id === "" ? "empty" : "filled"}
+            aria-label="商品 SKU 编号"
             value={formData.sku_id != null ? String(formData.sku_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sku_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -106,9 +128,14 @@ export function CombinationProductForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">拼团价格，单位分</label>
+          <label htmlFor="combination-product-combination_price" className="block text-xs text-slate-600 mb-1">拼团价格，单位分</label>
           <input
             type="number"
+            id="combination-product-combination_price"
+            data-testid="field-combination_price"
+            data-agent-target="combination-product:field:combination_price"
+            data-agent-state={formData.combination_price == null || formData.combination_price === "" ? "empty" : "filled"}
+            aria-label="拼团价格，单位分"
             value={formData.combination_price != null ? String(formData.combination_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, combination_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -118,9 +145,14 @@ export function CombinationProductForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">拼团商品状态</label>
+          <label htmlFor="combination-product-activity_status" className="block text-xs text-slate-600 mb-1">拼团商品状态</label>
           <input
             type="number"
+            id="combination-product-activity_status"
+            data-testid="field-activity_status"
+            data-agent-target="combination-product:field:activity_status"
+            data-agent-state={formData.activity_status == null || formData.activity_status === "" ? "empty" : "filled"}
+            aria-label="拼团商品状态"
             value={formData.activity_status != null ? String(formData.activity_status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, activity_status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -130,9 +162,14 @@ export function CombinationProductForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">活动开始时间点</label>
+          <label htmlFor="combination-product-activity_start_time" className="block text-xs text-slate-600 mb-1">活动开始时间点</label>
           <input
             type="text"
+            id="combination-product-activity_start_time"
+            data-testid="field-activity_start_time"
+            data-agent-target="combination-product:field:activity_start_time"
+            data-agent-state={formData.activity_start_time ? "filled" : "empty"}
+            aria-label="活动开始时间点"
             value={formData.activity_start_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, activity_start_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -142,9 +179,14 @@ export function CombinationProductForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">活动结束时间点</label>
+          <label htmlFor="combination-product-activity_end_time" className="block text-xs text-slate-600 mb-1">活动结束时间点</label>
           <input
             type="text"
+            id="combination-product-activity_end_time"
+            data-testid="field-activity_end_time"
+            data-agent-target="combination-product:field:activity_end_time"
+            data-agent-state={formData.activity_end_time ? "filled" : "empty"}
+            aria-label="活动结束时间点"
             value={formData.activity_end_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, activity_end_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -158,6 +200,8 @@ export function CombinationProductForm({ open, initialData, onClose, onSuccess }
             <button
               type="button"
               onClick={onClose}
+              data-testid="combination-product-form-cancel"
+              data-agent-target="combination-product:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -165,6 +209,9 @@ export function CombinationProductForm({ open, initialData, onClose, onSuccess }
             <button
               type="submit"
               disabled={loading}
+              data-testid="combination-product-form-submit"
+              data-agent-target="combination-product:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

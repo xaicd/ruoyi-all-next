@@ -1,0 +1,444 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mp",
+  "entity": "MpMessage",
+  "kebab": "mp-message",
+  "businessName": "公众号消息",
+  "permissionPrefix": "mp:mp_message",
+  "page": {
+    "route": "/admin/mp/mp-message",
+    "title": "公众号消息管理",
+    "titleSelector": "[data-testid=\"mp-message-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mp/api",
+    "bffMount": "/api/v1/admin/mp",
+    "resource": "mp-message",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mp-message",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mp-message/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mp-message"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mp-message/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mp-message/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mp-message-title\"]",
+    "refresh": "[data-testid=\"mp-message-refresh\"]",
+    "createButton": "[data-testid=\"mp-message-create\"]",
+    "searchForm": "[data-testid=\"mp-message-search\"]",
+    "searchSubmit": "[data-testid=\"mp-message-search-submit\"]",
+    "searchReset": "[data-testid=\"mp-message-search-reset\"]",
+    "total": "[data-testid=\"mp-message-total\"]",
+    "table": "[data-testid=\"mp-message-table\"]",
+    "row": "[data-testid=\"mp-message-row\"]",
+    "editButton": "[data-testid=\"mp-message-edit\"]",
+    "deleteButton": "[data-testid=\"mp-message-delete\"]",
+    "form": "[data-testid=\"mp-message-form\"]",
+    "formError": "[data-testid=\"mp-message-form-error\"]",
+    "formSubmit": "[data-testid=\"mp-message-form-submit\"]",
+    "formCancel": "[data-testid=\"mp-message-form-cancel\"]",
+    "formClose": "[data-testid=\"mp-message-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "公众号消息列表",
+    "dialogLabel": {
+      "create": "新增公众号消息",
+      "edit": "编辑公众号消息"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "msg_id",
+        "label": "微信公众号消息 id",
+        "type": "number",
+        "required": false,
+        "testId": "field-msg_id",
+        "selector": "[data-testid=\"field-msg_id\"]"
+      },
+      {
+        "name": "account_id",
+        "label": "公众号账号的 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-account_id",
+        "selector": "[data-testid=\"field-account_id\"]"
+      },
+      {
+        "name": "app_id",
+        "label": "公众号 appid",
+        "type": "string",
+        "required": false,
+        "testId": "field-app_id",
+        "selector": "[data-testid=\"field-app_id\"]"
+      },
+      {
+        "name": "user_id",
+        "label": "公众号粉丝的编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "openid",
+        "label": "公众号粉丝标志",
+        "type": "string",
+        "required": false,
+        "testId": "field-openid",
+        "selector": "[data-testid=\"field-openid\"]"
+      },
+      {
+        "name": "type",
+        "label": "消息类型",
+        "type": "string",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "send_from",
+        "label": "消息来源",
+        "type": "number",
+        "required": false,
+        "testId": "field-send_from",
+        "selector": "[data-testid=\"field-send_from\"]"
+      },
+      {
+        "name": "content",
+        "label": "消息内容",
+        "type": "string",
+        "required": false,
+        "testId": "field-content",
+        "selector": "[data-testid=\"field-content\"]"
+      },
+      {
+        "name": "media_id",
+        "label": "媒体文件的编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-media_id",
+        "selector": "[data-testid=\"field-media_id\"]"
+      },
+      {
+        "name": "media_url",
+        "label": "媒体文件的 URL",
+        "type": "string",
+        "required": false,
+        "testId": "field-media_url",
+        "selector": "[data-testid=\"field-media_url\"]"
+      },
+      {
+        "name": "recognition",
+        "label": "语音识别后文本",
+        "type": "string",
+        "required": false,
+        "testId": "field-recognition",
+        "selector": "[data-testid=\"field-recognition\"]"
+      },
+      {
+        "name": "format",
+        "label": "语音格式，如 amr，speex 等",
+        "type": "string",
+        "required": false,
+        "testId": "field-format",
+        "selector": "[data-testid=\"field-format\"]"
+      },
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "string",
+        "required": false,
+        "testId": "field-title",
+        "selector": "[data-testid=\"field-title\"]"
+      },
+      {
+        "name": "description",
+        "label": "描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      },
+      {
+        "name": "thumb_media_id",
+        "label": "缩略图的媒体 id，通过素材管理中的接口上传多媒体文件，得到的 id",
+        "type": "string",
+        "required": false,
+        "testId": "field-thumb_media_id",
+        "selector": "[data-testid=\"field-thumb_media_id\"]"
+      },
+      {
+        "name": "thumb_media_url",
+        "label": "缩略图的媒体 URL",
+        "type": "string",
+        "required": false,
+        "testId": "field-thumb_media_url",
+        "selector": "[data-testid=\"field-thumb_media_url\"]"
+      },
+      {
+        "name": "url",
+        "label": "点击图文消息跳转链接",
+        "type": "string",
+        "required": false,
+        "testId": "field-url",
+        "selector": "[data-testid=\"field-url\"]"
+      },
+      {
+        "name": "location_x",
+        "label": "地理位置维度",
+        "type": "number",
+        "required": false,
+        "testId": "field-location_x",
+        "selector": "[data-testid=\"field-location_x\"]"
+      },
+      {
+        "name": "location_y",
+        "label": "地理位置经度",
+        "type": "number",
+        "required": false,
+        "testId": "field-location_y",
+        "selector": "[data-testid=\"field-location_y\"]"
+      },
+      {
+        "name": "scale",
+        "label": "地图缩放大小",
+        "type": "number",
+        "required": false,
+        "testId": "field-scale",
+        "selector": "[data-testid=\"field-scale\"]"
+      },
+      {
+        "name": "label",
+        "label": "详细地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-label",
+        "selector": "[data-testid=\"field-label\"]"
+      },
+      {
+        "name": "articles",
+        "label": "图文消息数组",
+        "type": "string",
+        "required": false,
+        "testId": "field-articles",
+        "selector": "[data-testid=\"field-articles\"]"
+      },
+      {
+        "name": "music_url",
+        "label": "音乐链接",
+        "type": "string",
+        "required": false,
+        "testId": "field-music_url",
+        "selector": "[data-testid=\"field-music_url\"]"
+      },
+      {
+        "name": "hq_music_url",
+        "label": "高质量音乐链接",
+        "type": "string",
+        "required": false,
+        "testId": "field-hq_music_url",
+        "selector": "[data-testid=\"field-hq_music_url\"]"
+      },
+      {
+        "name": "event",
+        "label": "事件类型",
+        "type": "string",
+        "required": false,
+        "testId": "field-event",
+        "selector": "[data-testid=\"field-event\"]"
+      },
+      {
+        "name": "event_key",
+        "label": "事件 Key",
+        "type": "string",
+        "required": false,
+        "testId": "field-event_key",
+        "selector": "[data-testid=\"field-event_key\"]"
+      },
+      {
+        "name": "title",
+        "label": "图文消息标题",
+        "type": "string",
+        "required": false,
+        "testId": "field-title",
+        "selector": "[data-testid=\"field-title\"]"
+      },
+      {
+        "name": "description",
+        "label": "图文消息描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      },
+      {
+        "name": "pic_url",
+        "label": "图片链接",
+        "type": "string",
+        "required": false,
+        "testId": "field-pic_url",
+        "selector": "[data-testid=\"field-pic_url\"]"
+      },
+      {
+        "name": "url",
+        "label": "点击图文消息跳转链接",
+        "type": "string",
+        "required": false,
+        "testId": "field-url",
+        "selector": "[data-testid=\"field-url\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mp-message",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mp-message\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mp-message-form-overlay\"]",
+      "dialog": "[data-testid=\"mp-message-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mp-message:search",
+      "reset": "mp-message:reset",
+      "refresh": "mp-message:refresh",
+      "create": "mp-message:create",
+      "edit": "mp-message:edit",
+      "delete": "mp-message:delete",
+      "submit": "mp-message:submit",
+      "cancel": "mp-message:cancel",
+      "close": "mp-message:close",
+      "row": "mp-message:row",
+      "pagination": "mp-message:pagination",
+      "fields": {
+        "msg_id": "mp-message:field:msg_id",
+        "account_id": "mp-message:field:account_id",
+        "app_id": "mp-message:field:app_id",
+        "user_id": "mp-message:field:user_id",
+        "openid": "mp-message:field:openid",
+        "type": "mp-message:field:type",
+        "send_from": "mp-message:field:send_from",
+        "content": "mp-message:field:content",
+        "media_id": "mp-message:field:media_id",
+        "media_url": "mp-message:field:media_url",
+        "recognition": "mp-message:field:recognition",
+        "format": "mp-message:field:format",
+        "title": "mp-message:field:title",
+        "description": "mp-message:field:description",
+        "thumb_media_id": "mp-message:field:thumb_media_id",
+        "thumb_media_url": "mp-message:field:thumb_media_url",
+        "url": "mp-message:field:url",
+        "location_x": "mp-message:field:location_x",
+        "location_y": "mp-message:field:location_y",
+        "scale": "mp-message:field:scale",
+        "label": "mp-message:field:label",
+        "articles": "mp-message:field:articles",
+        "music_url": "mp-message:field:music_url",
+        "hq_music_url": "mp-message:field:hq_music_url",
+        "event": "mp-message:field:event",
+        "event_key": "mp-message:field:event_key",
+        "pic_url": "mp-message:field:pic_url"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mp.mp-message",
+      "examples": [
+        "mp.mp-message__List__Refresh",
+        "mp.mp-message__ListItem__Open",
+        "mp.mp-message__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

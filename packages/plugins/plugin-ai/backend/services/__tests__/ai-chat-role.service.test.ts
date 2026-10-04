@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { AiChatRoleService } from "../ai-chat-role.service"
 
 describe("AiChatRoleService", () => {
-  it("should create and query AiChatRole（源框架导入）", async () => {
+  it("should create and query AI 聊天角色", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AiChatRoleService.create({
-        name: "测试AiChatRole（源框架导入）",
+        name: "测试AI 聊天角色",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("AiChatRoleService", () => {
   
       const updated = await AiChatRoleService.update(created.id, {
         id: created.id,
-        name: "更新AiChatRole（源框架导入）",
+        name: "更新AI 聊天角色",
       } as any)
       expect(updated).toBeDefined()
   

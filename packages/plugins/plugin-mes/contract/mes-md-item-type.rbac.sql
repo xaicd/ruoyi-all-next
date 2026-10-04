@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesMdItemType（源框架导入） (MesMdItemType)
+-- Auto-generated RBAC & Menu Migration for MES 物料产品分类 (MesMdItemType)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-md-item-type',
   'mes-dir',
-  'MesMdItemType（源框架导入）管理',
+  'MES 物料产品分类管理',
   '/admin/mes/mes-md-item-type',
   'mes/mes-md-item-type/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-md-item-type-query',  'menu-mes-md-item-type', '查询MesMdItemType（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_md_item_type:query',  1, NOW(), NOW()),
-('menu-mes-md-item-type-create', 'menu-mes-md-item-type', '新增MesMdItemType（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_md_item_type:create', 2, NOW(), NOW()),
-('menu-mes-md-item-type-update', 'menu-mes-md-item-type', '修改MesMdItemType（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_md_item_type:update', 3, NOW(), NOW()),
-('menu-mes-md-item-type-delete', 'menu-mes-md-item-type', '删除MesMdItemType（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_md_item_type:delete', 4, NOW(), NOW())
+('menu-mes-md-item-type-query',  'menu-mes-md-item-type', '查询MES 物料产品分类', 'BUTTON', 'ACTIVE', 'mes:mes_md_item_type:query',  1, NOW(), NOW()),
+('menu-mes-md-item-type-create', 'menu-mes-md-item-type', '新增MES 物料产品分类', 'BUTTON', 'ACTIVE', 'mes:mes_md_item_type:create', 2, NOW(), NOW()),
+('menu-mes-md-item-type-update', 'menu-mes-md-item-type', '修改MES 物料产品分类', 'BUTTON', 'ACTIVE', 'mes:mes_md_item_type:update', 3, NOW(), NOW()),
+('menu-mes-md-item-type-delete', 'menu-mes-md-item-type', '删除MES 物料产品分类', 'BUTTON', 'ACTIVE', 'mes:mes_md_item_type:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

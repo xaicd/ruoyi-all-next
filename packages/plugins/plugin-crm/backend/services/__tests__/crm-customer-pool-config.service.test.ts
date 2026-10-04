@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { CrmCustomerPoolConfigService } from "../crm-customer-pool-config.service"
 
 describe("CrmCustomerPoolConfigService", () => {
-  it("should create and query CrmCustomerPoolConfig（源框架导入）", async () => {
+  it("should create and query 客户公海配置", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CrmCustomerPoolConfigService.create({
         enabled: true,
@@ -21,7 +21,7 @@ describe("CrmCustomerPoolConfigService", () => {
   
       const updated = await CrmCustomerPoolConfigService.update(created.id, {
         id: created.id,
-        enabled: "更新CrmCustomerPoolConfig（源框架导入）",
+        enabled: "更新客户公海配置",
       } as any)
       expect(updated).toBeDefined()
   

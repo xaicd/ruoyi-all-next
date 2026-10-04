@@ -6,12 +6,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpAccount",
-    businessName: "ErpAccount（源框架导入）",
+    businessName: "ERP 结算账户",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_account",
     table: {
       name: "erp_account",
-      comment: "ErpAccount（源框架导入）",
+      comment: "ERP 结算账户",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"结算账户编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"账户名称","nullableInferred":true},
@@ -32,12 +32,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpCustomer",
-    businessName: "ErpCustomer（源框架导入）",
+    businessName: "ERP 客户",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_customer",
     table: {
       name: "erp_customer",
-      comment: "ErpCustomer（源框架导入）",
+      comment: "ERP 客户",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"客户编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"客户名称","nullableInferred":true},
@@ -66,12 +66,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpFinancePayment",
-    businessName: "ErpFinancePayment（源框架导入）",
+    businessName: "ERP 付款单",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_finance_payment",
     table: {
       name: "erp_finance_payment",
-      comment: "ErpFinancePayment（源框架导入）",
+      comment: "ERP 付款单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"no","type":"varchar","tsType":"string","nullable":true,"comment":"付款单号","nullableInferred":true},
@@ -96,12 +96,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpFinancePaymentItem",
-    businessName: "ErpFinancePaymentItem（源框架导入）",
+    businessName: "ERP 付款项",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_finance_payment_item",
     table: {
       name: "erp_finance_payment_item",
-      comment: "ErpFinancePaymentItem（源框架导入）",
+      comment: "ERP 付款项",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"入库项编号","isPk":true,"nullableInferred":true},
         {"name":"payment_id","type":"bigint","tsType":"number","nullable":true,"comment":"付款单编号","nullableInferred":true},
@@ -124,12 +124,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpFinanceReceipt",
-    businessName: "ErpFinanceReceipt（源框架导入）",
+    businessName: "ERP 收款单",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_finance_receipt",
     table: {
       name: "erp_finance_receipt",
-      comment: "ErpFinanceReceipt（源框架导入）",
+      comment: "ERP 收款单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"no","type":"varchar","tsType":"string","nullable":true,"comment":"收款单号","nullableInferred":true},
@@ -154,12 +154,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpFinanceReceiptItem",
-    businessName: "ErpFinanceReceiptItem（源框架导入）",
+    businessName: "ERP 收款项",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_finance_receipt_item",
     table: {
       name: "erp_finance_receipt_item",
-      comment: "ErpFinanceReceiptItem（源框架导入）",
+      comment: "ERP 收款项",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"入库项编号","isPk":true,"nullableInferred":true},
         {"name":"receipt_id","type":"bigint","tsType":"number","nullable":true,"comment":"收款单编号","nullableInferred":true},
@@ -182,12 +182,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpProduct",
-    businessName: "ErpProduct（源框架导入）",
+    businessName: "ERP 产品",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_product",
     table: {
       name: "erp_product",
-      comment: "ErpProduct（源框架导入）",
+      comment: "ERP 产品",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"产品编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"产品名称","nullableInferred":true},
@@ -214,12 +214,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpProductCategory",
-    businessName: "ErpProductCategory（源框架导入）",
+    businessName: "ERP 产品分类",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_product_category",
     table: {
       name: "erp_product_category",
-      comment: "ErpProductCategory（源框架导入）",
+      comment: "ERP 产品分类",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"分类编号","isPk":true,"nullableInferred":true},
         {"name":"parent_id","type":"bigint","tsType":"number","nullable":true,"comment":"父分类编号","nullableInferred":true},
@@ -239,12 +239,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpProductUnit",
-    businessName: "ErpProductUnit（源框架导入）",
+    businessName: "ERP 产品单位",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_product_unit",
     table: {
       name: "erp_product_unit",
-      comment: "ErpProductUnit（源框架导入）",
+      comment: "ERP 产品单位",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"单位编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"单位名字","nullableInferred":true},
@@ -261,12 +261,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpPurchaseIn",
-    businessName: "ErpPurchaseIn（源框架导入）",
+    businessName: "ERP 采购入库",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_purchase_in",
     table: {
       name: "erp_purchase_in",
-      comment: "ErpPurchaseIn（源框架导入）",
+      comment: "ERP 采购入库",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"no","type":"varchar","tsType":"string","nullable":true,"comment":"采购入库单号","nullableInferred":true},
@@ -298,12 +298,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpPurchaseInItem",
-    businessName: "ErpPurchaseInItem（源框架导入）",
+    businessName: "ERP 采购入库项",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_purchase_in_item",
     table: {
       name: "erp_purchase_in_items",
-      comment: "ErpPurchaseInItem（源框架导入）",
+      comment: "ERP 采购入库项",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"in_id","type":"bigint","tsType":"number","nullable":true,"comment":"采购入库编号","nullableInferred":true},
@@ -329,12 +329,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpPurchaseOrder",
-    businessName: "ErpPurchaseOrder（源框架导入）",
+    businessName: "ERP 采购订单",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_purchase_order",
     table: {
       name: "erp_purchase_order",
-      comment: "ErpPurchaseOrder（源框架导入）",
+      comment: "ERP 采购订单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"no","type":"varchar","tsType":"string","nullable":true,"comment":"采购订单号","nullableInferred":true},
@@ -365,12 +365,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpPurchaseOrderItem",
-    businessName: "ErpPurchaseOrderItem（源框架导入）",
+    businessName: "ERP 采购订单项",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_purchase_order_item",
     table: {
       name: "erp_purchase_order_items",
-      comment: "ErpPurchaseOrderItem（源框架导入）",
+      comment: "ERP 采购订单项",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"order_id","type":"bigint","tsType":"number","nullable":true,"comment":"采购订单编号","nullableInferred":true},
@@ -396,12 +396,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpPurchaseReturn",
-    businessName: "ErpPurchaseReturn（源框架导入）",
+    businessName: "ERP 采购退货",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_purchase_return",
     table: {
       name: "erp_purchase_return",
-      comment: "ErpPurchaseReturn（源框架导入）",
+      comment: "ERP 采购退货",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"no","type":"varchar","tsType":"string","nullable":true,"comment":"采购退货单号","nullableInferred":true},
@@ -433,12 +433,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpPurchaseReturnItem",
-    businessName: "ErpPurchaseReturnItem（源框架导入）",
+    businessName: "ERP 采购退货项",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_purchase_return_item",
     table: {
       name: "erp_purchase_return_items",
-      comment: "ErpPurchaseReturnItem（源框架导入）",
+      comment: "ERP 采购退货项",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"return_id","type":"bigint","tsType":"number","nullable":true,"comment":"采购退货编号","nullableInferred":true},
@@ -464,12 +464,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpSaleOrder",
-    businessName: "ErpSaleOrder（源框架导入）",
+    businessName: "ERP 销售订单",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_sale_order",
     table: {
       name: "erp_sale_order",
-      comment: "ErpSaleOrder（源框架导入）",
+      comment: "ERP 销售订单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"no","type":"varchar","tsType":"string","nullable":true,"comment":"销售订单号","nullableInferred":true},
@@ -501,12 +501,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpSaleOrderItem",
-    businessName: "ErpSaleOrderItem（源框架导入）",
+    businessName: "ERP 销售订单项",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_sale_order_item",
     table: {
       name: "erp_sale_order_items",
-      comment: "ErpSaleOrderItem（源框架导入）",
+      comment: "ERP 销售订单项",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"order_id","type":"bigint","tsType":"number","nullable":true,"comment":"销售订单编号","nullableInferred":true},
@@ -532,12 +532,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpSaleOut",
-    businessName: "ErpSaleOut（源框架导入）",
+    businessName: "ERP 销售出库",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_sale_out",
     table: {
       name: "erp_sale_out",
-      comment: "ErpSaleOut（源框架导入）",
+      comment: "ERP 销售出库",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"no","type":"varchar","tsType":"string","nullable":true,"comment":"销售出库单号","nullableInferred":true},
@@ -570,12 +570,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpSaleOutItem",
-    businessName: "ErpSaleOutItem（源框架导入）",
+    businessName: "ERP 销售出库项",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_sale_out_item",
     table: {
       name: "erp_sale_out_items",
-      comment: "ErpSaleOutItem（源框架导入）",
+      comment: "ERP 销售出库项",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"out_id","type":"bigint","tsType":"number","nullable":true,"comment":"销售出库编号","nullableInferred":true},
@@ -601,12 +601,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpSaleReturn",
-    businessName: "ErpSaleReturn（源框架导入）",
+    businessName: "ERP 销售退货",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_sale_return",
     table: {
       name: "erp_sale_return",
-      comment: "ErpSaleReturn（源框架导入）",
+      comment: "ERP 销售退货",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"no","type":"varchar","tsType":"string","nullable":true,"comment":"销售退货单号","nullableInferred":true},
@@ -639,12 +639,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpSaleReturnItem",
-    businessName: "ErpSaleReturnItem（源框架导入）",
+    businessName: "ERP 销售退货项",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_sale_return_item",
     table: {
       name: "erp_sale_return_items",
-      comment: "ErpSaleReturnItem（源框架导入）",
+      comment: "ERP 销售退货项",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"return_id","type":"bigint","tsType":"number","nullable":true,"comment":"销售退货编号","nullableInferred":true},
@@ -670,12 +670,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpStock",
-    businessName: "ErpStock（源框架导入）",
+    businessName: "ERP 产品库存",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_stock",
     table: {
       name: "erp_stock",
-      comment: "ErpStock（源框架导入）",
+      comment: "ERP 产品库存",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"product_id","type":"bigint","tsType":"number","nullable":true,"comment":"产品编号","nullableInferred":true},
@@ -693,12 +693,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpStockCheck",
-    businessName: "ErpStockCheck（源框架导入）",
+    businessName: "ERP 库存盘点单",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_stock_check",
     table: {
       name: "erp_stock_check",
-      comment: "ErpStockCheck（源框架导入）",
+      comment: "ERP 库存盘点单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"盘点编号","isPk":true,"nullableInferred":true},
         {"name":"no","type":"varchar","tsType":"string","nullable":true,"comment":"盘点单号","nullableInferred":true},
@@ -720,12 +720,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpStockCheckItem",
-    businessName: "ErpStockCheckItem（源框架导入）",
+    businessName: "ERP 库存盘点单项",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_stock_check_item",
     table: {
       name: "erp_stock_check_item",
-      comment: "ErpStockCheckItem（源框架导入）",
+      comment: "ERP 库存盘点单项",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"盘点项编号","isPk":true,"nullableInferred":true},
         {"name":"check_id","type":"bigint","tsType":"number","nullable":true,"comment":"盘点编号","nullableInferred":true},
@@ -750,12 +750,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpStockIn",
-    businessName: "ErpStockIn（源框架导入）",
+    businessName: "ERP 其它入库单",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_stock_in",
     table: {
       name: "erp_stock_in",
-      comment: "ErpStockIn（源框架导入）",
+      comment: "ERP 其它入库单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"入库编号","isPk":true,"nullableInferred":true},
         {"name":"no","type":"varchar","tsType":"string","nullable":true,"comment":"入库单号","nullableInferred":true},
@@ -778,12 +778,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpStockInItem",
-    businessName: "ErpStockInItem（源框架导入）",
+    businessName: "ERP 其它入库单项",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_stock_in_item",
     table: {
       name: "erp_stock_in_item",
-      comment: "ErpStockInItem（源框架导入）",
+      comment: "ERP 其它入库单项",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"入库项编号","isPk":true,"nullableInferred":true},
         {"name":"in_id","type":"bigint","tsType":"number","nullable":true,"comment":"入库编号","nullableInferred":true},
@@ -806,12 +806,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpStockMove",
-    businessName: "ErpStockMove（源框架导入）",
+    businessName: "ERP 库存调拨单",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_stock_move",
     table: {
       name: "erp_stock_move",
-      comment: "ErpStockMove（源框架导入）",
+      comment: "ERP 库存调拨单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"调拨编号","isPk":true,"nullableInferred":true},
         {"name":"no","type":"varchar","tsType":"string","nullable":true,"comment":"调拨单号","nullableInferred":true},
@@ -833,12 +833,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpStockMoveItem",
-    businessName: "ErpStockMoveItem（源框架导入）",
+    businessName: "ERP 库存调拨单项",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_stock_move_item",
     table: {
       name: "erp_stock_move_item",
-      comment: "ErpStockMoveItem（源框架导入）",
+      comment: "ERP 库存调拨单项",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"调拨项编号","isPk":true,"nullableInferred":true},
         {"name":"move_id","type":"bigint","tsType":"number","nullable":true,"comment":"调拨编号","nullableInferred":true},
@@ -862,12 +862,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpStockOut",
-    businessName: "ErpStockOut（源框架导入）",
+    businessName: "ERP 其它出库单",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_stock_out",
     table: {
       name: "erp_stock_out",
-      comment: "ErpStockOut（源框架导入）",
+      comment: "ERP 其它出库单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"出库编号","isPk":true,"nullableInferred":true},
         {"name":"no","type":"varchar","tsType":"string","nullable":true,"comment":"出库单号","nullableInferred":true},
@@ -890,12 +890,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpStockOutItem",
-    businessName: "ErpStockOutItem（源框架导入）",
+    businessName: "ERP 其它出库单项",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_stock_out_item",
     table: {
       name: "erp_stock_out_item",
-      comment: "ErpStockOutItem（源框架导入）",
+      comment: "ERP 其它出库单项",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"出库项编号","isPk":true,"nullableInferred":true},
         {"name":"out_id","type":"bigint","tsType":"number","nullable":true,"comment":"出库编号","nullableInferred":true},
@@ -918,12 +918,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpStockRecord",
-    businessName: "ErpStockRecord（源框架导入）",
+    businessName: "ERP 产品库存明细",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_stock_record",
     table: {
       name: "erp_stock_record",
-      comment: "ErpStockRecord（源框架导入）",
+      comment: "ERP 产品库存明细",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"product_id","type":"bigint","tsType":"number","nullable":true,"comment":"产品编号","nullableInferred":true},
@@ -946,12 +946,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpSupplier",
-    businessName: "ErpSupplier（源框架导入）",
+    businessName: "ERP 供应商",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_supplier",
     table: {
       name: "erp_supplier",
-      comment: "ErpSupplier（源框架导入）",
+      comment: "ERP 供应商",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"供应商编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"供应商名称","nullableInferred":true},
@@ -980,12 +980,12 @@ export const ERP_TABLES: CodegenConfig[] = [
   {
     moduleName: "erp",
     className: "ErpWarehouse",
-    businessName: "ErpWarehouse（源框架导入）",
+    businessName: "ERP 仓库",
     parentMenuId: "erp-dir",
     permissionPrefix: "erp:erp_warehouse",
     table: {
       name: "erp_warehouse",
-      comment: "ErpWarehouse（源框架导入）",
+      comment: "ERP 仓库",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"仓库编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"仓库名称","nullableInferred":true},

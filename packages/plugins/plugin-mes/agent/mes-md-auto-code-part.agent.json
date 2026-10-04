@@ -1,0 +1,276 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesMdAutoCodePart",
+  "kebab": "mes-md-auto-code-part",
+  "businessName": "MES 编码规则组成",
+  "permissionPrefix": "mes:mes_md_auto_code_part",
+  "page": {
+    "route": "/admin/mes/mes-md-auto-code-part",
+    "title": "MES 编码规则组成管理",
+    "titleSelector": "[data-testid=\"mes-md-auto-code-part-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-md-auto-code-part",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-md-auto-code-part",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-md-auto-code-part/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-md-auto-code-part"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-md-auto-code-part/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-md-auto-code-part/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-md-auto-code-part-title\"]",
+    "refresh": "[data-testid=\"mes-md-auto-code-part-refresh\"]",
+    "createButton": "[data-testid=\"mes-md-auto-code-part-create\"]",
+    "searchForm": "[data-testid=\"mes-md-auto-code-part-search\"]",
+    "searchSubmit": "[data-testid=\"mes-md-auto-code-part-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-md-auto-code-part-search-reset\"]",
+    "total": "[data-testid=\"mes-md-auto-code-part-total\"]",
+    "table": "[data-testid=\"mes-md-auto-code-part-table\"]",
+    "row": "[data-testid=\"mes-md-auto-code-part-row\"]",
+    "editButton": "[data-testid=\"mes-md-auto-code-part-edit\"]",
+    "deleteButton": "[data-testid=\"mes-md-auto-code-part-delete\"]",
+    "form": "[data-testid=\"mes-md-auto-code-part-form\"]",
+    "formError": "[data-testid=\"mes-md-auto-code-part-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-md-auto-code-part-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-md-auto-code-part-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-md-auto-code-part-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 编码规则组成列表",
+    "dialogLabel": {
+      "create": "新增MES 编码规则组成",
+      "edit": "编辑MES 编码规则组成"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "rule_id",
+        "label": "规则 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-rule_id",
+        "selector": "[data-testid=\"field-rule_id\"]"
+      },
+      {
+        "name": "sort",
+        "label": "分段序号",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      },
+      {
+        "name": "type",
+        "label": "分段类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "length",
+        "label": "分段长度",
+        "type": "number",
+        "required": false,
+        "testId": "field-length",
+        "selector": "[data-testid=\"field-length\"]"
+      },
+      {
+        "name": "date_format",
+        "label": "日期格式",
+        "type": "string",
+        "required": false,
+        "testId": "field-date_format",
+        "selector": "[data-testid=\"field-date_format\"]"
+      },
+      {
+        "name": "fix_character",
+        "label": "固定字符",
+        "type": "string",
+        "required": false,
+        "testId": "field-fix_character",
+        "selector": "[data-testid=\"field-fix_character\"]"
+      },
+      {
+        "name": "serial_start_no",
+        "label": "流水号起始值",
+        "type": "number",
+        "required": false,
+        "testId": "field-serial_start_no",
+        "selector": "[data-testid=\"field-serial_start_no\"]"
+      },
+      {
+        "name": "serial_step",
+        "label": "流水号步长",
+        "type": "number",
+        "required": false,
+        "testId": "field-serial_step",
+        "selector": "[data-testid=\"field-serial_step\"]"
+      },
+      {
+        "name": "cycle_flag",
+        "label": "流水号是否循环",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-cycle_flag",
+        "selector": "[data-testid=\"field-cycle_flag\"]"
+      },
+      {
+        "name": "cycle_method",
+        "label": "循环方式",
+        "type": "number",
+        "required": false,
+        "testId": "field-cycle_method",
+        "selector": "[data-testid=\"field-cycle_method\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-md-auto-code-part",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-md-auto-code-part\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-md-auto-code-part-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-md-auto-code-part-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-md-auto-code-part:search",
+      "reset": "mes-md-auto-code-part:reset",
+      "refresh": "mes-md-auto-code-part:refresh",
+      "create": "mes-md-auto-code-part:create",
+      "edit": "mes-md-auto-code-part:edit",
+      "delete": "mes-md-auto-code-part:delete",
+      "submit": "mes-md-auto-code-part:submit",
+      "cancel": "mes-md-auto-code-part:cancel",
+      "close": "mes-md-auto-code-part:close",
+      "row": "mes-md-auto-code-part:row",
+      "pagination": "mes-md-auto-code-part:pagination",
+      "fields": {
+        "rule_id": "mes-md-auto-code-part:field:rule_id",
+        "sort": "mes-md-auto-code-part:field:sort",
+        "type": "mes-md-auto-code-part:field:type",
+        "length": "mes-md-auto-code-part:field:length",
+        "date_format": "mes-md-auto-code-part:field:date_format",
+        "fix_character": "mes-md-auto-code-part:field:fix_character",
+        "serial_start_no": "mes-md-auto-code-part:field:serial_start_no",
+        "serial_step": "mes-md-auto-code-part:field:serial_step",
+        "cycle_flag": "mes-md-auto-code-part:field:cycle_flag",
+        "cycle_method": "mes-md-auto-code-part:field:cycle_method",
+        "remark": "mes-md-auto-code-part:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-md-auto-code-part",
+      "examples": [
+        "mes.mes-md-auto-code-part__List__Refresh",
+        "mes.mes-md-auto-code-part__ListItem__Open",
+        "mes.mes-md-auto-code-part__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

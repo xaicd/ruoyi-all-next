@@ -64,24 +64,36 @@ export function AiMusicForm({ open, initialData, onClose, onSuccess }: AiMusicFo
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="ai-music-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑AI 音乐" : "新增AI 音乐"}
+        data-testid="ai-music-form"
+        data-agent-scope="ai-music:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑AiMusic（源框架导入）" : "新增AiMusic（源框架导入）"}
+            {isEdit ? "编辑AI 音乐" : "新增AI 音乐"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="ai-music-form-close" data-agent-target="ai-music:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="ai-music-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="ai-music-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="ai-music-user_id"
+            data-testid="field-user_id"
+            data-agent-target="ai-music:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -91,9 +103,14 @@ export function AiMusicForm({ open, initialData, onClose, onSuccess }: AiMusicFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">音乐名称</label>
+          <label htmlFor="ai-music-title" className="block text-xs text-slate-600 mb-1">音乐名称</label>
           <input
             type="text"
+            id="ai-music-title"
+            data-testid="field-title"
+            data-agent-target="ai-music:field:title"
+            data-agent-state={formData.title ? "filled" : "empty"}
+            aria-label="音乐名称"
             value={formData.title ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -103,9 +120,14 @@ export function AiMusicForm({ open, initialData, onClose, onSuccess }: AiMusicFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">歌词</label>
+          <label htmlFor="ai-music-lyric" className="block text-xs text-slate-600 mb-1">歌词</label>
           <input
             type="text"
+            id="ai-music-lyric"
+            data-testid="field-lyric"
+            data-agent-target="ai-music:field:lyric"
+            data-agent-state={formData.lyric ? "filled" : "empty"}
+            aria-label="歌词"
             value={formData.lyric ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, lyric: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -115,9 +137,14 @@ export function AiMusicForm({ open, initialData, onClose, onSuccess }: AiMusicFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">图片地址</label>
+          <label htmlFor="ai-music-image_url" className="block text-xs text-slate-600 mb-1">图片地址</label>
           <input
             type="text"
+            id="ai-music-image_url"
+            data-testid="field-image_url"
+            data-agent-target="ai-music:field:image_url"
+            data-agent-state={formData.image_url ? "filled" : "empty"}
+            aria-label="图片地址"
             value={formData.image_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, image_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -127,9 +154,14 @@ export function AiMusicForm({ open, initialData, onClose, onSuccess }: AiMusicFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">音频地址</label>
+          <label htmlFor="ai-music-audio_url" className="block text-xs text-slate-600 mb-1">音频地址</label>
           <input
             type="text"
+            id="ai-music-audio_url"
+            data-testid="field-audio_url"
+            data-agent-target="ai-music:field:audio_url"
+            data-agent-state={formData.audio_url ? "filled" : "empty"}
+            aria-label="音频地址"
             value={formData.audio_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, audio_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -139,9 +171,14 @@ export function AiMusicForm({ open, initialData, onClose, onSuccess }: AiMusicFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">视频地址</label>
+          <label htmlFor="ai-music-video_url" className="block text-xs text-slate-600 mb-1">视频地址</label>
           <input
             type="text"
+            id="ai-music-video_url"
+            data-testid="field-video_url"
+            data-agent-target="ai-music:field:video_url"
+            data-agent-state={formData.video_url ? "filled" : "empty"}
+            aria-label="视频地址"
             value={formData.video_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, video_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -151,9 +188,14 @@ export function AiMusicForm({ open, initialData, onClose, onSuccess }: AiMusicFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">音乐状态</label>
+          <label htmlFor="ai-music-status" className="block text-xs text-slate-600 mb-1">音乐状态</label>
           <input
             type="number"
+            id="ai-music-status"
+            data-testid="field-status"
+            data-agent-target="ai-music:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="音乐状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -163,9 +205,14 @@ export function AiMusicForm({ open, initialData, onClose, onSuccess }: AiMusicFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生成模式</label>
+          <label htmlFor="ai-music-generate_mode" className="block text-xs text-slate-600 mb-1">生成模式</label>
           <input
             type="number"
+            id="ai-music-generate_mode"
+            data-testid="field-generate_mode"
+            data-agent-target="ai-music:field:generate_mode"
+            data-agent-state={formData.generate_mode == null || formData.generate_mode === "" ? "empty" : "filled"}
+            aria-label="生成模式"
             value={formData.generate_mode != null ? String(formData.generate_mode) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, generate_mode: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -175,9 +222,14 @@ export function AiMusicForm({ open, initialData, onClose, onSuccess }: AiMusicFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">描述词</label>
+          <label htmlFor="ai-music-description" className="block text-xs text-slate-600 mb-1">描述词</label>
           <input
             type="text"
+            id="ai-music-description"
+            data-testid="field-description"
+            data-agent-target="ai-music:field:description"
+            data-agent-state={formData.description ? "filled" : "empty"}
+            aria-label="描述词"
             value={formData.description ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -187,9 +239,14 @@ export function AiMusicForm({ open, initialData, onClose, onSuccess }: AiMusicFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">平台</label>
+          <label htmlFor="ai-music-platform" className="block text-xs text-slate-600 mb-1">平台</label>
           <input
             type="text"
+            id="ai-music-platform"
+            data-testid="field-platform"
+            data-agent-target="ai-music:field:platform"
+            data-agent-state={formData.platform ? "filled" : "empty"}
+            aria-label="平台"
             value={formData.platform ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, platform: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -199,9 +256,14 @@ export function AiMusicForm({ open, initialData, onClose, onSuccess }: AiMusicFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">模型</label>
+          <label htmlFor="ai-music-model" className="block text-xs text-slate-600 mb-1">模型</label>
           <input
             type="text"
+            id="ai-music-model"
+            data-testid="field-model"
+            data-agent-target="ai-music:field:model"
+            data-agent-state={formData.model ? "filled" : "empty"}
+            aria-label="模型"
             value={formData.model ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, model: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -211,9 +273,14 @@ export function AiMusicForm({ open, initialData, onClose, onSuccess }: AiMusicFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">音乐风格标签</label>
+          <label htmlFor="ai-music-tags" className="block text-xs text-slate-600 mb-1">音乐风格标签</label>
           <input
             type="text"
+            id="ai-music-tags"
+            data-testid="field-tags"
+            data-agent-target="ai-music:field:tags"
+            data-agent-state={formData.tags ? "filled" : "empty"}
+            aria-label="音乐风格标签"
             value={formData.tags ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, tags: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -223,9 +290,14 @@ export function AiMusicForm({ open, initialData, onClose, onSuccess }: AiMusicFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">音乐时长</label>
+          <label htmlFor="ai-music-duration" className="block text-xs text-slate-600 mb-1">音乐时长</label>
           <input
             type="number"
+            id="ai-music-duration"
+            data-testid="field-duration"
+            data-agent-target="ai-music:field:duration"
+            data-agent-state={formData.duration == null || formData.duration === "" ? "empty" : "filled"}
+            aria-label="音乐时长"
             value={formData.duration != null ? String(formData.duration) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, duration: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -237,18 +309,27 @@ export function AiMusicForm({ open, initialData, onClose, onSuccess }: AiMusicFo
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="public_status"
+            id="ai-music-public_status"
+            data-testid="field-public_status"
+            data-agent-target="ai-music:field:public_status"
+            data-agent-state={formData.public_status ? "on" : "off"}
+            aria-label="是否公开"
             checked={Boolean(formData.public_status)}
             onChange={(e) => setFormData((prev) => ({ ...prev, public_status: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="public_status" className="text-xs text-slate-700 font-medium">是否公开</label>
+          <label htmlFor="ai-music-public_status" className="text-xs text-slate-700 font-medium">是否公开</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">任务编号</label>
+          <label htmlFor="ai-music-task_id" className="block text-xs text-slate-600 mb-1">任务编号</label>
           <input
             type="text"
+            id="ai-music-task_id"
+            data-testid="field-task_id"
+            data-agent-target="ai-music:field:task_id"
+            data-agent-state={formData.task_id ? "filled" : "empty"}
+            aria-label="任务编号"
             value={formData.task_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, task_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -258,9 +339,14 @@ export function AiMusicForm({ open, initialData, onClose, onSuccess }: AiMusicFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">错误信息</label>
+          <label htmlFor="ai-music-error_message" className="block text-xs text-slate-600 mb-1">错误信息</label>
           <input
             type="text"
+            id="ai-music-error_message"
+            data-testid="field-error_message"
+            data-agent-target="ai-music:field:error_message"
+            data-agent-state={formData.error_message ? "filled" : "empty"}
+            aria-label="错误信息"
             value={formData.error_message ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, error_message: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -274,6 +360,8 @@ export function AiMusicForm({ open, initialData, onClose, onSuccess }: AiMusicFo
             <button
               type="button"
               onClick={onClose}
+              data-testid="ai-music-form-cancel"
+              data-agent-target="ai-music:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -281,6 +369,9 @@ export function AiMusicForm({ open, initialData, onClose, onSuccess }: AiMusicFo
             <button
               type="submit"
               disabled={loading}
+              data-testid="ai-music-form-submit"
+              data-agent-target="ai-music:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

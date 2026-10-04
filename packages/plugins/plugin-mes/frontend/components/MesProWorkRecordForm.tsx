@@ -54,24 +54,36 @@ export function MesProWorkRecordForm({ open, initialData, onClose, onSuccess }: 
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-pro-work-record-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 用户工作站绑定关系（当前快照）" : "新增MES 用户工作站绑定关系（当前快照）"}
+        data-testid="mes-pro-work-record-form"
+        data-agent-scope="mes-pro-work-record:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesProWorkRecord（源框架导入）" : "新增MesProWorkRecord（源框架导入）"}
+            {isEdit ? "编辑MES 用户工作站绑定关系（当前快照）" : "新增MES 用户工作站绑定关系（当前快照）"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-pro-work-record-form-close" data-agent-target="mes-pro-work-record:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-pro-work-record-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="mes-pro-work-record-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="mes-pro-work-record-user_id"
+            data-testid="field-user_id"
+            data-agent-target="mes-pro-work-record:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -81,9 +93,14 @@ export function MesProWorkRecordForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工作站编号</label>
+          <label htmlFor="mes-pro-work-record-workstation_id" className="block text-xs text-slate-600 mb-1">工作站编号</label>
           <input
             type="number"
+            id="mes-pro-work-record-workstation_id"
+            data-testid="field-workstation_id"
+            data-agent-target="mes-pro-work-record:field:workstation_id"
+            data-agent-state={formData.workstation_id == null || formData.workstation_id === "" ? "empty" : "filled"}
+            aria-label="工作站编号"
             value={formData.workstation_id != null ? String(formData.workstation_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, workstation_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -93,9 +110,14 @@ export function MesProWorkRecordForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">当前状态</label>
+          <label htmlFor="mes-pro-work-record-type" className="block text-xs text-slate-600 mb-1">当前状态</label>
           <input
             type="number"
+            id="mes-pro-work-record-type"
+            data-testid="field-type"
+            data-agent-target="mes-pro-work-record:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="当前状态"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -105,9 +127,14 @@ export function MesProWorkRecordForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">上工时间</label>
+          <label htmlFor="mes-pro-work-record-clock_in_time" className="block text-xs text-slate-600 mb-1">上工时间</label>
           <input
             type="text"
+            id="mes-pro-work-record-clock_in_time"
+            data-testid="field-clock_in_time"
+            data-agent-target="mes-pro-work-record:field:clock_in_time"
+            data-agent-state={formData.clock_in_time ? "filled" : "empty"}
+            aria-label="上工时间"
             value={formData.clock_in_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, clock_in_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -117,9 +144,14 @@ export function MesProWorkRecordForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">下工时间</label>
+          <label htmlFor="mes-pro-work-record-clock_out_time" className="block text-xs text-slate-600 mb-1">下工时间</label>
           <input
             type="text"
+            id="mes-pro-work-record-clock_out_time"
+            data-testid="field-clock_out_time"
+            data-agent-target="mes-pro-work-record:field:clock_out_time"
+            data-agent-state={formData.clock_out_time ? "filled" : "empty"}
+            aria-label="下工时间"
             value={formData.clock_out_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, clock_out_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -129,9 +161,14 @@ export function MesProWorkRecordForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-pro-work-record-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-pro-work-record-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-pro-work-record:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -145,6 +182,8 @@ export function MesProWorkRecordForm({ open, initialData, onClose, onSuccess }: 
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-pro-work-record-form-cancel"
+              data-agent-target="mes-pro-work-record:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -152,6 +191,9 @@ export function MesProWorkRecordForm({ open, initialData, onClose, onSuccess }: 
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-pro-work-record-form-submit"
+              data-agent-target="mes-pro-work-record:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

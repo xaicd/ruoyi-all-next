@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for ErpPurchaseOrderItem（源框架导入） (ErpPurchaseOrderItem)
+-- Auto-generated RBAC & Menu Migration for ERP 采购订单项 (ErpPurchaseOrderItem)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-erp-purchase-order-item',
   'erp-dir',
-  'ErpPurchaseOrderItem（源框架导入）管理',
+  'ERP 采购订单项管理',
   '/admin/erp/erp-purchase-order-item',
   'erp/erp-purchase-order-item/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-erp-purchase-order-item-query',  'menu-erp-purchase-order-item', '查询ErpPurchaseOrderItem（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_purchase_order_item:query',  1, NOW(), NOW()),
-('menu-erp-purchase-order-item-create', 'menu-erp-purchase-order-item', '新增ErpPurchaseOrderItem（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_purchase_order_item:create', 2, NOW(), NOW()),
-('menu-erp-purchase-order-item-update', 'menu-erp-purchase-order-item', '修改ErpPurchaseOrderItem（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_purchase_order_item:update', 3, NOW(), NOW()),
-('menu-erp-purchase-order-item-delete', 'menu-erp-purchase-order-item', '删除ErpPurchaseOrderItem（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_purchase_order_item:delete', 4, NOW(), NOW())
+('menu-erp-purchase-order-item-query',  'menu-erp-purchase-order-item', '查询ERP 采购订单项', 'BUTTON', 'ACTIVE', 'erp:erp_purchase_order_item:query',  1, NOW(), NOW()),
+('menu-erp-purchase-order-item-create', 'menu-erp-purchase-order-item', '新增ERP 采购订单项', 'BUTTON', 'ACTIVE', 'erp:erp_purchase_order_item:create', 2, NOW(), NOW()),
+('menu-erp-purchase-order-item-update', 'menu-erp-purchase-order-item', '修改ERP 采购订单项', 'BUTTON', 'ACTIVE', 'erp:erp_purchase_order_item:update', 3, NOW(), NOW()),
+('menu-erp-purchase-order-item-delete', 'menu-erp-purchase-order-item', '删除ERP 采购订单项', 'BUTTON', 'ACTIVE', 'erp:erp_purchase_order_item:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

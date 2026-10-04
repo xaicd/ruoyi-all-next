@@ -1,0 +1,348 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "crm",
+  "entity": "CrmClue",
+  "kebab": "crm-clue",
+  "businessName": "CRM 线索",
+  "permissionPrefix": "crm:crm_clue",
+  "page": {
+    "route": "/admin/crm/crm-clue",
+    "title": "CRM 线索管理",
+    "titleSelector": "[data-testid=\"crm-clue-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.crm/api",
+    "bffMount": "/api/v1/admin/crm",
+    "resource": "crm-clue",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/crm-clue",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/crm-clue/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/crm-clue"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/crm-clue/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/crm-clue/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"crm-clue-title\"]",
+    "refresh": "[data-testid=\"crm-clue-refresh\"]",
+    "createButton": "[data-testid=\"crm-clue-create\"]",
+    "searchForm": "[data-testid=\"crm-clue-search\"]",
+    "searchSubmit": "[data-testid=\"crm-clue-search-submit\"]",
+    "searchReset": "[data-testid=\"crm-clue-search-reset\"]",
+    "total": "[data-testid=\"crm-clue-total\"]",
+    "table": "[data-testid=\"crm-clue-table\"]",
+    "row": "[data-testid=\"crm-clue-row\"]",
+    "editButton": "[data-testid=\"crm-clue-edit\"]",
+    "deleteButton": "[data-testid=\"crm-clue-delete\"]",
+    "form": "[data-testid=\"crm-clue-form\"]",
+    "formError": "[data-testid=\"crm-clue-form-error\"]",
+    "formSubmit": "[data-testid=\"crm-clue-form-submit\"]",
+    "formCancel": "[data-testid=\"crm-clue-form-cancel\"]",
+    "formClose": "[data-testid=\"crm-clue-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "CRM 线索列表",
+    "dialogLabel": {
+      "create": "新增CRM 线索",
+      "edit": "编辑CRM 线索"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "线索名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "follow_up_status",
+        "label": "跟进状态",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-follow_up_status",
+        "selector": "[data-testid=\"field-follow_up_status\"]"
+      },
+      {
+        "name": "contact_last_time",
+        "label": "最后跟进时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-contact_last_time",
+        "selector": "[data-testid=\"field-contact_last_time\"]"
+      },
+      {
+        "name": "contact_last_content",
+        "label": "最后跟进内容",
+        "type": "string",
+        "required": false,
+        "testId": "field-contact_last_content",
+        "selector": "[data-testid=\"field-contact_last_content\"]"
+      },
+      {
+        "name": "contact_next_time",
+        "label": "下次联系时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-contact_next_time",
+        "selector": "[data-testid=\"field-contact_next_time\"]"
+      },
+      {
+        "name": "owner_user_id",
+        "label": "负责人的用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-owner_user_id",
+        "selector": "[data-testid=\"field-owner_user_id\"]"
+      },
+      {
+        "name": "transform_status",
+        "label": "转化状态",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-transform_status",
+        "selector": "[data-testid=\"field-transform_status\"]"
+      },
+      {
+        "name": "customer_id",
+        "label": "客户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-customer_id",
+        "selector": "[data-testid=\"field-customer_id\"]"
+      },
+      {
+        "name": "mobile",
+        "label": "手机号",
+        "type": "string",
+        "required": false,
+        "testId": "field-mobile",
+        "selector": "[data-testid=\"field-mobile\"]"
+      },
+      {
+        "name": "telephone",
+        "label": "电话",
+        "type": "string",
+        "required": false,
+        "testId": "field-telephone",
+        "selector": "[data-testid=\"field-telephone\"]"
+      },
+      {
+        "name": "qq",
+        "label": "QQ",
+        "type": "string",
+        "required": false,
+        "testId": "field-qq",
+        "selector": "[data-testid=\"field-qq\"]"
+      },
+      {
+        "name": "wechat",
+        "label": "wechat",
+        "type": "string",
+        "required": false,
+        "testId": "field-wechat",
+        "selector": "[data-testid=\"field-wechat\"]"
+      },
+      {
+        "name": "email",
+        "label": "email",
+        "type": "string",
+        "required": false,
+        "testId": "field-email",
+        "selector": "[data-testid=\"field-email\"]"
+      },
+      {
+        "name": "area_id",
+        "label": "所在地",
+        "type": "number",
+        "required": false,
+        "testId": "field-area_id",
+        "selector": "[data-testid=\"field-area_id\"]"
+      },
+      {
+        "name": "detail_address",
+        "label": "详细地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-detail_address",
+        "selector": "[data-testid=\"field-detail_address\"]"
+      },
+      {
+        "name": "industry_id",
+        "label": "所属行业",
+        "type": "number",
+        "required": false,
+        "testId": "field-industry_id",
+        "selector": "[data-testid=\"field-industry_id\"]"
+      },
+      {
+        "name": "level",
+        "label": "客户等级",
+        "type": "number",
+        "required": false,
+        "testId": "field-level",
+        "selector": "[data-testid=\"field-level\"]"
+      },
+      {
+        "name": "source",
+        "label": "客户来源",
+        "type": "number",
+        "required": false,
+        "testId": "field-source",
+        "selector": "[data-testid=\"field-source\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "crm-clue",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"crm-clue\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"crm-clue-form-overlay\"]",
+      "dialog": "[data-testid=\"crm-clue-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "crm-clue:search",
+      "reset": "crm-clue:reset",
+      "refresh": "crm-clue:refresh",
+      "create": "crm-clue:create",
+      "edit": "crm-clue:edit",
+      "delete": "crm-clue:delete",
+      "submit": "crm-clue:submit",
+      "cancel": "crm-clue:cancel",
+      "close": "crm-clue:close",
+      "row": "crm-clue:row",
+      "pagination": "crm-clue:pagination",
+      "fields": {
+        "name": "crm-clue:field:name",
+        "follow_up_status": "crm-clue:field:follow_up_status",
+        "contact_last_time": "crm-clue:field:contact_last_time",
+        "contact_last_content": "crm-clue:field:contact_last_content",
+        "contact_next_time": "crm-clue:field:contact_next_time",
+        "owner_user_id": "crm-clue:field:owner_user_id",
+        "transform_status": "crm-clue:field:transform_status",
+        "customer_id": "crm-clue:field:customer_id",
+        "mobile": "crm-clue:field:mobile",
+        "telephone": "crm-clue:field:telephone",
+        "qq": "crm-clue:field:qq",
+        "wechat": "crm-clue:field:wechat",
+        "email": "crm-clue:field:email",
+        "area_id": "crm-clue:field:area_id",
+        "detail_address": "crm-clue:field:detail_address",
+        "industry_id": "crm-clue:field:industry_id",
+        "level": "crm-clue:field:level",
+        "source": "crm-clue:field:source",
+        "remark": "crm-clue:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "crm.crm-clue",
+      "examples": [
+        "crm.crm-clue__List__Refresh",
+        "crm.crm-clue__ListItem__Open",
+        "crm.crm-clue__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

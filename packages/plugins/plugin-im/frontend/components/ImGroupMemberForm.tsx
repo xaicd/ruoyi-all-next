@@ -60,24 +60,36 @@ export function ImGroupMemberForm({ open, initialData, onClose, onSuccess }: ImG
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="im-group-member-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑IM 群成员" : "新增IM 群成员"}
+        data-testid="im-group-member-form"
+        data-agent-scope="im-group-member:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑ImGroupMember（源框架导入）" : "新增ImGroupMember（源框架导入）"}
+            {isEdit ? "编辑IM 群成员" : "新增IM 群成员"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="im-group-member-form-close" data-agent-target="im-group-member:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="im-group-member-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">群编号</label>
+          <label htmlFor="im-group-member-group_id" className="block text-xs text-slate-600 mb-1">群编号</label>
           <input
             type="number"
+            id="im-group-member-group_id"
+            data-testid="field-group_id"
+            data-agent-target="im-group-member:field:group_id"
+            data-agent-state={formData.group_id == null || formData.group_id === "" ? "empty" : "filled"}
+            aria-label="群编号"
             value={formData.group_id != null ? String(formData.group_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, group_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -87,9 +99,14 @@ export function ImGroupMemberForm({ open, initialData, onClose, onSuccess }: ImG
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="im-group-member-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="im-group-member-user_id"
+            data-testid="field-user_id"
+            data-agent-target="im-group-member:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -99,9 +116,14 @@ export function ImGroupMemberForm({ open, initialData, onClose, onSuccess }: ImG
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">组内显示名</label>
+          <label htmlFor="im-group-member-display_user_name" className="block text-xs text-slate-600 mb-1">组内显示名</label>
           <input
             type="text"
+            id="im-group-member-display_user_name"
+            data-testid="field-display_user_name"
+            data-agent-target="im-group-member:field:display_user_name"
+            data-agent-state={formData.display_user_name ? "filled" : "empty"}
+            aria-label="组内显示名"
             value={formData.display_user_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, display_user_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -111,9 +133,14 @@ export function ImGroupMemberForm({ open, initialData, onClose, onSuccess }: ImG
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">群备注</label>
+          <label htmlFor="im-group-member-group_remark" className="block text-xs text-slate-600 mb-1">群备注</label>
           <input
             type="text"
+            id="im-group-member-group_remark"
+            data-testid="field-group_remark"
+            data-agent-target="im-group-member:field:group_remark"
+            data-agent-state={formData.group_remark ? "filled" : "empty"}
+            aria-label="群备注"
             value={formData.group_remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, group_remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -125,18 +152,27 @@ export function ImGroupMemberForm({ open, initialData, onClose, onSuccess }: ImG
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="silent"
+            id="im-group-member-silent"
+            data-testid="field-silent"
+            data-agent-target="im-group-member:field:silent"
+            data-agent-state={formData.silent ? "on" : "off"}
+            aria-label="是否免打扰"
             checked={Boolean(formData.silent)}
             onChange={(e) => setFormData((prev) => ({ ...prev, silent: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="silent" className="text-xs text-slate-700 font-medium">是否免打扰</label>
+          <label htmlFor="im-group-member-silent" className="text-xs text-slate-700 font-medium">是否免打扰</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">成员状态</label>
+          <label htmlFor="im-group-member-status" className="block text-xs text-slate-600 mb-1">成员状态</label>
           <input
             type="number"
+            id="im-group-member-status"
+            data-testid="field-status"
+            data-agent-target="im-group-member:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="成员状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -146,9 +182,14 @@ export function ImGroupMemberForm({ open, initialData, onClose, onSuccess }: ImG
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">成员角色</label>
+          <label htmlFor="im-group-member-role" className="block text-xs text-slate-600 mb-1">成员角色</label>
           <input
             type="number"
+            id="im-group-member-role"
+            data-testid="field-role"
+            data-agent-target="im-group-member:field:role"
+            data-agent-state={formData.role == null || formData.role === "" ? "empty" : "filled"}
+            aria-label="成员角色"
             value={formData.role != null ? String(formData.role) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, role: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -158,9 +199,14 @@ export function ImGroupMemberForm({ open, initialData, onClose, onSuccess }: ImG
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">入群时间</label>
+          <label htmlFor="im-group-member-join_time" className="block text-xs text-slate-600 mb-1">入群时间</label>
           <input
             type="text"
+            id="im-group-member-join_time"
+            data-testid="field-join_time"
+            data-agent-target="im-group-member:field:join_time"
+            data-agent-state={formData.join_time ? "filled" : "empty"}
+            aria-label="入群时间"
             value={formData.join_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, join_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -170,9 +216,14 @@ export function ImGroupMemberForm({ open, initialData, onClose, onSuccess }: ImG
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">加入来源</label>
+          <label htmlFor="im-group-member-add_source" className="block text-xs text-slate-600 mb-1">加入来源</label>
           <input
             type="number"
+            id="im-group-member-add_source"
+            data-testid="field-add_source"
+            data-agent-target="im-group-member:field:add_source"
+            data-agent-state={formData.add_source == null || formData.add_source === "" ? "empty" : "filled"}
+            aria-label="加入来源"
             value={formData.add_source != null ? String(formData.add_source) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, add_source: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -182,9 +233,14 @@ export function ImGroupMemberForm({ open, initialData, onClose, onSuccess }: ImG
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">邀请人用户编号</label>
+          <label htmlFor="im-group-member-inviter_user_id" className="block text-xs text-slate-600 mb-1">邀请人用户编号</label>
           <input
             type="number"
+            id="im-group-member-inviter_user_id"
+            data-testid="field-inviter_user_id"
+            data-agent-target="im-group-member:field:inviter_user_id"
+            data-agent-state={formData.inviter_user_id == null || formData.inviter_user_id === "" ? "empty" : "filled"}
+            aria-label="邀请人用户编号"
             value={formData.inviter_user_id != null ? String(formData.inviter_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, inviter_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -194,9 +250,14 @@ export function ImGroupMemberForm({ open, initialData, onClose, onSuccess }: ImG
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">退群时间</label>
+          <label htmlFor="im-group-member-quit_time" className="block text-xs text-slate-600 mb-1">退群时间</label>
           <input
             type="text"
+            id="im-group-member-quit_time"
+            data-testid="field-quit_time"
+            data-agent-target="im-group-member:field:quit_time"
+            data-agent-state={formData.quit_time ? "filled" : "empty"}
+            aria-label="退群时间"
             value={formData.quit_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, quit_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -206,9 +267,14 @@ export function ImGroupMemberForm({ open, initialData, onClose, onSuccess }: ImG
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">禁言到期时间</label>
+          <label htmlFor="im-group-member-mute_end_time" className="block text-xs text-slate-600 mb-1">禁言到期时间</label>
           <input
             type="text"
+            id="im-group-member-mute_end_time"
+            data-testid="field-mute_end_time"
+            data-agent-target="im-group-member:field:mute_end_time"
+            data-agent-state={formData.mute_end_time ? "filled" : "empty"}
+            aria-label="禁言到期时间"
             value={formData.mute_end_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, mute_end_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -222,6 +288,8 @@ export function ImGroupMemberForm({ open, initialData, onClose, onSuccess }: ImG
             <button
               type="button"
               onClick={onClose}
+              data-testid="im-group-member-form-cancel"
+              data-agent-target="im-group-member:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -229,6 +297,9 @@ export function ImGroupMemberForm({ open, initialData, onClose, onSuccess }: ImG
             <button
               type="submit"
               disabled={loading}
+              data-testid="im-group-member-form-submit"
+              data-agent-target="im-group-member:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

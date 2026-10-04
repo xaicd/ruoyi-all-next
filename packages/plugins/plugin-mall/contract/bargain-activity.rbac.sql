@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for BargainActivity（源框架导入） (BargainActivity)
+-- Auto-generated RBAC & Menu Migration for 砍价活动 (BargainActivity)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-bargain-activity',
   'mall-dir',
-  'BargainActivity（源框架导入）管理',
+  '砍价活动管理',
   '/admin/mall/bargain-activity',
   'mall/bargain-activity/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-bargain-activity-query',  'menu-bargain-activity', '查询BargainActivity（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:bargain_activity:query',  1, NOW(), NOW()),
-('menu-bargain-activity-create', 'menu-bargain-activity', '新增BargainActivity（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:bargain_activity:create', 2, NOW(), NOW()),
-('menu-bargain-activity-update', 'menu-bargain-activity', '修改BargainActivity（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:bargain_activity:update', 3, NOW(), NOW()),
-('menu-bargain-activity-delete', 'menu-bargain-activity', '删除BargainActivity（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:bargain_activity:delete', 4, NOW(), NOW())
+('menu-bargain-activity-query',  'menu-bargain-activity', '查询砍价活动', 'BUTTON', 'ACTIVE', 'mall:bargain_activity:query',  1, NOW(), NOW()),
+('menu-bargain-activity-create', 'menu-bargain-activity', '新增砍价活动', 'BUTTON', 'ACTIVE', 'mall:bargain_activity:create', 2, NOW(), NOW()),
+('menu-bargain-activity-update', 'menu-bargain-activity', '修改砍价活动', 'BUTTON', 'ACTIVE', 'mall:bargain_activity:update', 3, NOW(), NOW()),
+('menu-bargain-activity-delete', 'menu-bargain-activity', '删除砍价活动', 'BUTTON', 'ACTIVE', 'mall:bargain_activity:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

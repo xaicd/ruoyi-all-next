@@ -1,0 +1,267 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "pay",
+  "entity": "PayOrderExtension",
+  "kebab": "pay-order-extension",
+  "businessName": "支付订单拓展 DO每次调用支付渠道，都会生成一条对应记录",
+  "permissionPrefix": "pay:pay_order_extension",
+  "page": {
+    "route": "/admin/pay/pay-order-extension",
+    "title": "支付订单拓展 DO每次调用支付渠道，都会生成一条对应记录管理",
+    "titleSelector": "[data-testid=\"pay-order-extension-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.pay/api",
+    "bffMount": "/api/v1/admin/pay",
+    "resource": "pay-order-extension",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/pay-order-extension",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/pay-order-extension/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/pay-order-extension"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/pay-order-extension/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/pay-order-extension/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"pay-order-extension-title\"]",
+    "refresh": "[data-testid=\"pay-order-extension-refresh\"]",
+    "createButton": "[data-testid=\"pay-order-extension-create\"]",
+    "searchForm": "[data-testid=\"pay-order-extension-search\"]",
+    "searchSubmit": "[data-testid=\"pay-order-extension-search-submit\"]",
+    "searchReset": "[data-testid=\"pay-order-extension-search-reset\"]",
+    "total": "[data-testid=\"pay-order-extension-total\"]",
+    "table": "[data-testid=\"pay-order-extension-table\"]",
+    "row": "[data-testid=\"pay-order-extension-row\"]",
+    "editButton": "[data-testid=\"pay-order-extension-edit\"]",
+    "deleteButton": "[data-testid=\"pay-order-extension-delete\"]",
+    "form": "[data-testid=\"pay-order-extension-form\"]",
+    "formError": "[data-testid=\"pay-order-extension-form-error\"]",
+    "formSubmit": "[data-testid=\"pay-order-extension-form-submit\"]",
+    "formCancel": "[data-testid=\"pay-order-extension-form-cancel\"]",
+    "formClose": "[data-testid=\"pay-order-extension-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "支付订单拓展 DO每次调用支付渠道，都会生成一条对应记录列表",
+    "dialogLabel": {
+      "create": "新增支付订单拓展 DO每次调用支付渠道，都会生成一条对应记录",
+      "edit": "编辑支付订单拓展 DO每次调用支付渠道，都会生成一条对应记录"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "no",
+        "label": "外部订单号，根据规则生成",
+        "type": "string",
+        "required": false,
+        "testId": "field-no",
+        "selector": "[data-testid=\"field-no\"]"
+      },
+      {
+        "name": "order_id",
+        "label": "订单号",
+        "type": "number",
+        "required": false,
+        "testId": "field-order_id",
+        "selector": "[data-testid=\"field-order_id\"]"
+      },
+      {
+        "name": "channel_id",
+        "label": "渠道编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-channel_id",
+        "selector": "[data-testid=\"field-channel_id\"]"
+      },
+      {
+        "name": "channel_code",
+        "label": "渠道编码",
+        "type": "string",
+        "required": false,
+        "testId": "field-channel_code",
+        "selector": "[data-testid=\"field-channel_code\"]"
+      },
+      {
+        "name": "user_ip",
+        "label": "用户 IP",
+        "type": "string",
+        "required": false,
+        "testId": "field-user_ip",
+        "selector": "[data-testid=\"field-user_ip\"]"
+      },
+      {
+        "name": "status",
+        "label": "支付状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "channel_extras",
+        "label": "支付渠道的额外参数",
+        "type": "string",
+        "required": false,
+        "testId": "field-channel_extras",
+        "selector": "[data-testid=\"field-channel_extras\"]"
+      },
+      {
+        "name": "channel_error_code",
+        "label": "调用渠道的错误码",
+        "type": "string",
+        "required": false,
+        "testId": "field-channel_error_code",
+        "selector": "[data-testid=\"field-channel_error_code\"]"
+      },
+      {
+        "name": "channel_error_msg",
+        "label": "调用渠道报错时，错误信息",
+        "type": "string",
+        "required": false,
+        "testId": "field-channel_error_msg",
+        "selector": "[data-testid=\"field-channel_error_msg\"]"
+      },
+      {
+        "name": "channel_notify_data",
+        "label": "支付渠道的同步/异步通知的内容",
+        "type": "string",
+        "required": false,
+        "testId": "field-channel_notify_data",
+        "selector": "[data-testid=\"field-channel_notify_data\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "pay-order-extension",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"pay-order-extension\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"pay-order-extension-form-overlay\"]",
+      "dialog": "[data-testid=\"pay-order-extension-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "pay-order-extension:search",
+      "reset": "pay-order-extension:reset",
+      "refresh": "pay-order-extension:refresh",
+      "create": "pay-order-extension:create",
+      "edit": "pay-order-extension:edit",
+      "delete": "pay-order-extension:delete",
+      "submit": "pay-order-extension:submit",
+      "cancel": "pay-order-extension:cancel",
+      "close": "pay-order-extension:close",
+      "row": "pay-order-extension:row",
+      "pagination": "pay-order-extension:pagination",
+      "fields": {
+        "no": "pay-order-extension:field:no",
+        "order_id": "pay-order-extension:field:order_id",
+        "channel_id": "pay-order-extension:field:channel_id",
+        "channel_code": "pay-order-extension:field:channel_code",
+        "user_ip": "pay-order-extension:field:user_ip",
+        "status": "pay-order-extension:field:status",
+        "channel_extras": "pay-order-extension:field:channel_extras",
+        "channel_error_code": "pay-order-extension:field:channel_error_code",
+        "channel_error_msg": "pay-order-extension:field:channel_error_msg",
+        "channel_notify_data": "pay-order-extension:field:channel_notify_data"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "pay.pay-order-extension",
+      "examples": [
+        "pay.pay-order-extension__List__Refresh",
+        "pay.pay-order-extension__ListItem__Open",
+        "pay.pay-order-extension__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

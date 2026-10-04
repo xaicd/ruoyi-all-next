@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { AfterSaleLogService } from "../after-sale-log.service"
 
 describe("AfterSaleLogService", () => {
-  it("should create and query AfterSaleLog（源框架导入）", async () => {
+  it("should create and query 交易售后日志", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AfterSaleLogService.create({
         user_id: 1,
@@ -21,7 +21,7 @@ describe("AfterSaleLogService", () => {
   
       const updated = await AfterSaleLogService.update(created.id, {
         id: created.id,
-        user_id: "更新AfterSaleLog（源框架导入）",
+        user_id: "更新交易售后日志",
       } as any)
       expect(updated).toBeDefined()
   

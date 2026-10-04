@@ -57,24 +57,36 @@ export function CrmFollowUpRecordForm({ open, initialData, onClose, onSuccess }:
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="crm-follow-up-record-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑跟进记录 DO用于记录客户、联系人的每一次跟进" : "新增跟进记录 DO用于记录客户、联系人的每一次跟进"}
+        data-testid="crm-follow-up-record-form"
+        data-agent-scope="crm-follow-up-record:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑CrmFollowUpRecord（源框架导入）" : "新增CrmFollowUpRecord（源框架导入）"}
+            {isEdit ? "编辑跟进记录 DO用于记录客户、联系人的每一次跟进" : "新增跟进记录 DO用于记录客户、联系人的每一次跟进"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="crm-follow-up-record-form-close" data-agent-target="crm-follow-up-record:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="crm-follow-up-record-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">数据类型</label>
+          <label htmlFor="crm-follow-up-record-biz_type" className="block text-xs text-slate-600 mb-1">数据类型</label>
           <input
             type="number"
+            id="crm-follow-up-record-biz_type"
+            data-testid="field-biz_type"
+            data-agent-target="crm-follow-up-record:field:biz_type"
+            data-agent-state={formData.biz_type == null || formData.biz_type === "" ? "empty" : "filled"}
+            aria-label="数据类型"
             value={formData.biz_type != null ? String(formData.biz_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -84,9 +96,14 @@ export function CrmFollowUpRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">数据编号</label>
+          <label htmlFor="crm-follow-up-record-biz_id" className="block text-xs text-slate-600 mb-1">数据编号</label>
           <input
             type="number"
+            id="crm-follow-up-record-biz_id"
+            data-testid="field-biz_id"
+            data-agent-target="crm-follow-up-record:field:biz_id"
+            data-agent-state={formData.biz_id == null || formData.biz_id === "" ? "empty" : "filled"}
+            aria-label="数据编号"
             value={formData.biz_id != null ? String(formData.biz_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -96,9 +113,14 @@ export function CrmFollowUpRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">跟进类型</label>
+          <label htmlFor="crm-follow-up-record-type" className="block text-xs text-slate-600 mb-1">跟进类型</label>
           <input
             type="number"
+            id="crm-follow-up-record-type"
+            data-testid="field-type"
+            data-agent-target="crm-follow-up-record:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="跟进类型"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -108,9 +130,14 @@ export function CrmFollowUpRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">跟进内容</label>
+          <label htmlFor="crm-follow-up-record-content" className="block text-xs text-slate-600 mb-1">跟进内容</label>
           <input
             type="text"
+            id="crm-follow-up-record-content"
+            data-testid="field-content"
+            data-agent-target="crm-follow-up-record:field:content"
+            data-agent-state={formData.content ? "filled" : "empty"}
+            aria-label="跟进内容"
             value={formData.content ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, content: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -120,9 +147,14 @@ export function CrmFollowUpRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">下次联系时间</label>
+          <label htmlFor="crm-follow-up-record-next_time" className="block text-xs text-slate-600 mb-1">下次联系时间</label>
           <input
             type="text"
+            id="crm-follow-up-record-next_time"
+            data-testid="field-next_time"
+            data-agent-target="crm-follow-up-record:field:next_time"
+            data-agent-state={formData.next_time ? "filled" : "empty"}
+            aria-label="下次联系时间"
             value={formData.next_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, next_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -132,9 +164,14 @@ export function CrmFollowUpRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">图片</label>
+          <label htmlFor="crm-follow-up-record-pic_urls" className="block text-xs text-slate-600 mb-1">图片</label>
           <input
             type="text"
+            id="crm-follow-up-record-pic_urls"
+            data-testid="field-pic_urls"
+            data-agent-target="crm-follow-up-record:field:pic_urls"
+            data-agent-state={formData.pic_urls ? "filled" : "empty"}
+            aria-label="图片"
             value={formData.pic_urls ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pic_urls: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -144,9 +181,14 @@ export function CrmFollowUpRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">附件</label>
+          <label htmlFor="crm-follow-up-record-file_urls" className="block text-xs text-slate-600 mb-1">附件</label>
           <input
             type="text"
+            id="crm-follow-up-record-file_urls"
+            data-testid="field-file_urls"
+            data-agent-target="crm-follow-up-record:field:file_urls"
+            data-agent-state={formData.file_urls ? "filled" : "empty"}
+            aria-label="附件"
             value={formData.file_urls ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, file_urls: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -156,9 +198,14 @@ export function CrmFollowUpRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">关联的商机编号数组</label>
+          <label htmlFor="crm-follow-up-record-business_ids" className="block text-xs text-slate-600 mb-1">关联的商机编号数组</label>
           <input
             type="text"
+            id="crm-follow-up-record-business_ids"
+            data-testid="field-business_ids"
+            data-agent-target="crm-follow-up-record:field:business_ids"
+            data-agent-state={formData.business_ids ? "filled" : "empty"}
+            aria-label="关联的商机编号数组"
             value={formData.business_ids ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, business_ids: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -168,9 +215,14 @@ export function CrmFollowUpRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">关联的联系人编号数组</label>
+          <label htmlFor="crm-follow-up-record-contact_ids" className="block text-xs text-slate-600 mb-1">关联的联系人编号数组</label>
           <input
             type="text"
+            id="crm-follow-up-record-contact_ids"
+            data-testid="field-contact_ids"
+            data-agent-target="crm-follow-up-record:field:contact_ids"
+            data-agent-state={formData.contact_ids ? "filled" : "empty"}
+            aria-label="关联的联系人编号数组"
             value={formData.contact_ids ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, contact_ids: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -184,6 +236,8 @@ export function CrmFollowUpRecordForm({ open, initialData, onClose, onSuccess }:
             <button
               type="button"
               onClick={onClose}
+              data-testid="crm-follow-up-record-form-cancel"
+              data-agent-target="crm-follow-up-record:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -191,6 +245,9 @@ export function CrmFollowUpRecordForm({ open, initialData, onClose, onSuccess }:
             <button
               type="submit"
               disabled={loading}
+              data-testid="crm-follow-up-record-form-submit"
+              data-agent-target="crm-follow-up-record:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

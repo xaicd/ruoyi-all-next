@@ -1,0 +1,213 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesQcIndicatorResultDetail",
+  "kebab": "mes-qc-indicator-result-detail",
+  "businessName": "MES 检验结果明细记录",
+  "permissionPrefix": "mes:mes_qc_indicator_result_detail",
+  "page": {
+    "route": "/admin/mes/mes-qc-indicator-result-detail",
+    "title": "MES 检验结果明细记录管理",
+    "titleSelector": "[data-testid=\"mes-qc-indicator-result-detail-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-qc-indicator-result-detail",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-qc-indicator-result-detail",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-qc-indicator-result-detail/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-qc-indicator-result-detail"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-qc-indicator-result-detail/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-qc-indicator-result-detail/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-qc-indicator-result-detail-title\"]",
+    "refresh": "[data-testid=\"mes-qc-indicator-result-detail-refresh\"]",
+    "createButton": "[data-testid=\"mes-qc-indicator-result-detail-create\"]",
+    "searchForm": "[data-testid=\"mes-qc-indicator-result-detail-search\"]",
+    "searchSubmit": "[data-testid=\"mes-qc-indicator-result-detail-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-qc-indicator-result-detail-search-reset\"]",
+    "total": "[data-testid=\"mes-qc-indicator-result-detail-total\"]",
+    "table": "[data-testid=\"mes-qc-indicator-result-detail-table\"]",
+    "row": "[data-testid=\"mes-qc-indicator-result-detail-row\"]",
+    "editButton": "[data-testid=\"mes-qc-indicator-result-detail-edit\"]",
+    "deleteButton": "[data-testid=\"mes-qc-indicator-result-detail-delete\"]",
+    "form": "[data-testid=\"mes-qc-indicator-result-detail-form\"]",
+    "formError": "[data-testid=\"mes-qc-indicator-result-detail-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-qc-indicator-result-detail-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-qc-indicator-result-detail-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-qc-indicator-result-detail-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 检验结果明细记录列表",
+    "dialogLabel": {
+      "create": "新增MES 检验结果明细记录",
+      "edit": "编辑MES 检验结果明细记录"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "result_id",
+        "label": "关联检验结果 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-result_id",
+        "selector": "[data-testid=\"field-result_id\"]"
+      },
+      {
+        "name": "indicator_id",
+        "label": "检测指标 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-indicator_id",
+        "selector": "[data-testid=\"field-indicator_id\"]"
+      },
+      {
+        "name": "value",
+        "label": "检测值（统一存为字符串）",
+        "type": "string",
+        "required": false,
+        "testId": "field-value",
+        "selector": "[data-testid=\"field-value\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-qc-indicator-result-detail",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-qc-indicator-result-detail\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-qc-indicator-result-detail-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-qc-indicator-result-detail-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-qc-indicator-result-detail:search",
+      "reset": "mes-qc-indicator-result-detail:reset",
+      "refresh": "mes-qc-indicator-result-detail:refresh",
+      "create": "mes-qc-indicator-result-detail:create",
+      "edit": "mes-qc-indicator-result-detail:edit",
+      "delete": "mes-qc-indicator-result-detail:delete",
+      "submit": "mes-qc-indicator-result-detail:submit",
+      "cancel": "mes-qc-indicator-result-detail:cancel",
+      "close": "mes-qc-indicator-result-detail:close",
+      "row": "mes-qc-indicator-result-detail:row",
+      "pagination": "mes-qc-indicator-result-detail:pagination",
+      "fields": {
+        "result_id": "mes-qc-indicator-result-detail:field:result_id",
+        "indicator_id": "mes-qc-indicator-result-detail:field:indicator_id",
+        "value": "mes-qc-indicator-result-detail:field:value",
+        "remark": "mes-qc-indicator-result-detail:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-qc-indicator-result-detail",
+      "examples": [
+        "mes.mes-qc-indicator-result-detail__List__Refresh",
+        "mes.mes-qc-indicator-result-detail__ListItem__Open",
+        "mes.mes-qc-indicator-result-detail__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

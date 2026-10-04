@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for ErpStockIn（源框架导入） (ErpStockIn)
+-- Auto-generated RBAC & Menu Migration for ERP 其它入库单 (ErpStockIn)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-erp-stock-in',
   'erp-dir',
-  'ErpStockIn（源框架导入）管理',
+  'ERP 其它入库单管理',
   '/admin/erp/erp-stock-in',
   'erp/erp-stock-in/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-erp-stock-in-query',  'menu-erp-stock-in', '查询ErpStockIn（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_stock_in:query',  1, NOW(), NOW()),
-('menu-erp-stock-in-create', 'menu-erp-stock-in', '新增ErpStockIn（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_stock_in:create', 2, NOW(), NOW()),
-('menu-erp-stock-in-update', 'menu-erp-stock-in', '修改ErpStockIn（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_stock_in:update', 3, NOW(), NOW()),
-('menu-erp-stock-in-delete', 'menu-erp-stock-in', '删除ErpStockIn（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_stock_in:delete', 4, NOW(), NOW())
+('menu-erp-stock-in-query',  'menu-erp-stock-in', '查询ERP 其它入库单', 'BUTTON', 'ACTIVE', 'erp:erp_stock_in:query',  1, NOW(), NOW()),
+('menu-erp-stock-in-create', 'menu-erp-stock-in', '新增ERP 其它入库单', 'BUTTON', 'ACTIVE', 'erp:erp_stock_in:create', 2, NOW(), NOW()),
+('menu-erp-stock-in-update', 'menu-erp-stock-in', '修改ERP 其它入库单', 'BUTTON', 'ACTIVE', 'erp:erp_stock_in:update', 3, NOW(), NOW()),
+('menu-erp-stock-in-delete', 'menu-erp-stock-in', '删除ERP 其它入库单', 'BUTTON', 'ACTIVE', 'erp:erp_stock_in:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

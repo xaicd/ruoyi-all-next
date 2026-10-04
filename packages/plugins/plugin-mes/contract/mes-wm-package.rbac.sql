@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesWmPackage（源框架导入） (MesWmPackage)
+-- Auto-generated RBAC & Menu Migration for MES 装箱单 (MesWmPackage)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-wm-package',
   'mes-dir',
-  'MesWmPackage（源框架导入）管理',
+  'MES 装箱单管理',
   '/admin/mes/mes-wm-package',
   'mes/mes-wm-package/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-wm-package-query',  'menu-mes-wm-package', '查询MesWmPackage（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_package:query',  1, NOW(), NOW()),
-('menu-mes-wm-package-create', 'menu-mes-wm-package', '新增MesWmPackage（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_package:create', 2, NOW(), NOW()),
-('menu-mes-wm-package-update', 'menu-mes-wm-package', '修改MesWmPackage（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_package:update', 3, NOW(), NOW()),
-('menu-mes-wm-package-delete', 'menu-mes-wm-package', '删除MesWmPackage（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_package:delete', 4, NOW(), NOW())
+('menu-mes-wm-package-query',  'menu-mes-wm-package', '查询MES 装箱单', 'BUTTON', 'ACTIVE', 'mes:mes_wm_package:query',  1, NOW(), NOW()),
+('menu-mes-wm-package-create', 'menu-mes-wm-package', '新增MES 装箱单', 'BUTTON', 'ACTIVE', 'mes:mes_wm_package:create', 2, NOW(), NOW()),
+('menu-mes-wm-package-update', 'menu-mes-wm-package', '修改MES 装箱单', 'BUTTON', 'ACTIVE', 'mes:mes_wm_package:update', 3, NOW(), NOW()),
+('menu-mes-wm-package-delete', 'menu-mes-wm-package', '删除MES 装箱单', 'BUTTON', 'ACTIVE', 'mes:mes_wm_package:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

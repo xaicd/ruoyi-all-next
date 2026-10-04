@@ -1,0 +1,276 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "ai",
+  "entity": "AiChatConversation",
+  "kebab": "ai-chat-conversation",
+  "businessName": "AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它的消息关联在一起",
+  "permissionPrefix": "ai:ai_chat_conversation",
+  "page": {
+    "route": "/admin/ai/ai-chat-conversation",
+    "title": "AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它的消息关联在一起管理",
+    "titleSelector": "[data-testid=\"ai-chat-conversation-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.ai/api",
+    "bffMount": "/api/v1/admin/ai",
+    "resource": "ai-chat-conversation",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/ai-chat-conversation",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/ai-chat-conversation/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/ai-chat-conversation"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/ai-chat-conversation/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/ai-chat-conversation/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"ai-chat-conversation-title\"]",
+    "refresh": "[data-testid=\"ai-chat-conversation-refresh\"]",
+    "createButton": "[data-testid=\"ai-chat-conversation-create\"]",
+    "searchForm": "[data-testid=\"ai-chat-conversation-search\"]",
+    "searchSubmit": "[data-testid=\"ai-chat-conversation-search-submit\"]",
+    "searchReset": "[data-testid=\"ai-chat-conversation-search-reset\"]",
+    "total": "[data-testid=\"ai-chat-conversation-total\"]",
+    "table": "[data-testid=\"ai-chat-conversation-table\"]",
+    "row": "[data-testid=\"ai-chat-conversation-row\"]",
+    "editButton": "[data-testid=\"ai-chat-conversation-edit\"]",
+    "deleteButton": "[data-testid=\"ai-chat-conversation-delete\"]",
+    "form": "[data-testid=\"ai-chat-conversation-form\"]",
+    "formError": "[data-testid=\"ai-chat-conversation-form-error\"]",
+    "formSubmit": "[data-testid=\"ai-chat-conversation-form-submit\"]",
+    "formCancel": "[data-testid=\"ai-chat-conversation-form-cancel\"]",
+    "formClose": "[data-testid=\"ai-chat-conversation-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它的消息关联在一起列表",
+    "dialogLabel": {
+      "create": "新增AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它的消息关联在一起",
+      "edit": "编辑AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它的消息关联在一起"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "title",
+        "label": "对话标题",
+        "type": "string",
+        "required": false,
+        "testId": "field-title",
+        "selector": "[data-testid=\"field-title\"]"
+      },
+      {
+        "name": "pinned",
+        "label": "是否置顶",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-pinned",
+        "selector": "[data-testid=\"field-pinned\"]"
+      },
+      {
+        "name": "pinned_time",
+        "label": "置顶时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-pinned_time",
+        "selector": "[data-testid=\"field-pinned_time\"]"
+      },
+      {
+        "name": "role_id",
+        "label": "角色编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-role_id",
+        "selector": "[data-testid=\"field-role_id\"]"
+      },
+      {
+        "name": "model_id",
+        "label": "模型编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-model_id",
+        "selector": "[data-testid=\"field-model_id\"]"
+      },
+      {
+        "name": "model",
+        "label": "模型标志",
+        "type": "string",
+        "required": false,
+        "testId": "field-model",
+        "selector": "[data-testid=\"field-model\"]"
+      },
+      {
+        "name": "system_message",
+        "label": "角色设定",
+        "type": "string",
+        "required": false,
+        "testId": "field-system_message",
+        "selector": "[data-testid=\"field-system_message\"]"
+      },
+      {
+        "name": "temperature",
+        "label": "温度参数",
+        "type": "number",
+        "required": false,
+        "testId": "field-temperature",
+        "selector": "[data-testid=\"field-temperature\"]"
+      },
+      {
+        "name": "max_tokens",
+        "label": "单条回复的最大 Token 数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-max_tokens",
+        "selector": "[data-testid=\"field-max_tokens\"]"
+      },
+      {
+        "name": "max_contexts",
+        "label": "上下文的最大 Message 数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-max_contexts",
+        "selector": "[data-testid=\"field-max_contexts\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "ai-chat-conversation",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"ai-chat-conversation\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"ai-chat-conversation-form-overlay\"]",
+      "dialog": "[data-testid=\"ai-chat-conversation-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "ai-chat-conversation:search",
+      "reset": "ai-chat-conversation:reset",
+      "refresh": "ai-chat-conversation:refresh",
+      "create": "ai-chat-conversation:create",
+      "edit": "ai-chat-conversation:edit",
+      "delete": "ai-chat-conversation:delete",
+      "submit": "ai-chat-conversation:submit",
+      "cancel": "ai-chat-conversation:cancel",
+      "close": "ai-chat-conversation:close",
+      "row": "ai-chat-conversation:row",
+      "pagination": "ai-chat-conversation:pagination",
+      "fields": {
+        "user_id": "ai-chat-conversation:field:user_id",
+        "title": "ai-chat-conversation:field:title",
+        "pinned": "ai-chat-conversation:field:pinned",
+        "pinned_time": "ai-chat-conversation:field:pinned_time",
+        "role_id": "ai-chat-conversation:field:role_id",
+        "model_id": "ai-chat-conversation:field:model_id",
+        "model": "ai-chat-conversation:field:model",
+        "system_message": "ai-chat-conversation:field:system_message",
+        "temperature": "ai-chat-conversation:field:temperature",
+        "max_tokens": "ai-chat-conversation:field:max_tokens",
+        "max_contexts": "ai-chat-conversation:field:max_contexts"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "ai.ai-chat-conversation",
+      "examples": [
+        "ai.ai-chat-conversation__List__Refresh",
+        "ai.ai-chat-conversation__ListItem__Open",
+        "ai.ai-chat-conversation__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

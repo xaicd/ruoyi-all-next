@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { AiToolService } from "../ai-tool.service"
 
 describe("AiToolService", () => {
-  it("should create and query AiTool（源框架导入）", async () => {
+  it("should create and query AI 工具", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AiToolService.create({
-        name: "测试AiTool（源框架导入）",
+        name: "测试AI 工具",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("AiToolService", () => {
   
       const updated = await AiToolService.update(created.id, {
         id: created.id,
-        name: "更新AiTool（源框架导入）",
+        name: "更新AI 工具",
       } as any)
       expect(updated).toBeDefined()
   

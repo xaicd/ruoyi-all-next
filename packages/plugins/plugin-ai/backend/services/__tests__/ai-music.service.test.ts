@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { AiMusicService } from "../ai-music.service"
 
 describe("AiMusicService", () => {
-  it("should create and query AiMusic（源框架导入）", async () => {
+  it("should create and query AI 音乐", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AiMusicService.create({
         user_id: 1,
@@ -21,7 +21,7 @@ describe("AiMusicService", () => {
   
       const updated = await AiMusicService.update(created.id, {
         id: created.id,
-        user_id: "更新AiMusic（源框架导入）",
+        user_id: "更新AI 音乐",
       } as any)
       expect(updated).toBeDefined()
   

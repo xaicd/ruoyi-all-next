@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for AiTool（源框架导入） (AiTool)
+-- Auto-generated RBAC & Menu Migration for AI 工具 (AiTool)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-ai-tool',
   'ai-dir',
-  'AiTool（源框架导入）管理',
+  'AI 工具管理',
   '/admin/ai/ai-tool',
   'ai/ai-tool/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-ai-tool-query',  'menu-ai-tool', '查询AiTool（源框架导入）', 'BUTTON', 'ACTIVE', 'ai:ai_tool:query',  1, NOW(), NOW()),
-('menu-ai-tool-create', 'menu-ai-tool', '新增AiTool（源框架导入）', 'BUTTON', 'ACTIVE', 'ai:ai_tool:create', 2, NOW(), NOW()),
-('menu-ai-tool-update', 'menu-ai-tool', '修改AiTool（源框架导入）', 'BUTTON', 'ACTIVE', 'ai:ai_tool:update', 3, NOW(), NOW()),
-('menu-ai-tool-delete', 'menu-ai-tool', '删除AiTool（源框架导入）', 'BUTTON', 'ACTIVE', 'ai:ai_tool:delete', 4, NOW(), NOW())
+('menu-ai-tool-query',  'menu-ai-tool', '查询AI 工具', 'BUTTON', 'ACTIVE', 'ai:ai_tool:query',  1, NOW(), NOW()),
+('menu-ai-tool-create', 'menu-ai-tool', '新增AI 工具', 'BUTTON', 'ACTIVE', 'ai:ai_tool:create', 2, NOW(), NOW()),
+('menu-ai-tool-update', 'menu-ai-tool', '修改AI 工具', 'BUTTON', 'ACTIVE', 'ai:ai_tool:update', 3, NOW(), NOW()),
+('menu-ai-tool-delete', 'menu-ai-tool', '删除AI 工具', 'BUTTON', 'ACTIVE', 'ai:ai_tool:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

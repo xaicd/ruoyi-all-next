@@ -1,0 +1,240 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "erp",
+  "entity": "ErpStockMove",
+  "kebab": "erp-stock-move",
+  "businessName": "ERP 库存调拨单",
+  "permissionPrefix": "erp:erp_stock_move",
+  "page": {
+    "route": "/admin/erp/erp-stock-move",
+    "title": "ERP 库存调拨单管理",
+    "titleSelector": "[data-testid=\"erp-stock-move-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.erp/api",
+    "bffMount": "/api/v1/admin/erp",
+    "resource": "erp-stock-move",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/erp-stock-move",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/erp-stock-move/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/erp-stock-move"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/erp-stock-move/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/erp-stock-move/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"erp-stock-move-title\"]",
+    "refresh": "[data-testid=\"erp-stock-move-refresh\"]",
+    "createButton": "[data-testid=\"erp-stock-move-create\"]",
+    "searchForm": "[data-testid=\"erp-stock-move-search\"]",
+    "searchSubmit": "[data-testid=\"erp-stock-move-search-submit\"]",
+    "searchReset": "[data-testid=\"erp-stock-move-search-reset\"]",
+    "total": "[data-testid=\"erp-stock-move-total\"]",
+    "table": "[data-testid=\"erp-stock-move-table\"]",
+    "row": "[data-testid=\"erp-stock-move-row\"]",
+    "editButton": "[data-testid=\"erp-stock-move-edit\"]",
+    "deleteButton": "[data-testid=\"erp-stock-move-delete\"]",
+    "form": "[data-testid=\"erp-stock-move-form\"]",
+    "formError": "[data-testid=\"erp-stock-move-form-error\"]",
+    "formSubmit": "[data-testid=\"erp-stock-move-form-submit\"]",
+    "formCancel": "[data-testid=\"erp-stock-move-form-cancel\"]",
+    "formClose": "[data-testid=\"erp-stock-move-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "ERP 库存调拨单列表",
+    "dialogLabel": {
+      "create": "新增ERP 库存调拨单",
+      "edit": "编辑ERP 库存调拨单"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "no",
+        "label": "调拨单号",
+        "type": "string",
+        "required": false,
+        "testId": "field-no",
+        "selector": "[data-testid=\"field-no\"]"
+      },
+      {
+        "name": "move_time",
+        "label": "调拨时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-move_time",
+        "selector": "[data-testid=\"field-move_time\"]"
+      },
+      {
+        "name": "total_count",
+        "label": "合计数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_count",
+        "selector": "[data-testid=\"field-total_count\"]"
+      },
+      {
+        "name": "total_price",
+        "label": "合计金额，单位：元",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_price",
+        "selector": "[data-testid=\"field-total_price\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      },
+      {
+        "name": "file_url",
+        "label": "附件 URL",
+        "type": "string",
+        "required": false,
+        "testId": "field-file_url",
+        "selector": "[data-testid=\"field-file_url\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "erp-stock-move",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"erp-stock-move\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"erp-stock-move-form-overlay\"]",
+      "dialog": "[data-testid=\"erp-stock-move-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "erp-stock-move:search",
+      "reset": "erp-stock-move:reset",
+      "refresh": "erp-stock-move:refresh",
+      "create": "erp-stock-move:create",
+      "edit": "erp-stock-move:edit",
+      "delete": "erp-stock-move:delete",
+      "submit": "erp-stock-move:submit",
+      "cancel": "erp-stock-move:cancel",
+      "close": "erp-stock-move:close",
+      "row": "erp-stock-move:row",
+      "pagination": "erp-stock-move:pagination",
+      "fields": {
+        "no": "erp-stock-move:field:no",
+        "move_time": "erp-stock-move:field:move_time",
+        "total_count": "erp-stock-move:field:total_count",
+        "total_price": "erp-stock-move:field:total_price",
+        "status": "erp-stock-move:field:status",
+        "remark": "erp-stock-move:field:remark",
+        "file_url": "erp-stock-move:field:file_url"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "erp.erp-stock-move",
+      "examples": [
+        "erp.erp-stock-move__List__Refresh",
+        "erp.erp-stock-move__ListItem__Open",
+        "erp.erp-stock-move__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

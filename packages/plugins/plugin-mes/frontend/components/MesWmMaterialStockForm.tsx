@@ -59,24 +59,36 @@ export function MesWmMaterialStockForm({ open, initialData, onClose, onSuccess }
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-wm-material-stock-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 库存台账（仓库现有量）" : "新增MES 库存台账（仓库现有量）"}
+        data-testid="mes-wm-material-stock-form"
+        data-agent-scope="mes-wm-material-stock:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesWmMaterialStock（源框架导入）" : "新增MesWmMaterialStock（源框架导入）"}
+            {isEdit ? "编辑MES 库存台账（仓库现有量）" : "新增MES 库存台账（仓库现有量）"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-wm-material-stock-form-close" data-agent-target="mes-wm-material-stock:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-wm-material-stock-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">物料分类编号</label>
+          <label htmlFor="mes-wm-material-stock-item_type_id" className="block text-xs text-slate-600 mb-1">物料分类编号</label>
           <input
             type="number"
+            id="mes-wm-material-stock-item_type_id"
+            data-testid="field-item_type_id"
+            data-agent-target="mes-wm-material-stock:field:item_type_id"
+            data-agent-state={formData.item_type_id == null || formData.item_type_id === "" ? "empty" : "filled"}
+            aria-label="物料分类编号"
             value={formData.item_type_id != null ? String(formData.item_type_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, item_type_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -86,9 +98,14 @@ export function MesWmMaterialStockForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">物料编号</label>
+          <label htmlFor="mes-wm-material-stock-item_id" className="block text-xs text-slate-600 mb-1">物料编号</label>
           <input
             type="number"
+            id="mes-wm-material-stock-item_id"
+            data-testid="field-item_id"
+            data-agent-target="mes-wm-material-stock:field:item_id"
+            data-agent-state={formData.item_id == null || formData.item_id === "" ? "empty" : "filled"}
+            aria-label="物料编号"
             value={formData.item_id != null ? String(formData.item_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, item_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -98,9 +115,14 @@ export function MesWmMaterialStockForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">批次编号</label>
+          <label htmlFor="mes-wm-material-stock-batch_id" className="block text-xs text-slate-600 mb-1">批次编号</label>
           <input
             type="number"
+            id="mes-wm-material-stock-batch_id"
+            data-testid="field-batch_id"
+            data-agent-target="mes-wm-material-stock:field:batch_id"
+            data-agent-state={formData.batch_id == null || formData.batch_id === "" ? "empty" : "filled"}
+            aria-label="批次编号"
             value={formData.batch_id != null ? String(formData.batch_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, batch_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -110,9 +132,14 @@ export function MesWmMaterialStockForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">批次号</label>
+          <label htmlFor="mes-wm-material-stock-batch_code" className="block text-xs text-slate-600 mb-1">批次号</label>
           <input
             type="text"
+            id="mes-wm-material-stock-batch_code"
+            data-testid="field-batch_code"
+            data-agent-target="mes-wm-material-stock:field:batch_code"
+            data-agent-state={formData.batch_code ? "filled" : "empty"}
+            aria-label="批次号"
             value={formData.batch_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, batch_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -122,9 +149,14 @@ export function MesWmMaterialStockForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">仓库编号</label>
+          <label htmlFor="mes-wm-material-stock-warehouse_id" className="block text-xs text-slate-600 mb-1">仓库编号</label>
           <input
             type="number"
+            id="mes-wm-material-stock-warehouse_id"
+            data-testid="field-warehouse_id"
+            data-agent-target="mes-wm-material-stock:field:warehouse_id"
+            data-agent-state={formData.warehouse_id == null || formData.warehouse_id === "" ? "empty" : "filled"}
+            aria-label="仓库编号"
             value={formData.warehouse_id != null ? String(formData.warehouse_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, warehouse_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -134,9 +166,14 @@ export function MesWmMaterialStockForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">库区编号</label>
+          <label htmlFor="mes-wm-material-stock-location_id" className="block text-xs text-slate-600 mb-1">库区编号</label>
           <input
             type="number"
+            id="mes-wm-material-stock-location_id"
+            data-testid="field-location_id"
+            data-agent-target="mes-wm-material-stock:field:location_id"
+            data-agent-state={formData.location_id == null || formData.location_id === "" ? "empty" : "filled"}
+            aria-label="库区编号"
             value={formData.location_id != null ? String(formData.location_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, location_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -146,9 +183,14 @@ export function MesWmMaterialStockForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">库位编号</label>
+          <label htmlFor="mes-wm-material-stock-area_id" className="block text-xs text-slate-600 mb-1">库位编号</label>
           <input
             type="number"
+            id="mes-wm-material-stock-area_id"
+            data-testid="field-area_id"
+            data-agent-target="mes-wm-material-stock:field:area_id"
+            data-agent-state={formData.area_id == null || formData.area_id === "" ? "empty" : "filled"}
+            aria-label="库位编号"
             value={formData.area_id != null ? String(formData.area_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, area_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -158,9 +200,14 @@ export function MesWmMaterialStockForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">供应商编号</label>
+          <label htmlFor="mes-wm-material-stock-vendor_id" className="block text-xs text-slate-600 mb-1">供应商编号</label>
           <input
             type="number"
+            id="mes-wm-material-stock-vendor_id"
+            data-testid="field-vendor_id"
+            data-agent-target="mes-wm-material-stock:field:vendor_id"
+            data-agent-state={formData.vendor_id == null || formData.vendor_id === "" ? "empty" : "filled"}
+            aria-label="供应商编号"
             value={formData.vendor_id != null ? String(formData.vendor_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, vendor_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -170,9 +217,14 @@ export function MesWmMaterialStockForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">在库数量</label>
+          <label htmlFor="mes-wm-material-stock-quantity" className="block text-xs text-slate-600 mb-1">在库数量</label>
           <input
             type="number"
+            id="mes-wm-material-stock-quantity"
+            data-testid="field-quantity"
+            data-agent-target="mes-wm-material-stock:field:quantity"
+            data-agent-state={formData.quantity == null || formData.quantity === "" ? "empty" : "filled"}
+            aria-label="在库数量"
             value={formData.quantity != null ? String(formData.quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -182,9 +234,14 @@ export function MesWmMaterialStockForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">入库时间</label>
+          <label htmlFor="mes-wm-material-stock-receipt_time" className="block text-xs text-slate-600 mb-1">入库时间</label>
           <input
             type="text"
+            id="mes-wm-material-stock-receipt_time"
+            data-testid="field-receipt_time"
+            data-agent-target="mes-wm-material-stock:field:receipt_time"
+            data-agent-state={formData.receipt_time ? "filled" : "empty"}
+            aria-label="入库时间"
             value={formData.receipt_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, receipt_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -196,12 +253,16 @@ export function MesWmMaterialStockForm({ open, initialData, onClose, onSuccess }
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="frozen"
+            id="mes-wm-material-stock-frozen"
+            data-testid="field-frozen"
+            data-agent-target="mes-wm-material-stock:field:frozen"
+            data-agent-state={formData.frozen ? "on" : "off"}
+            aria-label="是否冻结"
             checked={Boolean(formData.frozen)}
             onChange={(e) => setFormData((prev) => ({ ...prev, frozen: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="frozen" className="text-xs text-slate-700 font-medium">是否冻结</label>
+          <label htmlFor="mes-wm-material-stock-frozen" className="text-xs text-slate-700 font-medium">是否冻结</label>
         </div>
           </div>
 
@@ -209,6 +270,8 @@ export function MesWmMaterialStockForm({ open, initialData, onClose, onSuccess }
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-wm-material-stock-form-cancel"
+              data-agent-target="mes-wm-material-stock:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -216,6 +279,9 @@ export function MesWmMaterialStockForm({ open, initialData, onClose, onSuccess }
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-wm-material-stock-form-submit"
+              data-agent-target="mes-wm-material-stock:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

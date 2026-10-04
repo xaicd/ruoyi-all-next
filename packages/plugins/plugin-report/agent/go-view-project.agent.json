@@ -1,0 +1,222 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "report",
+  "entity": "GoViewProject",
+  "kebab": "go-view-project",
+  "businessName": "GoView 项目表每个大屏图标，对应一个项目",
+  "permissionPrefix": "report:go_view_project",
+  "page": {
+    "route": "/admin/report/go-view-project",
+    "title": "GoView 项目表每个大屏图标，对应一个项目管理",
+    "titleSelector": "[data-testid=\"go-view-project-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.report/api",
+    "bffMount": "/api/v1/admin/report",
+    "resource": "go-view-project",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/go-view-project",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/go-view-project/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/go-view-project"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/go-view-project/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/go-view-project/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"go-view-project-title\"]",
+    "refresh": "[data-testid=\"go-view-project-refresh\"]",
+    "createButton": "[data-testid=\"go-view-project-create\"]",
+    "searchForm": "[data-testid=\"go-view-project-search\"]",
+    "searchSubmit": "[data-testid=\"go-view-project-search-submit\"]",
+    "searchReset": "[data-testid=\"go-view-project-search-reset\"]",
+    "total": "[data-testid=\"go-view-project-total\"]",
+    "table": "[data-testid=\"go-view-project-table\"]",
+    "row": "[data-testid=\"go-view-project-row\"]",
+    "editButton": "[data-testid=\"go-view-project-edit\"]",
+    "deleteButton": "[data-testid=\"go-view-project-delete\"]",
+    "form": "[data-testid=\"go-view-project-form\"]",
+    "formError": "[data-testid=\"go-view-project-form-error\"]",
+    "formSubmit": "[data-testid=\"go-view-project-form-submit\"]",
+    "formCancel": "[data-testid=\"go-view-project-form-cancel\"]",
+    "formClose": "[data-testid=\"go-view-project-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "GoView 项目表每个大屏图标，对应一个项目列表",
+    "dialogLabel": {
+      "create": "新增GoView 项目表每个大屏图标，对应一个项目",
+      "edit": "编辑GoView 项目表每个大屏图标，对应一个项目"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "项目名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "pic_url",
+        "label": "预览图片 URL",
+        "type": "string",
+        "required": false,
+        "testId": "field-pic_url",
+        "selector": "[data-testid=\"field-pic_url\"]"
+      },
+      {
+        "name": "content",
+        "label": "报表内容",
+        "type": "string",
+        "required": false,
+        "testId": "field-content",
+        "selector": "[data-testid=\"field-content\"]"
+      },
+      {
+        "name": "status",
+        "label": "发布状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "remark",
+        "label": "项目备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "go-view-project",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"go-view-project\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"go-view-project-form-overlay\"]",
+      "dialog": "[data-testid=\"go-view-project-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "go-view-project:search",
+      "reset": "go-view-project:reset",
+      "refresh": "go-view-project:refresh",
+      "create": "go-view-project:create",
+      "edit": "go-view-project:edit",
+      "delete": "go-view-project:delete",
+      "submit": "go-view-project:submit",
+      "cancel": "go-view-project:cancel",
+      "close": "go-view-project:close",
+      "row": "go-view-project:row",
+      "pagination": "go-view-project:pagination",
+      "fields": {
+        "name": "go-view-project:field:name",
+        "pic_url": "go-view-project:field:pic_url",
+        "content": "go-view-project:field:content",
+        "status": "go-view-project:field:status",
+        "remark": "go-view-project:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "report.go-view-project",
+      "examples": [
+        "report.go-view-project__List__Refresh",
+        "report.go-view-project__ListItem__Open",
+        "report.go-view-project__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

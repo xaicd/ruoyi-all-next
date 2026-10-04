@@ -59,24 +59,36 @@ export function PayDemoOrderForm({ open, initialData, onClose, onSuccess }: PayD
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="pay-demo-order-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑示例订单演示业务系统的订单，如何接入 pay 系统的支付与退款" : "新增示例订单演示业务系统的订单，如何接入 pay 系统的支付与退款"}
+        data-testid="pay-demo-order-form"
+        data-agent-scope="pay-demo-order:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑PayDemoOrder（源框架导入）" : "新增PayDemoOrder（源框架导入）"}
+            {isEdit ? "编辑示例订单演示业务系统的订单，如何接入 pay 系统的支付与退款" : "新增示例订单演示业务系统的订单，如何接入 pay 系统的支付与退款"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="pay-demo-order-form-close" data-agent-target="pay-demo-order:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="pay-demo-order-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="pay-demo-order-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="pay-demo-order-user_id"
+            data-testid="field-user_id"
+            data-agent-target="pay-demo-order:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -86,9 +98,14 @@ export function PayDemoOrderForm({ open, initialData, onClose, onSuccess }: PayD
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品编号</label>
+          <label htmlFor="pay-demo-order-spu_id" className="block text-xs text-slate-600 mb-1">商品编号</label>
           <input
             type="number"
+            id="pay-demo-order-spu_id"
+            data-testid="field-spu_id"
+            data-agent-target="pay-demo-order:field:spu_id"
+            data-agent-state={formData.spu_id == null || formData.spu_id === "" ? "empty" : "filled"}
+            aria-label="商品编号"
             value={formData.spu_id != null ? String(formData.spu_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, spu_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -98,9 +115,14 @@ export function PayDemoOrderForm({ open, initialData, onClose, onSuccess }: PayD
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品名称</label>
+          <label htmlFor="pay-demo-order-spu_name" className="block text-xs text-slate-600 mb-1">商品名称</label>
           <input
             type="text"
+            id="pay-demo-order-spu_name"
+            data-testid="field-spu_name"
+            data-agent-target="pay-demo-order:field:spu_name"
+            data-agent-state={formData.spu_name ? "filled" : "empty"}
+            aria-label="商品名称"
             value={formData.spu_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, spu_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -110,9 +132,14 @@ export function PayDemoOrderForm({ open, initialData, onClose, onSuccess }: PayD
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">价格，单位：分</label>
+          <label htmlFor="pay-demo-order-price" className="block text-xs text-slate-600 mb-1">价格，单位：分</label>
           <input
             type="number"
+            id="pay-demo-order-price"
+            data-testid="field-price"
+            data-agent-target="pay-demo-order:field:price"
+            data-agent-state={formData.price == null || formData.price === "" ? "empty" : "filled"}
+            aria-label="价格，单位：分"
             value={formData.price != null ? String(formData.price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -124,18 +151,27 @@ export function PayDemoOrderForm({ open, initialData, onClose, onSuccess }: PayD
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="pay_status"
+            id="pay-demo-order-pay_status"
+            data-testid="field-pay_status"
+            data-agent-target="pay-demo-order:field:pay_status"
+            data-agent-state={formData.pay_status ? "on" : "off"}
+            aria-label="是否支付"
             checked={Boolean(formData.pay_status)}
             onChange={(e) => setFormData((prev) => ({ ...prev, pay_status: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="pay_status" className="text-xs text-slate-700 font-medium">是否支付</label>
+          <label htmlFor="pay-demo-order-pay_status" className="text-xs text-slate-700 font-medium">是否支付</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">支付订单编号</label>
+          <label htmlFor="pay-demo-order-pay_order_id" className="block text-xs text-slate-600 mb-1">支付订单编号</label>
           <input
             type="number"
+            id="pay-demo-order-pay_order_id"
+            data-testid="field-pay_order_id"
+            data-agent-target="pay-demo-order:field:pay_order_id"
+            data-agent-state={formData.pay_order_id == null || formData.pay_order_id === "" ? "empty" : "filled"}
+            aria-label="支付订单编号"
             value={formData.pay_order_id != null ? String(formData.pay_order_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pay_order_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -145,9 +181,14 @@ export function PayDemoOrderForm({ open, initialData, onClose, onSuccess }: PayD
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">付款时间</label>
+          <label htmlFor="pay-demo-order-pay_time" className="block text-xs text-slate-600 mb-1">付款时间</label>
           <input
             type="text"
+            id="pay-demo-order-pay_time"
+            data-testid="field-pay_time"
+            data-agent-target="pay-demo-order:field:pay_time"
+            data-agent-state={formData.pay_time ? "filled" : "empty"}
+            aria-label="付款时间"
             value={formData.pay_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pay_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -157,9 +198,14 @@ export function PayDemoOrderForm({ open, initialData, onClose, onSuccess }: PayD
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">支付渠道</label>
+          <label htmlFor="pay-demo-order-pay_channel_code" className="block text-xs text-slate-600 mb-1">支付渠道</label>
           <input
             type="text"
+            id="pay-demo-order-pay_channel_code"
+            data-testid="field-pay_channel_code"
+            data-agent-target="pay-demo-order:field:pay_channel_code"
+            data-agent-state={formData.pay_channel_code ? "filled" : "empty"}
+            aria-label="支付渠道"
             value={formData.pay_channel_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pay_channel_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -169,9 +215,14 @@ export function PayDemoOrderForm({ open, initialData, onClose, onSuccess }: PayD
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">支付退款单号</label>
+          <label htmlFor="pay-demo-order-pay_refund_id" className="block text-xs text-slate-600 mb-1">支付退款单号</label>
           <input
             type="number"
+            id="pay-demo-order-pay_refund_id"
+            data-testid="field-pay_refund_id"
+            data-agent-target="pay-demo-order:field:pay_refund_id"
+            data-agent-state={formData.pay_refund_id == null || formData.pay_refund_id === "" ? "empty" : "filled"}
+            aria-label="支付退款单号"
             value={formData.pay_refund_id != null ? String(formData.pay_refund_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pay_refund_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -181,9 +232,14 @@ export function PayDemoOrderForm({ open, initialData, onClose, onSuccess }: PayD
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">退款金额，单位：分</label>
+          <label htmlFor="pay-demo-order-refund_price" className="block text-xs text-slate-600 mb-1">退款金额，单位：分</label>
           <input
             type="number"
+            id="pay-demo-order-refund_price"
+            data-testid="field-refund_price"
+            data-agent-target="pay-demo-order:field:refund_price"
+            data-agent-state={formData.refund_price == null || formData.refund_price === "" ? "empty" : "filled"}
+            aria-label="退款金额，单位：分"
             value={formData.refund_price != null ? String(formData.refund_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, refund_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -193,9 +249,14 @@ export function PayDemoOrderForm({ open, initialData, onClose, onSuccess }: PayD
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">退款完成时间</label>
+          <label htmlFor="pay-demo-order-refund_time" className="block text-xs text-slate-600 mb-1">退款完成时间</label>
           <input
             type="text"
+            id="pay-demo-order-refund_time"
+            data-testid="field-refund_time"
+            data-agent-target="pay-demo-order:field:refund_time"
+            data-agent-state={formData.refund_time ? "filled" : "empty"}
+            aria-label="退款完成时间"
             value={formData.refund_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, refund_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -209,6 +270,8 @@ export function PayDemoOrderForm({ open, initialData, onClose, onSuccess }: PayD
             <button
               type="button"
               onClick={onClose}
+              data-testid="pay-demo-order-form-cancel"
+              data-agent-target="pay-demo-order:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -216,6 +279,9 @@ export function PayDemoOrderForm({ open, initialData, onClose, onSuccess }: PayD
             <button
               type="submit"
               disabled={loading}
+              data-testid="pay-demo-order-form-submit"
+              data-agent-target="pay-demo-order:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

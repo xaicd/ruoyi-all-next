@@ -1,0 +1,213 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "iot",
+  "entity": "IotProductCategory",
+  "kebab": "iot-product-category",
+  "businessName": "IoT 产品分类",
+  "permissionPrefix": "iot:iot_product_category",
+  "page": {
+    "route": "/admin/iot/iot-product-category",
+    "title": "IoT 产品分类管理",
+    "titleSelector": "[data-testid=\"iot-product-category-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.iot/api",
+    "bffMount": "/api/v1/admin/iot",
+    "resource": "iot-product-category",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/iot-product-category",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/iot-product-category/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/iot-product-category"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/iot-product-category/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/iot-product-category/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"iot-product-category-title\"]",
+    "refresh": "[data-testid=\"iot-product-category-refresh\"]",
+    "createButton": "[data-testid=\"iot-product-category-create\"]",
+    "searchForm": "[data-testid=\"iot-product-category-search\"]",
+    "searchSubmit": "[data-testid=\"iot-product-category-search-submit\"]",
+    "searchReset": "[data-testid=\"iot-product-category-search-reset\"]",
+    "total": "[data-testid=\"iot-product-category-total\"]",
+    "table": "[data-testid=\"iot-product-category-table\"]",
+    "row": "[data-testid=\"iot-product-category-row\"]",
+    "editButton": "[data-testid=\"iot-product-category-edit\"]",
+    "deleteButton": "[data-testid=\"iot-product-category-delete\"]",
+    "form": "[data-testid=\"iot-product-category-form\"]",
+    "formError": "[data-testid=\"iot-product-category-form-error\"]",
+    "formSubmit": "[data-testid=\"iot-product-category-form-submit\"]",
+    "formCancel": "[data-testid=\"iot-product-category-form-cancel\"]",
+    "formClose": "[data-testid=\"iot-product-category-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IoT 产品分类列表",
+    "dialogLabel": {
+      "create": "新增IoT 产品分类",
+      "edit": "编辑IoT 产品分类"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "分类名字",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "sort",
+        "label": "分类排序",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      },
+      {
+        "name": "status",
+        "label": "分类状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "description",
+        "label": "分类描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "iot-product-category",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"iot-product-category\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"iot-product-category-form-overlay\"]",
+      "dialog": "[data-testid=\"iot-product-category-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "iot-product-category:search",
+      "reset": "iot-product-category:reset",
+      "refresh": "iot-product-category:refresh",
+      "create": "iot-product-category:create",
+      "edit": "iot-product-category:edit",
+      "delete": "iot-product-category:delete",
+      "submit": "iot-product-category:submit",
+      "cancel": "iot-product-category:cancel",
+      "close": "iot-product-category:close",
+      "row": "iot-product-category:row",
+      "pagination": "iot-product-category:pagination",
+      "fields": {
+        "name": "iot-product-category:field:name",
+        "sort": "iot-product-category:field:sort",
+        "status": "iot-product-category:field:status",
+        "description": "iot-product-category:field:description"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "iot.iot-product-category",
+      "examples": [
+        "iot.iot-product-category__List__Refresh",
+        "iot.iot-product-category__ListItem__Open",
+        "iot.iot-product-category__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

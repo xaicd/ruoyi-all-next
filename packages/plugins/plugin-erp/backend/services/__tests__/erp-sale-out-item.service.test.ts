@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ErpSaleOutItemService } from "../erp-sale-out-item.service"
 
 describe("ErpSaleOutItemService", () => {
-  it("should create and query ErpSaleOutItem（源框架导入）", async () => {
+  it("should create and query ERP 销售出库项", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ErpSaleOutItemService.create({
         out_id: 1,
@@ -21,7 +21,7 @@ describe("ErpSaleOutItemService", () => {
   
       const updated = await ErpSaleOutItemService.update(created.id, {
         id: created.id,
-        out_id: "更新ErpSaleOutItem（源框架导入）",
+        out_id: "更新ERP 销售出库项",
       } as any)
       expect(updated).toBeDefined()
   

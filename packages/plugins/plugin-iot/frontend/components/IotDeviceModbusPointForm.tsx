@@ -60,24 +60,36 @@ export function IotDeviceModbusPointForm({ open, initialData, onClose, onSuccess
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="iot-device-modbus-point-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑IoT 设备 Modbus 点位配置" : "新增IoT 设备 Modbus 点位配置"}
+        data-testid="iot-device-modbus-point-form"
+        data-agent-scope="iot-device-modbus-point:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑IotDeviceModbusPoint（源框架导入）" : "新增IotDeviceModbusPoint（源框架导入）"}
+            {isEdit ? "编辑IoT 设备 Modbus 点位配置" : "新增IoT 设备 Modbus 点位配置"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="iot-device-modbus-point-form-close" data-agent-target="iot-device-modbus-point:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="iot-device-modbus-point-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备编号</label>
+          <label htmlFor="iot-device-modbus-point-device_id" className="block text-xs text-slate-600 mb-1">设备编号</label>
           <input
             type="number"
+            id="iot-device-modbus-point-device_id"
+            data-testid="field-device_id"
+            data-agent-target="iot-device-modbus-point:field:device_id"
+            data-agent-state={formData.device_id == null || formData.device_id === "" ? "empty" : "filled"}
+            aria-label="设备编号"
             value={formData.device_id != null ? String(formData.device_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, device_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -87,9 +99,14 @@ export function IotDeviceModbusPointForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">物模型属性编号</label>
+          <label htmlFor="iot-device-modbus-point-thing_model_id" className="block text-xs text-slate-600 mb-1">物模型属性编号</label>
           <input
             type="number"
+            id="iot-device-modbus-point-thing_model_id"
+            data-testid="field-thing_model_id"
+            data-agent-target="iot-device-modbus-point:field:thing_model_id"
+            data-agent-state={formData.thing_model_id == null || formData.thing_model_id === "" ? "empty" : "filled"}
+            aria-label="物模型属性编号"
             value={formData.thing_model_id != null ? String(formData.thing_model_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, thing_model_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -99,9 +116,14 @@ export function IotDeviceModbusPointForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">属性标识符</label>
+          <label htmlFor="iot-device-modbus-point-identifier" className="block text-xs text-slate-600 mb-1">属性标识符</label>
           <input
             type="text"
+            id="iot-device-modbus-point-identifier"
+            data-testid="field-identifier"
+            data-agent-target="iot-device-modbus-point:field:identifier"
+            data-agent-state={formData.identifier ? "filled" : "empty"}
+            aria-label="属性标识符"
             value={formData.identifier ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, identifier: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -111,9 +133,14 @@ export function IotDeviceModbusPointForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">属性名称</label>
+          <label htmlFor="iot-device-modbus-point-name" className="block text-xs text-slate-600 mb-1">属性名称</label>
           <input
             type="text"
+            id="iot-device-modbus-point-name"
+            data-testid="field-name"
+            data-agent-target="iot-device-modbus-point:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="属性名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -123,9 +150,14 @@ export function IotDeviceModbusPointForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">Modbus 功能码</label>
+          <label htmlFor="iot-device-modbus-point-function_code" className="block text-xs text-slate-600 mb-1">Modbus 功能码</label>
           <input
             type="number"
+            id="iot-device-modbus-point-function_code"
+            data-testid="field-function_code"
+            data-agent-target="iot-device-modbus-point:field:function_code"
+            data-agent-state={formData.function_code == null || formData.function_code === "" ? "empty" : "filled"}
+            aria-label="Modbus 功能码"
             value={formData.function_code != null ? String(formData.function_code) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, function_code: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -135,9 +167,14 @@ export function IotDeviceModbusPointForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">寄存器起始地址</label>
+          <label htmlFor="iot-device-modbus-point-register_address" className="block text-xs text-slate-600 mb-1">寄存器起始地址</label>
           <input
             type="number"
+            id="iot-device-modbus-point-register_address"
+            data-testid="field-register_address"
+            data-agent-target="iot-device-modbus-point:field:register_address"
+            data-agent-state={formData.register_address == null || formData.register_address === "" ? "empty" : "filled"}
+            aria-label="寄存器起始地址"
             value={formData.register_address != null ? String(formData.register_address) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, register_address: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -147,9 +184,14 @@ export function IotDeviceModbusPointForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">寄存器数量</label>
+          <label htmlFor="iot-device-modbus-point-register_count" className="block text-xs text-slate-600 mb-1">寄存器数量</label>
           <input
             type="number"
+            id="iot-device-modbus-point-register_count"
+            data-testid="field-register_count"
+            data-agent-target="iot-device-modbus-point:field:register_count"
+            data-agent-state={formData.register_count == null || formData.register_count === "" ? "empty" : "filled"}
+            aria-label="寄存器数量"
             value={formData.register_count != null ? String(formData.register_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, register_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -159,9 +201,14 @@ export function IotDeviceModbusPointForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">字节序</label>
+          <label htmlFor="iot-device-modbus-point-byte_order" className="block text-xs text-slate-600 mb-1">字节序</label>
           <input
             type="text"
+            id="iot-device-modbus-point-byte_order"
+            data-testid="field-byte_order"
+            data-agent-target="iot-device-modbus-point:field:byte_order"
+            data-agent-state={formData.byte_order ? "filled" : "empty"}
+            aria-label="字节序"
             value={formData.byte_order ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, byte_order: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,9 +218,14 @@ export function IotDeviceModbusPointForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">原始数据类型</label>
+          <label htmlFor="iot-device-modbus-point-raw_data_type" className="block text-xs text-slate-600 mb-1">原始数据类型</label>
           <input
             type="text"
+            id="iot-device-modbus-point-raw_data_type"
+            data-testid="field-raw_data_type"
+            data-agent-target="iot-device-modbus-point:field:raw_data_type"
+            data-agent-state={formData.raw_data_type ? "filled" : "empty"}
+            aria-label="原始数据类型"
             value={formData.raw_data_type ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, raw_data_type: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -183,9 +235,14 @@ export function IotDeviceModbusPointForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">缩放因子</label>
+          <label htmlFor="iot-device-modbus-point-scale" className="block text-xs text-slate-600 mb-1">缩放因子</label>
           <input
             type="number"
+            id="iot-device-modbus-point-scale"
+            data-testid="field-scale"
+            data-agent-target="iot-device-modbus-point:field:scale"
+            data-agent-state={formData.scale == null || formData.scale === "" ? "empty" : "filled"}
+            aria-label="缩放因子"
             value={formData.scale != null ? String(formData.scale) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, scale: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -195,9 +252,14 @@ export function IotDeviceModbusPointForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">轮询间隔（毫秒）</label>
+          <label htmlFor="iot-device-modbus-point-poll_interval" className="block text-xs text-slate-600 mb-1">轮询间隔（毫秒）</label>
           <input
             type="number"
+            id="iot-device-modbus-point-poll_interval"
+            data-testid="field-poll_interval"
+            data-agent-target="iot-device-modbus-point:field:poll_interval"
+            data-agent-state={formData.poll_interval == null || formData.poll_interval === "" ? "empty" : "filled"}
+            aria-label="轮询间隔（毫秒）"
             value={formData.poll_interval != null ? String(formData.poll_interval) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, poll_interval: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -207,9 +269,14 @@ export function IotDeviceModbusPointForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="iot-device-modbus-point-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="iot-device-modbus-point-status"
+            data-testid="field-status"
+            data-agent-target="iot-device-modbus-point:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -223,6 +290,8 @@ export function IotDeviceModbusPointForm({ open, initialData, onClose, onSuccess
             <button
               type="button"
               onClick={onClose}
+              data-testid="iot-device-modbus-point-form-cancel"
+              data-agent-target="iot-device-modbus-point:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -230,6 +299,9 @@ export function IotDeviceModbusPointForm({ open, initialData, onClose, onSuccess
             <button
               type="submit"
               disabled={loading}
+              data-testid="iot-device-modbus-point-form-submit"
+              data-agent-target="iot-device-modbus-point:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

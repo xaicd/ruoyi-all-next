@@ -1,0 +1,258 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesWmReturnSalesLine",
+  "kebab": "mes-wm-return-sales-line",
+  "businessName": "MES 销售退货单行",
+  "permissionPrefix": "mes:mes_wm_return_sales_line",
+  "page": {
+    "route": "/admin/mes/mes-wm-return-sales-line",
+    "title": "MES 销售退货单行管理",
+    "titleSelector": "[data-testid=\"mes-wm-return-sales-line-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-wm-return-sales-line",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-wm-return-sales-line",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-wm-return-sales-line/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-wm-return-sales-line"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-wm-return-sales-line/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-wm-return-sales-line/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-wm-return-sales-line-title\"]",
+    "refresh": "[data-testid=\"mes-wm-return-sales-line-refresh\"]",
+    "createButton": "[data-testid=\"mes-wm-return-sales-line-create\"]",
+    "searchForm": "[data-testid=\"mes-wm-return-sales-line-search\"]",
+    "searchSubmit": "[data-testid=\"mes-wm-return-sales-line-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-wm-return-sales-line-search-reset\"]",
+    "total": "[data-testid=\"mes-wm-return-sales-line-total\"]",
+    "table": "[data-testid=\"mes-wm-return-sales-line-table\"]",
+    "row": "[data-testid=\"mes-wm-return-sales-line-row\"]",
+    "editButton": "[data-testid=\"mes-wm-return-sales-line-edit\"]",
+    "deleteButton": "[data-testid=\"mes-wm-return-sales-line-delete\"]",
+    "form": "[data-testid=\"mes-wm-return-sales-line-form\"]",
+    "formError": "[data-testid=\"mes-wm-return-sales-line-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-wm-return-sales-line-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-wm-return-sales-line-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-wm-return-sales-line-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 销售退货单行列表",
+    "dialogLabel": {
+      "create": "新增MES 销售退货单行",
+      "edit": "编辑MES 销售退货单行"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "return_id",
+        "label": "退货单 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-return_id",
+        "selector": "[data-testid=\"field-return_id\"]"
+      },
+      {
+        "name": "item_id",
+        "label": "物料 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-item_id",
+        "selector": "[data-testid=\"field-item_id\"]"
+      },
+      {
+        "name": "quantity",
+        "label": "退货数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-quantity",
+        "selector": "[data-testid=\"field-quantity\"]"
+      },
+      {
+        "name": "batch_id",
+        "label": "批次 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-batch_id",
+        "selector": "[data-testid=\"field-batch_id\"]"
+      },
+      {
+        "name": "batch_code",
+        "label": "批次号",
+        "type": "string",
+        "required": false,
+        "testId": "field-batch_code",
+        "selector": "[data-testid=\"field-batch_code\"]"
+      },
+      {
+        "name": "rqc_id",
+        "label": "退货检验单 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-rqc_id",
+        "selector": "[data-testid=\"field-rqc_id\"]"
+      },
+      {
+        "name": "rqc_check_flag",
+        "label": "是否需要质检",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-rqc_check_flag",
+        "selector": "[data-testid=\"field-rqc_check_flag\"]"
+      },
+      {
+        "name": "quality_status",
+        "label": "质量状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-quality_status",
+        "selector": "[data-testid=\"field-quality_status\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-wm-return-sales-line",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-wm-return-sales-line\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-wm-return-sales-line-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-wm-return-sales-line-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-wm-return-sales-line:search",
+      "reset": "mes-wm-return-sales-line:reset",
+      "refresh": "mes-wm-return-sales-line:refresh",
+      "create": "mes-wm-return-sales-line:create",
+      "edit": "mes-wm-return-sales-line:edit",
+      "delete": "mes-wm-return-sales-line:delete",
+      "submit": "mes-wm-return-sales-line:submit",
+      "cancel": "mes-wm-return-sales-line:cancel",
+      "close": "mes-wm-return-sales-line:close",
+      "row": "mes-wm-return-sales-line:row",
+      "pagination": "mes-wm-return-sales-line:pagination",
+      "fields": {
+        "return_id": "mes-wm-return-sales-line:field:return_id",
+        "item_id": "mes-wm-return-sales-line:field:item_id",
+        "quantity": "mes-wm-return-sales-line:field:quantity",
+        "batch_id": "mes-wm-return-sales-line:field:batch_id",
+        "batch_code": "mes-wm-return-sales-line:field:batch_code",
+        "rqc_id": "mes-wm-return-sales-line:field:rqc_id",
+        "rqc_check_flag": "mes-wm-return-sales-line:field:rqc_check_flag",
+        "quality_status": "mes-wm-return-sales-line:field:quality_status",
+        "remark": "mes-wm-return-sales-line:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-wm-return-sales-line",
+      "examples": [
+        "mes.mes-wm-return-sales-line__List__Refresh",
+        "mes.mes-wm-return-sales-line__ListItem__Open",
+        "mes.mes-wm-return-sales-line__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

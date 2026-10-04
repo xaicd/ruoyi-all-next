@@ -56,24 +56,36 @@ export function CrmProductForm({ open, initialData, onClose, onSuccess }: CrmPro
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="crm-product-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑CRM 产品" : "新增CRM 产品"}
+        data-testid="crm-product-form"
+        data-agent-scope="crm-product:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑CrmProduct（源框架导入）" : "新增CrmProduct（源框架导入）"}
+            {isEdit ? "编辑CRM 产品" : "新增CRM 产品"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="crm-product-form-close" data-agent-target="crm-product:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="crm-product-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品名称</label>
+          <label htmlFor="crm-product-name" className="block text-xs text-slate-600 mb-1">产品名称</label>
           <input
             type="text"
+            id="crm-product-name"
+            data-testid="field-name"
+            data-agent-target="crm-product:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="产品名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -83,9 +95,14 @@ export function CrmProductForm({ open, initialData, onClose, onSuccess }: CrmPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品编码</label>
+          <label htmlFor="crm-product-no" className="block text-xs text-slate-600 mb-1">产品编码</label>
           <input
             type="text"
+            id="crm-product-no"
+            data-testid="field-no"
+            data-agent-target="crm-product:field:no"
+            data-agent-state={formData.no ? "filled" : "empty"}
+            aria-label="产品编码"
             value={formData.no ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, no: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -95,9 +112,14 @@ export function CrmProductForm({ open, initialData, onClose, onSuccess }: CrmPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">单位 *</label>
+          <label htmlFor="crm-product-unit" className="block text-xs text-slate-600 mb-1">单位 *</label>
           <input
             type="number"
+            id="crm-product-unit"
+            data-testid="field-unit"
+            data-agent-target="crm-product:field:unit"
+            data-agent-state={formData.unit == null || formData.unit === "" ? "empty" : "filled"}
+            aria-label="单位"
             value={formData.unit != null ? String(formData.unit) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, unit: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -107,9 +129,14 @@ export function CrmProductForm({ open, initialData, onClose, onSuccess }: CrmPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">价格，单位：元</label>
+          <label htmlFor="crm-product-price" className="block text-xs text-slate-600 mb-1">价格，单位：元</label>
           <input
             type="number"
+            id="crm-product-price"
+            data-testid="field-price"
+            data-agent-target="crm-product:field:price"
+            data-agent-state={formData.price == null || formData.price === "" ? "empty" : "filled"}
+            aria-label="价格，单位：元"
             value={formData.price != null ? String(formData.price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -119,9 +146,14 @@ export function CrmProductForm({ open, initialData, onClose, onSuccess }: CrmPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="crm-product-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="crm-product-status"
+            data-testid="field-status"
+            data-agent-target="crm-product:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -131,9 +163,14 @@ export function CrmProductForm({ open, initialData, onClose, onSuccess }: CrmPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品分类 ID</label>
+          <label htmlFor="crm-product-category_id" className="block text-xs text-slate-600 mb-1">产品分类 ID</label>
           <input
             type="number"
+            id="crm-product-category_id"
+            data-testid="field-category_id"
+            data-agent-target="crm-product:field:category_id"
+            data-agent-state={formData.category_id == null || formData.category_id === "" ? "empty" : "filled"}
+            aria-label="产品分类 ID"
             value={formData.category_id != null ? String(formData.category_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, category_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -143,9 +180,14 @@ export function CrmProductForm({ open, initialData, onClose, onSuccess }: CrmPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品描述</label>
+          <label htmlFor="crm-product-description" className="block text-xs text-slate-600 mb-1">产品描述</label>
           <input
             type="text"
+            id="crm-product-description"
+            data-testid="field-description"
+            data-agent-target="crm-product:field:description"
+            data-agent-state={formData.description ? "filled" : "empty"}
+            aria-label="产品描述"
             value={formData.description ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -155,9 +197,14 @@ export function CrmProductForm({ open, initialData, onClose, onSuccess }: CrmPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">负责人的用户编号</label>
+          <label htmlFor="crm-product-owner_user_id" className="block text-xs text-slate-600 mb-1">负责人的用户编号</label>
           <input
             type="number"
+            id="crm-product-owner_user_id"
+            data-testid="field-owner_user_id"
+            data-agent-target="crm-product:field:owner_user_id"
+            data-agent-state={formData.owner_user_id == null || formData.owner_user_id === "" ? "empty" : "filled"}
+            aria-label="负责人的用户编号"
             value={formData.owner_user_id != null ? String(formData.owner_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, owner_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,6 +218,8 @@ export function CrmProductForm({ open, initialData, onClose, onSuccess }: CrmPro
             <button
               type="button"
               onClick={onClose}
+              data-testid="crm-product-form-cancel"
+              data-agent-target="crm-product:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -178,6 +227,9 @@ export function CrmProductForm({ open, initialData, onClose, onSuccess }: CrmPro
             <button
               type="submit"
               disabled={loading}
+              data-testid="crm-product-form-submit"
+              data-agent-target="crm-product:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

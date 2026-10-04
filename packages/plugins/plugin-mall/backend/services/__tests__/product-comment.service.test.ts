@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ProductCommentService } from "../product-comment.service"
 
 describe("ProductCommentService", () => {
-  it("should create and query ProductComment（源框架导入）", async () => {
+  it("should create and query 商品评论", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ProductCommentService.create({
         user_id: 1,
@@ -21,7 +21,7 @@ describe("ProductCommentService", () => {
   
       const updated = await ProductCommentService.update(created.id, {
         id: created.id,
-        user_id: "更新ProductComment（源框架导入）",
+        user_id: "更新商品评论",
       } as any)
       expect(updated).toBeDefined()
   

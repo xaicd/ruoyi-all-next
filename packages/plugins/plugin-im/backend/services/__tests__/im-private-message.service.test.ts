@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ImPrivateMessageService } from "../im-private-message.service"
 
 describe("ImPrivateMessageService", () => {
-  it("should create and query ImPrivateMessage（源框架导入）", async () => {
+  it("should create and query IM 私聊消息", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImPrivateMessageService.create({
-        client_message_id: "测试ImPrivateMessage（源框架导入）",
+        client_message_id: "测试IM 私聊消息",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("ImPrivateMessageService", () => {
   
       const updated = await ImPrivateMessageService.update(created.id, {
         id: created.id,
-        client_message_id: "更新ImPrivateMessage（源框架导入）",
+        client_message_id: "更新IM 私聊消息",
       } as any)
       expect(updated).toBeDefined()
   

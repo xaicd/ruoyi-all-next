@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { PayNotifyTaskService } from "../pay-notify-task.service"
 
 describe("PayNotifyTaskService", () => {
-  it("should create and query PayNotifyTask（源框架导入）", async () => {
+  it("should create and query 支付通知在支付系统收到支付渠道的支付、退款的结果后，需要不断的通知到业务系统，直到成功。", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await PayNotifyTaskService.create({
         app_id: 1,
@@ -21,7 +21,7 @@ describe("PayNotifyTaskService", () => {
   
       const updated = await PayNotifyTaskService.update(created.id, {
         id: created.id,
-        app_id: "更新PayNotifyTask（源框架导入）",
+        app_id: "更新支付通知在支付系统收到支付渠道的支付、退款的结果后，需要不断的通知到业务系统，直到成功。",
       } as any)
       expect(updated).toBeDefined()
   

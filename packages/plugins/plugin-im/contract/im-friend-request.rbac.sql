@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for ImFriendRequest（源框架导入） (ImFriendRequest)
+-- Auto-generated RBAC & Menu Migration for IM 好友申请记录 DO配合「申请 - 审批」流程：- 发起方调 apply 接口落库（handleResult=UNHANDLED）- 接收方调 agree / refuse 处理（更新 ha (ImFriendRequest)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-im-friend-request',
   'im-dir',
-  'ImFriendRequest（源框架导入）管理',
+  'IM 好友申请记录 DO配合「申请 - 审批」流程：- 发起方调 apply 接口落库（handleResult=UNHANDLED）- 接收方调 agree / refuse 处理（更新 ha管理',
   '/admin/im/im-friend-request',
   'im/im-friend-request/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-im-friend-request-query',  'menu-im-friend-request', '查询ImFriendRequest（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_friend_request:query',  1, NOW(), NOW()),
-('menu-im-friend-request-create', 'menu-im-friend-request', '新增ImFriendRequest（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_friend_request:create', 2, NOW(), NOW()),
-('menu-im-friend-request-update', 'menu-im-friend-request', '修改ImFriendRequest（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_friend_request:update', 3, NOW(), NOW()),
-('menu-im-friend-request-delete', 'menu-im-friend-request', '删除ImFriendRequest（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_friend_request:delete', 4, NOW(), NOW())
+('menu-im-friend-request-query',  'menu-im-friend-request', '查询IM 好友申请记录 DO配合「申请 - 审批」流程：- 发起方调 apply 接口落库（handleResult=UNHANDLED）- 接收方调 agree / refuse 处理（更新 ha', 'BUTTON', 'ACTIVE', 'im:im_friend_request:query',  1, NOW(), NOW()),
+('menu-im-friend-request-create', 'menu-im-friend-request', '新增IM 好友申请记录 DO配合「申请 - 审批」流程：- 发起方调 apply 接口落库（handleResult=UNHANDLED）- 接收方调 agree / refuse 处理（更新 ha', 'BUTTON', 'ACTIVE', 'im:im_friend_request:create', 2, NOW(), NOW()),
+('menu-im-friend-request-update', 'menu-im-friend-request', '修改IM 好友申请记录 DO配合「申请 - 审批」流程：- 发起方调 apply 接口落库（handleResult=UNHANDLED）- 接收方调 agree / refuse 处理（更新 ha', 'BUTTON', 'ACTIVE', 'im:im_friend_request:update', 3, NOW(), NOW()),
+('menu-im-friend-request-delete', 'menu-im-friend-request', '删除IM 好友申请记录 DO配合「申请 - 审批」流程：- 发起方调 apply 接口落库（handleResult=UNHANDLED）- 接收方调 agree / refuse 处理（更新 ha', 'BUTTON', 'ACTIVE', 'im:im_friend_request:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

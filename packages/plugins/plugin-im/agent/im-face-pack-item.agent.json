@@ -1,0 +1,240 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "im",
+  "entity": "ImFacePackItem",
+  "kebab": "im-face-pack-item",
+  "businessName": "IM 表情包项 DO（系统表情包内的单张表情图）",
+  "permissionPrefix": "im:im_face_pack_item",
+  "page": {
+    "route": "/admin/im/im-face-pack-item",
+    "title": "IM 表情包项 DO（系统表情包内的单张表情图）管理",
+    "titleSelector": "[data-testid=\"im-face-pack-item-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.im/api",
+    "bffMount": "/api/v1/admin/im",
+    "resource": "im-face-pack-item",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/im-face-pack-item",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/im-face-pack-item/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/im-face-pack-item"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/im-face-pack-item/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/im-face-pack-item/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"im-face-pack-item-title\"]",
+    "refresh": "[data-testid=\"im-face-pack-item-refresh\"]",
+    "createButton": "[data-testid=\"im-face-pack-item-create\"]",
+    "searchForm": "[data-testid=\"im-face-pack-item-search\"]",
+    "searchSubmit": "[data-testid=\"im-face-pack-item-search-submit\"]",
+    "searchReset": "[data-testid=\"im-face-pack-item-search-reset\"]",
+    "total": "[data-testid=\"im-face-pack-item-total\"]",
+    "table": "[data-testid=\"im-face-pack-item-table\"]",
+    "row": "[data-testid=\"im-face-pack-item-row\"]",
+    "editButton": "[data-testid=\"im-face-pack-item-edit\"]",
+    "deleteButton": "[data-testid=\"im-face-pack-item-delete\"]",
+    "form": "[data-testid=\"im-face-pack-item-form\"]",
+    "formError": "[data-testid=\"im-face-pack-item-form-error\"]",
+    "formSubmit": "[data-testid=\"im-face-pack-item-form-submit\"]",
+    "formCancel": "[data-testid=\"im-face-pack-item-form-cancel\"]",
+    "formClose": "[data-testid=\"im-face-pack-item-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IM 表情包项 DO（系统表情包内的单张表情图）列表",
+    "dialogLabel": {
+      "create": "新增IM 表情包项 DO（系统表情包内的单张表情图）",
+      "edit": "编辑IM 表情包项 DO（系统表情包内的单张表情图）"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "pack_id",
+        "label": "所属表情包编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-pack_id",
+        "selector": "[data-testid=\"field-pack_id\"]"
+      },
+      {
+        "name": "url",
+        "label": "表情图 URL",
+        "type": "string",
+        "required": false,
+        "testId": "field-url",
+        "selector": "[data-testid=\"field-url\"]"
+      },
+      {
+        "name": "name",
+        "label": "表情名（可选；如「狗头」「捂脸」）",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "width",
+        "label": "渲染宽度（像素）",
+        "type": "number",
+        "required": false,
+        "testId": "field-width",
+        "selector": "[data-testid=\"field-width\"]"
+      },
+      {
+        "name": "height",
+        "label": "渲染高度（像素）",
+        "type": "number",
+        "required": false,
+        "testId": "field-height",
+        "selector": "[data-testid=\"field-height\"]"
+      },
+      {
+        "name": "sort",
+        "label": "排序",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "im-face-pack-item",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"im-face-pack-item\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"im-face-pack-item-form-overlay\"]",
+      "dialog": "[data-testid=\"im-face-pack-item-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "im-face-pack-item:search",
+      "reset": "im-face-pack-item:reset",
+      "refresh": "im-face-pack-item:refresh",
+      "create": "im-face-pack-item:create",
+      "edit": "im-face-pack-item:edit",
+      "delete": "im-face-pack-item:delete",
+      "submit": "im-face-pack-item:submit",
+      "cancel": "im-face-pack-item:cancel",
+      "close": "im-face-pack-item:close",
+      "row": "im-face-pack-item:row",
+      "pagination": "im-face-pack-item:pagination",
+      "fields": {
+        "pack_id": "im-face-pack-item:field:pack_id",
+        "url": "im-face-pack-item:field:url",
+        "name": "im-face-pack-item:field:name",
+        "width": "im-face-pack-item:field:width",
+        "height": "im-face-pack-item:field:height",
+        "sort": "im-face-pack-item:field:sort",
+        "status": "im-face-pack-item:field:status"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "im.im-face-pack-item",
+      "examples": [
+        "im.im-face-pack-item__List__Refresh",
+        "im.im-face-pack-item__ListItem__Open",
+        "im.im-face-pack-item__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

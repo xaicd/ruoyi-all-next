@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ErpCustomerService } from "../erp-customer.service"
 
 describe("ErpCustomerService", () => {
-  it("should create and query ErpCustomer（源框架导入）", async () => {
+  it("should create and query ERP 客户", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ErpCustomerService.create({
-        name: "测试ErpCustomer（源框架导入）",
+        name: "测试ERP 客户",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("ErpCustomerService", () => {
   
       const updated = await ErpCustomerService.update(created.id, {
         id: created.id,
-        name: "更新ErpCustomer（源框架导入）",
+        name: "更新ERP 客户",
       } as any)
       expect(updated).toBeDefined()
   

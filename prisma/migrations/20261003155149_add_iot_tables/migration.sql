@@ -2,7 +2,7 @@
 -- 来源: scripts/data/iot-source-tables.ts#IOT_TABLES
 -- 背景: 这些表的定义来自低代码 CodegenConfig；此前只生成代码、不生成建表 SQL，
 --       导致"仓储在查但无处创建"。本迁移补齐 DDL。
--- IotAlertConfig（源框架导入）
+-- IoT 告警配置
 CREATE TABLE "iot_alert_config" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -25,7 +25,7 @@ CREATE TABLE "iot_alert_config" (
 );
 CREATE INDEX "iot_alert_config_tenant_id_idx" ON "iot_alert_config"("tenant_id");
 
--- IotAlertRecord（源框架导入）
+-- IoT 告警记录
 CREATE TABLE "iot_alert_record" (
     "id" TEXT NOT NULL,
     "config_id" BIGINT,
@@ -47,7 +47,7 @@ CREATE TABLE "iot_alert_record" (
 );
 CREATE INDEX "iot_alert_record_tenant_id_idx" ON "iot_alert_record"("tenant_id");
 
--- IotDataRule（源框架导入）
+-- IoT 数据流转规则 DO监听 数据源，转发到 数据目的
 CREATE TABLE "iot_data_rule" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -69,7 +69,7 @@ CREATE TABLE "iot_data_rule" (
 );
 CREATE INDEX "iot_data_rule_tenant_id_idx" ON "iot_data_rule"("tenant_id");
 
--- IotDataSink（源框架导入）
+-- IoT 数据流转目的
 CREATE TABLE "iot_data_sink" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -87,7 +87,7 @@ CREATE TABLE "iot_data_sink" (
 );
 CREATE INDEX "iot_data_sink_tenant_id_idx" ON "iot_data_sink"("tenant_id");
 
--- IotDevice（源框架导入）
+-- IoT 设备
 CREATE TABLE "iot_device" (
     "id" TEXT NOT NULL,
     "device_name" VARCHAR(255),
@@ -118,7 +118,7 @@ CREATE TABLE "iot_device" (
 );
 CREATE INDEX "iot_device_tenant_id_idx" ON "iot_device"("tenant_id");
 
--- IotDeviceGroup（源框架导入）
+-- IoT 设备分组
 CREATE TABLE "iot_device_group" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -134,7 +134,7 @@ CREATE TABLE "iot_device_group" (
 );
 CREATE INDEX "iot_device_group_tenant_id_idx" ON "iot_device_group"("tenant_id");
 
--- IotDeviceModbusConfig（源框架导入）
+-- IoT 设备 Modbus 连接配置
 CREATE TABLE "iot_device_modbus_config" (
     "id" TEXT NOT NULL,
     "product_id" BIGINT,
@@ -157,7 +157,7 @@ CREATE TABLE "iot_device_modbus_config" (
 );
 CREATE INDEX "iot_device_modbus_config_tenant_id_idx" ON "iot_device_modbus_config"("tenant_id");
 
--- IotDeviceModbusPoint（源框架导入）
+-- IoT 设备 Modbus 点位配置
 CREATE TABLE "iot_device_modbus_point" (
     "id" TEXT NOT NULL,
     "device_id" BIGINT,
@@ -182,7 +182,7 @@ CREATE TABLE "iot_device_modbus_point" (
 );
 CREATE INDEX "iot_device_modbus_point_tenant_id_idx" ON "iot_device_modbus_point"("tenant_id");
 
--- IotOtaFirmware（源框架导入）
+-- IoT OTA 固件
 CREATE TABLE "iot_ota_firmware" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -203,7 +203,7 @@ CREATE TABLE "iot_ota_firmware" (
 );
 CREATE INDEX "iot_ota_firmware_tenant_id_idx" ON "iot_ota_firmware"("tenant_id");
 
--- IotOtaTask（源框架导入）
+-- IoT OTA 升级任务
 CREATE TABLE "iot_ota_task" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -223,7 +223,7 @@ CREATE TABLE "iot_ota_task" (
 );
 CREATE INDEX "iot_ota_task_tenant_id_idx" ON "iot_ota_task"("tenant_id");
 
--- IotOtaTaskRecord（源框架导入）
+-- IoT OTA 升级任务记录
 CREATE TABLE "iot_ota_task_record" (
     "id" TEXT NOT NULL,
     "firmware_id" BIGINT,
@@ -243,7 +243,7 @@ CREATE TABLE "iot_ota_task_record" (
 );
 CREATE INDEX "iot_ota_task_record_tenant_id_idx" ON "iot_ota_task_record"("tenant_id");
 
--- IotProduct（源框架导入）
+-- IoT 产品
 CREATE TABLE "iot_product" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -269,7 +269,7 @@ CREATE TABLE "iot_product" (
 );
 CREATE INDEX "iot_product_tenant_id_idx" ON "iot_product"("tenant_id");
 
--- IotProductCategory（源框架导入）
+-- IoT 产品分类
 CREATE TABLE "iot_product_category" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -286,7 +286,7 @@ CREATE TABLE "iot_product_category" (
 );
 CREATE INDEX "iot_product_category_tenant_id_idx" ON "iot_product_category"("tenant_id");
 
--- IotSceneRule（源框架导入）
+-- IoT 场景联动规则
 CREATE TABLE "iot_scene_rule" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -325,7 +325,7 @@ CREATE TABLE "iot_scene_rule" (
 );
 CREATE INDEX "iot_scene_rule_tenant_id_idx" ON "iot_scene_rule"("tenant_id");
 
--- IotThingModel（源框架导入）
+-- IoT 产品物模型功能 DO每个 和 是“一对多”的关系，它的每个属性、事件、服务都对应一条记录
 CREATE TABLE "iot_thing_model" (
     "id" TEXT NOT NULL,
     "identifier" VARCHAR(255),

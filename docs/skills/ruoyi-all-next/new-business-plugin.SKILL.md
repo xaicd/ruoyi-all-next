@@ -117,6 +117,42 @@ pnpm run dev                      # 运行（或 ./start.sh app）
 
 **新域第一次要登记插件**（宿主只挂载已登记的）：`POST /api/v1/admin/plugins`。
 
+## 9. Agent-Native：测试与运营框架**随代码同步产出**（强制）
+
+新域不需要另外写测试页/运营脚本 —— 生成器与元数据同源产出，agent-device（接口级）
+与 agent-browser（浏览器级）直接消费：
+
+### 9.1 UI 必须带 Agent-Native 属性（强制）
+
+| 要求 | 具体 |
+|---|---|
+| 交互元素 | `data-agent-target="<模块>:<动作>"`（search/reset/refresh/create/edit/delete/submit/cancel/close） |
+| 作用域 | 根节点 `data-agent-scope` |
+| 状态 | `data-agent-state`（页面 loading/modal-open/empty/ready；行 idle/editing；表单 open/submitting/error） |
+| 就绪信号 | 页面顶层 `data-agent-page-ready={String(!loading)}` |
+| 多层弹窗 | 基底容器打 **`inert`** 做节点剪枝（agent 不会点到被遮挡元素） |
+| 移动端 | testID 用 `[Screen]__[Component]__[Action]`（如 `mes.mes-cal-holiday__Form__Submit`） |
+
+**严禁**让 agent 依赖无文本 CSS 或坐标定位。
+门禁: `npm run agent:native:check`（ratchet，只拦新增）。
+
+### 9.2 Agent 操作契约（随代码产出）
+
+每张表产出 `<插件根>/agent/<kebab>.agent.json`：页面路由、接口面、鉴权、选择器、
+无障碍标签、旅程、运营动作，外加 `agentNative` 段（上面的属性规范，机器可读）。
+汇总: `npm run agent:contracts` → `docs/agent/contracts.json`。
+
+### 9.3 两个通用 runner（消费契约，无需逐域写代码）
+
+```bash
+npm run agent:ops:health                       # 全量接口体检（结构断言）
+npm run agent:ops -- <域>.<实体> seed-sample    # 造样例数据（运营）
+npm run agent:ops -- <域>.<实体> purge-sample   # 清本契约造的样例
+pnpm test:agent                                # L4: 契约驱动的浏览器端到端旅程
+```
+
+改表 → 契约与用例自动跟着变，不存在"测试/运营文档与代码脱节"。
+
 ## 9. 验收清单（做完逐条打勾）
 
 - [ ] 表元数据已写，迁移已生成**并 `prisma migrate deploy` 到库**

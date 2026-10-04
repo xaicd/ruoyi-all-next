@@ -1,0 +1,231 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesDvMaintenRecord",
+  "kebab": "mes-dv-mainten-record",
+  "businessName": "MES 设备保养记录",
+  "permissionPrefix": "mes:mes_dv_mainten_record",
+  "page": {
+    "route": "/admin/mes/mes-dv-mainten-record",
+    "title": "MES 设备保养记录管理",
+    "titleSelector": "[data-testid=\"mes-dv-mainten-record-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-dv-mainten-record",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-dv-mainten-record",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-dv-mainten-record/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-dv-mainten-record"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-dv-mainten-record/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-dv-mainten-record/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-dv-mainten-record-title\"]",
+    "refresh": "[data-testid=\"mes-dv-mainten-record-refresh\"]",
+    "createButton": "[data-testid=\"mes-dv-mainten-record-create\"]",
+    "searchForm": "[data-testid=\"mes-dv-mainten-record-search\"]",
+    "searchSubmit": "[data-testid=\"mes-dv-mainten-record-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-dv-mainten-record-search-reset\"]",
+    "total": "[data-testid=\"mes-dv-mainten-record-total\"]",
+    "table": "[data-testid=\"mes-dv-mainten-record-table\"]",
+    "row": "[data-testid=\"mes-dv-mainten-record-row\"]",
+    "editButton": "[data-testid=\"mes-dv-mainten-record-edit\"]",
+    "deleteButton": "[data-testid=\"mes-dv-mainten-record-delete\"]",
+    "form": "[data-testid=\"mes-dv-mainten-record-form\"]",
+    "formError": "[data-testid=\"mes-dv-mainten-record-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-dv-mainten-record-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-dv-mainten-record-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-dv-mainten-record-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 设备保养记录列表",
+    "dialogLabel": {
+      "create": "新增MES 设备保养记录",
+      "edit": "编辑MES 设备保养记录"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "plan_id",
+        "label": "计划编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-plan_id",
+        "selector": "[data-testid=\"field-plan_id\"]"
+      },
+      {
+        "name": "machinery_id",
+        "label": "设备编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-machinery_id",
+        "selector": "[data-testid=\"field-machinery_id\"]"
+      },
+      {
+        "name": "mainten_time",
+        "label": "保养时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-mainten_time",
+        "selector": "[data-testid=\"field-mainten_time\"]"
+      },
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-dv-mainten-record",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-dv-mainten-record\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-dv-mainten-record-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-dv-mainten-record-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-dv-mainten-record:search",
+      "reset": "mes-dv-mainten-record:reset",
+      "refresh": "mes-dv-mainten-record:refresh",
+      "create": "mes-dv-mainten-record:create",
+      "edit": "mes-dv-mainten-record:edit",
+      "delete": "mes-dv-mainten-record:delete",
+      "submit": "mes-dv-mainten-record:submit",
+      "cancel": "mes-dv-mainten-record:cancel",
+      "close": "mes-dv-mainten-record:close",
+      "row": "mes-dv-mainten-record:row",
+      "pagination": "mes-dv-mainten-record:pagination",
+      "fields": {
+        "plan_id": "mes-dv-mainten-record:field:plan_id",
+        "machinery_id": "mes-dv-mainten-record:field:machinery_id",
+        "mainten_time": "mes-dv-mainten-record:field:mainten_time",
+        "user_id": "mes-dv-mainten-record:field:user_id",
+        "status": "mes-dv-mainten-record:field:status",
+        "remark": "mes-dv-mainten-record:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-dv-mainten-record",
+      "examples": [
+        "mes.mes-dv-mainten-record__List__Refresh",
+        "mes.mes-dv-mainten-record__ListItem__Open",
+        "mes.mes-dv-mainten-record__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

@@ -63,24 +63,36 @@ export function CrmBusinessForm({ open, initialData, onClose, onSuccess }: CrmBu
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="crm-business-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑CRM 商机" : "新增CRM 商机"}
+        data-testid="crm-business-form"
+        data-agent-scope="crm-business:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑CrmBusiness（源框架导入）" : "新增CrmBusiness（源框架导入）"}
+            {isEdit ? "编辑CRM 商机" : "新增CRM 商机"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="crm-business-form-close" data-agent-target="crm-business:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="crm-business-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商机名称</label>
+          <label htmlFor="crm-business-name" className="block text-xs text-slate-600 mb-1">商机名称</label>
           <input
             type="text"
+            id="crm-business-name"
+            data-testid="field-name"
+            data-agent-target="crm-business:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="商机名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -90,9 +102,14 @@ export function CrmBusinessForm({ open, initialData, onClose, onSuccess }: CrmBu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">客户编号</label>
+          <label htmlFor="crm-business-customer_id" className="block text-xs text-slate-600 mb-1">客户编号</label>
           <input
             type="number"
+            id="crm-business-customer_id"
+            data-testid="field-customer_id"
+            data-agent-target="crm-business:field:customer_id"
+            data-agent-state={formData.customer_id == null || formData.customer_id === "" ? "empty" : "filled"}
+            aria-label="客户编号"
             value={formData.customer_id != null ? String(formData.customer_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, customer_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -104,18 +121,27 @@ export function CrmBusinessForm({ open, initialData, onClose, onSuccess }: CrmBu
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="follow_up_status"
+            id="crm-business-follow_up_status"
+            data-testid="field-follow_up_status"
+            data-agent-target="crm-business:field:follow_up_status"
+            data-agent-state={formData.follow_up_status ? "on" : "off"}
+            aria-label="跟进状态"
             checked={Boolean(formData.follow_up_status)}
             onChange={(e) => setFormData((prev) => ({ ...prev, follow_up_status: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="follow_up_status" className="text-xs text-slate-700 font-medium">跟进状态</label>
+          <label htmlFor="crm-business-follow_up_status" className="text-xs text-slate-700 font-medium">跟进状态</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最后跟进时间</label>
+          <label htmlFor="crm-business-contact_last_time" className="block text-xs text-slate-600 mb-1">最后跟进时间</label>
           <input
             type="text"
+            id="crm-business-contact_last_time"
+            data-testid="field-contact_last_time"
+            data-agent-target="crm-business:field:contact_last_time"
+            data-agent-state={formData.contact_last_time ? "filled" : "empty"}
+            aria-label="最后跟进时间"
             value={formData.contact_last_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, contact_last_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -125,9 +151,14 @@ export function CrmBusinessForm({ open, initialData, onClose, onSuccess }: CrmBu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">下次联系时间</label>
+          <label htmlFor="crm-business-contact_next_time" className="block text-xs text-slate-600 mb-1">下次联系时间</label>
           <input
             type="text"
+            id="crm-business-contact_next_time"
+            data-testid="field-contact_next_time"
+            data-agent-target="crm-business:field:contact_next_time"
+            data-agent-state={formData.contact_next_time ? "filled" : "empty"}
+            aria-label="下次联系时间"
             value={formData.contact_next_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, contact_next_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -137,9 +168,14 @@ export function CrmBusinessForm({ open, initialData, onClose, onSuccess }: CrmBu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">负责人的用户编号</label>
+          <label htmlFor="crm-business-owner_user_id" className="block text-xs text-slate-600 mb-1">负责人的用户编号</label>
           <input
             type="number"
+            id="crm-business-owner_user_id"
+            data-testid="field-owner_user_id"
+            data-agent-target="crm-business:field:owner_user_id"
+            data-agent-state={formData.owner_user_id == null || formData.owner_user_id === "" ? "empty" : "filled"}
+            aria-label="负责人的用户编号"
             value={formData.owner_user_id != null ? String(formData.owner_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, owner_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -149,9 +185,14 @@ export function CrmBusinessForm({ open, initialData, onClose, onSuccess }: CrmBu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商机状态组编号</label>
+          <label htmlFor="crm-business-status_type_id" className="block text-xs text-slate-600 mb-1">商机状态组编号</label>
           <input
             type="number"
+            id="crm-business-status_type_id"
+            data-testid="field-status_type_id"
+            data-agent-target="crm-business:field:status_type_id"
+            data-agent-state={formData.status_type_id == null || formData.status_type_id === "" ? "empty" : "filled"}
+            aria-label="商机状态组编号"
             value={formData.status_type_id != null ? String(formData.status_type_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status_type_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -161,9 +202,14 @@ export function CrmBusinessForm({ open, initialData, onClose, onSuccess }: CrmBu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商机状态编号</label>
+          <label htmlFor="crm-business-status_id" className="block text-xs text-slate-600 mb-1">商机状态编号</label>
           <input
             type="number"
+            id="crm-business-status_id"
+            data-testid="field-status_id"
+            data-agent-target="crm-business:field:status_id"
+            data-agent-state={formData.status_id == null || formData.status_id === "" ? "empty" : "filled"}
+            aria-label="商机状态编号"
             value={formData.status_id != null ? String(formData.status_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -173,9 +219,14 @@ export function CrmBusinessForm({ open, initialData, onClose, onSuccess }: CrmBu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">结束状态</label>
+          <label htmlFor="crm-business-end_status" className="block text-xs text-slate-600 mb-1">结束状态</label>
           <input
             type="number"
+            id="crm-business-end_status"
+            data-testid="field-end_status"
+            data-agent-target="crm-business:field:end_status"
+            data-agent-state={formData.end_status == null || formData.end_status === "" ? "empty" : "filled"}
+            aria-label="结束状态"
             value={formData.end_status != null ? String(formData.end_status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, end_status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -185,9 +236,14 @@ export function CrmBusinessForm({ open, initialData, onClose, onSuccess }: CrmBu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">结束时的备注</label>
+          <label htmlFor="crm-business-end_remark" className="block text-xs text-slate-600 mb-1">结束时的备注</label>
           <input
             type="text"
+            id="crm-business-end_remark"
+            data-testid="field-end_remark"
+            data-agent-target="crm-business:field:end_remark"
+            data-agent-state={formData.end_remark ? "filled" : "empty"}
+            aria-label="结束时的备注"
             value={formData.end_remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, end_remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -197,9 +253,14 @@ export function CrmBusinessForm({ open, initialData, onClose, onSuccess }: CrmBu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">预计成交日期</label>
+          <label htmlFor="crm-business-deal_time" className="block text-xs text-slate-600 mb-1">预计成交日期</label>
           <input
             type="text"
+            id="crm-business-deal_time"
+            data-testid="field-deal_time"
+            data-agent-target="crm-business:field:deal_time"
+            data-agent-state={formData.deal_time ? "filled" : "empty"}
+            aria-label="预计成交日期"
             value={formData.deal_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, deal_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -209,9 +270,14 @@ export function CrmBusinessForm({ open, initialData, onClose, onSuccess }: CrmBu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品总金额，单位：元</label>
+          <label htmlFor="crm-business-total_product_price" className="block text-xs text-slate-600 mb-1">产品总金额，单位：元</label>
           <input
             type="number"
+            id="crm-business-total_product_price"
+            data-testid="field-total_product_price"
+            data-agent-target="crm-business:field:total_product_price"
+            data-agent-state={formData.total_product_price == null || formData.total_product_price === "" ? "empty" : "filled"}
+            aria-label="产品总金额，单位：元"
             value={formData.total_product_price != null ? String(formData.total_product_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, total_product_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -221,9 +287,14 @@ export function CrmBusinessForm({ open, initialData, onClose, onSuccess }: CrmBu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">整单折扣，百分比</label>
+          <label htmlFor="crm-business-discount_percent" className="block text-xs text-slate-600 mb-1">整单折扣，百分比</label>
           <input
             type="number"
+            id="crm-business-discount_percent"
+            data-testid="field-discount_percent"
+            data-agent-target="crm-business:field:discount_percent"
+            data-agent-state={formData.discount_percent == null || formData.discount_percent === "" ? "empty" : "filled"}
+            aria-label="整单折扣，百分比"
             value={formData.discount_percent != null ? String(formData.discount_percent) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, discount_percent: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -233,9 +304,14 @@ export function CrmBusinessForm({ open, initialData, onClose, onSuccess }: CrmBu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商机总金额，单位：元</label>
+          <label htmlFor="crm-business-total_price" className="block text-xs text-slate-600 mb-1">商机总金额，单位：元</label>
           <input
             type="number"
+            id="crm-business-total_price"
+            data-testid="field-total_price"
+            data-agent-target="crm-business:field:total_price"
+            data-agent-state={formData.total_price == null || formData.total_price === "" ? "empty" : "filled"}
+            aria-label="商机总金额，单位：元"
             value={formData.total_price != null ? String(formData.total_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, total_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -245,9 +321,14 @@ export function CrmBusinessForm({ open, initialData, onClose, onSuccess }: CrmBu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="crm-business-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="crm-business-remark"
+            data-testid="field-remark"
+            data-agent-target="crm-business:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -261,6 +342,8 @@ export function CrmBusinessForm({ open, initialData, onClose, onSuccess }: CrmBu
             <button
               type="button"
               onClick={onClose}
+              data-testid="crm-business-form-cancel"
+              data-agent-target="crm-business:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -268,6 +351,9 @@ export function CrmBusinessForm({ open, initialData, onClose, onSuccess }: CrmBu
             <button
               type="submit"
               disabled={loading}
+              data-testid="crm-business-form-submit"
+              data-agent-target="crm-business:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

@@ -1,0 +1,267 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "iot",
+  "entity": "IotAlertConfig",
+  "kebab": "iot-alert-config",
+  "businessName": "IoT 告警配置",
+  "permissionPrefix": "iot:iot_alert_config",
+  "page": {
+    "route": "/admin/iot/iot-alert-config",
+    "title": "IoT 告警配置管理",
+    "titleSelector": "[data-testid=\"iot-alert-config-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.iot/api",
+    "bffMount": "/api/v1/admin/iot",
+    "resource": "iot-alert-config",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/iot-alert-config",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/iot-alert-config/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/iot-alert-config"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/iot-alert-config/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/iot-alert-config/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"iot-alert-config-title\"]",
+    "refresh": "[data-testid=\"iot-alert-config-refresh\"]",
+    "createButton": "[data-testid=\"iot-alert-config-create\"]",
+    "searchForm": "[data-testid=\"iot-alert-config-search\"]",
+    "searchSubmit": "[data-testid=\"iot-alert-config-search-submit\"]",
+    "searchReset": "[data-testid=\"iot-alert-config-search-reset\"]",
+    "total": "[data-testid=\"iot-alert-config-total\"]",
+    "table": "[data-testid=\"iot-alert-config-table\"]",
+    "row": "[data-testid=\"iot-alert-config-row\"]",
+    "editButton": "[data-testid=\"iot-alert-config-edit\"]",
+    "deleteButton": "[data-testid=\"iot-alert-config-delete\"]",
+    "form": "[data-testid=\"iot-alert-config-form\"]",
+    "formError": "[data-testid=\"iot-alert-config-form-error\"]",
+    "formSubmit": "[data-testid=\"iot-alert-config-form-submit\"]",
+    "formCancel": "[data-testid=\"iot-alert-config-form-cancel\"]",
+    "formClose": "[data-testid=\"iot-alert-config-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IoT 告警配置列表",
+    "dialogLabel": {
+      "create": "新增IoT 告警配置",
+      "edit": "编辑IoT 告警配置"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "配置名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "description",
+        "label": "配置描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      },
+      {
+        "name": "level",
+        "label": "配置状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-level",
+        "selector": "[data-testid=\"field-level\"]"
+      },
+      {
+        "name": "status",
+        "label": "配置状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "scene_rule_ids",
+        "label": "关联的场景联动规则编号数组",
+        "type": "string",
+        "required": false,
+        "testId": "field-scene_rule_ids",
+        "selector": "[data-testid=\"field-scene_rule_ids\"]"
+      },
+      {
+        "name": "receive_user_ids",
+        "label": "接收的用户编号数组",
+        "type": "string",
+        "required": false,
+        "testId": "field-receive_user_ids",
+        "selector": "[data-testid=\"field-receive_user_ids\"]"
+      },
+      {
+        "name": "receive_types",
+        "label": "接收的类型数组",
+        "type": "string",
+        "required": false,
+        "testId": "field-receive_types",
+        "selector": "[data-testid=\"field-receive_types\"]"
+      },
+      {
+        "name": "sms_template_code",
+        "label": "短信模板编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-sms_template_code",
+        "selector": "[data-testid=\"field-sms_template_code\"]"
+      },
+      {
+        "name": "mail_template_code",
+        "label": "邮件模板编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-mail_template_code",
+        "selector": "[data-testid=\"field-mail_template_code\"]"
+      },
+      {
+        "name": "notify_template_code",
+        "label": "站内信模板编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-notify_template_code",
+        "selector": "[data-testid=\"field-notify_template_code\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "iot-alert-config",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"iot-alert-config\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"iot-alert-config-form-overlay\"]",
+      "dialog": "[data-testid=\"iot-alert-config-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "iot-alert-config:search",
+      "reset": "iot-alert-config:reset",
+      "refresh": "iot-alert-config:refresh",
+      "create": "iot-alert-config:create",
+      "edit": "iot-alert-config:edit",
+      "delete": "iot-alert-config:delete",
+      "submit": "iot-alert-config:submit",
+      "cancel": "iot-alert-config:cancel",
+      "close": "iot-alert-config:close",
+      "row": "iot-alert-config:row",
+      "pagination": "iot-alert-config:pagination",
+      "fields": {
+        "name": "iot-alert-config:field:name",
+        "description": "iot-alert-config:field:description",
+        "level": "iot-alert-config:field:level",
+        "status": "iot-alert-config:field:status",
+        "scene_rule_ids": "iot-alert-config:field:scene_rule_ids",
+        "receive_user_ids": "iot-alert-config:field:receive_user_ids",
+        "receive_types": "iot-alert-config:field:receive_types",
+        "sms_template_code": "iot-alert-config:field:sms_template_code",
+        "mail_template_code": "iot-alert-config:field:mail_template_code",
+        "notify_template_code": "iot-alert-config:field:notify_template_code"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "iot.iot-alert-config",
+      "examples": [
+        "iot.iot-alert-config__List__Refresh",
+        "iot.iot-alert-config__ListItem__Open",
+        "iot.iot-alert-config__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

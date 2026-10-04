@@ -1,0 +1,303 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "erp",
+  "entity": "ErpSupplier",
+  "kebab": "erp-supplier",
+  "businessName": "ERP 供应商",
+  "permissionPrefix": "erp:erp_supplier",
+  "page": {
+    "route": "/admin/erp/erp-supplier",
+    "title": "ERP 供应商管理",
+    "titleSelector": "[data-testid=\"erp-supplier-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.erp/api",
+    "bffMount": "/api/v1/admin/erp",
+    "resource": "erp-supplier",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/erp-supplier",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/erp-supplier/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/erp-supplier"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/erp-supplier/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/erp-supplier/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"erp-supplier-title\"]",
+    "refresh": "[data-testid=\"erp-supplier-refresh\"]",
+    "createButton": "[data-testid=\"erp-supplier-create\"]",
+    "searchForm": "[data-testid=\"erp-supplier-search\"]",
+    "searchSubmit": "[data-testid=\"erp-supplier-search-submit\"]",
+    "searchReset": "[data-testid=\"erp-supplier-search-reset\"]",
+    "total": "[data-testid=\"erp-supplier-total\"]",
+    "table": "[data-testid=\"erp-supplier-table\"]",
+    "row": "[data-testid=\"erp-supplier-row\"]",
+    "editButton": "[data-testid=\"erp-supplier-edit\"]",
+    "deleteButton": "[data-testid=\"erp-supplier-delete\"]",
+    "form": "[data-testid=\"erp-supplier-form\"]",
+    "formError": "[data-testid=\"erp-supplier-form-error\"]",
+    "formSubmit": "[data-testid=\"erp-supplier-form-submit\"]",
+    "formCancel": "[data-testid=\"erp-supplier-form-cancel\"]",
+    "formClose": "[data-testid=\"erp-supplier-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "ERP 供应商列表",
+    "dialogLabel": {
+      "create": "新增ERP 供应商",
+      "edit": "编辑ERP 供应商"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "供应商名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "contact",
+        "label": "联系人",
+        "type": "string",
+        "required": false,
+        "testId": "field-contact",
+        "selector": "[data-testid=\"field-contact\"]"
+      },
+      {
+        "name": "mobile",
+        "label": "手机号码",
+        "type": "string",
+        "required": false,
+        "testId": "field-mobile",
+        "selector": "[data-testid=\"field-mobile\"]"
+      },
+      {
+        "name": "telephone",
+        "label": "联系电话",
+        "type": "string",
+        "required": false,
+        "testId": "field-telephone",
+        "selector": "[data-testid=\"field-telephone\"]"
+      },
+      {
+        "name": "email",
+        "label": "电子邮箱",
+        "type": "string",
+        "required": false,
+        "testId": "field-email",
+        "selector": "[data-testid=\"field-email\"]"
+      },
+      {
+        "name": "fax",
+        "label": "传真",
+        "type": "string",
+        "required": false,
+        "testId": "field-fax",
+        "selector": "[data-testid=\"field-fax\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      },
+      {
+        "name": "status",
+        "label": "开启状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "sort",
+        "label": "排序",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      },
+      {
+        "name": "tax_no",
+        "label": "纳税人识别号",
+        "type": "string",
+        "required": false,
+        "testId": "field-tax_no",
+        "selector": "[data-testid=\"field-tax_no\"]"
+      },
+      {
+        "name": "tax_percent",
+        "label": "税率",
+        "type": "number",
+        "required": false,
+        "testId": "field-tax_percent",
+        "selector": "[data-testid=\"field-tax_percent\"]"
+      },
+      {
+        "name": "bank_name",
+        "label": "开户行",
+        "type": "string",
+        "required": false,
+        "testId": "field-bank_name",
+        "selector": "[data-testid=\"field-bank_name\"]"
+      },
+      {
+        "name": "bank_account",
+        "label": "开户账号",
+        "type": "string",
+        "required": false,
+        "testId": "field-bank_account",
+        "selector": "[data-testid=\"field-bank_account\"]"
+      },
+      {
+        "name": "bank_address",
+        "label": "开户地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-bank_address",
+        "selector": "[data-testid=\"field-bank_address\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "erp-supplier",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"erp-supplier\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"erp-supplier-form-overlay\"]",
+      "dialog": "[data-testid=\"erp-supplier-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "erp-supplier:search",
+      "reset": "erp-supplier:reset",
+      "refresh": "erp-supplier:refresh",
+      "create": "erp-supplier:create",
+      "edit": "erp-supplier:edit",
+      "delete": "erp-supplier:delete",
+      "submit": "erp-supplier:submit",
+      "cancel": "erp-supplier:cancel",
+      "close": "erp-supplier:close",
+      "row": "erp-supplier:row",
+      "pagination": "erp-supplier:pagination",
+      "fields": {
+        "name": "erp-supplier:field:name",
+        "contact": "erp-supplier:field:contact",
+        "mobile": "erp-supplier:field:mobile",
+        "telephone": "erp-supplier:field:telephone",
+        "email": "erp-supplier:field:email",
+        "fax": "erp-supplier:field:fax",
+        "remark": "erp-supplier:field:remark",
+        "status": "erp-supplier:field:status",
+        "sort": "erp-supplier:field:sort",
+        "tax_no": "erp-supplier:field:tax_no",
+        "tax_percent": "erp-supplier:field:tax_percent",
+        "bank_name": "erp-supplier:field:bank_name",
+        "bank_account": "erp-supplier:field:bank_account",
+        "bank_address": "erp-supplier:field:bank_address"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "erp.erp-supplier",
+      "examples": [
+        "erp.erp-supplier__List__Refresh",
+        "erp.erp-supplier__ListItem__Open",
+        "erp.erp-supplier__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

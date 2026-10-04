@@ -64,24 +64,36 @@ export function MesWmPackageForm({ open, initialData, onClose, onSuccess }: MesW
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-wm-package-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 装箱单" : "新增MES 装箱单"}
+        data-testid="mes-wm-package-form"
+        data-agent-scope="mes-wm-package:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesWmPackage（源框架导入）" : "新增MesWmPackage（源框架导入）"}
+            {isEdit ? "编辑MES 装箱单" : "新增MES 装箱单"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-wm-package-form-close" data-agent-target="mes-wm-package:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-wm-package-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">装箱单编号</label>
+          <label htmlFor="mes-wm-package-code" className="block text-xs text-slate-600 mb-1">装箱单编号</label>
           <input
             type="text"
+            id="mes-wm-package-code"
+            data-testid="field-code"
+            data-agent-target="mes-wm-package:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="装箱单编号"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -91,9 +103,14 @@ export function MesWmPackageForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">父箱 ID</label>
+          <label htmlFor="mes-wm-package-parent_id" className="block text-xs text-slate-600 mb-1">父箱 ID</label>
           <input
             type="number"
+            id="mes-wm-package-parent_id"
+            data-testid="field-parent_id"
+            data-agent-target="mes-wm-package:field:parent_id"
+            data-agent-state={formData.parent_id == null || formData.parent_id === "" ? "empty" : "filled"}
+            aria-label="父箱 ID"
             value={formData.parent_id != null ? String(formData.parent_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, parent_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -103,9 +120,14 @@ export function MesWmPackageForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">装箱日期</label>
+          <label htmlFor="mes-wm-package-package_date" className="block text-xs text-slate-600 mb-1">装箱日期</label>
           <input
             type="text"
+            id="mes-wm-package-package_date"
+            data-testid="field-package_date"
+            data-agent-target="mes-wm-package:field:package_date"
+            data-agent-state={formData.package_date ? "filled" : "empty"}
+            aria-label="装箱日期"
             value={formData.package_date ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, package_date: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -115,9 +137,14 @@ export function MesWmPackageForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">销售订单编号</label>
+          <label htmlFor="mes-wm-package-sales_order_code" className="block text-xs text-slate-600 mb-1">销售订单编号</label>
           <input
             type="text"
+            id="mes-wm-package-sales_order_code"
+            data-testid="field-sales_order_code"
+            data-agent-target="mes-wm-package:field:sales_order_code"
+            data-agent-state={formData.sales_order_code ? "filled" : "empty"}
+            aria-label="销售订单编号"
             value={formData.sales_order_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sales_order_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -127,9 +154,14 @@ export function MesWmPackageForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">发票编号</label>
+          <label htmlFor="mes-wm-package-invoice_code" className="block text-xs text-slate-600 mb-1">发票编号</label>
           <input
             type="text"
+            id="mes-wm-package-invoice_code"
+            data-testid="field-invoice_code"
+            data-agent-target="mes-wm-package:field:invoice_code"
+            data-agent-state={formData.invoice_code ? "filled" : "empty"}
+            aria-label="发票编号"
             value={formData.invoice_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, invoice_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -139,9 +171,14 @@ export function MesWmPackageForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">客户 ID</label>
+          <label htmlFor="mes-wm-package-client_id" className="block text-xs text-slate-600 mb-1">客户 ID</label>
           <input
             type="number"
+            id="mes-wm-package-client_id"
+            data-testid="field-client_id"
+            data-agent-target="mes-wm-package:field:client_id"
+            data-agent-state={formData.client_id == null || formData.client_id === "" ? "empty" : "filled"}
+            aria-label="客户 ID"
             value={formData.client_id != null ? String(formData.client_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, client_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -151,9 +188,14 @@ export function MesWmPackageForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">箱长度</label>
+          <label htmlFor="mes-wm-package-length" className="block text-xs text-slate-600 mb-1">箱长度</label>
           <input
             type="number"
+            id="mes-wm-package-length"
+            data-testid="field-length"
+            data-agent-target="mes-wm-package:field:length"
+            data-agent-state={formData.length == null || formData.length === "" ? "empty" : "filled"}
+            aria-label="箱长度"
             value={formData.length != null ? String(formData.length) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, length: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -163,9 +205,14 @@ export function MesWmPackageForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">箱宽度</label>
+          <label htmlFor="mes-wm-package-width" className="block text-xs text-slate-600 mb-1">箱宽度</label>
           <input
             type="number"
+            id="mes-wm-package-width"
+            data-testid="field-width"
+            data-agent-target="mes-wm-package:field:width"
+            data-agent-state={formData.width == null || formData.width === "" ? "empty" : "filled"}
+            aria-label="箱宽度"
             value={formData.width != null ? String(formData.width) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, width: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -175,9 +222,14 @@ export function MesWmPackageForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">箱高度</label>
+          <label htmlFor="mes-wm-package-height" className="block text-xs text-slate-600 mb-1">箱高度</label>
           <input
             type="number"
+            id="mes-wm-package-height"
+            data-testid="field-height"
+            data-agent-target="mes-wm-package:field:height"
+            data-agent-state={formData.height == null || formData.height === "" ? "empty" : "filled"}
+            aria-label="箱高度"
             value={formData.height != null ? String(formData.height) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, height: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -187,9 +239,14 @@ export function MesWmPackageForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">尺寸单位 ID</label>
+          <label htmlFor="mes-wm-package-size_unit_id" className="block text-xs text-slate-600 mb-1">尺寸单位 ID</label>
           <input
             type="number"
+            id="mes-wm-package-size_unit_id"
+            data-testid="field-size_unit_id"
+            data-agent-target="mes-wm-package:field:size_unit_id"
+            data-agent-state={formData.size_unit_id == null || formData.size_unit_id === "" ? "empty" : "filled"}
+            aria-label="尺寸单位 ID"
             value={formData.size_unit_id != null ? String(formData.size_unit_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, size_unit_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -199,9 +256,14 @@ export function MesWmPackageForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">净重</label>
+          <label htmlFor="mes-wm-package-net_weight" className="block text-xs text-slate-600 mb-1">净重</label>
           <input
             type="number"
+            id="mes-wm-package-net_weight"
+            data-testid="field-net_weight"
+            data-agent-target="mes-wm-package:field:net_weight"
+            data-agent-state={formData.net_weight == null || formData.net_weight === "" ? "empty" : "filled"}
+            aria-label="净重"
             value={formData.net_weight != null ? String(formData.net_weight) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, net_weight: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -211,9 +273,14 @@ export function MesWmPackageForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">毛重</label>
+          <label htmlFor="mes-wm-package-gross_weight" className="block text-xs text-slate-600 mb-1">毛重</label>
           <input
             type="number"
+            id="mes-wm-package-gross_weight"
+            data-testid="field-gross_weight"
+            data-agent-target="mes-wm-package:field:gross_weight"
+            data-agent-state={formData.gross_weight == null || formData.gross_weight === "" ? "empty" : "filled"}
+            aria-label="毛重"
             value={formData.gross_weight != null ? String(formData.gross_weight) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, gross_weight: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -223,9 +290,14 @@ export function MesWmPackageForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">重量单位 ID</label>
+          <label htmlFor="mes-wm-package-weight_unit_id" className="block text-xs text-slate-600 mb-1">重量单位 ID</label>
           <input
             type="number"
+            id="mes-wm-package-weight_unit_id"
+            data-testid="field-weight_unit_id"
+            data-agent-target="mes-wm-package:field:weight_unit_id"
+            data-agent-state={formData.weight_unit_id == null || formData.weight_unit_id === "" ? "empty" : "filled"}
+            aria-label="重量单位 ID"
             value={formData.weight_unit_id != null ? String(formData.weight_unit_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, weight_unit_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -235,9 +307,14 @@ export function MesWmPackageForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">检查员用户 ID</label>
+          <label htmlFor="mes-wm-package-inspector_user_id" className="block text-xs text-slate-600 mb-1">检查员用户 ID</label>
           <input
             type="number"
+            id="mes-wm-package-inspector_user_id"
+            data-testid="field-inspector_user_id"
+            data-agent-target="mes-wm-package:field:inspector_user_id"
+            data-agent-state={formData.inspector_user_id == null || formData.inspector_user_id === "" ? "empty" : "filled"}
+            aria-label="检查员用户 ID"
             value={formData.inspector_user_id != null ? String(formData.inspector_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, inspector_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -247,9 +324,14 @@ export function MesWmPackageForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="mes-wm-package-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="mes-wm-package-status"
+            data-testid="field-status"
+            data-agent-target="mes-wm-package:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -259,9 +341,14 @@ export function MesWmPackageForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-wm-package-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-wm-package-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-wm-package:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -275,6 +362,8 @@ export function MesWmPackageForm({ open, initialData, onClose, onSuccess }: MesW
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-wm-package-form-cancel"
+              data-agent-target="mes-wm-package:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -282,6 +371,9 @@ export function MesWmPackageForm({ open, initialData, onClose, onSuccess }: MesW
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-wm-package-form-submit"
+              data-agent-target="mes-wm-package:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

@@ -58,24 +58,36 @@ export function MpMaterialForm({ open, initialData, onClose, onSuccess }: MpMate
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mp-material-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_" : "新增公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_"}
+        data-testid="mp-material-form"
+        data-agent-scope="mp-material:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MpMaterial（源框架导入）" : "新增MpMaterial（源框架导入）"}
+            {isEdit ? "编辑公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_" : "新增公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mp-material-form-close" data-agent-target="mp-material:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mp-material-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">公众号账号的编号</label>
+          <label htmlFor="mp-material-account_id" className="block text-xs text-slate-600 mb-1">公众号账号的编号</label>
           <input
             type="number"
+            id="mp-material-account_id"
+            data-testid="field-account_id"
+            data-agent-target="mp-material:field:account_id"
+            data-agent-state={formData.account_id == null || formData.account_id === "" ? "empty" : "filled"}
+            aria-label="公众号账号的编号"
             value={formData.account_id != null ? String(formData.account_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, account_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -85,9 +97,14 @@ export function MpMaterialForm({ open, initialData, onClose, onSuccess }: MpMate
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">公众号 appId</label>
+          <label htmlFor="mp-material-app_id" className="block text-xs text-slate-600 mb-1">公众号 appId</label>
           <input
             type="text"
+            id="mp-material-app_id"
+            data-testid="field-app_id"
+            data-agent-target="mp-material:field:app_id"
+            data-agent-state={formData.app_id ? "filled" : "empty"}
+            aria-label="公众号 appId"
             value={formData.app_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, app_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -97,9 +114,14 @@ export function MpMaterialForm({ open, initialData, onClose, onSuccess }: MpMate
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">公众号素材 id</label>
+          <label htmlFor="mp-material-media_id" className="block text-xs text-slate-600 mb-1">公众号素材 id</label>
           <input
             type="text"
+            id="mp-material-media_id"
+            data-testid="field-media_id"
+            data-agent-target="mp-material:field:media_id"
+            data-agent-state={formData.media_id ? "filled" : "empty"}
+            aria-label="公众号素材 id"
             value={formData.media_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, media_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -109,9 +131,14 @@ export function MpMaterialForm({ open, initialData, onClose, onSuccess }: MpMate
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">文件类型</label>
+          <label htmlFor="mp-material-type" className="block text-xs text-slate-600 mb-1">文件类型</label>
           <input
             type="text"
+            id="mp-material-type"
+            data-testid="field-type"
+            data-agent-target="mp-material:field:type"
+            data-agent-state={formData.type ? "filled" : "empty"}
+            aria-label="文件类型"
             value={formData.type ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -123,18 +150,27 @@ export function MpMaterialForm({ open, initialData, onClose, onSuccess }: MpMate
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="permanent"
+            id="mp-material-permanent"
+            data-testid="field-permanent"
+            data-agent-target="mp-material:field:permanent"
+            data-agent-state={formData.permanent ? "on" : "off"}
+            aria-label="是否永久"
             checked={Boolean(formData.permanent)}
             onChange={(e) => setFormData((prev) => ({ ...prev, permanent: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="permanent" className="text-xs text-slate-700 font-medium">是否永久</label>
+          <label htmlFor="mp-material-permanent" className="text-xs text-slate-700 font-medium">是否永久</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">文件服务器的 URL</label>
+          <label htmlFor="mp-material-url" className="block text-xs text-slate-600 mb-1">文件服务器的 URL</label>
           <input
             type="text"
+            id="mp-material-url"
+            data-testid="field-url"
+            data-agent-target="mp-material:field:url"
+            data-agent-state={formData.url ? "filled" : "empty"}
+            aria-label="文件服务器的 URL"
             value={formData.url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -144,9 +180,14 @@ export function MpMaterialForm({ open, initialData, onClose, onSuccess }: MpMate
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">名字</label>
+          <label htmlFor="mp-material-name" className="block text-xs text-slate-600 mb-1">名字</label>
           <input
             type="text"
+            id="mp-material-name"
+            data-testid="field-name"
+            data-agent-target="mp-material:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="名字"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -156,9 +197,14 @@ export function MpMaterialForm({ open, initialData, onClose, onSuccess }: MpMate
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">公众号文件 URL</label>
+          <label htmlFor="mp-material-mp_url" className="block text-xs text-slate-600 mb-1">公众号文件 URL</label>
           <input
             type="text"
+            id="mp-material-mp_url"
+            data-testid="field-mp_url"
+            data-agent-target="mp-material:field:mp_url"
+            data-agent-state={formData.mp_url ? "filled" : "empty"}
+            aria-label="公众号文件 URL"
             value={formData.mp_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, mp_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -168,9 +214,14 @@ export function MpMaterialForm({ open, initialData, onClose, onSuccess }: MpMate
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">视频素材的标题</label>
+          <label htmlFor="mp-material-title" className="block text-xs text-slate-600 mb-1">视频素材的标题</label>
           <input
             type="text"
+            id="mp-material-title"
+            data-testid="field-title"
+            data-agent-target="mp-material:field:title"
+            data-agent-state={formData.title ? "filled" : "empty"}
+            aria-label="视频素材的标题"
             value={formData.title ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -180,9 +231,14 @@ export function MpMaterialForm({ open, initialData, onClose, onSuccess }: MpMate
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">视频素材的描述</label>
+          <label htmlFor="mp-material-introduction" className="block text-xs text-slate-600 mb-1">视频素材的描述</label>
           <input
             type="text"
+            id="mp-material-introduction"
+            data-testid="field-introduction"
+            data-agent-target="mp-material:field:introduction"
+            data-agent-state={formData.introduction ? "filled" : "empty"}
+            aria-label="视频素材的描述"
             value={formData.introduction ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, introduction: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -196,6 +252,8 @@ export function MpMaterialForm({ open, initialData, onClose, onSuccess }: MpMate
             <button
               type="button"
               onClick={onClose}
+              data-testid="mp-material-form-cancel"
+              data-agent-target="mp-material:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -203,6 +261,9 @@ export function MpMaterialForm({ open, initialData, onClose, onSuccess }: MpMate
             <button
               type="submit"
               disabled={loading}
+              data-testid="mp-material-form-submit"
+              data-agent-target="mp-material:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

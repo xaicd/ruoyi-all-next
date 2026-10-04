@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { IotProductCategoryService } from "../iot-product-category.service"
 
 describe("IotProductCategoryService", () => {
-  it("should create and query IotProductCategory（源框架导入）", async () => {
+  it("should create and query IoT 产品分类", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await IotProductCategoryService.create({
-        name: "测试IotProductCategory（源框架导入）",
+        name: "测试IoT 产品分类",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("IotProductCategoryService", () => {
   
       const updated = await IotProductCategoryService.update(created.id, {
         id: created.id,
-        name: "更新IotProductCategory（源框架导入）",
+        name: "更新IoT 产品分类",
       } as any)
       expect(updated).toBeDefined()
   

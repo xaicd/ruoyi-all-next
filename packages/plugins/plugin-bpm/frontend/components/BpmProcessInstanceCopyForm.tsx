@@ -58,24 +58,36 @@ export function BpmProcessInstanceCopyForm({ open, initialData, onClose, onSucce
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="bpm-process-instance-copy-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑流程抄送" : "新增流程抄送"}
+        data-testid="bpm-process-instance-copy-form"
+        data-agent-scope="bpm-process-instance-copy:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑BpmProcessInstanceCopy（源框架导入）" : "新增BpmProcessInstanceCopy（源框架导入）"}
+            {isEdit ? "编辑流程抄送" : "新增流程抄送"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="bpm-process-instance-copy-form-close" data-agent-target="bpm-process-instance-copy:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="bpm-process-instance-copy-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">发起人 Id</label>
+          <label htmlFor="bpm-process-instance-copy-start_user_id" className="block text-xs text-slate-600 mb-1">发起人 Id</label>
           <input
             type="number"
+            id="bpm-process-instance-copy-start_user_id"
+            data-testid="field-start_user_id"
+            data-agent-target="bpm-process-instance-copy:field:start_user_id"
+            data-agent-state={formData.start_user_id == null || formData.start_user_id === "" ? "empty" : "filled"}
+            aria-label="发起人 Id"
             value={formData.start_user_id != null ? String(formData.start_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, start_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -85,9 +97,14 @@ export function BpmProcessInstanceCopyForm({ open, initialData, onClose, onSucce
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">流程名</label>
+          <label htmlFor="bpm-process-instance-copy-process_instance_name" className="block text-xs text-slate-600 mb-1">流程名</label>
           <input
             type="text"
+            id="bpm-process-instance-copy-process_instance_name"
+            data-testid="field-process_instance_name"
+            data-agent-target="bpm-process-instance-copy:field:process_instance_name"
+            data-agent-state={formData.process_instance_name ? "filled" : "empty"}
+            aria-label="流程名"
             value={formData.process_instance_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, process_instance_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -97,9 +114,14 @@ export function BpmProcessInstanceCopyForm({ open, initialData, onClose, onSucce
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">流程实例的编号</label>
+          <label htmlFor="bpm-process-instance-copy-process_instance_id" className="block text-xs text-slate-600 mb-1">流程实例的编号</label>
           <input
             type="text"
+            id="bpm-process-instance-copy-process_instance_id"
+            data-testid="field-process_instance_id"
+            data-agent-target="bpm-process-instance-copy:field:process_instance_id"
+            data-agent-state={formData.process_instance_id ? "filled" : "empty"}
+            aria-label="流程实例的编号"
             value={formData.process_instance_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, process_instance_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -109,9 +131,14 @@ export function BpmProcessInstanceCopyForm({ open, initialData, onClose, onSucce
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">流程实例的流程定义编号</label>
+          <label htmlFor="bpm-process-instance-copy-process_definition_id" className="block text-xs text-slate-600 mb-1">流程实例的流程定义编号</label>
           <input
             type="text"
+            id="bpm-process-instance-copy-process_definition_id"
+            data-testid="field-process_definition_id"
+            data-agent-target="bpm-process-instance-copy:field:process_definition_id"
+            data-agent-state={formData.process_definition_id ? "filled" : "empty"}
+            aria-label="流程实例的流程定义编号"
             value={formData.process_definition_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, process_definition_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -121,9 +148,14 @@ export function BpmProcessInstanceCopyForm({ open, initialData, onClose, onSucce
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">流程分类</label>
+          <label htmlFor="bpm-process-instance-copy-category" className="block text-xs text-slate-600 mb-1">流程分类</label>
           <input
             type="text"
+            id="bpm-process-instance-copy-category"
+            data-testid="field-category"
+            data-agent-target="bpm-process-instance-copy:field:category"
+            data-agent-state={formData.category ? "filled" : "empty"}
+            aria-label="流程分类"
             value={formData.category ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, category: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -133,9 +165,14 @@ export function BpmProcessInstanceCopyForm({ open, initialData, onClose, onSucce
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">流程活动的编号</label>
+          <label htmlFor="bpm-process-instance-copy-activity_id" className="block text-xs text-slate-600 mb-1">流程活动的编号</label>
           <input
             type="text"
+            id="bpm-process-instance-copy-activity_id"
+            data-testid="field-activity_id"
+            data-agent-target="bpm-process-instance-copy:field:activity_id"
+            data-agent-state={formData.activity_id ? "filled" : "empty"}
+            aria-label="流程活动的编号"
             value={formData.activity_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, activity_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -145,9 +182,14 @@ export function BpmProcessInstanceCopyForm({ open, initialData, onClose, onSucce
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">流程活动的名字</label>
+          <label htmlFor="bpm-process-instance-copy-activity_name" className="block text-xs text-slate-600 mb-1">流程活动的名字</label>
           <input
             type="text"
+            id="bpm-process-instance-copy-activity_name"
+            data-testid="field-activity_name"
+            data-agent-target="bpm-process-instance-copy:field:activity_name"
+            data-agent-state={formData.activity_name ? "filled" : "empty"}
+            aria-label="流程活动的名字"
             value={formData.activity_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, activity_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -157,9 +199,14 @@ export function BpmProcessInstanceCopyForm({ open, initialData, onClose, onSucce
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">流程活动的编号</label>
+          <label htmlFor="bpm-process-instance-copy-task_id" className="block text-xs text-slate-600 mb-1">流程活动的编号</label>
           <input
             type="text"
+            id="bpm-process-instance-copy-task_id"
+            data-testid="field-task_id"
+            data-agent-target="bpm-process-instance-copy:field:task_id"
+            data-agent-state={formData.task_id ? "filled" : "empty"}
+            aria-label="流程活动的编号"
             value={formData.task_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, task_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -169,9 +216,14 @@ export function BpmProcessInstanceCopyForm({ open, initialData, onClose, onSucce
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号（被抄送的用户编号）</label>
+          <label htmlFor="bpm-process-instance-copy-user_id" className="block text-xs text-slate-600 mb-1">用户编号（被抄送的用户编号）</label>
           <input
             type="number"
+            id="bpm-process-instance-copy-user_id"
+            data-testid="field-user_id"
+            data-agent-target="bpm-process-instance-copy:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号（被抄送的用户编号）"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -181,9 +233,14 @@ export function BpmProcessInstanceCopyForm({ open, initialData, onClose, onSucce
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">抄送意见</label>
+          <label htmlFor="bpm-process-instance-copy-reason" className="block text-xs text-slate-600 mb-1">抄送意见</label>
           <input
             type="text"
+            id="bpm-process-instance-copy-reason"
+            data-testid="field-reason"
+            data-agent-target="bpm-process-instance-copy:field:reason"
+            data-agent-state={formData.reason ? "filled" : "empty"}
+            aria-label="抄送意见"
             value={formData.reason ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, reason: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -197,6 +254,8 @@ export function BpmProcessInstanceCopyForm({ open, initialData, onClose, onSucce
             <button
               type="button"
               onClick={onClose}
+              data-testid="bpm-process-instance-copy-form-cancel"
+              data-agent-target="bpm-process-instance-copy:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -204,6 +263,9 @@ export function BpmProcessInstanceCopyForm({ open, initialData, onClose, onSucce
             <button
               type="submit"
               disabled={loading}
+              data-testid="bpm-process-instance-copy-form-submit"
+              data-agent-target="bpm-process-instance-copy:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

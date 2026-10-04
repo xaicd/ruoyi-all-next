@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for CouponTemplate（源框架导入） (CouponTemplate)
+-- Auto-generated RBAC & Menu Migration for 优惠劵模板 DO当用户领取时，会生成 优惠劵 (CouponTemplate)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-coupon-template',
   'mall-dir',
-  'CouponTemplate（源框架导入）管理',
+  '优惠劵模板 DO当用户领取时，会生成 优惠劵管理',
   '/admin/mall/coupon-template',
   'mall/coupon-template/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-coupon-template-query',  'menu-coupon-template', '查询CouponTemplate（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:coupon_template:query',  1, NOW(), NOW()),
-('menu-coupon-template-create', 'menu-coupon-template', '新增CouponTemplate（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:coupon_template:create', 2, NOW(), NOW()),
-('menu-coupon-template-update', 'menu-coupon-template', '修改CouponTemplate（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:coupon_template:update', 3, NOW(), NOW()),
-('menu-coupon-template-delete', 'menu-coupon-template', '删除CouponTemplate（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:coupon_template:delete', 4, NOW(), NOW())
+('menu-coupon-template-query',  'menu-coupon-template', '查询优惠劵模板 DO当用户领取时，会生成 优惠劵', 'BUTTON', 'ACTIVE', 'mall:coupon_template:query',  1, NOW(), NOW()),
+('menu-coupon-template-create', 'menu-coupon-template', '新增优惠劵模板 DO当用户领取时，会生成 优惠劵', 'BUTTON', 'ACTIVE', 'mall:coupon_template:create', 2, NOW(), NOW()),
+('menu-coupon-template-update', 'menu-coupon-template', '修改优惠劵模板 DO当用户领取时，会生成 优惠劵', 'BUTTON', 'ACTIVE', 'mall:coupon_template:update', 3, NOW(), NOW()),
+('menu-coupon-template-delete', 'menu-coupon-template', '删除优惠劵模板 DO当用户领取时，会生成 优惠劵', 'BUTTON', 'ACTIVE', 'mall:coupon_template:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

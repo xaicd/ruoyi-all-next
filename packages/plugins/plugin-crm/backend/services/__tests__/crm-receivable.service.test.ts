@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { CrmReceivableService } from "../crm-receivable.service"
 
 describe("CrmReceivableService", () => {
-  it("should create and query CrmReceivable（源框架导入）", async () => {
+  it("should create and query 回款", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CrmReceivableService.create({
-        no: "测试CrmReceivable（源框架导入）",
+        no: "测试回款",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("CrmReceivableService", () => {
   
       const updated = await CrmReceivableService.update(created.id, {
         id: created.id,
-        no: "更新CrmReceivable（源框架导入）",
+        no: "更新回款",
       } as any)
       expect(updated).toBeDefined()
   

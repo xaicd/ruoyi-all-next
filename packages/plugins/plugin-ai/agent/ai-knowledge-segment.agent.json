@@ -1,0 +1,249 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "ai",
+  "entity": "AiKnowledgeSegment",
+  "kebab": "ai-knowledge-segment",
+  "businessName": "AI 知识库-文档分段",
+  "permissionPrefix": "ai:ai_knowledge_segment",
+  "page": {
+    "route": "/admin/ai/ai-knowledge-segment",
+    "title": "AI 知识库-文档分段管理",
+    "titleSelector": "[data-testid=\"ai-knowledge-segment-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.ai/api",
+    "bffMount": "/api/v1/admin/ai",
+    "resource": "ai-knowledge-segment",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/ai-knowledge-segment",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/ai-knowledge-segment/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/ai-knowledge-segment"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/ai-knowledge-segment/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/ai-knowledge-segment/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"ai-knowledge-segment-title\"]",
+    "refresh": "[data-testid=\"ai-knowledge-segment-refresh\"]",
+    "createButton": "[data-testid=\"ai-knowledge-segment-create\"]",
+    "searchForm": "[data-testid=\"ai-knowledge-segment-search\"]",
+    "searchSubmit": "[data-testid=\"ai-knowledge-segment-search-submit\"]",
+    "searchReset": "[data-testid=\"ai-knowledge-segment-search-reset\"]",
+    "total": "[data-testid=\"ai-knowledge-segment-total\"]",
+    "table": "[data-testid=\"ai-knowledge-segment-table\"]",
+    "row": "[data-testid=\"ai-knowledge-segment-row\"]",
+    "editButton": "[data-testid=\"ai-knowledge-segment-edit\"]",
+    "deleteButton": "[data-testid=\"ai-knowledge-segment-delete\"]",
+    "form": "[data-testid=\"ai-knowledge-segment-form\"]",
+    "formError": "[data-testid=\"ai-knowledge-segment-form-error\"]",
+    "formSubmit": "[data-testid=\"ai-knowledge-segment-form-submit\"]",
+    "formCancel": "[data-testid=\"ai-knowledge-segment-form-cancel\"]",
+    "formClose": "[data-testid=\"ai-knowledge-segment-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "AI 知识库-文档分段列表",
+    "dialogLabel": {
+      "create": "新增AI 知识库-文档分段",
+      "edit": "编辑AI 知识库-文档分段"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "knowledge_id",
+        "label": "知识库编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-knowledge_id",
+        "selector": "[data-testid=\"field-knowledge_id\"]"
+      },
+      {
+        "name": "document_id",
+        "label": "文档编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-document_id",
+        "selector": "[data-testid=\"field-document_id\"]"
+      },
+      {
+        "name": "content",
+        "label": "切片内容",
+        "type": "string",
+        "required": false,
+        "testId": "field-content",
+        "selector": "[data-testid=\"field-content\"]"
+      },
+      {
+        "name": "content_length",
+        "label": "切片内容长度",
+        "type": "number",
+        "required": false,
+        "testId": "field-content_length",
+        "selector": "[data-testid=\"field-content_length\"]"
+      },
+      {
+        "name": "vector_id",
+        "label": "向量库的编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-vector_id",
+        "selector": "[data-testid=\"field-vector_id\"]"
+      },
+      {
+        "name": "tokens",
+        "label": "token 数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-tokens",
+        "selector": "[data-testid=\"field-tokens\"]"
+      },
+      {
+        "name": "retrieval_count",
+        "label": "召回次数",
+        "type": "number",
+        "required": false,
+        "testId": "field-retrieval_count",
+        "selector": "[data-testid=\"field-retrieval_count\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "ai-knowledge-segment",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"ai-knowledge-segment\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"ai-knowledge-segment-form-overlay\"]",
+      "dialog": "[data-testid=\"ai-knowledge-segment-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "ai-knowledge-segment:search",
+      "reset": "ai-knowledge-segment:reset",
+      "refresh": "ai-knowledge-segment:refresh",
+      "create": "ai-knowledge-segment:create",
+      "edit": "ai-knowledge-segment:edit",
+      "delete": "ai-knowledge-segment:delete",
+      "submit": "ai-knowledge-segment:submit",
+      "cancel": "ai-knowledge-segment:cancel",
+      "close": "ai-knowledge-segment:close",
+      "row": "ai-knowledge-segment:row",
+      "pagination": "ai-knowledge-segment:pagination",
+      "fields": {
+        "knowledge_id": "ai-knowledge-segment:field:knowledge_id",
+        "document_id": "ai-knowledge-segment:field:document_id",
+        "content": "ai-knowledge-segment:field:content",
+        "content_length": "ai-knowledge-segment:field:content_length",
+        "vector_id": "ai-knowledge-segment:field:vector_id",
+        "tokens": "ai-knowledge-segment:field:tokens",
+        "retrieval_count": "ai-knowledge-segment:field:retrieval_count",
+        "status": "ai-knowledge-segment:field:status"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "ai.ai-knowledge-segment",
+      "examples": [
+        "ai.ai-knowledge-segment__List__Refresh",
+        "ai.ai-knowledge-segment__ListItem__Open",
+        "ai.ai-knowledge-segment__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

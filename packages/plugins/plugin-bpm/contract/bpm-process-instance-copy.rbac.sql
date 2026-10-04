@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for BpmProcessInstanceCopy（源框架导入） (BpmProcessInstanceCopy)
+-- Auto-generated RBAC & Menu Migration for 流程抄送 (BpmProcessInstanceCopy)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-bpm-process-instance-copy',
   'bpm-dir',
-  'BpmProcessInstanceCopy（源框架导入）管理',
+  '流程抄送管理',
   '/admin/bpm/bpm-process-instance-copy',
   'bpm/bpm-process-instance-copy/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-bpm-process-instance-copy-query',  'menu-bpm-process-instance-copy', '查询BpmProcessInstanceCopy（源框架导入）', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_instance_copy:query',  1, NOW(), NOW()),
-('menu-bpm-process-instance-copy-create', 'menu-bpm-process-instance-copy', '新增BpmProcessInstanceCopy（源框架导入）', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_instance_copy:create', 2, NOW(), NOW()),
-('menu-bpm-process-instance-copy-update', 'menu-bpm-process-instance-copy', '修改BpmProcessInstanceCopy（源框架导入）', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_instance_copy:update', 3, NOW(), NOW()),
-('menu-bpm-process-instance-copy-delete', 'menu-bpm-process-instance-copy', '删除BpmProcessInstanceCopy（源框架导入）', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_instance_copy:delete', 4, NOW(), NOW())
+('menu-bpm-process-instance-copy-query',  'menu-bpm-process-instance-copy', '查询流程抄送', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_instance_copy:query',  1, NOW(), NOW()),
+('menu-bpm-process-instance-copy-create', 'menu-bpm-process-instance-copy', '新增流程抄送', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_instance_copy:create', 2, NOW(), NOW()),
+('menu-bpm-process-instance-copy-update', 'menu-bpm-process-instance-copy', '修改流程抄送', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_instance_copy:update', 3, NOW(), NOW()),
+('menu-bpm-process-instance-copy-delete', 'menu-bpm-process-instance-copy', '删除流程抄送', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_instance_copy:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

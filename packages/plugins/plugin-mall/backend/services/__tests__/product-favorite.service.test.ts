@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ProductFavoriteService } from "../product-favorite.service"
 
 describe("ProductFavoriteService", () => {
-  it("should create and query ProductFavorite（源框架导入）", async () => {
+  it("should create and query 商品收藏", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ProductFavoriteService.create({
         user_id: 1,
@@ -21,7 +21,7 @@ describe("ProductFavoriteService", () => {
   
       const updated = await ProductFavoriteService.update(created.id, {
         id: created.id,
-        user_id: "更新ProductFavorite（源框架导入）",
+        user_id: "更新商品收藏",
       } as any)
       expect(updated).toBeDefined()
   

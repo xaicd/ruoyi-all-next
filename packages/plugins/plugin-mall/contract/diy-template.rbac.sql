@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for DiyTemplate（源框架导入） (DiyTemplate)
+-- Auto-generated RBAC & Menu Migration for 装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. 如果需要使用某个模版，则将 设置为 true，表示已使用，有且仅有一个 (DiyTemplate)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-diy-template',
   'mall-dir',
-  'DiyTemplate（源框架导入）管理',
+  '装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. 如果需要使用某个模版，则将 设置为 true，表示已使用，有且仅有一个管理',
   '/admin/mall/diy-template',
   'mall/diy-template/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-diy-template-query',  'menu-diy-template', '查询DiyTemplate（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:diy_template:query',  1, NOW(), NOW()),
-('menu-diy-template-create', 'menu-diy-template', '新增DiyTemplate（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:diy_template:create', 2, NOW(), NOW()),
-('menu-diy-template-update', 'menu-diy-template', '修改DiyTemplate（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:diy_template:update', 3, NOW(), NOW()),
-('menu-diy-template-delete', 'menu-diy-template', '删除DiyTemplate（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:diy_template:delete', 4, NOW(), NOW())
+('menu-diy-template-query',  'menu-diy-template', '查询装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. 如果需要使用某个模版，则将 设置为 true，表示已使用，有且仅有一个', 'BUTTON', 'ACTIVE', 'mall:diy_template:query',  1, NOW(), NOW()),
+('menu-diy-template-create', 'menu-diy-template', '新增装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. 如果需要使用某个模版，则将 设置为 true，表示已使用，有且仅有一个', 'BUTTON', 'ACTIVE', 'mall:diy_template:create', 2, NOW(), NOW()),
+('menu-diy-template-update', 'menu-diy-template', '修改装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. 如果需要使用某个模版，则将 设置为 true，表示已使用，有且仅有一个', 'BUTTON', 'ACTIVE', 'mall:diy_template:update', 3, NOW(), NOW()),
+('menu-diy-template-delete', 'menu-diy-template', '删除装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. 如果需要使用某个模版，则将 设置为 true，表示已使用，有且仅有一个', 'BUTTON', 'ACTIVE', 'mall:diy_template:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

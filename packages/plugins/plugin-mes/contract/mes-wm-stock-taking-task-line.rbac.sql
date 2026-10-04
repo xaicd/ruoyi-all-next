@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesWmStockTakingTaskLine（源框架导入） (MesWmStockTakingTaskLine)
+-- Auto-generated RBAC & Menu Migration for MES 盘点任务行 (MesWmStockTakingTaskLine)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-wm-stock-taking-task-line',
   'mes-dir',
-  'MesWmStockTakingTaskLine（源框架导入）管理',
+  'MES 盘点任务行管理',
   '/admin/mes/mes-wm-stock-taking-task-line',
   'mes/mes-wm-stock-taking-task-line/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-wm-stock-taking-task-line-query',  'menu-mes-wm-stock-taking-task-line', '查询MesWmStockTakingTaskLine（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_stock_taking_task_line:query',  1, NOW(), NOW()),
-('menu-mes-wm-stock-taking-task-line-create', 'menu-mes-wm-stock-taking-task-line', '新增MesWmStockTakingTaskLine（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_stock_taking_task_line:create', 2, NOW(), NOW()),
-('menu-mes-wm-stock-taking-task-line-update', 'menu-mes-wm-stock-taking-task-line', '修改MesWmStockTakingTaskLine（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_stock_taking_task_line:update', 3, NOW(), NOW()),
-('menu-mes-wm-stock-taking-task-line-delete', 'menu-mes-wm-stock-taking-task-line', '删除MesWmStockTakingTaskLine（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_stock_taking_task_line:delete', 4, NOW(), NOW())
+('menu-mes-wm-stock-taking-task-line-query',  'menu-mes-wm-stock-taking-task-line', '查询MES 盘点任务行', 'BUTTON', 'ACTIVE', 'mes:mes_wm_stock_taking_task_line:query',  1, NOW(), NOW()),
+('menu-mes-wm-stock-taking-task-line-create', 'menu-mes-wm-stock-taking-task-line', '新增MES 盘点任务行', 'BUTTON', 'ACTIVE', 'mes:mes_wm_stock_taking_task_line:create', 2, NOW(), NOW()),
+('menu-mes-wm-stock-taking-task-line-update', 'menu-mes-wm-stock-taking-task-line', '修改MES 盘点任务行', 'BUTTON', 'ACTIVE', 'mes:mes_wm_stock_taking_task_line:update', 3, NOW(), NOW()),
+('menu-mes-wm-stock-taking-task-line-delete', 'menu-mes-wm-stock-taking-task-line', '删除MES 盘点任务行', 'BUTTON', 'ACTIVE', 'mes:mes_wm_stock_taking_task_line:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

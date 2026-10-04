@@ -58,24 +58,36 @@ export function AiModelForm({ open, initialData, onClose, onSuccess }: AiModelFo
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="ai-model-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑AI 模型 DO默认模型： 为开启，并且 排序第一" : "新增AI 模型 DO默认模型： 为开启，并且 排序第一"}
+        data-testid="ai-model-form"
+        data-agent-scope="ai-model:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑AiModel（源框架导入）" : "新增AiModel（源框架导入）"}
+            {isEdit ? "编辑AI 模型 DO默认模型： 为开启，并且 排序第一" : "新增AI 模型 DO默认模型： 为开启，并且 排序第一"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="ai-model-form-close" data-agent-target="ai-model:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="ai-model-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">API 秘钥编号</label>
+          <label htmlFor="ai-model-key_id" className="block text-xs text-slate-600 mb-1">API 秘钥编号</label>
           <input
             type="number"
+            id="ai-model-key_id"
+            data-testid="field-key_id"
+            data-agent-target="ai-model:field:key_id"
+            data-agent-state={formData.key_id == null || formData.key_id === "" ? "empty" : "filled"}
+            aria-label="API 秘钥编号"
             value={formData.key_id != null ? String(formData.key_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, key_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -85,9 +97,14 @@ export function AiModelForm({ open, initialData, onClose, onSuccess }: AiModelFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">模型名称</label>
+          <label htmlFor="ai-model-name" className="block text-xs text-slate-600 mb-1">模型名称</label>
           <input
             type="text"
+            id="ai-model-name"
+            data-testid="field-name"
+            data-agent-target="ai-model:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="模型名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -97,9 +114,14 @@ export function AiModelForm({ open, initialData, onClose, onSuccess }: AiModelFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">模型标志</label>
+          <label htmlFor="ai-model-model" className="block text-xs text-slate-600 mb-1">模型标志</label>
           <input
             type="text"
+            id="ai-model-model"
+            data-testid="field-model"
+            data-agent-target="ai-model:field:model"
+            data-agent-state={formData.model ? "filled" : "empty"}
+            aria-label="模型标志"
             value={formData.model ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, model: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -109,9 +131,14 @@ export function AiModelForm({ open, initialData, onClose, onSuccess }: AiModelFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">平台</label>
+          <label htmlFor="ai-model-platform" className="block text-xs text-slate-600 mb-1">平台</label>
           <input
             type="text"
+            id="ai-model-platform"
+            data-testid="field-platform"
+            data-agent-target="ai-model:field:platform"
+            data-agent-state={formData.platform ? "filled" : "empty"}
+            aria-label="平台"
             value={formData.platform ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, platform: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -121,9 +148,14 @@ export function AiModelForm({ open, initialData, onClose, onSuccess }: AiModelFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">类型</label>
+          <label htmlFor="ai-model-type" className="block text-xs text-slate-600 mb-1">类型</label>
           <input
             type="number"
+            id="ai-model-type"
+            data-testid="field-type"
+            data-agent-target="ai-model:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="类型"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -133,9 +165,14 @@ export function AiModelForm({ open, initialData, onClose, onSuccess }: AiModelFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">排序值</label>
+          <label htmlFor="ai-model-sort" className="block text-xs text-slate-600 mb-1">排序值</label>
           <input
             type="number"
+            id="ai-model-sort"
+            data-testid="field-sort"
+            data-agent-target="ai-model:field:sort"
+            data-agent-state={formData.sort == null || formData.sort === "" ? "empty" : "filled"}
+            aria-label="排序值"
             value={formData.sort != null ? String(formData.sort) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sort: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -145,9 +182,14 @@ export function AiModelForm({ open, initialData, onClose, onSuccess }: AiModelFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="ai-model-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="ai-model-status"
+            data-testid="field-status"
+            data-agent-target="ai-model:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -157,9 +199,14 @@ export function AiModelForm({ open, initialData, onClose, onSuccess }: AiModelFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">温度参数</label>
+          <label htmlFor="ai-model-temperature" className="block text-xs text-slate-600 mb-1">温度参数</label>
           <input
             type="number"
+            id="ai-model-temperature"
+            data-testid="field-temperature"
+            data-agent-target="ai-model:field:temperature"
+            data-agent-state={formData.temperature == null || formData.temperature === "" ? "empty" : "filled"}
+            aria-label="温度参数"
             value={formData.temperature != null ? String(formData.temperature) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, temperature: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -169,9 +216,14 @@ export function AiModelForm({ open, initialData, onClose, onSuccess }: AiModelFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">单条回复的最大 Token 数量</label>
+          <label htmlFor="ai-model-max_tokens" className="block text-xs text-slate-600 mb-1">单条回复的最大 Token 数量</label>
           <input
             type="number"
+            id="ai-model-max_tokens"
+            data-testid="field-max_tokens"
+            data-agent-target="ai-model:field:max_tokens"
+            data-agent-state={formData.max_tokens == null || formData.max_tokens === "" ? "empty" : "filled"}
+            aria-label="单条回复的最大 Token 数量"
             value={formData.max_tokens != null ? String(formData.max_tokens) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, max_tokens: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -181,9 +233,14 @@ export function AiModelForm({ open, initialData, onClose, onSuccess }: AiModelFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">上下文的最大 Message 数量</label>
+          <label htmlFor="ai-model-max_contexts" className="block text-xs text-slate-600 mb-1">上下文的最大 Message 数量</label>
           <input
             type="number"
+            id="ai-model-max_contexts"
+            data-testid="field-max_contexts"
+            data-agent-target="ai-model:field:max_contexts"
+            data-agent-state={formData.max_contexts == null || formData.max_contexts === "" ? "empty" : "filled"}
+            aria-label="上下文的最大 Message 数量"
             value={formData.max_contexts != null ? String(formData.max_contexts) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, max_contexts: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -197,6 +254,8 @@ export function AiModelForm({ open, initialData, onClose, onSuccess }: AiModelFo
             <button
               type="button"
               onClick={onClose}
+              data-testid="ai-model-form-cancel"
+              data-agent-target="ai-model:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -204,6 +263,9 @@ export function AiModelForm({ open, initialData, onClose, onSuccess }: AiModelFo
             <button
               type="submit"
               disabled={loading}
+              data-testid="ai-model-form-submit"
+              data-agent-target="ai-model:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

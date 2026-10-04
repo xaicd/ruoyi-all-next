@@ -1,0 +1,213 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesMdWorkstationTool",
+  "kebab": "mes-md-workstation-tool",
+  "businessName": "MES 工装夹具资源",
+  "permissionPrefix": "mes:mes_md_workstation_tool",
+  "page": {
+    "route": "/admin/mes/mes-md-workstation-tool",
+    "title": "MES 工装夹具资源管理",
+    "titleSelector": "[data-testid=\"mes-md-workstation-tool-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-md-workstation-tool",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-md-workstation-tool",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-md-workstation-tool/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-md-workstation-tool"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-md-workstation-tool/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-md-workstation-tool/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-md-workstation-tool-title\"]",
+    "refresh": "[data-testid=\"mes-md-workstation-tool-refresh\"]",
+    "createButton": "[data-testid=\"mes-md-workstation-tool-create\"]",
+    "searchForm": "[data-testid=\"mes-md-workstation-tool-search\"]",
+    "searchSubmit": "[data-testid=\"mes-md-workstation-tool-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-md-workstation-tool-search-reset\"]",
+    "total": "[data-testid=\"mes-md-workstation-tool-total\"]",
+    "table": "[data-testid=\"mes-md-workstation-tool-table\"]",
+    "row": "[data-testid=\"mes-md-workstation-tool-row\"]",
+    "editButton": "[data-testid=\"mes-md-workstation-tool-edit\"]",
+    "deleteButton": "[data-testid=\"mes-md-workstation-tool-delete\"]",
+    "form": "[data-testid=\"mes-md-workstation-tool-form\"]",
+    "formError": "[data-testid=\"mes-md-workstation-tool-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-md-workstation-tool-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-md-workstation-tool-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-md-workstation-tool-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 工装夹具资源列表",
+    "dialogLabel": {
+      "create": "新增MES 工装夹具资源",
+      "edit": "编辑MES 工装夹具资源"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "workstation_id",
+        "label": "工作站编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-workstation_id",
+        "selector": "[data-testid=\"field-workstation_id\"]"
+      },
+      {
+        "name": "tool_type_id",
+        "label": "工具类型编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-tool_type_id",
+        "selector": "[data-testid=\"field-tool_type_id\"]"
+      },
+      {
+        "name": "quantity",
+        "label": "数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-quantity",
+        "selector": "[data-testid=\"field-quantity\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-md-workstation-tool",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-md-workstation-tool\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-md-workstation-tool-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-md-workstation-tool-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-md-workstation-tool:search",
+      "reset": "mes-md-workstation-tool:reset",
+      "refresh": "mes-md-workstation-tool:refresh",
+      "create": "mes-md-workstation-tool:create",
+      "edit": "mes-md-workstation-tool:edit",
+      "delete": "mes-md-workstation-tool:delete",
+      "submit": "mes-md-workstation-tool:submit",
+      "cancel": "mes-md-workstation-tool:cancel",
+      "close": "mes-md-workstation-tool:close",
+      "row": "mes-md-workstation-tool:row",
+      "pagination": "mes-md-workstation-tool:pagination",
+      "fields": {
+        "workstation_id": "mes-md-workstation-tool:field:workstation_id",
+        "tool_type_id": "mes-md-workstation-tool:field:tool_type_id",
+        "quantity": "mes-md-workstation-tool:field:quantity",
+        "remark": "mes-md-workstation-tool:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-md-workstation-tool",
+      "examples": [
+        "mes.mes-md-workstation-tool__List__Refresh",
+        "mes.mes-md-workstation-tool__ListItem__Open",
+        "mes.mes-md-workstation-tool__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

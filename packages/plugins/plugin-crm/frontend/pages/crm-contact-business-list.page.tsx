@@ -64,44 +64,63 @@ export function CrmContactBusinessListPage() {
     }
   }
 
+  // Agent-Native: 根节点暴露就绪信号；弹窗打开时基底打 inert，让无障碍树只留弹窗一层
+  const agentState = loading ? "loading" : formOpen ? "modal-open" : total === 0 ? "empty" : "ready"
+
   return (
-    <div className="p-6 space-y-4">
+    <div
+      data-agent-scope="crm-contact-business"
+      data-agent-state={agentState}
+      data-agent-page-ready={String(!loading)}
+      className="p-6 space-y-4"
+    >
+      {/* 弹窗打开时基底内容 inert —— Agent 不会误点到被遮挡的元素 */}
+      <div inert={formOpen ? true : undefined} className="space-y-4">
       {/* 页面头部 */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900">CrmContactBusiness（源框架导入）管理</h1>
-          <p className="text-xs text-slate-500 mt-0.5">CrmContactBusiness（源框架导入）列表与配置管理</p>
+          <h1 data-testid="crm-contact-business-title" className="text-xl font-bold tracking-tight text-slate-900">CRM 联系人与商机的关联管理</h1>
+          <p className="text-xs text-slate-500 mt-0.5">CRM 联系人与商机的关联列表与配置管理</p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={fetchData}
+            data-testid="crm-contact-business-refresh"
+            data-agent-target="crm-contact-business:refresh"
             className="px-3 py-1.5 text-xs text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
           >
             刷新
           </button>
           <button
             onClick={handleAdd}
+            data-testid="crm-contact-business-create"
+            data-agent-target="crm-contact-business:create"
             className="px-3.5 py-1.5 text-xs text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors font-medium shadow-xs"
           >
-            + 新增CrmContactBusiness（源框架导入）
+            + 新增CRM 联系人与商机的关联
           </button>
         </div>
       </div>
 
       {/* 搜索工具栏 */}
-      <form onSubmit={handleSearch} className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3">
+      <form
+        onSubmit={handleSearch}
+        data-testid="crm-contact-business-search"
+        data-agent-scope="crm-contact-business:search"
+        aria-label="CRM 联系人与商机的关联搜索"
+        className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3">
 
-          <button type="submit" className="px-3 py-1 text-xs text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition-colors">查询</button>
-          <button type="button" onClick={handleReset} className="px-3 py-1 text-xs text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors">重置</button>
+          <button type="submit" data-testid="crm-contact-business-search-submit" data-agent-target="crm-contact-business:search" className="px-3 py-1 text-xs text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition-colors">查询</button>
+          <button type="button" onClick={handleReset} data-testid="crm-contact-business-search-reset" data-agent-target="crm-contact-business:reset" className="px-3 py-1 text-xs text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors">重置</button>
         </div>
-        <div className="text-xs text-slate-500">共 <span className="font-semibold text-slate-700">{total}</span> 条记录</div>
+        <div className="text-xs text-slate-500">共 <span data-testid="crm-contact-business-total" className="font-semibold text-slate-700">{total}</span> 条记录</div>
       </form>
 
       {/* 数据表格 */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-slate-200">
+          <table data-testid="crm-contact-business-table" aria-label="CRM 联系人与商机的关联列表" className="min-w-full divide-y divide-slate-200">
             <thead className="bg-slate-50/80">
               <tr>
                 <th className="px-4 py-2.5 text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider">联系人编号</th>
@@ -120,12 +139,19 @@ export function CrmContactBusinessListPage() {
                 </tr>
               ) : (
                 data.map((item) => (
-                  <tr key={item.id} className="hover:bg-slate-50/60 transition-colors">
+                  <tr
+                    key={item.id}
+                    data-testid="crm-contact-business-row"
+                    data-agent-target="crm-contact-business:row"
+                    data-agent-state={editItem?.id === item.id ? "editing" : "idle"}
+                    data-agent-id={item.id}
+                    className="hover:bg-slate-50/60 transition-colors"
+                  >
                   <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.contact_id ?? "-")}>{String(item.contact_id ?? "-")}</td>
                   <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.business_id ?? "-")}>{String(item.business_id ?? "-")}</td>
                     <td className="px-4 py-2.5 text-xs text-right whitespace-nowrap space-x-2">
-                      <button onClick={() => handleEdit(item)} className="text-blue-600 hover:text-blue-800 font-medium">编辑</button>
-                      <button onClick={() => handleDelete(item.id)} className="text-rose-600 hover:text-rose-800 font-medium">删除</button>
+                      <button onClick={() => handleEdit(item)} data-testid="crm-contact-business-edit" data-agent-target="crm-contact-business:edit" data-agent-id={item.id} aria-label={"编辑 " + item.id} className="text-blue-600 hover:text-blue-800 font-medium">编辑</button>
+                      <button onClick={() => handleDelete(item.id)} data-testid="crm-contact-business-delete" data-agent-target="crm-contact-business:delete" data-agent-id={item.id} aria-label={"删除 " + item.id} className="text-rose-600 hover:text-rose-800 font-medium">删除</button>
                     </td>
                   </tr>
                 ))
@@ -135,7 +161,7 @@ export function CrmContactBusinessListPage() {
         </div>
 
         {/* 分页组件 */}
-        <div className="p-3 border-t border-slate-200">
+        <div data-agent-target="crm-contact-business:pagination" className="p-3 border-t border-slate-200">
           <Pagination
             total={total}
             page={page}
@@ -144,6 +170,8 @@ export function CrmContactBusinessListPage() {
             onPageSizeChange={(ps) => setPageSize(ps)}
           />
         </div>
+      </div>
+
       </div>
 
       {/* 弹窗表单 */}

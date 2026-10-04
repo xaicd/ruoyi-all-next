@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MemberLevel（源框架导入） (MemberLevel)
+-- Auto-generated RBAC & Menu Migration for 会员等级 DO配置每个等级需要的积分 (MemberLevel)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-member-level',
   'member-dir',
-  'MemberLevel（源框架导入）管理',
+  '会员等级 DO配置每个等级需要的积分管理',
   '/admin/member/member-level',
   'member/member-level/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-member-level-query',  'menu-member-level', '查询MemberLevel（源框架导入）', 'BUTTON', 'ACTIVE', 'member:member_level:query',  1, NOW(), NOW()),
-('menu-member-level-create', 'menu-member-level', '新增MemberLevel（源框架导入）', 'BUTTON', 'ACTIVE', 'member:member_level:create', 2, NOW(), NOW()),
-('menu-member-level-update', 'menu-member-level', '修改MemberLevel（源框架导入）', 'BUTTON', 'ACTIVE', 'member:member_level:update', 3, NOW(), NOW()),
-('menu-member-level-delete', 'menu-member-level', '删除MemberLevel（源框架导入）', 'BUTTON', 'ACTIVE', 'member:member_level:delete', 4, NOW(), NOW())
+('menu-member-level-query',  'menu-member-level', '查询会员等级 DO配置每个等级需要的积分', 'BUTTON', 'ACTIVE', 'member:member_level:query',  1, NOW(), NOW()),
+('menu-member-level-create', 'menu-member-level', '新增会员等级 DO配置每个等级需要的积分', 'BUTTON', 'ACTIVE', 'member:member_level:create', 2, NOW(), NOW()),
+('menu-member-level-update', 'menu-member-level', '修改会员等级 DO配置每个等级需要的积分', 'BUTTON', 'ACTIVE', 'member:member_level:update', 3, NOW(), NOW()),
+('menu-member-level-delete', 'menu-member-level', '删除会员等级 DO配置每个等级需要的积分', 'BUTTON', 'ACTIVE', 'member:member_level:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

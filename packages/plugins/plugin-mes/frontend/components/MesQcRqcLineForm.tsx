@@ -60,24 +60,36 @@ export function MesQcRqcLineForm({ open, initialData, onClose, onSuccess }: MesQ
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-qc-rqc-line-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 退货检验行" : "新增MES 退货检验行"}
+        data-testid="mes-qc-rqc-line-form"
+        data-agent-scope="mes-qc-rqc-line:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesQcRqcLine（源框架导入）" : "新增MesQcRqcLine（源框架导入）"}
+            {isEdit ? "编辑MES 退货检验行" : "新增MES 退货检验行"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-qc-rqc-line-form-close" data-agent-target="mes-qc-rqc-line:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-qc-rqc-line-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">退货检验单 ID</label>
+          <label htmlFor="mes-qc-rqc-line-rqc_id" className="block text-xs text-slate-600 mb-1">退货检验单 ID</label>
           <input
             type="number"
+            id="mes-qc-rqc-line-rqc_id"
+            data-testid="field-rqc_id"
+            data-agent-target="mes-qc-rqc-line:field:rqc_id"
+            data-agent-state={formData.rqc_id == null || formData.rqc_id === "" ? "empty" : "filled"}
+            aria-label="退货检验单 ID"
             value={formData.rqc_id != null ? String(formData.rqc_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, rqc_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -87,9 +99,14 @@ export function MesQcRqcLineForm({ open, initialData, onClose, onSuccess }: MesQ
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">检测指标 ID</label>
+          <label htmlFor="mes-qc-rqc-line-indicator_id" className="block text-xs text-slate-600 mb-1">检测指标 ID</label>
           <input
             type="number"
+            id="mes-qc-rqc-line-indicator_id"
+            data-testid="field-indicator_id"
+            data-agent-target="mes-qc-rqc-line:field:indicator_id"
+            data-agent-state={formData.indicator_id == null || formData.indicator_id === "" ? "empty" : "filled"}
+            aria-label="检测指标 ID"
             value={formData.indicator_id != null ? String(formData.indicator_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, indicator_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -99,9 +116,14 @@ export function MesQcRqcLineForm({ open, initialData, onClose, onSuccess }: MesQ
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">检测工具</label>
+          <label htmlFor="mes-qc-rqc-line-tool" className="block text-xs text-slate-600 mb-1">检测工具</label>
           <input
             type="text"
+            id="mes-qc-rqc-line-tool"
+            data-testid="field-tool"
+            data-agent-target="mes-qc-rqc-line:field:tool"
+            data-agent-state={formData.tool ? "filled" : "empty"}
+            aria-label="检测工具"
             value={formData.tool ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, tool: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -111,9 +133,14 @@ export function MesQcRqcLineForm({ open, initialData, onClose, onSuccess }: MesQ
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">检测方法</label>
+          <label htmlFor="mes-qc-rqc-line-check_method" className="block text-xs text-slate-600 mb-1">检测方法</label>
           <input
             type="text"
+            id="mes-qc-rqc-line-check_method"
+            data-testid="field-check_method"
+            data-agent-target="mes-qc-rqc-line:field:check_method"
+            data-agent-state={formData.check_method ? "filled" : "empty"}
+            aria-label="检测方法"
             value={formData.check_method ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, check_method: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -123,9 +150,14 @@ export function MesQcRqcLineForm({ open, initialData, onClose, onSuccess }: MesQ
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">标准值</label>
+          <label htmlFor="mes-qc-rqc-line-standard_value" className="block text-xs text-slate-600 mb-1">标准值</label>
           <input
             type="number"
+            id="mes-qc-rqc-line-standard_value"
+            data-testid="field-standard_value"
+            data-agent-target="mes-qc-rqc-line:field:standard_value"
+            data-agent-state={formData.standard_value == null || formData.standard_value === "" ? "empty" : "filled"}
+            aria-label="标准值"
             value={formData.standard_value != null ? String(formData.standard_value) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, standard_value: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -135,9 +167,14 @@ export function MesQcRqcLineForm({ open, initialData, onClose, onSuccess }: MesQ
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">计量单位 ID</label>
+          <label htmlFor="mes-qc-rqc-line-unit_measure_id" className="block text-xs text-slate-600 mb-1">计量单位 ID</label>
           <input
             type="number"
+            id="mes-qc-rqc-line-unit_measure_id"
+            data-testid="field-unit_measure_id"
+            data-agent-target="mes-qc-rqc-line:field:unit_measure_id"
+            data-agent-state={formData.unit_measure_id == null || formData.unit_measure_id === "" ? "empty" : "filled"}
+            aria-label="计量单位 ID"
             value={formData.unit_measure_id != null ? String(formData.unit_measure_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, unit_measure_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -147,9 +184,14 @@ export function MesQcRqcLineForm({ open, initialData, onClose, onSuccess }: MesQ
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">误差上限</label>
+          <label htmlFor="mes-qc-rqc-line-max_threshold" className="block text-xs text-slate-600 mb-1">误差上限</label>
           <input
             type="number"
+            id="mes-qc-rqc-line-max_threshold"
+            data-testid="field-max_threshold"
+            data-agent-target="mes-qc-rqc-line:field:max_threshold"
+            data-agent-state={formData.max_threshold == null || formData.max_threshold === "" ? "empty" : "filled"}
+            aria-label="误差上限"
             value={formData.max_threshold != null ? String(formData.max_threshold) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, max_threshold: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -159,9 +201,14 @@ export function MesQcRqcLineForm({ open, initialData, onClose, onSuccess }: MesQ
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">误差下限</label>
+          <label htmlFor="mes-qc-rqc-line-min_threshold" className="block text-xs text-slate-600 mb-1">误差下限</label>
           <input
             type="number"
+            id="mes-qc-rqc-line-min_threshold"
+            data-testid="field-min_threshold"
+            data-agent-target="mes-qc-rqc-line:field:min_threshold"
+            data-agent-state={formData.min_threshold == null || formData.min_threshold === "" ? "empty" : "filled"}
+            aria-label="误差下限"
             value={formData.min_threshold != null ? String(formData.min_threshold) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, min_threshold: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,9 +218,14 @@ export function MesQcRqcLineForm({ open, initialData, onClose, onSuccess }: MesQ
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">致命缺陷数量</label>
+          <label htmlFor="mes-qc-rqc-line-critical_quantity" className="block text-xs text-slate-600 mb-1">致命缺陷数量</label>
           <input
             type="number"
+            id="mes-qc-rqc-line-critical_quantity"
+            data-testid="field-critical_quantity"
+            data-agent-target="mes-qc-rqc-line:field:critical_quantity"
+            data-agent-state={formData.critical_quantity == null || formData.critical_quantity === "" ? "empty" : "filled"}
+            aria-label="致命缺陷数量"
             value={formData.critical_quantity != null ? String(formData.critical_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, critical_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -183,9 +235,14 @@ export function MesQcRqcLineForm({ open, initialData, onClose, onSuccess }: MesQ
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">严重缺陷数量</label>
+          <label htmlFor="mes-qc-rqc-line-major_quantity" className="block text-xs text-slate-600 mb-1">严重缺陷数量</label>
           <input
             type="number"
+            id="mes-qc-rqc-line-major_quantity"
+            data-testid="field-major_quantity"
+            data-agent-target="mes-qc-rqc-line:field:major_quantity"
+            data-agent-state={formData.major_quantity == null || formData.major_quantity === "" ? "empty" : "filled"}
+            aria-label="严重缺陷数量"
             value={formData.major_quantity != null ? String(formData.major_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, major_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -195,9 +252,14 @@ export function MesQcRqcLineForm({ open, initialData, onClose, onSuccess }: MesQ
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">轻微缺陷数量</label>
+          <label htmlFor="mes-qc-rqc-line-minor_quantity" className="block text-xs text-slate-600 mb-1">轻微缺陷数量</label>
           <input
             type="number"
+            id="mes-qc-rqc-line-minor_quantity"
+            data-testid="field-minor_quantity"
+            data-agent-target="mes-qc-rqc-line:field:minor_quantity"
+            data-agent-state={formData.minor_quantity == null || formData.minor_quantity === "" ? "empty" : "filled"}
+            aria-label="轻微缺陷数量"
             value={formData.minor_quantity != null ? String(formData.minor_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, minor_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -207,9 +269,14 @@ export function MesQcRqcLineForm({ open, initialData, onClose, onSuccess }: MesQ
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-qc-rqc-line-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-qc-rqc-line-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-qc-rqc-line:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -223,6 +290,8 @@ export function MesQcRqcLineForm({ open, initialData, onClose, onSuccess }: MesQ
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-qc-rqc-line-form-cancel"
+              data-agent-target="mes-qc-rqc-line:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -230,6 +299,9 @@ export function MesQcRqcLineForm({ open, initialData, onClose, onSuccess }: MesQ
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-qc-rqc-line-form-submit"
+              data-agent-target="mes-qc-rqc-line:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

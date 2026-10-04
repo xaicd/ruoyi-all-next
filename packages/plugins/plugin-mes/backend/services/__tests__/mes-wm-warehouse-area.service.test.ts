@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesWmWarehouseAreaService } from "../mes-wm-warehouse-area.service"
 
 describe("MesWmWarehouseAreaService", () => {
-  it("should create and query MesWmWarehouseArea（源框架导入）", async () => {
+  it("should create and query MES 库位", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmWarehouseAreaService.create({
-        code: "测试MesWmWarehouseArea（源框架导入）",
+        code: "测试MES 库位",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("MesWmWarehouseAreaService", () => {
   
       const updated = await MesWmWarehouseAreaService.update(created.id, {
         id: created.id,
-        code: "更新MesWmWarehouseArea（源框架导入）",
+        code: "更新MES 库位",
       } as any)
       expect(updated).toBeDefined()
   

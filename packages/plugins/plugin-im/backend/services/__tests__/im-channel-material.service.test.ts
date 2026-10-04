@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ImChannelMaterialService } from "../im-channel-material.service"
 
 describe("ImChannelMaterialService", () => {
-  it("should create and query ImChannelMaterial（源框架导入）", async () => {
+  it("should create and query IM 频道素材 DO业务语义：- 运营素材库，可被反复推送- 一条素材 1:N 关联多条 - 富文本仅在素材详情接口按需返回，推送 payload 不带，避免压爆 WebSocket 通道", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImChannelMaterialService.create({
         channel_id: 1,
@@ -21,7 +21,7 @@ describe("ImChannelMaterialService", () => {
   
       const updated = await ImChannelMaterialService.update(created.id, {
         id: created.id,
-        channel_id: "更新ImChannelMaterial（源框架导入）",
+        channel_id: "更新IM 频道素材 DO业务语义：- 运营素材库，可被反复推送- 一条素材 1:N 关联多条 - 富文本仅在素材详情接口按需返回，推送 payload 不带，避免压爆 WebSocket 通道",
       } as any)
       expect(updated).toBeDefined()
   

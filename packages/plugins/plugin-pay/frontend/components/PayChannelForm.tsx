@@ -54,24 +54,36 @@ export function PayChannelForm({ open, initialData, onClose, onSuccess }: PayCha
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="pay-channel-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑支付渠道 DO一个应用下，会有多种支付渠道，例如说微信支付、支付宝支付等等即 PayAppDO : PayChannelDO = 1 : n" : "新增支付渠道 DO一个应用下，会有多种支付渠道，例如说微信支付、支付宝支付等等即 PayAppDO : PayChannelDO = 1 : n"}
+        data-testid="pay-channel-form"
+        data-agent-scope="pay-channel:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑PayChannel（源框架导入）" : "新增PayChannel（源框架导入）"}
+            {isEdit ? "编辑支付渠道 DO一个应用下，会有多种支付渠道，例如说微信支付、支付宝支付等等即 PayAppDO : PayChannelDO = 1 : n" : "新增支付渠道 DO一个应用下，会有多种支付渠道，例如说微信支付、支付宝支付等等即 PayAppDO : PayChannelDO = 1 : n"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="pay-channel-form-close" data-agent-target="pay-channel:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="pay-channel-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">渠道编码</label>
+          <label htmlFor="pay-channel-code" className="block text-xs text-slate-600 mb-1">渠道编码</label>
           <input
             type="text"
+            id="pay-channel-code"
+            data-testid="field-code"
+            data-agent-target="pay-channel:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="渠道编码"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -81,9 +93,14 @@ export function PayChannelForm({ open, initialData, onClose, onSuccess }: PayCha
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="pay-channel-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="pay-channel-status"
+            data-testid="field-status"
+            data-agent-target="pay-channel:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -93,9 +110,14 @@ export function PayChannelForm({ open, initialData, onClose, onSuccess }: PayCha
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">渠道费率，单位：百分比</label>
+          <label htmlFor="pay-channel-fee_rate" className="block text-xs text-slate-600 mb-1">渠道费率，单位：百分比</label>
           <input
             type="number"
+            id="pay-channel-fee_rate"
+            data-testid="field-fee_rate"
+            data-agent-target="pay-channel:field:fee_rate"
+            data-agent-state={formData.fee_rate == null || formData.fee_rate === "" ? "empty" : "filled"}
+            aria-label="渠道费率，单位：百分比"
             value={formData.fee_rate != null ? String(formData.fee_rate) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, fee_rate: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -105,9 +127,14 @@ export function PayChannelForm({ open, initialData, onClose, onSuccess }: PayCha
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="pay-channel-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="pay-channel-remark"
+            data-testid="field-remark"
+            data-agent-target="pay-channel:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -117,9 +144,14 @@ export function PayChannelForm({ open, initialData, onClose, onSuccess }: PayCha
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">应用编号</label>
+          <label htmlFor="pay-channel-app_id" className="block text-xs text-slate-600 mb-1">应用编号</label>
           <input
             type="number"
+            id="pay-channel-app_id"
+            data-testid="field-app_id"
+            data-agent-target="pay-channel:field:app_id"
+            data-agent-state={formData.app_id == null || formData.app_id === "" ? "empty" : "filled"}
+            aria-label="应用编号"
             value={formData.app_id != null ? String(formData.app_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, app_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -129,9 +161,14 @@ export function PayChannelForm({ open, initialData, onClose, onSuccess }: PayCha
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">支付渠道配置</label>
+          <label htmlFor="pay-channel-config" className="block text-xs text-slate-600 mb-1">支付渠道配置</label>
           <input
             type="text"
+            id="pay-channel-config"
+            data-testid="field-config"
+            data-agent-target="pay-channel:field:config"
+            data-agent-state={formData.config ? "filled" : "empty"}
+            aria-label="支付渠道配置"
             value={formData.config ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, config: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -145,6 +182,8 @@ export function PayChannelForm({ open, initialData, onClose, onSuccess }: PayCha
             <button
               type="button"
               onClick={onClose}
+              data-testid="pay-channel-form-cancel"
+              data-agent-target="pay-channel:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -152,6 +191,9 @@ export function PayChannelForm({ open, initialData, onClose, onSuccess }: PayCha
             <button
               type="submit"
               disabled={loading}
+              data-testid="pay-channel-form-submit"
+              data-agent-target="pay-channel:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

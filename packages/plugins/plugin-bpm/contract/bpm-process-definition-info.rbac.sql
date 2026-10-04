@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for BpmProcessDefinitionInfo（源框架导入） (BpmProcessDefinitionInfo)
+-- Auto-generated RBAC & Menu Migration for BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表 (BpmProcessDefinitionInfo)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-bpm-process-definition-info',
   'bpm-dir',
-  'BpmProcessDefinitionInfo（源框架导入）管理',
+  'BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表管理',
   '/admin/bpm/bpm-process-definition-info',
   'bpm/bpm-process-definition-info/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-bpm-process-definition-info-query',  'menu-bpm-process-definition-info', '查询BpmProcessDefinitionInfo（源框架导入）', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_definition_info:query',  1, NOW(), NOW()),
-('menu-bpm-process-definition-info-create', 'menu-bpm-process-definition-info', '新增BpmProcessDefinitionInfo（源框架导入）', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_definition_info:create', 2, NOW(), NOW()),
-('menu-bpm-process-definition-info-update', 'menu-bpm-process-definition-info', '修改BpmProcessDefinitionInfo（源框架导入）', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_definition_info:update', 3, NOW(), NOW()),
-('menu-bpm-process-definition-info-delete', 'menu-bpm-process-definition-info', '删除BpmProcessDefinitionInfo（源框架导入）', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_definition_info:delete', 4, NOW(), NOW())
+('menu-bpm-process-definition-info-query',  'menu-bpm-process-definition-info', '查询BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_definition_info:query',  1, NOW(), NOW()),
+('menu-bpm-process-definition-info-create', 'menu-bpm-process-definition-info', '新增BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_definition_info:create', 2, NOW(), NOW()),
+('menu-bpm-process-definition-info-update', 'menu-bpm-process-definition-info', '修改BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_definition_info:update', 3, NOW(), NOW()),
+('menu-bpm-process-definition-info-delete', 'menu-bpm-process-definition-info', '删除BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_definition_info:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

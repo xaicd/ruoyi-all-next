@@ -1,0 +1,204 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "bpm",
+  "entity": "BpmProcessExpression",
+  "kebab": "bpm-process-expression",
+  "businessName": "BPM 流程表达式",
+  "permissionPrefix": "bpm:bpm_process_expression",
+  "page": {
+    "route": "/admin/bpm/bpm-process-expression",
+    "title": "BPM 流程表达式管理",
+    "titleSelector": "[data-testid=\"bpm-process-expression-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.bpm/api",
+    "bffMount": "/api/v1/admin/bpm",
+    "resource": "bpm-process-expression",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/bpm-process-expression",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/bpm-process-expression/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/bpm-process-expression"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/bpm-process-expression/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/bpm-process-expression/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"bpm-process-expression-title\"]",
+    "refresh": "[data-testid=\"bpm-process-expression-refresh\"]",
+    "createButton": "[data-testid=\"bpm-process-expression-create\"]",
+    "searchForm": "[data-testid=\"bpm-process-expression-search\"]",
+    "searchSubmit": "[data-testid=\"bpm-process-expression-search-submit\"]",
+    "searchReset": "[data-testid=\"bpm-process-expression-search-reset\"]",
+    "total": "[data-testid=\"bpm-process-expression-total\"]",
+    "table": "[data-testid=\"bpm-process-expression-table\"]",
+    "row": "[data-testid=\"bpm-process-expression-row\"]",
+    "editButton": "[data-testid=\"bpm-process-expression-edit\"]",
+    "deleteButton": "[data-testid=\"bpm-process-expression-delete\"]",
+    "form": "[data-testid=\"bpm-process-expression-form\"]",
+    "formError": "[data-testid=\"bpm-process-expression-form-error\"]",
+    "formSubmit": "[data-testid=\"bpm-process-expression-form-submit\"]",
+    "formCancel": "[data-testid=\"bpm-process-expression-form-cancel\"]",
+    "formClose": "[data-testid=\"bpm-process-expression-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "BPM 流程表达式列表",
+    "dialogLabel": {
+      "create": "新增BPM 流程表达式",
+      "edit": "编辑BPM 流程表达式"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "表达式名字",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "status",
+        "label": "表达式状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "expression",
+        "label": "表达式",
+        "type": "string",
+        "required": false,
+        "testId": "field-expression",
+        "selector": "[data-testid=\"field-expression\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "bpm-process-expression",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"bpm-process-expression\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"bpm-process-expression-form-overlay\"]",
+      "dialog": "[data-testid=\"bpm-process-expression-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "bpm-process-expression:search",
+      "reset": "bpm-process-expression:reset",
+      "refresh": "bpm-process-expression:refresh",
+      "create": "bpm-process-expression:create",
+      "edit": "bpm-process-expression:edit",
+      "delete": "bpm-process-expression:delete",
+      "submit": "bpm-process-expression:submit",
+      "cancel": "bpm-process-expression:cancel",
+      "close": "bpm-process-expression:close",
+      "row": "bpm-process-expression:row",
+      "pagination": "bpm-process-expression:pagination",
+      "fields": {
+        "name": "bpm-process-expression:field:name",
+        "status": "bpm-process-expression:field:status",
+        "expression": "bpm-process-expression:field:expression"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "bpm.bpm-process-expression",
+      "examples": [
+        "bpm.bpm-process-expression__List__Refresh",
+        "bpm.bpm-process-expression__ListItem__Open",
+        "bpm.bpm-process-expression__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

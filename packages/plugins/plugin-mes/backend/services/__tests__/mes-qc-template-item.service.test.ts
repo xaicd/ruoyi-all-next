@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesQcTemplateItemService } from "../mes-qc-template-item.service"
 
 describe("MesQcTemplateItemService", () => {
-  it("should create and query MesQcTemplateItem（源框架导入）", async () => {
+  it("should create and query MES 质检方案-产品关联", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesQcTemplateItemService.create({
         template_id: 1,
@@ -21,7 +21,7 @@ describe("MesQcTemplateItemService", () => {
   
       const updated = await MesQcTemplateItemService.update(created.id, {
         id: created.id,
-        template_id: "更新MesQcTemplateItem（源框架导入）",
+        template_id: "更新MES 质检方案-产品关联",
       } as any)
       expect(updated).toBeDefined()
   

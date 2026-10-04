@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for PayRefund（源框架导入） (PayRefund)
+-- Auto-generated RBAC & Menu Migration for 支付退款单 DO一个支付订单，可以拥有多个支付退款单即 PayOrderDO : PayRefundDO = 1 : n (PayRefund)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-pay-refund',
   'pay-dir',
-  'PayRefund（源框架导入）管理',
+  '支付退款单 DO一个支付订单，可以拥有多个支付退款单即 PayOrderDO : PayRefundDO = 1 : n管理',
   '/admin/pay/pay-refund',
   'pay/pay-refund/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-pay-refund-query',  'menu-pay-refund', '查询PayRefund（源框架导入）', 'BUTTON', 'ACTIVE', 'pay:pay_refund:query',  1, NOW(), NOW()),
-('menu-pay-refund-create', 'menu-pay-refund', '新增PayRefund（源框架导入）', 'BUTTON', 'ACTIVE', 'pay:pay_refund:create', 2, NOW(), NOW()),
-('menu-pay-refund-update', 'menu-pay-refund', '修改PayRefund（源框架导入）', 'BUTTON', 'ACTIVE', 'pay:pay_refund:update', 3, NOW(), NOW()),
-('menu-pay-refund-delete', 'menu-pay-refund', '删除PayRefund（源框架导入）', 'BUTTON', 'ACTIVE', 'pay:pay_refund:delete', 4, NOW(), NOW())
+('menu-pay-refund-query',  'menu-pay-refund', '查询支付退款单 DO一个支付订单，可以拥有多个支付退款单即 PayOrderDO : PayRefundDO = 1 : n', 'BUTTON', 'ACTIVE', 'pay:pay_refund:query',  1, NOW(), NOW()),
+('menu-pay-refund-create', 'menu-pay-refund', '新增支付退款单 DO一个支付订单，可以拥有多个支付退款单即 PayOrderDO : PayRefundDO = 1 : n', 'BUTTON', 'ACTIVE', 'pay:pay_refund:create', 2, NOW(), NOW()),
+('menu-pay-refund-update', 'menu-pay-refund', '修改支付退款单 DO一个支付订单，可以拥有多个支付退款单即 PayOrderDO : PayRefundDO = 1 : n', 'BUTTON', 'ACTIVE', 'pay:pay_refund:update', 3, NOW(), NOW()),
+('menu-pay-refund-delete', 'menu-pay-refund', '删除支付退款单 DO一个支付订单，可以拥有多个支付退款单即 PayOrderDO : PayRefundDO = 1 : n', 'BUTTON', 'ACTIVE', 'pay:pay_refund:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

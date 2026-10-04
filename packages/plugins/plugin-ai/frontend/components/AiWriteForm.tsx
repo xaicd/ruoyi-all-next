@@ -61,24 +61,36 @@ export function AiWriteForm({ open, initialData, onClose, onSuccess }: AiWriteFo
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="ai-write-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑AI 写作" : "新增AI 写作"}
+        data-testid="ai-write-form"
+        data-agent-scope="ai-write:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑AiWrite（源框架导入）" : "新增AiWrite（源框架导入）"}
+            {isEdit ? "编辑AI 写作" : "新增AI 写作"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="ai-write-form-close" data-agent-target="ai-write:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="ai-write-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="ai-write-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="ai-write-user_id"
+            data-testid="field-user_id"
+            data-agent-target="ai-write:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -88,9 +100,14 @@ export function AiWriteForm({ open, initialData, onClose, onSuccess }: AiWriteFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">写作类型</label>
+          <label htmlFor="ai-write-type" className="block text-xs text-slate-600 mb-1">写作类型</label>
           <input
             type="number"
+            id="ai-write-type"
+            data-testid="field-type"
+            data-agent-target="ai-write:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="写作类型"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -100,9 +117,14 @@ export function AiWriteForm({ open, initialData, onClose, onSuccess }: AiWriteFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">平台</label>
+          <label htmlFor="ai-write-platform" className="block text-xs text-slate-600 mb-1">平台</label>
           <input
             type="text"
+            id="ai-write-platform"
+            data-testid="field-platform"
+            data-agent-target="ai-write:field:platform"
+            data-agent-state={formData.platform ? "filled" : "empty"}
+            aria-label="平台"
             value={formData.platform ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, platform: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -112,9 +134,14 @@ export function AiWriteForm({ open, initialData, onClose, onSuccess }: AiWriteFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">模型编号</label>
+          <label htmlFor="ai-write-model_id" className="block text-xs text-slate-600 mb-1">模型编号</label>
           <input
             type="number"
+            id="ai-write-model_id"
+            data-testid="field-model_id"
+            data-agent-target="ai-write:field:model_id"
+            data-agent-state={formData.model_id == null || formData.model_id === "" ? "empty" : "filled"}
+            aria-label="模型编号"
             value={formData.model_id != null ? String(formData.model_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, model_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -124,9 +151,14 @@ export function AiWriteForm({ open, initialData, onClose, onSuccess }: AiWriteFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">模型</label>
+          <label htmlFor="ai-write-model" className="block text-xs text-slate-600 mb-1">模型</label>
           <input
             type="text"
+            id="ai-write-model"
+            data-testid="field-model"
+            data-agent-target="ai-write:field:model"
+            data-agent-state={formData.model ? "filled" : "empty"}
+            aria-label="模型"
             value={formData.model ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, model: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -136,9 +168,14 @@ export function AiWriteForm({ open, initialData, onClose, onSuccess }: AiWriteFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生成内容提示</label>
+          <label htmlFor="ai-write-prompt" className="block text-xs text-slate-600 mb-1">生成内容提示</label>
           <input
             type="text"
+            id="ai-write-prompt"
+            data-testid="field-prompt"
+            data-agent-target="ai-write:field:prompt"
+            data-agent-state={formData.prompt ? "filled" : "empty"}
+            aria-label="生成内容提示"
             value={formData.prompt ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, prompt: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -148,9 +185,14 @@ export function AiWriteForm({ open, initialData, onClose, onSuccess }: AiWriteFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生成的内容</label>
+          <label htmlFor="ai-write-generated_content" className="block text-xs text-slate-600 mb-1">生成的内容</label>
           <input
             type="text"
+            id="ai-write-generated_content"
+            data-testid="field-generated_content"
+            data-agent-target="ai-write:field:generated_content"
+            data-agent-state={formData.generated_content ? "filled" : "empty"}
+            aria-label="生成的内容"
             value={formData.generated_content ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, generated_content: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -160,9 +202,14 @@ export function AiWriteForm({ open, initialData, onClose, onSuccess }: AiWriteFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">原文</label>
+          <label htmlFor="ai-write-original_content" className="block text-xs text-slate-600 mb-1">原文</label>
           <input
             type="text"
+            id="ai-write-original_content"
+            data-testid="field-original_content"
+            data-agent-target="ai-write:field:original_content"
+            data-agent-state={formData.original_content ? "filled" : "empty"}
+            aria-label="原文"
             value={formData.original_content ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, original_content: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -172,9 +219,14 @@ export function AiWriteForm({ open, initialData, onClose, onSuccess }: AiWriteFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">长度提示词</label>
+          <label htmlFor="ai-write-length" className="block text-xs text-slate-600 mb-1">长度提示词</label>
           <input
             type="number"
+            id="ai-write-length"
+            data-testid="field-length"
+            data-agent-target="ai-write:field:length"
+            data-agent-state={formData.length == null || formData.length === "" ? "empty" : "filled"}
+            aria-label="长度提示词"
             value={formData.length != null ? String(formData.length) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, length: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -184,9 +236,14 @@ export function AiWriteForm({ open, initialData, onClose, onSuccess }: AiWriteFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">格式提示词</label>
+          <label htmlFor="ai-write-format" className="block text-xs text-slate-600 mb-1">格式提示词</label>
           <input
             type="number"
+            id="ai-write-format"
+            data-testid="field-format"
+            data-agent-target="ai-write:field:format"
+            data-agent-state={formData.format == null || formData.format === "" ? "empty" : "filled"}
+            aria-label="格式提示词"
             value={formData.format != null ? String(formData.format) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, format: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -196,9 +253,14 @@ export function AiWriteForm({ open, initialData, onClose, onSuccess }: AiWriteFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">语气提示词</label>
+          <label htmlFor="ai-write-tone" className="block text-xs text-slate-600 mb-1">语气提示词</label>
           <input
             type="number"
+            id="ai-write-tone"
+            data-testid="field-tone"
+            data-agent-target="ai-write:field:tone"
+            data-agent-state={formData.tone == null || formData.tone === "" ? "empty" : "filled"}
+            aria-label="语气提示词"
             value={formData.tone != null ? String(formData.tone) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, tone: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -208,9 +270,14 @@ export function AiWriteForm({ open, initialData, onClose, onSuccess }: AiWriteFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">语言提示词</label>
+          <label htmlFor="ai-write-language" className="block text-xs text-slate-600 mb-1">语言提示词</label>
           <input
             type="number"
+            id="ai-write-language"
+            data-testid="field-language"
+            data-agent-target="ai-write:field:language"
+            data-agent-state={formData.language == null || formData.language === "" ? "empty" : "filled"}
+            aria-label="语言提示词"
             value={formData.language != null ? String(formData.language) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, language: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -220,9 +287,14 @@ export function AiWriteForm({ open, initialData, onClose, onSuccess }: AiWriteFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">错误信息</label>
+          <label htmlFor="ai-write-error_message" className="block text-xs text-slate-600 mb-1">错误信息</label>
           <input
             type="text"
+            id="ai-write-error_message"
+            data-testid="field-error_message"
+            data-agent-target="ai-write:field:error_message"
+            data-agent-state={formData.error_message ? "filled" : "empty"}
+            aria-label="错误信息"
             value={formData.error_message ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, error_message: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -236,6 +308,8 @@ export function AiWriteForm({ open, initialData, onClose, onSuccess }: AiWriteFo
             <button
               type="button"
               onClick={onClose}
+              data-testid="ai-write-form-cancel"
+              data-agent-target="ai-write:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -243,6 +317,9 @@ export function AiWriteForm({ open, initialData, onClose, onSuccess }: AiWriteFo
             <button
               type="submit"
               disabled={loading}
+              data-testid="ai-write-form-submit"
+              data-agent-target="ai-write:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for IotDeviceGroup（源框架导入） (IotDeviceGroup)
+-- Auto-generated RBAC & Menu Migration for IoT 设备分组 (IotDeviceGroup)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-iot-device-group',
   'iot-dir',
-  'IotDeviceGroup（源框架导入）管理',
+  'IoT 设备分组管理',
   '/admin/iot/iot-device-group',
   'iot/iot-device-group/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-iot-device-group-query',  'menu-iot-device-group', '查询IotDeviceGroup（源框架导入）', 'BUTTON', 'ACTIVE', 'iot:iot_device_group:query',  1, NOW(), NOW()),
-('menu-iot-device-group-create', 'menu-iot-device-group', '新增IotDeviceGroup（源框架导入）', 'BUTTON', 'ACTIVE', 'iot:iot_device_group:create', 2, NOW(), NOW()),
-('menu-iot-device-group-update', 'menu-iot-device-group', '修改IotDeviceGroup（源框架导入）', 'BUTTON', 'ACTIVE', 'iot:iot_device_group:update', 3, NOW(), NOW()),
-('menu-iot-device-group-delete', 'menu-iot-device-group', '删除IotDeviceGroup（源框架导入）', 'BUTTON', 'ACTIVE', 'iot:iot_device_group:delete', 4, NOW(), NOW())
+('menu-iot-device-group-query',  'menu-iot-device-group', '查询IoT 设备分组', 'BUTTON', 'ACTIVE', 'iot:iot_device_group:query',  1, NOW(), NOW()),
+('menu-iot-device-group-create', 'menu-iot-device-group', '新增IoT 设备分组', 'BUTTON', 'ACTIVE', 'iot:iot_device_group:create', 2, NOW(), NOW()),
+('menu-iot-device-group-update', 'menu-iot-device-group', '修改IoT 设备分组', 'BUTTON', 'ACTIVE', 'iot:iot_device_group:update', 3, NOW(), NOW()),
+('menu-iot-device-group-delete', 'menu-iot-device-group', '删除IoT 设备分组', 'BUTTON', 'ACTIVE', 'iot:iot_device_group:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

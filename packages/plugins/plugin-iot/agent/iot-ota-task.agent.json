@@ -1,0 +1,240 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "iot",
+  "entity": "IotOtaTask",
+  "kebab": "iot-ota-task",
+  "businessName": "IoT OTA 升级任务",
+  "permissionPrefix": "iot:iot_ota_task",
+  "page": {
+    "route": "/admin/iot/iot-ota-task",
+    "title": "IoT OTA 升级任务管理",
+    "titleSelector": "[data-testid=\"iot-ota-task-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.iot/api",
+    "bffMount": "/api/v1/admin/iot",
+    "resource": "iot-ota-task",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/iot-ota-task",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/iot-ota-task/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/iot-ota-task"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/iot-ota-task/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/iot-ota-task/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"iot-ota-task-title\"]",
+    "refresh": "[data-testid=\"iot-ota-task-refresh\"]",
+    "createButton": "[data-testid=\"iot-ota-task-create\"]",
+    "searchForm": "[data-testid=\"iot-ota-task-search\"]",
+    "searchSubmit": "[data-testid=\"iot-ota-task-search-submit\"]",
+    "searchReset": "[data-testid=\"iot-ota-task-search-reset\"]",
+    "total": "[data-testid=\"iot-ota-task-total\"]",
+    "table": "[data-testid=\"iot-ota-task-table\"]",
+    "row": "[data-testid=\"iot-ota-task-row\"]",
+    "editButton": "[data-testid=\"iot-ota-task-edit\"]",
+    "deleteButton": "[data-testid=\"iot-ota-task-delete\"]",
+    "form": "[data-testid=\"iot-ota-task-form\"]",
+    "formError": "[data-testid=\"iot-ota-task-form-error\"]",
+    "formSubmit": "[data-testid=\"iot-ota-task-form-submit\"]",
+    "formCancel": "[data-testid=\"iot-ota-task-form-cancel\"]",
+    "formClose": "[data-testid=\"iot-ota-task-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IoT OTA 升级任务列表",
+    "dialogLabel": {
+      "create": "新增IoT OTA 升级任务",
+      "edit": "编辑IoT OTA 升级任务"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "任务名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "description",
+        "label": "任务描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      },
+      {
+        "name": "firmware_id",
+        "label": "固件编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-firmware_id",
+        "selector": "[data-testid=\"field-firmware_id\"]"
+      },
+      {
+        "name": "status",
+        "label": "任务状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "device_scope",
+        "label": "设备升级范围",
+        "type": "number",
+        "required": false,
+        "testId": "field-device_scope",
+        "selector": "[data-testid=\"field-device_scope\"]"
+      },
+      {
+        "name": "device_total_count",
+        "label": "设备总数数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-device_total_count",
+        "selector": "[data-testid=\"field-device_total_count\"]"
+      },
+      {
+        "name": "device_success_count",
+        "label": "设备成功数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-device_success_count",
+        "selector": "[data-testid=\"field-device_success_count\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "iot-ota-task",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"iot-ota-task\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"iot-ota-task-form-overlay\"]",
+      "dialog": "[data-testid=\"iot-ota-task-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "iot-ota-task:search",
+      "reset": "iot-ota-task:reset",
+      "refresh": "iot-ota-task:refresh",
+      "create": "iot-ota-task:create",
+      "edit": "iot-ota-task:edit",
+      "delete": "iot-ota-task:delete",
+      "submit": "iot-ota-task:submit",
+      "cancel": "iot-ota-task:cancel",
+      "close": "iot-ota-task:close",
+      "row": "iot-ota-task:row",
+      "pagination": "iot-ota-task:pagination",
+      "fields": {
+        "name": "iot-ota-task:field:name",
+        "description": "iot-ota-task:field:description",
+        "firmware_id": "iot-ota-task:field:firmware_id",
+        "status": "iot-ota-task:field:status",
+        "device_scope": "iot-ota-task:field:device_scope",
+        "device_total_count": "iot-ota-task:field:device_total_count",
+        "device_success_count": "iot-ota-task:field:device_success_count"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "iot.iot-ota-task",
+      "examples": [
+        "iot.iot-ota-task__List__Refresh",
+        "iot.iot-ota-task__ListItem__Open",
+        "iot.iot-ota-task__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

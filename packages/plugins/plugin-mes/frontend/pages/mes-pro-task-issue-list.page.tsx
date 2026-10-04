@@ -64,44 +64,63 @@ export function MesProTaskIssueListPage() {
     }
   }
 
+  // Agent-Native: 根节点暴露就绪信号；弹窗打开时基底打 inert，让无障碍树只留弹窗一层
+  const agentState = loading ? "loading" : formOpen ? "modal-open" : total === 0 ? "empty" : "ready"
+
   return (
-    <div className="p-6 space-y-4">
+    <div
+      data-agent-scope="mes-pro-task-issue"
+      data-agent-state={agentState}
+      data-agent-page-ready={String(!loading)}
+      className="p-6 space-y-4"
+    >
+      {/* 弹窗打开时基底内容 inert —— Agent 不会误点到被遮挡的元素 */}
+      <div inert={formOpen ? true : undefined} className="space-y-4">
       {/* 页面头部 */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900">MesProTaskIssue（源框架导入）管理</h1>
-          <p className="text-xs text-slate-500 mt-0.5">MesProTaskIssue（源框架导入）列表与配置管理</p>
+          <h1 data-testid="mes-pro-task-issue-title" className="text-xl font-bold tracking-tight text-slate-900">MES 生产任务投料管理</h1>
+          <p className="text-xs text-slate-500 mt-0.5">MES 生产任务投料列表与配置管理</p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={fetchData}
+            data-testid="mes-pro-task-issue-refresh"
+            data-agent-target="mes-pro-task-issue:refresh"
             className="px-3 py-1.5 text-xs text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
           >
             刷新
           </button>
           <button
             onClick={handleAdd}
+            data-testid="mes-pro-task-issue-create"
+            data-agent-target="mes-pro-task-issue:create"
             className="px-3.5 py-1.5 text-xs text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors font-medium shadow-xs"
           >
-            + 新增MesProTaskIssue（源框架导入）
+            + 新增MES 生产任务投料
           </button>
         </div>
       </div>
 
       {/* 搜索工具栏 */}
-      <form onSubmit={handleSearch} className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3">
+      <form
+        onSubmit={handleSearch}
+        data-testid="mes-pro-task-issue-search"
+        data-agent-scope="mes-pro-task-issue:search"
+        aria-label="MES 生产任务投料搜索"
+        className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3">
 
-          <button type="submit" className="px-3 py-1 text-xs text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition-colors">查询</button>
-          <button type="button" onClick={handleReset} className="px-3 py-1 text-xs text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors">重置</button>
+          <button type="submit" data-testid="mes-pro-task-issue-search-submit" data-agent-target="mes-pro-task-issue:search" className="px-3 py-1 text-xs text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition-colors">查询</button>
+          <button type="button" onClick={handleReset} data-testid="mes-pro-task-issue-search-reset" data-agent-target="mes-pro-task-issue:reset" className="px-3 py-1 text-xs text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors">重置</button>
         </div>
-        <div className="text-xs text-slate-500">共 <span className="font-semibold text-slate-700">{total}</span> 条记录</div>
+        <div className="text-xs text-slate-500">共 <span data-testid="mes-pro-task-issue-total" className="font-semibold text-slate-700">{total}</span> 条记录</div>
       </form>
 
       {/* 数据表格 */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-slate-200">
+          <table data-testid="mes-pro-task-issue-table" aria-label="MES 生产任务投料列表" className="min-w-full divide-y divide-slate-200">
             <thead className="bg-slate-50/80">
               <tr>
                 <th className="px-4 py-2.5 text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider">生产任务编号</th>
@@ -124,7 +143,14 @@ export function MesProTaskIssueListPage() {
                 </tr>
               ) : (
                 data.map((item) => (
-                  <tr key={item.id} className="hover:bg-slate-50/60 transition-colors">
+                  <tr
+                    key={item.id}
+                    data-testid="mes-pro-task-issue-row"
+                    data-agent-target="mes-pro-task-issue:row"
+                    data-agent-state={editItem?.id === item.id ? "editing" : "idle"}
+                    data-agent-id={item.id}
+                    className="hover:bg-slate-50/60 transition-colors"
+                  >
                   <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.task_id ?? "-")}>{String(item.task_id ?? "-")}</td>
                   <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.work_order_id ?? "-")}>{String(item.work_order_id ?? "-")}</td>
                   <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.workstation_id ?? "-")}>{String(item.workstation_id ?? "-")}</td>
@@ -132,8 +158,8 @@ export function MesProTaskIssueListPage() {
                   <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.source_doc_id ?? "-")}>{String(item.source_doc_id ?? "-")}</td>
                   <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.source_line_id ?? "-")}>{String(item.source_line_id ?? "-")}</td>
                     <td className="px-4 py-2.5 text-xs text-right whitespace-nowrap space-x-2">
-                      <button onClick={() => handleEdit(item)} className="text-blue-600 hover:text-blue-800 font-medium">编辑</button>
-                      <button onClick={() => handleDelete(item.id)} className="text-rose-600 hover:text-rose-800 font-medium">删除</button>
+                      <button onClick={() => handleEdit(item)} data-testid="mes-pro-task-issue-edit" data-agent-target="mes-pro-task-issue:edit" data-agent-id={item.id} aria-label={"编辑 " + item.id} className="text-blue-600 hover:text-blue-800 font-medium">编辑</button>
+                      <button onClick={() => handleDelete(item.id)} data-testid="mes-pro-task-issue-delete" data-agent-target="mes-pro-task-issue:delete" data-agent-id={item.id} aria-label={"删除 " + item.id} className="text-rose-600 hover:text-rose-800 font-medium">删除</button>
                     </td>
                   </tr>
                 ))
@@ -143,7 +169,7 @@ export function MesProTaskIssueListPage() {
         </div>
 
         {/* 分页组件 */}
-        <div className="p-3 border-t border-slate-200">
+        <div data-agent-target="mes-pro-task-issue:pagination" className="p-3 border-t border-slate-200">
           <Pagination
             total={total}
             page={page}
@@ -152,6 +178,8 @@ export function MesProTaskIssueListPage() {
             onPageSizeChange={(ps) => setPageSize(ps)}
           />
         </div>
+      </div>
+
       </div>
 
       {/* 弹窗表单 */}

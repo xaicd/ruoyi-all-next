@@ -69,24 +69,36 @@ export function ProductCommentForm({ open, initialData, onClose, onSuccess }: Pr
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="product-comment-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑商品评论" : "新增商品评论"}
+        data-testid="product-comment-form"
+        data-agent-scope="product-comment:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑ProductComment（源框架导入）" : "新增ProductComment（源框架导入）"}
+            {isEdit ? "编辑商品评论" : "新增商品评论"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="product-comment-form-close" data-agent-target="product-comment:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="product-comment-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">评价人的用户编号</label>
+          <label htmlFor="product-comment-user_id" className="block text-xs text-slate-600 mb-1">评价人的用户编号</label>
           <input
             type="number"
+            id="product-comment-user_id"
+            data-testid="field-user_id"
+            data-agent-target="product-comment:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="评价人的用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -96,9 +108,14 @@ export function ProductCommentForm({ open, initialData, onClose, onSuccess }: Pr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">评价人名称</label>
+          <label htmlFor="product-comment-user_nickname" className="block text-xs text-slate-600 mb-1">评价人名称</label>
           <input
             type="text"
+            id="product-comment-user_nickname"
+            data-testid="field-user_nickname"
+            data-agent-target="product-comment:field:user_nickname"
+            data-agent-state={formData.user_nickname ? "filled" : "empty"}
+            aria-label="评价人名称"
             value={formData.user_nickname ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_nickname: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -108,9 +125,14 @@ export function ProductCommentForm({ open, initialData, onClose, onSuccess }: Pr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">评价人头像</label>
+          <label htmlFor="product-comment-user_avatar" className="block text-xs text-slate-600 mb-1">评价人头像</label>
           <input
             type="text"
+            id="product-comment-user_avatar"
+            data-testid="field-user_avatar"
+            data-agent-target="product-comment:field:user_avatar"
+            data-agent-state={formData.user_avatar ? "filled" : "empty"}
+            aria-label="评价人头像"
             value={formData.user_avatar ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_avatar: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -122,18 +144,27 @@ export function ProductCommentForm({ open, initialData, onClose, onSuccess }: Pr
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="anonymous"
+            id="product-comment-anonymous"
+            data-testid="field-anonymous"
+            data-agent-target="product-comment:field:anonymous"
+            data-agent-state={formData.anonymous ? "on" : "off"}
+            aria-label="是否匿名"
             checked={Boolean(formData.anonymous)}
             onChange={(e) => setFormData((prev) => ({ ...prev, anonymous: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="anonymous" className="text-xs text-slate-700 font-medium">是否匿名</label>
+          <label htmlFor="product-comment-anonymous" className="text-xs text-slate-700 font-medium">是否匿名</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">交易订单编号</label>
+          <label htmlFor="product-comment-order_id" className="block text-xs text-slate-600 mb-1">交易订单编号</label>
           <input
             type="number"
+            id="product-comment-order_id"
+            data-testid="field-order_id"
+            data-agent-target="product-comment:field:order_id"
+            data-agent-state={formData.order_id == null || formData.order_id === "" ? "empty" : "filled"}
+            aria-label="交易订单编号"
             value={formData.order_id != null ? String(formData.order_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, order_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -143,9 +174,14 @@ export function ProductCommentForm({ open, initialData, onClose, onSuccess }: Pr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">交易订单项编号</label>
+          <label htmlFor="product-comment-order_item_id" className="block text-xs text-slate-600 mb-1">交易订单项编号</label>
           <input
             type="number"
+            id="product-comment-order_item_id"
+            data-testid="field-order_item_id"
+            data-agent-target="product-comment:field:order_item_id"
+            data-agent-state={formData.order_item_id == null || formData.order_item_id === "" ? "empty" : "filled"}
+            aria-label="交易订单项编号"
             value={formData.order_item_id != null ? String(formData.order_item_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, order_item_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -155,9 +191,14 @@ export function ProductCommentForm({ open, initialData, onClose, onSuccess }: Pr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品 SPU 编号</label>
+          <label htmlFor="product-comment-spu_id" className="block text-xs text-slate-600 mb-1">商品 SPU 编号</label>
           <input
             type="number"
+            id="product-comment-spu_id"
+            data-testid="field-spu_id"
+            data-agent-target="product-comment:field:spu_id"
+            data-agent-state={formData.spu_id == null || formData.spu_id === "" ? "empty" : "filled"}
+            aria-label="商品 SPU 编号"
             value={formData.spu_id != null ? String(formData.spu_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, spu_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -167,9 +208,14 @@ export function ProductCommentForm({ open, initialData, onClose, onSuccess }: Pr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品 SPU 名称</label>
+          <label htmlFor="product-comment-spu_name" className="block text-xs text-slate-600 mb-1">商品 SPU 名称</label>
           <input
             type="text"
+            id="product-comment-spu_name"
+            data-testid="field-spu_name"
+            data-agent-target="product-comment:field:spu_name"
+            data-agent-state={formData.spu_name ? "filled" : "empty"}
+            aria-label="商品 SPU 名称"
             value={formData.spu_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, spu_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -179,9 +225,14 @@ export function ProductCommentForm({ open, initialData, onClose, onSuccess }: Pr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品 SKU 编号</label>
+          <label htmlFor="product-comment-sku_id" className="block text-xs text-slate-600 mb-1">商品 SKU 编号</label>
           <input
             type="number"
+            id="product-comment-sku_id"
+            data-testid="field-sku_id"
+            data-agent-target="product-comment:field:sku_id"
+            data-agent-state={formData.sku_id == null || formData.sku_id === "" ? "empty" : "filled"}
+            aria-label="商品 SKU 编号"
             value={formData.sku_id != null ? String(formData.sku_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sku_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -191,9 +242,14 @@ export function ProductCommentForm({ open, initialData, onClose, onSuccess }: Pr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品 SKU 图片地址</label>
+          <label htmlFor="product-comment-sku_pic_url" className="block text-xs text-slate-600 mb-1">商品 SKU 图片地址</label>
           <input
             type="text"
+            id="product-comment-sku_pic_url"
+            data-testid="field-sku_pic_url"
+            data-agent-target="product-comment:field:sku_pic_url"
+            data-agent-state={formData.sku_pic_url ? "filled" : "empty"}
+            aria-label="商品 SKU 图片地址"
             value={formData.sku_pic_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sku_pic_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -203,9 +259,14 @@ export function ProductCommentForm({ open, initialData, onClose, onSuccess }: Pr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">属性数组，JSON 格式</label>
+          <label htmlFor="product-comment-sku_properties" className="block text-xs text-slate-600 mb-1">属性数组，JSON 格式</label>
           <input
             type="text"
+            id="product-comment-sku_properties"
+            data-testid="field-sku_properties"
+            data-agent-target="product-comment:field:sku_properties"
+            data-agent-state={formData.sku_properties ? "filled" : "empty"}
+            aria-label="属性数组，JSON 格式"
             value={formData.sku_properties ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sku_properties: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -217,18 +278,27 @@ export function ProductCommentForm({ open, initialData, onClose, onSuccess }: Pr
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="visible"
+            id="product-comment-visible"
+            data-testid="field-visible"
+            data-agent-target="product-comment:field:visible"
+            data-agent-state={formData.visible ? "on" : "off"}
+            aria-label="是否可见"
             checked={Boolean(formData.visible)}
             onChange={(e) => setFormData((prev) => ({ ...prev, visible: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="visible" className="text-xs text-slate-700 font-medium">是否可见</label>
+          <label htmlFor="product-comment-visible" className="text-xs text-slate-700 font-medium">是否可见</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">评分星级</label>
+          <label htmlFor="product-comment-scores" className="block text-xs text-slate-600 mb-1">评分星级</label>
           <input
             type="number"
+            id="product-comment-scores"
+            data-testid="field-scores"
+            data-agent-target="product-comment:field:scores"
+            data-agent-state={formData.scores == null || formData.scores === "" ? "empty" : "filled"}
+            aria-label="评分星级"
             value={formData.scores != null ? String(formData.scores) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, scores: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -238,9 +308,14 @@ export function ProductCommentForm({ open, initialData, onClose, onSuccess }: Pr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">描述星级</label>
+          <label htmlFor="product-comment-description_scores" className="block text-xs text-slate-600 mb-1">描述星级</label>
           <input
             type="number"
+            id="product-comment-description_scores"
+            data-testid="field-description_scores"
+            data-agent-target="product-comment:field:description_scores"
+            data-agent-state={formData.description_scores == null || formData.description_scores === "" ? "empty" : "filled"}
+            aria-label="描述星级"
             value={formData.description_scores != null ? String(formData.description_scores) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, description_scores: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -250,9 +325,14 @@ export function ProductCommentForm({ open, initialData, onClose, onSuccess }: Pr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">服务星级</label>
+          <label htmlFor="product-comment-benefit_scores" className="block text-xs text-slate-600 mb-1">服务星级</label>
           <input
             type="number"
+            id="product-comment-benefit_scores"
+            data-testid="field-benefit_scores"
+            data-agent-target="product-comment:field:benefit_scores"
+            data-agent-state={formData.benefit_scores == null || formData.benefit_scores === "" ? "empty" : "filled"}
+            aria-label="服务星级"
             value={formData.benefit_scores != null ? String(formData.benefit_scores) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, benefit_scores: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -262,9 +342,14 @@ export function ProductCommentForm({ open, initialData, onClose, onSuccess }: Pr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">评论内容</label>
+          <label htmlFor="product-comment-content" className="block text-xs text-slate-600 mb-1">评论内容</label>
           <input
             type="text"
+            id="product-comment-content"
+            data-testid="field-content"
+            data-agent-target="product-comment:field:content"
+            data-agent-state={formData.content ? "filled" : "empty"}
+            aria-label="评论内容"
             value={formData.content ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, content: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -274,9 +359,14 @@ export function ProductCommentForm({ open, initialData, onClose, onSuccess }: Pr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">评论图片地址数组</label>
+          <label htmlFor="product-comment-pic_urls" className="block text-xs text-slate-600 mb-1">评论图片地址数组</label>
           <input
             type="text"
+            id="product-comment-pic_urls"
+            data-testid="field-pic_urls"
+            data-agent-target="product-comment:field:pic_urls"
+            data-agent-state={formData.pic_urls ? "filled" : "empty"}
+            aria-label="评论图片地址数组"
             value={formData.pic_urls ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pic_urls: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -288,18 +378,27 @@ export function ProductCommentForm({ open, initialData, onClose, onSuccess }: Pr
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="reply_status"
+            id="product-comment-reply_status"
+            data-testid="field-reply_status"
+            data-agent-target="product-comment:field:reply_status"
+            data-agent-state={formData.reply_status ? "on" : "off"}
+            aria-label="商家是否回复"
             checked={Boolean(formData.reply_status)}
             onChange={(e) => setFormData((prev) => ({ ...prev, reply_status: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="reply_status" className="text-xs text-slate-700 font-medium">商家是否回复</label>
+          <label htmlFor="product-comment-reply_status" className="text-xs text-slate-700 font-medium">商家是否回复</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">回复管理员编号</label>
+          <label htmlFor="product-comment-reply_user_id" className="block text-xs text-slate-600 mb-1">回复管理员编号</label>
           <input
             type="number"
+            id="product-comment-reply_user_id"
+            data-testid="field-reply_user_id"
+            data-agent-target="product-comment:field:reply_user_id"
+            data-agent-state={formData.reply_user_id == null || formData.reply_user_id === "" ? "empty" : "filled"}
+            aria-label="回复管理员编号"
             value={formData.reply_user_id != null ? String(formData.reply_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, reply_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -309,9 +408,14 @@ export function ProductCommentForm({ open, initialData, onClose, onSuccess }: Pr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商家回复内容</label>
+          <label htmlFor="product-comment-reply_content" className="block text-xs text-slate-600 mb-1">商家回复内容</label>
           <input
             type="text"
+            id="product-comment-reply_content"
+            data-testid="field-reply_content"
+            data-agent-target="product-comment:field:reply_content"
+            data-agent-state={formData.reply_content ? "filled" : "empty"}
+            aria-label="商家回复内容"
             value={formData.reply_content ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, reply_content: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -321,9 +425,14 @@ export function ProductCommentForm({ open, initialData, onClose, onSuccess }: Pr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商家回复时间</label>
+          <label htmlFor="product-comment-reply_time" className="block text-xs text-slate-600 mb-1">商家回复时间</label>
           <input
             type="text"
+            id="product-comment-reply_time"
+            data-testid="field-reply_time"
+            data-agent-target="product-comment:field:reply_time"
+            data-agent-state={formData.reply_time ? "filled" : "empty"}
+            aria-label="商家回复时间"
             value={formData.reply_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, reply_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -337,6 +446,8 @@ export function ProductCommentForm({ open, initialData, onClose, onSuccess }: Pr
             <button
               type="button"
               onClick={onClose}
+              data-testid="product-comment-form-cancel"
+              data-agent-target="product-comment:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -344,6 +455,9 @@ export function ProductCommentForm({ open, initialData, onClose, onSuccess }: Pr
             <button
               type="submit"
               disabled={loading}
+              data-testid="product-comment-form-submit"
+              data-agent-target="product-comment:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { BargainRecordService } from "../bargain-record.service"
 
 describe("BargainRecordService", () => {
-  it("should create and query BargainRecord（源框架导入）", async () => {
+  it("should create and query 砍价记录 DO TO", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await BargainRecordService.create({
         user_id: 1,
@@ -21,7 +21,7 @@ describe("BargainRecordService", () => {
   
       const updated = await BargainRecordService.update(created.id, {
         id: created.id,
-        user_id: "更新BargainRecord（源框架导入）",
+        user_id: "更新砍价记录 DO TO",
       } as any)
       expect(updated).toBeDefined()
   

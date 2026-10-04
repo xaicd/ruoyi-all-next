@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { PayWalletTransactionService } from "../pay-wallet-transaction.service"
 
 describe("PayWalletTransactionService", () => {
-  it("should create and query PayWalletTransaction（源框架导入）", async () => {
+  it("should create and query 会员钱包流水", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await PayWalletTransactionService.create({
-        no: "测试PayWalletTransaction（源框架导入）",
+        no: "测试会员钱包流水",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("PayWalletTransactionService", () => {
   
       const updated = await PayWalletTransactionService.update(created.id, {
         id: created.id,
-        no: "更新PayWalletTransaction（源框架导入）",
+        no: "更新会员钱包流水",
       } as any)
       expect(updated).toBeDefined()
   

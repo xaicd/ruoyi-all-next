@@ -56,24 +56,36 @@ export function KeFuConversationForm({ open, initialData, onClose, onSuccess }: 
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="ke-fu-conversation-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑客服会话" : "新增客服会话"}
+        data-testid="ke-fu-conversation-form"
+        data-agent-scope="ke-fu-conversation:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑KeFuConversation（源框架导入）" : "新增KeFuConversation（源框架导入）"}
+            {isEdit ? "编辑客服会话" : "新增客服会话"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="ke-fu-conversation-form-close" data-agent-target="ke-fu-conversation:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="ke-fu-conversation-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">会话所属用户</label>
+          <label htmlFor="ke-fu-conversation-user_id" className="block text-xs text-slate-600 mb-1">会话所属用户</label>
           <input
             type="number"
+            id="ke-fu-conversation-user_id"
+            data-testid="field-user_id"
+            data-agent-target="ke-fu-conversation:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="会话所属用户"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -83,9 +95,14 @@ export function KeFuConversationForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最后聊天时间</label>
+          <label htmlFor="ke-fu-conversation-last_message_time" className="block text-xs text-slate-600 mb-1">最后聊天时间</label>
           <input
             type="text"
+            id="ke-fu-conversation-last_message_time"
+            data-testid="field-last_message_time"
+            data-agent-target="ke-fu-conversation:field:last_message_time"
+            data-agent-state={formData.last_message_time ? "filled" : "empty"}
+            aria-label="最后聊天时间"
             value={formData.last_message_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, last_message_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -95,9 +112,14 @@ export function KeFuConversationForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最后聊天内容</label>
+          <label htmlFor="ke-fu-conversation-last_message_content" className="block text-xs text-slate-600 mb-1">最后聊天内容</label>
           <input
             type="text"
+            id="ke-fu-conversation-last_message_content"
+            data-testid="field-last_message_content"
+            data-agent-target="ke-fu-conversation:field:last_message_content"
+            data-agent-state={formData.last_message_content ? "filled" : "empty"}
+            aria-label="最后聊天内容"
             value={formData.last_message_content ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, last_message_content: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -107,9 +129,14 @@ export function KeFuConversationForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最后发送的消息类型</label>
+          <label htmlFor="ke-fu-conversation-last_message_content_type" className="block text-xs text-slate-600 mb-1">最后发送的消息类型</label>
           <input
             type="number"
+            id="ke-fu-conversation-last_message_content_type"
+            data-testid="field-last_message_content_type"
+            data-agent-target="ke-fu-conversation:field:last_message_content_type"
+            data-agent-state={formData.last_message_content_type == null || formData.last_message_content_type === "" ? "empty" : "filled"}
+            aria-label="最后发送的消息类型"
             value={formData.last_message_content_type != null ? String(formData.last_message_content_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, last_message_content_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -121,40 +148,57 @@ export function KeFuConversationForm({ open, initialData, onClose, onSuccess }: 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="admin_pinned"
+            id="ke-fu-conversation-admin_pinned"
+            data-testid="field-admin_pinned"
+            data-agent-target="ke-fu-conversation:field:admin_pinned"
+            data-agent-state={formData.admin_pinned ? "on" : "off"}
+            aria-label="管理端置顶"
             checked={Boolean(formData.admin_pinned)}
             onChange={(e) => setFormData((prev) => ({ ...prev, admin_pinned: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="admin_pinned" className="text-xs text-slate-700 font-medium">管理端置顶</label>
+          <label htmlFor="ke-fu-conversation-admin_pinned" className="text-xs text-slate-700 font-medium">管理端置顶</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="user_deleted"
+            id="ke-fu-conversation-user_deleted"
+            data-testid="field-user_deleted"
+            data-agent-target="ke-fu-conversation:field:user_deleted"
+            data-agent-state={formData.user_deleted ? "on" : "off"}
+            aria-label="用户是否可见"
             checked={Boolean(formData.user_deleted)}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_deleted: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="user_deleted" className="text-xs text-slate-700 font-medium">用户是否可见</label>
+          <label htmlFor="ke-fu-conversation-user_deleted" className="text-xs text-slate-700 font-medium">用户是否可见</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="admin_deleted"
+            id="ke-fu-conversation-admin_deleted"
+            data-testid="field-admin_deleted"
+            data-agent-target="ke-fu-conversation:field:admin_deleted"
+            data-agent-state={formData.admin_deleted ? "on" : "off"}
+            aria-label="管理员是否可见"
             checked={Boolean(formData.admin_deleted)}
             onChange={(e) => setFormData((prev) => ({ ...prev, admin_deleted: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="admin_deleted" className="text-xs text-slate-700 font-medium">管理员是否可见</label>
+          <label htmlFor="ke-fu-conversation-admin_deleted" className="text-xs text-slate-700 font-medium">管理员是否可见</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">管理员未读消息数</label>
+          <label htmlFor="ke-fu-conversation-admin_unread_message_count" className="block text-xs text-slate-600 mb-1">管理员未读消息数</label>
           <input
             type="number"
+            id="ke-fu-conversation-admin_unread_message_count"
+            data-testid="field-admin_unread_message_count"
+            data-agent-target="ke-fu-conversation:field:admin_unread_message_count"
+            data-agent-state={formData.admin_unread_message_count == null || formData.admin_unread_message_count === "" ? "empty" : "filled"}
+            aria-label="管理员未读消息数"
             value={formData.admin_unread_message_count != null ? String(formData.admin_unread_message_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, admin_unread_message_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -168,6 +212,8 @@ export function KeFuConversationForm({ open, initialData, onClose, onSuccess }: 
             <button
               type="button"
               onClick={onClose}
+              data-testid="ke-fu-conversation-form-cancel"
+              data-agent-target="ke-fu-conversation:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -175,6 +221,9 @@ export function KeFuConversationForm({ open, initialData, onClose, onSuccess }: 
             <button
               type="submit"
               disabled={loading}
+              data-testid="ke-fu-conversation-form-submit"
+              data-agent-target="ke-fu-conversation:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

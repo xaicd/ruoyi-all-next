@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesDvCheckPlan（源框架导入） (MesDvCheckPlan)
+-- Auto-generated RBAC & Menu Migration for MES 点检保养方案 (MesDvCheckPlan)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-dv-check-plan',
   'mes-dir',
-  'MesDvCheckPlan（源框架导入）管理',
+  'MES 点检保养方案管理',
   '/admin/mes/mes-dv-check-plan',
   'mes/mes-dv-check-plan/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-dv-check-plan-query',  'menu-mes-dv-check-plan', '查询MesDvCheckPlan（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_dv_check_plan:query',  1, NOW(), NOW()),
-('menu-mes-dv-check-plan-create', 'menu-mes-dv-check-plan', '新增MesDvCheckPlan（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_dv_check_plan:create', 2, NOW(), NOW()),
-('menu-mes-dv-check-plan-update', 'menu-mes-dv-check-plan', '修改MesDvCheckPlan（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_dv_check_plan:update', 3, NOW(), NOW()),
-('menu-mes-dv-check-plan-delete', 'menu-mes-dv-check-plan', '删除MesDvCheckPlan（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_dv_check_plan:delete', 4, NOW(), NOW())
+('menu-mes-dv-check-plan-query',  'menu-mes-dv-check-plan', '查询MES 点检保养方案', 'BUTTON', 'ACTIVE', 'mes:mes_dv_check_plan:query',  1, NOW(), NOW()),
+('menu-mes-dv-check-plan-create', 'menu-mes-dv-check-plan', '新增MES 点检保养方案', 'BUTTON', 'ACTIVE', 'mes:mes_dv_check_plan:create', 2, NOW(), NOW()),
+('menu-mes-dv-check-plan-update', 'menu-mes-dv-check-plan', '修改MES 点检保养方案', 'BUTTON', 'ACTIVE', 'mes:mes_dv_check_plan:update', 3, NOW(), NOW()),
+('menu-mes-dv-check-plan-delete', 'menu-mes-dv-check-plan', '删除MES 点检保养方案', 'BUTTON', 'ACTIVE', 'mes:mes_dv_check_plan:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

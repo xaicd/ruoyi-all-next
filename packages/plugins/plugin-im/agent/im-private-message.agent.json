@@ -1,0 +1,249 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "im",
+  "entity": "ImPrivateMessage",
+  "kebab": "im-private-message",
+  "businessName": "IM 私聊消息",
+  "permissionPrefix": "im:im_private_message",
+  "page": {
+    "route": "/admin/im/im-private-message",
+    "title": "IM 私聊消息管理",
+    "titleSelector": "[data-testid=\"im-private-message-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.im/api",
+    "bffMount": "/api/v1/admin/im",
+    "resource": "im-private-message",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/im-private-message",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/im-private-message/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/im-private-message"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/im-private-message/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/im-private-message/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"im-private-message-title\"]",
+    "refresh": "[data-testid=\"im-private-message-refresh\"]",
+    "createButton": "[data-testid=\"im-private-message-create\"]",
+    "searchForm": "[data-testid=\"im-private-message-search\"]",
+    "searchSubmit": "[data-testid=\"im-private-message-search-submit\"]",
+    "searchReset": "[data-testid=\"im-private-message-search-reset\"]",
+    "total": "[data-testid=\"im-private-message-total\"]",
+    "table": "[data-testid=\"im-private-message-table\"]",
+    "row": "[data-testid=\"im-private-message-row\"]",
+    "editButton": "[data-testid=\"im-private-message-edit\"]",
+    "deleteButton": "[data-testid=\"im-private-message-delete\"]",
+    "form": "[data-testid=\"im-private-message-form\"]",
+    "formError": "[data-testid=\"im-private-message-form-error\"]",
+    "formSubmit": "[data-testid=\"im-private-message-form-submit\"]",
+    "formCancel": "[data-testid=\"im-private-message-form-cancel\"]",
+    "formClose": "[data-testid=\"im-private-message-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IM 私聊消息列表",
+    "dialogLabel": {
+      "create": "新增IM 私聊消息",
+      "edit": "编辑IM 私聊消息"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "client_message_id",
+        "label": "客户端消息编号，用于发送幂等",
+        "type": "string",
+        "required": false,
+        "testId": "field-client_message_id",
+        "selector": "[data-testid=\"field-client_message_id\"]"
+      },
+      {
+        "name": "sender_id",
+        "label": "发送人编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-sender_id",
+        "selector": "[data-testid=\"field-sender_id\"]"
+      },
+      {
+        "name": "receiver_id",
+        "label": "接收人编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-receiver_id",
+        "selector": "[data-testid=\"field-receiver_id\"]"
+      },
+      {
+        "name": "type",
+        "label": "消息类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "content",
+        "label": "消息内容，JSON 格式",
+        "type": "string",
+        "required": false,
+        "testId": "field-content",
+        "selector": "[data-testid=\"field-content\"]"
+      },
+      {
+        "name": "status",
+        "label": "消息状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "receipt_status",
+        "label": "回执状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-receipt_status",
+        "selector": "[data-testid=\"field-receipt_status\"]"
+      },
+      {
+        "name": "send_time",
+        "label": "发送时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-send_time",
+        "selector": "[data-testid=\"field-send_time\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "im-private-message",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"im-private-message\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"im-private-message-form-overlay\"]",
+      "dialog": "[data-testid=\"im-private-message-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "im-private-message:search",
+      "reset": "im-private-message:reset",
+      "refresh": "im-private-message:refresh",
+      "create": "im-private-message:create",
+      "edit": "im-private-message:edit",
+      "delete": "im-private-message:delete",
+      "submit": "im-private-message:submit",
+      "cancel": "im-private-message:cancel",
+      "close": "im-private-message:close",
+      "row": "im-private-message:row",
+      "pagination": "im-private-message:pagination",
+      "fields": {
+        "client_message_id": "im-private-message:field:client_message_id",
+        "sender_id": "im-private-message:field:sender_id",
+        "receiver_id": "im-private-message:field:receiver_id",
+        "type": "im-private-message:field:type",
+        "content": "im-private-message:field:content",
+        "status": "im-private-message:field:status",
+        "receipt_status": "im-private-message:field:receipt_status",
+        "send_time": "im-private-message:field:send_time"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "im.im-private-message",
+      "examples": [
+        "im.im-private-message__List__Refresh",
+        "im.im-private-message__ListItem__Open",
+        "im.im-private-message__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

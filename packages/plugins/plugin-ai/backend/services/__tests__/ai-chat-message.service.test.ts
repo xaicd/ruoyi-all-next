@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { AiChatMessageService } from "../ai-chat-message.service"
 
 describe("AiChatMessageService", () => {
-  it("should create and query AiChatMessage（源框架导入）", async () => {
+  it("should create and query AI Chat 消息", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AiChatMessageService.create({
         conversation_id: 1,
@@ -21,7 +21,7 @@ describe("AiChatMessageService", () => {
   
       const updated = await AiChatMessageService.update(created.id, {
         id: created.id,
-        conversation_id: "更新AiChatMessage（源框架导入）",
+        conversation_id: "更新AI Chat 消息",
       } as any)
       expect(updated).toBeDefined()
   

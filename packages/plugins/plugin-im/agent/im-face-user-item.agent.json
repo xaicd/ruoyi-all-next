@@ -1,0 +1,231 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "im",
+  "entity": "ImFaceUserItem",
+  "kebab": "im-face-user-item",
+  "businessName": "IM 用户私有表情 DO（个人表情包，对照微信「我的表情」）",
+  "permissionPrefix": "im:im_face_user_item",
+  "page": {
+    "route": "/admin/im/im-face-user-item",
+    "title": "IM 用户私有表情 DO（个人表情包，对照微信「我的表情」）管理",
+    "titleSelector": "[data-testid=\"im-face-user-item-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.im/api",
+    "bffMount": "/api/v1/admin/im",
+    "resource": "im-face-user-item",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/im-face-user-item",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/im-face-user-item/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/im-face-user-item"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/im-face-user-item/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/im-face-user-item/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"im-face-user-item-title\"]",
+    "refresh": "[data-testid=\"im-face-user-item-refresh\"]",
+    "createButton": "[data-testid=\"im-face-user-item-create\"]",
+    "searchForm": "[data-testid=\"im-face-user-item-search\"]",
+    "searchSubmit": "[data-testid=\"im-face-user-item-search-submit\"]",
+    "searchReset": "[data-testid=\"im-face-user-item-search-reset\"]",
+    "total": "[data-testid=\"im-face-user-item-total\"]",
+    "table": "[data-testid=\"im-face-user-item-table\"]",
+    "row": "[data-testid=\"im-face-user-item-row\"]",
+    "editButton": "[data-testid=\"im-face-user-item-edit\"]",
+    "deleteButton": "[data-testid=\"im-face-user-item-delete\"]",
+    "form": "[data-testid=\"im-face-user-item-form\"]",
+    "formError": "[data-testid=\"im-face-user-item-form-error\"]",
+    "formSubmit": "[data-testid=\"im-face-user-item-form-submit\"]",
+    "formCancel": "[data-testid=\"im-face-user-item-form-cancel\"]",
+    "formClose": "[data-testid=\"im-face-user-item-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IM 用户私有表情 DO（个人表情包，对照微信「我的表情」）列表",
+    "dialogLabel": {
+      "create": "新增IM 用户私有表情 DO（个人表情包，对照微信「我的表情」）",
+      "edit": "编辑IM 用户私有表情 DO（个人表情包，对照微信「我的表情」）"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "user_id",
+        "label": "所属用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "url",
+        "label": "表情图 URL",
+        "type": "string",
+        "required": false,
+        "testId": "field-url",
+        "selector": "[data-testid=\"field-url\"]"
+      },
+      {
+        "name": "name",
+        "label": "表情名（可选）",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "width",
+        "label": "渲染宽度（像素）",
+        "type": "number",
+        "required": false,
+        "testId": "field-width",
+        "selector": "[data-testid=\"field-width\"]"
+      },
+      {
+        "name": "height",
+        "label": "渲染高度（像素）",
+        "type": "number",
+        "required": false,
+        "testId": "field-height",
+        "selector": "[data-testid=\"field-height\"]"
+      },
+      {
+        "name": "sort",
+        "label": "排序",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "im-face-user-item",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"im-face-user-item\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"im-face-user-item-form-overlay\"]",
+      "dialog": "[data-testid=\"im-face-user-item-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "im-face-user-item:search",
+      "reset": "im-face-user-item:reset",
+      "refresh": "im-face-user-item:refresh",
+      "create": "im-face-user-item:create",
+      "edit": "im-face-user-item:edit",
+      "delete": "im-face-user-item:delete",
+      "submit": "im-face-user-item:submit",
+      "cancel": "im-face-user-item:cancel",
+      "close": "im-face-user-item:close",
+      "row": "im-face-user-item:row",
+      "pagination": "im-face-user-item:pagination",
+      "fields": {
+        "user_id": "im-face-user-item:field:user_id",
+        "url": "im-face-user-item:field:url",
+        "name": "im-face-user-item:field:name",
+        "width": "im-face-user-item:field:width",
+        "height": "im-face-user-item:field:height",
+        "sort": "im-face-user-item:field:sort"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "im.im-face-user-item",
+      "examples": [
+        "im.im-face-user-item__List__Refresh",
+        "im.im-face-user-item__ListItem__Open",
+        "im.im-face-user-item__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

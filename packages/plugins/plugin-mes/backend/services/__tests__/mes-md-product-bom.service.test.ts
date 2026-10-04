@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesMdProductBomService } from "../mes-md-product-bom.service"
 
 describe("MesMdProductBomService", () => {
-  it("should create and query MesMdProductBom（源框架导入）", async () => {
+  it("should create and query MES 产品 BOM", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesMdProductBomService.create({
         item_id: 1,
@@ -21,7 +21,7 @@ describe("MesMdProductBomService", () => {
   
       const updated = await MesMdProductBomService.update(created.id, {
         id: created.id,
-        item_id: "更新MesMdProductBom（源框架导入）",
+        item_id: "更新MES 产品 BOM",
       } as any)
       expect(updated).toBeDefined()
   

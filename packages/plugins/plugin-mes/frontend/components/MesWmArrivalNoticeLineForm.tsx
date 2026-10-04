@@ -55,24 +55,36 @@ export function MesWmArrivalNoticeLineForm({ open, initialData, onClose, onSucce
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-wm-arrival-notice-line-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 到货通知单行" : "新增MES 到货通知单行"}
+        data-testid="mes-wm-arrival-notice-line-form"
+        data-agent-scope="mes-wm-arrival-notice-line:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesWmArrivalNoticeLine（源框架导入）" : "新增MesWmArrivalNoticeLine（源框架导入）"}
+            {isEdit ? "编辑MES 到货通知单行" : "新增MES 到货通知单行"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-wm-arrival-notice-line-form-close" data-agent-target="mes-wm-arrival-notice-line:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-wm-arrival-notice-line-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">到货通知单编号</label>
+          <label htmlFor="mes-wm-arrival-notice-line-notice_id" className="block text-xs text-slate-600 mb-1">到货通知单编号</label>
           <input
             type="number"
+            id="mes-wm-arrival-notice-line-notice_id"
+            data-testid="field-notice_id"
+            data-agent-target="mes-wm-arrival-notice-line:field:notice_id"
+            data-agent-state={formData.notice_id == null || formData.notice_id === "" ? "empty" : "filled"}
+            aria-label="到货通知单编号"
             value={formData.notice_id != null ? String(formData.notice_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, notice_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -82,9 +94,14 @@ export function MesWmArrivalNoticeLineForm({ open, initialData, onClose, onSucce
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">物料编号</label>
+          <label htmlFor="mes-wm-arrival-notice-line-item_id" className="block text-xs text-slate-600 mb-1">物料编号</label>
           <input
             type="number"
+            id="mes-wm-arrival-notice-line-item_id"
+            data-testid="field-item_id"
+            data-agent-target="mes-wm-arrival-notice-line:field:item_id"
+            data-agent-state={formData.item_id == null || formData.item_id === "" ? "empty" : "filled"}
+            aria-label="物料编号"
             value={formData.item_id != null ? String(formData.item_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, item_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -94,9 +111,14 @@ export function MesWmArrivalNoticeLineForm({ open, initialData, onClose, onSucce
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">到货数量</label>
+          <label htmlFor="mes-wm-arrival-notice-line-arrival_quantity" className="block text-xs text-slate-600 mb-1">到货数量</label>
           <input
             type="number"
+            id="mes-wm-arrival-notice-line-arrival_quantity"
+            data-testid="field-arrival_quantity"
+            data-agent-target="mes-wm-arrival-notice-line:field:arrival_quantity"
+            data-agent-state={formData.arrival_quantity == null || formData.arrival_quantity === "" ? "empty" : "filled"}
+            aria-label="到货数量"
             value={formData.arrival_quantity != null ? String(formData.arrival_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, arrival_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -106,9 +128,14 @@ export function MesWmArrivalNoticeLineForm({ open, initialData, onClose, onSucce
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">合格数量</label>
+          <label htmlFor="mes-wm-arrival-notice-line-qualified_quantity" className="block text-xs text-slate-600 mb-1">合格数量</label>
           <input
             type="number"
+            id="mes-wm-arrival-notice-line-qualified_quantity"
+            data-testid="field-qualified_quantity"
+            data-agent-target="mes-wm-arrival-notice-line:field:qualified_quantity"
+            data-agent-state={formData.qualified_quantity == null || formData.qualified_quantity === "" ? "empty" : "filled"}
+            aria-label="合格数量"
             value={formData.qualified_quantity != null ? String(formData.qualified_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, qualified_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -120,18 +147,27 @@ export function MesWmArrivalNoticeLineForm({ open, initialData, onClose, onSucce
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="iqc_check_flag"
+            id="mes-wm-arrival-notice-line-iqc_check_flag"
+            data-testid="field-iqc_check_flag"
+            data-agent-target="mes-wm-arrival-notice-line:field:iqc_check_flag"
+            data-agent-state={formData.iqc_check_flag ? "on" : "off"}
+            aria-label="是否需要来料检验"
             checked={Boolean(formData.iqc_check_flag)}
             onChange={(e) => setFormData((prev) => ({ ...prev, iqc_check_flag: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="iqc_check_flag" className="text-xs text-slate-700 font-medium">是否需要来料检验</label>
+          <label htmlFor="mes-wm-arrival-notice-line-iqc_check_flag" className="text-xs text-slate-700 font-medium">是否需要来料检验</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">来料检验单编号</label>
+          <label htmlFor="mes-wm-arrival-notice-line-iqc_id" className="block text-xs text-slate-600 mb-1">来料检验单编号</label>
           <input
             type="number"
+            id="mes-wm-arrival-notice-line-iqc_id"
+            data-testid="field-iqc_id"
+            data-agent-target="mes-wm-arrival-notice-line:field:iqc_id"
+            data-agent-state={formData.iqc_id == null || formData.iqc_id === "" ? "empty" : "filled"}
+            aria-label="来料检验单编号"
             value={formData.iqc_id != null ? String(formData.iqc_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, iqc_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -141,9 +177,14 @@ export function MesWmArrivalNoticeLineForm({ open, initialData, onClose, onSucce
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-wm-arrival-notice-line-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-wm-arrival-notice-line-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-wm-arrival-notice-line:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -157,6 +198,8 @@ export function MesWmArrivalNoticeLineForm({ open, initialData, onClose, onSucce
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-wm-arrival-notice-line-form-cancel"
+              data-agent-target="mes-wm-arrival-notice-line:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -164,6 +207,9 @@ export function MesWmArrivalNoticeLineForm({ open, initialData, onClose, onSucce
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-wm-arrival-notice-line-form-submit"
+              data-agent-target="mes-wm-arrival-notice-line:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

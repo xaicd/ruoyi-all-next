@@ -1,0 +1,204 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesDvCheckPlanMachinery",
+  "kebab": "mes-dv-check-plan-machinery",
+  "businessName": "MES 点检保养方案设备",
+  "permissionPrefix": "mes:mes_dv_check_plan_machinery",
+  "page": {
+    "route": "/admin/mes/mes-dv-check-plan-machinery",
+    "title": "MES 点检保养方案设备管理",
+    "titleSelector": "[data-testid=\"mes-dv-check-plan-machinery-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-dv-check-plan-machinery",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-dv-check-plan-machinery",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-dv-check-plan-machinery/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-dv-check-plan-machinery"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-dv-check-plan-machinery/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-dv-check-plan-machinery/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-dv-check-plan-machinery-title\"]",
+    "refresh": "[data-testid=\"mes-dv-check-plan-machinery-refresh\"]",
+    "createButton": "[data-testid=\"mes-dv-check-plan-machinery-create\"]",
+    "searchForm": "[data-testid=\"mes-dv-check-plan-machinery-search\"]",
+    "searchSubmit": "[data-testid=\"mes-dv-check-plan-machinery-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-dv-check-plan-machinery-search-reset\"]",
+    "total": "[data-testid=\"mes-dv-check-plan-machinery-total\"]",
+    "table": "[data-testid=\"mes-dv-check-plan-machinery-table\"]",
+    "row": "[data-testid=\"mes-dv-check-plan-machinery-row\"]",
+    "editButton": "[data-testid=\"mes-dv-check-plan-machinery-edit\"]",
+    "deleteButton": "[data-testid=\"mes-dv-check-plan-machinery-delete\"]",
+    "form": "[data-testid=\"mes-dv-check-plan-machinery-form\"]",
+    "formError": "[data-testid=\"mes-dv-check-plan-machinery-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-dv-check-plan-machinery-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-dv-check-plan-machinery-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-dv-check-plan-machinery-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 点检保养方案设备列表",
+    "dialogLabel": {
+      "create": "新增MES 点检保养方案设备",
+      "edit": "编辑MES 点检保养方案设备"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "plan_id",
+        "label": "方案编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-plan_id",
+        "selector": "[data-testid=\"field-plan_id\"]"
+      },
+      {
+        "name": "machinery_id",
+        "label": "设备编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-machinery_id",
+        "selector": "[data-testid=\"field-machinery_id\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-dv-check-plan-machinery",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-dv-check-plan-machinery\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-dv-check-plan-machinery-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-dv-check-plan-machinery-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-dv-check-plan-machinery:search",
+      "reset": "mes-dv-check-plan-machinery:reset",
+      "refresh": "mes-dv-check-plan-machinery:refresh",
+      "create": "mes-dv-check-plan-machinery:create",
+      "edit": "mes-dv-check-plan-machinery:edit",
+      "delete": "mes-dv-check-plan-machinery:delete",
+      "submit": "mes-dv-check-plan-machinery:submit",
+      "cancel": "mes-dv-check-plan-machinery:cancel",
+      "close": "mes-dv-check-plan-machinery:close",
+      "row": "mes-dv-check-plan-machinery:row",
+      "pagination": "mes-dv-check-plan-machinery:pagination",
+      "fields": {
+        "plan_id": "mes-dv-check-plan-machinery:field:plan_id",
+        "machinery_id": "mes-dv-check-plan-machinery:field:machinery_id",
+        "remark": "mes-dv-check-plan-machinery:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-dv-check-plan-machinery",
+      "examples": [
+        "mes.mes-dv-check-plan-machinery__List__Refresh",
+        "mes.mes-dv-check-plan-machinery__ListItem__Open",
+        "mes.mes-dv-check-plan-machinery__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

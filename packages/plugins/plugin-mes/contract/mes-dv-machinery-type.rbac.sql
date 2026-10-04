@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesDvMachineryType（源框架导入） (MesDvMachineryType)
+-- Auto-generated RBAC & Menu Migration for MES 设备类型 (MesDvMachineryType)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-dv-machinery-type',
   'mes-dir',
-  'MesDvMachineryType（源框架导入）管理',
+  'MES 设备类型管理',
   '/admin/mes/mes-dv-machinery-type',
   'mes/mes-dv-machinery-type/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-dv-machinery-type-query',  'menu-mes-dv-machinery-type', '查询MesDvMachineryType（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_dv_machinery_type:query',  1, NOW(), NOW()),
-('menu-mes-dv-machinery-type-create', 'menu-mes-dv-machinery-type', '新增MesDvMachineryType（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_dv_machinery_type:create', 2, NOW(), NOW()),
-('menu-mes-dv-machinery-type-update', 'menu-mes-dv-machinery-type', '修改MesDvMachineryType（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_dv_machinery_type:update', 3, NOW(), NOW()),
-('menu-mes-dv-machinery-type-delete', 'menu-mes-dv-machinery-type', '删除MesDvMachineryType（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_dv_machinery_type:delete', 4, NOW(), NOW())
+('menu-mes-dv-machinery-type-query',  'menu-mes-dv-machinery-type', '查询MES 设备类型', 'BUTTON', 'ACTIVE', 'mes:mes_dv_machinery_type:query',  1, NOW(), NOW()),
+('menu-mes-dv-machinery-type-create', 'menu-mes-dv-machinery-type', '新增MES 设备类型', 'BUTTON', 'ACTIVE', 'mes:mes_dv_machinery_type:create', 2, NOW(), NOW()),
+('menu-mes-dv-machinery-type-update', 'menu-mes-dv-machinery-type', '修改MES 设备类型', 'BUTTON', 'ACTIVE', 'mes:mes_dv_machinery_type:update', 3, NOW(), NOW()),
+('menu-mes-dv-machinery-type-delete', 'menu-mes-dv-machinery-type', '删除MES 设备类型', 'BUTTON', 'ACTIVE', 'mes:mes_dv_machinery_type:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

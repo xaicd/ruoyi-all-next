@@ -1,0 +1,222 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "erp",
+  "entity": "ErpProductCategory",
+  "kebab": "erp-product-category",
+  "businessName": "ERP 产品分类",
+  "permissionPrefix": "erp:erp_product_category",
+  "page": {
+    "route": "/admin/erp/erp-product-category",
+    "title": "ERP 产品分类管理",
+    "titleSelector": "[data-testid=\"erp-product-category-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.erp/api",
+    "bffMount": "/api/v1/admin/erp",
+    "resource": "erp-product-category",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/erp-product-category",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/erp-product-category/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/erp-product-category"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/erp-product-category/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/erp-product-category/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"erp-product-category-title\"]",
+    "refresh": "[data-testid=\"erp-product-category-refresh\"]",
+    "createButton": "[data-testid=\"erp-product-category-create\"]",
+    "searchForm": "[data-testid=\"erp-product-category-search\"]",
+    "searchSubmit": "[data-testid=\"erp-product-category-search-submit\"]",
+    "searchReset": "[data-testid=\"erp-product-category-search-reset\"]",
+    "total": "[data-testid=\"erp-product-category-total\"]",
+    "table": "[data-testid=\"erp-product-category-table\"]",
+    "row": "[data-testid=\"erp-product-category-row\"]",
+    "editButton": "[data-testid=\"erp-product-category-edit\"]",
+    "deleteButton": "[data-testid=\"erp-product-category-delete\"]",
+    "form": "[data-testid=\"erp-product-category-form\"]",
+    "formError": "[data-testid=\"erp-product-category-form-error\"]",
+    "formSubmit": "[data-testid=\"erp-product-category-form-submit\"]",
+    "formCancel": "[data-testid=\"erp-product-category-form-cancel\"]",
+    "formClose": "[data-testid=\"erp-product-category-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "ERP 产品分类列表",
+    "dialogLabel": {
+      "create": "新增ERP 产品分类",
+      "edit": "编辑ERP 产品分类"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "parent_id",
+        "label": "父分类编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-parent_id",
+        "selector": "[data-testid=\"field-parent_id\"]"
+      },
+      {
+        "name": "name",
+        "label": "分类名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "code",
+        "label": "分类编码",
+        "type": "string",
+        "required": false,
+        "testId": "field-code",
+        "selector": "[data-testid=\"field-code\"]"
+      },
+      {
+        "name": "sort",
+        "label": "分类排序",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      },
+      {
+        "name": "status",
+        "label": "开启状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "erp-product-category",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"erp-product-category\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"erp-product-category-form-overlay\"]",
+      "dialog": "[data-testid=\"erp-product-category-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "erp-product-category:search",
+      "reset": "erp-product-category:reset",
+      "refresh": "erp-product-category:refresh",
+      "create": "erp-product-category:create",
+      "edit": "erp-product-category:edit",
+      "delete": "erp-product-category:delete",
+      "submit": "erp-product-category:submit",
+      "cancel": "erp-product-category:cancel",
+      "close": "erp-product-category:close",
+      "row": "erp-product-category:row",
+      "pagination": "erp-product-category:pagination",
+      "fields": {
+        "parent_id": "erp-product-category:field:parent_id",
+        "name": "erp-product-category:field:name",
+        "code": "erp-product-category:field:code",
+        "sort": "erp-product-category:field:sort",
+        "status": "erp-product-category:field:status"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "erp.erp-product-category",
+      "examples": [
+        "erp.erp-product-category__List__Refresh",
+        "erp.erp-product-category__ListItem__Open",
+        "erp.erp-product-category__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MpUser（源框架导入） (MpUser)
+-- Auto-generated RBAC & Menu Migration for 微信公众号粉丝 (MpUser)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mp-user',
   'mp-dir',
-  'MpUser（源框架导入）管理',
+  '微信公众号粉丝管理',
   '/admin/mp/mp-user',
   'mp/mp-user/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mp-user-query',  'menu-mp-user', '查询MpUser（源框架导入）', 'BUTTON', 'ACTIVE', 'mp:mp_user:query',  1, NOW(), NOW()),
-('menu-mp-user-create', 'menu-mp-user', '新增MpUser（源框架导入）', 'BUTTON', 'ACTIVE', 'mp:mp_user:create', 2, NOW(), NOW()),
-('menu-mp-user-update', 'menu-mp-user', '修改MpUser（源框架导入）', 'BUTTON', 'ACTIVE', 'mp:mp_user:update', 3, NOW(), NOW()),
-('menu-mp-user-delete', 'menu-mp-user', '删除MpUser（源框架导入）', 'BUTTON', 'ACTIVE', 'mp:mp_user:delete', 4, NOW(), NOW())
+('menu-mp-user-query',  'menu-mp-user', '查询微信公众号粉丝', 'BUTTON', 'ACTIVE', 'mp:mp_user:query',  1, NOW(), NOW()),
+('menu-mp-user-create', 'menu-mp-user', '新增微信公众号粉丝', 'BUTTON', 'ACTIVE', 'mp:mp_user:create', 2, NOW(), NOW()),
+('menu-mp-user-update', 'menu-mp-user', '修改微信公众号粉丝', 'BUTTON', 'ACTIVE', 'mp:mp_user:update', 3, NOW(), NOW()),
+('menu-mp-user-delete', 'menu-mp-user', '删除微信公众号粉丝', 'BUTTON', 'ACTIVE', 'mp:mp_user:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

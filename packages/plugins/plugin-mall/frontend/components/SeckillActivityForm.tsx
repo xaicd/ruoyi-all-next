@@ -60,24 +60,36 @@ export function SeckillActivityForm({ open, initialData, onClose, onSuccess }: S
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="seckill-activity-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑秒杀活动" : "新增秒杀活动"}
+        data-testid="seckill-activity-form"
+        data-agent-scope="seckill-activity:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑SeckillActivity（源框架导入）" : "新增SeckillActivity（源框架导入）"}
+            {isEdit ? "编辑秒杀活动" : "新增秒杀活动"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="seckill-activity-form-close" data-agent-target="seckill-activity:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="seckill-activity-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">秒杀活动商品</label>
+          <label htmlFor="seckill-activity-spu_id" className="block text-xs text-slate-600 mb-1">秒杀活动商品</label>
           <input
             type="number"
+            id="seckill-activity-spu_id"
+            data-testid="field-spu_id"
+            data-agent-target="seckill-activity:field:spu_id"
+            data-agent-state={formData.spu_id == null || formData.spu_id === "" ? "empty" : "filled"}
+            aria-label="秒杀活动商品"
             value={formData.spu_id != null ? String(formData.spu_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, spu_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -87,9 +99,14 @@ export function SeckillActivityForm({ open, initialData, onClose, onSuccess }: S
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">秒杀活动名称</label>
+          <label htmlFor="seckill-activity-name" className="block text-xs text-slate-600 mb-1">秒杀活动名称</label>
           <input
             type="text"
+            id="seckill-activity-name"
+            data-testid="field-name"
+            data-agent-target="seckill-activity:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="秒杀活动名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -99,9 +116,14 @@ export function SeckillActivityForm({ open, initialData, onClose, onSuccess }: S
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">活动状态</label>
+          <label htmlFor="seckill-activity-status" className="block text-xs text-slate-600 mb-1">活动状态</label>
           <input
             type="number"
+            id="seckill-activity-status"
+            data-testid="field-status"
+            data-agent-target="seckill-activity:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="活动状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -111,9 +133,14 @@ export function SeckillActivityForm({ open, initialData, onClose, onSuccess }: S
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="seckill-activity-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="seckill-activity-remark"
+            data-testid="field-remark"
+            data-agent-target="seckill-activity:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -123,9 +150,14 @@ export function SeckillActivityForm({ open, initialData, onClose, onSuccess }: S
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">活动开始时间</label>
+          <label htmlFor="seckill-activity-start_time" className="block text-xs text-slate-600 mb-1">活动开始时间</label>
           <input
             type="text"
+            id="seckill-activity-start_time"
+            data-testid="field-start_time"
+            data-agent-target="seckill-activity:field:start_time"
+            data-agent-state={formData.start_time ? "filled" : "empty"}
+            aria-label="活动开始时间"
             value={formData.start_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, start_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -135,9 +167,14 @@ export function SeckillActivityForm({ open, initialData, onClose, onSuccess }: S
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">活动结束时间</label>
+          <label htmlFor="seckill-activity-end_time" className="block text-xs text-slate-600 mb-1">活动结束时间</label>
           <input
             type="text"
+            id="seckill-activity-end_time"
+            data-testid="field-end_time"
+            data-agent-target="seckill-activity:field:end_time"
+            data-agent-state={formData.end_time ? "filled" : "empty"}
+            aria-label="活动结束时间"
             value={formData.end_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, end_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -147,9 +184,14 @@ export function SeckillActivityForm({ open, initialData, onClose, onSuccess }: S
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">排序</label>
+          <label htmlFor="seckill-activity-sort" className="block text-xs text-slate-600 mb-1">排序</label>
           <input
             type="number"
+            id="seckill-activity-sort"
+            data-testid="field-sort"
+            data-agent-target="seckill-activity:field:sort"
+            data-agent-state={formData.sort == null || formData.sort === "" ? "empty" : "filled"}
+            aria-label="排序"
             value={formData.sort != null ? String(formData.sort) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sort: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -159,9 +201,14 @@ export function SeckillActivityForm({ open, initialData, onClose, onSuccess }: S
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">秒杀时段 id</label>
+          <label htmlFor="seckill-activity-config_ids" className="block text-xs text-slate-600 mb-1">秒杀时段 id</label>
           <input
             type="text"
+            id="seckill-activity-config_ids"
+            data-testid="field-config_ids"
+            data-agent-target="seckill-activity:field:config_ids"
+            data-agent-state={formData.config_ids ? "filled" : "empty"}
+            aria-label="秒杀时段 id"
             value={formData.config_ids ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, config_ids: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,9 +218,14 @@ export function SeckillActivityForm({ open, initialData, onClose, onSuccess }: S
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">总限购数量</label>
+          <label htmlFor="seckill-activity-total_limit_count" className="block text-xs text-slate-600 mb-1">总限购数量</label>
           <input
             type="number"
+            id="seckill-activity-total_limit_count"
+            data-testid="field-total_limit_count"
+            data-agent-target="seckill-activity:field:total_limit_count"
+            data-agent-state={formData.total_limit_count == null || formData.total_limit_count === "" ? "empty" : "filled"}
+            aria-label="总限购数量"
             value={formData.total_limit_count != null ? String(formData.total_limit_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, total_limit_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -183,9 +235,14 @@ export function SeckillActivityForm({ open, initialData, onClose, onSuccess }: S
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">单次限够数量</label>
+          <label htmlFor="seckill-activity-single_limit_count" className="block text-xs text-slate-600 mb-1">单次限够数量</label>
           <input
             type="number"
+            id="seckill-activity-single_limit_count"
+            data-testid="field-single_limit_count"
+            data-agent-target="seckill-activity:field:single_limit_count"
+            data-agent-state={formData.single_limit_count == null || formData.single_limit_count === "" ? "empty" : "filled"}
+            aria-label="单次限够数量"
             value={formData.single_limit_count != null ? String(formData.single_limit_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, single_limit_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -195,9 +252,14 @@ export function SeckillActivityForm({ open, initialData, onClose, onSuccess }: S
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">秒杀库存(剩余库存秒杀时扣减)</label>
+          <label htmlFor="seckill-activity-stock" className="block text-xs text-slate-600 mb-1">秒杀库存(剩余库存秒杀时扣减)</label>
           <input
             type="number"
+            id="seckill-activity-stock"
+            data-testid="field-stock"
+            data-agent-target="seckill-activity:field:stock"
+            data-agent-state={formData.stock == null || formData.stock === "" ? "empty" : "filled"}
+            aria-label="秒杀库存(剩余库存秒杀时扣减)"
             value={formData.stock != null ? String(formData.stock) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, stock: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -207,9 +269,14 @@ export function SeckillActivityForm({ open, initialData, onClose, onSuccess }: S
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">秒杀总库存</label>
+          <label htmlFor="seckill-activity-total_stock" className="block text-xs text-slate-600 mb-1">秒杀总库存</label>
           <input
             type="number"
+            id="seckill-activity-total_stock"
+            data-testid="field-total_stock"
+            data-agent-target="seckill-activity:field:total_stock"
+            data-agent-state={formData.total_stock == null || formData.total_stock === "" ? "empty" : "filled"}
+            aria-label="秒杀总库存"
             value={formData.total_stock != null ? String(formData.total_stock) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, total_stock: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -223,6 +290,8 @@ export function SeckillActivityForm({ open, initialData, onClose, onSuccess }: S
             <button
               type="button"
               onClick={onClose}
+              data-testid="seckill-activity-form-cancel"
+              data-agent-target="seckill-activity:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -230,6 +299,9 @@ export function SeckillActivityForm({ open, initialData, onClose, onSuccess }: S
             <button
               type="submit"
               disabled={loading}
+              data-testid="seckill-activity-form-submit"
+              data-agent-target="seckill-activity:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

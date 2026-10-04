@@ -1,0 +1,240 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "ai",
+  "entity": "AiKnowledge",
+  "kebab": "ai-knowledge",
+  "businessName": "AI 知识库",
+  "permissionPrefix": "ai:ai_knowledge",
+  "page": {
+    "route": "/admin/ai/ai-knowledge",
+    "title": "AI 知识库管理",
+    "titleSelector": "[data-testid=\"ai-knowledge-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.ai/api",
+    "bffMount": "/api/v1/admin/ai",
+    "resource": "ai-knowledge",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/ai-knowledge",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/ai-knowledge/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/ai-knowledge"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/ai-knowledge/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/ai-knowledge/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"ai-knowledge-title\"]",
+    "refresh": "[data-testid=\"ai-knowledge-refresh\"]",
+    "createButton": "[data-testid=\"ai-knowledge-create\"]",
+    "searchForm": "[data-testid=\"ai-knowledge-search\"]",
+    "searchSubmit": "[data-testid=\"ai-knowledge-search-submit\"]",
+    "searchReset": "[data-testid=\"ai-knowledge-search-reset\"]",
+    "total": "[data-testid=\"ai-knowledge-total\"]",
+    "table": "[data-testid=\"ai-knowledge-table\"]",
+    "row": "[data-testid=\"ai-knowledge-row\"]",
+    "editButton": "[data-testid=\"ai-knowledge-edit\"]",
+    "deleteButton": "[data-testid=\"ai-knowledge-delete\"]",
+    "form": "[data-testid=\"ai-knowledge-form\"]",
+    "formError": "[data-testid=\"ai-knowledge-form-error\"]",
+    "formSubmit": "[data-testid=\"ai-knowledge-form-submit\"]",
+    "formCancel": "[data-testid=\"ai-knowledge-form-cancel\"]",
+    "formClose": "[data-testid=\"ai-knowledge-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "AI 知识库列表",
+    "dialogLabel": {
+      "create": "新增AI 知识库",
+      "edit": "编辑AI 知识库"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "知识库名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "description",
+        "label": "知识库描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      },
+      {
+        "name": "embedding_model_id",
+        "label": "向量模型编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-embedding_model_id",
+        "selector": "[data-testid=\"field-embedding_model_id\"]"
+      },
+      {
+        "name": "embedding_model",
+        "label": "模型标识",
+        "type": "string",
+        "required": false,
+        "testId": "field-embedding_model",
+        "selector": "[data-testid=\"field-embedding_model\"]"
+      },
+      {
+        "name": "top_k",
+        "label": "topK",
+        "type": "number",
+        "required": false,
+        "testId": "field-top_k",
+        "selector": "[data-testid=\"field-top_k\"]"
+      },
+      {
+        "name": "similarity_threshold",
+        "label": "相似度阈值",
+        "type": "number",
+        "required": false,
+        "testId": "field-similarity_threshold",
+        "selector": "[data-testid=\"field-similarity_threshold\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "ai-knowledge",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"ai-knowledge\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"ai-knowledge-form-overlay\"]",
+      "dialog": "[data-testid=\"ai-knowledge-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "ai-knowledge:search",
+      "reset": "ai-knowledge:reset",
+      "refresh": "ai-knowledge:refresh",
+      "create": "ai-knowledge:create",
+      "edit": "ai-knowledge:edit",
+      "delete": "ai-knowledge:delete",
+      "submit": "ai-knowledge:submit",
+      "cancel": "ai-knowledge:cancel",
+      "close": "ai-knowledge:close",
+      "row": "ai-knowledge:row",
+      "pagination": "ai-knowledge:pagination",
+      "fields": {
+        "name": "ai-knowledge:field:name",
+        "description": "ai-knowledge:field:description",
+        "embedding_model_id": "ai-knowledge:field:embedding_model_id",
+        "embedding_model": "ai-knowledge:field:embedding_model",
+        "top_k": "ai-knowledge:field:top_k",
+        "similarity_threshold": "ai-knowledge:field:similarity_threshold",
+        "status": "ai-knowledge:field:status"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "ai.ai-knowledge",
+      "examples": [
+        "ai.ai-knowledge__List__Refresh",
+        "ai.ai-knowledge__ListItem__Open",
+        "ai.ai-knowledge__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

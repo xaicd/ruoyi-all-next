@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for PayWalletRecharge（源框架导入） (PayWalletRecharge)
+-- Auto-generated RBAC & Menu Migration for 会员钱包充值 (PayWalletRecharge)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-pay-wallet-recharge',
   'pay-dir',
-  'PayWalletRecharge（源框架导入）管理',
+  '会员钱包充值管理',
   '/admin/pay/pay-wallet-recharge',
   'pay/pay-wallet-recharge/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-pay-wallet-recharge-query',  'menu-pay-wallet-recharge', '查询PayWalletRecharge（源框架导入）', 'BUTTON', 'ACTIVE', 'pay:pay_wallet_recharge:query',  1, NOW(), NOW()),
-('menu-pay-wallet-recharge-create', 'menu-pay-wallet-recharge', '新增PayWalletRecharge（源框架导入）', 'BUTTON', 'ACTIVE', 'pay:pay_wallet_recharge:create', 2, NOW(), NOW()),
-('menu-pay-wallet-recharge-update', 'menu-pay-wallet-recharge', '修改PayWalletRecharge（源框架导入）', 'BUTTON', 'ACTIVE', 'pay:pay_wallet_recharge:update', 3, NOW(), NOW()),
-('menu-pay-wallet-recharge-delete', 'menu-pay-wallet-recharge', '删除PayWalletRecharge（源框架导入）', 'BUTTON', 'ACTIVE', 'pay:pay_wallet_recharge:delete', 4, NOW(), NOW())
+('menu-pay-wallet-recharge-query',  'menu-pay-wallet-recharge', '查询会员钱包充值', 'BUTTON', 'ACTIVE', 'pay:pay_wallet_recharge:query',  1, NOW(), NOW()),
+('menu-pay-wallet-recharge-create', 'menu-pay-wallet-recharge', '新增会员钱包充值', 'BUTTON', 'ACTIVE', 'pay:pay_wallet_recharge:create', 2, NOW(), NOW()),
+('menu-pay-wallet-recharge-update', 'menu-pay-wallet-recharge', '修改会员钱包充值', 'BUTTON', 'ACTIVE', 'pay:pay_wallet_recharge:update', 3, NOW(), NOW()),
+('menu-pay-wallet-recharge-delete', 'menu-pay-wallet-recharge', '删除会员钱包充值', 'BUTTON', 'ACTIVE', 'pay:pay_wallet_recharge:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

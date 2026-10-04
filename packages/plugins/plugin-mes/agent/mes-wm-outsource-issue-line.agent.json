@@ -1,0 +1,231 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesWmOutsourceIssueLine",
+  "kebab": "mes-wm-outsource-issue-line",
+  "businessName": "MES 外协发料单行",
+  "permissionPrefix": "mes:mes_wm_outsource_issue_line",
+  "page": {
+    "route": "/admin/mes/mes-wm-outsource-issue-line",
+    "title": "MES 外协发料单行管理",
+    "titleSelector": "[data-testid=\"mes-wm-outsource-issue-line-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-wm-outsource-issue-line",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-wm-outsource-issue-line",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-wm-outsource-issue-line/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-wm-outsource-issue-line"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-wm-outsource-issue-line/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-wm-outsource-issue-line/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-wm-outsource-issue-line-title\"]",
+    "refresh": "[data-testid=\"mes-wm-outsource-issue-line-refresh\"]",
+    "createButton": "[data-testid=\"mes-wm-outsource-issue-line-create\"]",
+    "searchForm": "[data-testid=\"mes-wm-outsource-issue-line-search\"]",
+    "searchSubmit": "[data-testid=\"mes-wm-outsource-issue-line-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-wm-outsource-issue-line-search-reset\"]",
+    "total": "[data-testid=\"mes-wm-outsource-issue-line-total\"]",
+    "table": "[data-testid=\"mes-wm-outsource-issue-line-table\"]",
+    "row": "[data-testid=\"mes-wm-outsource-issue-line-row\"]",
+    "editButton": "[data-testid=\"mes-wm-outsource-issue-line-edit\"]",
+    "deleteButton": "[data-testid=\"mes-wm-outsource-issue-line-delete\"]",
+    "form": "[data-testid=\"mes-wm-outsource-issue-line-form\"]",
+    "formError": "[data-testid=\"mes-wm-outsource-issue-line-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-wm-outsource-issue-line-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-wm-outsource-issue-line-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-wm-outsource-issue-line-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 外协发料单行列表",
+    "dialogLabel": {
+      "create": "新增MES 外协发料单行",
+      "edit": "编辑MES 外协发料单行"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "issue_id",
+        "label": "发料单ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-issue_id",
+        "selector": "[data-testid=\"field-issue_id\"]"
+      },
+      {
+        "name": "material_stock_id",
+        "label": "库存ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-material_stock_id",
+        "selector": "[data-testid=\"field-material_stock_id\"]"
+      },
+      {
+        "name": "item_id",
+        "label": "物料ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-item_id",
+        "selector": "[data-testid=\"field-item_id\"]"
+      },
+      {
+        "name": "quantity",
+        "label": "发料数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-quantity",
+        "selector": "[data-testid=\"field-quantity\"]"
+      },
+      {
+        "name": "batch_id",
+        "label": "批次ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-batch_id",
+        "selector": "[data-testid=\"field-batch_id\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-wm-outsource-issue-line",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-wm-outsource-issue-line\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-wm-outsource-issue-line-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-wm-outsource-issue-line-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-wm-outsource-issue-line:search",
+      "reset": "mes-wm-outsource-issue-line:reset",
+      "refresh": "mes-wm-outsource-issue-line:refresh",
+      "create": "mes-wm-outsource-issue-line:create",
+      "edit": "mes-wm-outsource-issue-line:edit",
+      "delete": "mes-wm-outsource-issue-line:delete",
+      "submit": "mes-wm-outsource-issue-line:submit",
+      "cancel": "mes-wm-outsource-issue-line:cancel",
+      "close": "mes-wm-outsource-issue-line:close",
+      "row": "mes-wm-outsource-issue-line:row",
+      "pagination": "mes-wm-outsource-issue-line:pagination",
+      "fields": {
+        "issue_id": "mes-wm-outsource-issue-line:field:issue_id",
+        "material_stock_id": "mes-wm-outsource-issue-line:field:material_stock_id",
+        "item_id": "mes-wm-outsource-issue-line:field:item_id",
+        "quantity": "mes-wm-outsource-issue-line:field:quantity",
+        "batch_id": "mes-wm-outsource-issue-line:field:batch_id",
+        "remark": "mes-wm-outsource-issue-line:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-wm-outsource-issue-line",
+      "examples": [
+        "mes.mes-wm-outsource-issue-line__List__Refresh",
+        "mes.mes-wm-outsource-issue-line__ListItem__Open",
+        "mes.mes-wm-outsource-issue-line__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

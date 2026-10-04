@@ -1,0 +1,240 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "im",
+  "entity": "ImChannelMaterial",
+  "kebab": "im-channel-material",
+  "businessName": "IM 频道素材 DO业务语义：- 运营素材库，可被反复推送- 一条素材 1:N 关联多条 - 富文本仅在素材详情接口按需返回，推送 payload 不带，避免压爆 WebSocket 通道",
+  "permissionPrefix": "im:im_channel_material",
+  "page": {
+    "route": "/admin/im/im-channel-material",
+    "title": "IM 频道素材 DO业务语义：- 运营素材库，可被反复推送- 一条素材 1:N 关联多条 - 富文本仅在素材详情接口按需返回，推送 payload 不带，避免压爆 WebSocket 通道管理",
+    "titleSelector": "[data-testid=\"im-channel-material-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.im/api",
+    "bffMount": "/api/v1/admin/im",
+    "resource": "im-channel-material",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/im-channel-material",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/im-channel-material/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/im-channel-material"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/im-channel-material/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/im-channel-material/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"im-channel-material-title\"]",
+    "refresh": "[data-testid=\"im-channel-material-refresh\"]",
+    "createButton": "[data-testid=\"im-channel-material-create\"]",
+    "searchForm": "[data-testid=\"im-channel-material-search\"]",
+    "searchSubmit": "[data-testid=\"im-channel-material-search-submit\"]",
+    "searchReset": "[data-testid=\"im-channel-material-search-reset\"]",
+    "total": "[data-testid=\"im-channel-material-total\"]",
+    "table": "[data-testid=\"im-channel-material-table\"]",
+    "row": "[data-testid=\"im-channel-material-row\"]",
+    "editButton": "[data-testid=\"im-channel-material-edit\"]",
+    "deleteButton": "[data-testid=\"im-channel-material-delete\"]",
+    "form": "[data-testid=\"im-channel-material-form\"]",
+    "formError": "[data-testid=\"im-channel-material-form-error\"]",
+    "formSubmit": "[data-testid=\"im-channel-material-form-submit\"]",
+    "formCancel": "[data-testid=\"im-channel-material-form-cancel\"]",
+    "formClose": "[data-testid=\"im-channel-material-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IM 频道素材 DO业务语义：- 运营素材库，可被反复推送- 一条素材 1:N 关联多条 - 富文本仅在素材详情接口按需返回，推送 payload 不带，避免压爆 WebSocket 通道列表",
+    "dialogLabel": {
+      "create": "新增IM 频道素材 DO业务语义：- 运营素材库，可被反复推送- 一条素材 1:N 关联多条 - 富文本仅在素材详情接口按需返回，推送 payload 不带，避免压爆 WebSocket 通道",
+      "edit": "编辑IM 频道素材 DO业务语义：- 运营素材库，可被反复推送- 一条素材 1:N 关联多条 - 富文本仅在素材详情接口按需返回，推送 payload 不带，避免压爆 WebSocket 通道"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "channel_id",
+        "label": "频道编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-channel_id",
+        "selector": "[data-testid=\"field-channel_id\"]"
+      },
+      {
+        "name": "type",
+        "label": "素材内容类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "string",
+        "required": false,
+        "testId": "field-title",
+        "selector": "[data-testid=\"field-title\"]"
+      },
+      {
+        "name": "cover_url",
+        "label": "封面图",
+        "type": "string",
+        "required": false,
+        "testId": "field-cover_url",
+        "selector": "[data-testid=\"field-cover_url\"]"
+      },
+      {
+        "name": "summary",
+        "label": "摘要",
+        "type": "string",
+        "required": false,
+        "testId": "field-summary",
+        "selector": "[data-testid=\"field-summary\"]"
+      },
+      {
+        "name": "content",
+        "label": "富文本 HTML；在 使用",
+        "type": "string",
+        "required": false,
+        "testId": "field-content",
+        "selector": "[data-testid=\"field-content\"]"
+      },
+      {
+        "name": "url",
+        "label": "跳转链接；在 使用",
+        "type": "string",
+        "required": false,
+        "testId": "field-url",
+        "selector": "[data-testid=\"field-url\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "im-channel-material",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"im-channel-material\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"im-channel-material-form-overlay\"]",
+      "dialog": "[data-testid=\"im-channel-material-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "im-channel-material:search",
+      "reset": "im-channel-material:reset",
+      "refresh": "im-channel-material:refresh",
+      "create": "im-channel-material:create",
+      "edit": "im-channel-material:edit",
+      "delete": "im-channel-material:delete",
+      "submit": "im-channel-material:submit",
+      "cancel": "im-channel-material:cancel",
+      "close": "im-channel-material:close",
+      "row": "im-channel-material:row",
+      "pagination": "im-channel-material:pagination",
+      "fields": {
+        "channel_id": "im-channel-material:field:channel_id",
+        "type": "im-channel-material:field:type",
+        "title": "im-channel-material:field:title",
+        "cover_url": "im-channel-material:field:cover_url",
+        "summary": "im-channel-material:field:summary",
+        "content": "im-channel-material:field:content",
+        "url": "im-channel-material:field:url"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "im.im-channel-material",
+      "examples": [
+        "im.im-channel-material__List__Refresh",
+        "im.im-channel-material__ListItem__Open",
+        "im.im-channel-material__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

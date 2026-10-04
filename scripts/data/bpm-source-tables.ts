@@ -6,12 +6,12 @@ export const BPM_TABLES: CodegenConfig[] = [
   {
     moduleName: "bpm",
     className: "BpmCategory",
-    businessName: "BpmCategory（源框架导入）",
+    businessName: "BPM 流程分类",
     parentMenuId: "bpm-dir",
     permissionPrefix: "bpm:bpm_category",
     table: {
       name: "bpm_category",
-      comment: "BpmCategory（源框架导入）",
+      comment: "BPM 流程分类",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"分类编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"分类名","nullableInferred":true},
@@ -31,12 +31,12 @@ export const BPM_TABLES: CodegenConfig[] = [
   {
     moduleName: "bpm",
     className: "BpmForm",
-    businessName: "BpmForm（源框架导入）",
+    businessName: "BPM 工作流的表单定义用于工作流的申请表单，需要动态配置的场景",
     parentMenuId: "bpm-dir",
     permissionPrefix: "bpm:bpm_form",
     table: {
       name: "bpm_form",
-      comment: "BpmForm（源框架导入）",
+      comment: "BPM 工作流的表单定义用于工作流的申请表单，需要动态配置的场景",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"表单名","nullableInferred":true},
@@ -56,12 +56,12 @@ export const BPM_TABLES: CodegenConfig[] = [
   {
     moduleName: "bpm",
     className: "BpmOALeave",
-    businessName: "BpmOALeave（源框架导入）",
+    businessName: "OA 请假申请 DO 请假天数，目前先简单做。一般是分成请假上午和下午，可以是 1 整天，可以是 0.5 半天",
     parentMenuId: "bpm-dir",
     permissionPrefix: "bpm:bpm_oaleave",
     table: {
       name: "bpm_oa_leave",
-      comment: "BpmOALeave（源框架导入）",
+      comment: "OA 请假申请 DO 请假天数，目前先简单做。一般是分成请假上午和下午，可以是 1 整天，可以是 0.5 半天",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"请假表单主键","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"申请人的用户编号","nullableInferred":true},
@@ -84,12 +84,12 @@ export const BPM_TABLES: CodegenConfig[] = [
   {
     moduleName: "bpm",
     className: "BpmProcessDefinitionInfo",
-    businessName: "BpmProcessDefinitionInfo（源框架导入）",
+    businessName: "BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表",
     parentMenuId: "bpm-dir",
     permissionPrefix: "bpm:bpm_process_definition_info",
     table: {
       name: "bpm_process_definition_info",
-      comment: "BpmProcessDefinitionInfo（源框架导入）",
+      comment: "BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"process_definition_id","type":"varchar","tsType":"string","nullable":true,"comment":"流程定义的编号","nullableInferred":true},
@@ -133,12 +133,12 @@ export const BPM_TABLES: CodegenConfig[] = [
   {
     moduleName: "bpm",
     className: "BpmProcessExpression",
-    businessName: "BpmProcessExpression（源框架导入）",
+    businessName: "BPM 流程表达式",
     parentMenuId: "bpm-dir",
     permissionPrefix: "bpm:bpm_process_expression",
     table: {
       name: "bpm_process_expression",
-      comment: "BpmProcessExpression（源框架导入）",
+      comment: "BPM 流程表达式",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"表达式名字","nullableInferred":true},
@@ -156,12 +156,12 @@ export const BPM_TABLES: CodegenConfig[] = [
   {
     moduleName: "bpm",
     className: "BpmProcessInstanceCopy",
-    businessName: "BpmProcessInstanceCopy（源框架导入）",
+    businessName: "流程抄送",
     parentMenuId: "bpm-dir",
     permissionPrefix: "bpm:bpm_process_instance_copy",
     table: {
       name: "bpm_process_instance_copy",
-      comment: "BpmProcessInstanceCopy（源框架导入）",
+      comment: "流程抄送",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"start_user_id","type":"bigint","tsType":"number","nullable":true,"comment":"发起人 Id","nullableInferred":true},
@@ -186,12 +186,12 @@ export const BPM_TABLES: CodegenConfig[] = [
   {
     moduleName: "bpm",
     className: "BpmProcessListener",
-    businessName: "BpmProcessListener（源框架导入）",
+    businessName: "BPM 流程监听器 DO目的：本质上它是流程监听器的模版，用于 BPMN 在设计时，直接选择这些模版",
     parentMenuId: "bpm-dir",
     permissionPrefix: "bpm:bpm_process_listener",
     table: {
       name: "bpm_process_listener",
-      comment: "BpmProcessListener（源框架导入）",
+      comment: "BPM 流程监听器 DO目的：本质上它是流程监听器的模版，用于 BPMN 在设计时，直接选择这些模版",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"主键 ID，自增","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"监听器名字","nullableInferred":true},
@@ -212,12 +212,12 @@ export const BPM_TABLES: CodegenConfig[] = [
   {
     moduleName: "bpm",
     className: "BpmUserGroup",
-    businessName: "BpmUserGroup（源框架导入）",
+    businessName: "BPM 用户组",
     parentMenuId: "bpm-dir",
     permissionPrefix: "bpm:bpm_user_group",
     table: {
       name: "bpm_user_group",
-      comment: "BpmUserGroup（源框架导入）",
+      comment: "BPM 用户组",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号，自增","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"组名","nullableInferred":true},

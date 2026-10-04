@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { AiKnowledgeSegmentService } from "../ai-knowledge-segment.service"
 
 describe("AiKnowledgeSegmentService", () => {
-  it("should create and query AiKnowledgeSegment（源框架导入）", async () => {
+  it("should create and query AI 知识库-文档分段", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AiKnowledgeSegmentService.create({
         knowledge_id: 1,
@@ -21,7 +21,7 @@ describe("AiKnowledgeSegmentService", () => {
   
       const updated = await AiKnowledgeSegmentService.update(created.id, {
         id: created.id,
-        knowledge_id: "更新AiKnowledgeSegment（源框架导入）",
+        knowledge_id: "更新AI 知识库-文档分段",
       } as any)
       expect(updated).toBeDefined()
   

@@ -253,6 +253,18 @@
 4. 补齐权限、日志与自动化测试。
 5. 门禁检查与文档记录回写。
 
+### 5.2.1 Agent-Native 属性规范（强制）
+
+所有 UI 组件必须带 Agent-Native 属性，供 agent-device / agent-browser 做自动化测试与运营：
+
+1. 交互元素必带 `data-agent-target="<模块>:<动作>"`；根节点带 `data-agent-scope`；元素状态走 `data-agent-state`。
+2. 页面顶层必须暴露 `data-agent-page-ready` 就绪信号。
+3. 多层弹窗打开时，**底层容器必须打 `inert`** 实现节点剪枝隔离。
+4. 移动端（clients/expo）testID 统一 `[Screen]__[Component]__[Action]` 命名空间。
+5. **严禁**让 agent 依赖无文本 CSS 或坐标定位。
+6. 每张表随代码产出 Agent 操作契约 `<插件根>/agent/<kebab>.agent.json`；汇总 `npm run agent:contracts`。
+7. 机检: `npm run agent:native:check` + `npm run agent:contracts:check`（ratchet，只拦新增）。
+
 ### 5.2 前端 UI Design System 与低代码 Codegen 模板对齐规范（强制）
 
 所有手动编写与低代码生成器 (Codegen Engine) 产出的前端页面，必须严格遵循平台统一 UI Design System 风格指南（以 `channels.page.tsx` 为视觉基准）：

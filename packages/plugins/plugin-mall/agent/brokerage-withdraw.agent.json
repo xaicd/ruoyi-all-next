@@ -1,0 +1,339 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "BrokerageWithdraw",
+  "kebab": "brokerage-withdraw",
+  "businessName": "佣金提现",
+  "permissionPrefix": "mall:brokerage_withdraw",
+  "page": {
+    "route": "/admin/mall/brokerage-withdraw",
+    "title": "佣金提现管理",
+    "titleSelector": "[data-testid=\"brokerage-withdraw-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "brokerage-withdraw",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/brokerage-withdraw",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/brokerage-withdraw/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/brokerage-withdraw"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/brokerage-withdraw/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/brokerage-withdraw/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"brokerage-withdraw-title\"]",
+    "refresh": "[data-testid=\"brokerage-withdraw-refresh\"]",
+    "createButton": "[data-testid=\"brokerage-withdraw-create\"]",
+    "searchForm": "[data-testid=\"brokerage-withdraw-search\"]",
+    "searchSubmit": "[data-testid=\"brokerage-withdraw-search-submit\"]",
+    "searchReset": "[data-testid=\"brokerage-withdraw-search-reset\"]",
+    "total": "[data-testid=\"brokerage-withdraw-total\"]",
+    "table": "[data-testid=\"brokerage-withdraw-table\"]",
+    "row": "[data-testid=\"brokerage-withdraw-row\"]",
+    "editButton": "[data-testid=\"brokerage-withdraw-edit\"]",
+    "deleteButton": "[data-testid=\"brokerage-withdraw-delete\"]",
+    "form": "[data-testid=\"brokerage-withdraw-form\"]",
+    "formError": "[data-testid=\"brokerage-withdraw-form-error\"]",
+    "formSubmit": "[data-testid=\"brokerage-withdraw-form-submit\"]",
+    "formCancel": "[data-testid=\"brokerage-withdraw-form-cancel\"]",
+    "formClose": "[data-testid=\"brokerage-withdraw-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "佣金提现列表",
+    "dialogLabel": {
+      "create": "新增佣金提现",
+      "edit": "编辑佣金提现"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "price",
+        "label": "提现金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-price",
+        "selector": "[data-testid=\"field-price\"]"
+      },
+      {
+        "name": "fee_price",
+        "label": "提现手续费，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-fee_price",
+        "selector": "[data-testid=\"field-fee_price\"]"
+      },
+      {
+        "name": "total_price",
+        "label": "当前总佣金，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_price",
+        "selector": "[data-testid=\"field-total_price\"]"
+      },
+      {
+        "name": "type",
+        "label": "提现类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "user_name",
+        "label": "提现姓名",
+        "type": "string",
+        "required": false,
+        "testId": "field-user_name",
+        "selector": "[data-testid=\"field-user_name\"]"
+      },
+      {
+        "name": "user_account",
+        "label": "提现账号",
+        "type": "string",
+        "required": false,
+        "testId": "field-user_account",
+        "selector": "[data-testid=\"field-user_account\"]"
+      },
+      {
+        "name": "qr_code_url",
+        "label": "收款码",
+        "type": "string",
+        "required": false,
+        "testId": "field-qr_code_url",
+        "selector": "[data-testid=\"field-qr_code_url\"]"
+      },
+      {
+        "name": "bank_name",
+        "label": "银行名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-bank_name",
+        "selector": "[data-testid=\"field-bank_name\"]"
+      },
+      {
+        "name": "bank_address",
+        "label": "开户地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-bank_address",
+        "selector": "[data-testid=\"field-bank_address\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "audit_reason",
+        "label": "审核驳回原因",
+        "type": "string",
+        "required": false,
+        "testId": "field-audit_reason",
+        "selector": "[data-testid=\"field-audit_reason\"]"
+      },
+      {
+        "name": "audit_time",
+        "label": "审核时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-audit_time",
+        "selector": "[data-testid=\"field-audit_time\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      },
+      {
+        "name": "pay_transfer_id",
+        "label": "转账单编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-pay_transfer_id",
+        "selector": "[data-testid=\"field-pay_transfer_id\"]"
+      },
+      {
+        "name": "transfer_channel_code",
+        "label": "转账渠道",
+        "type": "string",
+        "required": false,
+        "testId": "field-transfer_channel_code",
+        "selector": "[data-testid=\"field-transfer_channel_code\"]"
+      },
+      {
+        "name": "transfer_time",
+        "label": "转账成功时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-transfer_time",
+        "selector": "[data-testid=\"field-transfer_time\"]"
+      },
+      {
+        "name": "transfer_error_msg",
+        "label": "转账错误提示",
+        "type": "string",
+        "required": false,
+        "testId": "field-transfer_error_msg",
+        "selector": "[data-testid=\"field-transfer_error_msg\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "brokerage-withdraw",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"brokerage-withdraw\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"brokerage-withdraw-form-overlay\"]",
+      "dialog": "[data-testid=\"brokerage-withdraw-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "brokerage-withdraw:search",
+      "reset": "brokerage-withdraw:reset",
+      "refresh": "brokerage-withdraw:refresh",
+      "create": "brokerage-withdraw:create",
+      "edit": "brokerage-withdraw:edit",
+      "delete": "brokerage-withdraw:delete",
+      "submit": "brokerage-withdraw:submit",
+      "cancel": "brokerage-withdraw:cancel",
+      "close": "brokerage-withdraw:close",
+      "row": "brokerage-withdraw:row",
+      "pagination": "brokerage-withdraw:pagination",
+      "fields": {
+        "user_id": "brokerage-withdraw:field:user_id",
+        "price": "brokerage-withdraw:field:price",
+        "fee_price": "brokerage-withdraw:field:fee_price",
+        "total_price": "brokerage-withdraw:field:total_price",
+        "type": "brokerage-withdraw:field:type",
+        "user_name": "brokerage-withdraw:field:user_name",
+        "user_account": "brokerage-withdraw:field:user_account",
+        "qr_code_url": "brokerage-withdraw:field:qr_code_url",
+        "bank_name": "brokerage-withdraw:field:bank_name",
+        "bank_address": "brokerage-withdraw:field:bank_address",
+        "status": "brokerage-withdraw:field:status",
+        "audit_reason": "brokerage-withdraw:field:audit_reason",
+        "audit_time": "brokerage-withdraw:field:audit_time",
+        "remark": "brokerage-withdraw:field:remark",
+        "pay_transfer_id": "brokerage-withdraw:field:pay_transfer_id",
+        "transfer_channel_code": "brokerage-withdraw:field:transfer_channel_code",
+        "transfer_time": "brokerage-withdraw:field:transfer_time",
+        "transfer_error_msg": "brokerage-withdraw:field:transfer_error_msg"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.brokerage-withdraw",
+      "examples": [
+        "mall.brokerage-withdraw__List__Refresh",
+        "mall.brokerage-withdraw__ListItem__Open",
+        "mall.brokerage-withdraw__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

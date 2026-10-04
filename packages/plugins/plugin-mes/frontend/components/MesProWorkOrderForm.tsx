@@ -67,24 +67,36 @@ export function MesProWorkOrderForm({ open, initialData, onClose, onSuccess }: M
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-pro-work-order-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 生产工单" : "新增MES 生产工单"}
+        data-testid="mes-pro-work-order-form"
+        data-agent-scope="mes-pro-work-order:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesProWorkOrder（源框架导入）" : "新增MesProWorkOrder（源框架导入）"}
+            {isEdit ? "编辑MES 生产工单" : "新增MES 生产工单"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-pro-work-order-form-close" data-agent-target="mes-pro-work-order:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-pro-work-order-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工单编码</label>
+          <label htmlFor="mes-pro-work-order-code" className="block text-xs text-slate-600 mb-1">工单编码</label>
           <input
             type="text"
+            id="mes-pro-work-order-code"
+            data-testid="field-code"
+            data-agent-target="mes-pro-work-order:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="工单编码"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -94,9 +106,14 @@ export function MesProWorkOrderForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工单名称</label>
+          <label htmlFor="mes-pro-work-order-name" className="block text-xs text-slate-600 mb-1">工单名称</label>
           <input
             type="text"
+            id="mes-pro-work-order-name"
+            data-testid="field-name"
+            data-agent-target="mes-pro-work-order:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="工单名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -106,9 +123,14 @@ export function MesProWorkOrderForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工单类型</label>
+          <label htmlFor="mes-pro-work-order-type" className="block text-xs text-slate-600 mb-1">工单类型</label>
           <input
             type="number"
+            id="mes-pro-work-order-type"
+            data-testid="field-type"
+            data-agent-target="mes-pro-work-order:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="工单类型"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -118,9 +140,14 @@ export function MesProWorkOrderForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">来源类型</label>
+          <label htmlFor="mes-pro-work-order-order_source_type" className="block text-xs text-slate-600 mb-1">来源类型</label>
           <input
             type="number"
+            id="mes-pro-work-order-order_source_type"
+            data-testid="field-order_source_type"
+            data-agent-target="mes-pro-work-order:field:order_source_type"
+            data-agent-state={formData.order_source_type == null || formData.order_source_type === "" ? "empty" : "filled"}
+            aria-label="来源类型"
             value={formData.order_source_type != null ? String(formData.order_source_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, order_source_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -130,9 +157,14 @@ export function MesProWorkOrderForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">来源单据编号</label>
+          <label htmlFor="mes-pro-work-order-order_source_code" className="block text-xs text-slate-600 mb-1">来源单据编号</label>
           <input
             type="text"
+            id="mes-pro-work-order-order_source_code"
+            data-testid="field-order_source_code"
+            data-agent-target="mes-pro-work-order:field:order_source_code"
+            data-agent-state={formData.order_source_code ? "filled" : "empty"}
+            aria-label="来源单据编号"
             value={formData.order_source_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, order_source_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -142,9 +174,14 @@ export function MesProWorkOrderForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品编号</label>
+          <label htmlFor="mes-pro-work-order-product_id" className="block text-xs text-slate-600 mb-1">产品编号</label>
           <input
             type="number"
+            id="mes-pro-work-order-product_id"
+            data-testid="field-product_id"
+            data-agent-target="mes-pro-work-order:field:product_id"
+            data-agent-state={formData.product_id == null || formData.product_id === "" ? "empty" : "filled"}
+            aria-label="产品编号"
             value={formData.product_id != null ? String(formData.product_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, product_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -154,9 +191,14 @@ export function MesProWorkOrderForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生产数量</label>
+          <label htmlFor="mes-pro-work-order-quantity" className="block text-xs text-slate-600 mb-1">生产数量</label>
           <input
             type="number"
+            id="mes-pro-work-order-quantity"
+            data-testid="field-quantity"
+            data-agent-target="mes-pro-work-order:field:quantity"
+            data-agent-state={formData.quantity == null || formData.quantity === "" ? "empty" : "filled"}
+            aria-label="生产数量"
             value={formData.quantity != null ? String(formData.quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -166,9 +208,14 @@ export function MesProWorkOrderForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">已生产数量</label>
+          <label htmlFor="mes-pro-work-order-quantity_produced" className="block text-xs text-slate-600 mb-1">已生产数量</label>
           <input
             type="number"
+            id="mes-pro-work-order-quantity_produced"
+            data-testid="field-quantity_produced"
+            data-agent-target="mes-pro-work-order:field:quantity_produced"
+            data-agent-state={formData.quantity_produced == null || formData.quantity_produced === "" ? "empty" : "filled"}
+            aria-label="已生产数量"
             value={formData.quantity_produced != null ? String(formData.quantity_produced) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, quantity_produced: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -178,9 +225,14 @@ export function MesProWorkOrderForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">调整数量</label>
+          <label htmlFor="mes-pro-work-order-quantity_changed" className="block text-xs text-slate-600 mb-1">调整数量</label>
           <input
             type="number"
+            id="mes-pro-work-order-quantity_changed"
+            data-testid="field-quantity_changed"
+            data-agent-target="mes-pro-work-order:field:quantity_changed"
+            data-agent-state={formData.quantity_changed == null || formData.quantity_changed === "" ? "empty" : "filled"}
+            aria-label="调整数量"
             value={formData.quantity_changed != null ? String(formData.quantity_changed) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, quantity_changed: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -190,9 +242,14 @@ export function MesProWorkOrderForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">已排产数量</label>
+          <label htmlFor="mes-pro-work-order-quantity_scheduled" className="block text-xs text-slate-600 mb-1">已排产数量</label>
           <input
             type="number"
+            id="mes-pro-work-order-quantity_scheduled"
+            data-testid="field-quantity_scheduled"
+            data-agent-target="mes-pro-work-order:field:quantity_scheduled"
+            data-agent-state={formData.quantity_scheduled == null || formData.quantity_scheduled === "" ? "empty" : "filled"}
+            aria-label="已排产数量"
             value={formData.quantity_scheduled != null ? String(formData.quantity_scheduled) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, quantity_scheduled: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -202,9 +259,14 @@ export function MesProWorkOrderForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">客户编号</label>
+          <label htmlFor="mes-pro-work-order-client_id" className="block text-xs text-slate-600 mb-1">客户编号</label>
           <input
             type="number"
+            id="mes-pro-work-order-client_id"
+            data-testid="field-client_id"
+            data-agent-target="mes-pro-work-order:field:client_id"
+            data-agent-state={formData.client_id == null || formData.client_id === "" ? "empty" : "filled"}
+            aria-label="客户编号"
             value={formData.client_id != null ? String(formData.client_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, client_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -214,9 +276,14 @@ export function MesProWorkOrderForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">供应商编号</label>
+          <label htmlFor="mes-pro-work-order-vendor_id" className="block text-xs text-slate-600 mb-1">供应商编号</label>
           <input
             type="number"
+            id="mes-pro-work-order-vendor_id"
+            data-testid="field-vendor_id"
+            data-agent-target="mes-pro-work-order:field:vendor_id"
+            data-agent-state={formData.vendor_id == null || formData.vendor_id === "" ? "empty" : "filled"}
+            aria-label="供应商编号"
             value={formData.vendor_id != null ? String(formData.vendor_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, vendor_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -226,9 +293,14 @@ export function MesProWorkOrderForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">批次号</label>
+          <label htmlFor="mes-pro-work-order-batch_code" className="block text-xs text-slate-600 mb-1">批次号</label>
           <input
             type="text"
+            id="mes-pro-work-order-batch_code"
+            data-testid="field-batch_code"
+            data-agent-target="mes-pro-work-order:field:batch_code"
+            data-agent-state={formData.batch_code ? "filled" : "empty"}
+            aria-label="批次号"
             value={formData.batch_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, batch_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -238,9 +310,14 @@ export function MesProWorkOrderForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">需求日期</label>
+          <label htmlFor="mes-pro-work-order-request_date" className="block text-xs text-slate-600 mb-1">需求日期</label>
           <input
             type="text"
+            id="mes-pro-work-order-request_date"
+            data-testid="field-request_date"
+            data-agent-target="mes-pro-work-order:field:request_date"
+            data-agent-state={formData.request_date ? "filled" : "empty"}
+            aria-label="需求日期"
             value={formData.request_date ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, request_date: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -250,9 +327,14 @@ export function MesProWorkOrderForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">父工单编号</label>
+          <label htmlFor="mes-pro-work-order-parent_id" className="block text-xs text-slate-600 mb-1">父工单编号</label>
           <input
             type="number"
+            id="mes-pro-work-order-parent_id"
+            data-testid="field-parent_id"
+            data-agent-target="mes-pro-work-order:field:parent_id"
+            data-agent-state={formData.parent_id == null || formData.parent_id === "" ? "empty" : "filled"}
+            aria-label="父工单编号"
             value={formData.parent_id != null ? String(formData.parent_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, parent_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -262,9 +344,14 @@ export function MesProWorkOrderForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">完成时间</label>
+          <label htmlFor="mes-pro-work-order-finish_date" className="block text-xs text-slate-600 mb-1">完成时间</label>
           <input
             type="text"
+            id="mes-pro-work-order-finish_date"
+            data-testid="field-finish_date"
+            data-agent-target="mes-pro-work-order:field:finish_date"
+            data-agent-state={formData.finish_date ? "filled" : "empty"}
+            aria-label="完成时间"
             value={formData.finish_date ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, finish_date: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -274,9 +361,14 @@ export function MesProWorkOrderForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">取消时间</label>
+          <label htmlFor="mes-pro-work-order-cancel_date" className="block text-xs text-slate-600 mb-1">取消时间</label>
           <input
             type="text"
+            id="mes-pro-work-order-cancel_date"
+            data-testid="field-cancel_date"
+            data-agent-target="mes-pro-work-order:field:cancel_date"
+            data-agent-state={formData.cancel_date ? "filled" : "empty"}
+            aria-label="取消时间"
             value={formData.cancel_date ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, cancel_date: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -286,9 +378,14 @@ export function MesProWorkOrderForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工单状态</label>
+          <label htmlFor="mes-pro-work-order-status" className="block text-xs text-slate-600 mb-1">工单状态</label>
           <input
             type="number"
+            id="mes-pro-work-order-status"
+            data-testid="field-status"
+            data-agent-target="mes-pro-work-order:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="工单状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -298,9 +395,14 @@ export function MesProWorkOrderForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-pro-work-order-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-pro-work-order-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-pro-work-order:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -314,6 +416,8 @@ export function MesProWorkOrderForm({ open, initialData, onClose, onSuccess }: M
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-pro-work-order-form-cancel"
+              data-agent-target="mes-pro-work-order:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -321,6 +425,9 @@ export function MesProWorkOrderForm({ open, initialData, onClose, onSuccess }: M
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-pro-work-order-form-submit"
+              data-agent-target="mes-pro-work-order:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesWmTransferDetail（源框架导入） (MesWmTransferDetail)
+-- Auto-generated RBAC & Menu Migration for MES 调拨明细 (MesWmTransferDetail)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-wm-transfer-detail',
   'mes-dir',
-  'MesWmTransferDetail（源框架导入）管理',
+  'MES 调拨明细管理',
   '/admin/mes/mes-wm-transfer-detail',
   'mes/mes-wm-transfer-detail/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-wm-transfer-detail-query',  'menu-mes-wm-transfer-detail', '查询MesWmTransferDetail（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_transfer_detail:query',  1, NOW(), NOW()),
-('menu-mes-wm-transfer-detail-create', 'menu-mes-wm-transfer-detail', '新增MesWmTransferDetail（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_transfer_detail:create', 2, NOW(), NOW()),
-('menu-mes-wm-transfer-detail-update', 'menu-mes-wm-transfer-detail', '修改MesWmTransferDetail（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_transfer_detail:update', 3, NOW(), NOW()),
-('menu-mes-wm-transfer-detail-delete', 'menu-mes-wm-transfer-detail', '删除MesWmTransferDetail（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_transfer_detail:delete', 4, NOW(), NOW())
+('menu-mes-wm-transfer-detail-query',  'menu-mes-wm-transfer-detail', '查询MES 调拨明细', 'BUTTON', 'ACTIVE', 'mes:mes_wm_transfer_detail:query',  1, NOW(), NOW()),
+('menu-mes-wm-transfer-detail-create', 'menu-mes-wm-transfer-detail', '新增MES 调拨明细', 'BUTTON', 'ACTIVE', 'mes:mes_wm_transfer_detail:create', 2, NOW(), NOW()),
+('menu-mes-wm-transfer-detail-update', 'menu-mes-wm-transfer-detail', '修改MES 调拨明细', 'BUTTON', 'ACTIVE', 'mes:mes_wm_transfer_detail:update', 3, NOW(), NOW()),
+('menu-mes-wm-transfer-detail-delete', 'menu-mes-wm-transfer-detail', '删除MES 调拨明细', 'BUTTON', 'ACTIVE', 'mes:mes_wm_transfer_detail:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

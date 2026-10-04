@@ -52,24 +52,36 @@ export function MesMdAutoCodeRecordForm({ open, initialData, onClose, onSuccess 
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-md-auto-code-record-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 编码生成记录" : "新增MES 编码生成记录"}
+        data-testid="mes-md-auto-code-record-form"
+        data-agent-scope="mes-md-auto-code-record:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesMdAutoCodeRecord（源框架导入）" : "新增MesMdAutoCodeRecord（源框架导入）"}
+            {isEdit ? "编辑MES 编码生成记录" : "新增MES 编码生成记录"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-md-auto-code-record-form-close" data-agent-target="mes-md-auto-code-record:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-md-auto-code-record-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">规则 ID</label>
+          <label htmlFor="mes-md-auto-code-record-rule_id" className="block text-xs text-slate-600 mb-1">规则 ID</label>
           <input
             type="number"
+            id="mes-md-auto-code-record-rule_id"
+            data-testid="field-rule_id"
+            data-agent-target="mes-md-auto-code-record:field:rule_id"
+            data-agent-state={formData.rule_id == null || formData.rule_id === "" ? "empty" : "filled"}
+            aria-label="规则 ID"
             value={formData.rule_id != null ? String(formData.rule_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, rule_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -79,9 +91,14 @@ export function MesMdAutoCodeRecordForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生成的编码</label>
+          <label htmlFor="mes-md-auto-code-record-result" className="block text-xs text-slate-600 mb-1">生成的编码</label>
           <input
             type="text"
+            id="mes-md-auto-code-record-result"
+            data-testid="field-result"
+            data-agent-target="mes-md-auto-code-record:field:result"
+            data-agent-state={formData.result ? "filled" : "empty"}
+            aria-label="生成的编码"
             value={formData.result ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, result: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -91,9 +108,14 @@ export function MesMdAutoCodeRecordForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生成的流水号</label>
+          <label htmlFor="mes-md-auto-code-record-serial_no" className="block text-xs text-slate-600 mb-1">生成的流水号</label>
           <input
             type="number"
+            id="mes-md-auto-code-record-serial_no"
+            data-testid="field-serial_no"
+            data-agent-target="mes-md-auto-code-record:field:serial_no"
+            data-agent-state={formData.serial_no == null || formData.serial_no === "" ? "empty" : "filled"}
+            aria-label="生成的流水号"
             value={formData.serial_no != null ? String(formData.serial_no) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, serial_no: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -103,9 +125,14 @@ export function MesMdAutoCodeRecordForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">传入的参数</label>
+          <label htmlFor="mes-md-auto-code-record-input_char" className="block text-xs text-slate-600 mb-1">传入的参数</label>
           <input
             type="text"
+            id="mes-md-auto-code-record-input_char"
+            data-testid="field-input_char"
+            data-agent-target="mes-md-auto-code-record:field:input_char"
+            data-agent-state={formData.input_char ? "filled" : "empty"}
+            aria-label="传入的参数"
             value={formData.input_char ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, input_char: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -119,6 +146,8 @@ export function MesMdAutoCodeRecordForm({ open, initialData, onClose, onSuccess 
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-md-auto-code-record-form-cancel"
+              data-agent-target="mes-md-auto-code-record:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -126,6 +155,9 @@ export function MesMdAutoCodeRecordForm({ open, initialData, onClose, onSuccess 
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-md-auto-code-record-form-submit"
+              data-agent-target="mes-md-auto-code-record:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

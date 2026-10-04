@@ -1,0 +1,240 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesDvSubject",
+  "kebab": "mes-dv-subject",
+  "businessName": "MES 点检保养项目",
+  "permissionPrefix": "mes:mes_dv_subject",
+  "page": {
+    "route": "/admin/mes/mes-dv-subject",
+    "title": "MES 点检保养项目管理",
+    "titleSelector": "[data-testid=\"mes-dv-subject-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-dv-subject",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-dv-subject",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-dv-subject/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-dv-subject"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-dv-subject/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-dv-subject/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-dv-subject-title\"]",
+    "refresh": "[data-testid=\"mes-dv-subject-refresh\"]",
+    "createButton": "[data-testid=\"mes-dv-subject-create\"]",
+    "searchForm": "[data-testid=\"mes-dv-subject-search\"]",
+    "searchSubmit": "[data-testid=\"mes-dv-subject-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-dv-subject-search-reset\"]",
+    "total": "[data-testid=\"mes-dv-subject-total\"]",
+    "table": "[data-testid=\"mes-dv-subject-table\"]",
+    "row": "[data-testid=\"mes-dv-subject-row\"]",
+    "editButton": "[data-testid=\"mes-dv-subject-edit\"]",
+    "deleteButton": "[data-testid=\"mes-dv-subject-delete\"]",
+    "form": "[data-testid=\"mes-dv-subject-form\"]",
+    "formError": "[data-testid=\"mes-dv-subject-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-dv-subject-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-dv-subject-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-dv-subject-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 点检保养项目列表",
+    "dialogLabel": {
+      "create": "新增MES 点检保养项目",
+      "edit": "编辑MES 点检保养项目"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "code",
+        "label": "项目编码",
+        "type": "string",
+        "required": false,
+        "testId": "field-code",
+        "selector": "[data-testid=\"field-code\"]"
+      },
+      {
+        "name": "name",
+        "label": "项目名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "type",
+        "label": "项目类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "content",
+        "label": "项目内容",
+        "type": "string",
+        "required": false,
+        "testId": "field-content",
+        "selector": "[data-testid=\"field-content\"]"
+      },
+      {
+        "name": "standard",
+        "label": "标准",
+        "type": "string",
+        "required": false,
+        "testId": "field-standard",
+        "selector": "[data-testid=\"field-standard\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-dv-subject",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-dv-subject\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-dv-subject-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-dv-subject-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-dv-subject:search",
+      "reset": "mes-dv-subject:reset",
+      "refresh": "mes-dv-subject:refresh",
+      "create": "mes-dv-subject:create",
+      "edit": "mes-dv-subject:edit",
+      "delete": "mes-dv-subject:delete",
+      "submit": "mes-dv-subject:submit",
+      "cancel": "mes-dv-subject:cancel",
+      "close": "mes-dv-subject:close",
+      "row": "mes-dv-subject:row",
+      "pagination": "mes-dv-subject:pagination",
+      "fields": {
+        "code": "mes-dv-subject:field:code",
+        "name": "mes-dv-subject:field:name",
+        "type": "mes-dv-subject:field:type",
+        "content": "mes-dv-subject:field:content",
+        "standard": "mes-dv-subject:field:standard",
+        "status": "mes-dv-subject:field:status",
+        "remark": "mes-dv-subject:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-dv-subject",
+      "examples": [
+        "mes.mes-dv-subject__List__Refresh",
+        "mes.mes-dv-subject__ListItem__Open",
+        "mes.mes-dv-subject__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

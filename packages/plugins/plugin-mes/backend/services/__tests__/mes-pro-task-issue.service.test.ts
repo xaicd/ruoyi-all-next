@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesProTaskIssueService } from "../mes-pro-task-issue.service"
 
 describe("MesProTaskIssueService", () => {
-  it("should create and query MesProTaskIssue（源框架导入）", async () => {
+  it("should create and query MES 生产任务投料", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesProTaskIssueService.create({
         task_id: 1,
@@ -21,7 +21,7 @@ describe("MesProTaskIssueService", () => {
   
       const updated = await MesProTaskIssueService.update(created.id, {
         id: created.id,
-        task_id: "更新MesProTaskIssue（源框架导入）",
+        task_id: "更新MES 生产任务投料",
       } as any)
       expect(updated).toBeDefined()
   

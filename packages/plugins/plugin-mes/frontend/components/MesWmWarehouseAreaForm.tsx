@@ -61,24 +61,36 @@ export function MesWmWarehouseAreaForm({ open, initialData, onClose, onSuccess }
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-wm-warehouse-area-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 库位" : "新增MES 库位"}
+        data-testid="mes-wm-warehouse-area-form"
+        data-agent-scope="mes-wm-warehouse-area:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesWmWarehouseArea（源框架导入）" : "新增MesWmWarehouseArea（源框架导入）"}
+            {isEdit ? "编辑MES 库位" : "新增MES 库位"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-wm-warehouse-area-form-close" data-agent-target="mes-wm-warehouse-area:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-wm-warehouse-area-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">库位编码</label>
+          <label htmlFor="mes-wm-warehouse-area-code" className="block text-xs text-slate-600 mb-1">库位编码</label>
           <input
             type="text"
+            id="mes-wm-warehouse-area-code"
+            data-testid="field-code"
+            data-agent-target="mes-wm-warehouse-area:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="库位编码"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -88,9 +100,14 @@ export function MesWmWarehouseAreaForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">库位名称</label>
+          <label htmlFor="mes-wm-warehouse-area-name" className="block text-xs text-slate-600 mb-1">库位名称</label>
           <input
             type="text"
+            id="mes-wm-warehouse-area-name"
+            data-testid="field-name"
+            data-agent-target="mes-wm-warehouse-area:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="库位名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -100,9 +117,14 @@ export function MesWmWarehouseAreaForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">库区编号</label>
+          <label htmlFor="mes-wm-warehouse-area-location_id" className="block text-xs text-slate-600 mb-1">库区编号</label>
           <input
             type="number"
+            id="mes-wm-warehouse-area-location_id"
+            data-testid="field-location_id"
+            data-agent-target="mes-wm-warehouse-area:field:location_id"
+            data-agent-state={formData.location_id == null || formData.location_id === "" ? "empty" : "filled"}
+            aria-label="库区编号"
             value={formData.location_id != null ? String(formData.location_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, location_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -112,9 +134,14 @@ export function MesWmWarehouseAreaForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">面积</label>
+          <label htmlFor="mes-wm-warehouse-area-area" className="block text-xs text-slate-600 mb-1">面积</label>
           <input
             type="number"
+            id="mes-wm-warehouse-area-area"
+            data-testid="field-area"
+            data-agent-target="mes-wm-warehouse-area:field:area"
+            data-agent-state={formData.area == null || formData.area === "" ? "empty" : "filled"}
+            aria-label="面积"
             value={formData.area != null ? String(formData.area) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, area: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -124,9 +151,14 @@ export function MesWmWarehouseAreaForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最大载重</label>
+          <label htmlFor="mes-wm-warehouse-area-max_load" className="block text-xs text-slate-600 mb-1">最大载重</label>
           <input
             type="number"
+            id="mes-wm-warehouse-area-max_load"
+            data-testid="field-max_load"
+            data-agent-target="mes-wm-warehouse-area:field:max_load"
+            data-agent-state={formData.max_load == null || formData.max_load === "" ? "empty" : "filled"}
+            aria-label="最大载重"
             value={formData.max_load != null ? String(formData.max_load) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, max_load: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -136,9 +168,14 @@ export function MesWmWarehouseAreaForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">位置 X</label>
+          <label htmlFor="mes-wm-warehouse-area-position_x" className="block text-xs text-slate-600 mb-1">位置 X</label>
           <input
             type="number"
+            id="mes-wm-warehouse-area-position_x"
+            data-testid="field-position_x"
+            data-agent-target="mes-wm-warehouse-area:field:position_x"
+            data-agent-state={formData.position_x == null || formData.position_x === "" ? "empty" : "filled"}
+            aria-label="位置 X"
             value={formData.position_x != null ? String(formData.position_x) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, position_x: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -148,9 +185,14 @@ export function MesWmWarehouseAreaForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">位置 Y</label>
+          <label htmlFor="mes-wm-warehouse-area-position_y" className="block text-xs text-slate-600 mb-1">位置 Y</label>
           <input
             type="number"
+            id="mes-wm-warehouse-area-position_y"
+            data-testid="field-position_y"
+            data-agent-target="mes-wm-warehouse-area:field:position_y"
+            data-agent-state={formData.position_y == null || formData.position_y === "" ? "empty" : "filled"}
+            aria-label="位置 Y"
             value={formData.position_y != null ? String(formData.position_y) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, position_y: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -160,9 +202,14 @@ export function MesWmWarehouseAreaForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">位置 Z</label>
+          <label htmlFor="mes-wm-warehouse-area-position_z" className="block text-xs text-slate-600 mb-1">位置 Z</label>
           <input
             type="number"
+            id="mes-wm-warehouse-area-position_z"
+            data-testid="field-position_z"
+            data-agent-target="mes-wm-warehouse-area:field:position_z"
+            data-agent-state={formData.position_z == null || formData.position_z === "" ? "empty" : "filled"}
+            aria-label="位置 Z"
             value={formData.position_z != null ? String(formData.position_z) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, position_z: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -172,9 +219,14 @@ export function MesWmWarehouseAreaForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="mes-wm-warehouse-area-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="mes-wm-warehouse-area-status"
+            data-testid="field-status"
+            data-agent-target="mes-wm-warehouse-area:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -186,40 +238,57 @@ export function MesWmWarehouseAreaForm({ open, initialData, onClose, onSuccess }
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="frozen"
+            id="mes-wm-warehouse-area-frozen"
+            data-testid="field-frozen"
+            data-agent-target="mes-wm-warehouse-area:field:frozen"
+            data-agent-state={formData.frozen ? "on" : "off"}
+            aria-label="是否冻结"
             checked={Boolean(formData.frozen)}
             onChange={(e) => setFormData((prev) => ({ ...prev, frozen: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="frozen" className="text-xs text-slate-700 font-medium">是否冻结</label>
+          <label htmlFor="mes-wm-warehouse-area-frozen" className="text-xs text-slate-700 font-medium">是否冻结</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="allow_item_mixing"
+            id="mes-wm-warehouse-area-allow_item_mixing"
+            data-testid="field-allow_item_mixing"
+            data-agent-target="mes-wm-warehouse-area:field:allow_item_mixing"
+            data-agent-state={formData.allow_item_mixing ? "on" : "off"}
+            aria-label="是否允许物料混放"
             checked={Boolean(formData.allow_item_mixing)}
             onChange={(e) => setFormData((prev) => ({ ...prev, allow_item_mixing: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="allow_item_mixing" className="text-xs text-slate-700 font-medium">是否允许物料混放</label>
+          <label htmlFor="mes-wm-warehouse-area-allow_item_mixing" className="text-xs text-slate-700 font-medium">是否允许物料混放</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="allow_batch_mixing"
+            id="mes-wm-warehouse-area-allow_batch_mixing"
+            data-testid="field-allow_batch_mixing"
+            data-agent-target="mes-wm-warehouse-area:field:allow_batch_mixing"
+            data-agent-state={formData.allow_batch_mixing ? "on" : "off"}
+            aria-label="是否允许批次混放"
             checked={Boolean(formData.allow_batch_mixing)}
             onChange={(e) => setFormData((prev) => ({ ...prev, allow_batch_mixing: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="allow_batch_mixing" className="text-xs text-slate-700 font-medium">是否允许批次混放</label>
+          <label htmlFor="mes-wm-warehouse-area-allow_batch_mixing" className="text-xs text-slate-700 font-medium">是否允许批次混放</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-wm-warehouse-area-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-wm-warehouse-area-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-wm-warehouse-area:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -233,6 +302,8 @@ export function MesWmWarehouseAreaForm({ open, initialData, onClose, onSuccess }
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-wm-warehouse-area-form-cancel"
+              data-agent-target="mes-wm-warehouse-area:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -240,6 +311,9 @@ export function MesWmWarehouseAreaForm({ open, initialData, onClose, onSuccess }
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-wm-warehouse-area-form-submit"
+              data-agent-target="mes-wm-warehouse-area:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

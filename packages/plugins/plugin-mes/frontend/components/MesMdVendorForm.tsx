@@ -69,24 +69,36 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-md-vendor-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 供应商" : "新增MES 供应商"}
+        data-testid="mes-md-vendor-form"
+        data-agent-scope="mes-md-vendor:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesMdVendor（源框架导入）" : "新增MesMdVendor（源框架导入）"}
+            {isEdit ? "编辑MES 供应商" : "新增MES 供应商"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-md-vendor-form-close" data-agent-target="mes-md-vendor:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-md-vendor-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">供应商编码</label>
+          <label htmlFor="mes-md-vendor-code" className="block text-xs text-slate-600 mb-1">供应商编码</label>
           <input
             type="text"
+            id="mes-md-vendor-code"
+            data-testid="field-code"
+            data-agent-target="mes-md-vendor:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="供应商编码"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -96,9 +108,14 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">供应商名称</label>
+          <label htmlFor="mes-md-vendor-name" className="block text-xs text-slate-600 mb-1">供应商名称</label>
           <input
             type="text"
+            id="mes-md-vendor-name"
+            data-testid="field-name"
+            data-agent-target="mes-md-vendor:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="供应商名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -108,9 +125,14 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">供应商简称</label>
+          <label htmlFor="mes-md-vendor-nickname" className="block text-xs text-slate-600 mb-1">供应商简称</label>
           <input
             type="text"
+            id="mes-md-vendor-nickname"
+            data-testid="field-nickname"
+            data-agent-target="mes-md-vendor:field:nickname"
+            data-agent-state={formData.nickname ? "filled" : "empty"}
+            aria-label="供应商简称"
             value={formData.nickname ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, nickname: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -120,9 +142,14 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">供应商英文名称</label>
+          <label htmlFor="mes-md-vendor-english_name" className="block text-xs text-slate-600 mb-1">供应商英文名称</label>
           <input
             type="text"
+            id="mes-md-vendor-english_name"
+            data-testid="field-english_name"
+            data-agent-target="mes-md-vendor:field:english_name"
+            data-agent-state={formData.english_name ? "filled" : "empty"}
+            aria-label="供应商英文名称"
             value={formData.english_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, english_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -132,9 +159,14 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">供应商简介</label>
+          <label htmlFor="mes-md-vendor-description" className="block text-xs text-slate-600 mb-1">供应商简介</label>
           <input
             type="text"
+            id="mes-md-vendor-description"
+            data-testid="field-description"
+            data-agent-target="mes-md-vendor:field:description"
+            data-agent-state={formData.description ? "filled" : "empty"}
+            aria-label="供应商简介"
             value={formData.description ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -144,9 +176,14 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">供应商LOGO地址</label>
+          <label htmlFor="mes-md-vendor-logo" className="block text-xs text-slate-600 mb-1">供应商LOGO地址</label>
           <input
             type="text"
+            id="mes-md-vendor-logo"
+            data-testid="field-logo"
+            data-agent-target="mes-md-vendor:field:logo"
+            data-agent-state={formData.logo ? "filled" : "empty"}
+            aria-label="供应商LOGO地址"
             value={formData.logo ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, logo: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -156,9 +193,14 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">供应商等级</label>
+          <label htmlFor="mes-md-vendor-level" className="block text-xs text-slate-600 mb-1">供应商等级</label>
           <input
             type="text"
+            id="mes-md-vendor-level"
+            data-testid="field-level"
+            data-agent-target="mes-md-vendor:field:level"
+            data-agent-state={formData.level ? "filled" : "empty"}
+            aria-label="供应商等级"
             value={formData.level ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, level: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -168,9 +210,14 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">供应商评分</label>
+          <label htmlFor="mes-md-vendor-score" className="block text-xs text-slate-600 mb-1">供应商评分</label>
           <input
             type="number"
+            id="mes-md-vendor-score"
+            data-testid="field-score"
+            data-agent-target="mes-md-vendor:field:score"
+            data-agent-state={formData.score == null || formData.score === "" ? "empty" : "filled"}
+            aria-label="供应商评分"
             value={formData.score != null ? String(formData.score) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, score: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -180,9 +227,14 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">供应商地址</label>
+          <label htmlFor="mes-md-vendor-address" className="block text-xs text-slate-600 mb-1">供应商地址</label>
           <input
             type="text"
+            id="mes-md-vendor-address"
+            data-testid="field-address"
+            data-agent-target="mes-md-vendor:field:address"
+            data-agent-state={formData.address ? "filled" : "empty"}
+            aria-label="供应商地址"
             value={formData.address ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, address: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -192,9 +244,14 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">供应商官网地址</label>
+          <label htmlFor="mes-md-vendor-website" className="block text-xs text-slate-600 mb-1">供应商官网地址</label>
           <input
             type="text"
+            id="mes-md-vendor-website"
+            data-testid="field-website"
+            data-agent-target="mes-md-vendor:field:website"
+            data-agent-state={formData.website ? "filled" : "empty"}
+            aria-label="供应商官网地址"
             value={formData.website ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, website: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -204,9 +261,14 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">供应商邮箱地址</label>
+          <label htmlFor="mes-md-vendor-email" className="block text-xs text-slate-600 mb-1">供应商邮箱地址</label>
           <input
             type="text"
+            id="mes-md-vendor-email"
+            data-testid="field-email"
+            data-agent-target="mes-md-vendor:field:email"
+            data-agent-state={formData.email ? "filled" : "empty"}
+            aria-label="供应商邮箱地址"
             value={formData.email ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -216,9 +278,14 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">供应商电话</label>
+          <label htmlFor="mes-md-vendor-telephone" className="block text-xs text-slate-600 mb-1">供应商电话</label>
           <input
             type="text"
+            id="mes-md-vendor-telephone"
+            data-testid="field-telephone"
+            data-agent-target="mes-md-vendor:field:telephone"
+            data-agent-state={formData.telephone ? "filled" : "empty"}
+            aria-label="供应商电话"
             value={formData.telephone ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, telephone: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -228,9 +295,14 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">联系人1</label>
+          <label htmlFor="mes-md-vendor-contact1_name" className="block text-xs text-slate-600 mb-1">联系人1</label>
           <input
             type="text"
+            id="mes-md-vendor-contact1_name"
+            data-testid="field-contact1_name"
+            data-agent-target="mes-md-vendor:field:contact1_name"
+            data-agent-state={formData.contact1_name ? "filled" : "empty"}
+            aria-label="联系人1"
             value={formData.contact1_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, contact1_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -240,9 +312,14 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">联系人1-电话</label>
+          <label htmlFor="mes-md-vendor-contact1_telephone" className="block text-xs text-slate-600 mb-1">联系人1-电话</label>
           <input
             type="text"
+            id="mes-md-vendor-contact1_telephone"
+            data-testid="field-contact1_telephone"
+            data-agent-target="mes-md-vendor:field:contact1_telephone"
+            data-agent-state={formData.contact1_telephone ? "filled" : "empty"}
+            aria-label="联系人1-电话"
             value={formData.contact1_telephone ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, contact1_telephone: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -252,9 +329,14 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">联系人1-邮箱</label>
+          <label htmlFor="mes-md-vendor-contact1_email" className="block text-xs text-slate-600 mb-1">联系人1-邮箱</label>
           <input
             type="text"
+            id="mes-md-vendor-contact1_email"
+            data-testid="field-contact1_email"
+            data-agent-target="mes-md-vendor:field:contact1_email"
+            data-agent-state={formData.contact1_email ? "filled" : "empty"}
+            aria-label="联系人1-邮箱"
             value={formData.contact1_email ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, contact1_email: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -264,9 +346,14 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">联系人2</label>
+          <label htmlFor="mes-md-vendor-contact2_name" className="block text-xs text-slate-600 mb-1">联系人2</label>
           <input
             type="text"
+            id="mes-md-vendor-contact2_name"
+            data-testid="field-contact2_name"
+            data-agent-target="mes-md-vendor:field:contact2_name"
+            data-agent-state={formData.contact2_name ? "filled" : "empty"}
+            aria-label="联系人2"
             value={formData.contact2_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, contact2_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -276,9 +363,14 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">联系人2-电话</label>
+          <label htmlFor="mes-md-vendor-contact2_telephone" className="block text-xs text-slate-600 mb-1">联系人2-电话</label>
           <input
             type="text"
+            id="mes-md-vendor-contact2_telephone"
+            data-testid="field-contact2_telephone"
+            data-agent-target="mes-md-vendor:field:contact2_telephone"
+            data-agent-state={formData.contact2_telephone ? "filled" : "empty"}
+            aria-label="联系人2-电话"
             value={formData.contact2_telephone ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, contact2_telephone: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -288,9 +380,14 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">联系人2-邮箱</label>
+          <label htmlFor="mes-md-vendor-contact2_email" className="block text-xs text-slate-600 mb-1">联系人2-邮箱</label>
           <input
             type="text"
+            id="mes-md-vendor-contact2_email"
+            data-testid="field-contact2_email"
+            data-agent-target="mes-md-vendor:field:contact2_email"
+            data-agent-state={formData.contact2_email ? "filled" : "empty"}
+            aria-label="联系人2-邮箱"
             value={formData.contact2_email ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, contact2_email: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -300,9 +397,14 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">统一社会信用代码</label>
+          <label htmlFor="mes-md-vendor-credit_code" className="block text-xs text-slate-600 mb-1">统一社会信用代码</label>
           <input
             type="text"
+            id="mes-md-vendor-credit_code"
+            data-testid="field-credit_code"
+            data-agent-target="mes-md-vendor:field:credit_code"
+            data-agent-state={formData.credit_code ? "filled" : "empty"}
+            aria-label="统一社会信用代码"
             value={formData.credit_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, credit_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -312,9 +414,14 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="mes-md-vendor-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="mes-md-vendor-status"
+            data-testid="field-status"
+            data-agent-target="mes-md-vendor:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -324,9 +431,14 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-md-vendor-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-md-vendor-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-md-vendor:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -340,6 +452,8 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-md-vendor-form-cancel"
+              data-agent-target="mes-md-vendor:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -347,6 +461,9 @@ export function MesMdVendorForm({ open, initialData, onClose, onSuccess }: MesMd
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-md-vendor-form-submit"
+              data-agent-target="mes-md-vendor:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

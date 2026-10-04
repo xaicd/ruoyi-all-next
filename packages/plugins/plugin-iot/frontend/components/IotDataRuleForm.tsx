@@ -57,24 +57,36 @@ export function IotDataRuleForm({ open, initialData, onClose, onSuccess }: IotDa
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="iot-data-rule-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑IoT 数据流转规则 DO监听 数据源，转发到 数据目的" : "新增IoT 数据流转规则 DO监听 数据源，转发到 数据目的"}
+        data-testid="iot-data-rule-form"
+        data-agent-scope="iot-data-rule:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑IotDataRule（源框架导入）" : "新增IotDataRule（源框架导入）"}
+            {isEdit ? "编辑IoT 数据流转规则 DO监听 数据源，转发到 数据目的" : "新增IoT 数据流转规则 DO监听 数据源，转发到 数据目的"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="iot-data-rule-form-close" data-agent-target="iot-data-rule:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="iot-data-rule-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">数据流转规格名称</label>
+          <label htmlFor="iot-data-rule-name" className="block text-xs text-slate-600 mb-1">数据流转规格名称</label>
           <input
             type="text"
+            id="iot-data-rule-name"
+            data-testid="field-name"
+            data-agent-target="iot-data-rule:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="数据流转规格名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -84,9 +96,14 @@ export function IotDataRuleForm({ open, initialData, onClose, onSuccess }: IotDa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">数据流转规格描述</label>
+          <label htmlFor="iot-data-rule-description" className="block text-xs text-slate-600 mb-1">数据流转规格描述</label>
           <input
             type="text"
+            id="iot-data-rule-description"
+            data-testid="field-description"
+            data-agent-target="iot-data-rule:field:description"
+            data-agent-state={formData.description ? "filled" : "empty"}
+            aria-label="数据流转规格描述"
             value={formData.description ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -96,9 +113,14 @@ export function IotDataRuleForm({ open, initialData, onClose, onSuccess }: IotDa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">数据流转规格状态</label>
+          <label htmlFor="iot-data-rule-status" className="block text-xs text-slate-600 mb-1">数据流转规格状态</label>
           <input
             type="number"
+            id="iot-data-rule-status"
+            data-testid="field-status"
+            data-agent-target="iot-data-rule:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="数据流转规格状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -108,9 +130,14 @@ export function IotDataRuleForm({ open, initialData, onClose, onSuccess }: IotDa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">数据源配置数组</label>
+          <label htmlFor="iot-data-rule-source_configs" className="block text-xs text-slate-600 mb-1">数据源配置数组</label>
           <input
             type="text"
+            id="iot-data-rule-source_configs"
+            data-testid="field-source_configs"
+            data-agent-target="iot-data-rule:field:source_configs"
+            data-agent-state={formData.source_configs ? "filled" : "empty"}
+            aria-label="数据源配置数组"
             value={formData.source_configs ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, source_configs: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -120,9 +147,14 @@ export function IotDataRuleForm({ open, initialData, onClose, onSuccess }: IotDa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">数据目的编号数组</label>
+          <label htmlFor="iot-data-rule-sink_ids" className="block text-xs text-slate-600 mb-1">数据目的编号数组</label>
           <input
             type="text"
+            id="iot-data-rule-sink_ids"
+            data-testid="field-sink_ids"
+            data-agent-target="iot-data-rule:field:sink_ids"
+            data-agent-state={formData.sink_ids ? "filled" : "empty"}
+            aria-label="数据目的编号数组"
             value={formData.sink_ids ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sink_ids: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -132,9 +164,14 @@ export function IotDataRuleForm({ open, initialData, onClose, onSuccess }: IotDa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">消息方法</label>
+          <label htmlFor="iot-data-rule-method" className="block text-xs text-slate-600 mb-1">消息方法</label>
           <input
             type="text"
+            id="iot-data-rule-method"
+            data-testid="field-method"
+            data-agent-target="iot-data-rule:field:method"
+            data-agent-state={formData.method ? "filled" : "empty"}
+            aria-label="消息方法"
             value={formData.method ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, method: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -144,9 +181,14 @@ export function IotDataRuleForm({ open, initialData, onClose, onSuccess }: IotDa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品编号</label>
+          <label htmlFor="iot-data-rule-product_id" className="block text-xs text-slate-600 mb-1">产品编号</label>
           <input
             type="number"
+            id="iot-data-rule-product_id"
+            data-testid="field-product_id"
+            data-agent-target="iot-data-rule:field:product_id"
+            data-agent-state={formData.product_id == null || formData.product_id === "" ? "empty" : "filled"}
+            aria-label="产品编号"
             value={formData.product_id != null ? String(formData.product_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, product_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -156,9 +198,14 @@ export function IotDataRuleForm({ open, initialData, onClose, onSuccess }: IotDa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备编号</label>
+          <label htmlFor="iot-data-rule-device_id" className="block text-xs text-slate-600 mb-1">设备编号</label>
           <input
             type="number"
+            id="iot-data-rule-device_id"
+            data-testid="field-device_id"
+            data-agent-target="iot-data-rule:field:device_id"
+            data-agent-state={formData.device_id == null || formData.device_id === "" ? "empty" : "filled"}
+            aria-label="设备编号"
             value={formData.device_id != null ? String(formData.device_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, device_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -168,9 +215,14 @@ export function IotDataRuleForm({ open, initialData, onClose, onSuccess }: IotDa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">标识符</label>
+          <label htmlFor="iot-data-rule-identifier" className="block text-xs text-slate-600 mb-1">标识符</label>
           <input
             type="text"
+            id="iot-data-rule-identifier"
+            data-testid="field-identifier"
+            data-agent-target="iot-data-rule:field:identifier"
+            data-agent-state={formData.identifier ? "filled" : "empty"}
+            aria-label="标识符"
             value={formData.identifier ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, identifier: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -184,6 +236,8 @@ export function IotDataRuleForm({ open, initialData, onClose, onSuccess }: IotDa
             <button
               type="button"
               onClick={onClose}
+              data-testid="iot-data-rule-form-cancel"
+              data-agent-target="iot-data-rule:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -191,6 +245,9 @@ export function IotDataRuleForm({ open, initialData, onClose, onSuccess }: IotDa
             <button
               type="submit"
               disabled={loading}
+              data-testid="iot-data-rule-form-submit"
+              data-agent-target="iot-data-rule:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

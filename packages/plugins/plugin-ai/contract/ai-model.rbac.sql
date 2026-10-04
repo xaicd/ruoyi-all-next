@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for AiModel（源框架导入） (AiModel)
+-- Auto-generated RBAC & Menu Migration for AI 模型 DO默认模型： 为开启，并且 排序第一 (AiModel)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-ai-model',
   'ai-dir',
-  'AiModel（源框架导入）管理',
+  'AI 模型 DO默认模型： 为开启，并且 排序第一管理',
   '/admin/ai/ai-model',
   'ai/ai-model/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-ai-model-query',  'menu-ai-model', '查询AiModel（源框架导入）', 'BUTTON', 'ACTIVE', 'ai:ai_model:query',  1, NOW(), NOW()),
-('menu-ai-model-create', 'menu-ai-model', '新增AiModel（源框架导入）', 'BUTTON', 'ACTIVE', 'ai:ai_model:create', 2, NOW(), NOW()),
-('menu-ai-model-update', 'menu-ai-model', '修改AiModel（源框架导入）', 'BUTTON', 'ACTIVE', 'ai:ai_model:update', 3, NOW(), NOW()),
-('menu-ai-model-delete', 'menu-ai-model', '删除AiModel（源框架导入）', 'BUTTON', 'ACTIVE', 'ai:ai_model:delete', 4, NOW(), NOW())
+('menu-ai-model-query',  'menu-ai-model', '查询AI 模型 DO默认模型： 为开启，并且 排序第一', 'BUTTON', 'ACTIVE', 'ai:ai_model:query',  1, NOW(), NOW()),
+('menu-ai-model-create', 'menu-ai-model', '新增AI 模型 DO默认模型： 为开启，并且 排序第一', 'BUTTON', 'ACTIVE', 'ai:ai_model:create', 2, NOW(), NOW()),
+('menu-ai-model-update', 'menu-ai-model', '修改AI 模型 DO默认模型： 为开启，并且 排序第一', 'BUTTON', 'ACTIVE', 'ai:ai_model:update', 3, NOW(), NOW()),
+('menu-ai-model-delete', 'menu-ai-model', '删除AI 模型 DO默认模型： 为开启，并且 排序第一', 'BUTTON', 'ACTIVE', 'ai:ai_model:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

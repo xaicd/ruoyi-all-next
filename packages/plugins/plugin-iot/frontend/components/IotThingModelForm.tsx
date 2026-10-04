@@ -57,24 +57,36 @@ export function IotThingModelForm({ open, initialData, onClose, onSuccess }: Iot
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="iot-thing-model-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑IoT 产品物模型功能 DO每个 和 是“一对多”的关系，它的每个属性、事件、服务都对应一条记录" : "新增IoT 产品物模型功能 DO每个 和 是“一对多”的关系，它的每个属性、事件、服务都对应一条记录"}
+        data-testid="iot-thing-model-form"
+        data-agent-scope="iot-thing-model:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑IotThingModel（源框架导入）" : "新增IotThingModel（源框架导入）"}
+            {isEdit ? "编辑IoT 产品物模型功能 DO每个 和 是“一对多”的关系，它的每个属性、事件、服务都对应一条记录" : "新增IoT 产品物模型功能 DO每个 和 是“一对多”的关系，它的每个属性、事件、服务都对应一条记录"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="iot-thing-model-form-close" data-agent-target="iot-thing-model:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="iot-thing-model-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">功能标识</label>
+          <label htmlFor="iot-thing-model-identifier" className="block text-xs text-slate-600 mb-1">功能标识</label>
           <input
             type="text"
+            id="iot-thing-model-identifier"
+            data-testid="field-identifier"
+            data-agent-target="iot-thing-model:field:identifier"
+            data-agent-state={formData.identifier ? "filled" : "empty"}
+            aria-label="功能标识"
             value={formData.identifier ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, identifier: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -84,9 +96,14 @@ export function IotThingModelForm({ open, initialData, onClose, onSuccess }: Iot
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">功能名称</label>
+          <label htmlFor="iot-thing-model-name" className="block text-xs text-slate-600 mb-1">功能名称</label>
           <input
             type="text"
+            id="iot-thing-model-name"
+            data-testid="field-name"
+            data-agent-target="iot-thing-model:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="功能名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -96,9 +113,14 @@ export function IotThingModelForm({ open, initialData, onClose, onSuccess }: Iot
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">功能描述</label>
+          <label htmlFor="iot-thing-model-description" className="block text-xs text-slate-600 mb-1">功能描述</label>
           <input
             type="text"
+            id="iot-thing-model-description"
+            data-testid="field-description"
+            data-agent-target="iot-thing-model:field:description"
+            data-agent-state={formData.description ? "filled" : "empty"}
+            aria-label="功能描述"
             value={formData.description ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -108,9 +130,14 @@ export function IotThingModelForm({ open, initialData, onClose, onSuccess }: Iot
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品标识</label>
+          <label htmlFor="iot-thing-model-product_id" className="block text-xs text-slate-600 mb-1">产品标识</label>
           <input
             type="number"
+            id="iot-thing-model-product_id"
+            data-testid="field-product_id"
+            data-agent-target="iot-thing-model:field:product_id"
+            data-agent-state={formData.product_id == null || formData.product_id === "" ? "empty" : "filled"}
+            aria-label="产品标识"
             value={formData.product_id != null ? String(formData.product_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, product_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -120,9 +147,14 @@ export function IotThingModelForm({ open, initialData, onClose, onSuccess }: Iot
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品标识</label>
+          <label htmlFor="iot-thing-model-product_key" className="block text-xs text-slate-600 mb-1">产品标识</label>
           <input
             type="text"
+            id="iot-thing-model-product_key"
+            data-testid="field-product_key"
+            data-agent-target="iot-thing-model:field:product_key"
+            data-agent-state={formData.product_key ? "filled" : "empty"}
+            aria-label="产品标识"
             value={formData.product_key ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, product_key: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -132,9 +164,14 @@ export function IotThingModelForm({ open, initialData, onClose, onSuccess }: Iot
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">功能类型</label>
+          <label htmlFor="iot-thing-model-type" className="block text-xs text-slate-600 mb-1">功能类型</label>
           <input
             type="number"
+            id="iot-thing-model-type"
+            data-testid="field-type"
+            data-agent-target="iot-thing-model:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="功能类型"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -144,9 +181,14 @@ export function IotThingModelForm({ open, initialData, onClose, onSuccess }: Iot
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">属性</label>
+          <label htmlFor="iot-thing-model-property" className="block text-xs text-slate-600 mb-1">属性</label>
           <input
             type="text"
+            id="iot-thing-model-property"
+            data-testid="field-property"
+            data-agent-target="iot-thing-model:field:property"
+            data-agent-state={formData.property ? "filled" : "empty"}
+            aria-label="属性"
             value={formData.property ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, property: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -156,9 +198,14 @@ export function IotThingModelForm({ open, initialData, onClose, onSuccess }: Iot
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">事件</label>
+          <label htmlFor="iot-thing-model-event" className="block text-xs text-slate-600 mb-1">事件</label>
           <input
             type="text"
+            id="iot-thing-model-event"
+            data-testid="field-event"
+            data-agent-target="iot-thing-model:field:event"
+            data-agent-state={formData.event ? "filled" : "empty"}
+            aria-label="事件"
             value={formData.event ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, event: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -168,9 +215,14 @@ export function IotThingModelForm({ open, initialData, onClose, onSuccess }: Iot
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">服务</label>
+          <label htmlFor="iot-thing-model-service" className="block text-xs text-slate-600 mb-1">服务</label>
           <input
             type="text"
+            id="iot-thing-model-service"
+            data-testid="field-service"
+            data-agent-target="iot-thing-model:field:service"
+            data-agent-state={formData.service ? "filled" : "empty"}
+            aria-label="服务"
             value={formData.service ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, service: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -184,6 +236,8 @@ export function IotThingModelForm({ open, initialData, onClose, onSuccess }: Iot
             <button
               type="button"
               onClick={onClose}
+              data-testid="iot-thing-model-form-cancel"
+              data-agent-target="iot-thing-model:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -191,6 +245,9 @@ export function IotThingModelForm({ open, initialData, onClose, onSuccess }: Iot
             <button
               type="submit"
               disabled={loading}
+              data-testid="iot-thing-model-form-submit"
+              data-agent-target="iot-thing-model:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

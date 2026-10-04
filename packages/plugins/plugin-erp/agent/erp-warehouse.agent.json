@@ -1,0 +1,258 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "erp",
+  "entity": "ErpWarehouse",
+  "kebab": "erp-warehouse",
+  "businessName": "ERP 仓库",
+  "permissionPrefix": "erp:erp_warehouse",
+  "page": {
+    "route": "/admin/erp/erp-warehouse",
+    "title": "ERP 仓库管理",
+    "titleSelector": "[data-testid=\"erp-warehouse-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.erp/api",
+    "bffMount": "/api/v1/admin/erp",
+    "resource": "erp-warehouse",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/erp-warehouse",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/erp-warehouse/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/erp-warehouse"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/erp-warehouse/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/erp-warehouse/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"erp-warehouse-title\"]",
+    "refresh": "[data-testid=\"erp-warehouse-refresh\"]",
+    "createButton": "[data-testid=\"erp-warehouse-create\"]",
+    "searchForm": "[data-testid=\"erp-warehouse-search\"]",
+    "searchSubmit": "[data-testid=\"erp-warehouse-search-submit\"]",
+    "searchReset": "[data-testid=\"erp-warehouse-search-reset\"]",
+    "total": "[data-testid=\"erp-warehouse-total\"]",
+    "table": "[data-testid=\"erp-warehouse-table\"]",
+    "row": "[data-testid=\"erp-warehouse-row\"]",
+    "editButton": "[data-testid=\"erp-warehouse-edit\"]",
+    "deleteButton": "[data-testid=\"erp-warehouse-delete\"]",
+    "form": "[data-testid=\"erp-warehouse-form\"]",
+    "formError": "[data-testid=\"erp-warehouse-form-error\"]",
+    "formSubmit": "[data-testid=\"erp-warehouse-form-submit\"]",
+    "formCancel": "[data-testid=\"erp-warehouse-form-cancel\"]",
+    "formClose": "[data-testid=\"erp-warehouse-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "ERP 仓库列表",
+    "dialogLabel": {
+      "create": "新增ERP 仓库",
+      "edit": "编辑ERP 仓库"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "仓库名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "address",
+        "label": "仓库地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-address",
+        "selector": "[data-testid=\"field-address\"]"
+      },
+      {
+        "name": "sort",
+        "label": "排序",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      },
+      {
+        "name": "principal",
+        "label": "负责人",
+        "type": "string",
+        "required": false,
+        "testId": "field-principal",
+        "selector": "[data-testid=\"field-principal\"]"
+      },
+      {
+        "name": "warehouse_price",
+        "label": "仓储费，单位：元",
+        "type": "number",
+        "required": false,
+        "testId": "field-warehouse_price",
+        "selector": "[data-testid=\"field-warehouse_price\"]"
+      },
+      {
+        "name": "truckage_price",
+        "label": "搬运费，单位：元",
+        "type": "number",
+        "required": false,
+        "testId": "field-truckage_price",
+        "selector": "[data-testid=\"field-truckage_price\"]"
+      },
+      {
+        "name": "status",
+        "label": "开启状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "default_status",
+        "label": "是否默认",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-default_status",
+        "selector": "[data-testid=\"field-default_status\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "erp-warehouse",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"erp-warehouse\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"erp-warehouse-form-overlay\"]",
+      "dialog": "[data-testid=\"erp-warehouse-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "erp-warehouse:search",
+      "reset": "erp-warehouse:reset",
+      "refresh": "erp-warehouse:refresh",
+      "create": "erp-warehouse:create",
+      "edit": "erp-warehouse:edit",
+      "delete": "erp-warehouse:delete",
+      "submit": "erp-warehouse:submit",
+      "cancel": "erp-warehouse:cancel",
+      "close": "erp-warehouse:close",
+      "row": "erp-warehouse:row",
+      "pagination": "erp-warehouse:pagination",
+      "fields": {
+        "name": "erp-warehouse:field:name",
+        "address": "erp-warehouse:field:address",
+        "sort": "erp-warehouse:field:sort",
+        "remark": "erp-warehouse:field:remark",
+        "principal": "erp-warehouse:field:principal",
+        "warehouse_price": "erp-warehouse:field:warehouse_price",
+        "truckage_price": "erp-warehouse:field:truckage_price",
+        "status": "erp-warehouse:field:status",
+        "default_status": "erp-warehouse:field:default_status"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "erp.erp-warehouse",
+      "examples": [
+        "erp.erp-warehouse__List__Refresh",
+        "erp.erp-warehouse__ListItem__Open",
+        "erp.erp-warehouse__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

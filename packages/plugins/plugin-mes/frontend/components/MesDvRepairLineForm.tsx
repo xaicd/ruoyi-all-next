@@ -54,24 +54,36 @@ export function MesDvRepairLineForm({ open, initialData, onClose, onSuccess }: M
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-dv-repair-line-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 维修工单行" : "新增MES 维修工单行"}
+        data-testid="mes-dv-repair-line-form"
+        data-agent-scope="mes-dv-repair-line:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesDvRepairLine（源框架导入）" : "新增MesDvRepairLine（源框架导入）"}
+            {isEdit ? "编辑MES 维修工单行" : "新增MES 维修工单行"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-dv-repair-line-form-close" data-agent-target="mes-dv-repair-line:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-dv-repair-line-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">维修工单编号</label>
+          <label htmlFor="mes-dv-repair-line-repair_id" className="block text-xs text-slate-600 mb-1">维修工单编号</label>
           <input
             type="number"
+            id="mes-dv-repair-line-repair_id"
+            data-testid="field-repair_id"
+            data-agent-target="mes-dv-repair-line:field:repair_id"
+            data-agent-state={formData.repair_id == null || formData.repair_id === "" ? "empty" : "filled"}
+            aria-label="维修工单编号"
             value={formData.repair_id != null ? String(formData.repair_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, repair_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -81,9 +93,14 @@ export function MesDvRepairLineForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">点检保养项目编号</label>
+          <label htmlFor="mes-dv-repair-line-subject_id" className="block text-xs text-slate-600 mb-1">点检保养项目编号</label>
           <input
             type="number"
+            id="mes-dv-repair-line-subject_id"
+            data-testid="field-subject_id"
+            data-agent-target="mes-dv-repair-line:field:subject_id"
+            data-agent-state={formData.subject_id == null || formData.subject_id === "" ? "empty" : "filled"}
+            aria-label="点检保养项目编号"
             value={formData.subject_id != null ? String(formData.subject_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, subject_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -93,9 +110,14 @@ export function MesDvRepairLineForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">故障描述</label>
+          <label htmlFor="mes-dv-repair-line-malfunction" className="block text-xs text-slate-600 mb-1">故障描述</label>
           <input
             type="text"
+            id="mes-dv-repair-line-malfunction"
+            data-testid="field-malfunction"
+            data-agent-target="mes-dv-repair-line:field:malfunction"
+            data-agent-state={formData.malfunction ? "filled" : "empty"}
+            aria-label="故障描述"
             value={formData.malfunction ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, malfunction: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -105,9 +127,14 @@ export function MesDvRepairLineForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">故障图片 URL</label>
+          <label htmlFor="mes-dv-repair-line-malfunction_url" className="block text-xs text-slate-600 mb-1">故障图片 URL</label>
           <input
             type="text"
+            id="mes-dv-repair-line-malfunction_url"
+            data-testid="field-malfunction_url"
+            data-agent-target="mes-dv-repair-line:field:malfunction_url"
+            data-agent-state={formData.malfunction_url ? "filled" : "empty"}
+            aria-label="故障图片 URL"
             value={formData.malfunction_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, malfunction_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -117,9 +144,14 @@ export function MesDvRepairLineForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">维修描述</label>
+          <label htmlFor="mes-dv-repair-line-description" className="block text-xs text-slate-600 mb-1">维修描述</label>
           <input
             type="text"
+            id="mes-dv-repair-line-description"
+            data-testid="field-description"
+            data-agent-target="mes-dv-repair-line:field:description"
+            data-agent-state={formData.description ? "filled" : "empty"}
+            aria-label="维修描述"
             value={formData.description ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -129,9 +161,14 @@ export function MesDvRepairLineForm({ open, initialData, onClose, onSuccess }: M
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-dv-repair-line-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-dv-repair-line-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-dv-repair-line:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -145,6 +182,8 @@ export function MesDvRepairLineForm({ open, initialData, onClose, onSuccess }: M
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-dv-repair-line-form-cancel"
+              data-agent-target="mes-dv-repair-line:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -152,6 +191,9 @@ export function MesDvRepairLineForm({ open, initialData, onClose, onSuccess }: M
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-dv-repair-line-form-submit"
+              data-agent-target="mes-dv-repair-line:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { CouponService } from "../coupon.service"
 
 describe("CouponService", () => {
-  it("should create and query Coupon（源框架导入）", async () => {
+  it("should create and query 优惠劵", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CouponService.create({
         template_id: 1,
@@ -21,7 +21,7 @@ describe("CouponService", () => {
   
       const updated = await CouponService.update(created.id, {
         id: created.id,
-        template_id: "更新Coupon（源框架导入）",
+        template_id: "更新优惠劵",
       } as any)
       expect(updated).toBeDefined()
   

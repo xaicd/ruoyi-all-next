@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesWmTransactionService } from "../mes-wm-transaction.service"
 
 describe("MesWmTransactionService", () => {
-  it("should create and query MesWmTransaction（源框架导入）", async () => {
+  it("should create and query MES 库存事务流水 DO记录每一笔库存增减事件，系统自动生成，只读查询，不允许人工维护。", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmTransactionService.create({
         type: 1,
@@ -21,7 +21,7 @@ describe("MesWmTransactionService", () => {
   
       const updated = await MesWmTransactionService.update(created.id, {
         id: created.id,
-        type: "更新MesWmTransaction（源框架导入）",
+        type: "更新MES 库存事务流水 DO记录每一笔库存增减事件，系统自动生成，只读查询，不允许人工维护。",
       } as any)
       expect(updated).toBeDefined()
   

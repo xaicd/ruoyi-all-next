@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { CrmReceivablePlanService } from "../crm-receivable-plan.service"
 
 describe("CrmReceivablePlanService", () => {
-  it("should create and query CrmReceivablePlan（源框架导入）", async () => {
+  it("should create and query CRM 回款计划", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CrmReceivablePlanService.create({
         period: 1,
@@ -21,7 +21,7 @@ describe("CrmReceivablePlanService", () => {
   
       const updated = await CrmReceivablePlanService.update(created.id, {
         id: created.id,
-        period: "更新CrmReceivablePlan（源框架导入）",
+        period: "更新CRM 回款计划",
       } as any)
       expect(updated).toBeDefined()
   

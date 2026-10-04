@@ -1,0 +1,222 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "crm",
+  "entity": "CrmCustomerLimitConfig",
+  "kebab": "crm-customer-limit-config",
+  "businessName": "客户限制配置",
+  "permissionPrefix": "crm:crm_customer_limit_config",
+  "page": {
+    "route": "/admin/crm/crm-customer-limit-config",
+    "title": "客户限制配置管理",
+    "titleSelector": "[data-testid=\"crm-customer-limit-config-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.crm/api",
+    "bffMount": "/api/v1/admin/crm",
+    "resource": "crm-customer-limit-config",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/crm-customer-limit-config",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/crm-customer-limit-config/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/crm-customer-limit-config"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/crm-customer-limit-config/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/crm-customer-limit-config/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"crm-customer-limit-config-title\"]",
+    "refresh": "[data-testid=\"crm-customer-limit-config-refresh\"]",
+    "createButton": "[data-testid=\"crm-customer-limit-config-create\"]",
+    "searchForm": "[data-testid=\"crm-customer-limit-config-search\"]",
+    "searchSubmit": "[data-testid=\"crm-customer-limit-config-search-submit\"]",
+    "searchReset": "[data-testid=\"crm-customer-limit-config-search-reset\"]",
+    "total": "[data-testid=\"crm-customer-limit-config-total\"]",
+    "table": "[data-testid=\"crm-customer-limit-config-table\"]",
+    "row": "[data-testid=\"crm-customer-limit-config-row\"]",
+    "editButton": "[data-testid=\"crm-customer-limit-config-edit\"]",
+    "deleteButton": "[data-testid=\"crm-customer-limit-config-delete\"]",
+    "form": "[data-testid=\"crm-customer-limit-config-form\"]",
+    "formError": "[data-testid=\"crm-customer-limit-config-form-error\"]",
+    "formSubmit": "[data-testid=\"crm-customer-limit-config-form-submit\"]",
+    "formCancel": "[data-testid=\"crm-customer-limit-config-form-cancel\"]",
+    "formClose": "[data-testid=\"crm-customer-limit-config-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "客户限制配置列表",
+    "dialogLabel": {
+      "create": "新增客户限制配置",
+      "edit": "编辑客户限制配置"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "type",
+        "label": "规则类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "user_ids",
+        "label": "规则适用人群",
+        "type": "string",
+        "required": false,
+        "testId": "field-user_ids",
+        "selector": "[data-testid=\"field-user_ids\"]"
+      },
+      {
+        "name": "dept_ids",
+        "label": "规则适用部门",
+        "type": "string",
+        "required": false,
+        "testId": "field-dept_ids",
+        "selector": "[data-testid=\"field-dept_ids\"]"
+      },
+      {
+        "name": "max_count",
+        "label": "数量上限",
+        "type": "number",
+        "required": false,
+        "testId": "field-max_count",
+        "selector": "[data-testid=\"field-max_count\"]"
+      },
+      {
+        "name": "deal_count_enabled",
+        "label": "成交客户是否占有拥有客户数",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-deal_count_enabled",
+        "selector": "[data-testid=\"field-deal_count_enabled\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "crm-customer-limit-config",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"crm-customer-limit-config\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"crm-customer-limit-config-form-overlay\"]",
+      "dialog": "[data-testid=\"crm-customer-limit-config-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "crm-customer-limit-config:search",
+      "reset": "crm-customer-limit-config:reset",
+      "refresh": "crm-customer-limit-config:refresh",
+      "create": "crm-customer-limit-config:create",
+      "edit": "crm-customer-limit-config:edit",
+      "delete": "crm-customer-limit-config:delete",
+      "submit": "crm-customer-limit-config:submit",
+      "cancel": "crm-customer-limit-config:cancel",
+      "close": "crm-customer-limit-config:close",
+      "row": "crm-customer-limit-config:row",
+      "pagination": "crm-customer-limit-config:pagination",
+      "fields": {
+        "type": "crm-customer-limit-config:field:type",
+        "user_ids": "crm-customer-limit-config:field:user_ids",
+        "dept_ids": "crm-customer-limit-config:field:dept_ids",
+        "max_count": "crm-customer-limit-config:field:max_count",
+        "deal_count_enabled": "crm-customer-limit-config:field:deal_count_enabled"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "crm.crm-customer-limit-config",
+      "examples": [
+        "crm.crm-customer-limit-config__List__Refresh",
+        "crm.crm-customer-limit-config__ListItem__Open",
+        "crm.crm-customer-limit-config__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

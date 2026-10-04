@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { IotAlertRecordService } from "../iot-alert-record.service"
 
 describe("IotAlertRecordService", () => {
-  it("should create and query IotAlertRecord（源框架导入）", async () => {
+  it("should create and query IoT 告警记录", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await IotAlertRecordService.create({
         config_id: 1,
@@ -21,7 +21,7 @@ describe("IotAlertRecordService", () => {
   
       const updated = await IotAlertRecordService.update(created.id, {
         id: created.id,
-        config_id: "更新IotAlertRecord（源框架导入）",
+        config_id: "更新IoT 告警记录",
       } as any)
       expect(updated).toBeDefined()
   

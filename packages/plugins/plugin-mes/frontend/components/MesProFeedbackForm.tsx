@@ -72,24 +72,36 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-pro-feedback-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 生产报工" : "新增MES 生产报工"}
+        data-testid="mes-pro-feedback-form"
+        data-agent-scope="mes-pro-feedback:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesProFeedback（源框架导入）" : "新增MesProFeedback（源框架导入）"}
+            {isEdit ? "编辑MES 生产报工" : "新增MES 生产报工"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-pro-feedback-form-close" data-agent-target="mes-pro-feedback:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-pro-feedback-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">报工单编号</label>
+          <label htmlFor="mes-pro-feedback-code" className="block text-xs text-slate-600 mb-1">报工单编号</label>
           <input
             type="text"
+            id="mes-pro-feedback-code"
+            data-testid="field-code"
+            data-agent-target="mes-pro-feedback:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="报工单编号"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -99,9 +111,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">报工类型</label>
+          <label htmlFor="mes-pro-feedback-type" className="block text-xs text-slate-600 mb-1">报工类型</label>
           <input
             type="number"
+            id="mes-pro-feedback-type"
+            data-testid="field-type"
+            data-agent-target="mes-pro-feedback:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="报工类型"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -111,9 +128,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">报工途径</label>
+          <label htmlFor="mes-pro-feedback-channel" className="block text-xs text-slate-600 mb-1">报工途径</label>
           <input
             type="text"
+            id="mes-pro-feedback-channel"
+            data-testid="field-channel"
+            data-agent-target="mes-pro-feedback:field:channel"
+            data-agent-state={formData.channel ? "filled" : "empty"}
+            aria-label="报工途径"
             value={formData.channel ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, channel: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -123,9 +145,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">报工时间</label>
+          <label htmlFor="mes-pro-feedback-feedback_time" className="block text-xs text-slate-600 mb-1">报工时间</label>
           <input
             type="text"
+            id="mes-pro-feedback-feedback_time"
+            data-testid="field-feedback_time"
+            data-agent-target="mes-pro-feedback:field:feedback_time"
+            data-agent-state={formData.feedback_time ? "filled" : "empty"}
+            aria-label="报工时间"
             value={formData.feedback_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, feedback_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -135,9 +162,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工作站编号</label>
+          <label htmlFor="mes-pro-feedback-workstation_id" className="block text-xs text-slate-600 mb-1">工作站编号</label>
           <input
             type="number"
+            id="mes-pro-feedback-workstation_id"
+            data-testid="field-workstation_id"
+            data-agent-target="mes-pro-feedback:field:workstation_id"
+            data-agent-state={formData.workstation_id == null || formData.workstation_id === "" ? "empty" : "filled"}
+            aria-label="工作站编号"
             value={formData.workstation_id != null ? String(formData.workstation_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, workstation_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -147,9 +179,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工艺路线编号</label>
+          <label htmlFor="mes-pro-feedback-route_id" className="block text-xs text-slate-600 mb-1">工艺路线编号</label>
           <input
             type="number"
+            id="mes-pro-feedback-route_id"
+            data-testid="field-route_id"
+            data-agent-target="mes-pro-feedback:field:route_id"
+            data-agent-state={formData.route_id == null || formData.route_id === "" ? "empty" : "filled"}
+            aria-label="工艺路线编号"
             value={formData.route_id != null ? String(formData.route_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, route_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -159,9 +196,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工序编号</label>
+          <label htmlFor="mes-pro-feedback-process_id" className="block text-xs text-slate-600 mb-1">工序编号</label>
           <input
             type="number"
+            id="mes-pro-feedback-process_id"
+            data-testid="field-process_id"
+            data-agent-target="mes-pro-feedback:field:process_id"
+            data-agent-state={formData.process_id == null || formData.process_id === "" ? "empty" : "filled"}
+            aria-label="工序编号"
             value={formData.process_id != null ? String(formData.process_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, process_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,9 +213,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生产工单编号</label>
+          <label htmlFor="mes-pro-feedback-work_order_id" className="block text-xs text-slate-600 mb-1">生产工单编号</label>
           <input
             type="number"
+            id="mes-pro-feedback-work_order_id"
+            data-testid="field-work_order_id"
+            data-agent-target="mes-pro-feedback:field:work_order_id"
+            data-agent-state={formData.work_order_id == null || formData.work_order_id === "" ? "empty" : "filled"}
+            aria-label="生产工单编号"
             value={formData.work_order_id != null ? String(formData.work_order_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, work_order_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -183,9 +230,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生产任务编号</label>
+          <label htmlFor="mes-pro-feedback-task_id" className="block text-xs text-slate-600 mb-1">生产任务编号</label>
           <input
             type="number"
+            id="mes-pro-feedback-task_id"
+            data-testid="field-task_id"
+            data-agent-target="mes-pro-feedback:field:task_id"
+            data-agent-state={formData.task_id == null || formData.task_id === "" ? "empty" : "filled"}
+            aria-label="生产任务编号"
             value={formData.task_id != null ? String(formData.task_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, task_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -195,9 +247,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品物料编号（冗余自任务）</label>
+          <label htmlFor="mes-pro-feedback-item_id" className="block text-xs text-slate-600 mb-1">产品物料编号（冗余自任务）</label>
           <input
             type="number"
+            id="mes-pro-feedback-item_id"
+            data-testid="field-item_id"
+            data-agent-target="mes-pro-feedback:field:item_id"
+            data-agent-state={formData.item_id == null || formData.item_id === "" ? "empty" : "filled"}
+            aria-label="产品物料编号（冗余自任务）"
             value={formData.item_id != null ? String(formData.item_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, item_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -207,9 +264,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">过期日期</label>
+          <label htmlFor="mes-pro-feedback-expire_date" className="block text-xs text-slate-600 mb-1">过期日期</label>
           <input
             type="text"
+            id="mes-pro-feedback-expire_date"
+            data-testid="field-expire_date"
+            data-agent-target="mes-pro-feedback:field:expire_date"
+            data-agent-state={formData.expire_date ? "filled" : "empty"}
+            aria-label="过期日期"
             value={formData.expire_date ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, expire_date: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -219,9 +281,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生产批号</label>
+          <label htmlFor="mes-pro-feedback-lot_number" className="block text-xs text-slate-600 mb-1">生产批号</label>
           <input
             type="text"
+            id="mes-pro-feedback-lot_number"
+            data-testid="field-lot_number"
+            data-agent-target="mes-pro-feedback:field:lot_number"
+            data-agent-state={formData.lot_number ? "filled" : "empty"}
+            aria-label="生产批号"
             value={formData.lot_number ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, lot_number: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -231,9 +298,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">排产数量</label>
+          <label htmlFor="mes-pro-feedback-scheduled_quantity" className="block text-xs text-slate-600 mb-1">排产数量</label>
           <input
             type="number"
+            id="mes-pro-feedback-scheduled_quantity"
+            data-testid="field-scheduled_quantity"
+            data-agent-target="mes-pro-feedback:field:scheduled_quantity"
+            data-agent-state={formData.scheduled_quantity == null || formData.scheduled_quantity === "" ? "empty" : "filled"}
+            aria-label="排产数量"
             value={formData.scheduled_quantity != null ? String(formData.scheduled_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, scheduled_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -243,9 +315,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">本次报工数量</label>
+          <label htmlFor="mes-pro-feedback-feedback_quantity" className="block text-xs text-slate-600 mb-1">本次报工数量</label>
           <input
             type="number"
+            id="mes-pro-feedback-feedback_quantity"
+            data-testid="field-feedback_quantity"
+            data-agent-target="mes-pro-feedback:field:feedback_quantity"
+            data-agent-state={formData.feedback_quantity == null || formData.feedback_quantity === "" ? "empty" : "filled"}
+            aria-label="本次报工数量"
             value={formData.feedback_quantity != null ? String(formData.feedback_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, feedback_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -255,9 +332,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">合格品数量</label>
+          <label htmlFor="mes-pro-feedback-qualified_quantity" className="block text-xs text-slate-600 mb-1">合格品数量</label>
           <input
             type="number"
+            id="mes-pro-feedback-qualified_quantity"
+            data-testid="field-qualified_quantity"
+            data-agent-target="mes-pro-feedback:field:qualified_quantity"
+            data-agent-state={formData.qualified_quantity == null || formData.qualified_quantity === "" ? "empty" : "filled"}
+            aria-label="合格品数量"
             value={formData.qualified_quantity != null ? String(formData.qualified_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, qualified_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -267,9 +349,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">不良品数量</label>
+          <label htmlFor="mes-pro-feedback-unqualified_quantity" className="block text-xs text-slate-600 mb-1">不良品数量</label>
           <input
             type="number"
+            id="mes-pro-feedback-unqualified_quantity"
+            data-testid="field-unqualified_quantity"
+            data-agent-target="mes-pro-feedback:field:unqualified_quantity"
+            data-agent-state={formData.unqualified_quantity == null || formData.unqualified_quantity === "" ? "empty" : "filled"}
+            aria-label="不良品数量"
             value={formData.unqualified_quantity != null ? String(formData.unqualified_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, unqualified_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -279,9 +366,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">待检测数量</label>
+          <label htmlFor="mes-pro-feedback-uncheck_quantity" className="block text-xs text-slate-600 mb-1">待检测数量</label>
           <input
             type="number"
+            id="mes-pro-feedback-uncheck_quantity"
+            data-testid="field-uncheck_quantity"
+            data-agent-target="mes-pro-feedback:field:uncheck_quantity"
+            data-agent-state={formData.uncheck_quantity == null || formData.uncheck_quantity === "" ? "empty" : "filled"}
+            aria-label="待检测数量"
             value={formData.uncheck_quantity != null ? String(formData.uncheck_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, uncheck_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -291,9 +383,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工废数量</label>
+          <label htmlFor="mes-pro-feedback-labor_scrap_quantity" className="block text-xs text-slate-600 mb-1">工废数量</label>
           <input
             type="number"
+            id="mes-pro-feedback-labor_scrap_quantity"
+            data-testid="field-labor_scrap_quantity"
+            data-agent-target="mes-pro-feedback:field:labor_scrap_quantity"
+            data-agent-state={formData.labor_scrap_quantity == null || formData.labor_scrap_quantity === "" ? "empty" : "filled"}
+            aria-label="工废数量"
             value={formData.labor_scrap_quantity != null ? String(formData.labor_scrap_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, labor_scrap_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -303,9 +400,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">料废数量</label>
+          <label htmlFor="mes-pro-feedback-material_scrap_quantity" className="block text-xs text-slate-600 mb-1">料废数量</label>
           <input
             type="number"
+            id="mes-pro-feedback-material_scrap_quantity"
+            data-testid="field-material_scrap_quantity"
+            data-agent-target="mes-pro-feedback:field:material_scrap_quantity"
+            data-agent-state={formData.material_scrap_quantity == null || formData.material_scrap_quantity === "" ? "empty" : "filled"}
+            aria-label="料废数量"
             value={formData.material_scrap_quantity != null ? String(formData.material_scrap_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, material_scrap_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -315,9 +417,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">其他废品数量</label>
+          <label htmlFor="mes-pro-feedback-other_scrap_quantity" className="block text-xs text-slate-600 mb-1">其他废品数量</label>
           <input
             type="number"
+            id="mes-pro-feedback-other_scrap_quantity"
+            data-testid="field-other_scrap_quantity"
+            data-agent-target="mes-pro-feedback:field:other_scrap_quantity"
+            data-agent-state={formData.other_scrap_quantity == null || formData.other_scrap_quantity === "" ? "empty" : "filled"}
+            aria-label="其他废品数量"
             value={formData.other_scrap_quantity != null ? String(formData.other_scrap_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, other_scrap_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -327,9 +434,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">报工用户编号</label>
+          <label htmlFor="mes-pro-feedback-feedback_user_id" className="block text-xs text-slate-600 mb-1">报工用户编号</label>
           <input
             type="number"
+            id="mes-pro-feedback-feedback_user_id"
+            data-testid="field-feedback_user_id"
+            data-agent-target="mes-pro-feedback:field:feedback_user_id"
+            data-agent-state={formData.feedback_user_id == null || formData.feedback_user_id === "" ? "empty" : "filled"}
+            aria-label="报工用户编号"
             value={formData.feedback_user_id != null ? String(formData.feedback_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, feedback_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -339,9 +451,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">审核用户编号</label>
+          <label htmlFor="mes-pro-feedback-approve_user_id" className="block text-xs text-slate-600 mb-1">审核用户编号</label>
           <input
             type="number"
+            id="mes-pro-feedback-approve_user_id"
+            data-testid="field-approve_user_id"
+            data-agent-target="mes-pro-feedback:field:approve_user_id"
+            data-agent-state={formData.approve_user_id == null || formData.approve_user_id === "" ? "empty" : "filled"}
+            aria-label="审核用户编号"
             value={formData.approve_user_id != null ? String(formData.approve_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, approve_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -351,9 +468,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="mes-pro-feedback-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="mes-pro-feedback-status"
+            data-testid="field-status"
+            data-agent-target="mes-pro-feedback:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -363,9 +485,14 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-pro-feedback-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-pro-feedback-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-pro-feedback:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -379,6 +506,8 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-pro-feedback-form-cancel"
+              data-agent-target="mes-pro-feedback:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -386,6 +515,9 @@ export function MesProFeedbackForm({ open, initialData, onClose, onSuccess }: Me
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-pro-feedback-form-submit"
+              data-agent-target="mes-pro-feedback:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

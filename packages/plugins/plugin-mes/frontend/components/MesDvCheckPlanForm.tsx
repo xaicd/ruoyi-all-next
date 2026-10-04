@@ -57,24 +57,36 @@ export function MesDvCheckPlanForm({ open, initialData, onClose, onSuccess }: Me
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-dv-check-plan-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 点检保养方案" : "新增MES 点检保养方案"}
+        data-testid="mes-dv-check-plan-form"
+        data-agent-scope="mes-dv-check-plan:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesDvCheckPlan（源框架导入）" : "新增MesDvCheckPlan（源框架导入）"}
+            {isEdit ? "编辑MES 点检保养方案" : "新增MES 点检保养方案"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-dv-check-plan-form-close" data-agent-target="mes-dv-check-plan:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-dv-check-plan-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">方案编码</label>
+          <label htmlFor="mes-dv-check-plan-code" className="block text-xs text-slate-600 mb-1">方案编码</label>
           <input
             type="text"
+            id="mes-dv-check-plan-code"
+            data-testid="field-code"
+            data-agent-target="mes-dv-check-plan:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="方案编码"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -84,9 +96,14 @@ export function MesDvCheckPlanForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">方案名称</label>
+          <label htmlFor="mes-dv-check-plan-name" className="block text-xs text-slate-600 mb-1">方案名称</label>
           <input
             type="text"
+            id="mes-dv-check-plan-name"
+            data-testid="field-name"
+            data-agent-target="mes-dv-check-plan:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="方案名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -96,9 +113,14 @@ export function MesDvCheckPlanForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">方案类型</label>
+          <label htmlFor="mes-dv-check-plan-type" className="block text-xs text-slate-600 mb-1">方案类型</label>
           <input
             type="number"
+            id="mes-dv-check-plan-type"
+            data-testid="field-type"
+            data-agent-target="mes-dv-check-plan:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="方案类型"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -108,9 +130,14 @@ export function MesDvCheckPlanForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">开始日期</label>
+          <label htmlFor="mes-dv-check-plan-start_date" className="block text-xs text-slate-600 mb-1">开始日期</label>
           <input
             type="text"
+            id="mes-dv-check-plan-start_date"
+            data-testid="field-start_date"
+            data-agent-target="mes-dv-check-plan:field:start_date"
+            data-agent-state={formData.start_date ? "filled" : "empty"}
+            aria-label="开始日期"
             value={formData.start_date ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, start_date: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -120,9 +147,14 @@ export function MesDvCheckPlanForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">结束日期</label>
+          <label htmlFor="mes-dv-check-plan-end_date" className="block text-xs text-slate-600 mb-1">结束日期</label>
           <input
             type="text"
+            id="mes-dv-check-plan-end_date"
+            data-testid="field-end_date"
+            data-agent-target="mes-dv-check-plan:field:end_date"
+            data-agent-state={formData.end_date ? "filled" : "empty"}
+            aria-label="结束日期"
             value={formData.end_date ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, end_date: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -132,9 +164,14 @@ export function MesDvCheckPlanForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">周期类型</label>
+          <label htmlFor="mes-dv-check-plan-cycle_type" className="block text-xs text-slate-600 mb-1">周期类型</label>
           <input
             type="number"
+            id="mes-dv-check-plan-cycle_type"
+            data-testid="field-cycle_type"
+            data-agent-target="mes-dv-check-plan:field:cycle_type"
+            data-agent-state={formData.cycle_type == null || formData.cycle_type === "" ? "empty" : "filled"}
+            aria-label="周期类型"
             value={formData.cycle_type != null ? String(formData.cycle_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, cycle_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -144,9 +181,14 @@ export function MesDvCheckPlanForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">周期数量</label>
+          <label htmlFor="mes-dv-check-plan-cycle_count" className="block text-xs text-slate-600 mb-1">周期数量</label>
           <input
             type="number"
+            id="mes-dv-check-plan-cycle_count"
+            data-testid="field-cycle_count"
+            data-agent-target="mes-dv-check-plan:field:cycle_count"
+            data-agent-state={formData.cycle_count == null || formData.cycle_count === "" ? "empty" : "filled"}
+            aria-label="周期数量"
             value={formData.cycle_count != null ? String(formData.cycle_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, cycle_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -156,9 +198,14 @@ export function MesDvCheckPlanForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="mes-dv-check-plan-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="mes-dv-check-plan-status"
+            data-testid="field-status"
+            data-agent-target="mes-dv-check-plan:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -168,9 +215,14 @@ export function MesDvCheckPlanForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-dv-check-plan-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-dv-check-plan-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-dv-check-plan:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -184,6 +236,8 @@ export function MesDvCheckPlanForm({ open, initialData, onClose, onSuccess }: Me
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-dv-check-plan-form-cancel"
+              data-agent-target="mes-dv-check-plan:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -191,6 +245,9 @@ export function MesDvCheckPlanForm({ open, initialData, onClose, onSuccess }: Me
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-dv-check-plan-form-submit"
+              data-agent-target="mes-dv-check-plan:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

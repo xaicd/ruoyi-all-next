@@ -1,0 +1,240 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "AfterSaleLog",
+  "kebab": "after-sale-log",
+  "businessName": "交易售后日志",
+  "permissionPrefix": "mall:after_sale_log",
+  "page": {
+    "route": "/admin/mall/after-sale-log",
+    "title": "交易售后日志管理",
+    "titleSelector": "[data-testid=\"after-sale-log-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "after-sale-log",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/after-sale-log",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/after-sale-log/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/after-sale-log"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/after-sale-log/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/after-sale-log/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"after-sale-log-title\"]",
+    "refresh": "[data-testid=\"after-sale-log-refresh\"]",
+    "createButton": "[data-testid=\"after-sale-log-create\"]",
+    "searchForm": "[data-testid=\"after-sale-log-search\"]",
+    "searchSubmit": "[data-testid=\"after-sale-log-search-submit\"]",
+    "searchReset": "[data-testid=\"after-sale-log-search-reset\"]",
+    "total": "[data-testid=\"after-sale-log-total\"]",
+    "table": "[data-testid=\"after-sale-log-table\"]",
+    "row": "[data-testid=\"after-sale-log-row\"]",
+    "editButton": "[data-testid=\"after-sale-log-edit\"]",
+    "deleteButton": "[data-testid=\"after-sale-log-delete\"]",
+    "form": "[data-testid=\"after-sale-log-form\"]",
+    "formError": "[data-testid=\"after-sale-log-form-error\"]",
+    "formSubmit": "[data-testid=\"after-sale-log-form-submit\"]",
+    "formCancel": "[data-testid=\"after-sale-log-form-cancel\"]",
+    "formClose": "[data-testid=\"after-sale-log-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "交易售后日志列表",
+    "dialogLabel": {
+      "create": "新增交易售后日志",
+      "edit": "编辑交易售后日志"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "user_type",
+        "label": "用户类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_type",
+        "selector": "[data-testid=\"field-user_type\"]"
+      },
+      {
+        "name": "after_sale_id",
+        "label": "售后编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-after_sale_id",
+        "selector": "[data-testid=\"field-after_sale_id\"]"
+      },
+      {
+        "name": "before_status",
+        "label": "操作前状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-before_status",
+        "selector": "[data-testid=\"field-before_status\"]"
+      },
+      {
+        "name": "after_status",
+        "label": "操作后状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-after_status",
+        "selector": "[data-testid=\"field-after_status\"]"
+      },
+      {
+        "name": "operate_type",
+        "label": "操作类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-operate_type",
+        "selector": "[data-testid=\"field-operate_type\"]"
+      },
+      {
+        "name": "content",
+        "label": "操作明细",
+        "type": "string",
+        "required": false,
+        "testId": "field-content",
+        "selector": "[data-testid=\"field-content\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "after-sale-log",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"after-sale-log\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"after-sale-log-form-overlay\"]",
+      "dialog": "[data-testid=\"after-sale-log-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "after-sale-log:search",
+      "reset": "after-sale-log:reset",
+      "refresh": "after-sale-log:refresh",
+      "create": "after-sale-log:create",
+      "edit": "after-sale-log:edit",
+      "delete": "after-sale-log:delete",
+      "submit": "after-sale-log:submit",
+      "cancel": "after-sale-log:cancel",
+      "close": "after-sale-log:close",
+      "row": "after-sale-log:row",
+      "pagination": "after-sale-log:pagination",
+      "fields": {
+        "user_id": "after-sale-log:field:user_id",
+        "user_type": "after-sale-log:field:user_type",
+        "after_sale_id": "after-sale-log:field:after_sale_id",
+        "before_status": "after-sale-log:field:before_status",
+        "after_status": "after-sale-log:field:after_status",
+        "operate_type": "after-sale-log:field:operate_type",
+        "content": "after-sale-log:field:content"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.after-sale-log",
+      "examples": [
+        "mall.after-sale-log__List__Refresh",
+        "mall.after-sale-log__ListItem__Open",
+        "mall.after-sale-log__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

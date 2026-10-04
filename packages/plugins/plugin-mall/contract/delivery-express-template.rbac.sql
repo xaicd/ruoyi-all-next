@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for DeliveryExpressTemplate（源框架导入） (DeliveryExpressTemplate)
+-- Auto-generated RBAC & Menu Migration for 快递运费模板 (DeliveryExpressTemplate)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-delivery-express-template',
   'mall-dir',
-  'DeliveryExpressTemplate（源框架导入）管理',
+  '快递运费模板管理',
   '/admin/mall/delivery-express-template',
   'mall/delivery-express-template/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-delivery-express-template-query',  'menu-delivery-express-template', '查询DeliveryExpressTemplate（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:delivery_express_template:query',  1, NOW(), NOW()),
-('menu-delivery-express-template-create', 'menu-delivery-express-template', '新增DeliveryExpressTemplate（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:delivery_express_template:create', 2, NOW(), NOW()),
-('menu-delivery-express-template-update', 'menu-delivery-express-template', '修改DeliveryExpressTemplate（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:delivery_express_template:update', 3, NOW(), NOW()),
-('menu-delivery-express-template-delete', 'menu-delivery-express-template', '删除DeliveryExpressTemplate（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:delivery_express_template:delete', 4, NOW(), NOW())
+('menu-delivery-express-template-query',  'menu-delivery-express-template', '查询快递运费模板', 'BUTTON', 'ACTIVE', 'mall:delivery_express_template:query',  1, NOW(), NOW()),
+('menu-delivery-express-template-create', 'menu-delivery-express-template', '新增快递运费模板', 'BUTTON', 'ACTIVE', 'mall:delivery_express_template:create', 2, NOW(), NOW()),
+('menu-delivery-express-template-update', 'menu-delivery-express-template', '修改快递运费模板', 'BUTTON', 'ACTIVE', 'mall:delivery_express_template:update', 3, NOW(), NOW()),
+('menu-delivery-express-template-delete', 'menu-delivery-express-template', '删除快递运费模板', 'BUTTON', 'ACTIVE', 'mall:delivery_express_template:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

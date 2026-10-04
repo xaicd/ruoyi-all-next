@@ -1,0 +1,195 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "crm",
+  "entity": "CrmProductCategory",
+  "kebab": "crm-product-category",
+  "businessName": "产品分类",
+  "permissionPrefix": "crm:crm_product_category",
+  "page": {
+    "route": "/admin/crm/crm-product-category",
+    "title": "产品分类管理",
+    "titleSelector": "[data-testid=\"crm-product-category-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.crm/api",
+    "bffMount": "/api/v1/admin/crm",
+    "resource": "crm-product-category",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/crm-product-category",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/crm-product-category/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/crm-product-category"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/crm-product-category/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/crm-product-category/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"crm-product-category-title\"]",
+    "refresh": "[data-testid=\"crm-product-category-refresh\"]",
+    "createButton": "[data-testid=\"crm-product-category-create\"]",
+    "searchForm": "[data-testid=\"crm-product-category-search\"]",
+    "searchSubmit": "[data-testid=\"crm-product-category-search-submit\"]",
+    "searchReset": "[data-testid=\"crm-product-category-search-reset\"]",
+    "total": "[data-testid=\"crm-product-category-total\"]",
+    "table": "[data-testid=\"crm-product-category-table\"]",
+    "row": "[data-testid=\"crm-product-category-row\"]",
+    "editButton": "[data-testid=\"crm-product-category-edit\"]",
+    "deleteButton": "[data-testid=\"crm-product-category-delete\"]",
+    "form": "[data-testid=\"crm-product-category-form\"]",
+    "formError": "[data-testid=\"crm-product-category-form-error\"]",
+    "formSubmit": "[data-testid=\"crm-product-category-form-submit\"]",
+    "formCancel": "[data-testid=\"crm-product-category-form-cancel\"]",
+    "formClose": "[data-testid=\"crm-product-category-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "产品分类列表",
+    "dialogLabel": {
+      "create": "新增产品分类",
+      "edit": "编辑产品分类"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "分类名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "parent_id",
+        "label": "父级编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-parent_id",
+        "selector": "[data-testid=\"field-parent_id\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "crm-product-category",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"crm-product-category\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"crm-product-category-form-overlay\"]",
+      "dialog": "[data-testid=\"crm-product-category-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "crm-product-category:search",
+      "reset": "crm-product-category:reset",
+      "refresh": "crm-product-category:refresh",
+      "create": "crm-product-category:create",
+      "edit": "crm-product-category:edit",
+      "delete": "crm-product-category:delete",
+      "submit": "crm-product-category:submit",
+      "cancel": "crm-product-category:cancel",
+      "close": "crm-product-category:close",
+      "row": "crm-product-category:row",
+      "pagination": "crm-product-category:pagination",
+      "fields": {
+        "name": "crm-product-category:field:name",
+        "parent_id": "crm-product-category:field:parent_id"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "crm.crm-product-category",
+      "examples": [
+        "crm.crm-product-category__List__Refresh",
+        "crm.crm-product-category__ListItem__Open",
+        "crm.crm-product-category__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

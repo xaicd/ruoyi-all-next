@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { KeFuConversationService } from "../ke-fu-conversation.service"
 
 describe("KeFuConversationService", () => {
-  it("should create and query KeFuConversation（源框架导入）", async () => {
+  it("should create and query 客服会话", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await KeFuConversationService.create({
         user_id: 1,
@@ -21,7 +21,7 @@ describe("KeFuConversationService", () => {
   
       const updated = await KeFuConversationService.update(created.id, {
         id: created.id,
-        user_id: "更新KeFuConversation（源框架导入）",
+        user_id: "更新客服会话",
       } as any)
       expect(updated).toBeDefined()
   

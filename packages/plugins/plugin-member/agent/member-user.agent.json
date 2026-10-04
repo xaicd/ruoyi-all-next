@@ -1,0 +1,357 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "member",
+  "entity": "MemberUser",
+  "kebab": "member-user",
+  "businessName": "会员用户 DOuk_mobile 索引：基于 字段",
+  "permissionPrefix": "member:member_user",
+  "page": {
+    "route": "/admin/member/member-user",
+    "title": "会员用户 DOuk_mobile 索引：基于 字段管理",
+    "titleSelector": "[data-testid=\"member-user-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.member/api",
+    "bffMount": "/api/v1/admin/member",
+    "resource": "member-user",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/member-user",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/member-user/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/member-user"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/member-user/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/member-user/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"member-user-title\"]",
+    "refresh": "[data-testid=\"member-user-refresh\"]",
+    "createButton": "[data-testid=\"member-user-create\"]",
+    "searchForm": "[data-testid=\"member-user-search\"]",
+    "searchSubmit": "[data-testid=\"member-user-search-submit\"]",
+    "searchReset": "[data-testid=\"member-user-search-reset\"]",
+    "total": "[data-testid=\"member-user-total\"]",
+    "table": "[data-testid=\"member-user-table\"]",
+    "row": "[data-testid=\"member-user-row\"]",
+    "editButton": "[data-testid=\"member-user-edit\"]",
+    "deleteButton": "[data-testid=\"member-user-delete\"]",
+    "form": "[data-testid=\"member-user-form\"]",
+    "formError": "[data-testid=\"member-user-form-error\"]",
+    "formSubmit": "[data-testid=\"member-user-form-submit\"]",
+    "formCancel": "[data-testid=\"member-user-form-cancel\"]",
+    "formClose": "[data-testid=\"member-user-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "会员用户 DOuk_mobile 索引：基于 字段列表",
+    "dialogLabel": {
+      "create": "新增会员用户 DOuk_mobile 索引：基于 字段",
+      "edit": "编辑会员用户 DOuk_mobile 索引：基于 字段"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "mobile",
+        "label": "手机",
+        "type": "string",
+        "required": false,
+        "testId": "field-mobile",
+        "selector": "[data-testid=\"field-mobile\"]"
+      },
+      {
+        "name": "email",
+        "label": "邮箱",
+        "type": "string",
+        "required": false,
+        "testId": "field-email",
+        "selector": "[data-testid=\"field-email\"]"
+      },
+      {
+        "name": "password",
+        "label": "加密后的密码",
+        "type": "string",
+        "required": false,
+        "testId": "field-password",
+        "selector": "[data-testid=\"field-password\"]"
+      },
+      {
+        "name": "status",
+        "label": "帐号状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "register_ip",
+        "label": "注册 IP",
+        "type": "string",
+        "required": false,
+        "testId": "field-register_ip",
+        "selector": "[data-testid=\"field-register_ip\"]"
+      },
+      {
+        "name": "register_terminal",
+        "label": "注册终端",
+        "type": "number",
+        "required": false,
+        "testId": "field-register_terminal",
+        "selector": "[data-testid=\"field-register_terminal\"]"
+      },
+      {
+        "name": "login_ip",
+        "label": "最后登录IP",
+        "type": "string",
+        "required": false,
+        "testId": "field-login_ip",
+        "selector": "[data-testid=\"field-login_ip\"]"
+      },
+      {
+        "name": "login_date",
+        "label": "最后登录时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-login_date",
+        "selector": "[data-testid=\"field-login_date\"]"
+      },
+      {
+        "name": "nickname",
+        "label": "用户昵称",
+        "type": "string",
+        "required": false,
+        "testId": "field-nickname",
+        "selector": "[data-testid=\"field-nickname\"]"
+      },
+      {
+        "name": "avatar",
+        "label": "用户头像",
+        "type": "string",
+        "required": false,
+        "testId": "field-avatar",
+        "selector": "[data-testid=\"field-avatar\"]"
+      },
+      {
+        "name": "name",
+        "label": "真实名字",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "sex",
+        "label": "性别",
+        "type": "number",
+        "required": false,
+        "testId": "field-sex",
+        "selector": "[data-testid=\"field-sex\"]"
+      },
+      {
+        "name": "birthday",
+        "label": "出生日期",
+        "type": "string",
+        "required": false,
+        "testId": "field-birthday",
+        "selector": "[data-testid=\"field-birthday\"]"
+      },
+      {
+        "name": "area_id",
+        "label": "所在地",
+        "type": "number",
+        "required": false,
+        "testId": "field-area_id",
+        "selector": "[data-testid=\"field-area_id\"]"
+      },
+      {
+        "name": "mark",
+        "label": "用户备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-mark",
+        "selector": "[data-testid=\"field-mark\"]"
+      },
+      {
+        "name": "point",
+        "label": "积分",
+        "type": "number",
+        "required": false,
+        "testId": "field-point",
+        "selector": "[data-testid=\"field-point\"]"
+      },
+      {
+        "name": "tag_ids",
+        "label": "会员标签列表，以逗号分隔",
+        "type": "string",
+        "required": false,
+        "testId": "field-tag_ids",
+        "selector": "[data-testid=\"field-tag_ids\"]"
+      },
+      {
+        "name": "level_id",
+        "label": "会员级别编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-level_id",
+        "selector": "[data-testid=\"field-level_id\"]"
+      },
+      {
+        "name": "experience",
+        "label": "会员经验",
+        "type": "number",
+        "required": false,
+        "testId": "field-experience",
+        "selector": "[data-testid=\"field-experience\"]"
+      },
+      {
+        "name": "group_id",
+        "label": "用户分组编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-group_id",
+        "selector": "[data-testid=\"field-group_id\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "member-user",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"member-user\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"member-user-form-overlay\"]",
+      "dialog": "[data-testid=\"member-user-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "member-user:search",
+      "reset": "member-user:reset",
+      "refresh": "member-user:refresh",
+      "create": "member-user:create",
+      "edit": "member-user:edit",
+      "delete": "member-user:delete",
+      "submit": "member-user:submit",
+      "cancel": "member-user:cancel",
+      "close": "member-user:close",
+      "row": "member-user:row",
+      "pagination": "member-user:pagination",
+      "fields": {
+        "mobile": "member-user:field:mobile",
+        "email": "member-user:field:email",
+        "password": "member-user:field:password",
+        "status": "member-user:field:status",
+        "register_ip": "member-user:field:register_ip",
+        "register_terminal": "member-user:field:register_terminal",
+        "login_ip": "member-user:field:login_ip",
+        "login_date": "member-user:field:login_date",
+        "nickname": "member-user:field:nickname",
+        "avatar": "member-user:field:avatar",
+        "name": "member-user:field:name",
+        "sex": "member-user:field:sex",
+        "birthday": "member-user:field:birthday",
+        "area_id": "member-user:field:area_id",
+        "mark": "member-user:field:mark",
+        "point": "member-user:field:point",
+        "tag_ids": "member-user:field:tag_ids",
+        "level_id": "member-user:field:level_id",
+        "experience": "member-user:field:experience",
+        "group_id": "member-user:field:group_id"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "member.member-user",
+      "examples": [
+        "member.member-user__List__Refresh",
+        "member.member-user__ListItem__Open",
+        "member.member-user__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

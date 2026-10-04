@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for ErpFinancePaymentItem（源框架导入） (ErpFinancePaymentItem)
+-- Auto-generated RBAC & Menu Migration for ERP 付款项 (ErpFinancePaymentItem)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-erp-finance-payment-item',
   'erp-dir',
-  'ErpFinancePaymentItem（源框架导入）管理',
+  'ERP 付款项管理',
   '/admin/erp/erp-finance-payment-item',
   'erp/erp-finance-payment-item/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-erp-finance-payment-item-query',  'menu-erp-finance-payment-item', '查询ErpFinancePaymentItem（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_finance_payment_item:query',  1, NOW(), NOW()),
-('menu-erp-finance-payment-item-create', 'menu-erp-finance-payment-item', '新增ErpFinancePaymentItem（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_finance_payment_item:create', 2, NOW(), NOW()),
-('menu-erp-finance-payment-item-update', 'menu-erp-finance-payment-item', '修改ErpFinancePaymentItem（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_finance_payment_item:update', 3, NOW(), NOW()),
-('menu-erp-finance-payment-item-delete', 'menu-erp-finance-payment-item', '删除ErpFinancePaymentItem（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_finance_payment_item:delete', 4, NOW(), NOW())
+('menu-erp-finance-payment-item-query',  'menu-erp-finance-payment-item', '查询ERP 付款项', 'BUTTON', 'ACTIVE', 'erp:erp_finance_payment_item:query',  1, NOW(), NOW()),
+('menu-erp-finance-payment-item-create', 'menu-erp-finance-payment-item', '新增ERP 付款项', 'BUTTON', 'ACTIVE', 'erp:erp_finance_payment_item:create', 2, NOW(), NOW()),
+('menu-erp-finance-payment-item-update', 'menu-erp-finance-payment-item', '修改ERP 付款项', 'BUTTON', 'ACTIVE', 'erp:erp_finance_payment_item:update', 3, NOW(), NOW()),
+('menu-erp-finance-payment-item-delete', 'menu-erp-finance-payment-item', '删除ERP 付款项', 'BUTTON', 'ACTIVE', 'erp:erp_finance_payment_item:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesWmArrivalNotice（源框架导入） (MesWmArrivalNotice)
+-- Auto-generated RBAC & Menu Migration for MES 到货通知单 (MesWmArrivalNotice)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-wm-arrival-notice',
   'mes-dir',
-  'MesWmArrivalNotice（源框架导入）管理',
+  'MES 到货通知单管理',
   '/admin/mes/mes-wm-arrival-notice',
   'mes/mes-wm-arrival-notice/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-wm-arrival-notice-query',  'menu-mes-wm-arrival-notice', '查询MesWmArrivalNotice（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_arrival_notice:query',  1, NOW(), NOW()),
-('menu-mes-wm-arrival-notice-create', 'menu-mes-wm-arrival-notice', '新增MesWmArrivalNotice（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_arrival_notice:create', 2, NOW(), NOW()),
-('menu-mes-wm-arrival-notice-update', 'menu-mes-wm-arrival-notice', '修改MesWmArrivalNotice（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_arrival_notice:update', 3, NOW(), NOW()),
-('menu-mes-wm-arrival-notice-delete', 'menu-mes-wm-arrival-notice', '删除MesWmArrivalNotice（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_arrival_notice:delete', 4, NOW(), NOW())
+('menu-mes-wm-arrival-notice-query',  'menu-mes-wm-arrival-notice', '查询MES 到货通知单', 'BUTTON', 'ACTIVE', 'mes:mes_wm_arrival_notice:query',  1, NOW(), NOW()),
+('menu-mes-wm-arrival-notice-create', 'menu-mes-wm-arrival-notice', '新增MES 到货通知单', 'BUTTON', 'ACTIVE', 'mes:mes_wm_arrival_notice:create', 2, NOW(), NOW()),
+('menu-mes-wm-arrival-notice-update', 'menu-mes-wm-arrival-notice', '修改MES 到货通知单', 'BUTTON', 'ACTIVE', 'mes:mes_wm_arrival_notice:update', 3, NOW(), NOW()),
+('menu-mes-wm-arrival-notice-delete', 'menu-mes-wm-arrival-notice', '删除MES 到货通知单', 'BUTTON', 'ACTIVE', 'mes:mes_wm_arrival_notice:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

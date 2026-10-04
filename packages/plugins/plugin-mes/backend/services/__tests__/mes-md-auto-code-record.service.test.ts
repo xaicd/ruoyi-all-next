@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesMdAutoCodeRecordService } from "../mes-md-auto-code-record.service"
 
 describe("MesMdAutoCodeRecordService", () => {
-  it("should create and query MesMdAutoCodeRecord（源框架导入）", async () => {
+  it("should create and query MES 编码生成记录", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesMdAutoCodeRecordService.create({
         rule_id: 1,
@@ -21,7 +21,7 @@ describe("MesMdAutoCodeRecordService", () => {
   
       const updated = await MesMdAutoCodeRecordService.update(created.id, {
         id: created.id,
-        rule_id: "更新MesMdAutoCodeRecord（源框架导入）",
+        rule_id: "更新MES 编码生成记录",
       } as any)
       expect(updated).toBeDefined()
   

@@ -1,0 +1,285 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "SeckillActivity",
+  "kebab": "seckill-activity",
+  "businessName": "秒杀活动",
+  "permissionPrefix": "mall:seckill_activity",
+  "page": {
+    "route": "/admin/mall/seckill-activity",
+    "title": "秒杀活动管理",
+    "titleSelector": "[data-testid=\"seckill-activity-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "seckill-activity",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/seckill-activity",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/seckill-activity/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/seckill-activity"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/seckill-activity/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/seckill-activity/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"seckill-activity-title\"]",
+    "refresh": "[data-testid=\"seckill-activity-refresh\"]",
+    "createButton": "[data-testid=\"seckill-activity-create\"]",
+    "searchForm": "[data-testid=\"seckill-activity-search\"]",
+    "searchSubmit": "[data-testid=\"seckill-activity-search-submit\"]",
+    "searchReset": "[data-testid=\"seckill-activity-search-reset\"]",
+    "total": "[data-testid=\"seckill-activity-total\"]",
+    "table": "[data-testid=\"seckill-activity-table\"]",
+    "row": "[data-testid=\"seckill-activity-row\"]",
+    "editButton": "[data-testid=\"seckill-activity-edit\"]",
+    "deleteButton": "[data-testid=\"seckill-activity-delete\"]",
+    "form": "[data-testid=\"seckill-activity-form\"]",
+    "formError": "[data-testid=\"seckill-activity-form-error\"]",
+    "formSubmit": "[data-testid=\"seckill-activity-form-submit\"]",
+    "formCancel": "[data-testid=\"seckill-activity-form-cancel\"]",
+    "formClose": "[data-testid=\"seckill-activity-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "秒杀活动列表",
+    "dialogLabel": {
+      "create": "新增秒杀活动",
+      "edit": "编辑秒杀活动"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "spu_id",
+        "label": "秒杀活动商品",
+        "type": "number",
+        "required": false,
+        "testId": "field-spu_id",
+        "selector": "[data-testid=\"field-spu_id\"]"
+      },
+      {
+        "name": "name",
+        "label": "秒杀活动名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "status",
+        "label": "活动状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      },
+      {
+        "name": "start_time",
+        "label": "活动开始时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-start_time",
+        "selector": "[data-testid=\"field-start_time\"]"
+      },
+      {
+        "name": "end_time",
+        "label": "活动结束时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-end_time",
+        "selector": "[data-testid=\"field-end_time\"]"
+      },
+      {
+        "name": "sort",
+        "label": "排序",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      },
+      {
+        "name": "config_ids",
+        "label": "秒杀时段 id",
+        "type": "string",
+        "required": false,
+        "testId": "field-config_ids",
+        "selector": "[data-testid=\"field-config_ids\"]"
+      },
+      {
+        "name": "total_limit_count",
+        "label": "总限购数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_limit_count",
+        "selector": "[data-testid=\"field-total_limit_count\"]"
+      },
+      {
+        "name": "single_limit_count",
+        "label": "单次限够数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-single_limit_count",
+        "selector": "[data-testid=\"field-single_limit_count\"]"
+      },
+      {
+        "name": "stock",
+        "label": "秒杀库存(剩余库存秒杀时扣减)",
+        "type": "number",
+        "required": false,
+        "testId": "field-stock",
+        "selector": "[data-testid=\"field-stock\"]"
+      },
+      {
+        "name": "total_stock",
+        "label": "秒杀总库存",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_stock",
+        "selector": "[data-testid=\"field-total_stock\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "seckill-activity",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"seckill-activity\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"seckill-activity-form-overlay\"]",
+      "dialog": "[data-testid=\"seckill-activity-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "seckill-activity:search",
+      "reset": "seckill-activity:reset",
+      "refresh": "seckill-activity:refresh",
+      "create": "seckill-activity:create",
+      "edit": "seckill-activity:edit",
+      "delete": "seckill-activity:delete",
+      "submit": "seckill-activity:submit",
+      "cancel": "seckill-activity:cancel",
+      "close": "seckill-activity:close",
+      "row": "seckill-activity:row",
+      "pagination": "seckill-activity:pagination",
+      "fields": {
+        "spu_id": "seckill-activity:field:spu_id",
+        "name": "seckill-activity:field:name",
+        "status": "seckill-activity:field:status",
+        "remark": "seckill-activity:field:remark",
+        "start_time": "seckill-activity:field:start_time",
+        "end_time": "seckill-activity:field:end_time",
+        "sort": "seckill-activity:field:sort",
+        "config_ids": "seckill-activity:field:config_ids",
+        "total_limit_count": "seckill-activity:field:total_limit_count",
+        "single_limit_count": "seckill-activity:field:single_limit_count",
+        "stock": "seckill-activity:field:stock",
+        "total_stock": "seckill-activity:field:total_stock"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.seckill-activity",
+      "examples": [
+        "mall.seckill-activity__List__Refresh",
+        "mall.seckill-activity__ListItem__Open",
+        "mall.seckill-activity__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

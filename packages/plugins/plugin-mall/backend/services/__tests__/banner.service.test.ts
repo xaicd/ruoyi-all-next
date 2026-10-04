@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { BannerService } from "../banner.service"
 
 describe("BannerService", () => {
-  it("should create and query Banner（源框架导入）", async () => {
+  it("should create and query banner", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await BannerService.create({
-        title: "测试Banner（源框架导入）",
+        title: "测试banner",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("BannerService", () => {
   
       const updated = await BannerService.update(created.id, {
         id: created.id,
-        title: "更新Banner（源框架导入）",
+        title: "更新banner",
       } as any)
       expect(updated).toBeDefined()
   

@@ -1,0 +1,258 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesWmArrivalNotice",
+  "kebab": "mes-wm-arrival-notice",
+  "businessName": "MES 到货通知单",
+  "permissionPrefix": "mes:mes_wm_arrival_notice",
+  "page": {
+    "route": "/admin/mes/mes-wm-arrival-notice",
+    "title": "MES 到货通知单管理",
+    "titleSelector": "[data-testid=\"mes-wm-arrival-notice-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-wm-arrival-notice",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-wm-arrival-notice",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-wm-arrival-notice/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-wm-arrival-notice"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-wm-arrival-notice/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-wm-arrival-notice/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-wm-arrival-notice-title\"]",
+    "refresh": "[data-testid=\"mes-wm-arrival-notice-refresh\"]",
+    "createButton": "[data-testid=\"mes-wm-arrival-notice-create\"]",
+    "searchForm": "[data-testid=\"mes-wm-arrival-notice-search\"]",
+    "searchSubmit": "[data-testid=\"mes-wm-arrival-notice-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-wm-arrival-notice-search-reset\"]",
+    "total": "[data-testid=\"mes-wm-arrival-notice-total\"]",
+    "table": "[data-testid=\"mes-wm-arrival-notice-table\"]",
+    "row": "[data-testid=\"mes-wm-arrival-notice-row\"]",
+    "editButton": "[data-testid=\"mes-wm-arrival-notice-edit\"]",
+    "deleteButton": "[data-testid=\"mes-wm-arrival-notice-delete\"]",
+    "form": "[data-testid=\"mes-wm-arrival-notice-form\"]",
+    "formError": "[data-testid=\"mes-wm-arrival-notice-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-wm-arrival-notice-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-wm-arrival-notice-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-wm-arrival-notice-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 到货通知单列表",
+    "dialogLabel": {
+      "create": "新增MES 到货通知单",
+      "edit": "编辑MES 到货通知单"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "code",
+        "label": "通知单编码",
+        "type": "string",
+        "required": false,
+        "testId": "field-code",
+        "selector": "[data-testid=\"field-code\"]"
+      },
+      {
+        "name": "name",
+        "label": "通知单名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "purchase_order_code",
+        "label": "采购订单编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-purchase_order_code",
+        "selector": "[data-testid=\"field-purchase_order_code\"]"
+      },
+      {
+        "name": "vendor_id",
+        "label": "供应商编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-vendor_id",
+        "selector": "[data-testid=\"field-vendor_id\"]"
+      },
+      {
+        "name": "arrival_date",
+        "label": "到货日期",
+        "type": "string",
+        "required": false,
+        "testId": "field-arrival_date",
+        "selector": "[data-testid=\"field-arrival_date\"]"
+      },
+      {
+        "name": "contact_name",
+        "label": "联系人",
+        "type": "string",
+        "required": false,
+        "testId": "field-contact_name",
+        "selector": "[data-testid=\"field-contact_name\"]"
+      },
+      {
+        "name": "contact_telephone",
+        "label": "联系电话",
+        "type": "string",
+        "required": false,
+        "testId": "field-contact_telephone",
+        "selector": "[data-testid=\"field-contact_telephone\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-wm-arrival-notice",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-wm-arrival-notice\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-wm-arrival-notice-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-wm-arrival-notice-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-wm-arrival-notice:search",
+      "reset": "mes-wm-arrival-notice:reset",
+      "refresh": "mes-wm-arrival-notice:refresh",
+      "create": "mes-wm-arrival-notice:create",
+      "edit": "mes-wm-arrival-notice:edit",
+      "delete": "mes-wm-arrival-notice:delete",
+      "submit": "mes-wm-arrival-notice:submit",
+      "cancel": "mes-wm-arrival-notice:cancel",
+      "close": "mes-wm-arrival-notice:close",
+      "row": "mes-wm-arrival-notice:row",
+      "pagination": "mes-wm-arrival-notice:pagination",
+      "fields": {
+        "code": "mes-wm-arrival-notice:field:code",
+        "name": "mes-wm-arrival-notice:field:name",
+        "purchase_order_code": "mes-wm-arrival-notice:field:purchase_order_code",
+        "vendor_id": "mes-wm-arrival-notice:field:vendor_id",
+        "arrival_date": "mes-wm-arrival-notice:field:arrival_date",
+        "contact_name": "mes-wm-arrival-notice:field:contact_name",
+        "contact_telephone": "mes-wm-arrival-notice:field:contact_telephone",
+        "status": "mes-wm-arrival-notice:field:status",
+        "remark": "mes-wm-arrival-notice:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-wm-arrival-notice",
+      "examples": [
+        "mes.mes-wm-arrival-notice__List__Refresh",
+        "mes.mes-wm-arrival-notice__ListItem__Open",
+        "mes.mes-wm-arrival-notice__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

@@ -1,0 +1,240 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "member",
+  "entity": "MemberLevel",
+  "kebab": "member-level",
+  "businessName": "会员等级 DO配置每个等级需要的积分",
+  "permissionPrefix": "member:member_level",
+  "page": {
+    "route": "/admin/member/member-level",
+    "title": "会员等级 DO配置每个等级需要的积分管理",
+    "titleSelector": "[data-testid=\"member-level-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.member/api",
+    "bffMount": "/api/v1/admin/member",
+    "resource": "member-level",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/member-level",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/member-level/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/member-level"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/member-level/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/member-level/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"member-level-title\"]",
+    "refresh": "[data-testid=\"member-level-refresh\"]",
+    "createButton": "[data-testid=\"member-level-create\"]",
+    "searchForm": "[data-testid=\"member-level-search\"]",
+    "searchSubmit": "[data-testid=\"member-level-search-submit\"]",
+    "searchReset": "[data-testid=\"member-level-search-reset\"]",
+    "total": "[data-testid=\"member-level-total\"]",
+    "table": "[data-testid=\"member-level-table\"]",
+    "row": "[data-testid=\"member-level-row\"]",
+    "editButton": "[data-testid=\"member-level-edit\"]",
+    "deleteButton": "[data-testid=\"member-level-delete\"]",
+    "form": "[data-testid=\"member-level-form\"]",
+    "formError": "[data-testid=\"member-level-form-error\"]",
+    "formSubmit": "[data-testid=\"member-level-form-submit\"]",
+    "formCancel": "[data-testid=\"member-level-form-cancel\"]",
+    "formClose": "[data-testid=\"member-level-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "会员等级 DO配置每个等级需要的积分列表",
+    "dialogLabel": {
+      "create": "新增会员等级 DO配置每个等级需要的积分",
+      "edit": "编辑会员等级 DO配置每个等级需要的积分"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "等级名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "level",
+        "label": "等级",
+        "type": "number",
+        "required": false,
+        "testId": "field-level",
+        "selector": "[data-testid=\"field-level\"]"
+      },
+      {
+        "name": "experience",
+        "label": "升级经验",
+        "type": "number",
+        "required": false,
+        "testId": "field-experience",
+        "selector": "[data-testid=\"field-experience\"]"
+      },
+      {
+        "name": "discount_percent",
+        "label": "享受折扣",
+        "type": "number",
+        "required": false,
+        "testId": "field-discount_percent",
+        "selector": "[data-testid=\"field-discount_percent\"]"
+      },
+      {
+        "name": "icon",
+        "label": "等级图标",
+        "type": "string",
+        "required": false,
+        "testId": "field-icon",
+        "selector": "[data-testid=\"field-icon\"]"
+      },
+      {
+        "name": "background_url",
+        "label": "等级背景图",
+        "type": "string",
+        "required": false,
+        "testId": "field-background_url",
+        "selector": "[data-testid=\"field-background_url\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "member-level",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"member-level\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"member-level-form-overlay\"]",
+      "dialog": "[data-testid=\"member-level-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "member-level:search",
+      "reset": "member-level:reset",
+      "refresh": "member-level:refresh",
+      "create": "member-level:create",
+      "edit": "member-level:edit",
+      "delete": "member-level:delete",
+      "submit": "member-level:submit",
+      "cancel": "member-level:cancel",
+      "close": "member-level:close",
+      "row": "member-level:row",
+      "pagination": "member-level:pagination",
+      "fields": {
+        "name": "member-level:field:name",
+        "level": "member-level:field:level",
+        "experience": "member-level:field:experience",
+        "discount_percent": "member-level:field:discount_percent",
+        "icon": "member-level:field:icon",
+        "background_url": "member-level:field:background_url",
+        "status": "member-level:field:status"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "member.member-level",
+      "examples": [
+        "member.member-level__List__Refresh",
+        "member.member-level__ListItem__Open",
+        "member.member-level__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

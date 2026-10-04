@@ -1,0 +1,258 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "im",
+  "entity": "ImGroupRequest",
+  "kebab": "im-group-request",
+  "businessName": "IM 加群申请记录 DO配合「申请 - 审批」流程：用户主动申请：调 apply 接口落库（inviterUserId=null，handleResult=UNHANDLED），",
+  "permissionPrefix": "im:im_group_request",
+  "page": {
+    "route": "/admin/im/im-group-request",
+    "title": "IM 加群申请记录 DO配合「申请 - 审批」流程：用户主动申请：调 apply 接口落库（inviterUserId=null，handleResult=UNHANDLED），管理",
+    "titleSelector": "[data-testid=\"im-group-request-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.im/api",
+    "bffMount": "/api/v1/admin/im",
+    "resource": "im-group-request",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/im-group-request",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/im-group-request/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/im-group-request"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/im-group-request/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/im-group-request/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"im-group-request-title\"]",
+    "refresh": "[data-testid=\"im-group-request-refresh\"]",
+    "createButton": "[data-testid=\"im-group-request-create\"]",
+    "searchForm": "[data-testid=\"im-group-request-search\"]",
+    "searchSubmit": "[data-testid=\"im-group-request-search-submit\"]",
+    "searchReset": "[data-testid=\"im-group-request-search-reset\"]",
+    "total": "[data-testid=\"im-group-request-total\"]",
+    "table": "[data-testid=\"im-group-request-table\"]",
+    "row": "[data-testid=\"im-group-request-row\"]",
+    "editButton": "[data-testid=\"im-group-request-edit\"]",
+    "deleteButton": "[data-testid=\"im-group-request-delete\"]",
+    "form": "[data-testid=\"im-group-request-form\"]",
+    "formError": "[data-testid=\"im-group-request-form-error\"]",
+    "formSubmit": "[data-testid=\"im-group-request-form-submit\"]",
+    "formCancel": "[data-testid=\"im-group-request-form-cancel\"]",
+    "formClose": "[data-testid=\"im-group-request-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IM 加群申请记录 DO配合「申请 - 审批」流程：用户主动申请：调 apply 接口落库（inviterUserId=null，handleResult=UNHANDLED），列表",
+    "dialogLabel": {
+      "create": "新增IM 加群申请记录 DO配合「申请 - 审批」流程：用户主动申请：调 apply 接口落库（inviterUserId=null，handleResult=UNHANDLED），",
+      "edit": "编辑IM 加群申请记录 DO配合「申请 - 审批」流程：用户主动申请：调 apply 接口落库（inviterUserId=null，handleResult=UNHANDLED），"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "group_id",
+        "label": "群编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-group_id",
+        "selector": "[data-testid=\"field-group_id\"]"
+      },
+      {
+        "name": "user_id",
+        "label": "申请人 / 被邀请人用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "inviter_user_id",
+        "label": "邀请人用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-inviter_user_id",
+        "selector": "[data-testid=\"field-inviter_user_id\"]"
+      },
+      {
+        "name": "apply_content",
+        "label": "申请理由",
+        "type": "string",
+        "required": false,
+        "testId": "field-apply_content",
+        "selector": "[data-testid=\"field-apply_content\"]"
+      },
+      {
+        "name": "add_source",
+        "label": "加入来源",
+        "type": "number",
+        "required": false,
+        "testId": "field-add_source",
+        "selector": "[data-testid=\"field-add_source\"]"
+      },
+      {
+        "name": "handle_result",
+        "label": "处理结果",
+        "type": "number",
+        "required": false,
+        "testId": "field-handle_result",
+        "selector": "[data-testid=\"field-handle_result\"]"
+      },
+      {
+        "name": "handle_user_id",
+        "label": "处理人用户编号（群主或管理员）",
+        "type": "number",
+        "required": false,
+        "testId": "field-handle_user_id",
+        "selector": "[data-testid=\"field-handle_user_id\"]"
+      },
+      {
+        "name": "handle_content",
+        "label": "处理理由（拒绝时可选填）",
+        "type": "string",
+        "required": false,
+        "testId": "field-handle_content",
+        "selector": "[data-testid=\"field-handle_content\"]"
+      },
+      {
+        "name": "handle_time",
+        "label": "处理时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-handle_time",
+        "selector": "[data-testid=\"field-handle_time\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "im-group-request",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"im-group-request\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"im-group-request-form-overlay\"]",
+      "dialog": "[data-testid=\"im-group-request-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "im-group-request:search",
+      "reset": "im-group-request:reset",
+      "refresh": "im-group-request:refresh",
+      "create": "im-group-request:create",
+      "edit": "im-group-request:edit",
+      "delete": "im-group-request:delete",
+      "submit": "im-group-request:submit",
+      "cancel": "im-group-request:cancel",
+      "close": "im-group-request:close",
+      "row": "im-group-request:row",
+      "pagination": "im-group-request:pagination",
+      "fields": {
+        "group_id": "im-group-request:field:group_id",
+        "user_id": "im-group-request:field:user_id",
+        "inviter_user_id": "im-group-request:field:inviter_user_id",
+        "apply_content": "im-group-request:field:apply_content",
+        "add_source": "im-group-request:field:add_source",
+        "handle_result": "im-group-request:field:handle_result",
+        "handle_user_id": "im-group-request:field:handle_user_id",
+        "handle_content": "im-group-request:field:handle_content",
+        "handle_time": "im-group-request:field:handle_time"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "im.im-group-request",
+      "examples": [
+        "im.im-group-request__List__Refresh",
+        "im.im-group-request__ListItem__Open",
+        "im.im-group-request__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

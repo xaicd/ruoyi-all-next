@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesMdProductSip（源框架导入） (MesMdProductSip)
+-- Auto-generated RBAC & Menu Migration for MES 产品SIP (MesMdProductSip)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-md-product-sip',
   'mes-dir',
-  'MesMdProductSip（源框架导入）管理',
+  'MES 产品SIP管理',
   '/admin/mes/mes-md-product-sip',
   'mes/mes-md-product-sip/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-md-product-sip-query',  'menu-mes-md-product-sip', '查询MesMdProductSip（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_md_product_sip:query',  1, NOW(), NOW()),
-('menu-mes-md-product-sip-create', 'menu-mes-md-product-sip', '新增MesMdProductSip（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_md_product_sip:create', 2, NOW(), NOW()),
-('menu-mes-md-product-sip-update', 'menu-mes-md-product-sip', '修改MesMdProductSip（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_md_product_sip:update', 3, NOW(), NOW()),
-('menu-mes-md-product-sip-delete', 'menu-mes-md-product-sip', '删除MesMdProductSip（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_md_product_sip:delete', 4, NOW(), NOW())
+('menu-mes-md-product-sip-query',  'menu-mes-md-product-sip', '查询MES 产品SIP', 'BUTTON', 'ACTIVE', 'mes:mes_md_product_sip:query',  1, NOW(), NOW()),
+('menu-mes-md-product-sip-create', 'menu-mes-md-product-sip', '新增MES 产品SIP', 'BUTTON', 'ACTIVE', 'mes:mes_md_product_sip:create', 2, NOW(), NOW()),
+('menu-mes-md-product-sip-update', 'menu-mes-md-product-sip', '修改MES 产品SIP', 'BUTTON', 'ACTIVE', 'mes:mes_md_product_sip:update', 3, NOW(), NOW()),
+('menu-mes-md-product-sip-delete', 'menu-mes-md-product-sip', '删除MES 产品SIP', 'BUTTON', 'ACTIVE', 'mes:mes_md_product_sip:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

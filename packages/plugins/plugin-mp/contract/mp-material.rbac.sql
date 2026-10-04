@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MpMaterial（源框架导入） (MpMaterial)
+-- Auto-generated RBAC & Menu Migration for 公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_ (MpMaterial)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mp-material',
   'mp-dir',
-  'MpMaterial（源框架导入）管理',
+  '公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_管理',
   '/admin/mp/mp-material',
   'mp/mp-material/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mp-material-query',  'menu-mp-material', '查询MpMaterial（源框架导入）', 'BUTTON', 'ACTIVE', 'mp:mp_material:query',  1, NOW(), NOW()),
-('menu-mp-material-create', 'menu-mp-material', '新增MpMaterial（源框架导入）', 'BUTTON', 'ACTIVE', 'mp:mp_material:create', 2, NOW(), NOW()),
-('menu-mp-material-update', 'menu-mp-material', '修改MpMaterial（源框架导入）', 'BUTTON', 'ACTIVE', 'mp:mp_material:update', 3, NOW(), NOW()),
-('menu-mp-material-delete', 'menu-mp-material', '删除MpMaterial（源框架导入）', 'BUTTON', 'ACTIVE', 'mp:mp_material:delete', 4, NOW(), NOW())
+('menu-mp-material-query',  'menu-mp-material', '查询公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_', 'BUTTON', 'ACTIVE', 'mp:mp_material:query',  1, NOW(), NOW()),
+('menu-mp-material-create', 'menu-mp-material', '新增公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_', 'BUTTON', 'ACTIVE', 'mp:mp_material:create', 2, NOW(), NOW()),
+('menu-mp-material-update', 'menu-mp-material', '修改公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_', 'BUTTON', 'ACTIVE', 'mp:mp_material:update', 3, NOW(), NOW()),
+('menu-mp-material-delete', 'menu-mp-material', '删除公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_', 'BUTTON', 'ACTIVE', 'mp:mp_material:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

@@ -66,24 +66,36 @@ export function CrmContactForm({ open, initialData, onClose, onSuccess }: CrmCon
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="crm-contact-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑CRM 联系人" : "新增CRM 联系人"}
+        data-testid="crm-contact-form"
+        data-agent-scope="crm-contact:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑CrmContact（源框架导入）" : "新增CrmContact（源框架导入）"}
+            {isEdit ? "编辑CRM 联系人" : "新增CRM 联系人"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="crm-contact-form-close" data-agent-target="crm-contact:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="crm-contact-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">联系人姓名</label>
+          <label htmlFor="crm-contact-name" className="block text-xs text-slate-600 mb-1">联系人姓名</label>
           <input
             type="text"
+            id="crm-contact-name"
+            data-testid="field-name"
+            data-agent-target="crm-contact:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="联系人姓名"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -93,9 +105,14 @@ export function CrmContactForm({ open, initialData, onClose, onSuccess }: CrmCon
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">客户编号</label>
+          <label htmlFor="crm-contact-customer_id" className="block text-xs text-slate-600 mb-1">客户编号</label>
           <input
             type="number"
+            id="crm-contact-customer_id"
+            data-testid="field-customer_id"
+            data-agent-target="crm-contact:field:customer_id"
+            data-agent-state={formData.customer_id == null || formData.customer_id === "" ? "empty" : "filled"}
+            aria-label="客户编号"
             value={formData.customer_id != null ? String(formData.customer_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, customer_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -105,9 +122,14 @@ export function CrmContactForm({ open, initialData, onClose, onSuccess }: CrmCon
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最后跟进时间</label>
+          <label htmlFor="crm-contact-contact_last_time" className="block text-xs text-slate-600 mb-1">最后跟进时间</label>
           <input
             type="text"
+            id="crm-contact-contact_last_time"
+            data-testid="field-contact_last_time"
+            data-agent-target="crm-contact:field:contact_last_time"
+            data-agent-state={formData.contact_last_time ? "filled" : "empty"}
+            aria-label="最后跟进时间"
             value={formData.contact_last_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, contact_last_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -117,9 +139,14 @@ export function CrmContactForm({ open, initialData, onClose, onSuccess }: CrmCon
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最后跟进内容</label>
+          <label htmlFor="crm-contact-contact_last_content" className="block text-xs text-slate-600 mb-1">最后跟进内容</label>
           <input
             type="text"
+            id="crm-contact-contact_last_content"
+            data-testid="field-contact_last_content"
+            data-agent-target="crm-contact:field:contact_last_content"
+            data-agent-state={formData.contact_last_content ? "filled" : "empty"}
+            aria-label="最后跟进内容"
             value={formData.contact_last_content ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, contact_last_content: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -129,9 +156,14 @@ export function CrmContactForm({ open, initialData, onClose, onSuccess }: CrmCon
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">下次联系时间</label>
+          <label htmlFor="crm-contact-contact_next_time" className="block text-xs text-slate-600 mb-1">下次联系时间</label>
           <input
             type="text"
+            id="crm-contact-contact_next_time"
+            data-testid="field-contact_next_time"
+            data-agent-target="crm-contact:field:contact_next_time"
+            data-agent-state={formData.contact_next_time ? "filled" : "empty"}
+            aria-label="下次联系时间"
             value={formData.contact_next_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, contact_next_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -141,9 +173,14 @@ export function CrmContactForm({ open, initialData, onClose, onSuccess }: CrmCon
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">负责人用户编号</label>
+          <label htmlFor="crm-contact-owner_user_id" className="block text-xs text-slate-600 mb-1">负责人用户编号</label>
           <input
             type="number"
+            id="crm-contact-owner_user_id"
+            data-testid="field-owner_user_id"
+            data-agent-target="crm-contact:field:owner_user_id"
+            data-agent-state={formData.owner_user_id == null || formData.owner_user_id === "" ? "empty" : "filled"}
+            aria-label="负责人用户编号"
             value={formData.owner_user_id != null ? String(formData.owner_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, owner_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -153,9 +190,14 @@ export function CrmContactForm({ open, initialData, onClose, onSuccess }: CrmCon
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">手机号</label>
+          <label htmlFor="crm-contact-mobile" className="block text-xs text-slate-600 mb-1">手机号</label>
           <input
             type="text"
+            id="crm-contact-mobile"
+            data-testid="field-mobile"
+            data-agent-target="crm-contact:field:mobile"
+            data-agent-state={formData.mobile ? "filled" : "empty"}
+            aria-label="手机号"
             value={formData.mobile ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, mobile: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -165,9 +207,14 @@ export function CrmContactForm({ open, initialData, onClose, onSuccess }: CrmCon
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">电话</label>
+          <label htmlFor="crm-contact-telephone" className="block text-xs text-slate-600 mb-1">电话</label>
           <input
             type="text"
+            id="crm-contact-telephone"
+            data-testid="field-telephone"
+            data-agent-target="crm-contact:field:telephone"
+            data-agent-state={formData.telephone ? "filled" : "empty"}
+            aria-label="电话"
             value={formData.telephone ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, telephone: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -177,9 +224,14 @@ export function CrmContactForm({ open, initialData, onClose, onSuccess }: CrmCon
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">电子邮箱</label>
+          <label htmlFor="crm-contact-email" className="block text-xs text-slate-600 mb-1">电子邮箱</label>
           <input
             type="text"
+            id="crm-contact-email"
+            data-testid="field-email"
+            data-agent-target="crm-contact:field:email"
+            data-agent-state={formData.email ? "filled" : "empty"}
+            aria-label="电子邮箱"
             value={formData.email ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -189,9 +241,14 @@ export function CrmContactForm({ open, initialData, onClose, onSuccess }: CrmCon
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">QQ</label>
+          <label htmlFor="crm-contact-qq" className="block text-xs text-slate-600 mb-1">QQ</label>
           <input
             type="number"
+            id="crm-contact-qq"
+            data-testid="field-qq"
+            data-agent-target="crm-contact:field:qq"
+            data-agent-state={formData.qq == null || formData.qq === "" ? "empty" : "filled"}
+            aria-label="QQ"
             value={formData.qq != null ? String(formData.qq) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, qq: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -201,9 +258,14 @@ export function CrmContactForm({ open, initialData, onClose, onSuccess }: CrmCon
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">微信</label>
+          <label htmlFor="crm-contact-wechat" className="block text-xs text-slate-600 mb-1">微信</label>
           <input
             type="text"
+            id="crm-contact-wechat"
+            data-testid="field-wechat"
+            data-agent-target="crm-contact:field:wechat"
+            data-agent-state={formData.wechat ? "filled" : "empty"}
+            aria-label="微信"
             value={formData.wechat ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, wechat: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -213,9 +275,14 @@ export function CrmContactForm({ open, initialData, onClose, onSuccess }: CrmCon
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">所在地</label>
+          <label htmlFor="crm-contact-area_id" className="block text-xs text-slate-600 mb-1">所在地</label>
           <input
             type="number"
+            id="crm-contact-area_id"
+            data-testid="field-area_id"
+            data-agent-target="crm-contact:field:area_id"
+            data-agent-state={formData.area_id == null || formData.area_id === "" ? "empty" : "filled"}
+            aria-label="所在地"
             value={formData.area_id != null ? String(formData.area_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, area_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -225,9 +292,14 @@ export function CrmContactForm({ open, initialData, onClose, onSuccess }: CrmCon
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">详细地址</label>
+          <label htmlFor="crm-contact-detail_address" className="block text-xs text-slate-600 mb-1">详细地址</label>
           <input
             type="text"
+            id="crm-contact-detail_address"
+            data-testid="field-detail_address"
+            data-agent-target="crm-contact:field:detail_address"
+            data-agent-state={formData.detail_address ? "filled" : "empty"}
+            aria-label="详细地址"
             value={formData.detail_address ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, detail_address: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -237,9 +309,14 @@ export function CrmContactForm({ open, initialData, onClose, onSuccess }: CrmCon
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">性别</label>
+          <label htmlFor="crm-contact-sex" className="block text-xs text-slate-600 mb-1">性别</label>
           <input
             type="number"
+            id="crm-contact-sex"
+            data-testid="field-sex"
+            data-agent-target="crm-contact:field:sex"
+            data-agent-state={formData.sex == null || formData.sex === "" ? "empty" : "filled"}
+            aria-label="性别"
             value={formData.sex != null ? String(formData.sex) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sex: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -251,18 +328,27 @@ export function CrmContactForm({ open, initialData, onClose, onSuccess }: CrmCon
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="master"
+            id="crm-contact-master"
+            data-testid="field-master"
+            data-agent-target="crm-contact:field:master"
+            data-agent-state={formData.master ? "on" : "off"}
+            aria-label="是否关键决策人"
             checked={Boolean(formData.master)}
             onChange={(e) => setFormData((prev) => ({ ...prev, master: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="master" className="text-xs text-slate-700 font-medium">是否关键决策人</label>
+          <label htmlFor="crm-contact-master" className="text-xs text-slate-700 font-medium">是否关键决策人</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">职位</label>
+          <label htmlFor="crm-contact-post" className="block text-xs text-slate-600 mb-1">职位</label>
           <input
             type="text"
+            id="crm-contact-post"
+            data-testid="field-post"
+            data-agent-target="crm-contact:field:post"
+            data-agent-state={formData.post ? "filled" : "empty"}
+            aria-label="职位"
             value={formData.post ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, post: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -272,9 +358,14 @@ export function CrmContactForm({ open, initialData, onClose, onSuccess }: CrmCon
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">直属上级</label>
+          <label htmlFor="crm-contact-parent_id" className="block text-xs text-slate-600 mb-1">直属上级</label>
           <input
             type="number"
+            id="crm-contact-parent_id"
+            data-testid="field-parent_id"
+            data-agent-target="crm-contact:field:parent_id"
+            data-agent-state={formData.parent_id == null || formData.parent_id === "" ? "empty" : "filled"}
+            aria-label="直属上级"
             value={formData.parent_id != null ? String(formData.parent_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, parent_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -284,9 +375,14 @@ export function CrmContactForm({ open, initialData, onClose, onSuccess }: CrmCon
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="crm-contact-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="crm-contact-remark"
+            data-testid="field-remark"
+            data-agent-target="crm-contact:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -300,6 +396,8 @@ export function CrmContactForm({ open, initialData, onClose, onSuccess }: CrmCon
             <button
               type="button"
               onClick={onClose}
+              data-testid="crm-contact-form-cancel"
+              data-agent-target="crm-contact:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -307,6 +405,9 @@ export function CrmContactForm({ open, initialData, onClose, onSuccess }: CrmCon
             <button
               type="submit"
               disabled={loading}
+              data-testid="crm-contact-form-submit"
+              data-agent-target="crm-contact:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

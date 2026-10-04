@@ -1,0 +1,222 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "ProductBrand",
+  "kebab": "product-brand",
+  "businessName": "商品品牌",
+  "permissionPrefix": "mall:product_brand",
+  "page": {
+    "route": "/admin/mall/product-brand",
+    "title": "商品品牌管理",
+    "titleSelector": "[data-testid=\"product-brand-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "product-brand",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/product-brand",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/product-brand/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/product-brand"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/product-brand/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/product-brand/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"product-brand-title\"]",
+    "refresh": "[data-testid=\"product-brand-refresh\"]",
+    "createButton": "[data-testid=\"product-brand-create\"]",
+    "searchForm": "[data-testid=\"product-brand-search\"]",
+    "searchSubmit": "[data-testid=\"product-brand-search-submit\"]",
+    "searchReset": "[data-testid=\"product-brand-search-reset\"]",
+    "total": "[data-testid=\"product-brand-total\"]",
+    "table": "[data-testid=\"product-brand-table\"]",
+    "row": "[data-testid=\"product-brand-row\"]",
+    "editButton": "[data-testid=\"product-brand-edit\"]",
+    "deleteButton": "[data-testid=\"product-brand-delete\"]",
+    "form": "[data-testid=\"product-brand-form\"]",
+    "formError": "[data-testid=\"product-brand-form-error\"]",
+    "formSubmit": "[data-testid=\"product-brand-form-submit\"]",
+    "formCancel": "[data-testid=\"product-brand-form-cancel\"]",
+    "formClose": "[data-testid=\"product-brand-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "商品品牌列表",
+    "dialogLabel": {
+      "create": "新增商品品牌",
+      "edit": "编辑商品品牌"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "品牌名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "pic_url",
+        "label": "品牌图片",
+        "type": "string",
+        "required": false,
+        "testId": "field-pic_url",
+        "selector": "[data-testid=\"field-pic_url\"]"
+      },
+      {
+        "name": "sort",
+        "label": "品牌排序",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      },
+      {
+        "name": "description",
+        "label": "品牌描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "product-brand",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"product-brand\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"product-brand-form-overlay\"]",
+      "dialog": "[data-testid=\"product-brand-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "product-brand:search",
+      "reset": "product-brand:reset",
+      "refresh": "product-brand:refresh",
+      "create": "product-brand:create",
+      "edit": "product-brand:edit",
+      "delete": "product-brand:delete",
+      "submit": "product-brand:submit",
+      "cancel": "product-brand:cancel",
+      "close": "product-brand:close",
+      "row": "product-brand:row",
+      "pagination": "product-brand:pagination",
+      "fields": {
+        "name": "product-brand:field:name",
+        "pic_url": "product-brand:field:pic_url",
+        "sort": "product-brand:field:sort",
+        "description": "product-brand:field:description",
+        "status": "product-brand:field:status"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.product-brand",
+      "examples": [
+        "mall.product-brand__List__Refresh",
+        "mall.product-brand__ListItem__Open",
+        "mall.product-brand__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

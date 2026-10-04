@@ -1,0 +1,285 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "im",
+  "entity": "ImGroup",
+  "kebab": "im-group",
+  "businessName": "IM 群信息",
+  "permissionPrefix": "im:im_group",
+  "page": {
+    "route": "/admin/im/im-group",
+    "title": "IM 群信息管理",
+    "titleSelector": "[data-testid=\"im-group-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.im/api",
+    "bffMount": "/api/v1/admin/im",
+    "resource": "im-group",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/im-group",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/im-group/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/im-group"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/im-group/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/im-group/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"im-group-title\"]",
+    "refresh": "[data-testid=\"im-group-refresh\"]",
+    "createButton": "[data-testid=\"im-group-create\"]",
+    "searchForm": "[data-testid=\"im-group-search\"]",
+    "searchSubmit": "[data-testid=\"im-group-search-submit\"]",
+    "searchReset": "[data-testid=\"im-group-search-reset\"]",
+    "total": "[data-testid=\"im-group-total\"]",
+    "table": "[data-testid=\"im-group-table\"]",
+    "row": "[data-testid=\"im-group-row\"]",
+    "editButton": "[data-testid=\"im-group-edit\"]",
+    "deleteButton": "[data-testid=\"im-group-delete\"]",
+    "form": "[data-testid=\"im-group-form\"]",
+    "formError": "[data-testid=\"im-group-form-error\"]",
+    "formSubmit": "[data-testid=\"im-group-form-submit\"]",
+    "formCancel": "[data-testid=\"im-group-form-cancel\"]",
+    "formClose": "[data-testid=\"im-group-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IM 群信息列表",
+    "dialogLabel": {
+      "create": "新增IM 群信息",
+      "edit": "编辑IM 群信息"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "群名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "owner_user_id",
+        "label": "群主用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-owner_user_id",
+        "selector": "[data-testid=\"field-owner_user_id\"]"
+      },
+      {
+        "name": "avatar",
+        "label": "群头像",
+        "type": "string",
+        "required": false,
+        "testId": "field-avatar",
+        "selector": "[data-testid=\"field-avatar\"]"
+      },
+      {
+        "name": "notice",
+        "label": "群公告",
+        "type": "string",
+        "required": false,
+        "testId": "field-notice",
+        "selector": "[data-testid=\"field-notice\"]"
+      },
+      {
+        "name": "join_approval",
+        "label": "进群是否需群主 / 管理员审批",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-join_approval",
+        "selector": "[data-testid=\"field-join_approval\"]"
+      },
+      {
+        "name": "banned",
+        "label": "是否封禁",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-banned",
+        "selector": "[data-testid=\"field-banned\"]"
+      },
+      {
+        "name": "banned_reason",
+        "label": "封禁原因",
+        "type": "string",
+        "required": false,
+        "testId": "field-banned_reason",
+        "selector": "[data-testid=\"field-banned_reason\"]"
+      },
+      {
+        "name": "banned_time",
+        "label": "封禁时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-banned_time",
+        "selector": "[data-testid=\"field-banned_time\"]"
+      },
+      {
+        "name": "status",
+        "label": "群状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "dissolved_time",
+        "label": "解散时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-dissolved_time",
+        "selector": "[data-testid=\"field-dissolved_time\"]"
+      },
+      {
+        "name": "muted_all",
+        "label": "是否全群禁言",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-muted_all",
+        "selector": "[data-testid=\"field-muted_all\"]"
+      },
+      {
+        "name": "pinned_message_ids",
+        "label": "群置顶消息编号列表",
+        "type": "string",
+        "required": false,
+        "testId": "field-pinned_message_ids",
+        "selector": "[data-testid=\"field-pinned_message_ids\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "im-group",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"im-group\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"im-group-form-overlay\"]",
+      "dialog": "[data-testid=\"im-group-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "im-group:search",
+      "reset": "im-group:reset",
+      "refresh": "im-group:refresh",
+      "create": "im-group:create",
+      "edit": "im-group:edit",
+      "delete": "im-group:delete",
+      "submit": "im-group:submit",
+      "cancel": "im-group:cancel",
+      "close": "im-group:close",
+      "row": "im-group:row",
+      "pagination": "im-group:pagination",
+      "fields": {
+        "name": "im-group:field:name",
+        "owner_user_id": "im-group:field:owner_user_id",
+        "avatar": "im-group:field:avatar",
+        "notice": "im-group:field:notice",
+        "join_approval": "im-group:field:join_approval",
+        "banned": "im-group:field:banned",
+        "banned_reason": "im-group:field:banned_reason",
+        "banned_time": "im-group:field:banned_time",
+        "status": "im-group:field:status",
+        "dissolved_time": "im-group:field:dissolved_time",
+        "muted_all": "im-group:field:muted_all",
+        "pinned_message_ids": "im-group:field:pinned_message_ids"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "im.im-group",
+      "examples": [
+        "im.im-group__List__Refresh",
+        "im.im-group__ListItem__Open",
+        "im.im-group__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

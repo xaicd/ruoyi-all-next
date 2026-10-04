@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { AiWriteService } from "../ai-write.service"
 
 describe("AiWriteService", () => {
-  it("should create and query AiWrite（源框架导入）", async () => {
+  it("should create and query AI 写作", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AiWriteService.create({
         user_id: 1,
@@ -21,7 +21,7 @@ describe("AiWriteService", () => {
   
       const updated = await AiWriteService.update(created.id, {
         id: created.id,
-        user_id: "更新AiWrite（源框架导入）",
+        user_id: "更新AI 写作",
       } as any)
       expect(updated).toBeDefined()
   

@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ImFacePackItemService } from "../im-face-pack-item.service"
 
 describe("ImFacePackItemService", () => {
-  it("should create and query ImFacePackItem（源框架导入）", async () => {
+  it("should create and query IM 表情包项 DO（系统表情包内的单张表情图）", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImFacePackItemService.create({
         pack_id: 1,
@@ -21,7 +21,7 @@ describe("ImFacePackItemService", () => {
   
       const updated = await ImFacePackItemService.update(created.id, {
         id: created.id,
-        pack_id: "更新ImFacePackItem（源框架导入）",
+        pack_id: "更新IM 表情包项 DO（系统表情包内的单张表情图）",
       } as any)
       expect(updated).toBeDefined()
   

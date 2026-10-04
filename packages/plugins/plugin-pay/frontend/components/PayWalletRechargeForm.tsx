@@ -63,24 +63,36 @@ export function PayWalletRechargeForm({ open, initialData, onClose, onSuccess }:
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="pay-wallet-recharge-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑会员钱包充值" : "新增会员钱包充值"}
+        data-testid="pay-wallet-recharge-form"
+        data-agent-scope="pay-wallet-recharge:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑PayWalletRecharge（源框架导入）" : "新增PayWalletRecharge（源框架导入）"}
+            {isEdit ? "编辑会员钱包充值" : "新增会员钱包充值"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="pay-wallet-recharge-form-close" data-agent-target="pay-wallet-recharge:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="pay-wallet-recharge-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">钱包编号</label>
+          <label htmlFor="pay-wallet-recharge-wallet_id" className="block text-xs text-slate-600 mb-1">钱包编号</label>
           <input
             type="number"
+            id="pay-wallet-recharge-wallet_id"
+            data-testid="field-wallet_id"
+            data-agent-target="pay-wallet-recharge:field:wallet_id"
+            data-agent-state={formData.wallet_id == null || formData.wallet_id === "" ? "empty" : "filled"}
+            aria-label="钱包编号"
             value={formData.wallet_id != null ? String(formData.wallet_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, wallet_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -90,9 +102,14 @@ export function PayWalletRechargeForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户实际到账余额</label>
+          <label htmlFor="pay-wallet-recharge-total_price" className="block text-xs text-slate-600 mb-1">用户实际到账余额</label>
           <input
             type="number"
+            id="pay-wallet-recharge-total_price"
+            data-testid="field-total_price"
+            data-agent-target="pay-wallet-recharge:field:total_price"
+            data-agent-state={formData.total_price == null || formData.total_price === "" ? "empty" : "filled"}
+            aria-label="用户实际到账余额"
             value={formData.total_price != null ? String(formData.total_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, total_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -102,9 +119,14 @@ export function PayWalletRechargeForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">实际支付金额</label>
+          <label htmlFor="pay-wallet-recharge-pay_price" className="block text-xs text-slate-600 mb-1">实际支付金额</label>
           <input
             type="number"
+            id="pay-wallet-recharge-pay_price"
+            data-testid="field-pay_price"
+            data-agent-target="pay-wallet-recharge:field:pay_price"
+            data-agent-state={formData.pay_price == null || formData.pay_price === "" ? "empty" : "filled"}
+            aria-label="实际支付金额"
             value={formData.pay_price != null ? String(formData.pay_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pay_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -114,9 +136,14 @@ export function PayWalletRechargeForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">钱包赠送金额</label>
+          <label htmlFor="pay-wallet-recharge-bonus_price" className="block text-xs text-slate-600 mb-1">钱包赠送金额</label>
           <input
             type="number"
+            id="pay-wallet-recharge-bonus_price"
+            data-testid="field-bonus_price"
+            data-agent-target="pay-wallet-recharge:field:bonus_price"
+            data-agent-state={formData.bonus_price == null || formData.bonus_price === "" ? "empty" : "filled"}
+            aria-label="钱包赠送金额"
             value={formData.bonus_price != null ? String(formData.bonus_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, bonus_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -126,9 +153,14 @@ export function PayWalletRechargeForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">充值套餐编号</label>
+          <label htmlFor="pay-wallet-recharge-package_id" className="block text-xs text-slate-600 mb-1">充值套餐编号</label>
           <input
             type="number"
+            id="pay-wallet-recharge-package_id"
+            data-testid="field-package_id"
+            data-agent-target="pay-wallet-recharge:field:package_id"
+            data-agent-state={formData.package_id == null || formData.package_id === "" ? "empty" : "filled"}
+            aria-label="充值套餐编号"
             value={formData.package_id != null ? String(formData.package_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, package_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -140,18 +172,27 @@ export function PayWalletRechargeForm({ open, initialData, onClose, onSuccess }:
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="pay_status"
+            id="pay-wallet-recharge-pay_status"
+            data-testid="field-pay_status"
+            data-agent-target="pay-wallet-recharge:field:pay_status"
+            data-agent-state={formData.pay_status ? "on" : "off"}
+            aria-label="是否已支付"
             checked={Boolean(formData.pay_status)}
             onChange={(e) => setFormData((prev) => ({ ...prev, pay_status: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="pay_status" className="text-xs text-slate-700 font-medium">是否已支付</label>
+          <label htmlFor="pay-wallet-recharge-pay_status" className="text-xs text-slate-700 font-medium">是否已支付</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">支付订单编号</label>
+          <label htmlFor="pay-wallet-recharge-pay_order_id" className="block text-xs text-slate-600 mb-1">支付订单编号</label>
           <input
             type="number"
+            id="pay-wallet-recharge-pay_order_id"
+            data-testid="field-pay_order_id"
+            data-agent-target="pay-wallet-recharge:field:pay_order_id"
+            data-agent-state={formData.pay_order_id == null || formData.pay_order_id === "" ? "empty" : "filled"}
+            aria-label="支付订单编号"
             value={formData.pay_order_id != null ? String(formData.pay_order_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pay_order_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -161,9 +202,14 @@ export function PayWalletRechargeForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">支付成功的支付渠道</label>
+          <label htmlFor="pay-wallet-recharge-pay_channel_code" className="block text-xs text-slate-600 mb-1">支付成功的支付渠道</label>
           <input
             type="text"
+            id="pay-wallet-recharge-pay_channel_code"
+            data-testid="field-pay_channel_code"
+            data-agent-target="pay-wallet-recharge:field:pay_channel_code"
+            data-agent-state={formData.pay_channel_code ? "filled" : "empty"}
+            aria-label="支付成功的支付渠道"
             value={formData.pay_channel_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pay_channel_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -173,9 +219,14 @@ export function PayWalletRechargeForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">订单支付时间</label>
+          <label htmlFor="pay-wallet-recharge-pay_time" className="block text-xs text-slate-600 mb-1">订单支付时间</label>
           <input
             type="text"
+            id="pay-wallet-recharge-pay_time"
+            data-testid="field-pay_time"
+            data-agent-target="pay-wallet-recharge:field:pay_time"
+            data-agent-state={formData.pay_time ? "filled" : "empty"}
+            aria-label="订单支付时间"
             value={formData.pay_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pay_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -185,9 +236,14 @@ export function PayWalletRechargeForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">支付退款单编号</label>
+          <label htmlFor="pay-wallet-recharge-pay_refund_id" className="block text-xs text-slate-600 mb-1">支付退款单编号</label>
           <input
             type="number"
+            id="pay-wallet-recharge-pay_refund_id"
+            data-testid="field-pay_refund_id"
+            data-agent-target="pay-wallet-recharge:field:pay_refund_id"
+            data-agent-state={formData.pay_refund_id == null || formData.pay_refund_id === "" ? "empty" : "filled"}
+            aria-label="支付退款单编号"
             value={formData.pay_refund_id != null ? String(formData.pay_refund_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pay_refund_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -197,9 +253,14 @@ export function PayWalletRechargeForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">退款金额，包含赠送金额</label>
+          <label htmlFor="pay-wallet-recharge-refund_total_price" className="block text-xs text-slate-600 mb-1">退款金额，包含赠送金额</label>
           <input
             type="number"
+            id="pay-wallet-recharge-refund_total_price"
+            data-testid="field-refund_total_price"
+            data-agent-target="pay-wallet-recharge:field:refund_total_price"
+            data-agent-state={formData.refund_total_price == null || formData.refund_total_price === "" ? "empty" : "filled"}
+            aria-label="退款金额，包含赠送金额"
             value={formData.refund_total_price != null ? String(formData.refund_total_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, refund_total_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -209,9 +270,14 @@ export function PayWalletRechargeForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">退款支付金额</label>
+          <label htmlFor="pay-wallet-recharge-refund_pay_price" className="block text-xs text-slate-600 mb-1">退款支付金额</label>
           <input
             type="number"
+            id="pay-wallet-recharge-refund_pay_price"
+            data-testid="field-refund_pay_price"
+            data-agent-target="pay-wallet-recharge:field:refund_pay_price"
+            data-agent-state={formData.refund_pay_price == null || formData.refund_pay_price === "" ? "empty" : "filled"}
+            aria-label="退款支付金额"
             value={formData.refund_pay_price != null ? String(formData.refund_pay_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, refund_pay_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -221,9 +287,14 @@ export function PayWalletRechargeForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">退款钱包赠送金额</label>
+          <label htmlFor="pay-wallet-recharge-refund_bonus_price" className="block text-xs text-slate-600 mb-1">退款钱包赠送金额</label>
           <input
             type="number"
+            id="pay-wallet-recharge-refund_bonus_price"
+            data-testid="field-refund_bonus_price"
+            data-agent-target="pay-wallet-recharge:field:refund_bonus_price"
+            data-agent-state={formData.refund_bonus_price == null || formData.refund_bonus_price === "" ? "empty" : "filled"}
+            aria-label="退款钱包赠送金额"
             value={formData.refund_bonus_price != null ? String(formData.refund_bonus_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, refund_bonus_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -233,9 +304,14 @@ export function PayWalletRechargeForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">退款时间</label>
+          <label htmlFor="pay-wallet-recharge-refund_time" className="block text-xs text-slate-600 mb-1">退款时间</label>
           <input
             type="text"
+            id="pay-wallet-recharge-refund_time"
+            data-testid="field-refund_time"
+            data-agent-target="pay-wallet-recharge:field:refund_time"
+            data-agent-state={formData.refund_time ? "filled" : "empty"}
+            aria-label="退款时间"
             value={formData.refund_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, refund_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -245,9 +321,14 @@ export function PayWalletRechargeForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">退款状态</label>
+          <label htmlFor="pay-wallet-recharge-refund_status" className="block text-xs text-slate-600 mb-1">退款状态</label>
           <input
             type="number"
+            id="pay-wallet-recharge-refund_status"
+            data-testid="field-refund_status"
+            data-agent-target="pay-wallet-recharge:field:refund_status"
+            data-agent-state={formData.refund_status == null || formData.refund_status === "" ? "empty" : "filled"}
+            aria-label="退款状态"
             value={formData.refund_status != null ? String(formData.refund_status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, refund_status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -261,6 +342,8 @@ export function PayWalletRechargeForm({ open, initialData, onClose, onSuccess }:
             <button
               type="button"
               onClick={onClose}
+              data-testid="pay-wallet-recharge-form-cancel"
+              data-agent-target="pay-wallet-recharge:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -268,6 +351,9 @@ export function PayWalletRechargeForm({ open, initialData, onClose, onSuccess }:
             <button
               type="submit"
               disabled={loading}
+              data-testid="pay-wallet-recharge-form-submit"
+              data-agent-target="pay-wallet-recharge:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

@@ -56,24 +56,36 @@ export function BannerForm({ open, initialData, onClose, onSuccess }: BannerForm
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="banner-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑banner" : "新增banner"}
+        data-testid="banner-form"
+        data-agent-scope="banner:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑Banner（源框架导入）" : "新增Banner（源框架导入）"}
+            {isEdit ? "编辑banner" : "新增banner"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="banner-form-close" data-agent-target="banner:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="banner-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">标题</label>
+          <label htmlFor="banner-title" className="block text-xs text-slate-600 mb-1">标题</label>
           <input
             type="text"
+            id="banner-title"
+            data-testid="field-title"
+            data-agent-target="banner:field:title"
+            data-agent-state={formData.title ? "filled" : "empty"}
+            aria-label="标题"
             value={formData.title ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -83,9 +95,14 @@ export function BannerForm({ open, initialData, onClose, onSuccess }: BannerForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">跳转链接</label>
+          <label htmlFor="banner-url" className="block text-xs text-slate-600 mb-1">跳转链接</label>
           <input
             type="text"
+            id="banner-url"
+            data-testid="field-url"
+            data-agent-target="banner:field:url"
+            data-agent-state={formData.url ? "filled" : "empty"}
+            aria-label="跳转链接"
             value={formData.url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -95,9 +112,14 @@ export function BannerForm({ open, initialData, onClose, onSuccess }: BannerForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">图片链接</label>
+          <label htmlFor="banner-pic_url" className="block text-xs text-slate-600 mb-1">图片链接</label>
           <input
             type="text"
+            id="banner-pic_url"
+            data-testid="field-pic_url"
+            data-agent-target="banner:field:pic_url"
+            data-agent-state={formData.pic_url ? "filled" : "empty"}
+            aria-label="图片链接"
             value={formData.pic_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pic_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -107,9 +129,14 @@ export function BannerForm({ open, initialData, onClose, onSuccess }: BannerForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">排序</label>
+          <label htmlFor="banner-sort" className="block text-xs text-slate-600 mb-1">排序</label>
           <input
             type="number"
+            id="banner-sort"
+            data-testid="field-sort"
+            data-agent-target="banner:field:sort"
+            data-agent-state={formData.sort == null || formData.sort === "" ? "empty" : "filled"}
+            aria-label="排序"
             value={formData.sort != null ? String(formData.sort) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sort: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -119,9 +146,14 @@ export function BannerForm({ open, initialData, onClose, onSuccess }: BannerForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="banner-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="banner-status"
+            data-testid="field-status"
+            data-agent-target="banner:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -131,9 +163,14 @@ export function BannerForm({ open, initialData, onClose, onSuccess }: BannerForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">定位</label>
+          <label htmlFor="banner-position" className="block text-xs text-slate-600 mb-1">定位</label>
           <input
             type="number"
+            id="banner-position"
+            data-testid="field-position"
+            data-agent-target="banner:field:position"
+            data-agent-state={formData.position == null || formData.position === "" ? "empty" : "filled"}
+            aria-label="定位"
             value={formData.position != null ? String(formData.position) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, position: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -143,9 +180,14 @@ export function BannerForm({ open, initialData, onClose, onSuccess }: BannerForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="banner-memo" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="banner-memo"
+            data-testid="field-memo"
+            data-agent-target="banner:field:memo"
+            data-agent-state={formData.memo ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.memo ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, memo: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -155,9 +197,14 @@ export function BannerForm({ open, initialData, onClose, onSuccess }: BannerForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">点击次数</label>
+          <label htmlFor="banner-browse_count" className="block text-xs text-slate-600 mb-1">点击次数</label>
           <input
             type="number"
+            id="banner-browse_count"
+            data-testid="field-browse_count"
+            data-agent-target="banner:field:browse_count"
+            data-agent-state={formData.browse_count == null || formData.browse_count === "" ? "empty" : "filled"}
+            aria-label="点击次数"
             value={formData.browse_count != null ? String(formData.browse_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, browse_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,6 +218,8 @@ export function BannerForm({ open, initialData, onClose, onSuccess }: BannerForm
             <button
               type="button"
               onClick={onClose}
+              data-testid="banner-form-cancel"
+              data-agent-target="banner:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -178,6 +227,9 @@ export function BannerForm({ open, initialData, onClose, onSuccess }: BannerForm
             <button
               type="submit"
               disabled={loading}
+              data-testid="banner-form-submit"
+              data-agent-target="banner:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

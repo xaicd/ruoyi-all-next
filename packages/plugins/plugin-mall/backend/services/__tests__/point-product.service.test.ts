@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { PointProductService } from "../point-product.service"
 
 describe("PointProductService", () => {
-  it("should create and query PointProduct（源框架导入）", async () => {
+  it("should create and query 积分商城商品", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await PointProductService.create({
         activity_id: 1,
@@ -21,7 +21,7 @@ describe("PointProductService", () => {
   
       const updated = await PointProductService.update(created.id, {
         id: created.id,
-        activity_id: "更新PointProduct（源框架导入）",
+        activity_id: "更新积分商城商品",
       } as any)
       expect(updated).toBeDefined()
   

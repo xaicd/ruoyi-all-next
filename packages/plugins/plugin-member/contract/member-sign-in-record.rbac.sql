@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MemberSignInRecord（源框架导入） (MemberSignInRecord)
+-- Auto-generated RBAC & Menu Migration for 签到记录 (MemberSignInRecord)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-member-sign-in-record',
   'member-dir',
-  'MemberSignInRecord（源框架导入）管理',
+  '签到记录管理',
   '/admin/member/member-sign-in-record',
   'member/member-sign-in-record/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-member-sign-in-record-query',  'menu-member-sign-in-record', '查询MemberSignInRecord（源框架导入）', 'BUTTON', 'ACTIVE', 'member:member_sign_in_record:query',  1, NOW(), NOW()),
-('menu-member-sign-in-record-create', 'menu-member-sign-in-record', '新增MemberSignInRecord（源框架导入）', 'BUTTON', 'ACTIVE', 'member:member_sign_in_record:create', 2, NOW(), NOW()),
-('menu-member-sign-in-record-update', 'menu-member-sign-in-record', '修改MemberSignInRecord（源框架导入）', 'BUTTON', 'ACTIVE', 'member:member_sign_in_record:update', 3, NOW(), NOW()),
-('menu-member-sign-in-record-delete', 'menu-member-sign-in-record', '删除MemberSignInRecord（源框架导入）', 'BUTTON', 'ACTIVE', 'member:member_sign_in_record:delete', 4, NOW(), NOW())
+('menu-member-sign-in-record-query',  'menu-member-sign-in-record', '查询签到记录', 'BUTTON', 'ACTIVE', 'member:member_sign_in_record:query',  1, NOW(), NOW()),
+('menu-member-sign-in-record-create', 'menu-member-sign-in-record', '新增签到记录', 'BUTTON', 'ACTIVE', 'member:member_sign_in_record:create', 2, NOW(), NOW()),
+('menu-member-sign-in-record-update', 'menu-member-sign-in-record', '修改签到记录', 'BUTTON', 'ACTIVE', 'member:member_sign_in_record:update', 3, NOW(), NOW()),
+('menu-member-sign-in-record-delete', 'menu-member-sign-in-record', '删除签到记录', 'BUTTON', 'ACTIVE', 'member:member_sign_in_record:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

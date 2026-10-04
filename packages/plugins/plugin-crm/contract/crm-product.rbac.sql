@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for CrmProduct（源框架导入） (CrmProduct)
+-- Auto-generated RBAC & Menu Migration for CRM 产品 (CrmProduct)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-crm-product',
   'crm-dir',
-  'CrmProduct（源框架导入）管理',
+  'CRM 产品管理',
   '/admin/crm/crm-product',
   'crm/crm-product/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-crm-product-query',  'menu-crm-product', '查询CrmProduct（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_product:query',  1, NOW(), NOW()),
-('menu-crm-product-create', 'menu-crm-product', '新增CrmProduct（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_product:create', 2, NOW(), NOW()),
-('menu-crm-product-update', 'menu-crm-product', '修改CrmProduct（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_product:update', 3, NOW(), NOW()),
-('menu-crm-product-delete', 'menu-crm-product', '删除CrmProduct（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_product:delete', 4, NOW(), NOW())
+('menu-crm-product-query',  'menu-crm-product', '查询CRM 产品', 'BUTTON', 'ACTIVE', 'crm:crm_product:query',  1, NOW(), NOW()),
+('menu-crm-product-create', 'menu-crm-product', '新增CRM 产品', 'BUTTON', 'ACTIVE', 'crm:crm_product:create', 2, NOW(), NOW()),
+('menu-crm-product-update', 'menu-crm-product', '修改CRM 产品', 'BUTTON', 'ACTIVE', 'crm:crm_product:update', 3, NOW(), NOW()),
+('menu-crm-product-delete', 'menu-crm-product', '删除CRM 产品', 'BUTTON', 'ACTIVE', 'crm:crm_product:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

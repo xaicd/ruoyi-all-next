@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesProAndonConfigService } from "../mes-pro-andon-config.service"
 
 describe("MesProAndonConfigService", () => {
-  it("should create and query MesProAndonConfig（源框架导入）", async () => {
+  it("should create and query MES 安灯呼叫配置", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesProAndonConfigService.create({
-        reason: "测试MesProAndonConfig（源框架导入）",
+        reason: "测试MES 安灯呼叫配置",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("MesProAndonConfigService", () => {
   
       const updated = await MesProAndonConfigService.update(created.id, {
         id: created.id,
-        reason: "更新MesProAndonConfig（源框架导入）",
+        reason: "更新MES 安灯呼叫配置",
       } as any)
       expect(updated).toBeDefined()
   

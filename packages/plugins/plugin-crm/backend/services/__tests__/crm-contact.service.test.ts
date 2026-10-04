@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { CrmContactService } from "../crm-contact.service"
 
 describe("CrmContactService", () => {
-  it("should create and query CrmContact（源框架导入）", async () => {
+  it("should create and query CRM 联系人", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CrmContactService.create({
-        name: "测试CrmContact（源框架导入）",
+        name: "测试CRM 联系人",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("CrmContactService", () => {
   
       const updated = await CrmContactService.update(created.id, {
         id: created.id,
-        name: "更新CrmContact（源框架导入）",
+        name: "更新CRM 联系人",
       } as any)
       expect(updated).toBeDefined()
   

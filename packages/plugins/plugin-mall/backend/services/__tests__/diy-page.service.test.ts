@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { DiyPageService } from "../diy-page.service"
 
 describe("DiyPageService", () => {
-  it("should create and query DiyPage（源框架导入）", async () => {
+  it("should create and query 装修页面", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await DiyPageService.create({
         template_id: 1,
@@ -21,7 +21,7 @@ describe("DiyPageService", () => {
   
       const updated = await DiyPageService.update(created.id, {
         id: created.id,
-        template_id: "更新DiyPage（源框架导入）",
+        template_id: "更新装修页面",
       } as any)
       expect(updated).toBeDefined()
   

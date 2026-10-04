@@ -1,0 +1,213 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "bpm",
+  "entity": "BpmUserGroup",
+  "kebab": "bpm-user-group",
+  "businessName": "BPM 用户组",
+  "permissionPrefix": "bpm:bpm_user_group",
+  "page": {
+    "route": "/admin/bpm/bpm-user-group",
+    "title": "BPM 用户组管理",
+    "titleSelector": "[data-testid=\"bpm-user-group-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.bpm/api",
+    "bffMount": "/api/v1/admin/bpm",
+    "resource": "bpm-user-group",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/bpm-user-group",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/bpm-user-group/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/bpm-user-group"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/bpm-user-group/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/bpm-user-group/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"bpm-user-group-title\"]",
+    "refresh": "[data-testid=\"bpm-user-group-refresh\"]",
+    "createButton": "[data-testid=\"bpm-user-group-create\"]",
+    "searchForm": "[data-testid=\"bpm-user-group-search\"]",
+    "searchSubmit": "[data-testid=\"bpm-user-group-search-submit\"]",
+    "searchReset": "[data-testid=\"bpm-user-group-search-reset\"]",
+    "total": "[data-testid=\"bpm-user-group-total\"]",
+    "table": "[data-testid=\"bpm-user-group-table\"]",
+    "row": "[data-testid=\"bpm-user-group-row\"]",
+    "editButton": "[data-testid=\"bpm-user-group-edit\"]",
+    "deleteButton": "[data-testid=\"bpm-user-group-delete\"]",
+    "form": "[data-testid=\"bpm-user-group-form\"]",
+    "formError": "[data-testid=\"bpm-user-group-form-error\"]",
+    "formSubmit": "[data-testid=\"bpm-user-group-form-submit\"]",
+    "formCancel": "[data-testid=\"bpm-user-group-form-cancel\"]",
+    "formClose": "[data-testid=\"bpm-user-group-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "BPM 用户组列表",
+    "dialogLabel": {
+      "create": "新增BPM 用户组",
+      "edit": "编辑BPM 用户组"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "组名",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "description",
+        "label": "描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "user_ids",
+        "label": "成员用户编号数组",
+        "type": "string",
+        "required": false,
+        "testId": "field-user_ids",
+        "selector": "[data-testid=\"field-user_ids\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "bpm-user-group",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"bpm-user-group\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"bpm-user-group-form-overlay\"]",
+      "dialog": "[data-testid=\"bpm-user-group-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "bpm-user-group:search",
+      "reset": "bpm-user-group:reset",
+      "refresh": "bpm-user-group:refresh",
+      "create": "bpm-user-group:create",
+      "edit": "bpm-user-group:edit",
+      "delete": "bpm-user-group:delete",
+      "submit": "bpm-user-group:submit",
+      "cancel": "bpm-user-group:cancel",
+      "close": "bpm-user-group:close",
+      "row": "bpm-user-group:row",
+      "pagination": "bpm-user-group:pagination",
+      "fields": {
+        "name": "bpm-user-group:field:name",
+        "description": "bpm-user-group:field:description",
+        "status": "bpm-user-group:field:status",
+        "user_ids": "bpm-user-group:field:user_ids"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "bpm.bpm-user-group",
+      "examples": [
+        "bpm.bpm-user-group__List__Refresh",
+        "bpm.bpm-user-group__ListItem__Open",
+        "bpm.bpm-user-group__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

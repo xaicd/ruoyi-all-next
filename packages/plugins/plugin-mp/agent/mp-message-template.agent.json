@@ -1,0 +1,249 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mp",
+  "entity": "MpMessageTemplate",
+  "kebab": "mp-message-template",
+  "businessName": "公众号模版消息",
+  "permissionPrefix": "mp:mp_message_template",
+  "page": {
+    "route": "/admin/mp/mp-message-template",
+    "title": "公众号模版消息管理",
+    "titleSelector": "[data-testid=\"mp-message-template-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mp/api",
+    "bffMount": "/api/v1/admin/mp",
+    "resource": "mp-message-template",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mp-message-template",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mp-message-template/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mp-message-template"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mp-message-template/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mp-message-template/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mp-message-template-title\"]",
+    "refresh": "[data-testid=\"mp-message-template-refresh\"]",
+    "createButton": "[data-testid=\"mp-message-template-create\"]",
+    "searchForm": "[data-testid=\"mp-message-template-search\"]",
+    "searchSubmit": "[data-testid=\"mp-message-template-search-submit\"]",
+    "searchReset": "[data-testid=\"mp-message-template-search-reset\"]",
+    "total": "[data-testid=\"mp-message-template-total\"]",
+    "table": "[data-testid=\"mp-message-template-table\"]",
+    "row": "[data-testid=\"mp-message-template-row\"]",
+    "editButton": "[data-testid=\"mp-message-template-edit\"]",
+    "deleteButton": "[data-testid=\"mp-message-template-delete\"]",
+    "form": "[data-testid=\"mp-message-template-form\"]",
+    "formError": "[data-testid=\"mp-message-template-form-error\"]",
+    "formSubmit": "[data-testid=\"mp-message-template-form-submit\"]",
+    "formCancel": "[data-testid=\"mp-message-template-form-cancel\"]",
+    "formClose": "[data-testid=\"mp-message-template-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "公众号模版消息列表",
+    "dialogLabel": {
+      "create": "新增公众号模版消息",
+      "edit": "编辑公众号模版消息"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "account_id",
+        "label": "公众号账号的编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-account_id",
+        "selector": "[data-testid=\"field-account_id\"]"
+      },
+      {
+        "name": "app_id",
+        "label": "公众号 appId",
+        "type": "string",
+        "required": false,
+        "testId": "field-app_id",
+        "selector": "[data-testid=\"field-app_id\"]"
+      },
+      {
+        "name": "template_id",
+        "label": "公众号模板 ID",
+        "type": "string",
+        "required": false,
+        "testId": "field-template_id",
+        "selector": "[data-testid=\"field-template_id\"]"
+      },
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "string",
+        "required": false,
+        "testId": "field-title",
+        "selector": "[data-testid=\"field-title\"]"
+      },
+      {
+        "name": "content",
+        "label": "模板内容",
+        "type": "string",
+        "required": false,
+        "testId": "field-content",
+        "selector": "[data-testid=\"field-content\"]"
+      },
+      {
+        "name": "example",
+        "label": "模板示例",
+        "type": "string",
+        "required": false,
+        "testId": "field-example",
+        "selector": "[data-testid=\"field-example\"]"
+      },
+      {
+        "name": "primary_industry",
+        "label": "模板所属行业的一级行业",
+        "type": "string",
+        "required": false,
+        "testId": "field-primary_industry",
+        "selector": "[data-testid=\"field-primary_industry\"]"
+      },
+      {
+        "name": "deputy_industry",
+        "label": "模板所属行业的二级行业",
+        "type": "string",
+        "required": false,
+        "testId": "field-deputy_industry",
+        "selector": "[data-testid=\"field-deputy_industry\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mp-message-template",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mp-message-template\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mp-message-template-form-overlay\"]",
+      "dialog": "[data-testid=\"mp-message-template-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mp-message-template:search",
+      "reset": "mp-message-template:reset",
+      "refresh": "mp-message-template:refresh",
+      "create": "mp-message-template:create",
+      "edit": "mp-message-template:edit",
+      "delete": "mp-message-template:delete",
+      "submit": "mp-message-template:submit",
+      "cancel": "mp-message-template:cancel",
+      "close": "mp-message-template:close",
+      "row": "mp-message-template:row",
+      "pagination": "mp-message-template:pagination",
+      "fields": {
+        "account_id": "mp-message-template:field:account_id",
+        "app_id": "mp-message-template:field:app_id",
+        "template_id": "mp-message-template:field:template_id",
+        "title": "mp-message-template:field:title",
+        "content": "mp-message-template:field:content",
+        "example": "mp-message-template:field:example",
+        "primary_industry": "mp-message-template:field:primary_industry",
+        "deputy_industry": "mp-message-template:field:deputy_industry"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mp.mp-message-template",
+      "examples": [
+        "mp.mp-message-template__List__Refresh",
+        "mp.mp-message-template__ListItem__Open",
+        "mp.mp-message-template__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesMdItem（源框架导入） (MesMdItem)
+-- Auto-generated RBAC & Menu Migration for MES 物料产品 (MesMdItem)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-md-item',
   'mes-dir',
-  'MesMdItem（源框架导入）管理',
+  'MES 物料产品管理',
   '/admin/mes/mes-md-item',
   'mes/mes-md-item/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-md-item-query',  'menu-mes-md-item', '查询MesMdItem（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_md_item:query',  1, NOW(), NOW()),
-('menu-mes-md-item-create', 'menu-mes-md-item', '新增MesMdItem（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_md_item:create', 2, NOW(), NOW()),
-('menu-mes-md-item-update', 'menu-mes-md-item', '修改MesMdItem（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_md_item:update', 3, NOW(), NOW()),
-('menu-mes-md-item-delete', 'menu-mes-md-item', '删除MesMdItem（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_md_item:delete', 4, NOW(), NOW())
+('menu-mes-md-item-query',  'menu-mes-md-item', '查询MES 物料产品', 'BUTTON', 'ACTIVE', 'mes:mes_md_item:query',  1, NOW(), NOW()),
+('menu-mes-md-item-create', 'menu-mes-md-item', '新增MES 物料产品', 'BUTTON', 'ACTIVE', 'mes:mes_md_item:create', 2, NOW(), NOW()),
+('menu-mes-md-item-update', 'menu-mes-md-item', '修改MES 物料产品', 'BUTTON', 'ACTIVE', 'mes:mes_md_item:update', 3, NOW(), NOW()),
+('menu-mes-md-item-delete', 'menu-mes-md-item', '删除MES 物料产品', 'BUTTON', 'ACTIVE', 'mes:mes_md_item:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

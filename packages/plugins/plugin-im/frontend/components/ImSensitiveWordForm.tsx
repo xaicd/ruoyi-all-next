@@ -50,24 +50,36 @@ export function ImSensitiveWordForm({ open, initialData, onClose, onSuccess }: I
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="im-sensitive-word-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑IM 敏感词" : "新增IM 敏感词"}
+        data-testid="im-sensitive-word-form"
+        data-agent-scope="im-sensitive-word:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑ImSensitiveWord（源框架导入）" : "新增ImSensitiveWord（源框架导入）"}
+            {isEdit ? "编辑IM 敏感词" : "新增IM 敏感词"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="im-sensitive-word-form-close" data-agent-target="im-sensitive-word:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="im-sensitive-word-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">敏感词</label>
+          <label htmlFor="im-sensitive-word-word" className="block text-xs text-slate-600 mb-1">敏感词</label>
           <input
             type="text"
+            id="im-sensitive-word-word"
+            data-testid="field-word"
+            data-agent-target="im-sensitive-word:field:word"
+            data-agent-state={formData.word ? "filled" : "empty"}
+            aria-label="敏感词"
             value={formData.word ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, word: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -77,9 +89,14 @@ export function ImSensitiveWordForm({ open, initialData, onClose, onSuccess }: I
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="im-sensitive-word-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="im-sensitive-word-status"
+            data-testid="field-status"
+            data-agent-target="im-sensitive-word:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -93,6 +110,8 @@ export function ImSensitiveWordForm({ open, initialData, onClose, onSuccess }: I
             <button
               type="button"
               onClick={onClose}
+              data-testid="im-sensitive-word-form-cancel"
+              data-agent-target="im-sensitive-word:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -100,6 +119,9 @@ export function ImSensitiveWordForm({ open, initialData, onClose, onSuccess }: I
             <button
               type="submit"
               disabled={loading}
+              data-testid="im-sensitive-word-form-submit"
+              data-agent-target="im-sensitive-word:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

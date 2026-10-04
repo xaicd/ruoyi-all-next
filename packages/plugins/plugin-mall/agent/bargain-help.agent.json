@@ -1,0 +1,213 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "BargainHelp",
+  "kebab": "bargain-help",
+  "businessName": "砍价助力",
+  "permissionPrefix": "mall:bargain_help",
+  "page": {
+    "route": "/admin/mall/bargain-help",
+    "title": "砍价助力管理",
+    "titleSelector": "[data-testid=\"bargain-help-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "bargain-help",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/bargain-help",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/bargain-help/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/bargain-help"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/bargain-help/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/bargain-help/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"bargain-help-title\"]",
+    "refresh": "[data-testid=\"bargain-help-refresh\"]",
+    "createButton": "[data-testid=\"bargain-help-create\"]",
+    "searchForm": "[data-testid=\"bargain-help-search\"]",
+    "searchSubmit": "[data-testid=\"bargain-help-search-submit\"]",
+    "searchReset": "[data-testid=\"bargain-help-search-reset\"]",
+    "total": "[data-testid=\"bargain-help-total\"]",
+    "table": "[data-testid=\"bargain-help-table\"]",
+    "row": "[data-testid=\"bargain-help-row\"]",
+    "editButton": "[data-testid=\"bargain-help-edit\"]",
+    "deleteButton": "[data-testid=\"bargain-help-delete\"]",
+    "form": "[data-testid=\"bargain-help-form\"]",
+    "formError": "[data-testid=\"bargain-help-form-error\"]",
+    "formSubmit": "[data-testid=\"bargain-help-form-submit\"]",
+    "formCancel": "[data-testid=\"bargain-help-form-cancel\"]",
+    "formClose": "[data-testid=\"bargain-help-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "砍价助力列表",
+    "dialogLabel": {
+      "create": "新增砍价助力",
+      "edit": "编辑砍价助力"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "activity_id",
+        "label": "砍价活动编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-activity_id",
+        "selector": "[data-testid=\"field-activity_id\"]"
+      },
+      {
+        "name": "record_id",
+        "label": "砍价记录编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-record_id",
+        "selector": "[data-testid=\"field-record_id\"]"
+      },
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "reduce_price",
+        "label": "减少价格，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-reduce_price",
+        "selector": "[data-testid=\"field-reduce_price\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "bargain-help",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"bargain-help\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"bargain-help-form-overlay\"]",
+      "dialog": "[data-testid=\"bargain-help-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "bargain-help:search",
+      "reset": "bargain-help:reset",
+      "refresh": "bargain-help:refresh",
+      "create": "bargain-help:create",
+      "edit": "bargain-help:edit",
+      "delete": "bargain-help:delete",
+      "submit": "bargain-help:submit",
+      "cancel": "bargain-help:cancel",
+      "close": "bargain-help:close",
+      "row": "bargain-help:row",
+      "pagination": "bargain-help:pagination",
+      "fields": {
+        "activity_id": "bargain-help:field:activity_id",
+        "record_id": "bargain-help:field:record_id",
+        "user_id": "bargain-help:field:user_id",
+        "reduce_price": "bargain-help:field:reduce_price"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.bargain-help",
+      "examples": [
+        "mall.bargain-help__List__Refresh",
+        "mall.bargain-help__ListItem__Open",
+        "mall.bargain-help__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

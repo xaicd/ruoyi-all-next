@@ -54,24 +54,36 @@ export function MesWmStockTakingPlanParamForm({ open, initialData, onClose, onSu
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-wm-stock-taking-plan-param-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 盘点方案参数" : "新增MES 盘点方案参数"}
+        data-testid="mes-wm-stock-taking-plan-param-form"
+        data-agent-scope="mes-wm-stock-taking-plan-param:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesWmStockTakingPlanParam（源框架导入）" : "新增MesWmStockTakingPlanParam（源框架导入）"}
+            {isEdit ? "编辑MES 盘点方案参数" : "新增MES 盘点方案参数"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-wm-stock-taking-plan-param-form-close" data-agent-target="mes-wm-stock-taking-plan-param:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-wm-stock-taking-plan-param-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">盘点方案编号</label>
+          <label htmlFor="mes-wm-stock-taking-plan-param-plan_id" className="block text-xs text-slate-600 mb-1">盘点方案编号</label>
           <input
             type="number"
+            id="mes-wm-stock-taking-plan-param-plan_id"
+            data-testid="field-plan_id"
+            data-agent-target="mes-wm-stock-taking-plan-param:field:plan_id"
+            data-agent-state={formData.plan_id == null || formData.plan_id === "" ? "empty" : "filled"}
+            aria-label="盘点方案编号"
             value={formData.plan_id != null ? String(formData.plan_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, plan_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -81,9 +93,14 @@ export function MesWmStockTakingPlanParamForm({ open, initialData, onClose, onSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">参数值类型</label>
+          <label htmlFor="mes-wm-stock-taking-plan-param-type" className="block text-xs text-slate-600 mb-1">参数值类型</label>
           <input
             type="number"
+            id="mes-wm-stock-taking-plan-param-type"
+            data-testid="field-type"
+            data-agent-target="mes-wm-stock-taking-plan-param:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="参数值类型"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -93,9 +110,14 @@ export function MesWmStockTakingPlanParamForm({ open, initialData, onClose, onSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">参数值编号，例如仓库、库区、库位、物料、批次的主键 ID</label>
+          <label htmlFor="mes-wm-stock-taking-plan-param-value_id" className="block text-xs text-slate-600 mb-1">参数值编号，例如仓库、库区、库位、物料、批次的主键 ID</label>
           <input
             type="number"
+            id="mes-wm-stock-taking-plan-param-value_id"
+            data-testid="field-value_id"
+            data-agent-target="mes-wm-stock-taking-plan-param:field:value_id"
+            data-agent-state={formData.value_id == null || formData.value_id === "" ? "empty" : "filled"}
+            aria-label="参数值编号，例如仓库、库区、库位、物料、批次的主键 ID"
             value={formData.value_id != null ? String(formData.value_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, value_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -105,9 +127,14 @@ export function MesWmStockTakingPlanParamForm({ open, initialData, onClose, onSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">参数值编码，例如仓库编码、库区编码、库位编码、物料编码、批次编码</label>
+          <label htmlFor="mes-wm-stock-taking-plan-param-value_code" className="block text-xs text-slate-600 mb-1">参数值编码，例如仓库编码、库区编码、库位编码、物料编码、批次编码</label>
           <input
             type="text"
+            id="mes-wm-stock-taking-plan-param-value_code"
+            data-testid="field-value_code"
+            data-agent-target="mes-wm-stock-taking-plan-param:field:value_code"
+            data-agent-state={formData.value_code ? "filled" : "empty"}
+            aria-label="参数值编码，例如仓库编码、库区编码、库位编码、物料编码、批次编码"
             value={formData.value_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, value_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -117,9 +144,14 @@ export function MesWmStockTakingPlanParamForm({ open, initialData, onClose, onSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">参数值名称，例如仓库名称、库区名称、库位名称、物料名称、批次名称</label>
+          <label htmlFor="mes-wm-stock-taking-plan-param-value_name" className="block text-xs text-slate-600 mb-1">参数值名称，例如仓库名称、库区名称、库位名称、物料名称、批次名称</label>
           <input
             type="text"
+            id="mes-wm-stock-taking-plan-param-value_name"
+            data-testid="field-value_name"
+            data-agent-target="mes-wm-stock-taking-plan-param:field:value_name"
+            data-agent-state={formData.value_name ? "filled" : "empty"}
+            aria-label="参数值名称，例如仓库名称、库区名称、库位名称、物料名称、批次名称"
             value={formData.value_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, value_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -129,9 +161,14 @@ export function MesWmStockTakingPlanParamForm({ open, initialData, onClose, onSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-wm-stock-taking-plan-param-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-wm-stock-taking-plan-param-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-wm-stock-taking-plan-param:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -145,6 +182,8 @@ export function MesWmStockTakingPlanParamForm({ open, initialData, onClose, onSu
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-wm-stock-taking-plan-param-form-cancel"
+              data-agent-target="mes-wm-stock-taking-plan-param:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -152,6 +191,9 @@ export function MesWmStockTakingPlanParamForm({ open, initialData, onClose, onSu
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-wm-stock-taking-plan-param-form-submit"
+              data-agent-target="mes-wm-stock-taking-plan-param:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

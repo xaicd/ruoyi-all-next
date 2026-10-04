@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesWmBarcodeService } from "../mes-wm-barcode.service"
 
 describe("MesWmBarcodeService", () => {
-  it("should create and query MesWmBarcode（源框架导入）", async () => {
+  it("should create and query MES 条码清单", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmBarcodeService.create({
         config_id: 1,
@@ -21,7 +21,7 @@ describe("MesWmBarcodeService", () => {
   
       const updated = await MesWmBarcodeService.update(created.id, {
         id: created.id,
-        config_id: "更新MesWmBarcode（源框架导入）",
+        config_id: "更新MES 条码清单",
       } as any)
       expect(updated).toBeDefined()
   

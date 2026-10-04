@@ -1,0 +1,249 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "im",
+  "entity": "ImRtcParticipant",
+  "kebab": "im-rtc-participant",
+  "businessName": "IM 通话参与者 DO（用户级 / 明细表）一通通话每个参与者一行；通过 关联主表 终态闭合：通话 ENDED 时所有明细 status 必属 LEFT / REJECTED / NO",
+  "permissionPrefix": "im:im_rtc_participant",
+  "page": {
+    "route": "/admin/im/im-rtc-participant",
+    "title": "IM 通话参与者 DO（用户级 / 明细表）一通通话每个参与者一行；通过 关联主表 终态闭合：通话 ENDED 时所有明细 status 必属 LEFT / REJECTED / NO管理",
+    "titleSelector": "[data-testid=\"im-rtc-participant-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.im/api",
+    "bffMount": "/api/v1/admin/im",
+    "resource": "im-rtc-participant",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/im-rtc-participant",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/im-rtc-participant/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/im-rtc-participant"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/im-rtc-participant/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/im-rtc-participant/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"im-rtc-participant-title\"]",
+    "refresh": "[data-testid=\"im-rtc-participant-refresh\"]",
+    "createButton": "[data-testid=\"im-rtc-participant-create\"]",
+    "searchForm": "[data-testid=\"im-rtc-participant-search\"]",
+    "searchSubmit": "[data-testid=\"im-rtc-participant-search-submit\"]",
+    "searchReset": "[data-testid=\"im-rtc-participant-search-reset\"]",
+    "total": "[data-testid=\"im-rtc-participant-total\"]",
+    "table": "[data-testid=\"im-rtc-participant-table\"]",
+    "row": "[data-testid=\"im-rtc-participant-row\"]",
+    "editButton": "[data-testid=\"im-rtc-participant-edit\"]",
+    "deleteButton": "[data-testid=\"im-rtc-participant-delete\"]",
+    "form": "[data-testid=\"im-rtc-participant-form\"]",
+    "formError": "[data-testid=\"im-rtc-participant-form-error\"]",
+    "formSubmit": "[data-testid=\"im-rtc-participant-form-submit\"]",
+    "formCancel": "[data-testid=\"im-rtc-participant-form-cancel\"]",
+    "formClose": "[data-testid=\"im-rtc-participant-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IM 通话参与者 DO（用户级 / 明细表）一通通话每个参与者一行；通过 关联主表 终态闭合：通话 ENDED 时所有明细 status 必属 LEFT / REJECTED / NO列表",
+    "dialogLabel": {
+      "create": "新增IM 通话参与者 DO（用户级 / 明细表）一通通话每个参与者一行；通过 关联主表 终态闭合：通话 ENDED 时所有明细 status 必属 LEFT / REJECTED / NO",
+      "edit": "编辑IM 通话参与者 DO（用户级 / 明细表）一通通话每个参与者一行；通过 关联主表 终态闭合：通话 ENDED 时所有明细 status 必属 LEFT / REJECTED / NO"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "call_id",
+        "label": "通话编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-call_id",
+        "selector": "[data-testid=\"field-call_id\"]"
+      },
+      {
+        "name": "room",
+        "label": "业务通话编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-room",
+        "selector": "[data-testid=\"field-room\"]"
+      },
+      {
+        "name": "user_id",
+        "label": "参与者用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "role",
+        "label": "参与角色",
+        "type": "number",
+        "required": false,
+        "testId": "field-role",
+        "selector": "[data-testid=\"field-role\"]"
+      },
+      {
+        "name": "status",
+        "label": "参与状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "invite_time",
+        "label": "被邀请时间；发起人取通话 startTime",
+        "type": "string",
+        "required": false,
+        "testId": "field-invite_time",
+        "selector": "[data-testid=\"field-invite_time\"]"
+      },
+      {
+        "name": "accept_time",
+        "label": "接听时间；未接听 NULL",
+        "type": "string",
+        "required": false,
+        "testId": "field-accept_time",
+        "selector": "[data-testid=\"field-accept_time\"]"
+      },
+      {
+        "name": "leave_time",
+        "label": "离开时间；未加入 NULL",
+        "type": "string",
+        "required": false,
+        "testId": "field-leave_time",
+        "selector": "[data-testid=\"field-leave_time\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "im-rtc-participant",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"im-rtc-participant\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"im-rtc-participant-form-overlay\"]",
+      "dialog": "[data-testid=\"im-rtc-participant-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "im-rtc-participant:search",
+      "reset": "im-rtc-participant:reset",
+      "refresh": "im-rtc-participant:refresh",
+      "create": "im-rtc-participant:create",
+      "edit": "im-rtc-participant:edit",
+      "delete": "im-rtc-participant:delete",
+      "submit": "im-rtc-participant:submit",
+      "cancel": "im-rtc-participant:cancel",
+      "close": "im-rtc-participant:close",
+      "row": "im-rtc-participant:row",
+      "pagination": "im-rtc-participant:pagination",
+      "fields": {
+        "call_id": "im-rtc-participant:field:call_id",
+        "room": "im-rtc-participant:field:room",
+        "user_id": "im-rtc-participant:field:user_id",
+        "role": "im-rtc-participant:field:role",
+        "status": "im-rtc-participant:field:status",
+        "invite_time": "im-rtc-participant:field:invite_time",
+        "accept_time": "im-rtc-participant:field:accept_time",
+        "leave_time": "im-rtc-participant:field:leave_time"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "im.im-rtc-participant",
+      "examples": [
+        "im.im-rtc-participant__List__Refresh",
+        "im.im-rtc-participant__ListItem__Open",
+        "im.im-rtc-participant__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

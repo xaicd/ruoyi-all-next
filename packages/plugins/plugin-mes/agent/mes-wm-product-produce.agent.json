@@ -1,0 +1,249 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesWmProductProduce",
+  "kebab": "mes-wm-product-produce",
+  "businessName": "MES 生产入库单",
+  "permissionPrefix": "mes:mes_wm_product_produce",
+  "page": {
+    "route": "/admin/mes/mes-wm-product-produce",
+    "title": "MES 生产入库单管理",
+    "titleSelector": "[data-testid=\"mes-wm-product-produce-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-wm-product-produce",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-wm-product-produce",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-wm-product-produce/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-wm-product-produce"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-wm-product-produce/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-wm-product-produce/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-wm-product-produce-title\"]",
+    "refresh": "[data-testid=\"mes-wm-product-produce-refresh\"]",
+    "createButton": "[data-testid=\"mes-wm-product-produce-create\"]",
+    "searchForm": "[data-testid=\"mes-wm-product-produce-search\"]",
+    "searchSubmit": "[data-testid=\"mes-wm-product-produce-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-wm-product-produce-search-reset\"]",
+    "total": "[data-testid=\"mes-wm-product-produce-total\"]",
+    "table": "[data-testid=\"mes-wm-product-produce-table\"]",
+    "row": "[data-testid=\"mes-wm-product-produce-row\"]",
+    "editButton": "[data-testid=\"mes-wm-product-produce-edit\"]",
+    "deleteButton": "[data-testid=\"mes-wm-product-produce-delete\"]",
+    "form": "[data-testid=\"mes-wm-product-produce-form\"]",
+    "formError": "[data-testid=\"mes-wm-product-produce-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-wm-product-produce-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-wm-product-produce-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-wm-product-produce-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 生产入库单列表",
+    "dialogLabel": {
+      "create": "新增MES 生产入库单",
+      "edit": "编辑MES 生产入库单"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "work_order_id",
+        "label": "生产工单 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-work_order_id",
+        "selector": "[data-testid=\"field-work_order_id\"]"
+      },
+      {
+        "name": "feedback_id",
+        "label": "报工记录 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-feedback_id",
+        "selector": "[data-testid=\"field-feedback_id\"]"
+      },
+      {
+        "name": "task_id",
+        "label": "生产任务 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-task_id",
+        "selector": "[data-testid=\"field-task_id\"]"
+      },
+      {
+        "name": "workstation_id",
+        "label": "工作站 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-workstation_id",
+        "selector": "[data-testid=\"field-workstation_id\"]"
+      },
+      {
+        "name": "process_id",
+        "label": "工序 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-process_id",
+        "selector": "[data-testid=\"field-process_id\"]"
+      },
+      {
+        "name": "produce_date",
+        "label": "生产日期",
+        "type": "string",
+        "required": false,
+        "testId": "field-produce_date",
+        "selector": "[data-testid=\"field-produce_date\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-wm-product-produce",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-wm-product-produce\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-wm-product-produce-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-wm-product-produce-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-wm-product-produce:search",
+      "reset": "mes-wm-product-produce:reset",
+      "refresh": "mes-wm-product-produce:refresh",
+      "create": "mes-wm-product-produce:create",
+      "edit": "mes-wm-product-produce:edit",
+      "delete": "mes-wm-product-produce:delete",
+      "submit": "mes-wm-product-produce:submit",
+      "cancel": "mes-wm-product-produce:cancel",
+      "close": "mes-wm-product-produce:close",
+      "row": "mes-wm-product-produce:row",
+      "pagination": "mes-wm-product-produce:pagination",
+      "fields": {
+        "work_order_id": "mes-wm-product-produce:field:work_order_id",
+        "feedback_id": "mes-wm-product-produce:field:feedback_id",
+        "task_id": "mes-wm-product-produce:field:task_id",
+        "workstation_id": "mes-wm-product-produce:field:workstation_id",
+        "process_id": "mes-wm-product-produce:field:process_id",
+        "produce_date": "mes-wm-product-produce:field:produce_date",
+        "status": "mes-wm-product-produce:field:status",
+        "remark": "mes-wm-product-produce:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-wm-product-produce",
+      "examples": [
+        "mes.mes-wm-product-produce__List__Refresh",
+        "mes.mes-wm-product-produce__ListItem__Open",
+        "mes.mes-wm-product-produce__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

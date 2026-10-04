@@ -1,0 +1,249 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "erp",
+  "entity": "ErpStockOutItem",
+  "kebab": "erp-stock-out-item",
+  "businessName": "ERP 其它出库单项",
+  "permissionPrefix": "erp:erp_stock_out_item",
+  "page": {
+    "route": "/admin/erp/erp-stock-out-item",
+    "title": "ERP 其它出库单项管理",
+    "titleSelector": "[data-testid=\"erp-stock-out-item-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.erp/api",
+    "bffMount": "/api/v1/admin/erp",
+    "resource": "erp-stock-out-item",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/erp-stock-out-item",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/erp-stock-out-item/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/erp-stock-out-item"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/erp-stock-out-item/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/erp-stock-out-item/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"erp-stock-out-item-title\"]",
+    "refresh": "[data-testid=\"erp-stock-out-item-refresh\"]",
+    "createButton": "[data-testid=\"erp-stock-out-item-create\"]",
+    "searchForm": "[data-testid=\"erp-stock-out-item-search\"]",
+    "searchSubmit": "[data-testid=\"erp-stock-out-item-search-submit\"]",
+    "searchReset": "[data-testid=\"erp-stock-out-item-search-reset\"]",
+    "total": "[data-testid=\"erp-stock-out-item-total\"]",
+    "table": "[data-testid=\"erp-stock-out-item-table\"]",
+    "row": "[data-testid=\"erp-stock-out-item-row\"]",
+    "editButton": "[data-testid=\"erp-stock-out-item-edit\"]",
+    "deleteButton": "[data-testid=\"erp-stock-out-item-delete\"]",
+    "form": "[data-testid=\"erp-stock-out-item-form\"]",
+    "formError": "[data-testid=\"erp-stock-out-item-form-error\"]",
+    "formSubmit": "[data-testid=\"erp-stock-out-item-form-submit\"]",
+    "formCancel": "[data-testid=\"erp-stock-out-item-form-cancel\"]",
+    "formClose": "[data-testid=\"erp-stock-out-item-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "ERP 其它出库单项列表",
+    "dialogLabel": {
+      "create": "新增ERP 其它出库单项",
+      "edit": "编辑ERP 其它出库单项"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "out_id",
+        "label": "出库编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-out_id",
+        "selector": "[data-testid=\"field-out_id\"]"
+      },
+      {
+        "name": "warehouse_id",
+        "label": "仓库编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-warehouse_id",
+        "selector": "[data-testid=\"field-warehouse_id\"]"
+      },
+      {
+        "name": "product_id",
+        "label": "产品编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-product_id",
+        "selector": "[data-testid=\"field-product_id\"]"
+      },
+      {
+        "name": "product_unit_id",
+        "label": "产品单位编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-product_unit_id",
+        "selector": "[data-testid=\"field-product_unit_id\"]"
+      },
+      {
+        "name": "product_price",
+        "label": "产品单价",
+        "type": "number",
+        "required": false,
+        "testId": "field-product_price",
+        "selector": "[data-testid=\"field-product_price\"]"
+      },
+      {
+        "name": "count",
+        "label": "产品数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-count",
+        "selector": "[data-testid=\"field-count\"]"
+      },
+      {
+        "name": "total_price",
+        "label": "合计金额，单位：元",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_price",
+        "selector": "[data-testid=\"field-total_price\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "erp-stock-out-item",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"erp-stock-out-item\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"erp-stock-out-item-form-overlay\"]",
+      "dialog": "[data-testid=\"erp-stock-out-item-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "erp-stock-out-item:search",
+      "reset": "erp-stock-out-item:reset",
+      "refresh": "erp-stock-out-item:refresh",
+      "create": "erp-stock-out-item:create",
+      "edit": "erp-stock-out-item:edit",
+      "delete": "erp-stock-out-item:delete",
+      "submit": "erp-stock-out-item:submit",
+      "cancel": "erp-stock-out-item:cancel",
+      "close": "erp-stock-out-item:close",
+      "row": "erp-stock-out-item:row",
+      "pagination": "erp-stock-out-item:pagination",
+      "fields": {
+        "out_id": "erp-stock-out-item:field:out_id",
+        "warehouse_id": "erp-stock-out-item:field:warehouse_id",
+        "product_id": "erp-stock-out-item:field:product_id",
+        "product_unit_id": "erp-stock-out-item:field:product_unit_id",
+        "product_price": "erp-stock-out-item:field:product_price",
+        "count": "erp-stock-out-item:field:count",
+        "total_price": "erp-stock-out-item:field:total_price",
+        "remark": "erp-stock-out-item:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "erp.erp-stock-out-item",
+      "examples": [
+        "erp.erp-stock-out-item__List__Refresh",
+        "erp.erp-stock-out-item__ListItem__Open",
+        "erp.erp-stock-out-item__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

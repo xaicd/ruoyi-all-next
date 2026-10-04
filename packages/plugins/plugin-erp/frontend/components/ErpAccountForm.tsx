@@ -54,24 +54,36 @@ export function ErpAccountForm({ open, initialData, onClose, onSuccess }: ErpAcc
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="erp-account-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑ERP 结算账户" : "新增ERP 结算账户"}
+        data-testid="erp-account-form"
+        data-agent-scope="erp-account:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑ErpAccount（源框架导入）" : "新增ErpAccount（源框架导入）"}
+            {isEdit ? "编辑ERP 结算账户" : "新增ERP 结算账户"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="erp-account-form-close" data-agent-target="erp-account:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="erp-account-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">账户名称</label>
+          <label htmlFor="erp-account-name" className="block text-xs text-slate-600 mb-1">账户名称</label>
           <input
             type="text"
+            id="erp-account-name"
+            data-testid="field-name"
+            data-agent-target="erp-account:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="账户名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -81,9 +93,14 @@ export function ErpAccountForm({ open, initialData, onClose, onSuccess }: ErpAcc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">账户编码</label>
+          <label htmlFor="erp-account-no" className="block text-xs text-slate-600 mb-1">账户编码</label>
           <input
             type="text"
+            id="erp-account-no"
+            data-testid="field-no"
+            data-agent-target="erp-account:field:no"
+            data-agent-state={formData.no ? "filled" : "empty"}
+            aria-label="账户编码"
             value={formData.no ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, no: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -93,9 +110,14 @@ export function ErpAccountForm({ open, initialData, onClose, onSuccess }: ErpAcc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="erp-account-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="erp-account-remark"
+            data-testid="field-remark"
+            data-agent-target="erp-account:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -105,9 +127,14 @@ export function ErpAccountForm({ open, initialData, onClose, onSuccess }: ErpAcc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">开启状态</label>
+          <label htmlFor="erp-account-status" className="block text-xs text-slate-600 mb-1">开启状态</label>
           <input
             type="number"
+            id="erp-account-status"
+            data-testid="field-status"
+            data-agent-target="erp-account:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="开启状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -117,9 +144,14 @@ export function ErpAccountForm({ open, initialData, onClose, onSuccess }: ErpAcc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">排序</label>
+          <label htmlFor="erp-account-sort" className="block text-xs text-slate-600 mb-1">排序</label>
           <input
             type="number"
+            id="erp-account-sort"
+            data-testid="field-sort"
+            data-agent-target="erp-account:field:sort"
+            data-agent-state={formData.sort == null || formData.sort === "" ? "empty" : "filled"}
+            aria-label="排序"
             value={formData.sort != null ? String(formData.sort) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sort: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -131,12 +163,16 @@ export function ErpAccountForm({ open, initialData, onClose, onSuccess }: ErpAcc
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="default_status"
+            id="erp-account-default_status"
+            data-testid="field-default_status"
+            data-agent-target="erp-account:field:default_status"
+            data-agent-state={formData.default_status ? "on" : "off"}
+            aria-label="是否默认"
             checked={Boolean(formData.default_status)}
             onChange={(e) => setFormData((prev) => ({ ...prev, default_status: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="default_status" className="text-xs text-slate-700 font-medium">是否默认</label>
+          <label htmlFor="erp-account-default_status" className="text-xs text-slate-700 font-medium">是否默认</label>
         </div>
           </div>
 
@@ -144,6 +180,8 @@ export function ErpAccountForm({ open, initialData, onClose, onSuccess }: ErpAcc
             <button
               type="button"
               onClick={onClose}
+              data-testid="erp-account-form-cancel"
+              data-agent-target="erp-account:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -151,6 +189,9 @@ export function ErpAccountForm({ open, initialData, onClose, onSuccess }: ErpAcc
             <button
               type="submit"
               disabled={loading}
+              data-testid="erp-account-form-submit"
+              data-agent-target="erp-account:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

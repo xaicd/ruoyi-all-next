@@ -1,0 +1,195 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "crm",
+  "entity": "CrmContractConfig",
+  "kebab": "crm-contract-config",
+  "businessName": "编号",
+  "permissionPrefix": "crm:crm_contract_config",
+  "page": {
+    "route": "/admin/crm/crm-contract-config",
+    "title": "编号管理",
+    "titleSelector": "[data-testid=\"crm-contract-config-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.crm/api",
+    "bffMount": "/api/v1/admin/crm",
+    "resource": "crm-contract-config",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/crm-contract-config",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/crm-contract-config/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/crm-contract-config"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/crm-contract-config/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/crm-contract-config/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"crm-contract-config-title\"]",
+    "refresh": "[data-testid=\"crm-contract-config-refresh\"]",
+    "createButton": "[data-testid=\"crm-contract-config-create\"]",
+    "searchForm": "[data-testid=\"crm-contract-config-search\"]",
+    "searchSubmit": "[data-testid=\"crm-contract-config-search-submit\"]",
+    "searchReset": "[data-testid=\"crm-contract-config-search-reset\"]",
+    "total": "[data-testid=\"crm-contract-config-total\"]",
+    "table": "[data-testid=\"crm-contract-config-table\"]",
+    "row": "[data-testid=\"crm-contract-config-row\"]",
+    "editButton": "[data-testid=\"crm-contract-config-edit\"]",
+    "deleteButton": "[data-testid=\"crm-contract-config-delete\"]",
+    "form": "[data-testid=\"crm-contract-config-form\"]",
+    "formError": "[data-testid=\"crm-contract-config-form-error\"]",
+    "formSubmit": "[data-testid=\"crm-contract-config-form-submit\"]",
+    "formCancel": "[data-testid=\"crm-contract-config-form-cancel\"]",
+    "formClose": "[data-testid=\"crm-contract-config-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "编号列表",
+    "dialogLabel": {
+      "create": "新增编号",
+      "edit": "编辑编号"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "notify_enabled",
+        "label": "是否开启提前提醒",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-notify_enabled",
+        "selector": "[data-testid=\"field-notify_enabled\"]"
+      },
+      {
+        "name": "notify_days",
+        "label": "提前提醒天数",
+        "type": "number",
+        "required": false,
+        "testId": "field-notify_days",
+        "selector": "[data-testid=\"field-notify_days\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "crm-contract-config",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"crm-contract-config\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"crm-contract-config-form-overlay\"]",
+      "dialog": "[data-testid=\"crm-contract-config-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "crm-contract-config:search",
+      "reset": "crm-contract-config:reset",
+      "refresh": "crm-contract-config:refresh",
+      "create": "crm-contract-config:create",
+      "edit": "crm-contract-config:edit",
+      "delete": "crm-contract-config:delete",
+      "submit": "crm-contract-config:submit",
+      "cancel": "crm-contract-config:cancel",
+      "close": "crm-contract-config:close",
+      "row": "crm-contract-config:row",
+      "pagination": "crm-contract-config:pagination",
+      "fields": {
+        "notify_enabled": "crm-contract-config:field:notify_enabled",
+        "notify_days": "crm-contract-config:field:notify_days"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "crm.crm-contract-config",
+      "examples": [
+        "crm.crm-contract-config__List__Refresh",
+        "crm.crm-contract-config__ListItem__Open",
+        "crm.crm-contract-config__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

@@ -52,24 +52,36 @@ export function DeliveryExpressTemplateFreeForm({ open, initialData, onClose, on
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="delivery-express-template-free-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑快递运费模板包邮配置" : "新增快递运费模板包邮配置"}
+        data-testid="delivery-express-template-free-form"
+        data-agent-scope="delivery-express-template-free:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑DeliveryExpressTemplateFree（源框架导入）" : "新增DeliveryExpressTemplateFree（源框架导入）"}
+            {isEdit ? "编辑快递运费模板包邮配置" : "新增快递运费模板包邮配置"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="delivery-express-template-free-form-close" data-agent-target="delivery-express-template-free:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="delivery-express-template-free-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">配送模板编号</label>
+          <label htmlFor="delivery-express-template-free-template_id" className="block text-xs text-slate-600 mb-1">配送模板编号</label>
           <input
             type="number"
+            id="delivery-express-template-free-template_id"
+            data-testid="field-template_id"
+            data-agent-target="delivery-express-template-free:field:template_id"
+            data-agent-state={formData.template_id == null || formData.template_id === "" ? "empty" : "filled"}
+            aria-label="配送模板编号"
             value={formData.template_id != null ? String(formData.template_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, template_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -79,9 +91,14 @@ export function DeliveryExpressTemplateFreeForm({ open, initialData, onClose, on
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">配送区域编号列表</label>
+          <label htmlFor="delivery-express-template-free-area_ids" className="block text-xs text-slate-600 mb-1">配送区域编号列表</label>
           <input
             type="text"
+            id="delivery-express-template-free-area_ids"
+            data-testid="field-area_ids"
+            data-agent-target="delivery-express-template-free:field:area_ids"
+            data-agent-state={formData.area_ids ? "filled" : "empty"}
+            aria-label="配送区域编号列表"
             value={formData.area_ids ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, area_ids: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -91,9 +108,14 @@ export function DeliveryExpressTemplateFreeForm({ open, initialData, onClose, on
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">包邮金额，单位：分</label>
+          <label htmlFor="delivery-express-template-free-free_price" className="block text-xs text-slate-600 mb-1">包邮金额，单位：分</label>
           <input
             type="number"
+            id="delivery-express-template-free-free_price"
+            data-testid="field-free_price"
+            data-agent-target="delivery-express-template-free:field:free_price"
+            data-agent-state={formData.free_price == null || formData.free_price === "" ? "empty" : "filled"}
+            aria-label="包邮金额，单位：分"
             value={formData.free_price != null ? String(formData.free_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, free_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -103,9 +125,14 @@ export function DeliveryExpressTemplateFreeForm({ open, initialData, onClose, on
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">包邮件数</label>
+          <label htmlFor="delivery-express-template-free-free_count" className="block text-xs text-slate-600 mb-1">包邮件数</label>
           <input
             type="number"
+            id="delivery-express-template-free-free_count"
+            data-testid="field-free_count"
+            data-agent-target="delivery-express-template-free:field:free_count"
+            data-agent-state={formData.free_count == null || formData.free_count === "" ? "empty" : "filled"}
+            aria-label="包邮件数"
             value={formData.free_count != null ? String(formData.free_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, free_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -119,6 +146,8 @@ export function DeliveryExpressTemplateFreeForm({ open, initialData, onClose, on
             <button
               type="button"
               onClick={onClose}
+              data-testid="delivery-express-template-free-form-cancel"
+              data-agent-target="delivery-express-template-free:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -126,6 +155,9 @@ export function DeliveryExpressTemplateFreeForm({ open, initialData, onClose, on
             <button
               type="submit"
               disabled={loading}
+              data-testid="delivery-express-template-free-form-submit"
+              data-agent-target="delivery-express-template-free:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

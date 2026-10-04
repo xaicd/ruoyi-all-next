@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { AiMindMapService } from "../ai-mind-map.service"
 
 describe("AiMindMapService", () => {
-  it("should create and query AiMindMap（源框架导入）", async () => {
+  it("should create and query AI 思维导图", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AiMindMapService.create({
         user_id: 1,
@@ -21,7 +21,7 @@ describe("AiMindMapService", () => {
   
       const updated = await AiMindMapService.update(created.id, {
         id: created.id,
-        user_id: "更新AiMindMap（源框架导入）",
+        user_id: "更新AI 思维导图",
       } as any)
       expect(updated).toBeDefined()
   

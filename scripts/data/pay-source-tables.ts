@@ -6,12 +6,12 @@ export const PAY_TABLES: CodegenConfig[] = [
   {
     moduleName: "pay",
     className: "PayApp",
-    businessName: "PayApp（源框架导入）",
+    businessName: "支付应用 DO一个商户下，可能会有多个支付应用。例如说，京东有京东商城、京东到家等等不过一般来说，一个商户，只有一个应用哈~即 PayMerchantDO : PayAppDO = 1 : n",
     parentMenuId: "pay-dir",
     permissionPrefix: "pay:pay_app",
     table: {
       name: "pay_app",
-      comment: "PayApp（源框架导入）",
+      comment: "支付应用 DO一个商户下，可能会有多个支付应用。例如说，京东有京东商城、京东到家等等不过一般来说，一个商户，只有一个应用哈~即 PayMerchantDO : PayAppDO = 1 : n",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"应用编号，数据库自增","isPk":true,"nullableInferred":true},
         {"name":"app_key","type":"varchar","tsType":"string","nullable":true,"comment":"应用标识","nullableInferred":true},
@@ -33,12 +33,12 @@ export const PAY_TABLES: CodegenConfig[] = [
   {
     moduleName: "pay",
     className: "PayChannel",
-    businessName: "PayChannel（源框架导入）",
+    businessName: "支付渠道 DO一个应用下，会有多种支付渠道，例如说微信支付、支付宝支付等等即 PayAppDO : PayChannelDO = 1 : n",
     parentMenuId: "pay-dir",
     permissionPrefix: "pay:pay_channel",
     table: {
       name: "pay_channel",
-      comment: "PayChannel（源框架导入）",
+      comment: "支付渠道 DO一个应用下，会有多种支付渠道，例如说微信支付、支付宝支付等等即 PayAppDO : PayChannelDO = 1 : n",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"渠道编号，数据库自增","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"渠道编码","nullableInferred":true},
@@ -59,12 +59,12 @@ export const PAY_TABLES: CodegenConfig[] = [
   {
     moduleName: "pay",
     className: "PayDemoOrder",
-    businessName: "PayDemoOrder（源框架导入）",
+    businessName: "示例订单演示业务系统的订单，如何接入 pay 系统的支付与退款",
     parentMenuId: "pay-dir",
     permissionPrefix: "pay:pay_demo_order",
     table: {
       name: "pay_demo_order",
-      comment: "PayDemoOrder（源框架导入）",
+      comment: "示例订单演示业务系统的订单，如何接入 pay 系统的支付与退款",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"订单编号，自增","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},
@@ -90,12 +90,12 @@ export const PAY_TABLES: CodegenConfig[] = [
   {
     moduleName: "pay",
     className: "PayDemoWithdraw",
-    businessName: "PayDemoWithdraw（源框架导入）",
+    businessName: "示例提现订单演示业务系统的转账业务",
     parentMenuId: "pay-dir",
     permissionPrefix: "pay:pay_demo_withdraw",
     table: {
       name: "pay_demo_withdraw",
-      comment: "PayDemoWithdraw（源框架导入）",
+      comment: "示例提现订单演示业务系统的转账业务",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"提现单编号，自增","isPk":true,"nullableInferred":true},
         {"name":"subject","type":"varchar","tsType":"string","nullable":true,"comment":"提现标题","nullableInferred":true},
@@ -120,12 +120,12 @@ export const PAY_TABLES: CodegenConfig[] = [
   {
     moduleName: "pay",
     className: "PayNotifyLog",
-    businessName: "PayNotifyLog（源框架导入）",
+    businessName: "商户支付、退款等的通知 Log每次通知时，都会在该表中，记录一次 Log，方便排查问题",
     parentMenuId: "pay-dir",
     permissionPrefix: "pay:pay_notify_log",
     table: {
       name: "pay_notify_log",
-      comment: "PayNotifyLog（源框架导入）",
+      comment: "商户支付、退款等的通知 Log每次通知时，都会在该表中，记录一次 Log，方便排查问题",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"日志编号，自增","isPk":true,"nullableInferred":true},
         {"name":"task_id","type":"bigint","tsType":"number","nullable":true,"comment":"通知任务编号","nullableInferred":true},
@@ -144,12 +144,12 @@ export const PAY_TABLES: CodegenConfig[] = [
   {
     moduleName: "pay",
     className: "PayNotifyTask",
-    businessName: "PayNotifyTask（源框架导入）",
+    businessName: "支付通知在支付系统收到支付渠道的支付、退款的结果后，需要不断的通知到业务系统，直到成功。",
     parentMenuId: "pay-dir",
     permissionPrefix: "pay:pay_notify_task",
     table: {
       name: "pay_notify_task",
-      comment: "PayNotifyTask（源框架导入）",
+      comment: "支付通知在支付系统收到支付渠道的支付、退款的结果后，需要不断的通知到业务系统，直到成功。",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号，自增","isPk":true,"nullableInferred":true},
         {"name":"app_id","type":"bigint","tsType":"number","nullable":true,"comment":"应用编号","nullableInferred":true},
@@ -176,12 +176,12 @@ export const PAY_TABLES: CodegenConfig[] = [
   {
     moduleName: "pay",
     className: "PayOrder",
-    businessName: "PayOrder（源框架导入）",
+    businessName: "支付订单",
     parentMenuId: "pay-dir",
     permissionPrefix: "pay:pay_order",
     table: {
       name: "pay_order",
-      comment: "PayOrder（源框架导入）",
+      comment: "支付订单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"订单编号，数据库自增","isPk":true,"nullableInferred":true},
         {"name":"app_id","type":"bigint","tsType":"number","nullable":true,"comment":"应用编号","nullableInferred":true},
@@ -217,12 +217,12 @@ export const PAY_TABLES: CodegenConfig[] = [
   {
     moduleName: "pay",
     className: "PayOrderExtension",
-    businessName: "PayOrderExtension（源框架导入）",
+    businessName: "支付订单拓展 DO每次调用支付渠道，都会生成一条对应记录",
     parentMenuId: "pay-dir",
     permissionPrefix: "pay:pay_order_extension",
     table: {
       name: "pay_order_extension",
-      comment: "PayOrderExtension（源框架导入）",
+      comment: "支付订单拓展 DO每次调用支付渠道，都会生成一条对应记录",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"订单拓展编号，数据库自增","isPk":true,"nullableInferred":true},
         {"name":"no","type":"varchar","tsType":"string","nullable":true,"comment":"外部订单号，根据规则生成","nullableInferred":true},
@@ -247,12 +247,12 @@ export const PAY_TABLES: CodegenConfig[] = [
   {
     moduleName: "pay",
     className: "PayRefund",
-    businessName: "PayRefund（源框架导入）",
+    businessName: "支付退款单 DO一个支付订单，可以拥有多个支付退款单即 PayOrderDO : PayRefundDO = 1 : n",
     parentMenuId: "pay-dir",
     permissionPrefix: "pay:pay_refund",
     table: {
       name: "pay_refund",
-      comment: "PayRefund（源框架导入）",
+      comment: "支付退款单 DO一个支付订单，可以拥有多个支付退款单即 PayOrderDO : PayRefundDO = 1 : n",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"退款单编号，数据库自增","isPk":true,"nullableInferred":true},
         {"name":"no","type":"varchar","tsType":"string","nullable":true,"comment":"外部退款号，根据规则生成","nullableInferred":true},
@@ -289,12 +289,12 @@ export const PAY_TABLES: CodegenConfig[] = [
   {
     moduleName: "pay",
     className: "PayTransfer",
-    businessName: "PayTransfer（源框架导入）",
+    businessName: "转账单",
     parentMenuId: "pay-dir",
     permissionPrefix: "pay:pay_transfer",
     table: {
       name: "pay_transfer",
-      comment: "PayTransfer（源框架导入）",
+      comment: "转账单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"no","type":"varchar","tsType":"string","nullable":true,"comment":"转账单号","nullableInferred":true},
@@ -330,12 +330,12 @@ export const PAY_TABLES: CodegenConfig[] = [
   {
     moduleName: "pay",
     className: "PayWallet",
-    businessName: "PayWallet（源框架导入）",
+    businessName: "会员钱包",
     parentMenuId: "pay-dir",
     permissionPrefix: "pay:pay_wallet",
     table: {
       name: "pay_wallet",
-      comment: "PayWallet（源框架导入）",
+      comment: "会员钱包",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户 id","nullableInferred":true},
@@ -356,12 +356,12 @@ export const PAY_TABLES: CodegenConfig[] = [
   {
     moduleName: "pay",
     className: "PayWalletRecharge",
-    businessName: "PayWalletRecharge（源框架导入）",
+    businessName: "会员钱包充值",
     parentMenuId: "pay-dir",
     permissionPrefix: "pay:pay_wallet_recharge",
     table: {
       name: "pay_wallet_recharge",
-      comment: "PayWalletRecharge（源框架导入）",
+      comment: "会员钱包充值",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"wallet_id","type":"bigint","tsType":"number","nullable":true,"comment":"钱包编号","nullableInferred":true},
@@ -391,12 +391,12 @@ export const PAY_TABLES: CodegenConfig[] = [
   {
     moduleName: "pay",
     className: "PayWalletRechargePackage",
-    businessName: "PayWalletRechargePackage（源框架导入）",
+    businessName: "会员钱包充值套餐 DO通过充值套餐时，可以赠送一定金额；",
     parentMenuId: "pay-dir",
     permissionPrefix: "pay:pay_wallet_recharge_package",
     table: {
       name: "pay_wallet_recharge_package",
-      comment: "PayWalletRechargePackage（源框架导入）",
+      comment: "会员钱包充值套餐 DO通过充值套餐时，可以赠送一定金额；",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"套餐名","nullableInferred":true},
@@ -415,12 +415,12 @@ export const PAY_TABLES: CodegenConfig[] = [
   {
     moduleName: "pay",
     className: "PayWalletTransaction",
-    businessName: "PayWalletTransaction（源框架导入）",
+    businessName: "会员钱包流水",
     parentMenuId: "pay-dir",
     permissionPrefix: "pay:pay_wallet_transaction",
     table: {
       name: "pay_wallet_transaction",
-      comment: "PayWalletTransaction（源框架导入）",
+      comment: "会员钱包流水",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"no","type":"varchar","tsType":"string","nullable":true,"comment":"流水号","nullableInferred":true},

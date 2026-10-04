@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for CrmContact（源框架导入） (CrmContact)
+-- Auto-generated RBAC & Menu Migration for CRM 联系人 (CrmContact)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-crm-contact',
   'crm-dir',
-  'CrmContact（源框架导入）管理',
+  'CRM 联系人管理',
   '/admin/crm/crm-contact',
   'crm/crm-contact/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-crm-contact-query',  'menu-crm-contact', '查询CrmContact（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_contact:query',  1, NOW(), NOW()),
-('menu-crm-contact-create', 'menu-crm-contact', '新增CrmContact（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_contact:create', 2, NOW(), NOW()),
-('menu-crm-contact-update', 'menu-crm-contact', '修改CrmContact（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_contact:update', 3, NOW(), NOW()),
-('menu-crm-contact-delete', 'menu-crm-contact', '删除CrmContact（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_contact:delete', 4, NOW(), NOW())
+('menu-crm-contact-query',  'menu-crm-contact', '查询CRM 联系人', 'BUTTON', 'ACTIVE', 'crm:crm_contact:query',  1, NOW(), NOW()),
+('menu-crm-contact-create', 'menu-crm-contact', '新增CRM 联系人', 'BUTTON', 'ACTIVE', 'crm:crm_contact:create', 2, NOW(), NOW()),
+('menu-crm-contact-update', 'menu-crm-contact', '修改CRM 联系人', 'BUTTON', 'ACTIVE', 'crm:crm_contact:update', 3, NOW(), NOW()),
+('menu-crm-contact-delete', 'menu-crm-contact', '删除CRM 联系人', 'BUTTON', 'ACTIVE', 'crm:crm_contact:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

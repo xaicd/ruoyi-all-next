@@ -54,24 +54,36 @@ export function CrmBusinessProductForm({ open, initialData, onClose, onSuccess }
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="crm-business-product-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑CRM 商机产品关联表 DOCrmBusinessDO : CrmBusinessProductDO = 1 : N" : "新增CRM 商机产品关联表 DOCrmBusinessDO : CrmBusinessProductDO = 1 : N"}
+        data-testid="crm-business-product-form"
+        data-agent-scope="crm-business-product:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑CrmBusinessProduct（源框架导入）" : "新增CrmBusinessProduct（源框架导入）"}
+            {isEdit ? "编辑CRM 商机产品关联表 DOCrmBusinessDO : CrmBusinessProductDO = 1 : N" : "新增CRM 商机产品关联表 DOCrmBusinessDO : CrmBusinessProductDO = 1 : N"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="crm-business-product-form-close" data-agent-target="crm-business-product:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="crm-business-product-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商机编号</label>
+          <label htmlFor="crm-business-product-business_id" className="block text-xs text-slate-600 mb-1">商机编号</label>
           <input
             type="number"
+            id="crm-business-product-business_id"
+            data-testid="field-business_id"
+            data-agent-target="crm-business-product:field:business_id"
+            data-agent-state={formData.business_id == null || formData.business_id === "" ? "empty" : "filled"}
+            aria-label="商机编号"
             value={formData.business_id != null ? String(formData.business_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, business_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -81,9 +93,14 @@ export function CrmBusinessProductForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品编号</label>
+          <label htmlFor="crm-business-product-product_id" className="block text-xs text-slate-600 mb-1">产品编号</label>
           <input
             type="number"
+            id="crm-business-product-product_id"
+            data-testid="field-product_id"
+            data-agent-target="crm-business-product:field:product_id"
+            data-agent-state={formData.product_id == null || formData.product_id === "" ? "empty" : "filled"}
+            aria-label="产品编号"
             value={formData.product_id != null ? String(formData.product_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, product_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -93,9 +110,14 @@ export function CrmBusinessProductForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品单价，单位：元</label>
+          <label htmlFor="crm-business-product-product_price" className="block text-xs text-slate-600 mb-1">产品单价，单位：元</label>
           <input
             type="number"
+            id="crm-business-product-product_price"
+            data-testid="field-product_price"
+            data-agent-target="crm-business-product:field:product_price"
+            data-agent-state={formData.product_price == null || formData.product_price === "" ? "empty" : "filled"}
+            aria-label="产品单价，单位：元"
             value={formData.product_price != null ? String(formData.product_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, product_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -105,9 +127,14 @@ export function CrmBusinessProductForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商机价格, 单位：元</label>
+          <label htmlFor="crm-business-product-business_price" className="block text-xs text-slate-600 mb-1">商机价格, 单位：元</label>
           <input
             type="number"
+            id="crm-business-product-business_price"
+            data-testid="field-business_price"
+            data-agent-target="crm-business-product:field:business_price"
+            data-agent-state={formData.business_price == null || formData.business_price === "" ? "empty" : "filled"}
+            aria-label="商机价格, 单位：元"
             value={formData.business_price != null ? String(formData.business_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, business_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -117,9 +144,14 @@ export function CrmBusinessProductForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">数量</label>
+          <label htmlFor="crm-business-product-count" className="block text-xs text-slate-600 mb-1">数量</label>
           <input
             type="number"
+            id="crm-business-product-count"
+            data-testid="field-count"
+            data-agent-target="crm-business-product:field:count"
+            data-agent-state={formData.count == null || formData.count === "" ? "empty" : "filled"}
+            aria-label="数量"
             value={formData.count != null ? String(formData.count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -129,9 +161,14 @@ export function CrmBusinessProductForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">总计价格，单位：元</label>
+          <label htmlFor="crm-business-product-total_price" className="block text-xs text-slate-600 mb-1">总计价格，单位：元</label>
           <input
             type="number"
+            id="crm-business-product-total_price"
+            data-testid="field-total_price"
+            data-agent-target="crm-business-product:field:total_price"
+            data-agent-state={formData.total_price == null || formData.total_price === "" ? "empty" : "filled"}
+            aria-label="总计价格，单位：元"
             value={formData.total_price != null ? String(formData.total_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, total_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -145,6 +182,8 @@ export function CrmBusinessProductForm({ open, initialData, onClose, onSuccess }
             <button
               type="button"
               onClick={onClose}
+              data-testid="crm-business-product-form-cancel"
+              data-agent-target="crm-business-product:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -152,6 +191,9 @@ export function CrmBusinessProductForm({ open, initialData, onClose, onSuccess }
             <button
               type="submit"
               disabled={loading}
+              data-testid="crm-business-product-form-submit"
+              data-agent-target="crm-business-product:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

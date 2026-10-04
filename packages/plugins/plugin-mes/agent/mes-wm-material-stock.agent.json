@@ -1,0 +1,276 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesWmMaterialStock",
+  "kebab": "mes-wm-material-stock",
+  "businessName": "MES 库存台账（仓库现有量）",
+  "permissionPrefix": "mes:mes_wm_material_stock",
+  "page": {
+    "route": "/admin/mes/mes-wm-material-stock",
+    "title": "MES 库存台账（仓库现有量）管理",
+    "titleSelector": "[data-testid=\"mes-wm-material-stock-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-wm-material-stock",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-wm-material-stock",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-wm-material-stock/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-wm-material-stock"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-wm-material-stock/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-wm-material-stock/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-wm-material-stock-title\"]",
+    "refresh": "[data-testid=\"mes-wm-material-stock-refresh\"]",
+    "createButton": "[data-testid=\"mes-wm-material-stock-create\"]",
+    "searchForm": "[data-testid=\"mes-wm-material-stock-search\"]",
+    "searchSubmit": "[data-testid=\"mes-wm-material-stock-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-wm-material-stock-search-reset\"]",
+    "total": "[data-testid=\"mes-wm-material-stock-total\"]",
+    "table": "[data-testid=\"mes-wm-material-stock-table\"]",
+    "row": "[data-testid=\"mes-wm-material-stock-row\"]",
+    "editButton": "[data-testid=\"mes-wm-material-stock-edit\"]",
+    "deleteButton": "[data-testid=\"mes-wm-material-stock-delete\"]",
+    "form": "[data-testid=\"mes-wm-material-stock-form\"]",
+    "formError": "[data-testid=\"mes-wm-material-stock-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-wm-material-stock-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-wm-material-stock-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-wm-material-stock-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 库存台账（仓库现有量）列表",
+    "dialogLabel": {
+      "create": "新增MES 库存台账（仓库现有量）",
+      "edit": "编辑MES 库存台账（仓库现有量）"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "item_type_id",
+        "label": "物料分类编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-item_type_id",
+        "selector": "[data-testid=\"field-item_type_id\"]"
+      },
+      {
+        "name": "item_id",
+        "label": "物料编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-item_id",
+        "selector": "[data-testid=\"field-item_id\"]"
+      },
+      {
+        "name": "batch_id",
+        "label": "批次编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-batch_id",
+        "selector": "[data-testid=\"field-batch_id\"]"
+      },
+      {
+        "name": "batch_code",
+        "label": "批次号",
+        "type": "string",
+        "required": false,
+        "testId": "field-batch_code",
+        "selector": "[data-testid=\"field-batch_code\"]"
+      },
+      {
+        "name": "warehouse_id",
+        "label": "仓库编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-warehouse_id",
+        "selector": "[data-testid=\"field-warehouse_id\"]"
+      },
+      {
+        "name": "location_id",
+        "label": "库区编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-location_id",
+        "selector": "[data-testid=\"field-location_id\"]"
+      },
+      {
+        "name": "area_id",
+        "label": "库位编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-area_id",
+        "selector": "[data-testid=\"field-area_id\"]"
+      },
+      {
+        "name": "vendor_id",
+        "label": "供应商编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-vendor_id",
+        "selector": "[data-testid=\"field-vendor_id\"]"
+      },
+      {
+        "name": "quantity",
+        "label": "在库数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-quantity",
+        "selector": "[data-testid=\"field-quantity\"]"
+      },
+      {
+        "name": "receipt_time",
+        "label": "入库时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-receipt_time",
+        "selector": "[data-testid=\"field-receipt_time\"]"
+      },
+      {
+        "name": "frozen",
+        "label": "是否冻结",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-frozen",
+        "selector": "[data-testid=\"field-frozen\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-wm-material-stock",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-wm-material-stock\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-wm-material-stock-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-wm-material-stock-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-wm-material-stock:search",
+      "reset": "mes-wm-material-stock:reset",
+      "refresh": "mes-wm-material-stock:refresh",
+      "create": "mes-wm-material-stock:create",
+      "edit": "mes-wm-material-stock:edit",
+      "delete": "mes-wm-material-stock:delete",
+      "submit": "mes-wm-material-stock:submit",
+      "cancel": "mes-wm-material-stock:cancel",
+      "close": "mes-wm-material-stock:close",
+      "row": "mes-wm-material-stock:row",
+      "pagination": "mes-wm-material-stock:pagination",
+      "fields": {
+        "item_type_id": "mes-wm-material-stock:field:item_type_id",
+        "item_id": "mes-wm-material-stock:field:item_id",
+        "batch_id": "mes-wm-material-stock:field:batch_id",
+        "batch_code": "mes-wm-material-stock:field:batch_code",
+        "warehouse_id": "mes-wm-material-stock:field:warehouse_id",
+        "location_id": "mes-wm-material-stock:field:location_id",
+        "area_id": "mes-wm-material-stock:field:area_id",
+        "vendor_id": "mes-wm-material-stock:field:vendor_id",
+        "quantity": "mes-wm-material-stock:field:quantity",
+        "receipt_time": "mes-wm-material-stock:field:receipt_time",
+        "frozen": "mes-wm-material-stock:field:frozen"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-wm-material-stock",
+      "examples": [
+        "mes.mes-wm-material-stock__List__Refresh",
+        "mes.mes-wm-material-stock__ListItem__Open",
+        "mes.mes-wm-material-stock__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

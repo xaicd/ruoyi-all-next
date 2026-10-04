@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for KeFuConversation（源框架导入） (KeFuConversation)
+-- Auto-generated RBAC & Menu Migration for 客服会话 (KeFuConversation)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-ke-fu-conversation',
   'mall-dir',
-  'KeFuConversation（源框架导入）管理',
+  '客服会话管理',
   '/admin/mall/ke-fu-conversation',
   'mall/ke-fu-conversation/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-ke-fu-conversation-query',  'menu-ke-fu-conversation', '查询KeFuConversation（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:ke_fu_conversation:query',  1, NOW(), NOW()),
-('menu-ke-fu-conversation-create', 'menu-ke-fu-conversation', '新增KeFuConversation（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:ke_fu_conversation:create', 2, NOW(), NOW()),
-('menu-ke-fu-conversation-update', 'menu-ke-fu-conversation', '修改KeFuConversation（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:ke_fu_conversation:update', 3, NOW(), NOW()),
-('menu-ke-fu-conversation-delete', 'menu-ke-fu-conversation', '删除KeFuConversation（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:ke_fu_conversation:delete', 4, NOW(), NOW())
+('menu-ke-fu-conversation-query',  'menu-ke-fu-conversation', '查询客服会话', 'BUTTON', 'ACTIVE', 'mall:ke_fu_conversation:query',  1, NOW(), NOW()),
+('menu-ke-fu-conversation-create', 'menu-ke-fu-conversation', '新增客服会话', 'BUTTON', 'ACTIVE', 'mall:ke_fu_conversation:create', 2, NOW(), NOW()),
+('menu-ke-fu-conversation-update', 'menu-ke-fu-conversation', '修改客服会话', 'BUTTON', 'ACTIVE', 'mall:ke_fu_conversation:update', 3, NOW(), NOW()),
+('menu-ke-fu-conversation-delete', 'menu-ke-fu-conversation', '删除客服会话', 'BUTTON', 'ACTIVE', 'mall:ke_fu_conversation:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

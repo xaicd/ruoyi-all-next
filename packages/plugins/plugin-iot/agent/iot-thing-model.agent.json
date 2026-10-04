@@ -1,0 +1,258 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "iot",
+  "entity": "IotThingModel",
+  "kebab": "iot-thing-model",
+  "businessName": "IoT 产品物模型功能 DO每个 和 是“一对多”的关系，它的每个属性、事件、服务都对应一条记录",
+  "permissionPrefix": "iot:iot_thing_model",
+  "page": {
+    "route": "/admin/iot/iot-thing-model",
+    "title": "IoT 产品物模型功能 DO每个 和 是“一对多”的关系，它的每个属性、事件、服务都对应一条记录管理",
+    "titleSelector": "[data-testid=\"iot-thing-model-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.iot/api",
+    "bffMount": "/api/v1/admin/iot",
+    "resource": "iot-thing-model",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/iot-thing-model",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/iot-thing-model/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/iot-thing-model"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/iot-thing-model/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/iot-thing-model/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"iot-thing-model-title\"]",
+    "refresh": "[data-testid=\"iot-thing-model-refresh\"]",
+    "createButton": "[data-testid=\"iot-thing-model-create\"]",
+    "searchForm": "[data-testid=\"iot-thing-model-search\"]",
+    "searchSubmit": "[data-testid=\"iot-thing-model-search-submit\"]",
+    "searchReset": "[data-testid=\"iot-thing-model-search-reset\"]",
+    "total": "[data-testid=\"iot-thing-model-total\"]",
+    "table": "[data-testid=\"iot-thing-model-table\"]",
+    "row": "[data-testid=\"iot-thing-model-row\"]",
+    "editButton": "[data-testid=\"iot-thing-model-edit\"]",
+    "deleteButton": "[data-testid=\"iot-thing-model-delete\"]",
+    "form": "[data-testid=\"iot-thing-model-form\"]",
+    "formError": "[data-testid=\"iot-thing-model-form-error\"]",
+    "formSubmit": "[data-testid=\"iot-thing-model-form-submit\"]",
+    "formCancel": "[data-testid=\"iot-thing-model-form-cancel\"]",
+    "formClose": "[data-testid=\"iot-thing-model-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IoT 产品物模型功能 DO每个 和 是“一对多”的关系，它的每个属性、事件、服务都对应一条记录列表",
+    "dialogLabel": {
+      "create": "新增IoT 产品物模型功能 DO每个 和 是“一对多”的关系，它的每个属性、事件、服务都对应一条记录",
+      "edit": "编辑IoT 产品物模型功能 DO每个 和 是“一对多”的关系，它的每个属性、事件、服务都对应一条记录"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "identifier",
+        "label": "功能标识",
+        "type": "string",
+        "required": false,
+        "testId": "field-identifier",
+        "selector": "[data-testid=\"field-identifier\"]"
+      },
+      {
+        "name": "name",
+        "label": "功能名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "description",
+        "label": "功能描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      },
+      {
+        "name": "product_id",
+        "label": "产品标识",
+        "type": "number",
+        "required": false,
+        "testId": "field-product_id",
+        "selector": "[data-testid=\"field-product_id\"]"
+      },
+      {
+        "name": "product_key",
+        "label": "产品标识",
+        "type": "string",
+        "required": false,
+        "testId": "field-product_key",
+        "selector": "[data-testid=\"field-product_key\"]"
+      },
+      {
+        "name": "type",
+        "label": "功能类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "property",
+        "label": "属性",
+        "type": "string",
+        "required": false,
+        "testId": "field-property",
+        "selector": "[data-testid=\"field-property\"]"
+      },
+      {
+        "name": "event",
+        "label": "事件",
+        "type": "string",
+        "required": false,
+        "testId": "field-event",
+        "selector": "[data-testid=\"field-event\"]"
+      },
+      {
+        "name": "service",
+        "label": "服务",
+        "type": "string",
+        "required": false,
+        "testId": "field-service",
+        "selector": "[data-testid=\"field-service\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "iot-thing-model",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"iot-thing-model\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"iot-thing-model-form-overlay\"]",
+      "dialog": "[data-testid=\"iot-thing-model-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "iot-thing-model:search",
+      "reset": "iot-thing-model:reset",
+      "refresh": "iot-thing-model:refresh",
+      "create": "iot-thing-model:create",
+      "edit": "iot-thing-model:edit",
+      "delete": "iot-thing-model:delete",
+      "submit": "iot-thing-model:submit",
+      "cancel": "iot-thing-model:cancel",
+      "close": "iot-thing-model:close",
+      "row": "iot-thing-model:row",
+      "pagination": "iot-thing-model:pagination",
+      "fields": {
+        "identifier": "iot-thing-model:field:identifier",
+        "name": "iot-thing-model:field:name",
+        "description": "iot-thing-model:field:description",
+        "product_id": "iot-thing-model:field:product_id",
+        "product_key": "iot-thing-model:field:product_key",
+        "type": "iot-thing-model:field:type",
+        "property": "iot-thing-model:field:property",
+        "event": "iot-thing-model:field:event",
+        "service": "iot-thing-model:field:service"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "iot.iot-thing-model",
+      "examples": [
+        "iot.iot-thing-model__List__Refresh",
+        "iot.iot-thing-model__ListItem__Open",
+        "iot.iot-thing-model__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { DeliveryExpressTemplateChargeService } from "../delivery-express-template-charge.service"
 
 describe("DeliveryExpressTemplateChargeService", () => {
-  it("should create and query DeliveryExpressTemplateCharge（源框架导入）", async () => {
+  it("should create and query 快递运费模板计费配置", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await DeliveryExpressTemplateChargeService.create({
         template_id: 1,
@@ -21,7 +21,7 @@ describe("DeliveryExpressTemplateChargeService", () => {
   
       const updated = await DeliveryExpressTemplateChargeService.update(created.id, {
         id: created.id,
-        template_id: "更新DeliveryExpressTemplateCharge（源框架导入）",
+        template_id: "更新快递运费模板计费配置",
       } as any)
       expect(updated).toBeDefined()
   

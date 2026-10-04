@@ -65,24 +65,36 @@ export function MpAutoReplyForm({ open, initialData, onClose, onSuccess }: MpAut
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mp-auto-reply-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑公众号消息自动回复" : "新增公众号消息自动回复"}
+        data-testid="mp-auto-reply-form"
+        data-agent-scope="mp-auto-reply:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MpAutoReply（源框架导入）" : "新增MpAutoReply（源框架导入）"}
+            {isEdit ? "编辑公众号消息自动回复" : "新增公众号消息自动回复"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mp-auto-reply-form-close" data-agent-target="mp-auto-reply:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mp-auto-reply-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">公众号账号的编号</label>
+          <label htmlFor="mp-auto-reply-account_id" className="block text-xs text-slate-600 mb-1">公众号账号的编号</label>
           <input
             type="number"
+            id="mp-auto-reply-account_id"
+            data-testid="field-account_id"
+            data-agent-target="mp-auto-reply:field:account_id"
+            data-agent-state={formData.account_id == null || formData.account_id === "" ? "empty" : "filled"}
+            aria-label="公众号账号的编号"
             value={formData.account_id != null ? String(formData.account_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, account_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -92,9 +104,14 @@ export function MpAutoReplyForm({ open, initialData, onClose, onSuccess }: MpAut
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">公众号 appId</label>
+          <label htmlFor="mp-auto-reply-app_id" className="block text-xs text-slate-600 mb-1">公众号 appId</label>
           <input
             type="text"
+            id="mp-auto-reply-app_id"
+            data-testid="field-app_id"
+            data-agent-target="mp-auto-reply:field:app_id"
+            data-agent-state={formData.app_id ? "filled" : "empty"}
+            aria-label="公众号 appId"
             value={formData.app_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, app_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -104,9 +121,14 @@ export function MpAutoReplyForm({ open, initialData, onClose, onSuccess }: MpAut
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">回复类型</label>
+          <label htmlFor="mp-auto-reply-type" className="block text-xs text-slate-600 mb-1">回复类型</label>
           <input
             type="number"
+            id="mp-auto-reply-type"
+            data-testid="field-type"
+            data-agent-target="mp-auto-reply:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="回复类型"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -116,9 +138,14 @@ export function MpAutoReplyForm({ open, initialData, onClose, onSuccess }: MpAut
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">请求的关键字</label>
+          <label htmlFor="mp-auto-reply-request_keyword" className="block text-xs text-slate-600 mb-1">请求的关键字</label>
           <input
             type="text"
+            id="mp-auto-reply-request_keyword"
+            data-testid="field-request_keyword"
+            data-agent-target="mp-auto-reply:field:request_keyword"
+            data-agent-state={formData.request_keyword ? "filled" : "empty"}
+            aria-label="请求的关键字"
             value={formData.request_keyword ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, request_keyword: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -128,9 +155,14 @@ export function MpAutoReplyForm({ open, initialData, onClose, onSuccess }: MpAut
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">请求的关键字的匹配</label>
+          <label htmlFor="mp-auto-reply-request_match" className="block text-xs text-slate-600 mb-1">请求的关键字的匹配</label>
           <input
             type="number"
+            id="mp-auto-reply-request_match"
+            data-testid="field-request_match"
+            data-agent-target="mp-auto-reply:field:request_match"
+            data-agent-state={formData.request_match == null || formData.request_match === "" ? "empty" : "filled"}
+            aria-label="请求的关键字的匹配"
             value={formData.request_match != null ? String(formData.request_match) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, request_match: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -140,9 +172,14 @@ export function MpAutoReplyForm({ open, initialData, onClose, onSuccess }: MpAut
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">请求的消息类型</label>
+          <label htmlFor="mp-auto-reply-request_message_type" className="block text-xs text-slate-600 mb-1">请求的消息类型</label>
           <input
             type="text"
+            id="mp-auto-reply-request_message_type"
+            data-testid="field-request_message_type"
+            data-agent-target="mp-auto-reply:field:request_message_type"
+            data-agent-state={formData.request_message_type ? "filled" : "empty"}
+            aria-label="请求的消息类型"
             value={formData.request_message_type ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, request_message_type: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -152,9 +189,14 @@ export function MpAutoReplyForm({ open, initialData, onClose, onSuccess }: MpAut
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">回复的消息类型</label>
+          <label htmlFor="mp-auto-reply-response_message_type" className="block text-xs text-slate-600 mb-1">回复的消息类型</label>
           <input
             type="text"
+            id="mp-auto-reply-response_message_type"
+            data-testid="field-response_message_type"
+            data-agent-target="mp-auto-reply:field:response_message_type"
+            data-agent-state={formData.response_message_type ? "filled" : "empty"}
+            aria-label="回复的消息类型"
             value={formData.response_message_type ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, response_message_type: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -164,9 +206,14 @@ export function MpAutoReplyForm({ open, initialData, onClose, onSuccess }: MpAut
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">回复的消息内容</label>
+          <label htmlFor="mp-auto-reply-response_content" className="block text-xs text-slate-600 mb-1">回复的消息内容</label>
           <input
             type="text"
+            id="mp-auto-reply-response_content"
+            data-testid="field-response_content"
+            data-agent-target="mp-auto-reply:field:response_content"
+            data-agent-state={formData.response_content ? "filled" : "empty"}
+            aria-label="回复的消息内容"
             value={formData.response_content ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, response_content: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -176,9 +223,14 @@ export function MpAutoReplyForm({ open, initialData, onClose, onSuccess }: MpAut
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">回复的媒体 id</label>
+          <label htmlFor="mp-auto-reply-response_media_id" className="block text-xs text-slate-600 mb-1">回复的媒体 id</label>
           <input
             type="text"
+            id="mp-auto-reply-response_media_id"
+            data-testid="field-response_media_id"
+            data-agent-target="mp-auto-reply:field:response_media_id"
+            data-agent-state={formData.response_media_id ? "filled" : "empty"}
+            aria-label="回复的媒体 id"
             value={formData.response_media_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, response_media_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -188,9 +240,14 @@ export function MpAutoReplyForm({ open, initialData, onClose, onSuccess }: MpAut
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">回复的媒体 URL</label>
+          <label htmlFor="mp-auto-reply-response_media_url" className="block text-xs text-slate-600 mb-1">回复的媒体 URL</label>
           <input
             type="text"
+            id="mp-auto-reply-response_media_url"
+            data-testid="field-response_media_url"
+            data-agent-target="mp-auto-reply:field:response_media_url"
+            data-agent-state={formData.response_media_url ? "filled" : "empty"}
+            aria-label="回复的媒体 URL"
             value={formData.response_media_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, response_media_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -200,9 +257,14 @@ export function MpAutoReplyForm({ open, initialData, onClose, onSuccess }: MpAut
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">回复的标题</label>
+          <label htmlFor="mp-auto-reply-response_title" className="block text-xs text-slate-600 mb-1">回复的标题</label>
           <input
             type="text"
+            id="mp-auto-reply-response_title"
+            data-testid="field-response_title"
+            data-agent-target="mp-auto-reply:field:response_title"
+            data-agent-state={formData.response_title ? "filled" : "empty"}
+            aria-label="回复的标题"
             value={formData.response_title ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, response_title: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -212,9 +274,14 @@ export function MpAutoReplyForm({ open, initialData, onClose, onSuccess }: MpAut
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">回复的描述</label>
+          <label htmlFor="mp-auto-reply-response_description" className="block text-xs text-slate-600 mb-1">回复的描述</label>
           <input
             type="text"
+            id="mp-auto-reply-response_description"
+            data-testid="field-response_description"
+            data-agent-target="mp-auto-reply:field:response_description"
+            data-agent-state={formData.response_description ? "filled" : "empty"}
+            aria-label="回复的描述"
             value={formData.response_description ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, response_description: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -224,9 +291,14 @@ export function MpAutoReplyForm({ open, initialData, onClose, onSuccess }: MpAut
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">回复的缩略图的媒体 id，通过素材管理中的接口上传多媒体文件，得到的 id</label>
+          <label htmlFor="mp-auto-reply-response_thumb_media_id" className="block text-xs text-slate-600 mb-1">回复的缩略图的媒体 id，通过素材管理中的接口上传多媒体文件，得到的 id</label>
           <input
             type="text"
+            id="mp-auto-reply-response_thumb_media_id"
+            data-testid="field-response_thumb_media_id"
+            data-agent-target="mp-auto-reply:field:response_thumb_media_id"
+            data-agent-state={formData.response_thumb_media_id ? "filled" : "empty"}
+            aria-label="回复的缩略图的媒体 id，通过素材管理中的接口上传多媒体文件，得到的 id"
             value={formData.response_thumb_media_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, response_thumb_media_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -236,9 +308,14 @@ export function MpAutoReplyForm({ open, initialData, onClose, onSuccess }: MpAut
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">回复的缩略图的媒体 URL</label>
+          <label htmlFor="mp-auto-reply-response_thumb_media_url" className="block text-xs text-slate-600 mb-1">回复的缩略图的媒体 URL</label>
           <input
             type="text"
+            id="mp-auto-reply-response_thumb_media_url"
+            data-testid="field-response_thumb_media_url"
+            data-agent-target="mp-auto-reply:field:response_thumb_media_url"
+            data-agent-state={formData.response_thumb_media_url ? "filled" : "empty"}
+            aria-label="回复的缩略图的媒体 URL"
             value={formData.response_thumb_media_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, response_thumb_media_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -248,9 +325,14 @@ export function MpAutoReplyForm({ open, initialData, onClose, onSuccess }: MpAut
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">回复的图文消息</label>
+          <label htmlFor="mp-auto-reply-response_articles" className="block text-xs text-slate-600 mb-1">回复的图文消息</label>
           <input
             type="text"
+            id="mp-auto-reply-response_articles"
+            data-testid="field-response_articles"
+            data-agent-target="mp-auto-reply:field:response_articles"
+            data-agent-state={formData.response_articles ? "filled" : "empty"}
+            aria-label="回复的图文消息"
             value={formData.response_articles ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, response_articles: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -260,9 +342,14 @@ export function MpAutoReplyForm({ open, initialData, onClose, onSuccess }: MpAut
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">回复的音乐链接</label>
+          <label htmlFor="mp-auto-reply-response_music_url" className="block text-xs text-slate-600 mb-1">回复的音乐链接</label>
           <input
             type="text"
+            id="mp-auto-reply-response_music_url"
+            data-testid="field-response_music_url"
+            data-agent-target="mp-auto-reply:field:response_music_url"
+            data-agent-state={formData.response_music_url ? "filled" : "empty"}
+            aria-label="回复的音乐链接"
             value={formData.response_music_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, response_music_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -272,9 +359,14 @@ export function MpAutoReplyForm({ open, initialData, onClose, onSuccess }: MpAut
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">回复的高质量音乐链接</label>
+          <label htmlFor="mp-auto-reply-response_hq_music_url" className="block text-xs text-slate-600 mb-1">回复的高质量音乐链接</label>
           <input
             type="text"
+            id="mp-auto-reply-response_hq_music_url"
+            data-testid="field-response_hq_music_url"
+            data-agent-target="mp-auto-reply:field:response_hq_music_url"
+            data-agent-state={formData.response_hq_music_url ? "filled" : "empty"}
+            aria-label="回复的高质量音乐链接"
             value={formData.response_hq_music_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, response_hq_music_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -288,6 +380,8 @@ export function MpAutoReplyForm({ open, initialData, onClose, onSuccess }: MpAut
             <button
               type="button"
               onClick={onClose}
+              data-testid="mp-auto-reply-form-cancel"
+              data-agent-target="mp-auto-reply:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -295,6 +389,9 @@ export function MpAutoReplyForm({ open, initialData, onClose, onSuccess }: MpAut
             <button
               type="submit"
               disabled={loading}
+              data-testid="mp-auto-reply-form-submit"
+              data-agent-target="mp-auto-reply:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

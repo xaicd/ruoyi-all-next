@@ -1,0 +1,249 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "iot",
+  "entity": "IotOtaFirmware",
+  "kebab": "iot-ota-firmware",
+  "businessName": "IoT OTA 固件",
+  "permissionPrefix": "iot:iot_ota_firmware",
+  "page": {
+    "route": "/admin/iot/iot-ota-firmware",
+    "title": "IoT OTA 固件管理",
+    "titleSelector": "[data-testid=\"iot-ota-firmware-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.iot/api",
+    "bffMount": "/api/v1/admin/iot",
+    "resource": "iot-ota-firmware",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/iot-ota-firmware",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/iot-ota-firmware/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/iot-ota-firmware"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/iot-ota-firmware/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/iot-ota-firmware/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"iot-ota-firmware-title\"]",
+    "refresh": "[data-testid=\"iot-ota-firmware-refresh\"]",
+    "createButton": "[data-testid=\"iot-ota-firmware-create\"]",
+    "searchForm": "[data-testid=\"iot-ota-firmware-search\"]",
+    "searchSubmit": "[data-testid=\"iot-ota-firmware-search-submit\"]",
+    "searchReset": "[data-testid=\"iot-ota-firmware-search-reset\"]",
+    "total": "[data-testid=\"iot-ota-firmware-total\"]",
+    "table": "[data-testid=\"iot-ota-firmware-table\"]",
+    "row": "[data-testid=\"iot-ota-firmware-row\"]",
+    "editButton": "[data-testid=\"iot-ota-firmware-edit\"]",
+    "deleteButton": "[data-testid=\"iot-ota-firmware-delete\"]",
+    "form": "[data-testid=\"iot-ota-firmware-form\"]",
+    "formError": "[data-testid=\"iot-ota-firmware-form-error\"]",
+    "formSubmit": "[data-testid=\"iot-ota-firmware-form-submit\"]",
+    "formCancel": "[data-testid=\"iot-ota-firmware-form-cancel\"]",
+    "formClose": "[data-testid=\"iot-ota-firmware-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IoT OTA 固件列表",
+    "dialogLabel": {
+      "create": "新增IoT OTA 固件",
+      "edit": "编辑IoT OTA 固件"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "固件名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "description",
+        "label": "固件描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      },
+      {
+        "name": "version",
+        "label": "版本号",
+        "type": "string",
+        "required": false,
+        "testId": "field-version",
+        "selector": "[data-testid=\"field-version\"]"
+      },
+      {
+        "name": "product_id",
+        "label": "产品编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-product_id",
+        "selector": "[data-testid=\"field-product_id\"]"
+      },
+      {
+        "name": "file_url",
+        "label": "固件文件 URL",
+        "type": "string",
+        "required": false,
+        "testId": "field-file_url",
+        "selector": "[data-testid=\"field-file_url\"]"
+      },
+      {
+        "name": "file_size",
+        "label": "固件文件大小",
+        "type": "number",
+        "required": false,
+        "testId": "field-file_size",
+        "selector": "[data-testid=\"field-file_size\"]"
+      },
+      {
+        "name": "file_digest_algorithm",
+        "label": "固件文件签名算法",
+        "type": "string",
+        "required": false,
+        "testId": "field-file_digest_algorithm",
+        "selector": "[data-testid=\"field-file_digest_algorithm\"]"
+      },
+      {
+        "name": "file_digest_value",
+        "label": "固件文件签名结果",
+        "type": "string",
+        "required": false,
+        "testId": "field-file_digest_value",
+        "selector": "[data-testid=\"field-file_digest_value\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "iot-ota-firmware",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"iot-ota-firmware\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"iot-ota-firmware-form-overlay\"]",
+      "dialog": "[data-testid=\"iot-ota-firmware-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "iot-ota-firmware:search",
+      "reset": "iot-ota-firmware:reset",
+      "refresh": "iot-ota-firmware:refresh",
+      "create": "iot-ota-firmware:create",
+      "edit": "iot-ota-firmware:edit",
+      "delete": "iot-ota-firmware:delete",
+      "submit": "iot-ota-firmware:submit",
+      "cancel": "iot-ota-firmware:cancel",
+      "close": "iot-ota-firmware:close",
+      "row": "iot-ota-firmware:row",
+      "pagination": "iot-ota-firmware:pagination",
+      "fields": {
+        "name": "iot-ota-firmware:field:name",
+        "description": "iot-ota-firmware:field:description",
+        "version": "iot-ota-firmware:field:version",
+        "product_id": "iot-ota-firmware:field:product_id",
+        "file_url": "iot-ota-firmware:field:file_url",
+        "file_size": "iot-ota-firmware:field:file_size",
+        "file_digest_algorithm": "iot-ota-firmware:field:file_digest_algorithm",
+        "file_digest_value": "iot-ota-firmware:field:file_digest_value"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "iot.iot-ota-firmware",
+      "examples": [
+        "iot.iot-ota-firmware__List__Refresh",
+        "iot.iot-ota-firmware__ListItem__Open",
+        "iot.iot-ota-firmware__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

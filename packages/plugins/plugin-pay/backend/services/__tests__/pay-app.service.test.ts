@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { PayAppService } from "../pay-app.service"
 
 describe("PayAppService", () => {
-  it("should create and query PayApp（源框架导入）", async () => {
+  it("should create and query 支付应用 DO一个商户下，可能会有多个支付应用。例如说，京东有京东商城、京东到家等等不过一般来说，一个商户，只有一个应用哈~即 PayMerchantDO : PayAppDO = 1 : n", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await PayAppService.create({
-        app_key: "测试PayApp（源框架导入）",
+        app_key: "测试支付应用 DO一个商户下，可能会有多个支付应用。例如说，京东有京东商城、京东到家等等不过一般来说，一个商户，只有一个应用哈~即 PayMerchantDO : PayAppDO = 1 : n",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("PayAppService", () => {
   
       const updated = await PayAppService.update(created.id, {
         id: created.id,
-        app_key: "更新PayApp（源框架导入）",
+        app_key: "更新支付应用 DO一个商户下，可能会有多个支付应用。例如说，京东有京东商城、京东到家等等不过一般来说，一个商户，只有一个应用哈~即 PayMerchantDO : PayAppDO = 1 : n",
       } as any)
       expect(updated).toBeDefined()
   

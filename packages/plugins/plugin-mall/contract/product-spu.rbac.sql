@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for ProductSpu（源框架导入） (ProductSpu)
+-- Auto-generated RBAC & Menu Migration for 商品 SPU (ProductSpu)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-product-spu',
   'mall-dir',
-  'ProductSpu（源框架导入）管理',
+  '商品 SPU管理',
   '/admin/mall/product-spu',
   'mall/product-spu/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-product-spu-query',  'menu-product-spu', '查询ProductSpu（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:product_spu:query',  1, NOW(), NOW()),
-('menu-product-spu-create', 'menu-product-spu', '新增ProductSpu（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:product_spu:create', 2, NOW(), NOW()),
-('menu-product-spu-update', 'menu-product-spu', '修改ProductSpu（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:product_spu:update', 3, NOW(), NOW()),
-('menu-product-spu-delete', 'menu-product-spu', '删除ProductSpu（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:product_spu:delete', 4, NOW(), NOW())
+('menu-product-spu-query',  'menu-product-spu', '查询商品 SPU', 'BUTTON', 'ACTIVE', 'mall:product_spu:query',  1, NOW(), NOW()),
+('menu-product-spu-create', 'menu-product-spu', '新增商品 SPU', 'BUTTON', 'ACTIVE', 'mall:product_spu:create', 2, NOW(), NOW()),
+('menu-product-spu-update', 'menu-product-spu', '修改商品 SPU', 'BUTTON', 'ACTIVE', 'mall:product_spu:update', 3, NOW(), NOW()),
+('menu-product-spu-delete', 'menu-product-spu', '删除商品 SPU', 'BUTTON', 'ACTIVE', 'mall:product_spu:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MpAutoReplyService } from "../mp-auto-reply.service"
 
 describe("MpAutoReplyService", () => {
-  it("should create and query MpAutoReply（源框架导入）", async () => {
+  it("should create and query 公众号消息自动回复", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MpAutoReplyService.create({
         account_id: 1,
@@ -21,7 +21,7 @@ describe("MpAutoReplyService", () => {
   
       const updated = await MpAutoReplyService.update(created.id, {
         id: created.id,
-        account_id: "更新MpAutoReply（源框架导入）",
+        account_id: "更新公众号消息自动回复",
       } as any)
       expect(updated).toBeDefined()
   

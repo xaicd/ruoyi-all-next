@@ -57,24 +57,36 @@ export function MesWmProductReceiptDetailForm({ open, initialData, onClose, onSu
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-wm-product-receipt-detail-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 产品收货（入库）单明细" : "新增MES 产品收货（入库）单明细"}
+        data-testid="mes-wm-product-receipt-detail-form"
+        data-agent-scope="mes-wm-product-receipt-detail:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesWmProductReceiptDetail（源框架导入）" : "新增MesWmProductReceiptDetail（源框架导入）"}
+            {isEdit ? "编辑MES 产品收货（入库）单明细" : "新增MES 产品收货（入库）单明细"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-wm-product-receipt-detail-form-close" data-agent-target="mes-wm-product-receipt-detail:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-wm-product-receipt-detail-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">收货单行编号</label>
+          <label htmlFor="mes-wm-product-receipt-detail-line_id" className="block text-xs text-slate-600 mb-1">收货单行编号</label>
           <input
             type="number"
+            id="mes-wm-product-receipt-detail-line_id"
+            data-testid="field-line_id"
+            data-agent-target="mes-wm-product-receipt-detail:field:line_id"
+            data-agent-state={formData.line_id == null || formData.line_id === "" ? "empty" : "filled"}
+            aria-label="收货单行编号"
             value={formData.line_id != null ? String(formData.line_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, line_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -84,9 +96,14 @@ export function MesWmProductReceiptDetailForm({ open, initialData, onClose, onSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">收货单编号</label>
+          <label htmlFor="mes-wm-product-receipt-detail-receipt_id" className="block text-xs text-slate-600 mb-1">收货单编号</label>
           <input
             type="number"
+            id="mes-wm-product-receipt-detail-receipt_id"
+            data-testid="field-receipt_id"
+            data-agent-target="mes-wm-product-receipt-detail:field:receipt_id"
+            data-agent-state={formData.receipt_id == null || formData.receipt_id === "" ? "empty" : "filled"}
+            aria-label="收货单编号"
             value={formData.receipt_id != null ? String(formData.receipt_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, receipt_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -96,9 +113,14 @@ export function MesWmProductReceiptDetailForm({ open, initialData, onClose, onSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">物料编号</label>
+          <label htmlFor="mes-wm-product-receipt-detail-item_id" className="block text-xs text-slate-600 mb-1">物料编号</label>
           <input
             type="number"
+            id="mes-wm-product-receipt-detail-item_id"
+            data-testid="field-item_id"
+            data-agent-target="mes-wm-product-receipt-detail:field:item_id"
+            data-agent-state={formData.item_id == null || formData.item_id === "" ? "empty" : "filled"}
+            aria-label="物料编号"
             value={formData.item_id != null ? String(formData.item_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, item_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -108,9 +130,14 @@ export function MesWmProductReceiptDetailForm({ open, initialData, onClose, onSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">上架数量</label>
+          <label htmlFor="mes-wm-product-receipt-detail-quantity" className="block text-xs text-slate-600 mb-1">上架数量</label>
           <input
             type="number"
+            id="mes-wm-product-receipt-detail-quantity"
+            data-testid="field-quantity"
+            data-agent-target="mes-wm-product-receipt-detail:field:quantity"
+            data-agent-state={formData.quantity == null || formData.quantity === "" ? "empty" : "filled"}
+            aria-label="上架数量"
             value={formData.quantity != null ? String(formData.quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -120,9 +147,14 @@ export function MesWmProductReceiptDetailForm({ open, initialData, onClose, onSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">批次编号</label>
+          <label htmlFor="mes-wm-product-receipt-detail-batch_id" className="block text-xs text-slate-600 mb-1">批次编号</label>
           <input
             type="number"
+            id="mes-wm-product-receipt-detail-batch_id"
+            data-testid="field-batch_id"
+            data-agent-target="mes-wm-product-receipt-detail:field:batch_id"
+            data-agent-state={formData.batch_id == null || formData.batch_id === "" ? "empty" : "filled"}
+            aria-label="批次编号"
             value={formData.batch_id != null ? String(formData.batch_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, batch_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -132,9 +164,14 @@ export function MesWmProductReceiptDetailForm({ open, initialData, onClose, onSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">仓库编号</label>
+          <label htmlFor="mes-wm-product-receipt-detail-warehouse_id" className="block text-xs text-slate-600 mb-1">仓库编号</label>
           <input
             type="number"
+            id="mes-wm-product-receipt-detail-warehouse_id"
+            data-testid="field-warehouse_id"
+            data-agent-target="mes-wm-product-receipt-detail:field:warehouse_id"
+            data-agent-state={formData.warehouse_id == null || formData.warehouse_id === "" ? "empty" : "filled"}
+            aria-label="仓库编号"
             value={formData.warehouse_id != null ? String(formData.warehouse_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, warehouse_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -144,9 +181,14 @@ export function MesWmProductReceiptDetailForm({ open, initialData, onClose, onSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">库区编号</label>
+          <label htmlFor="mes-wm-product-receipt-detail-location_id" className="block text-xs text-slate-600 mb-1">库区编号</label>
           <input
             type="number"
+            id="mes-wm-product-receipt-detail-location_id"
+            data-testid="field-location_id"
+            data-agent-target="mes-wm-product-receipt-detail:field:location_id"
+            data-agent-state={formData.location_id == null || formData.location_id === "" ? "empty" : "filled"}
+            aria-label="库区编号"
             value={formData.location_id != null ? String(formData.location_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, location_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -156,9 +198,14 @@ export function MesWmProductReceiptDetailForm({ open, initialData, onClose, onSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">库位编号</label>
+          <label htmlFor="mes-wm-product-receipt-detail-area_id" className="block text-xs text-slate-600 mb-1">库位编号</label>
           <input
             type="number"
+            id="mes-wm-product-receipt-detail-area_id"
+            data-testid="field-area_id"
+            data-agent-target="mes-wm-product-receipt-detail:field:area_id"
+            data-agent-state={formData.area_id == null || formData.area_id === "" ? "empty" : "filled"}
+            aria-label="库位编号"
             value={formData.area_id != null ? String(formData.area_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, area_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -168,9 +215,14 @@ export function MesWmProductReceiptDetailForm({ open, initialData, onClose, onSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-wm-product-receipt-detail-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-wm-product-receipt-detail-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-wm-product-receipt-detail:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -184,6 +236,8 @@ export function MesWmProductReceiptDetailForm({ open, initialData, onClose, onSu
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-wm-product-receipt-detail-form-cancel"
+              data-agent-target="mes-wm-product-receipt-detail:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -191,6 +245,9 @@ export function MesWmProductReceiptDetailForm({ open, initialData, onClose, onSu
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-wm-product-receipt-detail-form-submit"
+              data-agent-target="mes-wm-product-receipt-detail:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

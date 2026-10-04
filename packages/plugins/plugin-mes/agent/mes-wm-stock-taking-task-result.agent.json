@@ -1,0 +1,285 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesWmStockTakingTaskResult",
+  "kebab": "mes-wm-stock-taking-task-result",
+  "businessName": "MES 盘点结果",
+  "permissionPrefix": "mes:mes_wm_stock_taking_task_result",
+  "page": {
+    "route": "/admin/mes/mes-wm-stock-taking-task-result",
+    "title": "MES 盘点结果管理",
+    "titleSelector": "[data-testid=\"mes-wm-stock-taking-task-result-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-wm-stock-taking-task-result",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-wm-stock-taking-task-result",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-wm-stock-taking-task-result/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-wm-stock-taking-task-result"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-wm-stock-taking-task-result/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-wm-stock-taking-task-result/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-wm-stock-taking-task-result-title\"]",
+    "refresh": "[data-testid=\"mes-wm-stock-taking-task-result-refresh\"]",
+    "createButton": "[data-testid=\"mes-wm-stock-taking-task-result-create\"]",
+    "searchForm": "[data-testid=\"mes-wm-stock-taking-task-result-search\"]",
+    "searchSubmit": "[data-testid=\"mes-wm-stock-taking-task-result-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-wm-stock-taking-task-result-search-reset\"]",
+    "total": "[data-testid=\"mes-wm-stock-taking-task-result-total\"]",
+    "table": "[data-testid=\"mes-wm-stock-taking-task-result-table\"]",
+    "row": "[data-testid=\"mes-wm-stock-taking-task-result-row\"]",
+    "editButton": "[data-testid=\"mes-wm-stock-taking-task-result-edit\"]",
+    "deleteButton": "[data-testid=\"mes-wm-stock-taking-task-result-delete\"]",
+    "form": "[data-testid=\"mes-wm-stock-taking-task-result-form\"]",
+    "formError": "[data-testid=\"mes-wm-stock-taking-task-result-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-wm-stock-taking-task-result-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-wm-stock-taking-task-result-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-wm-stock-taking-task-result-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 盘点结果列表",
+    "dialogLabel": {
+      "create": "新增MES 盘点结果",
+      "edit": "编辑MES 盘点结果"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "task_id",
+        "label": "盘点任务编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-task_id",
+        "selector": "[data-testid=\"field-task_id\"]"
+      },
+      {
+        "name": "line_id",
+        "label": "盘点任务行编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-line_id",
+        "selector": "[data-testid=\"field-line_id\"]"
+      },
+      {
+        "name": "material_stock_id",
+        "label": "库存编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-material_stock_id",
+        "selector": "[data-testid=\"field-material_stock_id\"]"
+      },
+      {
+        "name": "item_id",
+        "label": "物料编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-item_id",
+        "selector": "[data-testid=\"field-item_id\"]"
+      },
+      {
+        "name": "batch_id",
+        "label": "批次编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-batch_id",
+        "selector": "[data-testid=\"field-batch_id\"]"
+      },
+      {
+        "name": "batch_code",
+        "label": "批次编码",
+        "type": "string",
+        "required": false,
+        "testId": "field-batch_code",
+        "selector": "[data-testid=\"field-batch_code\"]"
+      },
+      {
+        "name": "warehouse_id",
+        "label": "仓库编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-warehouse_id",
+        "selector": "[data-testid=\"field-warehouse_id\"]"
+      },
+      {
+        "name": "location_id",
+        "label": "库位编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-location_id",
+        "selector": "[data-testid=\"field-location_id\"]"
+      },
+      {
+        "name": "area_id",
+        "label": "库区编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-area_id",
+        "selector": "[data-testid=\"field-area_id\"]"
+      },
+      {
+        "name": "quantity",
+        "label": "在库数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-quantity",
+        "selector": "[data-testid=\"field-quantity\"]"
+      },
+      {
+        "name": "taking_quantity",
+        "label": "盘点数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-taking_quantity",
+        "selector": "[data-testid=\"field-taking_quantity\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-wm-stock-taking-task-result",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-wm-stock-taking-task-result\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-wm-stock-taking-task-result-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-wm-stock-taking-task-result-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-wm-stock-taking-task-result:search",
+      "reset": "mes-wm-stock-taking-task-result:reset",
+      "refresh": "mes-wm-stock-taking-task-result:refresh",
+      "create": "mes-wm-stock-taking-task-result:create",
+      "edit": "mes-wm-stock-taking-task-result:edit",
+      "delete": "mes-wm-stock-taking-task-result:delete",
+      "submit": "mes-wm-stock-taking-task-result:submit",
+      "cancel": "mes-wm-stock-taking-task-result:cancel",
+      "close": "mes-wm-stock-taking-task-result:close",
+      "row": "mes-wm-stock-taking-task-result:row",
+      "pagination": "mes-wm-stock-taking-task-result:pagination",
+      "fields": {
+        "task_id": "mes-wm-stock-taking-task-result:field:task_id",
+        "line_id": "mes-wm-stock-taking-task-result:field:line_id",
+        "material_stock_id": "mes-wm-stock-taking-task-result:field:material_stock_id",
+        "item_id": "mes-wm-stock-taking-task-result:field:item_id",
+        "batch_id": "mes-wm-stock-taking-task-result:field:batch_id",
+        "batch_code": "mes-wm-stock-taking-task-result:field:batch_code",
+        "warehouse_id": "mes-wm-stock-taking-task-result:field:warehouse_id",
+        "location_id": "mes-wm-stock-taking-task-result:field:location_id",
+        "area_id": "mes-wm-stock-taking-task-result:field:area_id",
+        "quantity": "mes-wm-stock-taking-task-result:field:quantity",
+        "taking_quantity": "mes-wm-stock-taking-task-result:field:taking_quantity",
+        "remark": "mes-wm-stock-taking-task-result:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-wm-stock-taking-task-result",
+      "examples": [
+        "mes.mes-wm-stock-taking-task-result__List__Refresh",
+        "mes.mes-wm-stock-taking-task-result__ListItem__Open",
+        "mes.mes-wm-stock-taking-task-result__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

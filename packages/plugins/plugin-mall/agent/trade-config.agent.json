@@ -1,0 +1,312 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "TradeConfig",
+  "kebab": "trade-config",
+  "businessName": "交易中心配置",
+  "permissionPrefix": "mall:trade_config",
+  "page": {
+    "route": "/admin/mall/trade-config",
+    "title": "交易中心配置管理",
+    "titleSelector": "[data-testid=\"trade-config-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "trade-config",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/trade-config",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/trade-config/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/trade-config"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/trade-config/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/trade-config/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"trade-config-title\"]",
+    "refresh": "[data-testid=\"trade-config-refresh\"]",
+    "createButton": "[data-testid=\"trade-config-create\"]",
+    "searchForm": "[data-testid=\"trade-config-search\"]",
+    "searchSubmit": "[data-testid=\"trade-config-search-submit\"]",
+    "searchReset": "[data-testid=\"trade-config-search-reset\"]",
+    "total": "[data-testid=\"trade-config-total\"]",
+    "table": "[data-testid=\"trade-config-table\"]",
+    "row": "[data-testid=\"trade-config-row\"]",
+    "editButton": "[data-testid=\"trade-config-edit\"]",
+    "deleteButton": "[data-testid=\"trade-config-delete\"]",
+    "form": "[data-testid=\"trade-config-form\"]",
+    "formError": "[data-testid=\"trade-config-form-error\"]",
+    "formSubmit": "[data-testid=\"trade-config-form-submit\"]",
+    "formCancel": "[data-testid=\"trade-config-form-cancel\"]",
+    "formClose": "[data-testid=\"trade-config-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "交易中心配置列表",
+    "dialogLabel": {
+      "create": "新增交易中心配置",
+      "edit": "编辑交易中心配置"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "after_sale_refund_reasons",
+        "label": "售后的退款理由",
+        "type": "string",
+        "required": false,
+        "testId": "field-after_sale_refund_reasons",
+        "selector": "[data-testid=\"field-after_sale_refund_reasons\"]"
+      },
+      {
+        "name": "after_sale_return_reasons",
+        "label": "售后的退货理由",
+        "type": "string",
+        "required": false,
+        "testId": "field-after_sale_return_reasons",
+        "selector": "[data-testid=\"field-after_sale_return_reasons\"]"
+      },
+      {
+        "name": "delivery_express_free_enabled",
+        "label": "是否启用全场包邮",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-delivery_express_free_enabled",
+        "selector": "[data-testid=\"field-delivery_express_free_enabled\"]"
+      },
+      {
+        "name": "delivery_express_free_price",
+        "label": "全场包邮的最小金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-delivery_express_free_price",
+        "selector": "[data-testid=\"field-delivery_express_free_price\"]"
+      },
+      {
+        "name": "delivery_pick_up_enabled",
+        "label": "是否开启自提",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-delivery_pick_up_enabled",
+        "selector": "[data-testid=\"field-delivery_pick_up_enabled\"]"
+      },
+      {
+        "name": "brokerage_enabled",
+        "label": "是否启用分佣",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-brokerage_enabled",
+        "selector": "[data-testid=\"field-brokerage_enabled\"]"
+      },
+      {
+        "name": "brokerage_enabled_condition",
+        "label": "分佣模式",
+        "type": "number",
+        "required": false,
+        "testId": "field-brokerage_enabled_condition",
+        "selector": "[data-testid=\"field-brokerage_enabled_condition\"]"
+      },
+      {
+        "name": "brokerage_bind_mode",
+        "label": "分销关系绑定模式",
+        "type": "number",
+        "required": false,
+        "testId": "field-brokerage_bind_mode",
+        "selector": "[data-testid=\"field-brokerage_bind_mode\"]"
+      },
+      {
+        "name": "brokerage_poster_urls",
+        "label": "分销海报图地址数组",
+        "type": "string",
+        "required": false,
+        "testId": "field-brokerage_poster_urls",
+        "selector": "[data-testid=\"field-brokerage_poster_urls\"]"
+      },
+      {
+        "name": "brokerage_first_percent",
+        "label": "一级返佣比例",
+        "type": "number",
+        "required": false,
+        "testId": "field-brokerage_first_percent",
+        "selector": "[data-testid=\"field-brokerage_first_percent\"]"
+      },
+      {
+        "name": "brokerage_second_percent",
+        "label": "二级返佣比例",
+        "type": "number",
+        "required": false,
+        "testId": "field-brokerage_second_percent",
+        "selector": "[data-testid=\"field-brokerage_second_percent\"]"
+      },
+      {
+        "name": "brokerage_withdraw_min_price",
+        "label": "用户提现最低金额",
+        "type": "number",
+        "required": false,
+        "testId": "field-brokerage_withdraw_min_price",
+        "selector": "[data-testid=\"field-brokerage_withdraw_min_price\"]"
+      },
+      {
+        "name": "brokerage_withdraw_fee_percent",
+        "label": "用户提现手续费百分比",
+        "type": "number",
+        "required": false,
+        "testId": "field-brokerage_withdraw_fee_percent",
+        "selector": "[data-testid=\"field-brokerage_withdraw_fee_percent\"]"
+      },
+      {
+        "name": "brokerage_frozen_days",
+        "label": "佣金冻结时间(天)",
+        "type": "number",
+        "required": false,
+        "testId": "field-brokerage_frozen_days",
+        "selector": "[data-testid=\"field-brokerage_frozen_days\"]"
+      },
+      {
+        "name": "brokerage_withdraw_types",
+        "label": "提现方式",
+        "type": "string",
+        "required": false,
+        "testId": "field-brokerage_withdraw_types",
+        "selector": "[data-testid=\"field-brokerage_withdraw_types\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "trade-config",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"trade-config\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"trade-config-form-overlay\"]",
+      "dialog": "[data-testid=\"trade-config-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "trade-config:search",
+      "reset": "trade-config:reset",
+      "refresh": "trade-config:refresh",
+      "create": "trade-config:create",
+      "edit": "trade-config:edit",
+      "delete": "trade-config:delete",
+      "submit": "trade-config:submit",
+      "cancel": "trade-config:cancel",
+      "close": "trade-config:close",
+      "row": "trade-config:row",
+      "pagination": "trade-config:pagination",
+      "fields": {
+        "after_sale_refund_reasons": "trade-config:field:after_sale_refund_reasons",
+        "after_sale_return_reasons": "trade-config:field:after_sale_return_reasons",
+        "delivery_express_free_enabled": "trade-config:field:delivery_express_free_enabled",
+        "delivery_express_free_price": "trade-config:field:delivery_express_free_price",
+        "delivery_pick_up_enabled": "trade-config:field:delivery_pick_up_enabled",
+        "brokerage_enabled": "trade-config:field:brokerage_enabled",
+        "brokerage_enabled_condition": "trade-config:field:brokerage_enabled_condition",
+        "brokerage_bind_mode": "trade-config:field:brokerage_bind_mode",
+        "brokerage_poster_urls": "trade-config:field:brokerage_poster_urls",
+        "brokerage_first_percent": "trade-config:field:brokerage_first_percent",
+        "brokerage_second_percent": "trade-config:field:brokerage_second_percent",
+        "brokerage_withdraw_min_price": "trade-config:field:brokerage_withdraw_min_price",
+        "brokerage_withdraw_fee_percent": "trade-config:field:brokerage_withdraw_fee_percent",
+        "brokerage_frozen_days": "trade-config:field:brokerage_frozen_days",
+        "brokerage_withdraw_types": "trade-config:field:brokerage_withdraw_types"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.trade-config",
+      "examples": [
+        "mall.trade-config__List__Refresh",
+        "mall.trade-config__ListItem__Open",
+        "mall.trade-config__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

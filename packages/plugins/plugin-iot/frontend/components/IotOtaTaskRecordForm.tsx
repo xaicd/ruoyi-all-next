@@ -55,24 +55,36 @@ export function IotOtaTaskRecordForm({ open, initialData, onClose, onSuccess }: 
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="iot-ota-task-record-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑IoT OTA 升级任务记录" : "新增IoT OTA 升级任务记录"}
+        data-testid="iot-ota-task-record-form"
+        data-agent-scope="iot-ota-task-record:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑IotOtaTaskRecord（源框架导入）" : "新增IotOtaTaskRecord（源框架导入）"}
+            {isEdit ? "编辑IoT OTA 升级任务记录" : "新增IoT OTA 升级任务记录"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="iot-ota-task-record-form-close" data-agent-target="iot-ota-task-record:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="iot-ota-task-record-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">固件编号</label>
+          <label htmlFor="iot-ota-task-record-firmware_id" className="block text-xs text-slate-600 mb-1">固件编号</label>
           <input
             type="number"
+            id="iot-ota-task-record-firmware_id"
+            data-testid="field-firmware_id"
+            data-agent-target="iot-ota-task-record:field:firmware_id"
+            data-agent-state={formData.firmware_id == null || formData.firmware_id === "" ? "empty" : "filled"}
+            aria-label="固件编号"
             value={formData.firmware_id != null ? String(formData.firmware_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, firmware_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -82,9 +94,14 @@ export function IotOtaTaskRecordForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">任务编号</label>
+          <label htmlFor="iot-ota-task-record-task_id" className="block text-xs text-slate-600 mb-1">任务编号</label>
           <input
             type="number"
+            id="iot-ota-task-record-task_id"
+            data-testid="field-task_id"
+            data-agent-target="iot-ota-task-record:field:task_id"
+            data-agent-state={formData.task_id == null || formData.task_id === "" ? "empty" : "filled"}
+            aria-label="任务编号"
             value={formData.task_id != null ? String(formData.task_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, task_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -94,9 +111,14 @@ export function IotOtaTaskRecordForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备编号</label>
+          <label htmlFor="iot-ota-task-record-device_id" className="block text-xs text-slate-600 mb-1">设备编号</label>
           <input
             type="number"
+            id="iot-ota-task-record-device_id"
+            data-testid="field-device_id"
+            data-agent-target="iot-ota-task-record:field:device_id"
+            data-agent-state={formData.device_id == null || formData.device_id === "" ? "empty" : "filled"}
+            aria-label="设备编号"
             value={formData.device_id != null ? String(formData.device_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, device_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -106,9 +128,14 @@ export function IotOtaTaskRecordForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">来源的固件编号</label>
+          <label htmlFor="iot-ota-task-record-from_firmware_id" className="block text-xs text-slate-600 mb-1">来源的固件编号</label>
           <input
             type="number"
+            id="iot-ota-task-record-from_firmware_id"
+            data-testid="field-from_firmware_id"
+            data-agent-target="iot-ota-task-record:field:from_firmware_id"
+            data-agent-state={formData.from_firmware_id == null || formData.from_firmware_id === "" ? "empty" : "filled"}
+            aria-label="来源的固件编号"
             value={formData.from_firmware_id != null ? String(formData.from_firmware_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, from_firmware_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -118,9 +145,14 @@ export function IotOtaTaskRecordForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">升级状态</label>
+          <label htmlFor="iot-ota-task-record-status" className="block text-xs text-slate-600 mb-1">升级状态</label>
           <input
             type="number"
+            id="iot-ota-task-record-status"
+            data-testid="field-status"
+            data-agent-target="iot-ota-task-record:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="升级状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -130,9 +162,14 @@ export function IotOtaTaskRecordForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">升级进度，百分比</label>
+          <label htmlFor="iot-ota-task-record-progress" className="block text-xs text-slate-600 mb-1">升级进度，百分比</label>
           <input
             type="number"
+            id="iot-ota-task-record-progress"
+            data-testid="field-progress"
+            data-agent-target="iot-ota-task-record:field:progress"
+            data-agent-state={formData.progress == null || formData.progress === "" ? "empty" : "filled"}
+            aria-label="升级进度，百分比"
             value={formData.progress != null ? String(formData.progress) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, progress: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -142,9 +179,14 @@ export function IotOtaTaskRecordForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">升级进度描述</label>
+          <label htmlFor="iot-ota-task-record-description" className="block text-xs text-slate-600 mb-1">升级进度描述</label>
           <input
             type="text"
+            id="iot-ota-task-record-description"
+            data-testid="field-description"
+            data-agent-target="iot-ota-task-record:field:description"
+            data-agent-state={formData.description ? "filled" : "empty"}
+            aria-label="升级进度描述"
             value={formData.description ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -158,6 +200,8 @@ export function IotOtaTaskRecordForm({ open, initialData, onClose, onSuccess }: 
             <button
               type="button"
               onClick={onClose}
+              data-testid="iot-ota-task-record-form-cancel"
+              data-agent-target="iot-ota-task-record:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -165,6 +209,9 @@ export function IotOtaTaskRecordForm({ open, initialData, onClose, onSuccess }: 
             <button
               type="submit"
               disabled={loading}
+              data-testid="iot-ota-task-record-form-submit"
+              data-agent-target="iot-ota-task-record:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

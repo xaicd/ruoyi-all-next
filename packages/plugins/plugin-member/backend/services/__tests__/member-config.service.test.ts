@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MemberConfigService } from "../member-config.service"
 
 describe("MemberConfigService", () => {
-  it("should create and query MemberConfig（源框架导入）", async () => {
+  it("should create and query 会员配置", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MemberConfigService.create({
         point_trade_deduct_enable: true,
@@ -21,7 +21,7 @@ describe("MemberConfigService", () => {
   
       const updated = await MemberConfigService.update(created.id, {
         id: created.id,
-        point_trade_deduct_enable: "更新MemberConfig（源框架导入）",
+        point_trade_deduct_enable: "更新会员配置",
       } as any)
       expect(updated).toBeDefined()
   

@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesWmReturnIssueDetailService } from "../mes-wm-return-issue-detail.service"
 
 describe("MesWmReturnIssueDetailService", () => {
-  it("should create and query MesWmReturnIssueDetail（源框架导入）", async () => {
+  it("should create and query MES 生产退料明细", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmReturnIssueDetailService.create({
         issue_id: 1,
@@ -21,7 +21,7 @@ describe("MesWmReturnIssueDetailService", () => {
   
       const updated = await MesWmReturnIssueDetailService.update(created.id, {
         id: created.id,
-        issue_id: "更新MesWmReturnIssueDetail（源框架导入）",
+        issue_id: "更新MES 生产退料明细",
       } as any)
       expect(updated).toBeDefined()
   

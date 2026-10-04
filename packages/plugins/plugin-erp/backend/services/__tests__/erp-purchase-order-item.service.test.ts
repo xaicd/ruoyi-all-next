@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ErpPurchaseOrderItemService } from "../erp-purchase-order-item.service"
 
 describe("ErpPurchaseOrderItemService", () => {
-  it("should create and query ErpPurchaseOrderItem（源框架导入）", async () => {
+  it("should create and query ERP 采购订单项", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ErpPurchaseOrderItemService.create({
         order_id: 1,
@@ -21,7 +21,7 @@ describe("ErpPurchaseOrderItemService", () => {
   
       const updated = await ErpPurchaseOrderItemService.update(created.id, {
         id: created.id,
-        order_id: "更新ErpPurchaseOrderItem（源框架导入）",
+        order_id: "更新ERP 采购订单项",
       } as any)
       expect(updated).toBeDefined()
   

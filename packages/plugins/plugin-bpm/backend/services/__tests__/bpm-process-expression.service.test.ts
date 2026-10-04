@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { BpmProcessExpressionService } from "../bpm-process-expression.service"
 
 describe("BpmProcessExpressionService", () => {
-  it("should create and query BpmProcessExpression（源框架导入）", async () => {
+  it("should create and query BPM 流程表达式", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await BpmProcessExpressionService.create({
-        name: "测试BpmProcessExpression（源框架导入）",
+        name: "测试BPM 流程表达式",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("BpmProcessExpressionService", () => {
   
       const updated = await BpmProcessExpressionService.update(created.id, {
         id: created.id,
-        name: "更新BpmProcessExpression（源框架导入）",
+        name: "更新BPM 流程表达式",
       } as any)
       expect(updated).toBeDefined()
   

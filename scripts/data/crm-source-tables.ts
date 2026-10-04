@@ -6,12 +6,12 @@ export const CRM_TABLES: CodegenConfig[] = [
   {
     moduleName: "crm",
     className: "CrmBusiness",
-    businessName: "CrmBusiness（源框架导入）",
+    businessName: "CRM 商机",
     parentMenuId: "crm-dir",
     permissionPrefix: "crm:crm_business",
     table: {
       name: "crm_business",
-      comment: "CrmBusiness（源框架导入）",
+      comment: "CRM 商机",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"商机名称","nullableInferred":true},
@@ -41,12 +41,12 @@ export const CRM_TABLES: CodegenConfig[] = [
   {
     moduleName: "crm",
     className: "CrmBusinessProduct",
-    businessName: "CrmBusinessProduct（源框架导入）",
+    businessName: "CRM 商机产品关联表 DOCrmBusinessDO : CrmBusinessProductDO = 1 : N",
     parentMenuId: "crm-dir",
     permissionPrefix: "crm:crm_business_product",
     table: {
       name: "crm_business_product",
-      comment: "CrmBusinessProduct（源框架导入）",
+      comment: "CRM 商机产品关联表 DOCrmBusinessDO : CrmBusinessProductDO = 1 : N",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"主键","isPk":true,"nullableInferred":true},
         {"name":"business_id","type":"bigint","tsType":"number","nullable":true,"comment":"商机编号","nullableInferred":true},
@@ -67,12 +67,12 @@ export const CRM_TABLES: CodegenConfig[] = [
   {
     moduleName: "crm",
     className: "CrmBusinessStatus",
-    businessName: "CrmBusinessStatus（源框架导入）",
+    businessName: "CRM 商机状态 DO注意，它是个配置表",
     parentMenuId: "crm-dir",
     permissionPrefix: "crm:crm_business_status",
     table: {
       name: "crm_business_status",
-      comment: "CrmBusinessStatus（源框架导入）",
+      comment: "CRM 商机状态 DO注意，它是个配置表",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"主键","isPk":true,"nullableInferred":true},
         {"name":"type_id","type":"bigint","tsType":"number","nullable":true,"comment":"状态类型编号","nullableInferred":true},
@@ -91,12 +91,12 @@ export const CRM_TABLES: CodegenConfig[] = [
   {
     moduleName: "crm",
     className: "CrmBusinessStatusType",
-    businessName: "CrmBusinessStatusType（源框架导入）",
+    businessName: "CRM 商机状态组 DO注意，它是个配置表",
     parentMenuId: "crm-dir",
     permissionPrefix: "crm:crm_business_status_type",
     table: {
       name: "crm_business_status_type",
-      comment: "CrmBusinessStatusType（源框架导入）",
+      comment: "CRM 商机状态组 DO注意，它是个配置表",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"主键","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"状态类型名","nullableInferred":true},
@@ -113,12 +113,12 @@ export const CRM_TABLES: CodegenConfig[] = [
   {
     moduleName: "crm",
     className: "CrmClue",
-    businessName: "CrmClue（源框架导入）",
+    businessName: "CRM 线索",
     parentMenuId: "crm-dir",
     permissionPrefix: "crm:crm_clue",
     table: {
       name: "crm_clue",
-      comment: "CrmClue（源框架导入）",
+      comment: "CRM 线索",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号，主键自增","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"线索名称","nullableInferred":true},
@@ -152,12 +152,12 @@ export const CRM_TABLES: CodegenConfig[] = [
   {
     moduleName: "crm",
     className: "CrmContact",
-    businessName: "CrmContact（源框架导入）",
+    businessName: "CRM 联系人",
     parentMenuId: "crm-dir",
     permissionPrefix: "crm:crm_contact",
     table: {
       name: "crm_contact",
-      comment: "CrmContact（源框架导入）",
+      comment: "CRM 联系人",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"主键","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"联系人姓名","nullableInferred":true},
@@ -190,12 +190,12 @@ export const CRM_TABLES: CodegenConfig[] = [
   {
     moduleName: "crm",
     className: "CrmContactBusiness",
-    businessName: "CrmContactBusiness（源框架导入）",
+    businessName: "CRM 联系人与商机的关联",
     parentMenuId: "crm-dir",
     permissionPrefix: "crm:crm_contact_business",
     table: {
       name: "crm_contact_business",
-      comment: "CrmContactBusiness（源框架导入）",
+      comment: "CRM 联系人与商机的关联",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"主键","isPk":true,"nullableInferred":true},
         {"name":"contact_id","type":"bigint","tsType":"number","nullable":true,"comment":"联系人编号","nullableInferred":true},
@@ -212,12 +212,12 @@ export const CRM_TABLES: CodegenConfig[] = [
   {
     moduleName: "crm",
     className: "CrmContract",
-    businessName: "CrmContract（源框架导入）",
+    businessName: "CRM 合同",
     parentMenuId: "crm-dir",
     permissionPrefix: "crm:crm_contract",
     table: {
       name: "crm_contract",
-      comment: "CrmContract（源框架导入）",
+      comment: "CRM 合同",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"合同编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"合同名称","nullableInferred":true},
@@ -249,12 +249,12 @@ export const CRM_TABLES: CodegenConfig[] = [
   {
     moduleName: "crm",
     className: "CrmContractConfig",
-    businessName: "CrmContractConfig（源框架导入）",
+    businessName: "编号",
     parentMenuId: "crm-dir",
     permissionPrefix: "crm:crm_contract_config",
     table: {
       name: "crm_contract_config",
-      comment: "CrmContractConfig（源框架导入）",
+      comment: "编号",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"notify_enabled","type":"boolean","tsType":"boolean","nullable":true,"comment":"是否开启提前提醒","nullableInferred":true},
@@ -271,12 +271,12 @@ export const CRM_TABLES: CodegenConfig[] = [
   {
     moduleName: "crm",
     className: "CrmContractProduct",
-    businessName: "CrmContractProduct（源框架导入）",
+    businessName: "CRM 合同产品关联表",
     parentMenuId: "crm-dir",
     permissionPrefix: "crm:crm_contract_product",
     table: {
       name: "crm_contract_product",
-      comment: "CrmContractProduct（源框架导入）",
+      comment: "CRM 合同产品关联表",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"主键","isPk":true,"nullableInferred":true},
         {"name":"contract_id","type":"bigint","tsType":"number","nullable":true,"comment":"合同编号","nullableInferred":true},
@@ -297,12 +297,12 @@ export const CRM_TABLES: CodegenConfig[] = [
   {
     moduleName: "crm",
     className: "CrmCustomer",
-    businessName: "CrmCustomer（源框架导入）",
+    businessName: "CRM 客户",
     parentMenuId: "crm-dir",
     permissionPrefix: "crm:crm_customer",
     table: {
       name: "crm_customer",
-      comment: "CrmCustomer（源框架导入）",
+      comment: "CRM 客户",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"客户名称","nullableInferred":true},
@@ -337,12 +337,12 @@ export const CRM_TABLES: CodegenConfig[] = [
   {
     moduleName: "crm",
     className: "CrmCustomerLimitConfig",
-    businessName: "CrmCustomerLimitConfig（源框架导入）",
+    businessName: "客户限制配置",
     parentMenuId: "crm-dir",
     permissionPrefix: "crm:crm_customer_limit_config",
     table: {
       name: "crm_customer_limit_config",
-      comment: "CrmCustomerLimitConfig（源框架导入）",
+      comment: "客户限制配置",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"type","type":"int","tsType":"number","nullable":true,"comment":"规则类型","nullableInferred":true},
@@ -362,12 +362,12 @@ export const CRM_TABLES: CodegenConfig[] = [
   {
     moduleName: "crm",
     className: "CrmCustomerPoolConfig",
-    businessName: "CrmCustomerPoolConfig（源框架导入）",
+    businessName: "客户公海配置",
     parentMenuId: "crm-dir",
     permissionPrefix: "crm:crm_customer_pool_config",
     table: {
       name: "crm_customer_pool_config",
-      comment: "CrmCustomerPoolConfig（源框架导入）",
+      comment: "客户公海配置",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"enabled","type":"boolean","tsType":"boolean","nullable":true,"comment":"是否启用客户公海","nullableInferred":true},
@@ -387,12 +387,12 @@ export const CRM_TABLES: CodegenConfig[] = [
   {
     moduleName: "crm",
     className: "CrmFollowUpRecord",
-    businessName: "CrmFollowUpRecord（源框架导入）",
+    businessName: "跟进记录 DO用于记录客户、联系人的每一次跟进",
     parentMenuId: "crm-dir",
     permissionPrefix: "crm:crm_follow_up_record",
     table: {
       name: "crm_follow_up_record",
-      comment: "CrmFollowUpRecord（源框架导入）",
+      comment: "跟进记录 DO用于记录客户、联系人的每一次跟进",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"biz_type","type":"int","tsType":"number","nullable":true,"comment":"数据类型","nullableInferred":true},
@@ -416,12 +416,12 @@ export const CRM_TABLES: CodegenConfig[] = [
   {
     moduleName: "crm",
     className: "CrmOwnerRecord",
-    businessName: "CrmOwnerRecord（源框架导入）",
+    businessName: "CRM 负责人变更记录",
     parentMenuId: "crm-dir",
     permissionPrefix: "crm:crm_owner_record",
     table: {
       name: "crm_owner_record",
-      comment: "CrmOwnerRecord（源框架导入）",
+      comment: "CRM 负责人变更记录",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"biz_type","type":"int","tsType":"number","nullable":true,"comment":"CRM 业务类型","nullableInferred":true},
@@ -440,12 +440,12 @@ export const CRM_TABLES: CodegenConfig[] = [
   {
     moduleName: "crm",
     className: "CrmPerformanceConfig",
-    businessName: "CrmPerformanceConfig（源框架导入）",
+    businessName: "CRM 业绩目标",
     parentMenuId: "crm-dir",
     permissionPrefix: "crm:crm_performance_config",
     table: {
       name: "crm_performance_config",
-      comment: "CrmPerformanceConfig（源框架导入）",
+      comment: "CRM 业绩目标",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"biz_type","type":"int","tsType":"number","nullable":true,"comment":"目标类型","nullableInferred":true},
@@ -477,12 +477,12 @@ export const CRM_TABLES: CodegenConfig[] = [
   {
     moduleName: "crm",
     className: "CrmPermission",
-    businessName: "CrmPermission（源框架导入）",
+    businessName: "CRM 数据权限",
     parentMenuId: "crm-dir",
     permissionPrefix: "crm:crm_permission",
     table: {
       name: "crm_permission",
-      comment: "CrmPermission（源框架导入）",
+      comment: "CRM 数据权限",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号，主键自增","isPk":true,"nullableInferred":true},
         {"name":"biz_type","type":"int","tsType":"number","nullable":true,"comment":"数据类型","nullableInferred":true},
@@ -501,12 +501,12 @@ export const CRM_TABLES: CodegenConfig[] = [
   {
     moduleName: "crm",
     className: "CrmProduct",
-    businessName: "CrmProduct（源框架导入）",
+    businessName: "CRM 产品",
     parentMenuId: "crm-dir",
     permissionPrefix: "crm:crm_product",
     table: {
       name: "crm_product",
-      comment: "CrmProduct（源框架导入）",
+      comment: "CRM 产品",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"产品名称","nullableInferred":true},
@@ -529,12 +529,12 @@ export const CRM_TABLES: CodegenConfig[] = [
   {
     moduleName: "crm",
     className: "CrmProductCategory",
-    businessName: "CrmProductCategory（源框架导入）",
+    businessName: "产品分类",
     parentMenuId: "crm-dir",
     permissionPrefix: "crm:crm_product_category",
     table: {
       name: "crm_product_category",
-      comment: "CrmProductCategory（源框架导入）",
+      comment: "产品分类",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"分类编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"分类名称","nullableInferred":true},
@@ -551,12 +551,12 @@ export const CRM_TABLES: CodegenConfig[] = [
   {
     moduleName: "crm",
     className: "CrmReceivable",
-    businessName: "CrmReceivable（源框架导入）",
+    businessName: "回款",
     parentMenuId: "crm-dir",
     permissionPrefix: "crm:crm_receivable",
     table: {
       name: "crm_receivable",
-      comment: "CrmReceivable（源框架导入）",
+      comment: "回款",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"ID","isPk":true,"nullableInferred":true},
         {"name":"no","type":"varchar","tsType":"string","nullable":true,"comment":"回款编号","nullableInferred":true},
@@ -582,12 +582,12 @@ export const CRM_TABLES: CodegenConfig[] = [
   {
     moduleName: "crm",
     className: "CrmReceivablePlan",
-    businessName: "CrmReceivablePlan（源框架导入）",
+    businessName: "CRM 回款计划",
     parentMenuId: "crm-dir",
     permissionPrefix: "crm:crm_receivable_plan",
     table: {
       name: "crm_receivable_plan",
-      comment: "CrmReceivablePlan（源框架导入）",
+      comment: "CRM 回款计划",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"period","type":"int","tsType":"number","nullable":true,"comment":"期数","nullableInferred":true},

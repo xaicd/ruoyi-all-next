@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesWmMiscReceiptDetail（源框架导入） (MesWmMiscReceiptDetail)
+-- Auto-generated RBAC & Menu Migration for MES 杂项入库明细 (MesWmMiscReceiptDetail)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-wm-misc-receipt-detail',
   'mes-dir',
-  'MesWmMiscReceiptDetail（源框架导入）管理',
+  'MES 杂项入库明细管理',
   '/admin/mes/mes-wm-misc-receipt-detail',
   'mes/mes-wm-misc-receipt-detail/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-wm-misc-receipt-detail-query',  'menu-mes-wm-misc-receipt-detail', '查询MesWmMiscReceiptDetail（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_misc_receipt_detail:query',  1, NOW(), NOW()),
-('menu-mes-wm-misc-receipt-detail-create', 'menu-mes-wm-misc-receipt-detail', '新增MesWmMiscReceiptDetail（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_misc_receipt_detail:create', 2, NOW(), NOW()),
-('menu-mes-wm-misc-receipt-detail-update', 'menu-mes-wm-misc-receipt-detail', '修改MesWmMiscReceiptDetail（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_misc_receipt_detail:update', 3, NOW(), NOW()),
-('menu-mes-wm-misc-receipt-detail-delete', 'menu-mes-wm-misc-receipt-detail', '删除MesWmMiscReceiptDetail（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_misc_receipt_detail:delete', 4, NOW(), NOW())
+('menu-mes-wm-misc-receipt-detail-query',  'menu-mes-wm-misc-receipt-detail', '查询MES 杂项入库明细', 'BUTTON', 'ACTIVE', 'mes:mes_wm_misc_receipt_detail:query',  1, NOW(), NOW()),
+('menu-mes-wm-misc-receipt-detail-create', 'menu-mes-wm-misc-receipt-detail', '新增MES 杂项入库明细', 'BUTTON', 'ACTIVE', 'mes:mes_wm_misc_receipt_detail:create', 2, NOW(), NOW()),
+('menu-mes-wm-misc-receipt-detail-update', 'menu-mes-wm-misc-receipt-detail', '修改MES 杂项入库明细', 'BUTTON', 'ACTIVE', 'mes:mes_wm_misc_receipt_detail:update', 3, NOW(), NOW()),
+('menu-mes-wm-misc-receipt-detail-delete', 'menu-mes-wm-misc-receipt-detail', '删除MES 杂项入库明细', 'BUTTON', 'ACTIVE', 'mes:mes_wm_misc_receipt_detail:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

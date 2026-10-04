@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for CrmCustomer（源框架导入） (CrmCustomer)
+-- Auto-generated RBAC & Menu Migration for CRM 客户 (CrmCustomer)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-crm-customer',
   'crm-dir',
-  'CrmCustomer（源框架导入）管理',
+  'CRM 客户管理',
   '/admin/crm/crm-customer',
   'crm/crm-customer/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-crm-customer-query',  'menu-crm-customer', '查询CrmCustomer（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_customer:query',  1, NOW(), NOW()),
-('menu-crm-customer-create', 'menu-crm-customer', '新增CrmCustomer（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_customer:create', 2, NOW(), NOW()),
-('menu-crm-customer-update', 'menu-crm-customer', '修改CrmCustomer（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_customer:update', 3, NOW(), NOW()),
-('menu-crm-customer-delete', 'menu-crm-customer', '删除CrmCustomer（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_customer:delete', 4, NOW(), NOW())
+('menu-crm-customer-query',  'menu-crm-customer', '查询CRM 客户', 'BUTTON', 'ACTIVE', 'crm:crm_customer:query',  1, NOW(), NOW()),
+('menu-crm-customer-create', 'menu-crm-customer', '新增CRM 客户', 'BUTTON', 'ACTIVE', 'crm:crm_customer:create', 2, NOW(), NOW()),
+('menu-crm-customer-update', 'menu-crm-customer', '修改CRM 客户', 'BUTTON', 'ACTIVE', 'crm:crm_customer:update', 3, NOW(), NOW()),
+('menu-crm-customer-delete', 'menu-crm-customer', '删除CRM 客户', 'BUTTON', 'ACTIVE', 'crm:crm_customer:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

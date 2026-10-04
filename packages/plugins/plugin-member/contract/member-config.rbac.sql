@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MemberConfig（源框架导入） (MemberConfig)
+-- Auto-generated RBAC & Menu Migration for 会员配置 (MemberConfig)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-member-config',
   'member-dir',
-  'MemberConfig（源框架导入）管理',
+  '会员配置管理',
   '/admin/member/member-config',
   'member/member-config/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-member-config-query',  'menu-member-config', '查询MemberConfig（源框架导入）', 'BUTTON', 'ACTIVE', 'member:member_config:query',  1, NOW(), NOW()),
-('menu-member-config-create', 'menu-member-config', '新增MemberConfig（源框架导入）', 'BUTTON', 'ACTIVE', 'member:member_config:create', 2, NOW(), NOW()),
-('menu-member-config-update', 'menu-member-config', '修改MemberConfig（源框架导入）', 'BUTTON', 'ACTIVE', 'member:member_config:update', 3, NOW(), NOW()),
-('menu-member-config-delete', 'menu-member-config', '删除MemberConfig（源框架导入）', 'BUTTON', 'ACTIVE', 'member:member_config:delete', 4, NOW(), NOW())
+('menu-member-config-query',  'menu-member-config', '查询会员配置', 'BUTTON', 'ACTIVE', 'member:member_config:query',  1, NOW(), NOW()),
+('menu-member-config-create', 'menu-member-config', '新增会员配置', 'BUTTON', 'ACTIVE', 'member:member_config:create', 2, NOW(), NOW()),
+('menu-member-config-update', 'menu-member-config', '修改会员配置', 'BUTTON', 'ACTIVE', 'member:member_config:update', 3, NOW(), NOW()),
+('menu-member-config-delete', 'menu-member-config', '删除会员配置', 'BUTTON', 'ACTIVE', 'member:member_config:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

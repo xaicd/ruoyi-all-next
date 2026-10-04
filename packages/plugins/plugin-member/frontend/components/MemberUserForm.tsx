@@ -68,24 +68,36 @@ export function MemberUserForm({ open, initialData, onClose, onSuccess }: Member
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="member-user-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑会员用户 DOuk_mobile 索引：基于 字段" : "新增会员用户 DOuk_mobile 索引：基于 字段"}
+        data-testid="member-user-form"
+        data-agent-scope="member-user:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MemberUser（源框架导入）" : "新增MemberUser（源框架导入）"}
+            {isEdit ? "编辑会员用户 DOuk_mobile 索引：基于 字段" : "新增会员用户 DOuk_mobile 索引：基于 字段"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="member-user-form-close" data-agent-target="member-user:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="member-user-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">手机</label>
+          <label htmlFor="member-user-mobile" className="block text-xs text-slate-600 mb-1">手机</label>
           <input
             type="text"
+            id="member-user-mobile"
+            data-testid="field-mobile"
+            data-agent-target="member-user:field:mobile"
+            data-agent-state={formData.mobile ? "filled" : "empty"}
+            aria-label="手机"
             value={formData.mobile ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, mobile: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -95,9 +107,14 @@ export function MemberUserForm({ open, initialData, onClose, onSuccess }: Member
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">邮箱</label>
+          <label htmlFor="member-user-email" className="block text-xs text-slate-600 mb-1">邮箱</label>
           <input
             type="text"
+            id="member-user-email"
+            data-testid="field-email"
+            data-agent-target="member-user:field:email"
+            data-agent-state={formData.email ? "filled" : "empty"}
+            aria-label="邮箱"
             value={formData.email ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -107,9 +124,14 @@ export function MemberUserForm({ open, initialData, onClose, onSuccess }: Member
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">加密后的密码</label>
+          <label htmlFor="member-user-password" className="block text-xs text-slate-600 mb-1">加密后的密码</label>
           <input
             type="text"
+            id="member-user-password"
+            data-testid="field-password"
+            data-agent-target="member-user:field:password"
+            data-agent-state={formData.password ? "filled" : "empty"}
+            aria-label="加密后的密码"
             value={formData.password ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, password: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -119,9 +141,14 @@ export function MemberUserForm({ open, initialData, onClose, onSuccess }: Member
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">帐号状态</label>
+          <label htmlFor="member-user-status" className="block text-xs text-slate-600 mb-1">帐号状态</label>
           <input
             type="number"
+            id="member-user-status"
+            data-testid="field-status"
+            data-agent-target="member-user:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="帐号状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -131,9 +158,14 @@ export function MemberUserForm({ open, initialData, onClose, onSuccess }: Member
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">注册 IP</label>
+          <label htmlFor="member-user-register_ip" className="block text-xs text-slate-600 mb-1">注册 IP</label>
           <input
             type="text"
+            id="member-user-register_ip"
+            data-testid="field-register_ip"
+            data-agent-target="member-user:field:register_ip"
+            data-agent-state={formData.register_ip ? "filled" : "empty"}
+            aria-label="注册 IP"
             value={formData.register_ip ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, register_ip: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -143,9 +175,14 @@ export function MemberUserForm({ open, initialData, onClose, onSuccess }: Member
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">注册终端</label>
+          <label htmlFor="member-user-register_terminal" className="block text-xs text-slate-600 mb-1">注册终端</label>
           <input
             type="number"
+            id="member-user-register_terminal"
+            data-testid="field-register_terminal"
+            data-agent-target="member-user:field:register_terminal"
+            data-agent-state={formData.register_terminal == null || formData.register_terminal === "" ? "empty" : "filled"}
+            aria-label="注册终端"
             value={formData.register_terminal != null ? String(formData.register_terminal) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, register_terminal: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -155,9 +192,14 @@ export function MemberUserForm({ open, initialData, onClose, onSuccess }: Member
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最后登录IP</label>
+          <label htmlFor="member-user-login_ip" className="block text-xs text-slate-600 mb-1">最后登录IP</label>
           <input
             type="text"
+            id="member-user-login_ip"
+            data-testid="field-login_ip"
+            data-agent-target="member-user:field:login_ip"
+            data-agent-state={formData.login_ip ? "filled" : "empty"}
+            aria-label="最后登录IP"
             value={formData.login_ip ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, login_ip: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -167,9 +209,14 @@ export function MemberUserForm({ open, initialData, onClose, onSuccess }: Member
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最后登录时间</label>
+          <label htmlFor="member-user-login_date" className="block text-xs text-slate-600 mb-1">最后登录时间</label>
           <input
             type="text"
+            id="member-user-login_date"
+            data-testid="field-login_date"
+            data-agent-target="member-user:field:login_date"
+            data-agent-state={formData.login_date ? "filled" : "empty"}
+            aria-label="最后登录时间"
             value={formData.login_date ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, login_date: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -179,9 +226,14 @@ export function MemberUserForm({ open, initialData, onClose, onSuccess }: Member
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户昵称</label>
+          <label htmlFor="member-user-nickname" className="block text-xs text-slate-600 mb-1">用户昵称</label>
           <input
             type="text"
+            id="member-user-nickname"
+            data-testid="field-nickname"
+            data-agent-target="member-user:field:nickname"
+            data-agent-state={formData.nickname ? "filled" : "empty"}
+            aria-label="用户昵称"
             value={formData.nickname ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, nickname: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -191,9 +243,14 @@ export function MemberUserForm({ open, initialData, onClose, onSuccess }: Member
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户头像</label>
+          <label htmlFor="member-user-avatar" className="block text-xs text-slate-600 mb-1">用户头像</label>
           <input
             type="text"
+            id="member-user-avatar"
+            data-testid="field-avatar"
+            data-agent-target="member-user:field:avatar"
+            data-agent-state={formData.avatar ? "filled" : "empty"}
+            aria-label="用户头像"
             value={formData.avatar ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, avatar: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -203,9 +260,14 @@ export function MemberUserForm({ open, initialData, onClose, onSuccess }: Member
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">真实名字</label>
+          <label htmlFor="member-user-name" className="block text-xs text-slate-600 mb-1">真实名字</label>
           <input
             type="text"
+            id="member-user-name"
+            data-testid="field-name"
+            data-agent-target="member-user:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="真实名字"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -215,9 +277,14 @@ export function MemberUserForm({ open, initialData, onClose, onSuccess }: Member
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">性别</label>
+          <label htmlFor="member-user-sex" className="block text-xs text-slate-600 mb-1">性别</label>
           <input
             type="number"
+            id="member-user-sex"
+            data-testid="field-sex"
+            data-agent-target="member-user:field:sex"
+            data-agent-state={formData.sex == null || formData.sex === "" ? "empty" : "filled"}
+            aria-label="性别"
             value={formData.sex != null ? String(formData.sex) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sex: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -227,9 +294,14 @@ export function MemberUserForm({ open, initialData, onClose, onSuccess }: Member
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">出生日期</label>
+          <label htmlFor="member-user-birthday" className="block text-xs text-slate-600 mb-1">出生日期</label>
           <input
             type="text"
+            id="member-user-birthday"
+            data-testid="field-birthday"
+            data-agent-target="member-user:field:birthday"
+            data-agent-state={formData.birthday ? "filled" : "empty"}
+            aria-label="出生日期"
             value={formData.birthday ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, birthday: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -239,9 +311,14 @@ export function MemberUserForm({ open, initialData, onClose, onSuccess }: Member
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">所在地</label>
+          <label htmlFor="member-user-area_id" className="block text-xs text-slate-600 mb-1">所在地</label>
           <input
             type="number"
+            id="member-user-area_id"
+            data-testid="field-area_id"
+            data-agent-target="member-user:field:area_id"
+            data-agent-state={formData.area_id == null || formData.area_id === "" ? "empty" : "filled"}
+            aria-label="所在地"
             value={formData.area_id != null ? String(formData.area_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, area_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -251,9 +328,14 @@ export function MemberUserForm({ open, initialData, onClose, onSuccess }: Member
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户备注</label>
+          <label htmlFor="member-user-mark" className="block text-xs text-slate-600 mb-1">用户备注</label>
           <input
             type="text"
+            id="member-user-mark"
+            data-testid="field-mark"
+            data-agent-target="member-user:field:mark"
+            data-agent-state={formData.mark ? "filled" : "empty"}
+            aria-label="用户备注"
             value={formData.mark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, mark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -263,9 +345,14 @@ export function MemberUserForm({ open, initialData, onClose, onSuccess }: Member
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">积分</label>
+          <label htmlFor="member-user-point" className="block text-xs text-slate-600 mb-1">积分</label>
           <input
             type="number"
+            id="member-user-point"
+            data-testid="field-point"
+            data-agent-target="member-user:field:point"
+            data-agent-state={formData.point == null || formData.point === "" ? "empty" : "filled"}
+            aria-label="积分"
             value={formData.point != null ? String(formData.point) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, point: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -275,9 +362,14 @@ export function MemberUserForm({ open, initialData, onClose, onSuccess }: Member
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">会员标签列表，以逗号分隔</label>
+          <label htmlFor="member-user-tag_ids" className="block text-xs text-slate-600 mb-1">会员标签列表，以逗号分隔</label>
           <input
             type="text"
+            id="member-user-tag_ids"
+            data-testid="field-tag_ids"
+            data-agent-target="member-user:field:tag_ids"
+            data-agent-state={formData.tag_ids ? "filled" : "empty"}
+            aria-label="会员标签列表，以逗号分隔"
             value={formData.tag_ids ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, tag_ids: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -287,9 +379,14 @@ export function MemberUserForm({ open, initialData, onClose, onSuccess }: Member
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">会员级别编号</label>
+          <label htmlFor="member-user-level_id" className="block text-xs text-slate-600 mb-1">会员级别编号</label>
           <input
             type="number"
+            id="member-user-level_id"
+            data-testid="field-level_id"
+            data-agent-target="member-user:field:level_id"
+            data-agent-state={formData.level_id == null || formData.level_id === "" ? "empty" : "filled"}
+            aria-label="会员级别编号"
             value={formData.level_id != null ? String(formData.level_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, level_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -299,9 +396,14 @@ export function MemberUserForm({ open, initialData, onClose, onSuccess }: Member
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">会员经验</label>
+          <label htmlFor="member-user-experience" className="block text-xs text-slate-600 mb-1">会员经验</label>
           <input
             type="number"
+            id="member-user-experience"
+            data-testid="field-experience"
+            data-agent-target="member-user:field:experience"
+            data-agent-state={formData.experience == null || formData.experience === "" ? "empty" : "filled"}
+            aria-label="会员经验"
             value={formData.experience != null ? String(formData.experience) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, experience: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -311,9 +413,14 @@ export function MemberUserForm({ open, initialData, onClose, onSuccess }: Member
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户分组编号</label>
+          <label htmlFor="member-user-group_id" className="block text-xs text-slate-600 mb-1">用户分组编号</label>
           <input
             type="number"
+            id="member-user-group_id"
+            data-testid="field-group_id"
+            data-agent-target="member-user:field:group_id"
+            data-agent-state={formData.group_id == null || formData.group_id === "" ? "empty" : "filled"}
+            aria-label="用户分组编号"
             value={formData.group_id != null ? String(formData.group_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, group_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -327,6 +434,8 @@ export function MemberUserForm({ open, initialData, onClose, onSuccess }: Member
             <button
               type="button"
               onClick={onClose}
+              data-testid="member-user-form-cancel"
+              data-agent-target="member-user:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -334,6 +443,9 @@ export function MemberUserForm({ open, initialData, onClose, onSuccess }: Member
             <button
               type="submit"
               disabled={loading}
+              data-testid="member-user-form-submit"
+              data-agent-target="member-user:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

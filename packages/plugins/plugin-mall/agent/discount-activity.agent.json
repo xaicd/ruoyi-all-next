@@ -1,0 +1,222 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "DiscountActivity",
+  "kebab": "discount-activity",
+  "businessName": "限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一个活动；",
+  "permissionPrefix": "mall:discount_activity",
+  "page": {
+    "route": "/admin/mall/discount-activity",
+    "title": "限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一个活动；管理",
+    "titleSelector": "[data-testid=\"discount-activity-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "discount-activity",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/discount-activity",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/discount-activity/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/discount-activity"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/discount-activity/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/discount-activity/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"discount-activity-title\"]",
+    "refresh": "[data-testid=\"discount-activity-refresh\"]",
+    "createButton": "[data-testid=\"discount-activity-create\"]",
+    "searchForm": "[data-testid=\"discount-activity-search\"]",
+    "searchSubmit": "[data-testid=\"discount-activity-search-submit\"]",
+    "searchReset": "[data-testid=\"discount-activity-search-reset\"]",
+    "total": "[data-testid=\"discount-activity-total\"]",
+    "table": "[data-testid=\"discount-activity-table\"]",
+    "row": "[data-testid=\"discount-activity-row\"]",
+    "editButton": "[data-testid=\"discount-activity-edit\"]",
+    "deleteButton": "[data-testid=\"discount-activity-delete\"]",
+    "form": "[data-testid=\"discount-activity-form\"]",
+    "formError": "[data-testid=\"discount-activity-form-error\"]",
+    "formSubmit": "[data-testid=\"discount-activity-form-submit\"]",
+    "formCancel": "[data-testid=\"discount-activity-form-cancel\"]",
+    "formClose": "[data-testid=\"discount-activity-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一个活动；列表",
+    "dialogLabel": {
+      "create": "新增限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一个活动；",
+      "edit": "编辑限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一个活动；"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "活动标题",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "start_time",
+        "label": "开始时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-start_time",
+        "selector": "[data-testid=\"field-start_time\"]"
+      },
+      {
+        "name": "end_time",
+        "label": "结束时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-end_time",
+        "selector": "[data-testid=\"field-end_time\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "discount-activity",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"discount-activity\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"discount-activity-form-overlay\"]",
+      "dialog": "[data-testid=\"discount-activity-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "discount-activity:search",
+      "reset": "discount-activity:reset",
+      "refresh": "discount-activity:refresh",
+      "create": "discount-activity:create",
+      "edit": "discount-activity:edit",
+      "delete": "discount-activity:delete",
+      "submit": "discount-activity:submit",
+      "cancel": "discount-activity:cancel",
+      "close": "discount-activity:close",
+      "row": "discount-activity:row",
+      "pagination": "discount-activity:pagination",
+      "fields": {
+        "name": "discount-activity:field:name",
+        "status": "discount-activity:field:status",
+        "start_time": "discount-activity:field:start_time",
+        "end_time": "discount-activity:field:end_time",
+        "remark": "discount-activity:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.discount-activity",
+      "examples": [
+        "mall.discount-activity__List__Refresh",
+        "mall.discount-activity__ListItem__Open",
+        "mall.discount-activity__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

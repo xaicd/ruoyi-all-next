@@ -1,0 +1,276 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesWmReturnVendorDetail",
+  "kebab": "mes-wm-return-vendor-detail",
+  "businessName": "MES 供应商退货明细",
+  "permissionPrefix": "mes:mes_wm_return_vendor_detail",
+  "page": {
+    "route": "/admin/mes/mes-wm-return-vendor-detail",
+    "title": "MES 供应商退货明细管理",
+    "titleSelector": "[data-testid=\"mes-wm-return-vendor-detail-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-wm-return-vendor-detail",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-wm-return-vendor-detail",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-wm-return-vendor-detail/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-wm-return-vendor-detail"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-wm-return-vendor-detail/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-wm-return-vendor-detail/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-wm-return-vendor-detail-title\"]",
+    "refresh": "[data-testid=\"mes-wm-return-vendor-detail-refresh\"]",
+    "createButton": "[data-testid=\"mes-wm-return-vendor-detail-create\"]",
+    "searchForm": "[data-testid=\"mes-wm-return-vendor-detail-search\"]",
+    "searchSubmit": "[data-testid=\"mes-wm-return-vendor-detail-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-wm-return-vendor-detail-search-reset\"]",
+    "total": "[data-testid=\"mes-wm-return-vendor-detail-total\"]",
+    "table": "[data-testid=\"mes-wm-return-vendor-detail-table\"]",
+    "row": "[data-testid=\"mes-wm-return-vendor-detail-row\"]",
+    "editButton": "[data-testid=\"mes-wm-return-vendor-detail-edit\"]",
+    "deleteButton": "[data-testid=\"mes-wm-return-vendor-detail-delete\"]",
+    "form": "[data-testid=\"mes-wm-return-vendor-detail-form\"]",
+    "formError": "[data-testid=\"mes-wm-return-vendor-detail-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-wm-return-vendor-detail-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-wm-return-vendor-detail-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-wm-return-vendor-detail-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 供应商退货明细列表",
+    "dialogLabel": {
+      "create": "新增MES 供应商退货明细",
+      "edit": "编辑MES 供应商退货明细"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "return_id",
+        "label": "退货单 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-return_id",
+        "selector": "[data-testid=\"field-return_id\"]"
+      },
+      {
+        "name": "line_id",
+        "label": "行 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-line_id",
+        "selector": "[data-testid=\"field-line_id\"]"
+      },
+      {
+        "name": "material_stock_id",
+        "label": "库存记录 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-material_stock_id",
+        "selector": "[data-testid=\"field-material_stock_id\"]"
+      },
+      {
+        "name": "item_id",
+        "label": "物料 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-item_id",
+        "selector": "[data-testid=\"field-item_id\"]"
+      },
+      {
+        "name": "quantity",
+        "label": "退货数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-quantity",
+        "selector": "[data-testid=\"field-quantity\"]"
+      },
+      {
+        "name": "batch_id",
+        "label": "批次 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-batch_id",
+        "selector": "[data-testid=\"field-batch_id\"]"
+      },
+      {
+        "name": "batch_code",
+        "label": "批次号",
+        "type": "string",
+        "required": false,
+        "testId": "field-batch_code",
+        "selector": "[data-testid=\"field-batch_code\"]"
+      },
+      {
+        "name": "warehouse_id",
+        "label": "仓库 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-warehouse_id",
+        "selector": "[data-testid=\"field-warehouse_id\"]"
+      },
+      {
+        "name": "location_id",
+        "label": "库区 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-location_id",
+        "selector": "[data-testid=\"field-location_id\"]"
+      },
+      {
+        "name": "area_id",
+        "label": "库位 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-area_id",
+        "selector": "[data-testid=\"field-area_id\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-wm-return-vendor-detail",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-wm-return-vendor-detail\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-wm-return-vendor-detail-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-wm-return-vendor-detail-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-wm-return-vendor-detail:search",
+      "reset": "mes-wm-return-vendor-detail:reset",
+      "refresh": "mes-wm-return-vendor-detail:refresh",
+      "create": "mes-wm-return-vendor-detail:create",
+      "edit": "mes-wm-return-vendor-detail:edit",
+      "delete": "mes-wm-return-vendor-detail:delete",
+      "submit": "mes-wm-return-vendor-detail:submit",
+      "cancel": "mes-wm-return-vendor-detail:cancel",
+      "close": "mes-wm-return-vendor-detail:close",
+      "row": "mes-wm-return-vendor-detail:row",
+      "pagination": "mes-wm-return-vendor-detail:pagination",
+      "fields": {
+        "return_id": "mes-wm-return-vendor-detail:field:return_id",
+        "line_id": "mes-wm-return-vendor-detail:field:line_id",
+        "material_stock_id": "mes-wm-return-vendor-detail:field:material_stock_id",
+        "item_id": "mes-wm-return-vendor-detail:field:item_id",
+        "quantity": "mes-wm-return-vendor-detail:field:quantity",
+        "batch_id": "mes-wm-return-vendor-detail:field:batch_id",
+        "batch_code": "mes-wm-return-vendor-detail:field:batch_code",
+        "warehouse_id": "mes-wm-return-vendor-detail:field:warehouse_id",
+        "location_id": "mes-wm-return-vendor-detail:field:location_id",
+        "area_id": "mes-wm-return-vendor-detail:field:area_id",
+        "remark": "mes-wm-return-vendor-detail:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-wm-return-vendor-detail",
+      "examples": [
+        "mes.mes-wm-return-vendor-detail__List__Refresh",
+        "mes.mes-wm-return-vendor-detail__ListItem__Open",
+        "mes.mes-wm-return-vendor-detail__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

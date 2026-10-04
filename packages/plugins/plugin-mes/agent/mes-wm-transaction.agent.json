@@ -1,0 +1,330 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesWmTransaction",
+  "kebab": "mes-wm-transaction",
+  "businessName": "MES 库存事务流水 DO记录每一笔库存增减事件，系统自动生成，只读查询，不允许人工维护。",
+  "permissionPrefix": "mes:mes_wm_transaction",
+  "page": {
+    "route": "/admin/mes/mes-wm-transaction",
+    "title": "MES 库存事务流水 DO记录每一笔库存增减事件，系统自动生成，只读查询，不允许人工维护。管理",
+    "titleSelector": "[data-testid=\"mes-wm-transaction-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-wm-transaction",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-wm-transaction",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-wm-transaction/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-wm-transaction"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-wm-transaction/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-wm-transaction/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-wm-transaction-title\"]",
+    "refresh": "[data-testid=\"mes-wm-transaction-refresh\"]",
+    "createButton": "[data-testid=\"mes-wm-transaction-create\"]",
+    "searchForm": "[data-testid=\"mes-wm-transaction-search\"]",
+    "searchSubmit": "[data-testid=\"mes-wm-transaction-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-wm-transaction-search-reset\"]",
+    "total": "[data-testid=\"mes-wm-transaction-total\"]",
+    "table": "[data-testid=\"mes-wm-transaction-table\"]",
+    "row": "[data-testid=\"mes-wm-transaction-row\"]",
+    "editButton": "[data-testid=\"mes-wm-transaction-edit\"]",
+    "deleteButton": "[data-testid=\"mes-wm-transaction-delete\"]",
+    "form": "[data-testid=\"mes-wm-transaction-form\"]",
+    "formError": "[data-testid=\"mes-wm-transaction-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-wm-transaction-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-wm-transaction-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-wm-transaction-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 库存事务流水 DO记录每一笔库存增减事件，系统自动生成，只读查询，不允许人工维护。列表",
+    "dialogLabel": {
+      "create": "新增MES 库存事务流水 DO记录每一笔库存增减事件，系统自动生成，只读查询，不允许人工维护。",
+      "edit": "编辑MES 库存事务流水 DO记录每一笔库存增减事件，系统自动生成，只读查询，不允许人工维护。"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "type",
+        "label": "事务类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "biz_type",
+        "label": "业务类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-biz_type",
+        "selector": "[data-testid=\"field-biz_type\"]"
+      },
+      {
+        "name": "biz_id",
+        "label": "来源业务主单 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-biz_id",
+        "selector": "[data-testid=\"field-biz_id\"]"
+      },
+      {
+        "name": "biz_code",
+        "label": "来源业务单号",
+        "type": "string",
+        "required": false,
+        "testId": "field-biz_code",
+        "selector": "[data-testid=\"field-biz_code\"]"
+      },
+      {
+        "name": "biz_line_id",
+        "label": "来源业务行 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-biz_line_id",
+        "selector": "[data-testid=\"field-biz_line_id\"]"
+      },
+      {
+        "name": "material_stock_id",
+        "label": "库存记录 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-material_stock_id",
+        "selector": "[data-testid=\"field-material_stock_id\"]"
+      },
+      {
+        "name": "related_transaction_id",
+        "label": "关联的事务 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-related_transaction_id",
+        "selector": "[data-testid=\"field-related_transaction_id\"]"
+      },
+      {
+        "name": "item_id",
+        "label": "物料 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-item_id",
+        "selector": "[data-testid=\"field-item_id\"]"
+      },
+      {
+        "name": "quantity",
+        "label": "本次变动数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-quantity",
+        "selector": "[data-testid=\"field-quantity\"]"
+      },
+      {
+        "name": "batch_id",
+        "label": "批次 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-batch_id",
+        "selector": "[data-testid=\"field-batch_id\"]"
+      },
+      {
+        "name": "batch_code",
+        "label": "批次号",
+        "type": "string",
+        "required": false,
+        "testId": "field-batch_code",
+        "selector": "[data-testid=\"field-batch_code\"]"
+      },
+      {
+        "name": "warehouse_id",
+        "label": "仓库 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-warehouse_id",
+        "selector": "[data-testid=\"field-warehouse_id\"]"
+      },
+      {
+        "name": "location_id",
+        "label": "库区 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-location_id",
+        "selector": "[data-testid=\"field-location_id\"]"
+      },
+      {
+        "name": "area_id",
+        "label": "库位 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-area_id",
+        "selector": "[data-testid=\"field-area_id\"]"
+      },
+      {
+        "name": "transaction_time",
+        "label": "事务发生时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-transaction_time",
+        "selector": "[data-testid=\"field-transaction_time\"]"
+      },
+      {
+        "name": "erp_time",
+        "label": "ERP 账期",
+        "type": "string",
+        "required": false,
+        "testId": "field-erp_time",
+        "selector": "[data-testid=\"field-erp_time\"]"
+      },
+      {
+        "name": "receipt_time",
+        "label": "入库时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-receipt_time",
+        "selector": "[data-testid=\"field-receipt_time\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-wm-transaction",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-wm-transaction\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-wm-transaction-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-wm-transaction-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-wm-transaction:search",
+      "reset": "mes-wm-transaction:reset",
+      "refresh": "mes-wm-transaction:refresh",
+      "create": "mes-wm-transaction:create",
+      "edit": "mes-wm-transaction:edit",
+      "delete": "mes-wm-transaction:delete",
+      "submit": "mes-wm-transaction:submit",
+      "cancel": "mes-wm-transaction:cancel",
+      "close": "mes-wm-transaction:close",
+      "row": "mes-wm-transaction:row",
+      "pagination": "mes-wm-transaction:pagination",
+      "fields": {
+        "type": "mes-wm-transaction:field:type",
+        "biz_type": "mes-wm-transaction:field:biz_type",
+        "biz_id": "mes-wm-transaction:field:biz_id",
+        "biz_code": "mes-wm-transaction:field:biz_code",
+        "biz_line_id": "mes-wm-transaction:field:biz_line_id",
+        "material_stock_id": "mes-wm-transaction:field:material_stock_id",
+        "related_transaction_id": "mes-wm-transaction:field:related_transaction_id",
+        "item_id": "mes-wm-transaction:field:item_id",
+        "quantity": "mes-wm-transaction:field:quantity",
+        "batch_id": "mes-wm-transaction:field:batch_id",
+        "batch_code": "mes-wm-transaction:field:batch_code",
+        "warehouse_id": "mes-wm-transaction:field:warehouse_id",
+        "location_id": "mes-wm-transaction:field:location_id",
+        "area_id": "mes-wm-transaction:field:area_id",
+        "transaction_time": "mes-wm-transaction:field:transaction_time",
+        "erp_time": "mes-wm-transaction:field:erp_time",
+        "receipt_time": "mes-wm-transaction:field:receipt_time"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-wm-transaction",
+      "examples": [
+        "mes.mes-wm-transaction__List__Refresh",
+        "mes.mes-wm-transaction__ListItem__Open",
+        "mes.mes-wm-transaction__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

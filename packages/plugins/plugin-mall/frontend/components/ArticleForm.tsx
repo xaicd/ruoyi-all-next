@@ -60,24 +60,36 @@ export function ArticleForm({ open, initialData, onClose, onSuccess }: ArticleFo
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="article-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑文章管理" : "新增文章管理"}
+        data-testid="article-form"
+        data-agent-scope="article:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑Article（源框架导入）" : "新增Article（源框架导入）"}
+            {isEdit ? "编辑文章管理" : "新增文章管理"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="article-form-close" data-agent-target="article:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="article-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">分类编号 ArticleCategoryDO#id</label>
+          <label htmlFor="article-category_id" className="block text-xs text-slate-600 mb-1">分类编号 ArticleCategoryDO#id</label>
           <input
             type="number"
+            id="article-category_id"
+            data-testid="field-category_id"
+            data-agent-target="article:field:category_id"
+            data-agent-state={formData.category_id == null || formData.category_id === "" ? "empty" : "filled"}
+            aria-label="分类编号 ArticleCategoryDO#id"
             value={formData.category_id != null ? String(formData.category_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, category_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -87,9 +99,14 @@ export function ArticleForm({ open, initialData, onClose, onSuccess }: ArticleFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">关联商品编号 ProductSpuDO#id</label>
+          <label htmlFor="article-spu_id" className="block text-xs text-slate-600 mb-1">关联商品编号 ProductSpuDO#id</label>
           <input
             type="number"
+            id="article-spu_id"
+            data-testid="field-spu_id"
+            data-agent-target="article:field:spu_id"
+            data-agent-state={formData.spu_id == null || formData.spu_id === "" ? "empty" : "filled"}
+            aria-label="关联商品编号 ProductSpuDO#id"
             value={formData.spu_id != null ? String(formData.spu_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, spu_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -99,9 +116,14 @@ export function ArticleForm({ open, initialData, onClose, onSuccess }: ArticleFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">文章标题</label>
+          <label htmlFor="article-title" className="block text-xs text-slate-600 mb-1">文章标题</label>
           <input
             type="text"
+            id="article-title"
+            data-testid="field-title"
+            data-agent-target="article:field:title"
+            data-agent-state={formData.title ? "filled" : "empty"}
+            aria-label="文章标题"
             value={formData.title ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -111,9 +133,14 @@ export function ArticleForm({ open, initialData, onClose, onSuccess }: ArticleFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">文章作者</label>
+          <label htmlFor="article-author" className="block text-xs text-slate-600 mb-1">文章作者</label>
           <input
             type="text"
+            id="article-author"
+            data-testid="field-author"
+            data-agent-target="article:field:author"
+            data-agent-state={formData.author ? "filled" : "empty"}
+            aria-label="文章作者"
             value={formData.author ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, author: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -123,9 +150,14 @@ export function ArticleForm({ open, initialData, onClose, onSuccess }: ArticleFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">文章封面图片地址</label>
+          <label htmlFor="article-pic_url" className="block text-xs text-slate-600 mb-1">文章封面图片地址</label>
           <input
             type="text"
+            id="article-pic_url"
+            data-testid="field-pic_url"
+            data-agent-target="article:field:pic_url"
+            data-agent-state={formData.pic_url ? "filled" : "empty"}
+            aria-label="文章封面图片地址"
             value={formData.pic_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pic_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -135,9 +167,14 @@ export function ArticleForm({ open, initialData, onClose, onSuccess }: ArticleFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">文章简介</label>
+          <label htmlFor="article-introduction" className="block text-xs text-slate-600 mb-1">文章简介</label>
           <input
             type="text"
+            id="article-introduction"
+            data-testid="field-introduction"
+            data-agent-target="article:field:introduction"
+            data-agent-state={formData.introduction ? "filled" : "empty"}
+            aria-label="文章简介"
             value={formData.introduction ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, introduction: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -147,9 +184,14 @@ export function ArticleForm({ open, initialData, onClose, onSuccess }: ArticleFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">浏览次数</label>
+          <label htmlFor="article-browse_count" className="block text-xs text-slate-600 mb-1">浏览次数</label>
           <input
             type="number"
+            id="article-browse_count"
+            data-testid="field-browse_count"
+            data-agent-target="article:field:browse_count"
+            data-agent-state={formData.browse_count == null || formData.browse_count === "" ? "empty" : "filled"}
+            aria-label="浏览次数"
             value={formData.browse_count != null ? String(formData.browse_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, browse_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -159,9 +201,14 @@ export function ArticleForm({ open, initialData, onClose, onSuccess }: ArticleFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">排序</label>
+          <label htmlFor="article-sort" className="block text-xs text-slate-600 mb-1">排序</label>
           <input
             type="number"
+            id="article-sort"
+            data-testid="field-sort"
+            data-agent-target="article:field:sort"
+            data-agent-state={formData.sort == null || formData.sort === "" ? "empty" : "filled"}
+            aria-label="排序"
             value={formData.sort != null ? String(formData.sort) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sort: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,9 +218,14 @@ export function ArticleForm({ open, initialData, onClose, onSuccess }: ArticleFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="article-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="article-status"
+            data-testid="field-status"
+            data-agent-target="article:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -185,29 +237,42 @@ export function ArticleForm({ open, initialData, onClose, onSuccess }: ArticleFo
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="recommend_hot"
+            id="article-recommend_hot"
+            data-testid="field-recommend_hot"
+            data-agent-target="article:field:recommend_hot"
+            data-agent-state={formData.recommend_hot ? "on" : "off"}
+            aria-label="是否热门(小程序)"
             checked={Boolean(formData.recommend_hot)}
             onChange={(e) => setFormData((prev) => ({ ...prev, recommend_hot: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="recommend_hot" className="text-xs text-slate-700 font-medium">是否热门(小程序)</label>
+          <label htmlFor="article-recommend_hot" className="text-xs text-slate-700 font-medium">是否热门(小程序)</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="recommend_banner"
+            id="article-recommend_banner"
+            data-testid="field-recommend_banner"
+            data-agent-target="article:field:recommend_banner"
+            data-agent-state={formData.recommend_banner ? "on" : "off"}
+            aria-label="是否轮播图(小程序)"
             checked={Boolean(formData.recommend_banner)}
             onChange={(e) => setFormData((prev) => ({ ...prev, recommend_banner: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="recommend_banner" className="text-xs text-slate-700 font-medium">是否轮播图(小程序)</label>
+          <label htmlFor="article-recommend_banner" className="text-xs text-slate-700 font-medium">是否轮播图(小程序)</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">文章内容</label>
+          <label htmlFor="article-content" className="block text-xs text-slate-600 mb-1">文章内容</label>
           <input
             type="text"
+            id="article-content"
+            data-testid="field-content"
+            data-agent-target="article:field:content"
+            data-agent-state={formData.content ? "filled" : "empty"}
+            aria-label="文章内容"
             value={formData.content ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, content: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -221,6 +286,8 @@ export function ArticleForm({ open, initialData, onClose, onSuccess }: ArticleFo
             <button
               type="button"
               onClick={onClose}
+              data-testid="article-form-cancel"
+              data-agent-target="article:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -228,6 +295,9 @@ export function ArticleForm({ open, initialData, onClose, onSuccess }: ArticleFo
             <button
               type="submit"
               disabled={loading}
+              data-testid="article-form-submit"
+              data-agent-target="article:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

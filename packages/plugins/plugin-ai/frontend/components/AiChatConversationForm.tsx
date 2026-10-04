@@ -59,24 +59,36 @@ export function AiChatConversationForm({ open, initialData, onClose, onSuccess }
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="ai-chat-conversation-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它的消息关联在一起" : "新增AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它的消息关联在一起"}
+        data-testid="ai-chat-conversation-form"
+        data-agent-scope="ai-chat-conversation:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑AiChatConversation（源框架导入）" : "新增AiChatConversation（源框架导入）"}
+            {isEdit ? "编辑AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它的消息关联在一起" : "新增AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它的消息关联在一起"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="ai-chat-conversation-form-close" data-agent-target="ai-chat-conversation:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="ai-chat-conversation-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="ai-chat-conversation-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="ai-chat-conversation-user_id"
+            data-testid="field-user_id"
+            data-agent-target="ai-chat-conversation:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -86,9 +98,14 @@ export function AiChatConversationForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">对话标题</label>
+          <label htmlFor="ai-chat-conversation-title" className="block text-xs text-slate-600 mb-1">对话标题</label>
           <input
             type="text"
+            id="ai-chat-conversation-title"
+            data-testid="field-title"
+            data-agent-target="ai-chat-conversation:field:title"
+            data-agent-state={formData.title ? "filled" : "empty"}
+            aria-label="对话标题"
             value={formData.title ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -100,18 +117,27 @@ export function AiChatConversationForm({ open, initialData, onClose, onSuccess }
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="pinned"
+            id="ai-chat-conversation-pinned"
+            data-testid="field-pinned"
+            data-agent-target="ai-chat-conversation:field:pinned"
+            data-agent-state={formData.pinned ? "on" : "off"}
+            aria-label="是否置顶"
             checked={Boolean(formData.pinned)}
             onChange={(e) => setFormData((prev) => ({ ...prev, pinned: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="pinned" className="text-xs text-slate-700 font-medium">是否置顶</label>
+          <label htmlFor="ai-chat-conversation-pinned" className="text-xs text-slate-700 font-medium">是否置顶</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">置顶时间</label>
+          <label htmlFor="ai-chat-conversation-pinned_time" className="block text-xs text-slate-600 mb-1">置顶时间</label>
           <input
             type="text"
+            id="ai-chat-conversation-pinned_time"
+            data-testid="field-pinned_time"
+            data-agent-target="ai-chat-conversation:field:pinned_time"
+            data-agent-state={formData.pinned_time ? "filled" : "empty"}
+            aria-label="置顶时间"
             value={formData.pinned_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pinned_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -121,9 +147,14 @@ export function AiChatConversationForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">角色编号</label>
+          <label htmlFor="ai-chat-conversation-role_id" className="block text-xs text-slate-600 mb-1">角色编号</label>
           <input
             type="number"
+            id="ai-chat-conversation-role_id"
+            data-testid="field-role_id"
+            data-agent-target="ai-chat-conversation:field:role_id"
+            data-agent-state={formData.role_id == null || formData.role_id === "" ? "empty" : "filled"}
+            aria-label="角色编号"
             value={formData.role_id != null ? String(formData.role_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, role_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -133,9 +164,14 @@ export function AiChatConversationForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">模型编号</label>
+          <label htmlFor="ai-chat-conversation-model_id" className="block text-xs text-slate-600 mb-1">模型编号</label>
           <input
             type="number"
+            id="ai-chat-conversation-model_id"
+            data-testid="field-model_id"
+            data-agent-target="ai-chat-conversation:field:model_id"
+            data-agent-state={formData.model_id == null || formData.model_id === "" ? "empty" : "filled"}
+            aria-label="模型编号"
             value={formData.model_id != null ? String(formData.model_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, model_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -145,9 +181,14 @@ export function AiChatConversationForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">模型标志</label>
+          <label htmlFor="ai-chat-conversation-model" className="block text-xs text-slate-600 mb-1">模型标志</label>
           <input
             type="text"
+            id="ai-chat-conversation-model"
+            data-testid="field-model"
+            data-agent-target="ai-chat-conversation:field:model"
+            data-agent-state={formData.model ? "filled" : "empty"}
+            aria-label="模型标志"
             value={formData.model ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, model: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -157,9 +198,14 @@ export function AiChatConversationForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">角色设定</label>
+          <label htmlFor="ai-chat-conversation-system_message" className="block text-xs text-slate-600 mb-1">角色设定</label>
           <input
             type="text"
+            id="ai-chat-conversation-system_message"
+            data-testid="field-system_message"
+            data-agent-target="ai-chat-conversation:field:system_message"
+            data-agent-state={formData.system_message ? "filled" : "empty"}
+            aria-label="角色设定"
             value={formData.system_message ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, system_message: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -169,9 +215,14 @@ export function AiChatConversationForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">温度参数</label>
+          <label htmlFor="ai-chat-conversation-temperature" className="block text-xs text-slate-600 mb-1">温度参数</label>
           <input
             type="number"
+            id="ai-chat-conversation-temperature"
+            data-testid="field-temperature"
+            data-agent-target="ai-chat-conversation:field:temperature"
+            data-agent-state={formData.temperature == null || formData.temperature === "" ? "empty" : "filled"}
+            aria-label="温度参数"
             value={formData.temperature != null ? String(formData.temperature) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, temperature: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -181,9 +232,14 @@ export function AiChatConversationForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">单条回复的最大 Token 数量</label>
+          <label htmlFor="ai-chat-conversation-max_tokens" className="block text-xs text-slate-600 mb-1">单条回复的最大 Token 数量</label>
           <input
             type="number"
+            id="ai-chat-conversation-max_tokens"
+            data-testid="field-max_tokens"
+            data-agent-target="ai-chat-conversation:field:max_tokens"
+            data-agent-state={formData.max_tokens == null || formData.max_tokens === "" ? "empty" : "filled"}
+            aria-label="单条回复的最大 Token 数量"
             value={formData.max_tokens != null ? String(formData.max_tokens) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, max_tokens: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -193,9 +249,14 @@ export function AiChatConversationForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">上下文的最大 Message 数量</label>
+          <label htmlFor="ai-chat-conversation-max_contexts" className="block text-xs text-slate-600 mb-1">上下文的最大 Message 数量</label>
           <input
             type="number"
+            id="ai-chat-conversation-max_contexts"
+            data-testid="field-max_contexts"
+            data-agent-target="ai-chat-conversation:field:max_contexts"
+            data-agent-state={formData.max_contexts == null || formData.max_contexts === "" ? "empty" : "filled"}
+            aria-label="上下文的最大 Message 数量"
             value={formData.max_contexts != null ? String(formData.max_contexts) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, max_contexts: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -209,6 +270,8 @@ export function AiChatConversationForm({ open, initialData, onClose, onSuccess }
             <button
               type="button"
               onClick={onClose}
+              data-testid="ai-chat-conversation-form-cancel"
+              data-agent-target="ai-chat-conversation:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -216,6 +279,9 @@ export function AiChatConversationForm({ open, initialData, onClose, onSuccess }
             <button
               type="submit"
               disabled={loading}
+              data-testid="ai-chat-conversation-form-submit"
+              data-agent-target="ai-chat-conversation:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

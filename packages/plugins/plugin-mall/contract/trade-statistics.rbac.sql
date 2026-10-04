@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for TradeStatistics（源框架导入） (TradeStatistics)
+-- Auto-generated RBAC & Menu Migration for 交易统计 DO以天为维度，统计全部的数据 (TradeStatistics)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-trade-statistics',
   'mall-dir',
-  'TradeStatistics（源框架导入）管理',
+  '交易统计 DO以天为维度，统计全部的数据管理',
   '/admin/mall/trade-statistics',
   'mall/trade-statistics/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-trade-statistics-query',  'menu-trade-statistics', '查询TradeStatistics（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:trade_statistics:query',  1, NOW(), NOW()),
-('menu-trade-statistics-create', 'menu-trade-statistics', '新增TradeStatistics（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:trade_statistics:create', 2, NOW(), NOW()),
-('menu-trade-statistics-update', 'menu-trade-statistics', '修改TradeStatistics（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:trade_statistics:update', 3, NOW(), NOW()),
-('menu-trade-statistics-delete', 'menu-trade-statistics', '删除TradeStatistics（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:trade_statistics:delete', 4, NOW(), NOW())
+('menu-trade-statistics-query',  'menu-trade-statistics', '查询交易统计 DO以天为维度，统计全部的数据', 'BUTTON', 'ACTIVE', 'mall:trade_statistics:query',  1, NOW(), NOW()),
+('menu-trade-statistics-create', 'menu-trade-statistics', '新增交易统计 DO以天为维度，统计全部的数据', 'BUTTON', 'ACTIVE', 'mall:trade_statistics:create', 2, NOW(), NOW()),
+('menu-trade-statistics-update', 'menu-trade-statistics', '修改交易统计 DO以天为维度，统计全部的数据', 'BUTTON', 'ACTIVE', 'mall:trade_statistics:update', 3, NOW(), NOW()),
+('menu-trade-statistics-delete', 'menu-trade-statistics', '删除交易统计 DO以天为维度，统计全部的数据', 'BUTTON', 'ACTIVE', 'mall:trade_statistics:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

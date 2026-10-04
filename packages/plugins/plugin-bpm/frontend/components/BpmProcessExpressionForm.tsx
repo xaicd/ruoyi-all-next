@@ -51,24 +51,36 @@ export function BpmProcessExpressionForm({ open, initialData, onClose, onSuccess
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="bpm-process-expression-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑BPM 流程表达式" : "新增BPM 流程表达式"}
+        data-testid="bpm-process-expression-form"
+        data-agent-scope="bpm-process-expression:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑BpmProcessExpression（源框架导入）" : "新增BpmProcessExpression（源框架导入）"}
+            {isEdit ? "编辑BPM 流程表达式" : "新增BPM 流程表达式"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="bpm-process-expression-form-close" data-agent-target="bpm-process-expression:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="bpm-process-expression-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">表达式名字</label>
+          <label htmlFor="bpm-process-expression-name" className="block text-xs text-slate-600 mb-1">表达式名字</label>
           <input
             type="text"
+            id="bpm-process-expression-name"
+            data-testid="field-name"
+            data-agent-target="bpm-process-expression:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="表达式名字"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -78,9 +90,14 @@ export function BpmProcessExpressionForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">表达式状态</label>
+          <label htmlFor="bpm-process-expression-status" className="block text-xs text-slate-600 mb-1">表达式状态</label>
           <input
             type="number"
+            id="bpm-process-expression-status"
+            data-testid="field-status"
+            data-agent-target="bpm-process-expression:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="表达式状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -90,9 +107,14 @@ export function BpmProcessExpressionForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">表达式</label>
+          <label htmlFor="bpm-process-expression-expression" className="block text-xs text-slate-600 mb-1">表达式</label>
           <input
             type="text"
+            id="bpm-process-expression-expression"
+            data-testid="field-expression"
+            data-agent-target="bpm-process-expression:field:expression"
+            data-agent-state={formData.expression ? "filled" : "empty"}
+            aria-label="表达式"
             value={formData.expression ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, expression: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -106,6 +128,8 @@ export function BpmProcessExpressionForm({ open, initialData, onClose, onSuccess
             <button
               type="button"
               onClick={onClose}
+              data-testid="bpm-process-expression-form-cancel"
+              data-agent-target="bpm-process-expression:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -113,6 +137,9 @@ export function BpmProcessExpressionForm({ open, initialData, onClose, onSuccess
             <button
               type="submit"
               disabled={loading}
+              data-testid="bpm-process-expression-form-submit"
+              data-agent-target="bpm-process-expression:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

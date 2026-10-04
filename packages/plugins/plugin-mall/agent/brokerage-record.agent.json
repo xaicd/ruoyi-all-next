@@ -1,0 +1,285 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "BrokerageRecord",
+  "kebab": "brokerage-record",
+  "businessName": "佣金记录",
+  "permissionPrefix": "mall:brokerage_record",
+  "page": {
+    "route": "/admin/mall/brokerage-record",
+    "title": "佣金记录管理",
+    "titleSelector": "[data-testid=\"brokerage-record-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "brokerage-record",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/brokerage-record",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/brokerage-record/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/brokerage-record"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/brokerage-record/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/brokerage-record/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"brokerage-record-title\"]",
+    "refresh": "[data-testid=\"brokerage-record-refresh\"]",
+    "createButton": "[data-testid=\"brokerage-record-create\"]",
+    "searchForm": "[data-testid=\"brokerage-record-search\"]",
+    "searchSubmit": "[data-testid=\"brokerage-record-search-submit\"]",
+    "searchReset": "[data-testid=\"brokerage-record-search-reset\"]",
+    "total": "[data-testid=\"brokerage-record-total\"]",
+    "table": "[data-testid=\"brokerage-record-table\"]",
+    "row": "[data-testid=\"brokerage-record-row\"]",
+    "editButton": "[data-testid=\"brokerage-record-edit\"]",
+    "deleteButton": "[data-testid=\"brokerage-record-delete\"]",
+    "form": "[data-testid=\"brokerage-record-form\"]",
+    "formError": "[data-testid=\"brokerage-record-form-error\"]",
+    "formSubmit": "[data-testid=\"brokerage-record-form-submit\"]",
+    "formCancel": "[data-testid=\"brokerage-record-form-cancel\"]",
+    "formClose": "[data-testid=\"brokerage-record-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "佣金记录列表",
+    "dialogLabel": {
+      "create": "新增佣金记录",
+      "edit": "编辑佣金记录"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "biz_id",
+        "label": "业务编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-biz_id",
+        "selector": "[data-testid=\"field-biz_id\"]"
+      },
+      {
+        "name": "biz_type",
+        "label": "业务类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-biz_type",
+        "selector": "[data-testid=\"field-biz_type\"]"
+      },
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "string",
+        "required": false,
+        "testId": "field-title",
+        "selector": "[data-testid=\"field-title\"]"
+      },
+      {
+        "name": "description",
+        "label": "说明",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      },
+      {
+        "name": "price",
+        "label": "金额",
+        "type": "number",
+        "required": false,
+        "testId": "field-price",
+        "selector": "[data-testid=\"field-price\"]"
+      },
+      {
+        "name": "total_price",
+        "label": "当前总佣金",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_price",
+        "selector": "[data-testid=\"field-total_price\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "frozen_days",
+        "label": "冻结时间（天）",
+        "type": "number",
+        "required": false,
+        "testId": "field-frozen_days",
+        "selector": "[data-testid=\"field-frozen_days\"]"
+      },
+      {
+        "name": "unfreeze_time",
+        "label": "解冻时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-unfreeze_time",
+        "selector": "[data-testid=\"field-unfreeze_time\"]"
+      },
+      {
+        "name": "source_user_level",
+        "label": "来源用户等级",
+        "type": "number",
+        "required": false,
+        "testId": "field-source_user_level",
+        "selector": "[data-testid=\"field-source_user_level\"]"
+      },
+      {
+        "name": "source_user_id",
+        "label": "来源用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-source_user_id",
+        "selector": "[data-testid=\"field-source_user_id\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "brokerage-record",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"brokerage-record\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"brokerage-record-form-overlay\"]",
+      "dialog": "[data-testid=\"brokerage-record-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "brokerage-record:search",
+      "reset": "brokerage-record:reset",
+      "refresh": "brokerage-record:refresh",
+      "create": "brokerage-record:create",
+      "edit": "brokerage-record:edit",
+      "delete": "brokerage-record:delete",
+      "submit": "brokerage-record:submit",
+      "cancel": "brokerage-record:cancel",
+      "close": "brokerage-record:close",
+      "row": "brokerage-record:row",
+      "pagination": "brokerage-record:pagination",
+      "fields": {
+        "user_id": "brokerage-record:field:user_id",
+        "biz_id": "brokerage-record:field:biz_id",
+        "biz_type": "brokerage-record:field:biz_type",
+        "title": "brokerage-record:field:title",
+        "description": "brokerage-record:field:description",
+        "price": "brokerage-record:field:price",
+        "total_price": "brokerage-record:field:total_price",
+        "status": "brokerage-record:field:status",
+        "frozen_days": "brokerage-record:field:frozen_days",
+        "unfreeze_time": "brokerage-record:field:unfreeze_time",
+        "source_user_level": "brokerage-record:field:source_user_level",
+        "source_user_id": "brokerage-record:field:source_user_id"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.brokerage-record",
+      "examples": [
+        "mall.brokerage-record__List__Refresh",
+        "mall.brokerage-record__ListItem__Open",
+        "mall.brokerage-record__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

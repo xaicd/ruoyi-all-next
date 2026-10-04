@@ -58,24 +58,36 @@ export function MesDvMachineryForm({ open, initialData, onClose, onSuccess }: Me
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-dv-machinery-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 设备台账" : "新增MES 设备台账"}
+        data-testid="mes-dv-machinery-form"
+        data-agent-scope="mes-dv-machinery:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesDvMachinery（源框架导入）" : "新增MesDvMachinery（源框架导入）"}
+            {isEdit ? "编辑MES 设备台账" : "新增MES 设备台账"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-dv-machinery-form-close" data-agent-target="mes-dv-machinery:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-dv-machinery-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备编码</label>
+          <label htmlFor="mes-dv-machinery-code" className="block text-xs text-slate-600 mb-1">设备编码</label>
           <input
             type="text"
+            id="mes-dv-machinery-code"
+            data-testid="field-code"
+            data-agent-target="mes-dv-machinery:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="设备编码"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -85,9 +97,14 @@ export function MesDvMachineryForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备名称</label>
+          <label htmlFor="mes-dv-machinery-name" className="block text-xs text-slate-600 mb-1">设备名称</label>
           <input
             type="text"
+            id="mes-dv-machinery-name"
+            data-testid="field-name"
+            data-agent-target="mes-dv-machinery:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="设备名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -97,9 +114,14 @@ export function MesDvMachineryForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">品牌</label>
+          <label htmlFor="mes-dv-machinery-brand" className="block text-xs text-slate-600 mb-1">品牌</label>
           <input
             type="text"
+            id="mes-dv-machinery-brand"
+            data-testid="field-brand"
+            data-agent-target="mes-dv-machinery:field:brand"
+            data-agent-state={formData.brand ? "filled" : "empty"}
+            aria-label="品牌"
             value={formData.brand ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, brand: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -109,9 +131,14 @@ export function MesDvMachineryForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">规格型号</label>
+          <label htmlFor="mes-dv-machinery-specification" className="block text-xs text-slate-600 mb-1">规格型号</label>
           <input
             type="text"
+            id="mes-dv-machinery-specification"
+            data-testid="field-specification"
+            data-agent-target="mes-dv-machinery:field:specification"
+            data-agent-state={formData.specification ? "filled" : "empty"}
+            aria-label="规格型号"
             value={formData.specification ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, specification: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -121,9 +148,14 @@ export function MesDvMachineryForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备类型编号</label>
+          <label htmlFor="mes-dv-machinery-machinery_type_id" className="block text-xs text-slate-600 mb-1">设备类型编号</label>
           <input
             type="number"
+            id="mes-dv-machinery-machinery_type_id"
+            data-testid="field-machinery_type_id"
+            data-agent-target="mes-dv-machinery:field:machinery_type_id"
+            data-agent-state={formData.machinery_type_id == null || formData.machinery_type_id === "" ? "empty" : "filled"}
+            aria-label="设备类型编号"
             value={formData.machinery_type_id != null ? String(formData.machinery_type_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, machinery_type_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -133,9 +165,14 @@ export function MesDvMachineryForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">所属车间编号</label>
+          <label htmlFor="mes-dv-machinery-workshop_id" className="block text-xs text-slate-600 mb-1">所属车间编号</label>
           <input
             type="number"
+            id="mes-dv-machinery-workshop_id"
+            data-testid="field-workshop_id"
+            data-agent-target="mes-dv-machinery:field:workshop_id"
+            data-agent-state={formData.workshop_id == null || formData.workshop_id === "" ? "empty" : "filled"}
+            aria-label="所属车间编号"
             value={formData.workshop_id != null ? String(formData.workshop_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, workshop_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -145,9 +182,14 @@ export function MesDvMachineryForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备状态</label>
+          <label htmlFor="mes-dv-machinery-status" className="block text-xs text-slate-600 mb-1">设备状态</label>
           <input
             type="number"
+            id="mes-dv-machinery-status"
+            data-testid="field-status"
+            data-agent-target="mes-dv-machinery:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="设备状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -157,9 +199,14 @@ export function MesDvMachineryForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最近保养时间</label>
+          <label htmlFor="mes-dv-machinery-last_mainten_time" className="block text-xs text-slate-600 mb-1">最近保养时间</label>
           <input
             type="text"
+            id="mes-dv-machinery-last_mainten_time"
+            data-testid="field-last_mainten_time"
+            data-agent-target="mes-dv-machinery:field:last_mainten_time"
+            data-agent-state={formData.last_mainten_time ? "filled" : "empty"}
+            aria-label="最近保养时间"
             value={formData.last_mainten_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, last_mainten_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -169,9 +216,14 @@ export function MesDvMachineryForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最近点检时间</label>
+          <label htmlFor="mes-dv-machinery-last_check_time" className="block text-xs text-slate-600 mb-1">最近点检时间</label>
           <input
             type="text"
+            id="mes-dv-machinery-last_check_time"
+            data-testid="field-last_check_time"
+            data-agent-target="mes-dv-machinery:field:last_check_time"
+            data-agent-state={formData.last_check_time ? "filled" : "empty"}
+            aria-label="最近点检时间"
             value={formData.last_check_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, last_check_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -181,9 +233,14 @@ export function MesDvMachineryForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-dv-machinery-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-dv-machinery-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-dv-machinery:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -197,6 +254,8 @@ export function MesDvMachineryForm({ open, initialData, onClose, onSuccess }: Me
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-dv-machinery-form-cancel"
+              data-agent-target="mes-dv-machinery:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -204,6 +263,9 @@ export function MesDvMachineryForm({ open, initialData, onClose, onSuccess }: Me
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-dv-machinery-form-submit"
+              data-agent-target="mes-dv-machinery:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

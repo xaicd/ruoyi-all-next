@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { PayWalletRechargePackageService } from "../pay-wallet-recharge-package.service"
 
 describe("PayWalletRechargePackageService", () => {
-  it("should create and query PayWalletRechargePackage（源框架导入）", async () => {
+  it("should create and query 会员钱包充值套餐 DO通过充值套餐时，可以赠送一定金额；", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await PayWalletRechargePackageService.create({
-        name: "测试PayWalletRechargePackage（源框架导入）",
+        name: "测试会员钱包充值套餐 DO通过充值套餐时，可以赠送一定金额；",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("PayWalletRechargePackageService", () => {
   
       const updated = await PayWalletRechargePackageService.update(created.id, {
         id: created.id,
-        name: "更新PayWalletRechargePackage（源框架导入）",
+        name: "更新会员钱包充值套餐 DO通过充值套餐时，可以赠送一定金额；",
       } as any)
       expect(updated).toBeDefined()
   

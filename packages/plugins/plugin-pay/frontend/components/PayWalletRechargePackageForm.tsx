@@ -52,24 +52,36 @@ export function PayWalletRechargePackageForm({ open, initialData, onClose, onSuc
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="pay-wallet-recharge-package-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑会员钱包充值套餐 DO通过充值套餐时，可以赠送一定金额；" : "新增会员钱包充值套餐 DO通过充值套餐时，可以赠送一定金额；"}
+        data-testid="pay-wallet-recharge-package-form"
+        data-agent-scope="pay-wallet-recharge-package:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑PayWalletRechargePackage（源框架导入）" : "新增PayWalletRechargePackage（源框架导入）"}
+            {isEdit ? "编辑会员钱包充值套餐 DO通过充值套餐时，可以赠送一定金额；" : "新增会员钱包充值套餐 DO通过充值套餐时，可以赠送一定金额；"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="pay-wallet-recharge-package-form-close" data-agent-target="pay-wallet-recharge-package:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="pay-wallet-recharge-package-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">套餐名</label>
+          <label htmlFor="pay-wallet-recharge-package-name" className="block text-xs text-slate-600 mb-1">套餐名</label>
           <input
             type="text"
+            id="pay-wallet-recharge-package-name"
+            data-testid="field-name"
+            data-agent-target="pay-wallet-recharge-package:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="套餐名"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -79,9 +91,14 @@ export function PayWalletRechargePackageForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">支付金额</label>
+          <label htmlFor="pay-wallet-recharge-package-pay_price" className="block text-xs text-slate-600 mb-1">支付金额</label>
           <input
             type="number"
+            id="pay-wallet-recharge-package-pay_price"
+            data-testid="field-pay_price"
+            data-agent-target="pay-wallet-recharge-package:field:pay_price"
+            data-agent-state={formData.pay_price == null || formData.pay_price === "" ? "empty" : "filled"}
+            aria-label="支付金额"
             value={formData.pay_price != null ? String(formData.pay_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pay_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -91,9 +108,14 @@ export function PayWalletRechargePackageForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">赠送金额</label>
+          <label htmlFor="pay-wallet-recharge-package-bonus_price" className="block text-xs text-slate-600 mb-1">赠送金额</label>
           <input
             type="number"
+            id="pay-wallet-recharge-package-bonus_price"
+            data-testid="field-bonus_price"
+            data-agent-target="pay-wallet-recharge-package:field:bonus_price"
+            data-agent-state={formData.bonus_price == null || formData.bonus_price === "" ? "empty" : "filled"}
+            aria-label="赠送金额"
             value={formData.bonus_price != null ? String(formData.bonus_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, bonus_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -103,9 +125,14 @@ export function PayWalletRechargePackageForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="pay-wallet-recharge-package-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="pay-wallet-recharge-package-status"
+            data-testid="field-status"
+            data-agent-target="pay-wallet-recharge-package:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -119,6 +146,8 @@ export function PayWalletRechargePackageForm({ open, initialData, onClose, onSuc
             <button
               type="button"
               onClick={onClose}
+              data-testid="pay-wallet-recharge-package-form-cancel"
+              data-agent-target="pay-wallet-recharge-package:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -126,6 +155,9 @@ export function PayWalletRechargePackageForm({ open, initialData, onClose, onSuc
             <button
               type="submit"
               disabled={loading}
+              data-testid="pay-wallet-recharge-package-form-submit"
+              data-agent-target="pay-wallet-recharge-package:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

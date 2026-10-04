@@ -60,7 +60,7 @@
     "standards:baseline": "node scripts/check-engineering-standards.cjs --write-baseline",
     "evolution:backlog": "node scripts/build-evolution-backlog.cjs",
     "mcp:serve": "node scripts/mcp/ruoyi-mcp-server.cjs",
-    "check": "npm run domain:manifests:check && npm run contracts:sync && npm run domain:check && npm run microservice:check && npm run harness:check && npm run admin:routes:check && npm run foundation:ontology:check && npm run skills:check && npm run compat:check && npm run standards:check && npm run evolution:backlog && node scripts/write-harness-trace.cjs",
+    "check": "npm run domain:manifests:check && npm run contracts:sync && npm run domain:check && npm run microservice:check && npm run harness:check && npm run admin:routes:check && npm run foundation:ontology:check && npm run skills:check && npm run compat:check && npm run standards:check && npm run agent:native:check && npm run agent:contracts:check && npm run evolution:backlog && node scripts/write-harness-trace.cjs",
     "domain:dev": "node scripts/pack-domain.cjs --dev --materialize",
     "domain:build": "node scripts/pack-domain.cjs --build --materialize",
     "domain:up": "node scripts/domain-up.cjs",
@@ -85,7 +85,14 @@
     "postinstall": "prisma generate",
     "domains:capabilities": "node scripts/scan-domain-capabilities.cjs",
     "domains:parity": "node scripts/scan-source-parity.cjs",
-    "domain:new": "tsx scripts/create-business-domain.ts"
+    "domain:new": "tsx scripts/create-business-domain.ts",
+    "agent:contracts": "node scripts/agent/collect-contracts.cjs",
+    "agent:contracts:check": "node scripts/agent/collect-contracts.cjs --check",
+    "agent:ops": "node scripts/agent/run-ops.cjs",
+    "agent:ops:health": "node scripts/agent/run-ops.cjs health",
+    "agent:native:check": "node scripts/check-agent-native.cjs",
+    "agent:native:audit": "node scripts/check-agent-native.cjs --audit",
+    "agent:native:baseline": "node scripts/check-agent-native.cjs --update-baseline"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",

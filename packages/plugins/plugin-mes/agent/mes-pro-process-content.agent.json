@@ -1,0 +1,240 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesProProcessContent",
+  "kebab": "mes-pro-process-content",
+  "businessName": "MES 生产工序内容",
+  "permissionPrefix": "mes:mes_pro_process_content",
+  "page": {
+    "route": "/admin/mes/mes-pro-process-content",
+    "title": "MES 生产工序内容管理",
+    "titleSelector": "[data-testid=\"mes-pro-process-content-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-pro-process-content",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-pro-process-content",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-pro-process-content/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-pro-process-content"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-pro-process-content/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-pro-process-content/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-pro-process-content-title\"]",
+    "refresh": "[data-testid=\"mes-pro-process-content-refresh\"]",
+    "createButton": "[data-testid=\"mes-pro-process-content-create\"]",
+    "searchForm": "[data-testid=\"mes-pro-process-content-search\"]",
+    "searchSubmit": "[data-testid=\"mes-pro-process-content-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-pro-process-content-search-reset\"]",
+    "total": "[data-testid=\"mes-pro-process-content-total\"]",
+    "table": "[data-testid=\"mes-pro-process-content-table\"]",
+    "row": "[data-testid=\"mes-pro-process-content-row\"]",
+    "editButton": "[data-testid=\"mes-pro-process-content-edit\"]",
+    "deleteButton": "[data-testid=\"mes-pro-process-content-delete\"]",
+    "form": "[data-testid=\"mes-pro-process-content-form\"]",
+    "formError": "[data-testid=\"mes-pro-process-content-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-pro-process-content-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-pro-process-content-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-pro-process-content-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 生产工序内容列表",
+    "dialogLabel": {
+      "create": "新增MES 生产工序内容",
+      "edit": "编辑MES 生产工序内容"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "process_id",
+        "label": "工序编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-process_id",
+        "selector": "[data-testid=\"field-process_id\"]"
+      },
+      {
+        "name": "sort",
+        "label": "顺序编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      },
+      {
+        "name": "content",
+        "label": "步骤说明",
+        "type": "string",
+        "required": false,
+        "testId": "field-content",
+        "selector": "[data-testid=\"field-content\"]"
+      },
+      {
+        "name": "device",
+        "label": "辅助设备",
+        "type": "string",
+        "required": false,
+        "testId": "field-device",
+        "selector": "[data-testid=\"field-device\"]"
+      },
+      {
+        "name": "material",
+        "label": "辅助材料",
+        "type": "string",
+        "required": false,
+        "testId": "field-material",
+        "selector": "[data-testid=\"field-material\"]"
+      },
+      {
+        "name": "doc_url",
+        "label": "材料文档 URL",
+        "type": "string",
+        "required": false,
+        "testId": "field-doc_url",
+        "selector": "[data-testid=\"field-doc_url\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-pro-process-content",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-pro-process-content\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-pro-process-content-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-pro-process-content-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-pro-process-content:search",
+      "reset": "mes-pro-process-content:reset",
+      "refresh": "mes-pro-process-content:refresh",
+      "create": "mes-pro-process-content:create",
+      "edit": "mes-pro-process-content:edit",
+      "delete": "mes-pro-process-content:delete",
+      "submit": "mes-pro-process-content:submit",
+      "cancel": "mes-pro-process-content:cancel",
+      "close": "mes-pro-process-content:close",
+      "row": "mes-pro-process-content:row",
+      "pagination": "mes-pro-process-content:pagination",
+      "fields": {
+        "process_id": "mes-pro-process-content:field:process_id",
+        "sort": "mes-pro-process-content:field:sort",
+        "content": "mes-pro-process-content:field:content",
+        "device": "mes-pro-process-content:field:device",
+        "material": "mes-pro-process-content:field:material",
+        "doc_url": "mes-pro-process-content:field:doc_url",
+        "remark": "mes-pro-process-content:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-pro-process-content",
+      "examples": [
+        "mes.mes-pro-process-content__List__Refresh",
+        "mes.mes-pro-process-content__ListItem__Open",
+        "mes.mes-pro-process-content__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

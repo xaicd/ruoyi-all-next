@@ -2,7 +2,7 @@
 -- 来源: scripts/data/report-source-tables.ts#REPORT_TABLES
 -- 背景: 这些表的定义来自低代码 CodegenConfig；此前只生成代码、不生成建表 SQL，
 --       导致"仓储在查但无处创建"。本迁移补齐 DDL。
--- GoViewProject（源框架导入）
+-- GoView 项目表每个大屏图标，对应一个项目
 CREATE TABLE "report_go_view_project" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),

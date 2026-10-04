@@ -1,0 +1,222 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "bpm",
+  "entity": "BpmForm",
+  "kebab": "bpm-form",
+  "businessName": "BPM 工作流的表单定义用于工作流的申请表单，需要动态配置的场景",
+  "permissionPrefix": "bpm:bpm_form",
+  "page": {
+    "route": "/admin/bpm/bpm-form",
+    "title": "BPM 工作流的表单定义用于工作流的申请表单，需要动态配置的场景管理",
+    "titleSelector": "[data-testid=\"bpm-form-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.bpm/api",
+    "bffMount": "/api/v1/admin/bpm",
+    "resource": "bpm-form",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/bpm-form",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/bpm-form/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/bpm-form"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/bpm-form/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/bpm-form/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"bpm-form-title\"]",
+    "refresh": "[data-testid=\"bpm-form-refresh\"]",
+    "createButton": "[data-testid=\"bpm-form-create\"]",
+    "searchForm": "[data-testid=\"bpm-form-search\"]",
+    "searchSubmit": "[data-testid=\"bpm-form-search-submit\"]",
+    "searchReset": "[data-testid=\"bpm-form-search-reset\"]",
+    "total": "[data-testid=\"bpm-form-total\"]",
+    "table": "[data-testid=\"bpm-form-table\"]",
+    "row": "[data-testid=\"bpm-form-row\"]",
+    "editButton": "[data-testid=\"bpm-form-edit\"]",
+    "deleteButton": "[data-testid=\"bpm-form-delete\"]",
+    "form": "[data-testid=\"bpm-form-form\"]",
+    "formError": "[data-testid=\"bpm-form-form-error\"]",
+    "formSubmit": "[data-testid=\"bpm-form-form-submit\"]",
+    "formCancel": "[data-testid=\"bpm-form-form-cancel\"]",
+    "formClose": "[data-testid=\"bpm-form-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "BPM 工作流的表单定义用于工作流的申请表单，需要动态配置的场景列表",
+    "dialogLabel": {
+      "create": "新增BPM 工作流的表单定义用于工作流的申请表单，需要动态配置的场景",
+      "edit": "编辑BPM 工作流的表单定义用于工作流的申请表单，需要动态配置的场景"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "表单名",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "conf",
+        "label": "表单的配置",
+        "type": "string",
+        "required": false,
+        "testId": "field-conf",
+        "selector": "[data-testid=\"field-conf\"]"
+      },
+      {
+        "name": "fields",
+        "label": "表单项的数组",
+        "type": "string",
+        "required": false,
+        "testId": "field-fields",
+        "selector": "[data-testid=\"field-fields\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "bpm-form",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"bpm-form\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"bpm-form-form-overlay\"]",
+      "dialog": "[data-testid=\"bpm-form-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "bpm-form:search",
+      "reset": "bpm-form:reset",
+      "refresh": "bpm-form:refresh",
+      "create": "bpm-form:create",
+      "edit": "bpm-form:edit",
+      "delete": "bpm-form:delete",
+      "submit": "bpm-form:submit",
+      "cancel": "bpm-form:cancel",
+      "close": "bpm-form:close",
+      "row": "bpm-form:row",
+      "pagination": "bpm-form:pagination",
+      "fields": {
+        "name": "bpm-form:field:name",
+        "status": "bpm-form:field:status",
+        "conf": "bpm-form:field:conf",
+        "fields": "bpm-form:field:fields",
+        "remark": "bpm-form:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "bpm.bpm-form",
+      "examples": [
+        "bpm.bpm-form__List__Refresh",
+        "bpm.bpm-form__ListItem__Open",
+        "bpm.bpm-form__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

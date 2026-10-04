@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MemberTagService } from "../member-tag.service"
 
 describe("MemberTagService", () => {
-  it("should create and query MemberTag（源框架导入）", async () => {
+  it("should create and query 会员标签", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MemberTagService.create({
-        name: "测试MemberTag（源框架导入）",
+        name: "测试会员标签",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("MemberTagService", () => {
   
       const updated = await MemberTagService.update(created.id, {
         id: created.id,
-        name: "更新MemberTag（源框架导入）",
+        name: "更新会员标签",
       } as any)
       expect(updated).toBeDefined()
   

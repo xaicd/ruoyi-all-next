@@ -1,0 +1,348 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "CombinationRecord",
+  "kebab": "combination-record",
+  "businessName": "拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联",
+  "permissionPrefix": "mall:combination_record",
+  "page": {
+    "route": "/admin/mall/combination-record",
+    "title": "拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联管理",
+    "titleSelector": "[data-testid=\"combination-record-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "combination-record",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/combination-record",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/combination-record/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/combination-record"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/combination-record/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/combination-record/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"combination-record-title\"]",
+    "refresh": "[data-testid=\"combination-record-refresh\"]",
+    "createButton": "[data-testid=\"combination-record-create\"]",
+    "searchForm": "[data-testid=\"combination-record-search\"]",
+    "searchSubmit": "[data-testid=\"combination-record-search-submit\"]",
+    "searchReset": "[data-testid=\"combination-record-search-reset\"]",
+    "total": "[data-testid=\"combination-record-total\"]",
+    "table": "[data-testid=\"combination-record-table\"]",
+    "row": "[data-testid=\"combination-record-row\"]",
+    "editButton": "[data-testid=\"combination-record-edit\"]",
+    "deleteButton": "[data-testid=\"combination-record-delete\"]",
+    "form": "[data-testid=\"combination-record-form\"]",
+    "formError": "[data-testid=\"combination-record-form-error\"]",
+    "formSubmit": "[data-testid=\"combination-record-form-submit\"]",
+    "formCancel": "[data-testid=\"combination-record-form-cancel\"]",
+    "formClose": "[data-testid=\"combination-record-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联列表",
+    "dialogLabel": {
+      "create": "新增拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联",
+      "edit": "编辑拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "activity_id",
+        "label": "拼团活动编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-activity_id",
+        "selector": "[data-testid=\"field-activity_id\"]"
+      },
+      {
+        "name": "combination_price",
+        "label": "拼团商品单价",
+        "type": "number",
+        "required": false,
+        "testId": "field-combination_price",
+        "selector": "[data-testid=\"field-combination_price\"]"
+      },
+      {
+        "name": "spu_id",
+        "label": "SPU 编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-spu_id",
+        "selector": "[data-testid=\"field-spu_id\"]"
+      },
+      {
+        "name": "spu_name",
+        "label": "商品名字",
+        "type": "string",
+        "required": false,
+        "testId": "field-spu_name",
+        "selector": "[data-testid=\"field-spu_name\"]"
+      },
+      {
+        "name": "pic_url",
+        "label": "商品图片",
+        "type": "string",
+        "required": false,
+        "testId": "field-pic_url",
+        "selector": "[data-testid=\"field-pic_url\"]"
+      },
+      {
+        "name": "sku_id",
+        "label": "SKU 编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-sku_id",
+        "selector": "[data-testid=\"field-sku_id\"]"
+      },
+      {
+        "name": "count",
+        "label": "购买的商品数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-count",
+        "selector": "[data-testid=\"field-count\"]"
+      },
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "nickname",
+        "label": "用户昵称",
+        "type": "string",
+        "required": false,
+        "testId": "field-nickname",
+        "selector": "[data-testid=\"field-nickname\"]"
+      },
+      {
+        "name": "avatar",
+        "label": "用户头像",
+        "type": "string",
+        "required": false,
+        "testId": "field-avatar",
+        "selector": "[data-testid=\"field-avatar\"]"
+      },
+      {
+        "name": "head_id",
+        "label": "团长编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-head_id",
+        "selector": "[data-testid=\"field-head_id\"]"
+      },
+      {
+        "name": "status",
+        "label": "开团状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "order_id",
+        "label": "订单编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-order_id",
+        "selector": "[data-testid=\"field-order_id\"]"
+      },
+      {
+        "name": "user_size",
+        "label": "开团需要人数",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_size",
+        "selector": "[data-testid=\"field-user_size\"]"
+      },
+      {
+        "name": "user_count",
+        "label": "已加入拼团人数",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_count",
+        "selector": "[data-testid=\"field-user_count\"]"
+      },
+      {
+        "name": "virtual_group",
+        "label": "是否虚拟成团",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-virtual_group",
+        "selector": "[data-testid=\"field-virtual_group\"]"
+      },
+      {
+        "name": "expire_time",
+        "label": "过期时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-expire_time",
+        "selector": "[data-testid=\"field-expire_time\"]"
+      },
+      {
+        "name": "start_time",
+        "label": "开始时间 (订单付款后开始的时间)",
+        "type": "string",
+        "required": false,
+        "testId": "field-start_time",
+        "selector": "[data-testid=\"field-start_time\"]"
+      },
+      {
+        "name": "end_time",
+        "label": "结束时间（成团时间/失败时间）",
+        "type": "string",
+        "required": false,
+        "testId": "field-end_time",
+        "selector": "[data-testid=\"field-end_time\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "combination-record",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"combination-record\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"combination-record-form-overlay\"]",
+      "dialog": "[data-testid=\"combination-record-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "combination-record:search",
+      "reset": "combination-record:reset",
+      "refresh": "combination-record:refresh",
+      "create": "combination-record:create",
+      "edit": "combination-record:edit",
+      "delete": "combination-record:delete",
+      "submit": "combination-record:submit",
+      "cancel": "combination-record:cancel",
+      "close": "combination-record:close",
+      "row": "combination-record:row",
+      "pagination": "combination-record:pagination",
+      "fields": {
+        "activity_id": "combination-record:field:activity_id",
+        "combination_price": "combination-record:field:combination_price",
+        "spu_id": "combination-record:field:spu_id",
+        "spu_name": "combination-record:field:spu_name",
+        "pic_url": "combination-record:field:pic_url",
+        "sku_id": "combination-record:field:sku_id",
+        "count": "combination-record:field:count",
+        "user_id": "combination-record:field:user_id",
+        "nickname": "combination-record:field:nickname",
+        "avatar": "combination-record:field:avatar",
+        "head_id": "combination-record:field:head_id",
+        "status": "combination-record:field:status",
+        "order_id": "combination-record:field:order_id",
+        "user_size": "combination-record:field:user_size",
+        "user_count": "combination-record:field:user_count",
+        "virtual_group": "combination-record:field:virtual_group",
+        "expire_time": "combination-record:field:expire_time",
+        "start_time": "combination-record:field:start_time",
+        "end_time": "combination-record:field:end_time"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.combination-record",
+      "examples": [
+        "mall.combination-record__List__Refresh",
+        "mall.combination-record__ListItem__Open",
+        "mall.combination-record__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

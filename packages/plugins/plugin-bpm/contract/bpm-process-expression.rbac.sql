@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for BpmProcessExpression（源框架导入） (BpmProcessExpression)
+-- Auto-generated RBAC & Menu Migration for BPM 流程表达式 (BpmProcessExpression)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-bpm-process-expression',
   'bpm-dir',
-  'BpmProcessExpression（源框架导入）管理',
+  'BPM 流程表达式管理',
   '/admin/bpm/bpm-process-expression',
   'bpm/bpm-process-expression/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-bpm-process-expression-query',  'menu-bpm-process-expression', '查询BpmProcessExpression（源框架导入）', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_expression:query',  1, NOW(), NOW()),
-('menu-bpm-process-expression-create', 'menu-bpm-process-expression', '新增BpmProcessExpression（源框架导入）', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_expression:create', 2, NOW(), NOW()),
-('menu-bpm-process-expression-update', 'menu-bpm-process-expression', '修改BpmProcessExpression（源框架导入）', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_expression:update', 3, NOW(), NOW()),
-('menu-bpm-process-expression-delete', 'menu-bpm-process-expression', '删除BpmProcessExpression（源框架导入）', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_expression:delete', 4, NOW(), NOW())
+('menu-bpm-process-expression-query',  'menu-bpm-process-expression', '查询BPM 流程表达式', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_expression:query',  1, NOW(), NOW()),
+('menu-bpm-process-expression-create', 'menu-bpm-process-expression', '新增BPM 流程表达式', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_expression:create', 2, NOW(), NOW()),
+('menu-bpm-process-expression-update', 'menu-bpm-process-expression', '修改BPM 流程表达式', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_expression:update', 3, NOW(), NOW()),
+('menu-bpm-process-expression-delete', 'menu-bpm-process-expression', '删除BPM 流程表达式', 'BUTTON', 'ACTIVE', 'bpm:bpm_process_expression:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

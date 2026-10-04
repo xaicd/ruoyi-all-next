@@ -58,24 +58,36 @@ export function PayOrderExtensionForm({ open, initialData, onClose, onSuccess }:
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="pay-order-extension-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑支付订单拓展 DO每次调用支付渠道，都会生成一条对应记录" : "新增支付订单拓展 DO每次调用支付渠道，都会生成一条对应记录"}
+        data-testid="pay-order-extension-form"
+        data-agent-scope="pay-order-extension:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑PayOrderExtension（源框架导入）" : "新增PayOrderExtension（源框架导入）"}
+            {isEdit ? "编辑支付订单拓展 DO每次调用支付渠道，都会生成一条对应记录" : "新增支付订单拓展 DO每次调用支付渠道，都会生成一条对应记录"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="pay-order-extension-form-close" data-agent-target="pay-order-extension:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="pay-order-extension-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">外部订单号，根据规则生成</label>
+          <label htmlFor="pay-order-extension-no" className="block text-xs text-slate-600 mb-1">外部订单号，根据规则生成</label>
           <input
             type="text"
+            id="pay-order-extension-no"
+            data-testid="field-no"
+            data-agent-target="pay-order-extension:field:no"
+            data-agent-state={formData.no ? "filled" : "empty"}
+            aria-label="外部订单号，根据规则生成"
             value={formData.no ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, no: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -85,9 +97,14 @@ export function PayOrderExtensionForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">订单号</label>
+          <label htmlFor="pay-order-extension-order_id" className="block text-xs text-slate-600 mb-1">订单号</label>
           <input
             type="number"
+            id="pay-order-extension-order_id"
+            data-testid="field-order_id"
+            data-agent-target="pay-order-extension:field:order_id"
+            data-agent-state={formData.order_id == null || formData.order_id === "" ? "empty" : "filled"}
+            aria-label="订单号"
             value={formData.order_id != null ? String(formData.order_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, order_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -97,9 +114,14 @@ export function PayOrderExtensionForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">渠道编号</label>
+          <label htmlFor="pay-order-extension-channel_id" className="block text-xs text-slate-600 mb-1">渠道编号</label>
           <input
             type="number"
+            id="pay-order-extension-channel_id"
+            data-testid="field-channel_id"
+            data-agent-target="pay-order-extension:field:channel_id"
+            data-agent-state={formData.channel_id == null || formData.channel_id === "" ? "empty" : "filled"}
+            aria-label="渠道编号"
             value={formData.channel_id != null ? String(formData.channel_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, channel_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -109,9 +131,14 @@ export function PayOrderExtensionForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">渠道编码</label>
+          <label htmlFor="pay-order-extension-channel_code" className="block text-xs text-slate-600 mb-1">渠道编码</label>
           <input
             type="text"
+            id="pay-order-extension-channel_code"
+            data-testid="field-channel_code"
+            data-agent-target="pay-order-extension:field:channel_code"
+            data-agent-state={formData.channel_code ? "filled" : "empty"}
+            aria-label="渠道编码"
             value={formData.channel_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, channel_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -121,9 +148,14 @@ export function PayOrderExtensionForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户 IP</label>
+          <label htmlFor="pay-order-extension-user_ip" className="block text-xs text-slate-600 mb-1">用户 IP</label>
           <input
             type="text"
+            id="pay-order-extension-user_ip"
+            data-testid="field-user_ip"
+            data-agent-target="pay-order-extension:field:user_ip"
+            data-agent-state={formData.user_ip ? "filled" : "empty"}
+            aria-label="用户 IP"
             value={formData.user_ip ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_ip: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -133,9 +165,14 @@ export function PayOrderExtensionForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">支付状态</label>
+          <label htmlFor="pay-order-extension-status" className="block text-xs text-slate-600 mb-1">支付状态</label>
           <input
             type="number"
+            id="pay-order-extension-status"
+            data-testid="field-status"
+            data-agent-target="pay-order-extension:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="支付状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -145,9 +182,14 @@ export function PayOrderExtensionForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">支付渠道的额外参数</label>
+          <label htmlFor="pay-order-extension-channel_extras" className="block text-xs text-slate-600 mb-1">支付渠道的额外参数</label>
           <input
             type="text"
+            id="pay-order-extension-channel_extras"
+            data-testid="field-channel_extras"
+            data-agent-target="pay-order-extension:field:channel_extras"
+            data-agent-state={formData.channel_extras ? "filled" : "empty"}
+            aria-label="支付渠道的额外参数"
             value={formData.channel_extras ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, channel_extras: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -157,9 +199,14 @@ export function PayOrderExtensionForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">调用渠道的错误码</label>
+          <label htmlFor="pay-order-extension-channel_error_code" className="block text-xs text-slate-600 mb-1">调用渠道的错误码</label>
           <input
             type="text"
+            id="pay-order-extension-channel_error_code"
+            data-testid="field-channel_error_code"
+            data-agent-target="pay-order-extension:field:channel_error_code"
+            data-agent-state={formData.channel_error_code ? "filled" : "empty"}
+            aria-label="调用渠道的错误码"
             value={formData.channel_error_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, channel_error_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -169,9 +216,14 @@ export function PayOrderExtensionForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">调用渠道报错时，错误信息</label>
+          <label htmlFor="pay-order-extension-channel_error_msg" className="block text-xs text-slate-600 mb-1">调用渠道报错时，错误信息</label>
           <input
             type="text"
+            id="pay-order-extension-channel_error_msg"
+            data-testid="field-channel_error_msg"
+            data-agent-target="pay-order-extension:field:channel_error_msg"
+            data-agent-state={formData.channel_error_msg ? "filled" : "empty"}
+            aria-label="调用渠道报错时，错误信息"
             value={formData.channel_error_msg ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, channel_error_msg: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -181,9 +233,14 @@ export function PayOrderExtensionForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">支付渠道的同步/异步通知的内容</label>
+          <label htmlFor="pay-order-extension-channel_notify_data" className="block text-xs text-slate-600 mb-1">支付渠道的同步/异步通知的内容</label>
           <input
             type="text"
+            id="pay-order-extension-channel_notify_data"
+            data-testid="field-channel_notify_data"
+            data-agent-target="pay-order-extension:field:channel_notify_data"
+            data-agent-state={formData.channel_notify_data ? "filled" : "empty"}
+            aria-label="支付渠道的同步/异步通知的内容"
             value={formData.channel_notify_data ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, channel_notify_data: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -197,6 +254,8 @@ export function PayOrderExtensionForm({ open, initialData, onClose, onSuccess }:
             <button
               type="button"
               onClick={onClose}
+              data-testid="pay-order-extension-form-cancel"
+              data-agent-target="pay-order-extension:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -204,6 +263,9 @@ export function PayOrderExtensionForm({ open, initialData, onClose, onSuccess }:
             <button
               type="submit"
               disabled={loading}
+              data-testid="pay-order-extension-form-submit"
+              data-agent-target="pay-order-extension:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

@@ -1,0 +1,240 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "pay",
+  "entity": "PayWalletTransaction",
+  "kebab": "pay-wallet-transaction",
+  "businessName": "会员钱包流水",
+  "permissionPrefix": "pay:pay_wallet_transaction",
+  "page": {
+    "route": "/admin/pay/pay-wallet-transaction",
+    "title": "会员钱包流水管理",
+    "titleSelector": "[data-testid=\"pay-wallet-transaction-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.pay/api",
+    "bffMount": "/api/v1/admin/pay",
+    "resource": "pay-wallet-transaction",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/pay-wallet-transaction",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/pay-wallet-transaction/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/pay-wallet-transaction"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/pay-wallet-transaction/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/pay-wallet-transaction/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"pay-wallet-transaction-title\"]",
+    "refresh": "[data-testid=\"pay-wallet-transaction-refresh\"]",
+    "createButton": "[data-testid=\"pay-wallet-transaction-create\"]",
+    "searchForm": "[data-testid=\"pay-wallet-transaction-search\"]",
+    "searchSubmit": "[data-testid=\"pay-wallet-transaction-search-submit\"]",
+    "searchReset": "[data-testid=\"pay-wallet-transaction-search-reset\"]",
+    "total": "[data-testid=\"pay-wallet-transaction-total\"]",
+    "table": "[data-testid=\"pay-wallet-transaction-table\"]",
+    "row": "[data-testid=\"pay-wallet-transaction-row\"]",
+    "editButton": "[data-testid=\"pay-wallet-transaction-edit\"]",
+    "deleteButton": "[data-testid=\"pay-wallet-transaction-delete\"]",
+    "form": "[data-testid=\"pay-wallet-transaction-form\"]",
+    "formError": "[data-testid=\"pay-wallet-transaction-form-error\"]",
+    "formSubmit": "[data-testid=\"pay-wallet-transaction-form-submit\"]",
+    "formCancel": "[data-testid=\"pay-wallet-transaction-form-cancel\"]",
+    "formClose": "[data-testid=\"pay-wallet-transaction-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "会员钱包流水列表",
+    "dialogLabel": {
+      "create": "新增会员钱包流水",
+      "edit": "编辑会员钱包流水"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "no",
+        "label": "流水号",
+        "type": "string",
+        "required": false,
+        "testId": "field-no",
+        "selector": "[data-testid=\"field-no\"]"
+      },
+      {
+        "name": "wallet_id",
+        "label": "钱包编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-wallet_id",
+        "selector": "[data-testid=\"field-wallet_id\"]"
+      },
+      {
+        "name": "biz_type",
+        "label": "关联业务分类",
+        "type": "number",
+        "required": false,
+        "testId": "field-biz_type",
+        "selector": "[data-testid=\"field-biz_type\"]"
+      },
+      {
+        "name": "biz_id",
+        "label": "关联业务编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-biz_id",
+        "selector": "[data-testid=\"field-biz_id\"]"
+      },
+      {
+        "name": "title",
+        "label": "流水说明",
+        "type": "string",
+        "required": false,
+        "testId": "field-title",
+        "selector": "[data-testid=\"field-title\"]"
+      },
+      {
+        "name": "price",
+        "label": "交易金额，单位分",
+        "type": "number",
+        "required": false,
+        "testId": "field-price",
+        "selector": "[data-testid=\"field-price\"]"
+      },
+      {
+        "name": "balance",
+        "label": "交易后余额，单位分",
+        "type": "number",
+        "required": false,
+        "testId": "field-balance",
+        "selector": "[data-testid=\"field-balance\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "pay-wallet-transaction",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"pay-wallet-transaction\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"pay-wallet-transaction-form-overlay\"]",
+      "dialog": "[data-testid=\"pay-wallet-transaction-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "pay-wallet-transaction:search",
+      "reset": "pay-wallet-transaction:reset",
+      "refresh": "pay-wallet-transaction:refresh",
+      "create": "pay-wallet-transaction:create",
+      "edit": "pay-wallet-transaction:edit",
+      "delete": "pay-wallet-transaction:delete",
+      "submit": "pay-wallet-transaction:submit",
+      "cancel": "pay-wallet-transaction:cancel",
+      "close": "pay-wallet-transaction:close",
+      "row": "pay-wallet-transaction:row",
+      "pagination": "pay-wallet-transaction:pagination",
+      "fields": {
+        "no": "pay-wallet-transaction:field:no",
+        "wallet_id": "pay-wallet-transaction:field:wallet_id",
+        "biz_type": "pay-wallet-transaction:field:biz_type",
+        "biz_id": "pay-wallet-transaction:field:biz_id",
+        "title": "pay-wallet-transaction:field:title",
+        "price": "pay-wallet-transaction:field:price",
+        "balance": "pay-wallet-transaction:field:balance"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "pay.pay-wallet-transaction",
+      "examples": [
+        "pay.pay-wallet-transaction__List__Refresh",
+        "pay.pay-wallet-transaction__ListItem__Open",
+        "pay.pay-wallet-transaction__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

@@ -1,0 +1,267 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesDvMachinery",
+  "kebab": "mes-dv-machinery",
+  "businessName": "MES 设备台账",
+  "permissionPrefix": "mes:mes_dv_machinery",
+  "page": {
+    "route": "/admin/mes/mes-dv-machinery",
+    "title": "MES 设备台账管理",
+    "titleSelector": "[data-testid=\"mes-dv-machinery-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-dv-machinery",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-dv-machinery",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-dv-machinery/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-dv-machinery"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-dv-machinery/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-dv-machinery/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-dv-machinery-title\"]",
+    "refresh": "[data-testid=\"mes-dv-machinery-refresh\"]",
+    "createButton": "[data-testid=\"mes-dv-machinery-create\"]",
+    "searchForm": "[data-testid=\"mes-dv-machinery-search\"]",
+    "searchSubmit": "[data-testid=\"mes-dv-machinery-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-dv-machinery-search-reset\"]",
+    "total": "[data-testid=\"mes-dv-machinery-total\"]",
+    "table": "[data-testid=\"mes-dv-machinery-table\"]",
+    "row": "[data-testid=\"mes-dv-machinery-row\"]",
+    "editButton": "[data-testid=\"mes-dv-machinery-edit\"]",
+    "deleteButton": "[data-testid=\"mes-dv-machinery-delete\"]",
+    "form": "[data-testid=\"mes-dv-machinery-form\"]",
+    "formError": "[data-testid=\"mes-dv-machinery-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-dv-machinery-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-dv-machinery-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-dv-machinery-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 设备台账列表",
+    "dialogLabel": {
+      "create": "新增MES 设备台账",
+      "edit": "编辑MES 设备台账"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "code",
+        "label": "设备编码",
+        "type": "string",
+        "required": false,
+        "testId": "field-code",
+        "selector": "[data-testid=\"field-code\"]"
+      },
+      {
+        "name": "name",
+        "label": "设备名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "brand",
+        "label": "品牌",
+        "type": "string",
+        "required": false,
+        "testId": "field-brand",
+        "selector": "[data-testid=\"field-brand\"]"
+      },
+      {
+        "name": "specification",
+        "label": "规格型号",
+        "type": "string",
+        "required": false,
+        "testId": "field-specification",
+        "selector": "[data-testid=\"field-specification\"]"
+      },
+      {
+        "name": "machinery_type_id",
+        "label": "设备类型编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-machinery_type_id",
+        "selector": "[data-testid=\"field-machinery_type_id\"]"
+      },
+      {
+        "name": "workshop_id",
+        "label": "所属车间编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-workshop_id",
+        "selector": "[data-testid=\"field-workshop_id\"]"
+      },
+      {
+        "name": "status",
+        "label": "设备状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "last_mainten_time",
+        "label": "最近保养时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-last_mainten_time",
+        "selector": "[data-testid=\"field-last_mainten_time\"]"
+      },
+      {
+        "name": "last_check_time",
+        "label": "最近点检时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-last_check_time",
+        "selector": "[data-testid=\"field-last_check_time\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-dv-machinery",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-dv-machinery\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-dv-machinery-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-dv-machinery-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-dv-machinery:search",
+      "reset": "mes-dv-machinery:reset",
+      "refresh": "mes-dv-machinery:refresh",
+      "create": "mes-dv-machinery:create",
+      "edit": "mes-dv-machinery:edit",
+      "delete": "mes-dv-machinery:delete",
+      "submit": "mes-dv-machinery:submit",
+      "cancel": "mes-dv-machinery:cancel",
+      "close": "mes-dv-machinery:close",
+      "row": "mes-dv-machinery:row",
+      "pagination": "mes-dv-machinery:pagination",
+      "fields": {
+        "code": "mes-dv-machinery:field:code",
+        "name": "mes-dv-machinery:field:name",
+        "brand": "mes-dv-machinery:field:brand",
+        "specification": "mes-dv-machinery:field:specification",
+        "machinery_type_id": "mes-dv-machinery:field:machinery_type_id",
+        "workshop_id": "mes-dv-machinery:field:workshop_id",
+        "status": "mes-dv-machinery:field:status",
+        "last_mainten_time": "mes-dv-machinery:field:last_mainten_time",
+        "last_check_time": "mes-dv-machinery:field:last_check_time",
+        "remark": "mes-dv-machinery:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-dv-machinery",
+      "examples": [
+        "mes.mes-dv-machinery__List__Refresh",
+        "mes.mes-dv-machinery__ListItem__Open",
+        "mes.mes-dv-machinery__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

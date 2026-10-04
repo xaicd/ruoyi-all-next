@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesDvMachineryTypeService } from "../mes-dv-machinery-type.service"
 
 describe("MesDvMachineryTypeService", () => {
-  it("should create and query MesDvMachineryType（源框架导入）", async () => {
+  it("should create and query MES 设备类型", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesDvMachineryTypeService.create({
-        code: "测试MesDvMachineryType（源框架导入）",
+        code: "测试MES 设备类型",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("MesDvMachineryTypeService", () => {
   
       const updated = await MesDvMachineryTypeService.update(created.id, {
         id: created.id,
-        code: "更新MesDvMachineryType（源框架导入）",
+        code: "更新MES 设备类型",
       } as any)
       expect(updated).toBeDefined()
   

@@ -55,24 +55,36 @@ export function PayWalletTransactionForm({ open, initialData, onClose, onSuccess
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="pay-wallet-transaction-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑会员钱包流水" : "新增会员钱包流水"}
+        data-testid="pay-wallet-transaction-form"
+        data-agent-scope="pay-wallet-transaction:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑PayWalletTransaction（源框架导入）" : "新增PayWalletTransaction（源框架导入）"}
+            {isEdit ? "编辑会员钱包流水" : "新增会员钱包流水"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="pay-wallet-transaction-form-close" data-agent-target="pay-wallet-transaction:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="pay-wallet-transaction-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">流水号</label>
+          <label htmlFor="pay-wallet-transaction-no" className="block text-xs text-slate-600 mb-1">流水号</label>
           <input
             type="text"
+            id="pay-wallet-transaction-no"
+            data-testid="field-no"
+            data-agent-target="pay-wallet-transaction:field:no"
+            data-agent-state={formData.no ? "filled" : "empty"}
+            aria-label="流水号"
             value={formData.no ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, no: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -82,9 +94,14 @@ export function PayWalletTransactionForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">钱包编号</label>
+          <label htmlFor="pay-wallet-transaction-wallet_id" className="block text-xs text-slate-600 mb-1">钱包编号</label>
           <input
             type="number"
+            id="pay-wallet-transaction-wallet_id"
+            data-testid="field-wallet_id"
+            data-agent-target="pay-wallet-transaction:field:wallet_id"
+            data-agent-state={formData.wallet_id == null || formData.wallet_id === "" ? "empty" : "filled"}
+            aria-label="钱包编号"
             value={formData.wallet_id != null ? String(formData.wallet_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, wallet_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -94,9 +111,14 @@ export function PayWalletTransactionForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">关联业务分类</label>
+          <label htmlFor="pay-wallet-transaction-biz_type" className="block text-xs text-slate-600 mb-1">关联业务分类</label>
           <input
             type="number"
+            id="pay-wallet-transaction-biz_type"
+            data-testid="field-biz_type"
+            data-agent-target="pay-wallet-transaction:field:biz_type"
+            data-agent-state={formData.biz_type == null || formData.biz_type === "" ? "empty" : "filled"}
+            aria-label="关联业务分类"
             value={formData.biz_type != null ? String(formData.biz_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -106,9 +128,14 @@ export function PayWalletTransactionForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">关联业务编号</label>
+          <label htmlFor="pay-wallet-transaction-biz_id" className="block text-xs text-slate-600 mb-1">关联业务编号</label>
           <input
             type="text"
+            id="pay-wallet-transaction-biz_id"
+            data-testid="field-biz_id"
+            data-agent-target="pay-wallet-transaction:field:biz_id"
+            data-agent-state={formData.biz_id ? "filled" : "empty"}
+            aria-label="关联业务编号"
             value={formData.biz_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -118,9 +145,14 @@ export function PayWalletTransactionForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">流水说明</label>
+          <label htmlFor="pay-wallet-transaction-title" className="block text-xs text-slate-600 mb-1">流水说明</label>
           <input
             type="text"
+            id="pay-wallet-transaction-title"
+            data-testid="field-title"
+            data-agent-target="pay-wallet-transaction:field:title"
+            data-agent-state={formData.title ? "filled" : "empty"}
+            aria-label="流水说明"
             value={formData.title ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -130,9 +162,14 @@ export function PayWalletTransactionForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">交易金额，单位分</label>
+          <label htmlFor="pay-wallet-transaction-price" className="block text-xs text-slate-600 mb-1">交易金额，单位分</label>
           <input
             type="number"
+            id="pay-wallet-transaction-price"
+            data-testid="field-price"
+            data-agent-target="pay-wallet-transaction:field:price"
+            data-agent-state={formData.price == null || formData.price === "" ? "empty" : "filled"}
+            aria-label="交易金额，单位分"
             value={formData.price != null ? String(formData.price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -142,9 +179,14 @@ export function PayWalletTransactionForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">交易后余额，单位分</label>
+          <label htmlFor="pay-wallet-transaction-balance" className="block text-xs text-slate-600 mb-1">交易后余额，单位分</label>
           <input
             type="number"
+            id="pay-wallet-transaction-balance"
+            data-testid="field-balance"
+            data-agent-target="pay-wallet-transaction:field:balance"
+            data-agent-state={formData.balance == null || formData.balance === "" ? "empty" : "filled"}
+            aria-label="交易后余额，单位分"
             value={formData.balance != null ? String(formData.balance) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, balance: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -158,6 +200,8 @@ export function PayWalletTransactionForm({ open, initialData, onClose, onSuccess
             <button
               type="button"
               onClick={onClose}
+              data-testid="pay-wallet-transaction-form-cancel"
+              data-agent-target="pay-wallet-transaction:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -165,6 +209,9 @@ export function PayWalletTransactionForm({ open, initialData, onClose, onSuccess
             <button
               type="submit"
               disabled={loading}
+              data-testid="pay-wallet-transaction-form-submit"
+              data-agent-target="pay-wallet-transaction:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

@@ -52,24 +52,36 @@ export function PayNotifyLogForm({ open, initialData, onClose, onSuccess }: PayN
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="pay-notify-log-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑商户支付、退款等的通知 Log每次通知时，都会在该表中，记录一次 Log，方便排查问题" : "新增商户支付、退款等的通知 Log每次通知时，都会在该表中，记录一次 Log，方便排查问题"}
+        data-testid="pay-notify-log-form"
+        data-agent-scope="pay-notify-log:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑PayNotifyLog（源框架导入）" : "新增PayNotifyLog（源框架导入）"}
+            {isEdit ? "编辑商户支付、退款等的通知 Log每次通知时，都会在该表中，记录一次 Log，方便排查问题" : "新增商户支付、退款等的通知 Log每次通知时，都会在该表中，记录一次 Log，方便排查问题"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="pay-notify-log-form-close" data-agent-target="pay-notify-log:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="pay-notify-log-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">通知任务编号</label>
+          <label htmlFor="pay-notify-log-task_id" className="block text-xs text-slate-600 mb-1">通知任务编号</label>
           <input
             type="number"
+            id="pay-notify-log-task_id"
+            data-testid="field-task_id"
+            data-agent-target="pay-notify-log:field:task_id"
+            data-agent-state={formData.task_id == null || formData.task_id === "" ? "empty" : "filled"}
+            aria-label="通知任务编号"
             value={formData.task_id != null ? String(formData.task_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, task_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -79,9 +91,14 @@ export function PayNotifyLogForm({ open, initialData, onClose, onSuccess }: PayN
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">第几次被通知</label>
+          <label htmlFor="pay-notify-log-notify_times" className="block text-xs text-slate-600 mb-1">第几次被通知</label>
           <input
             type="number"
+            id="pay-notify-log-notify_times"
+            data-testid="field-notify_times"
+            data-agent-target="pay-notify-log:field:notify_times"
+            data-agent-state={formData.notify_times == null || formData.notify_times === "" ? "empty" : "filled"}
+            aria-label="第几次被通知"
             value={formData.notify_times != null ? String(formData.notify_times) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, notify_times: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -91,9 +108,14 @@ export function PayNotifyLogForm({ open, initialData, onClose, onSuccess }: PayN
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">HTTP 响应结果</label>
+          <label htmlFor="pay-notify-log-response" className="block text-xs text-slate-600 mb-1">HTTP 响应结果</label>
           <input
             type="text"
+            id="pay-notify-log-response"
+            data-testid="field-response"
+            data-agent-target="pay-notify-log:field:response"
+            data-agent-state={formData.response ? "filled" : "empty"}
+            aria-label="HTTP 响应结果"
             value={formData.response ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, response: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -103,9 +125,14 @@ export function PayNotifyLogForm({ open, initialData, onClose, onSuccess }: PayN
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">支付通知状态</label>
+          <label htmlFor="pay-notify-log-status" className="block text-xs text-slate-600 mb-1">支付通知状态</label>
           <input
             type="number"
+            id="pay-notify-log-status"
+            data-testid="field-status"
+            data-agent-target="pay-notify-log:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="支付通知状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -119,6 +146,8 @@ export function PayNotifyLogForm({ open, initialData, onClose, onSuccess }: PayN
             <button
               type="button"
               onClick={onClose}
+              data-testid="pay-notify-log-form-cancel"
+              data-agent-target="pay-notify-log:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -126,6 +155,9 @@ export function PayNotifyLogForm({ open, initialData, onClose, onSuccess }: PayN
             <button
               type="submit"
               disabled={loading}
+              data-testid="pay-notify-log-form-submit"
+              data-agent-target="pay-notify-log:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

@@ -55,24 +55,36 @@ export function ImFacePackItemForm({ open, initialData, onClose, onSuccess }: Im
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="im-face-pack-item-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑IM 表情包项 DO（系统表情包内的单张表情图）" : "新增IM 表情包项 DO（系统表情包内的单张表情图）"}
+        data-testid="im-face-pack-item-form"
+        data-agent-scope="im-face-pack-item:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑ImFacePackItem（源框架导入）" : "新增ImFacePackItem（源框架导入）"}
+            {isEdit ? "编辑IM 表情包项 DO（系统表情包内的单张表情图）" : "新增IM 表情包项 DO（系统表情包内的单张表情图）"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="im-face-pack-item-form-close" data-agent-target="im-face-pack-item:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="im-face-pack-item-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">所属表情包编号</label>
+          <label htmlFor="im-face-pack-item-pack_id" className="block text-xs text-slate-600 mb-1">所属表情包编号</label>
           <input
             type="number"
+            id="im-face-pack-item-pack_id"
+            data-testid="field-pack_id"
+            data-agent-target="im-face-pack-item:field:pack_id"
+            data-agent-state={formData.pack_id == null || formData.pack_id === "" ? "empty" : "filled"}
+            aria-label="所属表情包编号"
             value={formData.pack_id != null ? String(formData.pack_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pack_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -82,9 +94,14 @@ export function ImFacePackItemForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">表情图 URL</label>
+          <label htmlFor="im-face-pack-item-url" className="block text-xs text-slate-600 mb-1">表情图 URL</label>
           <input
             type="text"
+            id="im-face-pack-item-url"
+            data-testid="field-url"
+            data-agent-target="im-face-pack-item:field:url"
+            data-agent-state={formData.url ? "filled" : "empty"}
+            aria-label="表情图 URL"
             value={formData.url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -94,9 +111,14 @@ export function ImFacePackItemForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">表情名（可选；如「狗头」「捂脸」）</label>
+          <label htmlFor="im-face-pack-item-name" className="block text-xs text-slate-600 mb-1">表情名（可选；如「狗头」「捂脸」）</label>
           <input
             type="text"
+            id="im-face-pack-item-name"
+            data-testid="field-name"
+            data-agent-target="im-face-pack-item:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="表情名（可选；如「狗头」「捂脸」）"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -106,9 +128,14 @@ export function ImFacePackItemForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">渲染宽度（像素）</label>
+          <label htmlFor="im-face-pack-item-width" className="block text-xs text-slate-600 mb-1">渲染宽度（像素）</label>
           <input
             type="number"
+            id="im-face-pack-item-width"
+            data-testid="field-width"
+            data-agent-target="im-face-pack-item:field:width"
+            data-agent-state={formData.width == null || formData.width === "" ? "empty" : "filled"}
+            aria-label="渲染宽度（像素）"
             value={formData.width != null ? String(formData.width) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, width: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -118,9 +145,14 @@ export function ImFacePackItemForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">渲染高度（像素）</label>
+          <label htmlFor="im-face-pack-item-height" className="block text-xs text-slate-600 mb-1">渲染高度（像素）</label>
           <input
             type="number"
+            id="im-face-pack-item-height"
+            data-testid="field-height"
+            data-agent-target="im-face-pack-item:field:height"
+            data-agent-state={formData.height == null || formData.height === "" ? "empty" : "filled"}
+            aria-label="渲染高度（像素）"
             value={formData.height != null ? String(formData.height) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, height: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -130,9 +162,14 @@ export function ImFacePackItemForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">排序</label>
+          <label htmlFor="im-face-pack-item-sort" className="block text-xs text-slate-600 mb-1">排序</label>
           <input
             type="number"
+            id="im-face-pack-item-sort"
+            data-testid="field-sort"
+            data-agent-target="im-face-pack-item:field:sort"
+            data-agent-state={formData.sort == null || formData.sort === "" ? "empty" : "filled"}
+            aria-label="排序"
             value={formData.sort != null ? String(formData.sort) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sort: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -142,9 +179,14 @@ export function ImFacePackItemForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="im-face-pack-item-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="im-face-pack-item-status"
+            data-testid="field-status"
+            data-agent-target="im-face-pack-item:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -158,6 +200,8 @@ export function ImFacePackItemForm({ open, initialData, onClose, onSuccess }: Im
             <button
               type="button"
               onClick={onClose}
+              data-testid="im-face-pack-item-form-cancel"
+              data-agent-target="im-face-pack-item:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -165,6 +209,9 @@ export function ImFacePackItemForm({ open, initialData, onClose, onSuccess }: Im
             <button
               type="submit"
               disabled={loading}
+              data-testid="im-face-pack-item-form-submit"
+              data-agent-target="im-face-pack-item:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

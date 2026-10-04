@@ -1,0 +1,231 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesProWorkRecord",
+  "kebab": "mes-pro-work-record",
+  "businessName": "MES 用户工作站绑定关系（当前快照）",
+  "permissionPrefix": "mes:mes_pro_work_record",
+  "page": {
+    "route": "/admin/mes/mes-pro-work-record",
+    "title": "MES 用户工作站绑定关系（当前快照）管理",
+    "titleSelector": "[data-testid=\"mes-pro-work-record-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-pro-work-record",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-pro-work-record",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-pro-work-record/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-pro-work-record"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-pro-work-record/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-pro-work-record/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-pro-work-record-title\"]",
+    "refresh": "[data-testid=\"mes-pro-work-record-refresh\"]",
+    "createButton": "[data-testid=\"mes-pro-work-record-create\"]",
+    "searchForm": "[data-testid=\"mes-pro-work-record-search\"]",
+    "searchSubmit": "[data-testid=\"mes-pro-work-record-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-pro-work-record-search-reset\"]",
+    "total": "[data-testid=\"mes-pro-work-record-total\"]",
+    "table": "[data-testid=\"mes-pro-work-record-table\"]",
+    "row": "[data-testid=\"mes-pro-work-record-row\"]",
+    "editButton": "[data-testid=\"mes-pro-work-record-edit\"]",
+    "deleteButton": "[data-testid=\"mes-pro-work-record-delete\"]",
+    "form": "[data-testid=\"mes-pro-work-record-form\"]",
+    "formError": "[data-testid=\"mes-pro-work-record-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-pro-work-record-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-pro-work-record-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-pro-work-record-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 用户工作站绑定关系（当前快照）列表",
+    "dialogLabel": {
+      "create": "新增MES 用户工作站绑定关系（当前快照）",
+      "edit": "编辑MES 用户工作站绑定关系（当前快照）"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "workstation_id",
+        "label": "工作站编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-workstation_id",
+        "selector": "[data-testid=\"field-workstation_id\"]"
+      },
+      {
+        "name": "type",
+        "label": "当前状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "clock_in_time",
+        "label": "上工时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-clock_in_time",
+        "selector": "[data-testid=\"field-clock_in_time\"]"
+      },
+      {
+        "name": "clock_out_time",
+        "label": "下工时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-clock_out_time",
+        "selector": "[data-testid=\"field-clock_out_time\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-pro-work-record",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-pro-work-record\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-pro-work-record-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-pro-work-record-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-pro-work-record:search",
+      "reset": "mes-pro-work-record:reset",
+      "refresh": "mes-pro-work-record:refresh",
+      "create": "mes-pro-work-record:create",
+      "edit": "mes-pro-work-record:edit",
+      "delete": "mes-pro-work-record:delete",
+      "submit": "mes-pro-work-record:submit",
+      "cancel": "mes-pro-work-record:cancel",
+      "close": "mes-pro-work-record:close",
+      "row": "mes-pro-work-record:row",
+      "pagination": "mes-pro-work-record:pagination",
+      "fields": {
+        "user_id": "mes-pro-work-record:field:user_id",
+        "workstation_id": "mes-pro-work-record:field:workstation_id",
+        "type": "mes-pro-work-record:field:type",
+        "clock_in_time": "mes-pro-work-record:field:clock_in_time",
+        "clock_out_time": "mes-pro-work-record:field:clock_out_time",
+        "remark": "mes-pro-work-record:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-pro-work-record",
+      "examples": [
+        "mes.mes-pro-work-record__List__Refresh",
+        "mes.mes-pro-work-record__ListItem__Open",
+        "mes.mes-pro-work-record__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

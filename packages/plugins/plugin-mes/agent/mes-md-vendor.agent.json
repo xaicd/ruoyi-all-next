@@ -1,0 +1,366 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesMdVendor",
+  "kebab": "mes-md-vendor",
+  "businessName": "MES 供应商",
+  "permissionPrefix": "mes:mes_md_vendor",
+  "page": {
+    "route": "/admin/mes/mes-md-vendor",
+    "title": "MES 供应商管理",
+    "titleSelector": "[data-testid=\"mes-md-vendor-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-md-vendor",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-md-vendor",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-md-vendor/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-md-vendor"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-md-vendor/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-md-vendor/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-md-vendor-title\"]",
+    "refresh": "[data-testid=\"mes-md-vendor-refresh\"]",
+    "createButton": "[data-testid=\"mes-md-vendor-create\"]",
+    "searchForm": "[data-testid=\"mes-md-vendor-search\"]",
+    "searchSubmit": "[data-testid=\"mes-md-vendor-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-md-vendor-search-reset\"]",
+    "total": "[data-testid=\"mes-md-vendor-total\"]",
+    "table": "[data-testid=\"mes-md-vendor-table\"]",
+    "row": "[data-testid=\"mes-md-vendor-row\"]",
+    "editButton": "[data-testid=\"mes-md-vendor-edit\"]",
+    "deleteButton": "[data-testid=\"mes-md-vendor-delete\"]",
+    "form": "[data-testid=\"mes-md-vendor-form\"]",
+    "formError": "[data-testid=\"mes-md-vendor-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-md-vendor-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-md-vendor-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-md-vendor-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 供应商列表",
+    "dialogLabel": {
+      "create": "新增MES 供应商",
+      "edit": "编辑MES 供应商"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "code",
+        "label": "供应商编码",
+        "type": "string",
+        "required": false,
+        "testId": "field-code",
+        "selector": "[data-testid=\"field-code\"]"
+      },
+      {
+        "name": "name",
+        "label": "供应商名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "nickname",
+        "label": "供应商简称",
+        "type": "string",
+        "required": false,
+        "testId": "field-nickname",
+        "selector": "[data-testid=\"field-nickname\"]"
+      },
+      {
+        "name": "english_name",
+        "label": "供应商英文名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-english_name",
+        "selector": "[data-testid=\"field-english_name\"]"
+      },
+      {
+        "name": "description",
+        "label": "供应商简介",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      },
+      {
+        "name": "logo",
+        "label": "供应商LOGO地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-logo",
+        "selector": "[data-testid=\"field-logo\"]"
+      },
+      {
+        "name": "level",
+        "label": "供应商等级",
+        "type": "string",
+        "required": false,
+        "testId": "field-level",
+        "selector": "[data-testid=\"field-level\"]"
+      },
+      {
+        "name": "score",
+        "label": "供应商评分",
+        "type": "number",
+        "required": false,
+        "testId": "field-score",
+        "selector": "[data-testid=\"field-score\"]"
+      },
+      {
+        "name": "address",
+        "label": "供应商地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-address",
+        "selector": "[data-testid=\"field-address\"]"
+      },
+      {
+        "name": "website",
+        "label": "供应商官网地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-website",
+        "selector": "[data-testid=\"field-website\"]"
+      },
+      {
+        "name": "email",
+        "label": "供应商邮箱地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-email",
+        "selector": "[data-testid=\"field-email\"]"
+      },
+      {
+        "name": "telephone",
+        "label": "供应商电话",
+        "type": "string",
+        "required": false,
+        "testId": "field-telephone",
+        "selector": "[data-testid=\"field-telephone\"]"
+      },
+      {
+        "name": "contact1_name",
+        "label": "联系人1",
+        "type": "string",
+        "required": false,
+        "testId": "field-contact1_name",
+        "selector": "[data-testid=\"field-contact1_name\"]"
+      },
+      {
+        "name": "contact1_telephone",
+        "label": "联系人1-电话",
+        "type": "string",
+        "required": false,
+        "testId": "field-contact1_telephone",
+        "selector": "[data-testid=\"field-contact1_telephone\"]"
+      },
+      {
+        "name": "contact1_email",
+        "label": "联系人1-邮箱",
+        "type": "string",
+        "required": false,
+        "testId": "field-contact1_email",
+        "selector": "[data-testid=\"field-contact1_email\"]"
+      },
+      {
+        "name": "contact2_name",
+        "label": "联系人2",
+        "type": "string",
+        "required": false,
+        "testId": "field-contact2_name",
+        "selector": "[data-testid=\"field-contact2_name\"]"
+      },
+      {
+        "name": "contact2_telephone",
+        "label": "联系人2-电话",
+        "type": "string",
+        "required": false,
+        "testId": "field-contact2_telephone",
+        "selector": "[data-testid=\"field-contact2_telephone\"]"
+      },
+      {
+        "name": "contact2_email",
+        "label": "联系人2-邮箱",
+        "type": "string",
+        "required": false,
+        "testId": "field-contact2_email",
+        "selector": "[data-testid=\"field-contact2_email\"]"
+      },
+      {
+        "name": "credit_code",
+        "label": "统一社会信用代码",
+        "type": "string",
+        "required": false,
+        "testId": "field-credit_code",
+        "selector": "[data-testid=\"field-credit_code\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-md-vendor",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-md-vendor\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-md-vendor-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-md-vendor-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-md-vendor:search",
+      "reset": "mes-md-vendor:reset",
+      "refresh": "mes-md-vendor:refresh",
+      "create": "mes-md-vendor:create",
+      "edit": "mes-md-vendor:edit",
+      "delete": "mes-md-vendor:delete",
+      "submit": "mes-md-vendor:submit",
+      "cancel": "mes-md-vendor:cancel",
+      "close": "mes-md-vendor:close",
+      "row": "mes-md-vendor:row",
+      "pagination": "mes-md-vendor:pagination",
+      "fields": {
+        "code": "mes-md-vendor:field:code",
+        "name": "mes-md-vendor:field:name",
+        "nickname": "mes-md-vendor:field:nickname",
+        "english_name": "mes-md-vendor:field:english_name",
+        "description": "mes-md-vendor:field:description",
+        "logo": "mes-md-vendor:field:logo",
+        "level": "mes-md-vendor:field:level",
+        "score": "mes-md-vendor:field:score",
+        "address": "mes-md-vendor:field:address",
+        "website": "mes-md-vendor:field:website",
+        "email": "mes-md-vendor:field:email",
+        "telephone": "mes-md-vendor:field:telephone",
+        "contact1_name": "mes-md-vendor:field:contact1_name",
+        "contact1_telephone": "mes-md-vendor:field:contact1_telephone",
+        "contact1_email": "mes-md-vendor:field:contact1_email",
+        "contact2_name": "mes-md-vendor:field:contact2_name",
+        "contact2_telephone": "mes-md-vendor:field:contact2_telephone",
+        "contact2_email": "mes-md-vendor:field:contact2_email",
+        "credit_code": "mes-md-vendor:field:credit_code",
+        "status": "mes-md-vendor:field:status",
+        "remark": "mes-md-vendor:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-md-vendor",
+      "examples": [
+        "mes.mes-md-vendor__List__Refresh",
+        "mes.mes-md-vendor__ListItem__Open",
+        "mes.mes-md-vendor__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

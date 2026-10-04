@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for PointProduct（源框架导入） (PointProduct)
+-- Auto-generated RBAC & Menu Migration for 积分商城商品 (PointProduct)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-point-product',
   'mall-dir',
-  'PointProduct（源框架导入）管理',
+  '积分商城商品管理',
   '/admin/mall/point-product',
   'mall/point-product/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-point-product-query',  'menu-point-product', '查询PointProduct（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:point_product:query',  1, NOW(), NOW()),
-('menu-point-product-create', 'menu-point-product', '新增PointProduct（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:point_product:create', 2, NOW(), NOW()),
-('menu-point-product-update', 'menu-point-product', '修改PointProduct（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:point_product:update', 3, NOW(), NOW()),
-('menu-point-product-delete', 'menu-point-product', '删除PointProduct（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:point_product:delete', 4, NOW(), NOW())
+('menu-point-product-query',  'menu-point-product', '查询积分商城商品', 'BUTTON', 'ACTIVE', 'mall:point_product:query',  1, NOW(), NOW()),
+('menu-point-product-create', 'menu-point-product', '新增积分商城商品', 'BUTTON', 'ACTIVE', 'mall:point_product:create', 2, NOW(), NOW()),
+('menu-point-product-update', 'menu-point-product', '修改积分商城商品', 'BUTTON', 'ACTIVE', 'mall:point_product:update', 3, NOW(), NOW()),
+('menu-point-product-delete', 'menu-point-product', '删除积分商城商品', 'BUTTON', 'ACTIVE', 'mall:point_product:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

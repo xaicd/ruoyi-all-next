@@ -1,0 +1,294 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "iot",
+  "entity": "IotProduct",
+  "kebab": "iot-product",
+  "businessName": "IoT 产品",
+  "permissionPrefix": "iot:iot_product",
+  "page": {
+    "route": "/admin/iot/iot-product",
+    "title": "IoT 产品管理",
+    "titleSelector": "[data-testid=\"iot-product-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.iot/api",
+    "bffMount": "/api/v1/admin/iot",
+    "resource": "iot-product",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/iot-product",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/iot-product/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/iot-product"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/iot-product/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/iot-product/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"iot-product-title\"]",
+    "refresh": "[data-testid=\"iot-product-refresh\"]",
+    "createButton": "[data-testid=\"iot-product-create\"]",
+    "searchForm": "[data-testid=\"iot-product-search\"]",
+    "searchSubmit": "[data-testid=\"iot-product-search-submit\"]",
+    "searchReset": "[data-testid=\"iot-product-search-reset\"]",
+    "total": "[data-testid=\"iot-product-total\"]",
+    "table": "[data-testid=\"iot-product-table\"]",
+    "row": "[data-testid=\"iot-product-row\"]",
+    "editButton": "[data-testid=\"iot-product-edit\"]",
+    "deleteButton": "[data-testid=\"iot-product-delete\"]",
+    "form": "[data-testid=\"iot-product-form\"]",
+    "formError": "[data-testid=\"iot-product-form-error\"]",
+    "formSubmit": "[data-testid=\"iot-product-form-submit\"]",
+    "formCancel": "[data-testid=\"iot-product-form-cancel\"]",
+    "formClose": "[data-testid=\"iot-product-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IoT 产品列表",
+    "dialogLabel": {
+      "create": "新增IoT 产品",
+      "edit": "编辑IoT 产品"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "产品名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "product_key",
+        "label": "产品标识",
+        "type": "string",
+        "required": false,
+        "testId": "field-product_key",
+        "selector": "[data-testid=\"field-product_key\"]"
+      },
+      {
+        "name": "product_secret",
+        "label": "产品密钥，用于一型一密动态注册",
+        "type": "string",
+        "required": false,
+        "testId": "field-product_secret",
+        "selector": "[data-testid=\"field-product_secret\"]"
+      },
+      {
+        "name": "register_enabled",
+        "label": "是否开启动态注册",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-register_enabled",
+        "selector": "[data-testid=\"field-register_enabled\"]"
+      },
+      {
+        "name": "category_id",
+        "label": "产品分类编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-category_id",
+        "selector": "[data-testid=\"field-category_id\"]"
+      },
+      {
+        "name": "icon",
+        "label": "产品图标",
+        "type": "string",
+        "required": false,
+        "testId": "field-icon",
+        "selector": "[data-testid=\"field-icon\"]"
+      },
+      {
+        "name": "pic_url",
+        "label": "产品图片",
+        "type": "string",
+        "required": false,
+        "testId": "field-pic_url",
+        "selector": "[data-testid=\"field-pic_url\"]"
+      },
+      {
+        "name": "description",
+        "label": "产品描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      },
+      {
+        "name": "status",
+        "label": "产品状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "device_type",
+        "label": "设备类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-device_type",
+        "selector": "[data-testid=\"field-device_type\"]"
+      },
+      {
+        "name": "net_type",
+        "label": "联网方式",
+        "type": "number",
+        "required": false,
+        "testId": "field-net_type",
+        "selector": "[data-testid=\"field-net_type\"]"
+      },
+      {
+        "name": "protocol_type",
+        "label": "协议类型",
+        "type": "string",
+        "required": false,
+        "testId": "field-protocol_type",
+        "selector": "[data-testid=\"field-protocol_type\"]"
+      },
+      {
+        "name": "serialize_type",
+        "label": "序列化类型",
+        "type": "string",
+        "required": false,
+        "testId": "field-serialize_type",
+        "selector": "[data-testid=\"field-serialize_type\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "iot-product",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"iot-product\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"iot-product-form-overlay\"]",
+      "dialog": "[data-testid=\"iot-product-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "iot-product:search",
+      "reset": "iot-product:reset",
+      "refresh": "iot-product:refresh",
+      "create": "iot-product:create",
+      "edit": "iot-product:edit",
+      "delete": "iot-product:delete",
+      "submit": "iot-product:submit",
+      "cancel": "iot-product:cancel",
+      "close": "iot-product:close",
+      "row": "iot-product:row",
+      "pagination": "iot-product:pagination",
+      "fields": {
+        "name": "iot-product:field:name",
+        "product_key": "iot-product:field:product_key",
+        "product_secret": "iot-product:field:product_secret",
+        "register_enabled": "iot-product:field:register_enabled",
+        "category_id": "iot-product:field:category_id",
+        "icon": "iot-product:field:icon",
+        "pic_url": "iot-product:field:pic_url",
+        "description": "iot-product:field:description",
+        "status": "iot-product:field:status",
+        "device_type": "iot-product:field:device_type",
+        "net_type": "iot-product:field:net_type",
+        "protocol_type": "iot-product:field:protocol_type",
+        "serialize_type": "iot-product:field:serialize_type"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "iot.iot-product",
+      "examples": [
+        "iot.iot-product__List__Refresh",
+        "iot.iot-product__ListItem__Open",
+        "iot.iot-product__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

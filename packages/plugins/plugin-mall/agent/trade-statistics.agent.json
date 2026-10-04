@@ -1,0 +1,285 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "TradeStatistics",
+  "kebab": "trade-statistics",
+  "businessName": "交易统计 DO以天为维度，统计全部的数据",
+  "permissionPrefix": "mall:trade_statistics",
+  "page": {
+    "route": "/admin/mall/trade-statistics",
+    "title": "交易统计 DO以天为维度，统计全部的数据管理",
+    "titleSelector": "[data-testid=\"trade-statistics-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "trade-statistics",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/trade-statistics",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/trade-statistics/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/trade-statistics"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/trade-statistics/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/trade-statistics/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"trade-statistics-title\"]",
+    "refresh": "[data-testid=\"trade-statistics-refresh\"]",
+    "createButton": "[data-testid=\"trade-statistics-create\"]",
+    "searchForm": "[data-testid=\"trade-statistics-search\"]",
+    "searchSubmit": "[data-testid=\"trade-statistics-search-submit\"]",
+    "searchReset": "[data-testid=\"trade-statistics-search-reset\"]",
+    "total": "[data-testid=\"trade-statistics-total\"]",
+    "table": "[data-testid=\"trade-statistics-table\"]",
+    "row": "[data-testid=\"trade-statistics-row\"]",
+    "editButton": "[data-testid=\"trade-statistics-edit\"]",
+    "deleteButton": "[data-testid=\"trade-statistics-delete\"]",
+    "form": "[data-testid=\"trade-statistics-form\"]",
+    "formError": "[data-testid=\"trade-statistics-form-error\"]",
+    "formSubmit": "[data-testid=\"trade-statistics-form-submit\"]",
+    "formCancel": "[data-testid=\"trade-statistics-form-cancel\"]",
+    "formClose": "[data-testid=\"trade-statistics-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "交易统计 DO以天为维度，统计全部的数据列表",
+    "dialogLabel": {
+      "create": "新增交易统计 DO以天为维度，统计全部的数据",
+      "edit": "编辑交易统计 DO以天为维度，统计全部的数据"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "time",
+        "label": "统计日期",
+        "type": "string",
+        "required": false,
+        "testId": "field-time",
+        "selector": "[data-testid=\"field-time\"]"
+      },
+      {
+        "name": "order_create_count",
+        "label": "创建订单数",
+        "type": "number",
+        "required": false,
+        "testId": "field-order_create_count",
+        "selector": "[data-testid=\"field-order_create_count\"]"
+      },
+      {
+        "name": "order_pay_count",
+        "label": "支付订单商品数",
+        "type": "number",
+        "required": false,
+        "testId": "field-order_pay_count",
+        "selector": "[data-testid=\"field-order_pay_count\"]"
+      },
+      {
+        "name": "order_pay_price",
+        "label": "总支付金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-order_pay_price",
+        "selector": "[data-testid=\"field-order_pay_price\"]"
+      },
+      {
+        "name": "after_sale_count",
+        "label": "退款订单数",
+        "type": "number",
+        "required": false,
+        "testId": "field-after_sale_count",
+        "selector": "[data-testid=\"field-after_sale_count\"]"
+      },
+      {
+        "name": "after_sale_refund_price",
+        "label": "总退款金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-after_sale_refund_price",
+        "selector": "[data-testid=\"field-after_sale_refund_price\"]"
+      },
+      {
+        "name": "brokerage_settlement_price",
+        "label": "佣金金额（已结算），单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-brokerage_settlement_price",
+        "selector": "[data-testid=\"field-brokerage_settlement_price\"]"
+      },
+      {
+        "name": "wallet_pay_price",
+        "label": "总支付金额（余额），单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-wallet_pay_price",
+        "selector": "[data-testid=\"field-wallet_pay_price\"]"
+      },
+      {
+        "name": "recharge_pay_count",
+        "label": "充值订单数",
+        "type": "number",
+        "required": false,
+        "testId": "field-recharge_pay_count",
+        "selector": "[data-testid=\"field-recharge_pay_count\"]"
+      },
+      {
+        "name": "recharge_pay_price",
+        "label": "充值金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-recharge_pay_price",
+        "selector": "[data-testid=\"field-recharge_pay_price\"]"
+      },
+      {
+        "name": "recharge_refund_count",
+        "label": "充值退款订单数",
+        "type": "number",
+        "required": false,
+        "testId": "field-recharge_refund_count",
+        "selector": "[data-testid=\"field-recharge_refund_count\"]"
+      },
+      {
+        "name": "recharge_refund_price",
+        "label": "充值退款金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-recharge_refund_price",
+        "selector": "[data-testid=\"field-recharge_refund_price\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "trade-statistics",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"trade-statistics\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"trade-statistics-form-overlay\"]",
+      "dialog": "[data-testid=\"trade-statistics-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "trade-statistics:search",
+      "reset": "trade-statistics:reset",
+      "refresh": "trade-statistics:refresh",
+      "create": "trade-statistics:create",
+      "edit": "trade-statistics:edit",
+      "delete": "trade-statistics:delete",
+      "submit": "trade-statistics:submit",
+      "cancel": "trade-statistics:cancel",
+      "close": "trade-statistics:close",
+      "row": "trade-statistics:row",
+      "pagination": "trade-statistics:pagination",
+      "fields": {
+        "time": "trade-statistics:field:time",
+        "order_create_count": "trade-statistics:field:order_create_count",
+        "order_pay_count": "trade-statistics:field:order_pay_count",
+        "order_pay_price": "trade-statistics:field:order_pay_price",
+        "after_sale_count": "trade-statistics:field:after_sale_count",
+        "after_sale_refund_price": "trade-statistics:field:after_sale_refund_price",
+        "brokerage_settlement_price": "trade-statistics:field:brokerage_settlement_price",
+        "wallet_pay_price": "trade-statistics:field:wallet_pay_price",
+        "recharge_pay_count": "trade-statistics:field:recharge_pay_count",
+        "recharge_pay_price": "trade-statistics:field:recharge_pay_price",
+        "recharge_refund_count": "trade-statistics:field:recharge_refund_count",
+        "recharge_refund_price": "trade-statistics:field:recharge_refund_price"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.trade-statistics",
+      "examples": [
+        "mall.trade-statistics__List__Refresh",
+        "mall.trade-statistics__ListItem__Open",
+        "mall.trade-statistics__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

@@ -1,0 +1,267 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "im",
+  "entity": "ImRtcCall",
+  "kebab": "im-rtc-call",
+  "businessName": "IM 通话记录 DO（房间级 / 主表）一通通话一行；状态机 CREATED → RUNNING → ENDED；和明细表 通过 关联",
+  "permissionPrefix": "im:im_rtc_call",
+  "page": {
+    "route": "/admin/im/im-rtc-call",
+    "title": "IM 通话记录 DO（房间级 / 主表）一通通话一行；状态机 CREATED → RUNNING → ENDED；和明细表 通过 关联管理",
+    "titleSelector": "[data-testid=\"im-rtc-call-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.im/api",
+    "bffMount": "/api/v1/admin/im",
+    "resource": "im-rtc-call",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/im-rtc-call",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/im-rtc-call/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/im-rtc-call"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/im-rtc-call/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/im-rtc-call/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"im-rtc-call-title\"]",
+    "refresh": "[data-testid=\"im-rtc-call-refresh\"]",
+    "createButton": "[data-testid=\"im-rtc-call-create\"]",
+    "searchForm": "[data-testid=\"im-rtc-call-search\"]",
+    "searchSubmit": "[data-testid=\"im-rtc-call-search-submit\"]",
+    "searchReset": "[data-testid=\"im-rtc-call-search-reset\"]",
+    "total": "[data-testid=\"im-rtc-call-total\"]",
+    "table": "[data-testid=\"im-rtc-call-table\"]",
+    "row": "[data-testid=\"im-rtc-call-row\"]",
+    "editButton": "[data-testid=\"im-rtc-call-edit\"]",
+    "deleteButton": "[data-testid=\"im-rtc-call-delete\"]",
+    "form": "[data-testid=\"im-rtc-call-form\"]",
+    "formError": "[data-testid=\"im-rtc-call-form-error\"]",
+    "formSubmit": "[data-testid=\"im-rtc-call-form-submit\"]",
+    "formCancel": "[data-testid=\"im-rtc-call-form-cancel\"]",
+    "formClose": "[data-testid=\"im-rtc-call-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IM 通话记录 DO（房间级 / 主表）一通通话一行；状态机 CREATED → RUNNING → ENDED；和明细表 通过 关联列表",
+    "dialogLabel": {
+      "create": "新增IM 通话记录 DO（房间级 / 主表）一通通话一行；状态机 CREATED → RUNNING → ENDED；和明细表 通过 关联",
+      "edit": "编辑IM 通话记录 DO（房间级 / 主表）一通通话一行；状态机 CREATED → RUNNING → ENDED；和明细表 通过 关联"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "room",
+        "label": "业务通话编号（UUID，同时作为 LiveKit 房间名）；唯一",
+        "type": "string",
+        "required": false,
+        "testId": "field-room",
+        "selector": "[data-testid=\"field-room\"]"
+      },
+      {
+        "name": "conversation_type",
+        "label": "会话类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-conversation_type",
+        "selector": "[data-testid=\"field-conversation_type\"]"
+      },
+      {
+        "name": "media_type",
+        "label": "媒体类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-media_type",
+        "selector": "[data-testid=\"field-media_type\"]"
+      },
+      {
+        "name": "inviter_user_id",
+        "label": "发起人用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-inviter_user_id",
+        "selector": "[data-testid=\"field-inviter_user_id\"]"
+      },
+      {
+        "name": "group_id",
+        "label": "群编号；私聊为 NULL",
+        "type": "number",
+        "required": false,
+        "testId": "field-group_id",
+        "selector": "[data-testid=\"field-group_id\"]"
+      },
+      {
+        "name": "status",
+        "label": "通话状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "end_reason",
+        "label": "结束原因；通话未结束时为 NULL",
+        "type": "number",
+        "required": false,
+        "testId": "field-end_reason",
+        "selector": "[data-testid=\"field-end_reason\"]"
+      },
+      {
+        "name": "start_time",
+        "label": "发起时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-start_time",
+        "selector": "[data-testid=\"field-start_time\"]"
+      },
+      {
+        "name": "accept_time",
+        "label": "接通时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-accept_time",
+        "selector": "[data-testid=\"field-accept_time\"]"
+      },
+      {
+        "name": "end_time",
+        "label": "通话结束时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-end_time",
+        "selector": "[data-testid=\"field-end_time\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "im-rtc-call",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"im-rtc-call\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"im-rtc-call-form-overlay\"]",
+      "dialog": "[data-testid=\"im-rtc-call-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "im-rtc-call:search",
+      "reset": "im-rtc-call:reset",
+      "refresh": "im-rtc-call:refresh",
+      "create": "im-rtc-call:create",
+      "edit": "im-rtc-call:edit",
+      "delete": "im-rtc-call:delete",
+      "submit": "im-rtc-call:submit",
+      "cancel": "im-rtc-call:cancel",
+      "close": "im-rtc-call:close",
+      "row": "im-rtc-call:row",
+      "pagination": "im-rtc-call:pagination",
+      "fields": {
+        "room": "im-rtc-call:field:room",
+        "conversation_type": "im-rtc-call:field:conversation_type",
+        "media_type": "im-rtc-call:field:media_type",
+        "inviter_user_id": "im-rtc-call:field:inviter_user_id",
+        "group_id": "im-rtc-call:field:group_id",
+        "status": "im-rtc-call:field:status",
+        "end_reason": "im-rtc-call:field:end_reason",
+        "start_time": "im-rtc-call:field:start_time",
+        "accept_time": "im-rtc-call:field:accept_time",
+        "end_time": "im-rtc-call:field:end_time"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "im.im-rtc-call",
+      "examples": [
+        "im.im-rtc-call__List__Refresh",
+        "im.im-rtc-call__ListItem__Open",
+        "im.im-rtc-call__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

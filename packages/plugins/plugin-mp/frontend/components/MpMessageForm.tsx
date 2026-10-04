@@ -78,24 +78,36 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mp-message-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑公众号消息" : "新增公众号消息"}
+        data-testid="mp-message-form"
+        data-agent-scope="mp-message:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MpMessage（源框架导入）" : "新增MpMessage（源框架导入）"}
+            {isEdit ? "编辑公众号消息" : "新增公众号消息"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mp-message-form-close" data-agent-target="mp-message:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mp-message-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">微信公众号消息 id</label>
+          <label htmlFor="mp-message-msg_id" className="block text-xs text-slate-600 mb-1">微信公众号消息 id</label>
           <input
             type="number"
+            id="mp-message-msg_id"
+            data-testid="field-msg_id"
+            data-agent-target="mp-message:field:msg_id"
+            data-agent-state={formData.msg_id == null || formData.msg_id === "" ? "empty" : "filled"}
+            aria-label="微信公众号消息 id"
             value={formData.msg_id != null ? String(formData.msg_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, msg_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -105,9 +117,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">公众号账号的 ID</label>
+          <label htmlFor="mp-message-account_id" className="block text-xs text-slate-600 mb-1">公众号账号的 ID</label>
           <input
             type="number"
+            id="mp-message-account_id"
+            data-testid="field-account_id"
+            data-agent-target="mp-message:field:account_id"
+            data-agent-state={formData.account_id == null || formData.account_id === "" ? "empty" : "filled"}
+            aria-label="公众号账号的 ID"
             value={formData.account_id != null ? String(formData.account_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, account_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -117,9 +134,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">公众号 appid</label>
+          <label htmlFor="mp-message-app_id" className="block text-xs text-slate-600 mb-1">公众号 appid</label>
           <input
             type="text"
+            id="mp-message-app_id"
+            data-testid="field-app_id"
+            data-agent-target="mp-message:field:app_id"
+            data-agent-state={formData.app_id ? "filled" : "empty"}
+            aria-label="公众号 appid"
             value={formData.app_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, app_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -129,9 +151,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">公众号粉丝的编号</label>
+          <label htmlFor="mp-message-user_id" className="block text-xs text-slate-600 mb-1">公众号粉丝的编号</label>
           <input
             type="number"
+            id="mp-message-user_id"
+            data-testid="field-user_id"
+            data-agent-target="mp-message:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="公众号粉丝的编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -141,9 +168,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">公众号粉丝标志</label>
+          <label htmlFor="mp-message-openid" className="block text-xs text-slate-600 mb-1">公众号粉丝标志</label>
           <input
             type="text"
+            id="mp-message-openid"
+            data-testid="field-openid"
+            data-agent-target="mp-message:field:openid"
+            data-agent-state={formData.openid ? "filled" : "empty"}
+            aria-label="公众号粉丝标志"
             value={formData.openid ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, openid: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -153,9 +185,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">消息类型</label>
+          <label htmlFor="mp-message-type" className="block text-xs text-slate-600 mb-1">消息类型</label>
           <input
             type="text"
+            id="mp-message-type"
+            data-testid="field-type"
+            data-agent-target="mp-message:field:type"
+            data-agent-state={formData.type ? "filled" : "empty"}
+            aria-label="消息类型"
             value={formData.type ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -165,9 +202,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">消息来源</label>
+          <label htmlFor="mp-message-send_from" className="block text-xs text-slate-600 mb-1">消息来源</label>
           <input
             type="number"
+            id="mp-message-send_from"
+            data-testid="field-send_from"
+            data-agent-target="mp-message:field:send_from"
+            data-agent-state={formData.send_from == null || formData.send_from === "" ? "empty" : "filled"}
+            aria-label="消息来源"
             value={formData.send_from != null ? String(formData.send_from) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, send_from: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -177,9 +219,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">消息内容</label>
+          <label htmlFor="mp-message-content" className="block text-xs text-slate-600 mb-1">消息内容</label>
           <input
             type="text"
+            id="mp-message-content"
+            data-testid="field-content"
+            data-agent-target="mp-message:field:content"
+            data-agent-state={formData.content ? "filled" : "empty"}
+            aria-label="消息内容"
             value={formData.content ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, content: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -189,9 +236,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">媒体文件的编号</label>
+          <label htmlFor="mp-message-media_id" className="block text-xs text-slate-600 mb-1">媒体文件的编号</label>
           <input
             type="text"
+            id="mp-message-media_id"
+            data-testid="field-media_id"
+            data-agent-target="mp-message:field:media_id"
+            data-agent-state={formData.media_id ? "filled" : "empty"}
+            aria-label="媒体文件的编号"
             value={formData.media_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, media_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -201,9 +253,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">媒体文件的 URL</label>
+          <label htmlFor="mp-message-media_url" className="block text-xs text-slate-600 mb-1">媒体文件的 URL</label>
           <input
             type="text"
+            id="mp-message-media_url"
+            data-testid="field-media_url"
+            data-agent-target="mp-message:field:media_url"
+            data-agent-state={formData.media_url ? "filled" : "empty"}
+            aria-label="媒体文件的 URL"
             value={formData.media_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, media_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -213,9 +270,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">语音识别后文本</label>
+          <label htmlFor="mp-message-recognition" className="block text-xs text-slate-600 mb-1">语音识别后文本</label>
           <input
             type="text"
+            id="mp-message-recognition"
+            data-testid="field-recognition"
+            data-agent-target="mp-message:field:recognition"
+            data-agent-state={formData.recognition ? "filled" : "empty"}
+            aria-label="语音识别后文本"
             value={formData.recognition ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, recognition: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -225,9 +287,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">语音格式，如 amr，speex 等</label>
+          <label htmlFor="mp-message-format" className="block text-xs text-slate-600 mb-1">语音格式，如 amr，speex 等</label>
           <input
             type="text"
+            id="mp-message-format"
+            data-testid="field-format"
+            data-agent-target="mp-message:field:format"
+            data-agent-state={formData.format ? "filled" : "empty"}
+            aria-label="语音格式，如 amr，speex 等"
             value={formData.format ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, format: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -237,9 +304,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">标题</label>
+          <label htmlFor="mp-message-title" className="block text-xs text-slate-600 mb-1">标题</label>
           <input
             type="text"
+            id="mp-message-title"
+            data-testid="field-title"
+            data-agent-target="mp-message:field:title"
+            data-agent-state={formData.title ? "filled" : "empty"}
+            aria-label="标题"
             value={formData.title ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -249,9 +321,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">描述</label>
+          <label htmlFor="mp-message-description" className="block text-xs text-slate-600 mb-1">描述</label>
           <input
             type="text"
+            id="mp-message-description"
+            data-testid="field-description"
+            data-agent-target="mp-message:field:description"
+            data-agent-state={formData.description ? "filled" : "empty"}
+            aria-label="描述"
             value={formData.description ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -261,9 +338,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">缩略图的媒体 id，通过素材管理中的接口上传多媒体文件，得到的 id</label>
+          <label htmlFor="mp-message-thumb_media_id" className="block text-xs text-slate-600 mb-1">缩略图的媒体 id，通过素材管理中的接口上传多媒体文件，得到的 id</label>
           <input
             type="text"
+            id="mp-message-thumb_media_id"
+            data-testid="field-thumb_media_id"
+            data-agent-target="mp-message:field:thumb_media_id"
+            data-agent-state={formData.thumb_media_id ? "filled" : "empty"}
+            aria-label="缩略图的媒体 id，通过素材管理中的接口上传多媒体文件，得到的 id"
             value={formData.thumb_media_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, thumb_media_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -273,9 +355,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">缩略图的媒体 URL</label>
+          <label htmlFor="mp-message-thumb_media_url" className="block text-xs text-slate-600 mb-1">缩略图的媒体 URL</label>
           <input
             type="text"
+            id="mp-message-thumb_media_url"
+            data-testid="field-thumb_media_url"
+            data-agent-target="mp-message:field:thumb_media_url"
+            data-agent-state={formData.thumb_media_url ? "filled" : "empty"}
+            aria-label="缩略图的媒体 URL"
             value={formData.thumb_media_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, thumb_media_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -285,9 +372,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">点击图文消息跳转链接</label>
+          <label htmlFor="mp-message-url" className="block text-xs text-slate-600 mb-1">点击图文消息跳转链接</label>
           <input
             type="text"
+            id="mp-message-url"
+            data-testid="field-url"
+            data-agent-target="mp-message:field:url"
+            data-agent-state={formData.url ? "filled" : "empty"}
+            aria-label="点击图文消息跳转链接"
             value={formData.url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -297,9 +389,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">地理位置维度</label>
+          <label htmlFor="mp-message-location_x" className="block text-xs text-slate-600 mb-1">地理位置维度</label>
           <input
             type="number"
+            id="mp-message-location_x"
+            data-testid="field-location_x"
+            data-agent-target="mp-message:field:location_x"
+            data-agent-state={formData.location_x == null || formData.location_x === "" ? "empty" : "filled"}
+            aria-label="地理位置维度"
             value={formData.location_x != null ? String(formData.location_x) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, location_x: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -309,9 +406,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">地理位置经度</label>
+          <label htmlFor="mp-message-location_y" className="block text-xs text-slate-600 mb-1">地理位置经度</label>
           <input
             type="number"
+            id="mp-message-location_y"
+            data-testid="field-location_y"
+            data-agent-target="mp-message:field:location_y"
+            data-agent-state={formData.location_y == null || formData.location_y === "" ? "empty" : "filled"}
+            aria-label="地理位置经度"
             value={formData.location_y != null ? String(formData.location_y) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, location_y: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -321,9 +423,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">地图缩放大小</label>
+          <label htmlFor="mp-message-scale" className="block text-xs text-slate-600 mb-1">地图缩放大小</label>
           <input
             type="number"
+            id="mp-message-scale"
+            data-testid="field-scale"
+            data-agent-target="mp-message:field:scale"
+            data-agent-state={formData.scale == null || formData.scale === "" ? "empty" : "filled"}
+            aria-label="地图缩放大小"
             value={formData.scale != null ? String(formData.scale) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, scale: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -333,9 +440,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">详细地址</label>
+          <label htmlFor="mp-message-label" className="block text-xs text-slate-600 mb-1">详细地址</label>
           <input
             type="text"
+            id="mp-message-label"
+            data-testid="field-label"
+            data-agent-target="mp-message:field:label"
+            data-agent-state={formData.label ? "filled" : "empty"}
+            aria-label="详细地址"
             value={formData.label ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, label: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -345,9 +457,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">图文消息数组</label>
+          <label htmlFor="mp-message-articles" className="block text-xs text-slate-600 mb-1">图文消息数组</label>
           <input
             type="text"
+            id="mp-message-articles"
+            data-testid="field-articles"
+            data-agent-target="mp-message:field:articles"
+            data-agent-state={formData.articles ? "filled" : "empty"}
+            aria-label="图文消息数组"
             value={formData.articles ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, articles: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -357,9 +474,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">音乐链接</label>
+          <label htmlFor="mp-message-music_url" className="block text-xs text-slate-600 mb-1">音乐链接</label>
           <input
             type="text"
+            id="mp-message-music_url"
+            data-testid="field-music_url"
+            data-agent-target="mp-message:field:music_url"
+            data-agent-state={formData.music_url ? "filled" : "empty"}
+            aria-label="音乐链接"
             value={formData.music_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, music_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -369,9 +491,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">高质量音乐链接</label>
+          <label htmlFor="mp-message-hq_music_url" className="block text-xs text-slate-600 mb-1">高质量音乐链接</label>
           <input
             type="text"
+            id="mp-message-hq_music_url"
+            data-testid="field-hq_music_url"
+            data-agent-target="mp-message:field:hq_music_url"
+            data-agent-state={formData.hq_music_url ? "filled" : "empty"}
+            aria-label="高质量音乐链接"
             value={formData.hq_music_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, hq_music_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -381,9 +508,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">事件类型</label>
+          <label htmlFor="mp-message-event" className="block text-xs text-slate-600 mb-1">事件类型</label>
           <input
             type="text"
+            id="mp-message-event"
+            data-testid="field-event"
+            data-agent-target="mp-message:field:event"
+            data-agent-state={formData.event ? "filled" : "empty"}
+            aria-label="事件类型"
             value={formData.event ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, event: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -393,9 +525,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">事件 Key</label>
+          <label htmlFor="mp-message-event_key" className="block text-xs text-slate-600 mb-1">事件 Key</label>
           <input
             type="text"
+            id="mp-message-event_key"
+            data-testid="field-event_key"
+            data-agent-target="mp-message:field:event_key"
+            data-agent-state={formData.event_key ? "filled" : "empty"}
+            aria-label="事件 Key"
             value={formData.event_key ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, event_key: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -405,9 +542,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">图文消息标题</label>
+          <label htmlFor="mp-message-title" className="block text-xs text-slate-600 mb-1">图文消息标题</label>
           <input
             type="text"
+            id="mp-message-title"
+            data-testid="field-title"
+            data-agent-target="mp-message:field:title"
+            data-agent-state={formData.title ? "filled" : "empty"}
+            aria-label="图文消息标题"
             value={formData.title ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -417,9 +559,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">图文消息描述</label>
+          <label htmlFor="mp-message-description" className="block text-xs text-slate-600 mb-1">图文消息描述</label>
           <input
             type="text"
+            id="mp-message-description"
+            data-testid="field-description"
+            data-agent-target="mp-message:field:description"
+            data-agent-state={formData.description ? "filled" : "empty"}
+            aria-label="图文消息描述"
             value={formData.description ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -429,9 +576,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">图片链接</label>
+          <label htmlFor="mp-message-pic_url" className="block text-xs text-slate-600 mb-1">图片链接</label>
           <input
             type="text"
+            id="mp-message-pic_url"
+            data-testid="field-pic_url"
+            data-agent-target="mp-message:field:pic_url"
+            data-agent-state={formData.pic_url ? "filled" : "empty"}
+            aria-label="图片链接"
             value={formData.pic_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pic_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -441,9 +593,14 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">点击图文消息跳转链接</label>
+          <label htmlFor="mp-message-url" className="block text-xs text-slate-600 mb-1">点击图文消息跳转链接</label>
           <input
             type="text"
+            id="mp-message-url"
+            data-testid="field-url"
+            data-agent-target="mp-message:field:url"
+            data-agent-state={formData.url ? "filled" : "empty"}
+            aria-label="点击图文消息跳转链接"
             value={formData.url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -457,6 +614,8 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
             <button
               type="button"
               onClick={onClose}
+              data-testid="mp-message-form-cancel"
+              data-agent-target="mp-message:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -464,6 +623,9 @@ export function MpMessageForm({ open, initialData, onClose, onSuccess }: MpMessa
             <button
               type="submit"
               disabled={loading}
+              data-testid="mp-message-form-submit"
+              data-agent-target="mp-message:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

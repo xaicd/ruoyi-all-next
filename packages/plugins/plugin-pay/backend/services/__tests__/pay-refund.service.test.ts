@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { PayRefundService } from "../pay-refund.service"
 
 describe("PayRefundService", () => {
-  it("should create and query PayRefund（源框架导入）", async () => {
+  it("should create and query 支付退款单 DO一个支付订单，可以拥有多个支付退款单即 PayOrderDO : PayRefundDO = 1 : n", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await PayRefundService.create({
-        no: "测试PayRefund（源框架导入）",
+        no: "测试支付退款单 DO一个支付订单，可以拥有多个支付退款单即 PayOrderDO : PayRefundDO = 1 : n",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("PayRefundService", () => {
   
       const updated = await PayRefundService.update(created.id, {
         id: created.id,
-        no: "更新PayRefund（源框架导入）",
+        no: "更新支付退款单 DO一个支付订单，可以拥有多个支付退款单即 PayOrderDO : PayRefundDO = 1 : n",
       } as any)
       expect(updated).toBeDefined()
   

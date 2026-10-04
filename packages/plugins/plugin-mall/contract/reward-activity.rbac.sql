@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for RewardActivity（源框架导入） (RewardActivity)
+-- Auto-generated RBAC & Menu Migration for 满减送活动 (RewardActivity)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-reward-activity',
   'mall-dir',
-  'RewardActivity（源框架导入）管理',
+  '满减送活动管理',
   '/admin/mall/reward-activity',
   'mall/reward-activity/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-reward-activity-query',  'menu-reward-activity', '查询RewardActivity（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:reward_activity:query',  1, NOW(), NOW()),
-('menu-reward-activity-create', 'menu-reward-activity', '新增RewardActivity（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:reward_activity:create', 2, NOW(), NOW()),
-('menu-reward-activity-update', 'menu-reward-activity', '修改RewardActivity（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:reward_activity:update', 3, NOW(), NOW()),
-('menu-reward-activity-delete', 'menu-reward-activity', '删除RewardActivity（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:reward_activity:delete', 4, NOW(), NOW())
+('menu-reward-activity-query',  'menu-reward-activity', '查询满减送活动', 'BUTTON', 'ACTIVE', 'mall:reward_activity:query',  1, NOW(), NOW()),
+('menu-reward-activity-create', 'menu-reward-activity', '新增满减送活动', 'BUTTON', 'ACTIVE', 'mall:reward_activity:create', 2, NOW(), NOW()),
+('menu-reward-activity-update', 'menu-reward-activity', '修改满减送活动', 'BUTTON', 'ACTIVE', 'mall:reward_activity:update', 3, NOW(), NOW()),
+('menu-reward-activity-delete', 'menu-reward-activity', '删除满减送活动', 'BUTTON', 'ACTIVE', 'mall:reward_activity:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

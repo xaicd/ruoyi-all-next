@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesProRouteProduct（源框架导入） (MesProRouteProduct)
+-- Auto-generated RBAC & Menu Migration for MES 工艺路线产品 (MesProRouteProduct)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-pro-route-product',
   'mes-dir',
-  'MesProRouteProduct（源框架导入）管理',
+  'MES 工艺路线产品管理',
   '/admin/mes/mes-pro-route-product',
   'mes/mes-pro-route-product/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-pro-route-product-query',  'menu-mes-pro-route-product', '查询MesProRouteProduct（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_route_product:query',  1, NOW(), NOW()),
-('menu-mes-pro-route-product-create', 'menu-mes-pro-route-product', '新增MesProRouteProduct（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_route_product:create', 2, NOW(), NOW()),
-('menu-mes-pro-route-product-update', 'menu-mes-pro-route-product', '修改MesProRouteProduct（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_route_product:update', 3, NOW(), NOW()),
-('menu-mes-pro-route-product-delete', 'menu-mes-pro-route-product', '删除MesProRouteProduct（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_route_product:delete', 4, NOW(), NOW())
+('menu-mes-pro-route-product-query',  'menu-mes-pro-route-product', '查询MES 工艺路线产品', 'BUTTON', 'ACTIVE', 'mes:mes_pro_route_product:query',  1, NOW(), NOW()),
+('menu-mes-pro-route-product-create', 'menu-mes-pro-route-product', '新增MES 工艺路线产品', 'BUTTON', 'ACTIVE', 'mes:mes_pro_route_product:create', 2, NOW(), NOW()),
+('menu-mes-pro-route-product-update', 'menu-mes-pro-route-product', '修改MES 工艺路线产品', 'BUTTON', 'ACTIVE', 'mes:mes_pro_route_product:update', 3, NOW(), NOW()),
+('menu-mes-pro-route-product-delete', 'menu-mes-pro-route-product', '删除MES 工艺路线产品', 'BUTTON', 'ACTIVE', 'mes:mes_pro_route_product:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

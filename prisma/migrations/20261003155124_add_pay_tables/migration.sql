@@ -2,7 +2,7 @@
 -- 来源: scripts/data/pay-source-tables.ts#PAY_TABLES
 -- 背景: 这些表的定义来自低代码 CodegenConfig；此前只生成代码、不生成建表 SQL，
 --       导致"仓储在查但无处创建"。本迁移补齐 DDL。
--- PayApp（源框架导入）
+-- 支付应用 DO一个商户下，可能会有多个支付应用。例如说，京东有京东商城、京东到家等等不过一般来说，一个商户，只有一个应用哈~即 PayMerchantDO : PayAppDO = 1 : n
 CREATE TABLE "pay_app" (
     "id" TEXT NOT NULL,
     "app_key" VARCHAR(255),
@@ -22,7 +22,7 @@ CREATE TABLE "pay_app" (
 );
 CREATE INDEX "pay_app_tenant_id_idx" ON "pay_app"("tenant_id");
 
--- PayChannel（源框架导入）
+-- 支付渠道 DO一个应用下，会有多种支付渠道，例如说微信支付、支付宝支付等等即 PayAppDO : PayChannelDO = 1 : n
 CREATE TABLE "pay_channel" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
@@ -41,7 +41,7 @@ CREATE TABLE "pay_channel" (
 );
 CREATE INDEX "pay_channel_tenant_id_idx" ON "pay_channel"("tenant_id");
 
--- PayDemoOrder（源框架导入）
+-- 示例订单演示业务系统的订单，如何接入 pay 系统的支付与退款
 CREATE TABLE "pay_demo_order" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
@@ -65,7 +65,7 @@ CREATE TABLE "pay_demo_order" (
 );
 CREATE INDEX "pay_demo_order_tenant_id_idx" ON "pay_demo_order"("tenant_id");
 
--- PayDemoWithdraw（源框架导入）
+-- 示例提现订单演示业务系统的转账业务
 CREATE TABLE "pay_demo_withdraw" (
     "id" TEXT NOT NULL,
     "subject" VARCHAR(255),
@@ -88,7 +88,7 @@ CREATE TABLE "pay_demo_withdraw" (
 );
 CREATE INDEX "pay_demo_withdraw_tenant_id_idx" ON "pay_demo_withdraw"("tenant_id");
 
--- PayNotifyLog（源框架导入）
+-- 商户支付、退款等的通知 Log每次通知时，都会在该表中，记录一次 Log，方便排查问题
 CREATE TABLE "pay_notify_log" (
     "id" TEXT NOT NULL,
     "task_id" BIGINT,
@@ -105,7 +105,7 @@ CREATE TABLE "pay_notify_log" (
 );
 CREATE INDEX "pay_notify_log_tenant_id_idx" ON "pay_notify_log"("tenant_id");
 
--- PayNotifyTask（源框架导入）
+-- 支付通知在支付系统收到支付渠道的支付、退款的结果后，需要不断的通知到业务系统，直到成功。
 CREATE TABLE "pay_notify_task" (
     "id" TEXT NOT NULL,
     "app_id" BIGINT,
@@ -130,7 +130,7 @@ CREATE TABLE "pay_notify_task" (
 );
 CREATE INDEX "pay_notify_task_tenant_id_idx" ON "pay_notify_task"("tenant_id");
 
--- PayOrder（源框架导入）
+-- 支付订单
 CREATE TABLE "pay_order" (
     "id" TEXT NOT NULL,
     "app_id" BIGINT,
@@ -164,7 +164,7 @@ CREATE TABLE "pay_order" (
 );
 CREATE INDEX "pay_order_tenant_id_idx" ON "pay_order"("tenant_id");
 
--- PayOrderExtension（源框架导入）
+-- 支付订单拓展 DO每次调用支付渠道，都会生成一条对应记录
 CREATE TABLE "pay_order_extension" (
     "id" TEXT NOT NULL,
     "no" VARCHAR(255),
@@ -187,7 +187,7 @@ CREATE TABLE "pay_order_extension" (
 );
 CREATE INDEX "pay_order_extension_tenant_id_idx" ON "pay_order_extension"("tenant_id");
 
--- PayRefund（源框架导入）
+-- 支付退款单 DO一个支付订单，可以拥有多个支付退款单即 PayOrderDO : PayRefundDO = 1 : n
 CREATE TABLE "pay_refund" (
     "id" TEXT NOT NULL,
     "no" VARCHAR(255),
@@ -222,7 +222,7 @@ CREATE TABLE "pay_refund" (
 );
 CREATE INDEX "pay_refund_tenant_id_idx" ON "pay_refund"("tenant_id");
 
--- PayTransfer（源框架导入）
+-- 转账单
 CREATE TABLE "pay_transfer" (
     "id" TEXT NOT NULL,
     "no" VARCHAR(255),
@@ -256,7 +256,7 @@ CREATE TABLE "pay_transfer" (
 );
 CREATE INDEX "pay_transfer_tenant_id_idx" ON "pay_transfer"("tenant_id");
 
--- PayWallet（源框架导入）
+-- 会员钱包
 CREATE TABLE "pay_wallet" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
@@ -275,7 +275,7 @@ CREATE TABLE "pay_wallet" (
 );
 CREATE INDEX "pay_wallet_tenant_id_idx" ON "pay_wallet"("tenant_id");
 
--- PayWalletRecharge（源框架导入）
+-- 会员钱包充值
 CREATE TABLE "pay_wallet_recharge" (
     "id" TEXT NOT NULL,
     "wallet_id" BIGINT,
@@ -303,7 +303,7 @@ CREATE TABLE "pay_wallet_recharge" (
 );
 CREATE INDEX "pay_wallet_recharge_tenant_id_idx" ON "pay_wallet_recharge"("tenant_id");
 
--- PayWalletRechargePackage（源框架导入）
+-- 会员钱包充值套餐 DO通过充值套餐时，可以赠送一定金额；
 CREATE TABLE "pay_wallet_recharge_package" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -320,7 +320,7 @@ CREATE TABLE "pay_wallet_recharge_package" (
 );
 CREATE INDEX "pay_wallet_recharge_package_tenant_id_idx" ON "pay_wallet_recharge_package"("tenant_id");
 
--- PayWalletTransaction（源框架导入）
+-- 会员钱包流水
 CREATE TABLE "pay_wallet_transaction" (
     "id" TEXT NOT NULL,
     "no" VARCHAR(255),

@@ -54,24 +54,36 @@ export function MesQcIndicatorResultForm({ open, initialData, onClose, onSuccess
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-qc-indicator-result-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 检验结果记录" : "新增MES 检验结果记录"}
+        data-testid="mes-qc-indicator-result-form"
+        data-agent-scope="mes-qc-indicator-result:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesQcIndicatorResult（源框架导入）" : "新增MesQcIndicatorResult（源框架导入）"}
+            {isEdit ? "编辑MES 检验结果记录" : "新增MES 检验结果记录"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-qc-indicator-result-form-close" data-agent-target="mes-qc-indicator-result:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-qc-indicator-result-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">样品编号</label>
+          <label htmlFor="mes-qc-indicator-result-code" className="block text-xs text-slate-600 mb-1">样品编号</label>
           <input
             type="text"
+            id="mes-qc-indicator-result-code"
+            data-testid="field-code"
+            data-agent-target="mes-qc-indicator-result:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="样品编号"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -81,9 +93,14 @@ export function MesQcIndicatorResultForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">关联质检单 ID（IQC/IPQC/OQC/RQC 的 id）</label>
+          <label htmlFor="mes-qc-indicator-result-qc_id" className="block text-xs text-slate-600 mb-1">关联质检单 ID（IQC/IPQC/OQC/RQC 的 id）</label>
           <input
             type="number"
+            id="mes-qc-indicator-result-qc_id"
+            data-testid="field-qc_id"
+            data-agent-target="mes-qc-indicator-result:field:qc_id"
+            data-agent-state={formData.qc_id == null || formData.qc_id === "" ? "empty" : "filled"}
+            aria-label="关联质检单 ID（IQC/IPQC/OQC/RQC 的 id）"
             value={formData.qc_id != null ? String(formData.qc_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, qc_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -93,9 +110,14 @@ export function MesQcIndicatorResultForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">质检类型</label>
+          <label htmlFor="mes-qc-indicator-result-qc_type" className="block text-xs text-slate-600 mb-1">质检类型</label>
           <input
             type="number"
+            id="mes-qc-indicator-result-qc_type"
+            data-testid="field-qc_type"
+            data-agent-target="mes-qc-indicator-result:field:qc_type"
+            data-agent-state={formData.qc_type == null || formData.qc_type === "" ? "empty" : "filled"}
+            aria-label="质检类型"
             value={formData.qc_type != null ? String(formData.qc_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, qc_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -105,9 +127,14 @@ export function MesQcIndicatorResultForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品物料 ID</label>
+          <label htmlFor="mes-qc-indicator-result-item_id" className="block text-xs text-slate-600 mb-1">产品物料 ID</label>
           <input
             type="number"
+            id="mes-qc-indicator-result-item_id"
+            data-testid="field-item_id"
+            data-agent-target="mes-qc-indicator-result:field:item_id"
+            data-agent-state={formData.item_id == null || formData.item_id === "" ? "empty" : "filled"}
+            aria-label="产品物料 ID"
             value={formData.item_id != null ? String(formData.item_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, item_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -117,9 +144,14 @@ export function MesQcIndicatorResultForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">物资 SN</label>
+          <label htmlFor="mes-qc-indicator-result-sn" className="block text-xs text-slate-600 mb-1">物资 SN</label>
           <input
             type="text"
+            id="mes-qc-indicator-result-sn"
+            data-testid="field-sn"
+            data-agent-target="mes-qc-indicator-result:field:sn"
+            data-agent-state={formData.sn ? "filled" : "empty"}
+            aria-label="物资 SN"
             value={formData.sn ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sn: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -129,9 +161,14 @@ export function MesQcIndicatorResultForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-qc-indicator-result-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-qc-indicator-result-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-qc-indicator-result:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -145,6 +182,8 @@ export function MesQcIndicatorResultForm({ open, initialData, onClose, onSuccess
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-qc-indicator-result-form-cancel"
+              data-agent-target="mes-qc-indicator-result:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -152,6 +191,9 @@ export function MesQcIndicatorResultForm({ open, initialData, onClose, onSuccess
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-qc-indicator-result-form-submit"
+              data-agent-target="mes-qc-indicator-result:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

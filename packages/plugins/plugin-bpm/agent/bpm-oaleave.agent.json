@@ -1,0 +1,249 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "bpm",
+  "entity": "BpmOALeave",
+  "kebab": "bpm-oaleave",
+  "businessName": "OA 请假申请 DO 请假天数，目前先简单做。一般是分成请假上午和下午，可以是 1 整天，可以是 0.5 半天",
+  "permissionPrefix": "bpm:bpm_oaleave",
+  "page": {
+    "route": "/admin/bpm/bpm-oaleave",
+    "title": "OA 请假申请 DO 请假天数，目前先简单做。一般是分成请假上午和下午，可以是 1 整天，可以是 0.5 半天管理",
+    "titleSelector": "[data-testid=\"bpm-oaleave-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.bpm/api",
+    "bffMount": "/api/v1/admin/bpm",
+    "resource": "bpm-oaleave",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/bpm-oaleave",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/bpm-oaleave/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/bpm-oaleave"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/bpm-oaleave/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/bpm-oaleave/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"bpm-oaleave-title\"]",
+    "refresh": "[data-testid=\"bpm-oaleave-refresh\"]",
+    "createButton": "[data-testid=\"bpm-oaleave-create\"]",
+    "searchForm": "[data-testid=\"bpm-oaleave-search\"]",
+    "searchSubmit": "[data-testid=\"bpm-oaleave-search-submit\"]",
+    "searchReset": "[data-testid=\"bpm-oaleave-search-reset\"]",
+    "total": "[data-testid=\"bpm-oaleave-total\"]",
+    "table": "[data-testid=\"bpm-oaleave-table\"]",
+    "row": "[data-testid=\"bpm-oaleave-row\"]",
+    "editButton": "[data-testid=\"bpm-oaleave-edit\"]",
+    "deleteButton": "[data-testid=\"bpm-oaleave-delete\"]",
+    "form": "[data-testid=\"bpm-oaleave-form\"]",
+    "formError": "[data-testid=\"bpm-oaleave-form-error\"]",
+    "formSubmit": "[data-testid=\"bpm-oaleave-form-submit\"]",
+    "formCancel": "[data-testid=\"bpm-oaleave-form-cancel\"]",
+    "formClose": "[data-testid=\"bpm-oaleave-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "OA 请假申请 DO 请假天数，目前先简单做。一般是分成请假上午和下午，可以是 1 整天，可以是 0.5 半天列表",
+    "dialogLabel": {
+      "create": "新增OA 请假申请 DO 请假天数，目前先简单做。一般是分成请假上午和下午，可以是 1 整天，可以是 0.5 半天",
+      "edit": "编辑OA 请假申请 DO 请假天数，目前先简单做。一般是分成请假上午和下午，可以是 1 整天，可以是 0.5 半天"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "user_id",
+        "label": "申请人的用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "type",
+        "label": "请假类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "reason",
+        "label": "原因",
+        "type": "string",
+        "required": false,
+        "testId": "field-reason",
+        "selector": "[data-testid=\"field-reason\"]"
+      },
+      {
+        "name": "start_time",
+        "label": "开始时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-start_time",
+        "selector": "[data-testid=\"field-start_time\"]"
+      },
+      {
+        "name": "end_time",
+        "label": "结束时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-end_time",
+        "selector": "[data-testid=\"field-end_time\"]"
+      },
+      {
+        "name": "day",
+        "label": "请假天数",
+        "type": "number",
+        "required": false,
+        "testId": "field-day",
+        "selector": "[data-testid=\"field-day\"]"
+      },
+      {
+        "name": "status",
+        "label": "审批结果",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "process_instance_id",
+        "label": "对应的流程编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-process_instance_id",
+        "selector": "[data-testid=\"field-process_instance_id\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "bpm-oaleave",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"bpm-oaleave\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"bpm-oaleave-form-overlay\"]",
+      "dialog": "[data-testid=\"bpm-oaleave-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "bpm-oaleave:search",
+      "reset": "bpm-oaleave:reset",
+      "refresh": "bpm-oaleave:refresh",
+      "create": "bpm-oaleave:create",
+      "edit": "bpm-oaleave:edit",
+      "delete": "bpm-oaleave:delete",
+      "submit": "bpm-oaleave:submit",
+      "cancel": "bpm-oaleave:cancel",
+      "close": "bpm-oaleave:close",
+      "row": "bpm-oaleave:row",
+      "pagination": "bpm-oaleave:pagination",
+      "fields": {
+        "user_id": "bpm-oaleave:field:user_id",
+        "type": "bpm-oaleave:field:type",
+        "reason": "bpm-oaleave:field:reason",
+        "start_time": "bpm-oaleave:field:start_time",
+        "end_time": "bpm-oaleave:field:end_time",
+        "day": "bpm-oaleave:field:day",
+        "status": "bpm-oaleave:field:status",
+        "process_instance_id": "bpm-oaleave:field:process_instance_id"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "bpm.bpm-oaleave",
+      "examples": [
+        "bpm.bpm-oaleave__List__Refresh",
+        "bpm.bpm-oaleave__ListItem__Open",
+        "bpm.bpm-oaleave__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

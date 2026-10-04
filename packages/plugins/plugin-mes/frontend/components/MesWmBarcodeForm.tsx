@@ -57,24 +57,36 @@ export function MesWmBarcodeForm({ open, initialData, onClose, onSuccess }: MesW
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-wm-barcode-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 条码清单" : "新增MES 条码清单"}
+        data-testid="mes-wm-barcode-form"
+        data-agent-scope="mes-wm-barcode:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesWmBarcode（源框架导入）" : "新增MesWmBarcode（源框架导入）"}
+            {isEdit ? "编辑MES 条码清单" : "新增MES 条码清单"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-wm-barcode-form-close" data-agent-target="mes-wm-barcode:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-wm-barcode-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">条码配置编号</label>
+          <label htmlFor="mes-wm-barcode-config_id" className="block text-xs text-slate-600 mb-1">条码配置编号</label>
           <input
             type="number"
+            id="mes-wm-barcode-config_id"
+            data-testid="field-config_id"
+            data-agent-target="mes-wm-barcode:field:config_id"
+            data-agent-state={formData.config_id == null || formData.config_id === "" ? "empty" : "filled"}
+            aria-label="条码配置编号"
             value={formData.config_id != null ? String(formData.config_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, config_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -84,9 +96,14 @@ export function MesWmBarcodeForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">条码格式</label>
+          <label htmlFor="mes-wm-barcode-format" className="block text-xs text-slate-600 mb-1">条码格式</label>
           <input
             type="number"
+            id="mes-wm-barcode-format"
+            data-testid="field-format"
+            data-agent-target="mes-wm-barcode:field:format"
+            data-agent-state={formData.format == null || formData.format === "" ? "empty" : "filled"}
+            aria-label="条码格式"
             value={formData.format != null ? String(formData.format) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, format: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -96,9 +113,14 @@ export function MesWmBarcodeForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">业务类型</label>
+          <label htmlFor="mes-wm-barcode-biz_type" className="block text-xs text-slate-600 mb-1">业务类型</label>
           <input
             type="number"
+            id="mes-wm-barcode-biz_type"
+            data-testid="field-biz_type"
+            data-agent-target="mes-wm-barcode:field:biz_type"
+            data-agent-state={formData.biz_type == null || formData.biz_type === "" ? "empty" : "filled"}
+            aria-label="业务类型"
             value={formData.biz_type != null ? String(formData.biz_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -108,9 +130,14 @@ export function MesWmBarcodeForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">条码内容（核心字段，前端根据此内容生成条码图片）</label>
+          <label htmlFor="mes-wm-barcode-content" className="block text-xs text-slate-600 mb-1">条码内容（核心字段，前端根据此内容生成条码图片）</label>
           <input
             type="text"
+            id="mes-wm-barcode-content"
+            data-testid="field-content"
+            data-agent-target="mes-wm-barcode:field:content"
+            data-agent-state={formData.content ? "filled" : "empty"}
+            aria-label="条码内容（核心字段，前端根据此内容生成条码图片）"
             value={formData.content ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, content: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -120,9 +147,14 @@ export function MesWmBarcodeForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">业务编号</label>
+          <label htmlFor="mes-wm-barcode-biz_id" className="block text-xs text-slate-600 mb-1">业务编号</label>
           <input
             type="number"
+            id="mes-wm-barcode-biz_id"
+            data-testid="field-biz_id"
+            data-agent-target="mes-wm-barcode:field:biz_id"
+            data-agent-state={formData.biz_id == null || formData.biz_id === "" ? "empty" : "filled"}
+            aria-label="业务编号"
             value={formData.biz_id != null ? String(formData.biz_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -132,9 +164,14 @@ export function MesWmBarcodeForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">业务编码</label>
+          <label htmlFor="mes-wm-barcode-biz_code" className="block text-xs text-slate-600 mb-1">业务编码</label>
           <input
             type="text"
+            id="mes-wm-barcode-biz_code"
+            data-testid="field-biz_code"
+            data-agent-target="mes-wm-barcode:field:biz_code"
+            data-agent-state={formData.biz_code ? "filled" : "empty"}
+            aria-label="业务编码"
             value={formData.biz_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -144,9 +181,14 @@ export function MesWmBarcodeForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">业务名称</label>
+          <label htmlFor="mes-wm-barcode-biz_name" className="block text-xs text-slate-600 mb-1">业务名称</label>
           <input
             type="text"
+            id="mes-wm-barcode-biz_name"
+            data-testid="field-biz_name"
+            data-agent-target="mes-wm-barcode:field:biz_name"
+            data-agent-state={formData.biz_name ? "filled" : "empty"}
+            aria-label="业务名称"
             value={formData.biz_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -156,9 +198,14 @@ export function MesWmBarcodeForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="mes-wm-barcode-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="mes-wm-barcode-status"
+            data-testid="field-status"
+            data-agent-target="mes-wm-barcode:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -168,9 +215,14 @@ export function MesWmBarcodeForm({ open, initialData, onClose, onSuccess }: MesW
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-wm-barcode-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-wm-barcode-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-wm-barcode:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -184,6 +236,8 @@ export function MesWmBarcodeForm({ open, initialData, onClose, onSuccess }: MesW
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-wm-barcode-form-cancel"
+              data-agent-target="mes-wm-barcode:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -191,6 +245,9 @@ export function MesWmBarcodeForm({ open, initialData, onClose, onSuccess }: MesW
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-wm-barcode-form-submit"
+              data-agent-target="mes-wm-barcode:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { AiImageService } from "../ai-image.service"
 
 describe("AiImageService", () => {
-  it("should create and query AiImage（源框架导入）", async () => {
+  it("should create and query AI 绘画", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AiImageService.create({
         user_id: 1,
@@ -21,7 +21,7 @@ describe("AiImageService", () => {
   
       const updated = await AiImageService.update(created.id, {
         id: created.id,
-        user_id: "更新AiImage（源框架导入）",
+        user_id: "更新AI 绘画",
       } as any)
       expect(updated).toBeDefined()
   

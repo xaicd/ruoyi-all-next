@@ -1,0 +1,195 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "crm",
+  "entity": "CrmContactBusiness",
+  "kebab": "crm-contact-business",
+  "businessName": "CRM 联系人与商机的关联",
+  "permissionPrefix": "crm:crm_contact_business",
+  "page": {
+    "route": "/admin/crm/crm-contact-business",
+    "title": "CRM 联系人与商机的关联管理",
+    "titleSelector": "[data-testid=\"crm-contact-business-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.crm/api",
+    "bffMount": "/api/v1/admin/crm",
+    "resource": "crm-contact-business",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/crm-contact-business",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/crm-contact-business/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/crm-contact-business"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/crm-contact-business/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/crm-contact-business/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"crm-contact-business-title\"]",
+    "refresh": "[data-testid=\"crm-contact-business-refresh\"]",
+    "createButton": "[data-testid=\"crm-contact-business-create\"]",
+    "searchForm": "[data-testid=\"crm-contact-business-search\"]",
+    "searchSubmit": "[data-testid=\"crm-contact-business-search-submit\"]",
+    "searchReset": "[data-testid=\"crm-contact-business-search-reset\"]",
+    "total": "[data-testid=\"crm-contact-business-total\"]",
+    "table": "[data-testid=\"crm-contact-business-table\"]",
+    "row": "[data-testid=\"crm-contact-business-row\"]",
+    "editButton": "[data-testid=\"crm-contact-business-edit\"]",
+    "deleteButton": "[data-testid=\"crm-contact-business-delete\"]",
+    "form": "[data-testid=\"crm-contact-business-form\"]",
+    "formError": "[data-testid=\"crm-contact-business-form-error\"]",
+    "formSubmit": "[data-testid=\"crm-contact-business-form-submit\"]",
+    "formCancel": "[data-testid=\"crm-contact-business-form-cancel\"]",
+    "formClose": "[data-testid=\"crm-contact-business-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "CRM 联系人与商机的关联列表",
+    "dialogLabel": {
+      "create": "新增CRM 联系人与商机的关联",
+      "edit": "编辑CRM 联系人与商机的关联"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "contact_id",
+        "label": "联系人编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-contact_id",
+        "selector": "[data-testid=\"field-contact_id\"]"
+      },
+      {
+        "name": "business_id",
+        "label": "商机编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-business_id",
+        "selector": "[data-testid=\"field-business_id\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "crm-contact-business",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"crm-contact-business\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"crm-contact-business-form-overlay\"]",
+      "dialog": "[data-testid=\"crm-contact-business-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "crm-contact-business:search",
+      "reset": "crm-contact-business:reset",
+      "refresh": "crm-contact-business:refresh",
+      "create": "crm-contact-business:create",
+      "edit": "crm-contact-business:edit",
+      "delete": "crm-contact-business:delete",
+      "submit": "crm-contact-business:submit",
+      "cancel": "crm-contact-business:cancel",
+      "close": "crm-contact-business:close",
+      "row": "crm-contact-business:row",
+      "pagination": "crm-contact-business:pagination",
+      "fields": {
+        "contact_id": "crm-contact-business:field:contact_id",
+        "business_id": "crm-contact-business:field:business_id"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "crm.crm-contact-business",
+      "examples": [
+        "crm.crm-contact-business__List__Refresh",
+        "crm.crm-contact-business__ListItem__Open",
+        "crm.crm-contact-business__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

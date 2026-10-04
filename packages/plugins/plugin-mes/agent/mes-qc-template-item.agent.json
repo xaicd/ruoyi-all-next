@@ -1,0 +1,249 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesQcTemplateItem",
+  "kebab": "mes-qc-template-item",
+  "businessName": "MES 质检方案-产品关联",
+  "permissionPrefix": "mes:mes_qc_template_item",
+  "page": {
+    "route": "/admin/mes/mes-qc-template-item",
+    "title": "MES 质检方案-产品关联管理",
+    "titleSelector": "[data-testid=\"mes-qc-template-item-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-qc-template-item",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-qc-template-item",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-qc-template-item/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-qc-template-item"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-qc-template-item/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-qc-template-item/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-qc-template-item-title\"]",
+    "refresh": "[data-testid=\"mes-qc-template-item-refresh\"]",
+    "createButton": "[data-testid=\"mes-qc-template-item-create\"]",
+    "searchForm": "[data-testid=\"mes-qc-template-item-search\"]",
+    "searchSubmit": "[data-testid=\"mes-qc-template-item-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-qc-template-item-search-reset\"]",
+    "total": "[data-testid=\"mes-qc-template-item-total\"]",
+    "table": "[data-testid=\"mes-qc-template-item-table\"]",
+    "row": "[data-testid=\"mes-qc-template-item-row\"]",
+    "editButton": "[data-testid=\"mes-qc-template-item-edit\"]",
+    "deleteButton": "[data-testid=\"mes-qc-template-item-delete\"]",
+    "form": "[data-testid=\"mes-qc-template-item-form\"]",
+    "formError": "[data-testid=\"mes-qc-template-item-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-qc-template-item-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-qc-template-item-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-qc-template-item-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 质检方案-产品关联列表",
+    "dialogLabel": {
+      "create": "新增MES 质检方案-产品关联",
+      "edit": "编辑MES 质检方案-产品关联"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "template_id",
+        "label": "质检方案编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-template_id",
+        "selector": "[data-testid=\"field-template_id\"]"
+      },
+      {
+        "name": "item_id",
+        "label": "产品物料编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-item_id",
+        "selector": "[data-testid=\"field-item_id\"]"
+      },
+      {
+        "name": "quantity_check",
+        "label": "最低检测数",
+        "type": "number",
+        "required": false,
+        "testId": "field-quantity_check",
+        "selector": "[data-testid=\"field-quantity_check\"]"
+      },
+      {
+        "name": "quantity_unqualified",
+        "label": "最大不合格数（0=不启用）",
+        "type": "number",
+        "required": false,
+        "testId": "field-quantity_unqualified",
+        "selector": "[data-testid=\"field-quantity_unqualified\"]"
+      },
+      {
+        "name": "critical_rate",
+        "label": "最大致命缺陷率（%，0=不允许）",
+        "type": "number",
+        "required": false,
+        "testId": "field-critical_rate",
+        "selector": "[data-testid=\"field-critical_rate\"]"
+      },
+      {
+        "name": "major_rate",
+        "label": "最大严重缺陷率（%，0=不允许）",
+        "type": "number",
+        "required": false,
+        "testId": "field-major_rate",
+        "selector": "[data-testid=\"field-major_rate\"]"
+      },
+      {
+        "name": "minor_rate",
+        "label": "最大轻微缺陷率（%）",
+        "type": "number",
+        "required": false,
+        "testId": "field-minor_rate",
+        "selector": "[data-testid=\"field-minor_rate\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-qc-template-item",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-qc-template-item\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-qc-template-item-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-qc-template-item-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-qc-template-item:search",
+      "reset": "mes-qc-template-item:reset",
+      "refresh": "mes-qc-template-item:refresh",
+      "create": "mes-qc-template-item:create",
+      "edit": "mes-qc-template-item:edit",
+      "delete": "mes-qc-template-item:delete",
+      "submit": "mes-qc-template-item:submit",
+      "cancel": "mes-qc-template-item:cancel",
+      "close": "mes-qc-template-item:close",
+      "row": "mes-qc-template-item:row",
+      "pagination": "mes-qc-template-item:pagination",
+      "fields": {
+        "template_id": "mes-qc-template-item:field:template_id",
+        "item_id": "mes-qc-template-item:field:item_id",
+        "quantity_check": "mes-qc-template-item:field:quantity_check",
+        "quantity_unqualified": "mes-qc-template-item:field:quantity_unqualified",
+        "critical_rate": "mes-qc-template-item:field:critical_rate",
+        "major_rate": "mes-qc-template-item:field:major_rate",
+        "minor_rate": "mes-qc-template-item:field:minor_rate",
+        "remark": "mes-qc-template-item:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-qc-template-item",
+      "examples": [
+        "mes.mes-qc-template-item__List__Refresh",
+        "mes.mes-qc-template-item__ListItem__Open",
+        "mes.mes-qc-template-item__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

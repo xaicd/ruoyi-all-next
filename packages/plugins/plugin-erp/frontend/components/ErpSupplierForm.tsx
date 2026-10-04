@@ -62,24 +62,36 @@ export function ErpSupplierForm({ open, initialData, onClose, onSuccess }: ErpSu
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="erp-supplier-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑ERP 供应商" : "新增ERP 供应商"}
+        data-testid="erp-supplier-form"
+        data-agent-scope="erp-supplier:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑ErpSupplier（源框架导入）" : "新增ErpSupplier（源框架导入）"}
+            {isEdit ? "编辑ERP 供应商" : "新增ERP 供应商"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="erp-supplier-form-close" data-agent-target="erp-supplier:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="erp-supplier-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">供应商名称</label>
+          <label htmlFor="erp-supplier-name" className="block text-xs text-slate-600 mb-1">供应商名称</label>
           <input
             type="text"
+            id="erp-supplier-name"
+            data-testid="field-name"
+            data-agent-target="erp-supplier:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="供应商名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -89,9 +101,14 @@ export function ErpSupplierForm({ open, initialData, onClose, onSuccess }: ErpSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">联系人</label>
+          <label htmlFor="erp-supplier-contact" className="block text-xs text-slate-600 mb-1">联系人</label>
           <input
             type="text"
+            id="erp-supplier-contact"
+            data-testid="field-contact"
+            data-agent-target="erp-supplier:field:contact"
+            data-agent-state={formData.contact ? "filled" : "empty"}
+            aria-label="联系人"
             value={formData.contact ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, contact: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -101,9 +118,14 @@ export function ErpSupplierForm({ open, initialData, onClose, onSuccess }: ErpSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">手机号码</label>
+          <label htmlFor="erp-supplier-mobile" className="block text-xs text-slate-600 mb-1">手机号码</label>
           <input
             type="text"
+            id="erp-supplier-mobile"
+            data-testid="field-mobile"
+            data-agent-target="erp-supplier:field:mobile"
+            data-agent-state={formData.mobile ? "filled" : "empty"}
+            aria-label="手机号码"
             value={formData.mobile ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, mobile: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -113,9 +135,14 @@ export function ErpSupplierForm({ open, initialData, onClose, onSuccess }: ErpSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">联系电话</label>
+          <label htmlFor="erp-supplier-telephone" className="block text-xs text-slate-600 mb-1">联系电话</label>
           <input
             type="text"
+            id="erp-supplier-telephone"
+            data-testid="field-telephone"
+            data-agent-target="erp-supplier:field:telephone"
+            data-agent-state={formData.telephone ? "filled" : "empty"}
+            aria-label="联系电话"
             value={formData.telephone ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, telephone: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -125,9 +152,14 @@ export function ErpSupplierForm({ open, initialData, onClose, onSuccess }: ErpSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">电子邮箱</label>
+          <label htmlFor="erp-supplier-email" className="block text-xs text-slate-600 mb-1">电子邮箱</label>
           <input
             type="text"
+            id="erp-supplier-email"
+            data-testid="field-email"
+            data-agent-target="erp-supplier:field:email"
+            data-agent-state={formData.email ? "filled" : "empty"}
+            aria-label="电子邮箱"
             value={formData.email ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -137,9 +169,14 @@ export function ErpSupplierForm({ open, initialData, onClose, onSuccess }: ErpSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">传真</label>
+          <label htmlFor="erp-supplier-fax" className="block text-xs text-slate-600 mb-1">传真</label>
           <input
             type="text"
+            id="erp-supplier-fax"
+            data-testid="field-fax"
+            data-agent-target="erp-supplier:field:fax"
+            data-agent-state={formData.fax ? "filled" : "empty"}
+            aria-label="传真"
             value={formData.fax ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, fax: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -149,9 +186,14 @@ export function ErpSupplierForm({ open, initialData, onClose, onSuccess }: ErpSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="erp-supplier-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="erp-supplier-remark"
+            data-testid="field-remark"
+            data-agent-target="erp-supplier:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -161,9 +203,14 @@ export function ErpSupplierForm({ open, initialData, onClose, onSuccess }: ErpSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">开启状态</label>
+          <label htmlFor="erp-supplier-status" className="block text-xs text-slate-600 mb-1">开启状态</label>
           <input
             type="number"
+            id="erp-supplier-status"
+            data-testid="field-status"
+            data-agent-target="erp-supplier:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="开启状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -173,9 +220,14 @@ export function ErpSupplierForm({ open, initialData, onClose, onSuccess }: ErpSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">排序</label>
+          <label htmlFor="erp-supplier-sort" className="block text-xs text-slate-600 mb-1">排序</label>
           <input
             type="number"
+            id="erp-supplier-sort"
+            data-testid="field-sort"
+            data-agent-target="erp-supplier:field:sort"
+            data-agent-state={formData.sort == null || formData.sort === "" ? "empty" : "filled"}
+            aria-label="排序"
             value={formData.sort != null ? String(formData.sort) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sort: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -185,9 +237,14 @@ export function ErpSupplierForm({ open, initialData, onClose, onSuccess }: ErpSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">纳税人识别号</label>
+          <label htmlFor="erp-supplier-tax_no" className="block text-xs text-slate-600 mb-1">纳税人识别号</label>
           <input
             type="text"
+            id="erp-supplier-tax_no"
+            data-testid="field-tax_no"
+            data-agent-target="erp-supplier:field:tax_no"
+            data-agent-state={formData.tax_no ? "filled" : "empty"}
+            aria-label="纳税人识别号"
             value={formData.tax_no ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, tax_no: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -197,9 +254,14 @@ export function ErpSupplierForm({ open, initialData, onClose, onSuccess }: ErpSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">税率</label>
+          <label htmlFor="erp-supplier-tax_percent" className="block text-xs text-slate-600 mb-1">税率</label>
           <input
             type="number"
+            id="erp-supplier-tax_percent"
+            data-testid="field-tax_percent"
+            data-agent-target="erp-supplier:field:tax_percent"
+            data-agent-state={formData.tax_percent == null || formData.tax_percent === "" ? "empty" : "filled"}
+            aria-label="税率"
             value={formData.tax_percent != null ? String(formData.tax_percent) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, tax_percent: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -209,9 +271,14 @@ export function ErpSupplierForm({ open, initialData, onClose, onSuccess }: ErpSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">开户行</label>
+          <label htmlFor="erp-supplier-bank_name" className="block text-xs text-slate-600 mb-1">开户行</label>
           <input
             type="text"
+            id="erp-supplier-bank_name"
+            data-testid="field-bank_name"
+            data-agent-target="erp-supplier:field:bank_name"
+            data-agent-state={formData.bank_name ? "filled" : "empty"}
+            aria-label="开户行"
             value={formData.bank_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, bank_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -221,9 +288,14 @@ export function ErpSupplierForm({ open, initialData, onClose, onSuccess }: ErpSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">开户账号</label>
+          <label htmlFor="erp-supplier-bank_account" className="block text-xs text-slate-600 mb-1">开户账号</label>
           <input
             type="text"
+            id="erp-supplier-bank_account"
+            data-testid="field-bank_account"
+            data-agent-target="erp-supplier:field:bank_account"
+            data-agent-state={formData.bank_account ? "filled" : "empty"}
+            aria-label="开户账号"
             value={formData.bank_account ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, bank_account: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -233,9 +305,14 @@ export function ErpSupplierForm({ open, initialData, onClose, onSuccess }: ErpSu
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">开户地址</label>
+          <label htmlFor="erp-supplier-bank_address" className="block text-xs text-slate-600 mb-1">开户地址</label>
           <input
             type="text"
+            id="erp-supplier-bank_address"
+            data-testid="field-bank_address"
+            data-agent-target="erp-supplier:field:bank_address"
+            data-agent-state={formData.bank_address ? "filled" : "empty"}
+            aria-label="开户地址"
             value={formData.bank_address ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, bank_address: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -249,6 +326,8 @@ export function ErpSupplierForm({ open, initialData, onClose, onSuccess }: ErpSu
             <button
               type="button"
               onClick={onClose}
+              data-testid="erp-supplier-form-cancel"
+              data-agent-target="erp-supplier:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -256,6 +335,9 @@ export function ErpSupplierForm({ open, initialData, onClose, onSuccess }: ErpSu
             <button
               type="submit"
               disabled={loading}
+              data-testid="erp-supplier-form-submit"
+              data-agent-target="erp-supplier:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

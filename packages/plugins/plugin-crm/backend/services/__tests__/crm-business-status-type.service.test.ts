@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { CrmBusinessStatusTypeService } from "../crm-business-status-type.service"
 
 describe("CrmBusinessStatusTypeService", () => {
-  it("should create and query CrmBusinessStatusType（源框架导入）", async () => {
+  it("should create and query CRM 商机状态组 DO注意，它是个配置表", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CrmBusinessStatusTypeService.create({
-        name: "测试CrmBusinessStatusType（源框架导入）",
+        name: "测试CRM 商机状态组 DO注意，它是个配置表",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("CrmBusinessStatusTypeService", () => {
   
       const updated = await CrmBusinessStatusTypeService.update(created.id, {
         id: created.id,
-        name: "更新CrmBusinessStatusType（源框架导入）",
+        name: "更新CRM 商机状态组 DO注意，它是个配置表",
       } as any)
       expect(updated).toBeDefined()
   

@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesQcDefect（源框架导入） (MesQcDefect)
+-- Auto-generated RBAC & Menu Migration for MES 缺陷类型 (MesQcDefect)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-qc-defect',
   'mes-dir',
-  'MesQcDefect（源框架导入）管理',
+  'MES 缺陷类型管理',
   '/admin/mes/mes-qc-defect',
   'mes/mes-qc-defect/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-qc-defect-query',  'menu-mes-qc-defect', '查询MesQcDefect（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_qc_defect:query',  1, NOW(), NOW()),
-('menu-mes-qc-defect-create', 'menu-mes-qc-defect', '新增MesQcDefect（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_qc_defect:create', 2, NOW(), NOW()),
-('menu-mes-qc-defect-update', 'menu-mes-qc-defect', '修改MesQcDefect（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_qc_defect:update', 3, NOW(), NOW()),
-('menu-mes-qc-defect-delete', 'menu-mes-qc-defect', '删除MesQcDefect（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_qc_defect:delete', 4, NOW(), NOW())
+('menu-mes-qc-defect-query',  'menu-mes-qc-defect', '查询MES 缺陷类型', 'BUTTON', 'ACTIVE', 'mes:mes_qc_defect:query',  1, NOW(), NOW()),
+('menu-mes-qc-defect-create', 'menu-mes-qc-defect', '新增MES 缺陷类型', 'BUTTON', 'ACTIVE', 'mes:mes_qc_defect:create', 2, NOW(), NOW()),
+('menu-mes-qc-defect-update', 'menu-mes-qc-defect', '修改MES 缺陷类型', 'BUTTON', 'ACTIVE', 'mes:mes_qc_defect:update', 3, NOW(), NOW()),
+('menu-mes-qc-defect-delete', 'menu-mes-qc-defect', '删除MES 缺陷类型', 'BUTTON', 'ACTIVE', 'mes:mes_qc_defect:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

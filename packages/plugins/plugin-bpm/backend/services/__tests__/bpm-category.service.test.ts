@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { BpmCategoryService } from "../bpm-category.service"
 
 describe("BpmCategoryService", () => {
-  it("should create and query BpmCategory（源框架导入）", async () => {
+  it("should create and query BPM 流程分类", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await BpmCategoryService.create({
-        name: "测试BpmCategory（源框架导入）",
+        name: "测试BPM 流程分类",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("BpmCategoryService", () => {
   
       const updated = await BpmCategoryService.update(created.id, {
         id: created.id,
-        name: "更新BpmCategory（源框架导入）",
+        name: "更新BPM 流程分类",
       } as any)
       expect(updated).toBeDefined()
   

@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesWmItemReceiptDetail（源框架导入） (MesWmItemReceiptDetail)
+-- Auto-generated RBAC & Menu Migration for MES 采购入库明细 (MesWmItemReceiptDetail)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-wm-item-receipt-detail',
   'mes-dir',
-  'MesWmItemReceiptDetail（源框架导入）管理',
+  'MES 采购入库明细管理',
   '/admin/mes/mes-wm-item-receipt-detail',
   'mes/mes-wm-item-receipt-detail/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-wm-item-receipt-detail-query',  'menu-mes-wm-item-receipt-detail', '查询MesWmItemReceiptDetail（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_item_receipt_detail:query',  1, NOW(), NOW()),
-('menu-mes-wm-item-receipt-detail-create', 'menu-mes-wm-item-receipt-detail', '新增MesWmItemReceiptDetail（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_item_receipt_detail:create', 2, NOW(), NOW()),
-('menu-mes-wm-item-receipt-detail-update', 'menu-mes-wm-item-receipt-detail', '修改MesWmItemReceiptDetail（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_item_receipt_detail:update', 3, NOW(), NOW()),
-('menu-mes-wm-item-receipt-detail-delete', 'menu-mes-wm-item-receipt-detail', '删除MesWmItemReceiptDetail（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_item_receipt_detail:delete', 4, NOW(), NOW())
+('menu-mes-wm-item-receipt-detail-query',  'menu-mes-wm-item-receipt-detail', '查询MES 采购入库明细', 'BUTTON', 'ACTIVE', 'mes:mes_wm_item_receipt_detail:query',  1, NOW(), NOW()),
+('menu-mes-wm-item-receipt-detail-create', 'menu-mes-wm-item-receipt-detail', '新增MES 采购入库明细', 'BUTTON', 'ACTIVE', 'mes:mes_wm_item_receipt_detail:create', 2, NOW(), NOW()),
+('menu-mes-wm-item-receipt-detail-update', 'menu-mes-wm-item-receipt-detail', '修改MES 采购入库明细', 'BUTTON', 'ACTIVE', 'mes:mes_wm_item_receipt_detail:update', 3, NOW(), NOW()),
+('menu-mes-wm-item-receipt-detail-delete', 'menu-mes-wm-item-receipt-detail', '删除MES 采购入库明细', 'BUTTON', 'ACTIVE', 'mes:mes_wm_item_receipt_detail:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

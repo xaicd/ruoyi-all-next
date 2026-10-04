@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesWmItemReceiptService } from "../mes-wm-item-receipt.service"
 
 describe("MesWmItemReceiptService", () => {
-  it("should create and query MesWmItemReceipt（源框架导入）", async () => {
+  it("should create and query MES 采购入库单", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmItemReceiptService.create({
-        code: "测试MesWmItemReceipt（源框架导入）",
+        code: "测试MES 采购入库单",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("MesWmItemReceiptService", () => {
   
       const updated = await MesWmItemReceiptService.update(created.id, {
         id: created.id,
-        code: "更新MesWmItemReceipt（源框架导入）",
+        code: "更新MES 采购入库单",
       } as any)
       expect(updated).toBeDefined()
   

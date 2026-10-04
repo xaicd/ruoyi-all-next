@@ -56,24 +56,36 @@ export function MesWmBarcodeConfigForm({ open, initialData, onClose, onSuccess }
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-wm-barcode-config-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 条码配置" : "新增MES 条码配置"}
+        data-testid="mes-wm-barcode-config-form"
+        data-agent-scope="mes-wm-barcode-config:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesWmBarcodeConfig（源框架导入）" : "新增MesWmBarcodeConfig（源框架导入）"}
+            {isEdit ? "编辑MES 条码配置" : "新增MES 条码配置"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-wm-barcode-config-form-close" data-agent-target="mes-wm-barcode-config:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-wm-barcode-config-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">条码格式</label>
+          <label htmlFor="mes-wm-barcode-config-format" className="block text-xs text-slate-600 mb-1">条码格式</label>
           <input
             type="number"
+            id="mes-wm-barcode-config-format"
+            data-testid="field-format"
+            data-agent-target="mes-wm-barcode-config:field:format"
+            data-agent-state={formData.format == null || formData.format === "" ? "empty" : "filled"}
+            aria-label="条码格式"
             value={formData.format != null ? String(formData.format) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, format: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -83,9 +95,14 @@ export function MesWmBarcodeConfigForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">业务类型</label>
+          <label htmlFor="mes-wm-barcode-config-biz_type" className="block text-xs text-slate-600 mb-1">业务类型</label>
           <input
             type="number"
+            id="mes-wm-barcode-config-biz_type"
+            data-testid="field-biz_type"
+            data-agent-target="mes-wm-barcode-config:field:biz_type"
+            data-agent-state={formData.biz_type == null || formData.biz_type === "" ? "empty" : "filled"}
+            aria-label="业务类型"
             value={formData.biz_type != null ? String(formData.biz_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -95,9 +112,14 @@ export function MesWmBarcodeConfigForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">内容格式模板（支持 BUSINESSCODE 占位符）</label>
+          <label htmlFor="mes-wm-barcode-config-content_format" className="block text-xs text-slate-600 mb-1">内容格式模板（支持 BUSINESSCODE 占位符）</label>
           <input
             type="text"
+            id="mes-wm-barcode-config-content_format"
+            data-testid="field-content_format"
+            data-agent-target="mes-wm-barcode-config:field:content_format"
+            data-agent-state={formData.content_format ? "filled" : "empty"}
+            aria-label="内容格式模板（支持 BUSINESSCODE 占位符）"
             value={formData.content_format ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, content_format: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -107,9 +129,14 @@ export function MesWmBarcodeConfigForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">内容样例</label>
+          <label htmlFor="mes-wm-barcode-config-content_example" className="block text-xs text-slate-600 mb-1">内容样例</label>
           <input
             type="text"
+            id="mes-wm-barcode-config-content_example"
+            data-testid="field-content_example"
+            data-agent-target="mes-wm-barcode-config:field:content_example"
+            data-agent-state={formData.content_example ? "filled" : "empty"}
+            aria-label="内容样例"
             value={formData.content_example ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, content_example: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -121,18 +148,27 @@ export function MesWmBarcodeConfigForm({ open, initialData, onClose, onSuccess }
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="auto_generate_flag"
+            id="mes-wm-barcode-config-auto_generate_flag"
+            data-testid="field-auto_generate_flag"
+            data-agent-target="mes-wm-barcode-config:field:auto_generate_flag"
+            data-agent-state={formData.auto_generate_flag ? "on" : "off"}
+            aria-label="是否自动生成"
             checked={Boolean(formData.auto_generate_flag)}
             onChange={(e) => setFormData((prev) => ({ ...prev, auto_generate_flag: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="auto_generate_flag" className="text-xs text-slate-700 font-medium">是否自动生成</label>
+          <label htmlFor="mes-wm-barcode-config-auto_generate_flag" className="text-xs text-slate-700 font-medium">是否自动生成</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">默认打印模板</label>
+          <label htmlFor="mes-wm-barcode-config-default_template" className="block text-xs text-slate-600 mb-1">默认打印模板</label>
           <input
             type="text"
+            id="mes-wm-barcode-config-default_template"
+            data-testid="field-default_template"
+            data-agent-target="mes-wm-barcode-config:field:default_template"
+            data-agent-state={formData.default_template ? "filled" : "empty"}
+            aria-label="默认打印模板"
             value={formData.default_template ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, default_template: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -142,9 +178,14 @@ export function MesWmBarcodeConfigForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="mes-wm-barcode-config-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="mes-wm-barcode-config-status"
+            data-testid="field-status"
+            data-agent-target="mes-wm-barcode-config:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -154,9 +195,14 @@ export function MesWmBarcodeConfigForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-wm-barcode-config-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-wm-barcode-config-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-wm-barcode-config:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -170,6 +216,8 @@ export function MesWmBarcodeConfigForm({ open, initialData, onClose, onSuccess }
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-wm-barcode-config-form-cancel"
+              data-agent-target="mes-wm-barcode-config:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -177,6 +225,9 @@ export function MesWmBarcodeConfigForm({ open, initialData, onClose, onSuccess }
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-wm-barcode-config-form-submit"
+              data-agent-target="mes-wm-barcode-config:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

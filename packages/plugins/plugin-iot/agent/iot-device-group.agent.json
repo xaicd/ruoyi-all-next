@@ -1,0 +1,204 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "iot",
+  "entity": "IotDeviceGroup",
+  "kebab": "iot-device-group",
+  "businessName": "IoT 设备分组",
+  "permissionPrefix": "iot:iot_device_group",
+  "page": {
+    "route": "/admin/iot/iot-device-group",
+    "title": "IoT 设备分组管理",
+    "titleSelector": "[data-testid=\"iot-device-group-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.iot/api",
+    "bffMount": "/api/v1/admin/iot",
+    "resource": "iot-device-group",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/iot-device-group",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/iot-device-group/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/iot-device-group"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/iot-device-group/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/iot-device-group/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"iot-device-group-title\"]",
+    "refresh": "[data-testid=\"iot-device-group-refresh\"]",
+    "createButton": "[data-testid=\"iot-device-group-create\"]",
+    "searchForm": "[data-testid=\"iot-device-group-search\"]",
+    "searchSubmit": "[data-testid=\"iot-device-group-search-submit\"]",
+    "searchReset": "[data-testid=\"iot-device-group-search-reset\"]",
+    "total": "[data-testid=\"iot-device-group-total\"]",
+    "table": "[data-testid=\"iot-device-group-table\"]",
+    "row": "[data-testid=\"iot-device-group-row\"]",
+    "editButton": "[data-testid=\"iot-device-group-edit\"]",
+    "deleteButton": "[data-testid=\"iot-device-group-delete\"]",
+    "form": "[data-testid=\"iot-device-group-form\"]",
+    "formError": "[data-testid=\"iot-device-group-form-error\"]",
+    "formSubmit": "[data-testid=\"iot-device-group-form-submit\"]",
+    "formCancel": "[data-testid=\"iot-device-group-form-cancel\"]",
+    "formClose": "[data-testid=\"iot-device-group-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IoT 设备分组列表",
+    "dialogLabel": {
+      "create": "新增IoT 设备分组",
+      "edit": "编辑IoT 设备分组"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "分组名字",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "status",
+        "label": "分组状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "description",
+        "label": "分组描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "iot-device-group",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"iot-device-group\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"iot-device-group-form-overlay\"]",
+      "dialog": "[data-testid=\"iot-device-group-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "iot-device-group:search",
+      "reset": "iot-device-group:reset",
+      "refresh": "iot-device-group:refresh",
+      "create": "iot-device-group:create",
+      "edit": "iot-device-group:edit",
+      "delete": "iot-device-group:delete",
+      "submit": "iot-device-group:submit",
+      "cancel": "iot-device-group:cancel",
+      "close": "iot-device-group:close",
+      "row": "iot-device-group:row",
+      "pagination": "iot-device-group:pagination",
+      "fields": {
+        "name": "iot-device-group:field:name",
+        "status": "iot-device-group:field:status",
+        "description": "iot-device-group:field:description"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "iot.iot-device-group",
+      "examples": [
+        "iot.iot-device-group__List__Refresh",
+        "iot.iot-device-group__ListItem__Open",
+        "iot.iot-device-group__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

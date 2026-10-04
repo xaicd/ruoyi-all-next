@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesCalHolidayService } from "../mes-cal-holiday.service"
 
 describe("MesCalHolidayService", () => {
-  it("should create and query MesCalHoliday（源框架导入）", async () => {
+  it("should create and query MES 假期设置", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesCalHolidayService.create({
         day: new Date().toISOString(),
@@ -21,7 +21,7 @@ describe("MesCalHolidayService", () => {
   
       const updated = await MesCalHolidayService.update(created.id, {
         id: created.id,
-        day: "更新MesCalHoliday（源框架导入）",
+        day: "更新MES 假期设置",
       } as any)
       expect(updated).toBeDefined()
   

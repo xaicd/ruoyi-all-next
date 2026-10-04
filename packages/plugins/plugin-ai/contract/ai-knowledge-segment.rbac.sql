@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for AiKnowledgeSegment（源框架导入） (AiKnowledgeSegment)
+-- Auto-generated RBAC & Menu Migration for AI 知识库-文档分段 (AiKnowledgeSegment)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-ai-knowledge-segment',
   'ai-dir',
-  'AiKnowledgeSegment（源框架导入）管理',
+  'AI 知识库-文档分段管理',
   '/admin/ai/ai-knowledge-segment',
   'ai/ai-knowledge-segment/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-ai-knowledge-segment-query',  'menu-ai-knowledge-segment', '查询AiKnowledgeSegment（源框架导入）', 'BUTTON', 'ACTIVE', 'ai:ai_knowledge_segment:query',  1, NOW(), NOW()),
-('menu-ai-knowledge-segment-create', 'menu-ai-knowledge-segment', '新增AiKnowledgeSegment（源框架导入）', 'BUTTON', 'ACTIVE', 'ai:ai_knowledge_segment:create', 2, NOW(), NOW()),
-('menu-ai-knowledge-segment-update', 'menu-ai-knowledge-segment', '修改AiKnowledgeSegment（源框架导入）', 'BUTTON', 'ACTIVE', 'ai:ai_knowledge_segment:update', 3, NOW(), NOW()),
-('menu-ai-knowledge-segment-delete', 'menu-ai-knowledge-segment', '删除AiKnowledgeSegment（源框架导入）', 'BUTTON', 'ACTIVE', 'ai:ai_knowledge_segment:delete', 4, NOW(), NOW())
+('menu-ai-knowledge-segment-query',  'menu-ai-knowledge-segment', '查询AI 知识库-文档分段', 'BUTTON', 'ACTIVE', 'ai:ai_knowledge_segment:query',  1, NOW(), NOW()),
+('menu-ai-knowledge-segment-create', 'menu-ai-knowledge-segment', '新增AI 知识库-文档分段', 'BUTTON', 'ACTIVE', 'ai:ai_knowledge_segment:create', 2, NOW(), NOW()),
+('menu-ai-knowledge-segment-update', 'menu-ai-knowledge-segment', '修改AI 知识库-文档分段', 'BUTTON', 'ACTIVE', 'ai:ai_knowledge_segment:update', 3, NOW(), NOW()),
+('menu-ai-knowledge-segment-delete', 'menu-ai-knowledge-segment', '删除AI 知识库-文档分段', 'BUTTON', 'ACTIVE', 'ai:ai_knowledge_segment:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ErpSaleReturnService } from "../erp-sale-return.service"
 
 describe("ErpSaleReturnService", () => {
-  it("should create and query ErpSaleReturn（源框架导入）", async () => {
+  it("should create and query ERP 销售退货", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ErpSaleReturnService.create({
-        no: "测试ErpSaleReturn（源框架导入）",
+        no: "测试ERP 销售退货",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("ErpSaleReturnService", () => {
   
       const updated = await ErpSaleReturnService.update(created.id, {
         id: created.id,
-        no: "更新ErpSaleReturn（源框架导入）",
+        no: "更新ERP 销售退货",
       } as any)
       expect(updated).toBeDefined()
   

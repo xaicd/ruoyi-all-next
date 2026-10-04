@@ -63,24 +63,36 @@ export function MesMdItemBatchConfigForm({ open, initialData, onClose, onSuccess
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-md-item-batch-config-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 物料批次属性配置" : "新增MES 物料批次属性配置"}
+        data-testid="mes-md-item-batch-config-form"
+        data-agent-scope="mes-md-item-batch-config:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesMdItemBatchConfig（源框架导入）" : "新增MesMdItemBatchConfig（源框架导入）"}
+            {isEdit ? "编辑MES 物料批次属性配置" : "新增MES 物料批次属性配置"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-md-item-batch-config-form-close" data-agent-target="mes-md-item-batch-config:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-md-item-batch-config-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">物料编号</label>
+          <label htmlFor="mes-md-item-batch-config-item_id" className="block text-xs text-slate-600 mb-1">物料编号</label>
           <input
             type="number"
+            id="mes-md-item-batch-config-item_id"
+            data-testid="field-item_id"
+            data-agent-target="mes-md-item-batch-config:field:item_id"
+            data-agent-state={formData.item_id == null || formData.item_id === "" ? "empty" : "filled"}
+            aria-label="物料编号"
             value={formData.item_id != null ? String(formData.item_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, item_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -92,155 +104,211 @@ export function MesMdItemBatchConfigForm({ open, initialData, onClose, onSuccess
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="produce_date_flag"
+            id="mes-md-item-batch-config-produce_date_flag"
+            data-testid="field-produce_date_flag"
+            data-agent-target="mes-md-item-batch-config:field:produce_date_flag"
+            data-agent-state={formData.produce_date_flag ? "on" : "off"}
+            aria-label="批次属性-生产日期"
             checked={Boolean(formData.produce_date_flag)}
             onChange={(e) => setFormData((prev) => ({ ...prev, produce_date_flag: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="produce_date_flag" className="text-xs text-slate-700 font-medium">批次属性-生产日期</label>
+          <label htmlFor="mes-md-item-batch-config-produce_date_flag" className="text-xs text-slate-700 font-medium">批次属性-生产日期</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="expire_date_flag"
+            id="mes-md-item-batch-config-expire_date_flag"
+            data-testid="field-expire_date_flag"
+            data-agent-target="mes-md-item-batch-config:field:expire_date_flag"
+            data-agent-state={formData.expire_date_flag ? "on" : "off"}
+            aria-label="批次属性-有效期"
             checked={Boolean(formData.expire_date_flag)}
             onChange={(e) => setFormData((prev) => ({ ...prev, expire_date_flag: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="expire_date_flag" className="text-xs text-slate-700 font-medium">批次属性-有效期</label>
+          <label htmlFor="mes-md-item-batch-config-expire_date_flag" className="text-xs text-slate-700 font-medium">批次属性-有效期</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="receipt_date_flag"
+            id="mes-md-item-batch-config-receipt_date_flag"
+            data-testid="field-receipt_date_flag"
+            data-agent-target="mes-md-item-batch-config:field:receipt_date_flag"
+            data-agent-state={formData.receipt_date_flag ? "on" : "off"}
+            aria-label="批次属性-入库日期"
             checked={Boolean(formData.receipt_date_flag)}
             onChange={(e) => setFormData((prev) => ({ ...prev, receipt_date_flag: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="receipt_date_flag" className="text-xs text-slate-700 font-medium">批次属性-入库日期</label>
+          <label htmlFor="mes-md-item-batch-config-receipt_date_flag" className="text-xs text-slate-700 font-medium">批次属性-入库日期</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="vendor_flag"
+            id="mes-md-item-batch-config-vendor_flag"
+            data-testid="field-vendor_flag"
+            data-agent-target="mes-md-item-batch-config:field:vendor_flag"
+            data-agent-state={formData.vendor_flag ? "on" : "off"}
+            aria-label="批次属性-供应商"
             checked={Boolean(formData.vendor_flag)}
             onChange={(e) => setFormData((prev) => ({ ...prev, vendor_flag: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="vendor_flag" className="text-xs text-slate-700 font-medium">批次属性-供应商</label>
+          <label htmlFor="mes-md-item-batch-config-vendor_flag" className="text-xs text-slate-700 font-medium">批次属性-供应商</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="client_flag"
+            id="mes-md-item-batch-config-client_flag"
+            data-testid="field-client_flag"
+            data-agent-target="mes-md-item-batch-config:field:client_flag"
+            data-agent-state={formData.client_flag ? "on" : "off"}
+            aria-label="批次属性-客户"
             checked={Boolean(formData.client_flag)}
             onChange={(e) => setFormData((prev) => ({ ...prev, client_flag: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="client_flag" className="text-xs text-slate-700 font-medium">批次属性-客户</label>
+          <label htmlFor="mes-md-item-batch-config-client_flag" className="text-xs text-slate-700 font-medium">批次属性-客户</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="sales_order_code_flag"
+            id="mes-md-item-batch-config-sales_order_code_flag"
+            data-testid="field-sales_order_code_flag"
+            data-agent-target="mes-md-item-batch-config:field:sales_order_code_flag"
+            data-agent-state={formData.sales_order_code_flag ? "on" : "off"}
+            aria-label="批次属性-销售订单编号"
             checked={Boolean(formData.sales_order_code_flag)}
             onChange={(e) => setFormData((prev) => ({ ...prev, sales_order_code_flag: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="sales_order_code_flag" className="text-xs text-slate-700 font-medium">批次属性-销售订单编号</label>
+          <label htmlFor="mes-md-item-batch-config-sales_order_code_flag" className="text-xs text-slate-700 font-medium">批次属性-销售订单编号</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="purchase_order_code_flag"
+            id="mes-md-item-batch-config-purchase_order_code_flag"
+            data-testid="field-purchase_order_code_flag"
+            data-agent-target="mes-md-item-batch-config:field:purchase_order_code_flag"
+            data-agent-state={formData.purchase_order_code_flag ? "on" : "off"}
+            aria-label="批次属性-采购订单编号"
             checked={Boolean(formData.purchase_order_code_flag)}
             onChange={(e) => setFormData((prev) => ({ ...prev, purchase_order_code_flag: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="purchase_order_code_flag" className="text-xs text-slate-700 font-medium">批次属性-采购订单编号</label>
+          <label htmlFor="mes-md-item-batch-config-purchase_order_code_flag" className="text-xs text-slate-700 font-medium">批次属性-采购订单编号</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="work_order_flag"
+            id="mes-md-item-batch-config-work_order_flag"
+            data-testid="field-work_order_flag"
+            data-agent-target="mes-md-item-batch-config:field:work_order_flag"
+            data-agent-state={formData.work_order_flag ? "on" : "off"}
+            aria-label="批次属性-生产工单"
             checked={Boolean(formData.work_order_flag)}
             onChange={(e) => setFormData((prev) => ({ ...prev, work_order_flag: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="work_order_flag" className="text-xs text-slate-700 font-medium">批次属性-生产工单</label>
+          <label htmlFor="mes-md-item-batch-config-work_order_flag" className="text-xs text-slate-700 font-medium">批次属性-生产工单</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="task_flag"
+            id="mes-md-item-batch-config-task_flag"
+            data-testid="field-task_flag"
+            data-agent-target="mes-md-item-batch-config:field:task_flag"
+            data-agent-state={formData.task_flag ? "on" : "off"}
+            aria-label="批次属性-生产任务"
             checked={Boolean(formData.task_flag)}
             onChange={(e) => setFormData((prev) => ({ ...prev, task_flag: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="task_flag" className="text-xs text-slate-700 font-medium">批次属性-生产任务</label>
+          <label htmlFor="mes-md-item-batch-config-task_flag" className="text-xs text-slate-700 font-medium">批次属性-生产任务</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="workstation_flag"
+            id="mes-md-item-batch-config-workstation_flag"
+            data-testid="field-workstation_flag"
+            data-agent-target="mes-md-item-batch-config:field:workstation_flag"
+            data-agent-state={formData.workstation_flag ? "on" : "off"}
+            aria-label="批次属性-工作站"
             checked={Boolean(formData.workstation_flag)}
             onChange={(e) => setFormData((prev) => ({ ...prev, workstation_flag: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="workstation_flag" className="text-xs text-slate-700 font-medium">批次属性-工作站</label>
+          <label htmlFor="mes-md-item-batch-config-workstation_flag" className="text-xs text-slate-700 font-medium">批次属性-工作站</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="tool_flag"
+            id="mes-md-item-batch-config-tool_flag"
+            data-testid="field-tool_flag"
+            data-agent-target="mes-md-item-batch-config:field:tool_flag"
+            data-agent-state={formData.tool_flag ? "on" : "off"}
+            aria-label="批次属性-工具"
             checked={Boolean(formData.tool_flag)}
             onChange={(e) => setFormData((prev) => ({ ...prev, tool_flag: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="tool_flag" className="text-xs text-slate-700 font-medium">批次属性-工具</label>
+          <label htmlFor="mes-md-item-batch-config-tool_flag" className="text-xs text-slate-700 font-medium">批次属性-工具</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="mold_flag"
+            id="mes-md-item-batch-config-mold_flag"
+            data-testid="field-mold_flag"
+            data-agent-target="mes-md-item-batch-config:field:mold_flag"
+            data-agent-state={formData.mold_flag ? "on" : "off"}
+            aria-label="批次属性-模具"
             checked={Boolean(formData.mold_flag)}
             onChange={(e) => setFormData((prev) => ({ ...prev, mold_flag: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="mold_flag" className="text-xs text-slate-700 font-medium">批次属性-模具</label>
+          <label htmlFor="mes-md-item-batch-config-mold_flag" className="text-xs text-slate-700 font-medium">批次属性-模具</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="lot_number_flag"
+            id="mes-md-item-batch-config-lot_number_flag"
+            data-testid="field-lot_number_flag"
+            data-agent-target="mes-md-item-batch-config:field:lot_number_flag"
+            data-agent-state={formData.lot_number_flag ? "on" : "off"}
+            aria-label="批次属性-生产批号"
             checked={Boolean(formData.lot_number_flag)}
             onChange={(e) => setFormData((prev) => ({ ...prev, lot_number_flag: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="lot_number_flag" className="text-xs text-slate-700 font-medium">批次属性-生产批号</label>
+          <label htmlFor="mes-md-item-batch-config-lot_number_flag" className="text-xs text-slate-700 font-medium">批次属性-生产批号</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="quality_status_flag"
+            id="mes-md-item-batch-config-quality_status_flag"
+            data-testid="field-quality_status_flag"
+            data-agent-target="mes-md-item-batch-config:field:quality_status_flag"
+            data-agent-state={formData.quality_status_flag ? "on" : "off"}
+            aria-label="批次属性-质量状态"
             checked={Boolean(formData.quality_status_flag)}
             onChange={(e) => setFormData((prev) => ({ ...prev, quality_status_flag: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="quality_status_flag" className="text-xs text-slate-700 font-medium">批次属性-质量状态</label>
+          <label htmlFor="mes-md-item-batch-config-quality_status_flag" className="text-xs text-slate-700 font-medium">批次属性-质量状态</label>
         </div>
           </div>
 
@@ -248,6 +316,8 @@ export function MesMdItemBatchConfigForm({ open, initialData, onClose, onSuccess
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-md-item-batch-config-form-cancel"
+              data-agent-target="mes-md-item-batch-config:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -255,6 +325,9 @@ export function MesMdItemBatchConfigForm({ open, initialData, onClose, onSuccess
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-md-item-batch-config-form-submit"
+              data-agent-target="mes-md-item-batch-config:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

@@ -1,0 +1,213 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "crm",
+  "entity": "CrmPermission",
+  "kebab": "crm-permission",
+  "businessName": "CRM 数据权限",
+  "permissionPrefix": "crm:crm_permission",
+  "page": {
+    "route": "/admin/crm/crm-permission",
+    "title": "CRM 数据权限管理",
+    "titleSelector": "[data-testid=\"crm-permission-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.crm/api",
+    "bffMount": "/api/v1/admin/crm",
+    "resource": "crm-permission",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/crm-permission",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/crm-permission/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/crm-permission"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/crm-permission/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/crm-permission/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"crm-permission-title\"]",
+    "refresh": "[data-testid=\"crm-permission-refresh\"]",
+    "createButton": "[data-testid=\"crm-permission-create\"]",
+    "searchForm": "[data-testid=\"crm-permission-search\"]",
+    "searchSubmit": "[data-testid=\"crm-permission-search-submit\"]",
+    "searchReset": "[data-testid=\"crm-permission-search-reset\"]",
+    "total": "[data-testid=\"crm-permission-total\"]",
+    "table": "[data-testid=\"crm-permission-table\"]",
+    "row": "[data-testid=\"crm-permission-row\"]",
+    "editButton": "[data-testid=\"crm-permission-edit\"]",
+    "deleteButton": "[data-testid=\"crm-permission-delete\"]",
+    "form": "[data-testid=\"crm-permission-form\"]",
+    "formError": "[data-testid=\"crm-permission-form-error\"]",
+    "formSubmit": "[data-testid=\"crm-permission-form-submit\"]",
+    "formCancel": "[data-testid=\"crm-permission-form-cancel\"]",
+    "formClose": "[data-testid=\"crm-permission-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "CRM 数据权限列表",
+    "dialogLabel": {
+      "create": "新增CRM 数据权限",
+      "edit": "编辑CRM 数据权限"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "biz_type",
+        "label": "数据类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-biz_type",
+        "selector": "[data-testid=\"field-biz_type\"]"
+      },
+      {
+        "name": "biz_id",
+        "label": "数据编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-biz_id",
+        "selector": "[data-testid=\"field-biz_id\"]"
+      },
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "level",
+        "label": "权限级别",
+        "type": "number",
+        "required": false,
+        "testId": "field-level",
+        "selector": "[data-testid=\"field-level\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "crm-permission",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"crm-permission\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"crm-permission-form-overlay\"]",
+      "dialog": "[data-testid=\"crm-permission-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "crm-permission:search",
+      "reset": "crm-permission:reset",
+      "refresh": "crm-permission:refresh",
+      "create": "crm-permission:create",
+      "edit": "crm-permission:edit",
+      "delete": "crm-permission:delete",
+      "submit": "crm-permission:submit",
+      "cancel": "crm-permission:cancel",
+      "close": "crm-permission:close",
+      "row": "crm-permission:row",
+      "pagination": "crm-permission:pagination",
+      "fields": {
+        "biz_type": "crm-permission:field:biz_type",
+        "biz_id": "crm-permission:field:biz_id",
+        "user_id": "crm-permission:field:user_id",
+        "level": "crm-permission:field:level"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "crm.crm-permission",
+      "examples": [
+        "crm.crm-permission__List__Refresh",
+        "crm.crm-permission__ListItem__Open",
+        "crm.crm-permission__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

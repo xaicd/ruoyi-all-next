@@ -60,24 +60,36 @@ export function PayNotifyTaskForm({ open, initialData, onClose, onSuccess }: Pay
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="pay-notify-task-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑支付通知在支付系统收到支付渠道的支付、退款的结果后，需要不断的通知到业务系统，直到成功。" : "新增支付通知在支付系统收到支付渠道的支付、退款的结果后，需要不断的通知到业务系统，直到成功。"}
+        data-testid="pay-notify-task-form"
+        data-agent-scope="pay-notify-task:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑PayNotifyTask（源框架导入）" : "新增PayNotifyTask（源框架导入）"}
+            {isEdit ? "编辑支付通知在支付系统收到支付渠道的支付、退款的结果后，需要不断的通知到业务系统，直到成功。" : "新增支付通知在支付系统收到支付渠道的支付、退款的结果后，需要不断的通知到业务系统，直到成功。"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="pay-notify-task-form-close" data-agent-target="pay-notify-task:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="pay-notify-task-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">应用编号</label>
+          <label htmlFor="pay-notify-task-app_id" className="block text-xs text-slate-600 mb-1">应用编号</label>
           <input
             type="number"
+            id="pay-notify-task-app_id"
+            data-testid="field-app_id"
+            data-agent-target="pay-notify-task:field:app_id"
+            data-agent-state={formData.app_id == null || formData.app_id === "" ? "empty" : "filled"}
+            aria-label="应用编号"
             value={formData.app_id != null ? String(formData.app_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, app_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -87,9 +99,14 @@ export function PayNotifyTaskForm({ open, initialData, onClose, onSuccess }: Pay
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">通知类型</label>
+          <label htmlFor="pay-notify-task-type" className="block text-xs text-slate-600 mb-1">通知类型</label>
           <input
             type="number"
+            id="pay-notify-task-type"
+            data-testid="field-type"
+            data-agent-target="pay-notify-task:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="通知类型"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -99,9 +116,14 @@ export function PayNotifyTaskForm({ open, initialData, onClose, onSuccess }: Pay
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">数据编号，根据不同 type 进行关联：</label>
+          <label htmlFor="pay-notify-task-data_id" className="block text-xs text-slate-600 mb-1">数据编号，根据不同 type 进行关联：</label>
           <input
             type="number"
+            id="pay-notify-task-data_id"
+            data-testid="field-data_id"
+            data-agent-target="pay-notify-task:field:data_id"
+            data-agent-state={formData.data_id == null || formData.data_id === "" ? "empty" : "filled"}
+            aria-label="数据编号，根据不同 type 进行关联："
             value={formData.data_id != null ? String(formData.data_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, data_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -111,9 +133,14 @@ export function PayNotifyTaskForm({ open, initialData, onClose, onSuccess }: Pay
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商户订单编号</label>
+          <label htmlFor="pay-notify-task-merchant_order_id" className="block text-xs text-slate-600 mb-1">商户订单编号</label>
           <input
             type="text"
+            id="pay-notify-task-merchant_order_id"
+            data-testid="field-merchant_order_id"
+            data-agent-target="pay-notify-task:field:merchant_order_id"
+            data-agent-state={formData.merchant_order_id ? "filled" : "empty"}
+            aria-label="商户订单编号"
             value={formData.merchant_order_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, merchant_order_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -123,9 +150,14 @@ export function PayNotifyTaskForm({ open, initialData, onClose, onSuccess }: Pay
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商户退款编号</label>
+          <label htmlFor="pay-notify-task-merchant_refund_id" className="block text-xs text-slate-600 mb-1">商户退款编号</label>
           <input
             type="text"
+            id="pay-notify-task-merchant_refund_id"
+            data-testid="field-merchant_refund_id"
+            data-agent-target="pay-notify-task:field:merchant_refund_id"
+            data-agent-state={formData.merchant_refund_id ? "filled" : "empty"}
+            aria-label="商户退款编号"
             value={formData.merchant_refund_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, merchant_refund_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -135,9 +167,14 @@ export function PayNotifyTaskForm({ open, initialData, onClose, onSuccess }: Pay
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商户转账编号</label>
+          <label htmlFor="pay-notify-task-merchant_transfer_id" className="block text-xs text-slate-600 mb-1">商户转账编号</label>
           <input
             type="text"
+            id="pay-notify-task-merchant_transfer_id"
+            data-testid="field-merchant_transfer_id"
+            data-agent-target="pay-notify-task:field:merchant_transfer_id"
+            data-agent-state={formData.merchant_transfer_id ? "filled" : "empty"}
+            aria-label="商户转账编号"
             value={formData.merchant_transfer_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, merchant_transfer_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -147,9 +184,14 @@ export function PayNotifyTaskForm({ open, initialData, onClose, onSuccess }: Pay
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">通知状态</label>
+          <label htmlFor="pay-notify-task-status" className="block text-xs text-slate-600 mb-1">通知状态</label>
           <input
             type="number"
+            id="pay-notify-task-status"
+            data-testid="field-status"
+            data-agent-target="pay-notify-task:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="通知状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -159,9 +201,14 @@ export function PayNotifyTaskForm({ open, initialData, onClose, onSuccess }: Pay
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">下一次通知时间</label>
+          <label htmlFor="pay-notify-task-next_notify_time" className="block text-xs text-slate-600 mb-1">下一次通知时间</label>
           <input
             type="text"
+            id="pay-notify-task-next_notify_time"
+            data-testid="field-next_notify_time"
+            data-agent-target="pay-notify-task:field:next_notify_time"
+            data-agent-state={formData.next_notify_time ? "filled" : "empty"}
+            aria-label="下一次通知时间"
             value={formData.next_notify_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, next_notify_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,9 +218,14 @@ export function PayNotifyTaskForm({ open, initialData, onClose, onSuccess }: Pay
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最后一次执行时间</label>
+          <label htmlFor="pay-notify-task-last_execute_time" className="block text-xs text-slate-600 mb-1">最后一次执行时间</label>
           <input
             type="text"
+            id="pay-notify-task-last_execute_time"
+            data-testid="field-last_execute_time"
+            data-agent-target="pay-notify-task:field:last_execute_time"
+            data-agent-state={formData.last_execute_time ? "filled" : "empty"}
+            aria-label="最后一次执行时间"
             value={formData.last_execute_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, last_execute_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -183,9 +235,14 @@ export function PayNotifyTaskForm({ open, initialData, onClose, onSuccess }: Pay
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">当前通知次数</label>
+          <label htmlFor="pay-notify-task-notify_times" className="block text-xs text-slate-600 mb-1">当前通知次数</label>
           <input
             type="number"
+            id="pay-notify-task-notify_times"
+            data-testid="field-notify_times"
+            data-agent-target="pay-notify-task:field:notify_times"
+            data-agent-state={formData.notify_times == null || formData.notify_times === "" ? "empty" : "filled"}
+            aria-label="当前通知次数"
             value={formData.notify_times != null ? String(formData.notify_times) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, notify_times: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -195,9 +252,14 @@ export function PayNotifyTaskForm({ open, initialData, onClose, onSuccess }: Pay
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最大可通知次数</label>
+          <label htmlFor="pay-notify-task-max_notify_times" className="block text-xs text-slate-600 mb-1">最大可通知次数</label>
           <input
             type="number"
+            id="pay-notify-task-max_notify_times"
+            data-testid="field-max_notify_times"
+            data-agent-target="pay-notify-task:field:max_notify_times"
+            data-agent-state={formData.max_notify_times == null || formData.max_notify_times === "" ? "empty" : "filled"}
+            aria-label="最大可通知次数"
             value={formData.max_notify_times != null ? String(formData.max_notify_times) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, max_notify_times: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -207,9 +269,14 @@ export function PayNotifyTaskForm({ open, initialData, onClose, onSuccess }: Pay
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">通知地址</label>
+          <label htmlFor="pay-notify-task-notify_url" className="block text-xs text-slate-600 mb-1">通知地址</label>
           <input
             type="text"
+            id="pay-notify-task-notify_url"
+            data-testid="field-notify_url"
+            data-agent-target="pay-notify-task:field:notify_url"
+            data-agent-state={formData.notify_url ? "filled" : "empty"}
+            aria-label="通知地址"
             value={formData.notify_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, notify_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -223,6 +290,8 @@ export function PayNotifyTaskForm({ open, initialData, onClose, onSuccess }: Pay
             <button
               type="button"
               onClick={onClose}
+              data-testid="pay-notify-task-form-cancel"
+              data-agent-target="pay-notify-task:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -230,6 +299,9 @@ export function PayNotifyTaskForm({ open, initialData, onClose, onSuccess }: Pay
             <button
               type="submit"
               disabled={loading}
+              data-testid="pay-notify-task-form-submit"
+              data-agent-target="pay-notify-task:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

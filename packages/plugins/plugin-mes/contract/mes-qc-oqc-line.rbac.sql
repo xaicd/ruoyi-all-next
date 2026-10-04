@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesQcOqcLine（源框架导入） (MesQcOqcLine)
+-- Auto-generated RBAC & Menu Migration for MES 出货检验单行 (MesQcOqcLine)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-qc-oqc-line',
   'mes-dir',
-  'MesQcOqcLine（源框架导入）管理',
+  'MES 出货检验单行管理',
   '/admin/mes/mes-qc-oqc-line',
   'mes/mes-qc-oqc-line/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-qc-oqc-line-query',  'menu-mes-qc-oqc-line', '查询MesQcOqcLine（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_qc_oqc_line:query',  1, NOW(), NOW()),
-('menu-mes-qc-oqc-line-create', 'menu-mes-qc-oqc-line', '新增MesQcOqcLine（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_qc_oqc_line:create', 2, NOW(), NOW()),
-('menu-mes-qc-oqc-line-update', 'menu-mes-qc-oqc-line', '修改MesQcOqcLine（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_qc_oqc_line:update', 3, NOW(), NOW()),
-('menu-mes-qc-oqc-line-delete', 'menu-mes-qc-oqc-line', '删除MesQcOqcLine（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_qc_oqc_line:delete', 4, NOW(), NOW())
+('menu-mes-qc-oqc-line-query',  'menu-mes-qc-oqc-line', '查询MES 出货检验单行', 'BUTTON', 'ACTIVE', 'mes:mes_qc_oqc_line:query',  1, NOW(), NOW()),
+('menu-mes-qc-oqc-line-create', 'menu-mes-qc-oqc-line', '新增MES 出货检验单行', 'BUTTON', 'ACTIVE', 'mes:mes_qc_oqc_line:create', 2, NOW(), NOW()),
+('menu-mes-qc-oqc-line-update', 'menu-mes-qc-oqc-line', '修改MES 出货检验单行', 'BUTTON', 'ACTIVE', 'mes:mes_qc_oqc_line:update', 3, NOW(), NOW()),
+('menu-mes-qc-oqc-line-delete', 'menu-mes-qc-oqc-line', '删除MES 出货检验单行', 'BUTTON', 'ACTIVE', 'mes:mes_qc_oqc_line:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

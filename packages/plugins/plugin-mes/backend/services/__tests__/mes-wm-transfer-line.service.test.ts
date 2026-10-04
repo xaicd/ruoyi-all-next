@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesWmTransferLineService } from "../mes-wm-transfer-line.service"
 
 describe("MesWmTransferLineService", () => {
-  it("should create and query MesWmTransferLine（源框架导入）", async () => {
+  it("should create and query MES 转移单行", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmTransferLineService.create({
         transfer_id: 1,
@@ -21,7 +21,7 @@ describe("MesWmTransferLineService", () => {
   
       const updated = await MesWmTransferLineService.update(created.id, {
         id: created.id,
-        transfer_id: "更新MesWmTransferLine（源框架导入）",
+        transfer_id: "更新MES 转移单行",
       } as any)
       expect(updated).toBeDefined()
   

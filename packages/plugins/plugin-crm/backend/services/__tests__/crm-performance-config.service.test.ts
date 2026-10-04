@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { CrmPerformanceConfigService } from "../crm-performance-config.service"
 
 describe("CrmPerformanceConfigService", () => {
-  it("should create and query CrmPerformanceConfig（源框架导入）", async () => {
+  it("should create and query CRM 业绩目标", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CrmPerformanceConfigService.create({
         biz_type: 1,
@@ -21,7 +21,7 @@ describe("CrmPerformanceConfigService", () => {
   
       const updated = await CrmPerformanceConfigService.update(created.id, {
         id: created.id,
-        biz_type: "更新CrmPerformanceConfig（源框架导入）",
+        biz_type: "更新CRM 业绩目标",
       } as any)
       expect(updated).toBeDefined()
   

@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for DiyPage（源框架导入） (DiyPage)
+-- Auto-generated RBAC & Menu Migration for 装修页面 (DiyPage)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-diy-page',
   'mall-dir',
-  'DiyPage（源框架导入）管理',
+  '装修页面管理',
   '/admin/mall/diy-page',
   'mall/diy-page/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-diy-page-query',  'menu-diy-page', '查询DiyPage（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:diy_page:query',  1, NOW(), NOW()),
-('menu-diy-page-create', 'menu-diy-page', '新增DiyPage（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:diy_page:create', 2, NOW(), NOW()),
-('menu-diy-page-update', 'menu-diy-page', '修改DiyPage（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:diy_page:update', 3, NOW(), NOW()),
-('menu-diy-page-delete', 'menu-diy-page', '删除DiyPage（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:diy_page:delete', 4, NOW(), NOW())
+('menu-diy-page-query',  'menu-diy-page', '查询装修页面', 'BUTTON', 'ACTIVE', 'mall:diy_page:query',  1, NOW(), NOW()),
+('menu-diy-page-create', 'menu-diy-page', '新增装修页面', 'BUTTON', 'ACTIVE', 'mall:diy_page:create', 2, NOW(), NOW()),
+('menu-diy-page-update', 'menu-diy-page', '修改装修页面', 'BUTTON', 'ACTIVE', 'mall:diy_page:update', 3, NOW(), NOW()),
+('menu-diy-page-delete', 'menu-diy-page', '删除装修页面', 'BUTTON', 'ACTIVE', 'mall:diy_page:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

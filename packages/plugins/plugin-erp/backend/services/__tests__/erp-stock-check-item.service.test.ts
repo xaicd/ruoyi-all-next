@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ErpStockCheckItemService } from "../erp-stock-check-item.service"
 
 describe("ErpStockCheckItemService", () => {
-  it("should create and query ErpStockCheckItem（源框架导入）", async () => {
+  it("should create and query ERP 库存盘点单项", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ErpStockCheckItemService.create({
         check_id: 1,
@@ -21,7 +21,7 @@ describe("ErpStockCheckItemService", () => {
   
       const updated = await ErpStockCheckItemService.update(created.id, {
         id: created.id,
-        check_id: "更新ErpStockCheckItem（源框架导入）",
+        check_id: "更新ERP 库存盘点单项",
       } as any)
       expect(updated).toBeDefined()
   

@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesProAndonConfig（源框架导入） (MesProAndonConfig)
+-- Auto-generated RBAC & Menu Migration for MES 安灯呼叫配置 (MesProAndonConfig)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-pro-andon-config',
   'mes-dir',
-  'MesProAndonConfig（源框架导入）管理',
+  'MES 安灯呼叫配置管理',
   '/admin/mes/mes-pro-andon-config',
   'mes/mes-pro-andon-config/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-pro-andon-config-query',  'menu-mes-pro-andon-config', '查询MesProAndonConfig（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_andon_config:query',  1, NOW(), NOW()),
-('menu-mes-pro-andon-config-create', 'menu-mes-pro-andon-config', '新增MesProAndonConfig（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_andon_config:create', 2, NOW(), NOW()),
-('menu-mes-pro-andon-config-update', 'menu-mes-pro-andon-config', '修改MesProAndonConfig（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_andon_config:update', 3, NOW(), NOW()),
-('menu-mes-pro-andon-config-delete', 'menu-mes-pro-andon-config', '删除MesProAndonConfig（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_andon_config:delete', 4, NOW(), NOW())
+('menu-mes-pro-andon-config-query',  'menu-mes-pro-andon-config', '查询MES 安灯呼叫配置', 'BUTTON', 'ACTIVE', 'mes:mes_pro_andon_config:query',  1, NOW(), NOW()),
+('menu-mes-pro-andon-config-create', 'menu-mes-pro-andon-config', '新增MES 安灯呼叫配置', 'BUTTON', 'ACTIVE', 'mes:mes_pro_andon_config:create', 2, NOW(), NOW()),
+('menu-mes-pro-andon-config-update', 'menu-mes-pro-andon-config', '修改MES 安灯呼叫配置', 'BUTTON', 'ACTIVE', 'mes:mes_pro_andon_config:update', 3, NOW(), NOW()),
+('menu-mes-pro-andon-config-delete', 'menu-mes-pro-andon-config', '删除MES 安灯呼叫配置', 'BUTTON', 'ACTIVE', 'mes:mes_pro_andon_config:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

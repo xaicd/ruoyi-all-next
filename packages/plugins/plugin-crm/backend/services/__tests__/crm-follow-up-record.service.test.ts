@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { CrmFollowUpRecordService } from "../crm-follow-up-record.service"
 
 describe("CrmFollowUpRecordService", () => {
-  it("should create and query CrmFollowUpRecord（源框架导入）", async () => {
+  it("should create and query 跟进记录 DO用于记录客户、联系人的每一次跟进", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CrmFollowUpRecordService.create({
         biz_type: 1,
@@ -21,7 +21,7 @@ describe("CrmFollowUpRecordService", () => {
   
       const updated = await CrmFollowUpRecordService.update(created.id, {
         id: created.id,
-        biz_type: "更新CrmFollowUpRecord（源框架导入）",
+        biz_type: "更新跟进记录 DO用于记录客户、联系人的每一次跟进",
       } as any)
       expect(updated).toBeDefined()
   

@@ -1,0 +1,222 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "SeckillConfig",
+  "kebab": "seckill-config",
+  "businessName": "秒杀时段",
+  "permissionPrefix": "mall:seckill_config",
+  "page": {
+    "route": "/admin/mall/seckill-config",
+    "title": "秒杀时段管理",
+    "titleSelector": "[data-testid=\"seckill-config-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "seckill-config",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/seckill-config",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/seckill-config/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/seckill-config"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/seckill-config/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/seckill-config/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"seckill-config-title\"]",
+    "refresh": "[data-testid=\"seckill-config-refresh\"]",
+    "createButton": "[data-testid=\"seckill-config-create\"]",
+    "searchForm": "[data-testid=\"seckill-config-search\"]",
+    "searchSubmit": "[data-testid=\"seckill-config-search-submit\"]",
+    "searchReset": "[data-testid=\"seckill-config-search-reset\"]",
+    "total": "[data-testid=\"seckill-config-total\"]",
+    "table": "[data-testid=\"seckill-config-table\"]",
+    "row": "[data-testid=\"seckill-config-row\"]",
+    "editButton": "[data-testid=\"seckill-config-edit\"]",
+    "deleteButton": "[data-testid=\"seckill-config-delete\"]",
+    "form": "[data-testid=\"seckill-config-form\"]",
+    "formError": "[data-testid=\"seckill-config-form-error\"]",
+    "formSubmit": "[data-testid=\"seckill-config-form-submit\"]",
+    "formCancel": "[data-testid=\"seckill-config-form-cancel\"]",
+    "formClose": "[data-testid=\"seckill-config-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "秒杀时段列表",
+    "dialogLabel": {
+      "create": "新增秒杀时段",
+      "edit": "编辑秒杀时段"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "秒杀时段名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "start_time",
+        "label": "开始时间点",
+        "type": "string",
+        "required": false,
+        "testId": "field-start_time",
+        "selector": "[data-testid=\"field-start_time\"]"
+      },
+      {
+        "name": "end_time",
+        "label": "结束时间点",
+        "type": "string",
+        "required": false,
+        "testId": "field-end_time",
+        "selector": "[data-testid=\"field-end_time\"]"
+      },
+      {
+        "name": "slider_pic_urls",
+        "label": "秒杀轮播图",
+        "type": "string",
+        "required": false,
+        "testId": "field-slider_pic_urls",
+        "selector": "[data-testid=\"field-slider_pic_urls\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "seckill-config",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"seckill-config\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"seckill-config-form-overlay\"]",
+      "dialog": "[data-testid=\"seckill-config-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "seckill-config:search",
+      "reset": "seckill-config:reset",
+      "refresh": "seckill-config:refresh",
+      "create": "seckill-config:create",
+      "edit": "seckill-config:edit",
+      "delete": "seckill-config:delete",
+      "submit": "seckill-config:submit",
+      "cancel": "seckill-config:cancel",
+      "close": "seckill-config:close",
+      "row": "seckill-config:row",
+      "pagination": "seckill-config:pagination",
+      "fields": {
+        "name": "seckill-config:field:name",
+        "start_time": "seckill-config:field:start_time",
+        "end_time": "seckill-config:field:end_time",
+        "slider_pic_urls": "seckill-config:field:slider_pic_urls",
+        "status": "seckill-config:field:status"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.seckill-config",
+      "examples": [
+        "mall.seckill-config__List__Refresh",
+        "mall.seckill-config__ListItem__Open",
+        "mall.seckill-config__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

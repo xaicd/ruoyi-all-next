@@ -66,24 +66,36 @@ export function IotDeviceForm({ open, initialData, onClose, onSuccess }: IotDevi
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="iot-device-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑IoT 设备" : "新增IoT 设备"}
+        data-testid="iot-device-form"
+        data-agent-scope="iot-device:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑IotDevice（源框架导入）" : "新增IotDevice（源框架导入）"}
+            {isEdit ? "编辑IoT 设备" : "新增IoT 设备"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="iot-device-form-close" data-agent-target="iot-device:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="iot-device-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备名称，在产品内唯一，用于标识设备</label>
+          <label htmlFor="iot-device-device_name" className="block text-xs text-slate-600 mb-1">设备名称，在产品内唯一，用于标识设备</label>
           <input
             type="text"
+            id="iot-device-device_name"
+            data-testid="field-device_name"
+            data-agent-target="iot-device:field:device_name"
+            data-agent-state={formData.device_name ? "filled" : "empty"}
+            aria-label="设备名称，在产品内唯一，用于标识设备"
             value={formData.device_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, device_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -93,9 +105,14 @@ export function IotDeviceForm({ open, initialData, onClose, onSuccess }: IotDevi
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备备注名称</label>
+          <label htmlFor="iot-device-nickname" className="block text-xs text-slate-600 mb-1">设备备注名称</label>
           <input
             type="text"
+            id="iot-device-nickname"
+            data-testid="field-nickname"
+            data-agent-target="iot-device:field:nickname"
+            data-agent-state={formData.nickname ? "filled" : "empty"}
+            aria-label="设备备注名称"
             value={formData.nickname ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, nickname: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -105,9 +122,14 @@ export function IotDeviceForm({ open, initialData, onClose, onSuccess }: IotDevi
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备序列号</label>
+          <label htmlFor="iot-device-serial_number" className="block text-xs text-slate-600 mb-1">设备序列号</label>
           <input
             type="text"
+            id="iot-device-serial_number"
+            data-testid="field-serial_number"
+            data-agent-target="iot-device:field:serial_number"
+            data-agent-state={formData.serial_number ? "filled" : "empty"}
+            aria-label="设备序列号"
             value={formData.serial_number ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, serial_number: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -117,9 +139,14 @@ export function IotDeviceForm({ open, initialData, onClose, onSuccess }: IotDevi
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备图片</label>
+          <label htmlFor="iot-device-pic_url" className="block text-xs text-slate-600 mb-1">设备图片</label>
           <input
             type="text"
+            id="iot-device-pic_url"
+            data-testid="field-pic_url"
+            data-agent-target="iot-device:field:pic_url"
+            data-agent-state={formData.pic_url ? "filled" : "empty"}
+            aria-label="设备图片"
             value={formData.pic_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pic_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -129,9 +156,14 @@ export function IotDeviceForm({ open, initialData, onClose, onSuccess }: IotDevi
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备分组编号集合</label>
+          <label htmlFor="iot-device-group_ids" className="block text-xs text-slate-600 mb-1">设备分组编号集合</label>
           <input
             type="text"
+            id="iot-device-group_ids"
+            data-testid="field-group_ids"
+            data-agent-target="iot-device:field:group_ids"
+            data-agent-state={formData.group_ids ? "filled" : "empty"}
+            aria-label="设备分组编号集合"
             value={formData.group_ids ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, group_ids: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -141,9 +173,14 @@ export function IotDeviceForm({ open, initialData, onClose, onSuccess }: IotDevi
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品编号</label>
+          <label htmlFor="iot-device-product_id" className="block text-xs text-slate-600 mb-1">产品编号</label>
           <input
             type="number"
+            id="iot-device-product_id"
+            data-testid="field-product_id"
+            data-agent-target="iot-device:field:product_id"
+            data-agent-state={formData.product_id == null || formData.product_id === "" ? "empty" : "filled"}
+            aria-label="产品编号"
             value={formData.product_id != null ? String(formData.product_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, product_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -153,9 +190,14 @@ export function IotDeviceForm({ open, initialData, onClose, onSuccess }: IotDevi
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品标识</label>
+          <label htmlFor="iot-device-product_key" className="block text-xs text-slate-600 mb-1">产品标识</label>
           <input
             type="text"
+            id="iot-device-product_key"
+            data-testid="field-product_key"
+            data-agent-target="iot-device:field:product_key"
+            data-agent-state={formData.product_key ? "filled" : "empty"}
+            aria-label="产品标识"
             value={formData.product_key ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, product_key: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -165,9 +207,14 @@ export function IotDeviceForm({ open, initialData, onClose, onSuccess }: IotDevi
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备类型</label>
+          <label htmlFor="iot-device-device_type" className="block text-xs text-slate-600 mb-1">设备类型</label>
           <input
             type="number"
+            id="iot-device-device_type"
+            data-testid="field-device_type"
+            data-agent-target="iot-device:field:device_type"
+            data-agent-state={formData.device_type == null || formData.device_type === "" ? "empty" : "filled"}
+            aria-label="设备类型"
             value={formData.device_type != null ? String(formData.device_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, device_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -177,9 +224,14 @@ export function IotDeviceForm({ open, initialData, onClose, onSuccess }: IotDevi
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">网关设备编号</label>
+          <label htmlFor="iot-device-gateway_id" className="block text-xs text-slate-600 mb-1">网关设备编号</label>
           <input
             type="number"
+            id="iot-device-gateway_id"
+            data-testid="field-gateway_id"
+            data-agent-target="iot-device:field:gateway_id"
+            data-agent-state={formData.gateway_id == null || formData.gateway_id === "" ? "empty" : "filled"}
+            aria-label="网关设备编号"
             value={formData.gateway_id != null ? String(formData.gateway_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, gateway_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -189,9 +241,14 @@ export function IotDeviceForm({ open, initialData, onClose, onSuccess }: IotDevi
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备状态</label>
+          <label htmlFor="iot-device-state" className="block text-xs text-slate-600 mb-1">设备状态</label>
           <input
             type="number"
+            id="iot-device-state"
+            data-testid="field-state"
+            data-agent-target="iot-device:field:state"
+            data-agent-state={formData.state == null || formData.state === "" ? "empty" : "filled"}
+            aria-label="设备状态"
             value={formData.state != null ? String(formData.state) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, state: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -201,9 +258,14 @@ export function IotDeviceForm({ open, initialData, onClose, onSuccess }: IotDevi
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最后上线时间</label>
+          <label htmlFor="iot-device-online_time" className="block text-xs text-slate-600 mb-1">最后上线时间</label>
           <input
             type="text"
+            id="iot-device-online_time"
+            data-testid="field-online_time"
+            data-agent-target="iot-device:field:online_time"
+            data-agent-state={formData.online_time ? "filled" : "empty"}
+            aria-label="最后上线时间"
             value={formData.online_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, online_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -213,9 +275,14 @@ export function IotDeviceForm({ open, initialData, onClose, onSuccess }: IotDevi
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最后离线时间</label>
+          <label htmlFor="iot-device-offline_time" className="block text-xs text-slate-600 mb-1">最后离线时间</label>
           <input
             type="text"
+            id="iot-device-offline_time"
+            data-testid="field-offline_time"
+            data-agent-target="iot-device:field:offline_time"
+            data-agent-state={formData.offline_time ? "filled" : "empty"}
+            aria-label="最后离线时间"
             value={formData.offline_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, offline_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -225,9 +292,14 @@ export function IotDeviceForm({ open, initialData, onClose, onSuccess }: IotDevi
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备激活时间</label>
+          <label htmlFor="iot-device-active_time" className="block text-xs text-slate-600 mb-1">设备激活时间</label>
           <input
             type="text"
+            id="iot-device-active_time"
+            data-testid="field-active_time"
+            data-agent-target="iot-device:field:active_time"
+            data-agent-state={formData.active_time ? "filled" : "empty"}
+            aria-label="设备激活时间"
             value={formData.active_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, active_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -237,9 +309,14 @@ export function IotDeviceForm({ open, initialData, onClose, onSuccess }: IotDevi
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">固件编号</label>
+          <label htmlFor="iot-device-firmware_id" className="block text-xs text-slate-600 mb-1">固件编号</label>
           <input
             type="number"
+            id="iot-device-firmware_id"
+            data-testid="field-firmware_id"
+            data-agent-target="iot-device:field:firmware_id"
+            data-agent-state={formData.firmware_id == null || formData.firmware_id === "" ? "empty" : "filled"}
+            aria-label="固件编号"
             value={formData.firmware_id != null ? String(formData.firmware_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, firmware_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -249,9 +326,14 @@ export function IotDeviceForm({ open, initialData, onClose, onSuccess }: IotDevi
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备密钥，用于设备认证</label>
+          <label htmlFor="iot-device-device_secret" className="block text-xs text-slate-600 mb-1">设备密钥，用于设备认证</label>
           <input
             type="text"
+            id="iot-device-device_secret"
+            data-testid="field-device_secret"
+            data-agent-target="iot-device:field:device_secret"
+            data-agent-state={formData.device_secret ? "filled" : "empty"}
+            aria-label="设备密钥，用于设备认证"
             value={formData.device_secret ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, device_secret: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -261,9 +343,14 @@ export function IotDeviceForm({ open, initialData, onClose, onSuccess }: IotDevi
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备位置的纬度</label>
+          <label htmlFor="iot-device-latitude" className="block text-xs text-slate-600 mb-1">设备位置的纬度</label>
           <input
             type="number"
+            id="iot-device-latitude"
+            data-testid="field-latitude"
+            data-agent-target="iot-device:field:latitude"
+            data-agent-state={formData.latitude == null || formData.latitude === "" ? "empty" : "filled"}
+            aria-label="设备位置的纬度"
             value={formData.latitude != null ? String(formData.latitude) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, latitude: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -273,9 +360,14 @@ export function IotDeviceForm({ open, initialData, onClose, onSuccess }: IotDevi
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备位置的经度</label>
+          <label htmlFor="iot-device-longitude" className="block text-xs text-slate-600 mb-1">设备位置的经度</label>
           <input
             type="number"
+            id="iot-device-longitude"
+            data-testid="field-longitude"
+            data-agent-target="iot-device:field:longitude"
+            data-agent-state={formData.longitude == null || formData.longitude === "" ? "empty" : "filled"}
+            aria-label="设备位置的经度"
             value={formData.longitude != null ? String(formData.longitude) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, longitude: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -285,9 +377,14 @@ export function IotDeviceForm({ open, initialData, onClose, onSuccess }: IotDevi
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备配置</label>
+          <label htmlFor="iot-device-config" className="block text-xs text-slate-600 mb-1">设备配置</label>
           <input
             type="text"
+            id="iot-device-config"
+            data-testid="field-config"
+            data-agent-target="iot-device:field:config"
+            data-agent-state={formData.config ? "filled" : "empty"}
+            aria-label="设备配置"
             value={formData.config ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, config: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -301,6 +398,8 @@ export function IotDeviceForm({ open, initialData, onClose, onSuccess }: IotDevi
             <button
               type="button"
               onClick={onClose}
+              data-testid="iot-device-form-cancel"
+              data-agent-target="iot-device:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -308,6 +407,9 @@ export function IotDeviceForm({ open, initialData, onClose, onSuccess }: IotDevi
             <button
               type="submit"
               disabled={loading}
+              data-testid="iot-device-form-submit"
+              data-agent-target="iot-device:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

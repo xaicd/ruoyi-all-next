@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for PayWalletRechargePackage（源框架导入） (PayWalletRechargePackage)
+-- Auto-generated RBAC & Menu Migration for 会员钱包充值套餐 DO通过充值套餐时，可以赠送一定金额； (PayWalletRechargePackage)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-pay-wallet-recharge-package',
   'pay-dir',
-  'PayWalletRechargePackage（源框架导入）管理',
+  '会员钱包充值套餐 DO通过充值套餐时，可以赠送一定金额；管理',
   '/admin/pay/pay-wallet-recharge-package',
   'pay/pay-wallet-recharge-package/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-pay-wallet-recharge-package-query',  'menu-pay-wallet-recharge-package', '查询PayWalletRechargePackage（源框架导入）', 'BUTTON', 'ACTIVE', 'pay:pay_wallet_recharge_package:query',  1, NOW(), NOW()),
-('menu-pay-wallet-recharge-package-create', 'menu-pay-wallet-recharge-package', '新增PayWalletRechargePackage（源框架导入）', 'BUTTON', 'ACTIVE', 'pay:pay_wallet_recharge_package:create', 2, NOW(), NOW()),
-('menu-pay-wallet-recharge-package-update', 'menu-pay-wallet-recharge-package', '修改PayWalletRechargePackage（源框架导入）', 'BUTTON', 'ACTIVE', 'pay:pay_wallet_recharge_package:update', 3, NOW(), NOW()),
-('menu-pay-wallet-recharge-package-delete', 'menu-pay-wallet-recharge-package', '删除PayWalletRechargePackage（源框架导入）', 'BUTTON', 'ACTIVE', 'pay:pay_wallet_recharge_package:delete', 4, NOW(), NOW())
+('menu-pay-wallet-recharge-package-query',  'menu-pay-wallet-recharge-package', '查询会员钱包充值套餐 DO通过充值套餐时，可以赠送一定金额；', 'BUTTON', 'ACTIVE', 'pay:pay_wallet_recharge_package:query',  1, NOW(), NOW()),
+('menu-pay-wallet-recharge-package-create', 'menu-pay-wallet-recharge-package', '新增会员钱包充值套餐 DO通过充值套餐时，可以赠送一定金额；', 'BUTTON', 'ACTIVE', 'pay:pay_wallet_recharge_package:create', 2, NOW(), NOW()),
+('menu-pay-wallet-recharge-package-update', 'menu-pay-wallet-recharge-package', '修改会员钱包充值套餐 DO通过充值套餐时，可以赠送一定金额；', 'BUTTON', 'ACTIVE', 'pay:pay_wallet_recharge_package:update', 3, NOW(), NOW()),
+('menu-pay-wallet-recharge-package-delete', 'menu-pay-wallet-recharge-package', '删除会员钱包充值套餐 DO通过充值套餐时，可以赠送一定金额；', 'BUTTON', 'ACTIVE', 'pay:pay_wallet_recharge_package:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

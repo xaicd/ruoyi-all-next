@@ -1,0 +1,240 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesMdUnitMeasure",
+  "kebab": "mes-md-unit-measure",
+  "businessName": "MES 计量单位",
+  "permissionPrefix": "mes:mes_md_unit_measure",
+  "page": {
+    "route": "/admin/mes/mes-md-unit-measure",
+    "title": "MES 计量单位管理",
+    "titleSelector": "[data-testid=\"mes-md-unit-measure-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-md-unit-measure",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-md-unit-measure",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-md-unit-measure/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-md-unit-measure"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-md-unit-measure/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-md-unit-measure/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-md-unit-measure-title\"]",
+    "refresh": "[data-testid=\"mes-md-unit-measure-refresh\"]",
+    "createButton": "[data-testid=\"mes-md-unit-measure-create\"]",
+    "searchForm": "[data-testid=\"mes-md-unit-measure-search\"]",
+    "searchSubmit": "[data-testid=\"mes-md-unit-measure-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-md-unit-measure-search-reset\"]",
+    "total": "[data-testid=\"mes-md-unit-measure-total\"]",
+    "table": "[data-testid=\"mes-md-unit-measure-table\"]",
+    "row": "[data-testid=\"mes-md-unit-measure-row\"]",
+    "editButton": "[data-testid=\"mes-md-unit-measure-edit\"]",
+    "deleteButton": "[data-testid=\"mes-md-unit-measure-delete\"]",
+    "form": "[data-testid=\"mes-md-unit-measure-form\"]",
+    "formError": "[data-testid=\"mes-md-unit-measure-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-md-unit-measure-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-md-unit-measure-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-md-unit-measure-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 计量单位列表",
+    "dialogLabel": {
+      "create": "新增MES 计量单位",
+      "edit": "编辑MES 计量单位"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "code",
+        "label": "单位编码",
+        "type": "string",
+        "required": false,
+        "testId": "field-code",
+        "selector": "[data-testid=\"field-code\"]"
+      },
+      {
+        "name": "name",
+        "label": "单位名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "primary_flag",
+        "label": "是否主单位",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-primary_flag",
+        "selector": "[data-testid=\"field-primary_flag\"]"
+      },
+      {
+        "name": "primary_id",
+        "label": "主单位编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-primary_id",
+        "selector": "[data-testid=\"field-primary_id\"]"
+      },
+      {
+        "name": "change_rate",
+        "label": "与主单位换算比例",
+        "type": "number",
+        "required": false,
+        "testId": "field-change_rate",
+        "selector": "[data-testid=\"field-change_rate\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-md-unit-measure",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-md-unit-measure\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-md-unit-measure-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-md-unit-measure-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-md-unit-measure:search",
+      "reset": "mes-md-unit-measure:reset",
+      "refresh": "mes-md-unit-measure:refresh",
+      "create": "mes-md-unit-measure:create",
+      "edit": "mes-md-unit-measure:edit",
+      "delete": "mes-md-unit-measure:delete",
+      "submit": "mes-md-unit-measure:submit",
+      "cancel": "mes-md-unit-measure:cancel",
+      "close": "mes-md-unit-measure:close",
+      "row": "mes-md-unit-measure:row",
+      "pagination": "mes-md-unit-measure:pagination",
+      "fields": {
+        "code": "mes-md-unit-measure:field:code",
+        "name": "mes-md-unit-measure:field:name",
+        "primary_flag": "mes-md-unit-measure:field:primary_flag",
+        "primary_id": "mes-md-unit-measure:field:primary_id",
+        "change_rate": "mes-md-unit-measure:field:change_rate",
+        "status": "mes-md-unit-measure:field:status",
+        "remark": "mes-md-unit-measure:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-md-unit-measure",
+      "examples": [
+        "mes.mes-md-unit-measure__List__Refresh",
+        "mes.mes-md-unit-measure__ListItem__Open",
+        "mes.mes-md-unit-measure__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

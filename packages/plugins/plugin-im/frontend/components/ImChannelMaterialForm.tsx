@@ -55,24 +55,36 @@ export function ImChannelMaterialForm({ open, initialData, onClose, onSuccess }:
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="im-channel-material-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑IM 频道素材 DO业务语义：- 运营素材库，可被反复推送- 一条素材 1:N 关联多条 - 富文本仅在素材详情接口按需返回，推送 payload 不带，避免压爆 WebSocket 通道" : "新增IM 频道素材 DO业务语义：- 运营素材库，可被反复推送- 一条素材 1:N 关联多条 - 富文本仅在素材详情接口按需返回，推送 payload 不带，避免压爆 WebSocket 通道"}
+        data-testid="im-channel-material-form"
+        data-agent-scope="im-channel-material:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑ImChannelMaterial（源框架导入）" : "新增ImChannelMaterial（源框架导入）"}
+            {isEdit ? "编辑IM 频道素材 DO业务语义：- 运营素材库，可被反复推送- 一条素材 1:N 关联多条 - 富文本仅在素材详情接口按需返回，推送 payload 不带，避免压爆 WebSocket 通道" : "新增IM 频道素材 DO业务语义：- 运营素材库，可被反复推送- 一条素材 1:N 关联多条 - 富文本仅在素材详情接口按需返回，推送 payload 不带，避免压爆 WebSocket 通道"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="im-channel-material-form-close" data-agent-target="im-channel-material:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="im-channel-material-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">频道编号</label>
+          <label htmlFor="im-channel-material-channel_id" className="block text-xs text-slate-600 mb-1">频道编号</label>
           <input
             type="number"
+            id="im-channel-material-channel_id"
+            data-testid="field-channel_id"
+            data-agent-target="im-channel-material:field:channel_id"
+            data-agent-state={formData.channel_id == null || formData.channel_id === "" ? "empty" : "filled"}
+            aria-label="频道编号"
             value={formData.channel_id != null ? String(formData.channel_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, channel_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -82,9 +94,14 @@ export function ImChannelMaterialForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">素材内容类型</label>
+          <label htmlFor="im-channel-material-type" className="block text-xs text-slate-600 mb-1">素材内容类型</label>
           <input
             type="number"
+            id="im-channel-material-type"
+            data-testid="field-type"
+            data-agent-target="im-channel-material:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="素材内容类型"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -94,9 +111,14 @@ export function ImChannelMaterialForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">标题</label>
+          <label htmlFor="im-channel-material-title" className="block text-xs text-slate-600 mb-1">标题</label>
           <input
             type="text"
+            id="im-channel-material-title"
+            data-testid="field-title"
+            data-agent-target="im-channel-material:field:title"
+            data-agent-state={formData.title ? "filled" : "empty"}
+            aria-label="标题"
             value={formData.title ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -106,9 +128,14 @@ export function ImChannelMaterialForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">封面图</label>
+          <label htmlFor="im-channel-material-cover_url" className="block text-xs text-slate-600 mb-1">封面图</label>
           <input
             type="text"
+            id="im-channel-material-cover_url"
+            data-testid="field-cover_url"
+            data-agent-target="im-channel-material:field:cover_url"
+            data-agent-state={formData.cover_url ? "filled" : "empty"}
+            aria-label="封面图"
             value={formData.cover_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, cover_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -118,9 +145,14 @@ export function ImChannelMaterialForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">摘要</label>
+          <label htmlFor="im-channel-material-summary" className="block text-xs text-slate-600 mb-1">摘要</label>
           <input
             type="text"
+            id="im-channel-material-summary"
+            data-testid="field-summary"
+            data-agent-target="im-channel-material:field:summary"
+            data-agent-state={formData.summary ? "filled" : "empty"}
+            aria-label="摘要"
             value={formData.summary ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, summary: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -130,9 +162,14 @@ export function ImChannelMaterialForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">富文本 HTML；在 使用</label>
+          <label htmlFor="im-channel-material-content" className="block text-xs text-slate-600 mb-1">富文本 HTML；在 使用</label>
           <input
             type="text"
+            id="im-channel-material-content"
+            data-testid="field-content"
+            data-agent-target="im-channel-material:field:content"
+            data-agent-state={formData.content ? "filled" : "empty"}
+            aria-label="富文本 HTML；在 使用"
             value={formData.content ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, content: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -142,9 +179,14 @@ export function ImChannelMaterialForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">跳转链接；在 使用</label>
+          <label htmlFor="im-channel-material-url" className="block text-xs text-slate-600 mb-1">跳转链接；在 使用</label>
           <input
             type="text"
+            id="im-channel-material-url"
+            data-testid="field-url"
+            data-agent-target="im-channel-material:field:url"
+            data-agent-state={formData.url ? "filled" : "empty"}
+            aria-label="跳转链接；在 使用"
             value={formData.url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -158,6 +200,8 @@ export function ImChannelMaterialForm({ open, initialData, onClose, onSuccess }:
             <button
               type="button"
               onClick={onClose}
+              data-testid="im-channel-material-form-cancel"
+              data-agent-target="im-channel-material:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -165,6 +209,9 @@ export function ImChannelMaterialForm({ open, initialData, onClose, onSuccess }:
             <button
               type="submit"
               disabled={loading}
+              data-testid="im-channel-material-form-submit"
+              data-agent-target="im-channel-material:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

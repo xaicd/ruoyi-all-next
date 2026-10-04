@@ -64,24 +64,36 @@ export function CouponForm({ open, initialData, onClose, onSuccess }: CouponForm
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="coupon-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑优惠劵" : "新增优惠劵"}
+        data-testid="coupon-form"
+        data-agent-scope="coupon:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑Coupon（源框架导入）" : "新增Coupon（源框架导入）"}
+            {isEdit ? "编辑优惠劵" : "新增优惠劵"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="coupon-form-close" data-agent-target="coupon:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="coupon-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">优惠劵模板编号</label>
+          <label htmlFor="coupon-template_id" className="block text-xs text-slate-600 mb-1">优惠劵模板编号</label>
           <input
             type="number"
+            id="coupon-template_id"
+            data-testid="field-template_id"
+            data-agent-target="coupon:field:template_id"
+            data-agent-state={formData.template_id == null || formData.template_id === "" ? "empty" : "filled"}
+            aria-label="优惠劵模板编号"
             value={formData.template_id != null ? String(formData.template_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, template_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -91,9 +103,14 @@ export function CouponForm({ open, initialData, onClose, onSuccess }: CouponForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">优惠劵名</label>
+          <label htmlFor="coupon-name" className="block text-xs text-slate-600 mb-1">优惠劵名</label>
           <input
             type="text"
+            id="coupon-name"
+            data-testid="field-name"
+            data-agent-target="coupon:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="优惠劵名"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -103,9 +120,14 @@ export function CouponForm({ open, initialData, onClose, onSuccess }: CouponForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">优惠码状态</label>
+          <label htmlFor="coupon-status" className="block text-xs text-slate-600 mb-1">优惠码状态</label>
           <input
             type="number"
+            id="coupon-status"
+            data-testid="field-status"
+            data-agent-target="coupon:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="优惠码状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -115,9 +137,14 @@ export function CouponForm({ open, initialData, onClose, onSuccess }: CouponForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="coupon-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="coupon-user_id"
+            data-testid="field-user_id"
+            data-agent-target="coupon:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -127,9 +154,14 @@ export function CouponForm({ open, initialData, onClose, onSuccess }: CouponForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">领取类型</label>
+          <label htmlFor="coupon-take_type" className="block text-xs text-slate-600 mb-1">领取类型</label>
           <input
             type="number"
+            id="coupon-take_type"
+            data-testid="field-take_type"
+            data-agent-target="coupon:field:take_type"
+            data-agent-state={formData.take_type == null || formData.take_type === "" ? "empty" : "filled"}
+            aria-label="领取类型"
             value={formData.take_type != null ? String(formData.take_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, take_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -139,9 +171,14 @@ export function CouponForm({ open, initialData, onClose, onSuccess }: CouponForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">是否设置满多少金额可用，单位：分</label>
+          <label htmlFor="coupon-use_price" className="block text-xs text-slate-600 mb-1">是否设置满多少金额可用，单位：分</label>
           <input
             type="number"
+            id="coupon-use_price"
+            data-testid="field-use_price"
+            data-agent-target="coupon:field:use_price"
+            data-agent-state={formData.use_price == null || formData.use_price === "" ? "empty" : "filled"}
+            aria-label="是否设置满多少金额可用，单位：分"
             value={formData.use_price != null ? String(formData.use_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, use_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -151,9 +188,14 @@ export function CouponForm({ open, initialData, onClose, onSuccess }: CouponForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生效开始时间</label>
+          <label htmlFor="coupon-valid_start_time" className="block text-xs text-slate-600 mb-1">生效开始时间</label>
           <input
             type="text"
+            id="coupon-valid_start_time"
+            data-testid="field-valid_start_time"
+            data-agent-target="coupon:field:valid_start_time"
+            data-agent-state={formData.valid_start_time ? "filled" : "empty"}
+            aria-label="生效开始时间"
             value={formData.valid_start_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, valid_start_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -163,9 +205,14 @@ export function CouponForm({ open, initialData, onClose, onSuccess }: CouponForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生效结束时间</label>
+          <label htmlFor="coupon-valid_end_time" className="block text-xs text-slate-600 mb-1">生效结束时间</label>
           <input
             type="text"
+            id="coupon-valid_end_time"
+            data-testid="field-valid_end_time"
+            data-agent-target="coupon:field:valid_end_time"
+            data-agent-state={formData.valid_end_time ? "filled" : "empty"}
+            aria-label="生效结束时间"
             value={formData.valid_end_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, valid_end_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -175,9 +222,14 @@ export function CouponForm({ open, initialData, onClose, onSuccess }: CouponForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品范围</label>
+          <label htmlFor="coupon-product_scope" className="block text-xs text-slate-600 mb-1">商品范围</label>
           <input
             type="number"
+            id="coupon-product_scope"
+            data-testid="field-product_scope"
+            data-agent-target="coupon:field:product_scope"
+            data-agent-state={formData.product_scope == null || formData.product_scope === "" ? "empty" : "filled"}
+            aria-label="商品范围"
             value={formData.product_scope != null ? String(formData.product_scope) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, product_scope: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -187,9 +239,14 @@ export function CouponForm({ open, initialData, onClose, onSuccess }: CouponForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品范围编号的数组</label>
+          <label htmlFor="coupon-product_scope_values" className="block text-xs text-slate-600 mb-1">商品范围编号的数组</label>
           <input
             type="text"
+            id="coupon-product_scope_values"
+            data-testid="field-product_scope_values"
+            data-agent-target="coupon:field:product_scope_values"
+            data-agent-state={formData.product_scope_values ? "filled" : "empty"}
+            aria-label="商品范围编号的数组"
             value={formData.product_scope_values ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, product_scope_values: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -199,9 +256,14 @@ export function CouponForm({ open, initialData, onClose, onSuccess }: CouponForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">折扣类型</label>
+          <label htmlFor="coupon-discount_type" className="block text-xs text-slate-600 mb-1">折扣类型</label>
           <input
             type="number"
+            id="coupon-discount_type"
+            data-testid="field-discount_type"
+            data-agent-target="coupon:field:discount_type"
+            data-agent-state={formData.discount_type == null || formData.discount_type === "" ? "empty" : "filled"}
+            aria-label="折扣类型"
             value={formData.discount_type != null ? String(formData.discount_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, discount_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -211,9 +273,14 @@ export function CouponForm({ open, initialData, onClose, onSuccess }: CouponForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">折扣百分比</label>
+          <label htmlFor="coupon-discount_percent" className="block text-xs text-slate-600 mb-1">折扣百分比</label>
           <input
             type="number"
+            id="coupon-discount_percent"
+            data-testid="field-discount_percent"
+            data-agent-target="coupon:field:discount_percent"
+            data-agent-state={formData.discount_percent == null || formData.discount_percent === "" ? "empty" : "filled"}
+            aria-label="折扣百分比"
             value={formData.discount_percent != null ? String(formData.discount_percent) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, discount_percent: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -223,9 +290,14 @@ export function CouponForm({ open, initialData, onClose, onSuccess }: CouponForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">优惠金额，单位：分</label>
+          <label htmlFor="coupon-discount_price" className="block text-xs text-slate-600 mb-1">优惠金额，单位：分</label>
           <input
             type="number"
+            id="coupon-discount_price"
+            data-testid="field-discount_price"
+            data-agent-target="coupon:field:discount_price"
+            data-agent-state={formData.discount_price == null || formData.discount_price === "" ? "empty" : "filled"}
+            aria-label="优惠金额，单位：分"
             value={formData.discount_price != null ? String(formData.discount_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, discount_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -235,9 +307,14 @@ export function CouponForm({ open, initialData, onClose, onSuccess }: CouponForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">折扣上限，仅在 等于 时生效</label>
+          <label htmlFor="coupon-discount_limit_price" className="block text-xs text-slate-600 mb-1">折扣上限，仅在 等于 时生效</label>
           <input
             type="number"
+            id="coupon-discount_limit_price"
+            data-testid="field-discount_limit_price"
+            data-agent-target="coupon:field:discount_limit_price"
+            data-agent-state={formData.discount_limit_price == null || formData.discount_limit_price === "" ? "empty" : "filled"}
+            aria-label="折扣上限，仅在 等于 时生效"
             value={formData.discount_limit_price != null ? String(formData.discount_limit_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, discount_limit_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -247,9 +324,14 @@ export function CouponForm({ open, initialData, onClose, onSuccess }: CouponForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">使用订单号</label>
+          <label htmlFor="coupon-use_order_id" className="block text-xs text-slate-600 mb-1">使用订单号</label>
           <input
             type="number"
+            id="coupon-use_order_id"
+            data-testid="field-use_order_id"
+            data-agent-target="coupon:field:use_order_id"
+            data-agent-state={formData.use_order_id == null || formData.use_order_id === "" ? "empty" : "filled"}
+            aria-label="使用订单号"
             value={formData.use_order_id != null ? String(formData.use_order_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, use_order_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -259,9 +341,14 @@ export function CouponForm({ open, initialData, onClose, onSuccess }: CouponForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">使用时间</label>
+          <label htmlFor="coupon-use_time" className="block text-xs text-slate-600 mb-1">使用时间</label>
           <input
             type="text"
+            id="coupon-use_time"
+            data-testid="field-use_time"
+            data-agent-target="coupon:field:use_time"
+            data-agent-state={formData.use_time ? "filled" : "empty"}
+            aria-label="使用时间"
             value={formData.use_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, use_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -275,6 +362,8 @@ export function CouponForm({ open, initialData, onClose, onSuccess }: CouponForm
             <button
               type="button"
               onClick={onClose}
+              data-testid="coupon-form-cancel"
+              data-agent-target="coupon:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -282,6 +371,9 @@ export function CouponForm({ open, initialData, onClose, onSuccess }: CouponForm
             <button
               type="submit"
               disabled={loading}
+              data-testid="coupon-form-submit"
+              data-agent-target="coupon:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

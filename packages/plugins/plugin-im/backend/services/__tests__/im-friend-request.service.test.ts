@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ImFriendRequestService } from "../im-friend-request.service"
 
 describe("ImFriendRequestService", () => {
-  it("should create and query ImFriendRequest（源框架导入）", async () => {
+  it("should create and query IM 好友申请记录 DO配合「申请 - 审批」流程：- 发起方调 apply 接口落库（handleResult=UNHANDLED）- 接收方调 agree / refuse 处理（更新 ha", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImFriendRequestService.create({
         from_user_id: 1,
@@ -21,7 +21,7 @@ describe("ImFriendRequestService", () => {
   
       const updated = await ImFriendRequestService.update(created.id, {
         id: created.id,
-        from_user_id: "更新ImFriendRequest（源框架导入）",
+        from_user_id: "更新IM 好友申请记录 DO配合「申请 - 审批」流程：- 发起方调 apply 接口落库（handleResult=UNHANDLED）- 接收方调 agree / refuse 处理（更新 ha",
       } as any)
       expect(updated).toBeDefined()
   

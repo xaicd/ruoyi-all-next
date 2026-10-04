@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { PayOrderExtensionService } from "../pay-order-extension.service"
 
 describe("PayOrderExtensionService", () => {
-  it("should create and query PayOrderExtension（源框架导入）", async () => {
+  it("should create and query 支付订单拓展 DO每次调用支付渠道，都会生成一条对应记录", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await PayOrderExtensionService.create({
-        no: "测试PayOrderExtension（源框架导入）",
+        no: "测试支付订单拓展 DO每次调用支付渠道，都会生成一条对应记录",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("PayOrderExtensionService", () => {
   
       const updated = await PayOrderExtensionService.update(created.id, {
         id: created.id,
-        no: "更新PayOrderExtension（源框架导入）",
+        no: "更新支付订单拓展 DO每次调用支付渠道，都会生成一条对应记录",
       } as any)
       expect(updated).toBeDefined()
   

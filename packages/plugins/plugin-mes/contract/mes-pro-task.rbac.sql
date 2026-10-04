@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesProTask（源框架导入） (MesProTask)
+-- Auto-generated RBAC & Menu Migration for MES 生产任务 (MesProTask)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-pro-task',
   'mes-dir',
-  'MesProTask（源框架导入）管理',
+  'MES 生产任务管理',
   '/admin/mes/mes-pro-task',
   'mes/mes-pro-task/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-pro-task-query',  'menu-mes-pro-task', '查询MesProTask（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_task:query',  1, NOW(), NOW()),
-('menu-mes-pro-task-create', 'menu-mes-pro-task', '新增MesProTask（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_task:create', 2, NOW(), NOW()),
-('menu-mes-pro-task-update', 'menu-mes-pro-task', '修改MesProTask（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_task:update', 3, NOW(), NOW()),
-('menu-mes-pro-task-delete', 'menu-mes-pro-task', '删除MesProTask（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_task:delete', 4, NOW(), NOW())
+('menu-mes-pro-task-query',  'menu-mes-pro-task', '查询MES 生产任务', 'BUTTON', 'ACTIVE', 'mes:mes_pro_task:query',  1, NOW(), NOW()),
+('menu-mes-pro-task-create', 'menu-mes-pro-task', '新增MES 生产任务', 'BUTTON', 'ACTIVE', 'mes:mes_pro_task:create', 2, NOW(), NOW()),
+('menu-mes-pro-task-update', 'menu-mes-pro-task', '修改MES 生产任务', 'BUTTON', 'ACTIVE', 'mes:mes_pro_task:update', 3, NOW(), NOW()),
+('menu-mes-pro-task-delete', 'menu-mes-pro-task', '删除MES 生产任务', 'BUTTON', 'ACTIVE', 'mes:mes_pro_task:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

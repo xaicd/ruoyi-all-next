@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for CrmClue（源框架导入） (CrmClue)
+-- Auto-generated RBAC & Menu Migration for CRM 线索 (CrmClue)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-crm-clue',
   'crm-dir',
-  'CrmClue（源框架导入）管理',
+  'CRM 线索管理',
   '/admin/crm/crm-clue',
   'crm/crm-clue/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-crm-clue-query',  'menu-crm-clue', '查询CrmClue（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_clue:query',  1, NOW(), NOW()),
-('menu-crm-clue-create', 'menu-crm-clue', '新增CrmClue（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_clue:create', 2, NOW(), NOW()),
-('menu-crm-clue-update', 'menu-crm-clue', '修改CrmClue（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_clue:update', 3, NOW(), NOW()),
-('menu-crm-clue-delete', 'menu-crm-clue', '删除CrmClue（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_clue:delete', 4, NOW(), NOW())
+('menu-crm-clue-query',  'menu-crm-clue', '查询CRM 线索', 'BUTTON', 'ACTIVE', 'crm:crm_clue:query',  1, NOW(), NOW()),
+('menu-crm-clue-create', 'menu-crm-clue', '新增CRM 线索', 'BUTTON', 'ACTIVE', 'crm:crm_clue:create', 2, NOW(), NOW()),
+('menu-crm-clue-update', 'menu-crm-clue', '修改CRM 线索', 'BUTTON', 'ACTIVE', 'crm:crm_clue:update', 3, NOW(), NOW()),
+('menu-crm-clue-delete', 'menu-crm-clue', '删除CRM 线索', 'BUTTON', 'ACTIVE', 'crm:crm_clue:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

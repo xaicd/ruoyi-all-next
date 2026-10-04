@@ -58,24 +58,36 @@ export function PayDemoWithdrawForm({ open, initialData, onClose, onSuccess }: P
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="pay-demo-withdraw-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑示例提现订单演示业务系统的转账业务" : "新增示例提现订单演示业务系统的转账业务"}
+        data-testid="pay-demo-withdraw-form"
+        data-agent-scope="pay-demo-withdraw:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑PayDemoWithdraw（源框架导入）" : "新增PayDemoWithdraw（源框架导入）"}
+            {isEdit ? "编辑示例提现订单演示业务系统的转账业务" : "新增示例提现订单演示业务系统的转账业务"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="pay-demo-withdraw-form-close" data-agent-target="pay-demo-withdraw:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="pay-demo-withdraw-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">提现标题</label>
+          <label htmlFor="pay-demo-withdraw-subject" className="block text-xs text-slate-600 mb-1">提现标题</label>
           <input
             type="text"
+            id="pay-demo-withdraw-subject"
+            data-testid="field-subject"
+            data-agent-target="pay-demo-withdraw:field:subject"
+            data-agent-state={formData.subject ? "filled" : "empty"}
+            aria-label="提现标题"
             value={formData.subject ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, subject: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -85,9 +97,14 @@ export function PayDemoWithdrawForm({ open, initialData, onClose, onSuccess }: P
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">提现金额，单位：分</label>
+          <label htmlFor="pay-demo-withdraw-price" className="block text-xs text-slate-600 mb-1">提现金额，单位：分</label>
           <input
             type="number"
+            id="pay-demo-withdraw-price"
+            data-testid="field-price"
+            data-agent-target="pay-demo-withdraw:field:price"
+            data-agent-state={formData.price == null || formData.price === "" ? "empty" : "filled"}
+            aria-label="提现金额，单位：分"
             value={formData.price != null ? String(formData.price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -97,9 +114,14 @@ export function PayDemoWithdrawForm({ open, initialData, onClose, onSuccess }: P
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">收款人账号</label>
+          <label htmlFor="pay-demo-withdraw-user_account" className="block text-xs text-slate-600 mb-1">收款人账号</label>
           <input
             type="text"
+            id="pay-demo-withdraw-user_account"
+            data-testid="field-user_account"
+            data-agent-target="pay-demo-withdraw:field:user_account"
+            data-agent-state={formData.user_account ? "filled" : "empty"}
+            aria-label="收款人账号"
             value={formData.user_account ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_account: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -109,9 +131,14 @@ export function PayDemoWithdrawForm({ open, initialData, onClose, onSuccess }: P
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">收款人姓名</label>
+          <label htmlFor="pay-demo-withdraw-user_name" className="block text-xs text-slate-600 mb-1">收款人姓名</label>
           <input
             type="text"
+            id="pay-demo-withdraw-user_name"
+            data-testid="field-user_name"
+            data-agent-target="pay-demo-withdraw:field:user_name"
+            data-agent-state={formData.user_name ? "filled" : "empty"}
+            aria-label="收款人姓名"
             value={formData.user_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -121,9 +148,14 @@ export function PayDemoWithdrawForm({ open, initialData, onClose, onSuccess }: P
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">提现方式</label>
+          <label htmlFor="pay-demo-withdraw-type" className="block text-xs text-slate-600 mb-1">提现方式</label>
           <input
             type="number"
+            id="pay-demo-withdraw-type"
+            data-testid="field-type"
+            data-agent-target="pay-demo-withdraw:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="提现方式"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -133,9 +165,14 @@ export function PayDemoWithdrawForm({ open, initialData, onClose, onSuccess }: P
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">提现状态</label>
+          <label htmlFor="pay-demo-withdraw-status" className="block text-xs text-slate-600 mb-1">提现状态</label>
           <input
             type="number"
+            id="pay-demo-withdraw-status"
+            data-testid="field-status"
+            data-agent-target="pay-demo-withdraw:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="提现状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -145,9 +182,14 @@ export function PayDemoWithdrawForm({ open, initialData, onClose, onSuccess }: P
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">转账单编号</label>
+          <label htmlFor="pay-demo-withdraw-pay_transfer_id" className="block text-xs text-slate-600 mb-1">转账单编号</label>
           <input
             type="number"
+            id="pay-demo-withdraw-pay_transfer_id"
+            data-testid="field-pay_transfer_id"
+            data-agent-target="pay-demo-withdraw:field:pay_transfer_id"
+            data-agent-state={formData.pay_transfer_id == null || formData.pay_transfer_id === "" ? "empty" : "filled"}
+            aria-label="转账单编号"
             value={formData.pay_transfer_id != null ? String(formData.pay_transfer_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pay_transfer_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -157,9 +199,14 @@ export function PayDemoWithdrawForm({ open, initialData, onClose, onSuccess }: P
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">转账渠道</label>
+          <label htmlFor="pay-demo-withdraw-transfer_channel_code" className="block text-xs text-slate-600 mb-1">转账渠道</label>
           <input
             type="text"
+            id="pay-demo-withdraw-transfer_channel_code"
+            data-testid="field-transfer_channel_code"
+            data-agent-target="pay-demo-withdraw:field:transfer_channel_code"
+            data-agent-state={formData.transfer_channel_code ? "filled" : "empty"}
+            aria-label="转账渠道"
             value={formData.transfer_channel_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, transfer_channel_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -169,9 +216,14 @@ export function PayDemoWithdrawForm({ open, initialData, onClose, onSuccess }: P
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">转账成功时间</label>
+          <label htmlFor="pay-demo-withdraw-transfer_time" className="block text-xs text-slate-600 mb-1">转账成功时间</label>
           <input
             type="text"
+            id="pay-demo-withdraw-transfer_time"
+            data-testid="field-transfer_time"
+            data-agent-target="pay-demo-withdraw:field:transfer_time"
+            data-agent-state={formData.transfer_time ? "filled" : "empty"}
+            aria-label="转账成功时间"
             value={formData.transfer_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, transfer_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -181,9 +233,14 @@ export function PayDemoWithdrawForm({ open, initialData, onClose, onSuccess }: P
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">转账错误提示</label>
+          <label htmlFor="pay-demo-withdraw-transfer_error_msg" className="block text-xs text-slate-600 mb-1">转账错误提示</label>
           <input
             type="text"
+            id="pay-demo-withdraw-transfer_error_msg"
+            data-testid="field-transfer_error_msg"
+            data-agent-target="pay-demo-withdraw:field:transfer_error_msg"
+            data-agent-state={formData.transfer_error_msg ? "filled" : "empty"}
+            aria-label="转账错误提示"
             value={formData.transfer_error_msg ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, transfer_error_msg: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -197,6 +254,8 @@ export function PayDemoWithdrawForm({ open, initialData, onClose, onSuccess }: P
             <button
               type="button"
               onClick={onClose}
+              data-testid="pay-demo-withdraw-form-cancel"
+              data-agent-target="pay-demo-withdraw:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -204,6 +263,9 @@ export function PayDemoWithdrawForm({ open, initialData, onClose, onSuccess }: P
             <button
               type="submit"
               disabled={loading}
+              data-testid="pay-demo-withdraw-form-submit"
+              data-agent-target="pay-demo-withdraw:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

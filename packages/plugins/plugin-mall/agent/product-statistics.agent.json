@@ -1,0 +1,285 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "ProductStatistics",
+  "kebab": "product-statistics",
+  "businessName": "商品统计",
+  "permissionPrefix": "mall:product_statistics",
+  "page": {
+    "route": "/admin/mall/product-statistics",
+    "title": "商品统计管理",
+    "titleSelector": "[data-testid=\"product-statistics-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "product-statistics",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/product-statistics",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/product-statistics/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/product-statistics"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/product-statistics/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/product-statistics/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"product-statistics-title\"]",
+    "refresh": "[data-testid=\"product-statistics-refresh\"]",
+    "createButton": "[data-testid=\"product-statistics-create\"]",
+    "searchForm": "[data-testid=\"product-statistics-search\"]",
+    "searchSubmit": "[data-testid=\"product-statistics-search-submit\"]",
+    "searchReset": "[data-testid=\"product-statistics-search-reset\"]",
+    "total": "[data-testid=\"product-statistics-total\"]",
+    "table": "[data-testid=\"product-statistics-table\"]",
+    "row": "[data-testid=\"product-statistics-row\"]",
+    "editButton": "[data-testid=\"product-statistics-edit\"]",
+    "deleteButton": "[data-testid=\"product-statistics-delete\"]",
+    "form": "[data-testid=\"product-statistics-form\"]",
+    "formError": "[data-testid=\"product-statistics-form-error\"]",
+    "formSubmit": "[data-testid=\"product-statistics-form-submit\"]",
+    "formCancel": "[data-testid=\"product-statistics-form-cancel\"]",
+    "formClose": "[data-testid=\"product-statistics-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "商品统计列表",
+    "dialogLabel": {
+      "create": "新增商品统计",
+      "edit": "编辑商品统计"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "time",
+        "label": "统计日期",
+        "type": "string",
+        "required": false,
+        "testId": "field-time",
+        "selector": "[data-testid=\"field-time\"]"
+      },
+      {
+        "name": "spu_id",
+        "label": "商品 SPU 编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-spu_id",
+        "selector": "[data-testid=\"field-spu_id\"]"
+      },
+      {
+        "name": "browse_count",
+        "label": "浏览量",
+        "type": "number",
+        "required": false,
+        "testId": "field-browse_count",
+        "selector": "[data-testid=\"field-browse_count\"]"
+      },
+      {
+        "name": "browse_user_count",
+        "label": "访客量",
+        "type": "number",
+        "required": false,
+        "testId": "field-browse_user_count",
+        "selector": "[data-testid=\"field-browse_user_count\"]"
+      },
+      {
+        "name": "favorite_count",
+        "label": "收藏数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-favorite_count",
+        "selector": "[data-testid=\"field-favorite_count\"]"
+      },
+      {
+        "name": "cart_count",
+        "label": "加购数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-cart_count",
+        "selector": "[data-testid=\"field-cart_count\"]"
+      },
+      {
+        "name": "order_count",
+        "label": "下单件数",
+        "type": "number",
+        "required": false,
+        "testId": "field-order_count",
+        "selector": "[data-testid=\"field-order_count\"]"
+      },
+      {
+        "name": "order_pay_count",
+        "label": "支付件数",
+        "type": "number",
+        "required": false,
+        "testId": "field-order_pay_count",
+        "selector": "[data-testid=\"field-order_pay_count\"]"
+      },
+      {
+        "name": "order_pay_price",
+        "label": "支付金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-order_pay_price",
+        "selector": "[data-testid=\"field-order_pay_price\"]"
+      },
+      {
+        "name": "after_sale_count",
+        "label": "退款件数",
+        "type": "number",
+        "required": false,
+        "testId": "field-after_sale_count",
+        "selector": "[data-testid=\"field-after_sale_count\"]"
+      },
+      {
+        "name": "after_sale_refund_price",
+        "label": "退款金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-after_sale_refund_price",
+        "selector": "[data-testid=\"field-after_sale_refund_price\"]"
+      },
+      {
+        "name": "browse_convert_percent",
+        "label": "访客支付转化率（百分比）",
+        "type": "number",
+        "required": false,
+        "testId": "field-browse_convert_percent",
+        "selector": "[data-testid=\"field-browse_convert_percent\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "product-statistics",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"product-statistics\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"product-statistics-form-overlay\"]",
+      "dialog": "[data-testid=\"product-statistics-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "product-statistics:search",
+      "reset": "product-statistics:reset",
+      "refresh": "product-statistics:refresh",
+      "create": "product-statistics:create",
+      "edit": "product-statistics:edit",
+      "delete": "product-statistics:delete",
+      "submit": "product-statistics:submit",
+      "cancel": "product-statistics:cancel",
+      "close": "product-statistics:close",
+      "row": "product-statistics:row",
+      "pagination": "product-statistics:pagination",
+      "fields": {
+        "time": "product-statistics:field:time",
+        "spu_id": "product-statistics:field:spu_id",
+        "browse_count": "product-statistics:field:browse_count",
+        "browse_user_count": "product-statistics:field:browse_user_count",
+        "favorite_count": "product-statistics:field:favorite_count",
+        "cart_count": "product-statistics:field:cart_count",
+        "order_count": "product-statistics:field:order_count",
+        "order_pay_count": "product-statistics:field:order_pay_count",
+        "order_pay_price": "product-statistics:field:order_pay_price",
+        "after_sale_count": "product-statistics:field:after_sale_count",
+        "after_sale_refund_price": "product-statistics:field:after_sale_refund_price",
+        "browse_convert_percent": "product-statistics:field:browse_convert_percent"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.product-statistics",
+      "examples": [
+        "mall.product-statistics__List__Refresh",
+        "mall.product-statistics__ListItem__Open",
+        "mall.product-statistics__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

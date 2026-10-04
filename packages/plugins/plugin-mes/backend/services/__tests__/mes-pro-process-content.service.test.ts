@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesProProcessContentService } from "../mes-pro-process-content.service"
 
 describe("MesProProcessContentService", () => {
-  it("should create and query MesProProcessContent（源框架导入）", async () => {
+  it("should create and query MES 生产工序内容", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesProProcessContentService.create({
         process_id: 1,
@@ -21,7 +21,7 @@ describe("MesProProcessContentService", () => {
   
       const updated = await MesProProcessContentService.update(created.id, {
         id: created.id,
-        process_id: "更新MesProProcessContent（源框架导入）",
+        process_id: "更新MES 生产工序内容",
       } as any)
       expect(updated).toBeDefined()
   

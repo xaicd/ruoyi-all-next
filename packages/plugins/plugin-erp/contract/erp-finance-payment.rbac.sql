@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for ErpFinancePayment（源框架导入） (ErpFinancePayment)
+-- Auto-generated RBAC & Menu Migration for ERP 付款单 (ErpFinancePayment)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-erp-finance-payment',
   'erp-dir',
-  'ErpFinancePayment（源框架导入）管理',
+  'ERP 付款单管理',
   '/admin/erp/erp-finance-payment',
   'erp/erp-finance-payment/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-erp-finance-payment-query',  'menu-erp-finance-payment', '查询ErpFinancePayment（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_finance_payment:query',  1, NOW(), NOW()),
-('menu-erp-finance-payment-create', 'menu-erp-finance-payment', '新增ErpFinancePayment（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_finance_payment:create', 2, NOW(), NOW()),
-('menu-erp-finance-payment-update', 'menu-erp-finance-payment', '修改ErpFinancePayment（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_finance_payment:update', 3, NOW(), NOW()),
-('menu-erp-finance-payment-delete', 'menu-erp-finance-payment', '删除ErpFinancePayment（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_finance_payment:delete', 4, NOW(), NOW())
+('menu-erp-finance-payment-query',  'menu-erp-finance-payment', '查询ERP 付款单', 'BUTTON', 'ACTIVE', 'erp:erp_finance_payment:query',  1, NOW(), NOW()),
+('menu-erp-finance-payment-create', 'menu-erp-finance-payment', '新增ERP 付款单', 'BUTTON', 'ACTIVE', 'erp:erp_finance_payment:create', 2, NOW(), NOW()),
+('menu-erp-finance-payment-update', 'menu-erp-finance-payment', '修改ERP 付款单', 'BUTTON', 'ACTIVE', 'erp:erp_finance_payment:update', 3, NOW(), NOW()),
+('menu-erp-finance-payment-delete', 'menu-erp-finance-payment', '删除ERP 付款单', 'BUTTON', 'ACTIVE', 'erp:erp_finance_payment:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

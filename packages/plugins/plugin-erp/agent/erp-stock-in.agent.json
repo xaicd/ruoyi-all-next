@@ -1,0 +1,249 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "erp",
+  "entity": "ErpStockIn",
+  "kebab": "erp-stock-in",
+  "businessName": "ERP 其它入库单",
+  "permissionPrefix": "erp:erp_stock_in",
+  "page": {
+    "route": "/admin/erp/erp-stock-in",
+    "title": "ERP 其它入库单管理",
+    "titleSelector": "[data-testid=\"erp-stock-in-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.erp/api",
+    "bffMount": "/api/v1/admin/erp",
+    "resource": "erp-stock-in",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/erp-stock-in",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/erp-stock-in/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/erp-stock-in"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/erp-stock-in/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/erp-stock-in/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"erp-stock-in-title\"]",
+    "refresh": "[data-testid=\"erp-stock-in-refresh\"]",
+    "createButton": "[data-testid=\"erp-stock-in-create\"]",
+    "searchForm": "[data-testid=\"erp-stock-in-search\"]",
+    "searchSubmit": "[data-testid=\"erp-stock-in-search-submit\"]",
+    "searchReset": "[data-testid=\"erp-stock-in-search-reset\"]",
+    "total": "[data-testid=\"erp-stock-in-total\"]",
+    "table": "[data-testid=\"erp-stock-in-table\"]",
+    "row": "[data-testid=\"erp-stock-in-row\"]",
+    "editButton": "[data-testid=\"erp-stock-in-edit\"]",
+    "deleteButton": "[data-testid=\"erp-stock-in-delete\"]",
+    "form": "[data-testid=\"erp-stock-in-form\"]",
+    "formError": "[data-testid=\"erp-stock-in-form-error\"]",
+    "formSubmit": "[data-testid=\"erp-stock-in-form-submit\"]",
+    "formCancel": "[data-testid=\"erp-stock-in-form-cancel\"]",
+    "formClose": "[data-testid=\"erp-stock-in-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "ERP 其它入库单列表",
+    "dialogLabel": {
+      "create": "新增ERP 其它入库单",
+      "edit": "编辑ERP 其它入库单"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "no",
+        "label": "入库单号",
+        "type": "string",
+        "required": false,
+        "testId": "field-no",
+        "selector": "[data-testid=\"field-no\"]"
+      },
+      {
+        "name": "supplier_id",
+        "label": "供应商编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-supplier_id",
+        "selector": "[data-testid=\"field-supplier_id\"]"
+      },
+      {
+        "name": "in_time",
+        "label": "入库时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-in_time",
+        "selector": "[data-testid=\"field-in_time\"]"
+      },
+      {
+        "name": "total_count",
+        "label": "合计数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_count",
+        "selector": "[data-testid=\"field-total_count\"]"
+      },
+      {
+        "name": "total_price",
+        "label": "合计金额，单位：元",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_price",
+        "selector": "[data-testid=\"field-total_price\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      },
+      {
+        "name": "file_url",
+        "label": "附件 URL",
+        "type": "string",
+        "required": false,
+        "testId": "field-file_url",
+        "selector": "[data-testid=\"field-file_url\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "erp-stock-in",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"erp-stock-in\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"erp-stock-in-form-overlay\"]",
+      "dialog": "[data-testid=\"erp-stock-in-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "erp-stock-in:search",
+      "reset": "erp-stock-in:reset",
+      "refresh": "erp-stock-in:refresh",
+      "create": "erp-stock-in:create",
+      "edit": "erp-stock-in:edit",
+      "delete": "erp-stock-in:delete",
+      "submit": "erp-stock-in:submit",
+      "cancel": "erp-stock-in:cancel",
+      "close": "erp-stock-in:close",
+      "row": "erp-stock-in:row",
+      "pagination": "erp-stock-in:pagination",
+      "fields": {
+        "no": "erp-stock-in:field:no",
+        "supplier_id": "erp-stock-in:field:supplier_id",
+        "in_time": "erp-stock-in:field:in_time",
+        "total_count": "erp-stock-in:field:total_count",
+        "total_price": "erp-stock-in:field:total_price",
+        "status": "erp-stock-in:field:status",
+        "remark": "erp-stock-in:field:remark",
+        "file_url": "erp-stock-in:field:file_url"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "erp.erp-stock-in",
+      "examples": [
+        "erp.erp-stock-in__List__Refresh",
+        "erp.erp-stock-in__ListItem__Open",
+        "erp.erp-stock-in__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

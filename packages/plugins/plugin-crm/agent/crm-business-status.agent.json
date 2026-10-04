@@ -1,0 +1,213 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "crm",
+  "entity": "CrmBusinessStatus",
+  "kebab": "crm-business-status",
+  "businessName": "CRM 商机状态 DO注意，它是个配置表",
+  "permissionPrefix": "crm:crm_business_status",
+  "page": {
+    "route": "/admin/crm/crm-business-status",
+    "title": "CRM 商机状态 DO注意，它是个配置表管理",
+    "titleSelector": "[data-testid=\"crm-business-status-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.crm/api",
+    "bffMount": "/api/v1/admin/crm",
+    "resource": "crm-business-status",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/crm-business-status",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/crm-business-status/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/crm-business-status"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/crm-business-status/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/crm-business-status/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"crm-business-status-title\"]",
+    "refresh": "[data-testid=\"crm-business-status-refresh\"]",
+    "createButton": "[data-testid=\"crm-business-status-create\"]",
+    "searchForm": "[data-testid=\"crm-business-status-search\"]",
+    "searchSubmit": "[data-testid=\"crm-business-status-search-submit\"]",
+    "searchReset": "[data-testid=\"crm-business-status-search-reset\"]",
+    "total": "[data-testid=\"crm-business-status-total\"]",
+    "table": "[data-testid=\"crm-business-status-table\"]",
+    "row": "[data-testid=\"crm-business-status-row\"]",
+    "editButton": "[data-testid=\"crm-business-status-edit\"]",
+    "deleteButton": "[data-testid=\"crm-business-status-delete\"]",
+    "form": "[data-testid=\"crm-business-status-form\"]",
+    "formError": "[data-testid=\"crm-business-status-form-error\"]",
+    "formSubmit": "[data-testid=\"crm-business-status-form-submit\"]",
+    "formCancel": "[data-testid=\"crm-business-status-form-cancel\"]",
+    "formClose": "[data-testid=\"crm-business-status-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "CRM 商机状态 DO注意，它是个配置表列表",
+    "dialogLabel": {
+      "create": "新增CRM 商机状态 DO注意，它是个配置表",
+      "edit": "编辑CRM 商机状态 DO注意，它是个配置表"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "type_id",
+        "label": "状态类型编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-type_id",
+        "selector": "[data-testid=\"field-type_id\"]"
+      },
+      {
+        "name": "name",
+        "label": "状态名",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "percent",
+        "label": "赢单率，百分比",
+        "type": "number",
+        "required": false,
+        "testId": "field-percent",
+        "selector": "[data-testid=\"field-percent\"]"
+      },
+      {
+        "name": "sort",
+        "label": "排序",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "crm-business-status",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"crm-business-status\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"crm-business-status-form-overlay\"]",
+      "dialog": "[data-testid=\"crm-business-status-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "crm-business-status:search",
+      "reset": "crm-business-status:reset",
+      "refresh": "crm-business-status:refresh",
+      "create": "crm-business-status:create",
+      "edit": "crm-business-status:edit",
+      "delete": "crm-business-status:delete",
+      "submit": "crm-business-status:submit",
+      "cancel": "crm-business-status:cancel",
+      "close": "crm-business-status:close",
+      "row": "crm-business-status:row",
+      "pagination": "crm-business-status:pagination",
+      "fields": {
+        "type_id": "crm-business-status:field:type_id",
+        "name": "crm-business-status:field:name",
+        "percent": "crm-business-status:field:percent",
+        "sort": "crm-business-status:field:sort"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "crm.crm-business-status",
+      "examples": [
+        "crm.crm-business-status__List__Refresh",
+        "crm.crm-business-status__ListItem__Open",
+        "crm.crm-business-status__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

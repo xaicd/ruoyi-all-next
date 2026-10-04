@@ -1,0 +1,375 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "ProductSpu",
+  "kebab": "product-spu",
+  "businessName": "商品 SPU",
+  "permissionPrefix": "mall:product_spu",
+  "page": {
+    "route": "/admin/mall/product-spu",
+    "title": "商品 SPU管理",
+    "titleSelector": "[data-testid=\"product-spu-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "product-spu",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/product-spu",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/product-spu/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/product-spu"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/product-spu/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/product-spu/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"product-spu-title\"]",
+    "refresh": "[data-testid=\"product-spu-refresh\"]",
+    "createButton": "[data-testid=\"product-spu-create\"]",
+    "searchForm": "[data-testid=\"product-spu-search\"]",
+    "searchSubmit": "[data-testid=\"product-spu-search-submit\"]",
+    "searchReset": "[data-testid=\"product-spu-search-reset\"]",
+    "total": "[data-testid=\"product-spu-total\"]",
+    "table": "[data-testid=\"product-spu-table\"]",
+    "row": "[data-testid=\"product-spu-row\"]",
+    "editButton": "[data-testid=\"product-spu-edit\"]",
+    "deleteButton": "[data-testid=\"product-spu-delete\"]",
+    "form": "[data-testid=\"product-spu-form\"]",
+    "formError": "[data-testid=\"product-spu-form-error\"]",
+    "formSubmit": "[data-testid=\"product-spu-form-submit\"]",
+    "formCancel": "[data-testid=\"product-spu-form-cancel\"]",
+    "formClose": "[data-testid=\"product-spu-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "商品 SPU列表",
+    "dialogLabel": {
+      "create": "新增商品 SPU",
+      "edit": "编辑商品 SPU"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "商品名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "keyword",
+        "label": "关键字",
+        "type": "string",
+        "required": false,
+        "testId": "field-keyword",
+        "selector": "[data-testid=\"field-keyword\"]"
+      },
+      {
+        "name": "introduction",
+        "label": "商品简介",
+        "type": "string",
+        "required": false,
+        "testId": "field-introduction",
+        "selector": "[data-testid=\"field-introduction\"]"
+      },
+      {
+        "name": "description",
+        "label": "商品详情",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      },
+      {
+        "name": "category_id",
+        "label": "商品分类编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-category_id",
+        "selector": "[data-testid=\"field-category_id\"]"
+      },
+      {
+        "name": "brand_id",
+        "label": "商品品牌编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-brand_id",
+        "selector": "[data-testid=\"field-brand_id\"]"
+      },
+      {
+        "name": "pic_url",
+        "label": "商品封面图",
+        "type": "string",
+        "required": false,
+        "testId": "field-pic_url",
+        "selector": "[data-testid=\"field-pic_url\"]"
+      },
+      {
+        "name": "slider_pic_urls",
+        "label": "商品轮播图",
+        "type": "string",
+        "required": false,
+        "testId": "field-slider_pic_urls",
+        "selector": "[data-testid=\"field-slider_pic_urls\"]"
+      },
+      {
+        "name": "sort",
+        "label": "排序字段",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      },
+      {
+        "name": "status",
+        "label": "商品状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "spec_type",
+        "label": "规格类型",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-spec_type",
+        "selector": "[data-testid=\"field-spec_type\"]"
+      },
+      {
+        "name": "price",
+        "label": "商品价格，单位使用：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-price",
+        "selector": "[data-testid=\"field-price\"]"
+      },
+      {
+        "name": "market_price",
+        "label": "市场价，单位使用：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-market_price",
+        "selector": "[data-testid=\"field-market_price\"]"
+      },
+      {
+        "name": "cost_price",
+        "label": "成本价，单位使用：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-cost_price",
+        "selector": "[data-testid=\"field-cost_price\"]"
+      },
+      {
+        "name": "stock",
+        "label": "库存",
+        "type": "number",
+        "required": false,
+        "testId": "field-stock",
+        "selector": "[data-testid=\"field-stock\"]"
+      },
+      {
+        "name": "delivery_types",
+        "label": "配送方式数组",
+        "type": "string",
+        "required": false,
+        "testId": "field-delivery_types",
+        "selector": "[data-testid=\"field-delivery_types\"]"
+      },
+      {
+        "name": "delivery_template_id",
+        "label": "物流配置模板编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-delivery_template_id",
+        "selector": "[data-testid=\"field-delivery_template_id\"]"
+      },
+      {
+        "name": "give_integral",
+        "label": "赠送积分",
+        "type": "number",
+        "required": false,
+        "testId": "field-give_integral",
+        "selector": "[data-testid=\"field-give_integral\"]"
+      },
+      {
+        "name": "sub_commission_type",
+        "label": "分销类型",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-sub_commission_type",
+        "selector": "[data-testid=\"field-sub_commission_type\"]"
+      },
+      {
+        "name": "sales_count",
+        "label": "商品销量",
+        "type": "number",
+        "required": false,
+        "testId": "field-sales_count",
+        "selector": "[data-testid=\"field-sales_count\"]"
+      },
+      {
+        "name": "virtual_sales_count",
+        "label": "虚拟销量",
+        "type": "number",
+        "required": false,
+        "testId": "field-virtual_sales_count",
+        "selector": "[data-testid=\"field-virtual_sales_count\"]"
+      },
+      {
+        "name": "browse_count",
+        "label": "浏览量",
+        "type": "number",
+        "required": false,
+        "testId": "field-browse_count",
+        "selector": "[data-testid=\"field-browse_count\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "product-spu",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"product-spu\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"product-spu-form-overlay\"]",
+      "dialog": "[data-testid=\"product-spu-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "product-spu:search",
+      "reset": "product-spu:reset",
+      "refresh": "product-spu:refresh",
+      "create": "product-spu:create",
+      "edit": "product-spu:edit",
+      "delete": "product-spu:delete",
+      "submit": "product-spu:submit",
+      "cancel": "product-spu:cancel",
+      "close": "product-spu:close",
+      "row": "product-spu:row",
+      "pagination": "product-spu:pagination",
+      "fields": {
+        "name": "product-spu:field:name",
+        "keyword": "product-spu:field:keyword",
+        "introduction": "product-spu:field:introduction",
+        "description": "product-spu:field:description",
+        "category_id": "product-spu:field:category_id",
+        "brand_id": "product-spu:field:brand_id",
+        "pic_url": "product-spu:field:pic_url",
+        "slider_pic_urls": "product-spu:field:slider_pic_urls",
+        "sort": "product-spu:field:sort",
+        "status": "product-spu:field:status",
+        "spec_type": "product-spu:field:spec_type",
+        "price": "product-spu:field:price",
+        "market_price": "product-spu:field:market_price",
+        "cost_price": "product-spu:field:cost_price",
+        "stock": "product-spu:field:stock",
+        "delivery_types": "product-spu:field:delivery_types",
+        "delivery_template_id": "product-spu:field:delivery_template_id",
+        "give_integral": "product-spu:field:give_integral",
+        "sub_commission_type": "product-spu:field:sub_commission_type",
+        "sales_count": "product-spu:field:sales_count",
+        "virtual_sales_count": "product-spu:field:virtual_sales_count",
+        "browse_count": "product-spu:field:browse_count"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.product-spu",
+      "examples": [
+        "mall.product-spu__List__Refresh",
+        "mall.product-spu__ListItem__Open",
+        "mall.product-spu__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

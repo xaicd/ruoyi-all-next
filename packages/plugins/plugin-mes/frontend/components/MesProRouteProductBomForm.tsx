@@ -54,24 +54,36 @@ export function MesProRouteProductBomForm({ open, initialData, onClose, onSucces
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-pro-route-product-bom-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 工艺路线产品 BOM" : "新增MES 工艺路线产品 BOM"}
+        data-testid="mes-pro-route-product-bom-form"
+        data-agent-scope="mes-pro-route-product-bom:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesProRouteProductBom（源框架导入）" : "新增MesProRouteProductBom（源框架导入）"}
+            {isEdit ? "编辑MES 工艺路线产品 BOM" : "新增MES 工艺路线产品 BOM"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-pro-route-product-bom-form-close" data-agent-target="mes-pro-route-product-bom:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-pro-route-product-bom-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工艺路线编号</label>
+          <label htmlFor="mes-pro-route-product-bom-route_id" className="block text-xs text-slate-600 mb-1">工艺路线编号</label>
           <input
             type="number"
+            id="mes-pro-route-product-bom-route_id"
+            data-testid="field-route_id"
+            data-agent-target="mes-pro-route-product-bom:field:route_id"
+            data-agent-state={formData.route_id == null || formData.route_id === "" ? "empty" : "filled"}
+            aria-label="工艺路线编号"
             value={formData.route_id != null ? String(formData.route_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, route_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -81,9 +93,14 @@ export function MesProRouteProductBomForm({ open, initialData, onClose, onSucces
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工序编号</label>
+          <label htmlFor="mes-pro-route-product-bom-process_id" className="block text-xs text-slate-600 mb-1">工序编号</label>
           <input
             type="number"
+            id="mes-pro-route-product-bom-process_id"
+            data-testid="field-process_id"
+            data-agent-target="mes-pro-route-product-bom:field:process_id"
+            data-agent-state={formData.process_id == null || formData.process_id === "" ? "empty" : "filled"}
+            aria-label="工序编号"
             value={formData.process_id != null ? String(formData.process_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, process_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -93,9 +110,14 @@ export function MesProRouteProductBomForm({ open, initialData, onClose, onSucces
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品物料编号</label>
+          <label htmlFor="mes-pro-route-product-bom-product_id" className="block text-xs text-slate-600 mb-1">产品物料编号</label>
           <input
             type="number"
+            id="mes-pro-route-product-bom-product_id"
+            data-testid="field-product_id"
+            data-agent-target="mes-pro-route-product-bom:field:product_id"
+            data-agent-state={formData.product_id == null || formData.product_id === "" ? "empty" : "filled"}
+            aria-label="产品物料编号"
             value={formData.product_id != null ? String(formData.product_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, product_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -105,9 +127,14 @@ export function MesProRouteProductBomForm({ open, initialData, onClose, onSucces
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">BOM 物料编号</label>
+          <label htmlFor="mes-pro-route-product-bom-item_id" className="block text-xs text-slate-600 mb-1">BOM 物料编号</label>
           <input
             type="number"
+            id="mes-pro-route-product-bom-item_id"
+            data-testid="field-item_id"
+            data-agent-target="mes-pro-route-product-bom:field:item_id"
+            data-agent-state={formData.item_id == null || formData.item_id === "" ? "empty" : "filled"}
+            aria-label="BOM 物料编号"
             value={formData.item_id != null ? String(formData.item_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, item_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -117,9 +144,14 @@ export function MesProRouteProductBomForm({ open, initialData, onClose, onSucces
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用料比例</label>
+          <label htmlFor="mes-pro-route-product-bom-quantity" className="block text-xs text-slate-600 mb-1">用料比例</label>
           <input
             type="number"
+            id="mes-pro-route-product-bom-quantity"
+            data-testid="field-quantity"
+            data-agent-target="mes-pro-route-product-bom:field:quantity"
+            data-agent-state={formData.quantity == null || formData.quantity === "" ? "empty" : "filled"}
+            aria-label="用料比例"
             value={formData.quantity != null ? String(formData.quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -129,9 +161,14 @@ export function MesProRouteProductBomForm({ open, initialData, onClose, onSucces
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-pro-route-product-bom-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-pro-route-product-bom-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-pro-route-product-bom:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -145,6 +182,8 @@ export function MesProRouteProductBomForm({ open, initialData, onClose, onSucces
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-pro-route-product-bom-form-cancel"
+              data-agent-target="mes-pro-route-product-bom:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -152,6 +191,9 @@ export function MesProRouteProductBomForm({ open, initialData, onClose, onSucces
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-pro-route-product-bom-form-submit"
+              data-agent-target="mes-pro-route-product-bom:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

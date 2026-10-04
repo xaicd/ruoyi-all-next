@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MpUserService } from "../mp-user.service"
 
 describe("MpUserService", () => {
-  it("should create and query MpUser（源框架导入）", async () => {
+  it("should create and query 微信公众号粉丝", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MpUserService.create({
-        openid: "测试MpUser（源框架导入）",
+        openid: "测试微信公众号粉丝",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("MpUserService", () => {
   
       const updated = await MpUserService.update(created.id, {
         id: created.id,
-        openid: "更新MpUser（源框架导入）",
+        openid: "更新微信公众号粉丝",
       } as any)
       expect(updated).toBeDefined()
   

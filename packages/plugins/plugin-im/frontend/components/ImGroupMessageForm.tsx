@@ -59,24 +59,36 @@ export function ImGroupMessageForm({ open, initialData, onClose, onSuccess }: Im
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="im-group-message-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑IM 群聊消息" : "新增IM 群聊消息"}
+        data-testid="im-group-message-form"
+        data-agent-scope="im-group-message:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑ImGroupMessage（源框架导入）" : "新增ImGroupMessage（源框架导入）"}
+            {isEdit ? "编辑IM 群聊消息" : "新增IM 群聊消息"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="im-group-message-form-close" data-agent-target="im-group-message:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="im-group-message-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">客户端消息编号，用于发送幂等</label>
+          <label htmlFor="im-group-message-client_message_id" className="block text-xs text-slate-600 mb-1">客户端消息编号，用于发送幂等</label>
           <input
             type="text"
+            id="im-group-message-client_message_id"
+            data-testid="field-client_message_id"
+            data-agent-target="im-group-message:field:client_message_id"
+            data-agent-state={formData.client_message_id ? "filled" : "empty"}
+            aria-label="客户端消息编号，用于发送幂等"
             value={formData.client_message_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, client_message_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -86,9 +98,14 @@ export function ImGroupMessageForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">发送人编号</label>
+          <label htmlFor="im-group-message-sender_id" className="block text-xs text-slate-600 mb-1">发送人编号</label>
           <input
             type="number"
+            id="im-group-message-sender_id"
+            data-testid="field-sender_id"
+            data-agent-target="im-group-message:field:sender_id"
+            data-agent-state={formData.sender_id == null || formData.sender_id === "" ? "empty" : "filled"}
+            aria-label="发送人编号"
             value={formData.sender_id != null ? String(formData.sender_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sender_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -98,9 +115,14 @@ export function ImGroupMessageForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">群编号</label>
+          <label htmlFor="im-group-message-group_id" className="block text-xs text-slate-600 mb-1">群编号</label>
           <input
             type="number"
+            id="im-group-message-group_id"
+            data-testid="field-group_id"
+            data-agent-target="im-group-message:field:group_id"
+            data-agent-state={formData.group_id == null || formData.group_id === "" ? "empty" : "filled"}
+            aria-label="群编号"
             value={formData.group_id != null ? String(formData.group_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, group_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -110,9 +132,14 @@ export function ImGroupMessageForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">消息类型</label>
+          <label htmlFor="im-group-message-type" className="block text-xs text-slate-600 mb-1">消息类型</label>
           <input
             type="number"
+            id="im-group-message-type"
+            data-testid="field-type"
+            data-agent-target="im-group-message:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="消息类型"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -122,9 +149,14 @@ export function ImGroupMessageForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">消息内容，JSON 格式</label>
+          <label htmlFor="im-group-message-content" className="block text-xs text-slate-600 mb-1">消息内容，JSON 格式</label>
           <input
             type="text"
+            id="im-group-message-content"
+            data-testid="field-content"
+            data-agent-target="im-group-message:field:content"
+            data-agent-state={formData.content ? "filled" : "empty"}
+            aria-label="消息内容，JSON 格式"
             value={formData.content ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, content: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -134,9 +166,14 @@ export function ImGroupMessageForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">消息状态</label>
+          <label htmlFor="im-group-message-status" className="block text-xs text-slate-600 mb-1">消息状态</label>
           <input
             type="number"
+            id="im-group-message-status"
+            data-testid="field-status"
+            data-agent-target="im-group-message:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="消息状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -146,9 +183,14 @@ export function ImGroupMessageForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">发送时间</label>
+          <label htmlFor="im-group-message-send_time" className="block text-xs text-slate-600 mb-1">发送时间</label>
           <input
             type="text"
+            id="im-group-message-send_time"
+            data-testid="field-send_time"
+            data-agent-target="im-group-message:field:send_time"
+            data-agent-state={formData.send_time ? "filled" : "empty"}
+            aria-label="发送时间"
             value={formData.send_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, send_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -158,9 +200,14 @@ export function ImGroupMessageForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">定向接收用户编号列表，以逗号分隔</label>
+          <label htmlFor="im-group-message-receiver_user_ids" className="block text-xs text-slate-600 mb-1">定向接收用户编号列表，以逗号分隔</label>
           <input
             type="text"
+            id="im-group-message-receiver_user_ids"
+            data-testid="field-receiver_user_ids"
+            data-agent-target="im-group-message:field:receiver_user_ids"
+            data-agent-state={formData.receiver_user_ids ? "filled" : "empty"}
+            aria-label="定向接收用户编号列表，以逗号分隔"
             value={formData.receiver_user_ids ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, receiver_user_ids: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -170,9 +217,14 @@ export function ImGroupMessageForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">@ 目标用户编号列表，以逗号分隔</label>
+          <label htmlFor="im-group-message-at_user_ids" className="block text-xs text-slate-600 mb-1">@ 目标用户编号列表，以逗号分隔</label>
           <input
             type="text"
+            id="im-group-message-at_user_ids"
+            data-testid="field-at_user_ids"
+            data-agent-target="im-group-message:field:at_user_ids"
+            data-agent-state={formData.at_user_ids ? "filled" : "empty"}
+            aria-label="@ 目标用户编号列表，以逗号分隔"
             value={formData.at_user_ids ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, at_user_ids: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -182,9 +234,14 @@ export function ImGroupMessageForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">回执状态</label>
+          <label htmlFor="im-group-message-receipt_status" className="block text-xs text-slate-600 mb-1">回执状态</label>
           <input
             type="number"
+            id="im-group-message-receipt_status"
+            data-testid="field-receipt_status"
+            data-agent-target="im-group-message:field:receipt_status"
+            data-agent-state={formData.receipt_status == null || formData.receipt_status === "" ? "empty" : "filled"}
+            aria-label="回执状态"
             value={formData.receipt_status != null ? String(formData.receipt_status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, receipt_status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -194,9 +251,14 @@ export function ImGroupMessageForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">离线拉取等场景下回算的已读人数</label>
+          <label htmlFor="im-group-message-read_count" className="block text-xs text-slate-600 mb-1">离线拉取等场景下回算的已读人数</label>
           <input
             type="number"
+            id="im-group-message-read_count"
+            data-testid="field-read_count"
+            data-agent-target="im-group-message:field:read_count"
+            data-agent-state={formData.read_count == null || formData.read_count === "" ? "empty" : "filled"}
+            aria-label="离线拉取等场景下回算的已读人数"
             value={formData.read_count != null ? String(formData.read_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, read_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -210,6 +272,8 @@ export function ImGroupMessageForm({ open, initialData, onClose, onSuccess }: Im
             <button
               type="button"
               onClick={onClose}
+              data-testid="im-group-message-form-cancel"
+              data-agent-target="im-group-message:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -217,6 +281,9 @@ export function ImGroupMessageForm({ open, initialData, onClose, onSuccess }: Im
             <button
               type="submit"
               disabled={loading}
+              data-testid="im-group-message-form-submit"
+              data-agent-target="im-group-message:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

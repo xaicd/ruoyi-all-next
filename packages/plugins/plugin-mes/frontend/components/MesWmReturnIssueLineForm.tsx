@@ -58,24 +58,36 @@ export function MesWmReturnIssueLineForm({ open, initialData, onClose, onSuccess
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-wm-return-issue-line-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 生产退料单行" : "新增MES 生产退料单行"}
+        data-testid="mes-wm-return-issue-line-form"
+        data-agent-scope="mes-wm-return-issue-line:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesWmReturnIssueLine（源框架导入）" : "新增MesWmReturnIssueLine（源框架导入）"}
+            {isEdit ? "编辑MES 生产退料单行" : "新增MES 生产退料单行"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-wm-return-issue-line-form-close" data-agent-target="mes-wm-return-issue-line:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-wm-return-issue-line-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">退料单 ID</label>
+          <label htmlFor="mes-wm-return-issue-line-issue_id" className="block text-xs text-slate-600 mb-1">退料单 ID</label>
           <input
             type="number"
+            id="mes-wm-return-issue-line-issue_id"
+            data-testid="field-issue_id"
+            data-agent-target="mes-wm-return-issue-line:field:issue_id"
+            data-agent-state={formData.issue_id == null || formData.issue_id === "" ? "empty" : "filled"}
+            aria-label="退料单 ID"
             value={formData.issue_id != null ? String(formData.issue_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, issue_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -85,9 +97,14 @@ export function MesWmReturnIssueLineForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">库存记录 ID</label>
+          <label htmlFor="mes-wm-return-issue-line-material_stock_id" className="block text-xs text-slate-600 mb-1">库存记录 ID</label>
           <input
             type="number"
+            id="mes-wm-return-issue-line-material_stock_id"
+            data-testid="field-material_stock_id"
+            data-agent-target="mes-wm-return-issue-line:field:material_stock_id"
+            data-agent-state={formData.material_stock_id == null || formData.material_stock_id === "" ? "empty" : "filled"}
+            aria-label="库存记录 ID"
             value={formData.material_stock_id != null ? String(formData.material_stock_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, material_stock_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -97,9 +114,14 @@ export function MesWmReturnIssueLineForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">物料 ID</label>
+          <label htmlFor="mes-wm-return-issue-line-item_id" className="block text-xs text-slate-600 mb-1">物料 ID</label>
           <input
             type="number"
+            id="mes-wm-return-issue-line-item_id"
+            data-testid="field-item_id"
+            data-agent-target="mes-wm-return-issue-line:field:item_id"
+            data-agent-state={formData.item_id == null || formData.item_id === "" ? "empty" : "filled"}
+            aria-label="物料 ID"
             value={formData.item_id != null ? String(formData.item_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, item_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -109,9 +131,14 @@ export function MesWmReturnIssueLineForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">退料数量</label>
+          <label htmlFor="mes-wm-return-issue-line-quantity" className="block text-xs text-slate-600 mb-1">退料数量</label>
           <input
             type="number"
+            id="mes-wm-return-issue-line-quantity"
+            data-testid="field-quantity"
+            data-agent-target="mes-wm-return-issue-line:field:quantity"
+            data-agent-state={formData.quantity == null || formData.quantity === "" ? "empty" : "filled"}
+            aria-label="退料数量"
             value={formData.quantity != null ? String(formData.quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -121,9 +148,14 @@ export function MesWmReturnIssueLineForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">批次 ID</label>
+          <label htmlFor="mes-wm-return-issue-line-batch_id" className="block text-xs text-slate-600 mb-1">批次 ID</label>
           <input
             type="number"
+            id="mes-wm-return-issue-line-batch_id"
+            data-testid="field-batch_id"
+            data-agent-target="mes-wm-return-issue-line:field:batch_id"
+            data-agent-state={formData.batch_id == null || formData.batch_id === "" ? "empty" : "filled"}
+            aria-label="批次 ID"
             value={formData.batch_id != null ? String(formData.batch_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, batch_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -133,9 +165,14 @@ export function MesWmReturnIssueLineForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">批次编码</label>
+          <label htmlFor="mes-wm-return-issue-line-batch_code" className="block text-xs text-slate-600 mb-1">批次编码</label>
           <input
             type="text"
+            id="mes-wm-return-issue-line-batch_code"
+            data-testid="field-batch_code"
+            data-agent-target="mes-wm-return-issue-line:field:batch_code"
+            data-agent-state={formData.batch_code ? "filled" : "empty"}
+            aria-label="批次编码"
             value={formData.batch_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, batch_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -145,9 +182,14 @@ export function MesWmReturnIssueLineForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">退货检验单 ID</label>
+          <label htmlFor="mes-wm-return-issue-line-rqc_id" className="block text-xs text-slate-600 mb-1">退货检验单 ID</label>
           <input
             type="number"
+            id="mes-wm-return-issue-line-rqc_id"
+            data-testid="field-rqc_id"
+            data-agent-target="mes-wm-return-issue-line:field:rqc_id"
+            data-agent-state={formData.rqc_id == null || formData.rqc_id === "" ? "empty" : "filled"}
+            aria-label="退货检验单 ID"
             value={formData.rqc_id != null ? String(formData.rqc_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, rqc_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -159,18 +201,27 @@ export function MesWmReturnIssueLineForm({ open, initialData, onClose, onSuccess
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="rqc_check_flag"
+            id="mes-wm-return-issue-line-rqc_check_flag"
+            data-testid="field-rqc_check_flag"
+            data-agent-target="mes-wm-return-issue-line:field:rqc_check_flag"
+            data-agent-state={formData.rqc_check_flag ? "on" : "off"}
+            aria-label="是否需要质检"
             checked={Boolean(formData.rqc_check_flag)}
             onChange={(e) => setFormData((prev) => ({ ...prev, rqc_check_flag: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="rqc_check_flag" className="text-xs text-slate-700 font-medium">是否需要质检</label>
+          <label htmlFor="mes-wm-return-issue-line-rqc_check_flag" className="text-xs text-slate-700 font-medium">是否需要质检</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">质量状态</label>
+          <label htmlFor="mes-wm-return-issue-line-quality_status" className="block text-xs text-slate-600 mb-1">质量状态</label>
           <input
             type="number"
+            id="mes-wm-return-issue-line-quality_status"
+            data-testid="field-quality_status"
+            data-agent-target="mes-wm-return-issue-line:field:quality_status"
+            data-agent-state={formData.quality_status == null || formData.quality_status === "" ? "empty" : "filled"}
+            aria-label="质量状态"
             value={formData.quality_status != null ? String(formData.quality_status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, quality_status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -180,9 +231,14 @@ export function MesWmReturnIssueLineForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-wm-return-issue-line-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-wm-return-issue-line-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-wm-return-issue-line:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -196,6 +252,8 @@ export function MesWmReturnIssueLineForm({ open, initialData, onClose, onSuccess
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-wm-return-issue-line-form-cancel"
+              data-agent-target="mes-wm-return-issue-line:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -203,6 +261,9 @@ export function MesWmReturnIssueLineForm({ open, initialData, onClose, onSuccess
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-wm-return-issue-line-form-submit"
+              data-agent-target="mes-wm-return-issue-line:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

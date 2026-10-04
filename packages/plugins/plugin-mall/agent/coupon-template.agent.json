@@ -1,0 +1,357 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "CouponTemplate",
+  "kebab": "coupon-template",
+  "businessName": "优惠劵模板 DO当用户领取时，会生成 优惠劵",
+  "permissionPrefix": "mall:coupon_template",
+  "page": {
+    "route": "/admin/mall/coupon-template",
+    "title": "优惠劵模板 DO当用户领取时，会生成 优惠劵管理",
+    "titleSelector": "[data-testid=\"coupon-template-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "coupon-template",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/coupon-template",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/coupon-template/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/coupon-template"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/coupon-template/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/coupon-template/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"coupon-template-title\"]",
+    "refresh": "[data-testid=\"coupon-template-refresh\"]",
+    "createButton": "[data-testid=\"coupon-template-create\"]",
+    "searchForm": "[data-testid=\"coupon-template-search\"]",
+    "searchSubmit": "[data-testid=\"coupon-template-search-submit\"]",
+    "searchReset": "[data-testid=\"coupon-template-search-reset\"]",
+    "total": "[data-testid=\"coupon-template-total\"]",
+    "table": "[data-testid=\"coupon-template-table\"]",
+    "row": "[data-testid=\"coupon-template-row\"]",
+    "editButton": "[data-testid=\"coupon-template-edit\"]",
+    "deleteButton": "[data-testid=\"coupon-template-delete\"]",
+    "form": "[data-testid=\"coupon-template-form\"]",
+    "formError": "[data-testid=\"coupon-template-form-error\"]",
+    "formSubmit": "[data-testid=\"coupon-template-form-submit\"]",
+    "formCancel": "[data-testid=\"coupon-template-form-cancel\"]",
+    "formClose": "[data-testid=\"coupon-template-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "优惠劵模板 DO当用户领取时，会生成 优惠劵列表",
+    "dialogLabel": {
+      "create": "新增优惠劵模板 DO当用户领取时，会生成 优惠劵",
+      "edit": "编辑优惠劵模板 DO当用户领取时，会生成 优惠劵"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "优惠劵名",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "description",
+        "label": "优惠券说明",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "total_count",
+        "label": "发放数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_count",
+        "selector": "[data-testid=\"field-total_count\"]"
+      },
+      {
+        "name": "take_limit_count",
+        "label": "每人限领个数",
+        "type": "number",
+        "required": false,
+        "testId": "field-take_limit_count",
+        "selector": "[data-testid=\"field-take_limit_count\"]"
+      },
+      {
+        "name": "take_type",
+        "label": "领取方式",
+        "type": "number",
+        "required": false,
+        "testId": "field-take_type",
+        "selector": "[data-testid=\"field-take_type\"]"
+      },
+      {
+        "name": "use_price",
+        "label": "是否设置满多少金额可用，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-use_price",
+        "selector": "[data-testid=\"field-use_price\"]"
+      },
+      {
+        "name": "product_scope",
+        "label": "商品范围",
+        "type": "number",
+        "required": false,
+        "testId": "field-product_scope",
+        "selector": "[data-testid=\"field-product_scope\"]"
+      },
+      {
+        "name": "product_scope_values",
+        "label": "商品范围编号的数组",
+        "type": "string",
+        "required": false,
+        "testId": "field-product_scope_values",
+        "selector": "[data-testid=\"field-product_scope_values\"]"
+      },
+      {
+        "name": "validity_type",
+        "label": "生效日期类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-validity_type",
+        "selector": "[data-testid=\"field-validity_type\"]"
+      },
+      {
+        "name": "valid_start_time",
+        "label": "固定日期 - 生效开始时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-valid_start_time",
+        "selector": "[data-testid=\"field-valid_start_time\"]"
+      },
+      {
+        "name": "valid_end_time",
+        "label": "固定日期 - 生效结束时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-valid_end_time",
+        "selector": "[data-testid=\"field-valid_end_time\"]"
+      },
+      {
+        "name": "fixed_start_term",
+        "label": "领取日期 - 开始天数",
+        "type": "number",
+        "required": false,
+        "testId": "field-fixed_start_term",
+        "selector": "[data-testid=\"field-fixed_start_term\"]"
+      },
+      {
+        "name": "fixed_end_term",
+        "label": "领取日期 - 结束天数",
+        "type": "number",
+        "required": false,
+        "testId": "field-fixed_end_term",
+        "selector": "[data-testid=\"field-fixed_end_term\"]"
+      },
+      {
+        "name": "discount_type",
+        "label": "折扣类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-discount_type",
+        "selector": "[data-testid=\"field-discount_type\"]"
+      },
+      {
+        "name": "discount_percent",
+        "label": "折扣百分比",
+        "type": "number",
+        "required": false,
+        "testId": "field-discount_percent",
+        "selector": "[data-testid=\"field-discount_percent\"]"
+      },
+      {
+        "name": "discount_price",
+        "label": "优惠金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-discount_price",
+        "selector": "[data-testid=\"field-discount_price\"]"
+      },
+      {
+        "name": "discount_limit_price",
+        "label": "折扣上限，仅在 等于 时生效",
+        "type": "number",
+        "required": false,
+        "testId": "field-discount_limit_price",
+        "selector": "[data-testid=\"field-discount_limit_price\"]"
+      },
+      {
+        "name": "take_count",
+        "label": "领取优惠券的数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-take_count",
+        "selector": "[data-testid=\"field-take_count\"]"
+      },
+      {
+        "name": "use_count",
+        "label": "使用优惠券的次数",
+        "type": "number",
+        "required": false,
+        "testId": "field-use_count",
+        "selector": "[data-testid=\"field-use_count\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "coupon-template",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"coupon-template\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"coupon-template-form-overlay\"]",
+      "dialog": "[data-testid=\"coupon-template-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "coupon-template:search",
+      "reset": "coupon-template:reset",
+      "refresh": "coupon-template:refresh",
+      "create": "coupon-template:create",
+      "edit": "coupon-template:edit",
+      "delete": "coupon-template:delete",
+      "submit": "coupon-template:submit",
+      "cancel": "coupon-template:cancel",
+      "close": "coupon-template:close",
+      "row": "coupon-template:row",
+      "pagination": "coupon-template:pagination",
+      "fields": {
+        "name": "coupon-template:field:name",
+        "description": "coupon-template:field:description",
+        "status": "coupon-template:field:status",
+        "total_count": "coupon-template:field:total_count",
+        "take_limit_count": "coupon-template:field:take_limit_count",
+        "take_type": "coupon-template:field:take_type",
+        "use_price": "coupon-template:field:use_price",
+        "product_scope": "coupon-template:field:product_scope",
+        "product_scope_values": "coupon-template:field:product_scope_values",
+        "validity_type": "coupon-template:field:validity_type",
+        "valid_start_time": "coupon-template:field:valid_start_time",
+        "valid_end_time": "coupon-template:field:valid_end_time",
+        "fixed_start_term": "coupon-template:field:fixed_start_term",
+        "fixed_end_term": "coupon-template:field:fixed_end_term",
+        "discount_type": "coupon-template:field:discount_type",
+        "discount_percent": "coupon-template:field:discount_percent",
+        "discount_price": "coupon-template:field:discount_price",
+        "discount_limit_price": "coupon-template:field:discount_limit_price",
+        "take_count": "coupon-template:field:take_count",
+        "use_count": "coupon-template:field:use_count"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.coupon-template",
+      "examples": [
+        "mall.coupon-template__List__Refresh",
+        "mall.coupon-template__ListItem__Open",
+        "mall.coupon-template__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

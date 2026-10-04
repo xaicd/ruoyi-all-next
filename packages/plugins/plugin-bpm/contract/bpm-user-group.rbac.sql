@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for BpmUserGroup（源框架导入） (BpmUserGroup)
+-- Auto-generated RBAC & Menu Migration for BPM 用户组 (BpmUserGroup)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-bpm-user-group',
   'bpm-dir',
-  'BpmUserGroup（源框架导入）管理',
+  'BPM 用户组管理',
   '/admin/bpm/bpm-user-group',
   'bpm/bpm-user-group/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-bpm-user-group-query',  'menu-bpm-user-group', '查询BpmUserGroup（源框架导入）', 'BUTTON', 'ACTIVE', 'bpm:bpm_user_group:query',  1, NOW(), NOW()),
-('menu-bpm-user-group-create', 'menu-bpm-user-group', '新增BpmUserGroup（源框架导入）', 'BUTTON', 'ACTIVE', 'bpm:bpm_user_group:create', 2, NOW(), NOW()),
-('menu-bpm-user-group-update', 'menu-bpm-user-group', '修改BpmUserGroup（源框架导入）', 'BUTTON', 'ACTIVE', 'bpm:bpm_user_group:update', 3, NOW(), NOW()),
-('menu-bpm-user-group-delete', 'menu-bpm-user-group', '删除BpmUserGroup（源框架导入）', 'BUTTON', 'ACTIVE', 'bpm:bpm_user_group:delete', 4, NOW(), NOW())
+('menu-bpm-user-group-query',  'menu-bpm-user-group', '查询BPM 用户组', 'BUTTON', 'ACTIVE', 'bpm:bpm_user_group:query',  1, NOW(), NOW()),
+('menu-bpm-user-group-create', 'menu-bpm-user-group', '新增BPM 用户组', 'BUTTON', 'ACTIVE', 'bpm:bpm_user_group:create', 2, NOW(), NOW()),
+('menu-bpm-user-group-update', 'menu-bpm-user-group', '修改BPM 用户组', 'BUTTON', 'ACTIVE', 'bpm:bpm_user_group:update', 3, NOW(), NOW()),
+('menu-bpm-user-group-delete', 'menu-bpm-user-group', '删除BPM 用户组', 'BUTTON', 'ACTIVE', 'bpm:bpm_user_group:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

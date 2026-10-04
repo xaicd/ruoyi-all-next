@@ -63,24 +63,36 @@ export function TradeConfigForm({ open, initialData, onClose, onSuccess }: Trade
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="trade-config-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑交易中心配置" : "新增交易中心配置"}
+        data-testid="trade-config-form"
+        data-agent-scope="trade-config:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑TradeConfig（源框架导入）" : "新增TradeConfig（源框架导入）"}
+            {isEdit ? "编辑交易中心配置" : "新增交易中心配置"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="trade-config-form-close" data-agent-target="trade-config:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="trade-config-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">售后的退款理由</label>
+          <label htmlFor="trade-config-after_sale_refund_reasons" className="block text-xs text-slate-600 mb-1">售后的退款理由</label>
           <input
             type="text"
+            id="trade-config-after_sale_refund_reasons"
+            data-testid="field-after_sale_refund_reasons"
+            data-agent-target="trade-config:field:after_sale_refund_reasons"
+            data-agent-state={formData.after_sale_refund_reasons ? "filled" : "empty"}
+            aria-label="售后的退款理由"
             value={formData.after_sale_refund_reasons ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, after_sale_refund_reasons: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -90,9 +102,14 @@ export function TradeConfigForm({ open, initialData, onClose, onSuccess }: Trade
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">售后的退货理由</label>
+          <label htmlFor="trade-config-after_sale_return_reasons" className="block text-xs text-slate-600 mb-1">售后的退货理由</label>
           <input
             type="text"
+            id="trade-config-after_sale_return_reasons"
+            data-testid="field-after_sale_return_reasons"
+            data-agent-target="trade-config:field:after_sale_return_reasons"
+            data-agent-state={formData.after_sale_return_reasons ? "filled" : "empty"}
+            aria-label="售后的退货理由"
             value={formData.after_sale_return_reasons ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, after_sale_return_reasons: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -104,18 +121,27 @@ export function TradeConfigForm({ open, initialData, onClose, onSuccess }: Trade
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="delivery_express_free_enabled"
+            id="trade-config-delivery_express_free_enabled"
+            data-testid="field-delivery_express_free_enabled"
+            data-agent-target="trade-config:field:delivery_express_free_enabled"
+            data-agent-state={formData.delivery_express_free_enabled ? "on" : "off"}
+            aria-label="是否启用全场包邮"
             checked={Boolean(formData.delivery_express_free_enabled)}
             onChange={(e) => setFormData((prev) => ({ ...prev, delivery_express_free_enabled: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="delivery_express_free_enabled" className="text-xs text-slate-700 font-medium">是否启用全场包邮</label>
+          <label htmlFor="trade-config-delivery_express_free_enabled" className="text-xs text-slate-700 font-medium">是否启用全场包邮</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">全场包邮的最小金额，单位：分</label>
+          <label htmlFor="trade-config-delivery_express_free_price" className="block text-xs text-slate-600 mb-1">全场包邮的最小金额，单位：分</label>
           <input
             type="number"
+            id="trade-config-delivery_express_free_price"
+            data-testid="field-delivery_express_free_price"
+            data-agent-target="trade-config:field:delivery_express_free_price"
+            data-agent-state={formData.delivery_express_free_price == null || formData.delivery_express_free_price === "" ? "empty" : "filled"}
+            aria-label="全场包邮的最小金额，单位：分"
             value={formData.delivery_express_free_price != null ? String(formData.delivery_express_free_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, delivery_express_free_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -127,29 +153,42 @@ export function TradeConfigForm({ open, initialData, onClose, onSuccess }: Trade
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="delivery_pick_up_enabled"
+            id="trade-config-delivery_pick_up_enabled"
+            data-testid="field-delivery_pick_up_enabled"
+            data-agent-target="trade-config:field:delivery_pick_up_enabled"
+            data-agent-state={formData.delivery_pick_up_enabled ? "on" : "off"}
+            aria-label="是否开启自提"
             checked={Boolean(formData.delivery_pick_up_enabled)}
             onChange={(e) => setFormData((prev) => ({ ...prev, delivery_pick_up_enabled: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="delivery_pick_up_enabled" className="text-xs text-slate-700 font-medium">是否开启自提</label>
+          <label htmlFor="trade-config-delivery_pick_up_enabled" className="text-xs text-slate-700 font-medium">是否开启自提</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="brokerage_enabled"
+            id="trade-config-brokerage_enabled"
+            data-testid="field-brokerage_enabled"
+            data-agent-target="trade-config:field:brokerage_enabled"
+            data-agent-state={formData.brokerage_enabled ? "on" : "off"}
+            aria-label="是否启用分佣"
             checked={Boolean(formData.brokerage_enabled)}
             onChange={(e) => setFormData((prev) => ({ ...prev, brokerage_enabled: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="brokerage_enabled" className="text-xs text-slate-700 font-medium">是否启用分佣</label>
+          <label htmlFor="trade-config-brokerage_enabled" className="text-xs text-slate-700 font-medium">是否启用分佣</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">分佣模式</label>
+          <label htmlFor="trade-config-brokerage_enabled_condition" className="block text-xs text-slate-600 mb-1">分佣模式</label>
           <input
             type="number"
+            id="trade-config-brokerage_enabled_condition"
+            data-testid="field-brokerage_enabled_condition"
+            data-agent-target="trade-config:field:brokerage_enabled_condition"
+            data-agent-state={formData.brokerage_enabled_condition == null || formData.brokerage_enabled_condition === "" ? "empty" : "filled"}
+            aria-label="分佣模式"
             value={formData.brokerage_enabled_condition != null ? String(formData.brokerage_enabled_condition) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, brokerage_enabled_condition: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -159,9 +198,14 @@ export function TradeConfigForm({ open, initialData, onClose, onSuccess }: Trade
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">分销关系绑定模式</label>
+          <label htmlFor="trade-config-brokerage_bind_mode" className="block text-xs text-slate-600 mb-1">分销关系绑定模式</label>
           <input
             type="number"
+            id="trade-config-brokerage_bind_mode"
+            data-testid="field-brokerage_bind_mode"
+            data-agent-target="trade-config:field:brokerage_bind_mode"
+            data-agent-state={formData.brokerage_bind_mode == null || formData.brokerage_bind_mode === "" ? "empty" : "filled"}
+            aria-label="分销关系绑定模式"
             value={formData.brokerage_bind_mode != null ? String(formData.brokerage_bind_mode) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, brokerage_bind_mode: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,9 +215,14 @@ export function TradeConfigForm({ open, initialData, onClose, onSuccess }: Trade
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">分销海报图地址数组</label>
+          <label htmlFor="trade-config-brokerage_poster_urls" className="block text-xs text-slate-600 mb-1">分销海报图地址数组</label>
           <input
             type="text"
+            id="trade-config-brokerage_poster_urls"
+            data-testid="field-brokerage_poster_urls"
+            data-agent-target="trade-config:field:brokerage_poster_urls"
+            data-agent-state={formData.brokerage_poster_urls ? "filled" : "empty"}
+            aria-label="分销海报图地址数组"
             value={formData.brokerage_poster_urls ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, brokerage_poster_urls: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -183,9 +232,14 @@ export function TradeConfigForm({ open, initialData, onClose, onSuccess }: Trade
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">一级返佣比例</label>
+          <label htmlFor="trade-config-brokerage_first_percent" className="block text-xs text-slate-600 mb-1">一级返佣比例</label>
           <input
             type="number"
+            id="trade-config-brokerage_first_percent"
+            data-testid="field-brokerage_first_percent"
+            data-agent-target="trade-config:field:brokerage_first_percent"
+            data-agent-state={formData.brokerage_first_percent == null || formData.brokerage_first_percent === "" ? "empty" : "filled"}
+            aria-label="一级返佣比例"
             value={formData.brokerage_first_percent != null ? String(formData.brokerage_first_percent) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, brokerage_first_percent: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -195,9 +249,14 @@ export function TradeConfigForm({ open, initialData, onClose, onSuccess }: Trade
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">二级返佣比例</label>
+          <label htmlFor="trade-config-brokerage_second_percent" className="block text-xs text-slate-600 mb-1">二级返佣比例</label>
           <input
             type="number"
+            id="trade-config-brokerage_second_percent"
+            data-testid="field-brokerage_second_percent"
+            data-agent-target="trade-config:field:brokerage_second_percent"
+            data-agent-state={formData.brokerage_second_percent == null || formData.brokerage_second_percent === "" ? "empty" : "filled"}
+            aria-label="二级返佣比例"
             value={formData.brokerage_second_percent != null ? String(formData.brokerage_second_percent) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, brokerage_second_percent: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -207,9 +266,14 @@ export function TradeConfigForm({ open, initialData, onClose, onSuccess }: Trade
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户提现最低金额</label>
+          <label htmlFor="trade-config-brokerage_withdraw_min_price" className="block text-xs text-slate-600 mb-1">用户提现最低金额</label>
           <input
             type="number"
+            id="trade-config-brokerage_withdraw_min_price"
+            data-testid="field-brokerage_withdraw_min_price"
+            data-agent-target="trade-config:field:brokerage_withdraw_min_price"
+            data-agent-state={formData.brokerage_withdraw_min_price == null || formData.brokerage_withdraw_min_price === "" ? "empty" : "filled"}
+            aria-label="用户提现最低金额"
             value={formData.brokerage_withdraw_min_price != null ? String(formData.brokerage_withdraw_min_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, brokerage_withdraw_min_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -219,9 +283,14 @@ export function TradeConfigForm({ open, initialData, onClose, onSuccess }: Trade
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户提现手续费百分比</label>
+          <label htmlFor="trade-config-brokerage_withdraw_fee_percent" className="block text-xs text-slate-600 mb-1">用户提现手续费百分比</label>
           <input
             type="number"
+            id="trade-config-brokerage_withdraw_fee_percent"
+            data-testid="field-brokerage_withdraw_fee_percent"
+            data-agent-target="trade-config:field:brokerage_withdraw_fee_percent"
+            data-agent-state={formData.brokerage_withdraw_fee_percent == null || formData.brokerage_withdraw_fee_percent === "" ? "empty" : "filled"}
+            aria-label="用户提现手续费百分比"
             value={formData.brokerage_withdraw_fee_percent != null ? String(formData.brokerage_withdraw_fee_percent) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, brokerage_withdraw_fee_percent: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -231,9 +300,14 @@ export function TradeConfigForm({ open, initialData, onClose, onSuccess }: Trade
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">佣金冻结时间(天)</label>
+          <label htmlFor="trade-config-brokerage_frozen_days" className="block text-xs text-slate-600 mb-1">佣金冻结时间(天)</label>
           <input
             type="number"
+            id="trade-config-brokerage_frozen_days"
+            data-testid="field-brokerage_frozen_days"
+            data-agent-target="trade-config:field:brokerage_frozen_days"
+            data-agent-state={formData.brokerage_frozen_days == null || formData.brokerage_frozen_days === "" ? "empty" : "filled"}
+            aria-label="佣金冻结时间(天)"
             value={formData.brokerage_frozen_days != null ? String(formData.brokerage_frozen_days) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, brokerage_frozen_days: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -243,9 +317,14 @@ export function TradeConfigForm({ open, initialData, onClose, onSuccess }: Trade
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">提现方式</label>
+          <label htmlFor="trade-config-brokerage_withdraw_types" className="block text-xs text-slate-600 mb-1">提现方式</label>
           <input
             type="text"
+            id="trade-config-brokerage_withdraw_types"
+            data-testid="field-brokerage_withdraw_types"
+            data-agent-target="trade-config:field:brokerage_withdraw_types"
+            data-agent-state={formData.brokerage_withdraw_types ? "filled" : "empty"}
+            aria-label="提现方式"
             value={formData.brokerage_withdraw_types ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, brokerage_withdraw_types: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -259,6 +338,8 @@ export function TradeConfigForm({ open, initialData, onClose, onSuccess }: Trade
             <button
               type="button"
               onClick={onClose}
+              data-testid="trade-config-form-cancel"
+              data-agent-target="trade-config:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -266,6 +347,9 @@ export function TradeConfigForm({ open, initialData, onClose, onSuccess }: Trade
             <button
               type="submit"
               disabled={loading}
+              data-testid="trade-config-form-submit"
+              data-agent-target="trade-config:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

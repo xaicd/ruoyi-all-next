@@ -57,24 +57,36 @@ export function MesMdAutoCodeRuleForm({ open, initialData, onClose, onSuccess }:
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-md-auto-code-rule-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 编码规则" : "新增MES 编码规则"}
+        data-testid="mes-md-auto-code-rule-form"
+        data-agent-scope="mes-md-auto-code-rule:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesMdAutoCodeRule（源框架导入）" : "新增MesMdAutoCodeRule（源框架导入）"}
+            {isEdit ? "编辑MES 编码规则" : "新增MES 编码规则"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-md-auto-code-rule-form-close" data-agent-target="mes-md-auto-code-rule:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-md-auto-code-rule-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">规则编码</label>
+          <label htmlFor="mes-md-auto-code-rule-code" className="block text-xs text-slate-600 mb-1">规则编码</label>
           <input
             type="text"
+            id="mes-md-auto-code-rule-code"
+            data-testid="field-code"
+            data-agent-target="mes-md-auto-code-rule:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="规则编码"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -84,9 +96,14 @@ export function MesMdAutoCodeRuleForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">规则名称</label>
+          <label htmlFor="mes-md-auto-code-rule-name" className="block text-xs text-slate-600 mb-1">规则名称</label>
           <input
             type="text"
+            id="mes-md-auto-code-rule-name"
+            data-testid="field-name"
+            data-agent-target="mes-md-auto-code-rule:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="规则名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -96,9 +113,14 @@ export function MesMdAutoCodeRuleForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">描述</label>
+          <label htmlFor="mes-md-auto-code-rule-description" className="block text-xs text-slate-600 mb-1">描述</label>
           <input
             type="text"
+            id="mes-md-auto-code-rule-description"
+            data-testid="field-description"
+            data-agent-target="mes-md-auto-code-rule:field:description"
+            data-agent-state={formData.description ? "filled" : "empty"}
+            aria-label="描述"
             value={formData.description ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -108,9 +130,14 @@ export function MesMdAutoCodeRuleForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最大长度</label>
+          <label htmlFor="mes-md-auto-code-rule-max_length" className="block text-xs text-slate-600 mb-1">最大长度</label>
           <input
             type="number"
+            id="mes-md-auto-code-rule-max_length"
+            data-testid="field-max_length"
+            data-agent-target="mes-md-auto-code-rule:field:max_length"
+            data-agent-state={formData.max_length == null || formData.max_length === "" ? "empty" : "filled"}
+            aria-label="最大长度"
             value={formData.max_length != null ? String(formData.max_length) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, max_length: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -122,18 +149,27 @@ export function MesMdAutoCodeRuleForm({ open, initialData, onClose, onSuccess }:
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="padded"
+            id="mes-md-auto-code-rule-padded"
+            data-testid="field-padded"
+            data-agent-target="mes-md-auto-code-rule:field:padded"
+            data-agent-state={formData.padded ? "on" : "off"}
+            aria-label="是否补齐"
             checked={Boolean(formData.padded)}
             onChange={(e) => setFormData((prev) => ({ ...prev, padded: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="padded" className="text-xs text-slate-700 font-medium">是否补齐</label>
+          <label htmlFor="mes-md-auto-code-rule-padded" className="text-xs text-slate-700 font-medium">是否补齐</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">补齐字符</label>
+          <label htmlFor="mes-md-auto-code-rule-padded_char" className="block text-xs text-slate-600 mb-1">补齐字符</label>
           <input
             type="text"
+            id="mes-md-auto-code-rule-padded_char"
+            data-testid="field-padded_char"
+            data-agent-target="mes-md-auto-code-rule:field:padded_char"
+            data-agent-state={formData.padded_char ? "filled" : "empty"}
+            aria-label="补齐字符"
             value={formData.padded_char ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, padded_char: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -143,9 +179,14 @@ export function MesMdAutoCodeRuleForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">补齐方式</label>
+          <label htmlFor="mes-md-auto-code-rule-padded_method" className="block text-xs text-slate-600 mb-1">补齐方式</label>
           <input
             type="number"
+            id="mes-md-auto-code-rule-padded_method"
+            data-testid="field-padded_method"
+            data-agent-target="mes-md-auto-code-rule:field:padded_method"
+            data-agent-state={formData.padded_method == null || formData.padded_method === "" ? "empty" : "filled"}
+            aria-label="补齐方式"
             value={formData.padded_method != null ? String(formData.padded_method) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, padded_method: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -155,9 +196,14 @@ export function MesMdAutoCodeRuleForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="mes-md-auto-code-rule-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="mes-md-auto-code-rule-status"
+            data-testid="field-status"
+            data-agent-target="mes-md-auto-code-rule:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -167,9 +213,14 @@ export function MesMdAutoCodeRuleForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-md-auto-code-rule-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-md-auto-code-rule-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-md-auto-code-rule:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -183,6 +234,8 @@ export function MesMdAutoCodeRuleForm({ open, initialData, onClose, onSuccess }:
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-md-auto-code-rule-form-cancel"
+              data-agent-target="mes-md-auto-code-rule:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -190,6 +243,9 @@ export function MesMdAutoCodeRuleForm({ open, initialData, onClose, onSuccess }:
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-md-auto-code-rule-form-submit"
+              data-agent-target="mes-md-auto-code-rule:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

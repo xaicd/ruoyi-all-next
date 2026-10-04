@@ -1,0 +1,204 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "ProductBrowseHistory",
+  "kebab": "product-browse-history",
+  "businessName": "商品浏览记录",
+  "permissionPrefix": "mall:product_browse_history",
+  "page": {
+    "route": "/admin/mall/product-browse-history",
+    "title": "商品浏览记录管理",
+    "titleSelector": "[data-testid=\"product-browse-history-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "product-browse-history",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/product-browse-history",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/product-browse-history/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/product-browse-history"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/product-browse-history/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/product-browse-history/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"product-browse-history-title\"]",
+    "refresh": "[data-testid=\"product-browse-history-refresh\"]",
+    "createButton": "[data-testid=\"product-browse-history-create\"]",
+    "searchForm": "[data-testid=\"product-browse-history-search\"]",
+    "searchSubmit": "[data-testid=\"product-browse-history-search-submit\"]",
+    "searchReset": "[data-testid=\"product-browse-history-search-reset\"]",
+    "total": "[data-testid=\"product-browse-history-total\"]",
+    "table": "[data-testid=\"product-browse-history-table\"]",
+    "row": "[data-testid=\"product-browse-history-row\"]",
+    "editButton": "[data-testid=\"product-browse-history-edit\"]",
+    "deleteButton": "[data-testid=\"product-browse-history-delete\"]",
+    "form": "[data-testid=\"product-browse-history-form\"]",
+    "formError": "[data-testid=\"product-browse-history-form-error\"]",
+    "formSubmit": "[data-testid=\"product-browse-history-form-submit\"]",
+    "formCancel": "[data-testid=\"product-browse-history-form-cancel\"]",
+    "formClose": "[data-testid=\"product-browse-history-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "商品浏览记录列表",
+    "dialogLabel": {
+      "create": "新增商品浏览记录",
+      "edit": "编辑商品浏览记录"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "spu_id",
+        "label": "商品 SPU 编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-spu_id",
+        "selector": "[data-testid=\"field-spu_id\"]"
+      },
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "user_deleted",
+        "label": "用户是否删除",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-user_deleted",
+        "selector": "[data-testid=\"field-user_deleted\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "product-browse-history",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"product-browse-history\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"product-browse-history-form-overlay\"]",
+      "dialog": "[data-testid=\"product-browse-history-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "product-browse-history:search",
+      "reset": "product-browse-history:reset",
+      "refresh": "product-browse-history:refresh",
+      "create": "product-browse-history:create",
+      "edit": "product-browse-history:edit",
+      "delete": "product-browse-history:delete",
+      "submit": "product-browse-history:submit",
+      "cancel": "product-browse-history:cancel",
+      "close": "product-browse-history:close",
+      "row": "product-browse-history:row",
+      "pagination": "product-browse-history:pagination",
+      "fields": {
+        "spu_id": "product-browse-history:field:spu_id",
+        "user_id": "product-browse-history:field:user_id",
+        "user_deleted": "product-browse-history:field:user_deleted"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.product-browse-history",
+      "examples": [
+        "mall.product-browse-history__List__Refresh",
+        "mall.product-browse-history__ListItem__Open",
+        "mall.product-browse-history__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

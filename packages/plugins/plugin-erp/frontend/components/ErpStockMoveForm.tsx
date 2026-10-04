@@ -55,24 +55,36 @@ export function ErpStockMoveForm({ open, initialData, onClose, onSuccess }: ErpS
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="erp-stock-move-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑ERP 库存调拨单" : "新增ERP 库存调拨单"}
+        data-testid="erp-stock-move-form"
+        data-agent-scope="erp-stock-move:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑ErpStockMove（源框架导入）" : "新增ErpStockMove（源框架导入）"}
+            {isEdit ? "编辑ERP 库存调拨单" : "新增ERP 库存调拨单"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="erp-stock-move-form-close" data-agent-target="erp-stock-move:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="erp-stock-move-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">调拨单号</label>
+          <label htmlFor="erp-stock-move-no" className="block text-xs text-slate-600 mb-1">调拨单号</label>
           <input
             type="text"
+            id="erp-stock-move-no"
+            data-testid="field-no"
+            data-agent-target="erp-stock-move:field:no"
+            data-agent-state={formData.no ? "filled" : "empty"}
+            aria-label="调拨单号"
             value={formData.no ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, no: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -82,9 +94,14 @@ export function ErpStockMoveForm({ open, initialData, onClose, onSuccess }: ErpS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">调拨时间</label>
+          <label htmlFor="erp-stock-move-move_time" className="block text-xs text-slate-600 mb-1">调拨时间</label>
           <input
             type="text"
+            id="erp-stock-move-move_time"
+            data-testid="field-move_time"
+            data-agent-target="erp-stock-move:field:move_time"
+            data-agent-state={formData.move_time ? "filled" : "empty"}
+            aria-label="调拨时间"
             value={formData.move_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, move_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -94,9 +111,14 @@ export function ErpStockMoveForm({ open, initialData, onClose, onSuccess }: ErpS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">合计数量</label>
+          <label htmlFor="erp-stock-move-total_count" className="block text-xs text-slate-600 mb-1">合计数量</label>
           <input
             type="number"
+            id="erp-stock-move-total_count"
+            data-testid="field-total_count"
+            data-agent-target="erp-stock-move:field:total_count"
+            data-agent-state={formData.total_count == null || formData.total_count === "" ? "empty" : "filled"}
+            aria-label="合计数量"
             value={formData.total_count != null ? String(formData.total_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, total_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -106,9 +128,14 @@ export function ErpStockMoveForm({ open, initialData, onClose, onSuccess }: ErpS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">合计金额，单位：元</label>
+          <label htmlFor="erp-stock-move-total_price" className="block text-xs text-slate-600 mb-1">合计金额，单位：元</label>
           <input
             type="number"
+            id="erp-stock-move-total_price"
+            data-testid="field-total_price"
+            data-agent-target="erp-stock-move:field:total_price"
+            data-agent-state={formData.total_price == null || formData.total_price === "" ? "empty" : "filled"}
+            aria-label="合计金额，单位：元"
             value={formData.total_price != null ? String(formData.total_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, total_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -118,9 +145,14 @@ export function ErpStockMoveForm({ open, initialData, onClose, onSuccess }: ErpS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="erp-stock-move-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="erp-stock-move-status"
+            data-testid="field-status"
+            data-agent-target="erp-stock-move:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -130,9 +162,14 @@ export function ErpStockMoveForm({ open, initialData, onClose, onSuccess }: ErpS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="erp-stock-move-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="erp-stock-move-remark"
+            data-testid="field-remark"
+            data-agent-target="erp-stock-move:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -142,9 +179,14 @@ export function ErpStockMoveForm({ open, initialData, onClose, onSuccess }: ErpS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">附件 URL</label>
+          <label htmlFor="erp-stock-move-file_url" className="block text-xs text-slate-600 mb-1">附件 URL</label>
           <input
             type="text"
+            id="erp-stock-move-file_url"
+            data-testid="field-file_url"
+            data-agent-target="erp-stock-move:field:file_url"
+            data-agent-state={formData.file_url ? "filled" : "empty"}
+            aria-label="附件 URL"
             value={formData.file_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, file_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -158,6 +200,8 @@ export function ErpStockMoveForm({ open, initialData, onClose, onSuccess }: ErpS
             <button
               type="button"
               onClick={onClose}
+              data-testid="erp-stock-move-form-cancel"
+              data-agent-target="erp-stock-move:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -165,6 +209,9 @@ export function ErpStockMoveForm({ open, initialData, onClose, onSuccess }: ErpS
             <button
               type="submit"
               disabled={loading}
+              data-testid="erp-stock-move-form-submit"
+              data-agent-target="erp-stock-move:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

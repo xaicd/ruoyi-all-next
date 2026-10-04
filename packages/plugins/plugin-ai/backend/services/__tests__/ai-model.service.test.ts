@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { AiModelService } from "../ai-model.service"
 
 describe("AiModelService", () => {
-  it("should create and query AiModel（源框架导入）", async () => {
+  it("should create and query AI 模型 DO默认模型： 为开启，并且 排序第一", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AiModelService.create({
         key_id: 1,
@@ -21,7 +21,7 @@ describe("AiModelService", () => {
   
       const updated = await AiModelService.update(created.id, {
         id: created.id,
-        key_id: "更新AiModel（源框架导入）",
+        key_id: "更新AI 模型 DO默认模型： 为开启，并且 排序第一",
       } as any)
       expect(updated).toBeDefined()
   

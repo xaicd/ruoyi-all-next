@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ProductCategoryService } from "../product-category.service"
 
 describe("ProductCategoryService", () => {
-  it("should create and query ProductCategory（源框架导入）", async () => {
+  it("should create and query 商品分类", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ProductCategoryService.create({
         parent_id: 1,
@@ -21,7 +21,7 @@ describe("ProductCategoryService", () => {
   
       const updated = await ProductCategoryService.update(created.id, {
         id: created.id,
-        parent_id: "更新ProductCategory（源框架导入）",
+        parent_id: "更新商品分类",
       } as any)
       expect(updated).toBeDefined()
   

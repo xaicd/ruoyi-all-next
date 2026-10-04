@@ -1,0 +1,294 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesWmWarehouseArea",
+  "kebab": "mes-wm-warehouse-area",
+  "businessName": "MES 库位",
+  "permissionPrefix": "mes:mes_wm_warehouse_area",
+  "page": {
+    "route": "/admin/mes/mes-wm-warehouse-area",
+    "title": "MES 库位管理",
+    "titleSelector": "[data-testid=\"mes-wm-warehouse-area-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-wm-warehouse-area",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-wm-warehouse-area",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-wm-warehouse-area/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-wm-warehouse-area"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-wm-warehouse-area/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-wm-warehouse-area/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-wm-warehouse-area-title\"]",
+    "refresh": "[data-testid=\"mes-wm-warehouse-area-refresh\"]",
+    "createButton": "[data-testid=\"mes-wm-warehouse-area-create\"]",
+    "searchForm": "[data-testid=\"mes-wm-warehouse-area-search\"]",
+    "searchSubmit": "[data-testid=\"mes-wm-warehouse-area-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-wm-warehouse-area-search-reset\"]",
+    "total": "[data-testid=\"mes-wm-warehouse-area-total\"]",
+    "table": "[data-testid=\"mes-wm-warehouse-area-table\"]",
+    "row": "[data-testid=\"mes-wm-warehouse-area-row\"]",
+    "editButton": "[data-testid=\"mes-wm-warehouse-area-edit\"]",
+    "deleteButton": "[data-testid=\"mes-wm-warehouse-area-delete\"]",
+    "form": "[data-testid=\"mes-wm-warehouse-area-form\"]",
+    "formError": "[data-testid=\"mes-wm-warehouse-area-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-wm-warehouse-area-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-wm-warehouse-area-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-wm-warehouse-area-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 库位列表",
+    "dialogLabel": {
+      "create": "新增MES 库位",
+      "edit": "编辑MES 库位"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "code",
+        "label": "库位编码",
+        "type": "string",
+        "required": false,
+        "testId": "field-code",
+        "selector": "[data-testid=\"field-code\"]"
+      },
+      {
+        "name": "name",
+        "label": "库位名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "location_id",
+        "label": "库区编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-location_id",
+        "selector": "[data-testid=\"field-location_id\"]"
+      },
+      {
+        "name": "area",
+        "label": "面积",
+        "type": "number",
+        "required": false,
+        "testId": "field-area",
+        "selector": "[data-testid=\"field-area\"]"
+      },
+      {
+        "name": "max_load",
+        "label": "最大载重",
+        "type": "number",
+        "required": false,
+        "testId": "field-max_load",
+        "selector": "[data-testid=\"field-max_load\"]"
+      },
+      {
+        "name": "position_x",
+        "label": "位置 X",
+        "type": "number",
+        "required": false,
+        "testId": "field-position_x",
+        "selector": "[data-testid=\"field-position_x\"]"
+      },
+      {
+        "name": "position_y",
+        "label": "位置 Y",
+        "type": "number",
+        "required": false,
+        "testId": "field-position_y",
+        "selector": "[data-testid=\"field-position_y\"]"
+      },
+      {
+        "name": "position_z",
+        "label": "位置 Z",
+        "type": "number",
+        "required": false,
+        "testId": "field-position_z",
+        "selector": "[data-testid=\"field-position_z\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "frozen",
+        "label": "是否冻结",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-frozen",
+        "selector": "[data-testid=\"field-frozen\"]"
+      },
+      {
+        "name": "allow_item_mixing",
+        "label": "是否允许物料混放",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-allow_item_mixing",
+        "selector": "[data-testid=\"field-allow_item_mixing\"]"
+      },
+      {
+        "name": "allow_batch_mixing",
+        "label": "是否允许批次混放",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-allow_batch_mixing",
+        "selector": "[data-testid=\"field-allow_batch_mixing\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-wm-warehouse-area",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-wm-warehouse-area\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-wm-warehouse-area-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-wm-warehouse-area-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-wm-warehouse-area:search",
+      "reset": "mes-wm-warehouse-area:reset",
+      "refresh": "mes-wm-warehouse-area:refresh",
+      "create": "mes-wm-warehouse-area:create",
+      "edit": "mes-wm-warehouse-area:edit",
+      "delete": "mes-wm-warehouse-area:delete",
+      "submit": "mes-wm-warehouse-area:submit",
+      "cancel": "mes-wm-warehouse-area:cancel",
+      "close": "mes-wm-warehouse-area:close",
+      "row": "mes-wm-warehouse-area:row",
+      "pagination": "mes-wm-warehouse-area:pagination",
+      "fields": {
+        "code": "mes-wm-warehouse-area:field:code",
+        "name": "mes-wm-warehouse-area:field:name",
+        "location_id": "mes-wm-warehouse-area:field:location_id",
+        "area": "mes-wm-warehouse-area:field:area",
+        "max_load": "mes-wm-warehouse-area:field:max_load",
+        "position_x": "mes-wm-warehouse-area:field:position_x",
+        "position_y": "mes-wm-warehouse-area:field:position_y",
+        "position_z": "mes-wm-warehouse-area:field:position_z",
+        "status": "mes-wm-warehouse-area:field:status",
+        "frozen": "mes-wm-warehouse-area:field:frozen",
+        "allow_item_mixing": "mes-wm-warehouse-area:field:allow_item_mixing",
+        "allow_batch_mixing": "mes-wm-warehouse-area:field:allow_batch_mixing",
+        "remark": "mes-wm-warehouse-area:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-wm-warehouse-area",
+      "examples": [
+        "mes.mes-wm-warehouse-area__List__Refresh",
+        "mes.mes-wm-warehouse-area__ListItem__Open",
+        "mes.mes-wm-warehouse-area__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

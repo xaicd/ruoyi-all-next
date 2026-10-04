@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesWmItemConsumeLineService } from "../mes-wm-item-consume-line.service"
 
 describe("MesWmItemConsumeLineService", () => {
-  it("should create and query MesWmItemConsumeLine（源框架导入）", async () => {
+  it("should create and query MES 物料消耗记录行", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmItemConsumeLineService.create({
         consume_id: 1,
@@ -21,7 +21,7 @@ describe("MesWmItemConsumeLineService", () => {
   
       const updated = await MesWmItemConsumeLineService.update(created.id, {
         id: created.id,
-        consume_id: "更新MesWmItemConsumeLine（源框架导入）",
+        consume_id: "更新MES 物料消耗记录行",
       } as any)
       expect(updated).toBeDefined()
   

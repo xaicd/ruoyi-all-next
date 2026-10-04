@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for CrmPerformanceConfig（源框架导入） (CrmPerformanceConfig)
+-- Auto-generated RBAC & Menu Migration for CRM 业绩目标 (CrmPerformanceConfig)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-crm-performance-config',
   'crm-dir',
-  'CrmPerformanceConfig（源框架导入）管理',
+  'CRM 业绩目标管理',
   '/admin/crm/crm-performance-config',
   'crm/crm-performance-config/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-crm-performance-config-query',  'menu-crm-performance-config', '查询CrmPerformanceConfig（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_performance_config:query',  1, NOW(), NOW()),
-('menu-crm-performance-config-create', 'menu-crm-performance-config', '新增CrmPerformanceConfig（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_performance_config:create', 2, NOW(), NOW()),
-('menu-crm-performance-config-update', 'menu-crm-performance-config', '修改CrmPerformanceConfig（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_performance_config:update', 3, NOW(), NOW()),
-('menu-crm-performance-config-delete', 'menu-crm-performance-config', '删除CrmPerformanceConfig（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_performance_config:delete', 4, NOW(), NOW())
+('menu-crm-performance-config-query',  'menu-crm-performance-config', '查询CRM 业绩目标', 'BUTTON', 'ACTIVE', 'crm:crm_performance_config:query',  1, NOW(), NOW()),
+('menu-crm-performance-config-create', 'menu-crm-performance-config', '新增CRM 业绩目标', 'BUTTON', 'ACTIVE', 'crm:crm_performance_config:create', 2, NOW(), NOW()),
+('menu-crm-performance-config-update', 'menu-crm-performance-config', '修改CRM 业绩目标', 'BUTTON', 'ACTIVE', 'crm:crm_performance_config:update', 3, NOW(), NOW()),
+('menu-crm-performance-config-delete', 'menu-crm-performance-config', '删除CRM 业绩目标', 'BUTTON', 'ACTIVE', 'crm:crm_performance_config:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

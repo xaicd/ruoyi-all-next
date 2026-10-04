@@ -53,24 +53,36 @@ export function MesProAndonConfigForm({ open, initialData, onClose, onSuccess }:
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-pro-andon-config-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 安灯呼叫配置" : "新增MES 安灯呼叫配置"}
+        data-testid="mes-pro-andon-config-form"
+        data-agent-scope="mes-pro-andon-config:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesProAndonConfig（源框架导入）" : "新增MesProAndonConfig（源框架导入）"}
+            {isEdit ? "编辑MES 安灯呼叫配置" : "新增MES 安灯呼叫配置"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-pro-andon-config-form-close" data-agent-target="mes-pro-andon-config:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-pro-andon-config-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">呼叫原因</label>
+          <label htmlFor="mes-pro-andon-config-reason" className="block text-xs text-slate-600 mb-1">呼叫原因</label>
           <input
             type="text"
+            id="mes-pro-andon-config-reason"
+            data-testid="field-reason"
+            data-agent-target="mes-pro-andon-config:field:reason"
+            data-agent-state={formData.reason ? "filled" : "empty"}
+            aria-label="呼叫原因"
             value={formData.reason ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, reason: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -80,9 +92,14 @@ export function MesProAndonConfigForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">级别</label>
+          <label htmlFor="mes-pro-andon-config-level" className="block text-xs text-slate-600 mb-1">级别</label>
           <input
             type="number"
+            id="mes-pro-andon-config-level"
+            data-testid="field-level"
+            data-agent-target="mes-pro-andon-config:field:level"
+            data-agent-state={formData.level == null || formData.level === "" ? "empty" : "filled"}
+            aria-label="级别"
             value={formData.level != null ? String(formData.level) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, level: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -92,9 +109,14 @@ export function MesProAndonConfigForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">处置人角色编号</label>
+          <label htmlFor="mes-pro-andon-config-handler_role_id" className="block text-xs text-slate-600 mb-1">处置人角色编号</label>
           <input
             type="number"
+            id="mes-pro-andon-config-handler_role_id"
+            data-testid="field-handler_role_id"
+            data-agent-target="mes-pro-andon-config:field:handler_role_id"
+            data-agent-state={formData.handler_role_id == null || formData.handler_role_id === "" ? "empty" : "filled"}
+            aria-label="处置人角色编号"
             value={formData.handler_role_id != null ? String(formData.handler_role_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, handler_role_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -104,9 +126,14 @@ export function MesProAndonConfigForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">处置人编号</label>
+          <label htmlFor="mes-pro-andon-config-handler_user_id" className="block text-xs text-slate-600 mb-1">处置人编号</label>
           <input
             type="number"
+            id="mes-pro-andon-config-handler_user_id"
+            data-testid="field-handler_user_id"
+            data-agent-target="mes-pro-andon-config:field:handler_user_id"
+            data-agent-state={formData.handler_user_id == null || formData.handler_user_id === "" ? "empty" : "filled"}
+            aria-label="处置人编号"
             value={formData.handler_user_id != null ? String(formData.handler_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, handler_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -116,9 +143,14 @@ export function MesProAndonConfigForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-pro-andon-config-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-pro-andon-config-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-pro-andon-config:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -132,6 +164,8 @@ export function MesProAndonConfigForm({ open, initialData, onClose, onSuccess }:
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-pro-andon-config-form-cancel"
+              data-agent-target="mes-pro-andon-config:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -139,6 +173,9 @@ export function MesProAndonConfigForm({ open, initialData, onClose, onSuccess }:
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-pro-andon-config-form-submit"
+              data-agent-target="mes-pro-andon-config:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

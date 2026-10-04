@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MemberLevelRecordService } from "../member-level-record.service"
 
 describe("MemberLevelRecordService", () => {
-  it("should create and query MemberLevelRecord（源框架导入）", async () => {
+  it("should create and query 会员等级记录 DO用户每次等级发生变更时，记录一条日志", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MemberLevelRecordService.create({
         user_id: 1,
@@ -21,7 +21,7 @@ describe("MemberLevelRecordService", () => {
   
       const updated = await MemberLevelRecordService.update(created.id, {
         id: created.id,
-        user_id: "更新MemberLevelRecord（源框架导入）",
+        user_id: "更新会员等级记录 DO用户每次等级发生变更时，记录一条日志",
       } as any)
       expect(updated).toBeDefined()
   

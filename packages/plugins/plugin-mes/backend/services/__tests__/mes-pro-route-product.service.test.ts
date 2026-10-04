@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesProRouteProductService } from "../mes-pro-route-product.service"
 
 describe("MesProRouteProductService", () => {
-  it("should create and query MesProRouteProduct（源框架导入）", async () => {
+  it("should create and query MES 工艺路线产品", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesProRouteProductService.create({
         route_id: 1,
@@ -21,7 +21,7 @@ describe("MesProRouteProductService", () => {
   
       const updated = await MesProRouteProductService.update(created.id, {
         id: created.id,
-        route_id: "更新MesProRouteProduct（源框架导入）",
+        route_id: "更新MES 工艺路线产品",
       } as any)
       expect(updated).toBeDefined()
   

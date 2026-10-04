@@ -1,0 +1,267 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "im",
+  "entity": "ImFriend",
+  "kebab": "im-friend",
+  "businessName": "IM 好友关系 DO业务语义：- 双向关系：A-B 互为好友会存 2 条记录（userId=A, friendUserId=B 和 userId=B, friendUserId=A）- 状态管理",
+  "permissionPrefix": "im:im_friend",
+  "page": {
+    "route": "/admin/im/im-friend",
+    "title": "IM 好友关系 DO业务语义：- 双向关系：A-B 互为好友会存 2 条记录（userId=A, friendUserId=B 和 userId=B, friendUserId=A）- 状态管理管理",
+    "titleSelector": "[data-testid=\"im-friend-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.im/api",
+    "bffMount": "/api/v1/admin/im",
+    "resource": "im-friend",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/im-friend",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/im-friend/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/im-friend"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/im-friend/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/im-friend/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"im-friend-title\"]",
+    "refresh": "[data-testid=\"im-friend-refresh\"]",
+    "createButton": "[data-testid=\"im-friend-create\"]",
+    "searchForm": "[data-testid=\"im-friend-search\"]",
+    "searchSubmit": "[data-testid=\"im-friend-search-submit\"]",
+    "searchReset": "[data-testid=\"im-friend-search-reset\"]",
+    "total": "[data-testid=\"im-friend-total\"]",
+    "table": "[data-testid=\"im-friend-table\"]",
+    "row": "[data-testid=\"im-friend-row\"]",
+    "editButton": "[data-testid=\"im-friend-edit\"]",
+    "deleteButton": "[data-testid=\"im-friend-delete\"]",
+    "form": "[data-testid=\"im-friend-form\"]",
+    "formError": "[data-testid=\"im-friend-form-error\"]",
+    "formSubmit": "[data-testid=\"im-friend-form-submit\"]",
+    "formCancel": "[data-testid=\"im-friend-form-cancel\"]",
+    "formClose": "[data-testid=\"im-friend-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IM 好友关系 DO业务语义：- 双向关系：A-B 互为好友会存 2 条记录（userId=A, friendUserId=B 和 userId=B, friendUserId=A）- 状态管理列表",
+    "dialogLabel": {
+      "create": "新增IM 好友关系 DO业务语义：- 双向关系：A-B 互为好友会存 2 条记录（userId=A, friendUserId=B 和 userId=B, friendUserId=A）- 状态管理",
+      "edit": "编辑IM 好友关系 DO业务语义：- 双向关系：A-B 互为好友会存 2 条记录（userId=A, friendUserId=B 和 userId=B, friendUserId=A）- 状态管理"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "friend_user_id",
+        "label": "好友用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-friend_user_id",
+        "selector": "[data-testid=\"field-friend_user_id\"]"
+      },
+      {
+        "name": "silent",
+        "label": "是否免打扰",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-silent",
+        "selector": "[data-testid=\"field-silent\"]"
+      },
+      {
+        "name": "display_name",
+        "label": "好友展示备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-display_name",
+        "selector": "[data-testid=\"field-display_name\"]"
+      },
+      {
+        "name": "add_source",
+        "label": "添加来源",
+        "type": "number",
+        "required": false,
+        "testId": "field-add_source",
+        "selector": "[data-testid=\"field-add_source\"]"
+      },
+      {
+        "name": "pinned",
+        "label": "是否置顶联系人",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-pinned",
+        "selector": "[data-testid=\"field-pinned\"]"
+      },
+      {
+        "name": "blocked",
+        "label": "是否拉黑（弱关联 friend，单边屏蔽对方私聊消息）",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-blocked",
+        "selector": "[data-testid=\"field-blocked\"]"
+      },
+      {
+        "name": "status",
+        "label": "好友状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "add_time",
+        "label": "添加好友时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-add_time",
+        "selector": "[data-testid=\"field-add_time\"]"
+      },
+      {
+        "name": "delete_time",
+        "label": "删除好友时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-delete_time",
+        "selector": "[data-testid=\"field-delete_time\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "im-friend",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"im-friend\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"im-friend-form-overlay\"]",
+      "dialog": "[data-testid=\"im-friend-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "im-friend:search",
+      "reset": "im-friend:reset",
+      "refresh": "im-friend:refresh",
+      "create": "im-friend:create",
+      "edit": "im-friend:edit",
+      "delete": "im-friend:delete",
+      "submit": "im-friend:submit",
+      "cancel": "im-friend:cancel",
+      "close": "im-friend:close",
+      "row": "im-friend:row",
+      "pagination": "im-friend:pagination",
+      "fields": {
+        "user_id": "im-friend:field:user_id",
+        "friend_user_id": "im-friend:field:friend_user_id",
+        "silent": "im-friend:field:silent",
+        "display_name": "im-friend:field:display_name",
+        "add_source": "im-friend:field:add_source",
+        "pinned": "im-friend:field:pinned",
+        "blocked": "im-friend:field:blocked",
+        "status": "im-friend:field:status",
+        "add_time": "im-friend:field:add_time",
+        "delete_time": "im-friend:field:delete_time"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "im.im-friend",
+      "examples": [
+        "im.im-friend__List__Refresh",
+        "im.im-friend__ListItem__Open",
+        "im.im-friend__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

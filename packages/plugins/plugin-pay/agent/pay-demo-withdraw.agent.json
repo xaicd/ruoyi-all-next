@@ -1,0 +1,267 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "pay",
+  "entity": "PayDemoWithdraw",
+  "kebab": "pay-demo-withdraw",
+  "businessName": "示例提现订单演示业务系统的转账业务",
+  "permissionPrefix": "pay:pay_demo_withdraw",
+  "page": {
+    "route": "/admin/pay/pay-demo-withdraw",
+    "title": "示例提现订单演示业务系统的转账业务管理",
+    "titleSelector": "[data-testid=\"pay-demo-withdraw-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.pay/api",
+    "bffMount": "/api/v1/admin/pay",
+    "resource": "pay-demo-withdraw",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/pay-demo-withdraw",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/pay-demo-withdraw/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/pay-demo-withdraw"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/pay-demo-withdraw/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/pay-demo-withdraw/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"pay-demo-withdraw-title\"]",
+    "refresh": "[data-testid=\"pay-demo-withdraw-refresh\"]",
+    "createButton": "[data-testid=\"pay-demo-withdraw-create\"]",
+    "searchForm": "[data-testid=\"pay-demo-withdraw-search\"]",
+    "searchSubmit": "[data-testid=\"pay-demo-withdraw-search-submit\"]",
+    "searchReset": "[data-testid=\"pay-demo-withdraw-search-reset\"]",
+    "total": "[data-testid=\"pay-demo-withdraw-total\"]",
+    "table": "[data-testid=\"pay-demo-withdraw-table\"]",
+    "row": "[data-testid=\"pay-demo-withdraw-row\"]",
+    "editButton": "[data-testid=\"pay-demo-withdraw-edit\"]",
+    "deleteButton": "[data-testid=\"pay-demo-withdraw-delete\"]",
+    "form": "[data-testid=\"pay-demo-withdraw-form\"]",
+    "formError": "[data-testid=\"pay-demo-withdraw-form-error\"]",
+    "formSubmit": "[data-testid=\"pay-demo-withdraw-form-submit\"]",
+    "formCancel": "[data-testid=\"pay-demo-withdraw-form-cancel\"]",
+    "formClose": "[data-testid=\"pay-demo-withdraw-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "示例提现订单演示业务系统的转账业务列表",
+    "dialogLabel": {
+      "create": "新增示例提现订单演示业务系统的转账业务",
+      "edit": "编辑示例提现订单演示业务系统的转账业务"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "subject",
+        "label": "提现标题",
+        "type": "string",
+        "required": false,
+        "testId": "field-subject",
+        "selector": "[data-testid=\"field-subject\"]"
+      },
+      {
+        "name": "price",
+        "label": "提现金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-price",
+        "selector": "[data-testid=\"field-price\"]"
+      },
+      {
+        "name": "user_account",
+        "label": "收款人账号",
+        "type": "string",
+        "required": false,
+        "testId": "field-user_account",
+        "selector": "[data-testid=\"field-user_account\"]"
+      },
+      {
+        "name": "user_name",
+        "label": "收款人姓名",
+        "type": "string",
+        "required": false,
+        "testId": "field-user_name",
+        "selector": "[data-testid=\"field-user_name\"]"
+      },
+      {
+        "name": "type",
+        "label": "提现方式",
+        "type": "number",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "status",
+        "label": "提现状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "pay_transfer_id",
+        "label": "转账单编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-pay_transfer_id",
+        "selector": "[data-testid=\"field-pay_transfer_id\"]"
+      },
+      {
+        "name": "transfer_channel_code",
+        "label": "转账渠道",
+        "type": "string",
+        "required": false,
+        "testId": "field-transfer_channel_code",
+        "selector": "[data-testid=\"field-transfer_channel_code\"]"
+      },
+      {
+        "name": "transfer_time",
+        "label": "转账成功时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-transfer_time",
+        "selector": "[data-testid=\"field-transfer_time\"]"
+      },
+      {
+        "name": "transfer_error_msg",
+        "label": "转账错误提示",
+        "type": "string",
+        "required": false,
+        "testId": "field-transfer_error_msg",
+        "selector": "[data-testid=\"field-transfer_error_msg\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "pay-demo-withdraw",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"pay-demo-withdraw\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"pay-demo-withdraw-form-overlay\"]",
+      "dialog": "[data-testid=\"pay-demo-withdraw-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "pay-demo-withdraw:search",
+      "reset": "pay-demo-withdraw:reset",
+      "refresh": "pay-demo-withdraw:refresh",
+      "create": "pay-demo-withdraw:create",
+      "edit": "pay-demo-withdraw:edit",
+      "delete": "pay-demo-withdraw:delete",
+      "submit": "pay-demo-withdraw:submit",
+      "cancel": "pay-demo-withdraw:cancel",
+      "close": "pay-demo-withdraw:close",
+      "row": "pay-demo-withdraw:row",
+      "pagination": "pay-demo-withdraw:pagination",
+      "fields": {
+        "subject": "pay-demo-withdraw:field:subject",
+        "price": "pay-demo-withdraw:field:price",
+        "user_account": "pay-demo-withdraw:field:user_account",
+        "user_name": "pay-demo-withdraw:field:user_name",
+        "type": "pay-demo-withdraw:field:type",
+        "status": "pay-demo-withdraw:field:status",
+        "pay_transfer_id": "pay-demo-withdraw:field:pay_transfer_id",
+        "transfer_channel_code": "pay-demo-withdraw:field:transfer_channel_code",
+        "transfer_time": "pay-demo-withdraw:field:transfer_time",
+        "transfer_error_msg": "pay-demo-withdraw:field:transfer_error_msg"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "pay.pay-demo-withdraw",
+      "examples": [
+        "pay.pay-demo-withdraw__List__Refresh",
+        "pay.pay-demo-withdraw__ListItem__Open",
+        "pay.pay-demo-withdraw__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

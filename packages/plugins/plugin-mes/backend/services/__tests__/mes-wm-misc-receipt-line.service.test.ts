@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesWmMiscReceiptLineService } from "../mes-wm-misc-receipt-line.service"
 
 describe("MesWmMiscReceiptLineService", () => {
-  it("should create and query MesWmMiscReceiptLine（源框架导入）", async () => {
+  it("should create and query MES 杂项入库单行", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmMiscReceiptLineService.create({
         receipt_id: 1,
@@ -21,7 +21,7 @@ describe("MesWmMiscReceiptLineService", () => {
   
       const updated = await MesWmMiscReceiptLineService.update(created.id, {
         id: created.id,
-        receipt_id: "更新MesWmMiscReceiptLine（源框架导入）",
+        receipt_id: "更新MES 杂项入库单行",
       } as any)
       expect(updated).toBeDefined()
   

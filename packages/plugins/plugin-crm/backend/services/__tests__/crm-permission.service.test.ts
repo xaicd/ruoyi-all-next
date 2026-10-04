@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { CrmPermissionService } from "../crm-permission.service"
 
 describe("CrmPermissionService", () => {
-  it("should create and query CrmPermission（源框架导入）", async () => {
+  it("should create and query CRM 数据权限", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CrmPermissionService.create({
         biz_type: 1,
@@ -21,7 +21,7 @@ describe("CrmPermissionService", () => {
   
       const updated = await CrmPermissionService.update(created.id, {
         id: created.id,
-        biz_type: "更新CrmPermission（源框架导入）",
+        biz_type: "更新CRM 数据权限",
       } as any)
       expect(updated).toBeDefined()
   

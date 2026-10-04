@@ -1,0 +1,267 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "CombinationActivity",
+  "kebab": "combination-activity",
+  "businessName": "拼团活动",
+  "permissionPrefix": "mall:combination_activity",
+  "page": {
+    "route": "/admin/mall/combination-activity",
+    "title": "拼团活动管理",
+    "titleSelector": "[data-testid=\"combination-activity-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "combination-activity",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/combination-activity",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/combination-activity/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/combination-activity"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/combination-activity/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/combination-activity/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"combination-activity-title\"]",
+    "refresh": "[data-testid=\"combination-activity-refresh\"]",
+    "createButton": "[data-testid=\"combination-activity-create\"]",
+    "searchForm": "[data-testid=\"combination-activity-search\"]",
+    "searchSubmit": "[data-testid=\"combination-activity-search-submit\"]",
+    "searchReset": "[data-testid=\"combination-activity-search-reset\"]",
+    "total": "[data-testid=\"combination-activity-total\"]",
+    "table": "[data-testid=\"combination-activity-table\"]",
+    "row": "[data-testid=\"combination-activity-row\"]",
+    "editButton": "[data-testid=\"combination-activity-edit\"]",
+    "deleteButton": "[data-testid=\"combination-activity-delete\"]",
+    "form": "[data-testid=\"combination-activity-form\"]",
+    "formError": "[data-testid=\"combination-activity-form-error\"]",
+    "formSubmit": "[data-testid=\"combination-activity-form-submit\"]",
+    "formCancel": "[data-testid=\"combination-activity-form-cancel\"]",
+    "formClose": "[data-testid=\"combination-activity-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "拼团活动列表",
+    "dialogLabel": {
+      "create": "新增拼团活动",
+      "edit": "编辑拼团活动"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "拼团名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "spu_id",
+        "label": "商品 SPU 编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-spu_id",
+        "selector": "[data-testid=\"field-spu_id\"]"
+      },
+      {
+        "name": "total_limit_count",
+        "label": "总限购数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_limit_count",
+        "selector": "[data-testid=\"field-total_limit_count\"]"
+      },
+      {
+        "name": "single_limit_count",
+        "label": "单次限购数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-single_limit_count",
+        "selector": "[data-testid=\"field-single_limit_count\"]"
+      },
+      {
+        "name": "start_time",
+        "label": "开始时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-start_time",
+        "selector": "[data-testid=\"field-start_time\"]"
+      },
+      {
+        "name": "end_time",
+        "label": "结束时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-end_time",
+        "selector": "[data-testid=\"field-end_time\"]"
+      },
+      {
+        "name": "user_size",
+        "label": "几人团",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_size",
+        "selector": "[data-testid=\"field-user_size\"]"
+      },
+      {
+        "name": "virtual_group",
+        "label": "虚拟成团",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-virtual_group",
+        "selector": "[data-testid=\"field-virtual_group\"]"
+      },
+      {
+        "name": "status",
+        "label": "活动状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "limit_duration",
+        "label": "限制时长（小时）",
+        "type": "number",
+        "required": false,
+        "testId": "field-limit_duration",
+        "selector": "[data-testid=\"field-limit_duration\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "combination-activity",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"combination-activity\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"combination-activity-form-overlay\"]",
+      "dialog": "[data-testid=\"combination-activity-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "combination-activity:search",
+      "reset": "combination-activity:reset",
+      "refresh": "combination-activity:refresh",
+      "create": "combination-activity:create",
+      "edit": "combination-activity:edit",
+      "delete": "combination-activity:delete",
+      "submit": "combination-activity:submit",
+      "cancel": "combination-activity:cancel",
+      "close": "combination-activity:close",
+      "row": "combination-activity:row",
+      "pagination": "combination-activity:pagination",
+      "fields": {
+        "name": "combination-activity:field:name",
+        "spu_id": "combination-activity:field:spu_id",
+        "total_limit_count": "combination-activity:field:total_limit_count",
+        "single_limit_count": "combination-activity:field:single_limit_count",
+        "start_time": "combination-activity:field:start_time",
+        "end_time": "combination-activity:field:end_time",
+        "user_size": "combination-activity:field:user_size",
+        "virtual_group": "combination-activity:field:virtual_group",
+        "status": "combination-activity:field:status",
+        "limit_duration": "combination-activity:field:limit_duration"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.combination-activity",
+      "examples": [
+        "mall.combination-activity__List__Refresh",
+        "mall.combination-activity__ListItem__Open",
+        "mall.combination-activity__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

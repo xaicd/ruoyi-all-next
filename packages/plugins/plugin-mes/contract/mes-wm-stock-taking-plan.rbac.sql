@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesWmStockTakingPlan（源框架导入） (MesWmStockTakingPlan)
+-- Auto-generated RBAC & Menu Migration for MES 盘点方案 (MesWmStockTakingPlan)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-wm-stock-taking-plan',
   'mes-dir',
-  'MesWmStockTakingPlan（源框架导入）管理',
+  'MES 盘点方案管理',
   '/admin/mes/mes-wm-stock-taking-plan',
   'mes/mes-wm-stock-taking-plan/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-wm-stock-taking-plan-query',  'menu-mes-wm-stock-taking-plan', '查询MesWmStockTakingPlan（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_stock_taking_plan:query',  1, NOW(), NOW()),
-('menu-mes-wm-stock-taking-plan-create', 'menu-mes-wm-stock-taking-plan', '新增MesWmStockTakingPlan（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_stock_taking_plan:create', 2, NOW(), NOW()),
-('menu-mes-wm-stock-taking-plan-update', 'menu-mes-wm-stock-taking-plan', '修改MesWmStockTakingPlan（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_stock_taking_plan:update', 3, NOW(), NOW()),
-('menu-mes-wm-stock-taking-plan-delete', 'menu-mes-wm-stock-taking-plan', '删除MesWmStockTakingPlan（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_stock_taking_plan:delete', 4, NOW(), NOW())
+('menu-mes-wm-stock-taking-plan-query',  'menu-mes-wm-stock-taking-plan', '查询MES 盘点方案', 'BUTTON', 'ACTIVE', 'mes:mes_wm_stock_taking_plan:query',  1, NOW(), NOW()),
+('menu-mes-wm-stock-taking-plan-create', 'menu-mes-wm-stock-taking-plan', '新增MES 盘点方案', 'BUTTON', 'ACTIVE', 'mes:mes_wm_stock_taking_plan:create', 2, NOW(), NOW()),
+('menu-mes-wm-stock-taking-plan-update', 'menu-mes-wm-stock-taking-plan', '修改MES 盘点方案', 'BUTTON', 'ACTIVE', 'mes:mes_wm_stock_taking_plan:update', 3, NOW(), NOW()),
+('menu-mes-wm-stock-taking-plan-delete', 'menu-mes-wm-stock-taking-plan', '删除MES 盘点方案', 'BUTTON', 'ACTIVE', 'mes:mes_wm_stock_taking_plan:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

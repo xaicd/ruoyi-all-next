@@ -1,0 +1,240 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "member",
+  "entity": "MemberExperienceRecord",
+  "kebab": "member-experience-record",
+  "businessName": "会员经验记录",
+  "permissionPrefix": "member:member_experience_record",
+  "page": {
+    "route": "/admin/member/member-experience-record",
+    "title": "会员经验记录管理",
+    "titleSelector": "[data-testid=\"member-experience-record-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.member/api",
+    "bffMount": "/api/v1/admin/member",
+    "resource": "member-experience-record",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/member-experience-record",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/member-experience-record/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/member-experience-record"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/member-experience-record/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/member-experience-record/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"member-experience-record-title\"]",
+    "refresh": "[data-testid=\"member-experience-record-refresh\"]",
+    "createButton": "[data-testid=\"member-experience-record-create\"]",
+    "searchForm": "[data-testid=\"member-experience-record-search\"]",
+    "searchSubmit": "[data-testid=\"member-experience-record-search-submit\"]",
+    "searchReset": "[data-testid=\"member-experience-record-search-reset\"]",
+    "total": "[data-testid=\"member-experience-record-total\"]",
+    "table": "[data-testid=\"member-experience-record-table\"]",
+    "row": "[data-testid=\"member-experience-record-row\"]",
+    "editButton": "[data-testid=\"member-experience-record-edit\"]",
+    "deleteButton": "[data-testid=\"member-experience-record-delete\"]",
+    "form": "[data-testid=\"member-experience-record-form\"]",
+    "formError": "[data-testid=\"member-experience-record-form-error\"]",
+    "formSubmit": "[data-testid=\"member-experience-record-form-submit\"]",
+    "formCancel": "[data-testid=\"member-experience-record-form-cancel\"]",
+    "formClose": "[data-testid=\"member-experience-record-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "会员经验记录列表",
+    "dialogLabel": {
+      "create": "新增会员经验记录",
+      "edit": "编辑会员经验记录"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "biz_type",
+        "label": "业务类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-biz_type",
+        "selector": "[data-testid=\"field-biz_type\"]"
+      },
+      {
+        "name": "biz_id",
+        "label": "业务编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-biz_id",
+        "selector": "[data-testid=\"field-biz_id\"]"
+      },
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "string",
+        "required": false,
+        "testId": "field-title",
+        "selector": "[data-testid=\"field-title\"]"
+      },
+      {
+        "name": "description",
+        "label": "描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      },
+      {
+        "name": "experience",
+        "label": "经验",
+        "type": "number",
+        "required": false,
+        "testId": "field-experience",
+        "selector": "[data-testid=\"field-experience\"]"
+      },
+      {
+        "name": "total_experience",
+        "label": "变更后的经验",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_experience",
+        "selector": "[data-testid=\"field-total_experience\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "member-experience-record",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"member-experience-record\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"member-experience-record-form-overlay\"]",
+      "dialog": "[data-testid=\"member-experience-record-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "member-experience-record:search",
+      "reset": "member-experience-record:reset",
+      "refresh": "member-experience-record:refresh",
+      "create": "member-experience-record:create",
+      "edit": "member-experience-record:edit",
+      "delete": "member-experience-record:delete",
+      "submit": "member-experience-record:submit",
+      "cancel": "member-experience-record:cancel",
+      "close": "member-experience-record:close",
+      "row": "member-experience-record:row",
+      "pagination": "member-experience-record:pagination",
+      "fields": {
+        "user_id": "member-experience-record:field:user_id",
+        "biz_type": "member-experience-record:field:biz_type",
+        "biz_id": "member-experience-record:field:biz_id",
+        "title": "member-experience-record:field:title",
+        "description": "member-experience-record:field:description",
+        "experience": "member-experience-record:field:experience",
+        "total_experience": "member-experience-record:field:total_experience"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "member.member-experience-record",
+      "examples": [
+        "member.member-experience-record__List__Refresh",
+        "member.member-experience-record__ListItem__Open",
+        "member.member-experience-record__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

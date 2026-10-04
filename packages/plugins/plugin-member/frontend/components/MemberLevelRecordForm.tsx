@@ -56,24 +56,36 @@ export function MemberLevelRecordForm({ open, initialData, onClose, onSuccess }:
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="member-level-record-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑会员等级记录 DO用户每次等级发生变更时，记录一条日志" : "新增会员等级记录 DO用户每次等级发生变更时，记录一条日志"}
+        data-testid="member-level-record-form"
+        data-agent-scope="member-level-record:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MemberLevelRecord（源框架导入）" : "新增MemberLevelRecord（源框架导入）"}
+            {isEdit ? "编辑会员等级记录 DO用户每次等级发生变更时，记录一条日志" : "新增会员等级记录 DO用户每次等级发生变更时，记录一条日志"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="member-level-record-form-close" data-agent-target="member-level-record:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="member-level-record-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="member-level-record-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="member-level-record-user_id"
+            data-testid="field-user_id"
+            data-agent-target="member-level-record:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -83,9 +95,14 @@ export function MemberLevelRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">等级编号</label>
+          <label htmlFor="member-level-record-level_id" className="block text-xs text-slate-600 mb-1">等级编号</label>
           <input
             type="number"
+            id="member-level-record-level_id"
+            data-testid="field-level_id"
+            data-agent-target="member-level-record:field:level_id"
+            data-agent-state={formData.level_id == null || formData.level_id === "" ? "empty" : "filled"}
+            aria-label="等级编号"
             value={formData.level_id != null ? String(formData.level_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, level_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -95,9 +112,14 @@ export function MemberLevelRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">会员等级</label>
+          <label htmlFor="member-level-record-level" className="block text-xs text-slate-600 mb-1">会员等级</label>
           <input
             type="number"
+            id="member-level-record-level"
+            data-testid="field-level"
+            data-agent-target="member-level-record:field:level"
+            data-agent-state={formData.level == null || formData.level === "" ? "empty" : "filled"}
+            aria-label="会员等级"
             value={formData.level != null ? String(formData.level) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, level: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -107,9 +129,14 @@ export function MemberLevelRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">享受折扣</label>
+          <label htmlFor="member-level-record-discount_percent" className="block text-xs text-slate-600 mb-1">享受折扣</label>
           <input
             type="number"
+            id="member-level-record-discount_percent"
+            data-testid="field-discount_percent"
+            data-agent-target="member-level-record:field:discount_percent"
+            data-agent-state={formData.discount_percent == null || formData.discount_percent === "" ? "empty" : "filled"}
+            aria-label="享受折扣"
             value={formData.discount_percent != null ? String(formData.discount_percent) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, discount_percent: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -119,9 +146,14 @@ export function MemberLevelRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">升级经验</label>
+          <label htmlFor="member-level-record-experience" className="block text-xs text-slate-600 mb-1">升级经验</label>
           <input
             type="number"
+            id="member-level-record-experience"
+            data-testid="field-experience"
+            data-agent-target="member-level-record:field:experience"
+            data-agent-state={formData.experience == null || formData.experience === "" ? "empty" : "filled"}
+            aria-label="升级经验"
             value={formData.experience != null ? String(formData.experience) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, experience: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -131,9 +163,14 @@ export function MemberLevelRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">会员此时的经验</label>
+          <label htmlFor="member-level-record-user_experience" className="block text-xs text-slate-600 mb-1">会员此时的经验</label>
           <input
             type="number"
+            id="member-level-record-user_experience"
+            data-testid="field-user_experience"
+            data-agent-target="member-level-record:field:user_experience"
+            data-agent-state={formData.user_experience == null || formData.user_experience === "" ? "empty" : "filled"}
+            aria-label="会员此时的经验"
             value={formData.user_experience != null ? String(formData.user_experience) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_experience: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -143,9 +180,14 @@ export function MemberLevelRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="member-level-record-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="member-level-record-remark"
+            data-testid="field-remark"
+            data-agent-target="member-level-record:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -155,9 +197,14 @@ export function MemberLevelRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">描述</label>
+          <label htmlFor="member-level-record-description" className="block text-xs text-slate-600 mb-1">描述</label>
           <input
             type="text"
+            id="member-level-record-description"
+            data-testid="field-description"
+            data-agent-target="member-level-record:field:description"
+            data-agent-state={formData.description ? "filled" : "empty"}
+            aria-label="描述"
             value={formData.description ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,6 +218,8 @@ export function MemberLevelRecordForm({ open, initialData, onClose, onSuccess }:
             <button
               type="button"
               onClick={onClose}
+              data-testid="member-level-record-form-cancel"
+              data-agent-target="member-level-record:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -178,6 +227,9 @@ export function MemberLevelRecordForm({ open, initialData, onClose, onSuccess }:
             <button
               type="submit"
               disabled={loading}
+              data-testid="member-level-record-form-submit"
+              data-agent-target="member-level-record:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

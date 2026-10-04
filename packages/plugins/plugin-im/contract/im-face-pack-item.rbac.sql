@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for ImFacePackItem（源框架导入） (ImFacePackItem)
+-- Auto-generated RBAC & Menu Migration for IM 表情包项 DO（系统表情包内的单张表情图） (ImFacePackItem)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-im-face-pack-item',
   'im-dir',
-  'ImFacePackItem（源框架导入）管理',
+  'IM 表情包项 DO（系统表情包内的单张表情图）管理',
   '/admin/im/im-face-pack-item',
   'im/im-face-pack-item/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-im-face-pack-item-query',  'menu-im-face-pack-item', '查询ImFacePackItem（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_face_pack_item:query',  1, NOW(), NOW()),
-('menu-im-face-pack-item-create', 'menu-im-face-pack-item', '新增ImFacePackItem（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_face_pack_item:create', 2, NOW(), NOW()),
-('menu-im-face-pack-item-update', 'menu-im-face-pack-item', '修改ImFacePackItem（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_face_pack_item:update', 3, NOW(), NOW()),
-('menu-im-face-pack-item-delete', 'menu-im-face-pack-item', '删除ImFacePackItem（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_face_pack_item:delete', 4, NOW(), NOW())
+('menu-im-face-pack-item-query',  'menu-im-face-pack-item', '查询IM 表情包项 DO（系统表情包内的单张表情图）', 'BUTTON', 'ACTIVE', 'im:im_face_pack_item:query',  1, NOW(), NOW()),
+('menu-im-face-pack-item-create', 'menu-im-face-pack-item', '新增IM 表情包项 DO（系统表情包内的单张表情图）', 'BUTTON', 'ACTIVE', 'im:im_face_pack_item:create', 2, NOW(), NOW()),
+('menu-im-face-pack-item-update', 'menu-im-face-pack-item', '修改IM 表情包项 DO（系统表情包内的单张表情图）', 'BUTTON', 'ACTIVE', 'im:im_face_pack_item:update', 3, NOW(), NOW()),
+('menu-im-face-pack-item-delete', 'menu-im-face-pack-item', '删除IM 表情包项 DO（系统表情包内的单张表情图）', 'BUTTON', 'ACTIVE', 'im:im_face_pack_item:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesWmItemConsumeDetailService } from "../mes-wm-item-consume-detail.service"
 
 describe("MesWmItemConsumeDetailService", () => {
-  it("should create and query MesWmItemConsumeDetail（源框架导入）", async () => {
+  it("should create and query MES 物料消耗记录明细 DO记录 line 级别的消耗按线边库 FIFO 分配到具体批次的明细。一条 line 可能拆分为多条 detail（当一个批次库存不够，需要从下一个批次继续分配时）。", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmItemConsumeDetailService.create({
         consume_id: 1,
@@ -21,7 +21,7 @@ describe("MesWmItemConsumeDetailService", () => {
   
       const updated = await MesWmItemConsumeDetailService.update(created.id, {
         id: created.id,
-        consume_id: "更新MesWmItemConsumeDetail（源框架导入）",
+        consume_id: "更新MES 物料消耗记录明细 DO记录 line 级别的消耗按线边库 FIFO 分配到具体批次的明细。一条 line 可能拆分为多条 detail（当一个批次库存不够，需要从下一个批次继续分配时）。",
       } as any)
       expect(updated).toBeDefined()
   

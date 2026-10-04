@@ -77,24 +77,36 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="bpm-process-definition-info-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表" : "新增BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表"}
+        data-testid="bpm-process-definition-info-form"
+        data-agent-scope="bpm-process-definition-info:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑BpmProcessDefinitionInfo（源框架导入）" : "新增BpmProcessDefinitionInfo（源框架导入）"}
+            {isEdit ? "编辑BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表" : "新增BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="bpm-process-definition-info-form-close" data-agent-target="bpm-process-definition-info:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="bpm-process-definition-info-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">流程定义的编号</label>
+          <label htmlFor="bpm-process-definition-info-process_definition_id" className="block text-xs text-slate-600 mb-1">流程定义的编号</label>
           <input
             type="text"
+            id="bpm-process-definition-info-process_definition_id"
+            data-testid="field-process_definition_id"
+            data-agent-target="bpm-process-definition-info:field:process_definition_id"
+            data-agent-state={formData.process_definition_id ? "filled" : "empty"}
+            aria-label="流程定义的编号"
             value={formData.process_definition_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, process_definition_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -104,9 +116,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">流程模型的编号</label>
+          <label htmlFor="bpm-process-definition-info-model_id" className="block text-xs text-slate-600 mb-1">流程模型的编号</label>
           <input
             type="text"
+            id="bpm-process-definition-info-model_id"
+            data-testid="field-model_id"
+            data-agent-target="bpm-process-definition-info:field:model_id"
+            data-agent-state={formData.model_id ? "filled" : "empty"}
+            aria-label="流程模型的编号"
             value={formData.model_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, model_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -116,9 +133,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">流程模型的类型</label>
+          <label htmlFor="bpm-process-definition-info-model_type" className="block text-xs text-slate-600 mb-1">流程模型的类型</label>
           <input
             type="number"
+            id="bpm-process-definition-info-model_type"
+            data-testid="field-model_type"
+            data-agent-target="bpm-process-definition-info:field:model_type"
+            data-agent-state={formData.model_type == null || formData.model_type === "" ? "empty" : "filled"}
+            aria-label="流程模型的类型"
             value={formData.model_type != null ? String(formData.model_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, model_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -128,9 +150,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">流程分类的编码</label>
+          <label htmlFor="bpm-process-definition-info-category" className="block text-xs text-slate-600 mb-1">流程分类的编码</label>
           <input
             type="text"
+            id="bpm-process-definition-info-category"
+            data-testid="field-category"
+            data-agent-target="bpm-process-definition-info:field:category"
+            data-agent-state={formData.category ? "filled" : "empty"}
+            aria-label="流程分类的编码"
             value={formData.category ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, category: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -140,9 +167,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">图标</label>
+          <label htmlFor="bpm-process-definition-info-icon" className="block text-xs text-slate-600 mb-1">图标</label>
           <input
             type="text"
+            id="bpm-process-definition-info-icon"
+            data-testid="field-icon"
+            data-agent-target="bpm-process-definition-info:field:icon"
+            data-agent-state={formData.icon ? "filled" : "empty"}
+            aria-label="图标"
             value={formData.icon ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, icon: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -152,9 +184,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">描述</label>
+          <label htmlFor="bpm-process-definition-info-description" className="block text-xs text-slate-600 mb-1">描述</label>
           <input
             type="text"
+            id="bpm-process-definition-info-description"
+            data-testid="field-description"
+            data-agent-target="bpm-process-definition-info:field:description"
+            data-agent-state={formData.description ? "filled" : "empty"}
+            aria-label="描述"
             value={formData.description ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -164,9 +201,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">表单类型</label>
+          <label htmlFor="bpm-process-definition-info-form_type" className="block text-xs text-slate-600 mb-1">表单类型</label>
           <input
             type="number"
+            id="bpm-process-definition-info-form_type"
+            data-testid="field-form_type"
+            data-agent-target="bpm-process-definition-info:field:form_type"
+            data-agent-state={formData.form_type == null || formData.form_type === "" ? "empty" : "filled"}
+            aria-label="表单类型"
             value={formData.form_type != null ? String(formData.form_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, form_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -176,9 +218,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">动态表单编号</label>
+          <label htmlFor="bpm-process-definition-info-form_id" className="block text-xs text-slate-600 mb-1">动态表单编号</label>
           <input
             type="number"
+            id="bpm-process-definition-info-form_id"
+            data-testid="field-form_id"
+            data-agent-target="bpm-process-definition-info:field:form_id"
+            data-agent-state={formData.form_id == null || formData.form_id === "" ? "empty" : "filled"}
+            aria-label="动态表单编号"
             value={formData.form_id != null ? String(formData.form_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, form_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -188,9 +235,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">表单的配置</label>
+          <label htmlFor="bpm-process-definition-info-form_conf" className="block text-xs text-slate-600 mb-1">表单的配置</label>
           <input
             type="text"
+            id="bpm-process-definition-info-form_conf"
+            data-testid="field-form_conf"
+            data-agent-target="bpm-process-definition-info:field:form_conf"
+            data-agent-state={formData.form_conf ? "filled" : "empty"}
+            aria-label="表单的配置"
             value={formData.form_conf ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, form_conf: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -200,9 +252,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">表单项的数组</label>
+          <label htmlFor="bpm-process-definition-info-form_fields" className="block text-xs text-slate-600 mb-1">表单项的数组</label>
           <input
             type="text"
+            id="bpm-process-definition-info-form_fields"
+            data-testid="field-form_fields"
+            data-agent-target="bpm-process-definition-info:field:form_fields"
+            data-agent-state={formData.form_fields ? "filled" : "empty"}
+            aria-label="表单项的数组"
             value={formData.form_fields ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, form_fields: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -212,9 +269,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">自定义表单的提交路径，使用 Vue 的路由地址</label>
+          <label htmlFor="bpm-process-definition-info-form_custom_create_path" className="block text-xs text-slate-600 mb-1">自定义表单的提交路径，使用 Vue 的路由地址</label>
           <input
             type="text"
+            id="bpm-process-definition-info-form_custom_create_path"
+            data-testid="field-form_custom_create_path"
+            data-agent-target="bpm-process-definition-info:field:form_custom_create_path"
+            data-agent-state={formData.form_custom_create_path ? "filled" : "empty"}
+            aria-label="自定义表单的提交路径，使用 Vue 的路由地址"
             value={formData.form_custom_create_path ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, form_custom_create_path: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -224,9 +286,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">自定义表单的查看路径，使用 Vue 的路由地址</label>
+          <label htmlFor="bpm-process-definition-info-form_custom_view_path" className="block text-xs text-slate-600 mb-1">自定义表单的查看路径，使用 Vue 的路由地址</label>
           <input
             type="text"
+            id="bpm-process-definition-info-form_custom_view_path"
+            data-testid="field-form_custom_view_path"
+            data-agent-target="bpm-process-definition-info:field:form_custom_view_path"
+            data-agent-state={formData.form_custom_view_path ? "filled" : "empty"}
+            aria-label="自定义表单的查看路径，使用 Vue 的路由地址"
             value={formData.form_custom_view_path ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, form_custom_view_path: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -236,9 +303,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">SIMPLE 设计器模型数据 json 格式</label>
+          <label htmlFor="bpm-process-definition-info-simple_model" className="block text-xs text-slate-600 mb-1">SIMPLE 设计器模型数据 json 格式</label>
           <input
             type="text"
+            id="bpm-process-definition-info-simple_model"
+            data-testid="field-simple_model"
+            data-agent-target="bpm-process-definition-info:field:simple_model"
+            data-agent-state={formData.simple_model ? "filled" : "empty"}
+            aria-label="SIMPLE 设计器模型数据 json 格式"
             value={formData.simple_model ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, simple_model: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -250,18 +322,27 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="visible"
+            id="bpm-process-definition-info-visible"
+            data-testid="field-visible"
+            data-agent-target="bpm-process-definition-info:field:visible"
+            data-agent-state={formData.visible ? "on" : "off"}
+            aria-label="是否可见"
             checked={Boolean(formData.visible)}
             onChange={(e) => setFormData((prev) => ({ ...prev, visible: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="visible" className="text-xs text-slate-700 font-medium">是否可见</label>
+          <label htmlFor="bpm-process-definition-info-visible" className="text-xs text-slate-700 font-medium">是否可见</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">排序值</label>
+          <label htmlFor="bpm-process-definition-info-sort" className="block text-xs text-slate-600 mb-1">排序值</label>
           <input
             type="number"
+            id="bpm-process-definition-info-sort"
+            data-testid="field-sort"
+            data-agent-target="bpm-process-definition-info:field:sort"
+            data-agent-state={formData.sort == null || formData.sort === "" ? "empty" : "filled"}
+            aria-label="排序值"
             value={formData.sort != null ? String(formData.sort) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sort: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -271,9 +352,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">可发起用户编号数组</label>
+          <label htmlFor="bpm-process-definition-info-start_user_ids" className="block text-xs text-slate-600 mb-1">可发起用户编号数组</label>
           <input
             type="text"
+            id="bpm-process-definition-info-start_user_ids"
+            data-testid="field-start_user_ids"
+            data-agent-target="bpm-process-definition-info:field:start_user_ids"
+            data-agent-state={formData.start_user_ids ? "filled" : "empty"}
+            aria-label="可发起用户编号数组"
             value={formData.start_user_ids ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, start_user_ids: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -283,9 +369,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">可发起部门编号数组</label>
+          <label htmlFor="bpm-process-definition-info-start_dept_ids" className="block text-xs text-slate-600 mb-1">可发起部门编号数组</label>
           <input
             type="text"
+            id="bpm-process-definition-info-start_dept_ids"
+            data-testid="field-start_dept_ids"
+            data-agent-target="bpm-process-definition-info:field:start_dept_ids"
+            data-agent-state={formData.start_dept_ids ? "filled" : "empty"}
+            aria-label="可发起部门编号数组"
             value={formData.start_dept_ids ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, start_dept_ids: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -295,9 +386,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">可管理用户编号数组</label>
+          <label htmlFor="bpm-process-definition-info-manager_user_ids" className="block text-xs text-slate-600 mb-1">可管理用户编号数组</label>
           <input
             type="text"
+            id="bpm-process-definition-info-manager_user_ids"
+            data-testid="field-manager_user_ids"
+            data-agent-target="bpm-process-definition-info:field:manager_user_ids"
+            data-agent-state={formData.manager_user_ids ? "filled" : "empty"}
+            aria-label="可管理用户编号数组"
             value={formData.manager_user_ids ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, manager_user_ids: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -309,29 +405,42 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="allow_cancel_running_process"
+            id="bpm-process-definition-info-allow_cancel_running_process"
+            data-testid="field-allow_cancel_running_process"
+            data-agent-target="bpm-process-definition-info:field:allow_cancel_running_process"
+            data-agent-state={formData.allow_cancel_running_process ? "on" : "off"}
+            aria-label="是否允许撤销审批中的申请"
             checked={Boolean(formData.allow_cancel_running_process)}
             onChange={(e) => setFormData((prev) => ({ ...prev, allow_cancel_running_process: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="allow_cancel_running_process" className="text-xs text-slate-700 font-medium">是否允许撤销审批中的申请</label>
+          <label htmlFor="bpm-process-definition-info-allow_cancel_running_process" className="text-xs text-slate-700 font-medium">是否允许撤销审批中的申请</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="allow_withdraw_task"
+            id="bpm-process-definition-info-allow_withdraw_task"
+            data-testid="field-allow_withdraw_task"
+            data-agent-target="bpm-process-definition-info:field:allow_withdraw_task"
+            data-agent-state={formData.allow_withdraw_task ? "on" : "off"}
+            aria-label="是否允许审批人撤回任务"
             checked={Boolean(formData.allow_withdraw_task)}
             onChange={(e) => setFormData((prev) => ({ ...prev, allow_withdraw_task: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="allow_withdraw_task" className="text-xs text-slate-700 font-medium">是否允许审批人撤回任务</label>
+          <label htmlFor="bpm-process-definition-info-allow_withdraw_task" className="text-xs text-slate-700 font-medium">是否允许审批人撤回任务</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">流程 ID 规则</label>
+          <label htmlFor="bpm-process-definition-info-process_id_rule" className="block text-xs text-slate-600 mb-1">流程 ID 规则</label>
           <input
             type="text"
+            id="bpm-process-definition-info-process_id_rule"
+            data-testid="field-process_id_rule"
+            data-agent-target="bpm-process-definition-info:field:process_id_rule"
+            data-agent-state={formData.process_id_rule ? "filled" : "empty"}
+            aria-label="流程 ID 规则"
             value={formData.process_id_rule ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, process_id_rule: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -341,9 +450,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">自动去重类型</label>
+          <label htmlFor="bpm-process-definition-info-auto_approval_type" className="block text-xs text-slate-600 mb-1">自动去重类型</label>
           <input
             type="number"
+            id="bpm-process-definition-info-auto_approval_type"
+            data-testid="field-auto_approval_type"
+            data-agent-target="bpm-process-definition-info:field:auto_approval_type"
+            data-agent-state={formData.auto_approval_type == null || formData.auto_approval_type === "" ? "empty" : "filled"}
+            aria-label="自动去重类型"
             value={formData.auto_approval_type != null ? String(formData.auto_approval_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, auto_approval_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -353,9 +467,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">标题设置</label>
+          <label htmlFor="bpm-process-definition-info-title_setting" className="block text-xs text-slate-600 mb-1">标题设置</label>
           <input
             type="text"
+            id="bpm-process-definition-info-title_setting"
+            data-testid="field-title_setting"
+            data-agent-target="bpm-process-definition-info:field:title_setting"
+            data-agent-state={formData.title_setting ? "filled" : "empty"}
+            aria-label="标题设置"
             value={formData.title_setting ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, title_setting: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -365,9 +484,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">摘要设置</label>
+          <label htmlFor="bpm-process-definition-info-summary_setting" className="block text-xs text-slate-600 mb-1">摘要设置</label>
           <input
             type="text"
+            id="bpm-process-definition-info-summary_setting"
+            data-testid="field-summary_setting"
+            data-agent-target="bpm-process-definition-info:field:summary_setting"
+            data-agent-state={formData.summary_setting ? "filled" : "empty"}
+            aria-label="摘要设置"
             value={formData.summary_setting ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, summary_setting: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -377,9 +501,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">流程前置通知设置</label>
+          <label htmlFor="bpm-process-definition-info-process_before_trigger_setting" className="block text-xs text-slate-600 mb-1">流程前置通知设置</label>
           <input
             type="text"
+            id="bpm-process-definition-info-process_before_trigger_setting"
+            data-testid="field-process_before_trigger_setting"
+            data-agent-target="bpm-process-definition-info:field:process_before_trigger_setting"
+            data-agent-state={formData.process_before_trigger_setting ? "filled" : "empty"}
+            aria-label="流程前置通知设置"
             value={formData.process_before_trigger_setting ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, process_before_trigger_setting: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -389,9 +518,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">流程后置通知设置</label>
+          <label htmlFor="bpm-process-definition-info-process_after_trigger_setting" className="block text-xs text-slate-600 mb-1">流程后置通知设置</label>
           <input
             type="text"
+            id="bpm-process-definition-info-process_after_trigger_setting"
+            data-testid="field-process_after_trigger_setting"
+            data-agent-target="bpm-process-definition-info:field:process_after_trigger_setting"
+            data-agent-state={formData.process_after_trigger_setting ? "filled" : "empty"}
+            aria-label="流程后置通知设置"
             value={formData.process_after_trigger_setting ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, process_after_trigger_setting: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -401,9 +535,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">任务前置通知设置</label>
+          <label htmlFor="bpm-process-definition-info-task_before_trigger_setting" className="block text-xs text-slate-600 mb-1">任务前置通知设置</label>
           <input
             type="text"
+            id="bpm-process-definition-info-task_before_trigger_setting"
+            data-testid="field-task_before_trigger_setting"
+            data-agent-target="bpm-process-definition-info:field:task_before_trigger_setting"
+            data-agent-state={formData.task_before_trigger_setting ? "filled" : "empty"}
+            aria-label="任务前置通知设置"
             value={formData.task_before_trigger_setting ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, task_before_trigger_setting: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -413,9 +552,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">任务后置通知设置</label>
+          <label htmlFor="bpm-process-definition-info-task_after_trigger_setting" className="block text-xs text-slate-600 mb-1">任务后置通知设置</label>
           <input
             type="text"
+            id="bpm-process-definition-info-task_after_trigger_setting"
+            data-testid="field-task_after_trigger_setting"
+            data-agent-target="bpm-process-definition-info:field:task_after_trigger_setting"
+            data-agent-state={formData.task_after_trigger_setting ? "filled" : "empty"}
+            aria-label="任务后置通知设置"
             value={formData.task_after_trigger_setting ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, task_after_trigger_setting: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -425,9 +569,14 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">自定义打印模板设置</label>
+          <label htmlFor="bpm-process-definition-info-print_template_setting" className="block text-xs text-slate-600 mb-1">自定义打印模板设置</label>
           <input
             type="text"
+            id="bpm-process-definition-info-print_template_setting"
+            data-testid="field-print_template_setting"
+            data-agent-target="bpm-process-definition-info:field:print_template_setting"
+            data-agent-state={formData.print_template_setting ? "filled" : "empty"}
+            aria-label="自定义打印模板设置"
             value={formData.print_template_setting ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, print_template_setting: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -441,6 +590,8 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
             <button
               type="button"
               onClick={onClose}
+              data-testid="bpm-process-definition-info-form-cancel"
+              data-agent-target="bpm-process-definition-info:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -448,6 +599,9 @@ export function BpmProcessDefinitionInfoForm({ open, initialData, onClose, onSuc
             <button
               type="submit"
               disabled={loading}
+              data-testid="bpm-process-definition-info-form-submit"
+              data-agent-target="bpm-process-definition-info:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

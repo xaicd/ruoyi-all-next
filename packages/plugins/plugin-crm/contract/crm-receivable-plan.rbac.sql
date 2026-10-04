@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for CrmReceivablePlan（源框架导入） (CrmReceivablePlan)
+-- Auto-generated RBAC & Menu Migration for CRM 回款计划 (CrmReceivablePlan)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-crm-receivable-plan',
   'crm-dir',
-  'CrmReceivablePlan（源框架导入）管理',
+  'CRM 回款计划管理',
   '/admin/crm/crm-receivable-plan',
   'crm/crm-receivable-plan/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-crm-receivable-plan-query',  'menu-crm-receivable-plan', '查询CrmReceivablePlan（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_receivable_plan:query',  1, NOW(), NOW()),
-('menu-crm-receivable-plan-create', 'menu-crm-receivable-plan', '新增CrmReceivablePlan（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_receivable_plan:create', 2, NOW(), NOW()),
-('menu-crm-receivable-plan-update', 'menu-crm-receivable-plan', '修改CrmReceivablePlan（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_receivable_plan:update', 3, NOW(), NOW()),
-('menu-crm-receivable-plan-delete', 'menu-crm-receivable-plan', '删除CrmReceivablePlan（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_receivable_plan:delete', 4, NOW(), NOW())
+('menu-crm-receivable-plan-query',  'menu-crm-receivable-plan', '查询CRM 回款计划', 'BUTTON', 'ACTIVE', 'crm:crm_receivable_plan:query',  1, NOW(), NOW()),
+('menu-crm-receivable-plan-create', 'menu-crm-receivable-plan', '新增CRM 回款计划', 'BUTTON', 'ACTIVE', 'crm:crm_receivable_plan:create', 2, NOW(), NOW()),
+('menu-crm-receivable-plan-update', 'menu-crm-receivable-plan', '修改CRM 回款计划', 'BUTTON', 'ACTIVE', 'crm:crm_receivable_plan:update', 3, NOW(), NOW()),
+('menu-crm-receivable-plan-delete', 'menu-crm-receivable-plan', '删除CRM 回款计划', 'BUTTON', 'ACTIVE', 'crm:crm_receivable_plan:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

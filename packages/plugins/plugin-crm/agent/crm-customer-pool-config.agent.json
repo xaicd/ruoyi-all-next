@@ -1,0 +1,222 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "crm",
+  "entity": "CrmCustomerPoolConfig",
+  "kebab": "crm-customer-pool-config",
+  "businessName": "客户公海配置",
+  "permissionPrefix": "crm:crm_customer_pool_config",
+  "page": {
+    "route": "/admin/crm/crm-customer-pool-config",
+    "title": "客户公海配置管理",
+    "titleSelector": "[data-testid=\"crm-customer-pool-config-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.crm/api",
+    "bffMount": "/api/v1/admin/crm",
+    "resource": "crm-customer-pool-config",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/crm-customer-pool-config",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/crm-customer-pool-config/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/crm-customer-pool-config"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/crm-customer-pool-config/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/crm-customer-pool-config/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"crm-customer-pool-config-title\"]",
+    "refresh": "[data-testid=\"crm-customer-pool-config-refresh\"]",
+    "createButton": "[data-testid=\"crm-customer-pool-config-create\"]",
+    "searchForm": "[data-testid=\"crm-customer-pool-config-search\"]",
+    "searchSubmit": "[data-testid=\"crm-customer-pool-config-search-submit\"]",
+    "searchReset": "[data-testid=\"crm-customer-pool-config-search-reset\"]",
+    "total": "[data-testid=\"crm-customer-pool-config-total\"]",
+    "table": "[data-testid=\"crm-customer-pool-config-table\"]",
+    "row": "[data-testid=\"crm-customer-pool-config-row\"]",
+    "editButton": "[data-testid=\"crm-customer-pool-config-edit\"]",
+    "deleteButton": "[data-testid=\"crm-customer-pool-config-delete\"]",
+    "form": "[data-testid=\"crm-customer-pool-config-form\"]",
+    "formError": "[data-testid=\"crm-customer-pool-config-form-error\"]",
+    "formSubmit": "[data-testid=\"crm-customer-pool-config-form-submit\"]",
+    "formCancel": "[data-testid=\"crm-customer-pool-config-form-cancel\"]",
+    "formClose": "[data-testid=\"crm-customer-pool-config-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "客户公海配置列表",
+    "dialogLabel": {
+      "create": "新增客户公海配置",
+      "edit": "编辑客户公海配置"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "enabled",
+        "label": "是否启用客户公海",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-enabled",
+        "selector": "[data-testid=\"field-enabled\"]"
+      },
+      {
+        "name": "contact_expire_days",
+        "label": "未跟进放入公海天数",
+        "type": "number",
+        "required": false,
+        "testId": "field-contact_expire_days",
+        "selector": "[data-testid=\"field-contact_expire_days\"]"
+      },
+      {
+        "name": "deal_expire_days",
+        "label": "未成交放入公海天数",
+        "type": "number",
+        "required": false,
+        "testId": "field-deal_expire_days",
+        "selector": "[data-testid=\"field-deal_expire_days\"]"
+      },
+      {
+        "name": "notify_enabled",
+        "label": "是否开启提前提醒",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-notify_enabled",
+        "selector": "[data-testid=\"field-notify_enabled\"]"
+      },
+      {
+        "name": "notify_days",
+        "label": "提前提醒天数",
+        "type": "number",
+        "required": false,
+        "testId": "field-notify_days",
+        "selector": "[data-testid=\"field-notify_days\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "crm-customer-pool-config",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"crm-customer-pool-config\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"crm-customer-pool-config-form-overlay\"]",
+      "dialog": "[data-testid=\"crm-customer-pool-config-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "crm-customer-pool-config:search",
+      "reset": "crm-customer-pool-config:reset",
+      "refresh": "crm-customer-pool-config:refresh",
+      "create": "crm-customer-pool-config:create",
+      "edit": "crm-customer-pool-config:edit",
+      "delete": "crm-customer-pool-config:delete",
+      "submit": "crm-customer-pool-config:submit",
+      "cancel": "crm-customer-pool-config:cancel",
+      "close": "crm-customer-pool-config:close",
+      "row": "crm-customer-pool-config:row",
+      "pagination": "crm-customer-pool-config:pagination",
+      "fields": {
+        "enabled": "crm-customer-pool-config:field:enabled",
+        "contact_expire_days": "crm-customer-pool-config:field:contact_expire_days",
+        "deal_expire_days": "crm-customer-pool-config:field:deal_expire_days",
+        "notify_enabled": "crm-customer-pool-config:field:notify_enabled",
+        "notify_days": "crm-customer-pool-config:field:notify_days"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "crm.crm-customer-pool-config",
+      "examples": [
+        "crm.crm-customer-pool-config__List__Refresh",
+        "crm.crm-customer-pool-config__ListItem__Open",
+        "crm.crm-customer-pool-config__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

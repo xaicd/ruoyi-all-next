@@ -56,24 +56,36 @@ export function MpAccountForm({ open, initialData, onClose, onSuccess }: MpAccou
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mp-account-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑公众号账号" : "新增公众号账号"}
+        data-testid="mp-account-form"
+        data-agent-scope="mp-account:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MpAccount（源框架导入）" : "新增MpAccount（源框架导入）"}
+            {isEdit ? "编辑公众号账号" : "新增公众号账号"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mp-account-form-close" data-agent-target="mp-account:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mp-account-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">公众号名称</label>
+          <label htmlFor="mp-account-name" className="block text-xs text-slate-600 mb-1">公众号名称</label>
           <input
             type="text"
+            id="mp-account-name"
+            data-testid="field-name"
+            data-agent-target="mp-account:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="公众号名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -83,9 +95,14 @@ export function MpAccountForm({ open, initialData, onClose, onSuccess }: MpAccou
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">公众号账号</label>
+          <label htmlFor="mp-account-account" className="block text-xs text-slate-600 mb-1">公众号账号</label>
           <input
             type="text"
+            id="mp-account-account"
+            data-testid="field-account"
+            data-agent-target="mp-account:field:account"
+            data-agent-state={formData.account ? "filled" : "empty"}
+            aria-label="公众号账号"
             value={formData.account ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, account: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -95,9 +112,14 @@ export function MpAccountForm({ open, initialData, onClose, onSuccess }: MpAccou
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">公众号 appid</label>
+          <label htmlFor="mp-account-app_id" className="block text-xs text-slate-600 mb-1">公众号 appid</label>
           <input
             type="text"
+            id="mp-account-app_id"
+            data-testid="field-app_id"
+            data-agent-target="mp-account:field:app_id"
+            data-agent-state={formData.app_id ? "filled" : "empty"}
+            aria-label="公众号 appid"
             value={formData.app_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, app_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -107,9 +129,14 @@ export function MpAccountForm({ open, initialData, onClose, onSuccess }: MpAccou
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">公众号密钥</label>
+          <label htmlFor="mp-account-app_secret" className="block text-xs text-slate-600 mb-1">公众号密钥</label>
           <input
             type="text"
+            id="mp-account-app_secret"
+            data-testid="field-app_secret"
+            data-agent-target="mp-account:field:app_secret"
+            data-agent-state={formData.app_secret ? "filled" : "empty"}
+            aria-label="公众号密钥"
             value={formData.app_secret ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, app_secret: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -119,9 +146,14 @@ export function MpAccountForm({ open, initialData, onClose, onSuccess }: MpAccou
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">公众号token</label>
+          <label htmlFor="mp-account-token" className="block text-xs text-slate-600 mb-1">公众号token</label>
           <input
             type="text"
+            id="mp-account-token"
+            data-testid="field-token"
+            data-agent-target="mp-account:field:token"
+            data-agent-state={formData.token ? "filled" : "empty"}
+            aria-label="公众号token"
             value={formData.token ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, token: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -131,9 +163,14 @@ export function MpAccountForm({ open, initialData, onClose, onSuccess }: MpAccou
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">消息加解密密钥</label>
+          <label htmlFor="mp-account-aes_key" className="block text-xs text-slate-600 mb-1">消息加解密密钥</label>
           <input
             type="text"
+            id="mp-account-aes_key"
+            data-testid="field-aes_key"
+            data-agent-target="mp-account:field:aes_key"
+            data-agent-state={formData.aes_key ? "filled" : "empty"}
+            aria-label="消息加解密密钥"
             value={formData.aes_key ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, aes_key: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -143,9 +180,14 @@ export function MpAccountForm({ open, initialData, onClose, onSuccess }: MpAccou
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">二维码图片 URL</label>
+          <label htmlFor="mp-account-qr_code_url" className="block text-xs text-slate-600 mb-1">二维码图片 URL</label>
           <input
             type="text"
+            id="mp-account-qr_code_url"
+            data-testid="field-qr_code_url"
+            data-agent-target="mp-account:field:qr_code_url"
+            data-agent-state={formData.qr_code_url ? "filled" : "empty"}
+            aria-label="二维码图片 URL"
             value={formData.qr_code_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, qr_code_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -155,9 +197,14 @@ export function MpAccountForm({ open, initialData, onClose, onSuccess }: MpAccou
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mp-account-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mp-account-remark"
+            data-testid="field-remark"
+            data-agent-target="mp-account:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,6 +218,8 @@ export function MpAccountForm({ open, initialData, onClose, onSuccess }: MpAccou
             <button
               type="button"
               onClick={onClose}
+              data-testid="mp-account-form-cancel"
+              data-agent-target="mp-account:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -178,6 +227,9 @@ export function MpAccountForm({ open, initialData, onClose, onSuccess }: MpAccou
             <button
               type="submit"
               disabled={loading}
+              data-testid="mp-account-form-submit"
+              data-agent-target="mp-account:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

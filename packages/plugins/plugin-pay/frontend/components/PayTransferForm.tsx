@@ -69,24 +69,36 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="pay-transfer-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑转账单" : "新增转账单"}
+        data-testid="pay-transfer-form"
+        data-agent-scope="pay-transfer:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑PayTransfer（源框架导入）" : "新增PayTransfer（源框架导入）"}
+            {isEdit ? "编辑转账单" : "新增转账单"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="pay-transfer-form-close" data-agent-target="pay-transfer:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="pay-transfer-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">转账单号</label>
+          <label htmlFor="pay-transfer-no" className="block text-xs text-slate-600 mb-1">转账单号</label>
           <input
             type="text"
+            id="pay-transfer-no"
+            data-testid="field-no"
+            data-agent-target="pay-transfer:field:no"
+            data-agent-state={formData.no ? "filled" : "empty"}
+            aria-label="转账单号"
             value={formData.no ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, no: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -96,9 +108,14 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">应用编号</label>
+          <label htmlFor="pay-transfer-app_id" className="block text-xs text-slate-600 mb-1">应用编号</label>
           <input
             type="number"
+            id="pay-transfer-app_id"
+            data-testid="field-app_id"
+            data-agent-target="pay-transfer:field:app_id"
+            data-agent-state={formData.app_id == null || formData.app_id === "" ? "empty" : "filled"}
+            aria-label="应用编号"
             value={formData.app_id != null ? String(formData.app_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, app_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -108,9 +125,14 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">转账渠道编号</label>
+          <label htmlFor="pay-transfer-channel_id" className="block text-xs text-slate-600 mb-1">转账渠道编号</label>
           <input
             type="number"
+            id="pay-transfer-channel_id"
+            data-testid="field-channel_id"
+            data-agent-target="pay-transfer:field:channel_id"
+            data-agent-state={formData.channel_id == null || formData.channel_id === "" ? "empty" : "filled"}
+            aria-label="转账渠道编号"
             value={formData.channel_id != null ? String(formData.channel_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, channel_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -120,9 +142,14 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">转账渠道编码</label>
+          <label htmlFor="pay-transfer-channel_code" className="block text-xs text-slate-600 mb-1">转账渠道编码</label>
           <input
             type="text"
+            id="pay-transfer-channel_code"
+            data-testid="field-channel_code"
+            data-agent-target="pay-transfer:field:channel_code"
+            data-agent-state={formData.channel_code ? "filled" : "empty"}
+            aria-label="转账渠道编码"
             value={formData.channel_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, channel_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -132,9 +159,14 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="pay-transfer-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="pay-transfer-user_id"
+            data-testid="field-user_id"
+            data-agent-target="pay-transfer:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -144,9 +176,14 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户类型</label>
+          <label htmlFor="pay-transfer-user_type" className="block text-xs text-slate-600 mb-1">用户类型</label>
           <input
             type="number"
+            id="pay-transfer-user_type"
+            data-testid="field-user_type"
+            data-agent-target="pay-transfer:field:user_type"
+            data-agent-state={formData.user_type == null || formData.user_type === "" ? "empty" : "filled"}
+            aria-label="用户类型"
             value={formData.user_type != null ? String(formData.user_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -156,9 +193,14 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商户转账单编号</label>
+          <label htmlFor="pay-transfer-merchant_transfer_id" className="block text-xs text-slate-600 mb-1">商户转账单编号</label>
           <input
             type="text"
+            id="pay-transfer-merchant_transfer_id"
+            data-testid="field-merchant_transfer_id"
+            data-agent-target="pay-transfer:field:merchant_transfer_id"
+            data-agent-state={formData.merchant_transfer_id ? "filled" : "empty"}
+            aria-label="商户转账单编号"
             value={formData.merchant_transfer_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, merchant_transfer_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -168,9 +210,14 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">转账标题</label>
+          <label htmlFor="pay-transfer-subject" className="block text-xs text-slate-600 mb-1">转账标题</label>
           <input
             type="text"
+            id="pay-transfer-subject"
+            data-testid="field-subject"
+            data-agent-target="pay-transfer:field:subject"
+            data-agent-state={formData.subject ? "filled" : "empty"}
+            aria-label="转账标题"
             value={formData.subject ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, subject: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -180,9 +227,14 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">转账金额，单位：分</label>
+          <label htmlFor="pay-transfer-price" className="block text-xs text-slate-600 mb-1">转账金额，单位：分</label>
           <input
             type="number"
+            id="pay-transfer-price"
+            data-testid="field-price"
+            data-agent-target="pay-transfer:field:price"
+            data-agent-state={formData.price == null || formData.price === "" ? "empty" : "filled"}
+            aria-label="转账金额，单位：分"
             value={formData.price != null ? String(formData.price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -192,9 +244,14 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">收款人账号</label>
+          <label htmlFor="pay-transfer-user_account" className="block text-xs text-slate-600 mb-1">收款人账号</label>
           <input
             type="text"
+            id="pay-transfer-user_account"
+            data-testid="field-user_account"
+            data-agent-target="pay-transfer:field:user_account"
+            data-agent-state={formData.user_account ? "filled" : "empty"}
+            aria-label="收款人账号"
             value={formData.user_account ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_account: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -204,9 +261,14 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">收款人姓名</label>
+          <label htmlFor="pay-transfer-user_name" className="block text-xs text-slate-600 mb-1">收款人姓名</label>
           <input
             type="text"
+            id="pay-transfer-user_name"
+            data-testid="field-user_name"
+            data-agent-target="pay-transfer:field:user_name"
+            data-agent-state={formData.user_name ? "filled" : "empty"}
+            aria-label="收款人姓名"
             value={formData.user_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -216,9 +278,14 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">转账状态</label>
+          <label htmlFor="pay-transfer-status" className="block text-xs text-slate-600 mb-1">转账状态</label>
           <input
             type="number"
+            id="pay-transfer-status"
+            data-testid="field-status"
+            data-agent-target="pay-transfer:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="转账状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -228,9 +295,14 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">订单转账成功时间</label>
+          <label htmlFor="pay-transfer-success_time" className="block text-xs text-slate-600 mb-1">订单转账成功时间</label>
           <input
             type="text"
+            id="pay-transfer-success_time"
+            data-testid="field-success_time"
+            data-agent-target="pay-transfer:field:success_time"
+            data-agent-state={formData.success_time ? "filled" : "empty"}
+            aria-label="订单转账成功时间"
             value={formData.success_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, success_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -240,9 +312,14 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">异步通知地址</label>
+          <label htmlFor="pay-transfer-notify_url" className="block text-xs text-slate-600 mb-1">异步通知地址</label>
           <input
             type="text"
+            id="pay-transfer-notify_url"
+            data-testid="field-notify_url"
+            data-agent-target="pay-transfer:field:notify_url"
+            data-agent-state={formData.notify_url ? "filled" : "empty"}
+            aria-label="异步通知地址"
             value={formData.notify_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, notify_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -252,9 +329,14 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户 IP</label>
+          <label htmlFor="pay-transfer-user_ip" className="block text-xs text-slate-600 mb-1">用户 IP</label>
           <input
             type="text"
+            id="pay-transfer-user_ip"
+            data-testid="field-user_ip"
+            data-agent-target="pay-transfer:field:user_ip"
+            data-agent-state={formData.user_ip ? "filled" : "empty"}
+            aria-label="用户 IP"
             value={formData.user_ip ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_ip: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -264,9 +346,14 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">渠道的额外参数</label>
+          <label htmlFor="pay-transfer-channel_extras" className="block text-xs text-slate-600 mb-1">渠道的额外参数</label>
           <input
             type="text"
+            id="pay-transfer-channel_extras"
+            data-testid="field-channel_extras"
+            data-agent-target="pay-transfer:field:channel_extras"
+            data-agent-state={formData.channel_extras ? "filled" : "empty"}
+            aria-label="渠道的额外参数"
             value={formData.channel_extras ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, channel_extras: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -276,9 +363,14 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">渠道转账单号</label>
+          <label htmlFor="pay-transfer-channel_transfer_no" className="block text-xs text-slate-600 mb-1">渠道转账单号</label>
           <input
             type="text"
+            id="pay-transfer-channel_transfer_no"
+            data-testid="field-channel_transfer_no"
+            data-agent-target="pay-transfer:field:channel_transfer_no"
+            data-agent-state={formData.channel_transfer_no ? "filled" : "empty"}
+            aria-label="渠道转账单号"
             value={formData.channel_transfer_no ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, channel_transfer_no: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -288,9 +380,14 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">调用渠道的错误码</label>
+          <label htmlFor="pay-transfer-channel_error_code" className="block text-xs text-slate-600 mb-1">调用渠道的错误码</label>
           <input
             type="text"
+            id="pay-transfer-channel_error_code"
+            data-testid="field-channel_error_code"
+            data-agent-target="pay-transfer:field:channel_error_code"
+            data-agent-state={formData.channel_error_code ? "filled" : "empty"}
+            aria-label="调用渠道的错误码"
             value={formData.channel_error_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, channel_error_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -300,9 +397,14 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">调用渠道的错误提示</label>
+          <label htmlFor="pay-transfer-channel_error_msg" className="block text-xs text-slate-600 mb-1">调用渠道的错误提示</label>
           <input
             type="text"
+            id="pay-transfer-channel_error_msg"
+            data-testid="field-channel_error_msg"
+            data-agent-target="pay-transfer:field:channel_error_msg"
+            data-agent-state={formData.channel_error_msg ? "filled" : "empty"}
+            aria-label="调用渠道的错误提示"
             value={formData.channel_error_msg ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, channel_error_msg: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -312,9 +414,14 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">渠道的同步/异步通知的内容</label>
+          <label htmlFor="pay-transfer-channel_notify_data" className="block text-xs text-slate-600 mb-1">渠道的同步/异步通知的内容</label>
           <input
             type="text"
+            id="pay-transfer-channel_notify_data"
+            data-testid="field-channel_notify_data"
+            data-agent-target="pay-transfer:field:channel_notify_data"
+            data-agent-state={formData.channel_notify_data ? "filled" : "empty"}
+            aria-label="渠道的同步/异步通知的内容"
             value={formData.channel_notify_data ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, channel_notify_data: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -324,9 +431,14 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">渠道 package 信息</label>
+          <label htmlFor="pay-transfer-channel_package_info" className="block text-xs text-slate-600 mb-1">渠道 package 信息</label>
           <input
             type="text"
+            id="pay-transfer-channel_package_info"
+            data-testid="field-channel_package_info"
+            data-agent-target="pay-transfer:field:channel_package_info"
+            data-agent-state={formData.channel_package_info ? "filled" : "empty"}
+            aria-label="渠道 package 信息"
             value={formData.channel_package_info ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, channel_package_info: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -340,6 +452,8 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
             <button
               type="button"
               onClick={onClose}
+              data-testid="pay-transfer-form-cancel"
+              data-agent-target="pay-transfer:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -347,6 +461,9 @@ export function PayTransferForm({ open, initialData, onClose, onSuccess }: PayTr
             <button
               type="submit"
               disabled={loading}
+              data-testid="pay-transfer-form-submit"
+              data-agent-target="pay-transfer:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

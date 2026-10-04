@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { IotDeviceModbusPointService } from "../iot-device-modbus-point.service"
 
 describe("IotDeviceModbusPointService", () => {
-  it("should create and query IotDeviceModbusPoint（源框架导入）", async () => {
+  it("should create and query IoT 设备 Modbus 点位配置", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await IotDeviceModbusPointService.create({
         device_id: 1,
@@ -21,7 +21,7 @@ describe("IotDeviceModbusPointService", () => {
   
       const updated = await IotDeviceModbusPointService.update(created.id, {
         id: created.id,
-        device_id: "更新IotDeviceModbusPoint（源框架导入）",
+        device_id: "更新IoT 设备 Modbus 点位配置",
       } as any)
       expect(updated).toBeDefined()
   

@@ -1,0 +1,222 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesQcTemplate",
+  "kebab": "mes-qc-template",
+  "businessName": "MES 质检方案",
+  "permissionPrefix": "mes:mes_qc_template",
+  "page": {
+    "route": "/admin/mes/mes-qc-template",
+    "title": "MES 质检方案管理",
+    "titleSelector": "[data-testid=\"mes-qc-template-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-qc-template",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-qc-template",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-qc-template/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-qc-template"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-qc-template/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-qc-template/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-qc-template-title\"]",
+    "refresh": "[data-testid=\"mes-qc-template-refresh\"]",
+    "createButton": "[data-testid=\"mes-qc-template-create\"]",
+    "searchForm": "[data-testid=\"mes-qc-template-search\"]",
+    "searchSubmit": "[data-testid=\"mes-qc-template-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-qc-template-search-reset\"]",
+    "total": "[data-testid=\"mes-qc-template-total\"]",
+    "table": "[data-testid=\"mes-qc-template-table\"]",
+    "row": "[data-testid=\"mes-qc-template-row\"]",
+    "editButton": "[data-testid=\"mes-qc-template-edit\"]",
+    "deleteButton": "[data-testid=\"mes-qc-template-delete\"]",
+    "form": "[data-testid=\"mes-qc-template-form\"]",
+    "formError": "[data-testid=\"mes-qc-template-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-qc-template-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-qc-template-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-qc-template-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 质检方案列表",
+    "dialogLabel": {
+      "create": "新增MES 质检方案",
+      "edit": "编辑MES 质检方案"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "code",
+        "label": "方案编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-code",
+        "selector": "[data-testid=\"field-code\"]"
+      },
+      {
+        "name": "name",
+        "label": "方案名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "types",
+        "label": "检测种类",
+        "type": "string",
+        "required": false,
+        "testId": "field-types",
+        "selector": "[data-testid=\"field-types\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-qc-template",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-qc-template\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-qc-template-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-qc-template-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-qc-template:search",
+      "reset": "mes-qc-template:reset",
+      "refresh": "mes-qc-template:refresh",
+      "create": "mes-qc-template:create",
+      "edit": "mes-qc-template:edit",
+      "delete": "mes-qc-template:delete",
+      "submit": "mes-qc-template:submit",
+      "cancel": "mes-qc-template:cancel",
+      "close": "mes-qc-template:close",
+      "row": "mes-qc-template:row",
+      "pagination": "mes-qc-template:pagination",
+      "fields": {
+        "code": "mes-qc-template:field:code",
+        "name": "mes-qc-template:field:name",
+        "types": "mes-qc-template:field:types",
+        "status": "mes-qc-template:field:status",
+        "remark": "mes-qc-template:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-qc-template",
+      "examples": [
+        "mes.mes-qc-template__List__Refresh",
+        "mes.mes-qc-template__ListItem__Open",
+        "mes.mes-qc-template__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

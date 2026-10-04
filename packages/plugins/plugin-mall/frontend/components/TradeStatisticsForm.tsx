@@ -60,24 +60,36 @@ export function TradeStatisticsForm({ open, initialData, onClose, onSuccess }: T
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="trade-statistics-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑交易统计 DO以天为维度，统计全部的数据" : "新增交易统计 DO以天为维度，统计全部的数据"}
+        data-testid="trade-statistics-form"
+        data-agent-scope="trade-statistics:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑TradeStatistics（源框架导入）" : "新增TradeStatistics（源框架导入）"}
+            {isEdit ? "编辑交易统计 DO以天为维度，统计全部的数据" : "新增交易统计 DO以天为维度，统计全部的数据"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="trade-statistics-form-close" data-agent-target="trade-statistics:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="trade-statistics-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">统计日期</label>
+          <label htmlFor="trade-statistics-time" className="block text-xs text-slate-600 mb-1">统计日期</label>
           <input
             type="text"
+            id="trade-statistics-time"
+            data-testid="field-time"
+            data-agent-target="trade-statistics:field:time"
+            data-agent-state={formData.time ? "filled" : "empty"}
+            aria-label="统计日期"
             value={formData.time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -87,9 +99,14 @@ export function TradeStatisticsForm({ open, initialData, onClose, onSuccess }: T
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">创建订单数</label>
+          <label htmlFor="trade-statistics-order_create_count" className="block text-xs text-slate-600 mb-1">创建订单数</label>
           <input
             type="number"
+            id="trade-statistics-order_create_count"
+            data-testid="field-order_create_count"
+            data-agent-target="trade-statistics:field:order_create_count"
+            data-agent-state={formData.order_create_count == null || formData.order_create_count === "" ? "empty" : "filled"}
+            aria-label="创建订单数"
             value={formData.order_create_count != null ? String(formData.order_create_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, order_create_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -99,9 +116,14 @@ export function TradeStatisticsForm({ open, initialData, onClose, onSuccess }: T
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">支付订单商品数</label>
+          <label htmlFor="trade-statistics-order_pay_count" className="block text-xs text-slate-600 mb-1">支付订单商品数</label>
           <input
             type="number"
+            id="trade-statistics-order_pay_count"
+            data-testid="field-order_pay_count"
+            data-agent-target="trade-statistics:field:order_pay_count"
+            data-agent-state={formData.order_pay_count == null || formData.order_pay_count === "" ? "empty" : "filled"}
+            aria-label="支付订单商品数"
             value={formData.order_pay_count != null ? String(formData.order_pay_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, order_pay_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -111,9 +133,14 @@ export function TradeStatisticsForm({ open, initialData, onClose, onSuccess }: T
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">总支付金额，单位：分</label>
+          <label htmlFor="trade-statistics-order_pay_price" className="block text-xs text-slate-600 mb-1">总支付金额，单位：分</label>
           <input
             type="number"
+            id="trade-statistics-order_pay_price"
+            data-testid="field-order_pay_price"
+            data-agent-target="trade-statistics:field:order_pay_price"
+            data-agent-state={formData.order_pay_price == null || formData.order_pay_price === "" ? "empty" : "filled"}
+            aria-label="总支付金额，单位：分"
             value={formData.order_pay_price != null ? String(formData.order_pay_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, order_pay_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -123,9 +150,14 @@ export function TradeStatisticsForm({ open, initialData, onClose, onSuccess }: T
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">退款订单数</label>
+          <label htmlFor="trade-statistics-after_sale_count" className="block text-xs text-slate-600 mb-1">退款订单数</label>
           <input
             type="number"
+            id="trade-statistics-after_sale_count"
+            data-testid="field-after_sale_count"
+            data-agent-target="trade-statistics:field:after_sale_count"
+            data-agent-state={formData.after_sale_count == null || formData.after_sale_count === "" ? "empty" : "filled"}
+            aria-label="退款订单数"
             value={formData.after_sale_count != null ? String(formData.after_sale_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, after_sale_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -135,9 +167,14 @@ export function TradeStatisticsForm({ open, initialData, onClose, onSuccess }: T
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">总退款金额，单位：分</label>
+          <label htmlFor="trade-statistics-after_sale_refund_price" className="block text-xs text-slate-600 mb-1">总退款金额，单位：分</label>
           <input
             type="number"
+            id="trade-statistics-after_sale_refund_price"
+            data-testid="field-after_sale_refund_price"
+            data-agent-target="trade-statistics:field:after_sale_refund_price"
+            data-agent-state={formData.after_sale_refund_price == null || formData.after_sale_refund_price === "" ? "empty" : "filled"}
+            aria-label="总退款金额，单位：分"
             value={formData.after_sale_refund_price != null ? String(formData.after_sale_refund_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, after_sale_refund_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -147,9 +184,14 @@ export function TradeStatisticsForm({ open, initialData, onClose, onSuccess }: T
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">佣金金额（已结算），单位：分</label>
+          <label htmlFor="trade-statistics-brokerage_settlement_price" className="block text-xs text-slate-600 mb-1">佣金金额（已结算），单位：分</label>
           <input
             type="number"
+            id="trade-statistics-brokerage_settlement_price"
+            data-testid="field-brokerage_settlement_price"
+            data-agent-target="trade-statistics:field:brokerage_settlement_price"
+            data-agent-state={formData.brokerage_settlement_price == null || formData.brokerage_settlement_price === "" ? "empty" : "filled"}
+            aria-label="佣金金额（已结算），单位：分"
             value={formData.brokerage_settlement_price != null ? String(formData.brokerage_settlement_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, brokerage_settlement_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -159,9 +201,14 @@ export function TradeStatisticsForm({ open, initialData, onClose, onSuccess }: T
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">总支付金额（余额），单位：分</label>
+          <label htmlFor="trade-statistics-wallet_pay_price" className="block text-xs text-slate-600 mb-1">总支付金额（余额），单位：分</label>
           <input
             type="number"
+            id="trade-statistics-wallet_pay_price"
+            data-testid="field-wallet_pay_price"
+            data-agent-target="trade-statistics:field:wallet_pay_price"
+            data-agent-state={formData.wallet_pay_price == null || formData.wallet_pay_price === "" ? "empty" : "filled"}
+            aria-label="总支付金额（余额），单位：分"
             value={formData.wallet_pay_price != null ? String(formData.wallet_pay_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, wallet_pay_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,9 +218,14 @@ export function TradeStatisticsForm({ open, initialData, onClose, onSuccess }: T
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">充值订单数</label>
+          <label htmlFor="trade-statistics-recharge_pay_count" className="block text-xs text-slate-600 mb-1">充值订单数</label>
           <input
             type="number"
+            id="trade-statistics-recharge_pay_count"
+            data-testid="field-recharge_pay_count"
+            data-agent-target="trade-statistics:field:recharge_pay_count"
+            data-agent-state={formData.recharge_pay_count == null || formData.recharge_pay_count === "" ? "empty" : "filled"}
+            aria-label="充值订单数"
             value={formData.recharge_pay_count != null ? String(formData.recharge_pay_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, recharge_pay_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -183,9 +235,14 @@ export function TradeStatisticsForm({ open, initialData, onClose, onSuccess }: T
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">充值金额，单位：分</label>
+          <label htmlFor="trade-statistics-recharge_pay_price" className="block text-xs text-slate-600 mb-1">充值金额，单位：分</label>
           <input
             type="number"
+            id="trade-statistics-recharge_pay_price"
+            data-testid="field-recharge_pay_price"
+            data-agent-target="trade-statistics:field:recharge_pay_price"
+            data-agent-state={formData.recharge_pay_price == null || formData.recharge_pay_price === "" ? "empty" : "filled"}
+            aria-label="充值金额，单位：分"
             value={formData.recharge_pay_price != null ? String(formData.recharge_pay_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, recharge_pay_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -195,9 +252,14 @@ export function TradeStatisticsForm({ open, initialData, onClose, onSuccess }: T
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">充值退款订单数</label>
+          <label htmlFor="trade-statistics-recharge_refund_count" className="block text-xs text-slate-600 mb-1">充值退款订单数</label>
           <input
             type="number"
+            id="trade-statistics-recharge_refund_count"
+            data-testid="field-recharge_refund_count"
+            data-agent-target="trade-statistics:field:recharge_refund_count"
+            data-agent-state={formData.recharge_refund_count == null || formData.recharge_refund_count === "" ? "empty" : "filled"}
+            aria-label="充值退款订单数"
             value={formData.recharge_refund_count != null ? String(formData.recharge_refund_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, recharge_refund_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -207,9 +269,14 @@ export function TradeStatisticsForm({ open, initialData, onClose, onSuccess }: T
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">充值退款金额，单位：分</label>
+          <label htmlFor="trade-statistics-recharge_refund_price" className="block text-xs text-slate-600 mb-1">充值退款金额，单位：分</label>
           <input
             type="number"
+            id="trade-statistics-recharge_refund_price"
+            data-testid="field-recharge_refund_price"
+            data-agent-target="trade-statistics:field:recharge_refund_price"
+            data-agent-state={formData.recharge_refund_price == null || formData.recharge_refund_price === "" ? "empty" : "filled"}
+            aria-label="充值退款金额，单位：分"
             value={formData.recharge_refund_price != null ? String(formData.recharge_refund_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, recharge_refund_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -223,6 +290,8 @@ export function TradeStatisticsForm({ open, initialData, onClose, onSuccess }: T
             <button
               type="button"
               onClick={onClose}
+              data-testid="trade-statistics-form-cancel"
+              data-agent-target="trade-statistics:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -230,6 +299,9 @@ export function TradeStatisticsForm({ open, initialData, onClose, onSuccess }: T
             <button
               type="submit"
               disabled={loading}
+              data-testid="trade-statistics-form-submit"
+              data-agent-target="trade-statistics:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

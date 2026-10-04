@@ -60,24 +60,36 @@ export function MesProCardProcessForm({ open, initialData, onClose, onSuccess }:
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-pro-card-process-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 流转卡工序记录" : "新增MES 流转卡工序记录"}
+        data-testid="mes-pro-card-process-form"
+        data-agent-scope="mes-pro-card-process:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesProCardProcess（源框架导入）" : "新增MesProCardProcess（源框架导入）"}
+            {isEdit ? "编辑MES 流转卡工序记录" : "新增MES 流转卡工序记录"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-pro-card-process-form-close" data-agent-target="mes-pro-card-process:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-pro-card-process-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">流转卡编号</label>
+          <label htmlFor="mes-pro-card-process-card_id" className="block text-xs text-slate-600 mb-1">流转卡编号</label>
           <input
             type="number"
+            id="mes-pro-card-process-card_id"
+            data-testid="field-card_id"
+            data-agent-target="mes-pro-card-process:field:card_id"
+            data-agent-state={formData.card_id == null || formData.card_id === "" ? "empty" : "filled"}
+            aria-label="流转卡编号"
             value={formData.card_id != null ? String(formData.card_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, card_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -87,9 +99,14 @@ export function MesProCardProcessForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">序号</label>
+          <label htmlFor="mes-pro-card-process-sort" className="block text-xs text-slate-600 mb-1">序号</label>
           <input
             type="number"
+            id="mes-pro-card-process-sort"
+            data-testid="field-sort"
+            data-agent-target="mes-pro-card-process:field:sort"
+            data-agent-state={formData.sort == null || formData.sort === "" ? "empty" : "filled"}
+            aria-label="序号"
             value={formData.sort != null ? String(formData.sort) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sort: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -99,9 +116,14 @@ export function MesProCardProcessForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工序编号</label>
+          <label htmlFor="mes-pro-card-process-process_id" className="block text-xs text-slate-600 mb-1">工序编号</label>
           <input
             type="number"
+            id="mes-pro-card-process-process_id"
+            data-testid="field-process_id"
+            data-agent-target="mes-pro-card-process:field:process_id"
+            data-agent-state={formData.process_id == null || formData.process_id === "" ? "empty" : "filled"}
+            aria-label="工序编号"
             value={formData.process_id != null ? String(formData.process_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, process_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -111,9 +133,14 @@ export function MesProCardProcessForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">进入工序时间</label>
+          <label htmlFor="mes-pro-card-process-input_time" className="block text-xs text-slate-600 mb-1">进入工序时间</label>
           <input
             type="text"
+            id="mes-pro-card-process-input_time"
+            data-testid="field-input_time"
+            data-agent-target="mes-pro-card-process:field:input_time"
+            data-agent-state={formData.input_time ? "filled" : "empty"}
+            aria-label="进入工序时间"
             value={formData.input_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, input_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -123,9 +150,14 @@ export function MesProCardProcessForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">出工序时间</label>
+          <label htmlFor="mes-pro-card-process-output_time" className="block text-xs text-slate-600 mb-1">出工序时间</label>
           <input
             type="text"
+            id="mes-pro-card-process-output_time"
+            data-testid="field-output_time"
+            data-agent-target="mes-pro-card-process:field:output_time"
+            data-agent-state={formData.output_time ? "filled" : "empty"}
+            aria-label="出工序时间"
             value={formData.output_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, output_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -135,9 +167,14 @@ export function MesProCardProcessForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">投入数量</label>
+          <label htmlFor="mes-pro-card-process-input_quantity" className="block text-xs text-slate-600 mb-1">投入数量</label>
           <input
             type="number"
+            id="mes-pro-card-process-input_quantity"
+            data-testid="field-input_quantity"
+            data-agent-target="mes-pro-card-process:field:input_quantity"
+            data-agent-state={formData.input_quantity == null || formData.input_quantity === "" ? "empty" : "filled"}
+            aria-label="投入数量"
             value={formData.input_quantity != null ? String(formData.input_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, input_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -147,9 +184,14 @@ export function MesProCardProcessForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产出数量</label>
+          <label htmlFor="mes-pro-card-process-output_quantity" className="block text-xs text-slate-600 mb-1">产出数量</label>
           <input
             type="number"
+            id="mes-pro-card-process-output_quantity"
+            data-testid="field-output_quantity"
+            data-agent-target="mes-pro-card-process:field:output_quantity"
+            data-agent-state={formData.output_quantity == null || formData.output_quantity === "" ? "empty" : "filled"}
+            aria-label="产出数量"
             value={formData.output_quantity != null ? String(formData.output_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, output_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -159,9 +201,14 @@ export function MesProCardProcessForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">不合格品数量</label>
+          <label htmlFor="mes-pro-card-process-unqualified_quantity" className="block text-xs text-slate-600 mb-1">不合格品数量</label>
           <input
             type="number"
+            id="mes-pro-card-process-unqualified_quantity"
+            data-testid="field-unqualified_quantity"
+            data-agent-target="mes-pro-card-process:field:unqualified_quantity"
+            data-agent-state={formData.unqualified_quantity == null || formData.unqualified_quantity === "" ? "empty" : "filled"}
+            aria-label="不合格品数量"
             value={formData.unqualified_quantity != null ? String(formData.unqualified_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, unqualified_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,9 +218,14 @@ export function MesProCardProcessForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工位编号</label>
+          <label htmlFor="mes-pro-card-process-workstation_id" className="block text-xs text-slate-600 mb-1">工位编号</label>
           <input
             type="number"
+            id="mes-pro-card-process-workstation_id"
+            data-testid="field-workstation_id"
+            data-agent-target="mes-pro-card-process:field:workstation_id"
+            data-agent-state={formData.workstation_id == null || formData.workstation_id === "" ? "empty" : "filled"}
+            aria-label="工位编号"
             value={formData.workstation_id != null ? String(formData.workstation_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, workstation_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -183,9 +235,14 @@ export function MesProCardProcessForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">操作人编号</label>
+          <label htmlFor="mes-pro-card-process-user_id" className="block text-xs text-slate-600 mb-1">操作人编号</label>
           <input
             type="number"
+            id="mes-pro-card-process-user_id"
+            data-testid="field-user_id"
+            data-agent-target="mes-pro-card-process:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="操作人编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -195,9 +252,14 @@ export function MesProCardProcessForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">过程检验单编号</label>
+          <label htmlFor="mes-pro-card-process-ipqc_id" className="block text-xs text-slate-600 mb-1">过程检验单编号</label>
           <input
             type="number"
+            id="mes-pro-card-process-ipqc_id"
+            data-testid="field-ipqc_id"
+            data-agent-target="mes-pro-card-process:field:ipqc_id"
+            data-agent-state={formData.ipqc_id == null || formData.ipqc_id === "" ? "empty" : "filled"}
+            aria-label="过程检验单编号"
             value={formData.ipqc_id != null ? String(formData.ipqc_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, ipqc_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -207,9 +269,14 @@ export function MesProCardProcessForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-pro-card-process-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-pro-card-process-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-pro-card-process:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -223,6 +290,8 @@ export function MesProCardProcessForm({ open, initialData, onClose, onSuccess }:
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-pro-card-process-form-cancel"
+              data-agent-target="mes-pro-card-process:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -230,6 +299,9 @@ export function MesProCardProcessForm({ open, initialData, onClose, onSuccess }:
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-pro-card-process-form-submit"
+              data-agent-target="mes-pro-card-process:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

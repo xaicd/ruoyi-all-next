@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesDvMaintenRecordLine（源框架导入） (MesDvMaintenRecordLine)
+-- Auto-generated RBAC & Menu Migration for MES 设备保养记录明细 (MesDvMaintenRecordLine)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-dv-mainten-record-line',
   'mes-dir',
-  'MesDvMaintenRecordLine（源框架导入）管理',
+  'MES 设备保养记录明细管理',
   '/admin/mes/mes-dv-mainten-record-line',
   'mes/mes-dv-mainten-record-line/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-dv-mainten-record-line-query',  'menu-mes-dv-mainten-record-line', '查询MesDvMaintenRecordLine（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_dv_mainten_record_line:query',  1, NOW(), NOW()),
-('menu-mes-dv-mainten-record-line-create', 'menu-mes-dv-mainten-record-line', '新增MesDvMaintenRecordLine（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_dv_mainten_record_line:create', 2, NOW(), NOW()),
-('menu-mes-dv-mainten-record-line-update', 'menu-mes-dv-mainten-record-line', '修改MesDvMaintenRecordLine（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_dv_mainten_record_line:update', 3, NOW(), NOW()),
-('menu-mes-dv-mainten-record-line-delete', 'menu-mes-dv-mainten-record-line', '删除MesDvMaintenRecordLine（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_dv_mainten_record_line:delete', 4, NOW(), NOW())
+('menu-mes-dv-mainten-record-line-query',  'menu-mes-dv-mainten-record-line', '查询MES 设备保养记录明细', 'BUTTON', 'ACTIVE', 'mes:mes_dv_mainten_record_line:query',  1, NOW(), NOW()),
+('menu-mes-dv-mainten-record-line-create', 'menu-mes-dv-mainten-record-line', '新增MES 设备保养记录明细', 'BUTTON', 'ACTIVE', 'mes:mes_dv_mainten_record_line:create', 2, NOW(), NOW()),
+('menu-mes-dv-mainten-record-line-update', 'menu-mes-dv-mainten-record-line', '修改MES 设备保养记录明细', 'BUTTON', 'ACTIVE', 'mes:mes_dv_mainten_record_line:update', 3, NOW(), NOW()),
+('menu-mes-dv-mainten-record-line-delete', 'menu-mes-dv-mainten-record-line', '删除MES 设备保养记录明细', 'BUTTON', 'ACTIVE', 'mes:mes_dv_mainten_record_line:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MpMenu（源框架导入） (MpMenu)
+-- Auto-generated RBAC & Menu Migration for 公众号菜单 (MpMenu)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mp-menu',
   'mp-dir',
-  'MpMenu（源框架导入）管理',
+  '公众号菜单管理',
   '/admin/mp/mp-menu',
   'mp/mp-menu/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mp-menu-query',  'menu-mp-menu', '查询MpMenu（源框架导入）', 'BUTTON', 'ACTIVE', 'mp:mp_menu:query',  1, NOW(), NOW()),
-('menu-mp-menu-create', 'menu-mp-menu', '新增MpMenu（源框架导入）', 'BUTTON', 'ACTIVE', 'mp:mp_menu:create', 2, NOW(), NOW()),
-('menu-mp-menu-update', 'menu-mp-menu', '修改MpMenu（源框架导入）', 'BUTTON', 'ACTIVE', 'mp:mp_menu:update', 3, NOW(), NOW()),
-('menu-mp-menu-delete', 'menu-mp-menu', '删除MpMenu（源框架导入）', 'BUTTON', 'ACTIVE', 'mp:mp_menu:delete', 4, NOW(), NOW())
+('menu-mp-menu-query',  'menu-mp-menu', '查询公众号菜单', 'BUTTON', 'ACTIVE', 'mp:mp_menu:query',  1, NOW(), NOW()),
+('menu-mp-menu-create', 'menu-mp-menu', '新增公众号菜单', 'BUTTON', 'ACTIVE', 'mp:mp_menu:create', 2, NOW(), NOW()),
+('menu-mp-menu-update', 'menu-mp-menu', '修改公众号菜单', 'BUTTON', 'ACTIVE', 'mp:mp_menu:update', 3, NOW(), NOW()),
+('menu-mp-menu-delete', 'menu-mp-menu', '删除公众号菜单', 'BUTTON', 'ACTIVE', 'mp:mp_menu:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

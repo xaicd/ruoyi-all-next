@@ -1,0 +1,258 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesWmOutsourceReceiptDetail",
+  "kebab": "mes-wm-outsource-receipt-detail",
+  "businessName": "MES 外协入库明细",
+  "permissionPrefix": "mes:mes_wm_outsource_receipt_detail",
+  "page": {
+    "route": "/admin/mes/mes-wm-outsource-receipt-detail",
+    "title": "MES 外协入库明细管理",
+    "titleSelector": "[data-testid=\"mes-wm-outsource-receipt-detail-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-wm-outsource-receipt-detail",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-wm-outsource-receipt-detail",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-wm-outsource-receipt-detail/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-wm-outsource-receipt-detail"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-wm-outsource-receipt-detail/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-wm-outsource-receipt-detail/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-wm-outsource-receipt-detail-title\"]",
+    "refresh": "[data-testid=\"mes-wm-outsource-receipt-detail-refresh\"]",
+    "createButton": "[data-testid=\"mes-wm-outsource-receipt-detail-create\"]",
+    "searchForm": "[data-testid=\"mes-wm-outsource-receipt-detail-search\"]",
+    "searchSubmit": "[data-testid=\"mes-wm-outsource-receipt-detail-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-wm-outsource-receipt-detail-search-reset\"]",
+    "total": "[data-testid=\"mes-wm-outsource-receipt-detail-total\"]",
+    "table": "[data-testid=\"mes-wm-outsource-receipt-detail-table\"]",
+    "row": "[data-testid=\"mes-wm-outsource-receipt-detail-row\"]",
+    "editButton": "[data-testid=\"mes-wm-outsource-receipt-detail-edit\"]",
+    "deleteButton": "[data-testid=\"mes-wm-outsource-receipt-detail-delete\"]",
+    "form": "[data-testid=\"mes-wm-outsource-receipt-detail-form\"]",
+    "formError": "[data-testid=\"mes-wm-outsource-receipt-detail-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-wm-outsource-receipt-detail-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-wm-outsource-receipt-detail-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-wm-outsource-receipt-detail-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 外协入库明细列表",
+    "dialogLabel": {
+      "create": "新增MES 外协入库明细",
+      "edit": "编辑MES 外协入库明细"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "line_id",
+        "label": "入库单行编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-line_id",
+        "selector": "[data-testid=\"field-line_id\"]"
+      },
+      {
+        "name": "receipt_id",
+        "label": "入库单编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-receipt_id",
+        "selector": "[data-testid=\"field-receipt_id\"]"
+      },
+      {
+        "name": "item_id",
+        "label": "物料编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-item_id",
+        "selector": "[data-testid=\"field-item_id\"]"
+      },
+      {
+        "name": "quantity",
+        "label": "上架数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-quantity",
+        "selector": "[data-testid=\"field-quantity\"]"
+      },
+      {
+        "name": "batch_id",
+        "label": "批次编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-batch_id",
+        "selector": "[data-testid=\"field-batch_id\"]"
+      },
+      {
+        "name": "warehouse_id",
+        "label": "仓库编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-warehouse_id",
+        "selector": "[data-testid=\"field-warehouse_id\"]"
+      },
+      {
+        "name": "location_id",
+        "label": "库区编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-location_id",
+        "selector": "[data-testid=\"field-location_id\"]"
+      },
+      {
+        "name": "area_id",
+        "label": "库位编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-area_id",
+        "selector": "[data-testid=\"field-area_id\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-wm-outsource-receipt-detail",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-wm-outsource-receipt-detail\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-wm-outsource-receipt-detail-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-wm-outsource-receipt-detail-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-wm-outsource-receipt-detail:search",
+      "reset": "mes-wm-outsource-receipt-detail:reset",
+      "refresh": "mes-wm-outsource-receipt-detail:refresh",
+      "create": "mes-wm-outsource-receipt-detail:create",
+      "edit": "mes-wm-outsource-receipt-detail:edit",
+      "delete": "mes-wm-outsource-receipt-detail:delete",
+      "submit": "mes-wm-outsource-receipt-detail:submit",
+      "cancel": "mes-wm-outsource-receipt-detail:cancel",
+      "close": "mes-wm-outsource-receipt-detail:close",
+      "row": "mes-wm-outsource-receipt-detail:row",
+      "pagination": "mes-wm-outsource-receipt-detail:pagination",
+      "fields": {
+        "line_id": "mes-wm-outsource-receipt-detail:field:line_id",
+        "receipt_id": "mes-wm-outsource-receipt-detail:field:receipt_id",
+        "item_id": "mes-wm-outsource-receipt-detail:field:item_id",
+        "quantity": "mes-wm-outsource-receipt-detail:field:quantity",
+        "batch_id": "mes-wm-outsource-receipt-detail:field:batch_id",
+        "warehouse_id": "mes-wm-outsource-receipt-detail:field:warehouse_id",
+        "location_id": "mes-wm-outsource-receipt-detail:field:location_id",
+        "area_id": "mes-wm-outsource-receipt-detail:field:area_id",
+        "remark": "mes-wm-outsource-receipt-detail:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-wm-outsource-receipt-detail",
+      "examples": [
+        "mes.mes-wm-outsource-receipt-detail__List__Refresh",
+        "mes.mes-wm-outsource-receipt-detail__ListItem__Open",
+        "mes.mes-wm-outsource-receipt-detail__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

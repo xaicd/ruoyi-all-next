@@ -1,0 +1,240 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "DeliveryExpressTemplateCharge",
+  "kebab": "delivery-express-template-charge",
+  "businessName": "快递运费模板计费配置",
+  "permissionPrefix": "mall:delivery_express_template_charge",
+  "page": {
+    "route": "/admin/mall/delivery-express-template-charge",
+    "title": "快递运费模板计费配置管理",
+    "titleSelector": "[data-testid=\"delivery-express-template-charge-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "delivery-express-template-charge",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/delivery-express-template-charge",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/delivery-express-template-charge/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/delivery-express-template-charge"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/delivery-express-template-charge/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/delivery-express-template-charge/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"delivery-express-template-charge-title\"]",
+    "refresh": "[data-testid=\"delivery-express-template-charge-refresh\"]",
+    "createButton": "[data-testid=\"delivery-express-template-charge-create\"]",
+    "searchForm": "[data-testid=\"delivery-express-template-charge-search\"]",
+    "searchSubmit": "[data-testid=\"delivery-express-template-charge-search-submit\"]",
+    "searchReset": "[data-testid=\"delivery-express-template-charge-search-reset\"]",
+    "total": "[data-testid=\"delivery-express-template-charge-total\"]",
+    "table": "[data-testid=\"delivery-express-template-charge-table\"]",
+    "row": "[data-testid=\"delivery-express-template-charge-row\"]",
+    "editButton": "[data-testid=\"delivery-express-template-charge-edit\"]",
+    "deleteButton": "[data-testid=\"delivery-express-template-charge-delete\"]",
+    "form": "[data-testid=\"delivery-express-template-charge-form\"]",
+    "formError": "[data-testid=\"delivery-express-template-charge-form-error\"]",
+    "formSubmit": "[data-testid=\"delivery-express-template-charge-form-submit\"]",
+    "formCancel": "[data-testid=\"delivery-express-template-charge-form-cancel\"]",
+    "formClose": "[data-testid=\"delivery-express-template-charge-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "快递运费模板计费配置列表",
+    "dialogLabel": {
+      "create": "新增快递运费模板计费配置",
+      "edit": "编辑快递运费模板计费配置"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "template_id",
+        "label": "配送模板编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-template_id",
+        "selector": "[data-testid=\"field-template_id\"]"
+      },
+      {
+        "name": "area_ids",
+        "label": "配送区域编号列表",
+        "type": "string",
+        "required": false,
+        "testId": "field-area_ids",
+        "selector": "[data-testid=\"field-area_ids\"]"
+      },
+      {
+        "name": "charge_mode",
+        "label": "配送计费方式",
+        "type": "number",
+        "required": false,
+        "testId": "field-charge_mode",
+        "selector": "[data-testid=\"field-charge_mode\"]"
+      },
+      {
+        "name": "start_count",
+        "label": "首件数量(件数,重量，或体积)",
+        "type": "number",
+        "required": false,
+        "testId": "field-start_count",
+        "selector": "[data-testid=\"field-start_count\"]"
+      },
+      {
+        "name": "start_price",
+        "label": "起步价，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-start_price",
+        "selector": "[data-testid=\"field-start_price\"]"
+      },
+      {
+        "name": "extra_count",
+        "label": "续件数量(件, 重量，或体积)",
+        "type": "number",
+        "required": false,
+        "testId": "field-extra_count",
+        "selector": "[data-testid=\"field-extra_count\"]"
+      },
+      {
+        "name": "extra_price",
+        "label": "额外价，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-extra_price",
+        "selector": "[data-testid=\"field-extra_price\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "delivery-express-template-charge",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"delivery-express-template-charge\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"delivery-express-template-charge-form-overlay\"]",
+      "dialog": "[data-testid=\"delivery-express-template-charge-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "delivery-express-template-charge:search",
+      "reset": "delivery-express-template-charge:reset",
+      "refresh": "delivery-express-template-charge:refresh",
+      "create": "delivery-express-template-charge:create",
+      "edit": "delivery-express-template-charge:edit",
+      "delete": "delivery-express-template-charge:delete",
+      "submit": "delivery-express-template-charge:submit",
+      "cancel": "delivery-express-template-charge:cancel",
+      "close": "delivery-express-template-charge:close",
+      "row": "delivery-express-template-charge:row",
+      "pagination": "delivery-express-template-charge:pagination",
+      "fields": {
+        "template_id": "delivery-express-template-charge:field:template_id",
+        "area_ids": "delivery-express-template-charge:field:area_ids",
+        "charge_mode": "delivery-express-template-charge:field:charge_mode",
+        "start_count": "delivery-express-template-charge:field:start_count",
+        "start_price": "delivery-express-template-charge:field:start_price",
+        "extra_count": "delivery-express-template-charge:field:extra_count",
+        "extra_price": "delivery-express-template-charge:field:extra_price"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.delivery-express-template-charge",
+      "examples": [
+        "mall.delivery-express-template-charge__List__Refresh",
+        "mall.delivery-express-template-charge__ListItem__Open",
+        "mall.delivery-express-template-charge__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

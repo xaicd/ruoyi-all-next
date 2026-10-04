@@ -60,24 +60,36 @@ export function BrokerageRecordForm({ open, initialData, onClose, onSuccess }: B
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="brokerage-record-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑佣金记录" : "新增佣金记录"}
+        data-testid="brokerage-record-form"
+        data-agent-scope="brokerage-record:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑BrokerageRecord（源框架导入）" : "新增BrokerageRecord（源框架导入）"}
+            {isEdit ? "编辑佣金记录" : "新增佣金记录"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="brokerage-record-form-close" data-agent-target="brokerage-record:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="brokerage-record-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="brokerage-record-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="brokerage-record-user_id"
+            data-testid="field-user_id"
+            data-agent-target="brokerage-record:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -87,9 +99,14 @@ export function BrokerageRecordForm({ open, initialData, onClose, onSuccess }: B
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">业务编号</label>
+          <label htmlFor="brokerage-record-biz_id" className="block text-xs text-slate-600 mb-1">业务编号</label>
           <input
             type="text"
+            id="brokerage-record-biz_id"
+            data-testid="field-biz_id"
+            data-agent-target="brokerage-record:field:biz_id"
+            data-agent-state={formData.biz_id ? "filled" : "empty"}
+            aria-label="业务编号"
             value={formData.biz_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -99,9 +116,14 @@ export function BrokerageRecordForm({ open, initialData, onClose, onSuccess }: B
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">业务类型</label>
+          <label htmlFor="brokerage-record-biz_type" className="block text-xs text-slate-600 mb-1">业务类型</label>
           <input
             type="number"
+            id="brokerage-record-biz_type"
+            data-testid="field-biz_type"
+            data-agent-target="brokerage-record:field:biz_type"
+            data-agent-state={formData.biz_type == null || formData.biz_type === "" ? "empty" : "filled"}
+            aria-label="业务类型"
             value={formData.biz_type != null ? String(formData.biz_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -111,9 +133,14 @@ export function BrokerageRecordForm({ open, initialData, onClose, onSuccess }: B
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">标题</label>
+          <label htmlFor="brokerage-record-title" className="block text-xs text-slate-600 mb-1">标题</label>
           <input
             type="text"
+            id="brokerage-record-title"
+            data-testid="field-title"
+            data-agent-target="brokerage-record:field:title"
+            data-agent-state={formData.title ? "filled" : "empty"}
+            aria-label="标题"
             value={formData.title ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -123,9 +150,14 @@ export function BrokerageRecordForm({ open, initialData, onClose, onSuccess }: B
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">说明</label>
+          <label htmlFor="brokerage-record-description" className="block text-xs text-slate-600 mb-1">说明</label>
           <input
             type="text"
+            id="brokerage-record-description"
+            data-testid="field-description"
+            data-agent-target="brokerage-record:field:description"
+            data-agent-state={formData.description ? "filled" : "empty"}
+            aria-label="说明"
             value={formData.description ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -135,9 +167,14 @@ export function BrokerageRecordForm({ open, initialData, onClose, onSuccess }: B
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">金额</label>
+          <label htmlFor="brokerage-record-price" className="block text-xs text-slate-600 mb-1">金额</label>
           <input
             type="number"
+            id="brokerage-record-price"
+            data-testid="field-price"
+            data-agent-target="brokerage-record:field:price"
+            data-agent-state={formData.price == null || formData.price === "" ? "empty" : "filled"}
+            aria-label="金额"
             value={formData.price != null ? String(formData.price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -147,9 +184,14 @@ export function BrokerageRecordForm({ open, initialData, onClose, onSuccess }: B
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">当前总佣金</label>
+          <label htmlFor="brokerage-record-total_price" className="block text-xs text-slate-600 mb-1">当前总佣金</label>
           <input
             type="number"
+            id="brokerage-record-total_price"
+            data-testid="field-total_price"
+            data-agent-target="brokerage-record:field:total_price"
+            data-agent-state={formData.total_price == null || formData.total_price === "" ? "empty" : "filled"}
+            aria-label="当前总佣金"
             value={formData.total_price != null ? String(formData.total_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, total_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -159,9 +201,14 @@ export function BrokerageRecordForm({ open, initialData, onClose, onSuccess }: B
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="brokerage-record-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="brokerage-record-status"
+            data-testid="field-status"
+            data-agent-target="brokerage-record:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,9 +218,14 @@ export function BrokerageRecordForm({ open, initialData, onClose, onSuccess }: B
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">冻结时间（天）</label>
+          <label htmlFor="brokerage-record-frozen_days" className="block text-xs text-slate-600 mb-1">冻结时间（天）</label>
           <input
             type="number"
+            id="brokerage-record-frozen_days"
+            data-testid="field-frozen_days"
+            data-agent-target="brokerage-record:field:frozen_days"
+            data-agent-state={formData.frozen_days == null || formData.frozen_days === "" ? "empty" : "filled"}
+            aria-label="冻结时间（天）"
             value={formData.frozen_days != null ? String(formData.frozen_days) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, frozen_days: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -183,9 +235,14 @@ export function BrokerageRecordForm({ open, initialData, onClose, onSuccess }: B
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">解冻时间</label>
+          <label htmlFor="brokerage-record-unfreeze_time" className="block text-xs text-slate-600 mb-1">解冻时间</label>
           <input
             type="text"
+            id="brokerage-record-unfreeze_time"
+            data-testid="field-unfreeze_time"
+            data-agent-target="brokerage-record:field:unfreeze_time"
+            data-agent-state={formData.unfreeze_time ? "filled" : "empty"}
+            aria-label="解冻时间"
             value={formData.unfreeze_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, unfreeze_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -195,9 +252,14 @@ export function BrokerageRecordForm({ open, initialData, onClose, onSuccess }: B
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">来源用户等级</label>
+          <label htmlFor="brokerage-record-source_user_level" className="block text-xs text-slate-600 mb-1">来源用户等级</label>
           <input
             type="number"
+            id="brokerage-record-source_user_level"
+            data-testid="field-source_user_level"
+            data-agent-target="brokerage-record:field:source_user_level"
+            data-agent-state={formData.source_user_level == null || formData.source_user_level === "" ? "empty" : "filled"}
+            aria-label="来源用户等级"
             value={formData.source_user_level != null ? String(formData.source_user_level) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, source_user_level: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -207,9 +269,14 @@ export function BrokerageRecordForm({ open, initialData, onClose, onSuccess }: B
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">来源用户编号</label>
+          <label htmlFor="brokerage-record-source_user_id" className="block text-xs text-slate-600 mb-1">来源用户编号</label>
           <input
             type="number"
+            id="brokerage-record-source_user_id"
+            data-testid="field-source_user_id"
+            data-agent-target="brokerage-record:field:source_user_id"
+            data-agent-state={formData.source_user_id == null || formData.source_user_id === "" ? "empty" : "filled"}
+            aria-label="来源用户编号"
             value={formData.source_user_id != null ? String(formData.source_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, source_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -223,6 +290,8 @@ export function BrokerageRecordForm({ open, initialData, onClose, onSuccess }: B
             <button
               type="button"
               onClick={onClose}
+              data-testid="brokerage-record-form-cancel"
+              data-agent-target="brokerage-record:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -230,6 +299,9 @@ export function BrokerageRecordForm({ open, initialData, onClose, onSuccess }: B
             <button
               type="submit"
               disabled={loading}
+              data-testid="brokerage-record-form-submit"
+              data-agent-target="brokerage-record:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

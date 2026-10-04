@@ -1,0 +1,267 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "iot",
+  "entity": "IotDeviceModbusConfig",
+  "kebab": "iot-device-modbus-config",
+  "businessName": "IoT 设备 Modbus 连接配置",
+  "permissionPrefix": "iot:iot_device_modbus_config",
+  "page": {
+    "route": "/admin/iot/iot-device-modbus-config",
+    "title": "IoT 设备 Modbus 连接配置管理",
+    "titleSelector": "[data-testid=\"iot-device-modbus-config-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.iot/api",
+    "bffMount": "/api/v1/admin/iot",
+    "resource": "iot-device-modbus-config",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/iot-device-modbus-config",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/iot-device-modbus-config/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/iot-device-modbus-config"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/iot-device-modbus-config/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/iot-device-modbus-config/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"iot-device-modbus-config-title\"]",
+    "refresh": "[data-testid=\"iot-device-modbus-config-refresh\"]",
+    "createButton": "[data-testid=\"iot-device-modbus-config-create\"]",
+    "searchForm": "[data-testid=\"iot-device-modbus-config-search\"]",
+    "searchSubmit": "[data-testid=\"iot-device-modbus-config-search-submit\"]",
+    "searchReset": "[data-testid=\"iot-device-modbus-config-search-reset\"]",
+    "total": "[data-testid=\"iot-device-modbus-config-total\"]",
+    "table": "[data-testid=\"iot-device-modbus-config-table\"]",
+    "row": "[data-testid=\"iot-device-modbus-config-row\"]",
+    "editButton": "[data-testid=\"iot-device-modbus-config-edit\"]",
+    "deleteButton": "[data-testid=\"iot-device-modbus-config-delete\"]",
+    "form": "[data-testid=\"iot-device-modbus-config-form\"]",
+    "formError": "[data-testid=\"iot-device-modbus-config-form-error\"]",
+    "formSubmit": "[data-testid=\"iot-device-modbus-config-form-submit\"]",
+    "formCancel": "[data-testid=\"iot-device-modbus-config-form-cancel\"]",
+    "formClose": "[data-testid=\"iot-device-modbus-config-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IoT 设备 Modbus 连接配置列表",
+    "dialogLabel": {
+      "create": "新增IoT 设备 Modbus 连接配置",
+      "edit": "编辑IoT 设备 Modbus 连接配置"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "product_id",
+        "label": "产品编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-product_id",
+        "selector": "[data-testid=\"field-product_id\"]"
+      },
+      {
+        "name": "device_id",
+        "label": "设备编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-device_id",
+        "selector": "[data-testid=\"field-device_id\"]"
+      },
+      {
+        "name": "ip",
+        "label": "Modbus 服务器 IP 地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-ip",
+        "selector": "[data-testid=\"field-ip\"]"
+      },
+      {
+        "name": "port",
+        "label": "Modbus 服务器端口",
+        "type": "number",
+        "required": false,
+        "testId": "field-port",
+        "selector": "[data-testid=\"field-port\"]"
+      },
+      {
+        "name": "slave_id",
+        "label": "从站地址",
+        "type": "number",
+        "required": false,
+        "testId": "field-slave_id",
+        "selector": "[data-testid=\"field-slave_id\"]"
+      },
+      {
+        "name": "timeout",
+        "label": "连接超时时间，单位：毫秒",
+        "type": "number",
+        "required": false,
+        "testId": "field-timeout",
+        "selector": "[data-testid=\"field-timeout\"]"
+      },
+      {
+        "name": "retry_interval",
+        "label": "重试间隔，单位：毫秒",
+        "type": "number",
+        "required": false,
+        "testId": "field-retry_interval",
+        "selector": "[data-testid=\"field-retry_interval\"]"
+      },
+      {
+        "name": "mode",
+        "label": "模式",
+        "type": "number",
+        "required": false,
+        "testId": "field-mode",
+        "selector": "[data-testid=\"field-mode\"]"
+      },
+      {
+        "name": "frame_format",
+        "label": "数据帧格式",
+        "type": "number",
+        "required": false,
+        "testId": "field-frame_format",
+        "selector": "[data-testid=\"field-frame_format\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "iot-device-modbus-config",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"iot-device-modbus-config\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"iot-device-modbus-config-form-overlay\"]",
+      "dialog": "[data-testid=\"iot-device-modbus-config-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "iot-device-modbus-config:search",
+      "reset": "iot-device-modbus-config:reset",
+      "refresh": "iot-device-modbus-config:refresh",
+      "create": "iot-device-modbus-config:create",
+      "edit": "iot-device-modbus-config:edit",
+      "delete": "iot-device-modbus-config:delete",
+      "submit": "iot-device-modbus-config:submit",
+      "cancel": "iot-device-modbus-config:cancel",
+      "close": "iot-device-modbus-config:close",
+      "row": "iot-device-modbus-config:row",
+      "pagination": "iot-device-modbus-config:pagination",
+      "fields": {
+        "product_id": "iot-device-modbus-config:field:product_id",
+        "device_id": "iot-device-modbus-config:field:device_id",
+        "ip": "iot-device-modbus-config:field:ip",
+        "port": "iot-device-modbus-config:field:port",
+        "slave_id": "iot-device-modbus-config:field:slave_id",
+        "timeout": "iot-device-modbus-config:field:timeout",
+        "retry_interval": "iot-device-modbus-config:field:retry_interval",
+        "mode": "iot-device-modbus-config:field:mode",
+        "frame_format": "iot-device-modbus-config:field:frame_format",
+        "status": "iot-device-modbus-config:field:status"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "iot.iot-device-modbus-config",
+      "examples": [
+        "iot.iot-device-modbus-config__List__Refresh",
+        "iot.iot-device-modbus-config__ListItem__Open",
+        "iot.iot-device-modbus-config__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

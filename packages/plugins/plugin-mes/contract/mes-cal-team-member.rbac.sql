@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesCalTeamMember（源框架导入） (MesCalTeamMember)
+-- Auto-generated RBAC & Menu Migration for MES 班组成员 (MesCalTeamMember)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-cal-team-member',
   'mes-dir',
-  'MesCalTeamMember（源框架导入）管理',
+  'MES 班组成员管理',
   '/admin/mes/mes-cal-team-member',
   'mes/mes-cal-team-member/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-cal-team-member-query',  'menu-mes-cal-team-member', '查询MesCalTeamMember（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_cal_team_member:query',  1, NOW(), NOW()),
-('menu-mes-cal-team-member-create', 'menu-mes-cal-team-member', '新增MesCalTeamMember（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_cal_team_member:create', 2, NOW(), NOW()),
-('menu-mes-cal-team-member-update', 'menu-mes-cal-team-member', '修改MesCalTeamMember（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_cal_team_member:update', 3, NOW(), NOW()),
-('menu-mes-cal-team-member-delete', 'menu-mes-cal-team-member', '删除MesCalTeamMember（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_cal_team_member:delete', 4, NOW(), NOW())
+('menu-mes-cal-team-member-query',  'menu-mes-cal-team-member', '查询MES 班组成员', 'BUTTON', 'ACTIVE', 'mes:mes_cal_team_member:query',  1, NOW(), NOW()),
+('menu-mes-cal-team-member-create', 'menu-mes-cal-team-member', '新增MES 班组成员', 'BUTTON', 'ACTIVE', 'mes:mes_cal_team_member:create', 2, NOW(), NOW()),
+('menu-mes-cal-team-member-update', 'menu-mes-cal-team-member', '修改MES 班组成员', 'BUTTON', 'ACTIVE', 'mes:mes_cal_team_member:update', 3, NOW(), NOW()),
+('menu-mes-cal-team-member-delete', 'menu-mes-cal-team-member', '删除MES 班组成员', 'BUTTON', 'ACTIVE', 'mes:mes_cal_team_member:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

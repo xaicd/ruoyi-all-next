@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { PayOrderService } from "../pay-order.service"
 
 describe("PayOrderService", () => {
-  it("should create and query PayOrder（源框架导入）", async () => {
+  it("should create and query 支付订单", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await PayOrderService.create({
         app_id: 1,
@@ -21,7 +21,7 @@ describe("PayOrderService", () => {
   
       const updated = await PayOrderService.update(created.id, {
         id: created.id,
-        app_id: "更新PayOrder（源框架导入）",
+        app_id: "更新支付订单",
       } as any)
       expect(updated).toBeDefined()
   

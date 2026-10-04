@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for ErpSaleOut（源框架导入） (ErpSaleOut)
+-- Auto-generated RBAC & Menu Migration for ERP 销售出库 (ErpSaleOut)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-erp-sale-out',
   'erp-dir',
-  'ErpSaleOut（源框架导入）管理',
+  'ERP 销售出库管理',
   '/admin/erp/erp-sale-out',
   'erp/erp-sale-out/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-erp-sale-out-query',  'menu-erp-sale-out', '查询ErpSaleOut（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_sale_out:query',  1, NOW(), NOW()),
-('menu-erp-sale-out-create', 'menu-erp-sale-out', '新增ErpSaleOut（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_sale_out:create', 2, NOW(), NOW()),
-('menu-erp-sale-out-update', 'menu-erp-sale-out', '修改ErpSaleOut（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_sale_out:update', 3, NOW(), NOW()),
-('menu-erp-sale-out-delete', 'menu-erp-sale-out', '删除ErpSaleOut（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_sale_out:delete', 4, NOW(), NOW())
+('menu-erp-sale-out-query',  'menu-erp-sale-out', '查询ERP 销售出库', 'BUTTON', 'ACTIVE', 'erp:erp_sale_out:query',  1, NOW(), NOW()),
+('menu-erp-sale-out-create', 'menu-erp-sale-out', '新增ERP 销售出库', 'BUTTON', 'ACTIVE', 'erp:erp_sale_out:create', 2, NOW(), NOW()),
+('menu-erp-sale-out-update', 'menu-erp-sale-out', '修改ERP 销售出库', 'BUTTON', 'ACTIVE', 'erp:erp_sale_out:update', 3, NOW(), NOW()),
+('menu-erp-sale-out-delete', 'menu-erp-sale-out', '删除ERP 销售出库', 'BUTTON', 'ACTIVE', 'erp:erp_sale_out:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

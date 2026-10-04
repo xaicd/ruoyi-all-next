@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { PayDemoWithdrawService } from "../pay-demo-withdraw.service"
 
 describe("PayDemoWithdrawService", () => {
-  it("should create and query PayDemoWithdraw（源框架导入）", async () => {
+  it("should create and query 示例提现订单演示业务系统的转账业务", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await PayDemoWithdrawService.create({
-        subject: "测试PayDemoWithdraw（源框架导入）",
+        subject: "测试示例提现订单演示业务系统的转账业务",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("PayDemoWithdrawService", () => {
   
       const updated = await PayDemoWithdrawService.update(created.id, {
         id: created.id,
-        subject: "更新PayDemoWithdraw（源框架导入）",
+        subject: "更新示例提现订单演示业务系统的转账业务",
       } as any)
       expect(updated).toBeDefined()
   

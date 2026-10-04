@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for BrokerageWithdraw（源框架导入） (BrokerageWithdraw)
+-- Auto-generated RBAC & Menu Migration for 佣金提现 (BrokerageWithdraw)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-brokerage-withdraw',
   'mall-dir',
-  'BrokerageWithdraw（源框架导入）管理',
+  '佣金提现管理',
   '/admin/mall/brokerage-withdraw',
   'mall/brokerage-withdraw/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-brokerage-withdraw-query',  'menu-brokerage-withdraw', '查询BrokerageWithdraw（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:brokerage_withdraw:query',  1, NOW(), NOW()),
-('menu-brokerage-withdraw-create', 'menu-brokerage-withdraw', '新增BrokerageWithdraw（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:brokerage_withdraw:create', 2, NOW(), NOW()),
-('menu-brokerage-withdraw-update', 'menu-brokerage-withdraw', '修改BrokerageWithdraw（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:brokerage_withdraw:update', 3, NOW(), NOW()),
-('menu-brokerage-withdraw-delete', 'menu-brokerage-withdraw', '删除BrokerageWithdraw（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:brokerage_withdraw:delete', 4, NOW(), NOW())
+('menu-brokerage-withdraw-query',  'menu-brokerage-withdraw', '查询佣金提现', 'BUTTON', 'ACTIVE', 'mall:brokerage_withdraw:query',  1, NOW(), NOW()),
+('menu-brokerage-withdraw-create', 'menu-brokerage-withdraw', '新增佣金提现', 'BUTTON', 'ACTIVE', 'mall:brokerage_withdraw:create', 2, NOW(), NOW()),
+('menu-brokerage-withdraw-update', 'menu-brokerage-withdraw', '修改佣金提现', 'BUTTON', 'ACTIVE', 'mall:brokerage_withdraw:update', 3, NOW(), NOW()),
+('menu-brokerage-withdraw-delete', 'menu-brokerage-withdraw', '删除佣金提现', 'BUTTON', 'ACTIVE', 'mall:brokerage_withdraw:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

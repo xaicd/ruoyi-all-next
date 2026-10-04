@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesDvMaintenRecordService } from "../mes-dv-mainten-record.service"
 
 describe("MesDvMaintenRecordService", () => {
-  it("should create and query MesDvMaintenRecord（源框架导入）", async () => {
+  it("should create and query MES 设备保养记录", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesDvMaintenRecordService.create({
         plan_id: 1,
@@ -21,7 +21,7 @@ describe("MesDvMaintenRecordService", () => {
   
       const updated = await MesDvMaintenRecordService.update(created.id, {
         id: created.id,
-        plan_id: "更新MesDvMaintenRecord（源框架导入）",
+        plan_id: "更新MES 设备保养记录",
       } as any)
       expect(updated).toBeDefined()
   

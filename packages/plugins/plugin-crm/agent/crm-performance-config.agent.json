@@ -1,0 +1,330 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "crm",
+  "entity": "CrmPerformanceConfig",
+  "kebab": "crm-performance-config",
+  "businessName": "CRM 业绩目标",
+  "permissionPrefix": "crm:crm_performance_config",
+  "page": {
+    "route": "/admin/crm/crm-performance-config",
+    "title": "CRM 业绩目标管理",
+    "titleSelector": "[data-testid=\"crm-performance-config-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.crm/api",
+    "bffMount": "/api/v1/admin/crm",
+    "resource": "crm-performance-config",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/crm-performance-config",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/crm-performance-config/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/crm-performance-config"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/crm-performance-config/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/crm-performance-config/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"crm-performance-config-title\"]",
+    "refresh": "[data-testid=\"crm-performance-config-refresh\"]",
+    "createButton": "[data-testid=\"crm-performance-config-create\"]",
+    "searchForm": "[data-testid=\"crm-performance-config-search\"]",
+    "searchSubmit": "[data-testid=\"crm-performance-config-search-submit\"]",
+    "searchReset": "[data-testid=\"crm-performance-config-search-reset\"]",
+    "total": "[data-testid=\"crm-performance-config-total\"]",
+    "table": "[data-testid=\"crm-performance-config-table\"]",
+    "row": "[data-testid=\"crm-performance-config-row\"]",
+    "editButton": "[data-testid=\"crm-performance-config-edit\"]",
+    "deleteButton": "[data-testid=\"crm-performance-config-delete\"]",
+    "form": "[data-testid=\"crm-performance-config-form\"]",
+    "formError": "[data-testid=\"crm-performance-config-form-error\"]",
+    "formSubmit": "[data-testid=\"crm-performance-config-form-submit\"]",
+    "formCancel": "[data-testid=\"crm-performance-config-form-cancel\"]",
+    "formClose": "[data-testid=\"crm-performance-config-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "CRM 业绩目标列表",
+    "dialogLabel": {
+      "create": "新增CRM 业绩目标",
+      "edit": "编辑CRM 业绩目标"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "biz_type",
+        "label": "目标类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-biz_type",
+        "selector": "[data-testid=\"field-biz_type\"]"
+      },
+      {
+        "name": "object_id",
+        "label": "目标对象编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-object_id",
+        "selector": "[data-testid=\"field-object_id\"]"
+      },
+      {
+        "name": "object_type",
+        "label": "目标对象类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-object_type",
+        "selector": "[data-testid=\"field-object_type\"]"
+      },
+      {
+        "name": "year",
+        "label": "年份",
+        "type": "number",
+        "required": false,
+        "testId": "field-year",
+        "selector": "[data-testid=\"field-year\"]"
+      },
+      {
+        "name": "year_target_price",
+        "label": "年度目标金额",
+        "type": "number",
+        "required": false,
+        "testId": "field-year_target_price",
+        "selector": "[data-testid=\"field-year_target_price\"]"
+      },
+      {
+        "name": "january_target_price",
+        "label": "一月目标金额",
+        "type": "number",
+        "required": false,
+        "testId": "field-january_target_price",
+        "selector": "[data-testid=\"field-january_target_price\"]"
+      },
+      {
+        "name": "february_target_price",
+        "label": "二月目标金额",
+        "type": "number",
+        "required": false,
+        "testId": "field-february_target_price",
+        "selector": "[data-testid=\"field-february_target_price\"]"
+      },
+      {
+        "name": "march_target_price",
+        "label": "三月目标金额",
+        "type": "number",
+        "required": false,
+        "testId": "field-march_target_price",
+        "selector": "[data-testid=\"field-march_target_price\"]"
+      },
+      {
+        "name": "april_target_price",
+        "label": "四月目标金额",
+        "type": "number",
+        "required": false,
+        "testId": "field-april_target_price",
+        "selector": "[data-testid=\"field-april_target_price\"]"
+      },
+      {
+        "name": "may_target_price",
+        "label": "五月目标金额",
+        "type": "number",
+        "required": false,
+        "testId": "field-may_target_price",
+        "selector": "[data-testid=\"field-may_target_price\"]"
+      },
+      {
+        "name": "june_target_price",
+        "label": "六月目标金额",
+        "type": "number",
+        "required": false,
+        "testId": "field-june_target_price",
+        "selector": "[data-testid=\"field-june_target_price\"]"
+      },
+      {
+        "name": "july_target_price",
+        "label": "七月目标金额",
+        "type": "number",
+        "required": false,
+        "testId": "field-july_target_price",
+        "selector": "[data-testid=\"field-july_target_price\"]"
+      },
+      {
+        "name": "august_target_price",
+        "label": "八月目标金额",
+        "type": "number",
+        "required": false,
+        "testId": "field-august_target_price",
+        "selector": "[data-testid=\"field-august_target_price\"]"
+      },
+      {
+        "name": "september_target_price",
+        "label": "九月目标金额",
+        "type": "number",
+        "required": false,
+        "testId": "field-september_target_price",
+        "selector": "[data-testid=\"field-september_target_price\"]"
+      },
+      {
+        "name": "october_target_price",
+        "label": "十月目标金额",
+        "type": "number",
+        "required": false,
+        "testId": "field-october_target_price",
+        "selector": "[data-testid=\"field-october_target_price\"]"
+      },
+      {
+        "name": "november_target_price",
+        "label": "十一月目标金额",
+        "type": "number",
+        "required": false,
+        "testId": "field-november_target_price",
+        "selector": "[data-testid=\"field-november_target_price\"]"
+      },
+      {
+        "name": "december_target_price",
+        "label": "十二月目标金额",
+        "type": "number",
+        "required": false,
+        "testId": "field-december_target_price",
+        "selector": "[data-testid=\"field-december_target_price\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "crm-performance-config",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"crm-performance-config\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"crm-performance-config-form-overlay\"]",
+      "dialog": "[data-testid=\"crm-performance-config-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "crm-performance-config:search",
+      "reset": "crm-performance-config:reset",
+      "refresh": "crm-performance-config:refresh",
+      "create": "crm-performance-config:create",
+      "edit": "crm-performance-config:edit",
+      "delete": "crm-performance-config:delete",
+      "submit": "crm-performance-config:submit",
+      "cancel": "crm-performance-config:cancel",
+      "close": "crm-performance-config:close",
+      "row": "crm-performance-config:row",
+      "pagination": "crm-performance-config:pagination",
+      "fields": {
+        "biz_type": "crm-performance-config:field:biz_type",
+        "object_id": "crm-performance-config:field:object_id",
+        "object_type": "crm-performance-config:field:object_type",
+        "year": "crm-performance-config:field:year",
+        "year_target_price": "crm-performance-config:field:year_target_price",
+        "january_target_price": "crm-performance-config:field:january_target_price",
+        "february_target_price": "crm-performance-config:field:february_target_price",
+        "march_target_price": "crm-performance-config:field:march_target_price",
+        "april_target_price": "crm-performance-config:field:april_target_price",
+        "may_target_price": "crm-performance-config:field:may_target_price",
+        "june_target_price": "crm-performance-config:field:june_target_price",
+        "july_target_price": "crm-performance-config:field:july_target_price",
+        "august_target_price": "crm-performance-config:field:august_target_price",
+        "september_target_price": "crm-performance-config:field:september_target_price",
+        "october_target_price": "crm-performance-config:field:october_target_price",
+        "november_target_price": "crm-performance-config:field:november_target_price",
+        "december_target_price": "crm-performance-config:field:december_target_price"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "crm.crm-performance-config",
+      "examples": [
+        "crm.crm-performance-config__List__Refresh",
+        "crm.crm-performance-config__ListItem__Open",
+        "crm.crm-performance-config__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

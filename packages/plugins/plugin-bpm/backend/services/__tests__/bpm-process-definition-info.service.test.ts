@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { BpmProcessDefinitionInfoService } from "../bpm-process-definition-info.service"
 
 describe("BpmProcessDefinitionInfoService", () => {
-  it("should create and query BpmProcessDefinitionInfo（源框架导入）", async () => {
+  it("should create and query BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await BpmProcessDefinitionInfoService.create({
-        process_definition_id: "测试BpmProcessDefinitionInfo（源框架导入）",
+        process_definition_id: "测试BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("BpmProcessDefinitionInfoService", () => {
   
       const updated = await BpmProcessDefinitionInfoService.update(created.id, {
         id: created.id,
-        process_definition_id: "更新BpmProcessDefinitionInfo（源框架导入）",
+        process_definition_id: "更新BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表",
       } as any)
       expect(updated).toBeDefined()
   

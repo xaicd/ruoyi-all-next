@@ -6,12 +6,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "ProductBrand",
-    businessName: "ProductBrand（源框架导入）",
+    businessName: "商品品牌",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:product_brand",
     table: {
       name: "product_brand",
-      comment: "ProductBrand（源框架导入）",
+      comment: "商品品牌",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"品牌编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"品牌名称","nullableInferred":true},
@@ -31,12 +31,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "ProductBrowseHistory",
-    businessName: "ProductBrowseHistory（源框架导入）",
+    businessName: "商品浏览记录",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:product_browse_history",
     table: {
       name: "product_browse_history",
-      comment: "ProductBrowseHistory（源框架导入）",
+      comment: "商品浏览记录",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"记录编号","isPk":true,"nullableInferred":true},
         {"name":"spu_id","type":"bigint","tsType":"number","nullable":true,"comment":"商品 SPU 编号","nullableInferred":true},
@@ -54,12 +54,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "ProductCategory",
-    businessName: "ProductCategory（源框架导入）",
+    businessName: "商品分类",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:product_category",
     table: {
       name: "product_category",
-      comment: "ProductCategory（源框架导入）",
+      comment: "商品分类",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"分类编号","isPk":true,"nullableInferred":true},
         {"name":"parent_id","type":"bigint","tsType":"number","nullable":true,"comment":"父分类编号","nullableInferred":true},
@@ -79,12 +79,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "ProductComment",
-    businessName: "ProductComment（源框架导入）",
+    businessName: "商品评论",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:product_comment",
     table: {
       name: "product_comment",
-      comment: "ProductComment（源框架导入）",
+      comment: "商品评论",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"评论编号，主键自增","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"评价人的用户编号","nullableInferred":true},
@@ -120,12 +120,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "ProductFavorite",
-    businessName: "ProductFavorite（源框架导入）",
+    businessName: "商品收藏",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:product_favorite",
     table: {
       name: "product_favorite",
-      comment: "ProductFavorite（源框架导入）",
+      comment: "商品收藏",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号，主键自增","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},
@@ -142,12 +142,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "ProductProperty",
-    businessName: "ProductProperty（源框架导入）",
+    businessName: "商品属性项",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:product_property",
     table: {
       name: "product_property",
-      comment: "ProductProperty（源框架导入）",
+      comment: "商品属性项",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"主键","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"名称","nullableInferred":true},
@@ -164,12 +164,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "ProductPropertyValue",
-    businessName: "ProductPropertyValue（源框架导入）",
+    businessName: "商品属性值",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:product_property_value",
     table: {
       name: "product_property_value",
-      comment: "ProductPropertyValue（源框架导入）",
+      comment: "商品属性值",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"主键","isPk":true,"nullableInferred":true},
         {"name":"property_id","type":"bigint","tsType":"number","nullable":true,"comment":"属性项的编号","nullableInferred":true},
@@ -187,12 +187,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "ProductSku",
-    businessName: "ProductSku（源框架导入）",
+    businessName: "商品 SKU",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:product_sku",
     table: {
       name: "product_sku",
-      comment: "ProductSku（源框架导入）",
+      comment: "商品 SKU",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"商品 SKU 编号，自增","isPk":true,"nullableInferred":true},
         {"name":"spu_id","type":"bigint","tsType":"number","nullable":true,"comment":"SPU 编号","nullableInferred":true},
@@ -224,12 +224,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "ProductSpu",
-    businessName: "ProductSpu（源框架导入）",
+    businessName: "商品 SPU",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:product_spu",
     table: {
       name: "product_spu",
-      comment: "ProductSpu（源框架导入）",
+      comment: "商品 SPU",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"商品 SPU 编号，自增","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"商品名称","nullableInferred":true},
@@ -266,12 +266,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "ProductStatistics",
-    businessName: "ProductStatistics（源框架导入）",
+    businessName: "商品统计",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:product_statistics",
     table: {
       name: "product_statistics",
-      comment: "ProductStatistics（源框架导入）",
+      comment: "商品统计",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号，主键自增","isPk":true,"nullableInferred":true},
         {"name":"time","type":"timestamp","tsType":"string","nullable":true,"comment":"统计日期","nullableInferred":true},
@@ -298,12 +298,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "Article",
-    businessName: "Article（源框架导入）",
+    businessName: "文章管理",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:article",
     table: {
       name: "promotion_article",
-      comment: "Article（源框架导入）",
+      comment: "文章管理",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"文章管理编号","isPk":true,"nullableInferred":true},
         {"name":"category_id","type":"bigint","tsType":"number","nullable":true,"comment":"分类编号 ArticleCategoryDO#id","nullableInferred":true},
@@ -330,12 +330,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "ArticleCategory",
-    businessName: "ArticleCategory（源框架导入）",
+    businessName: "文章分类",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:article_category",
     table: {
       name: "promotion_article_category",
-      comment: "ArticleCategory（源框架导入）",
+      comment: "文章分类",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"文章分类编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"文章分类名称","nullableInferred":true},
@@ -354,12 +354,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "Banner",
-    businessName: "Banner（源框架导入）",
+    businessName: "banner",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:banner",
     table: {
       name: "promotion_banner",
-      comment: "Banner（源框架导入）",
+      comment: "banner",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"title","type":"varchar","tsType":"string","nullable":true,"comment":"标题","nullableInferred":true},
@@ -382,12 +382,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "BargainActivity",
-    businessName: "BargainActivity（源框架导入）",
+    businessName: "砍价活动",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:bargain_activity",
     table: {
       name: "promotion_bargain_activity",
-      comment: "BargainActivity（源框架导入）",
+      comment: "砍价活动",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"砍价活动编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"砍价活动名称","nullableInferred":true},
@@ -417,12 +417,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "BargainHelp",
-    businessName: "BargainHelp（源框架导入）",
+    businessName: "砍价助力",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:bargain_help",
     table: {
       name: "promotion_bargain_help",
-      comment: "BargainHelp（源框架导入）",
+      comment: "砍价助力",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"activity_id","type":"bigint","tsType":"number","nullable":true,"comment":"砍价活动编号","nullableInferred":true},
@@ -441,12 +441,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "BargainRecord",
-    businessName: "BargainRecord（源框架导入）",
+    businessName: "砍价记录 DO TO",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:bargain_record",
     table: {
       name: "promotion_bargain_record",
-      comment: "BargainRecord（源框架导入）",
+      comment: "砍价记录 DO TO",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},
@@ -470,12 +470,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "CombinationActivity",
-    businessName: "CombinationActivity（源框架导入）",
+    businessName: "拼团活动",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:combination_activity",
     table: {
       name: "promotion_combination_activity",
-      comment: "CombinationActivity（源框架导入）",
+      comment: "拼团活动",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"活动编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"拼团名称","nullableInferred":true},
@@ -500,12 +500,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "CombinationProduct",
-    businessName: "CombinationProduct（源框架导入）",
+    businessName: "拼团商品",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:combination_product",
     table: {
       name: "promotion_combination_product",
-      comment: "CombinationProduct（源框架导入）",
+      comment: "拼团商品",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"activity_id","type":"bigint","tsType":"number","nullable":true,"comment":"拼团活动编号","nullableInferred":true},
@@ -527,12 +527,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "CombinationRecord",
-    businessName: "CombinationRecord（源框架导入）",
+    businessName: "拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:combination_record",
     table: {
       name: "promotion_combination_record",
-      comment: "CombinationRecord（源框架导入）",
+      comment: "拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号，主键自增","isPk":true,"nullableInferred":true},
         {"name":"activity_id","type":"bigint","tsType":"number","nullable":true,"comment":"拼团活动编号","nullableInferred":true},
@@ -566,12 +566,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "Coupon",
-    businessName: "Coupon（源框架导入）",
+    businessName: "优惠劵",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:coupon",
     table: {
       name: "promotion_coupon",
-      comment: "Coupon（源框架导入）",
+      comment: "优惠劵",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"优惠劵编号","isPk":true,"nullableInferred":true},
         {"name":"template_id","type":"bigint","tsType":"number","nullable":true,"comment":"优惠劵模板编号","nullableInferred":true},
@@ -602,12 +602,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "CouponTemplate",
-    businessName: "CouponTemplate（源框架导入）",
+    businessName: "优惠劵模板 DO当用户领取时，会生成 优惠劵",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:coupon_template",
     table: {
       name: "promotion_coupon_template",
-      comment: "CouponTemplate（源框架导入）",
+      comment: "优惠劵模板 DO当用户领取时，会生成 优惠劵",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"模板编号，自增唯一","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"优惠劵名","nullableInferred":true},
@@ -642,12 +642,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "DiscountActivity",
-    businessName: "DiscountActivity（源框架导入）",
+    businessName: "限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一个活动；",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:discount_activity",
     table: {
       name: "promotion_discount_activity",
-      comment: "DiscountActivity（源框架导入）",
+      comment: "限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一个活动；",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"活动编号，主键自增","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"活动标题","nullableInferred":true},
@@ -667,12 +667,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "DiscountProduct",
-    businessName: "DiscountProduct（源框架导入）",
+    businessName: "限时折扣商品",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:discount_product",
     table: {
       name: "promotion_discount_product",
-      comment: "DiscountProduct（源框架导入）",
+      comment: "限时折扣商品",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号，主键自增","isPk":true,"nullableInferred":true},
         {"name":"activity_id","type":"bigint","tsType":"number","nullable":true,"comment":"限时折扣活动的编号","nullableInferred":true},
@@ -697,12 +697,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "DiyPage",
-    businessName: "DiyPage（源框架导入）",
+    businessName: "装修页面",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:diy_page",
     table: {
       name: "promotion_diy_page",
-      comment: "DiyPage（源框架导入）",
+      comment: "装修页面",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"装修页面编号","isPk":true,"nullableInferred":true},
         {"name":"template_id","type":"bigint","tsType":"number","nullable":true,"comment":"装修模板编号","nullableInferred":true},
@@ -722,12 +722,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "DiyTemplate",
-    businessName: "DiyTemplate（源框架导入）",
+    businessName: "装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. 如果需要使用某个模版，则将 设置为 true，表示已使用，有且仅有一个",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:diy_template",
     table: {
       name: "promotion_diy_template",
-      comment: "DiyTemplate（源框架导入）",
+      comment: "装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. 如果需要使用某个模版，则将 设置为 true，表示已使用，有且仅有一个",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"装修模板编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"模板名称","nullableInferred":true},
@@ -748,12 +748,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "KeFuConversation",
-    businessName: "KeFuConversation（源框架导入）",
+    businessName: "客服会话",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:ke_fu_conversation",
     table: {
       name: "promotion_kefu_conversation",
-      comment: "KeFuConversation（源框架导入）",
+      comment: "客服会话",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"会话所属用户","nullableInferred":true},
@@ -776,12 +776,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "KeFuMessage",
-    businessName: "KeFuMessage（源框架导入）",
+    businessName: "客服消息",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:ke_fu_message",
     table: {
       name: "promotion_kefu_message",
-      comment: "KeFuMessage（源框架导入）",
+      comment: "客服消息",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"conversation_id","type":"bigint","tsType":"number","nullable":true,"comment":"会话编号","nullableInferred":true},
@@ -804,12 +804,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "PointActivity",
-    businessName: "PointActivity（源框架导入）",
+    businessName: "积分商城活动",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:point_activity",
     table: {
       name: "promotion_point_activity",
-      comment: "PointActivity（源框架导入）",
+      comment: "积分商城活动",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"积分商城活动编号","isPk":true,"nullableInferred":true},
         {"name":"spu_id","type":"bigint","tsType":"number","nullable":true,"comment":"积分商城活动商品","nullableInferred":true},
@@ -830,12 +830,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "PointProduct",
-    businessName: "PointProduct（源框架导入）",
+    businessName: "积分商城商品",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:point_product",
     table: {
       name: "promotion_point_product",
-      comment: "PointProduct（源框架导入）",
+      comment: "积分商城商品",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"积分商城商品编号","isPk":true,"nullableInferred":true},
         {"name":"activity_id","type":"bigint","tsType":"number","nullable":true,"comment":"积分商城活动 id","nullableInferred":true},
@@ -858,12 +858,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "RewardActivity",
-    businessName: "RewardActivity（源框架导入）",
+    businessName: "满减送活动",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:reward_activity",
     table: {
       name: "promotion_reward_activity",
-      comment: "RewardActivity（源框架导入）",
+      comment: "满减送活动",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"活动编号，主键自增","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"活动标题","nullableInferred":true},
@@ -892,12 +892,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "SeckillActivity",
-    businessName: "SeckillActivity（源框架导入）",
+    businessName: "秒杀活动",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:seckill_activity",
     table: {
       name: "promotion_seckill_activity",
-      comment: "SeckillActivity（源框架导入）",
+      comment: "秒杀活动",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"秒杀活动编号","isPk":true,"nullableInferred":true},
         {"name":"spu_id","type":"bigint","tsType":"number","nullable":true,"comment":"秒杀活动商品","nullableInferred":true},
@@ -924,12 +924,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "SeckillConfig",
-    businessName: "SeckillConfig（源框架导入）",
+    businessName: "秒杀时段",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:seckill_config",
     table: {
       name: "promotion_seckill_config",
-      comment: "SeckillConfig（源框架导入）",
+      comment: "秒杀时段",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"秒杀时段名称","nullableInferred":true},
@@ -949,12 +949,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "SeckillProduct",
-    businessName: "SeckillProduct（源框架导入）",
+    businessName: "秒杀参与商品",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:seckill_product",
     table: {
       name: "promotion_seckill_product",
-      comment: "SeckillProduct（源框架导入）",
+      comment: "秒杀参与商品",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"秒杀参与商品编号","isPk":true,"nullableInferred":true},
         {"name":"activity_id","type":"bigint","tsType":"number","nullable":true,"comment":"秒杀活动 id","nullableInferred":true},
@@ -978,12 +978,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "AfterSale",
-    businessName: "AfterSale（源框架导入）",
+    businessName: "售后订单，用于处理 交易订单的退款退货流程",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:after_sale",
     table: {
       name: "trade_after_sale",
-      comment: "AfterSale（源框架导入）",
+      comment: "售后订单，用于处理 交易订单的退款退货流程",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"售后编号，主键自增","isPk":true,"nullableInferred":true},
         {"name":"no","type":"varchar","tsType":"string","nullable":true,"comment":"售后单号","nullableInferred":true},
@@ -1026,12 +1026,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "AfterSaleLog",
-    businessName: "AfterSaleLog（源框架导入）",
+    businessName: "交易售后日志",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:after_sale_log",
     table: {
       name: "trade_after_sale_log",
-      comment: "AfterSaleLog（源框架导入）",
+      comment: "交易售后日志",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},
@@ -1053,12 +1053,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "BrokerageRecord",
-    businessName: "BrokerageRecord（源框架导入）",
+    businessName: "佣金记录",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:brokerage_record",
     table: {
       name: "trade_brokerage_record",
-      comment: "BrokerageRecord（源框架导入）",
+      comment: "佣金记录",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},
@@ -1085,12 +1085,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "BrokerageUser",
-    businessName: "BrokerageUser（源框架导入）",
+    businessName: "分销用户",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:brokerage_user",
     table: {
       name: "trade_brokerage_user",
-      comment: "BrokerageUser（源框架导入）",
+      comment: "分销用户",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"用户编号","isPk":true,"nullableInferred":true},
         {"name":"bind_user_id","type":"bigint","tsType":"number","nullable":true,"comment":"推广员编号","nullableInferred":true},
@@ -1111,12 +1111,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "BrokerageWithdraw",
-    businessName: "BrokerageWithdraw（源框架导入）",
+    businessName: "佣金提现",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:brokerage_withdraw",
     table: {
       name: "trade_brokerage_withdraw",
-      comment: "BrokerageWithdraw（源框架导入）",
+      comment: "佣金提现",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},
@@ -1149,12 +1149,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "Cart",
-    businessName: "Cart（源框架导入）",
+    businessName: "购物车的商品信息 DO每个商品，对应一条记录，通过 和 关联",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:cart",
     table: {
       name: "trade_cart",
-      comment: "Cart（源框架导入）",
+      comment: "购物车的商品信息 DO每个商品，对应一条记录，通过 和 关联",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号，唯一自增","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},
@@ -1174,12 +1174,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "TradeConfig",
-    businessName: "TradeConfig（源框架导入）",
+    businessName: "交易中心配置",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:trade_config",
     table: {
       name: "trade_config",
-      comment: "TradeConfig（源框架导入）",
+      comment: "交易中心配置",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"自增主键","isPk":true,"nullableInferred":true},
         {"name":"after_sale_refund_reasons","type":"text","tsType":"string","nullable":true,"comment":"售后的退款理由","nullableInferred":true},
@@ -1209,12 +1209,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "DeliveryExpress",
-    businessName: "DeliveryExpress（源框架导入）",
+    businessName: "快递公司",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:delivery_express",
     table: {
       name: "trade_delivery_express",
-      comment: "DeliveryExpress（源框架导入）",
+      comment: "快递公司",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号，自增","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"快递公司 code","nullableInferred":true},
@@ -1234,12 +1234,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "DeliveryExpressTemplate",
-    businessName: "DeliveryExpressTemplate（源框架导入）",
+    businessName: "快递运费模板",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:delivery_express_template",
     table: {
       name: "trade_delivery_express_template",
-      comment: "DeliveryExpressTemplate（源框架导入）",
+      comment: "快递运费模板",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号，自增","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"模板名称","nullableInferred":true},
@@ -1257,12 +1257,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "DeliveryExpressTemplateCharge",
-    businessName: "DeliveryExpressTemplateCharge（源框架导入）",
+    businessName: "快递运费模板计费配置",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:delivery_express_template_charge",
     table: {
       name: "trade_delivery_express_template_charge",
-      comment: "DeliveryExpressTemplateCharge（源框架导入）",
+      comment: "快递运费模板计费配置",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号，自增","isPk":true,"nullableInferred":true},
         {"name":"template_id","type":"bigint","tsType":"number","nullable":true,"comment":"配送模板编号","nullableInferred":true},
@@ -1284,12 +1284,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "DeliveryExpressTemplateFree",
-    businessName: "DeliveryExpressTemplateFree（源框架导入）",
+    businessName: "快递运费模板包邮配置",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:delivery_express_template_free",
     table: {
       name: "trade_delivery_express_template_free",
-      comment: "DeliveryExpressTemplateFree（源框架导入）",
+      comment: "快递运费模板包邮配置",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"template_id","type":"bigint","tsType":"number","nullable":true,"comment":"配送模板编号","nullableInferred":true},
@@ -1308,12 +1308,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "DeliveryPickUpStore",
-    businessName: "DeliveryPickUpStore（源框架导入）",
+    businessName: "自提门店",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:delivery_pick_up_store",
     table: {
       name: "trade_delivery_pick_up_store",
-      comment: "DeliveryPickUpStore（源框架导入）",
+      comment: "自提门店",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"门店名称","nullableInferred":true},
@@ -1340,12 +1340,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "TradeOrder",
-    businessName: "TradeOrder（源框架导入）",
+    businessName: "交易订单",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:trade_order",
     table: {
       name: "trade_order",
-      comment: "TradeOrder（源框架导入）",
+      comment: "交易订单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"订单编号，主键自增","isPk":true,"nullableInferred":true},
         {"name":"no","type":"varchar","tsType":"string","nullable":true,"comment":"订单流水号","nullableInferred":true},
@@ -1412,12 +1412,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "TradeOrderItem",
-    businessName: "TradeOrderItem（源框架导入）",
+    businessName: "交易订单项",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:trade_order_item",
     table: {
       name: "trade_order_item",
-      comment: "TradeOrderItem（源框架导入）",
+      comment: "交易订单项",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},
@@ -1458,12 +1458,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "TradeOrderLog",
-    businessName: "TradeOrderLog（源框架导入）",
+    businessName: "订单日志",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:trade_order_log",
     table: {
       name: "trade_order_log",
-      comment: "TradeOrderLog（源框架导入）",
+      comment: "订单日志",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},
@@ -1485,12 +1485,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "TradeStatistics",
-    businessName: "TradeStatistics（源框架导入）",
+    businessName: "交易统计 DO以天为维度，统计全部的数据",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:trade_statistics",
     table: {
       name: "trade_statistics",
-      comment: "TradeStatistics（源框架导入）",
+      comment: "交易统计 DO以天为维度，统计全部的数据",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号，主键自增","isPk":true,"nullableInferred":true},
         {"name":"time","type":"timestamp","tsType":"string","nullable":true,"comment":"统计日期","nullableInferred":true},

@@ -1,0 +1,366 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesProTask",
+  "kebab": "mes-pro-task",
+  "businessName": "MES 生产任务",
+  "permissionPrefix": "mes:mes_pro_task",
+  "page": {
+    "route": "/admin/mes/mes-pro-task",
+    "title": "MES 生产任务管理",
+    "titleSelector": "[data-testid=\"mes-pro-task-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-pro-task",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-pro-task",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-pro-task/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-pro-task"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-pro-task/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-pro-task/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-pro-task-title\"]",
+    "refresh": "[data-testid=\"mes-pro-task-refresh\"]",
+    "createButton": "[data-testid=\"mes-pro-task-create\"]",
+    "searchForm": "[data-testid=\"mes-pro-task-search\"]",
+    "searchSubmit": "[data-testid=\"mes-pro-task-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-pro-task-search-reset\"]",
+    "total": "[data-testid=\"mes-pro-task-total\"]",
+    "table": "[data-testid=\"mes-pro-task-table\"]",
+    "row": "[data-testid=\"mes-pro-task-row\"]",
+    "editButton": "[data-testid=\"mes-pro-task-edit\"]",
+    "deleteButton": "[data-testid=\"mes-pro-task-delete\"]",
+    "form": "[data-testid=\"mes-pro-task-form\"]",
+    "formError": "[data-testid=\"mes-pro-task-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-pro-task-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-pro-task-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-pro-task-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 生产任务列表",
+    "dialogLabel": {
+      "create": "新增MES 生产任务",
+      "edit": "编辑MES 生产任务"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "code",
+        "label": "任务编码",
+        "type": "string",
+        "required": false,
+        "testId": "field-code",
+        "selector": "[data-testid=\"field-code\"]"
+      },
+      {
+        "name": "name",
+        "label": "任务名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "work_order_id",
+        "label": "生产工单编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-work_order_id",
+        "selector": "[data-testid=\"field-work_order_id\"]"
+      },
+      {
+        "name": "workstation_id",
+        "label": "工作站编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-workstation_id",
+        "selector": "[data-testid=\"field-workstation_id\"]"
+      },
+      {
+        "name": "route_id",
+        "label": "工艺路线编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-route_id",
+        "selector": "[data-testid=\"field-route_id\"]"
+      },
+      {
+        "name": "process_id",
+        "label": "工序编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-process_id",
+        "selector": "[data-testid=\"field-process_id\"]"
+      },
+      {
+        "name": "item_id",
+        "label": "产品物料编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-item_id",
+        "selector": "[data-testid=\"field-item_id\"]"
+      },
+      {
+        "name": "quantity",
+        "label": "排产数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-quantity",
+        "selector": "[data-testid=\"field-quantity\"]"
+      },
+      {
+        "name": "produced_quantity",
+        "label": "已生产数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-produced_quantity",
+        "selector": "[data-testid=\"field-produced_quantity\"]"
+      },
+      {
+        "name": "qualify_quantity",
+        "label": "合格品数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-qualify_quantity",
+        "selector": "[data-testid=\"field-qualify_quantity\"]"
+      },
+      {
+        "name": "unqualify_quantity",
+        "label": "不良品数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-unqualify_quantity",
+        "selector": "[data-testid=\"field-unqualify_quantity\"]"
+      },
+      {
+        "name": "changed_quantity",
+        "label": "调整数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-changed_quantity",
+        "selector": "[data-testid=\"field-changed_quantity\"]"
+      },
+      {
+        "name": "client_id",
+        "label": "客户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-client_id",
+        "selector": "[data-testid=\"field-client_id\"]"
+      },
+      {
+        "name": "start_time",
+        "label": "开始生产时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-start_time",
+        "selector": "[data-testid=\"field-start_time\"]"
+      },
+      {
+        "name": "duration",
+        "label": "生产时长（工作日，1=8小时）",
+        "type": "number",
+        "required": false,
+        "testId": "field-duration",
+        "selector": "[data-testid=\"field-duration\"]"
+      },
+      {
+        "name": "end_time",
+        "label": "结束生产时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-end_time",
+        "selector": "[data-testid=\"field-end_time\"]"
+      },
+      {
+        "name": "color_code",
+        "label": "甘特图显示颜色",
+        "type": "string",
+        "required": false,
+        "testId": "field-color_code",
+        "selector": "[data-testid=\"field-color_code\"]"
+      },
+      {
+        "name": "finish_date",
+        "label": "完成日期",
+        "type": "string",
+        "required": false,
+        "testId": "field-finish_date",
+        "selector": "[data-testid=\"field-finish_date\"]"
+      },
+      {
+        "name": "cancel_date",
+        "label": "取消日期",
+        "type": "string",
+        "required": false,
+        "testId": "field-cancel_date",
+        "selector": "[data-testid=\"field-cancel_date\"]"
+      },
+      {
+        "name": "status",
+        "label": "任务状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-pro-task",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-pro-task\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-pro-task-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-pro-task-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-pro-task:search",
+      "reset": "mes-pro-task:reset",
+      "refresh": "mes-pro-task:refresh",
+      "create": "mes-pro-task:create",
+      "edit": "mes-pro-task:edit",
+      "delete": "mes-pro-task:delete",
+      "submit": "mes-pro-task:submit",
+      "cancel": "mes-pro-task:cancel",
+      "close": "mes-pro-task:close",
+      "row": "mes-pro-task:row",
+      "pagination": "mes-pro-task:pagination",
+      "fields": {
+        "code": "mes-pro-task:field:code",
+        "name": "mes-pro-task:field:name",
+        "work_order_id": "mes-pro-task:field:work_order_id",
+        "workstation_id": "mes-pro-task:field:workstation_id",
+        "route_id": "mes-pro-task:field:route_id",
+        "process_id": "mes-pro-task:field:process_id",
+        "item_id": "mes-pro-task:field:item_id",
+        "quantity": "mes-pro-task:field:quantity",
+        "produced_quantity": "mes-pro-task:field:produced_quantity",
+        "qualify_quantity": "mes-pro-task:field:qualify_quantity",
+        "unqualify_quantity": "mes-pro-task:field:unqualify_quantity",
+        "changed_quantity": "mes-pro-task:field:changed_quantity",
+        "client_id": "mes-pro-task:field:client_id",
+        "start_time": "mes-pro-task:field:start_time",
+        "duration": "mes-pro-task:field:duration",
+        "end_time": "mes-pro-task:field:end_time",
+        "color_code": "mes-pro-task:field:color_code",
+        "finish_date": "mes-pro-task:field:finish_date",
+        "cancel_date": "mes-pro-task:field:cancel_date",
+        "status": "mes-pro-task:field:status",
+        "remark": "mes-pro-task:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-pro-task",
+      "examples": [
+        "mes.mes-pro-task__List__Refresh",
+        "mes.mes-pro-task__ListItem__Open",
+        "mes.mes-pro-task__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

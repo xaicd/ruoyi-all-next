@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for Cart（源框架导入） (Cart)
+-- Auto-generated RBAC & Menu Migration for 购物车的商品信息 DO每个商品，对应一条记录，通过 和 关联 (Cart)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-cart',
   'mall-dir',
-  'Cart（源框架导入）管理',
+  '购物车的商品信息 DO每个商品，对应一条记录，通过 和 关联管理',
   '/admin/mall/cart',
   'mall/cart/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-cart-query',  'menu-cart', '查询Cart（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:cart:query',  1, NOW(), NOW()),
-('menu-cart-create', 'menu-cart', '新增Cart（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:cart:create', 2, NOW(), NOW()),
-('menu-cart-update', 'menu-cart', '修改Cart（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:cart:update', 3, NOW(), NOW()),
-('menu-cart-delete', 'menu-cart', '删除Cart（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:cart:delete', 4, NOW(), NOW())
+('menu-cart-query',  'menu-cart', '查询购物车的商品信息 DO每个商品，对应一条记录，通过 和 关联', 'BUTTON', 'ACTIVE', 'mall:cart:query',  1, NOW(), NOW()),
+('menu-cart-create', 'menu-cart', '新增购物车的商品信息 DO每个商品，对应一条记录，通过 和 关联', 'BUTTON', 'ACTIVE', 'mall:cart:create', 2, NOW(), NOW()),
+('menu-cart-update', 'menu-cart', '修改购物车的商品信息 DO每个商品，对应一条记录，通过 和 关联', 'BUTTON', 'ACTIVE', 'mall:cart:update', 3, NOW(), NOW()),
+('menu-cart-delete', 'menu-cart', '删除购物车的商品信息 DO每个商品，对应一条记录，通过 和 关联', 'BUTTON', 'ACTIVE', 'mall:cart:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

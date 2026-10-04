@@ -55,24 +55,36 @@ export function MesDvSubjectForm({ open, initialData, onClose, onSuccess }: MesD
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-dv-subject-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 点检保养项目" : "新增MES 点检保养项目"}
+        data-testid="mes-dv-subject-form"
+        data-agent-scope="mes-dv-subject:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesDvSubject（源框架导入）" : "新增MesDvSubject（源框架导入）"}
+            {isEdit ? "编辑MES 点检保养项目" : "新增MES 点检保养项目"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-dv-subject-form-close" data-agent-target="mes-dv-subject:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-dv-subject-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">项目编码</label>
+          <label htmlFor="mes-dv-subject-code" className="block text-xs text-slate-600 mb-1">项目编码</label>
           <input
             type="text"
+            id="mes-dv-subject-code"
+            data-testid="field-code"
+            data-agent-target="mes-dv-subject:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="项目编码"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -82,9 +94,14 @@ export function MesDvSubjectForm({ open, initialData, onClose, onSuccess }: MesD
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">项目名称</label>
+          <label htmlFor="mes-dv-subject-name" className="block text-xs text-slate-600 mb-1">项目名称</label>
           <input
             type="text"
+            id="mes-dv-subject-name"
+            data-testid="field-name"
+            data-agent-target="mes-dv-subject:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="项目名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -94,9 +111,14 @@ export function MesDvSubjectForm({ open, initialData, onClose, onSuccess }: MesD
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">项目类型</label>
+          <label htmlFor="mes-dv-subject-type" className="block text-xs text-slate-600 mb-1">项目类型</label>
           <input
             type="number"
+            id="mes-dv-subject-type"
+            data-testid="field-type"
+            data-agent-target="mes-dv-subject:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="项目类型"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -106,9 +128,14 @@ export function MesDvSubjectForm({ open, initialData, onClose, onSuccess }: MesD
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">项目内容</label>
+          <label htmlFor="mes-dv-subject-content" className="block text-xs text-slate-600 mb-1">项目内容</label>
           <input
             type="text"
+            id="mes-dv-subject-content"
+            data-testid="field-content"
+            data-agent-target="mes-dv-subject:field:content"
+            data-agent-state={formData.content ? "filled" : "empty"}
+            aria-label="项目内容"
             value={formData.content ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, content: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -118,9 +145,14 @@ export function MesDvSubjectForm({ open, initialData, onClose, onSuccess }: MesD
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">标准</label>
+          <label htmlFor="mes-dv-subject-standard" className="block text-xs text-slate-600 mb-1">标准</label>
           <input
             type="text"
+            id="mes-dv-subject-standard"
+            data-testid="field-standard"
+            data-agent-target="mes-dv-subject:field:standard"
+            data-agent-state={formData.standard ? "filled" : "empty"}
+            aria-label="标准"
             value={formData.standard ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, standard: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -130,9 +162,14 @@ export function MesDvSubjectForm({ open, initialData, onClose, onSuccess }: MesD
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="mes-dv-subject-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="mes-dv-subject-status"
+            data-testid="field-status"
+            data-agent-target="mes-dv-subject:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -142,9 +179,14 @@ export function MesDvSubjectForm({ open, initialData, onClose, onSuccess }: MesD
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-dv-subject-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-dv-subject-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-dv-subject:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -158,6 +200,8 @@ export function MesDvSubjectForm({ open, initialData, onClose, onSuccess }: MesD
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-dv-subject-form-cancel"
+              data-agent-target="mes-dv-subject:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -165,6 +209,9 @@ export function MesDvSubjectForm({ open, initialData, onClose, onSuccess }: MesD
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-dv-subject-form-submit"
+              data-agent-target="mes-dv-subject:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

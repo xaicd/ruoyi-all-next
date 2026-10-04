@@ -1,0 +1,267 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "ai",
+  "entity": "AiModel",
+  "kebab": "ai-model",
+  "businessName": "AI 模型 DO默认模型： 为开启，并且 排序第一",
+  "permissionPrefix": "ai:ai_model",
+  "page": {
+    "route": "/admin/ai/ai-model",
+    "title": "AI 模型 DO默认模型： 为开启，并且 排序第一管理",
+    "titleSelector": "[data-testid=\"ai-model-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.ai/api",
+    "bffMount": "/api/v1/admin/ai",
+    "resource": "ai-model",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/ai-model",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/ai-model/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/ai-model"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/ai-model/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/ai-model/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"ai-model-title\"]",
+    "refresh": "[data-testid=\"ai-model-refresh\"]",
+    "createButton": "[data-testid=\"ai-model-create\"]",
+    "searchForm": "[data-testid=\"ai-model-search\"]",
+    "searchSubmit": "[data-testid=\"ai-model-search-submit\"]",
+    "searchReset": "[data-testid=\"ai-model-search-reset\"]",
+    "total": "[data-testid=\"ai-model-total\"]",
+    "table": "[data-testid=\"ai-model-table\"]",
+    "row": "[data-testid=\"ai-model-row\"]",
+    "editButton": "[data-testid=\"ai-model-edit\"]",
+    "deleteButton": "[data-testid=\"ai-model-delete\"]",
+    "form": "[data-testid=\"ai-model-form\"]",
+    "formError": "[data-testid=\"ai-model-form-error\"]",
+    "formSubmit": "[data-testid=\"ai-model-form-submit\"]",
+    "formCancel": "[data-testid=\"ai-model-form-cancel\"]",
+    "formClose": "[data-testid=\"ai-model-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "AI 模型 DO默认模型： 为开启，并且 排序第一列表",
+    "dialogLabel": {
+      "create": "新增AI 模型 DO默认模型： 为开启，并且 排序第一",
+      "edit": "编辑AI 模型 DO默认模型： 为开启，并且 排序第一"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "key_id",
+        "label": "API 秘钥编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-key_id",
+        "selector": "[data-testid=\"field-key_id\"]"
+      },
+      {
+        "name": "name",
+        "label": "模型名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "model",
+        "label": "模型标志",
+        "type": "string",
+        "required": false,
+        "testId": "field-model",
+        "selector": "[data-testid=\"field-model\"]"
+      },
+      {
+        "name": "platform",
+        "label": "平台",
+        "type": "string",
+        "required": false,
+        "testId": "field-platform",
+        "selector": "[data-testid=\"field-platform\"]"
+      },
+      {
+        "name": "type",
+        "label": "类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "sort",
+        "label": "排序值",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "temperature",
+        "label": "温度参数",
+        "type": "number",
+        "required": false,
+        "testId": "field-temperature",
+        "selector": "[data-testid=\"field-temperature\"]"
+      },
+      {
+        "name": "max_tokens",
+        "label": "单条回复的最大 Token 数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-max_tokens",
+        "selector": "[data-testid=\"field-max_tokens\"]"
+      },
+      {
+        "name": "max_contexts",
+        "label": "上下文的最大 Message 数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-max_contexts",
+        "selector": "[data-testid=\"field-max_contexts\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "ai-model",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"ai-model\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"ai-model-form-overlay\"]",
+      "dialog": "[data-testid=\"ai-model-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "ai-model:search",
+      "reset": "ai-model:reset",
+      "refresh": "ai-model:refresh",
+      "create": "ai-model:create",
+      "edit": "ai-model:edit",
+      "delete": "ai-model:delete",
+      "submit": "ai-model:submit",
+      "cancel": "ai-model:cancel",
+      "close": "ai-model:close",
+      "row": "ai-model:row",
+      "pagination": "ai-model:pagination",
+      "fields": {
+        "key_id": "ai-model:field:key_id",
+        "name": "ai-model:field:name",
+        "model": "ai-model:field:model",
+        "platform": "ai-model:field:platform",
+        "type": "ai-model:field:type",
+        "sort": "ai-model:field:sort",
+        "status": "ai-model:field:status",
+        "temperature": "ai-model:field:temperature",
+        "max_tokens": "ai-model:field:max_tokens",
+        "max_contexts": "ai-model:field:max_contexts"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "ai.ai-model",
+      "examples": [
+        "ai.ai-model__List__Refresh",
+        "ai.ai-model__ListItem__Open",
+        "ai.ai-model__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

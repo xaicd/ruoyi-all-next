@@ -1,0 +1,267 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mp",
+  "entity": "MpMaterial",
+  "kebab": "mp-material",
+  "businessName": "公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_",
+  "permissionPrefix": "mp:mp_material",
+  "page": {
+    "route": "/admin/mp/mp-material",
+    "title": "公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_管理",
+    "titleSelector": "[data-testid=\"mp-material-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mp/api",
+    "bffMount": "/api/v1/admin/mp",
+    "resource": "mp-material",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mp-material",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mp-material/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mp-material"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mp-material/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mp-material/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mp-material-title\"]",
+    "refresh": "[data-testid=\"mp-material-refresh\"]",
+    "createButton": "[data-testid=\"mp-material-create\"]",
+    "searchForm": "[data-testid=\"mp-material-search\"]",
+    "searchSubmit": "[data-testid=\"mp-material-search-submit\"]",
+    "searchReset": "[data-testid=\"mp-material-search-reset\"]",
+    "total": "[data-testid=\"mp-material-total\"]",
+    "table": "[data-testid=\"mp-material-table\"]",
+    "row": "[data-testid=\"mp-material-row\"]",
+    "editButton": "[data-testid=\"mp-material-edit\"]",
+    "deleteButton": "[data-testid=\"mp-material-delete\"]",
+    "form": "[data-testid=\"mp-material-form\"]",
+    "formError": "[data-testid=\"mp-material-form-error\"]",
+    "formSubmit": "[data-testid=\"mp-material-form-submit\"]",
+    "formCancel": "[data-testid=\"mp-material-form-cancel\"]",
+    "formClose": "[data-testid=\"mp-material-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_列表",
+    "dialogLabel": {
+      "create": "新增公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_",
+      "edit": "编辑公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "account_id",
+        "label": "公众号账号的编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-account_id",
+        "selector": "[data-testid=\"field-account_id\"]"
+      },
+      {
+        "name": "app_id",
+        "label": "公众号 appId",
+        "type": "string",
+        "required": false,
+        "testId": "field-app_id",
+        "selector": "[data-testid=\"field-app_id\"]"
+      },
+      {
+        "name": "media_id",
+        "label": "公众号素材 id",
+        "type": "string",
+        "required": false,
+        "testId": "field-media_id",
+        "selector": "[data-testid=\"field-media_id\"]"
+      },
+      {
+        "name": "type",
+        "label": "文件类型",
+        "type": "string",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "permanent",
+        "label": "是否永久",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-permanent",
+        "selector": "[data-testid=\"field-permanent\"]"
+      },
+      {
+        "name": "url",
+        "label": "文件服务器的 URL",
+        "type": "string",
+        "required": false,
+        "testId": "field-url",
+        "selector": "[data-testid=\"field-url\"]"
+      },
+      {
+        "name": "name",
+        "label": "名字",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "mp_url",
+        "label": "公众号文件 URL",
+        "type": "string",
+        "required": false,
+        "testId": "field-mp_url",
+        "selector": "[data-testid=\"field-mp_url\"]"
+      },
+      {
+        "name": "title",
+        "label": "视频素材的标题",
+        "type": "string",
+        "required": false,
+        "testId": "field-title",
+        "selector": "[data-testid=\"field-title\"]"
+      },
+      {
+        "name": "introduction",
+        "label": "视频素材的描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-introduction",
+        "selector": "[data-testid=\"field-introduction\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mp-material",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mp-material\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mp-material-form-overlay\"]",
+      "dialog": "[data-testid=\"mp-material-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mp-material:search",
+      "reset": "mp-material:reset",
+      "refresh": "mp-material:refresh",
+      "create": "mp-material:create",
+      "edit": "mp-material:edit",
+      "delete": "mp-material:delete",
+      "submit": "mp-material:submit",
+      "cancel": "mp-material:cancel",
+      "close": "mp-material:close",
+      "row": "mp-material:row",
+      "pagination": "mp-material:pagination",
+      "fields": {
+        "account_id": "mp-material:field:account_id",
+        "app_id": "mp-material:field:app_id",
+        "media_id": "mp-material:field:media_id",
+        "type": "mp-material:field:type",
+        "permanent": "mp-material:field:permanent",
+        "url": "mp-material:field:url",
+        "name": "mp-material:field:name",
+        "mp_url": "mp-material:field:mp_url",
+        "title": "mp-material:field:title",
+        "introduction": "mp-material:field:introduction"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mp.mp-material",
+      "examples": [
+        "mp.mp-material__List__Refresh",
+        "mp.mp-material__ListItem__Open",
+        "mp.mp-material__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

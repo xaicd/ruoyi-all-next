@@ -56,24 +56,36 @@ export function MesWmMiscReceiptLineForm({ open, initialData, onClose, onSuccess
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-wm-misc-receipt-line-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 杂项入库单行" : "新增MES 杂项入库单行"}
+        data-testid="mes-wm-misc-receipt-line-form"
+        data-agent-scope="mes-wm-misc-receipt-line:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesWmMiscReceiptLine（源框架导入）" : "新增MesWmMiscReceiptLine（源框架导入）"}
+            {isEdit ? "编辑MES 杂项入库单行" : "新增MES 杂项入库单行"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-wm-misc-receipt-line-form-close" data-agent-target="mes-wm-misc-receipt-line:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-wm-misc-receipt-line-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">入库单编号</label>
+          <label htmlFor="mes-wm-misc-receipt-line-receipt_id" className="block text-xs text-slate-600 mb-1">入库单编号</label>
           <input
             type="number"
+            id="mes-wm-misc-receipt-line-receipt_id"
+            data-testid="field-receipt_id"
+            data-agent-target="mes-wm-misc-receipt-line:field:receipt_id"
+            data-agent-state={formData.receipt_id == null || formData.receipt_id === "" ? "empty" : "filled"}
+            aria-label="入库单编号"
             value={formData.receipt_id != null ? String(formData.receipt_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, receipt_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -83,9 +95,14 @@ export function MesWmMiscReceiptLineForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">物料编号</label>
+          <label htmlFor="mes-wm-misc-receipt-line-item_id" className="block text-xs text-slate-600 mb-1">物料编号</label>
           <input
             type="number"
+            id="mes-wm-misc-receipt-line-item_id"
+            data-testid="field-item_id"
+            data-agent-target="mes-wm-misc-receipt-line:field:item_id"
+            data-agent-state={formData.item_id == null || formData.item_id === "" ? "empty" : "filled"}
+            aria-label="物料编号"
             value={formData.item_id != null ? String(formData.item_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, item_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -95,9 +112,14 @@ export function MesWmMiscReceiptLineForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">入库数量</label>
+          <label htmlFor="mes-wm-misc-receipt-line-quantity" className="block text-xs text-slate-600 mb-1">入库数量</label>
           <input
             type="number"
+            id="mes-wm-misc-receipt-line-quantity"
+            data-testid="field-quantity"
+            data-agent-target="mes-wm-misc-receipt-line:field:quantity"
+            data-agent-state={formData.quantity == null || formData.quantity === "" ? "empty" : "filled"}
+            aria-label="入库数量"
             value={formData.quantity != null ? String(formData.quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -107,9 +129,14 @@ export function MesWmMiscReceiptLineForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">批次号</label>
+          <label htmlFor="mes-wm-misc-receipt-line-batch_code" className="block text-xs text-slate-600 mb-1">批次号</label>
           <input
             type="text"
+            id="mes-wm-misc-receipt-line-batch_code"
+            data-testid="field-batch_code"
+            data-agent-target="mes-wm-misc-receipt-line:field:batch_code"
+            data-agent-state={formData.batch_code ? "filled" : "empty"}
+            aria-label="批次号"
             value={formData.batch_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, batch_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -119,9 +146,14 @@ export function MesWmMiscReceiptLineForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">仓库编号</label>
+          <label htmlFor="mes-wm-misc-receipt-line-warehouse_id" className="block text-xs text-slate-600 mb-1">仓库编号</label>
           <input
             type="number"
+            id="mes-wm-misc-receipt-line-warehouse_id"
+            data-testid="field-warehouse_id"
+            data-agent-target="mes-wm-misc-receipt-line:field:warehouse_id"
+            data-agent-state={formData.warehouse_id == null || formData.warehouse_id === "" ? "empty" : "filled"}
+            aria-label="仓库编号"
             value={formData.warehouse_id != null ? String(formData.warehouse_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, warehouse_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -131,9 +163,14 @@ export function MesWmMiscReceiptLineForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">库区编号</label>
+          <label htmlFor="mes-wm-misc-receipt-line-location_id" className="block text-xs text-slate-600 mb-1">库区编号</label>
           <input
             type="number"
+            id="mes-wm-misc-receipt-line-location_id"
+            data-testid="field-location_id"
+            data-agent-target="mes-wm-misc-receipt-line:field:location_id"
+            data-agent-state={formData.location_id == null || formData.location_id === "" ? "empty" : "filled"}
+            aria-label="库区编号"
             value={formData.location_id != null ? String(formData.location_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, location_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -143,9 +180,14 @@ export function MesWmMiscReceiptLineForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">库位编号</label>
+          <label htmlFor="mes-wm-misc-receipt-line-area_id" className="block text-xs text-slate-600 mb-1">库位编号</label>
           <input
             type="number"
+            id="mes-wm-misc-receipt-line-area_id"
+            data-testid="field-area_id"
+            data-agent-target="mes-wm-misc-receipt-line:field:area_id"
+            data-agent-state={formData.area_id == null || formData.area_id === "" ? "empty" : "filled"}
+            aria-label="库位编号"
             value={formData.area_id != null ? String(formData.area_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, area_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -155,9 +197,14 @@ export function MesWmMiscReceiptLineForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-wm-misc-receipt-line-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-wm-misc-receipt-line-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-wm-misc-receipt-line:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,6 +218,8 @@ export function MesWmMiscReceiptLineForm({ open, initialData, onClose, onSuccess
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-wm-misc-receipt-line-form-cancel"
+              data-agent-target="mes-wm-misc-receipt-line:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -178,6 +227,9 @@ export function MesWmMiscReceiptLineForm({ open, initialData, onClose, onSuccess
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-wm-misc-receipt-line-form-submit"
+              data-agent-target="mes-wm-misc-receipt-line:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MpMessage（源框架导入） (MpMessage)
+-- Auto-generated RBAC & Menu Migration for 公众号消息 (MpMessage)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mp-message',
   'mp-dir',
-  'MpMessage（源框架导入）管理',
+  '公众号消息管理',
   '/admin/mp/mp-message',
   'mp/mp-message/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mp-message-query',  'menu-mp-message', '查询MpMessage（源框架导入）', 'BUTTON', 'ACTIVE', 'mp:mp_message:query',  1, NOW(), NOW()),
-('menu-mp-message-create', 'menu-mp-message', '新增MpMessage（源框架导入）', 'BUTTON', 'ACTIVE', 'mp:mp_message:create', 2, NOW(), NOW()),
-('menu-mp-message-update', 'menu-mp-message', '修改MpMessage（源框架导入）', 'BUTTON', 'ACTIVE', 'mp:mp_message:update', 3, NOW(), NOW()),
-('menu-mp-message-delete', 'menu-mp-message', '删除MpMessage（源框架导入）', 'BUTTON', 'ACTIVE', 'mp:mp_message:delete', 4, NOW(), NOW())
+('menu-mp-message-query',  'menu-mp-message', '查询公众号消息', 'BUTTON', 'ACTIVE', 'mp:mp_message:query',  1, NOW(), NOW()),
+('menu-mp-message-create', 'menu-mp-message', '新增公众号消息', 'BUTTON', 'ACTIVE', 'mp:mp_message:create', 2, NOW(), NOW()),
+('menu-mp-message-update', 'menu-mp-message', '修改公众号消息', 'BUTTON', 'ACTIVE', 'mp:mp_message:update', 3, NOW(), NOW()),
+('menu-mp-message-delete', 'menu-mp-message', '删除公众号消息', 'BUTTON', 'ACTIVE', 'mp:mp_message:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

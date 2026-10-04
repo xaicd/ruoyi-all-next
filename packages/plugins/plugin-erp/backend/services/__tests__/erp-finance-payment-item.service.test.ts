@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ErpFinancePaymentItemService } from "../erp-finance-payment-item.service"
 
 describe("ErpFinancePaymentItemService", () => {
-  it("should create and query ErpFinancePaymentItem（源框架导入）", async () => {
+  it("should create and query ERP 付款项", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ErpFinancePaymentItemService.create({
         payment_id: 1,
@@ -21,7 +21,7 @@ describe("ErpFinancePaymentItemService", () => {
   
       const updated = await ErpFinancePaymentItemService.update(created.id, {
         id: created.id,
-        payment_id: "更新ErpFinancePaymentItem（源框架导入）",
+        payment_id: "更新ERP 付款项",
       } as any)
       expect(updated).toBeDefined()
   

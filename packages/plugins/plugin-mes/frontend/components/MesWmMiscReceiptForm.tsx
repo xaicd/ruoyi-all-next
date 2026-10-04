@@ -57,24 +57,36 @@ export function MesWmMiscReceiptForm({ open, initialData, onClose, onSuccess }: 
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-wm-misc-receipt-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 杂项入库单" : "新增MES 杂项入库单"}
+        data-testid="mes-wm-misc-receipt-form"
+        data-agent-scope="mes-wm-misc-receipt:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesWmMiscReceipt（源框架导入）" : "新增MesWmMiscReceipt（源框架导入）"}
+            {isEdit ? "编辑MES 杂项入库单" : "新增MES 杂项入库单"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-wm-misc-receipt-form-close" data-agent-target="mes-wm-misc-receipt:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-wm-misc-receipt-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">入库单编码</label>
+          <label htmlFor="mes-wm-misc-receipt-code" className="block text-xs text-slate-600 mb-1">入库单编码</label>
           <input
             type="text"
+            id="mes-wm-misc-receipt-code"
+            data-testid="field-code"
+            data-agent-target="mes-wm-misc-receipt:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="入库单编码"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -84,9 +96,14 @@ export function MesWmMiscReceiptForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">入库单名称</label>
+          <label htmlFor="mes-wm-misc-receipt-name" className="block text-xs text-slate-600 mb-1">入库单名称</label>
           <input
             type="text"
+            id="mes-wm-misc-receipt-name"
+            data-testid="field-name"
+            data-agent-target="mes-wm-misc-receipt:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="入库单名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -96,9 +113,14 @@ export function MesWmMiscReceiptForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">杂项类型</label>
+          <label htmlFor="mes-wm-misc-receipt-type" className="block text-xs text-slate-600 mb-1">杂项类型</label>
           <input
             type="number"
+            id="mes-wm-misc-receipt-type"
+            data-testid="field-type"
+            data-agent-target="mes-wm-misc-receipt:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="杂项类型"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -108,9 +130,14 @@ export function MesWmMiscReceiptForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">来源单据类型</label>
+          <label htmlFor="mes-wm-misc-receipt-source_doc_type" className="block text-xs text-slate-600 mb-1">来源单据类型</label>
           <input
             type="text"
+            id="mes-wm-misc-receipt-source_doc_type"
+            data-testid="field-source_doc_type"
+            data-agent-target="mes-wm-misc-receipt:field:source_doc_type"
+            data-agent-state={formData.source_doc_type ? "filled" : "empty"}
+            aria-label="来源单据类型"
             value={formData.source_doc_type ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, source_doc_type: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -120,9 +147,14 @@ export function MesWmMiscReceiptForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">来源单据 ID</label>
+          <label htmlFor="mes-wm-misc-receipt-source_doc_id" className="block text-xs text-slate-600 mb-1">来源单据 ID</label>
           <input
             type="number"
+            id="mes-wm-misc-receipt-source_doc_id"
+            data-testid="field-source_doc_id"
+            data-agent-target="mes-wm-misc-receipt:field:source_doc_id"
+            data-agent-state={formData.source_doc_id == null || formData.source_doc_id === "" ? "empty" : "filled"}
+            aria-label="来源单据 ID"
             value={formData.source_doc_id != null ? String(formData.source_doc_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, source_doc_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -132,9 +164,14 @@ export function MesWmMiscReceiptForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">来源单据编码</label>
+          <label htmlFor="mes-wm-misc-receipt-source_doc_code" className="block text-xs text-slate-600 mb-1">来源单据编码</label>
           <input
             type="text"
+            id="mes-wm-misc-receipt-source_doc_code"
+            data-testid="field-source_doc_code"
+            data-agent-target="mes-wm-misc-receipt:field:source_doc_code"
+            data-agent-state={formData.source_doc_code ? "filled" : "empty"}
+            aria-label="来源单据编码"
             value={formData.source_doc_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, source_doc_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -144,9 +181,14 @@ export function MesWmMiscReceiptForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">入库日期</label>
+          <label htmlFor="mes-wm-misc-receipt-receipt_date" className="block text-xs text-slate-600 mb-1">入库日期</label>
           <input
             type="text"
+            id="mes-wm-misc-receipt-receipt_date"
+            data-testid="field-receipt_date"
+            data-agent-target="mes-wm-misc-receipt:field:receipt_date"
+            data-agent-state={formData.receipt_date ? "filled" : "empty"}
+            aria-label="入库日期"
             value={formData.receipt_date ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, receipt_date: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -156,9 +198,14 @@ export function MesWmMiscReceiptForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="mes-wm-misc-receipt-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="mes-wm-misc-receipt-status"
+            data-testid="field-status"
+            data-agent-target="mes-wm-misc-receipt:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -168,9 +215,14 @@ export function MesWmMiscReceiptForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-wm-misc-receipt-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-wm-misc-receipt-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-wm-misc-receipt:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -184,6 +236,8 @@ export function MesWmMiscReceiptForm({ open, initialData, onClose, onSuccess }: 
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-wm-misc-receipt-form-cancel"
+              data-agent-target="mes-wm-misc-receipt:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -191,6 +245,9 @@ export function MesWmMiscReceiptForm({ open, initialData, onClose, onSuccess }: 
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-wm-misc-receipt-form-submit"
+              data-agent-target="mes-wm-misc-receipt:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

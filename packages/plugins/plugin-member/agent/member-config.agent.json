@@ -1,0 +1,213 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "member",
+  "entity": "MemberConfig",
+  "kebab": "member-config",
+  "businessName": "会员配置",
+  "permissionPrefix": "member:member_config",
+  "page": {
+    "route": "/admin/member/member-config",
+    "title": "会员配置管理",
+    "titleSelector": "[data-testid=\"member-config-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.member/api",
+    "bffMount": "/api/v1/admin/member",
+    "resource": "member-config",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/member-config",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/member-config/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/member-config"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/member-config/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/member-config/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"member-config-title\"]",
+    "refresh": "[data-testid=\"member-config-refresh\"]",
+    "createButton": "[data-testid=\"member-config-create\"]",
+    "searchForm": "[data-testid=\"member-config-search\"]",
+    "searchSubmit": "[data-testid=\"member-config-search-submit\"]",
+    "searchReset": "[data-testid=\"member-config-search-reset\"]",
+    "total": "[data-testid=\"member-config-total\"]",
+    "table": "[data-testid=\"member-config-table\"]",
+    "row": "[data-testid=\"member-config-row\"]",
+    "editButton": "[data-testid=\"member-config-edit\"]",
+    "deleteButton": "[data-testid=\"member-config-delete\"]",
+    "form": "[data-testid=\"member-config-form\"]",
+    "formError": "[data-testid=\"member-config-form-error\"]",
+    "formSubmit": "[data-testid=\"member-config-form-submit\"]",
+    "formCancel": "[data-testid=\"member-config-form-cancel\"]",
+    "formClose": "[data-testid=\"member-config-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "会员配置列表",
+    "dialogLabel": {
+      "create": "新增会员配置",
+      "edit": "编辑会员配置"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "point_trade_deduct_enable",
+        "label": "积分抵扣开关",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-point_trade_deduct_enable",
+        "selector": "[data-testid=\"field-point_trade_deduct_enable\"]"
+      },
+      {
+        "name": "point_trade_deduct_unit_price",
+        "label": "积分抵扣，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-point_trade_deduct_unit_price",
+        "selector": "[data-testid=\"field-point_trade_deduct_unit_price\"]"
+      },
+      {
+        "name": "point_trade_deduct_max_price",
+        "label": "积分抵扣最大值",
+        "type": "number",
+        "required": false,
+        "testId": "field-point_trade_deduct_max_price",
+        "selector": "[data-testid=\"field-point_trade_deduct_max_price\"]"
+      },
+      {
+        "name": "point_trade_give_point",
+        "label": "1 元赠送多少分",
+        "type": "number",
+        "required": false,
+        "testId": "field-point_trade_give_point",
+        "selector": "[data-testid=\"field-point_trade_give_point\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "member-config",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"member-config\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"member-config-form-overlay\"]",
+      "dialog": "[data-testid=\"member-config-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "member-config:search",
+      "reset": "member-config:reset",
+      "refresh": "member-config:refresh",
+      "create": "member-config:create",
+      "edit": "member-config:edit",
+      "delete": "member-config:delete",
+      "submit": "member-config:submit",
+      "cancel": "member-config:cancel",
+      "close": "member-config:close",
+      "row": "member-config:row",
+      "pagination": "member-config:pagination",
+      "fields": {
+        "point_trade_deduct_enable": "member-config:field:point_trade_deduct_enable",
+        "point_trade_deduct_unit_price": "member-config:field:point_trade_deduct_unit_price",
+        "point_trade_deduct_max_price": "member-config:field:point_trade_deduct_max_price",
+        "point_trade_give_point": "member-config:field:point_trade_give_point"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "member.member-config",
+      "examples": [
+        "member.member-config__List__Refresh",
+        "member.member-config__ListItem__Open",
+        "member.member-config__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

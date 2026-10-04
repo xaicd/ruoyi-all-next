@@ -60,24 +60,36 @@ export function MesMdItemForm({ open, initialData, onClose, onSuccess }: MesMdIt
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-md-item-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 物料产品" : "新增MES 物料产品"}
+        data-testid="mes-md-item-form"
+        data-agent-scope="mes-md-item:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesMdItem（源框架导入）" : "新增MesMdItem（源框架导入）"}
+            {isEdit ? "编辑MES 物料产品" : "新增MES 物料产品"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-md-item-form-close" data-agent-target="mes-md-item:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-md-item-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">物料编码</label>
+          <label htmlFor="mes-md-item-code" className="block text-xs text-slate-600 mb-1">物料编码</label>
           <input
             type="text"
+            id="mes-md-item-code"
+            data-testid="field-code"
+            data-agent-target="mes-md-item:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="物料编码"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -87,9 +99,14 @@ export function MesMdItemForm({ open, initialData, onClose, onSuccess }: MesMdIt
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">物料名称</label>
+          <label htmlFor="mes-md-item-name" className="block text-xs text-slate-600 mb-1">物料名称</label>
           <input
             type="text"
+            id="mes-md-item-name"
+            data-testid="field-name"
+            data-agent-target="mes-md-item:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="物料名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -99,9 +116,14 @@ export function MesMdItemForm({ open, initialData, onClose, onSuccess }: MesMdIt
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">规格型号</label>
+          <label htmlFor="mes-md-item-specification" className="block text-xs text-slate-600 mb-1">规格型号</label>
           <input
             type="text"
+            id="mes-md-item-specification"
+            data-testid="field-specification"
+            data-agent-target="mes-md-item:field:specification"
+            data-agent-state={formData.specification ? "filled" : "empty"}
+            aria-label="规格型号"
             value={formData.specification ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, specification: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -111,9 +133,14 @@ export function MesMdItemForm({ open, initialData, onClose, onSuccess }: MesMdIt
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">计量单位编号</label>
+          <label htmlFor="mes-md-item-unit_measure_id" className="block text-xs text-slate-600 mb-1">计量单位编号</label>
           <input
             type="number"
+            id="mes-md-item-unit_measure_id"
+            data-testid="field-unit_measure_id"
+            data-agent-target="mes-md-item:field:unit_measure_id"
+            data-agent-state={formData.unit_measure_id == null || formData.unit_measure_id === "" ? "empty" : "filled"}
+            aria-label="计量单位编号"
             value={formData.unit_measure_id != null ? String(formData.unit_measure_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, unit_measure_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -123,9 +150,14 @@ export function MesMdItemForm({ open, initialData, onClose, onSuccess }: MesMdIt
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">物料分类编号</label>
+          <label htmlFor="mes-md-item-item_type_id" className="block text-xs text-slate-600 mb-1">物料分类编号</label>
           <input
             type="number"
+            id="mes-md-item-item_type_id"
+            data-testid="field-item_type_id"
+            data-agent-target="mes-md-item:field:item_type_id"
+            data-agent-state={formData.item_type_id == null || formData.item_type_id === "" ? "empty" : "filled"}
+            aria-label="物料分类编号"
             value={formData.item_type_id != null ? String(formData.item_type_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, item_type_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -135,9 +167,14 @@ export function MesMdItemForm({ open, initialData, onClose, onSuccess }: MesMdIt
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="mes-md-item-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="mes-md-item-status"
+            data-testid="field-status"
+            data-agent-target="mes-md-item:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -149,18 +186,27 @@ export function MesMdItemForm({ open, initialData, onClose, onSuccess }: MesMdIt
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="safe_stock_flag"
+            id="mes-md-item-safe_stock_flag"
+            data-testid="field-safe_stock_flag"
+            data-agent-target="mes-md-item:field:safe_stock_flag"
+            data-agent-state={formData.safe_stock_flag ? "on" : "off"}
+            aria-label="是否启用安全库存"
             checked={Boolean(formData.safe_stock_flag)}
             onChange={(e) => setFormData((prev) => ({ ...prev, safe_stock_flag: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="safe_stock_flag" className="text-xs text-slate-700 font-medium">是否启用安全库存</label>
+          <label htmlFor="mes-md-item-safe_stock_flag" className="text-xs text-slate-700 font-medium">是否启用安全库存</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最低库存量</label>
+          <label htmlFor="mes-md-item-min_stock" className="block text-xs text-slate-600 mb-1">最低库存量</label>
           <input
             type="number"
+            id="mes-md-item-min_stock"
+            data-testid="field-min_stock"
+            data-agent-target="mes-md-item:field:min_stock"
+            data-agent-state={formData.min_stock == null || formData.min_stock === "" ? "empty" : "filled"}
+            aria-label="最低库存量"
             value={formData.min_stock != null ? String(formData.min_stock) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, min_stock: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -170,9 +216,14 @@ export function MesMdItemForm({ open, initialData, onClose, onSuccess }: MesMdIt
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最高库存量</label>
+          <label htmlFor="mes-md-item-max_stock" className="block text-xs text-slate-600 mb-1">最高库存量</label>
           <input
             type="number"
+            id="mes-md-item-max_stock"
+            data-testid="field-max_stock"
+            data-agent-target="mes-md-item:field:max_stock"
+            data-agent-state={formData.max_stock == null || formData.max_stock === "" ? "empty" : "filled"}
+            aria-label="最高库存量"
             value={formData.max_stock != null ? String(formData.max_stock) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, max_stock: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -184,29 +235,42 @@ export function MesMdItemForm({ open, initialData, onClose, onSuccess }: MesMdIt
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="high_value"
+            id="mes-md-item-high_value"
+            data-testid="field-high_value"
+            data-agent-target="mes-md-item:field:high_value"
+            data-agent-state={formData.high_value ? "on" : "off"}
+            aria-label="是否高值物料"
             checked={Boolean(formData.high_value)}
             onChange={(e) => setFormData((prev) => ({ ...prev, high_value: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="high_value" className="text-xs text-slate-700 font-medium">是否高值物料</label>
+          <label htmlFor="mes-md-item-high_value" className="text-xs text-slate-700 font-medium">是否高值物料</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="batch_flag"
+            id="mes-md-item-batch_flag"
+            data-testid="field-batch_flag"
+            data-agent-target="mes-md-item:field:batch_flag"
+            data-agent-state={formData.batch_flag ? "on" : "off"}
+            aria-label="是否启用批次管理"
             checked={Boolean(formData.batch_flag)}
             onChange={(e) => setFormData((prev) => ({ ...prev, batch_flag: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="batch_flag" className="text-xs text-slate-700 font-medium">是否启用批次管理</label>
+          <label htmlFor="mes-md-item-batch_flag" className="text-xs text-slate-700 font-medium">是否启用批次管理</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-md-item-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-md-item-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-md-item:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -220,6 +284,8 @@ export function MesMdItemForm({ open, initialData, onClose, onSuccess }: MesMdIt
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-md-item-form-cancel"
+              data-agent-target="mes-md-item:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -227,6 +293,9 @@ export function MesMdItemForm({ open, initialData, onClose, onSuccess }: MesMdIt
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-md-item-form-submit"
+              data-agent-target="mes-md-item:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

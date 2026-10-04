@@ -52,24 +52,36 @@ export function CrmOwnerRecordForm({ open, initialData, onClose, onSuccess }: Cr
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="crm-owner-record-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑CRM 负责人变更记录" : "新增CRM 负责人变更记录"}
+        data-testid="crm-owner-record-form"
+        data-agent-scope="crm-owner-record:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑CrmOwnerRecord（源框架导入）" : "新增CrmOwnerRecord（源框架导入）"}
+            {isEdit ? "编辑CRM 负责人变更记录" : "新增CRM 负责人变更记录"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="crm-owner-record-form-close" data-agent-target="crm-owner-record:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="crm-owner-record-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">CRM 业务类型</label>
+          <label htmlFor="crm-owner-record-biz_type" className="block text-xs text-slate-600 mb-1">CRM 业务类型</label>
           <input
             type="number"
+            id="crm-owner-record-biz_type"
+            data-testid="field-biz_type"
+            data-agent-target="crm-owner-record:field:biz_type"
+            data-agent-state={formData.biz_type == null || formData.biz_type === "" ? "empty" : "filled"}
+            aria-label="CRM 业务类型"
             value={formData.biz_type != null ? String(formData.biz_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -79,9 +91,14 @@ export function CrmOwnerRecordForm({ open, initialData, onClose, onSuccess }: Cr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">CRM 业务编号</label>
+          <label htmlFor="crm-owner-record-biz_id" className="block text-xs text-slate-600 mb-1">CRM 业务编号</label>
           <input
             type="number"
+            id="crm-owner-record-biz_id"
+            data-testid="field-biz_id"
+            data-agent-target="crm-owner-record:field:biz_id"
+            data-agent-state={formData.biz_id == null || formData.biz_id === "" ? "empty" : "filled"}
+            aria-label="CRM 业务编号"
             value={formData.biz_id != null ? String(formData.biz_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -91,9 +108,14 @@ export function CrmOwnerRecordForm({ open, initialData, onClose, onSuccess }: Cr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">变更前负责人</label>
+          <label htmlFor="crm-owner-record-pre_owner_user_id" className="block text-xs text-slate-600 mb-1">变更前负责人</label>
           <input
             type="number"
+            id="crm-owner-record-pre_owner_user_id"
+            data-testid="field-pre_owner_user_id"
+            data-agent-target="crm-owner-record:field:pre_owner_user_id"
+            data-agent-state={formData.pre_owner_user_id == null || formData.pre_owner_user_id === "" ? "empty" : "filled"}
+            aria-label="变更前负责人"
             value={formData.pre_owner_user_id != null ? String(formData.pre_owner_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pre_owner_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -103,9 +125,14 @@ export function CrmOwnerRecordForm({ open, initialData, onClose, onSuccess }: Cr
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">变更后负责人</label>
+          <label htmlFor="crm-owner-record-post_owner_user_id" className="block text-xs text-slate-600 mb-1">变更后负责人</label>
           <input
             type="number"
+            id="crm-owner-record-post_owner_user_id"
+            data-testid="field-post_owner_user_id"
+            data-agent-target="crm-owner-record:field:post_owner_user_id"
+            data-agent-state={formData.post_owner_user_id == null || formData.post_owner_user_id === "" ? "empty" : "filled"}
+            aria-label="变更后负责人"
             value={formData.post_owner_user_id != null ? String(formData.post_owner_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, post_owner_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -119,6 +146,8 @@ export function CrmOwnerRecordForm({ open, initialData, onClose, onSuccess }: Cr
             <button
               type="button"
               onClick={onClose}
+              data-testid="crm-owner-record-form-cancel"
+              data-agent-target="crm-owner-record:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -126,6 +155,9 @@ export function CrmOwnerRecordForm({ open, initialData, onClose, onSuccess }: Cr
             <button
               type="submit"
               disabled={loading}
+              data-testid="crm-owner-record-form-submit"
+              data-agent-target="crm-owner-record:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

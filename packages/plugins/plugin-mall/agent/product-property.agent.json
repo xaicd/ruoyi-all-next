@@ -1,0 +1,195 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "ProductProperty",
+  "kebab": "product-property",
+  "businessName": "商品属性项",
+  "permissionPrefix": "mall:product_property",
+  "page": {
+    "route": "/admin/mall/product-property",
+    "title": "商品属性项管理",
+    "titleSelector": "[data-testid=\"product-property-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "product-property",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/product-property",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/product-property/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/product-property"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/product-property/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/product-property/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"product-property-title\"]",
+    "refresh": "[data-testid=\"product-property-refresh\"]",
+    "createButton": "[data-testid=\"product-property-create\"]",
+    "searchForm": "[data-testid=\"product-property-search\"]",
+    "searchSubmit": "[data-testid=\"product-property-search-submit\"]",
+    "searchReset": "[data-testid=\"product-property-search-reset\"]",
+    "total": "[data-testid=\"product-property-total\"]",
+    "table": "[data-testid=\"product-property-table\"]",
+    "row": "[data-testid=\"product-property-row\"]",
+    "editButton": "[data-testid=\"product-property-edit\"]",
+    "deleteButton": "[data-testid=\"product-property-delete\"]",
+    "form": "[data-testid=\"product-property-form\"]",
+    "formError": "[data-testid=\"product-property-form-error\"]",
+    "formSubmit": "[data-testid=\"product-property-form-submit\"]",
+    "formCancel": "[data-testid=\"product-property-form-cancel\"]",
+    "formClose": "[data-testid=\"product-property-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "商品属性项列表",
+    "dialogLabel": {
+      "create": "新增商品属性项",
+      "edit": "编辑商品属性项"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "product-property",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"product-property\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"product-property-form-overlay\"]",
+      "dialog": "[data-testid=\"product-property-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "product-property:search",
+      "reset": "product-property:reset",
+      "refresh": "product-property:refresh",
+      "create": "product-property:create",
+      "edit": "product-property:edit",
+      "delete": "product-property:delete",
+      "submit": "product-property:submit",
+      "cancel": "product-property:cancel",
+      "close": "product-property:close",
+      "row": "product-property:row",
+      "pagination": "product-property:pagination",
+      "fields": {
+        "name": "product-property:field:name",
+        "remark": "product-property:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.product-property",
+      "examples": [
+        "mall.product-property__List__Refresh",
+        "mall.product-property__ListItem__Open",
+        "mall.product-property__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

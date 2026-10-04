@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for ErpPurchaseReturn（源框架导入） (ErpPurchaseReturn)
+-- Auto-generated RBAC & Menu Migration for ERP 采购退货 (ErpPurchaseReturn)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-erp-purchase-return',
   'erp-dir',
-  'ErpPurchaseReturn（源框架导入）管理',
+  'ERP 采购退货管理',
   '/admin/erp/erp-purchase-return',
   'erp/erp-purchase-return/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-erp-purchase-return-query',  'menu-erp-purchase-return', '查询ErpPurchaseReturn（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_purchase_return:query',  1, NOW(), NOW()),
-('menu-erp-purchase-return-create', 'menu-erp-purchase-return', '新增ErpPurchaseReturn（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_purchase_return:create', 2, NOW(), NOW()),
-('menu-erp-purchase-return-update', 'menu-erp-purchase-return', '修改ErpPurchaseReturn（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_purchase_return:update', 3, NOW(), NOW()),
-('menu-erp-purchase-return-delete', 'menu-erp-purchase-return', '删除ErpPurchaseReturn（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_purchase_return:delete', 4, NOW(), NOW())
+('menu-erp-purchase-return-query',  'menu-erp-purchase-return', '查询ERP 采购退货', 'BUTTON', 'ACTIVE', 'erp:erp_purchase_return:query',  1, NOW(), NOW()),
+('menu-erp-purchase-return-create', 'menu-erp-purchase-return', '新增ERP 采购退货', 'BUTTON', 'ACTIVE', 'erp:erp_purchase_return:create', 2, NOW(), NOW()),
+('menu-erp-purchase-return-update', 'menu-erp-purchase-return', '修改ERP 采购退货', 'BUTTON', 'ACTIVE', 'erp:erp_purchase_return:update', 3, NOW(), NOW()),
+('menu-erp-purchase-return-delete', 'menu-erp-purchase-return', '删除ERP 采购退货', 'BUTTON', 'ACTIVE', 'erp:erp_purchase_return:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

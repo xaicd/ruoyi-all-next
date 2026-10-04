@@ -1,0 +1,249 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "member",
+  "entity": "MemberLevelRecord",
+  "kebab": "member-level-record",
+  "businessName": "会员等级记录 DO用户每次等级发生变更时，记录一条日志",
+  "permissionPrefix": "member:member_level_record",
+  "page": {
+    "route": "/admin/member/member-level-record",
+    "title": "会员等级记录 DO用户每次等级发生变更时，记录一条日志管理",
+    "titleSelector": "[data-testid=\"member-level-record-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.member/api",
+    "bffMount": "/api/v1/admin/member",
+    "resource": "member-level-record",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/member-level-record",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/member-level-record/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/member-level-record"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/member-level-record/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/member-level-record/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"member-level-record-title\"]",
+    "refresh": "[data-testid=\"member-level-record-refresh\"]",
+    "createButton": "[data-testid=\"member-level-record-create\"]",
+    "searchForm": "[data-testid=\"member-level-record-search\"]",
+    "searchSubmit": "[data-testid=\"member-level-record-search-submit\"]",
+    "searchReset": "[data-testid=\"member-level-record-search-reset\"]",
+    "total": "[data-testid=\"member-level-record-total\"]",
+    "table": "[data-testid=\"member-level-record-table\"]",
+    "row": "[data-testid=\"member-level-record-row\"]",
+    "editButton": "[data-testid=\"member-level-record-edit\"]",
+    "deleteButton": "[data-testid=\"member-level-record-delete\"]",
+    "form": "[data-testid=\"member-level-record-form\"]",
+    "formError": "[data-testid=\"member-level-record-form-error\"]",
+    "formSubmit": "[data-testid=\"member-level-record-form-submit\"]",
+    "formCancel": "[data-testid=\"member-level-record-form-cancel\"]",
+    "formClose": "[data-testid=\"member-level-record-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "会员等级记录 DO用户每次等级发生变更时，记录一条日志列表",
+    "dialogLabel": {
+      "create": "新增会员等级记录 DO用户每次等级发生变更时，记录一条日志",
+      "edit": "编辑会员等级记录 DO用户每次等级发生变更时，记录一条日志"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "level_id",
+        "label": "等级编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-level_id",
+        "selector": "[data-testid=\"field-level_id\"]"
+      },
+      {
+        "name": "level",
+        "label": "会员等级",
+        "type": "number",
+        "required": false,
+        "testId": "field-level",
+        "selector": "[data-testid=\"field-level\"]"
+      },
+      {
+        "name": "discount_percent",
+        "label": "享受折扣",
+        "type": "number",
+        "required": false,
+        "testId": "field-discount_percent",
+        "selector": "[data-testid=\"field-discount_percent\"]"
+      },
+      {
+        "name": "experience",
+        "label": "升级经验",
+        "type": "number",
+        "required": false,
+        "testId": "field-experience",
+        "selector": "[data-testid=\"field-experience\"]"
+      },
+      {
+        "name": "user_experience",
+        "label": "会员此时的经验",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_experience",
+        "selector": "[data-testid=\"field-user_experience\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      },
+      {
+        "name": "description",
+        "label": "描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "member-level-record",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"member-level-record\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"member-level-record-form-overlay\"]",
+      "dialog": "[data-testid=\"member-level-record-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "member-level-record:search",
+      "reset": "member-level-record:reset",
+      "refresh": "member-level-record:refresh",
+      "create": "member-level-record:create",
+      "edit": "member-level-record:edit",
+      "delete": "member-level-record:delete",
+      "submit": "member-level-record:submit",
+      "cancel": "member-level-record:cancel",
+      "close": "member-level-record:close",
+      "row": "member-level-record:row",
+      "pagination": "member-level-record:pagination",
+      "fields": {
+        "user_id": "member-level-record:field:user_id",
+        "level_id": "member-level-record:field:level_id",
+        "level": "member-level-record:field:level",
+        "discount_percent": "member-level-record:field:discount_percent",
+        "experience": "member-level-record:field:experience",
+        "user_experience": "member-level-record:field:user_experience",
+        "remark": "member-level-record:field:remark",
+        "description": "member-level-record:field:description"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "member.member-level-record",
+      "examples": [
+        "member.member-level-record__List__Refresh",
+        "member.member-level-record__ListItem__Open",
+        "member.member-level-record__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

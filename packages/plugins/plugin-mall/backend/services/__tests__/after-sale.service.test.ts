@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { AfterSaleService } from "../after-sale.service"
 
 describe("AfterSaleService", () => {
-  it("should create and query AfterSale（源框架导入）", async () => {
+  it("should create and query 售后订单，用于处理 交易订单的退款退货流程", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AfterSaleService.create({
-        no: "测试AfterSale（源框架导入）",
+        no: "测试售后订单，用于处理 交易订单的退款退货流程",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("AfterSaleService", () => {
   
       const updated = await AfterSaleService.update(created.id, {
         id: created.id,
-        no: "更新AfterSale（源框架导入）",
+        no: "更新售后订单，用于处理 交易订单的退款退货流程",
       } as any)
       expect(updated).toBeDefined()
   

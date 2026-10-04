@@ -64,44 +64,63 @@ export function ErpSaleOutItemListPage() {
     }
   }
 
+  // Agent-Native: 根节点暴露就绪信号；弹窗打开时基底打 inert，让无障碍树只留弹窗一层
+  const agentState = loading ? "loading" : formOpen ? "modal-open" : total === 0 ? "empty" : "ready"
+
   return (
-    <div className="p-6 space-y-4">
+    <div
+      data-agent-scope="erp-sale-out-item"
+      data-agent-state={agentState}
+      data-agent-page-ready={String(!loading)}
+      className="p-6 space-y-4"
+    >
+      {/* 弹窗打开时基底内容 inert —— Agent 不会误点到被遮挡的元素 */}
+      <div inert={formOpen ? true : undefined} className="space-y-4">
       {/* 页面头部 */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900">ErpSaleOutItem（源框架导入）管理</h1>
-          <p className="text-xs text-slate-500 mt-0.5">ErpSaleOutItem（源框架导入）列表与配置管理</p>
+          <h1 data-testid="erp-sale-out-item-title" className="text-xl font-bold tracking-tight text-slate-900">ERP 销售出库项管理</h1>
+          <p className="text-xs text-slate-500 mt-0.5">ERP 销售出库项列表与配置管理</p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={fetchData}
+            data-testid="erp-sale-out-item-refresh"
+            data-agent-target="erp-sale-out-item:refresh"
             className="px-3 py-1.5 text-xs text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
           >
             刷新
           </button>
           <button
             onClick={handleAdd}
+            data-testid="erp-sale-out-item-create"
+            data-agent-target="erp-sale-out-item:create"
             className="px-3.5 py-1.5 text-xs text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors font-medium shadow-xs"
           >
-            + 新增ErpSaleOutItem（源框架导入）
+            + 新增ERP 销售出库项
           </button>
         </div>
       </div>
 
       {/* 搜索工具栏 */}
-      <form onSubmit={handleSearch} className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3">
+      <form
+        onSubmit={handleSearch}
+        data-testid="erp-sale-out-item-search"
+        data-agent-scope="erp-sale-out-item:search"
+        aria-label="ERP 销售出库项搜索"
+        className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3">
 
-          <button type="submit" className="px-3 py-1 text-xs text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition-colors">查询</button>
-          <button type="button" onClick={handleReset} className="px-3 py-1 text-xs text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors">重置</button>
+          <button type="submit" data-testid="erp-sale-out-item-search-submit" data-agent-target="erp-sale-out-item:search" className="px-3 py-1 text-xs text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition-colors">查询</button>
+          <button type="button" onClick={handleReset} data-testid="erp-sale-out-item-search-reset" data-agent-target="erp-sale-out-item:reset" className="px-3 py-1 text-xs text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors">重置</button>
         </div>
-        <div className="text-xs text-slate-500">共 <span className="font-semibold text-slate-700">{total}</span> 条记录</div>
+        <div className="text-xs text-slate-500">共 <span data-testid="erp-sale-out-item-total" className="font-semibold text-slate-700">{total}</span> 条记录</div>
       </form>
 
       {/* 数据表格 */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-slate-200">
+          <table data-testid="erp-sale-out-item-table" aria-label="ERP 销售出库项列表" className="min-w-full divide-y divide-slate-200">
             <thead className="bg-slate-50/80">
               <tr>
                 <th className="px-4 py-2.5 text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider">销售出库编号</th>
@@ -124,7 +143,14 @@ export function ErpSaleOutItemListPage() {
                 </tr>
               ) : (
                 data.map((item) => (
-                  <tr key={item.id} className="hover:bg-slate-50/60 transition-colors">
+                  <tr
+                    key={item.id}
+                    data-testid="erp-sale-out-item-row"
+                    data-agent-target="erp-sale-out-item:row"
+                    data-agent-state={editItem?.id === item.id ? "editing" : "idle"}
+                    data-agent-id={item.id}
+                    className="hover:bg-slate-50/60 transition-colors"
+                  >
                   <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.out_id ?? "-")}>{String(item.out_id ?? "-")}</td>
                   <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.order_item_id ?? "-")}>{String(item.order_item_id ?? "-")}</td>
                   <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.warehouse_id ?? "-")}>{String(item.warehouse_id ?? "-")}</td>
@@ -132,8 +158,8 @@ export function ErpSaleOutItemListPage() {
                   <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.product_unit_id ?? "-")}>{String(item.product_unit_id ?? "-")}</td>
                   <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.product_price ?? "-")}>{String(item.product_price ?? "-")}</td>
                     <td className="px-4 py-2.5 text-xs text-right whitespace-nowrap space-x-2">
-                      <button onClick={() => handleEdit(item)} className="text-blue-600 hover:text-blue-800 font-medium">编辑</button>
-                      <button onClick={() => handleDelete(item.id)} className="text-rose-600 hover:text-rose-800 font-medium">删除</button>
+                      <button onClick={() => handleEdit(item)} data-testid="erp-sale-out-item-edit" data-agent-target="erp-sale-out-item:edit" data-agent-id={item.id} aria-label={"编辑 " + item.id} className="text-blue-600 hover:text-blue-800 font-medium">编辑</button>
+                      <button onClick={() => handleDelete(item.id)} data-testid="erp-sale-out-item-delete" data-agent-target="erp-sale-out-item:delete" data-agent-id={item.id} aria-label={"删除 " + item.id} className="text-rose-600 hover:text-rose-800 font-medium">删除</button>
                     </td>
                   </tr>
                 ))
@@ -143,7 +169,7 @@ export function ErpSaleOutItemListPage() {
         </div>
 
         {/* 分页组件 */}
-        <div className="p-3 border-t border-slate-200">
+        <div data-agent-target="erp-sale-out-item:pagination" className="p-3 border-t border-slate-200">
           <Pagination
             total={total}
             page={page}
@@ -152,6 +178,8 @@ export function ErpSaleOutItemListPage() {
             onPageSizeChange={(ps) => setPageSize(ps)}
           />
         </div>
+      </div>
+
       </div>
 
       {/* 弹窗表单 */}

@@ -1,0 +1,231 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "erp",
+  "entity": "ErpAccount",
+  "kebab": "erp-account",
+  "businessName": "ERP 结算账户",
+  "permissionPrefix": "erp:erp_account",
+  "page": {
+    "route": "/admin/erp/erp-account",
+    "title": "ERP 结算账户管理",
+    "titleSelector": "[data-testid=\"erp-account-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.erp/api",
+    "bffMount": "/api/v1/admin/erp",
+    "resource": "erp-account",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/erp-account",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/erp-account/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/erp-account"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/erp-account/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/erp-account/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"erp-account-title\"]",
+    "refresh": "[data-testid=\"erp-account-refresh\"]",
+    "createButton": "[data-testid=\"erp-account-create\"]",
+    "searchForm": "[data-testid=\"erp-account-search\"]",
+    "searchSubmit": "[data-testid=\"erp-account-search-submit\"]",
+    "searchReset": "[data-testid=\"erp-account-search-reset\"]",
+    "total": "[data-testid=\"erp-account-total\"]",
+    "table": "[data-testid=\"erp-account-table\"]",
+    "row": "[data-testid=\"erp-account-row\"]",
+    "editButton": "[data-testid=\"erp-account-edit\"]",
+    "deleteButton": "[data-testid=\"erp-account-delete\"]",
+    "form": "[data-testid=\"erp-account-form\"]",
+    "formError": "[data-testid=\"erp-account-form-error\"]",
+    "formSubmit": "[data-testid=\"erp-account-form-submit\"]",
+    "formCancel": "[data-testid=\"erp-account-form-cancel\"]",
+    "formClose": "[data-testid=\"erp-account-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "ERP 结算账户列表",
+    "dialogLabel": {
+      "create": "新增ERP 结算账户",
+      "edit": "编辑ERP 结算账户"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "账户名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "no",
+        "label": "账户编码",
+        "type": "string",
+        "required": false,
+        "testId": "field-no",
+        "selector": "[data-testid=\"field-no\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      },
+      {
+        "name": "status",
+        "label": "开启状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "sort",
+        "label": "排序",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      },
+      {
+        "name": "default_status",
+        "label": "是否默认",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-default_status",
+        "selector": "[data-testid=\"field-default_status\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "erp-account",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"erp-account\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"erp-account-form-overlay\"]",
+      "dialog": "[data-testid=\"erp-account-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "erp-account:search",
+      "reset": "erp-account:reset",
+      "refresh": "erp-account:refresh",
+      "create": "erp-account:create",
+      "edit": "erp-account:edit",
+      "delete": "erp-account:delete",
+      "submit": "erp-account:submit",
+      "cancel": "erp-account:cancel",
+      "close": "erp-account:close",
+      "row": "erp-account:row",
+      "pagination": "erp-account:pagination",
+      "fields": {
+        "name": "erp-account:field:name",
+        "no": "erp-account:field:no",
+        "remark": "erp-account:field:remark",
+        "status": "erp-account:field:status",
+        "sort": "erp-account:field:sort",
+        "default_status": "erp-account:field:default_status"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "erp.erp-account",
+      "examples": [
+        "erp.erp-account__List__Refresh",
+        "erp.erp-account__ListItem__Open",
+        "erp.erp-account__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

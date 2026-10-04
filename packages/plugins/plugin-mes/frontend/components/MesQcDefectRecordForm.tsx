@@ -55,24 +55,36 @@ export function MesQcDefectRecordForm({ open, initialData, onClose, onSuccess }:
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-qc-defect-record-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 质检缺陷记录 DO通用缺陷记录表，通过 区分检验类型（IQC、IPQC、OQC、RQC），多模块复用" : "新增MES 质检缺陷记录 DO通用缺陷记录表，通过 区分检验类型（IQC、IPQC、OQC、RQC），多模块复用"}
+        data-testid="mes-qc-defect-record-form"
+        data-agent-scope="mes-qc-defect-record:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesQcDefectRecord（源框架导入）" : "新增MesQcDefectRecord（源框架导入）"}
+            {isEdit ? "编辑MES 质检缺陷记录 DO通用缺陷记录表，通过 区分检验类型（IQC、IPQC、OQC、RQC），多模块复用" : "新增MES 质检缺陷记录 DO通用缺陷记录表，通过 区分检验类型（IQC、IPQC、OQC、RQC），多模块复用"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-qc-defect-record-form-close" data-agent-target="mes-qc-defect-record:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-qc-defect-record-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">检验类型</label>
+          <label htmlFor="mes-qc-defect-record-qc_type" className="block text-xs text-slate-600 mb-1">检验类型</label>
           <input
             type="number"
+            id="mes-qc-defect-record-qc_type"
+            data-testid="field-qc_type"
+            data-agent-target="mes-qc-defect-record:field:qc_type"
+            data-agent-state={formData.qc_type == null || formData.qc_type === "" ? "empty" : "filled"}
+            aria-label="检验类型"
             value={formData.qc_type != null ? String(formData.qc_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, qc_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -82,9 +94,14 @@ export function MesQcDefectRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">检验单 ID</label>
+          <label htmlFor="mes-qc-defect-record-qc_id" className="block text-xs text-slate-600 mb-1">检验单 ID</label>
           <input
             type="number"
+            id="mes-qc-defect-record-qc_id"
+            data-testid="field-qc_id"
+            data-agent-target="mes-qc-defect-record:field:qc_id"
+            data-agent-state={formData.qc_id == null || formData.qc_id === "" ? "empty" : "filled"}
+            aria-label="检验单 ID"
             value={formData.qc_id != null ? String(formData.qc_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, qc_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -94,9 +111,14 @@ export function MesQcDefectRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">检验行 ID</label>
+          <label htmlFor="mes-qc-defect-record-line_id" className="block text-xs text-slate-600 mb-1">检验行 ID</label>
           <input
             type="number"
+            id="mes-qc-defect-record-line_id"
+            data-testid="field-line_id"
+            data-agent-target="mes-qc-defect-record:field:line_id"
+            data-agent-state={formData.line_id == null || formData.line_id === "" ? "empty" : "filled"}
+            aria-label="检验行 ID"
             value={formData.line_id != null ? String(formData.line_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, line_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -106,9 +128,14 @@ export function MesQcDefectRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">缺陷描述</label>
+          <label htmlFor="mes-qc-defect-record-name" className="block text-xs text-slate-600 mb-1">缺陷描述</label>
           <input
             type="text"
+            id="mes-qc-defect-record-name"
+            data-testid="field-name"
+            data-agent-target="mes-qc-defect-record:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="缺陷描述"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -118,9 +145,14 @@ export function MesQcDefectRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">缺陷等级</label>
+          <label htmlFor="mes-qc-defect-record-level" className="block text-xs text-slate-600 mb-1">缺陷等级</label>
           <input
             type="number"
+            id="mes-qc-defect-record-level"
+            data-testid="field-level"
+            data-agent-target="mes-qc-defect-record:field:level"
+            data-agent-state={formData.level == null || formData.level === "" ? "empty" : "filled"}
+            aria-label="缺陷等级"
             value={formData.level != null ? String(formData.level) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, level: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -130,9 +162,14 @@ export function MesQcDefectRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">缺陷数量</label>
+          <label htmlFor="mes-qc-defect-record-quantity" className="block text-xs text-slate-600 mb-1">缺陷数量</label>
           <input
             type="number"
+            id="mes-qc-defect-record-quantity"
+            data-testid="field-quantity"
+            data-agent-target="mes-qc-defect-record:field:quantity"
+            data-agent-state={formData.quantity == null || formData.quantity === "" ? "empty" : "filled"}
+            aria-label="缺陷数量"
             value={formData.quantity != null ? String(formData.quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -142,9 +179,14 @@ export function MesQcDefectRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-qc-defect-record-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-qc-defect-record-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-qc-defect-record:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -158,6 +200,8 @@ export function MesQcDefectRecordForm({ open, initialData, onClose, onSuccess }:
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-qc-defect-record-form-cancel"
+              data-agent-target="mes-qc-defect-record:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -165,6 +209,9 @@ export function MesQcDefectRecordForm({ open, initialData, onClose, onSuccess }:
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-qc-defect-record-form-submit"
+              data-agent-target="mes-qc-defect-record:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

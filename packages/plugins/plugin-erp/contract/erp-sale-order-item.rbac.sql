@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for ErpSaleOrderItem（源框架导入） (ErpSaleOrderItem)
+-- Auto-generated RBAC & Menu Migration for ERP 销售订单项 (ErpSaleOrderItem)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-erp-sale-order-item',
   'erp-dir',
-  'ErpSaleOrderItem（源框架导入）管理',
+  'ERP 销售订单项管理',
   '/admin/erp/erp-sale-order-item',
   'erp/erp-sale-order-item/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-erp-sale-order-item-query',  'menu-erp-sale-order-item', '查询ErpSaleOrderItem（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_sale_order_item:query',  1, NOW(), NOW()),
-('menu-erp-sale-order-item-create', 'menu-erp-sale-order-item', '新增ErpSaleOrderItem（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_sale_order_item:create', 2, NOW(), NOW()),
-('menu-erp-sale-order-item-update', 'menu-erp-sale-order-item', '修改ErpSaleOrderItem（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_sale_order_item:update', 3, NOW(), NOW()),
-('menu-erp-sale-order-item-delete', 'menu-erp-sale-order-item', '删除ErpSaleOrderItem（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_sale_order_item:delete', 4, NOW(), NOW())
+('menu-erp-sale-order-item-query',  'menu-erp-sale-order-item', '查询ERP 销售订单项', 'BUTTON', 'ACTIVE', 'erp:erp_sale_order_item:query',  1, NOW(), NOW()),
+('menu-erp-sale-order-item-create', 'menu-erp-sale-order-item', '新增ERP 销售订单项', 'BUTTON', 'ACTIVE', 'erp:erp_sale_order_item:create', 2, NOW(), NOW()),
+('menu-erp-sale-order-item-update', 'menu-erp-sale-order-item', '修改ERP 销售订单项', 'BUTTON', 'ACTIVE', 'erp:erp_sale_order_item:update', 3, NOW(), NOW()),
+('menu-erp-sale-order-item-delete', 'menu-erp-sale-order-item', '删除ERP 销售订单项', 'BUTTON', 'ACTIVE', 'erp:erp_sale_order_item:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

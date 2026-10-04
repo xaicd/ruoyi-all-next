@@ -1,0 +1,312 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mp",
+  "entity": "MpUser",
+  "kebab": "mp-user",
+  "businessName": "微信公众号粉丝",
+  "permissionPrefix": "mp:mp_user",
+  "page": {
+    "route": "/admin/mp/mp-user",
+    "title": "微信公众号粉丝管理",
+    "titleSelector": "[data-testid=\"mp-user-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mp/api",
+    "bffMount": "/api/v1/admin/mp",
+    "resource": "mp-user",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mp-user",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mp-user/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mp-user"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mp-user/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mp-user/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mp-user-title\"]",
+    "refresh": "[data-testid=\"mp-user-refresh\"]",
+    "createButton": "[data-testid=\"mp-user-create\"]",
+    "searchForm": "[data-testid=\"mp-user-search\"]",
+    "searchSubmit": "[data-testid=\"mp-user-search-submit\"]",
+    "searchReset": "[data-testid=\"mp-user-search-reset\"]",
+    "total": "[data-testid=\"mp-user-total\"]",
+    "table": "[data-testid=\"mp-user-table\"]",
+    "row": "[data-testid=\"mp-user-row\"]",
+    "editButton": "[data-testid=\"mp-user-edit\"]",
+    "deleteButton": "[data-testid=\"mp-user-delete\"]",
+    "form": "[data-testid=\"mp-user-form\"]",
+    "formError": "[data-testid=\"mp-user-form-error\"]",
+    "formSubmit": "[data-testid=\"mp-user-form-submit\"]",
+    "formCancel": "[data-testid=\"mp-user-form-cancel\"]",
+    "formClose": "[data-testid=\"mp-user-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "微信公众号粉丝列表",
+    "dialogLabel": {
+      "create": "新增微信公众号粉丝",
+      "edit": "编辑微信公众号粉丝"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "openid",
+        "label": "粉丝标识",
+        "type": "string",
+        "required": false,
+        "testId": "field-openid",
+        "selector": "[data-testid=\"field-openid\"]"
+      },
+      {
+        "name": "union_id",
+        "label": "微信生态唯一标识",
+        "type": "string",
+        "required": false,
+        "testId": "field-union_id",
+        "selector": "[data-testid=\"field-union_id\"]"
+      },
+      {
+        "name": "subscribe_status",
+        "label": "关注状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-subscribe_status",
+        "selector": "[data-testid=\"field-subscribe_status\"]"
+      },
+      {
+        "name": "subscribe_time",
+        "label": "关注时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-subscribe_time",
+        "selector": "[data-testid=\"field-subscribe_time\"]"
+      },
+      {
+        "name": "unsubscribe_time",
+        "label": "取消关注时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-unsubscribe_time",
+        "selector": "[data-testid=\"field-unsubscribe_time\"]"
+      },
+      {
+        "name": "nickname",
+        "label": "昵称",
+        "type": "string",
+        "required": false,
+        "testId": "field-nickname",
+        "selector": "[data-testid=\"field-nickname\"]"
+      },
+      {
+        "name": "head_image_url",
+        "label": "头像地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-head_image_url",
+        "selector": "[data-testid=\"field-head_image_url\"]"
+      },
+      {
+        "name": "language",
+        "label": "语言",
+        "type": "string",
+        "required": false,
+        "testId": "field-language",
+        "selector": "[data-testid=\"field-language\"]"
+      },
+      {
+        "name": "country",
+        "label": "国家",
+        "type": "string",
+        "required": false,
+        "testId": "field-country",
+        "selector": "[data-testid=\"field-country\"]"
+      },
+      {
+        "name": "province",
+        "label": "省份",
+        "type": "string",
+        "required": false,
+        "testId": "field-province",
+        "selector": "[data-testid=\"field-province\"]"
+      },
+      {
+        "name": "city",
+        "label": "城市",
+        "type": "string",
+        "required": false,
+        "testId": "field-city",
+        "selector": "[data-testid=\"field-city\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      },
+      {
+        "name": "tag_ids",
+        "label": "标签编号数组",
+        "type": "string",
+        "required": false,
+        "testId": "field-tag_ids",
+        "selector": "[data-testid=\"field-tag_ids\"]"
+      },
+      {
+        "name": "account_id",
+        "label": "公众号账号的编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-account_id",
+        "selector": "[data-testid=\"field-account_id\"]"
+      },
+      {
+        "name": "app_id",
+        "label": "公众号 appId",
+        "type": "string",
+        "required": false,
+        "testId": "field-app_id",
+        "selector": "[data-testid=\"field-app_id\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mp-user",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mp-user\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mp-user-form-overlay\"]",
+      "dialog": "[data-testid=\"mp-user-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mp-user:search",
+      "reset": "mp-user:reset",
+      "refresh": "mp-user:refresh",
+      "create": "mp-user:create",
+      "edit": "mp-user:edit",
+      "delete": "mp-user:delete",
+      "submit": "mp-user:submit",
+      "cancel": "mp-user:cancel",
+      "close": "mp-user:close",
+      "row": "mp-user:row",
+      "pagination": "mp-user:pagination",
+      "fields": {
+        "openid": "mp-user:field:openid",
+        "union_id": "mp-user:field:union_id",
+        "subscribe_status": "mp-user:field:subscribe_status",
+        "subscribe_time": "mp-user:field:subscribe_time",
+        "unsubscribe_time": "mp-user:field:unsubscribe_time",
+        "nickname": "mp-user:field:nickname",
+        "head_image_url": "mp-user:field:head_image_url",
+        "language": "mp-user:field:language",
+        "country": "mp-user:field:country",
+        "province": "mp-user:field:province",
+        "city": "mp-user:field:city",
+        "remark": "mp-user:field:remark",
+        "tag_ids": "mp-user:field:tag_ids",
+        "account_id": "mp-user:field:account_id",
+        "app_id": "mp-user:field:app_id"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mp.mp-user",
+      "examples": [
+        "mp.mp-user__List__Refresh",
+        "mp.mp-user__ListItem__Open",
+        "mp.mp-user__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

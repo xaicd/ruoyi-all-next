@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesProProcess（源框架导入） (MesProProcess)
+-- Auto-generated RBAC & Menu Migration for MES 生产工序 (MesProProcess)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-pro-process',
   'mes-dir',
-  'MesProProcess（源框架导入）管理',
+  'MES 生产工序管理',
   '/admin/mes/mes-pro-process',
   'mes/mes-pro-process/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-pro-process-query',  'menu-mes-pro-process', '查询MesProProcess（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_process:query',  1, NOW(), NOW()),
-('menu-mes-pro-process-create', 'menu-mes-pro-process', '新增MesProProcess（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_process:create', 2, NOW(), NOW()),
-('menu-mes-pro-process-update', 'menu-mes-pro-process', '修改MesProProcess（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_process:update', 3, NOW(), NOW()),
-('menu-mes-pro-process-delete', 'menu-mes-pro-process', '删除MesProProcess（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_process:delete', 4, NOW(), NOW())
+('menu-mes-pro-process-query',  'menu-mes-pro-process', '查询MES 生产工序', 'BUTTON', 'ACTIVE', 'mes:mes_pro_process:query',  1, NOW(), NOW()),
+('menu-mes-pro-process-create', 'menu-mes-pro-process', '新增MES 生产工序', 'BUTTON', 'ACTIVE', 'mes:mes_pro_process:create', 2, NOW(), NOW()),
+('menu-mes-pro-process-update', 'menu-mes-pro-process', '修改MES 生产工序', 'BUTTON', 'ACTIVE', 'mes:mes_pro_process:update', 3, NOW(), NOW()),
+('menu-mes-pro-process-delete', 'menu-mes-pro-process', '删除MES 生产工序', 'BUTTON', 'ACTIVE', 'mes:mes_pro_process:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

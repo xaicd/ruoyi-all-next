@@ -57,24 +57,36 @@ export function ImGroupRequestForm({ open, initialData, onClose, onSuccess }: Im
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="im-group-request-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑IM 加群申请记录 DO配合「申请 - 审批」流程：用户主动申请：调 apply 接口落库（inviterUserId=null，handleResult=UNHANDLED），" : "新增IM 加群申请记录 DO配合「申请 - 审批」流程：用户主动申请：调 apply 接口落库（inviterUserId=null，handleResult=UNHANDLED），"}
+        data-testid="im-group-request-form"
+        data-agent-scope="im-group-request:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑ImGroupRequest（源框架导入）" : "新增ImGroupRequest（源框架导入）"}
+            {isEdit ? "编辑IM 加群申请记录 DO配合「申请 - 审批」流程：用户主动申请：调 apply 接口落库（inviterUserId=null，handleResult=UNHANDLED），" : "新增IM 加群申请记录 DO配合「申请 - 审批」流程：用户主动申请：调 apply 接口落库（inviterUserId=null，handleResult=UNHANDLED），"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="im-group-request-form-close" data-agent-target="im-group-request:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="im-group-request-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">群编号</label>
+          <label htmlFor="im-group-request-group_id" className="block text-xs text-slate-600 mb-1">群编号</label>
           <input
             type="number"
+            id="im-group-request-group_id"
+            data-testid="field-group_id"
+            data-agent-target="im-group-request:field:group_id"
+            data-agent-state={formData.group_id == null || formData.group_id === "" ? "empty" : "filled"}
+            aria-label="群编号"
             value={formData.group_id != null ? String(formData.group_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, group_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -84,9 +96,14 @@ export function ImGroupRequestForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">申请人 / 被邀请人用户编号</label>
+          <label htmlFor="im-group-request-user_id" className="block text-xs text-slate-600 mb-1">申请人 / 被邀请人用户编号</label>
           <input
             type="number"
+            id="im-group-request-user_id"
+            data-testid="field-user_id"
+            data-agent-target="im-group-request:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="申请人 / 被邀请人用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -96,9 +113,14 @@ export function ImGroupRequestForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">邀请人用户编号</label>
+          <label htmlFor="im-group-request-inviter_user_id" className="block text-xs text-slate-600 mb-1">邀请人用户编号</label>
           <input
             type="number"
+            id="im-group-request-inviter_user_id"
+            data-testid="field-inviter_user_id"
+            data-agent-target="im-group-request:field:inviter_user_id"
+            data-agent-state={formData.inviter_user_id == null || formData.inviter_user_id === "" ? "empty" : "filled"}
+            aria-label="邀请人用户编号"
             value={formData.inviter_user_id != null ? String(formData.inviter_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, inviter_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -108,9 +130,14 @@ export function ImGroupRequestForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">申请理由</label>
+          <label htmlFor="im-group-request-apply_content" className="block text-xs text-slate-600 mb-1">申请理由</label>
           <input
             type="text"
+            id="im-group-request-apply_content"
+            data-testid="field-apply_content"
+            data-agent-target="im-group-request:field:apply_content"
+            data-agent-state={formData.apply_content ? "filled" : "empty"}
+            aria-label="申请理由"
             value={formData.apply_content ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, apply_content: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -120,9 +147,14 @@ export function ImGroupRequestForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">加入来源</label>
+          <label htmlFor="im-group-request-add_source" className="block text-xs text-slate-600 mb-1">加入来源</label>
           <input
             type="number"
+            id="im-group-request-add_source"
+            data-testid="field-add_source"
+            data-agent-target="im-group-request:field:add_source"
+            data-agent-state={formData.add_source == null || formData.add_source === "" ? "empty" : "filled"}
+            aria-label="加入来源"
             value={formData.add_source != null ? String(formData.add_source) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, add_source: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -132,9 +164,14 @@ export function ImGroupRequestForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">处理结果</label>
+          <label htmlFor="im-group-request-handle_result" className="block text-xs text-slate-600 mb-1">处理结果</label>
           <input
             type="number"
+            id="im-group-request-handle_result"
+            data-testid="field-handle_result"
+            data-agent-target="im-group-request:field:handle_result"
+            data-agent-state={formData.handle_result == null || formData.handle_result === "" ? "empty" : "filled"}
+            aria-label="处理结果"
             value={formData.handle_result != null ? String(formData.handle_result) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, handle_result: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -144,9 +181,14 @@ export function ImGroupRequestForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">处理人用户编号（群主或管理员）</label>
+          <label htmlFor="im-group-request-handle_user_id" className="block text-xs text-slate-600 mb-1">处理人用户编号（群主或管理员）</label>
           <input
             type="number"
+            id="im-group-request-handle_user_id"
+            data-testid="field-handle_user_id"
+            data-agent-target="im-group-request:field:handle_user_id"
+            data-agent-state={formData.handle_user_id == null || formData.handle_user_id === "" ? "empty" : "filled"}
+            aria-label="处理人用户编号（群主或管理员）"
             value={formData.handle_user_id != null ? String(formData.handle_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, handle_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -156,9 +198,14 @@ export function ImGroupRequestForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">处理理由（拒绝时可选填）</label>
+          <label htmlFor="im-group-request-handle_content" className="block text-xs text-slate-600 mb-1">处理理由（拒绝时可选填）</label>
           <input
             type="text"
+            id="im-group-request-handle_content"
+            data-testid="field-handle_content"
+            data-agent-target="im-group-request:field:handle_content"
+            data-agent-state={formData.handle_content ? "filled" : "empty"}
+            aria-label="处理理由（拒绝时可选填）"
             value={formData.handle_content ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, handle_content: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -168,9 +215,14 @@ export function ImGroupRequestForm({ open, initialData, onClose, onSuccess }: Im
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">处理时间</label>
+          <label htmlFor="im-group-request-handle_time" className="block text-xs text-slate-600 mb-1">处理时间</label>
           <input
             type="text"
+            id="im-group-request-handle_time"
+            data-testid="field-handle_time"
+            data-agent-target="im-group-request:field:handle_time"
+            data-agent-state={formData.handle_time ? "filled" : "empty"}
+            aria-label="处理时间"
             value={formData.handle_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, handle_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -184,6 +236,8 @@ export function ImGroupRequestForm({ open, initialData, onClose, onSuccess }: Im
             <button
               type="button"
               onClick={onClose}
+              data-testid="im-group-request-form-cancel"
+              data-agent-target="im-group-request:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -191,6 +245,9 @@ export function ImGroupRequestForm({ open, initialData, onClose, onSuccess }: Im
             <button
               type="submit"
               disabled={loading}
+              data-testid="im-group-request-form-submit"
+              data-agent-target="im-group-request:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

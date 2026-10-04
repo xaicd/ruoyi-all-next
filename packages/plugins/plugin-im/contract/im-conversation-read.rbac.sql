@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for ImConversationRead（源框架导入） (ImConversationRead)
+-- Auto-generated RBAC & Menu Migration for IM 会话读位置 DO只表达「用户在某个会话的最大已读位置」，私聊 / 群聊 / 频道统一落这张表，是读位置的唯一权威。 (ImConversationRead)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-im-conversation-read',
   'im-dir',
-  'ImConversationRead（源框架导入）管理',
+  'IM 会话读位置 DO只表达「用户在某个会话的最大已读位置」，私聊 / 群聊 / 频道统一落这张表，是读位置的唯一权威。管理',
   '/admin/im/im-conversation-read',
   'im/im-conversation-read/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-im-conversation-read-query',  'menu-im-conversation-read', '查询ImConversationRead（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_conversation_read:query',  1, NOW(), NOW()),
-('menu-im-conversation-read-create', 'menu-im-conversation-read', '新增ImConversationRead（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_conversation_read:create', 2, NOW(), NOW()),
-('menu-im-conversation-read-update', 'menu-im-conversation-read', '修改ImConversationRead（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_conversation_read:update', 3, NOW(), NOW()),
-('menu-im-conversation-read-delete', 'menu-im-conversation-read', '删除ImConversationRead（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_conversation_read:delete', 4, NOW(), NOW())
+('menu-im-conversation-read-query',  'menu-im-conversation-read', '查询IM 会话读位置 DO只表达「用户在某个会话的最大已读位置」，私聊 / 群聊 / 频道统一落这张表，是读位置的唯一权威。', 'BUTTON', 'ACTIVE', 'im:im_conversation_read:query',  1, NOW(), NOW()),
+('menu-im-conversation-read-create', 'menu-im-conversation-read', '新增IM 会话读位置 DO只表达「用户在某个会话的最大已读位置」，私聊 / 群聊 / 频道统一落这张表，是读位置的唯一权威。', 'BUTTON', 'ACTIVE', 'im:im_conversation_read:create', 2, NOW(), NOW()),
+('menu-im-conversation-read-update', 'menu-im-conversation-read', '修改IM 会话读位置 DO只表达「用户在某个会话的最大已读位置」，私聊 / 群聊 / 频道统一落这张表，是读位置的唯一权威。', 'BUTTON', 'ACTIVE', 'im:im_conversation_read:update', 3, NOW(), NOW()),
+('menu-im-conversation-read-delete', 'menu-im-conversation-read', '删除IM 会话读位置 DO只表达「用户在某个会话的最大已读位置」，私聊 / 群聊 / 频道统一落这张表，是读位置的唯一权威。', 'BUTTON', 'ACTIVE', 'im:im_conversation_read:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

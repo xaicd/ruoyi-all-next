@@ -65,24 +65,36 @@ export function MesWmBatchForm({ open, initialData, onClose, onSuccess }: MesWmB
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-wm-batch-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑批次管理" : "新增批次管理"}
+        data-testid="mes-wm-batch-form"
+        data-agent-scope="mes-wm-batch:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesWmBatch（源框架导入）" : "新增MesWmBatch（源框架导入）"}
+            {isEdit ? "编辑批次管理" : "新增批次管理"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-wm-batch-form-close" data-agent-target="mes-wm-batch:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-wm-batch-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">批次编码</label>
+          <label htmlFor="mes-wm-batch-code" className="block text-xs text-slate-600 mb-1">批次编码</label>
           <input
             type="text"
+            id="mes-wm-batch-code"
+            data-testid="field-code"
+            data-agent-target="mes-wm-batch:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="批次编码"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -92,9 +104,14 @@ export function MesWmBatchForm({ open, initialData, onClose, onSuccess }: MesWmB
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">物料ID</label>
+          <label htmlFor="mes-wm-batch-item_id" className="block text-xs text-slate-600 mb-1">物料ID</label>
           <input
             type="number"
+            id="mes-wm-batch-item_id"
+            data-testid="field-item_id"
+            data-agent-target="mes-wm-batch:field:item_id"
+            data-agent-state={formData.item_id == null || formData.item_id === "" ? "empty" : "filled"}
+            aria-label="物料ID"
             value={formData.item_id != null ? String(formData.item_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, item_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -104,9 +121,14 @@ export function MesWmBatchForm({ open, initialData, onClose, onSuccess }: MesWmB
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生产日期</label>
+          <label htmlFor="mes-wm-batch-produce_date" className="block text-xs text-slate-600 mb-1">生产日期</label>
           <input
             type="text"
+            id="mes-wm-batch-produce_date"
+            data-testid="field-produce_date"
+            data-agent-target="mes-wm-batch:field:produce_date"
+            data-agent-state={formData.produce_date ? "filled" : "empty"}
+            aria-label="生产日期"
             value={formData.produce_date ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, produce_date: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -116,9 +138,14 @@ export function MesWmBatchForm({ open, initialData, onClose, onSuccess }: MesWmB
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">有效期</label>
+          <label htmlFor="mes-wm-batch-expire_date" className="block text-xs text-slate-600 mb-1">有效期</label>
           <input
             type="text"
+            id="mes-wm-batch-expire_date"
+            data-testid="field-expire_date"
+            data-agent-target="mes-wm-batch:field:expire_date"
+            data-agent-state={formData.expire_date ? "filled" : "empty"}
+            aria-label="有效期"
             value={formData.expire_date ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, expire_date: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -128,9 +155,14 @@ export function MesWmBatchForm({ open, initialData, onClose, onSuccess }: MesWmB
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">入库日期</label>
+          <label htmlFor="mes-wm-batch-receipt_date" className="block text-xs text-slate-600 mb-1">入库日期</label>
           <input
             type="text"
+            id="mes-wm-batch-receipt_date"
+            data-testid="field-receipt_date"
+            data-agent-target="mes-wm-batch:field:receipt_date"
+            data-agent-state={formData.receipt_date ? "filled" : "empty"}
+            aria-label="入库日期"
             value={formData.receipt_date ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, receipt_date: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -140,9 +172,14 @@ export function MesWmBatchForm({ open, initialData, onClose, onSuccess }: MesWmB
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">供应商ID</label>
+          <label htmlFor="mes-wm-batch-vendor_id" className="block text-xs text-slate-600 mb-1">供应商ID</label>
           <input
             type="number"
+            id="mes-wm-batch-vendor_id"
+            data-testid="field-vendor_id"
+            data-agent-target="mes-wm-batch:field:vendor_id"
+            data-agent-state={formData.vendor_id == null || formData.vendor_id === "" ? "empty" : "filled"}
+            aria-label="供应商ID"
             value={formData.vendor_id != null ? String(formData.vendor_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, vendor_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -152,9 +189,14 @@ export function MesWmBatchForm({ open, initialData, onClose, onSuccess }: MesWmB
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">客户ID</label>
+          <label htmlFor="mes-wm-batch-client_id" className="block text-xs text-slate-600 mb-1">客户ID</label>
           <input
             type="number"
+            id="mes-wm-batch-client_id"
+            data-testid="field-client_id"
+            data-agent-target="mes-wm-batch:field:client_id"
+            data-agent-state={formData.client_id == null || formData.client_id === "" ? "empty" : "filled"}
+            aria-label="客户ID"
             value={formData.client_id != null ? String(formData.client_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, client_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -164,9 +206,14 @@ export function MesWmBatchForm({ open, initialData, onClose, onSuccess }: MesWmB
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">销售订单编号</label>
+          <label htmlFor="mes-wm-batch-sales_order_code" className="block text-xs text-slate-600 mb-1">销售订单编号</label>
           <input
             type="text"
+            id="mes-wm-batch-sales_order_code"
+            data-testid="field-sales_order_code"
+            data-agent-target="mes-wm-batch:field:sales_order_code"
+            data-agent-state={formData.sales_order_code ? "filled" : "empty"}
+            aria-label="销售订单编号"
             value={formData.sales_order_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sales_order_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -176,9 +223,14 @@ export function MesWmBatchForm({ open, initialData, onClose, onSuccess }: MesWmB
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">采购订单编号</label>
+          <label htmlFor="mes-wm-batch-purchase_order_code" className="block text-xs text-slate-600 mb-1">采购订单编号</label>
           <input
             type="text"
+            id="mes-wm-batch-purchase_order_code"
+            data-testid="field-purchase_order_code"
+            data-agent-target="mes-wm-batch:field:purchase_order_code"
+            data-agent-state={formData.purchase_order_code ? "filled" : "empty"}
+            aria-label="采购订单编号"
             value={formData.purchase_order_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, purchase_order_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -188,9 +240,14 @@ export function MesWmBatchForm({ open, initialData, onClose, onSuccess }: MesWmB
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生产工单ID</label>
+          <label htmlFor="mes-wm-batch-work_order_id" className="block text-xs text-slate-600 mb-1">生产工单ID</label>
           <input
             type="number"
+            id="mes-wm-batch-work_order_id"
+            data-testid="field-work_order_id"
+            data-agent-target="mes-wm-batch:field:work_order_id"
+            data-agent-state={formData.work_order_id == null || formData.work_order_id === "" ? "empty" : "filled"}
+            aria-label="生产工单ID"
             value={formData.work_order_id != null ? String(formData.work_order_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, work_order_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -200,9 +257,14 @@ export function MesWmBatchForm({ open, initialData, onClose, onSuccess }: MesWmB
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生产任务ID</label>
+          <label htmlFor="mes-wm-batch-task_id" className="block text-xs text-slate-600 mb-1">生产任务ID</label>
           <input
             type="number"
+            id="mes-wm-batch-task_id"
+            data-testid="field-task_id"
+            data-agent-target="mes-wm-batch:field:task_id"
+            data-agent-state={formData.task_id == null || formData.task_id === "" ? "empty" : "filled"}
+            aria-label="生产任务ID"
             value={formData.task_id != null ? String(formData.task_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, task_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -212,9 +274,14 @@ export function MesWmBatchForm({ open, initialData, onClose, onSuccess }: MesWmB
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工作站ID</label>
+          <label htmlFor="mes-wm-batch-workstation_id" className="block text-xs text-slate-600 mb-1">工作站ID</label>
           <input
             type="number"
+            id="mes-wm-batch-workstation_id"
+            data-testid="field-workstation_id"
+            data-agent-target="mes-wm-batch:field:workstation_id"
+            data-agent-state={formData.workstation_id == null || formData.workstation_id === "" ? "empty" : "filled"}
+            aria-label="工作站ID"
             value={formData.workstation_id != null ? String(formData.workstation_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, workstation_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -224,9 +291,14 @@ export function MesWmBatchForm({ open, initialData, onClose, onSuccess }: MesWmB
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工具ID</label>
+          <label htmlFor="mes-wm-batch-tool_id" className="block text-xs text-slate-600 mb-1">工具ID</label>
           <input
             type="number"
+            id="mes-wm-batch-tool_id"
+            data-testid="field-tool_id"
+            data-agent-target="mes-wm-batch:field:tool_id"
+            data-agent-state={formData.tool_id == null || formData.tool_id === "" ? "empty" : "filled"}
+            aria-label="工具ID"
             value={formData.tool_id != null ? String(formData.tool_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, tool_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -236,9 +308,14 @@ export function MesWmBatchForm({ open, initialData, onClose, onSuccess }: MesWmB
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">模具 ID</label>
+          <label htmlFor="mes-wm-batch-mold_id" className="block text-xs text-slate-600 mb-1">模具 ID</label>
           <input
             type="number"
+            id="mes-wm-batch-mold_id"
+            data-testid="field-mold_id"
+            data-agent-target="mes-wm-batch:field:mold_id"
+            data-agent-state={formData.mold_id == null || formData.mold_id === "" ? "empty" : "filled"}
+            aria-label="模具 ID"
             value={formData.mold_id != null ? String(formData.mold_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, mold_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -248,9 +325,14 @@ export function MesWmBatchForm({ open, initialData, onClose, onSuccess }: MesWmB
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生产批号</label>
+          <label htmlFor="mes-wm-batch-lot_number" className="block text-xs text-slate-600 mb-1">生产批号</label>
           <input
             type="text"
+            id="mes-wm-batch-lot_number"
+            data-testid="field-lot_number"
+            data-agent-target="mes-wm-batch:field:lot_number"
+            data-agent-state={formData.lot_number ? "filled" : "empty"}
+            aria-label="生产批号"
             value={formData.lot_number ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, lot_number: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -260,9 +342,14 @@ export function MesWmBatchForm({ open, initialData, onClose, onSuccess }: MesWmB
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">质量状态</label>
+          <label htmlFor="mes-wm-batch-quality_status" className="block text-xs text-slate-600 mb-1">质量状态</label>
           <input
             type="number"
+            id="mes-wm-batch-quality_status"
+            data-testid="field-quality_status"
+            data-agent-target="mes-wm-batch:field:quality_status"
+            data-agent-state={formData.quality_status == null || formData.quality_status === "" ? "empty" : "filled"}
+            aria-label="质量状态"
             value={formData.quality_status != null ? String(formData.quality_status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, quality_status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -272,9 +359,14 @@ export function MesWmBatchForm({ open, initialData, onClose, onSuccess }: MesWmB
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-wm-batch-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-wm-batch-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-wm-batch:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -288,6 +380,8 @@ export function MesWmBatchForm({ open, initialData, onClose, onSuccess }: MesWmB
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-wm-batch-form-cancel"
+              data-agent-target="mes-wm-batch:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -295,6 +389,9 @@ export function MesWmBatchForm({ open, initialData, onClose, onSuccess }: MesWmB
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-wm-batch-form-submit"
+              data-agent-target="mes-wm-batch:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

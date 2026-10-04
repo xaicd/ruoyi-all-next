@@ -1,0 +1,258 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "BargainRecord",
+  "kebab": "bargain-record",
+  "businessName": "砍价记录 DO TO",
+  "permissionPrefix": "mall:bargain_record",
+  "page": {
+    "route": "/admin/mall/bargain-record",
+    "title": "砍价记录 DO TO管理",
+    "titleSelector": "[data-testid=\"bargain-record-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "bargain-record",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/bargain-record",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/bargain-record/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/bargain-record"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/bargain-record/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/bargain-record/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"bargain-record-title\"]",
+    "refresh": "[data-testid=\"bargain-record-refresh\"]",
+    "createButton": "[data-testid=\"bargain-record-create\"]",
+    "searchForm": "[data-testid=\"bargain-record-search\"]",
+    "searchSubmit": "[data-testid=\"bargain-record-search-submit\"]",
+    "searchReset": "[data-testid=\"bargain-record-search-reset\"]",
+    "total": "[data-testid=\"bargain-record-total\"]",
+    "table": "[data-testid=\"bargain-record-table\"]",
+    "row": "[data-testid=\"bargain-record-row\"]",
+    "editButton": "[data-testid=\"bargain-record-edit\"]",
+    "deleteButton": "[data-testid=\"bargain-record-delete\"]",
+    "form": "[data-testid=\"bargain-record-form\"]",
+    "formError": "[data-testid=\"bargain-record-form-error\"]",
+    "formSubmit": "[data-testid=\"bargain-record-form-submit\"]",
+    "formCancel": "[data-testid=\"bargain-record-form-cancel\"]",
+    "formClose": "[data-testid=\"bargain-record-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "砍价记录 DO TO列表",
+    "dialogLabel": {
+      "create": "新增砍价记录 DO TO",
+      "edit": "编辑砍价记录 DO TO"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "activity_id",
+        "label": "砍价活动编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-activity_id",
+        "selector": "[data-testid=\"field-activity_id\"]"
+      },
+      {
+        "name": "spu_id",
+        "label": "商品 SPU 编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-spu_id",
+        "selector": "[data-testid=\"field-spu_id\"]"
+      },
+      {
+        "name": "sku_id",
+        "label": "商品 SKU 编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-sku_id",
+        "selector": "[data-testid=\"field-sku_id\"]"
+      },
+      {
+        "name": "bargain_first_price",
+        "label": "砍价起始价格，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-bargain_first_price",
+        "selector": "[data-testid=\"field-bargain_first_price\"]"
+      },
+      {
+        "name": "bargain_price",
+        "label": "当前砍价，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-bargain_price",
+        "selector": "[data-testid=\"field-bargain_price\"]"
+      },
+      {
+        "name": "status",
+        "label": "砍价状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "end_time",
+        "label": "结束时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-end_time",
+        "selector": "[data-testid=\"field-end_time\"]"
+      },
+      {
+        "name": "order_id",
+        "label": "订单编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-order_id",
+        "selector": "[data-testid=\"field-order_id\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "bargain-record",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"bargain-record\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"bargain-record-form-overlay\"]",
+      "dialog": "[data-testid=\"bargain-record-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "bargain-record:search",
+      "reset": "bargain-record:reset",
+      "refresh": "bargain-record:refresh",
+      "create": "bargain-record:create",
+      "edit": "bargain-record:edit",
+      "delete": "bargain-record:delete",
+      "submit": "bargain-record:submit",
+      "cancel": "bargain-record:cancel",
+      "close": "bargain-record:close",
+      "row": "bargain-record:row",
+      "pagination": "bargain-record:pagination",
+      "fields": {
+        "user_id": "bargain-record:field:user_id",
+        "activity_id": "bargain-record:field:activity_id",
+        "spu_id": "bargain-record:field:spu_id",
+        "sku_id": "bargain-record:field:sku_id",
+        "bargain_first_price": "bargain-record:field:bargain_first_price",
+        "bargain_price": "bargain-record:field:bargain_price",
+        "status": "bargain-record:field:status",
+        "end_time": "bargain-record:field:end_time",
+        "order_id": "bargain-record:field:order_id"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.bargain-record",
+      "examples": [
+        "mall.bargain-record__List__Refresh",
+        "mall.bargain-record__ListItem__Open",
+        "mall.bargain-record__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

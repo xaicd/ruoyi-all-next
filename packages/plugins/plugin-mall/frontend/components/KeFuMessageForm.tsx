@@ -56,24 +56,36 @@ export function KeFuMessageForm({ open, initialData, onClose, onSuccess }: KeFuM
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="ke-fu-message-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑客服消息" : "新增客服消息"}
+        data-testid="ke-fu-message-form"
+        data-agent-scope="ke-fu-message:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑KeFuMessage（源框架导入）" : "新增KeFuMessage（源框架导入）"}
+            {isEdit ? "编辑客服消息" : "新增客服消息"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="ke-fu-message-form-close" data-agent-target="ke-fu-message:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="ke-fu-message-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">会话编号</label>
+          <label htmlFor="ke-fu-message-conversation_id" className="block text-xs text-slate-600 mb-1">会话编号</label>
           <input
             type="number"
+            id="ke-fu-message-conversation_id"
+            data-testid="field-conversation_id"
+            data-agent-target="ke-fu-message:field:conversation_id"
+            data-agent-state={formData.conversation_id == null || formData.conversation_id === "" ? "empty" : "filled"}
+            aria-label="会话编号"
             value={formData.conversation_id != null ? String(formData.conversation_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, conversation_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -83,9 +95,14 @@ export function KeFuMessageForm({ open, initialData, onClose, onSuccess }: KeFuM
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">发送人编号</label>
+          <label htmlFor="ke-fu-message-sender_id" className="block text-xs text-slate-600 mb-1">发送人编号</label>
           <input
             type="number"
+            id="ke-fu-message-sender_id"
+            data-testid="field-sender_id"
+            data-agent-target="ke-fu-message:field:sender_id"
+            data-agent-state={formData.sender_id == null || formData.sender_id === "" ? "empty" : "filled"}
+            aria-label="发送人编号"
             value={formData.sender_id != null ? String(formData.sender_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sender_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -95,9 +112,14 @@ export function KeFuMessageForm({ open, initialData, onClose, onSuccess }: KeFuM
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">发送人类型</label>
+          <label htmlFor="ke-fu-message-sender_type" className="block text-xs text-slate-600 mb-1">发送人类型</label>
           <input
             type="number"
+            id="ke-fu-message-sender_type"
+            data-testid="field-sender_type"
+            data-agent-target="ke-fu-message:field:sender_type"
+            data-agent-state={formData.sender_type == null || formData.sender_type === "" ? "empty" : "filled"}
+            aria-label="发送人类型"
             value={formData.sender_type != null ? String(formData.sender_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sender_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -107,9 +129,14 @@ export function KeFuMessageForm({ open, initialData, onClose, onSuccess }: KeFuM
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">接收人编号</label>
+          <label htmlFor="ke-fu-message-receiver_id" className="block text-xs text-slate-600 mb-1">接收人编号</label>
           <input
             type="number"
+            id="ke-fu-message-receiver_id"
+            data-testid="field-receiver_id"
+            data-agent-target="ke-fu-message:field:receiver_id"
+            data-agent-state={formData.receiver_id == null || formData.receiver_id === "" ? "empty" : "filled"}
+            aria-label="接收人编号"
             value={formData.receiver_id != null ? String(formData.receiver_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, receiver_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -119,9 +146,14 @@ export function KeFuMessageForm({ open, initialData, onClose, onSuccess }: KeFuM
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">接收人类型</label>
+          <label htmlFor="ke-fu-message-receiver_type" className="block text-xs text-slate-600 mb-1">接收人类型</label>
           <input
             type="number"
+            id="ke-fu-message-receiver_type"
+            data-testid="field-receiver_type"
+            data-agent-target="ke-fu-message:field:receiver_type"
+            data-agent-state={formData.receiver_type == null || formData.receiver_type === "" ? "empty" : "filled"}
+            aria-label="接收人类型"
             value={formData.receiver_type != null ? String(formData.receiver_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, receiver_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -131,9 +163,14 @@ export function KeFuMessageForm({ open, initialData, onClose, onSuccess }: KeFuM
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">消息类型</label>
+          <label htmlFor="ke-fu-message-content_type" className="block text-xs text-slate-600 mb-1">消息类型</label>
           <input
             type="number"
+            id="ke-fu-message-content_type"
+            data-testid="field-content_type"
+            data-agent-target="ke-fu-message:field:content_type"
+            data-agent-state={formData.content_type == null || formData.content_type === "" ? "empty" : "filled"}
+            aria-label="消息类型"
             value={formData.content_type != null ? String(formData.content_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, content_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -143,9 +180,14 @@ export function KeFuMessageForm({ open, initialData, onClose, onSuccess }: KeFuM
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">消息</label>
+          <label htmlFor="ke-fu-message-content" className="block text-xs text-slate-600 mb-1">消息</label>
           <input
             type="text"
+            id="ke-fu-message-content"
+            data-testid="field-content"
+            data-agent-target="ke-fu-message:field:content"
+            data-agent-state={formData.content ? "filled" : "empty"}
+            aria-label="消息"
             value={formData.content ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, content: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -157,12 +199,16 @@ export function KeFuMessageForm({ open, initialData, onClose, onSuccess }: KeFuM
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="read_status"
+            id="ke-fu-message-read_status"
+            data-testid="field-read_status"
+            data-agent-target="ke-fu-message:field:read_status"
+            data-agent-state={formData.read_status ? "on" : "off"}
+            aria-label="是/否已读"
             checked={Boolean(formData.read_status)}
             onChange={(e) => setFormData((prev) => ({ ...prev, read_status: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="read_status" className="text-xs text-slate-700 font-medium">是/否已读</label>
+          <label htmlFor="ke-fu-message-read_status" className="text-xs text-slate-700 font-medium">是/否已读</label>
         </div>
           </div>
 
@@ -170,6 +216,8 @@ export function KeFuMessageForm({ open, initialData, onClose, onSuccess }: KeFuM
             <button
               type="button"
               onClick={onClose}
+              data-testid="ke-fu-message-form-cancel"
+              data-agent-target="ke-fu-message:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -177,6 +225,9 @@ export function KeFuMessageForm({ open, initialData, onClose, onSuccess }: KeFuM
             <button
               type="submit"
               disabled={loading}
+              data-testid="ke-fu-message-form-submit"
+              data-agent-target="ke-fu-message:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

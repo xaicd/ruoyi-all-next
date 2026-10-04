@@ -6,12 +6,12 @@ export const REPORT_TABLES: CodegenConfig[] = [
   {
     moduleName: "report",
     className: "GoViewProject",
-    businessName: "GoViewProject（源框架导入）",
+    businessName: "GoView 项目表每个大屏图标，对应一个项目",
     parentMenuId: "report-dir",
     permissionPrefix: "report:go_view_project",
     table: {
       name: "report_go_view_project",
-      comment: "GoViewProject（源框架导入）",
+      comment: "GoView 项目表每个大屏图标，对应一个项目",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号，数据库自增","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"项目名称","nullableInferred":true},

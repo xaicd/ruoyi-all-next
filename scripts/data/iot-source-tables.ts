@@ -6,12 +6,12 @@ export const IOT_TABLES: CodegenConfig[] = [
   {
     moduleName: "iot",
     className: "IotAlertConfig",
-    businessName: "IotAlertConfig（源框架导入）",
+    businessName: "IoT 告警配置",
     parentMenuId: "iot-dir",
     permissionPrefix: "iot:iot_alert_config",
     table: {
       name: "iot_alert_config",
-      comment: "IotAlertConfig（源框架导入）",
+      comment: "IoT 告警配置",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"配置编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"配置名称","nullableInferred":true},
@@ -36,12 +36,12 @@ export const IOT_TABLES: CodegenConfig[] = [
   {
     moduleName: "iot",
     className: "IotAlertRecord",
-    businessName: "IotAlertRecord（源框架导入）",
+    businessName: "IoT 告警记录",
     parentMenuId: "iot-dir",
     permissionPrefix: "iot:iot_alert_record",
     table: {
       name: "iot_alert_record",
-      comment: "IotAlertRecord（源框架导入）",
+      comment: "IoT 告警记录",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"记录编号","isPk":true,"nullableInferred":true},
         {"name":"config_id","type":"bigint","tsType":"number","nullable":true,"comment":"告警名称","nullableInferred":true},
@@ -65,12 +65,12 @@ export const IOT_TABLES: CodegenConfig[] = [
   {
     moduleName: "iot",
     className: "IotDataRule",
-    businessName: "IotDataRule（源框架导入）",
+    businessName: "IoT 数据流转规则 DO监听 数据源，转发到 数据目的",
     parentMenuId: "iot-dir",
     permissionPrefix: "iot:iot_data_rule",
     table: {
       name: "iot_data_rule",
-      comment: "IotDataRule（源框架导入）",
+      comment: "IoT 数据流转规则 DO监听 数据源，转发到 数据目的",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"数据流转规格编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"数据流转规格名称","nullableInferred":true},
@@ -94,12 +94,12 @@ export const IOT_TABLES: CodegenConfig[] = [
   {
     moduleName: "iot",
     className: "IotDataSink",
-    businessName: "IotDataSink（源框架导入）",
+    businessName: "IoT 数据流转目的",
     parentMenuId: "iot-dir",
     permissionPrefix: "iot:iot_data_sink",
     table: {
       name: "iot_data_sink",
-      comment: "IotDataSink（源框架导入）",
+      comment: "IoT 数据流转目的",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"数据流转目的编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"数据流转目的名称","nullableInferred":true},
@@ -119,12 +119,12 @@ export const IOT_TABLES: CodegenConfig[] = [
   {
     moduleName: "iot",
     className: "IotDevice",
-    businessName: "IotDevice（源框架导入）",
+    businessName: "IoT 设备",
     parentMenuId: "iot-dir",
     permissionPrefix: "iot:iot_device",
     table: {
       name: "iot_device",
-      comment: "IotDevice（源框架导入）",
+      comment: "IoT 设备",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"设备 ID，主键，自增","isPk":true,"nullableInferred":true},
         {"name":"device_name","type":"varchar","tsType":"string","nullable":true,"comment":"设备名称，在产品内唯一，用于标识设备","nullableInferred":true},
@@ -157,12 +157,12 @@ export const IOT_TABLES: CodegenConfig[] = [
   {
     moduleName: "iot",
     className: "IotDeviceGroup",
-    businessName: "IotDeviceGroup（源框架导入）",
+    businessName: "IoT 设备分组",
     parentMenuId: "iot-dir",
     permissionPrefix: "iot:iot_device_group",
     table: {
       name: "iot_device_group",
-      comment: "IotDeviceGroup（源框架导入）",
+      comment: "IoT 设备分组",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"分组 ID","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"分组名字","nullableInferred":true},
@@ -180,12 +180,12 @@ export const IOT_TABLES: CodegenConfig[] = [
   {
     moduleName: "iot",
     className: "IotDeviceModbusConfig",
-    businessName: "IotDeviceModbusConfig（源框架导入）",
+    businessName: "IoT 设备 Modbus 连接配置",
     parentMenuId: "iot-dir",
     permissionPrefix: "iot:iot_device_modbus_config",
     table: {
       name: "iot_device_modbus_config",
-      comment: "IotDeviceModbusConfig（源框架导入）",
+      comment: "IoT 设备 Modbus 连接配置",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"主键","isPk":true,"nullableInferred":true},
         {"name":"product_id","type":"bigint","tsType":"number","nullable":true,"comment":"产品编号","nullableInferred":true},
@@ -210,12 +210,12 @@ export const IOT_TABLES: CodegenConfig[] = [
   {
     moduleName: "iot",
     className: "IotDeviceModbusPoint",
-    businessName: "IotDeviceModbusPoint（源框架导入）",
+    businessName: "IoT 设备 Modbus 点位配置",
     parentMenuId: "iot-dir",
     permissionPrefix: "iot:iot_device_modbus_point",
     table: {
       name: "iot_device_modbus_point",
-      comment: "IotDeviceModbusPoint（源框架导入）",
+      comment: "IoT 设备 Modbus 点位配置",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"主键","isPk":true,"nullableInferred":true},
         {"name":"device_id","type":"bigint","tsType":"number","nullable":true,"comment":"设备编号","nullableInferred":true},
@@ -242,12 +242,12 @@ export const IOT_TABLES: CodegenConfig[] = [
   {
     moduleName: "iot",
     className: "IotOtaFirmware",
-    businessName: "IotOtaFirmware（源框架导入）",
+    businessName: "IoT OTA 固件",
     parentMenuId: "iot-dir",
     permissionPrefix: "iot:iot_ota_firmware",
     table: {
       name: "iot_ota_firmware",
-      comment: "IotOtaFirmware（源框架导入）",
+      comment: "IoT OTA 固件",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"固件编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"固件名称","nullableInferred":true},
@@ -270,12 +270,12 @@ export const IOT_TABLES: CodegenConfig[] = [
   {
     moduleName: "iot",
     className: "IotOtaTask",
-    businessName: "IotOtaTask（源框架导入）",
+    businessName: "IoT OTA 升级任务",
     parentMenuId: "iot-dir",
     permissionPrefix: "iot:iot_ota_task",
     table: {
       name: "iot_ota_task",
-      comment: "IotOtaTask（源框架导入）",
+      comment: "IoT OTA 升级任务",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"任务编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"任务名称","nullableInferred":true},
@@ -297,12 +297,12 @@ export const IOT_TABLES: CodegenConfig[] = [
   {
     moduleName: "iot",
     className: "IotOtaTaskRecord",
-    businessName: "IotOtaTaskRecord（源框架导入）",
+    businessName: "IoT OTA 升级任务记录",
     parentMenuId: "iot-dir",
     permissionPrefix: "iot:iot_ota_task_record",
     table: {
       name: "iot_ota_task_record",
-      comment: "IotOtaTaskRecord（源框架导入）",
+      comment: "IoT OTA 升级任务记录",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"升级记录编号","isPk":true,"nullableInferred":true},
         {"name":"firmware_id","type":"bigint","tsType":"number","nullable":true,"comment":"固件编号","nullableInferred":true},
@@ -324,12 +324,12 @@ export const IOT_TABLES: CodegenConfig[] = [
   {
     moduleName: "iot",
     className: "IotProduct",
-    businessName: "IotProduct（源框架导入）",
+    businessName: "IoT 产品",
     parentMenuId: "iot-dir",
     permissionPrefix: "iot:iot_product",
     table: {
       name: "iot_product",
-      comment: "IotProduct（源框架导入）",
+      comment: "IoT 产品",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"产品 ID","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"产品名称","nullableInferred":true},
@@ -357,12 +357,12 @@ export const IOT_TABLES: CodegenConfig[] = [
   {
     moduleName: "iot",
     className: "IotProductCategory",
-    businessName: "IotProductCategory（源框架导入）",
+    businessName: "IoT 产品分类",
     parentMenuId: "iot-dir",
     permissionPrefix: "iot:iot_product_category",
     table: {
       name: "iot_product_category",
-      comment: "IotProductCategory（源框架导入）",
+      comment: "IoT 产品分类",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"分类 ID","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"分类名字","nullableInferred":true},
@@ -381,12 +381,12 @@ export const IOT_TABLES: CodegenConfig[] = [
   {
     moduleName: "iot",
     className: "IotSceneRule",
-    businessName: "IotSceneRule（源框架导入）",
+    businessName: "IoT 场景联动规则",
     parentMenuId: "iot-dir",
     permissionPrefix: "iot:iot_scene_rule",
     table: {
       name: "iot_scene_rule",
-      comment: "IotSceneRule（源框架导入）",
+      comment: "IoT 场景联动规则",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"场景联动编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"场景联动名称","nullableInferred":true},
@@ -427,12 +427,12 @@ export const IOT_TABLES: CodegenConfig[] = [
   {
     moduleName: "iot",
     className: "IotThingModel",
-    businessName: "IotThingModel（源框架导入）",
+    businessName: "IoT 产品物模型功能 DO每个 和 是“一对多”的关系，它的每个属性、事件、服务都对应一条记录",
     parentMenuId: "iot-dir",
     permissionPrefix: "iot:iot_thing_model",
     table: {
       name: "iot_thing_model",
-      comment: "IotThingModel（源框架导入）",
+      comment: "IoT 产品物模型功能 DO每个 和 是“一对多”的关系，它的每个属性、事件、服务都对应一条记录",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"物模型功能编号","isPk":true,"nullableInferred":true},
         {"name":"identifier","type":"varchar","tsType":"string","nullable":true,"comment":"功能标识","nullableInferred":true},

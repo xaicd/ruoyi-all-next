@@ -52,24 +52,36 @@ export function CrmBusinessStatusForm({ open, initialData, onClose, onSuccess }:
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="crm-business-status-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑CRM 商机状态 DO注意，它是个配置表" : "新增CRM 商机状态 DO注意，它是个配置表"}
+        data-testid="crm-business-status-form"
+        data-agent-scope="crm-business-status:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑CrmBusinessStatus（源框架导入）" : "新增CrmBusinessStatus（源框架导入）"}
+            {isEdit ? "编辑CRM 商机状态 DO注意，它是个配置表" : "新增CRM 商机状态 DO注意，它是个配置表"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="crm-business-status-form-close" data-agent-target="crm-business-status:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="crm-business-status-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态类型编号</label>
+          <label htmlFor="crm-business-status-type_id" className="block text-xs text-slate-600 mb-1">状态类型编号</label>
           <input
             type="number"
+            id="crm-business-status-type_id"
+            data-testid="field-type_id"
+            data-agent-target="crm-business-status:field:type_id"
+            data-agent-state={formData.type_id == null || formData.type_id === "" ? "empty" : "filled"}
+            aria-label="状态类型编号"
             value={formData.type_id != null ? String(formData.type_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -79,9 +91,14 @@ export function CrmBusinessStatusForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态名</label>
+          <label htmlFor="crm-business-status-name" className="block text-xs text-slate-600 mb-1">状态名</label>
           <input
             type="text"
+            id="crm-business-status-name"
+            data-testid="field-name"
+            data-agent-target="crm-business-status:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="状态名"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -91,9 +108,14 @@ export function CrmBusinessStatusForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">赢单率，百分比</label>
+          <label htmlFor="crm-business-status-percent" className="block text-xs text-slate-600 mb-1">赢单率，百分比</label>
           <input
             type="number"
+            id="crm-business-status-percent"
+            data-testid="field-percent"
+            data-agent-target="crm-business-status:field:percent"
+            data-agent-state={formData.percent == null || formData.percent === "" ? "empty" : "filled"}
+            aria-label="赢单率，百分比"
             value={formData.percent != null ? String(formData.percent) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, percent: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -103,9 +125,14 @@ export function CrmBusinessStatusForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">排序</label>
+          <label htmlFor="crm-business-status-sort" className="block text-xs text-slate-600 mb-1">排序</label>
           <input
             type="number"
+            id="crm-business-status-sort"
+            data-testid="field-sort"
+            data-agent-target="crm-business-status:field:sort"
+            data-agent-state={formData.sort == null || formData.sort === "" ? "empty" : "filled"}
+            aria-label="排序"
             value={formData.sort != null ? String(formData.sort) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sort: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -119,6 +146,8 @@ export function CrmBusinessStatusForm({ open, initialData, onClose, onSuccess }:
             <button
               type="button"
               onClick={onClose}
+              data-testid="crm-business-status-form-cancel"
+              data-agent-target="crm-business-status:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -126,6 +155,9 @@ export function CrmBusinessStatusForm({ open, initialData, onClose, onSuccess }:
             <button
               type="submit"
               disabled={loading}
+              data-testid="crm-business-status-form-submit"
+              data-agent-target="crm-business-status:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

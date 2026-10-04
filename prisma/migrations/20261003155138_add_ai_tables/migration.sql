@@ -2,7 +2,7 @@
 -- 来源: scripts/data/ai-source-tables.ts#AI_TABLES
 -- 背景: 这些表的定义来自低代码 CodegenConfig；此前只生成代码、不生成建表 SQL，
 --       导致"仓储在查但无处创建"。本迁移补齐 DDL。
--- AiApiKey（源框架导入）
+-- AI API 秘钥
 CREATE TABLE "ai_api_key" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -20,7 +20,7 @@ CREATE TABLE "ai_api_key" (
 );
 CREATE INDEX "ai_api_key_tenant_id_idx" ON "ai_api_key"("tenant_id");
 
--- AiChatConversation（源框架导入）
+-- AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它的消息关联在一起
 CREATE TABLE "ai_chat_conversation" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
@@ -44,7 +44,7 @@ CREATE TABLE "ai_chat_conversation" (
 );
 CREATE INDEX "ai_chat_conversation_tenant_id_idx" ON "ai_chat_conversation"("tenant_id");
 
--- AiChatMessage（源框架导入）
+-- AI Chat 消息
 CREATE TABLE "ai_chat_message" (
     "id" TEXT NOT NULL,
     "conversation_id" BIGINT,
@@ -70,7 +70,7 @@ CREATE TABLE "ai_chat_message" (
 );
 CREATE INDEX "ai_chat_message_tenant_id_idx" ON "ai_chat_message"("tenant_id");
 
--- AiChatRole（源框架导入）
+-- AI 聊天角色
 CREATE TABLE "ai_chat_role" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -96,7 +96,7 @@ CREATE TABLE "ai_chat_role" (
 );
 CREATE INDEX "ai_chat_role_tenant_id_idx" ON "ai_chat_role"("tenant_id");
 
--- AiImage（源框架导入）
+-- AI 绘画
 CREATE TABLE "ai_image" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
@@ -124,7 +124,7 @@ CREATE TABLE "ai_image" (
 );
 CREATE INDEX "ai_image_tenant_id_idx" ON "ai_image"("tenant_id");
 
--- AiKnowledge（源框架导入）
+-- AI 知识库
 CREATE TABLE "ai_knowledge" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -144,7 +144,7 @@ CREATE TABLE "ai_knowledge" (
 );
 CREATE INDEX "ai_knowledge_tenant_id_idx" ON "ai_knowledge"("tenant_id");
 
--- AiKnowledgeDocument（源框架导入）
+-- AI 知识库-文档
 CREATE TABLE "ai_knowledge_document" (
     "id" TEXT NOT NULL,
     "knowledge_id" BIGINT,
@@ -166,7 +166,7 @@ CREATE TABLE "ai_knowledge_document" (
 );
 CREATE INDEX "ai_knowledge_document_tenant_id_idx" ON "ai_knowledge_document"("tenant_id");
 
--- AiKnowledgeSegment（源框架导入）
+-- AI 知识库-文档分段
 CREATE TABLE "ai_knowledge_segment" (
     "id" TEXT NOT NULL,
     "knowledge_id" BIGINT,
@@ -187,7 +187,7 @@ CREATE TABLE "ai_knowledge_segment" (
 );
 CREATE INDEX "ai_knowledge_segment_tenant_id_idx" ON "ai_knowledge_segment"("tenant_id");
 
--- AiMindMap（源框架导入）
+-- AI 思维导图
 CREATE TABLE "ai_mind_map" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
@@ -207,7 +207,7 @@ CREATE TABLE "ai_mind_map" (
 );
 CREATE INDEX "ai_mind_map_tenant_id_idx" ON "ai_mind_map"("tenant_id");
 
--- AiModel（源框架导入）
+-- AI 模型 DO默认模型： 为开启，并且 排序第一
 CREATE TABLE "ai_model" (
     "id" TEXT NOT NULL,
     "key_id" BIGINT,
@@ -230,7 +230,7 @@ CREATE TABLE "ai_model" (
 );
 CREATE INDEX "ai_model_tenant_id_idx" ON "ai_model"("tenant_id");
 
--- AiMusic（源框架导入）
+-- AI 音乐
 CREATE TABLE "ai_music" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
@@ -259,7 +259,7 @@ CREATE TABLE "ai_music" (
 );
 CREATE INDEX "ai_music_tenant_id_idx" ON "ai_music"("tenant_id");
 
--- AiTool（源框架导入）
+-- AI 工具
 CREATE TABLE "ai_tool" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -275,7 +275,7 @@ CREATE TABLE "ai_tool" (
 );
 CREATE INDEX "ai_tool_tenant_id_idx" ON "ai_tool"("tenant_id");
 
--- AiWorkflow（源框架导入）
+-- AI 工作流
 CREATE TABLE "ai_workflow" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -293,7 +293,7 @@ CREATE TABLE "ai_workflow" (
 );
 CREATE INDEX "ai_workflow_tenant_id_idx" ON "ai_workflow"("tenant_id");
 
--- AiWrite（源框架导入）
+-- AI 写作
 CREATE TABLE "ai_write" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,

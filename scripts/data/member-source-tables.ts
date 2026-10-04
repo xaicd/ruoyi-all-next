@@ -6,12 +6,12 @@ export const MEMBER_TABLES: CodegenConfig[] = [
   {
     moduleName: "member",
     className: "MemberAddress",
-    businessName: "MemberAddress（源框架导入）",
+    businessName: "用户收件地址",
     parentMenuId: "member-dir",
     permissionPrefix: "member:member_address",
     table: {
       name: "member_address",
-      comment: "MemberAddress（源框架导入）",
+      comment: "用户收件地址",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},
@@ -32,12 +32,12 @@ export const MEMBER_TABLES: CodegenConfig[] = [
   {
     moduleName: "member",
     className: "MemberConfig",
-    businessName: "MemberConfig（源框架导入）",
+    businessName: "会员配置",
     parentMenuId: "member-dir",
     permissionPrefix: "member:member_config",
     table: {
       name: "member_config",
-      comment: "MemberConfig（源框架导入）",
+      comment: "会员配置",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"自增主键","isPk":true,"nullableInferred":true},
         {"name":"point_trade_deduct_enable","type":"boolean","tsType":"boolean","nullable":true,"comment":"积分抵扣开关","nullableInferred":true},
@@ -56,12 +56,12 @@ export const MEMBER_TABLES: CodegenConfig[] = [
   {
     moduleName: "member",
     className: "MemberExperienceRecord",
-    businessName: "MemberExperienceRecord（源框架导入）",
+    businessName: "会员经验记录",
     parentMenuId: "member-dir",
     permissionPrefix: "member:member_experience_record",
     table: {
       name: "member_experience_record",
-      comment: "MemberExperienceRecord（源框架导入）",
+      comment: "会员经验记录",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},
@@ -83,12 +83,12 @@ export const MEMBER_TABLES: CodegenConfig[] = [
   {
     moduleName: "member",
     className: "MemberGroup",
-    businessName: "MemberGroup（源框架导入）",
+    businessName: "用户分组",
     parentMenuId: "member-dir",
     permissionPrefix: "member:member_group",
     table: {
       name: "member_group",
-      comment: "MemberGroup（源框架导入）",
+      comment: "用户分组",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"名称","nullableInferred":true},
@@ -106,12 +106,12 @@ export const MEMBER_TABLES: CodegenConfig[] = [
   {
     moduleName: "member",
     className: "MemberLevel",
-    businessName: "MemberLevel（源框架导入）",
+    businessName: "会员等级 DO配置每个等级需要的积分",
     parentMenuId: "member-dir",
     permissionPrefix: "member:member_level",
     table: {
       name: "member_level",
-      comment: "MemberLevel（源框架导入）",
+      comment: "会员等级 DO配置每个等级需要的积分",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"等级名称","nullableInferred":true},
@@ -133,12 +133,12 @@ export const MEMBER_TABLES: CodegenConfig[] = [
   {
     moduleName: "member",
     className: "MemberLevelRecord",
-    businessName: "MemberLevelRecord（源框架导入）",
+    businessName: "会员等级记录 DO用户每次等级发生变更时，记录一条日志",
     parentMenuId: "member-dir",
     permissionPrefix: "member:member_level_record",
     table: {
       name: "member_level_record",
-      comment: "MemberLevelRecord（源框架导入）",
+      comment: "会员等级记录 DO用户每次等级发生变更时，记录一条日志",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},
@@ -161,12 +161,12 @@ export const MEMBER_TABLES: CodegenConfig[] = [
   {
     moduleName: "member",
     className: "MemberPointRecord",
-    businessName: "MemberPointRecord（源框架导入）",
+    businessName: "用户积分记录",
     parentMenuId: "member-dir",
     permissionPrefix: "member:member_point_record",
     table: {
       name: "member_point_record",
-      comment: "MemberPointRecord（源框架导入）",
+      comment: "用户积分记录",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"自增主键","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},
@@ -188,12 +188,12 @@ export const MEMBER_TABLES: CodegenConfig[] = [
   {
     moduleName: "member",
     className: "MemberSignInConfig",
-    businessName: "MemberSignInConfig（源框架导入）",
+    businessName: "签到规则",
     parentMenuId: "member-dir",
     permissionPrefix: "member:member_sign_in_config",
     table: {
       name: "member_sign_in_config",
-      comment: "MemberSignInConfig（源框架导入）",
+      comment: "签到规则",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"规则自增主键","isPk":true,"nullableInferred":true},
         {"name":"day","type":"int","tsType":"number","nullable":true,"comment":"签到第 x 天","nullableInferred":true},
@@ -212,12 +212,12 @@ export const MEMBER_TABLES: CodegenConfig[] = [
   {
     moduleName: "member",
     className: "MemberSignInRecord",
-    businessName: "MemberSignInRecord（源框架导入）",
+    businessName: "签到记录",
     parentMenuId: "member-dir",
     permissionPrefix: "member:member_sign_in_record",
     table: {
       name: "member_sign_in_record",
-      comment: "MemberSignInRecord（源框架导入）",
+      comment: "签到记录",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"签到用户","nullableInferred":true},
@@ -236,12 +236,12 @@ export const MEMBER_TABLES: CodegenConfig[] = [
   {
     moduleName: "member",
     className: "MemberTag",
-    businessName: "MemberTag（源框架导入）",
+    businessName: "会员标签",
     parentMenuId: "member-dir",
     permissionPrefix: "member:member_tag",
     table: {
       name: "member_tag",
-      comment: "MemberTag（源框架导入）",
+      comment: "会员标签",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"标签名称","nullableInferred":true},
@@ -257,12 +257,12 @@ export const MEMBER_TABLES: CodegenConfig[] = [
   {
     moduleName: "member",
     className: "MemberUser",
-    businessName: "MemberUser（源框架导入）",
+    businessName: "会员用户 DOuk_mobile 索引：基于 字段",
     parentMenuId: "member-dir",
     permissionPrefix: "member:member_user",
     table: {
       name: "member_user",
-      comment: "MemberUser（源框架导入）",
+      comment: "会员用户 DOuk_mobile 索引：基于 字段",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"用户ID","isPk":true,"nullableInferred":true},
         {"name":"mobile","type":"varchar","tsType":"string","nullable":true,"comment":"手机","nullableInferred":true},

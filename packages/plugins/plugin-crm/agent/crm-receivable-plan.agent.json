@@ -1,0 +1,276 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "crm",
+  "entity": "CrmReceivablePlan",
+  "kebab": "crm-receivable-plan",
+  "businessName": "CRM 回款计划",
+  "permissionPrefix": "crm:crm_receivable_plan",
+  "page": {
+    "route": "/admin/crm/crm-receivable-plan",
+    "title": "CRM 回款计划管理",
+    "titleSelector": "[data-testid=\"crm-receivable-plan-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.crm/api",
+    "bffMount": "/api/v1/admin/crm",
+    "resource": "crm-receivable-plan",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/crm-receivable-plan",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/crm-receivable-plan/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/crm-receivable-plan"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/crm-receivable-plan/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/crm-receivable-plan/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"crm-receivable-plan-title\"]",
+    "refresh": "[data-testid=\"crm-receivable-plan-refresh\"]",
+    "createButton": "[data-testid=\"crm-receivable-plan-create\"]",
+    "searchForm": "[data-testid=\"crm-receivable-plan-search\"]",
+    "searchSubmit": "[data-testid=\"crm-receivable-plan-search-submit\"]",
+    "searchReset": "[data-testid=\"crm-receivable-plan-search-reset\"]",
+    "total": "[data-testid=\"crm-receivable-plan-total\"]",
+    "table": "[data-testid=\"crm-receivable-plan-table\"]",
+    "row": "[data-testid=\"crm-receivable-plan-row\"]",
+    "editButton": "[data-testid=\"crm-receivable-plan-edit\"]",
+    "deleteButton": "[data-testid=\"crm-receivable-plan-delete\"]",
+    "form": "[data-testid=\"crm-receivable-plan-form\"]",
+    "formError": "[data-testid=\"crm-receivable-plan-form-error\"]",
+    "formSubmit": "[data-testid=\"crm-receivable-plan-form-submit\"]",
+    "formCancel": "[data-testid=\"crm-receivable-plan-form-cancel\"]",
+    "formClose": "[data-testid=\"crm-receivable-plan-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "CRM 回款计划列表",
+    "dialogLabel": {
+      "create": "新增CRM 回款计划",
+      "edit": "编辑CRM 回款计划"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "period",
+        "label": "期数",
+        "type": "number",
+        "required": false,
+        "testId": "field-period",
+        "selector": "[data-testid=\"field-period\"]"
+      },
+      {
+        "name": "customer_id",
+        "label": "客户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-customer_id",
+        "selector": "[data-testid=\"field-customer_id\"]"
+      },
+      {
+        "name": "contract_id",
+        "label": "合同编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-contract_id",
+        "selector": "[data-testid=\"field-contract_id\"]"
+      },
+      {
+        "name": "owner_user_id",
+        "label": "负责人编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-owner_user_id",
+        "selector": "[data-testid=\"field-owner_user_id\"]"
+      },
+      {
+        "name": "return_time",
+        "label": "计划回款日期",
+        "type": "string",
+        "required": false,
+        "testId": "field-return_time",
+        "selector": "[data-testid=\"field-return_time\"]"
+      },
+      {
+        "name": "return_type",
+        "label": "计划回款类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-return_type",
+        "selector": "[data-testid=\"field-return_type\"]"
+      },
+      {
+        "name": "price",
+        "label": "计划回款金额，单位：元",
+        "type": "number",
+        "required": false,
+        "testId": "field-price",
+        "selector": "[data-testid=\"field-price\"]"
+      },
+      {
+        "name": "receivable_id",
+        "label": "回款编号，关联",
+        "type": "number",
+        "required": false,
+        "testId": "field-receivable_id",
+        "selector": "[data-testid=\"field-receivable_id\"]"
+      },
+      {
+        "name": "remind_days",
+        "label": "提前几天提醒",
+        "type": "number",
+        "required": false,
+        "testId": "field-remind_days",
+        "selector": "[data-testid=\"field-remind_days\"]"
+      },
+      {
+        "name": "remind_time",
+        "label": "提醒日期",
+        "type": "string",
+        "required": false,
+        "testId": "field-remind_time",
+        "selector": "[data-testid=\"field-remind_time\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "crm-receivable-plan",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"crm-receivable-plan\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"crm-receivable-plan-form-overlay\"]",
+      "dialog": "[data-testid=\"crm-receivable-plan-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "crm-receivable-plan:search",
+      "reset": "crm-receivable-plan:reset",
+      "refresh": "crm-receivable-plan:refresh",
+      "create": "crm-receivable-plan:create",
+      "edit": "crm-receivable-plan:edit",
+      "delete": "crm-receivable-plan:delete",
+      "submit": "crm-receivable-plan:submit",
+      "cancel": "crm-receivable-plan:cancel",
+      "close": "crm-receivable-plan:close",
+      "row": "crm-receivable-plan:row",
+      "pagination": "crm-receivable-plan:pagination",
+      "fields": {
+        "period": "crm-receivable-plan:field:period",
+        "customer_id": "crm-receivable-plan:field:customer_id",
+        "contract_id": "crm-receivable-plan:field:contract_id",
+        "owner_user_id": "crm-receivable-plan:field:owner_user_id",
+        "return_time": "crm-receivable-plan:field:return_time",
+        "return_type": "crm-receivable-plan:field:return_type",
+        "price": "crm-receivable-plan:field:price",
+        "receivable_id": "crm-receivable-plan:field:receivable_id",
+        "remind_days": "crm-receivable-plan:field:remind_days",
+        "remind_time": "crm-receivable-plan:field:remind_time",
+        "remark": "crm-receivable-plan:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "crm.crm-receivable-plan",
+      "examples": [
+        "crm.crm-receivable-plan__List__Refresh",
+        "crm.crm-receivable-plan__ListItem__Open",
+        "crm.crm-receivable-plan__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

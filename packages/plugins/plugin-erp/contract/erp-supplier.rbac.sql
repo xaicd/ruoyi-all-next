@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for ErpSupplier（源框架导入） (ErpSupplier)
+-- Auto-generated RBAC & Menu Migration for ERP 供应商 (ErpSupplier)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-erp-supplier',
   'erp-dir',
-  'ErpSupplier（源框架导入）管理',
+  'ERP 供应商管理',
   '/admin/erp/erp-supplier',
   'erp/erp-supplier/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-erp-supplier-query',  'menu-erp-supplier', '查询ErpSupplier（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_supplier:query',  1, NOW(), NOW()),
-('menu-erp-supplier-create', 'menu-erp-supplier', '新增ErpSupplier（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_supplier:create', 2, NOW(), NOW()),
-('menu-erp-supplier-update', 'menu-erp-supplier', '修改ErpSupplier（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_supplier:update', 3, NOW(), NOW()),
-('menu-erp-supplier-delete', 'menu-erp-supplier', '删除ErpSupplier（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_supplier:delete', 4, NOW(), NOW())
+('menu-erp-supplier-query',  'menu-erp-supplier', '查询ERP 供应商', 'BUTTON', 'ACTIVE', 'erp:erp_supplier:query',  1, NOW(), NOW()),
+('menu-erp-supplier-create', 'menu-erp-supplier', '新增ERP 供应商', 'BUTTON', 'ACTIVE', 'erp:erp_supplier:create', 2, NOW(), NOW()),
+('menu-erp-supplier-update', 'menu-erp-supplier', '修改ERP 供应商', 'BUTTON', 'ACTIVE', 'erp:erp_supplier:update', 3, NOW(), NOW()),
+('menu-erp-supplier-delete', 'menu-erp-supplier', '删除ERP 供应商', 'BUTTON', 'ACTIVE', 'erp:erp_supplier:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

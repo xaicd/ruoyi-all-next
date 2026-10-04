@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { AiApiKeyService } from "../ai-api-key.service"
 
 describe("AiApiKeyService", () => {
-  it("should create and query AiApiKey（源框架导入）", async () => {
+  it("should create and query AI API 秘钥", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AiApiKeyService.create({
-        name: "测试AiApiKey（源框架导入）",
+        name: "测试AI API 秘钥",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("AiApiKeyService", () => {
   
       const updated = await AiApiKeyService.update(created.id, {
         id: created.id,
-        name: "更新AiApiKey（源框架导入）",
+        name: "更新AI API 秘钥",
       } as any)
       expect(updated).toBeDefined()
   

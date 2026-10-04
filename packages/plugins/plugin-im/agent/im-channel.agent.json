@@ -1,0 +1,222 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "im",
+  "entity": "ImChannel",
+  "kebab": "im-channel",
+  "businessName": "IM 频道 DO业务语义：- 频道是运营单向推送的主体；C 端用户不能向频道发消息- 是业务码（API / 字典外露），id 是数字主键给前端会话 targetId 用",
+  "permissionPrefix": "im:im_channel",
+  "page": {
+    "route": "/admin/im/im-channel",
+    "title": "IM 频道 DO业务语义：- 频道是运营单向推送的主体；C 端用户不能向频道发消息- 是业务码（API / 字典外露），id 是数字主键给前端会话 targetId 用管理",
+    "titleSelector": "[data-testid=\"im-channel-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.im/api",
+    "bffMount": "/api/v1/admin/im",
+    "resource": "im-channel",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/im-channel",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/im-channel/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/im-channel"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/im-channel/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/im-channel/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"im-channel-title\"]",
+    "refresh": "[data-testid=\"im-channel-refresh\"]",
+    "createButton": "[data-testid=\"im-channel-create\"]",
+    "searchForm": "[data-testid=\"im-channel-search\"]",
+    "searchSubmit": "[data-testid=\"im-channel-search-submit\"]",
+    "searchReset": "[data-testid=\"im-channel-search-reset\"]",
+    "total": "[data-testid=\"im-channel-total\"]",
+    "table": "[data-testid=\"im-channel-table\"]",
+    "row": "[data-testid=\"im-channel-row\"]",
+    "editButton": "[data-testid=\"im-channel-edit\"]",
+    "deleteButton": "[data-testid=\"im-channel-delete\"]",
+    "form": "[data-testid=\"im-channel-form\"]",
+    "formError": "[data-testid=\"im-channel-form-error\"]",
+    "formSubmit": "[data-testid=\"im-channel-form-submit\"]",
+    "formCancel": "[data-testid=\"im-channel-form-cancel\"]",
+    "formClose": "[data-testid=\"im-channel-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IM 频道 DO业务语义：- 频道是运营单向推送的主体；C 端用户不能向频道发消息- 是业务码（API / 字典外露），id 是数字主键给前端会话 targetId 用列表",
+    "dialogLabel": {
+      "create": "新增IM 频道 DO业务语义：- 频道是运营单向推送的主体；C 端用户不能向频道发消息- 是业务码（API / 字典外露），id 是数字主键给前端会话 targetId 用",
+      "edit": "编辑IM 频道 DO业务语义：- 频道是运营单向推送的主体；C 端用户不能向频道发消息- 是业务码（API / 字典外露），id 是数字主键给前端会话 targetId 用"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "code",
+        "label": "频道业务码",
+        "type": "string",
+        "required": false,
+        "testId": "field-code",
+        "selector": "[data-testid=\"field-code\"]"
+      },
+      {
+        "name": "name",
+        "label": "频道名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "avatar",
+        "label": "频道头像",
+        "type": "string",
+        "required": false,
+        "testId": "field-avatar",
+        "selector": "[data-testid=\"field-avatar\"]"
+      },
+      {
+        "name": "sort",
+        "label": "排序",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "im-channel",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"im-channel\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"im-channel-form-overlay\"]",
+      "dialog": "[data-testid=\"im-channel-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "im-channel:search",
+      "reset": "im-channel:reset",
+      "refresh": "im-channel:refresh",
+      "create": "im-channel:create",
+      "edit": "im-channel:edit",
+      "delete": "im-channel:delete",
+      "submit": "im-channel:submit",
+      "cancel": "im-channel:cancel",
+      "close": "im-channel:close",
+      "row": "im-channel:row",
+      "pagination": "im-channel:pagination",
+      "fields": {
+        "code": "im-channel:field:code",
+        "name": "im-channel:field:name",
+        "avatar": "im-channel:field:avatar",
+        "sort": "im-channel:field:sort",
+        "status": "im-channel:field:status"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "im.im-channel",
+      "examples": [
+        "im.im-channel__List__Refresh",
+        "im.im-channel__ListItem__Open",
+        "im.im-channel__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

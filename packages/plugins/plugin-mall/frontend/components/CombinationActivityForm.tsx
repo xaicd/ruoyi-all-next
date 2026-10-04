@@ -58,24 +58,36 @@ export function CombinationActivityForm({ open, initialData, onClose, onSuccess 
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="combination-activity-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑拼团活动" : "新增拼团活动"}
+        data-testid="combination-activity-form"
+        data-agent-scope="combination-activity:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑CombinationActivity（源框架导入）" : "新增CombinationActivity（源框架导入）"}
+            {isEdit ? "编辑拼团活动" : "新增拼团活动"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="combination-activity-form-close" data-agent-target="combination-activity:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="combination-activity-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">拼团名称</label>
+          <label htmlFor="combination-activity-name" className="block text-xs text-slate-600 mb-1">拼团名称</label>
           <input
             type="text"
+            id="combination-activity-name"
+            data-testid="field-name"
+            data-agent-target="combination-activity:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="拼团名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -85,9 +97,14 @@ export function CombinationActivityForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品 SPU 编号</label>
+          <label htmlFor="combination-activity-spu_id" className="block text-xs text-slate-600 mb-1">商品 SPU 编号</label>
           <input
             type="number"
+            id="combination-activity-spu_id"
+            data-testid="field-spu_id"
+            data-agent-target="combination-activity:field:spu_id"
+            data-agent-state={formData.spu_id == null || formData.spu_id === "" ? "empty" : "filled"}
+            aria-label="商品 SPU 编号"
             value={formData.spu_id != null ? String(formData.spu_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, spu_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -97,9 +114,14 @@ export function CombinationActivityForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">总限购数量</label>
+          <label htmlFor="combination-activity-total_limit_count" className="block text-xs text-slate-600 mb-1">总限购数量</label>
           <input
             type="number"
+            id="combination-activity-total_limit_count"
+            data-testid="field-total_limit_count"
+            data-agent-target="combination-activity:field:total_limit_count"
+            data-agent-state={formData.total_limit_count == null || formData.total_limit_count === "" ? "empty" : "filled"}
+            aria-label="总限购数量"
             value={formData.total_limit_count != null ? String(formData.total_limit_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, total_limit_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -109,9 +131,14 @@ export function CombinationActivityForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">单次限购数量</label>
+          <label htmlFor="combination-activity-single_limit_count" className="block text-xs text-slate-600 mb-1">单次限购数量</label>
           <input
             type="number"
+            id="combination-activity-single_limit_count"
+            data-testid="field-single_limit_count"
+            data-agent-target="combination-activity:field:single_limit_count"
+            data-agent-state={formData.single_limit_count == null || formData.single_limit_count === "" ? "empty" : "filled"}
+            aria-label="单次限购数量"
             value={formData.single_limit_count != null ? String(formData.single_limit_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, single_limit_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -121,9 +148,14 @@ export function CombinationActivityForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">开始时间</label>
+          <label htmlFor="combination-activity-start_time" className="block text-xs text-slate-600 mb-1">开始时间</label>
           <input
             type="text"
+            id="combination-activity-start_time"
+            data-testid="field-start_time"
+            data-agent-target="combination-activity:field:start_time"
+            data-agent-state={formData.start_time ? "filled" : "empty"}
+            aria-label="开始时间"
             value={formData.start_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, start_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -133,9 +165,14 @@ export function CombinationActivityForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">结束时间</label>
+          <label htmlFor="combination-activity-end_time" className="block text-xs text-slate-600 mb-1">结束时间</label>
           <input
             type="text"
+            id="combination-activity-end_time"
+            data-testid="field-end_time"
+            data-agent-target="combination-activity:field:end_time"
+            data-agent-state={formData.end_time ? "filled" : "empty"}
+            aria-label="结束时间"
             value={formData.end_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, end_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -145,9 +182,14 @@ export function CombinationActivityForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">几人团</label>
+          <label htmlFor="combination-activity-user_size" className="block text-xs text-slate-600 mb-1">几人团</label>
           <input
             type="number"
+            id="combination-activity-user_size"
+            data-testid="field-user_size"
+            data-agent-target="combination-activity:field:user_size"
+            data-agent-state={formData.user_size == null || formData.user_size === "" ? "empty" : "filled"}
+            aria-label="几人团"
             value={formData.user_size != null ? String(formData.user_size) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_size: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -159,18 +201,27 @@ export function CombinationActivityForm({ open, initialData, onClose, onSuccess 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="virtual_group"
+            id="combination-activity-virtual_group"
+            data-testid="field-virtual_group"
+            data-agent-target="combination-activity:field:virtual_group"
+            data-agent-state={formData.virtual_group ? "on" : "off"}
+            aria-label="虚拟成团"
             checked={Boolean(formData.virtual_group)}
             onChange={(e) => setFormData((prev) => ({ ...prev, virtual_group: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="virtual_group" className="text-xs text-slate-700 font-medium">虚拟成团</label>
+          <label htmlFor="combination-activity-virtual_group" className="text-xs text-slate-700 font-medium">虚拟成团</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">活动状态</label>
+          <label htmlFor="combination-activity-status" className="block text-xs text-slate-600 mb-1">活动状态</label>
           <input
             type="number"
+            id="combination-activity-status"
+            data-testid="field-status"
+            data-agent-target="combination-activity:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="活动状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -180,9 +231,14 @@ export function CombinationActivityForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">限制时长（小时）</label>
+          <label htmlFor="combination-activity-limit_duration" className="block text-xs text-slate-600 mb-1">限制时长（小时）</label>
           <input
             type="number"
+            id="combination-activity-limit_duration"
+            data-testid="field-limit_duration"
+            data-agent-target="combination-activity:field:limit_duration"
+            data-agent-state={formData.limit_duration == null || formData.limit_duration === "" ? "empty" : "filled"}
+            aria-label="限制时长（小时）"
             value={formData.limit_duration != null ? String(formData.limit_duration) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, limit_duration: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -196,6 +252,8 @@ export function CombinationActivityForm({ open, initialData, onClose, onSuccess 
             <button
               type="button"
               onClick={onClose}
+              data-testid="combination-activity-form-cancel"
+              data-agent-target="combination-activity:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -203,6 +261,9 @@ export function CombinationActivityForm({ open, initialData, onClose, onSuccess 
             <button
               type="submit"
               disabled={loading}
+              data-testid="combination-activity-form-submit"
+              data-agent-target="combination-activity:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

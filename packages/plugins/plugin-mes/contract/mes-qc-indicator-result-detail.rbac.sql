@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesQcIndicatorResultDetail（源框架导入） (MesQcIndicatorResultDetail)
+-- Auto-generated RBAC & Menu Migration for MES 检验结果明细记录 (MesQcIndicatorResultDetail)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-qc-indicator-result-detail',
   'mes-dir',
-  'MesQcIndicatorResultDetail（源框架导入）管理',
+  'MES 检验结果明细记录管理',
   '/admin/mes/mes-qc-indicator-result-detail',
   'mes/mes-qc-indicator-result-detail/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-qc-indicator-result-detail-query',  'menu-mes-qc-indicator-result-detail', '查询MesQcIndicatorResultDetail（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_qc_indicator_result_detail:query',  1, NOW(), NOW()),
-('menu-mes-qc-indicator-result-detail-create', 'menu-mes-qc-indicator-result-detail', '新增MesQcIndicatorResultDetail（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_qc_indicator_result_detail:create', 2, NOW(), NOW()),
-('menu-mes-qc-indicator-result-detail-update', 'menu-mes-qc-indicator-result-detail', '修改MesQcIndicatorResultDetail（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_qc_indicator_result_detail:update', 3, NOW(), NOW()),
-('menu-mes-qc-indicator-result-detail-delete', 'menu-mes-qc-indicator-result-detail', '删除MesQcIndicatorResultDetail（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_qc_indicator_result_detail:delete', 4, NOW(), NOW())
+('menu-mes-qc-indicator-result-detail-query',  'menu-mes-qc-indicator-result-detail', '查询MES 检验结果明细记录', 'BUTTON', 'ACTIVE', 'mes:mes_qc_indicator_result_detail:query',  1, NOW(), NOW()),
+('menu-mes-qc-indicator-result-detail-create', 'menu-mes-qc-indicator-result-detail', '新增MES 检验结果明细记录', 'BUTTON', 'ACTIVE', 'mes:mes_qc_indicator_result_detail:create', 2, NOW(), NOW()),
+('menu-mes-qc-indicator-result-detail-update', 'menu-mes-qc-indicator-result-detail', '修改MES 检验结果明细记录', 'BUTTON', 'ACTIVE', 'mes:mes_qc_indicator_result_detail:update', 3, NOW(), NOW()),
+('menu-mes-qc-indicator-result-detail-delete', 'menu-mes-qc-indicator-result-detail', '删除MES 检验结果明细记录', 'BUTTON', 'ACTIVE', 'mes:mes_qc_indicator_result_detail:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { CrmOwnerRecordService } from "../crm-owner-record.service"
 
 describe("CrmOwnerRecordService", () => {
-  it("should create and query CrmOwnerRecord（源框架导入）", async () => {
+  it("should create and query CRM 负责人变更记录", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CrmOwnerRecordService.create({
         biz_type: 1,
@@ -21,7 +21,7 @@ describe("CrmOwnerRecordService", () => {
   
       const updated = await CrmOwnerRecordService.update(created.id, {
         id: created.id,
-        biz_type: "更新CrmOwnerRecord（源框架导入）",
+        biz_type: "更新CRM 负责人变更记录",
       } as any)
       expect(updated).toBeDefined()
   

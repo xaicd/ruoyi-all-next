@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for ErpSaleReturn（源框架导入） (ErpSaleReturn)
+-- Auto-generated RBAC & Menu Migration for ERP 销售退货 (ErpSaleReturn)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-erp-sale-return',
   'erp-dir',
-  'ErpSaleReturn（源框架导入）管理',
+  'ERP 销售退货管理',
   '/admin/erp/erp-sale-return',
   'erp/erp-sale-return/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-erp-sale-return-query',  'menu-erp-sale-return', '查询ErpSaleReturn（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_sale_return:query',  1, NOW(), NOW()),
-('menu-erp-sale-return-create', 'menu-erp-sale-return', '新增ErpSaleReturn（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_sale_return:create', 2, NOW(), NOW()),
-('menu-erp-sale-return-update', 'menu-erp-sale-return', '修改ErpSaleReturn（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_sale_return:update', 3, NOW(), NOW()),
-('menu-erp-sale-return-delete', 'menu-erp-sale-return', '删除ErpSaleReturn（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_sale_return:delete', 4, NOW(), NOW())
+('menu-erp-sale-return-query',  'menu-erp-sale-return', '查询ERP 销售退货', 'BUTTON', 'ACTIVE', 'erp:erp_sale_return:query',  1, NOW(), NOW()),
+('menu-erp-sale-return-create', 'menu-erp-sale-return', '新增ERP 销售退货', 'BUTTON', 'ACTIVE', 'erp:erp_sale_return:create', 2, NOW(), NOW()),
+('menu-erp-sale-return-update', 'menu-erp-sale-return', '修改ERP 销售退货', 'BUTTON', 'ACTIVE', 'erp:erp_sale_return:update', 3, NOW(), NOW()),
+('menu-erp-sale-return-delete', 'menu-erp-sale-return', '删除ERP 销售退货', 'BUTTON', 'ACTIVE', 'erp:erp_sale_return:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

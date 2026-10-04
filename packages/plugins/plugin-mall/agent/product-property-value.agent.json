@@ -1,0 +1,204 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "ProductPropertyValue",
+  "kebab": "product-property-value",
+  "businessName": "商品属性值",
+  "permissionPrefix": "mall:product_property_value",
+  "page": {
+    "route": "/admin/mall/product-property-value",
+    "title": "商品属性值管理",
+    "titleSelector": "[data-testid=\"product-property-value-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "product-property-value",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/product-property-value",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/product-property-value/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/product-property-value"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/product-property-value/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/product-property-value/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"product-property-value-title\"]",
+    "refresh": "[data-testid=\"product-property-value-refresh\"]",
+    "createButton": "[data-testid=\"product-property-value-create\"]",
+    "searchForm": "[data-testid=\"product-property-value-search\"]",
+    "searchSubmit": "[data-testid=\"product-property-value-search-submit\"]",
+    "searchReset": "[data-testid=\"product-property-value-search-reset\"]",
+    "total": "[data-testid=\"product-property-value-total\"]",
+    "table": "[data-testid=\"product-property-value-table\"]",
+    "row": "[data-testid=\"product-property-value-row\"]",
+    "editButton": "[data-testid=\"product-property-value-edit\"]",
+    "deleteButton": "[data-testid=\"product-property-value-delete\"]",
+    "form": "[data-testid=\"product-property-value-form\"]",
+    "formError": "[data-testid=\"product-property-value-form-error\"]",
+    "formSubmit": "[data-testid=\"product-property-value-form-submit\"]",
+    "formCancel": "[data-testid=\"product-property-value-form-cancel\"]",
+    "formClose": "[data-testid=\"product-property-value-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "商品属性值列表",
+    "dialogLabel": {
+      "create": "新增商品属性值",
+      "edit": "编辑商品属性值"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "property_id",
+        "label": "属性项的编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-property_id",
+        "selector": "[data-testid=\"field-property_id\"]"
+      },
+      {
+        "name": "name",
+        "label": "名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "product-property-value",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"product-property-value\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"product-property-value-form-overlay\"]",
+      "dialog": "[data-testid=\"product-property-value-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "product-property-value:search",
+      "reset": "product-property-value:reset",
+      "refresh": "product-property-value:refresh",
+      "create": "product-property-value:create",
+      "edit": "product-property-value:edit",
+      "delete": "product-property-value:delete",
+      "submit": "product-property-value:submit",
+      "cancel": "product-property-value:cancel",
+      "close": "product-property-value:close",
+      "row": "product-property-value:row",
+      "pagination": "product-property-value:pagination",
+      "fields": {
+        "property_id": "product-property-value:field:property_id",
+        "name": "product-property-value:field:name",
+        "remark": "product-property-value:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.product-property-value",
+      "examples": [
+        "mall.product-property-value__List__Refresh",
+        "mall.product-property-value__ListItem__Open",
+        "mall.product-property-value__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

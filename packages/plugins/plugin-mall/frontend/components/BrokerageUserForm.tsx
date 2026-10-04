@@ -54,24 +54,36 @@ export function BrokerageUserForm({ open, initialData, onClose, onSuccess }: Bro
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="brokerage-user-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑分销用户" : "新增分销用户"}
+        data-testid="brokerage-user-form"
+        data-agent-scope="brokerage-user:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑BrokerageUser（源框架导入）" : "新增BrokerageUser（源框架导入）"}
+            {isEdit ? "编辑分销用户" : "新增分销用户"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="brokerage-user-form-close" data-agent-target="brokerage-user:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="brokerage-user-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">推广员编号</label>
+          <label htmlFor="brokerage-user-bind_user_id" className="block text-xs text-slate-600 mb-1">推广员编号</label>
           <input
             type="number"
+            id="brokerage-user-bind_user_id"
+            data-testid="field-bind_user_id"
+            data-agent-target="brokerage-user:field:bind_user_id"
+            data-agent-state={formData.bind_user_id == null || formData.bind_user_id === "" ? "empty" : "filled"}
+            aria-label="推广员编号"
             value={formData.bind_user_id != null ? String(formData.bind_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, bind_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -81,9 +93,14 @@ export function BrokerageUserForm({ open, initialData, onClose, onSuccess }: Bro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">推广员绑定时间</label>
+          <label htmlFor="brokerage-user-bind_user_time" className="block text-xs text-slate-600 mb-1">推广员绑定时间</label>
           <input
             type="text"
+            id="brokerage-user-bind_user_time"
+            data-testid="field-bind_user_time"
+            data-agent-target="brokerage-user:field:bind_user_time"
+            data-agent-state={formData.bind_user_time ? "filled" : "empty"}
+            aria-label="推广员绑定时间"
             value={formData.bind_user_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, bind_user_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -95,18 +112,27 @@ export function BrokerageUserForm({ open, initialData, onClose, onSuccess }: Bro
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="brokerage_enabled"
+            id="brokerage-user-brokerage_enabled"
+            data-testid="field-brokerage_enabled"
+            data-agent-target="brokerage-user:field:brokerage_enabled"
+            data-agent-state={formData.brokerage_enabled ? "on" : "off"}
+            aria-label="是否有分销资格"
             checked={Boolean(formData.brokerage_enabled)}
             onChange={(e) => setFormData((prev) => ({ ...prev, brokerage_enabled: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="brokerage_enabled" className="text-xs text-slate-700 font-medium">是否有分销资格</label>
+          <label htmlFor="brokerage-user-brokerage_enabled" className="text-xs text-slate-700 font-medium">是否有分销资格</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">成为分销员时间</label>
+          <label htmlFor="brokerage-user-brokerage_time" className="block text-xs text-slate-600 mb-1">成为分销员时间</label>
           <input
             type="text"
+            id="brokerage-user-brokerage_time"
+            data-testid="field-brokerage_time"
+            data-agent-target="brokerage-user:field:brokerage_time"
+            data-agent-state={formData.brokerage_time ? "filled" : "empty"}
+            aria-label="成为分销员时间"
             value={formData.brokerage_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, brokerage_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -116,9 +142,14 @@ export function BrokerageUserForm({ open, initialData, onClose, onSuccess }: Bro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">可用佣金</label>
+          <label htmlFor="brokerage-user-brokerage_price" className="block text-xs text-slate-600 mb-1">可用佣金</label>
           <input
             type="number"
+            id="brokerage-user-brokerage_price"
+            data-testid="field-brokerage_price"
+            data-agent-target="brokerage-user:field:brokerage_price"
+            data-agent-state={formData.brokerage_price == null || formData.brokerage_price === "" ? "empty" : "filled"}
+            aria-label="可用佣金"
             value={formData.brokerage_price != null ? String(formData.brokerage_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, brokerage_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -128,9 +159,14 @@ export function BrokerageUserForm({ open, initialData, onClose, onSuccess }: Bro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">冻结佣金</label>
+          <label htmlFor="brokerage-user-frozen_price" className="block text-xs text-slate-600 mb-1">冻结佣金</label>
           <input
             type="number"
+            id="brokerage-user-frozen_price"
+            data-testid="field-frozen_price"
+            data-agent-target="brokerage-user:field:frozen_price"
+            data-agent-state={formData.frozen_price == null || formData.frozen_price === "" ? "empty" : "filled"}
+            aria-label="冻结佣金"
             value={formData.frozen_price != null ? String(formData.frozen_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, frozen_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -144,6 +180,8 @@ export function BrokerageUserForm({ open, initialData, onClose, onSuccess }: Bro
             <button
               type="button"
               onClick={onClose}
+              data-testid="brokerage-user-form-cancel"
+              data-agent-target="brokerage-user:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -151,6 +189,9 @@ export function BrokerageUserForm({ open, initialData, onClose, onSuccess }: Bro
             <button
               type="submit"
               disabled={loading}
+              data-testid="brokerage-user-form-submit"
+              data-agent-target="brokerage-user:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

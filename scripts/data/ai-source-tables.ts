@@ -6,12 +6,12 @@ export const AI_TABLES: CodegenConfig[] = [
   {
     moduleName: "ai",
     className: "AiApiKey",
-    businessName: "AiApiKey（源框架导入）",
+    businessName: "AI API 秘钥",
     parentMenuId: "ai-dir",
     permissionPrefix: "ai:ai_api_key",
     table: {
       name: "ai_api_key",
-      comment: "AiApiKey（源框架导入）",
+      comment: "AI API 秘钥",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"名称","nullableInferred":true},
@@ -31,12 +31,12 @@ export const AI_TABLES: CodegenConfig[] = [
   {
     moduleName: "ai",
     className: "AiChatConversation",
-    businessName: "AiChatConversation（源框架导入）",
+    businessName: "AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它的消息关联在一起",
     parentMenuId: "ai-dir",
     permissionPrefix: "ai:ai_chat_conversation",
     table: {
       name: "ai_chat_conversation",
-      comment: "AiChatConversation（源框架导入）",
+      comment: "AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它的消息关联在一起",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"ID 编号，自增","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},
@@ -62,12 +62,12 @@ export const AI_TABLES: CodegenConfig[] = [
   {
     moduleName: "ai",
     className: "AiChatMessage",
-    businessName: "AiChatMessage（源框架导入）",
+    businessName: "AI Chat 消息",
     parentMenuId: "ai-dir",
     permissionPrefix: "ai:ai_chat_message",
     table: {
       name: "ai_chat_message",
-      comment: "AiChatMessage（源框架导入）",
+      comment: "AI Chat 消息",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号，作为每条聊天记录的唯一标识符","isPk":true,"nullableInferred":true},
         {"name":"conversation_id","type":"bigint","tsType":"number","nullable":true,"comment":"对话编号","nullableInferred":true},
@@ -95,12 +95,12 @@ export const AI_TABLES: CodegenConfig[] = [
   {
     moduleName: "ai",
     className: "AiChatRole",
-    businessName: "AiChatRole（源框架导入）",
+    businessName: "AI 聊天角色",
     parentMenuId: "ai-dir",
     permissionPrefix: "ai:ai_chat_role",
     table: {
       name: "ai_chat_role",
-      comment: "AiChatRole（源框架导入）",
+      comment: "AI 聊天角色",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"角色名称","nullableInferred":true},
@@ -128,12 +128,12 @@ export const AI_TABLES: CodegenConfig[] = [
   {
     moduleName: "ai",
     className: "AiImage",
-    businessName: "AiImage（源框架导入）",
+    businessName: "AI 绘画",
     parentMenuId: "ai-dir",
     permissionPrefix: "ai:ai_image",
     table: {
       name: "ai_image",
-      comment: "AiImage（源框架导入）",
+      comment: "AI 绘画",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},
@@ -163,12 +163,12 @@ export const AI_TABLES: CodegenConfig[] = [
   {
     moduleName: "ai",
     className: "AiKnowledge",
-    businessName: "AiKnowledge（源框架导入）",
+    businessName: "AI 知识库",
     parentMenuId: "ai-dir",
     permissionPrefix: "ai:ai_knowledge",
     table: {
       name: "ai_knowledge",
-      comment: "AiKnowledge（源框架导入）",
+      comment: "AI 知识库",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"知识库名称","nullableInferred":true},
@@ -190,12 +190,12 @@ export const AI_TABLES: CodegenConfig[] = [
   {
     moduleName: "ai",
     className: "AiKnowledgeDocument",
-    businessName: "AiKnowledgeDocument（源框架导入）",
+    businessName: "AI 知识库-文档",
     parentMenuId: "ai-dir",
     permissionPrefix: "ai:ai_knowledge_document",
     table: {
       name: "ai_knowledge_document",
-      comment: "AiKnowledgeDocument（源框架导入）",
+      comment: "AI 知识库-文档",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"knowledge_id","type":"bigint","tsType":"number","nullable":true,"comment":"知识库编号","nullableInferred":true},
@@ -219,12 +219,12 @@ export const AI_TABLES: CodegenConfig[] = [
   {
     moduleName: "ai",
     className: "AiKnowledgeSegment",
-    businessName: "AiKnowledgeSegment（源框架导入）",
+    businessName: "AI 知识库-文档分段",
     parentMenuId: "ai-dir",
     permissionPrefix: "ai:ai_knowledge_segment",
     table: {
       name: "ai_knowledge_segment",
-      comment: "AiKnowledgeSegment（源框架导入）",
+      comment: "AI 知识库-文档分段",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"knowledge_id","type":"bigint","tsType":"number","nullable":true,"comment":"知识库编号","nullableInferred":true},
@@ -247,12 +247,12 @@ export const AI_TABLES: CodegenConfig[] = [
   {
     moduleName: "ai",
     className: "AiMindMap",
-    businessName: "AiMindMap（源框架导入）",
+    businessName: "AI 思维导图",
     parentMenuId: "ai-dir",
     permissionPrefix: "ai:ai_mind_map",
     table: {
       name: "ai_mind_map",
-      comment: "AiMindMap（源框架导入）",
+      comment: "AI 思维导图",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},
@@ -274,12 +274,12 @@ export const AI_TABLES: CodegenConfig[] = [
   {
     moduleName: "ai",
     className: "AiModel",
-    businessName: "AiModel（源框架导入）",
+    businessName: "AI 模型 DO默认模型： 为开启，并且 排序第一",
     parentMenuId: "ai-dir",
     permissionPrefix: "ai:ai_model",
     table: {
       name: "ai_model",
-      comment: "AiModel（源框架导入）",
+      comment: "AI 模型 DO默认模型： 为开启，并且 排序第一",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"key_id","type":"bigint","tsType":"number","nullable":true,"comment":"API 秘钥编号","nullableInferred":true},
@@ -304,12 +304,12 @@ export const AI_TABLES: CodegenConfig[] = [
   {
     moduleName: "ai",
     className: "AiMusic",
-    businessName: "AiMusic（源框架导入）",
+    businessName: "AI 音乐",
     parentMenuId: "ai-dir",
     permissionPrefix: "ai:ai_music",
     table: {
       name: "ai_music",
-      comment: "AiMusic（源框架导入）",
+      comment: "AI 音乐",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},
@@ -340,12 +340,12 @@ export const AI_TABLES: CodegenConfig[] = [
   {
     moduleName: "ai",
     className: "AiTool",
-    businessName: "AiTool（源框架导入）",
+    businessName: "AI 工具",
     parentMenuId: "ai-dir",
     permissionPrefix: "ai:ai_tool",
     table: {
       name: "ai_tool",
-      comment: "AiTool（源框架导入）",
+      comment: "AI 工具",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"工具编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"工具名称","nullableInferred":true},
@@ -363,12 +363,12 @@ export const AI_TABLES: CodegenConfig[] = [
   {
     moduleName: "ai",
     className: "AiWorkflow",
-    businessName: "AiWorkflow（源框架导入）",
+    businessName: "AI 工作流",
     parentMenuId: "ai-dir",
     permissionPrefix: "ai:ai_workflow",
     table: {
       name: "ai_workflow",
-      comment: "AiWorkflow（源框架导入）",
+      comment: "AI 工作流",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"工作流名称","nullableInferred":true},
@@ -388,12 +388,12 @@ export const AI_TABLES: CodegenConfig[] = [
   {
     moduleName: "ai",
     className: "AiWrite",
-    businessName: "AiWrite（源框架导入）",
+    businessName: "AI 写作",
     parentMenuId: "ai-dir",
     permissionPrefix: "ai:ai_write",
     table: {
       name: "ai_write",
-      comment: "AiWrite（源框架导入）",
+      comment: "AI 写作",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},

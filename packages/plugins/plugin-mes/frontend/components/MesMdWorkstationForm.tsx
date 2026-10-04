@@ -58,24 +58,36 @@ export function MesMdWorkstationForm({ open, initialData, onClose, onSuccess }: 
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-md-workstation-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 工作站" : "新增MES 工作站"}
+        data-testid="mes-md-workstation-form"
+        data-agent-scope="mes-md-workstation:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesMdWorkstation（源框架导入）" : "新增MesMdWorkstation（源框架导入）"}
+            {isEdit ? "编辑MES 工作站" : "新增MES 工作站"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-md-workstation-form-close" data-agent-target="mes-md-workstation:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-md-workstation-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工作站编码</label>
+          <label htmlFor="mes-md-workstation-code" className="block text-xs text-slate-600 mb-1">工作站编码</label>
           <input
             type="text"
+            id="mes-md-workstation-code"
+            data-testid="field-code"
+            data-agent-target="mes-md-workstation:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="工作站编码"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -85,9 +97,14 @@ export function MesMdWorkstationForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工作站名称</label>
+          <label htmlFor="mes-md-workstation-name" className="block text-xs text-slate-600 mb-1">工作站名称</label>
           <input
             type="text"
+            id="mes-md-workstation-name"
+            data-testid="field-name"
+            data-agent-target="mes-md-workstation:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="工作站名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -97,9 +114,14 @@ export function MesMdWorkstationForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工作站地点</label>
+          <label htmlFor="mes-md-workstation-address" className="block text-xs text-slate-600 mb-1">工作站地点</label>
           <input
             type="text"
+            id="mes-md-workstation-address"
+            data-testid="field-address"
+            data-agent-target="mes-md-workstation:field:address"
+            data-agent-state={formData.address ? "filled" : "empty"}
+            aria-label="工作站地点"
             value={formData.address ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, address: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -109,9 +131,14 @@ export function MesMdWorkstationForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">所在车间编号</label>
+          <label htmlFor="mes-md-workstation-workshop_id" className="block text-xs text-slate-600 mb-1">所在车间编号</label>
           <input
             type="number"
+            id="mes-md-workstation-workshop_id"
+            data-testid="field-workshop_id"
+            data-agent-target="mes-md-workstation:field:workshop_id"
+            data-agent-state={formData.workshop_id == null || formData.workshop_id === "" ? "empty" : "filled"}
+            aria-label="所在车间编号"
             value={formData.workshop_id != null ? String(formData.workshop_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, workshop_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -121,9 +148,14 @@ export function MesMdWorkstationForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工序编号</label>
+          <label htmlFor="mes-md-workstation-process_id" className="block text-xs text-slate-600 mb-1">工序编号</label>
           <input
             type="number"
+            id="mes-md-workstation-process_id"
+            data-testid="field-process_id"
+            data-agent-target="mes-md-workstation:field:process_id"
+            data-agent-state={formData.process_id == null || formData.process_id === "" ? "empty" : "filled"}
+            aria-label="工序编号"
             value={formData.process_id != null ? String(formData.process_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, process_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -133,9 +165,14 @@ export function MesMdWorkstationForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">线边库编号</label>
+          <label htmlFor="mes-md-workstation-warehouse_id" className="block text-xs text-slate-600 mb-1">线边库编号</label>
           <input
             type="number"
+            id="mes-md-workstation-warehouse_id"
+            data-testid="field-warehouse_id"
+            data-agent-target="mes-md-workstation:field:warehouse_id"
+            data-agent-state={formData.warehouse_id == null || formData.warehouse_id === "" ? "empty" : "filled"}
+            aria-label="线边库编号"
             value={formData.warehouse_id != null ? String(formData.warehouse_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, warehouse_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -145,9 +182,14 @@ export function MesMdWorkstationForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">库区编号</label>
+          <label htmlFor="mes-md-workstation-location_id" className="block text-xs text-slate-600 mb-1">库区编号</label>
           <input
             type="number"
+            id="mes-md-workstation-location_id"
+            data-testid="field-location_id"
+            data-agent-target="mes-md-workstation:field:location_id"
+            data-agent-state={formData.location_id == null || formData.location_id === "" ? "empty" : "filled"}
+            aria-label="库区编号"
             value={formData.location_id != null ? String(formData.location_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, location_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -157,9 +199,14 @@ export function MesMdWorkstationForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">库位编号</label>
+          <label htmlFor="mes-md-workstation-area_id" className="block text-xs text-slate-600 mb-1">库位编号</label>
           <input
             type="number"
+            id="mes-md-workstation-area_id"
+            data-testid="field-area_id"
+            data-agent-target="mes-md-workstation:field:area_id"
+            data-agent-state={formData.area_id == null || formData.area_id === "" ? "empty" : "filled"}
+            aria-label="库位编号"
             value={formData.area_id != null ? String(formData.area_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, area_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -169,9 +216,14 @@ export function MesMdWorkstationForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="mes-md-workstation-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="mes-md-workstation-status"
+            data-testid="field-status"
+            data-agent-target="mes-md-workstation:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -181,9 +233,14 @@ export function MesMdWorkstationForm({ open, initialData, onClose, onSuccess }: 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-md-workstation-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-md-workstation-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-md-workstation:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -197,6 +254,8 @@ export function MesMdWorkstationForm({ open, initialData, onClose, onSuccess }: 
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-md-workstation-form-cancel"
+              data-agent-target="mes-md-workstation:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -204,6 +263,9 @@ export function MesMdWorkstationForm({ open, initialData, onClose, onSuccess }: 
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-md-workstation-form-submit"
+              data-agent-target="mes-md-workstation:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

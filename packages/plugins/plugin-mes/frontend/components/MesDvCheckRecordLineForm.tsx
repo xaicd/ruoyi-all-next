@@ -53,24 +53,36 @@ export function MesDvCheckRecordLineForm({ open, initialData, onClose, onSuccess
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-dv-check-record-line-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 设备点检记录明细" : "新增MES 设备点检记录明细"}
+        data-testid="mes-dv-check-record-line-form"
+        data-agent-scope="mes-dv-check-record-line:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesDvCheckRecordLine（源框架导入）" : "新增MesDvCheckRecordLine（源框架导入）"}
+            {isEdit ? "编辑MES 设备点检记录明细" : "新增MES 设备点检记录明细"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-dv-check-record-line-form-close" data-agent-target="mes-dv-check-record-line:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-dv-check-record-line-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">点检记录编号</label>
+          <label htmlFor="mes-dv-check-record-line-record_id" className="block text-xs text-slate-600 mb-1">点检记录编号</label>
           <input
             type="number"
+            id="mes-dv-check-record-line-record_id"
+            data-testid="field-record_id"
+            data-agent-target="mes-dv-check-record-line:field:record_id"
+            data-agent-state={formData.record_id == null || formData.record_id === "" ? "empty" : "filled"}
+            aria-label="点检记录编号"
             value={formData.record_id != null ? String(formData.record_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, record_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -80,9 +92,14 @@ export function MesDvCheckRecordLineForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">点检项目编号</label>
+          <label htmlFor="mes-dv-check-record-line-subject_id" className="block text-xs text-slate-600 mb-1">点检项目编号</label>
           <input
             type="number"
+            id="mes-dv-check-record-line-subject_id"
+            data-testid="field-subject_id"
+            data-agent-target="mes-dv-check-record-line:field:subject_id"
+            data-agent-state={formData.subject_id == null || formData.subject_id === "" ? "empty" : "filled"}
+            aria-label="点检项目编号"
             value={formData.subject_id != null ? String(formData.subject_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, subject_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -92,9 +109,14 @@ export function MesDvCheckRecordLineForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">点检结果</label>
+          <label htmlFor="mes-dv-check-record-line-check_status" className="block text-xs text-slate-600 mb-1">点检结果</label>
           <input
             type="number"
+            id="mes-dv-check-record-line-check_status"
+            data-testid="field-check_status"
+            data-agent-target="mes-dv-check-record-line:field:check_status"
+            data-agent-state={formData.check_status == null || formData.check_status === "" ? "empty" : "filled"}
+            aria-label="点检结果"
             value={formData.check_status != null ? String(formData.check_status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, check_status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -104,9 +126,14 @@ export function MesDvCheckRecordLineForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">异常描述</label>
+          <label htmlFor="mes-dv-check-record-line-check_result" className="block text-xs text-slate-600 mb-1">异常描述</label>
           <input
             type="text"
+            id="mes-dv-check-record-line-check_result"
+            data-testid="field-check_result"
+            data-agent-target="mes-dv-check-record-line:field:check_result"
+            data-agent-state={formData.check_result ? "filled" : "empty"}
+            aria-label="异常描述"
             value={formData.check_result ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, check_result: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -116,9 +143,14 @@ export function MesDvCheckRecordLineForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-dv-check-record-line-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-dv-check-record-line-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-dv-check-record-line:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -132,6 +164,8 @@ export function MesDvCheckRecordLineForm({ open, initialData, onClose, onSuccess
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-dv-check-record-line-form-cancel"
+              data-agent-target="mes-dv-check-record-line:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -139,6 +173,9 @@ export function MesDvCheckRecordLineForm({ open, initialData, onClose, onSuccess
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-dv-check-record-line-form-submit"
+              data-agent-target="mes-dv-check-record-line:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

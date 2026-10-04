@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ProductPropertyValueService } from "../product-property-value.service"
 
 describe("ProductPropertyValueService", () => {
-  it("should create and query ProductPropertyValue（源框架导入）", async () => {
+  it("should create and query 商品属性值", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ProductPropertyValueService.create({
         property_id: 1,
@@ -21,7 +21,7 @@ describe("ProductPropertyValueService", () => {
   
       const updated = await ProductPropertyValueService.update(created.id, {
         id: created.id,
-        property_id: "更新ProductPropertyValue（源框架导入）",
+        property_id: "更新商品属性值",
       } as any)
       expect(updated).toBeDefined()
   

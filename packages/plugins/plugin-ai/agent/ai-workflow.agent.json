@@ -1,0 +1,222 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "ai",
+  "entity": "AiWorkflow",
+  "kebab": "ai-workflow",
+  "businessName": "AI 工作流",
+  "permissionPrefix": "ai:ai_workflow",
+  "page": {
+    "route": "/admin/ai/ai-workflow",
+    "title": "AI 工作流管理",
+    "titleSelector": "[data-testid=\"ai-workflow-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.ai/api",
+    "bffMount": "/api/v1/admin/ai",
+    "resource": "ai-workflow",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/ai-workflow",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/ai-workflow/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/ai-workflow"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/ai-workflow/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/ai-workflow/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"ai-workflow-title\"]",
+    "refresh": "[data-testid=\"ai-workflow-refresh\"]",
+    "createButton": "[data-testid=\"ai-workflow-create\"]",
+    "searchForm": "[data-testid=\"ai-workflow-search\"]",
+    "searchSubmit": "[data-testid=\"ai-workflow-search-submit\"]",
+    "searchReset": "[data-testid=\"ai-workflow-search-reset\"]",
+    "total": "[data-testid=\"ai-workflow-total\"]",
+    "table": "[data-testid=\"ai-workflow-table\"]",
+    "row": "[data-testid=\"ai-workflow-row\"]",
+    "editButton": "[data-testid=\"ai-workflow-edit\"]",
+    "deleteButton": "[data-testid=\"ai-workflow-delete\"]",
+    "form": "[data-testid=\"ai-workflow-form\"]",
+    "formError": "[data-testid=\"ai-workflow-form-error\"]",
+    "formSubmit": "[data-testid=\"ai-workflow-form-submit\"]",
+    "formCancel": "[data-testid=\"ai-workflow-form-cancel\"]",
+    "formClose": "[data-testid=\"ai-workflow-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "AI 工作流列表",
+    "dialogLabel": {
+      "create": "新增AI 工作流",
+      "edit": "编辑AI 工作流"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "工作流名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "code",
+        "label": "工作流标识",
+        "type": "string",
+        "required": false,
+        "testId": "field-code",
+        "selector": "[data-testid=\"field-code\"]"
+      },
+      {
+        "name": "graph",
+        "label": "工作流模型 JSON 数据",
+        "type": "string",
+        "required": false,
+        "testId": "field-graph",
+        "selector": "[data-testid=\"field-graph\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "ai-workflow",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"ai-workflow\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"ai-workflow-form-overlay\"]",
+      "dialog": "[data-testid=\"ai-workflow-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "ai-workflow:search",
+      "reset": "ai-workflow:reset",
+      "refresh": "ai-workflow:refresh",
+      "create": "ai-workflow:create",
+      "edit": "ai-workflow:edit",
+      "delete": "ai-workflow:delete",
+      "submit": "ai-workflow:submit",
+      "cancel": "ai-workflow:cancel",
+      "close": "ai-workflow:close",
+      "row": "ai-workflow:row",
+      "pagination": "ai-workflow:pagination",
+      "fields": {
+        "name": "ai-workflow:field:name",
+        "code": "ai-workflow:field:code",
+        "graph": "ai-workflow:field:graph",
+        "remark": "ai-workflow:field:remark",
+        "status": "ai-workflow:field:status"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "ai.ai-workflow",
+      "examples": [
+        "ai.ai-workflow__List__Refresh",
+        "ai.ai-workflow__ListItem__Open",
+        "ai.ai-workflow__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

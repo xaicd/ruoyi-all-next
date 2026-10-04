@@ -56,24 +56,36 @@ export function ErpStockRecordForm({ open, initialData, onClose, onSuccess }: Er
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="erp-stock-record-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑ERP 产品库存明细" : "新增ERP 产品库存明细"}
+        data-testid="erp-stock-record-form"
+        data-agent-scope="erp-stock-record:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑ErpStockRecord（源框架导入）" : "新增ErpStockRecord（源框架导入）"}
+            {isEdit ? "编辑ERP 产品库存明细" : "新增ERP 产品库存明细"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="erp-stock-record-form-close" data-agent-target="erp-stock-record:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="erp-stock-record-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品编号</label>
+          <label htmlFor="erp-stock-record-product_id" className="block text-xs text-slate-600 mb-1">产品编号</label>
           <input
             type="number"
+            id="erp-stock-record-product_id"
+            data-testid="field-product_id"
+            data-agent-target="erp-stock-record:field:product_id"
+            data-agent-state={formData.product_id == null || formData.product_id === "" ? "empty" : "filled"}
+            aria-label="产品编号"
             value={formData.product_id != null ? String(formData.product_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, product_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -83,9 +95,14 @@ export function ErpStockRecordForm({ open, initialData, onClose, onSuccess }: Er
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">仓库编号</label>
+          <label htmlFor="erp-stock-record-warehouse_id" className="block text-xs text-slate-600 mb-1">仓库编号</label>
           <input
             type="number"
+            id="erp-stock-record-warehouse_id"
+            data-testid="field-warehouse_id"
+            data-agent-target="erp-stock-record:field:warehouse_id"
+            data-agent-state={formData.warehouse_id == null || formData.warehouse_id === "" ? "empty" : "filled"}
+            aria-label="仓库编号"
             value={formData.warehouse_id != null ? String(formData.warehouse_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, warehouse_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -95,9 +112,14 @@ export function ErpStockRecordForm({ open, initialData, onClose, onSuccess }: Er
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">出入库数量</label>
+          <label htmlFor="erp-stock-record-count" className="block text-xs text-slate-600 mb-1">出入库数量</label>
           <input
             type="number"
+            id="erp-stock-record-count"
+            data-testid="field-count"
+            data-agent-target="erp-stock-record:field:count"
+            data-agent-state={formData.count == null || formData.count === "" ? "empty" : "filled"}
+            aria-label="出入库数量"
             value={formData.count != null ? String(formData.count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -107,9 +129,14 @@ export function ErpStockRecordForm({ open, initialData, onClose, onSuccess }: Er
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">总库存量</label>
+          <label htmlFor="erp-stock-record-total_count" className="block text-xs text-slate-600 mb-1">总库存量</label>
           <input
             type="number"
+            id="erp-stock-record-total_count"
+            data-testid="field-total_count"
+            data-agent-target="erp-stock-record:field:total_count"
+            data-agent-state={formData.total_count == null || formData.total_count === "" ? "empty" : "filled"}
+            aria-label="总库存量"
             value={formData.total_count != null ? String(formData.total_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, total_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -119,9 +146,14 @@ export function ErpStockRecordForm({ open, initialData, onClose, onSuccess }: Er
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">业务类型</label>
+          <label htmlFor="erp-stock-record-biz_type" className="block text-xs text-slate-600 mb-1">业务类型</label>
           <input
             type="number"
+            id="erp-stock-record-biz_type"
+            data-testid="field-biz_type"
+            data-agent-target="erp-stock-record:field:biz_type"
+            data-agent-state={formData.biz_type == null || formData.biz_type === "" ? "empty" : "filled"}
+            aria-label="业务类型"
             value={formData.biz_type != null ? String(formData.biz_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -131,9 +163,14 @@ export function ErpStockRecordForm({ open, initialData, onClose, onSuccess }: Er
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">业务编号</label>
+          <label htmlFor="erp-stock-record-biz_id" className="block text-xs text-slate-600 mb-1">业务编号</label>
           <input
             type="number"
+            id="erp-stock-record-biz_id"
+            data-testid="field-biz_id"
+            data-agent-target="erp-stock-record:field:biz_id"
+            data-agent-state={formData.biz_id == null || formData.biz_id === "" ? "empty" : "filled"}
+            aria-label="业务编号"
             value={formData.biz_id != null ? String(formData.biz_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -143,9 +180,14 @@ export function ErpStockRecordForm({ open, initialData, onClose, onSuccess }: Er
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">业务项编号</label>
+          <label htmlFor="erp-stock-record-biz_item_id" className="block text-xs text-slate-600 mb-1">业务项编号</label>
           <input
             type="number"
+            id="erp-stock-record-biz_item_id"
+            data-testid="field-biz_item_id"
+            data-agent-target="erp-stock-record:field:biz_item_id"
+            data-agent-state={formData.biz_item_id == null || formData.biz_item_id === "" ? "empty" : "filled"}
+            aria-label="业务项编号"
             value={formData.biz_item_id != null ? String(formData.biz_item_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_item_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -155,9 +197,14 @@ export function ErpStockRecordForm({ open, initialData, onClose, onSuccess }: Er
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">业务单号</label>
+          <label htmlFor="erp-stock-record-biz_no" className="block text-xs text-slate-600 mb-1">业务单号</label>
           <input
             type="text"
+            id="erp-stock-record-biz_no"
+            data-testid="field-biz_no"
+            data-agent-target="erp-stock-record:field:biz_no"
+            data-agent-state={formData.biz_no ? "filled" : "empty"}
+            aria-label="业务单号"
             value={formData.biz_no ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_no: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,6 +218,8 @@ export function ErpStockRecordForm({ open, initialData, onClose, onSuccess }: Er
             <button
               type="button"
               onClick={onClose}
+              data-testid="erp-stock-record-form-cancel"
+              data-agent-target="erp-stock-record:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -178,6 +227,9 @@ export function ErpStockRecordForm({ open, initialData, onClose, onSuccess }: Er
             <button
               type="submit"
               disabled={loading}
+              data-testid="erp-stock-record-form-submit"
+              data-agent-target="erp-stock-record:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

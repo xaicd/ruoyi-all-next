@@ -1,0 +1,249 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "PointProduct",
+  "kebab": "point-product",
+  "businessName": "积分商城商品",
+  "permissionPrefix": "mall:point_product",
+  "page": {
+    "route": "/admin/mall/point-product",
+    "title": "积分商城商品管理",
+    "titleSelector": "[data-testid=\"point-product-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "point-product",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/point-product",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/point-product/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/point-product"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/point-product/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/point-product/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"point-product-title\"]",
+    "refresh": "[data-testid=\"point-product-refresh\"]",
+    "createButton": "[data-testid=\"point-product-create\"]",
+    "searchForm": "[data-testid=\"point-product-search\"]",
+    "searchSubmit": "[data-testid=\"point-product-search-submit\"]",
+    "searchReset": "[data-testid=\"point-product-search-reset\"]",
+    "total": "[data-testid=\"point-product-total\"]",
+    "table": "[data-testid=\"point-product-table\"]",
+    "row": "[data-testid=\"point-product-row\"]",
+    "editButton": "[data-testid=\"point-product-edit\"]",
+    "deleteButton": "[data-testid=\"point-product-delete\"]",
+    "form": "[data-testid=\"point-product-form\"]",
+    "formError": "[data-testid=\"point-product-form-error\"]",
+    "formSubmit": "[data-testid=\"point-product-form-submit\"]",
+    "formCancel": "[data-testid=\"point-product-form-cancel\"]",
+    "formClose": "[data-testid=\"point-product-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "积分商城商品列表",
+    "dialogLabel": {
+      "create": "新增积分商城商品",
+      "edit": "编辑积分商城商品"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "activity_id",
+        "label": "积分商城活动 id",
+        "type": "number",
+        "required": false,
+        "testId": "field-activity_id",
+        "selector": "[data-testid=\"field-activity_id\"]"
+      },
+      {
+        "name": "spu_id",
+        "label": "商品 SPU 编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-spu_id",
+        "selector": "[data-testid=\"field-spu_id\"]"
+      },
+      {
+        "name": "sku_id",
+        "label": "商品 SKU 编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-sku_id",
+        "selector": "[data-testid=\"field-sku_id\"]"
+      },
+      {
+        "name": "count",
+        "label": "可兑换次数",
+        "type": "number",
+        "required": false,
+        "testId": "field-count",
+        "selector": "[data-testid=\"field-count\"]"
+      },
+      {
+        "name": "point",
+        "label": "所需兑换积分",
+        "type": "number",
+        "required": false,
+        "testId": "field-point",
+        "selector": "[data-testid=\"field-point\"]"
+      },
+      {
+        "name": "price",
+        "label": "所需兑换金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-price",
+        "selector": "[data-testid=\"field-price\"]"
+      },
+      {
+        "name": "stock",
+        "label": "积分商城商品库存",
+        "type": "number",
+        "required": false,
+        "testId": "field-stock",
+        "selector": "[data-testid=\"field-stock\"]"
+      },
+      {
+        "name": "activity_status",
+        "label": "积分商城商品状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-activity_status",
+        "selector": "[data-testid=\"field-activity_status\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "point-product",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"point-product\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"point-product-form-overlay\"]",
+      "dialog": "[data-testid=\"point-product-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "point-product:search",
+      "reset": "point-product:reset",
+      "refresh": "point-product:refresh",
+      "create": "point-product:create",
+      "edit": "point-product:edit",
+      "delete": "point-product:delete",
+      "submit": "point-product:submit",
+      "cancel": "point-product:cancel",
+      "close": "point-product:close",
+      "row": "point-product:row",
+      "pagination": "point-product:pagination",
+      "fields": {
+        "activity_id": "point-product:field:activity_id",
+        "spu_id": "point-product:field:spu_id",
+        "sku_id": "point-product:field:sku_id",
+        "count": "point-product:field:count",
+        "point": "point-product:field:point",
+        "price": "point-product:field:price",
+        "stock": "point-product:field:stock",
+        "activity_status": "point-product:field:activity_status"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.point-product",
+      "examples": [
+        "mall.point-product__List__Refresh",
+        "mall.point-product__ListItem__Open",
+        "mall.point-product__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

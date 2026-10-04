@@ -1,0 +1,339 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "iot",
+  "entity": "IotDevice",
+  "kebab": "iot-device",
+  "businessName": "IoT 设备",
+  "permissionPrefix": "iot:iot_device",
+  "page": {
+    "route": "/admin/iot/iot-device",
+    "title": "IoT 设备管理",
+    "titleSelector": "[data-testid=\"iot-device-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.iot/api",
+    "bffMount": "/api/v1/admin/iot",
+    "resource": "iot-device",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/iot-device",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/iot-device/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/iot-device"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/iot-device/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/iot-device/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"iot-device-title\"]",
+    "refresh": "[data-testid=\"iot-device-refresh\"]",
+    "createButton": "[data-testid=\"iot-device-create\"]",
+    "searchForm": "[data-testid=\"iot-device-search\"]",
+    "searchSubmit": "[data-testid=\"iot-device-search-submit\"]",
+    "searchReset": "[data-testid=\"iot-device-search-reset\"]",
+    "total": "[data-testid=\"iot-device-total\"]",
+    "table": "[data-testid=\"iot-device-table\"]",
+    "row": "[data-testid=\"iot-device-row\"]",
+    "editButton": "[data-testid=\"iot-device-edit\"]",
+    "deleteButton": "[data-testid=\"iot-device-delete\"]",
+    "form": "[data-testid=\"iot-device-form\"]",
+    "formError": "[data-testid=\"iot-device-form-error\"]",
+    "formSubmit": "[data-testid=\"iot-device-form-submit\"]",
+    "formCancel": "[data-testid=\"iot-device-form-cancel\"]",
+    "formClose": "[data-testid=\"iot-device-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IoT 设备列表",
+    "dialogLabel": {
+      "create": "新增IoT 设备",
+      "edit": "编辑IoT 设备"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "device_name",
+        "label": "设备名称，在产品内唯一，用于标识设备",
+        "type": "string",
+        "required": false,
+        "testId": "field-device_name",
+        "selector": "[data-testid=\"field-device_name\"]"
+      },
+      {
+        "name": "nickname",
+        "label": "设备备注名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-nickname",
+        "selector": "[data-testid=\"field-nickname\"]"
+      },
+      {
+        "name": "serial_number",
+        "label": "设备序列号",
+        "type": "string",
+        "required": false,
+        "testId": "field-serial_number",
+        "selector": "[data-testid=\"field-serial_number\"]"
+      },
+      {
+        "name": "pic_url",
+        "label": "设备图片",
+        "type": "string",
+        "required": false,
+        "testId": "field-pic_url",
+        "selector": "[data-testid=\"field-pic_url\"]"
+      },
+      {
+        "name": "group_ids",
+        "label": "设备分组编号集合",
+        "type": "string",
+        "required": false,
+        "testId": "field-group_ids",
+        "selector": "[data-testid=\"field-group_ids\"]"
+      },
+      {
+        "name": "product_id",
+        "label": "产品编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-product_id",
+        "selector": "[data-testid=\"field-product_id\"]"
+      },
+      {
+        "name": "product_key",
+        "label": "产品标识",
+        "type": "string",
+        "required": false,
+        "testId": "field-product_key",
+        "selector": "[data-testid=\"field-product_key\"]"
+      },
+      {
+        "name": "device_type",
+        "label": "设备类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-device_type",
+        "selector": "[data-testid=\"field-device_type\"]"
+      },
+      {
+        "name": "gateway_id",
+        "label": "网关设备编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-gateway_id",
+        "selector": "[data-testid=\"field-gateway_id\"]"
+      },
+      {
+        "name": "state",
+        "label": "设备状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-state",
+        "selector": "[data-testid=\"field-state\"]"
+      },
+      {
+        "name": "online_time",
+        "label": "最后上线时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-online_time",
+        "selector": "[data-testid=\"field-online_time\"]"
+      },
+      {
+        "name": "offline_time",
+        "label": "最后离线时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-offline_time",
+        "selector": "[data-testid=\"field-offline_time\"]"
+      },
+      {
+        "name": "active_time",
+        "label": "设备激活时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-active_time",
+        "selector": "[data-testid=\"field-active_time\"]"
+      },
+      {
+        "name": "firmware_id",
+        "label": "固件编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-firmware_id",
+        "selector": "[data-testid=\"field-firmware_id\"]"
+      },
+      {
+        "name": "device_secret",
+        "label": "设备密钥，用于设备认证",
+        "type": "string",
+        "required": false,
+        "testId": "field-device_secret",
+        "selector": "[data-testid=\"field-device_secret\"]"
+      },
+      {
+        "name": "latitude",
+        "label": "设备位置的纬度",
+        "type": "number",
+        "required": false,
+        "testId": "field-latitude",
+        "selector": "[data-testid=\"field-latitude\"]"
+      },
+      {
+        "name": "longitude",
+        "label": "设备位置的经度",
+        "type": "number",
+        "required": false,
+        "testId": "field-longitude",
+        "selector": "[data-testid=\"field-longitude\"]"
+      },
+      {
+        "name": "config",
+        "label": "设备配置",
+        "type": "string",
+        "required": false,
+        "testId": "field-config",
+        "selector": "[data-testid=\"field-config\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "iot-device",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"iot-device\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"iot-device-form-overlay\"]",
+      "dialog": "[data-testid=\"iot-device-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "iot-device:search",
+      "reset": "iot-device:reset",
+      "refresh": "iot-device:refresh",
+      "create": "iot-device:create",
+      "edit": "iot-device:edit",
+      "delete": "iot-device:delete",
+      "submit": "iot-device:submit",
+      "cancel": "iot-device:cancel",
+      "close": "iot-device:close",
+      "row": "iot-device:row",
+      "pagination": "iot-device:pagination",
+      "fields": {
+        "device_name": "iot-device:field:device_name",
+        "nickname": "iot-device:field:nickname",
+        "serial_number": "iot-device:field:serial_number",
+        "pic_url": "iot-device:field:pic_url",
+        "group_ids": "iot-device:field:group_ids",
+        "product_id": "iot-device:field:product_id",
+        "product_key": "iot-device:field:product_key",
+        "device_type": "iot-device:field:device_type",
+        "gateway_id": "iot-device:field:gateway_id",
+        "state": "iot-device:field:state",
+        "online_time": "iot-device:field:online_time",
+        "offline_time": "iot-device:field:offline_time",
+        "active_time": "iot-device:field:active_time",
+        "firmware_id": "iot-device:field:firmware_id",
+        "device_secret": "iot-device:field:device_secret",
+        "latitude": "iot-device:field:latitude",
+        "longitude": "iot-device:field:longitude",
+        "config": "iot-device:field:config"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "iot.iot-device",
+      "examples": [
+        "iot.iot-device__List__Refresh",
+        "iot.iot-device__ListItem__Open",
+        "iot.iot-device__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

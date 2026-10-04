@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesMdWorkstationWorkerService } from "../mes-md-workstation-worker.service"
 
 describe("MesMdWorkstationWorkerService", () => {
-  it("should create and query MesMdWorkstationWorker（源框架导入）", async () => {
+  it("should create and query MES 人力资源", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesMdWorkstationWorkerService.create({
         workstation_id: 1,
@@ -21,7 +21,7 @@ describe("MesMdWorkstationWorkerService", () => {
   
       const updated = await MesMdWorkstationWorkerService.update(created.id, {
         id: created.id,
-        workstation_id: "更新MesMdWorkstationWorker（源框架导入）",
+        workstation_id: "更新MES 人力资源",
       } as any)
       expect(updated).toBeDefined()
   

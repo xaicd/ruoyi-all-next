@@ -60,24 +60,36 @@ export function ErpProductForm({ open, initialData, onClose, onSuccess }: ErpPro
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="erp-product-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑ERP 产品" : "新增ERP 产品"}
+        data-testid="erp-product-form"
+        data-agent-scope="erp-product:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑ErpProduct（源框架导入）" : "新增ErpProduct（源框架导入）"}
+            {isEdit ? "编辑ERP 产品" : "新增ERP 产品"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="erp-product-form-close" data-agent-target="erp-product:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="erp-product-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品名称</label>
+          <label htmlFor="erp-product-name" className="block text-xs text-slate-600 mb-1">产品名称</label>
           <input
             type="text"
+            id="erp-product-name"
+            data-testid="field-name"
+            data-agent-target="erp-product:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="产品名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -87,9 +99,14 @@ export function ErpProductForm({ open, initialData, onClose, onSuccess }: ErpPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品条码</label>
+          <label htmlFor="erp-product-bar_code" className="block text-xs text-slate-600 mb-1">产品条码</label>
           <input
             type="text"
+            id="erp-product-bar_code"
+            data-testid="field-bar_code"
+            data-agent-target="erp-product:field:bar_code"
+            data-agent-state={formData.bar_code ? "filled" : "empty"}
+            aria-label="产品条码"
             value={formData.bar_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, bar_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -99,9 +116,14 @@ export function ErpProductForm({ open, initialData, onClose, onSuccess }: ErpPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品分类编号</label>
+          <label htmlFor="erp-product-category_id" className="block text-xs text-slate-600 mb-1">产品分类编号</label>
           <input
             type="number"
+            id="erp-product-category_id"
+            data-testid="field-category_id"
+            data-agent-target="erp-product:field:category_id"
+            data-agent-state={formData.category_id == null || formData.category_id === "" ? "empty" : "filled"}
+            aria-label="产品分类编号"
             value={formData.category_id != null ? String(formData.category_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, category_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -111,9 +133,14 @@ export function ErpProductForm({ open, initialData, onClose, onSuccess }: ErpPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">单位编号</label>
+          <label htmlFor="erp-product-unit_id" className="block text-xs text-slate-600 mb-1">单位编号</label>
           <input
             type="number"
+            id="erp-product-unit_id"
+            data-testid="field-unit_id"
+            data-agent-target="erp-product:field:unit_id"
+            data-agent-state={formData.unit_id == null || formData.unit_id === "" ? "empty" : "filled"}
+            aria-label="单位编号"
             value={formData.unit_id != null ? String(formData.unit_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, unit_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -123,9 +150,14 @@ export function ErpProductForm({ open, initialData, onClose, onSuccess }: ErpPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品状态</label>
+          <label htmlFor="erp-product-status" className="block text-xs text-slate-600 mb-1">产品状态</label>
           <input
             type="number"
+            id="erp-product-status"
+            data-testid="field-status"
+            data-agent-target="erp-product:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="产品状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -135,9 +167,14 @@ export function ErpProductForm({ open, initialData, onClose, onSuccess }: ErpPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品规格</label>
+          <label htmlFor="erp-product-standard" className="block text-xs text-slate-600 mb-1">产品规格</label>
           <input
             type="text"
+            id="erp-product-standard"
+            data-testid="field-standard"
+            data-agent-target="erp-product:field:standard"
+            data-agent-state={formData.standard ? "filled" : "empty"}
+            aria-label="产品规格"
             value={formData.standard ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, standard: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -147,9 +184,14 @@ export function ErpProductForm({ open, initialData, onClose, onSuccess }: ErpPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品备注</label>
+          <label htmlFor="erp-product-remark" className="block text-xs text-slate-600 mb-1">产品备注</label>
           <input
             type="text"
+            id="erp-product-remark"
+            data-testid="field-remark"
+            data-agent-target="erp-product:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="产品备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -159,9 +201,14 @@ export function ErpProductForm({ open, initialData, onClose, onSuccess }: ErpPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">保质期天数</label>
+          <label htmlFor="erp-product-expiry_day" className="block text-xs text-slate-600 mb-1">保质期天数</label>
           <input
             type="number"
+            id="erp-product-expiry_day"
+            data-testid="field-expiry_day"
+            data-agent-target="erp-product:field:expiry_day"
+            data-agent-state={formData.expiry_day == null || formData.expiry_day === "" ? "empty" : "filled"}
+            aria-label="保质期天数"
             value={formData.expiry_day != null ? String(formData.expiry_day) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, expiry_day: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,9 +218,14 @@ export function ErpProductForm({ open, initialData, onClose, onSuccess }: ErpPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">基础重量（kg）</label>
+          <label htmlFor="erp-product-weight" className="block text-xs text-slate-600 mb-1">基础重量（kg）</label>
           <input
             type="number"
+            id="erp-product-weight"
+            data-testid="field-weight"
+            data-agent-target="erp-product:field:weight"
+            data-agent-state={formData.weight == null || formData.weight === "" ? "empty" : "filled"}
+            aria-label="基础重量（kg）"
             value={formData.weight != null ? String(formData.weight) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, weight: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -183,9 +235,14 @@ export function ErpProductForm({ open, initialData, onClose, onSuccess }: ErpPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">采购价格，单位：元</label>
+          <label htmlFor="erp-product-purchase_price" className="block text-xs text-slate-600 mb-1">采购价格，单位：元</label>
           <input
             type="number"
+            id="erp-product-purchase_price"
+            data-testid="field-purchase_price"
+            data-agent-target="erp-product:field:purchase_price"
+            data-agent-state={formData.purchase_price == null || formData.purchase_price === "" ? "empty" : "filled"}
+            aria-label="采购价格，单位：元"
             value={formData.purchase_price != null ? String(formData.purchase_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, purchase_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -195,9 +252,14 @@ export function ErpProductForm({ open, initialData, onClose, onSuccess }: ErpPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">销售价格，单位：元</label>
+          <label htmlFor="erp-product-sale_price" className="block text-xs text-slate-600 mb-1">销售价格，单位：元</label>
           <input
             type="number"
+            id="erp-product-sale_price"
+            data-testid="field-sale_price"
+            data-agent-target="erp-product:field:sale_price"
+            data-agent-state={formData.sale_price == null || formData.sale_price === "" ? "empty" : "filled"}
+            aria-label="销售价格，单位：元"
             value={formData.sale_price != null ? String(formData.sale_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sale_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -207,9 +269,14 @@ export function ErpProductForm({ open, initialData, onClose, onSuccess }: ErpPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最低价格，单位：元</label>
+          <label htmlFor="erp-product-min_price" className="block text-xs text-slate-600 mb-1">最低价格，单位：元</label>
           <input
             type="number"
+            id="erp-product-min_price"
+            data-testid="field-min_price"
+            data-agent-target="erp-product:field:min_price"
+            data-agent-state={formData.min_price == null || formData.min_price === "" ? "empty" : "filled"}
+            aria-label="最低价格，单位：元"
             value={formData.min_price != null ? String(formData.min_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, min_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -223,6 +290,8 @@ export function ErpProductForm({ open, initialData, onClose, onSuccess }: ErpPro
             <button
               type="button"
               onClick={onClose}
+              data-testid="erp-product-form-cancel"
+              data-agent-target="erp-product:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -230,6 +299,9 @@ export function ErpProductForm({ open, initialData, onClose, onSuccess }: ErpPro
             <button
               type="submit"
               disabled={loading}
+              data-testid="erp-product-form-submit"
+              data-agent-target="erp-product:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

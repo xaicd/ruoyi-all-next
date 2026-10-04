@@ -56,24 +56,36 @@ export function MesQcTemplateItemForm({ open, initialData, onClose, onSuccess }:
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-qc-template-item-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 质检方案-产品关联" : "新增MES 质检方案-产品关联"}
+        data-testid="mes-qc-template-item-form"
+        data-agent-scope="mes-qc-template-item:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesQcTemplateItem（源框架导入）" : "新增MesQcTemplateItem（源框架导入）"}
+            {isEdit ? "编辑MES 质检方案-产品关联" : "新增MES 质检方案-产品关联"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-qc-template-item-form-close" data-agent-target="mes-qc-template-item:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-qc-template-item-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">质检方案编号</label>
+          <label htmlFor="mes-qc-template-item-template_id" className="block text-xs text-slate-600 mb-1">质检方案编号</label>
           <input
             type="number"
+            id="mes-qc-template-item-template_id"
+            data-testid="field-template_id"
+            data-agent-target="mes-qc-template-item:field:template_id"
+            data-agent-state={formData.template_id == null || formData.template_id === "" ? "empty" : "filled"}
+            aria-label="质检方案编号"
             value={formData.template_id != null ? String(formData.template_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, template_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -83,9 +95,14 @@ export function MesQcTemplateItemForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品物料编号</label>
+          <label htmlFor="mes-qc-template-item-item_id" className="block text-xs text-slate-600 mb-1">产品物料编号</label>
           <input
             type="number"
+            id="mes-qc-template-item-item_id"
+            data-testid="field-item_id"
+            data-agent-target="mes-qc-template-item:field:item_id"
+            data-agent-state={formData.item_id == null || formData.item_id === "" ? "empty" : "filled"}
+            aria-label="产品物料编号"
             value={formData.item_id != null ? String(formData.item_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, item_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -95,9 +112,14 @@ export function MesQcTemplateItemForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最低检测数</label>
+          <label htmlFor="mes-qc-template-item-quantity_check" className="block text-xs text-slate-600 mb-1">最低检测数</label>
           <input
             type="number"
+            id="mes-qc-template-item-quantity_check"
+            data-testid="field-quantity_check"
+            data-agent-target="mes-qc-template-item:field:quantity_check"
+            data-agent-state={formData.quantity_check == null || formData.quantity_check === "" ? "empty" : "filled"}
+            aria-label="最低检测数"
             value={formData.quantity_check != null ? String(formData.quantity_check) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, quantity_check: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -107,9 +129,14 @@ export function MesQcTemplateItemForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最大不合格数（0=不启用）</label>
+          <label htmlFor="mes-qc-template-item-quantity_unqualified" className="block text-xs text-slate-600 mb-1">最大不合格数（0=不启用）</label>
           <input
             type="number"
+            id="mes-qc-template-item-quantity_unqualified"
+            data-testid="field-quantity_unqualified"
+            data-agent-target="mes-qc-template-item:field:quantity_unqualified"
+            data-agent-state={formData.quantity_unqualified == null || formData.quantity_unqualified === "" ? "empty" : "filled"}
+            aria-label="最大不合格数（0=不启用）"
             value={formData.quantity_unqualified != null ? String(formData.quantity_unqualified) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, quantity_unqualified: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -119,9 +146,14 @@ export function MesQcTemplateItemForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最大致命缺陷率（%，0=不允许）</label>
+          <label htmlFor="mes-qc-template-item-critical_rate" className="block text-xs text-slate-600 mb-1">最大致命缺陷率（%，0=不允许）</label>
           <input
             type="number"
+            id="mes-qc-template-item-critical_rate"
+            data-testid="field-critical_rate"
+            data-agent-target="mes-qc-template-item:field:critical_rate"
+            data-agent-state={formData.critical_rate == null || formData.critical_rate === "" ? "empty" : "filled"}
+            aria-label="最大致命缺陷率（%，0=不允许）"
             value={formData.critical_rate != null ? String(formData.critical_rate) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, critical_rate: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -131,9 +163,14 @@ export function MesQcTemplateItemForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最大严重缺陷率（%，0=不允许）</label>
+          <label htmlFor="mes-qc-template-item-major_rate" className="block text-xs text-slate-600 mb-1">最大严重缺陷率（%，0=不允许）</label>
           <input
             type="number"
+            id="mes-qc-template-item-major_rate"
+            data-testid="field-major_rate"
+            data-agent-target="mes-qc-template-item:field:major_rate"
+            data-agent-state={formData.major_rate == null || formData.major_rate === "" ? "empty" : "filled"}
+            aria-label="最大严重缺陷率（%，0=不允许）"
             value={formData.major_rate != null ? String(formData.major_rate) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, major_rate: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -143,9 +180,14 @@ export function MesQcTemplateItemForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最大轻微缺陷率（%）</label>
+          <label htmlFor="mes-qc-template-item-minor_rate" className="block text-xs text-slate-600 mb-1">最大轻微缺陷率（%）</label>
           <input
             type="number"
+            id="mes-qc-template-item-minor_rate"
+            data-testid="field-minor_rate"
+            data-agent-target="mes-qc-template-item:field:minor_rate"
+            data-agent-state={formData.minor_rate == null || formData.minor_rate === "" ? "empty" : "filled"}
+            aria-label="最大轻微缺陷率（%）"
             value={formData.minor_rate != null ? String(formData.minor_rate) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, minor_rate: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -155,9 +197,14 @@ export function MesQcTemplateItemForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-qc-template-item-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-qc-template-item-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-qc-template-item:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,6 +218,8 @@ export function MesQcTemplateItemForm({ open, initialData, onClose, onSuccess }:
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-qc-template-item-form-cancel"
+              data-agent-target="mes-qc-template-item:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -178,6 +227,9 @@ export function MesQcTemplateItemForm({ open, initialData, onClose, onSuccess }:
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-qc-template-item-form-submit"
+              data-agent-target="mes-qc-template-item:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

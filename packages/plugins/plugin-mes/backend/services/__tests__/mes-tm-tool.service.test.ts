@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesTmToolService } from "../mes-tm-tool.service"
 
 describe("MesTmToolService", () => {
-  it("should create and query MesTmTool（源框架导入）", async () => {
+  it("should create and query MES 工具台账", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesTmToolService.create({
-        code: "测试MesTmTool（源框架导入）",
+        code: "测试MES 工具台账",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("MesTmToolService", () => {
   
       const updated = await MesTmToolService.update(created.id, {
         id: created.id,
-        code: "更新MesTmTool（源框架导入）",
+        code: "更新MES 工具台账",
       } as any)
       expect(updated).toBeDefined()
   

@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { RewardActivityService } from "../reward-activity.service"
 
 describe("RewardActivityService", () => {
-  it("should create and query RewardActivity（源框架导入）", async () => {
+  it("should create and query 满减送活动", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await RewardActivityService.create({
-        name: "测试RewardActivity（源框架导入）",
+        name: "测试满减送活动",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("RewardActivityService", () => {
   
       const updated = await RewardActivityService.update(created.id, {
         id: created.id,
-        name: "更新RewardActivity（源框架导入）",
+        name: "更新满减送活动",
       } as any)
       expect(updated).toBeDefined()
   

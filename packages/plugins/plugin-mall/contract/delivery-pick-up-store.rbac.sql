@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for DeliveryPickUpStore（源框架导入） (DeliveryPickUpStore)
+-- Auto-generated RBAC & Menu Migration for 自提门店 (DeliveryPickUpStore)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-delivery-pick-up-store',
   'mall-dir',
-  'DeliveryPickUpStore（源框架导入）管理',
+  '自提门店管理',
   '/admin/mall/delivery-pick-up-store',
   'mall/delivery-pick-up-store/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-delivery-pick-up-store-query',  'menu-delivery-pick-up-store', '查询DeliveryPickUpStore（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:delivery_pick_up_store:query',  1, NOW(), NOW()),
-('menu-delivery-pick-up-store-create', 'menu-delivery-pick-up-store', '新增DeliveryPickUpStore（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:delivery_pick_up_store:create', 2, NOW(), NOW()),
-('menu-delivery-pick-up-store-update', 'menu-delivery-pick-up-store', '修改DeliveryPickUpStore（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:delivery_pick_up_store:update', 3, NOW(), NOW()),
-('menu-delivery-pick-up-store-delete', 'menu-delivery-pick-up-store', '删除DeliveryPickUpStore（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:delivery_pick_up_store:delete', 4, NOW(), NOW())
+('menu-delivery-pick-up-store-query',  'menu-delivery-pick-up-store', '查询自提门店', 'BUTTON', 'ACTIVE', 'mall:delivery_pick_up_store:query',  1, NOW(), NOW()),
+('menu-delivery-pick-up-store-create', 'menu-delivery-pick-up-store', '新增自提门店', 'BUTTON', 'ACTIVE', 'mall:delivery_pick_up_store:create', 2, NOW(), NOW()),
+('menu-delivery-pick-up-store-update', 'menu-delivery-pick-up-store', '修改自提门店', 'BUTTON', 'ACTIVE', 'mall:delivery_pick_up_store:update', 3, NOW(), NOW()),
+('menu-delivery-pick-up-store-delete', 'menu-delivery-pick-up-store', '删除自提门店', 'BUTTON', 'ACTIVE', 'mall:delivery_pick_up_store:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

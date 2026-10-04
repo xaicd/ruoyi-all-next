@@ -1,0 +1,204 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "DeliveryExpressTemplate",
+  "kebab": "delivery-express-template",
+  "businessName": "快递运费模板",
+  "permissionPrefix": "mall:delivery_express_template",
+  "page": {
+    "route": "/admin/mall/delivery-express-template",
+    "title": "快递运费模板管理",
+    "titleSelector": "[data-testid=\"delivery-express-template-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "delivery-express-template",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/delivery-express-template",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/delivery-express-template/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/delivery-express-template"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/delivery-express-template/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/delivery-express-template/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"delivery-express-template-title\"]",
+    "refresh": "[data-testid=\"delivery-express-template-refresh\"]",
+    "createButton": "[data-testid=\"delivery-express-template-create\"]",
+    "searchForm": "[data-testid=\"delivery-express-template-search\"]",
+    "searchSubmit": "[data-testid=\"delivery-express-template-search-submit\"]",
+    "searchReset": "[data-testid=\"delivery-express-template-search-reset\"]",
+    "total": "[data-testid=\"delivery-express-template-total\"]",
+    "table": "[data-testid=\"delivery-express-template-table\"]",
+    "row": "[data-testid=\"delivery-express-template-row\"]",
+    "editButton": "[data-testid=\"delivery-express-template-edit\"]",
+    "deleteButton": "[data-testid=\"delivery-express-template-delete\"]",
+    "form": "[data-testid=\"delivery-express-template-form\"]",
+    "formError": "[data-testid=\"delivery-express-template-form-error\"]",
+    "formSubmit": "[data-testid=\"delivery-express-template-form-submit\"]",
+    "formCancel": "[data-testid=\"delivery-express-template-form-cancel\"]",
+    "formClose": "[data-testid=\"delivery-express-template-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "快递运费模板列表",
+    "dialogLabel": {
+      "create": "新增快递运费模板",
+      "edit": "编辑快递运费模板"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "模板名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "charge_mode",
+        "label": "配送计费方式",
+        "type": "number",
+        "required": false,
+        "testId": "field-charge_mode",
+        "selector": "[data-testid=\"field-charge_mode\"]"
+      },
+      {
+        "name": "sort",
+        "label": "排序",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "delivery-express-template",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"delivery-express-template\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"delivery-express-template-form-overlay\"]",
+      "dialog": "[data-testid=\"delivery-express-template-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "delivery-express-template:search",
+      "reset": "delivery-express-template:reset",
+      "refresh": "delivery-express-template:refresh",
+      "create": "delivery-express-template:create",
+      "edit": "delivery-express-template:edit",
+      "delete": "delivery-express-template:delete",
+      "submit": "delivery-express-template:submit",
+      "cancel": "delivery-express-template:cancel",
+      "close": "delivery-express-template:close",
+      "row": "delivery-express-template:row",
+      "pagination": "delivery-express-template:pagination",
+      "fields": {
+        "name": "delivery-express-template:field:name",
+        "charge_mode": "delivery-express-template:field:charge_mode",
+        "sort": "delivery-express-template:field:sort"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.delivery-express-template",
+      "examples": [
+        "mall.delivery-express-template__List__Refresh",
+        "mall.delivery-express-template__ListItem__Open",
+        "mall.delivery-express-template__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for IotProductCategory（源框架导入） (IotProductCategory)
+-- Auto-generated RBAC & Menu Migration for IoT 产品分类 (IotProductCategory)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-iot-product-category',
   'iot-dir',
-  'IotProductCategory（源框架导入）管理',
+  'IoT 产品分类管理',
   '/admin/iot/iot-product-category',
   'iot/iot-product-category/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-iot-product-category-query',  'menu-iot-product-category', '查询IotProductCategory（源框架导入）', 'BUTTON', 'ACTIVE', 'iot:iot_product_category:query',  1, NOW(), NOW()),
-('menu-iot-product-category-create', 'menu-iot-product-category', '新增IotProductCategory（源框架导入）', 'BUTTON', 'ACTIVE', 'iot:iot_product_category:create', 2, NOW(), NOW()),
-('menu-iot-product-category-update', 'menu-iot-product-category', '修改IotProductCategory（源框架导入）', 'BUTTON', 'ACTIVE', 'iot:iot_product_category:update', 3, NOW(), NOW()),
-('menu-iot-product-category-delete', 'menu-iot-product-category', '删除IotProductCategory（源框架导入）', 'BUTTON', 'ACTIVE', 'iot:iot_product_category:delete', 4, NOW(), NOW())
+('menu-iot-product-category-query',  'menu-iot-product-category', '查询IoT 产品分类', 'BUTTON', 'ACTIVE', 'iot:iot_product_category:query',  1, NOW(), NOW()),
+('menu-iot-product-category-create', 'menu-iot-product-category', '新增IoT 产品分类', 'BUTTON', 'ACTIVE', 'iot:iot_product_category:create', 2, NOW(), NOW()),
+('menu-iot-product-category-update', 'menu-iot-product-category', '修改IoT 产品分类', 'BUTTON', 'ACTIVE', 'iot:iot_product_category:update', 3, NOW(), NOW()),
+('menu-iot-product-category-delete', 'menu-iot-product-category', '删除IoT 产品分类', 'BUTTON', 'ACTIVE', 'iot:iot_product_category:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

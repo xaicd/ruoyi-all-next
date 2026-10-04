@@ -1,0 +1,258 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesWmMiscIssue",
+  "kebab": "mes-wm-misc-issue",
+  "businessName": "MES 杂项出库单",
+  "permissionPrefix": "mes:mes_wm_misc_issue",
+  "page": {
+    "route": "/admin/mes/mes-wm-misc-issue",
+    "title": "MES 杂项出库单管理",
+    "titleSelector": "[data-testid=\"mes-wm-misc-issue-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-wm-misc-issue",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-wm-misc-issue",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-wm-misc-issue/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-wm-misc-issue"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-wm-misc-issue/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-wm-misc-issue/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-wm-misc-issue-title\"]",
+    "refresh": "[data-testid=\"mes-wm-misc-issue-refresh\"]",
+    "createButton": "[data-testid=\"mes-wm-misc-issue-create\"]",
+    "searchForm": "[data-testid=\"mes-wm-misc-issue-search\"]",
+    "searchSubmit": "[data-testid=\"mes-wm-misc-issue-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-wm-misc-issue-search-reset\"]",
+    "total": "[data-testid=\"mes-wm-misc-issue-total\"]",
+    "table": "[data-testid=\"mes-wm-misc-issue-table\"]",
+    "row": "[data-testid=\"mes-wm-misc-issue-row\"]",
+    "editButton": "[data-testid=\"mes-wm-misc-issue-edit\"]",
+    "deleteButton": "[data-testid=\"mes-wm-misc-issue-delete\"]",
+    "form": "[data-testid=\"mes-wm-misc-issue-form\"]",
+    "formError": "[data-testid=\"mes-wm-misc-issue-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-wm-misc-issue-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-wm-misc-issue-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-wm-misc-issue-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 杂项出库单列表",
+    "dialogLabel": {
+      "create": "新增MES 杂项出库单",
+      "edit": "编辑MES 杂项出库单"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "code",
+        "label": "出库单编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-code",
+        "selector": "[data-testid=\"field-code\"]"
+      },
+      {
+        "name": "name",
+        "label": "出库单名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "type",
+        "label": "杂项类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "source_doc_type",
+        "label": "来源单据类型",
+        "type": "string",
+        "required": false,
+        "testId": "field-source_doc_type",
+        "selector": "[data-testid=\"field-source_doc_type\"]"
+      },
+      {
+        "name": "source_doc_id",
+        "label": "来源单据 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-source_doc_id",
+        "selector": "[data-testid=\"field-source_doc_id\"]"
+      },
+      {
+        "name": "source_doc_code",
+        "label": "来源单据编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-source_doc_code",
+        "selector": "[data-testid=\"field-source_doc_code\"]"
+      },
+      {
+        "name": "issue_date",
+        "label": "出库日期",
+        "type": "string",
+        "required": false,
+        "testId": "field-issue_date",
+        "selector": "[data-testid=\"field-issue_date\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-wm-misc-issue",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-wm-misc-issue\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-wm-misc-issue-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-wm-misc-issue-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-wm-misc-issue:search",
+      "reset": "mes-wm-misc-issue:reset",
+      "refresh": "mes-wm-misc-issue:refresh",
+      "create": "mes-wm-misc-issue:create",
+      "edit": "mes-wm-misc-issue:edit",
+      "delete": "mes-wm-misc-issue:delete",
+      "submit": "mes-wm-misc-issue:submit",
+      "cancel": "mes-wm-misc-issue:cancel",
+      "close": "mes-wm-misc-issue:close",
+      "row": "mes-wm-misc-issue:row",
+      "pagination": "mes-wm-misc-issue:pagination",
+      "fields": {
+        "code": "mes-wm-misc-issue:field:code",
+        "name": "mes-wm-misc-issue:field:name",
+        "type": "mes-wm-misc-issue:field:type",
+        "source_doc_type": "mes-wm-misc-issue:field:source_doc_type",
+        "source_doc_id": "mes-wm-misc-issue:field:source_doc_id",
+        "source_doc_code": "mes-wm-misc-issue:field:source_doc_code",
+        "issue_date": "mes-wm-misc-issue:field:issue_date",
+        "status": "mes-wm-misc-issue:field:status",
+        "remark": "mes-wm-misc-issue:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-wm-misc-issue",
+      "examples": [
+        "mes.mes-wm-misc-issue__List__Refresh",
+        "mes.mes-wm-misc-issue__ListItem__Open",
+        "mes.mes-wm-misc-issue__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

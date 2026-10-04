@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for AfterSaleLog（源框架导入） (AfterSaleLog)
+-- Auto-generated RBAC & Menu Migration for 交易售后日志 (AfterSaleLog)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-after-sale-log',
   'mall-dir',
-  'AfterSaleLog（源框架导入）管理',
+  '交易售后日志管理',
   '/admin/mall/after-sale-log',
   'mall/after-sale-log/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-after-sale-log-query',  'menu-after-sale-log', '查询AfterSaleLog（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:after_sale_log:query',  1, NOW(), NOW()),
-('menu-after-sale-log-create', 'menu-after-sale-log', '新增AfterSaleLog（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:after_sale_log:create', 2, NOW(), NOW()),
-('menu-after-sale-log-update', 'menu-after-sale-log', '修改AfterSaleLog（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:after_sale_log:update', 3, NOW(), NOW()),
-('menu-after-sale-log-delete', 'menu-after-sale-log', '删除AfterSaleLog（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:after_sale_log:delete', 4, NOW(), NOW())
+('menu-after-sale-log-query',  'menu-after-sale-log', '查询交易售后日志', 'BUTTON', 'ACTIVE', 'mall:after_sale_log:query',  1, NOW(), NOW()),
+('menu-after-sale-log-create', 'menu-after-sale-log', '新增交易售后日志', 'BUTTON', 'ACTIVE', 'mall:after_sale_log:create', 2, NOW(), NOW()),
+('menu-after-sale-log-update', 'menu-after-sale-log', '修改交易售后日志', 'BUTTON', 'ACTIVE', 'mall:after_sale_log:update', 3, NOW(), NOW()),
+('menu-after-sale-log-delete', 'menu-after-sale-log', '删除交易售后日志', 'BUTTON', 'ACTIVE', 'mall:after_sale_log:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

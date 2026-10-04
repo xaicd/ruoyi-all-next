@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesQcRqcLineService } from "../mes-qc-rqc-line.service"
 
 describe("MesQcRqcLineService", () => {
-  it("should create and query MesQcRqcLine（源框架导入）", async () => {
+  it("should create and query MES 退货检验行", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesQcRqcLineService.create({
         rqc_id: 1,
@@ -21,7 +21,7 @@ describe("MesQcRqcLineService", () => {
   
       const updated = await MesQcRqcLineService.update(created.id, {
         id: created.id,
-        rqc_id: "更新MesQcRqcLine（源框架导入）",
+        rqc_id: "更新MES 退货检验行",
       } as any)
       expect(updated).toBeDefined()
   

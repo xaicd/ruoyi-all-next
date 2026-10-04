@@ -1,0 +1,195 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "erp",
+  "entity": "ErpProductUnit",
+  "kebab": "erp-product-unit",
+  "businessName": "ERP 产品单位",
+  "permissionPrefix": "erp:erp_product_unit",
+  "page": {
+    "route": "/admin/erp/erp-product-unit",
+    "title": "ERP 产品单位管理",
+    "titleSelector": "[data-testid=\"erp-product-unit-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.erp/api",
+    "bffMount": "/api/v1/admin/erp",
+    "resource": "erp-product-unit",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/erp-product-unit",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/erp-product-unit/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/erp-product-unit"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/erp-product-unit/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/erp-product-unit/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"erp-product-unit-title\"]",
+    "refresh": "[data-testid=\"erp-product-unit-refresh\"]",
+    "createButton": "[data-testid=\"erp-product-unit-create\"]",
+    "searchForm": "[data-testid=\"erp-product-unit-search\"]",
+    "searchSubmit": "[data-testid=\"erp-product-unit-search-submit\"]",
+    "searchReset": "[data-testid=\"erp-product-unit-search-reset\"]",
+    "total": "[data-testid=\"erp-product-unit-total\"]",
+    "table": "[data-testid=\"erp-product-unit-table\"]",
+    "row": "[data-testid=\"erp-product-unit-row\"]",
+    "editButton": "[data-testid=\"erp-product-unit-edit\"]",
+    "deleteButton": "[data-testid=\"erp-product-unit-delete\"]",
+    "form": "[data-testid=\"erp-product-unit-form\"]",
+    "formError": "[data-testid=\"erp-product-unit-form-error\"]",
+    "formSubmit": "[data-testid=\"erp-product-unit-form-submit\"]",
+    "formCancel": "[data-testid=\"erp-product-unit-form-cancel\"]",
+    "formClose": "[data-testid=\"erp-product-unit-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "ERP 产品单位列表",
+    "dialogLabel": {
+      "create": "新增ERP 产品单位",
+      "edit": "编辑ERP 产品单位"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "单位名字",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "status",
+        "label": "单位状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "erp-product-unit",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"erp-product-unit\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"erp-product-unit-form-overlay\"]",
+      "dialog": "[data-testid=\"erp-product-unit-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "erp-product-unit:search",
+      "reset": "erp-product-unit:reset",
+      "refresh": "erp-product-unit:refresh",
+      "create": "erp-product-unit:create",
+      "edit": "erp-product-unit:edit",
+      "delete": "erp-product-unit:delete",
+      "submit": "erp-product-unit:submit",
+      "cancel": "erp-product-unit:cancel",
+      "close": "erp-product-unit:close",
+      "row": "erp-product-unit:row",
+      "pagination": "erp-product-unit:pagination",
+      "fields": {
+        "name": "erp-product-unit:field:name",
+        "status": "erp-product-unit:field:status"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "erp.erp-product-unit",
+      "examples": [
+        "erp.erp-product-unit__List__Refresh",
+        "erp.erp-product-unit__ListItem__Open",
+        "erp.erp-product-unit__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

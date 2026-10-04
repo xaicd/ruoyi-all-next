@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ImSensitiveWordService } from "../im-sensitive-word.service"
 
 describe("ImSensitiveWordService", () => {
-  it("should create and query ImSensitiveWord（源框架导入）", async () => {
+  it("should create and query IM 敏感词", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImSensitiveWordService.create({
-        word: "测试ImSensitiveWord（源框架导入）",
+        word: "测试IM 敏感词",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("ImSensitiveWordService", () => {
   
       const updated = await ImSensitiveWordService.update(created.id, {
         id: created.id,
-        word: "更新ImSensitiveWord（源框架导入）",
+        word: "更新IM 敏感词",
       } as any)
       expect(updated).toBeDefined()
   

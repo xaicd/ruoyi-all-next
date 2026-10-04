@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for ErpProductUnit（源框架导入） (ErpProductUnit)
+-- Auto-generated RBAC & Menu Migration for ERP 产品单位 (ErpProductUnit)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-erp-product-unit',
   'erp-dir',
-  'ErpProductUnit（源框架导入）管理',
+  'ERP 产品单位管理',
   '/admin/erp/erp-product-unit',
   'erp/erp-product-unit/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-erp-product-unit-query',  'menu-erp-product-unit', '查询ErpProductUnit（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_product_unit:query',  1, NOW(), NOW()),
-('menu-erp-product-unit-create', 'menu-erp-product-unit', '新增ErpProductUnit（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_product_unit:create', 2, NOW(), NOW()),
-('menu-erp-product-unit-update', 'menu-erp-product-unit', '修改ErpProductUnit（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_product_unit:update', 3, NOW(), NOW()),
-('menu-erp-product-unit-delete', 'menu-erp-product-unit', '删除ErpProductUnit（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_product_unit:delete', 4, NOW(), NOW())
+('menu-erp-product-unit-query',  'menu-erp-product-unit', '查询ERP 产品单位', 'BUTTON', 'ACTIVE', 'erp:erp_product_unit:query',  1, NOW(), NOW()),
+('menu-erp-product-unit-create', 'menu-erp-product-unit', '新增ERP 产品单位', 'BUTTON', 'ACTIVE', 'erp:erp_product_unit:create', 2, NOW(), NOW()),
+('menu-erp-product-unit-update', 'menu-erp-product-unit', '修改ERP 产品单位', 'BUTTON', 'ACTIVE', 'erp:erp_product_unit:update', 3, NOW(), NOW()),
+('menu-erp-product-unit-delete', 'menu-erp-product-unit', '删除ERP 产品单位', 'BUTTON', 'ACTIVE', 'erp:erp_product_unit:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

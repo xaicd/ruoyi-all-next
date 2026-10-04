@@ -1,0 +1,294 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "ai",
+  "entity": "AiChatRole",
+  "kebab": "ai-chat-role",
+  "businessName": "AI 聊天角色",
+  "permissionPrefix": "ai:ai_chat_role",
+  "page": {
+    "route": "/admin/ai/ai-chat-role",
+    "title": "AI 聊天角色管理",
+    "titleSelector": "[data-testid=\"ai-chat-role-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.ai/api",
+    "bffMount": "/api/v1/admin/ai",
+    "resource": "ai-chat-role",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/ai-chat-role",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/ai-chat-role/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/ai-chat-role"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/ai-chat-role/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/ai-chat-role/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"ai-chat-role-title\"]",
+    "refresh": "[data-testid=\"ai-chat-role-refresh\"]",
+    "createButton": "[data-testid=\"ai-chat-role-create\"]",
+    "searchForm": "[data-testid=\"ai-chat-role-search\"]",
+    "searchSubmit": "[data-testid=\"ai-chat-role-search-submit\"]",
+    "searchReset": "[data-testid=\"ai-chat-role-search-reset\"]",
+    "total": "[data-testid=\"ai-chat-role-total\"]",
+    "table": "[data-testid=\"ai-chat-role-table\"]",
+    "row": "[data-testid=\"ai-chat-role-row\"]",
+    "editButton": "[data-testid=\"ai-chat-role-edit\"]",
+    "deleteButton": "[data-testid=\"ai-chat-role-delete\"]",
+    "form": "[data-testid=\"ai-chat-role-form\"]",
+    "formError": "[data-testid=\"ai-chat-role-form-error\"]",
+    "formSubmit": "[data-testid=\"ai-chat-role-form-submit\"]",
+    "formCancel": "[data-testid=\"ai-chat-role-form-cancel\"]",
+    "formClose": "[data-testid=\"ai-chat-role-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "AI 聊天角色列表",
+    "dialogLabel": {
+      "create": "新增AI 聊天角色",
+      "edit": "编辑AI 聊天角色"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "角色名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "avatar",
+        "label": "角色头像",
+        "type": "string",
+        "required": false,
+        "testId": "field-avatar",
+        "selector": "[data-testid=\"field-avatar\"]"
+      },
+      {
+        "name": "category",
+        "label": "角色分类",
+        "type": "string",
+        "required": false,
+        "testId": "field-category",
+        "selector": "[data-testid=\"field-category\"]"
+      },
+      {
+        "name": "description",
+        "label": "角色描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      },
+      {
+        "name": "system_message",
+        "label": "角色设定",
+        "type": "string",
+        "required": false,
+        "testId": "field-system_message",
+        "selector": "[data-testid=\"field-system_message\"]"
+      },
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "model_id",
+        "label": "模型编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-model_id",
+        "selector": "[data-testid=\"field-model_id\"]"
+      },
+      {
+        "name": "knowledge_ids",
+        "label": "引用的知识库编号列表",
+        "type": "string",
+        "required": false,
+        "testId": "field-knowledge_ids",
+        "selector": "[data-testid=\"field-knowledge_ids\"]"
+      },
+      {
+        "name": "tool_ids",
+        "label": "引用的工具编号列表",
+        "type": "string",
+        "required": false,
+        "testId": "field-tool_ids",
+        "selector": "[data-testid=\"field-tool_ids\"]"
+      },
+      {
+        "name": "mcp_client_names",
+        "label": "引用的 MCP Client 名字列表",
+        "type": "string",
+        "required": false,
+        "testId": "field-mcp_client_names",
+        "selector": "[data-testid=\"field-mcp_client_names\"]"
+      },
+      {
+        "name": "public_status",
+        "label": "是否公开",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-public_status",
+        "selector": "[data-testid=\"field-public_status\"]"
+      },
+      {
+        "name": "sort",
+        "label": "排序值",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "ai-chat-role",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"ai-chat-role\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"ai-chat-role-form-overlay\"]",
+      "dialog": "[data-testid=\"ai-chat-role-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "ai-chat-role:search",
+      "reset": "ai-chat-role:reset",
+      "refresh": "ai-chat-role:refresh",
+      "create": "ai-chat-role:create",
+      "edit": "ai-chat-role:edit",
+      "delete": "ai-chat-role:delete",
+      "submit": "ai-chat-role:submit",
+      "cancel": "ai-chat-role:cancel",
+      "close": "ai-chat-role:close",
+      "row": "ai-chat-role:row",
+      "pagination": "ai-chat-role:pagination",
+      "fields": {
+        "name": "ai-chat-role:field:name",
+        "avatar": "ai-chat-role:field:avatar",
+        "category": "ai-chat-role:field:category",
+        "description": "ai-chat-role:field:description",
+        "system_message": "ai-chat-role:field:system_message",
+        "user_id": "ai-chat-role:field:user_id",
+        "model_id": "ai-chat-role:field:model_id",
+        "knowledge_ids": "ai-chat-role:field:knowledge_ids",
+        "tool_ids": "ai-chat-role:field:tool_ids",
+        "mcp_client_names": "ai-chat-role:field:mcp_client_names",
+        "public_status": "ai-chat-role:field:public_status",
+        "sort": "ai-chat-role:field:sort",
+        "status": "ai-chat-role:field:status"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "ai.ai-chat-role",
+      "examples": [
+        "ai.ai-chat-role__List__Refresh",
+        "ai.ai-chat-role__ListItem__Open",
+        "ai.ai-chat-role__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

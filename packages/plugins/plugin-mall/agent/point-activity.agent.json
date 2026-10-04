@@ -1,0 +1,231 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "PointActivity",
+  "kebab": "point-activity",
+  "businessName": "积分商城活动",
+  "permissionPrefix": "mall:point_activity",
+  "page": {
+    "route": "/admin/mall/point-activity",
+    "title": "积分商城活动管理",
+    "titleSelector": "[data-testid=\"point-activity-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "point-activity",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/point-activity",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/point-activity/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/point-activity"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/point-activity/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/point-activity/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"point-activity-title\"]",
+    "refresh": "[data-testid=\"point-activity-refresh\"]",
+    "createButton": "[data-testid=\"point-activity-create\"]",
+    "searchForm": "[data-testid=\"point-activity-search\"]",
+    "searchSubmit": "[data-testid=\"point-activity-search-submit\"]",
+    "searchReset": "[data-testid=\"point-activity-search-reset\"]",
+    "total": "[data-testid=\"point-activity-total\"]",
+    "table": "[data-testid=\"point-activity-table\"]",
+    "row": "[data-testid=\"point-activity-row\"]",
+    "editButton": "[data-testid=\"point-activity-edit\"]",
+    "deleteButton": "[data-testid=\"point-activity-delete\"]",
+    "form": "[data-testid=\"point-activity-form\"]",
+    "formError": "[data-testid=\"point-activity-form-error\"]",
+    "formSubmit": "[data-testid=\"point-activity-form-submit\"]",
+    "formCancel": "[data-testid=\"point-activity-form-cancel\"]",
+    "formClose": "[data-testid=\"point-activity-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "积分商城活动列表",
+    "dialogLabel": {
+      "create": "新增积分商城活动",
+      "edit": "编辑积分商城活动"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "spu_id",
+        "label": "积分商城活动商品",
+        "type": "number",
+        "required": false,
+        "testId": "field-spu_id",
+        "selector": "[data-testid=\"field-spu_id\"]"
+      },
+      {
+        "name": "status",
+        "label": "活动状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      },
+      {
+        "name": "sort",
+        "label": "排序",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      },
+      {
+        "name": "stock",
+        "label": "积分商城活动库存(剩余库存积分兑换时扣减)",
+        "type": "number",
+        "required": false,
+        "testId": "field-stock",
+        "selector": "[data-testid=\"field-stock\"]"
+      },
+      {
+        "name": "total_stock",
+        "label": "积分商城活动总库存",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_stock",
+        "selector": "[data-testid=\"field-total_stock\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "point-activity",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"point-activity\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"point-activity-form-overlay\"]",
+      "dialog": "[data-testid=\"point-activity-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "point-activity:search",
+      "reset": "point-activity:reset",
+      "refresh": "point-activity:refresh",
+      "create": "point-activity:create",
+      "edit": "point-activity:edit",
+      "delete": "point-activity:delete",
+      "submit": "point-activity:submit",
+      "cancel": "point-activity:cancel",
+      "close": "point-activity:close",
+      "row": "point-activity:row",
+      "pagination": "point-activity:pagination",
+      "fields": {
+        "spu_id": "point-activity:field:spu_id",
+        "status": "point-activity:field:status",
+        "remark": "point-activity:field:remark",
+        "sort": "point-activity:field:sort",
+        "stock": "point-activity:field:stock",
+        "total_stock": "point-activity:field:total_stock"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.point-activity",
+      "examples": [
+        "mall.point-activity__List__Refresh",
+        "mall.point-activity__ListItem__Open",
+        "mall.point-activity__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for IotProduct（源框架导入） (IotProduct)
+-- Auto-generated RBAC & Menu Migration for IoT 产品 (IotProduct)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-iot-product',
   'iot-dir',
-  'IotProduct（源框架导入）管理',
+  'IoT 产品管理',
   '/admin/iot/iot-product',
   'iot/iot-product/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-iot-product-query',  'menu-iot-product', '查询IotProduct（源框架导入）', 'BUTTON', 'ACTIVE', 'iot:iot_product:query',  1, NOW(), NOW()),
-('menu-iot-product-create', 'menu-iot-product', '新增IotProduct（源框架导入）', 'BUTTON', 'ACTIVE', 'iot:iot_product:create', 2, NOW(), NOW()),
-('menu-iot-product-update', 'menu-iot-product', '修改IotProduct（源框架导入）', 'BUTTON', 'ACTIVE', 'iot:iot_product:update', 3, NOW(), NOW()),
-('menu-iot-product-delete', 'menu-iot-product', '删除IotProduct（源框架导入）', 'BUTTON', 'ACTIVE', 'iot:iot_product:delete', 4, NOW(), NOW())
+('menu-iot-product-query',  'menu-iot-product', '查询IoT 产品', 'BUTTON', 'ACTIVE', 'iot:iot_product:query',  1, NOW(), NOW()),
+('menu-iot-product-create', 'menu-iot-product', '新增IoT 产品', 'BUTTON', 'ACTIVE', 'iot:iot_product:create', 2, NOW(), NOW()),
+('menu-iot-product-update', 'menu-iot-product', '修改IoT 产品', 'BUTTON', 'ACTIVE', 'iot:iot_product:update', 3, NOW(), NOW()),
+('menu-iot-product-delete', 'menu-iot-product', '删除IoT 产品', 'BUTTON', 'ACTIVE', 'iot:iot_product:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

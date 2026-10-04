@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for PayApp（源框架导入） (PayApp)
+-- Auto-generated RBAC & Menu Migration for 支付应用 DO一个商户下，可能会有多个支付应用。例如说，京东有京东商城、京东到家等等不过一般来说，一个商户，只有一个应用哈~即 PayMerchantDO : PayAppDO = 1 : n (PayApp)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-pay-app',
   'pay-dir',
-  'PayApp（源框架导入）管理',
+  '支付应用 DO一个商户下，可能会有多个支付应用。例如说，京东有京东商城、京东到家等等不过一般来说，一个商户，只有一个应用哈~即 PayMerchantDO : PayAppDO = 1 : n管理',
   '/admin/pay/pay-app',
   'pay/pay-app/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-pay-app-query',  'menu-pay-app', '查询PayApp（源框架导入）', 'BUTTON', 'ACTIVE', 'pay:pay_app:query',  1, NOW(), NOW()),
-('menu-pay-app-create', 'menu-pay-app', '新增PayApp（源框架导入）', 'BUTTON', 'ACTIVE', 'pay:pay_app:create', 2, NOW(), NOW()),
-('menu-pay-app-update', 'menu-pay-app', '修改PayApp（源框架导入）', 'BUTTON', 'ACTIVE', 'pay:pay_app:update', 3, NOW(), NOW()),
-('menu-pay-app-delete', 'menu-pay-app', '删除PayApp（源框架导入）', 'BUTTON', 'ACTIVE', 'pay:pay_app:delete', 4, NOW(), NOW())
+('menu-pay-app-query',  'menu-pay-app', '查询支付应用 DO一个商户下，可能会有多个支付应用。例如说，京东有京东商城、京东到家等等不过一般来说，一个商户，只有一个应用哈~即 PayMerchantDO : PayAppDO = 1 : n', 'BUTTON', 'ACTIVE', 'pay:pay_app:query',  1, NOW(), NOW()),
+('menu-pay-app-create', 'menu-pay-app', '新增支付应用 DO一个商户下，可能会有多个支付应用。例如说，京东有京东商城、京东到家等等不过一般来说，一个商户，只有一个应用哈~即 PayMerchantDO : PayAppDO = 1 : n', 'BUTTON', 'ACTIVE', 'pay:pay_app:create', 2, NOW(), NOW()),
+('menu-pay-app-update', 'menu-pay-app', '修改支付应用 DO一个商户下，可能会有多个支付应用。例如说，京东有京东商城、京东到家等等不过一般来说，一个商户，只有一个应用哈~即 PayMerchantDO : PayAppDO = 1 : n', 'BUTTON', 'ACTIVE', 'pay:pay_app:update', 3, NOW(), NOW()),
+('menu-pay-app-delete', 'menu-pay-app', '删除支付应用 DO一个商户下，可能会有多个支付应用。例如说，京东有京东商城、京东到家等等不过一般来说，一个商户，只有一个应用哈~即 PayMerchantDO : PayAppDO = 1 : n', 'BUTTON', 'ACTIVE', 'pay:pay_app:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

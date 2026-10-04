@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesQcIndicatorResultService } from "../mes-qc-indicator-result.service"
 
 describe("MesQcIndicatorResultService", () => {
-  it("should create and query MesQcIndicatorResult（源框架导入）", async () => {
+  it("should create and query MES 检验结果记录", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesQcIndicatorResultService.create({
-        code: "测试MesQcIndicatorResult（源框架导入）",
+        code: "测试MES 检验结果记录",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("MesQcIndicatorResultService", () => {
   
       const updated = await MesQcIndicatorResultService.update(created.id, {
         id: created.id,
-        code: "更新MesQcIndicatorResult（源框架导入）",
+        code: "更新MES 检验结果记录",
       } as any)
       expect(updated).toBeDefined()
   

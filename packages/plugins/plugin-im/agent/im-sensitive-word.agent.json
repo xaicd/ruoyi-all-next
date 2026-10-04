@@ -1,0 +1,195 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "im",
+  "entity": "ImSensitiveWord",
+  "kebab": "im-sensitive-word",
+  "businessName": "IM 敏感词",
+  "permissionPrefix": "im:im_sensitive_word",
+  "page": {
+    "route": "/admin/im/im-sensitive-word",
+    "title": "IM 敏感词管理",
+    "titleSelector": "[data-testid=\"im-sensitive-word-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.im/api",
+    "bffMount": "/api/v1/admin/im",
+    "resource": "im-sensitive-word",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/im-sensitive-word",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/im-sensitive-word/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/im-sensitive-word"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/im-sensitive-word/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/im-sensitive-word/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"im-sensitive-word-title\"]",
+    "refresh": "[data-testid=\"im-sensitive-word-refresh\"]",
+    "createButton": "[data-testid=\"im-sensitive-word-create\"]",
+    "searchForm": "[data-testid=\"im-sensitive-word-search\"]",
+    "searchSubmit": "[data-testid=\"im-sensitive-word-search-submit\"]",
+    "searchReset": "[data-testid=\"im-sensitive-word-search-reset\"]",
+    "total": "[data-testid=\"im-sensitive-word-total\"]",
+    "table": "[data-testid=\"im-sensitive-word-table\"]",
+    "row": "[data-testid=\"im-sensitive-word-row\"]",
+    "editButton": "[data-testid=\"im-sensitive-word-edit\"]",
+    "deleteButton": "[data-testid=\"im-sensitive-word-delete\"]",
+    "form": "[data-testid=\"im-sensitive-word-form\"]",
+    "formError": "[data-testid=\"im-sensitive-word-form-error\"]",
+    "formSubmit": "[data-testid=\"im-sensitive-word-form-submit\"]",
+    "formCancel": "[data-testid=\"im-sensitive-word-form-cancel\"]",
+    "formClose": "[data-testid=\"im-sensitive-word-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IM 敏感词列表",
+    "dialogLabel": {
+      "create": "新增IM 敏感词",
+      "edit": "编辑IM 敏感词"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "word",
+        "label": "敏感词",
+        "type": "string",
+        "required": false,
+        "testId": "field-word",
+        "selector": "[data-testid=\"field-word\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "im-sensitive-word",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"im-sensitive-word\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"im-sensitive-word-form-overlay\"]",
+      "dialog": "[data-testid=\"im-sensitive-word-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "im-sensitive-word:search",
+      "reset": "im-sensitive-word:reset",
+      "refresh": "im-sensitive-word:refresh",
+      "create": "im-sensitive-word:create",
+      "edit": "im-sensitive-word:edit",
+      "delete": "im-sensitive-word:delete",
+      "submit": "im-sensitive-word:submit",
+      "cancel": "im-sensitive-word:cancel",
+      "close": "im-sensitive-word:close",
+      "row": "im-sensitive-word:row",
+      "pagination": "im-sensitive-word:pagination",
+      "fields": {
+        "word": "im-sensitive-word:field:word",
+        "status": "im-sensitive-word:field:status"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "im.im-sensitive-word",
+      "examples": [
+        "im.im-sensitive-word__List__Refresh",
+        "im.im-sensitive-word__ListItem__Open",
+        "im.im-sensitive-word__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

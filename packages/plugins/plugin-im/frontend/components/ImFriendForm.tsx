@@ -58,24 +58,36 @@ export function ImFriendForm({ open, initialData, onClose, onSuccess }: ImFriend
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="im-friend-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑IM 好友关系 DO业务语义：- 双向关系：A-B 互为好友会存 2 条记录（userId=A, friendUserId=B 和 userId=B, friendUserId=A）- 状态管理" : "新增IM 好友关系 DO业务语义：- 双向关系：A-B 互为好友会存 2 条记录（userId=A, friendUserId=B 和 userId=B, friendUserId=A）- 状态管理"}
+        data-testid="im-friend-form"
+        data-agent-scope="im-friend:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑ImFriend（源框架导入）" : "新增ImFriend（源框架导入）"}
+            {isEdit ? "编辑IM 好友关系 DO业务语义：- 双向关系：A-B 互为好友会存 2 条记录（userId=A, friendUserId=B 和 userId=B, friendUserId=A）- 状态管理" : "新增IM 好友关系 DO业务语义：- 双向关系：A-B 互为好友会存 2 条记录（userId=A, friendUserId=B 和 userId=B, friendUserId=A）- 状态管理"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="im-friend-form-close" data-agent-target="im-friend:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="im-friend-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="im-friend-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="im-friend-user_id"
+            data-testid="field-user_id"
+            data-agent-target="im-friend:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -85,9 +97,14 @@ export function ImFriendForm({ open, initialData, onClose, onSuccess }: ImFriend
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">好友用户编号</label>
+          <label htmlFor="im-friend-friend_user_id" className="block text-xs text-slate-600 mb-1">好友用户编号</label>
           <input
             type="number"
+            id="im-friend-friend_user_id"
+            data-testid="field-friend_user_id"
+            data-agent-target="im-friend:field:friend_user_id"
+            data-agent-state={formData.friend_user_id == null || formData.friend_user_id === "" ? "empty" : "filled"}
+            aria-label="好友用户编号"
             value={formData.friend_user_id != null ? String(formData.friend_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, friend_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -99,18 +116,27 @@ export function ImFriendForm({ open, initialData, onClose, onSuccess }: ImFriend
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="silent"
+            id="im-friend-silent"
+            data-testid="field-silent"
+            data-agent-target="im-friend:field:silent"
+            data-agent-state={formData.silent ? "on" : "off"}
+            aria-label="是否免打扰"
             checked={Boolean(formData.silent)}
             onChange={(e) => setFormData((prev) => ({ ...prev, silent: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="silent" className="text-xs text-slate-700 font-medium">是否免打扰</label>
+          <label htmlFor="im-friend-silent" className="text-xs text-slate-700 font-medium">是否免打扰</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">好友展示备注</label>
+          <label htmlFor="im-friend-display_name" className="block text-xs text-slate-600 mb-1">好友展示备注</label>
           <input
             type="text"
+            id="im-friend-display_name"
+            data-testid="field-display_name"
+            data-agent-target="im-friend:field:display_name"
+            data-agent-state={formData.display_name ? "filled" : "empty"}
+            aria-label="好友展示备注"
             value={formData.display_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, display_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -120,9 +146,14 @@ export function ImFriendForm({ open, initialData, onClose, onSuccess }: ImFriend
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">添加来源</label>
+          <label htmlFor="im-friend-add_source" className="block text-xs text-slate-600 mb-1">添加来源</label>
           <input
             type="number"
+            id="im-friend-add_source"
+            data-testid="field-add_source"
+            data-agent-target="im-friend:field:add_source"
+            data-agent-state={formData.add_source == null || formData.add_source === "" ? "empty" : "filled"}
+            aria-label="添加来源"
             value={formData.add_source != null ? String(formData.add_source) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, add_source: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -134,29 +165,42 @@ export function ImFriendForm({ open, initialData, onClose, onSuccess }: ImFriend
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="pinned"
+            id="im-friend-pinned"
+            data-testid="field-pinned"
+            data-agent-target="im-friend:field:pinned"
+            data-agent-state={formData.pinned ? "on" : "off"}
+            aria-label="是否置顶联系人"
             checked={Boolean(formData.pinned)}
             onChange={(e) => setFormData((prev) => ({ ...prev, pinned: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="pinned" className="text-xs text-slate-700 font-medium">是否置顶联系人</label>
+          <label htmlFor="im-friend-pinned" className="text-xs text-slate-700 font-medium">是否置顶联系人</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="blocked"
+            id="im-friend-blocked"
+            data-testid="field-blocked"
+            data-agent-target="im-friend:field:blocked"
+            data-agent-state={formData.blocked ? "on" : "off"}
+            aria-label="是否拉黑（弱关联 friend，单边屏蔽对方私聊消息）"
             checked={Boolean(formData.blocked)}
             onChange={(e) => setFormData((prev) => ({ ...prev, blocked: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="blocked" className="text-xs text-slate-700 font-medium">是否拉黑（弱关联 friend，单边屏蔽对方私聊消息）</label>
+          <label htmlFor="im-friend-blocked" className="text-xs text-slate-700 font-medium">是否拉黑（弱关联 friend，单边屏蔽对方私聊消息）</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">好友状态</label>
+          <label htmlFor="im-friend-status" className="block text-xs text-slate-600 mb-1">好友状态</label>
           <input
             type="number"
+            id="im-friend-status"
+            data-testid="field-status"
+            data-agent-target="im-friend:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="好友状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -166,9 +210,14 @@ export function ImFriendForm({ open, initialData, onClose, onSuccess }: ImFriend
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">添加好友时间</label>
+          <label htmlFor="im-friend-add_time" className="block text-xs text-slate-600 mb-1">添加好友时间</label>
           <input
             type="text"
+            id="im-friend-add_time"
+            data-testid="field-add_time"
+            data-agent-target="im-friend:field:add_time"
+            data-agent-state={formData.add_time ? "filled" : "empty"}
+            aria-label="添加好友时间"
             value={formData.add_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, add_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -178,9 +227,14 @@ export function ImFriendForm({ open, initialData, onClose, onSuccess }: ImFriend
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">删除好友时间</label>
+          <label htmlFor="im-friend-delete_time" className="block text-xs text-slate-600 mb-1">删除好友时间</label>
           <input
             type="text"
+            id="im-friend-delete_time"
+            data-testid="field-delete_time"
+            data-agent-target="im-friend:field:delete_time"
+            data-agent-state={formData.delete_time ? "filled" : "empty"}
+            aria-label="删除好友时间"
             value={formData.delete_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, delete_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -194,6 +248,8 @@ export function ImFriendForm({ open, initialData, onClose, onSuccess }: ImFriend
             <button
               type="button"
               onClick={onClose}
+              data-testid="im-friend-form-cancel"
+              data-agent-target="im-friend:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -201,6 +257,9 @@ export function ImFriendForm({ open, initialData, onClose, onSuccess }: ImFriend
             <button
               type="submit"
               disabled={loading}
+              data-testid="im-friend-form-submit"
+              data-agent-target="im-friend:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

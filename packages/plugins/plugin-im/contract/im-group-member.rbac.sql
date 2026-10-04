@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for ImGroupMember（源框架导入） (ImGroupMember)
+-- Auto-generated RBAC & Menu Migration for IM 群成员 (ImGroupMember)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-im-group-member',
   'im-dir',
-  'ImGroupMember（源框架导入）管理',
+  'IM 群成员管理',
   '/admin/im/im-group-member',
   'im/im-group-member/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-im-group-member-query',  'menu-im-group-member', '查询ImGroupMember（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_group_member:query',  1, NOW(), NOW()),
-('menu-im-group-member-create', 'menu-im-group-member', '新增ImGroupMember（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_group_member:create', 2, NOW(), NOW()),
-('menu-im-group-member-update', 'menu-im-group-member', '修改ImGroupMember（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_group_member:update', 3, NOW(), NOW()),
-('menu-im-group-member-delete', 'menu-im-group-member', '删除ImGroupMember（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_group_member:delete', 4, NOW(), NOW())
+('menu-im-group-member-query',  'menu-im-group-member', '查询IM 群成员', 'BUTTON', 'ACTIVE', 'im:im_group_member:query',  1, NOW(), NOW()),
+('menu-im-group-member-create', 'menu-im-group-member', '新增IM 群成员', 'BUTTON', 'ACTIVE', 'im:im_group_member:create', 2, NOW(), NOW()),
+('menu-im-group-member-update', 'menu-im-group-member', '修改IM 群成员', 'BUTTON', 'ACTIVE', 'im:im_group_member:update', 3, NOW(), NOW()),
+('menu-im-group-member-delete', 'menu-im-group-member', '删除IM 群成员', 'BUTTON', 'ACTIVE', 'im:im_group_member:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

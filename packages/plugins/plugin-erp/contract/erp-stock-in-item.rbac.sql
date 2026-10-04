@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for ErpStockInItem（源框架导入） (ErpStockInItem)
+-- Auto-generated RBAC & Menu Migration for ERP 其它入库单项 (ErpStockInItem)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-erp-stock-in-item',
   'erp-dir',
-  'ErpStockInItem（源框架导入）管理',
+  'ERP 其它入库单项管理',
   '/admin/erp/erp-stock-in-item',
   'erp/erp-stock-in-item/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-erp-stock-in-item-query',  'menu-erp-stock-in-item', '查询ErpStockInItem（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_stock_in_item:query',  1, NOW(), NOW()),
-('menu-erp-stock-in-item-create', 'menu-erp-stock-in-item', '新增ErpStockInItem（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_stock_in_item:create', 2, NOW(), NOW()),
-('menu-erp-stock-in-item-update', 'menu-erp-stock-in-item', '修改ErpStockInItem（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_stock_in_item:update', 3, NOW(), NOW()),
-('menu-erp-stock-in-item-delete', 'menu-erp-stock-in-item', '删除ErpStockInItem（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_stock_in_item:delete', 4, NOW(), NOW())
+('menu-erp-stock-in-item-query',  'menu-erp-stock-in-item', '查询ERP 其它入库单项', 'BUTTON', 'ACTIVE', 'erp:erp_stock_in_item:query',  1, NOW(), NOW()),
+('menu-erp-stock-in-item-create', 'menu-erp-stock-in-item', '新增ERP 其它入库单项', 'BUTTON', 'ACTIVE', 'erp:erp_stock_in_item:create', 2, NOW(), NOW()),
+('menu-erp-stock-in-item-update', 'menu-erp-stock-in-item', '修改ERP 其它入库单项', 'BUTTON', 'ACTIVE', 'erp:erp_stock_in_item:update', 3, NOW(), NOW()),
+('menu-erp-stock-in-item-delete', 'menu-erp-stock-in-item', '删除ERP 其它入库单项', 'BUTTON', 'ACTIVE', 'erp:erp_stock_in_item:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

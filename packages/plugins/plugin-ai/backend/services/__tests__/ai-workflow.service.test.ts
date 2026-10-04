@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { AiWorkflowService } from "../ai-workflow.service"
 
 describe("AiWorkflowService", () => {
-  it("should create and query AiWorkflow（源框架导入）", async () => {
+  it("should create and query AI 工作流", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AiWorkflowService.create({
-        name: "测试AiWorkflow（源框架导入）",
+        name: "测试AI 工作流",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("AiWorkflowService", () => {
   
       const updated = await AiWorkflowService.update(created.id, {
         id: created.id,
-        name: "更新AiWorkflow（源框架导入）",
+        name: "更新AI 工作流",
       } as any)
       expect(updated).toBeDefined()
   

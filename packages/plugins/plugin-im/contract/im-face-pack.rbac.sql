@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for ImFacePack（源框架导入） (ImFacePack)
+-- Auto-generated RBAC & Menu Migration for IM 表情包 DO（运营配置的系统表情包元数据） (ImFacePack)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-im-face-pack',
   'im-dir',
-  'ImFacePack（源框架导入）管理',
+  'IM 表情包 DO（运营配置的系统表情包元数据）管理',
   '/admin/im/im-face-pack',
   'im/im-face-pack/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-im-face-pack-query',  'menu-im-face-pack', '查询ImFacePack（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_face_pack:query',  1, NOW(), NOW()),
-('menu-im-face-pack-create', 'menu-im-face-pack', '新增ImFacePack（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_face_pack:create', 2, NOW(), NOW()),
-('menu-im-face-pack-update', 'menu-im-face-pack', '修改ImFacePack（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_face_pack:update', 3, NOW(), NOW()),
-('menu-im-face-pack-delete', 'menu-im-face-pack', '删除ImFacePack（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_face_pack:delete', 4, NOW(), NOW())
+('menu-im-face-pack-query',  'menu-im-face-pack', '查询IM 表情包 DO（运营配置的系统表情包元数据）', 'BUTTON', 'ACTIVE', 'im:im_face_pack:query',  1, NOW(), NOW()),
+('menu-im-face-pack-create', 'menu-im-face-pack', '新增IM 表情包 DO（运营配置的系统表情包元数据）', 'BUTTON', 'ACTIVE', 'im:im_face_pack:create', 2, NOW(), NOW()),
+('menu-im-face-pack-update', 'menu-im-face-pack', '修改IM 表情包 DO（运营配置的系统表情包元数据）', 'BUTTON', 'ACTIVE', 'im:im_face_pack:update', 3, NOW(), NOW()),
+('menu-im-face-pack-delete', 'menu-im-face-pack', '删除IM 表情包 DO（运营配置的系统表情包元数据）', 'BUTTON', 'ACTIVE', 'im:im_face_pack:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

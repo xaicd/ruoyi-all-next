@@ -1,0 +1,312 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "ai",
+  "entity": "AiImage",
+  "kebab": "ai-image",
+  "businessName": "AI 绘画",
+  "permissionPrefix": "ai:ai_image",
+  "page": {
+    "route": "/admin/ai/ai-image",
+    "title": "AI 绘画管理",
+    "titleSelector": "[data-testid=\"ai-image-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.ai/api",
+    "bffMount": "/api/v1/admin/ai",
+    "resource": "ai-image",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/ai-image",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/ai-image/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/ai-image"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/ai-image/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/ai-image/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"ai-image-title\"]",
+    "refresh": "[data-testid=\"ai-image-refresh\"]",
+    "createButton": "[data-testid=\"ai-image-create\"]",
+    "searchForm": "[data-testid=\"ai-image-search\"]",
+    "searchSubmit": "[data-testid=\"ai-image-search-submit\"]",
+    "searchReset": "[data-testid=\"ai-image-search-reset\"]",
+    "total": "[data-testid=\"ai-image-total\"]",
+    "table": "[data-testid=\"ai-image-table\"]",
+    "row": "[data-testid=\"ai-image-row\"]",
+    "editButton": "[data-testid=\"ai-image-edit\"]",
+    "deleteButton": "[data-testid=\"ai-image-delete\"]",
+    "form": "[data-testid=\"ai-image-form\"]",
+    "formError": "[data-testid=\"ai-image-form-error\"]",
+    "formSubmit": "[data-testid=\"ai-image-form-submit\"]",
+    "formCancel": "[data-testid=\"ai-image-form-cancel\"]",
+    "formClose": "[data-testid=\"ai-image-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "AI 绘画列表",
+    "dialogLabel": {
+      "create": "新增AI 绘画",
+      "edit": "编辑AI 绘画"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "prompt",
+        "label": "提示词",
+        "type": "string",
+        "required": false,
+        "testId": "field-prompt",
+        "selector": "[data-testid=\"field-prompt\"]"
+      },
+      {
+        "name": "platform",
+        "label": "平台",
+        "type": "string",
+        "required": false,
+        "testId": "field-platform",
+        "selector": "[data-testid=\"field-platform\"]"
+      },
+      {
+        "name": "model_id",
+        "label": "模型编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-model_id",
+        "selector": "[data-testid=\"field-model_id\"]"
+      },
+      {
+        "name": "model",
+        "label": "模型标识",
+        "type": "string",
+        "required": false,
+        "testId": "field-model",
+        "selector": "[data-testid=\"field-model\"]"
+      },
+      {
+        "name": "width",
+        "label": "图片宽度",
+        "type": "number",
+        "required": false,
+        "testId": "field-width",
+        "selector": "[data-testid=\"field-width\"]"
+      },
+      {
+        "name": "height",
+        "label": "图片高度",
+        "type": "number",
+        "required": false,
+        "testId": "field-height",
+        "selector": "[data-testid=\"field-height\"]"
+      },
+      {
+        "name": "status",
+        "label": "生成状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "finish_time",
+        "label": "完成时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-finish_time",
+        "selector": "[data-testid=\"field-finish_time\"]"
+      },
+      {
+        "name": "error_message",
+        "label": "绘画错误信息",
+        "type": "string",
+        "required": false,
+        "testId": "field-error_message",
+        "selector": "[data-testid=\"field-error_message\"]"
+      },
+      {
+        "name": "pic_url",
+        "label": "图片地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-pic_url",
+        "selector": "[data-testid=\"field-pic_url\"]"
+      },
+      {
+        "name": "public_status",
+        "label": "是否公开",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-public_status",
+        "selector": "[data-testid=\"field-public_status\"]"
+      },
+      {
+        "name": "options",
+        "label": "绘制参数，不同 platform 的不同参数",
+        "type": "string",
+        "required": false,
+        "testId": "field-options",
+        "selector": "[data-testid=\"field-options\"]"
+      },
+      {
+        "name": "buttons",
+        "label": "mj buttons 按钮",
+        "type": "string",
+        "required": false,
+        "testId": "field-buttons",
+        "selector": "[data-testid=\"field-buttons\"]"
+      },
+      {
+        "name": "task_id",
+        "label": "任务编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-task_id",
+        "selector": "[data-testid=\"field-task_id\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "ai-image",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"ai-image\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"ai-image-form-overlay\"]",
+      "dialog": "[data-testid=\"ai-image-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "ai-image:search",
+      "reset": "ai-image:reset",
+      "refresh": "ai-image:refresh",
+      "create": "ai-image:create",
+      "edit": "ai-image:edit",
+      "delete": "ai-image:delete",
+      "submit": "ai-image:submit",
+      "cancel": "ai-image:cancel",
+      "close": "ai-image:close",
+      "row": "ai-image:row",
+      "pagination": "ai-image:pagination",
+      "fields": {
+        "user_id": "ai-image:field:user_id",
+        "prompt": "ai-image:field:prompt",
+        "platform": "ai-image:field:platform",
+        "model_id": "ai-image:field:model_id",
+        "model": "ai-image:field:model",
+        "width": "ai-image:field:width",
+        "height": "ai-image:field:height",
+        "status": "ai-image:field:status",
+        "finish_time": "ai-image:field:finish_time",
+        "error_message": "ai-image:field:error_message",
+        "pic_url": "ai-image:field:pic_url",
+        "public_status": "ai-image:field:public_status",
+        "options": "ai-image:field:options",
+        "buttons": "ai-image:field:buttons",
+        "task_id": "ai-image:field:task_id"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "ai.ai-image",
+      "examples": [
+        "ai.ai-image__List__Refresh",
+        "ai.ai-image__ListItem__Open",
+        "ai.ai-image__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

@@ -2,7 +2,7 @@
 -- 来源: scripts/data/mall-source-tables.ts#MALL_TABLES
 -- 背景: 这些表的定义来自低代码 CodegenConfig；此前只生成代码、不生成建表 SQL，
 --       导致"仓储在查但无处创建"。本迁移补齐 DDL。
--- ProductBrand（源框架导入）
+-- 商品品牌
 CREATE TABLE "product_brand" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -20,7 +20,7 @@ CREATE TABLE "product_brand" (
 );
 CREATE INDEX "product_brand_tenant_id_idx" ON "product_brand"("tenant_id");
 
--- ProductBrowseHistory（源框架导入）
+-- 商品浏览记录
 CREATE TABLE "product_browse_history" (
     "id" TEXT NOT NULL,
     "spu_id" BIGINT,
@@ -36,7 +36,7 @@ CREATE TABLE "product_browse_history" (
 );
 CREATE INDEX "product_browse_history_tenant_id_idx" ON "product_browse_history"("tenant_id");
 
--- ProductCategory（源框架导入）
+-- 商品分类
 CREATE TABLE "product_category" (
     "id" TEXT NOT NULL,
     "parent_id" BIGINT,
@@ -54,7 +54,7 @@ CREATE TABLE "product_category" (
 );
 CREATE INDEX "product_category_tenant_id_idx" ON "product_category"("tenant_id");
 
--- ProductComment（源框架导入）
+-- 商品评论
 CREATE TABLE "product_comment" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
@@ -88,7 +88,7 @@ CREATE TABLE "product_comment" (
 );
 CREATE INDEX "product_comment_tenant_id_idx" ON "product_comment"("tenant_id");
 
--- ProductFavorite（源框架导入）
+-- 商品收藏
 CREATE TABLE "product_favorite" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
@@ -103,7 +103,7 @@ CREATE TABLE "product_favorite" (
 );
 CREATE INDEX "product_favorite_tenant_id_idx" ON "product_favorite"("tenant_id");
 
--- ProductProperty（源框架导入）
+-- 商品属性项
 CREATE TABLE "product_property" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -118,7 +118,7 @@ CREATE TABLE "product_property" (
 );
 CREATE INDEX "product_property_tenant_id_idx" ON "product_property"("tenant_id");
 
--- ProductPropertyValue（源框架导入）
+-- 商品属性值
 CREATE TABLE "product_property_value" (
     "id" TEXT NOT NULL,
     "property_id" BIGINT,
@@ -134,7 +134,7 @@ CREATE TABLE "product_property_value" (
 );
 CREATE INDEX "product_property_value_tenant_id_idx" ON "product_property_value"("tenant_id");
 
--- ProductSku（源框架导入）
+-- 商品 SKU
 CREATE TABLE "product_sku" (
     "id" TEXT NOT NULL,
     "spu_id" BIGINT,
@@ -164,7 +164,7 @@ CREATE TABLE "product_sku" (
 );
 CREATE INDEX "product_sku_tenant_id_idx" ON "product_sku"("tenant_id");
 
--- ProductSpu（源框架导入）
+-- 商品 SPU
 CREATE TABLE "product_spu" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -199,7 +199,7 @@ CREATE TABLE "product_spu" (
 );
 CREATE INDEX "product_spu_tenant_id_idx" ON "product_spu"("tenant_id");
 
--- ProductStatistics（源框架导入）
+-- 商品统计
 CREATE TABLE "product_statistics" (
     "id" TEXT NOT NULL,
     "time" TIMESTAMP(3),
@@ -224,7 +224,7 @@ CREATE TABLE "product_statistics" (
 );
 CREATE INDEX "product_statistics_tenant_id_idx" ON "product_statistics"("tenant_id");
 
--- Article（源框架导入）
+-- 文章管理
 CREATE TABLE "promotion_article" (
     "id" TEXT NOT NULL,
     "category_id" BIGINT,
@@ -249,7 +249,7 @@ CREATE TABLE "promotion_article" (
 );
 CREATE INDEX "promotion_article_tenant_id_idx" ON "promotion_article"("tenant_id");
 
--- ArticleCategory（源框架导入）
+-- 文章分类
 CREATE TABLE "promotion_article_category" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -266,7 +266,7 @@ CREATE TABLE "promotion_article_category" (
 );
 CREATE INDEX "promotion_article_category_tenant_id_idx" ON "promotion_article_category"("tenant_id");
 
--- Banner（源框架导入）
+-- banner
 CREATE TABLE "promotion_banner" (
     "id" TEXT NOT NULL,
     "title" VARCHAR(255),
@@ -287,7 +287,7 @@ CREATE TABLE "promotion_banner" (
 );
 CREATE INDEX "promotion_banner_tenant_id_idx" ON "promotion_banner"("tenant_id");
 
--- BargainActivity（源框架导入）
+-- 砍价活动
 CREATE TABLE "promotion_bargain_activity" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -315,7 +315,7 @@ CREATE TABLE "promotion_bargain_activity" (
 );
 CREATE INDEX "promotion_bargain_activity_tenant_id_idx" ON "promotion_bargain_activity"("tenant_id");
 
--- BargainHelp（源框架导入）
+-- 砍价助力
 CREATE TABLE "promotion_bargain_help" (
     "id" TEXT NOT NULL,
     "activity_id" BIGINT,
@@ -332,7 +332,7 @@ CREATE TABLE "promotion_bargain_help" (
 );
 CREATE INDEX "promotion_bargain_help_tenant_id_idx" ON "promotion_bargain_help"("tenant_id");
 
--- BargainRecord（源框架导入）
+-- 砍价记录 DO TO
 CREATE TABLE "promotion_bargain_record" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
@@ -354,7 +354,7 @@ CREATE TABLE "promotion_bargain_record" (
 );
 CREATE INDEX "promotion_bargain_record_tenant_id_idx" ON "promotion_bargain_record"("tenant_id");
 
--- CombinationActivity（源框架导入）
+-- 拼团活动
 CREATE TABLE "promotion_combination_activity" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -377,7 +377,7 @@ CREATE TABLE "promotion_combination_activity" (
 );
 CREATE INDEX "promotion_combination_activity_tenant_id_idx" ON "promotion_combination_activity"("tenant_id");
 
--- CombinationProduct（源框架导入）
+-- 拼团商品
 CREATE TABLE "promotion_combination_product" (
     "id" TEXT NOT NULL,
     "activity_id" BIGINT,
@@ -397,7 +397,7 @@ CREATE TABLE "promotion_combination_product" (
 );
 CREATE INDEX "promotion_combination_product_tenant_id_idx" ON "promotion_combination_product"("tenant_id");
 
--- CombinationRecord（源框架导入）
+-- 拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联
 CREATE TABLE "promotion_combination_record" (
     "id" TEXT NOT NULL,
     "activity_id" BIGINT,
@@ -429,7 +429,7 @@ CREATE TABLE "promotion_combination_record" (
 );
 CREATE INDEX "promotion_combination_record_tenant_id_idx" ON "promotion_combination_record"("tenant_id");
 
--- Coupon（源框架导入）
+-- 优惠劵
 CREATE TABLE "promotion_coupon" (
     "id" TEXT NOT NULL,
     "template_id" BIGINT,
@@ -458,7 +458,7 @@ CREATE TABLE "promotion_coupon" (
 );
 CREATE INDEX "promotion_coupon_tenant_id_idx" ON "promotion_coupon"("tenant_id");
 
--- CouponTemplate（源框架导入）
+-- 优惠劵模板 DO当用户领取时，会生成 优惠劵
 CREATE TABLE "promotion_coupon_template" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -491,7 +491,7 @@ CREATE TABLE "promotion_coupon_template" (
 );
 CREATE INDEX "promotion_coupon_template_tenant_id_idx" ON "promotion_coupon_template"("tenant_id");
 
--- DiscountActivity（源框架导入）
+-- 限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一个活动；
 CREATE TABLE "promotion_discount_activity" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -509,7 +509,7 @@ CREATE TABLE "promotion_discount_activity" (
 );
 CREATE INDEX "promotion_discount_activity_tenant_id_idx" ON "promotion_discount_activity"("tenant_id");
 
--- DiscountProduct（源框架导入）
+-- 限时折扣商品
 CREATE TABLE "promotion_discount_product" (
     "id" TEXT NOT NULL,
     "activity_id" BIGINT,
@@ -532,7 +532,7 @@ CREATE TABLE "promotion_discount_product" (
 );
 CREATE INDEX "promotion_discount_product_tenant_id_idx" ON "promotion_discount_product"("tenant_id");
 
--- DiyPage（源框架导入）
+-- 装修页面
 CREATE TABLE "promotion_diy_page" (
     "id" TEXT NOT NULL,
     "template_id" BIGINT,
@@ -550,7 +550,7 @@ CREATE TABLE "promotion_diy_page" (
 );
 CREATE INDEX "promotion_diy_page_tenant_id_idx" ON "promotion_diy_page"("tenant_id");
 
--- DiyTemplate（源框架导入）
+-- 装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. 如果需要使用某个模版，则将 设置为 true，表示已使用，有且仅有一个
 CREATE TABLE "promotion_diy_template" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -569,7 +569,7 @@ CREATE TABLE "promotion_diy_template" (
 );
 CREATE INDEX "promotion_diy_template_tenant_id_idx" ON "promotion_diy_template"("tenant_id");
 
--- KeFuConversation（源框架导入）
+-- 客服会话
 CREATE TABLE "promotion_kefu_conversation" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
@@ -590,7 +590,7 @@ CREATE TABLE "promotion_kefu_conversation" (
 );
 CREATE INDEX "promotion_kefu_conversation_tenant_id_idx" ON "promotion_kefu_conversation"("tenant_id");
 
--- KeFuMessage（源框架导入）
+-- 客服消息
 CREATE TABLE "promotion_kefu_message" (
     "id" TEXT NOT NULL,
     "conversation_id" BIGINT,
@@ -611,7 +611,7 @@ CREATE TABLE "promotion_kefu_message" (
 );
 CREATE INDEX "promotion_kefu_message_tenant_id_idx" ON "promotion_kefu_message"("tenant_id");
 
--- PointActivity（源框架导入）
+-- 积分商城活动
 CREATE TABLE "promotion_point_activity" (
     "id" TEXT NOT NULL,
     "spu_id" BIGINT,
@@ -630,7 +630,7 @@ CREATE TABLE "promotion_point_activity" (
 );
 CREATE INDEX "promotion_point_activity_tenant_id_idx" ON "promotion_point_activity"("tenant_id");
 
--- PointProduct（源框架导入）
+-- 积分商城商品
 CREATE TABLE "promotion_point_product" (
     "id" TEXT NOT NULL,
     "activity_id" BIGINT,
@@ -651,7 +651,7 @@ CREATE TABLE "promotion_point_product" (
 );
 CREATE INDEX "promotion_point_product_tenant_id_idx" ON "promotion_point_product"("tenant_id");
 
--- RewardActivity（源框架导入）
+-- 满减送活动
 CREATE TABLE "promotion_reward_activity" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -678,7 +678,7 @@ CREATE TABLE "promotion_reward_activity" (
 );
 CREATE INDEX "promotion_reward_activity_tenant_id_idx" ON "promotion_reward_activity"("tenant_id");
 
--- SeckillActivity（源框架导入）
+-- 秒杀活动
 CREATE TABLE "promotion_seckill_activity" (
     "id" TEXT NOT NULL,
     "spu_id" BIGINT,
@@ -703,7 +703,7 @@ CREATE TABLE "promotion_seckill_activity" (
 );
 CREATE INDEX "promotion_seckill_activity_tenant_id_idx" ON "promotion_seckill_activity"("tenant_id");
 
--- SeckillConfig（源框架导入）
+-- 秒杀时段
 CREATE TABLE "promotion_seckill_config" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -721,7 +721,7 @@ CREATE TABLE "promotion_seckill_config" (
 );
 CREATE INDEX "promotion_seckill_config_tenant_id_idx" ON "promotion_seckill_config"("tenant_id");
 
--- SeckillProduct（源框架导入）
+-- 秒杀参与商品
 CREATE TABLE "promotion_seckill_product" (
     "id" TEXT NOT NULL,
     "activity_id" BIGINT,
@@ -743,7 +743,7 @@ CREATE TABLE "promotion_seckill_product" (
 );
 CREATE INDEX "promotion_seckill_product_tenant_id_idx" ON "promotion_seckill_product"("tenant_id");
 
--- AfterSale（源框架导入）
+-- 售后订单，用于处理 交易订单的退款退货流程
 CREATE TABLE "trade_after_sale" (
     "id" TEXT NOT NULL,
     "no" VARCHAR(255),
@@ -784,7 +784,7 @@ CREATE TABLE "trade_after_sale" (
 );
 CREATE INDEX "trade_after_sale_tenant_id_idx" ON "trade_after_sale"("tenant_id");
 
--- AfterSaleLog（源框架导入）
+-- 交易售后日志
 CREATE TABLE "trade_after_sale_log" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
@@ -804,7 +804,7 @@ CREATE TABLE "trade_after_sale_log" (
 );
 CREATE INDEX "trade_after_sale_log_tenant_id_idx" ON "trade_after_sale_log"("tenant_id");
 
--- BrokerageRecord（源框架导入）
+-- 佣金记录
 CREATE TABLE "trade_brokerage_record" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
@@ -829,7 +829,7 @@ CREATE TABLE "trade_brokerage_record" (
 );
 CREATE INDEX "trade_brokerage_record_tenant_id_idx" ON "trade_brokerage_record"("tenant_id");
 
--- BrokerageUser（源框架导入）
+-- 分销用户
 CREATE TABLE "trade_brokerage_user" (
     "id" TEXT NOT NULL,
     "bind_user_id" BIGINT,
@@ -848,7 +848,7 @@ CREATE TABLE "trade_brokerage_user" (
 );
 CREATE INDEX "trade_brokerage_user_tenant_id_idx" ON "trade_brokerage_user"("tenant_id");
 
--- BrokerageWithdraw（源框架导入）
+-- 佣金提现
 CREATE TABLE "trade_brokerage_withdraw" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
@@ -879,7 +879,7 @@ CREATE TABLE "trade_brokerage_withdraw" (
 );
 CREATE INDEX "trade_brokerage_withdraw_tenant_id_idx" ON "trade_brokerage_withdraw"("tenant_id");
 
--- Cart（源框架导入）
+-- 购物车的商品信息 DO每个商品，对应一条记录，通过 和 关联
 CREATE TABLE "trade_cart" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
@@ -897,7 +897,7 @@ CREATE TABLE "trade_cart" (
 );
 CREATE INDEX "trade_cart_tenant_id_idx" ON "trade_cart"("tenant_id");
 
--- TradeConfig（源框架导入）
+-- 交易中心配置
 CREATE TABLE "trade_config" (
     "id" TEXT NOT NULL,
     "after_sale_refund_reasons" TEXT,
@@ -925,7 +925,7 @@ CREATE TABLE "trade_config" (
 );
 CREATE INDEX "trade_config_tenant_id_idx" ON "trade_config"("tenant_id");
 
--- DeliveryExpress（源框架导入）
+-- 快递公司
 CREATE TABLE "trade_delivery_express" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
@@ -943,7 +943,7 @@ CREATE TABLE "trade_delivery_express" (
 );
 CREATE INDEX "trade_delivery_express_tenant_id_idx" ON "trade_delivery_express"("tenant_id");
 
--- DeliveryExpressTemplate（源框架导入）
+-- 快递运费模板
 CREATE TABLE "trade_delivery_express_template" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -959,7 +959,7 @@ CREATE TABLE "trade_delivery_express_template" (
 );
 CREATE INDEX "trade_delivery_express_template_tenant_id_idx" ON "trade_delivery_express_template"("tenant_id");
 
--- DeliveryExpressTemplateCharge（源框架导入）
+-- 快递运费模板计费配置
 CREATE TABLE "trade_delivery_express_template_charge" (
     "id" TEXT NOT NULL,
     "template_id" BIGINT,
@@ -979,7 +979,7 @@ CREATE TABLE "trade_delivery_express_template_charge" (
 );
 CREATE INDEX "trade_delivery_express_template_charge_tenant_id_idx" ON "trade_delivery_express_template_charge"("tenant_id");
 
--- DeliveryExpressTemplateFree（源框架导入）
+-- 快递运费模板包邮配置
 CREATE TABLE "trade_delivery_express_template_free" (
     "id" TEXT NOT NULL,
     "template_id" BIGINT,
@@ -996,7 +996,7 @@ CREATE TABLE "trade_delivery_express_template_free" (
 );
 CREATE INDEX "trade_delivery_express_template_free_tenant_id_idx" ON "trade_delivery_express_template_free"("tenant_id");
 
--- DeliveryPickUpStore（源框架导入）
+-- 自提门店
 CREATE TABLE "trade_delivery_pick_up_store" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -1021,7 +1021,7 @@ CREATE TABLE "trade_delivery_pick_up_store" (
 );
 CREATE INDEX "trade_delivery_pick_up_store_tenant_id_idx" ON "trade_delivery_pick_up_store"("tenant_id");
 
--- TradeOrder（源框架导入）
+-- 交易订单
 CREATE TABLE "trade_order" (
     "id" TEXT NOT NULL,
     "no" VARCHAR(255),
@@ -1086,7 +1086,7 @@ CREATE TABLE "trade_order" (
 );
 CREATE INDEX "trade_order_tenant_id_idx" ON "trade_order"("tenant_id");
 
--- TradeOrderItem（源框架导入）
+-- 交易订单项
 CREATE TABLE "trade_order_item" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
@@ -1125,7 +1125,7 @@ CREATE TABLE "trade_order_item" (
 );
 CREATE INDEX "trade_order_item_tenant_id_idx" ON "trade_order_item"("tenant_id");
 
--- TradeOrderLog（源框架导入）
+-- 订单日志
 CREATE TABLE "trade_order_log" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
@@ -1145,7 +1145,7 @@ CREATE TABLE "trade_order_log" (
 );
 CREATE INDEX "trade_order_log_tenant_id_idx" ON "trade_order_log"("tenant_id");
 
--- TradeStatistics（源框架导入）
+-- 交易统计 DO以天为维度，统计全部的数据
 CREATE TABLE "trade_statistics" (
     "id" TEXT NOT NULL,
     "time" TIMESTAMP(3),

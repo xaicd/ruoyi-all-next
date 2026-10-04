@@ -53,24 +53,36 @@ export function MesWmSnForm({ open, initialData, onClose, onSuccess }: MesWmSnFo
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-wm-sn-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES SN 码" : "新增MES SN 码"}
+        data-testid="mes-wm-sn-form"
+        data-agent-scope="mes-wm-sn:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesWmSn（源框架导入）" : "新增MesWmSn（源框架导入）"}
+            {isEdit ? "编辑MES SN 码" : "新增MES SN 码"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-wm-sn-form-close" data-agent-target="mes-wm-sn:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-wm-sn-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">批次 UUID（用于标记同一批次生成的 SN 码）</label>
+          <label htmlFor="mes-wm-sn-uuid" className="block text-xs text-slate-600 mb-1">批次 UUID（用于标记同一批次生成的 SN 码）</label>
           <input
             type="text"
+            id="mes-wm-sn-uuid"
+            data-testid="field-uuid"
+            data-agent-target="mes-wm-sn:field:uuid"
+            data-agent-state={formData.uuid ? "filled" : "empty"}
+            aria-label="批次 UUID（用于标记同一批次生成的 SN 码）"
             value={formData.uuid ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, uuid: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -80,9 +92,14 @@ export function MesWmSnForm({ open, initialData, onClose, onSuccess }: MesWmSnFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">SN 码（唯一）</label>
+          <label htmlFor="mes-wm-sn-code" className="block text-xs text-slate-600 mb-1">SN 码（唯一）</label>
           <input
             type="text"
+            id="mes-wm-sn-code"
+            data-testid="field-code"
+            data-agent-target="mes-wm-sn:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="SN 码（唯一）"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -92,9 +109,14 @@ export function MesWmSnForm({ open, initialData, onClose, onSuccess }: MesWmSnFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">物料编号</label>
+          <label htmlFor="mes-wm-sn-item_id" className="block text-xs text-slate-600 mb-1">物料编号</label>
           <input
             type="number"
+            id="mes-wm-sn-item_id"
+            data-testid="field-item_id"
+            data-agent-target="mes-wm-sn:field:item_id"
+            data-agent-state={formData.item_id == null || formData.item_id === "" ? "empty" : "filled"}
+            aria-label="物料编号"
             value={formData.item_id != null ? String(formData.item_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, item_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -104,9 +126,14 @@ export function MesWmSnForm({ open, initialData, onClose, onSuccess }: MesWmSnFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">批次号</label>
+          <label htmlFor="mes-wm-sn-batch_code" className="block text-xs text-slate-600 mb-1">批次号</label>
           <input
             type="text"
+            id="mes-wm-sn-batch_code"
+            data-testid="field-batch_code"
+            data-agent-target="mes-wm-sn:field:batch_code"
+            data-agent-state={formData.batch_code ? "filled" : "empty"}
+            aria-label="批次号"
             value={formData.batch_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, batch_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -116,9 +143,14 @@ export function MesWmSnForm({ open, initialData, onClose, onSuccess }: MesWmSnFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生产工单编号</label>
+          <label htmlFor="mes-wm-sn-work_order_id" className="block text-xs text-slate-600 mb-1">生产工单编号</label>
           <input
             type="number"
+            id="mes-wm-sn-work_order_id"
+            data-testid="field-work_order_id"
+            data-agent-target="mes-wm-sn:field:work_order_id"
+            data-agent-state={formData.work_order_id == null || formData.work_order_id === "" ? "empty" : "filled"}
+            aria-label="生产工单编号"
             value={formData.work_order_id != null ? String(formData.work_order_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, work_order_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -132,6 +164,8 @@ export function MesWmSnForm({ open, initialData, onClose, onSuccess }: MesWmSnFo
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-wm-sn-form-cancel"
+              data-agent-target="mes-wm-sn:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -139,6 +173,9 @@ export function MesWmSnForm({ open, initialData, onClose, onSuccess }: MesWmSnFo
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-wm-sn-form-submit"
+              data-agent-target="mes-wm-sn:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

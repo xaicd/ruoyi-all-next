@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for IotDeviceModbusPoint（源框架导入） (IotDeviceModbusPoint)
+-- Auto-generated RBAC & Menu Migration for IoT 设备 Modbus 点位配置 (IotDeviceModbusPoint)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-iot-device-modbus-point',
   'iot-dir',
-  'IotDeviceModbusPoint（源框架导入）管理',
+  'IoT 设备 Modbus 点位配置管理',
   '/admin/iot/iot-device-modbus-point',
   'iot/iot-device-modbus-point/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-iot-device-modbus-point-query',  'menu-iot-device-modbus-point', '查询IotDeviceModbusPoint（源框架导入）', 'BUTTON', 'ACTIVE', 'iot:iot_device_modbus_point:query',  1, NOW(), NOW()),
-('menu-iot-device-modbus-point-create', 'menu-iot-device-modbus-point', '新增IotDeviceModbusPoint（源框架导入）', 'BUTTON', 'ACTIVE', 'iot:iot_device_modbus_point:create', 2, NOW(), NOW()),
-('menu-iot-device-modbus-point-update', 'menu-iot-device-modbus-point', '修改IotDeviceModbusPoint（源框架导入）', 'BUTTON', 'ACTIVE', 'iot:iot_device_modbus_point:update', 3, NOW(), NOW()),
-('menu-iot-device-modbus-point-delete', 'menu-iot-device-modbus-point', '删除IotDeviceModbusPoint（源框架导入）', 'BUTTON', 'ACTIVE', 'iot:iot_device_modbus_point:delete', 4, NOW(), NOW())
+('menu-iot-device-modbus-point-query',  'menu-iot-device-modbus-point', '查询IoT 设备 Modbus 点位配置', 'BUTTON', 'ACTIVE', 'iot:iot_device_modbus_point:query',  1, NOW(), NOW()),
+('menu-iot-device-modbus-point-create', 'menu-iot-device-modbus-point', '新增IoT 设备 Modbus 点位配置', 'BUTTON', 'ACTIVE', 'iot:iot_device_modbus_point:create', 2, NOW(), NOW()),
+('menu-iot-device-modbus-point-update', 'menu-iot-device-modbus-point', '修改IoT 设备 Modbus 点位配置', 'BUTTON', 'ACTIVE', 'iot:iot_device_modbus_point:update', 3, NOW(), NOW()),
+('menu-iot-device-modbus-point-delete', 'menu-iot-device-modbus-point', '删除IoT 设备 Modbus 点位配置', 'BUTTON', 'ACTIVE', 'iot:iot_device_modbus_point:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

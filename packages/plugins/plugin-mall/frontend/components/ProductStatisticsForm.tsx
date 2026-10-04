@@ -60,24 +60,36 @@ export function ProductStatisticsForm({ open, initialData, onClose, onSuccess }:
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="product-statistics-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑商品统计" : "新增商品统计"}
+        data-testid="product-statistics-form"
+        data-agent-scope="product-statistics:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑ProductStatistics（源框架导入）" : "新增ProductStatistics（源框架导入）"}
+            {isEdit ? "编辑商品统计" : "新增商品统计"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="product-statistics-form-close" data-agent-target="product-statistics:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="product-statistics-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">统计日期</label>
+          <label htmlFor="product-statistics-time" className="block text-xs text-slate-600 mb-1">统计日期</label>
           <input
             type="text"
+            id="product-statistics-time"
+            data-testid="field-time"
+            data-agent-target="product-statistics:field:time"
+            data-agent-state={formData.time ? "filled" : "empty"}
+            aria-label="统计日期"
             value={formData.time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -87,9 +99,14 @@ export function ProductStatisticsForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品 SPU 编号</label>
+          <label htmlFor="product-statistics-spu_id" className="block text-xs text-slate-600 mb-1">商品 SPU 编号</label>
           <input
             type="number"
+            id="product-statistics-spu_id"
+            data-testid="field-spu_id"
+            data-agent-target="product-statistics:field:spu_id"
+            data-agent-state={formData.spu_id == null || formData.spu_id === "" ? "empty" : "filled"}
+            aria-label="商品 SPU 编号"
             value={formData.spu_id != null ? String(formData.spu_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, spu_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -99,9 +116,14 @@ export function ProductStatisticsForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">浏览量</label>
+          <label htmlFor="product-statistics-browse_count" className="block text-xs text-slate-600 mb-1">浏览量</label>
           <input
             type="number"
+            id="product-statistics-browse_count"
+            data-testid="field-browse_count"
+            data-agent-target="product-statistics:field:browse_count"
+            data-agent-state={formData.browse_count == null || formData.browse_count === "" ? "empty" : "filled"}
+            aria-label="浏览量"
             value={formData.browse_count != null ? String(formData.browse_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, browse_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -111,9 +133,14 @@ export function ProductStatisticsForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">访客量</label>
+          <label htmlFor="product-statistics-browse_user_count" className="block text-xs text-slate-600 mb-1">访客量</label>
           <input
             type="number"
+            id="product-statistics-browse_user_count"
+            data-testid="field-browse_user_count"
+            data-agent-target="product-statistics:field:browse_user_count"
+            data-agent-state={formData.browse_user_count == null || formData.browse_user_count === "" ? "empty" : "filled"}
+            aria-label="访客量"
             value={formData.browse_user_count != null ? String(formData.browse_user_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, browse_user_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -123,9 +150,14 @@ export function ProductStatisticsForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">收藏数量</label>
+          <label htmlFor="product-statistics-favorite_count" className="block text-xs text-slate-600 mb-1">收藏数量</label>
           <input
             type="number"
+            id="product-statistics-favorite_count"
+            data-testid="field-favorite_count"
+            data-agent-target="product-statistics:field:favorite_count"
+            data-agent-state={formData.favorite_count == null || formData.favorite_count === "" ? "empty" : "filled"}
+            aria-label="收藏数量"
             value={formData.favorite_count != null ? String(formData.favorite_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, favorite_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -135,9 +167,14 @@ export function ProductStatisticsForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">加购数量</label>
+          <label htmlFor="product-statistics-cart_count" className="block text-xs text-slate-600 mb-1">加购数量</label>
           <input
             type="number"
+            id="product-statistics-cart_count"
+            data-testid="field-cart_count"
+            data-agent-target="product-statistics:field:cart_count"
+            data-agent-state={formData.cart_count == null || formData.cart_count === "" ? "empty" : "filled"}
+            aria-label="加购数量"
             value={formData.cart_count != null ? String(formData.cart_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, cart_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -147,9 +184,14 @@ export function ProductStatisticsForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">下单件数</label>
+          <label htmlFor="product-statistics-order_count" className="block text-xs text-slate-600 mb-1">下单件数</label>
           <input
             type="number"
+            id="product-statistics-order_count"
+            data-testid="field-order_count"
+            data-agent-target="product-statistics:field:order_count"
+            data-agent-state={formData.order_count == null || formData.order_count === "" ? "empty" : "filled"}
+            aria-label="下单件数"
             value={formData.order_count != null ? String(formData.order_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, order_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -159,9 +201,14 @@ export function ProductStatisticsForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">支付件数</label>
+          <label htmlFor="product-statistics-order_pay_count" className="block text-xs text-slate-600 mb-1">支付件数</label>
           <input
             type="number"
+            id="product-statistics-order_pay_count"
+            data-testid="field-order_pay_count"
+            data-agent-target="product-statistics:field:order_pay_count"
+            data-agent-state={formData.order_pay_count == null || formData.order_pay_count === "" ? "empty" : "filled"}
+            aria-label="支付件数"
             value={formData.order_pay_count != null ? String(formData.order_pay_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, order_pay_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,9 +218,14 @@ export function ProductStatisticsForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">支付金额，单位：分</label>
+          <label htmlFor="product-statistics-order_pay_price" className="block text-xs text-slate-600 mb-1">支付金额，单位：分</label>
           <input
             type="number"
+            id="product-statistics-order_pay_price"
+            data-testid="field-order_pay_price"
+            data-agent-target="product-statistics:field:order_pay_price"
+            data-agent-state={formData.order_pay_price == null || formData.order_pay_price === "" ? "empty" : "filled"}
+            aria-label="支付金额，单位：分"
             value={formData.order_pay_price != null ? String(formData.order_pay_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, order_pay_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -183,9 +235,14 @@ export function ProductStatisticsForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">退款件数</label>
+          <label htmlFor="product-statistics-after_sale_count" className="block text-xs text-slate-600 mb-1">退款件数</label>
           <input
             type="number"
+            id="product-statistics-after_sale_count"
+            data-testid="field-after_sale_count"
+            data-agent-target="product-statistics:field:after_sale_count"
+            data-agent-state={formData.after_sale_count == null || formData.after_sale_count === "" ? "empty" : "filled"}
+            aria-label="退款件数"
             value={formData.after_sale_count != null ? String(formData.after_sale_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, after_sale_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -195,9 +252,14 @@ export function ProductStatisticsForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">退款金额，单位：分</label>
+          <label htmlFor="product-statistics-after_sale_refund_price" className="block text-xs text-slate-600 mb-1">退款金额，单位：分</label>
           <input
             type="number"
+            id="product-statistics-after_sale_refund_price"
+            data-testid="field-after_sale_refund_price"
+            data-agent-target="product-statistics:field:after_sale_refund_price"
+            data-agent-state={formData.after_sale_refund_price == null || formData.after_sale_refund_price === "" ? "empty" : "filled"}
+            aria-label="退款金额，单位：分"
             value={formData.after_sale_refund_price != null ? String(formData.after_sale_refund_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, after_sale_refund_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -207,9 +269,14 @@ export function ProductStatisticsForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">访客支付转化率（百分比）</label>
+          <label htmlFor="product-statistics-browse_convert_percent" className="block text-xs text-slate-600 mb-1">访客支付转化率（百分比）</label>
           <input
             type="number"
+            id="product-statistics-browse_convert_percent"
+            data-testid="field-browse_convert_percent"
+            data-agent-target="product-statistics:field:browse_convert_percent"
+            data-agent-state={formData.browse_convert_percent == null || formData.browse_convert_percent === "" ? "empty" : "filled"}
+            aria-label="访客支付转化率（百分比）"
             value={formData.browse_convert_percent != null ? String(formData.browse_convert_percent) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, browse_convert_percent: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -223,6 +290,8 @@ export function ProductStatisticsForm({ open, initialData, onClose, onSuccess }:
             <button
               type="button"
               onClick={onClose}
+              data-testid="product-statistics-form-cancel"
+              data-agent-target="product-statistics:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -230,6 +299,9 @@ export function ProductStatisticsForm({ open, initialData, onClose, onSuccess }:
             <button
               type="submit"
               disabled={loading}
+              data-testid="product-statistics-form-submit"
+              data-agent-target="product-statistics:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

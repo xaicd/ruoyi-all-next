@@ -1,0 +1,249 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mp",
+  "entity": "MpAccount",
+  "kebab": "mp-account",
+  "businessName": "公众号账号",
+  "permissionPrefix": "mp:mp_account",
+  "page": {
+    "route": "/admin/mp/mp-account",
+    "title": "公众号账号管理",
+    "titleSelector": "[data-testid=\"mp-account-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mp/api",
+    "bffMount": "/api/v1/admin/mp",
+    "resource": "mp-account",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mp-account",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mp-account/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mp-account"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mp-account/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mp-account/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mp-account-title\"]",
+    "refresh": "[data-testid=\"mp-account-refresh\"]",
+    "createButton": "[data-testid=\"mp-account-create\"]",
+    "searchForm": "[data-testid=\"mp-account-search\"]",
+    "searchSubmit": "[data-testid=\"mp-account-search-submit\"]",
+    "searchReset": "[data-testid=\"mp-account-search-reset\"]",
+    "total": "[data-testid=\"mp-account-total\"]",
+    "table": "[data-testid=\"mp-account-table\"]",
+    "row": "[data-testid=\"mp-account-row\"]",
+    "editButton": "[data-testid=\"mp-account-edit\"]",
+    "deleteButton": "[data-testid=\"mp-account-delete\"]",
+    "form": "[data-testid=\"mp-account-form\"]",
+    "formError": "[data-testid=\"mp-account-form-error\"]",
+    "formSubmit": "[data-testid=\"mp-account-form-submit\"]",
+    "formCancel": "[data-testid=\"mp-account-form-cancel\"]",
+    "formClose": "[data-testid=\"mp-account-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "公众号账号列表",
+    "dialogLabel": {
+      "create": "新增公众号账号",
+      "edit": "编辑公众号账号"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "公众号名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "account",
+        "label": "公众号账号",
+        "type": "string",
+        "required": false,
+        "testId": "field-account",
+        "selector": "[data-testid=\"field-account\"]"
+      },
+      {
+        "name": "app_id",
+        "label": "公众号 appid",
+        "type": "string",
+        "required": false,
+        "testId": "field-app_id",
+        "selector": "[data-testid=\"field-app_id\"]"
+      },
+      {
+        "name": "app_secret",
+        "label": "公众号密钥",
+        "type": "string",
+        "required": false,
+        "testId": "field-app_secret",
+        "selector": "[data-testid=\"field-app_secret\"]"
+      },
+      {
+        "name": "token",
+        "label": "公众号token",
+        "type": "string",
+        "required": false,
+        "testId": "field-token",
+        "selector": "[data-testid=\"field-token\"]"
+      },
+      {
+        "name": "aes_key",
+        "label": "消息加解密密钥",
+        "type": "string",
+        "required": false,
+        "testId": "field-aes_key",
+        "selector": "[data-testid=\"field-aes_key\"]"
+      },
+      {
+        "name": "qr_code_url",
+        "label": "二维码图片 URL",
+        "type": "string",
+        "required": false,
+        "testId": "field-qr_code_url",
+        "selector": "[data-testid=\"field-qr_code_url\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mp-account",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mp-account\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mp-account-form-overlay\"]",
+      "dialog": "[data-testid=\"mp-account-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mp-account:search",
+      "reset": "mp-account:reset",
+      "refresh": "mp-account:refresh",
+      "create": "mp-account:create",
+      "edit": "mp-account:edit",
+      "delete": "mp-account:delete",
+      "submit": "mp-account:submit",
+      "cancel": "mp-account:cancel",
+      "close": "mp-account:close",
+      "row": "mp-account:row",
+      "pagination": "mp-account:pagination",
+      "fields": {
+        "name": "mp-account:field:name",
+        "account": "mp-account:field:account",
+        "app_id": "mp-account:field:app_id",
+        "app_secret": "mp-account:field:app_secret",
+        "token": "mp-account:field:token",
+        "aes_key": "mp-account:field:aes_key",
+        "qr_code_url": "mp-account:field:qr_code_url",
+        "remark": "mp-account:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mp.mp-account",
+      "examples": [
+        "mp.mp-account__List__Refresh",
+        "mp.mp-account__ListItem__Open",
+        "mp.mp-account__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

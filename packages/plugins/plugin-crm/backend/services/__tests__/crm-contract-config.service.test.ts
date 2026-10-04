@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { CrmContractConfigService } from "../crm-contract-config.service"
 
 describe("CrmContractConfigService", () => {
-  it("should create and query CrmContractConfig（源框架导入）", async () => {
+  it("should create and query 编号", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CrmContractConfigService.create({
         notify_enabled: true,
@@ -21,7 +21,7 @@ describe("CrmContractConfigService", () => {
   
       const updated = await CrmContractConfigService.update(created.id, {
         id: created.id,
-        notify_enabled: "更新CrmContractConfig（源框架导入）",
+        notify_enabled: "更新编号",
       } as any)
       expect(updated).toBeDefined()
   

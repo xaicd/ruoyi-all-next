@@ -1,0 +1,213 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "im",
+  "entity": "ImFacePack",
+  "kebab": "im-face-pack",
+  "businessName": "IM 表情包 DO（运营配置的系统表情包元数据）",
+  "permissionPrefix": "im:im_face_pack",
+  "page": {
+    "route": "/admin/im/im-face-pack",
+    "title": "IM 表情包 DO（运营配置的系统表情包元数据）管理",
+    "titleSelector": "[data-testid=\"im-face-pack-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.im/api",
+    "bffMount": "/api/v1/admin/im",
+    "resource": "im-face-pack",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/im-face-pack",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/im-face-pack/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/im-face-pack"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/im-face-pack/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/im-face-pack/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"im-face-pack-title\"]",
+    "refresh": "[data-testid=\"im-face-pack-refresh\"]",
+    "createButton": "[data-testid=\"im-face-pack-create\"]",
+    "searchForm": "[data-testid=\"im-face-pack-search\"]",
+    "searchSubmit": "[data-testid=\"im-face-pack-search-submit\"]",
+    "searchReset": "[data-testid=\"im-face-pack-search-reset\"]",
+    "total": "[data-testid=\"im-face-pack-total\"]",
+    "table": "[data-testid=\"im-face-pack-table\"]",
+    "row": "[data-testid=\"im-face-pack-row\"]",
+    "editButton": "[data-testid=\"im-face-pack-edit\"]",
+    "deleteButton": "[data-testid=\"im-face-pack-delete\"]",
+    "form": "[data-testid=\"im-face-pack-form\"]",
+    "formError": "[data-testid=\"im-face-pack-form-error\"]",
+    "formSubmit": "[data-testid=\"im-face-pack-form-submit\"]",
+    "formCancel": "[data-testid=\"im-face-pack-form-cancel\"]",
+    "formClose": "[data-testid=\"im-face-pack-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IM 表情包 DO（运营配置的系统表情包元数据）列表",
+    "dialogLabel": {
+      "create": "新增IM 表情包 DO（运营配置的系统表情包元数据）",
+      "edit": "编辑IM 表情包 DO（运营配置的系统表情包元数据）"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "表情包名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "icon",
+        "label": "表情包图标",
+        "type": "string",
+        "required": false,
+        "testId": "field-icon",
+        "selector": "[data-testid=\"field-icon\"]"
+      },
+      {
+        "name": "sort",
+        "label": "排序",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "im-face-pack",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"im-face-pack\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"im-face-pack-form-overlay\"]",
+      "dialog": "[data-testid=\"im-face-pack-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "im-face-pack:search",
+      "reset": "im-face-pack:reset",
+      "refresh": "im-face-pack:refresh",
+      "create": "im-face-pack:create",
+      "edit": "im-face-pack:edit",
+      "delete": "im-face-pack:delete",
+      "submit": "im-face-pack:submit",
+      "cancel": "im-face-pack:cancel",
+      "close": "im-face-pack:close",
+      "row": "im-face-pack:row",
+      "pagination": "im-face-pack:pagination",
+      "fields": {
+        "name": "im-face-pack:field:name",
+        "icon": "im-face-pack:field:icon",
+        "sort": "im-face-pack:field:sort",
+        "status": "im-face-pack:field:status"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "im.im-face-pack",
+      "examples": [
+        "im.im-face-pack__List__Refresh",
+        "im.im-face-pack__ListItem__Open",
+        "im.im-face-pack__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

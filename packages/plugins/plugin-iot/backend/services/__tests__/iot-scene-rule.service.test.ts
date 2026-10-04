@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { IotSceneRuleService } from "../iot-scene-rule.service"
 
 describe("IotSceneRuleService", () => {
-  it("should create and query IotSceneRule（源框架导入）", async () => {
+  it("should create and query IoT 场景联动规则", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await IotSceneRuleService.create({
-        name: "测试IotSceneRule（源框架导入）",
+        name: "测试IoT 场景联动规则",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("IotSceneRuleService", () => {
   
       const updated = await IotSceneRuleService.update(created.id, {
         id: created.id,
-        name: "更新IotSceneRule（源框架导入）",
+        name: "更新IoT 场景联动规则",
       } as any)
       expect(updated).toBeDefined()
   

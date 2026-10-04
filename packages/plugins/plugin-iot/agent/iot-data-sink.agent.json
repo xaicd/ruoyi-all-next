@@ -1,0 +1,222 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "iot",
+  "entity": "IotDataSink",
+  "kebab": "iot-data-sink",
+  "businessName": "IoT 数据流转目的",
+  "permissionPrefix": "iot:iot_data_sink",
+  "page": {
+    "route": "/admin/iot/iot-data-sink",
+    "title": "IoT 数据流转目的管理",
+    "titleSelector": "[data-testid=\"iot-data-sink-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.iot/api",
+    "bffMount": "/api/v1/admin/iot",
+    "resource": "iot-data-sink",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/iot-data-sink",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/iot-data-sink/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/iot-data-sink"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/iot-data-sink/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/iot-data-sink/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"iot-data-sink-title\"]",
+    "refresh": "[data-testid=\"iot-data-sink-refresh\"]",
+    "createButton": "[data-testid=\"iot-data-sink-create\"]",
+    "searchForm": "[data-testid=\"iot-data-sink-search\"]",
+    "searchSubmit": "[data-testid=\"iot-data-sink-search-submit\"]",
+    "searchReset": "[data-testid=\"iot-data-sink-search-reset\"]",
+    "total": "[data-testid=\"iot-data-sink-total\"]",
+    "table": "[data-testid=\"iot-data-sink-table\"]",
+    "row": "[data-testid=\"iot-data-sink-row\"]",
+    "editButton": "[data-testid=\"iot-data-sink-edit\"]",
+    "deleteButton": "[data-testid=\"iot-data-sink-delete\"]",
+    "form": "[data-testid=\"iot-data-sink-form\"]",
+    "formError": "[data-testid=\"iot-data-sink-form-error\"]",
+    "formSubmit": "[data-testid=\"iot-data-sink-form-submit\"]",
+    "formCancel": "[data-testid=\"iot-data-sink-form-cancel\"]",
+    "formClose": "[data-testid=\"iot-data-sink-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IoT 数据流转目的列表",
+    "dialogLabel": {
+      "create": "新增IoT 数据流转目的",
+      "edit": "编辑IoT 数据流转目的"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "数据流转目的名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "description",
+        "label": "数据流转目的描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      },
+      {
+        "name": "status",
+        "label": "数据流转目的状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "type",
+        "label": "数据流转目的类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "config",
+        "label": "数据流转目的配置",
+        "type": "string",
+        "required": false,
+        "testId": "field-config",
+        "selector": "[data-testid=\"field-config\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "iot-data-sink",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"iot-data-sink\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"iot-data-sink-form-overlay\"]",
+      "dialog": "[data-testid=\"iot-data-sink-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "iot-data-sink:search",
+      "reset": "iot-data-sink:reset",
+      "refresh": "iot-data-sink:refresh",
+      "create": "iot-data-sink:create",
+      "edit": "iot-data-sink:edit",
+      "delete": "iot-data-sink:delete",
+      "submit": "iot-data-sink:submit",
+      "cancel": "iot-data-sink:cancel",
+      "close": "iot-data-sink:close",
+      "row": "iot-data-sink:row",
+      "pagination": "iot-data-sink:pagination",
+      "fields": {
+        "name": "iot-data-sink:field:name",
+        "description": "iot-data-sink:field:description",
+        "status": "iot-data-sink:field:status",
+        "type": "iot-data-sink:field:type",
+        "config": "iot-data-sink:field:config"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "iot.iot-data-sink",
+      "examples": [
+        "iot.iot-data-sink__List__Refresh",
+        "iot.iot-data-sink__ListItem__Open",
+        "iot.iot-data-sink__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

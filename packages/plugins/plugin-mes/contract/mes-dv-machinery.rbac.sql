@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesDvMachinery（源框架导入） (MesDvMachinery)
+-- Auto-generated RBAC & Menu Migration for MES 设备台账 (MesDvMachinery)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-dv-machinery',
   'mes-dir',
-  'MesDvMachinery（源框架导入）管理',
+  'MES 设备台账管理',
   '/admin/mes/mes-dv-machinery',
   'mes/mes-dv-machinery/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-dv-machinery-query',  'menu-mes-dv-machinery', '查询MesDvMachinery（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_dv_machinery:query',  1, NOW(), NOW()),
-('menu-mes-dv-machinery-create', 'menu-mes-dv-machinery', '新增MesDvMachinery（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_dv_machinery:create', 2, NOW(), NOW()),
-('menu-mes-dv-machinery-update', 'menu-mes-dv-machinery', '修改MesDvMachinery（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_dv_machinery:update', 3, NOW(), NOW()),
-('menu-mes-dv-machinery-delete', 'menu-mes-dv-machinery', '删除MesDvMachinery（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_dv_machinery:delete', 4, NOW(), NOW())
+('menu-mes-dv-machinery-query',  'menu-mes-dv-machinery', '查询MES 设备台账', 'BUTTON', 'ACTIVE', 'mes:mes_dv_machinery:query',  1, NOW(), NOW()),
+('menu-mes-dv-machinery-create', 'menu-mes-dv-machinery', '新增MES 设备台账', 'BUTTON', 'ACTIVE', 'mes:mes_dv_machinery:create', 2, NOW(), NOW()),
+('menu-mes-dv-machinery-update', 'menu-mes-dv-machinery', '修改MES 设备台账', 'BUTTON', 'ACTIVE', 'mes:mes_dv_machinery:update', 3, NOW(), NOW()),
+('menu-mes-dv-machinery-delete', 'menu-mes-dv-machinery', '删除MES 设备台账', 'BUTTON', 'ACTIVE', 'mes:mes_dv_machinery:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

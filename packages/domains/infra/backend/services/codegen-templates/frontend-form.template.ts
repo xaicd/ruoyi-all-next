@@ -19,19 +19,28 @@ export function generateFormComponent(config: CodegenConfig): CodegenOutput {
       return `        <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="${c.name}"
+            id="${kebab}-${c.name}"
+            data-testid="field-${c.name}"
+            data-agent-target="${kebab}:field:${c.name}"
+            data-agent-state={formData.${c.name} ? "on" : "off"}
+            aria-label="${label}"
             checked={Boolean(formData.${c.name})}
             onChange={(e) => setFormData((prev) => ({ ...prev, ${c.name}: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="${c.name}" className="text-xs text-slate-700 font-medium">${label}</label>
+          <label htmlFor="${kebab}-${c.name}" className="text-xs text-slate-700 font-medium">${label}</label>
         </div>`
     }
     if (c.tsType === "number") {
       return `        <div>
-          <label className="block text-xs text-slate-600 mb-1">${label}${c.formValidation === "required" || !c.nullable ? " *" : ""}</label>
+          <label htmlFor="${kebab}-${c.name}" className="block text-xs text-slate-600 mb-1">${label}${c.formValidation === "required" || !c.nullable ? " *" : ""}</label>
           <input
             type="number"
+            id="${kebab}-${c.name}"
+            data-testid="field-${c.name}"
+            data-agent-target="${kebab}:field:${c.name}"
+            data-agent-state={formData.${c.name} == null || formData.${c.name} === "" ? "empty" : "filled"}
+            aria-label="${label}"
             value={formData.${c.name} != null ? String(formData.${c.name}) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, ${c.name}: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -41,9 +50,14 @@ export function generateFormComponent(config: CodegenConfig): CodegenOutput {
         </div>`
     }
     return `        <div>
-          <label className="block text-xs text-slate-600 mb-1">${label}${c.formValidation === "required" || !c.nullable ? " *" : ""}</label>
+          <label htmlFor="${kebab}-${c.name}" className="block text-xs text-slate-600 mb-1">${label}${c.formValidation === "required" || !c.nullable ? " *" : ""}</label>
           <input
             type="text"
+            id="${kebab}-${c.name}"
+            data-testid="field-${c.name}"
+            data-agent-target="${kebab}:field:${c.name}"
+            data-agent-state={formData.${c.name} ? "filled" : "empty"}
+            aria-label="${label}"
             value={formData.${c.name} ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, ${c.name}: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -110,19 +124,26 @@ ${initFields}
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="${kebab}-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑${businessName}" : "新增${businessName}"}
+        data-testid="${kebab}-form"
+        data-agent-scope="${kebab}:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
             {isEdit ? "编辑${businessName}" : "新增${businessName}"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="${kebab}-form-close" data-agent-target="${kebab}:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="${kebab}-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
 ${formFields}
           </div>
@@ -131,6 +152,8 @@ ${formFields}
             <button
               type="button"
               onClick={onClose}
+              data-testid="${kebab}-form-cancel"
+              data-agent-target="${kebab}:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -138,6 +161,9 @@ ${formFields}
             <button
               type="submit"
               disabled={loading}
+              data-testid="${kebab}-form-submit"
+              data-agent-target="${kebab}:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

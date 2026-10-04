@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesWmArrivalNoticeLineService } from "../mes-wm-arrival-notice-line.service"
 
 describe("MesWmArrivalNoticeLineService", () => {
-  it("should create and query MesWmArrivalNoticeLine（源框架导入）", async () => {
+  it("should create and query MES 到货通知单行", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmArrivalNoticeLineService.create({
         notice_id: 1,
@@ -21,7 +21,7 @@ describe("MesWmArrivalNoticeLineService", () => {
   
       const updated = await MesWmArrivalNoticeLineService.update(created.id, {
         id: created.id,
-        notice_id: "更新MesWmArrivalNoticeLine（源框架导入）",
+        notice_id: "更新MES 到货通知单行",
       } as any)
       expect(updated).toBeDefined()
   

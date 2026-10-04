@@ -1,0 +1,231 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "DiyTemplate",
+  "kebab": "diy-template",
+  "businessName": "装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. 如果需要使用某个模版，则将 设置为 true，表示已使用，有且仅有一个",
+  "permissionPrefix": "mall:diy_template",
+  "page": {
+    "route": "/admin/mall/diy-template",
+    "title": "装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. 如果需要使用某个模版，则将 设置为 true，表示已使用，有且仅有一个管理",
+    "titleSelector": "[data-testid=\"diy-template-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "diy-template",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/diy-template",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/diy-template/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/diy-template"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/diy-template/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/diy-template/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"diy-template-title\"]",
+    "refresh": "[data-testid=\"diy-template-refresh\"]",
+    "createButton": "[data-testid=\"diy-template-create\"]",
+    "searchForm": "[data-testid=\"diy-template-search\"]",
+    "searchSubmit": "[data-testid=\"diy-template-search-submit\"]",
+    "searchReset": "[data-testid=\"diy-template-search-reset\"]",
+    "total": "[data-testid=\"diy-template-total\"]",
+    "table": "[data-testid=\"diy-template-table\"]",
+    "row": "[data-testid=\"diy-template-row\"]",
+    "editButton": "[data-testid=\"diy-template-edit\"]",
+    "deleteButton": "[data-testid=\"diy-template-delete\"]",
+    "form": "[data-testid=\"diy-template-form\"]",
+    "formError": "[data-testid=\"diy-template-form-error\"]",
+    "formSubmit": "[data-testid=\"diy-template-form-submit\"]",
+    "formCancel": "[data-testid=\"diy-template-form-cancel\"]",
+    "formClose": "[data-testid=\"diy-template-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. 如果需要使用某个模版，则将 设置为 true，表示已使用，有且仅有一个列表",
+    "dialogLabel": {
+      "create": "新增装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. 如果需要使用某个模版，则将 设置为 true，表示已使用，有且仅有一个",
+      "edit": "编辑装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. 如果需要使用某个模版，则将 设置为 true，表示已使用，有且仅有一个"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "模板名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "used",
+        "label": "是否使用",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-used",
+        "selector": "[data-testid=\"field-used\"]"
+      },
+      {
+        "name": "used_time",
+        "label": "使用时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-used_time",
+        "selector": "[data-testid=\"field-used_time\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      },
+      {
+        "name": "preview_pic_urls",
+        "label": "预览图",
+        "type": "string",
+        "required": false,
+        "testId": "field-preview_pic_urls",
+        "selector": "[data-testid=\"field-preview_pic_urls\"]"
+      },
+      {
+        "name": "property",
+        "label": "uni-app 底部导航属性，JSON 格式",
+        "type": "string",
+        "required": false,
+        "testId": "field-property",
+        "selector": "[data-testid=\"field-property\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "diy-template",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"diy-template\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"diy-template-form-overlay\"]",
+      "dialog": "[data-testid=\"diy-template-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "diy-template:search",
+      "reset": "diy-template:reset",
+      "refresh": "diy-template:refresh",
+      "create": "diy-template:create",
+      "edit": "diy-template:edit",
+      "delete": "diy-template:delete",
+      "submit": "diy-template:submit",
+      "cancel": "diy-template:cancel",
+      "close": "diy-template:close",
+      "row": "diy-template:row",
+      "pagination": "diy-template:pagination",
+      "fields": {
+        "name": "diy-template:field:name",
+        "used": "diy-template:field:used",
+        "used_time": "diy-template:field:used_time",
+        "remark": "diy-template:field:remark",
+        "preview_pic_urls": "diy-template:field:preview_pic_urls",
+        "property": "diy-template:field:property"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.diy-template",
+      "examples": [
+        "mall.diy-template__List__Refresh",
+        "mall.diy-template__ListItem__Open",
+        "mall.diy-template__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

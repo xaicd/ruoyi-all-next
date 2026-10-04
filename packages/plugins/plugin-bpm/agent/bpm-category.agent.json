@@ -1,0 +1,222 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "bpm",
+  "entity": "BpmCategory",
+  "kebab": "bpm-category",
+  "businessName": "BPM 流程分类",
+  "permissionPrefix": "bpm:bpm_category",
+  "page": {
+    "route": "/admin/bpm/bpm-category",
+    "title": "BPM 流程分类管理",
+    "titleSelector": "[data-testid=\"bpm-category-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.bpm/api",
+    "bffMount": "/api/v1/admin/bpm",
+    "resource": "bpm-category",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/bpm-category",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/bpm-category/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/bpm-category"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/bpm-category/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/bpm-category/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"bpm-category-title\"]",
+    "refresh": "[data-testid=\"bpm-category-refresh\"]",
+    "createButton": "[data-testid=\"bpm-category-create\"]",
+    "searchForm": "[data-testid=\"bpm-category-search\"]",
+    "searchSubmit": "[data-testid=\"bpm-category-search-submit\"]",
+    "searchReset": "[data-testid=\"bpm-category-search-reset\"]",
+    "total": "[data-testid=\"bpm-category-total\"]",
+    "table": "[data-testid=\"bpm-category-table\"]",
+    "row": "[data-testid=\"bpm-category-row\"]",
+    "editButton": "[data-testid=\"bpm-category-edit\"]",
+    "deleteButton": "[data-testid=\"bpm-category-delete\"]",
+    "form": "[data-testid=\"bpm-category-form\"]",
+    "formError": "[data-testid=\"bpm-category-form-error\"]",
+    "formSubmit": "[data-testid=\"bpm-category-form-submit\"]",
+    "formCancel": "[data-testid=\"bpm-category-form-cancel\"]",
+    "formClose": "[data-testid=\"bpm-category-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "BPM 流程分类列表",
+    "dialogLabel": {
+      "create": "新增BPM 流程分类",
+      "edit": "编辑BPM 流程分类"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "分类名",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "code",
+        "label": "分类标志",
+        "type": "string",
+        "required": false,
+        "testId": "field-code",
+        "selector": "[data-testid=\"field-code\"]"
+      },
+      {
+        "name": "description",
+        "label": "分类描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      },
+      {
+        "name": "status",
+        "label": "分类状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "sort",
+        "label": "分类排序",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "bpm-category",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"bpm-category\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"bpm-category-form-overlay\"]",
+      "dialog": "[data-testid=\"bpm-category-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "bpm-category:search",
+      "reset": "bpm-category:reset",
+      "refresh": "bpm-category:refresh",
+      "create": "bpm-category:create",
+      "edit": "bpm-category:edit",
+      "delete": "bpm-category:delete",
+      "submit": "bpm-category:submit",
+      "cancel": "bpm-category:cancel",
+      "close": "bpm-category:close",
+      "row": "bpm-category:row",
+      "pagination": "bpm-category:pagination",
+      "fields": {
+        "name": "bpm-category:field:name",
+        "code": "bpm-category:field:code",
+        "description": "bpm-category:field:description",
+        "status": "bpm-category:field:status",
+        "sort": "bpm-category:field:sort"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "bpm.bpm-category",
+      "examples": [
+        "bpm.bpm-category__List__Refresh",
+        "bpm.bpm-category__ListItem__Open",
+        "bpm.bpm-category__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

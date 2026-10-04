@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesCalTeam（源框架导入） (MesCalTeam)
+-- Auto-generated RBAC & Menu Migration for MES 班组 (MesCalTeam)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-cal-team',
   'mes-dir',
-  'MesCalTeam（源框架导入）管理',
+  'MES 班组管理',
   '/admin/mes/mes-cal-team',
   'mes/mes-cal-team/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-cal-team-query',  'menu-mes-cal-team', '查询MesCalTeam（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_cal_team:query',  1, NOW(), NOW()),
-('menu-mes-cal-team-create', 'menu-mes-cal-team', '新增MesCalTeam（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_cal_team:create', 2, NOW(), NOW()),
-('menu-mes-cal-team-update', 'menu-mes-cal-team', '修改MesCalTeam（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_cal_team:update', 3, NOW(), NOW()),
-('menu-mes-cal-team-delete', 'menu-mes-cal-team', '删除MesCalTeam（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_cal_team:delete', 4, NOW(), NOW())
+('menu-mes-cal-team-query',  'menu-mes-cal-team', '查询MES 班组', 'BUTTON', 'ACTIVE', 'mes:mes_cal_team:query',  1, NOW(), NOW()),
+('menu-mes-cal-team-create', 'menu-mes-cal-team', '新增MES 班组', 'BUTTON', 'ACTIVE', 'mes:mes_cal_team:create', 2, NOW(), NOW()),
+('menu-mes-cal-team-update', 'menu-mes-cal-team', '修改MES 班组', 'BUTTON', 'ACTIVE', 'mes:mes_cal_team:update', 3, NOW(), NOW()),
+('menu-mes-cal-team-delete', 'menu-mes-cal-team', '删除MES 班组', 'BUTTON', 'ACTIVE', 'mes:mes_cal_team:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

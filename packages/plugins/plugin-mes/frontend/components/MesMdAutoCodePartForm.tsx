@@ -59,24 +59,36 @@ export function MesMdAutoCodePartForm({ open, initialData, onClose, onSuccess }:
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-md-auto-code-part-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 编码规则组成" : "新增MES 编码规则组成"}
+        data-testid="mes-md-auto-code-part-form"
+        data-agent-scope="mes-md-auto-code-part:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesMdAutoCodePart（源框架导入）" : "新增MesMdAutoCodePart（源框架导入）"}
+            {isEdit ? "编辑MES 编码规则组成" : "新增MES 编码规则组成"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-md-auto-code-part-form-close" data-agent-target="mes-md-auto-code-part:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-md-auto-code-part-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">规则 ID</label>
+          <label htmlFor="mes-md-auto-code-part-rule_id" className="block text-xs text-slate-600 mb-1">规则 ID</label>
           <input
             type="number"
+            id="mes-md-auto-code-part-rule_id"
+            data-testid="field-rule_id"
+            data-agent-target="mes-md-auto-code-part:field:rule_id"
+            data-agent-state={formData.rule_id == null || formData.rule_id === "" ? "empty" : "filled"}
+            aria-label="规则 ID"
             value={formData.rule_id != null ? String(formData.rule_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, rule_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -86,9 +98,14 @@ export function MesMdAutoCodePartForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">分段序号</label>
+          <label htmlFor="mes-md-auto-code-part-sort" className="block text-xs text-slate-600 mb-1">分段序号</label>
           <input
             type="number"
+            id="mes-md-auto-code-part-sort"
+            data-testid="field-sort"
+            data-agent-target="mes-md-auto-code-part:field:sort"
+            data-agent-state={formData.sort == null || formData.sort === "" ? "empty" : "filled"}
+            aria-label="分段序号"
             value={formData.sort != null ? String(formData.sort) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sort: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -98,9 +115,14 @@ export function MesMdAutoCodePartForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">分段类型</label>
+          <label htmlFor="mes-md-auto-code-part-type" className="block text-xs text-slate-600 mb-1">分段类型</label>
           <input
             type="number"
+            id="mes-md-auto-code-part-type"
+            data-testid="field-type"
+            data-agent-target="mes-md-auto-code-part:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="分段类型"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -110,9 +132,14 @@ export function MesMdAutoCodePartForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">分段长度</label>
+          <label htmlFor="mes-md-auto-code-part-length" className="block text-xs text-slate-600 mb-1">分段长度</label>
           <input
             type="number"
+            id="mes-md-auto-code-part-length"
+            data-testid="field-length"
+            data-agent-target="mes-md-auto-code-part:field:length"
+            data-agent-state={formData.length == null || formData.length === "" ? "empty" : "filled"}
+            aria-label="分段长度"
             value={formData.length != null ? String(formData.length) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, length: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -122,9 +149,14 @@ export function MesMdAutoCodePartForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">日期格式</label>
+          <label htmlFor="mes-md-auto-code-part-date_format" className="block text-xs text-slate-600 mb-1">日期格式</label>
           <input
             type="text"
+            id="mes-md-auto-code-part-date_format"
+            data-testid="field-date_format"
+            data-agent-target="mes-md-auto-code-part:field:date_format"
+            data-agent-state={formData.date_format ? "filled" : "empty"}
+            aria-label="日期格式"
             value={formData.date_format ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, date_format: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -134,9 +166,14 @@ export function MesMdAutoCodePartForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">固定字符</label>
+          <label htmlFor="mes-md-auto-code-part-fix_character" className="block text-xs text-slate-600 mb-1">固定字符</label>
           <input
             type="text"
+            id="mes-md-auto-code-part-fix_character"
+            data-testid="field-fix_character"
+            data-agent-target="mes-md-auto-code-part:field:fix_character"
+            data-agent-state={formData.fix_character ? "filled" : "empty"}
+            aria-label="固定字符"
             value={formData.fix_character ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, fix_character: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -146,9 +183,14 @@ export function MesMdAutoCodePartForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">流水号起始值</label>
+          <label htmlFor="mes-md-auto-code-part-serial_start_no" className="block text-xs text-slate-600 mb-1">流水号起始值</label>
           <input
             type="number"
+            id="mes-md-auto-code-part-serial_start_no"
+            data-testid="field-serial_start_no"
+            data-agent-target="mes-md-auto-code-part:field:serial_start_no"
+            data-agent-state={formData.serial_start_no == null || formData.serial_start_no === "" ? "empty" : "filled"}
+            aria-label="流水号起始值"
             value={formData.serial_start_no != null ? String(formData.serial_start_no) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, serial_start_no: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -158,9 +200,14 @@ export function MesMdAutoCodePartForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">流水号步长</label>
+          <label htmlFor="mes-md-auto-code-part-serial_step" className="block text-xs text-slate-600 mb-1">流水号步长</label>
           <input
             type="number"
+            id="mes-md-auto-code-part-serial_step"
+            data-testid="field-serial_step"
+            data-agent-target="mes-md-auto-code-part:field:serial_step"
+            data-agent-state={formData.serial_step == null || formData.serial_step === "" ? "empty" : "filled"}
+            aria-label="流水号步长"
             value={formData.serial_step != null ? String(formData.serial_step) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, serial_step: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -172,18 +219,27 @@ export function MesMdAutoCodePartForm({ open, initialData, onClose, onSuccess }:
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="cycle_flag"
+            id="mes-md-auto-code-part-cycle_flag"
+            data-testid="field-cycle_flag"
+            data-agent-target="mes-md-auto-code-part:field:cycle_flag"
+            data-agent-state={formData.cycle_flag ? "on" : "off"}
+            aria-label="流水号是否循环"
             checked={Boolean(formData.cycle_flag)}
             onChange={(e) => setFormData((prev) => ({ ...prev, cycle_flag: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="cycle_flag" className="text-xs text-slate-700 font-medium">流水号是否循环</label>
+          <label htmlFor="mes-md-auto-code-part-cycle_flag" className="text-xs text-slate-700 font-medium">流水号是否循环</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">循环方式</label>
+          <label htmlFor="mes-md-auto-code-part-cycle_method" className="block text-xs text-slate-600 mb-1">循环方式</label>
           <input
             type="number"
+            id="mes-md-auto-code-part-cycle_method"
+            data-testid="field-cycle_method"
+            data-agent-target="mes-md-auto-code-part:field:cycle_method"
+            data-agent-state={formData.cycle_method == null || formData.cycle_method === "" ? "empty" : "filled"}
+            aria-label="循环方式"
             value={formData.cycle_method != null ? String(formData.cycle_method) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, cycle_method: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -193,9 +249,14 @@ export function MesMdAutoCodePartForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-md-auto-code-part-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-md-auto-code-part-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-md-auto-code-part:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -209,6 +270,8 @@ export function MesMdAutoCodePartForm({ open, initialData, onClose, onSuccess }:
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-md-auto-code-part-form-cancel"
+              data-agent-target="mes-md-auto-code-part:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -216,6 +279,9 @@ export function MesMdAutoCodePartForm({ open, initialData, onClose, onSuccess }:
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-md-auto-code-part-form-submit"
+              data-agent-target="mes-md-auto-code-part:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

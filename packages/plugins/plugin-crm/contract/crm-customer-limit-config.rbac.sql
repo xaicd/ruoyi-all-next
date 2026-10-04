@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for CrmCustomerLimitConfig（源框架导入） (CrmCustomerLimitConfig)
+-- Auto-generated RBAC & Menu Migration for 客户限制配置 (CrmCustomerLimitConfig)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-crm-customer-limit-config',
   'crm-dir',
-  'CrmCustomerLimitConfig（源框架导入）管理',
+  '客户限制配置管理',
   '/admin/crm/crm-customer-limit-config',
   'crm/crm-customer-limit-config/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-crm-customer-limit-config-query',  'menu-crm-customer-limit-config', '查询CrmCustomerLimitConfig（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_customer_limit_config:query',  1, NOW(), NOW()),
-('menu-crm-customer-limit-config-create', 'menu-crm-customer-limit-config', '新增CrmCustomerLimitConfig（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_customer_limit_config:create', 2, NOW(), NOW()),
-('menu-crm-customer-limit-config-update', 'menu-crm-customer-limit-config', '修改CrmCustomerLimitConfig（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_customer_limit_config:update', 3, NOW(), NOW()),
-('menu-crm-customer-limit-config-delete', 'menu-crm-customer-limit-config', '删除CrmCustomerLimitConfig（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_customer_limit_config:delete', 4, NOW(), NOW())
+('menu-crm-customer-limit-config-query',  'menu-crm-customer-limit-config', '查询客户限制配置', 'BUTTON', 'ACTIVE', 'crm:crm_customer_limit_config:query',  1, NOW(), NOW()),
+('menu-crm-customer-limit-config-create', 'menu-crm-customer-limit-config', '新增客户限制配置', 'BUTTON', 'ACTIVE', 'crm:crm_customer_limit_config:create', 2, NOW(), NOW()),
+('menu-crm-customer-limit-config-update', 'menu-crm-customer-limit-config', '修改客户限制配置', 'BUTTON', 'ACTIVE', 'crm:crm_customer_limit_config:update', 3, NOW(), NOW()),
+('menu-crm-customer-limit-config-delete', 'menu-crm-customer-limit-config', '删除客户限制配置', 'BUTTON', 'ACTIVE', 'crm:crm_customer_limit_config:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

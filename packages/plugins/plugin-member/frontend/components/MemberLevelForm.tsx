@@ -55,24 +55,36 @@ export function MemberLevelForm({ open, initialData, onClose, onSuccess }: Membe
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="member-level-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑会员等级 DO配置每个等级需要的积分" : "新增会员等级 DO配置每个等级需要的积分"}
+        data-testid="member-level-form"
+        data-agent-scope="member-level:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MemberLevel（源框架导入）" : "新增MemberLevel（源框架导入）"}
+            {isEdit ? "编辑会员等级 DO配置每个等级需要的积分" : "新增会员等级 DO配置每个等级需要的积分"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="member-level-form-close" data-agent-target="member-level:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="member-level-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">等级名称</label>
+          <label htmlFor="member-level-name" className="block text-xs text-slate-600 mb-1">等级名称</label>
           <input
             type="text"
+            id="member-level-name"
+            data-testid="field-name"
+            data-agent-target="member-level:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="等级名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -82,9 +94,14 @@ export function MemberLevelForm({ open, initialData, onClose, onSuccess }: Membe
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">等级</label>
+          <label htmlFor="member-level-level" className="block text-xs text-slate-600 mb-1">等级</label>
           <input
             type="number"
+            id="member-level-level"
+            data-testid="field-level"
+            data-agent-target="member-level:field:level"
+            data-agent-state={formData.level == null || formData.level === "" ? "empty" : "filled"}
+            aria-label="等级"
             value={formData.level != null ? String(formData.level) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, level: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -94,9 +111,14 @@ export function MemberLevelForm({ open, initialData, onClose, onSuccess }: Membe
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">升级经验</label>
+          <label htmlFor="member-level-experience" className="block text-xs text-slate-600 mb-1">升级经验</label>
           <input
             type="number"
+            id="member-level-experience"
+            data-testid="field-experience"
+            data-agent-target="member-level:field:experience"
+            data-agent-state={formData.experience == null || formData.experience === "" ? "empty" : "filled"}
+            aria-label="升级经验"
             value={formData.experience != null ? String(formData.experience) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, experience: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -106,9 +128,14 @@ export function MemberLevelForm({ open, initialData, onClose, onSuccess }: Membe
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">享受折扣</label>
+          <label htmlFor="member-level-discount_percent" className="block text-xs text-slate-600 mb-1">享受折扣</label>
           <input
             type="number"
+            id="member-level-discount_percent"
+            data-testid="field-discount_percent"
+            data-agent-target="member-level:field:discount_percent"
+            data-agent-state={formData.discount_percent == null || formData.discount_percent === "" ? "empty" : "filled"}
+            aria-label="享受折扣"
             value={formData.discount_percent != null ? String(formData.discount_percent) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, discount_percent: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -118,9 +145,14 @@ export function MemberLevelForm({ open, initialData, onClose, onSuccess }: Membe
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">等级图标</label>
+          <label htmlFor="member-level-icon" className="block text-xs text-slate-600 mb-1">等级图标</label>
           <input
             type="text"
+            id="member-level-icon"
+            data-testid="field-icon"
+            data-agent-target="member-level:field:icon"
+            data-agent-state={formData.icon ? "filled" : "empty"}
+            aria-label="等级图标"
             value={formData.icon ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, icon: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -130,9 +162,14 @@ export function MemberLevelForm({ open, initialData, onClose, onSuccess }: Membe
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">等级背景图</label>
+          <label htmlFor="member-level-background_url" className="block text-xs text-slate-600 mb-1">等级背景图</label>
           <input
             type="text"
+            id="member-level-background_url"
+            data-testid="field-background_url"
+            data-agent-target="member-level:field:background_url"
+            data-agent-state={formData.background_url ? "filled" : "empty"}
+            aria-label="等级背景图"
             value={formData.background_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, background_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -142,9 +179,14 @@ export function MemberLevelForm({ open, initialData, onClose, onSuccess }: Membe
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="member-level-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="member-level-status"
+            data-testid="field-status"
+            data-agent-target="member-level:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -158,6 +200,8 @@ export function MemberLevelForm({ open, initialData, onClose, onSuccess }: Membe
             <button
               type="button"
               onClick={onClose}
+              data-testid="member-level-form-cancel"
+              data-agent-target="member-level:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -165,6 +209,9 @@ export function MemberLevelForm({ open, initialData, onClose, onSuccess }: Membe
             <button
               type="submit"
               disabled={loading}
+              data-testid="member-level-form-submit"
+              data-agent-target="member-level:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

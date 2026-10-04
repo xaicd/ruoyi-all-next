@@ -53,24 +53,36 @@ export function SeckillConfigForm({ open, initialData, onClose, onSuccess }: Sec
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="seckill-config-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑秒杀时段" : "新增秒杀时段"}
+        data-testid="seckill-config-form"
+        data-agent-scope="seckill-config:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑SeckillConfig（源框架导入）" : "新增SeckillConfig（源框架导入）"}
+            {isEdit ? "编辑秒杀时段" : "新增秒杀时段"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="seckill-config-form-close" data-agent-target="seckill-config:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="seckill-config-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">秒杀时段名称</label>
+          <label htmlFor="seckill-config-name" className="block text-xs text-slate-600 mb-1">秒杀时段名称</label>
           <input
             type="text"
+            id="seckill-config-name"
+            data-testid="field-name"
+            data-agent-target="seckill-config:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="秒杀时段名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -80,9 +92,14 @@ export function SeckillConfigForm({ open, initialData, onClose, onSuccess }: Sec
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">开始时间点</label>
+          <label htmlFor="seckill-config-start_time" className="block text-xs text-slate-600 mb-1">开始时间点</label>
           <input
             type="text"
+            id="seckill-config-start_time"
+            data-testid="field-start_time"
+            data-agent-target="seckill-config:field:start_time"
+            data-agent-state={formData.start_time ? "filled" : "empty"}
+            aria-label="开始时间点"
             value={formData.start_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, start_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -92,9 +109,14 @@ export function SeckillConfigForm({ open, initialData, onClose, onSuccess }: Sec
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">结束时间点</label>
+          <label htmlFor="seckill-config-end_time" className="block text-xs text-slate-600 mb-1">结束时间点</label>
           <input
             type="text"
+            id="seckill-config-end_time"
+            data-testid="field-end_time"
+            data-agent-target="seckill-config:field:end_time"
+            data-agent-state={formData.end_time ? "filled" : "empty"}
+            aria-label="结束时间点"
             value={formData.end_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, end_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -104,9 +126,14 @@ export function SeckillConfigForm({ open, initialData, onClose, onSuccess }: Sec
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">秒杀轮播图</label>
+          <label htmlFor="seckill-config-slider_pic_urls" className="block text-xs text-slate-600 mb-1">秒杀轮播图</label>
           <input
             type="text"
+            id="seckill-config-slider_pic_urls"
+            data-testid="field-slider_pic_urls"
+            data-agent-target="seckill-config:field:slider_pic_urls"
+            data-agent-state={formData.slider_pic_urls ? "filled" : "empty"}
+            aria-label="秒杀轮播图"
             value={formData.slider_pic_urls ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, slider_pic_urls: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -116,9 +143,14 @@ export function SeckillConfigForm({ open, initialData, onClose, onSuccess }: Sec
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="seckill-config-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="seckill-config-status"
+            data-testid="field-status"
+            data-agent-target="seckill-config:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -132,6 +164,8 @@ export function SeckillConfigForm({ open, initialData, onClose, onSuccess }: Sec
             <button
               type="button"
               onClick={onClose}
+              data-testid="seckill-config-form-cancel"
+              data-agent-target="seckill-config:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -139,6 +173,9 @@ export function SeckillConfigForm({ open, initialData, onClose, onSuccess }: Sec
             <button
               type="submit"
               disabled={loading}
+              data-testid="seckill-config-form-submit"
+              data-agent-target="seckill-config:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

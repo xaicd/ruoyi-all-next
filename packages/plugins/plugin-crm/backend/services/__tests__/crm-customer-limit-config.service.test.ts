@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { CrmCustomerLimitConfigService } from "../crm-customer-limit-config.service"
 
 describe("CrmCustomerLimitConfigService", () => {
-  it("should create and query CrmCustomerLimitConfig（源框架导入）", async () => {
+  it("should create and query 客户限制配置", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CrmCustomerLimitConfigService.create({
         type: 1,
@@ -21,7 +21,7 @@ describe("CrmCustomerLimitConfigService", () => {
   
       const updated = await CrmCustomerLimitConfigService.update(created.id, {
         id: created.id,
-        type: "更新CrmCustomerLimitConfig（源框架导入）",
+        type: "更新客户限制配置",
       } as any)
       expect(updated).toBeDefined()
   

@@ -56,24 +56,36 @@ export function PointProductForm({ open, initialData, onClose, onSuccess }: Poin
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="point-product-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑积分商城商品" : "新增积分商城商品"}
+        data-testid="point-product-form"
+        data-agent-scope="point-product:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑PointProduct（源框架导入）" : "新增PointProduct（源框架导入）"}
+            {isEdit ? "编辑积分商城商品" : "新增积分商城商品"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="point-product-form-close" data-agent-target="point-product:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="point-product-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">积分商城活动 id</label>
+          <label htmlFor="point-product-activity_id" className="block text-xs text-slate-600 mb-1">积分商城活动 id</label>
           <input
             type="number"
+            id="point-product-activity_id"
+            data-testid="field-activity_id"
+            data-agent-target="point-product:field:activity_id"
+            data-agent-state={formData.activity_id == null || formData.activity_id === "" ? "empty" : "filled"}
+            aria-label="积分商城活动 id"
             value={formData.activity_id != null ? String(formData.activity_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, activity_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -83,9 +95,14 @@ export function PointProductForm({ open, initialData, onClose, onSuccess }: Poin
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品 SPU 编号</label>
+          <label htmlFor="point-product-spu_id" className="block text-xs text-slate-600 mb-1">商品 SPU 编号</label>
           <input
             type="number"
+            id="point-product-spu_id"
+            data-testid="field-spu_id"
+            data-agent-target="point-product:field:spu_id"
+            data-agent-state={formData.spu_id == null || formData.spu_id === "" ? "empty" : "filled"}
+            aria-label="商品 SPU 编号"
             value={formData.spu_id != null ? String(formData.spu_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, spu_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -95,9 +112,14 @@ export function PointProductForm({ open, initialData, onClose, onSuccess }: Poin
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品 SKU 编号</label>
+          <label htmlFor="point-product-sku_id" className="block text-xs text-slate-600 mb-1">商品 SKU 编号</label>
           <input
             type="number"
+            id="point-product-sku_id"
+            data-testid="field-sku_id"
+            data-agent-target="point-product:field:sku_id"
+            data-agent-state={formData.sku_id == null || formData.sku_id === "" ? "empty" : "filled"}
+            aria-label="商品 SKU 编号"
             value={formData.sku_id != null ? String(formData.sku_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sku_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -107,9 +129,14 @@ export function PointProductForm({ open, initialData, onClose, onSuccess }: Poin
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">可兑换次数</label>
+          <label htmlFor="point-product-count" className="block text-xs text-slate-600 mb-1">可兑换次数</label>
           <input
             type="number"
+            id="point-product-count"
+            data-testid="field-count"
+            data-agent-target="point-product:field:count"
+            data-agent-state={formData.count == null || formData.count === "" ? "empty" : "filled"}
+            aria-label="可兑换次数"
             value={formData.count != null ? String(formData.count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -119,9 +146,14 @@ export function PointProductForm({ open, initialData, onClose, onSuccess }: Poin
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">所需兑换积分</label>
+          <label htmlFor="point-product-point" className="block text-xs text-slate-600 mb-1">所需兑换积分</label>
           <input
             type="number"
+            id="point-product-point"
+            data-testid="field-point"
+            data-agent-target="point-product:field:point"
+            data-agent-state={formData.point == null || formData.point === "" ? "empty" : "filled"}
+            aria-label="所需兑换积分"
             value={formData.point != null ? String(formData.point) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, point: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -131,9 +163,14 @@ export function PointProductForm({ open, initialData, onClose, onSuccess }: Poin
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">所需兑换金额，单位：分</label>
+          <label htmlFor="point-product-price" className="block text-xs text-slate-600 mb-1">所需兑换金额，单位：分</label>
           <input
             type="number"
+            id="point-product-price"
+            data-testid="field-price"
+            data-agent-target="point-product:field:price"
+            data-agent-state={formData.price == null || formData.price === "" ? "empty" : "filled"}
+            aria-label="所需兑换金额，单位：分"
             value={formData.price != null ? String(formData.price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -143,9 +180,14 @@ export function PointProductForm({ open, initialData, onClose, onSuccess }: Poin
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">积分商城商品库存</label>
+          <label htmlFor="point-product-stock" className="block text-xs text-slate-600 mb-1">积分商城商品库存</label>
           <input
             type="number"
+            id="point-product-stock"
+            data-testid="field-stock"
+            data-agent-target="point-product:field:stock"
+            data-agent-state={formData.stock == null || formData.stock === "" ? "empty" : "filled"}
+            aria-label="积分商城商品库存"
             value={formData.stock != null ? String(formData.stock) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, stock: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -155,9 +197,14 @@ export function PointProductForm({ open, initialData, onClose, onSuccess }: Poin
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">积分商城商品状态</label>
+          <label htmlFor="point-product-activity_status" className="block text-xs text-slate-600 mb-1">积分商城商品状态</label>
           <input
             type="number"
+            id="point-product-activity_status"
+            data-testid="field-activity_status"
+            data-agent-target="point-product:field:activity_status"
+            data-agent-state={formData.activity_status == null || formData.activity_status === "" ? "empty" : "filled"}
+            aria-label="积分商城商品状态"
             value={formData.activity_status != null ? String(formData.activity_status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, activity_status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,6 +218,8 @@ export function PointProductForm({ open, initialData, onClose, onSuccess }: Poin
             <button
               type="button"
               onClick={onClose}
+              data-testid="point-product-form-cancel"
+              data-agent-target="point-product:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -178,6 +227,9 @@ export function PointProductForm({ open, initialData, onClose, onSuccess }: Poin
             <button
               type="submit"
               disabled={loading}
+              data-testid="point-product-form-submit"
+              data-agent-target="point-product:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

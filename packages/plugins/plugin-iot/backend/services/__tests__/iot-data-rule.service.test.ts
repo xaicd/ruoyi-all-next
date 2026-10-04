@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { IotDataRuleService } from "../iot-data-rule.service"
 
 describe("IotDataRuleService", () => {
-  it("should create and query IotDataRule（源框架导入）", async () => {
+  it("should create and query IoT 数据流转规则 DO监听 数据源，转发到 数据目的", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await IotDataRuleService.create({
-        name: "测试IotDataRule（源框架导入）",
+        name: "测试IoT 数据流转规则 DO监听 数据源，转发到 数据目的",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("IotDataRuleService", () => {
   
       const updated = await IotDataRuleService.update(created.id, {
         id: created.id,
-        name: "更新IotDataRule（源框架导入）",
+        name: "更新IoT 数据流转规则 DO监听 数据源，转发到 数据目的",
       } as any)
       expect(updated).toBeDefined()
   

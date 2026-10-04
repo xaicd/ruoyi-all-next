@@ -65,24 +65,36 @@ export function ProductSkuForm({ open, initialData, onClose, onSuccess }: Produc
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="product-sku-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑商品 SKU" : "新增商品 SKU"}
+        data-testid="product-sku-form"
+        data-agent-scope="product-sku:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑ProductSku（源框架导入）" : "新增ProductSku（源框架导入）"}
+            {isEdit ? "编辑商品 SKU" : "新增商品 SKU"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="product-sku-form-close" data-agent-target="product-sku:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="product-sku-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">SPU 编号</label>
+          <label htmlFor="product-sku-spu_id" className="block text-xs text-slate-600 mb-1">SPU 编号</label>
           <input
             type="number"
+            id="product-sku-spu_id"
+            data-testid="field-spu_id"
+            data-agent-target="product-sku:field:spu_id"
+            data-agent-state={formData.spu_id == null || formData.spu_id === "" ? "empty" : "filled"}
+            aria-label="SPU 编号"
             value={formData.spu_id != null ? String(formData.spu_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, spu_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -92,9 +104,14 @@ export function ProductSkuForm({ open, initialData, onClose, onSuccess }: Produc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">属性数组，JSON 格式</label>
+          <label htmlFor="product-sku-properties" className="block text-xs text-slate-600 mb-1">属性数组，JSON 格式</label>
           <input
             type="text"
+            id="product-sku-properties"
+            data-testid="field-properties"
+            data-agent-target="product-sku:field:properties"
+            data-agent-state={formData.properties ? "filled" : "empty"}
+            aria-label="属性数组，JSON 格式"
             value={formData.properties ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, properties: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -104,9 +121,14 @@ export function ProductSkuForm({ open, initialData, onClose, onSuccess }: Produc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品价格，单位：分</label>
+          <label htmlFor="product-sku-price" className="block text-xs text-slate-600 mb-1">商品价格，单位：分</label>
           <input
             type="number"
+            id="product-sku-price"
+            data-testid="field-price"
+            data-agent-target="product-sku:field:price"
+            data-agent-state={formData.price == null || formData.price === "" ? "empty" : "filled"}
+            aria-label="商品价格，单位：分"
             value={formData.price != null ? String(formData.price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -116,9 +138,14 @@ export function ProductSkuForm({ open, initialData, onClose, onSuccess }: Produc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">市场价，单位：分</label>
+          <label htmlFor="product-sku-market_price" className="block text-xs text-slate-600 mb-1">市场价，单位：分</label>
           <input
             type="number"
+            id="product-sku-market_price"
+            data-testid="field-market_price"
+            data-agent-target="product-sku:field:market_price"
+            data-agent-state={formData.market_price == null || formData.market_price === "" ? "empty" : "filled"}
+            aria-label="市场价，单位：分"
             value={formData.market_price != null ? String(formData.market_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, market_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -128,9 +155,14 @@ export function ProductSkuForm({ open, initialData, onClose, onSuccess }: Produc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">成本价，单位：分</label>
+          <label htmlFor="product-sku-cost_price" className="block text-xs text-slate-600 mb-1">成本价，单位：分</label>
           <input
             type="number"
+            id="product-sku-cost_price"
+            data-testid="field-cost_price"
+            data-agent-target="product-sku:field:cost_price"
+            data-agent-state={formData.cost_price == null || formData.cost_price === "" ? "empty" : "filled"}
+            aria-label="成本价，单位：分"
             value={formData.cost_price != null ? String(formData.cost_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, cost_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -140,9 +172,14 @@ export function ProductSkuForm({ open, initialData, onClose, onSuccess }: Produc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品条码</label>
+          <label htmlFor="product-sku-bar_code" className="block text-xs text-slate-600 mb-1">商品条码</label>
           <input
             type="text"
+            id="product-sku-bar_code"
+            data-testid="field-bar_code"
+            data-agent-target="product-sku:field:bar_code"
+            data-agent-state={formData.bar_code ? "filled" : "empty"}
+            aria-label="商品条码"
             value={formData.bar_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, bar_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -152,9 +189,14 @@ export function ProductSkuForm({ open, initialData, onClose, onSuccess }: Produc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">图片地址</label>
+          <label htmlFor="product-sku-pic_url" className="block text-xs text-slate-600 mb-1">图片地址</label>
           <input
             type="text"
+            id="product-sku-pic_url"
+            data-testid="field-pic_url"
+            data-agent-target="product-sku:field:pic_url"
+            data-agent-state={formData.pic_url ? "filled" : "empty"}
+            aria-label="图片地址"
             value={formData.pic_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pic_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -164,9 +206,14 @@ export function ProductSkuForm({ open, initialData, onClose, onSuccess }: Produc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">库存</label>
+          <label htmlFor="product-sku-stock" className="block text-xs text-slate-600 mb-1">库存</label>
           <input
             type="number"
+            id="product-sku-stock"
+            data-testid="field-stock"
+            data-agent-target="product-sku:field:stock"
+            data-agent-state={formData.stock == null || formData.stock === "" ? "empty" : "filled"}
+            aria-label="库存"
             value={formData.stock != null ? String(formData.stock) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, stock: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -176,9 +223,14 @@ export function ProductSkuForm({ open, initialData, onClose, onSuccess }: Produc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品重量，单位：kg 千克</label>
+          <label htmlFor="product-sku-weight" className="block text-xs text-slate-600 mb-1">商品重量，单位：kg 千克</label>
           <input
             type="number"
+            id="product-sku-weight"
+            data-testid="field-weight"
+            data-agent-target="product-sku:field:weight"
+            data-agent-state={formData.weight == null || formData.weight === "" ? "empty" : "filled"}
+            aria-label="商品重量，单位：kg 千克"
             value={formData.weight != null ? String(formData.weight) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, weight: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -188,9 +240,14 @@ export function ProductSkuForm({ open, initialData, onClose, onSuccess }: Produc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品体积，单位：m^3 平米</label>
+          <label htmlFor="product-sku-volume" className="block text-xs text-slate-600 mb-1">商品体积，单位：m^3 平米</label>
           <input
             type="number"
+            id="product-sku-volume"
+            data-testid="field-volume"
+            data-agent-target="product-sku:field:volume"
+            data-agent-state={formData.volume == null || formData.volume === "" ? "empty" : "filled"}
+            aria-label="商品体积，单位：m^3 平米"
             value={formData.volume != null ? String(formData.volume) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, volume: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -200,9 +257,14 @@ export function ProductSkuForm({ open, initialData, onClose, onSuccess }: Produc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">一级分销的佣金，单位：分</label>
+          <label htmlFor="product-sku-first_brokerage_price" className="block text-xs text-slate-600 mb-1">一级分销的佣金，单位：分</label>
           <input
             type="number"
+            id="product-sku-first_brokerage_price"
+            data-testid="field-first_brokerage_price"
+            data-agent-target="product-sku:field:first_brokerage_price"
+            data-agent-state={formData.first_brokerage_price == null || formData.first_brokerage_price === "" ? "empty" : "filled"}
+            aria-label="一级分销的佣金，单位：分"
             value={formData.first_brokerage_price != null ? String(formData.first_brokerage_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, first_brokerage_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -212,9 +274,14 @@ export function ProductSkuForm({ open, initialData, onClose, onSuccess }: Produc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">二级分销的佣金，单位：分</label>
+          <label htmlFor="product-sku-second_brokerage_price" className="block text-xs text-slate-600 mb-1">二级分销的佣金，单位：分</label>
           <input
             type="number"
+            id="product-sku-second_brokerage_price"
+            data-testid="field-second_brokerage_price"
+            data-agent-target="product-sku:field:second_brokerage_price"
+            data-agent-state={formData.second_brokerage_price == null || formData.second_brokerage_price === "" ? "empty" : "filled"}
+            aria-label="二级分销的佣金，单位：分"
             value={formData.second_brokerage_price != null ? String(formData.second_brokerage_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, second_brokerage_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -224,9 +291,14 @@ export function ProductSkuForm({ open, initialData, onClose, onSuccess }: Produc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品销量</label>
+          <label htmlFor="product-sku-sales_count" className="block text-xs text-slate-600 mb-1">商品销量</label>
           <input
             type="number"
+            id="product-sku-sales_count"
+            data-testid="field-sales_count"
+            data-agent-target="product-sku:field:sales_count"
+            data-agent-state={formData.sales_count == null || formData.sales_count === "" ? "empty" : "filled"}
+            aria-label="商品销量"
             value={formData.sales_count != null ? String(formData.sales_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sales_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -236,9 +308,14 @@ export function ProductSkuForm({ open, initialData, onClose, onSuccess }: Produc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">属性编号</label>
+          <label htmlFor="product-sku-property_id" className="block text-xs text-slate-600 mb-1">属性编号</label>
           <input
             type="number"
+            id="product-sku-property_id"
+            data-testid="field-property_id"
+            data-agent-target="product-sku:field:property_id"
+            data-agent-state={formData.property_id == null || formData.property_id === "" ? "empty" : "filled"}
+            aria-label="属性编号"
             value={formData.property_id != null ? String(formData.property_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, property_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -248,9 +325,14 @@ export function ProductSkuForm({ open, initialData, onClose, onSuccess }: Produc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">属性名字</label>
+          <label htmlFor="product-sku-property_name" className="block text-xs text-slate-600 mb-1">属性名字</label>
           <input
             type="text"
+            id="product-sku-property_name"
+            data-testid="field-property_name"
+            data-agent-target="product-sku:field:property_name"
+            data-agent-state={formData.property_name ? "filled" : "empty"}
+            aria-label="属性名字"
             value={formData.property_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, property_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -260,9 +342,14 @@ export function ProductSkuForm({ open, initialData, onClose, onSuccess }: Produc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">属性值编号</label>
+          <label htmlFor="product-sku-value_id" className="block text-xs text-slate-600 mb-1">属性值编号</label>
           <input
             type="number"
+            id="product-sku-value_id"
+            data-testid="field-value_id"
+            data-agent-target="product-sku:field:value_id"
+            data-agent-state={formData.value_id == null || formData.value_id === "" ? "empty" : "filled"}
+            aria-label="属性值编号"
             value={formData.value_id != null ? String(formData.value_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, value_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -272,9 +359,14 @@ export function ProductSkuForm({ open, initialData, onClose, onSuccess }: Produc
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">属性值名字</label>
+          <label htmlFor="product-sku-value_name" className="block text-xs text-slate-600 mb-1">属性值名字</label>
           <input
             type="text"
+            id="product-sku-value_name"
+            data-testid="field-value_name"
+            data-agent-target="product-sku:field:value_name"
+            data-agent-state={formData.value_name ? "filled" : "empty"}
+            aria-label="属性值名字"
             value={formData.value_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, value_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -288,6 +380,8 @@ export function ProductSkuForm({ open, initialData, onClose, onSuccess }: Produc
             <button
               type="button"
               onClick={onClose}
+              data-testid="product-sku-form-cancel"
+              data-agent-target="product-sku:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -295,6 +389,9 @@ export function ProductSkuForm({ open, initialData, onClose, onSuccess }: Produc
             <button
               type="submit"
               disabled={loading}
+              data-testid="product-sku-form-submit"
+              data-agent-target="product-sku:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for ImFaceUserItem（源框架导入） (ImFaceUserItem)
+-- Auto-generated RBAC & Menu Migration for IM 用户私有表情 DO（个人表情包，对照微信「我的表情」） (ImFaceUserItem)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-im-face-user-item',
   'im-dir',
-  'ImFaceUserItem（源框架导入）管理',
+  'IM 用户私有表情 DO（个人表情包，对照微信「我的表情」）管理',
   '/admin/im/im-face-user-item',
   'im/im-face-user-item/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-im-face-user-item-query',  'menu-im-face-user-item', '查询ImFaceUserItem（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_face_user_item:query',  1, NOW(), NOW()),
-('menu-im-face-user-item-create', 'menu-im-face-user-item', '新增ImFaceUserItem（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_face_user_item:create', 2, NOW(), NOW()),
-('menu-im-face-user-item-update', 'menu-im-face-user-item', '修改ImFaceUserItem（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_face_user_item:update', 3, NOW(), NOW()),
-('menu-im-face-user-item-delete', 'menu-im-face-user-item', '删除ImFaceUserItem（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_face_user_item:delete', 4, NOW(), NOW())
+('menu-im-face-user-item-query',  'menu-im-face-user-item', '查询IM 用户私有表情 DO（个人表情包，对照微信「我的表情」）', 'BUTTON', 'ACTIVE', 'im:im_face_user_item:query',  1, NOW(), NOW()),
+('menu-im-face-user-item-create', 'menu-im-face-user-item', '新增IM 用户私有表情 DO（个人表情包，对照微信「我的表情」）', 'BUTTON', 'ACTIVE', 'im:im_face_user_item:create', 2, NOW(), NOW()),
+('menu-im-face-user-item-update', 'menu-im-face-user-item', '修改IM 用户私有表情 DO（个人表情包，对照微信「我的表情」）', 'BUTTON', 'ACTIVE', 'im:im_face_user_item:update', 3, NOW(), NOW()),
+('menu-im-face-user-item-delete', 'menu-im-face-user-item', '删除IM 用户私有表情 DO（个人表情包，对照微信「我的表情」）', 'BUTTON', 'ACTIVE', 'im:im_face_user_item:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

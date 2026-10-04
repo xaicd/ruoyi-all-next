@@ -1,0 +1,303 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "RewardActivity",
+  "kebab": "reward-activity",
+  "businessName": "满减送活动",
+  "permissionPrefix": "mall:reward_activity",
+  "page": {
+    "route": "/admin/mall/reward-activity",
+    "title": "满减送活动管理",
+    "titleSelector": "[data-testid=\"reward-activity-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "reward-activity",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/reward-activity",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/reward-activity/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/reward-activity"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/reward-activity/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/reward-activity/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"reward-activity-title\"]",
+    "refresh": "[data-testid=\"reward-activity-refresh\"]",
+    "createButton": "[data-testid=\"reward-activity-create\"]",
+    "searchForm": "[data-testid=\"reward-activity-search\"]",
+    "searchSubmit": "[data-testid=\"reward-activity-search-submit\"]",
+    "searchReset": "[data-testid=\"reward-activity-search-reset\"]",
+    "total": "[data-testid=\"reward-activity-total\"]",
+    "table": "[data-testid=\"reward-activity-table\"]",
+    "row": "[data-testid=\"reward-activity-row\"]",
+    "editButton": "[data-testid=\"reward-activity-edit\"]",
+    "deleteButton": "[data-testid=\"reward-activity-delete\"]",
+    "form": "[data-testid=\"reward-activity-form\"]",
+    "formError": "[data-testid=\"reward-activity-form-error\"]",
+    "formSubmit": "[data-testid=\"reward-activity-form-submit\"]",
+    "formCancel": "[data-testid=\"reward-activity-form-cancel\"]",
+    "formClose": "[data-testid=\"reward-activity-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "满减送活动列表",
+    "dialogLabel": {
+      "create": "新增满减送活动",
+      "edit": "编辑满减送活动"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "活动标题",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "start_time",
+        "label": "开始时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-start_time",
+        "selector": "[data-testid=\"field-start_time\"]"
+      },
+      {
+        "name": "end_time",
+        "label": "结束时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-end_time",
+        "selector": "[data-testid=\"field-end_time\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      },
+      {
+        "name": "condition_type",
+        "label": "条件类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-condition_type",
+        "selector": "[data-testid=\"field-condition_type\"]"
+      },
+      {
+        "name": "product_scope",
+        "label": "商品范围",
+        "type": "number",
+        "required": false,
+        "testId": "field-product_scope",
+        "selector": "[data-testid=\"field-product_scope\"]"
+      },
+      {
+        "name": "product_scope_values",
+        "label": "商品 SPU 编号的数组",
+        "type": "string",
+        "required": false,
+        "testId": "field-product_scope_values",
+        "selector": "[data-testid=\"field-product_scope_values\"]"
+      },
+      {
+        "name": "rules",
+        "label": "优惠规则的数组",
+        "type": "string",
+        "required": false,
+        "testId": "field-rules",
+        "selector": "[data-testid=\"field-rules\"]"
+      },
+      {
+        "name": "limit",
+        "label": "优惠门槛",
+        "type": "number",
+        "required": false,
+        "testId": "field-limit",
+        "selector": "[data-testid=\"field-limit\"]"
+      },
+      {
+        "name": "discount_price",
+        "label": "优惠价格，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-discount_price",
+        "selector": "[data-testid=\"field-discount_price\"]"
+      },
+      {
+        "name": "free_delivery",
+        "label": "是否包邮",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-free_delivery",
+        "selector": "[data-testid=\"field-free_delivery\"]"
+      },
+      {
+        "name": "point",
+        "label": "赠送的积分",
+        "type": "number",
+        "required": false,
+        "testId": "field-point",
+        "selector": "[data-testid=\"field-point\"]"
+      },
+      {
+        "name": "give_coupon_template_counts",
+        "label": "赠送的优惠劵",
+        "type": "string",
+        "required": false,
+        "testId": "field-give_coupon_template_counts",
+        "selector": "[data-testid=\"field-give_coupon_template_counts\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "reward-activity",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"reward-activity\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"reward-activity-form-overlay\"]",
+      "dialog": "[data-testid=\"reward-activity-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "reward-activity:search",
+      "reset": "reward-activity:reset",
+      "refresh": "reward-activity:refresh",
+      "create": "reward-activity:create",
+      "edit": "reward-activity:edit",
+      "delete": "reward-activity:delete",
+      "submit": "reward-activity:submit",
+      "cancel": "reward-activity:cancel",
+      "close": "reward-activity:close",
+      "row": "reward-activity:row",
+      "pagination": "reward-activity:pagination",
+      "fields": {
+        "name": "reward-activity:field:name",
+        "status": "reward-activity:field:status",
+        "start_time": "reward-activity:field:start_time",
+        "end_time": "reward-activity:field:end_time",
+        "remark": "reward-activity:field:remark",
+        "condition_type": "reward-activity:field:condition_type",
+        "product_scope": "reward-activity:field:product_scope",
+        "product_scope_values": "reward-activity:field:product_scope_values",
+        "rules": "reward-activity:field:rules",
+        "limit": "reward-activity:field:limit",
+        "discount_price": "reward-activity:field:discount_price",
+        "free_delivery": "reward-activity:field:free_delivery",
+        "point": "reward-activity:field:point",
+        "give_coupon_template_counts": "reward-activity:field:give_coupon_template_counts"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.reward-activity",
+      "examples": [
+        "mall.reward-activity__List__Refresh",
+        "mall.reward-activity__ListItem__Open",
+        "mall.reward-activity__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

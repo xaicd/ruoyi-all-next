@@ -1,0 +1,276 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesProRouteProcess",
+  "kebab": "mes-pro-route-process",
+  "businessName": "MES 工艺路线工序",
+  "permissionPrefix": "mes:mes_pro_route_process",
+  "page": {
+    "route": "/admin/mes/mes-pro-route-process",
+    "title": "MES 工艺路线工序管理",
+    "titleSelector": "[data-testid=\"mes-pro-route-process-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-pro-route-process",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-pro-route-process",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-pro-route-process/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-pro-route-process"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-pro-route-process/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-pro-route-process/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-pro-route-process-title\"]",
+    "refresh": "[data-testid=\"mes-pro-route-process-refresh\"]",
+    "createButton": "[data-testid=\"mes-pro-route-process-create\"]",
+    "searchForm": "[data-testid=\"mes-pro-route-process-search\"]",
+    "searchSubmit": "[data-testid=\"mes-pro-route-process-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-pro-route-process-search-reset\"]",
+    "total": "[data-testid=\"mes-pro-route-process-total\"]",
+    "table": "[data-testid=\"mes-pro-route-process-table\"]",
+    "row": "[data-testid=\"mes-pro-route-process-row\"]",
+    "editButton": "[data-testid=\"mes-pro-route-process-edit\"]",
+    "deleteButton": "[data-testid=\"mes-pro-route-process-delete\"]",
+    "form": "[data-testid=\"mes-pro-route-process-form\"]",
+    "formError": "[data-testid=\"mes-pro-route-process-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-pro-route-process-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-pro-route-process-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-pro-route-process-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 工艺路线工序列表",
+    "dialogLabel": {
+      "create": "新增MES 工艺路线工序",
+      "edit": "编辑MES 工艺路线工序"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "route_id",
+        "label": "工艺路线编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-route_id",
+        "selector": "[data-testid=\"field-route_id\"]"
+      },
+      {
+        "name": "process_id",
+        "label": "工序编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-process_id",
+        "selector": "[data-testid=\"field-process_id\"]"
+      },
+      {
+        "name": "sort",
+        "label": "序号",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      },
+      {
+        "name": "next_process_id",
+        "label": "下一道工序编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-next_process_id",
+        "selector": "[data-testid=\"field-next_process_id\"]"
+      },
+      {
+        "name": "link_type",
+        "label": "与下一道工序关系",
+        "type": "number",
+        "required": false,
+        "testId": "field-link_type",
+        "selector": "[data-testid=\"field-link_type\"]"
+      },
+      {
+        "name": "prepare_time",
+        "label": "准备时间（分钟）",
+        "type": "number",
+        "required": false,
+        "testId": "field-prepare_time",
+        "selector": "[data-testid=\"field-prepare_time\"]"
+      },
+      {
+        "name": "wait_time",
+        "label": "等待时间（分钟）",
+        "type": "number",
+        "required": false,
+        "testId": "field-wait_time",
+        "selector": "[data-testid=\"field-wait_time\"]"
+      },
+      {
+        "name": "color_code",
+        "label": "甘特图显示颜色",
+        "type": "string",
+        "required": false,
+        "testId": "field-color_code",
+        "selector": "[data-testid=\"field-color_code\"]"
+      },
+      {
+        "name": "key_flag",
+        "label": "是否关键工序",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-key_flag",
+        "selector": "[data-testid=\"field-key_flag\"]"
+      },
+      {
+        "name": "check_flag",
+        "label": "是否质检工序",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-check_flag",
+        "selector": "[data-testid=\"field-check_flag\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-pro-route-process",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-pro-route-process\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-pro-route-process-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-pro-route-process-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-pro-route-process:search",
+      "reset": "mes-pro-route-process:reset",
+      "refresh": "mes-pro-route-process:refresh",
+      "create": "mes-pro-route-process:create",
+      "edit": "mes-pro-route-process:edit",
+      "delete": "mes-pro-route-process:delete",
+      "submit": "mes-pro-route-process:submit",
+      "cancel": "mes-pro-route-process:cancel",
+      "close": "mes-pro-route-process:close",
+      "row": "mes-pro-route-process:row",
+      "pagination": "mes-pro-route-process:pagination",
+      "fields": {
+        "route_id": "mes-pro-route-process:field:route_id",
+        "process_id": "mes-pro-route-process:field:process_id",
+        "sort": "mes-pro-route-process:field:sort",
+        "next_process_id": "mes-pro-route-process:field:next_process_id",
+        "link_type": "mes-pro-route-process:field:link_type",
+        "prepare_time": "mes-pro-route-process:field:prepare_time",
+        "wait_time": "mes-pro-route-process:field:wait_time",
+        "color_code": "mes-pro-route-process:field:color_code",
+        "key_flag": "mes-pro-route-process:field:key_flag",
+        "check_flag": "mes-pro-route-process:field:check_flag",
+        "remark": "mes-pro-route-process:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-pro-route-process",
+      "examples": [
+        "mes.mes-pro-route-process__List__Refresh",
+        "mes.mes-pro-route-process__ListItem__Open",
+        "mes.mes-pro-route-process__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ArticleService } from "../article.service"
 
 describe("ArticleService", () => {
-  it("should create and query Article（源框架导入）", async () => {
+  it("should create and query 文章管理", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ArticleService.create({
         category_id: 1,
@@ -21,7 +21,7 @@ describe("ArticleService", () => {
   
       const updated = await ArticleService.update(created.id, {
         id: created.id,
-        category_id: "更新Article（源框架导入）",
+        category_id: "更新文章管理",
       } as any)
       expect(updated).toBeDefined()
   

@@ -57,24 +57,36 @@ export function MesQcTemplateIndicatorForm({ open, initialData, onClose, onSucce
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-qc-template-indicator-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 质检方案-检测指标项" : "新增MES 质检方案-检测指标项"}
+        data-testid="mes-qc-template-indicator-form"
+        data-agent-scope="mes-qc-template-indicator:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesQcTemplateIndicator（源框架导入）" : "新增MesQcTemplateIndicator（源框架导入）"}
+            {isEdit ? "编辑MES 质检方案-检测指标项" : "新增MES 质检方案-检测指标项"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-qc-template-indicator-form-close" data-agent-target="mes-qc-template-indicator:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-qc-template-indicator-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">质检方案编号</label>
+          <label htmlFor="mes-qc-template-indicator-template_id" className="block text-xs text-slate-600 mb-1">质检方案编号</label>
           <input
             type="number"
+            id="mes-qc-template-indicator-template_id"
+            data-testid="field-template_id"
+            data-agent-target="mes-qc-template-indicator:field:template_id"
+            data-agent-state={formData.template_id == null || formData.template_id === "" ? "empty" : "filled"}
+            aria-label="质检方案编号"
             value={formData.template_id != null ? String(formData.template_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, template_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -84,9 +96,14 @@ export function MesQcTemplateIndicatorForm({ open, initialData, onClose, onSucce
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">质检指标编号</label>
+          <label htmlFor="mes-qc-template-indicator-indicator_id" className="block text-xs text-slate-600 mb-1">质检指标编号</label>
           <input
             type="number"
+            id="mes-qc-template-indicator-indicator_id"
+            data-testid="field-indicator_id"
+            data-agent-target="mes-qc-template-indicator:field:indicator_id"
+            data-agent-state={formData.indicator_id == null || formData.indicator_id === "" ? "empty" : "filled"}
+            aria-label="质检指标编号"
             value={formData.indicator_id != null ? String(formData.indicator_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, indicator_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -96,9 +113,14 @@ export function MesQcTemplateIndicatorForm({ open, initialData, onClose, onSucce
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">检测方法</label>
+          <label htmlFor="mes-qc-template-indicator-check_method" className="block text-xs text-slate-600 mb-1">检测方法</label>
           <input
             type="text"
+            id="mes-qc-template-indicator-check_method"
+            data-testid="field-check_method"
+            data-agent-target="mes-qc-template-indicator:field:check_method"
+            data-agent-state={formData.check_method ? "filled" : "empty"}
+            aria-label="检测方法"
             value={formData.check_method ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, check_method: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -108,9 +130,14 @@ export function MesQcTemplateIndicatorForm({ open, initialData, onClose, onSucce
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">标准值</label>
+          <label htmlFor="mes-qc-template-indicator-standard_value" className="block text-xs text-slate-600 mb-1">标准值</label>
           <input
             type="number"
+            id="mes-qc-template-indicator-standard_value"
+            data-testid="field-standard_value"
+            data-agent-target="mes-qc-template-indicator:field:standard_value"
+            data-agent-state={formData.standard_value == null || formData.standard_value === "" ? "empty" : "filled"}
+            aria-label="标准值"
             value={formData.standard_value != null ? String(formData.standard_value) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, standard_value: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -120,9 +147,14 @@ export function MesQcTemplateIndicatorForm({ open, initialData, onClose, onSucce
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">计量单位编号</label>
+          <label htmlFor="mes-qc-template-indicator-unit_measure_id" className="block text-xs text-slate-600 mb-1">计量单位编号</label>
           <input
             type="number"
+            id="mes-qc-template-indicator-unit_measure_id"
+            data-testid="field-unit_measure_id"
+            data-agent-target="mes-qc-template-indicator:field:unit_measure_id"
+            data-agent-state={formData.unit_measure_id == null || formData.unit_measure_id === "" ? "empty" : "filled"}
+            aria-label="计量单位编号"
             value={formData.unit_measure_id != null ? String(formData.unit_measure_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, unit_measure_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -132,9 +164,14 @@ export function MesQcTemplateIndicatorForm({ open, initialData, onClose, onSucce
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">误差上限</label>
+          <label htmlFor="mes-qc-template-indicator-threshold_max" className="block text-xs text-slate-600 mb-1">误差上限</label>
           <input
             type="number"
+            id="mes-qc-template-indicator-threshold_max"
+            data-testid="field-threshold_max"
+            data-agent-target="mes-qc-template-indicator:field:threshold_max"
+            data-agent-state={formData.threshold_max == null || formData.threshold_max === "" ? "empty" : "filled"}
+            aria-label="误差上限"
             value={formData.threshold_max != null ? String(formData.threshold_max) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, threshold_max: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -144,9 +181,14 @@ export function MesQcTemplateIndicatorForm({ open, initialData, onClose, onSucce
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">误差下限</label>
+          <label htmlFor="mes-qc-template-indicator-threshold_min" className="block text-xs text-slate-600 mb-1">误差下限</label>
           <input
             type="number"
+            id="mes-qc-template-indicator-threshold_min"
+            data-testid="field-threshold_min"
+            data-agent-target="mes-qc-template-indicator:field:threshold_min"
+            data-agent-state={formData.threshold_min == null || formData.threshold_min === "" ? "empty" : "filled"}
+            aria-label="误差下限"
             value={formData.threshold_min != null ? String(formData.threshold_min) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, threshold_min: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -156,9 +198,14 @@ export function MesQcTemplateIndicatorForm({ open, initialData, onClose, onSucce
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">说明图 URL</label>
+          <label htmlFor="mes-qc-template-indicator-doc_url" className="block text-xs text-slate-600 mb-1">说明图 URL</label>
           <input
             type="text"
+            id="mes-qc-template-indicator-doc_url"
+            data-testid="field-doc_url"
+            data-agent-target="mes-qc-template-indicator:field:doc_url"
+            data-agent-state={formData.doc_url ? "filled" : "empty"}
+            aria-label="说明图 URL"
             value={formData.doc_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, doc_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -168,9 +215,14 @@ export function MesQcTemplateIndicatorForm({ open, initialData, onClose, onSucce
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-qc-template-indicator-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-qc-template-indicator-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-qc-template-indicator:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -184,6 +236,8 @@ export function MesQcTemplateIndicatorForm({ open, initialData, onClose, onSucce
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-qc-template-indicator-form-cancel"
+              data-agent-target="mes-qc-template-indicator:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -191,6 +245,9 @@ export function MesQcTemplateIndicatorForm({ open, initialData, onClose, onSucce
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-qc-template-indicator-form-submit"
+              data-agent-target="mes-qc-template-indicator:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

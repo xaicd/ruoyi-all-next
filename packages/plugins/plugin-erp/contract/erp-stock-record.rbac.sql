@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for ErpStockRecord（源框架导入） (ErpStockRecord)
+-- Auto-generated RBAC & Menu Migration for ERP 产品库存明细 (ErpStockRecord)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-erp-stock-record',
   'erp-dir',
-  'ErpStockRecord（源框架导入）管理',
+  'ERP 产品库存明细管理',
   '/admin/erp/erp-stock-record',
   'erp/erp-stock-record/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-erp-stock-record-query',  'menu-erp-stock-record', '查询ErpStockRecord（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_stock_record:query',  1, NOW(), NOW()),
-('menu-erp-stock-record-create', 'menu-erp-stock-record', '新增ErpStockRecord（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_stock_record:create', 2, NOW(), NOW()),
-('menu-erp-stock-record-update', 'menu-erp-stock-record', '修改ErpStockRecord（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_stock_record:update', 3, NOW(), NOW()),
-('menu-erp-stock-record-delete', 'menu-erp-stock-record', '删除ErpStockRecord（源框架导入）', 'BUTTON', 'ACTIVE', 'erp:erp_stock_record:delete', 4, NOW(), NOW())
+('menu-erp-stock-record-query',  'menu-erp-stock-record', '查询ERP 产品库存明细', 'BUTTON', 'ACTIVE', 'erp:erp_stock_record:query',  1, NOW(), NOW()),
+('menu-erp-stock-record-create', 'menu-erp-stock-record', '新增ERP 产品库存明细', 'BUTTON', 'ACTIVE', 'erp:erp_stock_record:create', 2, NOW(), NOW()),
+('menu-erp-stock-record-update', 'menu-erp-stock-record', '修改ERP 产品库存明细', 'BUTTON', 'ACTIVE', 'erp:erp_stock_record:update', 3, NOW(), NOW()),
+('menu-erp-stock-record-delete', 'menu-erp-stock-record', '删除ERP 产品库存明细', 'BUTTON', 'ACTIVE', 'erp:erp_stock_record:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

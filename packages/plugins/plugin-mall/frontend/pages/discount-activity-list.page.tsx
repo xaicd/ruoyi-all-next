@@ -64,44 +64,63 @@ export function DiscountActivityListPage() {
     }
   }
 
+  // Agent-Native: 根节点暴露就绪信号；弹窗打开时基底打 inert，让无障碍树只留弹窗一层
+  const agentState = loading ? "loading" : formOpen ? "modal-open" : total === 0 ? "empty" : "ready"
+
   return (
-    <div className="p-6 space-y-4">
+    <div
+      data-agent-scope="discount-activity"
+      data-agent-state={agentState}
+      data-agent-page-ready={String(!loading)}
+      className="p-6 space-y-4"
+    >
+      {/* 弹窗打开时基底内容 inert —— Agent 不会误点到被遮挡的元素 */}
+      <div inert={formOpen ? true : undefined} className="space-y-4">
       {/* 页面头部 */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900">DiscountActivity（源框架导入）管理</h1>
-          <p className="text-xs text-slate-500 mt-0.5">DiscountActivity（源框架导入）列表与配置管理</p>
+          <h1 data-testid="discount-activity-title" className="text-xl font-bold tracking-tight text-slate-900">限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一个活动；管理</h1>
+          <p className="text-xs text-slate-500 mt-0.5">限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一个活动；列表与配置管理</p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={fetchData}
+            data-testid="discount-activity-refresh"
+            data-agent-target="discount-activity:refresh"
             className="px-3 py-1.5 text-xs text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
           >
             刷新
           </button>
           <button
             onClick={handleAdd}
+            data-testid="discount-activity-create"
+            data-agent-target="discount-activity:create"
             className="px-3.5 py-1.5 text-xs text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors font-medium shadow-xs"
           >
-            + 新增DiscountActivity（源框架导入）
+            + 新增限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一个活动；
           </button>
         </div>
       </div>
 
       {/* 搜索工具栏 */}
-      <form onSubmit={handleSearch} className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3">
+      <form
+        onSubmit={handleSearch}
+        data-testid="discount-activity-search"
+        data-agent-scope="discount-activity:search"
+        aria-label="限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一个活动；搜索"
+        className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3">
 
-          <button type="submit" className="px-3 py-1 text-xs text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition-colors">查询</button>
-          <button type="button" onClick={handleReset} className="px-3 py-1 text-xs text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors">重置</button>
+          <button type="submit" data-testid="discount-activity-search-submit" data-agent-target="discount-activity:search" className="px-3 py-1 text-xs text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition-colors">查询</button>
+          <button type="button" onClick={handleReset} data-testid="discount-activity-search-reset" data-agent-target="discount-activity:reset" className="px-3 py-1 text-xs text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors">重置</button>
         </div>
-        <div className="text-xs text-slate-500">共 <span className="font-semibold text-slate-700">{total}</span> 条记录</div>
+        <div className="text-xs text-slate-500">共 <span data-testid="discount-activity-total" className="font-semibold text-slate-700">{total}</span> 条记录</div>
       </form>
 
       {/* 数据表格 */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-slate-200">
+          <table data-testid="discount-activity-table" aria-label="限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一个活动；列表" className="min-w-full divide-y divide-slate-200">
             <thead className="bg-slate-50/80">
               <tr>
                 <th className="px-4 py-2.5 text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider">活动标题</th>
@@ -123,15 +142,22 @@ export function DiscountActivityListPage() {
                 </tr>
               ) : (
                 data.map((item) => (
-                  <tr key={item.id} className="hover:bg-slate-50/60 transition-colors">
+                  <tr
+                    key={item.id}
+                    data-testid="discount-activity-row"
+                    data-agent-target="discount-activity:row"
+                    data-agent-state={editItem?.id === item.id ? "editing" : "idle"}
+                    data-agent-id={item.id}
+                    className="hover:bg-slate-50/60 transition-colors"
+                  >
                   <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.name ?? "-")}>{String(item.name ?? "-")}</td>
                   <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.status ?? "-")}>{String(item.status ?? "-")}</td>
                   <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.start_time ?? "-")}>{String(item.start_time ?? "-")}</td>
                   <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.end_time ?? "-")}>{String(item.end_time ?? "-")}</td>
                   <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.remark ?? "-")}>{String(item.remark ?? "-")}</td>
                     <td className="px-4 py-2.5 text-xs text-right whitespace-nowrap space-x-2">
-                      <button onClick={() => handleEdit(item)} className="text-blue-600 hover:text-blue-800 font-medium">编辑</button>
-                      <button onClick={() => handleDelete(item.id)} className="text-rose-600 hover:text-rose-800 font-medium">删除</button>
+                      <button onClick={() => handleEdit(item)} data-testid="discount-activity-edit" data-agent-target="discount-activity:edit" data-agent-id={item.id} aria-label={"编辑 " + item.id} className="text-blue-600 hover:text-blue-800 font-medium">编辑</button>
+                      <button onClick={() => handleDelete(item.id)} data-testid="discount-activity-delete" data-agent-target="discount-activity:delete" data-agent-id={item.id} aria-label={"删除 " + item.id} className="text-rose-600 hover:text-rose-800 font-medium">删除</button>
                     </td>
                   </tr>
                 ))
@@ -141,7 +167,7 @@ export function DiscountActivityListPage() {
         </div>
 
         {/* 分页组件 */}
-        <div className="p-3 border-t border-slate-200">
+        <div data-agent-target="discount-activity:pagination" className="p-3 border-t border-slate-200">
           <Pagination
             total={total}
             page={page}
@@ -150,6 +176,8 @@ export function DiscountActivityListPage() {
             onPageSizeChange={(ps) => setPageSize(ps)}
           />
         </div>
+      </div>
+
       </div>
 
       {/* 弹窗表单 */}

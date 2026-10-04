@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesQcIpqc（源框架导入） (MesQcIpqc)
+-- Auto-generated RBAC & Menu Migration for MES 过程检验单（IPQC, In-Process Quality Control） (MesQcIpqc)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-qc-ipqc',
   'mes-dir',
-  'MesQcIpqc（源框架导入）管理',
+  'MES 过程检验单（IPQC, In-Process Quality Control）管理',
   '/admin/mes/mes-qc-ipqc',
   'mes/mes-qc-ipqc/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-qc-ipqc-query',  'menu-mes-qc-ipqc', '查询MesQcIpqc（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_qc_ipqc:query',  1, NOW(), NOW()),
-('menu-mes-qc-ipqc-create', 'menu-mes-qc-ipqc', '新增MesQcIpqc（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_qc_ipqc:create', 2, NOW(), NOW()),
-('menu-mes-qc-ipqc-update', 'menu-mes-qc-ipqc', '修改MesQcIpqc（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_qc_ipqc:update', 3, NOW(), NOW()),
-('menu-mes-qc-ipqc-delete', 'menu-mes-qc-ipqc', '删除MesQcIpqc（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_qc_ipqc:delete', 4, NOW(), NOW())
+('menu-mes-qc-ipqc-query',  'menu-mes-qc-ipqc', '查询MES 过程检验单（IPQC, In-Process Quality Control）', 'BUTTON', 'ACTIVE', 'mes:mes_qc_ipqc:query',  1, NOW(), NOW()),
+('menu-mes-qc-ipqc-create', 'menu-mes-qc-ipqc', '新增MES 过程检验单（IPQC, In-Process Quality Control）', 'BUTTON', 'ACTIVE', 'mes:mes_qc_ipqc:create', 2, NOW(), NOW()),
+('menu-mes-qc-ipqc-update', 'menu-mes-qc-ipqc', '修改MES 过程检验单（IPQC, In-Process Quality Control）', 'BUTTON', 'ACTIVE', 'mes:mes_qc_ipqc:update', 3, NOW(), NOW()),
+('menu-mes-qc-ipqc-delete', 'menu-mes-qc-ipqc', '删除MES 过程检验单（IPQC, In-Process Quality Control）', 'BUTTON', 'ACTIVE', 'mes:mes_qc_ipqc:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

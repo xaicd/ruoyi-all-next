@@ -53,24 +53,36 @@ export function BpmFormForm({ open, initialData, onClose, onSuccess }: BpmFormFo
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="bpm-form-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑BPM 工作流的表单定义用于工作流的申请表单，需要动态配置的场景" : "新增BPM 工作流的表单定义用于工作流的申请表单，需要动态配置的场景"}
+        data-testid="bpm-form-form"
+        data-agent-scope="bpm-form:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑BpmForm（源框架导入）" : "新增BpmForm（源框架导入）"}
+            {isEdit ? "编辑BPM 工作流的表单定义用于工作流的申请表单，需要动态配置的场景" : "新增BPM 工作流的表单定义用于工作流的申请表单，需要动态配置的场景"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="bpm-form-form-close" data-agent-target="bpm-form:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="bpm-form-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">表单名</label>
+          <label htmlFor="bpm-form-name" className="block text-xs text-slate-600 mb-1">表单名</label>
           <input
             type="text"
+            id="bpm-form-name"
+            data-testid="field-name"
+            data-agent-target="bpm-form:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="表单名"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -80,9 +92,14 @@ export function BpmFormForm({ open, initialData, onClose, onSuccess }: BpmFormFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="bpm-form-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="bpm-form-status"
+            data-testid="field-status"
+            data-agent-target="bpm-form:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -92,9 +109,14 @@ export function BpmFormForm({ open, initialData, onClose, onSuccess }: BpmFormFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">表单的配置</label>
+          <label htmlFor="bpm-form-conf" className="block text-xs text-slate-600 mb-1">表单的配置</label>
           <input
             type="text"
+            id="bpm-form-conf"
+            data-testid="field-conf"
+            data-agent-target="bpm-form:field:conf"
+            data-agent-state={formData.conf ? "filled" : "empty"}
+            aria-label="表单的配置"
             value={formData.conf ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, conf: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -104,9 +126,14 @@ export function BpmFormForm({ open, initialData, onClose, onSuccess }: BpmFormFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">表单项的数组</label>
+          <label htmlFor="bpm-form-fields" className="block text-xs text-slate-600 mb-1">表单项的数组</label>
           <input
             type="text"
+            id="bpm-form-fields"
+            data-testid="field-fields"
+            data-agent-target="bpm-form:field:fields"
+            data-agent-state={formData.fields ? "filled" : "empty"}
+            aria-label="表单项的数组"
             value={formData.fields ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, fields: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -116,9 +143,14 @@ export function BpmFormForm({ open, initialData, onClose, onSuccess }: BpmFormFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="bpm-form-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="bpm-form-remark"
+            data-testid="field-remark"
+            data-agent-target="bpm-form:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -132,6 +164,8 @@ export function BpmFormForm({ open, initialData, onClose, onSuccess }: BpmFormFo
             <button
               type="button"
               onClick={onClose}
+              data-testid="bpm-form-form-cancel"
+              data-agent-target="bpm-form:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -139,6 +173,9 @@ export function BpmFormForm({ open, initialData, onClose, onSuccess }: BpmFormFo
             <button
               type="submit"
               disabled={loading}
+              data-testid="bpm-form-form-submit"
+              data-agent-target="bpm-form:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

@@ -1,0 +1,429 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "AfterSale",
+  "kebab": "after-sale",
+  "businessName": "售后订单，用于处理 交易订单的退款退货流程",
+  "permissionPrefix": "mall:after_sale",
+  "page": {
+    "route": "/admin/mall/after-sale",
+    "title": "售后订单，用于处理 交易订单的退款退货流程管理",
+    "titleSelector": "[data-testid=\"after-sale-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "after-sale",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/after-sale",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/after-sale/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/after-sale"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/after-sale/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/after-sale/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"after-sale-title\"]",
+    "refresh": "[data-testid=\"after-sale-refresh\"]",
+    "createButton": "[data-testid=\"after-sale-create\"]",
+    "searchForm": "[data-testid=\"after-sale-search\"]",
+    "searchSubmit": "[data-testid=\"after-sale-search-submit\"]",
+    "searchReset": "[data-testid=\"after-sale-search-reset\"]",
+    "total": "[data-testid=\"after-sale-total\"]",
+    "table": "[data-testid=\"after-sale-table\"]",
+    "row": "[data-testid=\"after-sale-row\"]",
+    "editButton": "[data-testid=\"after-sale-edit\"]",
+    "deleteButton": "[data-testid=\"after-sale-delete\"]",
+    "form": "[data-testid=\"after-sale-form\"]",
+    "formError": "[data-testid=\"after-sale-form-error\"]",
+    "formSubmit": "[data-testid=\"after-sale-form-submit\"]",
+    "formCancel": "[data-testid=\"after-sale-form-cancel\"]",
+    "formClose": "[data-testid=\"after-sale-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "售后订单，用于处理 交易订单的退款退货流程列表",
+    "dialogLabel": {
+      "create": "新增售后订单，用于处理 交易订单的退款退货流程",
+      "edit": "编辑售后订单，用于处理 交易订单的退款退货流程"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "no",
+        "label": "售后单号",
+        "type": "string",
+        "required": false,
+        "testId": "field-no",
+        "selector": "[data-testid=\"field-no\"]"
+      },
+      {
+        "name": "status",
+        "label": "退款状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "way",
+        "label": "售后方式",
+        "type": "number",
+        "required": false,
+        "testId": "field-way",
+        "selector": "[data-testid=\"field-way\"]"
+      },
+      {
+        "name": "type",
+        "label": "售后类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "apply_reason",
+        "label": "申请原因",
+        "type": "string",
+        "required": false,
+        "testId": "field-apply_reason",
+        "selector": "[data-testid=\"field-apply_reason\"]"
+      },
+      {
+        "name": "apply_description",
+        "label": "补充描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-apply_description",
+        "selector": "[data-testid=\"field-apply_description\"]"
+      },
+      {
+        "name": "apply_pic_urls",
+        "label": "补充凭证图片",
+        "type": "string",
+        "required": false,
+        "testId": "field-apply_pic_urls",
+        "selector": "[data-testid=\"field-apply_pic_urls\"]"
+      },
+      {
+        "name": "order_id",
+        "label": "交易订单编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-order_id",
+        "selector": "[data-testid=\"field-order_id\"]"
+      },
+      {
+        "name": "order_no",
+        "label": "订单流水号",
+        "type": "string",
+        "required": false,
+        "testId": "field-order_no",
+        "selector": "[data-testid=\"field-order_no\"]"
+      },
+      {
+        "name": "order_item_id",
+        "label": "交易订单项编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-order_item_id",
+        "selector": "[data-testid=\"field-order_item_id\"]"
+      },
+      {
+        "name": "spu_id",
+        "label": "商品 SPU 编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-spu_id",
+        "selector": "[data-testid=\"field-spu_id\"]"
+      },
+      {
+        "name": "spu_name",
+        "label": "商品 SPU 名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-spu_name",
+        "selector": "[data-testid=\"field-spu_name\"]"
+      },
+      {
+        "name": "sku_id",
+        "label": "商品 SKU 编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-sku_id",
+        "selector": "[data-testid=\"field-sku_id\"]"
+      },
+      {
+        "name": "properties",
+        "label": "属性数组，JSON 格式",
+        "type": "string",
+        "required": false,
+        "testId": "field-properties",
+        "selector": "[data-testid=\"field-properties\"]"
+      },
+      {
+        "name": "pic_url",
+        "label": "商品图片",
+        "type": "string",
+        "required": false,
+        "testId": "field-pic_url",
+        "selector": "[data-testid=\"field-pic_url\"]"
+      },
+      {
+        "name": "count",
+        "label": "退货商品数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-count",
+        "selector": "[data-testid=\"field-count\"]"
+      },
+      {
+        "name": "audit_time",
+        "label": "审批时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-audit_time",
+        "selector": "[data-testid=\"field-audit_time\"]"
+      },
+      {
+        "name": "audit_user_id",
+        "label": "审批人",
+        "type": "number",
+        "required": false,
+        "testId": "field-audit_user_id",
+        "selector": "[data-testid=\"field-audit_user_id\"]"
+      },
+      {
+        "name": "audit_reason",
+        "label": "审批备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-audit_reason",
+        "selector": "[data-testid=\"field-audit_reason\"]"
+      },
+      {
+        "name": "refund_price",
+        "label": "退款金额，单位：分。",
+        "type": "number",
+        "required": false,
+        "testId": "field-refund_price",
+        "selector": "[data-testid=\"field-refund_price\"]"
+      },
+      {
+        "name": "pay_refund_id",
+        "label": "支付退款编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-pay_refund_id",
+        "selector": "[data-testid=\"field-pay_refund_id\"]"
+      },
+      {
+        "name": "refund_time",
+        "label": "退款时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-refund_time",
+        "selector": "[data-testid=\"field-refund_time\"]"
+      },
+      {
+        "name": "logistics_id",
+        "label": "退货物流公司编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-logistics_id",
+        "selector": "[data-testid=\"field-logistics_id\"]"
+      },
+      {
+        "name": "logistics_no",
+        "label": "退货物流单号",
+        "type": "string",
+        "required": false,
+        "testId": "field-logistics_no",
+        "selector": "[data-testid=\"field-logistics_no\"]"
+      },
+      {
+        "name": "delivery_time",
+        "label": "退货时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-delivery_time",
+        "selector": "[data-testid=\"field-delivery_time\"]"
+      },
+      {
+        "name": "receive_time",
+        "label": "收货时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-receive_time",
+        "selector": "[data-testid=\"field-receive_time\"]"
+      },
+      {
+        "name": "receive_reason",
+        "label": "收货备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-receive_reason",
+        "selector": "[data-testid=\"field-receive_reason\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "after-sale",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"after-sale\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"after-sale-form-overlay\"]",
+      "dialog": "[data-testid=\"after-sale-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "after-sale:search",
+      "reset": "after-sale:reset",
+      "refresh": "after-sale:refresh",
+      "create": "after-sale:create",
+      "edit": "after-sale:edit",
+      "delete": "after-sale:delete",
+      "submit": "after-sale:submit",
+      "cancel": "after-sale:cancel",
+      "close": "after-sale:close",
+      "row": "after-sale:row",
+      "pagination": "after-sale:pagination",
+      "fields": {
+        "no": "after-sale:field:no",
+        "status": "after-sale:field:status",
+        "way": "after-sale:field:way",
+        "type": "after-sale:field:type",
+        "user_id": "after-sale:field:user_id",
+        "apply_reason": "after-sale:field:apply_reason",
+        "apply_description": "after-sale:field:apply_description",
+        "apply_pic_urls": "after-sale:field:apply_pic_urls",
+        "order_id": "after-sale:field:order_id",
+        "order_no": "after-sale:field:order_no",
+        "order_item_id": "after-sale:field:order_item_id",
+        "spu_id": "after-sale:field:spu_id",
+        "spu_name": "after-sale:field:spu_name",
+        "sku_id": "after-sale:field:sku_id",
+        "properties": "after-sale:field:properties",
+        "pic_url": "after-sale:field:pic_url",
+        "count": "after-sale:field:count",
+        "audit_time": "after-sale:field:audit_time",
+        "audit_user_id": "after-sale:field:audit_user_id",
+        "audit_reason": "after-sale:field:audit_reason",
+        "refund_price": "after-sale:field:refund_price",
+        "pay_refund_id": "after-sale:field:pay_refund_id",
+        "refund_time": "after-sale:field:refund_time",
+        "logistics_id": "after-sale:field:logistics_id",
+        "logistics_no": "after-sale:field:logistics_no",
+        "delivery_time": "after-sale:field:delivery_time",
+        "receive_time": "after-sale:field:receive_time",
+        "receive_reason": "after-sale:field:receive_reason"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.after-sale",
+      "examples": [
+        "mall.after-sale__List__Refresh",
+        "mall.after-sale__ListItem__Open",
+        "mall.after-sale__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

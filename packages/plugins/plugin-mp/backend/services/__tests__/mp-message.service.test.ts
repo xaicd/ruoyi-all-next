@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MpMessageService } from "../mp-message.service"
 
 describe("MpMessageService", () => {
-  it("should create and query MpMessage（源框架导入）", async () => {
+  it("should create and query 公众号消息", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MpMessageService.create({
         msg_id: 1,
@@ -21,7 +21,7 @@ describe("MpMessageService", () => {
   
       const updated = await MpMessageService.update(created.id, {
         id: created.id,
-        msg_id: "更新MpMessage（源框架导入）",
+        msg_id: "更新公众号消息",
       } as any)
       expect(updated).toBeDefined()
   

@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesQcDefectService } from "../mes-qc-defect.service"
 
 describe("MesQcDefectService", () => {
-  it("should create and query MesQcDefect（源框架导入）", async () => {
+  it("should create and query MES 缺陷类型", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesQcDefectService.create({
-        code: "测试MesQcDefect（源框架导入）",
+        code: "测试MES 缺陷类型",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("MesQcDefectService", () => {
   
       const updated = await MesQcDefectService.update(created.id, {
         id: created.id,
-        code: "更新MesQcDefect（源框架导入）",
+        code: "更新MES 缺陷类型",
       } as any)
       expect(updated).toBeDefined()
   

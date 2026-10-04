@@ -1,0 +1,249 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "Banner",
+  "kebab": "banner",
+  "businessName": "banner",
+  "permissionPrefix": "mall:banner",
+  "page": {
+    "route": "/admin/mall/banner",
+    "title": "banner管理",
+    "titleSelector": "[data-testid=\"banner-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "banner",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/banner",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/banner/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/banner"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/banner/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/banner/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"banner-title\"]",
+    "refresh": "[data-testid=\"banner-refresh\"]",
+    "createButton": "[data-testid=\"banner-create\"]",
+    "searchForm": "[data-testid=\"banner-search\"]",
+    "searchSubmit": "[data-testid=\"banner-search-submit\"]",
+    "searchReset": "[data-testid=\"banner-search-reset\"]",
+    "total": "[data-testid=\"banner-total\"]",
+    "table": "[data-testid=\"banner-table\"]",
+    "row": "[data-testid=\"banner-row\"]",
+    "editButton": "[data-testid=\"banner-edit\"]",
+    "deleteButton": "[data-testid=\"banner-delete\"]",
+    "form": "[data-testid=\"banner-form\"]",
+    "formError": "[data-testid=\"banner-form-error\"]",
+    "formSubmit": "[data-testid=\"banner-form-submit\"]",
+    "formCancel": "[data-testid=\"banner-form-cancel\"]",
+    "formClose": "[data-testid=\"banner-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "banner列表",
+    "dialogLabel": {
+      "create": "新增banner",
+      "edit": "编辑banner"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "string",
+        "required": false,
+        "testId": "field-title",
+        "selector": "[data-testid=\"field-title\"]"
+      },
+      {
+        "name": "url",
+        "label": "跳转链接",
+        "type": "string",
+        "required": false,
+        "testId": "field-url",
+        "selector": "[data-testid=\"field-url\"]"
+      },
+      {
+        "name": "pic_url",
+        "label": "图片链接",
+        "type": "string",
+        "required": false,
+        "testId": "field-pic_url",
+        "selector": "[data-testid=\"field-pic_url\"]"
+      },
+      {
+        "name": "sort",
+        "label": "排序",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "position",
+        "label": "定位",
+        "type": "number",
+        "required": false,
+        "testId": "field-position",
+        "selector": "[data-testid=\"field-position\"]"
+      },
+      {
+        "name": "memo",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-memo",
+        "selector": "[data-testid=\"field-memo\"]"
+      },
+      {
+        "name": "browse_count",
+        "label": "点击次数",
+        "type": "number",
+        "required": false,
+        "testId": "field-browse_count",
+        "selector": "[data-testid=\"field-browse_count\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "banner",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"banner\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"banner-form-overlay\"]",
+      "dialog": "[data-testid=\"banner-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "banner:search",
+      "reset": "banner:reset",
+      "refresh": "banner:refresh",
+      "create": "banner:create",
+      "edit": "banner:edit",
+      "delete": "banner:delete",
+      "submit": "banner:submit",
+      "cancel": "banner:cancel",
+      "close": "banner:close",
+      "row": "banner:row",
+      "pagination": "banner:pagination",
+      "fields": {
+        "title": "banner:field:title",
+        "url": "banner:field:url",
+        "pic_url": "banner:field:pic_url",
+        "sort": "banner:field:sort",
+        "status": "banner:field:status",
+        "position": "banner:field:position",
+        "memo": "banner:field:memo",
+        "browse_count": "banner:field:browse_count"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.banner",
+      "examples": [
+        "mall.banner__List__Refresh",
+        "mall.banner__ListItem__Open",
+        "mall.banner__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

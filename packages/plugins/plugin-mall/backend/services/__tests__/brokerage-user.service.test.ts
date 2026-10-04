@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { BrokerageUserService } from "../brokerage-user.service"
 
 describe("BrokerageUserService", () => {
-  it("should create and query BrokerageUser（源框架导入）", async () => {
+  it("should create and query 分销用户", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await BrokerageUserService.create({
         bind_user_id: 1,
@@ -21,7 +21,7 @@ describe("BrokerageUserService", () => {
   
       const updated = await BrokerageUserService.update(created.id, {
         id: created.id,
-        bind_user_id: "更新BrokerageUser（源框架导入）",
+        bind_user_id: "更新分销用户",
       } as any)
       expect(updated).toBeDefined()
   

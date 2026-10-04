@@ -6,12 +6,12 @@ export const IM_TABLES: CodegenConfig[] = [
   {
     moduleName: "im",
     className: "ImChannel",
-    businessName: "ImChannel（源框架导入）",
+    businessName: "IM 频道 DO业务语义：- 频道是运营单向推送的主体；C 端用户不能向频道发消息- 是业务码（API / 字典外露），id 是数字主键给前端会话 targetId 用",
     parentMenuId: "im-dir",
     permissionPrefix: "im:im_channel",
     table: {
       name: "im_channel",
-      comment: "ImChannel（源框架导入）",
+      comment: "IM 频道 DO业务语义：- 频道是运营单向推送的主体；C 端用户不能向频道发消息- 是业务码（API / 字典外露），id 是数字主键给前端会话 targetId 用",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"频道业务码","nullableInferred":true},
@@ -31,12 +31,12 @@ export const IM_TABLES: CodegenConfig[] = [
   {
     moduleName: "im",
     className: "ImChannelMaterial",
-    businessName: "ImChannelMaterial（源框架导入）",
+    businessName: "IM 频道素材 DO业务语义：- 运营素材库，可被反复推送- 一条素材 1:N 关联多条 - 富文本仅在素材详情接口按需返回，推送 payload 不带，避免压爆 WebSocket 通道",
     parentMenuId: "im-dir",
     permissionPrefix: "im:im_channel_material",
     table: {
       name: "im_channel_material",
-      comment: "ImChannelMaterial（源框架导入）",
+      comment: "IM 频道素材 DO业务语义：- 运营素材库，可被反复推送- 一条素材 1:N 关联多条 - 富文本仅在素材详情接口按需返回，推送 payload 不带，避免压爆 WebSocket 通道",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"channel_id","type":"bigint","tsType":"number","nullable":true,"comment":"频道编号","nullableInferred":true},
@@ -58,12 +58,12 @@ export const IM_TABLES: CodegenConfig[] = [
   {
     moduleName: "im",
     className: "ImChannelMessage",
-    businessName: "ImChannelMessage（源框架导入）",
+    businessName: "IM 频道消息 DO业务语义：- 一次推送 1 行； 为空表示全员- 冗余 便于按频道检索- 存推送时 payload 的 JSON 快照（title / coverUrl / summa",
     parentMenuId: "im-dir",
     permissionPrefix: "im:im_channel_message",
     table: {
       name: "im_channel_message",
-      comment: "ImChannelMessage（源框架导入）",
+      comment: "IM 频道消息 DO业务语义：- 一次推送 1 行； 为空表示全员- 冗余 便于按频道检索- 存推送时 payload 的 JSON 快照（title / coverUrl / summa",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"channel_id","type":"bigint","tsType":"number","nullable":true,"comment":"频道编号","nullableInferred":true},
@@ -84,12 +84,12 @@ export const IM_TABLES: CodegenConfig[] = [
   {
     moduleName: "im",
     className: "ImConversationRead",
-    businessName: "ImConversationRead（源框架导入）",
+    businessName: "IM 会话读位置 DO只表达「用户在某个会话的最大已读位置」，私聊 / 群聊 / 频道统一落这张表，是读位置的唯一权威。",
     parentMenuId: "im-dir",
     permissionPrefix: "im:im_conversation_read",
     table: {
       name: "im_conversation_read",
-      comment: "ImConversationRead（源框架导入）",
+      comment: "IM 会话读位置 DO只表达「用户在某个会话的最大已读位置」，私聊 / 群聊 / 频道统一落这张表，是读位置的唯一权威。",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},
@@ -109,12 +109,12 @@ export const IM_TABLES: CodegenConfig[] = [
   {
     moduleName: "im",
     className: "ImFacePack",
-    businessName: "ImFacePack（源框架导入）",
+    businessName: "IM 表情包 DO（运营配置的系统表情包元数据）",
     parentMenuId: "im-dir",
     permissionPrefix: "im:im_face_pack",
     table: {
       name: "im_face_pack",
-      comment: "ImFacePack（源框架导入）",
+      comment: "IM 表情包 DO（运营配置的系统表情包元数据）",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"表情包名称","nullableInferred":true},
@@ -133,12 +133,12 @@ export const IM_TABLES: CodegenConfig[] = [
   {
     moduleName: "im",
     className: "ImFacePackItem",
-    businessName: "ImFacePackItem（源框架导入）",
+    businessName: "IM 表情包项 DO（系统表情包内的单张表情图）",
     parentMenuId: "im-dir",
     permissionPrefix: "im:im_face_pack_item",
     table: {
       name: "im_face_pack_item",
-      comment: "ImFacePackItem（源框架导入）",
+      comment: "IM 表情包项 DO（系统表情包内的单张表情图）",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"pack_id","type":"bigint","tsType":"number","nullable":true,"comment":"所属表情包编号","nullableInferred":true},
@@ -160,12 +160,12 @@ export const IM_TABLES: CodegenConfig[] = [
   {
     moduleName: "im",
     className: "ImFaceUserItem",
-    businessName: "ImFaceUserItem（源框架导入）",
+    businessName: "IM 用户私有表情 DO（个人表情包，对照微信「我的表情」）",
     parentMenuId: "im-dir",
     permissionPrefix: "im:im_face_user_item",
     table: {
       name: "im_face_user_item",
-      comment: "ImFaceUserItem（源框架导入）",
+      comment: "IM 用户私有表情 DO（个人表情包，对照微信「我的表情」）",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"所属用户编号","nullableInferred":true},
@@ -186,12 +186,12 @@ export const IM_TABLES: CodegenConfig[] = [
   {
     moduleName: "im",
     className: "ImFriend",
-    businessName: "ImFriend（源框架导入）",
+    businessName: "IM 好友关系 DO业务语义：- 双向关系：A-B 互为好友会存 2 条记录（userId=A, friendUserId=B 和 userId=B, friendUserId=A）- 状态管理",
     parentMenuId: "im-dir",
     permissionPrefix: "im:im_friend",
     table: {
       name: "im_friend",
-      comment: "ImFriend（源框架导入）",
+      comment: "IM 好友关系 DO业务语义：- 双向关系：A-B 互为好友会存 2 条记录（userId=A, friendUserId=B 和 userId=B, friendUserId=A）- 状态管理",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},
@@ -216,12 +216,12 @@ export const IM_TABLES: CodegenConfig[] = [
   {
     moduleName: "im",
     className: "ImFriendRequest",
-    businessName: "ImFriendRequest（源框架导入）",
+    businessName: "IM 好友申请记录 DO配合「申请 - 审批」流程：- 发起方调 apply 接口落库（handleResult=UNHANDLED）- 接收方调 agree / refuse 处理（更新 ha",
     parentMenuId: "im-dir",
     permissionPrefix: "im:im_friend_request",
     table: {
       name: "im_friend_request",
-      comment: "ImFriendRequest（源框架导入）",
+      comment: "IM 好友申请记录 DO配合「申请 - 审批」流程：- 发起方调 apply 接口落库（handleResult=UNHANDLED）- 接收方调 agree / refuse 处理（更新 ha",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"from_user_id","type":"bigint","tsType":"number","nullable":true,"comment":"发起方用户编号","nullableInferred":true},
@@ -244,12 +244,12 @@ export const IM_TABLES: CodegenConfig[] = [
   {
     moduleName: "im",
     className: "ImGroup",
-    businessName: "ImGroup（源框架导入）",
+    businessName: "IM 群信息",
     parentMenuId: "im-dir",
     permissionPrefix: "im:im_group",
     table: {
       name: "im_group",
-      comment: "ImGroup（源框架导入）",
+      comment: "IM 群信息",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"群名称","nullableInferred":true},
@@ -276,12 +276,12 @@ export const IM_TABLES: CodegenConfig[] = [
   {
     moduleName: "im",
     className: "ImGroupMember",
-    businessName: "ImGroupMember（源框架导入）",
+    businessName: "IM 群成员",
     parentMenuId: "im-dir",
     permissionPrefix: "im:im_group_member",
     table: {
       name: "im_group_member",
-      comment: "ImGroupMember（源框架导入）",
+      comment: "IM 群成员",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"group_id","type":"bigint","tsType":"number","nullable":true,"comment":"群编号","nullableInferred":true},
@@ -308,12 +308,12 @@ export const IM_TABLES: CodegenConfig[] = [
   {
     moduleName: "im",
     className: "ImGroupMessage",
-    businessName: "ImGroupMessage（源框架导入）",
+    businessName: "IM 群聊消息",
     parentMenuId: "im-dir",
     permissionPrefix: "im:im_group_message",
     table: {
       name: "im_group_message",
-      comment: "ImGroupMessage（源框架导入）",
+      comment: "IM 群聊消息",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"client_message_id","type":"varchar","tsType":"string","nullable":true,"comment":"客户端消息编号，用于发送幂等","nullableInferred":true},
@@ -339,12 +339,12 @@ export const IM_TABLES: CodegenConfig[] = [
   {
     moduleName: "im",
     className: "ImGroupRequest",
-    businessName: "ImGroupRequest（源框架导入）",
+    businessName: "IM 加群申请记录 DO配合「申请 - 审批」流程：用户主动申请：调 apply 接口落库（inviterUserId=null，handleResult=UNHANDLED），",
     parentMenuId: "im-dir",
     permissionPrefix: "im:im_group_request",
     table: {
       name: "im_group_request",
-      comment: "ImGroupRequest（源框架导入）",
+      comment: "IM 加群申请记录 DO配合「申请 - 审批」流程：用户主动申请：调 apply 接口落库（inviterUserId=null，handleResult=UNHANDLED），",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"group_id","type":"bigint","tsType":"number","nullable":true,"comment":"群编号","nullableInferred":true},
@@ -368,12 +368,12 @@ export const IM_TABLES: CodegenConfig[] = [
   {
     moduleName: "im",
     className: "ImPrivateMessage",
-    businessName: "ImPrivateMessage（源框架导入）",
+    businessName: "IM 私聊消息",
     parentMenuId: "im-dir",
     permissionPrefix: "im:im_private_message",
     table: {
       name: "im_private_message",
-      comment: "ImPrivateMessage（源框架导入）",
+      comment: "IM 私聊消息",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"client_message_id","type":"varchar","tsType":"string","nullable":true,"comment":"客户端消息编号，用于发送幂等","nullableInferred":true},
@@ -396,12 +396,12 @@ export const IM_TABLES: CodegenConfig[] = [
   {
     moduleName: "im",
     className: "ImRtcCall",
-    businessName: "ImRtcCall（源框架导入）",
+    businessName: "IM 通话记录 DO（房间级 / 主表）一通通话一行；状态机 CREATED → RUNNING → ENDED；和明细表 通过 关联",
     parentMenuId: "im-dir",
     permissionPrefix: "im:im_rtc_call",
     table: {
       name: "im_rtc_call",
-      comment: "ImRtcCall（源框架导入）",
+      comment: "IM 通话记录 DO（房间级 / 主表）一通通话一行；状态机 CREATED → RUNNING → ENDED；和明细表 通过 关联",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"room","type":"varchar","tsType":"string","nullable":true,"comment":"业务通话编号（UUID，同时作为 LiveKit 房间名）；唯一","nullableInferred":true},
@@ -426,12 +426,12 @@ export const IM_TABLES: CodegenConfig[] = [
   {
     moduleName: "im",
     className: "ImRtcParticipant",
-    businessName: "ImRtcParticipant（源框架导入）",
+    businessName: "IM 通话参与者 DO（用户级 / 明细表）一通通话每个参与者一行；通过 关联主表 终态闭合：通话 ENDED 时所有明细 status 必属 LEFT / REJECTED / NO",
     parentMenuId: "im-dir",
     permissionPrefix: "im:im_rtc_participant",
     table: {
       name: "im_rtc_participant",
-      comment: "ImRtcParticipant（源框架导入）",
+      comment: "IM 通话参与者 DO（用户级 / 明细表）一通通话每个参与者一行；通过 关联主表 终态闭合：通话 ENDED 时所有明细 status 必属 LEFT / REJECTED / NO",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"call_id","type":"bigint","tsType":"number","nullable":true,"comment":"通话编号","nullableInferred":true},
@@ -454,12 +454,12 @@ export const IM_TABLES: CodegenConfig[] = [
   {
     moduleName: "im",
     className: "ImSensitiveWord",
-    businessName: "ImSensitiveWord（源框架导入）",
+    businessName: "IM 敏感词",
     parentMenuId: "im-dir",
     permissionPrefix: "im:im_sensitive_word",
     table: {
       name: "im_sensitive_word",
-      comment: "ImSensitiveWord（源框架导入）",
+      comment: "IM 敏感词",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"word","type":"varchar","tsType":"string","nullable":true,"comment":"敏感词","nullableInferred":true},

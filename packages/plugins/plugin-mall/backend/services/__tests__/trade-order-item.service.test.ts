@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { TradeOrderItemService } from "../trade-order-item.service"
 
 describe("TradeOrderItemService", () => {
-  it("should create and query TradeOrderItem（源框架导入）", async () => {
+  it("should create and query 交易订单项", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await TradeOrderItemService.create({
         user_id: 1,
@@ -21,7 +21,7 @@ describe("TradeOrderItemService", () => {
   
       const updated = await TradeOrderItemService.update(created.id, {
         id: created.id,
-        user_id: "更新TradeOrderItem（源框架导入）",
+        user_id: "更新交易订单项",
       } as any)
       expect(updated).toBeDefined()
   

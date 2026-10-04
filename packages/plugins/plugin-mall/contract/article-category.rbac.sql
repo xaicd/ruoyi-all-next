@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for ArticleCategory（源框架导入） (ArticleCategory)
+-- Auto-generated RBAC & Menu Migration for 文章分类 (ArticleCategory)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-article-category',
   'mall-dir',
-  'ArticleCategory（源框架导入）管理',
+  '文章分类管理',
   '/admin/mall/article-category',
   'mall/article-category/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-article-category-query',  'menu-article-category', '查询ArticleCategory（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:article_category:query',  1, NOW(), NOW()),
-('menu-article-category-create', 'menu-article-category', '新增ArticleCategory（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:article_category:create', 2, NOW(), NOW()),
-('menu-article-category-update', 'menu-article-category', '修改ArticleCategory（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:article_category:update', 3, NOW(), NOW()),
-('menu-article-category-delete', 'menu-article-category', '删除ArticleCategory（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:article_category:delete', 4, NOW(), NOW())
+('menu-article-category-query',  'menu-article-category', '查询文章分类', 'BUTTON', 'ACTIVE', 'mall:article_category:query',  1, NOW(), NOW()),
+('menu-article-category-create', 'menu-article-category', '新增文章分类', 'BUTTON', 'ACTIVE', 'mall:article_category:create', 2, NOW(), NOW()),
+('menu-article-category-update', 'menu-article-category', '修改文章分类', 'BUTTON', 'ACTIVE', 'mall:article_category:update', 3, NOW(), NOW()),
+('menu-article-category-delete', 'menu-article-category', '删除文章分类', 'BUTTON', 'ACTIVE', 'mall:article_category:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

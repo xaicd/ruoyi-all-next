@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesWmItemConsumeDetail（源框架导入） (MesWmItemConsumeDetail)
+-- Auto-generated RBAC & Menu Migration for MES 物料消耗记录明细 DO记录 line 级别的消耗按线边库 FIFO 分配到具体批次的明细。一条 line 可能拆分为多条 detail（当一个批次库存不够，需要从下一个批次继续分配时）。 (MesWmItemConsumeDetail)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-wm-item-consume-detail',
   'mes-dir',
-  'MesWmItemConsumeDetail（源框架导入）管理',
+  'MES 物料消耗记录明细 DO记录 line 级别的消耗按线边库 FIFO 分配到具体批次的明细。一条 line 可能拆分为多条 detail（当一个批次库存不够，需要从下一个批次继续分配时）。管理',
   '/admin/mes/mes-wm-item-consume-detail',
   'mes/mes-wm-item-consume-detail/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-wm-item-consume-detail-query',  'menu-mes-wm-item-consume-detail', '查询MesWmItemConsumeDetail（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_item_consume_detail:query',  1, NOW(), NOW()),
-('menu-mes-wm-item-consume-detail-create', 'menu-mes-wm-item-consume-detail', '新增MesWmItemConsumeDetail（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_item_consume_detail:create', 2, NOW(), NOW()),
-('menu-mes-wm-item-consume-detail-update', 'menu-mes-wm-item-consume-detail', '修改MesWmItemConsumeDetail（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_item_consume_detail:update', 3, NOW(), NOW()),
-('menu-mes-wm-item-consume-detail-delete', 'menu-mes-wm-item-consume-detail', '删除MesWmItemConsumeDetail（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_item_consume_detail:delete', 4, NOW(), NOW())
+('menu-mes-wm-item-consume-detail-query',  'menu-mes-wm-item-consume-detail', '查询MES 物料消耗记录明细 DO记录 line 级别的消耗按线边库 FIFO 分配到具体批次的明细。一条 line 可能拆分为多条 detail（当一个批次库存不够，需要从下一个批次继续分配时）。', 'BUTTON', 'ACTIVE', 'mes:mes_wm_item_consume_detail:query',  1, NOW(), NOW()),
+('menu-mes-wm-item-consume-detail-create', 'menu-mes-wm-item-consume-detail', '新增MES 物料消耗记录明细 DO记录 line 级别的消耗按线边库 FIFO 分配到具体批次的明细。一条 line 可能拆分为多条 detail（当一个批次库存不够，需要从下一个批次继续分配时）。', 'BUTTON', 'ACTIVE', 'mes:mes_wm_item_consume_detail:create', 2, NOW(), NOW()),
+('menu-mes-wm-item-consume-detail-update', 'menu-mes-wm-item-consume-detail', '修改MES 物料消耗记录明细 DO记录 line 级别的消耗按线边库 FIFO 分配到具体批次的明细。一条 line 可能拆分为多条 detail（当一个批次库存不够，需要从下一个批次继续分配时）。', 'BUTTON', 'ACTIVE', 'mes:mes_wm_item_consume_detail:update', 3, NOW(), NOW()),
+('menu-mes-wm-item-consume-detail-delete', 'menu-mes-wm-item-consume-detail', '删除MES 物料消耗记录明细 DO记录 line 级别的消耗按线边库 FIFO 分配到具体批次的明细。一条 line 可能拆分为多条 detail（当一个批次库存不够，需要从下一个批次继续分配时）。', 'BUTTON', 'ACTIVE', 'mes:mes_wm_item_consume_detail:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

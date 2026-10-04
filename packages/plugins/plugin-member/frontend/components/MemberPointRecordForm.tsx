@@ -55,24 +55,36 @@ export function MemberPointRecordForm({ open, initialData, onClose, onSuccess }:
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="member-point-record-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑用户积分记录" : "新增用户积分记录"}
+        data-testid="member-point-record-form"
+        data-agent-scope="member-point-record:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MemberPointRecord（源框架导入）" : "新增MemberPointRecord（源框架导入）"}
+            {isEdit ? "编辑用户积分记录" : "新增用户积分记录"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="member-point-record-form-close" data-agent-target="member-point-record:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="member-point-record-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="member-point-record-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="member-point-record-user_id"
+            data-testid="field-user_id"
+            data-agent-target="member-point-record:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -82,9 +94,14 @@ export function MemberPointRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">业务编码</label>
+          <label htmlFor="member-point-record-biz_id" className="block text-xs text-slate-600 mb-1">业务编码</label>
           <input
             type="text"
+            id="member-point-record-biz_id"
+            data-testid="field-biz_id"
+            data-agent-target="member-point-record:field:biz_id"
+            data-agent-state={formData.biz_id ? "filled" : "empty"}
+            aria-label="业务编码"
             value={formData.biz_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -94,9 +111,14 @@ export function MemberPointRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">业务类型</label>
+          <label htmlFor="member-point-record-biz_type" className="block text-xs text-slate-600 mb-1">业务类型</label>
           <input
             type="number"
+            id="member-point-record-biz_type"
+            data-testid="field-biz_type"
+            data-agent-target="member-point-record:field:biz_type"
+            data-agent-state={formData.biz_type == null || formData.biz_type === "" ? "empty" : "filled"}
+            aria-label="业务类型"
             value={formData.biz_type != null ? String(formData.biz_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -106,9 +128,14 @@ export function MemberPointRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">积分标题</label>
+          <label htmlFor="member-point-record-title" className="block text-xs text-slate-600 mb-1">积分标题</label>
           <input
             type="text"
+            id="member-point-record-title"
+            data-testid="field-title"
+            data-agent-target="member-point-record:field:title"
+            data-agent-state={formData.title ? "filled" : "empty"}
+            aria-label="积分标题"
             value={formData.title ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -118,9 +145,14 @@ export function MemberPointRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">积分描述</label>
+          <label htmlFor="member-point-record-description" className="block text-xs text-slate-600 mb-1">积分描述</label>
           <input
             type="text"
+            id="member-point-record-description"
+            data-testid="field-description"
+            data-agent-target="member-point-record:field:description"
+            data-agent-state={formData.description ? "filled" : "empty"}
+            aria-label="积分描述"
             value={formData.description ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -130,9 +162,14 @@ export function MemberPointRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">变动积分</label>
+          <label htmlFor="member-point-record-point" className="block text-xs text-slate-600 mb-1">变动积分</label>
           <input
             type="number"
+            id="member-point-record-point"
+            data-testid="field-point"
+            data-agent-target="member-point-record:field:point"
+            data-agent-state={formData.point == null || formData.point === "" ? "empty" : "filled"}
+            aria-label="变动积分"
             value={formData.point != null ? String(formData.point) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, point: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -142,9 +179,14 @@ export function MemberPointRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">变动后的积分</label>
+          <label htmlFor="member-point-record-total_point" className="block text-xs text-slate-600 mb-1">变动后的积分</label>
           <input
             type="number"
+            id="member-point-record-total_point"
+            data-testid="field-total_point"
+            data-agent-target="member-point-record:field:total_point"
+            data-agent-state={formData.total_point == null || formData.total_point === "" ? "empty" : "filled"}
+            aria-label="变动后的积分"
             value={formData.total_point != null ? String(formData.total_point) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, total_point: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -158,6 +200,8 @@ export function MemberPointRecordForm({ open, initialData, onClose, onSuccess }:
             <button
               type="button"
               onClick={onClose}
+              data-testid="member-point-record-form-cancel"
+              data-agent-target="member-point-record:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -165,6 +209,9 @@ export function MemberPointRecordForm({ open, initialData, onClose, onSuccess }:
             <button
               type="submit"
               disabled={loading}
+              data-testid="member-point-record-form-submit"
+              data-agent-target="member-point-record:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for ImPrivateMessage（源框架导入） (ImPrivateMessage)
+-- Auto-generated RBAC & Menu Migration for IM 私聊消息 (ImPrivateMessage)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-im-private-message',
   'im-dir',
-  'ImPrivateMessage（源框架导入）管理',
+  'IM 私聊消息管理',
   '/admin/im/im-private-message',
   'im/im-private-message/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-im-private-message-query',  'menu-im-private-message', '查询ImPrivateMessage（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_private_message:query',  1, NOW(), NOW()),
-('menu-im-private-message-create', 'menu-im-private-message', '新增ImPrivateMessage（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_private_message:create', 2, NOW(), NOW()),
-('menu-im-private-message-update', 'menu-im-private-message', '修改ImPrivateMessage（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_private_message:update', 3, NOW(), NOW()),
-('menu-im-private-message-delete', 'menu-im-private-message', '删除ImPrivateMessage（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_private_message:delete', 4, NOW(), NOW())
+('menu-im-private-message-query',  'menu-im-private-message', '查询IM 私聊消息', 'BUTTON', 'ACTIVE', 'im:im_private_message:query',  1, NOW(), NOW()),
+('menu-im-private-message-create', 'menu-im-private-message', '新增IM 私聊消息', 'BUTTON', 'ACTIVE', 'im:im_private_message:create', 2, NOW(), NOW()),
+('menu-im-private-message-update', 'menu-im-private-message', '修改IM 私聊消息', 'BUTTON', 'ACTIVE', 'im:im_private_message:update', 3, NOW(), NOW()),
+('menu-im-private-message-delete', 'menu-im-private-message', '删除IM 私聊消息', 'BUTTON', 'ACTIVE', 'im:im_private_message:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

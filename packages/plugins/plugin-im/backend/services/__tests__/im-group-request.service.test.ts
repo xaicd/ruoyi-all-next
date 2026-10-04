@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ImGroupRequestService } from "../im-group-request.service"
 
 describe("ImGroupRequestService", () => {
-  it("should create and query ImGroupRequest（源框架导入）", async () => {
+  it("should create and query IM 加群申请记录 DO配合「申请 - 审批」流程：用户主动申请：调 apply 接口落库（inviterUserId=null，handleResult=UNHANDLED），", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImGroupRequestService.create({
         group_id: 1,
@@ -21,7 +21,7 @@ describe("ImGroupRequestService", () => {
   
       const updated = await ImGroupRequestService.update(created.id, {
         id: created.id,
-        group_id: "更新ImGroupRequest（源框架导入）",
+        group_id: "更新IM 加群申请记录 DO配合「申请 - 审批」流程：用户主动申请：调 apply 接口落库（inviterUserId=null，handleResult=UNHANDLED），",
       } as any)
       expect(updated).toBeDefined()
   

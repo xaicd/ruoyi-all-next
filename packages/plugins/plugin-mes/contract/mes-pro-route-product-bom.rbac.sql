@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesProRouteProductBom（源框架导入） (MesProRouteProductBom)
+-- Auto-generated RBAC & Menu Migration for MES 工艺路线产品 BOM (MesProRouteProductBom)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-pro-route-product-bom',
   'mes-dir',
-  'MesProRouteProductBom（源框架导入）管理',
+  'MES 工艺路线产品 BOM管理',
   '/admin/mes/mes-pro-route-product-bom',
   'mes/mes-pro-route-product-bom/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-pro-route-product-bom-query',  'menu-mes-pro-route-product-bom', '查询MesProRouteProductBom（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_route_product_bom:query',  1, NOW(), NOW()),
-('menu-mes-pro-route-product-bom-create', 'menu-mes-pro-route-product-bom', '新增MesProRouteProductBom（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_route_product_bom:create', 2, NOW(), NOW()),
-('menu-mes-pro-route-product-bom-update', 'menu-mes-pro-route-product-bom', '修改MesProRouteProductBom（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_route_product_bom:update', 3, NOW(), NOW()),
-('menu-mes-pro-route-product-bom-delete', 'menu-mes-pro-route-product-bom', '删除MesProRouteProductBom（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_route_product_bom:delete', 4, NOW(), NOW())
+('menu-mes-pro-route-product-bom-query',  'menu-mes-pro-route-product-bom', '查询MES 工艺路线产品 BOM', 'BUTTON', 'ACTIVE', 'mes:mes_pro_route_product_bom:query',  1, NOW(), NOW()),
+('menu-mes-pro-route-product-bom-create', 'menu-mes-pro-route-product-bom', '新增MES 工艺路线产品 BOM', 'BUTTON', 'ACTIVE', 'mes:mes_pro_route_product_bom:create', 2, NOW(), NOW()),
+('menu-mes-pro-route-product-bom-update', 'menu-mes-pro-route-product-bom', '修改MES 工艺路线产品 BOM', 'BUTTON', 'ACTIVE', 'mes:mes_pro_route_product_bom:update', 3, NOW(), NOW()),
+('menu-mes-pro-route-product-bom-delete', 'menu-mes-pro-route-product-bom', '删除MES 工艺路线产品 BOM', 'BUTTON', 'ACTIVE', 'mes:mes_pro_route_product_bom:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

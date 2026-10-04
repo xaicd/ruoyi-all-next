@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MpTagService } from "../mp-tag.service"
 
 describe("MpTagService", () => {
-  it("should create and query MpTag（源框架导入）", async () => {
+  it("should create and query 公众号标签", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MpTagService.create({
         tag_id: 1,
@@ -21,7 +21,7 @@ describe("MpTagService", () => {
   
       const updated = await MpTagService.update(created.id, {
         id: created.id,
-        tag_id: "更新MpTag（源框架导入）",
+        tag_id: "更新公众号标签",
       } as any)
       expect(updated).toBeDefined()
   

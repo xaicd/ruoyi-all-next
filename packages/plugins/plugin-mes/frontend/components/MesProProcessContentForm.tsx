@@ -55,24 +55,36 @@ export function MesProProcessContentForm({ open, initialData, onClose, onSuccess
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-pro-process-content-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 生产工序内容" : "新增MES 生产工序内容"}
+        data-testid="mes-pro-process-content-form"
+        data-agent-scope="mes-pro-process-content:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesProProcessContent（源框架导入）" : "新增MesProProcessContent（源框架导入）"}
+            {isEdit ? "编辑MES 生产工序内容" : "新增MES 生产工序内容"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-pro-process-content-form-close" data-agent-target="mes-pro-process-content:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-pro-process-content-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工序编号</label>
+          <label htmlFor="mes-pro-process-content-process_id" className="block text-xs text-slate-600 mb-1">工序编号</label>
           <input
             type="number"
+            id="mes-pro-process-content-process_id"
+            data-testid="field-process_id"
+            data-agent-target="mes-pro-process-content:field:process_id"
+            data-agent-state={formData.process_id == null || formData.process_id === "" ? "empty" : "filled"}
+            aria-label="工序编号"
             value={formData.process_id != null ? String(formData.process_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, process_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -82,9 +94,14 @@ export function MesProProcessContentForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">顺序编号</label>
+          <label htmlFor="mes-pro-process-content-sort" className="block text-xs text-slate-600 mb-1">顺序编号</label>
           <input
             type="number"
+            id="mes-pro-process-content-sort"
+            data-testid="field-sort"
+            data-agent-target="mes-pro-process-content:field:sort"
+            data-agent-state={formData.sort == null || formData.sort === "" ? "empty" : "filled"}
+            aria-label="顺序编号"
             value={formData.sort != null ? String(formData.sort) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sort: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -94,9 +111,14 @@ export function MesProProcessContentForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">步骤说明</label>
+          <label htmlFor="mes-pro-process-content-content" className="block text-xs text-slate-600 mb-1">步骤说明</label>
           <input
             type="text"
+            id="mes-pro-process-content-content"
+            data-testid="field-content"
+            data-agent-target="mes-pro-process-content:field:content"
+            data-agent-state={formData.content ? "filled" : "empty"}
+            aria-label="步骤说明"
             value={formData.content ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, content: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -106,9 +128,14 @@ export function MesProProcessContentForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">辅助设备</label>
+          <label htmlFor="mes-pro-process-content-device" className="block text-xs text-slate-600 mb-1">辅助设备</label>
           <input
             type="text"
+            id="mes-pro-process-content-device"
+            data-testid="field-device"
+            data-agent-target="mes-pro-process-content:field:device"
+            data-agent-state={formData.device ? "filled" : "empty"}
+            aria-label="辅助设备"
             value={formData.device ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, device: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -118,9 +145,14 @@ export function MesProProcessContentForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">辅助材料</label>
+          <label htmlFor="mes-pro-process-content-material" className="block text-xs text-slate-600 mb-1">辅助材料</label>
           <input
             type="text"
+            id="mes-pro-process-content-material"
+            data-testid="field-material"
+            data-agent-target="mes-pro-process-content:field:material"
+            data-agent-state={formData.material ? "filled" : "empty"}
+            aria-label="辅助材料"
             value={formData.material ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, material: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -130,9 +162,14 @@ export function MesProProcessContentForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">材料文档 URL</label>
+          <label htmlFor="mes-pro-process-content-doc_url" className="block text-xs text-slate-600 mb-1">材料文档 URL</label>
           <input
             type="text"
+            id="mes-pro-process-content-doc_url"
+            data-testid="field-doc_url"
+            data-agent-target="mes-pro-process-content:field:doc_url"
+            data-agent-state={formData.doc_url ? "filled" : "empty"}
+            aria-label="材料文档 URL"
             value={formData.doc_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, doc_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -142,9 +179,14 @@ export function MesProProcessContentForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-pro-process-content-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-pro-process-content-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-pro-process-content:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -158,6 +200,8 @@ export function MesProProcessContentForm({ open, initialData, onClose, onSuccess
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-pro-process-content-form-cancel"
+              data-agent-target="mes-pro-process-content:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -165,6 +209,9 @@ export function MesProProcessContentForm({ open, initialData, onClose, onSuccess
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-pro-process-content-form-submit"
+              data-agent-target="mes-pro-process-content:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

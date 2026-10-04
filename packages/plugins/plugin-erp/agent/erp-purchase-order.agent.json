@@ -1,0 +1,321 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "erp",
+  "entity": "ErpPurchaseOrder",
+  "kebab": "erp-purchase-order",
+  "businessName": "ERP 采购订单",
+  "permissionPrefix": "erp:erp_purchase_order",
+  "page": {
+    "route": "/admin/erp/erp-purchase-order",
+    "title": "ERP 采购订单管理",
+    "titleSelector": "[data-testid=\"erp-purchase-order-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.erp/api",
+    "bffMount": "/api/v1/admin/erp",
+    "resource": "erp-purchase-order",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/erp-purchase-order",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/erp-purchase-order/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/erp-purchase-order"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/erp-purchase-order/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/erp-purchase-order/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"erp-purchase-order-title\"]",
+    "refresh": "[data-testid=\"erp-purchase-order-refresh\"]",
+    "createButton": "[data-testid=\"erp-purchase-order-create\"]",
+    "searchForm": "[data-testid=\"erp-purchase-order-search\"]",
+    "searchSubmit": "[data-testid=\"erp-purchase-order-search-submit\"]",
+    "searchReset": "[data-testid=\"erp-purchase-order-search-reset\"]",
+    "total": "[data-testid=\"erp-purchase-order-total\"]",
+    "table": "[data-testid=\"erp-purchase-order-table\"]",
+    "row": "[data-testid=\"erp-purchase-order-row\"]",
+    "editButton": "[data-testid=\"erp-purchase-order-edit\"]",
+    "deleteButton": "[data-testid=\"erp-purchase-order-delete\"]",
+    "form": "[data-testid=\"erp-purchase-order-form\"]",
+    "formError": "[data-testid=\"erp-purchase-order-form-error\"]",
+    "formSubmit": "[data-testid=\"erp-purchase-order-form-submit\"]",
+    "formCancel": "[data-testid=\"erp-purchase-order-form-cancel\"]",
+    "formClose": "[data-testid=\"erp-purchase-order-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "ERP 采购订单列表",
+    "dialogLabel": {
+      "create": "新增ERP 采购订单",
+      "edit": "编辑ERP 采购订单"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "no",
+        "label": "采购订单号",
+        "type": "string",
+        "required": false,
+        "testId": "field-no",
+        "selector": "[data-testid=\"field-no\"]"
+      },
+      {
+        "name": "status",
+        "label": "采购状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "supplier_id",
+        "label": "供应商编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-supplier_id",
+        "selector": "[data-testid=\"field-supplier_id\"]"
+      },
+      {
+        "name": "account_id",
+        "label": "结算账户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-account_id",
+        "selector": "[data-testid=\"field-account_id\"]"
+      },
+      {
+        "name": "order_time",
+        "label": "下单时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-order_time",
+        "selector": "[data-testid=\"field-order_time\"]"
+      },
+      {
+        "name": "total_count",
+        "label": "合计数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_count",
+        "selector": "[data-testid=\"field-total_count\"]"
+      },
+      {
+        "name": "total_price",
+        "label": "最终合计价格，单位：元",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_price",
+        "selector": "[data-testid=\"field-total_price\"]"
+      },
+      {
+        "name": "total_product_price",
+        "label": "合计产品价格，单位：元",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_product_price",
+        "selector": "[data-testid=\"field-total_product_price\"]"
+      },
+      {
+        "name": "total_tax_price",
+        "label": "合计税额，单位：元",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_tax_price",
+        "selector": "[data-testid=\"field-total_tax_price\"]"
+      },
+      {
+        "name": "discount_percent",
+        "label": "优惠率，百分比",
+        "type": "number",
+        "required": false,
+        "testId": "field-discount_percent",
+        "selector": "[data-testid=\"field-discount_percent\"]"
+      },
+      {
+        "name": "discount_price",
+        "label": "优惠金额，单位：元",
+        "type": "number",
+        "required": false,
+        "testId": "field-discount_price",
+        "selector": "[data-testid=\"field-discount_price\"]"
+      },
+      {
+        "name": "deposit_price",
+        "label": "定金金额，单位：元",
+        "type": "number",
+        "required": false,
+        "testId": "field-deposit_price",
+        "selector": "[data-testid=\"field-deposit_price\"]"
+      },
+      {
+        "name": "file_url",
+        "label": "附件地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-file_url",
+        "selector": "[data-testid=\"field-file_url\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      },
+      {
+        "name": "in_count",
+        "label": "采购入库数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-in_count",
+        "selector": "[data-testid=\"field-in_count\"]"
+      },
+      {
+        "name": "return_count",
+        "label": "采购退货数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-return_count",
+        "selector": "[data-testid=\"field-return_count\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "erp-purchase-order",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"erp-purchase-order\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"erp-purchase-order-form-overlay\"]",
+      "dialog": "[data-testid=\"erp-purchase-order-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "erp-purchase-order:search",
+      "reset": "erp-purchase-order:reset",
+      "refresh": "erp-purchase-order:refresh",
+      "create": "erp-purchase-order:create",
+      "edit": "erp-purchase-order:edit",
+      "delete": "erp-purchase-order:delete",
+      "submit": "erp-purchase-order:submit",
+      "cancel": "erp-purchase-order:cancel",
+      "close": "erp-purchase-order:close",
+      "row": "erp-purchase-order:row",
+      "pagination": "erp-purchase-order:pagination",
+      "fields": {
+        "no": "erp-purchase-order:field:no",
+        "status": "erp-purchase-order:field:status",
+        "supplier_id": "erp-purchase-order:field:supplier_id",
+        "account_id": "erp-purchase-order:field:account_id",
+        "order_time": "erp-purchase-order:field:order_time",
+        "total_count": "erp-purchase-order:field:total_count",
+        "total_price": "erp-purchase-order:field:total_price",
+        "total_product_price": "erp-purchase-order:field:total_product_price",
+        "total_tax_price": "erp-purchase-order:field:total_tax_price",
+        "discount_percent": "erp-purchase-order:field:discount_percent",
+        "discount_price": "erp-purchase-order:field:discount_price",
+        "deposit_price": "erp-purchase-order:field:deposit_price",
+        "file_url": "erp-purchase-order:field:file_url",
+        "remark": "erp-purchase-order:field:remark",
+        "in_count": "erp-purchase-order:field:in_count",
+        "return_count": "erp-purchase-order:field:return_count"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "erp.erp-purchase-order",
+      "examples": [
+        "erp.erp-purchase-order__List__Refresh",
+        "erp.erp-purchase-order__ListItem__Open",
+        "erp.erp-purchase-order__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

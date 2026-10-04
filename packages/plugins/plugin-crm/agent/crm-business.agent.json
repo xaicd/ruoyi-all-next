@@ -1,0 +1,312 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "crm",
+  "entity": "CrmBusiness",
+  "kebab": "crm-business",
+  "businessName": "CRM 商机",
+  "permissionPrefix": "crm:crm_business",
+  "page": {
+    "route": "/admin/crm/crm-business",
+    "title": "CRM 商机管理",
+    "titleSelector": "[data-testid=\"crm-business-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.crm/api",
+    "bffMount": "/api/v1/admin/crm",
+    "resource": "crm-business",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/crm-business",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/crm-business/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/crm-business"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/crm-business/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/crm-business/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"crm-business-title\"]",
+    "refresh": "[data-testid=\"crm-business-refresh\"]",
+    "createButton": "[data-testid=\"crm-business-create\"]",
+    "searchForm": "[data-testid=\"crm-business-search\"]",
+    "searchSubmit": "[data-testid=\"crm-business-search-submit\"]",
+    "searchReset": "[data-testid=\"crm-business-search-reset\"]",
+    "total": "[data-testid=\"crm-business-total\"]",
+    "table": "[data-testid=\"crm-business-table\"]",
+    "row": "[data-testid=\"crm-business-row\"]",
+    "editButton": "[data-testid=\"crm-business-edit\"]",
+    "deleteButton": "[data-testid=\"crm-business-delete\"]",
+    "form": "[data-testid=\"crm-business-form\"]",
+    "formError": "[data-testid=\"crm-business-form-error\"]",
+    "formSubmit": "[data-testid=\"crm-business-form-submit\"]",
+    "formCancel": "[data-testid=\"crm-business-form-cancel\"]",
+    "formClose": "[data-testid=\"crm-business-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "CRM 商机列表",
+    "dialogLabel": {
+      "create": "新增CRM 商机",
+      "edit": "编辑CRM 商机"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "商机名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "customer_id",
+        "label": "客户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-customer_id",
+        "selector": "[data-testid=\"field-customer_id\"]"
+      },
+      {
+        "name": "follow_up_status",
+        "label": "跟进状态",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-follow_up_status",
+        "selector": "[data-testid=\"field-follow_up_status\"]"
+      },
+      {
+        "name": "contact_last_time",
+        "label": "最后跟进时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-contact_last_time",
+        "selector": "[data-testid=\"field-contact_last_time\"]"
+      },
+      {
+        "name": "contact_next_time",
+        "label": "下次联系时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-contact_next_time",
+        "selector": "[data-testid=\"field-contact_next_time\"]"
+      },
+      {
+        "name": "owner_user_id",
+        "label": "负责人的用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-owner_user_id",
+        "selector": "[data-testid=\"field-owner_user_id\"]"
+      },
+      {
+        "name": "status_type_id",
+        "label": "商机状态组编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-status_type_id",
+        "selector": "[data-testid=\"field-status_type_id\"]"
+      },
+      {
+        "name": "status_id",
+        "label": "商机状态编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-status_id",
+        "selector": "[data-testid=\"field-status_id\"]"
+      },
+      {
+        "name": "end_status",
+        "label": "结束状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-end_status",
+        "selector": "[data-testid=\"field-end_status\"]"
+      },
+      {
+        "name": "end_remark",
+        "label": "结束时的备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-end_remark",
+        "selector": "[data-testid=\"field-end_remark\"]"
+      },
+      {
+        "name": "deal_time",
+        "label": "预计成交日期",
+        "type": "string",
+        "required": false,
+        "testId": "field-deal_time",
+        "selector": "[data-testid=\"field-deal_time\"]"
+      },
+      {
+        "name": "total_product_price",
+        "label": "产品总金额，单位：元",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_product_price",
+        "selector": "[data-testid=\"field-total_product_price\"]"
+      },
+      {
+        "name": "discount_percent",
+        "label": "整单折扣，百分比",
+        "type": "number",
+        "required": false,
+        "testId": "field-discount_percent",
+        "selector": "[data-testid=\"field-discount_percent\"]"
+      },
+      {
+        "name": "total_price",
+        "label": "商机总金额，单位：元",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_price",
+        "selector": "[data-testid=\"field-total_price\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "crm-business",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"crm-business\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"crm-business-form-overlay\"]",
+      "dialog": "[data-testid=\"crm-business-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "crm-business:search",
+      "reset": "crm-business:reset",
+      "refresh": "crm-business:refresh",
+      "create": "crm-business:create",
+      "edit": "crm-business:edit",
+      "delete": "crm-business:delete",
+      "submit": "crm-business:submit",
+      "cancel": "crm-business:cancel",
+      "close": "crm-business:close",
+      "row": "crm-business:row",
+      "pagination": "crm-business:pagination",
+      "fields": {
+        "name": "crm-business:field:name",
+        "customer_id": "crm-business:field:customer_id",
+        "follow_up_status": "crm-business:field:follow_up_status",
+        "contact_last_time": "crm-business:field:contact_last_time",
+        "contact_next_time": "crm-business:field:contact_next_time",
+        "owner_user_id": "crm-business:field:owner_user_id",
+        "status_type_id": "crm-business:field:status_type_id",
+        "status_id": "crm-business:field:status_id",
+        "end_status": "crm-business:field:end_status",
+        "end_remark": "crm-business:field:end_remark",
+        "deal_time": "crm-business:field:deal_time",
+        "total_product_price": "crm-business:field:total_product_price",
+        "discount_percent": "crm-business:field:discount_percent",
+        "total_price": "crm-business:field:total_price",
+        "remark": "crm-business:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "crm.crm-business",
+      "examples": [
+        "crm.crm-business__List__Refresh",
+        "crm.crm-business__ListItem__Open",
+        "crm.crm-business__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

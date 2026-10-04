@@ -1,0 +1,438 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "bpm",
+  "entity": "BpmProcessDefinitionInfo",
+  "kebab": "bpm-process-definition-info",
+  "businessName": "BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表",
+  "permissionPrefix": "bpm:bpm_process_definition_info",
+  "page": {
+    "route": "/admin/bpm/bpm-process-definition-info",
+    "title": "BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表管理",
+    "titleSelector": "[data-testid=\"bpm-process-definition-info-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.bpm/api",
+    "bffMount": "/api/v1/admin/bpm",
+    "resource": "bpm-process-definition-info",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/bpm-process-definition-info",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/bpm-process-definition-info/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/bpm-process-definition-info"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/bpm-process-definition-info/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/bpm-process-definition-info/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"bpm-process-definition-info-title\"]",
+    "refresh": "[data-testid=\"bpm-process-definition-info-refresh\"]",
+    "createButton": "[data-testid=\"bpm-process-definition-info-create\"]",
+    "searchForm": "[data-testid=\"bpm-process-definition-info-search\"]",
+    "searchSubmit": "[data-testid=\"bpm-process-definition-info-search-submit\"]",
+    "searchReset": "[data-testid=\"bpm-process-definition-info-search-reset\"]",
+    "total": "[data-testid=\"bpm-process-definition-info-total\"]",
+    "table": "[data-testid=\"bpm-process-definition-info-table\"]",
+    "row": "[data-testid=\"bpm-process-definition-info-row\"]",
+    "editButton": "[data-testid=\"bpm-process-definition-info-edit\"]",
+    "deleteButton": "[data-testid=\"bpm-process-definition-info-delete\"]",
+    "form": "[data-testid=\"bpm-process-definition-info-form\"]",
+    "formError": "[data-testid=\"bpm-process-definition-info-form-error\"]",
+    "formSubmit": "[data-testid=\"bpm-process-definition-info-form-submit\"]",
+    "formCancel": "[data-testid=\"bpm-process-definition-info-form-cancel\"]",
+    "formClose": "[data-testid=\"bpm-process-definition-info-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表列表",
+    "dialogLabel": {
+      "create": "新增BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表",
+      "edit": "编辑BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "process_definition_id",
+        "label": "流程定义的编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-process_definition_id",
+        "selector": "[data-testid=\"field-process_definition_id\"]"
+      },
+      {
+        "name": "model_id",
+        "label": "流程模型的编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-model_id",
+        "selector": "[data-testid=\"field-model_id\"]"
+      },
+      {
+        "name": "model_type",
+        "label": "流程模型的类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-model_type",
+        "selector": "[data-testid=\"field-model_type\"]"
+      },
+      {
+        "name": "category",
+        "label": "流程分类的编码",
+        "type": "string",
+        "required": false,
+        "testId": "field-category",
+        "selector": "[data-testid=\"field-category\"]"
+      },
+      {
+        "name": "icon",
+        "label": "图标",
+        "type": "string",
+        "required": false,
+        "testId": "field-icon",
+        "selector": "[data-testid=\"field-icon\"]"
+      },
+      {
+        "name": "description",
+        "label": "描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      },
+      {
+        "name": "form_type",
+        "label": "表单类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-form_type",
+        "selector": "[data-testid=\"field-form_type\"]"
+      },
+      {
+        "name": "form_id",
+        "label": "动态表单编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-form_id",
+        "selector": "[data-testid=\"field-form_id\"]"
+      },
+      {
+        "name": "form_conf",
+        "label": "表单的配置",
+        "type": "string",
+        "required": false,
+        "testId": "field-form_conf",
+        "selector": "[data-testid=\"field-form_conf\"]"
+      },
+      {
+        "name": "form_fields",
+        "label": "表单项的数组",
+        "type": "string",
+        "required": false,
+        "testId": "field-form_fields",
+        "selector": "[data-testid=\"field-form_fields\"]"
+      },
+      {
+        "name": "form_custom_create_path",
+        "label": "自定义表单的提交路径，使用 Vue 的路由地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-form_custom_create_path",
+        "selector": "[data-testid=\"field-form_custom_create_path\"]"
+      },
+      {
+        "name": "form_custom_view_path",
+        "label": "自定义表单的查看路径，使用 Vue 的路由地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-form_custom_view_path",
+        "selector": "[data-testid=\"field-form_custom_view_path\"]"
+      },
+      {
+        "name": "simple_model",
+        "label": "SIMPLE 设计器模型数据 json 格式",
+        "type": "string",
+        "required": false,
+        "testId": "field-simple_model",
+        "selector": "[data-testid=\"field-simple_model\"]"
+      },
+      {
+        "name": "visible",
+        "label": "是否可见",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-visible",
+        "selector": "[data-testid=\"field-visible\"]"
+      },
+      {
+        "name": "sort",
+        "label": "排序值",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      },
+      {
+        "name": "start_user_ids",
+        "label": "可发起用户编号数组",
+        "type": "string",
+        "required": false,
+        "testId": "field-start_user_ids",
+        "selector": "[data-testid=\"field-start_user_ids\"]"
+      },
+      {
+        "name": "start_dept_ids",
+        "label": "可发起部门编号数组",
+        "type": "string",
+        "required": false,
+        "testId": "field-start_dept_ids",
+        "selector": "[data-testid=\"field-start_dept_ids\"]"
+      },
+      {
+        "name": "manager_user_ids",
+        "label": "可管理用户编号数组",
+        "type": "string",
+        "required": false,
+        "testId": "field-manager_user_ids",
+        "selector": "[data-testid=\"field-manager_user_ids\"]"
+      },
+      {
+        "name": "allow_cancel_running_process",
+        "label": "是否允许撤销审批中的申请",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-allow_cancel_running_process",
+        "selector": "[data-testid=\"field-allow_cancel_running_process\"]"
+      },
+      {
+        "name": "allow_withdraw_task",
+        "label": "是否允许审批人撤回任务",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-allow_withdraw_task",
+        "selector": "[data-testid=\"field-allow_withdraw_task\"]"
+      },
+      {
+        "name": "process_id_rule",
+        "label": "流程 ID 规则",
+        "type": "string",
+        "required": false,
+        "testId": "field-process_id_rule",
+        "selector": "[data-testid=\"field-process_id_rule\"]"
+      },
+      {
+        "name": "auto_approval_type",
+        "label": "自动去重类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-auto_approval_type",
+        "selector": "[data-testid=\"field-auto_approval_type\"]"
+      },
+      {
+        "name": "title_setting",
+        "label": "标题设置",
+        "type": "string",
+        "required": false,
+        "testId": "field-title_setting",
+        "selector": "[data-testid=\"field-title_setting\"]"
+      },
+      {
+        "name": "summary_setting",
+        "label": "摘要设置",
+        "type": "string",
+        "required": false,
+        "testId": "field-summary_setting",
+        "selector": "[data-testid=\"field-summary_setting\"]"
+      },
+      {
+        "name": "process_before_trigger_setting",
+        "label": "流程前置通知设置",
+        "type": "string",
+        "required": false,
+        "testId": "field-process_before_trigger_setting",
+        "selector": "[data-testid=\"field-process_before_trigger_setting\"]"
+      },
+      {
+        "name": "process_after_trigger_setting",
+        "label": "流程后置通知设置",
+        "type": "string",
+        "required": false,
+        "testId": "field-process_after_trigger_setting",
+        "selector": "[data-testid=\"field-process_after_trigger_setting\"]"
+      },
+      {
+        "name": "task_before_trigger_setting",
+        "label": "任务前置通知设置",
+        "type": "string",
+        "required": false,
+        "testId": "field-task_before_trigger_setting",
+        "selector": "[data-testid=\"field-task_before_trigger_setting\"]"
+      },
+      {
+        "name": "task_after_trigger_setting",
+        "label": "任务后置通知设置",
+        "type": "string",
+        "required": false,
+        "testId": "field-task_after_trigger_setting",
+        "selector": "[data-testid=\"field-task_after_trigger_setting\"]"
+      },
+      {
+        "name": "print_template_setting",
+        "label": "自定义打印模板设置",
+        "type": "string",
+        "required": false,
+        "testId": "field-print_template_setting",
+        "selector": "[data-testid=\"field-print_template_setting\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "bpm-process-definition-info",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"bpm-process-definition-info\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"bpm-process-definition-info-form-overlay\"]",
+      "dialog": "[data-testid=\"bpm-process-definition-info-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "bpm-process-definition-info:search",
+      "reset": "bpm-process-definition-info:reset",
+      "refresh": "bpm-process-definition-info:refresh",
+      "create": "bpm-process-definition-info:create",
+      "edit": "bpm-process-definition-info:edit",
+      "delete": "bpm-process-definition-info:delete",
+      "submit": "bpm-process-definition-info:submit",
+      "cancel": "bpm-process-definition-info:cancel",
+      "close": "bpm-process-definition-info:close",
+      "row": "bpm-process-definition-info:row",
+      "pagination": "bpm-process-definition-info:pagination",
+      "fields": {
+        "process_definition_id": "bpm-process-definition-info:field:process_definition_id",
+        "model_id": "bpm-process-definition-info:field:model_id",
+        "model_type": "bpm-process-definition-info:field:model_type",
+        "category": "bpm-process-definition-info:field:category",
+        "icon": "bpm-process-definition-info:field:icon",
+        "description": "bpm-process-definition-info:field:description",
+        "form_type": "bpm-process-definition-info:field:form_type",
+        "form_id": "bpm-process-definition-info:field:form_id",
+        "form_conf": "bpm-process-definition-info:field:form_conf",
+        "form_fields": "bpm-process-definition-info:field:form_fields",
+        "form_custom_create_path": "bpm-process-definition-info:field:form_custom_create_path",
+        "form_custom_view_path": "bpm-process-definition-info:field:form_custom_view_path",
+        "simple_model": "bpm-process-definition-info:field:simple_model",
+        "visible": "bpm-process-definition-info:field:visible",
+        "sort": "bpm-process-definition-info:field:sort",
+        "start_user_ids": "bpm-process-definition-info:field:start_user_ids",
+        "start_dept_ids": "bpm-process-definition-info:field:start_dept_ids",
+        "manager_user_ids": "bpm-process-definition-info:field:manager_user_ids",
+        "allow_cancel_running_process": "bpm-process-definition-info:field:allow_cancel_running_process",
+        "allow_withdraw_task": "bpm-process-definition-info:field:allow_withdraw_task",
+        "process_id_rule": "bpm-process-definition-info:field:process_id_rule",
+        "auto_approval_type": "bpm-process-definition-info:field:auto_approval_type",
+        "title_setting": "bpm-process-definition-info:field:title_setting",
+        "summary_setting": "bpm-process-definition-info:field:summary_setting",
+        "process_before_trigger_setting": "bpm-process-definition-info:field:process_before_trigger_setting",
+        "process_after_trigger_setting": "bpm-process-definition-info:field:process_after_trigger_setting",
+        "task_before_trigger_setting": "bpm-process-definition-info:field:task_before_trigger_setting",
+        "task_after_trigger_setting": "bpm-process-definition-info:field:task_after_trigger_setting",
+        "print_template_setting": "bpm-process-definition-info:field:print_template_setting"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "bpm.bpm-process-definition-info",
+      "examples": [
+        "bpm.bpm-process-definition-info__List__Refresh",
+        "bpm.bpm-process-definition-info__ListItem__Open",
+        "bpm.bpm-process-definition-info__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

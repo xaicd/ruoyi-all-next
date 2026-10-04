@@ -1,0 +1,231 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "crm",
+  "entity": "CrmBusinessProduct",
+  "kebab": "crm-business-product",
+  "businessName": "CRM 商机产品关联表 DOCrmBusinessDO : CrmBusinessProductDO = 1 : N",
+  "permissionPrefix": "crm:crm_business_product",
+  "page": {
+    "route": "/admin/crm/crm-business-product",
+    "title": "CRM 商机产品关联表 DOCrmBusinessDO : CrmBusinessProductDO = 1 : N管理",
+    "titleSelector": "[data-testid=\"crm-business-product-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.crm/api",
+    "bffMount": "/api/v1/admin/crm",
+    "resource": "crm-business-product",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/crm-business-product",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/crm-business-product/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/crm-business-product"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/crm-business-product/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/crm-business-product/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"crm-business-product-title\"]",
+    "refresh": "[data-testid=\"crm-business-product-refresh\"]",
+    "createButton": "[data-testid=\"crm-business-product-create\"]",
+    "searchForm": "[data-testid=\"crm-business-product-search\"]",
+    "searchSubmit": "[data-testid=\"crm-business-product-search-submit\"]",
+    "searchReset": "[data-testid=\"crm-business-product-search-reset\"]",
+    "total": "[data-testid=\"crm-business-product-total\"]",
+    "table": "[data-testid=\"crm-business-product-table\"]",
+    "row": "[data-testid=\"crm-business-product-row\"]",
+    "editButton": "[data-testid=\"crm-business-product-edit\"]",
+    "deleteButton": "[data-testid=\"crm-business-product-delete\"]",
+    "form": "[data-testid=\"crm-business-product-form\"]",
+    "formError": "[data-testid=\"crm-business-product-form-error\"]",
+    "formSubmit": "[data-testid=\"crm-business-product-form-submit\"]",
+    "formCancel": "[data-testid=\"crm-business-product-form-cancel\"]",
+    "formClose": "[data-testid=\"crm-business-product-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "CRM 商机产品关联表 DOCrmBusinessDO : CrmBusinessProductDO = 1 : N列表",
+    "dialogLabel": {
+      "create": "新增CRM 商机产品关联表 DOCrmBusinessDO : CrmBusinessProductDO = 1 : N",
+      "edit": "编辑CRM 商机产品关联表 DOCrmBusinessDO : CrmBusinessProductDO = 1 : N"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "business_id",
+        "label": "商机编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-business_id",
+        "selector": "[data-testid=\"field-business_id\"]"
+      },
+      {
+        "name": "product_id",
+        "label": "产品编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-product_id",
+        "selector": "[data-testid=\"field-product_id\"]"
+      },
+      {
+        "name": "product_price",
+        "label": "产品单价，单位：元",
+        "type": "number",
+        "required": false,
+        "testId": "field-product_price",
+        "selector": "[data-testid=\"field-product_price\"]"
+      },
+      {
+        "name": "business_price",
+        "label": "商机价格, 单位：元",
+        "type": "number",
+        "required": false,
+        "testId": "field-business_price",
+        "selector": "[data-testid=\"field-business_price\"]"
+      },
+      {
+        "name": "count",
+        "label": "数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-count",
+        "selector": "[data-testid=\"field-count\"]"
+      },
+      {
+        "name": "total_price",
+        "label": "总计价格，单位：元",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_price",
+        "selector": "[data-testid=\"field-total_price\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "crm-business-product",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"crm-business-product\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"crm-business-product-form-overlay\"]",
+      "dialog": "[data-testid=\"crm-business-product-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "crm-business-product:search",
+      "reset": "crm-business-product:reset",
+      "refresh": "crm-business-product:refresh",
+      "create": "crm-business-product:create",
+      "edit": "crm-business-product:edit",
+      "delete": "crm-business-product:delete",
+      "submit": "crm-business-product:submit",
+      "cancel": "crm-business-product:cancel",
+      "close": "crm-business-product:close",
+      "row": "crm-business-product:row",
+      "pagination": "crm-business-product:pagination",
+      "fields": {
+        "business_id": "crm-business-product:field:business_id",
+        "product_id": "crm-business-product:field:product_id",
+        "product_price": "crm-business-product:field:product_price",
+        "business_price": "crm-business-product:field:business_price",
+        "count": "crm-business-product:field:count",
+        "total_price": "crm-business-product:field:total_price"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "crm.crm-business-product",
+      "examples": [
+        "crm.crm-business-product__List__Refresh",
+        "crm.crm-business-product__ListItem__Open",
+        "crm.crm-business-product__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

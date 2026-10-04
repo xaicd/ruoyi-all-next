@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { IotDataSinkService } from "../iot-data-sink.service"
 
 describe("IotDataSinkService", () => {
-  it("should create and query IotDataSink（源框架导入）", async () => {
+  it("should create and query IoT 数据流转目的", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await IotDataSinkService.create({
-        name: "测试IotDataSink（源框架导入）",
+        name: "测试IoT 数据流转目的",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("IotDataSinkService", () => {
   
       const updated = await IotDataSinkService.update(created.id, {
         id: created.id,
-        name: "更新IotDataSink（源框架导入）",
+        name: "更新IoT 数据流转目的",
       } as any)
       expect(updated).toBeDefined()
   

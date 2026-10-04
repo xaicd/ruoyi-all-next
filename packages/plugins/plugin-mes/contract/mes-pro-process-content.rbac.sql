@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesProProcessContent（源框架导入） (MesProProcessContent)
+-- Auto-generated RBAC & Menu Migration for MES 生产工序内容 (MesProProcessContent)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-pro-process-content',
   'mes-dir',
-  'MesProProcessContent（源框架导入）管理',
+  'MES 生产工序内容管理',
   '/admin/mes/mes-pro-process-content',
   'mes/mes-pro-process-content/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-pro-process-content-query',  'menu-mes-pro-process-content', '查询MesProProcessContent（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_process_content:query',  1, NOW(), NOW()),
-('menu-mes-pro-process-content-create', 'menu-mes-pro-process-content', '新增MesProProcessContent（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_process_content:create', 2, NOW(), NOW()),
-('menu-mes-pro-process-content-update', 'menu-mes-pro-process-content', '修改MesProProcessContent（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_process_content:update', 3, NOW(), NOW()),
-('menu-mes-pro-process-content-delete', 'menu-mes-pro-process-content', '删除MesProProcessContent（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_pro_process_content:delete', 4, NOW(), NOW())
+('menu-mes-pro-process-content-query',  'menu-mes-pro-process-content', '查询MES 生产工序内容', 'BUTTON', 'ACTIVE', 'mes:mes_pro_process_content:query',  1, NOW(), NOW()),
+('menu-mes-pro-process-content-create', 'menu-mes-pro-process-content', '新增MES 生产工序内容', 'BUTTON', 'ACTIVE', 'mes:mes_pro_process_content:create', 2, NOW(), NOW()),
+('menu-mes-pro-process-content-update', 'menu-mes-pro-process-content', '修改MES 生产工序内容', 'BUTTON', 'ACTIVE', 'mes:mes_pro_process_content:update', 3, NOW(), NOW()),
+('menu-mes-pro-process-content-delete', 'menu-mes-pro-process-content', '删除MES 生产工序内容', 'BUTTON', 'ACTIVE', 'mes:mes_pro_process_content:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

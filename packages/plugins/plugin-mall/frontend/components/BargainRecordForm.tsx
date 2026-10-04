@@ -57,24 +57,36 @@ export function BargainRecordForm({ open, initialData, onClose, onSuccess }: Bar
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="bargain-record-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑砍价记录 DO TO" : "新增砍价记录 DO TO"}
+        data-testid="bargain-record-form"
+        data-agent-scope="bargain-record:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑BargainRecord（源框架导入）" : "新增BargainRecord（源框架导入）"}
+            {isEdit ? "编辑砍价记录 DO TO" : "新增砍价记录 DO TO"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="bargain-record-form-close" data-agent-target="bargain-record:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="bargain-record-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="bargain-record-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="bargain-record-user_id"
+            data-testid="field-user_id"
+            data-agent-target="bargain-record:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -84,9 +96,14 @@ export function BargainRecordForm({ open, initialData, onClose, onSuccess }: Bar
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">砍价活动编号</label>
+          <label htmlFor="bargain-record-activity_id" className="block text-xs text-slate-600 mb-1">砍价活动编号</label>
           <input
             type="number"
+            id="bargain-record-activity_id"
+            data-testid="field-activity_id"
+            data-agent-target="bargain-record:field:activity_id"
+            data-agent-state={formData.activity_id == null || formData.activity_id === "" ? "empty" : "filled"}
+            aria-label="砍价活动编号"
             value={formData.activity_id != null ? String(formData.activity_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, activity_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -96,9 +113,14 @@ export function BargainRecordForm({ open, initialData, onClose, onSuccess }: Bar
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品 SPU 编号</label>
+          <label htmlFor="bargain-record-spu_id" className="block text-xs text-slate-600 mb-1">商品 SPU 编号</label>
           <input
             type="number"
+            id="bargain-record-spu_id"
+            data-testid="field-spu_id"
+            data-agent-target="bargain-record:field:spu_id"
+            data-agent-state={formData.spu_id == null || formData.spu_id === "" ? "empty" : "filled"}
+            aria-label="商品 SPU 编号"
             value={formData.spu_id != null ? String(formData.spu_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, spu_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -108,9 +130,14 @@ export function BargainRecordForm({ open, initialData, onClose, onSuccess }: Bar
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品 SKU 编号</label>
+          <label htmlFor="bargain-record-sku_id" className="block text-xs text-slate-600 mb-1">商品 SKU 编号</label>
           <input
             type="number"
+            id="bargain-record-sku_id"
+            data-testid="field-sku_id"
+            data-agent-target="bargain-record:field:sku_id"
+            data-agent-state={formData.sku_id == null || formData.sku_id === "" ? "empty" : "filled"}
+            aria-label="商品 SKU 编号"
             value={formData.sku_id != null ? String(formData.sku_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sku_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -120,9 +147,14 @@ export function BargainRecordForm({ open, initialData, onClose, onSuccess }: Bar
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">砍价起始价格，单位：分</label>
+          <label htmlFor="bargain-record-bargain_first_price" className="block text-xs text-slate-600 mb-1">砍价起始价格，单位：分</label>
           <input
             type="number"
+            id="bargain-record-bargain_first_price"
+            data-testid="field-bargain_first_price"
+            data-agent-target="bargain-record:field:bargain_first_price"
+            data-agent-state={formData.bargain_first_price == null || formData.bargain_first_price === "" ? "empty" : "filled"}
+            aria-label="砍价起始价格，单位：分"
             value={formData.bargain_first_price != null ? String(formData.bargain_first_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, bargain_first_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -132,9 +164,14 @@ export function BargainRecordForm({ open, initialData, onClose, onSuccess }: Bar
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">当前砍价，单位：分</label>
+          <label htmlFor="bargain-record-bargain_price" className="block text-xs text-slate-600 mb-1">当前砍价，单位：分</label>
           <input
             type="number"
+            id="bargain-record-bargain_price"
+            data-testid="field-bargain_price"
+            data-agent-target="bargain-record:field:bargain_price"
+            data-agent-state={formData.bargain_price == null || formData.bargain_price === "" ? "empty" : "filled"}
+            aria-label="当前砍价，单位：分"
             value={formData.bargain_price != null ? String(formData.bargain_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, bargain_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -144,9 +181,14 @@ export function BargainRecordForm({ open, initialData, onClose, onSuccess }: Bar
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">砍价状态</label>
+          <label htmlFor="bargain-record-status" className="block text-xs text-slate-600 mb-1">砍价状态</label>
           <input
             type="number"
+            id="bargain-record-status"
+            data-testid="field-status"
+            data-agent-target="bargain-record:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="砍价状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -156,9 +198,14 @@ export function BargainRecordForm({ open, initialData, onClose, onSuccess }: Bar
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">结束时间</label>
+          <label htmlFor="bargain-record-end_time" className="block text-xs text-slate-600 mb-1">结束时间</label>
           <input
             type="text"
+            id="bargain-record-end_time"
+            data-testid="field-end_time"
+            data-agent-target="bargain-record:field:end_time"
+            data-agent-state={formData.end_time ? "filled" : "empty"}
+            aria-label="结束时间"
             value={formData.end_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, end_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -168,9 +215,14 @@ export function BargainRecordForm({ open, initialData, onClose, onSuccess }: Bar
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">订单编号</label>
+          <label htmlFor="bargain-record-order_id" className="block text-xs text-slate-600 mb-1">订单编号</label>
           <input
             type="number"
+            id="bargain-record-order_id"
+            data-testid="field-order_id"
+            data-agent-target="bargain-record:field:order_id"
+            data-agent-state={formData.order_id == null || formData.order_id === "" ? "empty" : "filled"}
+            aria-label="订单编号"
             value={formData.order_id != null ? String(formData.order_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, order_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -184,6 +236,8 @@ export function BargainRecordForm({ open, initialData, onClose, onSuccess }: Bar
             <button
               type="button"
               onClick={onClose}
+              data-testid="bargain-record-form-cancel"
+              data-agent-target="bargain-record:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -191,6 +245,9 @@ export function BargainRecordForm({ open, initialData, onClose, onSuccess }: Bar
             <button
               type="submit"
               disabled={loading}
+              data-testid="bargain-record-form-submit"
+              data-agent-target="bargain-record:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

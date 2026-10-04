@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { IotDeviceGroupService } from "../iot-device-group.service"
 
 describe("IotDeviceGroupService", () => {
-  it("should create and query IotDeviceGroup（源框架导入）", async () => {
+  it("should create and query IoT 设备分组", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await IotDeviceGroupService.create({
-        name: "测试IotDeviceGroup（源框架导入）",
+        name: "测试IoT 设备分组",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("IotDeviceGroupService", () => {
   
       const updated = await IotDeviceGroupService.update(created.id, {
         id: created.id,
-        name: "更新IotDeviceGroup（源框架导入）",
+        name: "更新IoT 设备分组",
       } as any)
       expect(updated).toBeDefined()
   

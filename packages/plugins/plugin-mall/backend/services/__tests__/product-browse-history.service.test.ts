@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ProductBrowseHistoryService } from "../product-browse-history.service"
 
 describe("ProductBrowseHistoryService", () => {
-  it("should create and query ProductBrowseHistory（源框架导入）", async () => {
+  it("should create and query 商品浏览记录", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ProductBrowseHistoryService.create({
         spu_id: 1,
@@ -21,7 +21,7 @@ describe("ProductBrowseHistoryService", () => {
   
       const updated = await ProductBrowseHistoryService.update(created.id, {
         id: created.id,
-        spu_id: "更新ProductBrowseHistory（源框架导入）",
+        spu_id: "更新商品浏览记录",
       } as any)
       expect(updated).toBeDefined()
   

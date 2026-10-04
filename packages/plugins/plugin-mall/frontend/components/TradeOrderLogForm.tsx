@@ -55,24 +55,36 @@ export function TradeOrderLogForm({ open, initialData, onClose, onSuccess }: Tra
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="trade-order-log-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑订单日志" : "新增订单日志"}
+        data-testid="trade-order-log-form"
+        data-agent-scope="trade-order-log:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑TradeOrderLog（源框架导入）" : "新增TradeOrderLog（源框架导入）"}
+            {isEdit ? "编辑订单日志" : "新增订单日志"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="trade-order-log-form-close" data-agent-target="trade-order-log:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="trade-order-log-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="trade-order-log-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="trade-order-log-user_id"
+            data-testid="field-user_id"
+            data-agent-target="trade-order-log:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -82,9 +94,14 @@ export function TradeOrderLogForm({ open, initialData, onClose, onSuccess }: Tra
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户类型</label>
+          <label htmlFor="trade-order-log-user_type" className="block text-xs text-slate-600 mb-1">用户类型</label>
           <input
             type="number"
+            id="trade-order-log-user_type"
+            data-testid="field-user_type"
+            data-agent-target="trade-order-log:field:user_type"
+            data-agent-state={formData.user_type == null || formData.user_type === "" ? "empty" : "filled"}
+            aria-label="用户类型"
             value={formData.user_type != null ? String(formData.user_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -94,9 +111,14 @@ export function TradeOrderLogForm({ open, initialData, onClose, onSuccess }: Tra
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">订单号</label>
+          <label htmlFor="trade-order-log-order_id" className="block text-xs text-slate-600 mb-1">订单号</label>
           <input
             type="number"
+            id="trade-order-log-order_id"
+            data-testid="field-order_id"
+            data-agent-target="trade-order-log:field:order_id"
+            data-agent-state={formData.order_id == null || formData.order_id === "" ? "empty" : "filled"}
+            aria-label="订单号"
             value={formData.order_id != null ? String(formData.order_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, order_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -106,9 +128,14 @@ export function TradeOrderLogForm({ open, initialData, onClose, onSuccess }: Tra
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">操作前状态</label>
+          <label htmlFor="trade-order-log-before_status" className="block text-xs text-slate-600 mb-1">操作前状态</label>
           <input
             type="number"
+            id="trade-order-log-before_status"
+            data-testid="field-before_status"
+            data-agent-target="trade-order-log:field:before_status"
+            data-agent-state={formData.before_status == null || formData.before_status === "" ? "empty" : "filled"}
+            aria-label="操作前状态"
             value={formData.before_status != null ? String(formData.before_status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, before_status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -118,9 +145,14 @@ export function TradeOrderLogForm({ open, initialData, onClose, onSuccess }: Tra
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">操作后状态</label>
+          <label htmlFor="trade-order-log-after_status" className="block text-xs text-slate-600 mb-1">操作后状态</label>
           <input
             type="number"
+            id="trade-order-log-after_status"
+            data-testid="field-after_status"
+            data-agent-target="trade-order-log:field:after_status"
+            data-agent-state={formData.after_status == null || formData.after_status === "" ? "empty" : "filled"}
+            aria-label="操作后状态"
             value={formData.after_status != null ? String(formData.after_status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, after_status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -130,9 +162,14 @@ export function TradeOrderLogForm({ open, initialData, onClose, onSuccess }: Tra
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">操作类型</label>
+          <label htmlFor="trade-order-log-operate_type" className="block text-xs text-slate-600 mb-1">操作类型</label>
           <input
             type="number"
+            id="trade-order-log-operate_type"
+            data-testid="field-operate_type"
+            data-agent-target="trade-order-log:field:operate_type"
+            data-agent-state={formData.operate_type == null || formData.operate_type === "" ? "empty" : "filled"}
+            aria-label="操作类型"
             value={formData.operate_type != null ? String(formData.operate_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, operate_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -142,9 +179,14 @@ export function TradeOrderLogForm({ open, initialData, onClose, onSuccess }: Tra
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">订单日志信息</label>
+          <label htmlFor="trade-order-log-content" className="block text-xs text-slate-600 mb-1">订单日志信息</label>
           <input
             type="text"
+            id="trade-order-log-content"
+            data-testid="field-content"
+            data-agent-target="trade-order-log:field:content"
+            data-agent-state={formData.content ? "filled" : "empty"}
+            aria-label="订单日志信息"
             value={formData.content ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, content: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -158,6 +200,8 @@ export function TradeOrderLogForm({ open, initialData, onClose, onSuccess }: Tra
             <button
               type="button"
               onClick={onClose}
+              data-testid="trade-order-log-form-cancel"
+              data-agent-target="trade-order-log:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -165,6 +209,9 @@ export function TradeOrderLogForm({ open, initialData, onClose, onSuccess }: Tra
             <button
               type="submit"
               disabled={loading}
+              data-testid="trade-order-log-form-submit"
+              data-agent-target="trade-order-log:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

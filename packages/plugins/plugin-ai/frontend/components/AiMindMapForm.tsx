@@ -55,24 +55,36 @@ export function AiMindMapForm({ open, initialData, onClose, onSuccess }: AiMindM
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="ai-mind-map-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑AI 思维导图" : "新增AI 思维导图"}
+        data-testid="ai-mind-map-form"
+        data-agent-scope="ai-mind-map:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑AiMindMap（源框架导入）" : "新增AiMindMap（源框架导入）"}
+            {isEdit ? "编辑AI 思维导图" : "新增AI 思维导图"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="ai-mind-map-form-close" data-agent-target="ai-mind-map:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="ai-mind-map-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="ai-mind-map-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="ai-mind-map-user_id"
+            data-testid="field-user_id"
+            data-agent-target="ai-mind-map:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -82,9 +94,14 @@ export function AiMindMapForm({ open, initialData, onClose, onSuccess }: AiMindM
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">平台</label>
+          <label htmlFor="ai-mind-map-platform" className="block text-xs text-slate-600 mb-1">平台</label>
           <input
             type="text"
+            id="ai-mind-map-platform"
+            data-testid="field-platform"
+            data-agent-target="ai-mind-map:field:platform"
+            data-agent-state={formData.platform ? "filled" : "empty"}
+            aria-label="平台"
             value={formData.platform ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, platform: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -94,9 +111,14 @@ export function AiMindMapForm({ open, initialData, onClose, onSuccess }: AiMindM
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">模型编号</label>
+          <label htmlFor="ai-mind-map-model_id" className="block text-xs text-slate-600 mb-1">模型编号</label>
           <input
             type="number"
+            id="ai-mind-map-model_id"
+            data-testid="field-model_id"
+            data-agent-target="ai-mind-map:field:model_id"
+            data-agent-state={formData.model_id == null || formData.model_id === "" ? "empty" : "filled"}
+            aria-label="模型编号"
             value={formData.model_id != null ? String(formData.model_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, model_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -106,9 +128,14 @@ export function AiMindMapForm({ open, initialData, onClose, onSuccess }: AiMindM
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">模型</label>
+          <label htmlFor="ai-mind-map-model" className="block text-xs text-slate-600 mb-1">模型</label>
           <input
             type="text"
+            id="ai-mind-map-model"
+            data-testid="field-model"
+            data-agent-target="ai-mind-map:field:model"
+            data-agent-state={formData.model ? "filled" : "empty"}
+            aria-label="模型"
             value={formData.model ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, model: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -118,9 +145,14 @@ export function AiMindMapForm({ open, initialData, onClose, onSuccess }: AiMindM
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生成内容提示</label>
+          <label htmlFor="ai-mind-map-prompt" className="block text-xs text-slate-600 mb-1">生成内容提示</label>
           <input
             type="text"
+            id="ai-mind-map-prompt"
+            data-testid="field-prompt"
+            data-agent-target="ai-mind-map:field:prompt"
+            data-agent-state={formData.prompt ? "filled" : "empty"}
+            aria-label="生成内容提示"
             value={formData.prompt ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, prompt: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -130,9 +162,14 @@ export function AiMindMapForm({ open, initialData, onClose, onSuccess }: AiMindM
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生成的内容</label>
+          <label htmlFor="ai-mind-map-generated_content" className="block text-xs text-slate-600 mb-1">生成的内容</label>
           <input
             type="text"
+            id="ai-mind-map-generated_content"
+            data-testid="field-generated_content"
+            data-agent-target="ai-mind-map:field:generated_content"
+            data-agent-state={formData.generated_content ? "filled" : "empty"}
+            aria-label="生成的内容"
             value={formData.generated_content ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, generated_content: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -142,9 +179,14 @@ export function AiMindMapForm({ open, initialData, onClose, onSuccess }: AiMindM
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">错误信息</label>
+          <label htmlFor="ai-mind-map-error_message" className="block text-xs text-slate-600 mb-1">错误信息</label>
           <input
             type="text"
+            id="ai-mind-map-error_message"
+            data-testid="field-error_message"
+            data-agent-target="ai-mind-map:field:error_message"
+            data-agent-state={formData.error_message ? "filled" : "empty"}
+            aria-label="错误信息"
             value={formData.error_message ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, error_message: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -158,6 +200,8 @@ export function AiMindMapForm({ open, initialData, onClose, onSuccess }: AiMindM
             <button
               type="button"
               onClick={onClose}
+              data-testid="ai-mind-map-form-cancel"
+              data-agent-target="ai-mind-map:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -165,6 +209,9 @@ export function AiMindMapForm({ open, initialData, onClose, onSuccess }: AiMindM
             <button
               type="submit"
               disabled={loading}
+              data-testid="ai-mind-map-form-submit"
+              data-agent-target="ai-mind-map:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

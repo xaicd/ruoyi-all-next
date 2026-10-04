@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ImFaceUserItemService } from "../im-face-user-item.service"
 
 describe("ImFaceUserItemService", () => {
-  it("should create and query ImFaceUserItem（源框架导入）", async () => {
+  it("should create and query IM 用户私有表情 DO（个人表情包，对照微信「我的表情」）", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImFaceUserItemService.create({
         user_id: 1,
@@ -21,7 +21,7 @@ describe("ImFaceUserItemService", () => {
   
       const updated = await ImFaceUserItemService.update(created.id, {
         id: created.id,
-        user_id: "更新ImFaceUserItem（源框架导入）",
+        user_id: "更新IM 用户私有表情 DO（个人表情包，对照微信「我的表情」）",
       } as any)
       expect(updated).toBeDefined()
   

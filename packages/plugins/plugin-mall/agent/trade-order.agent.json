@@ -1,0 +1,645 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "TradeOrder",
+  "kebab": "trade-order",
+  "businessName": "交易订单",
+  "permissionPrefix": "mall:trade_order",
+  "page": {
+    "route": "/admin/mall/trade-order",
+    "title": "交易订单管理",
+    "titleSelector": "[data-testid=\"trade-order-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "trade-order",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/trade-order",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/trade-order/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/trade-order"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/trade-order/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/trade-order/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"trade-order-title\"]",
+    "refresh": "[data-testid=\"trade-order-refresh\"]",
+    "createButton": "[data-testid=\"trade-order-create\"]",
+    "searchForm": "[data-testid=\"trade-order-search\"]",
+    "searchSubmit": "[data-testid=\"trade-order-search-submit\"]",
+    "searchReset": "[data-testid=\"trade-order-search-reset\"]",
+    "total": "[data-testid=\"trade-order-total\"]",
+    "table": "[data-testid=\"trade-order-table\"]",
+    "row": "[data-testid=\"trade-order-row\"]",
+    "editButton": "[data-testid=\"trade-order-edit\"]",
+    "deleteButton": "[data-testid=\"trade-order-delete\"]",
+    "form": "[data-testid=\"trade-order-form\"]",
+    "formError": "[data-testid=\"trade-order-form-error\"]",
+    "formSubmit": "[data-testid=\"trade-order-form-submit\"]",
+    "formCancel": "[data-testid=\"trade-order-form-cancel\"]",
+    "formClose": "[data-testid=\"trade-order-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "交易订单列表",
+    "dialogLabel": {
+      "create": "新增交易订单",
+      "edit": "编辑交易订单"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "no",
+        "label": "订单流水号",
+        "type": "string",
+        "required": false,
+        "testId": "field-no",
+        "selector": "[data-testid=\"field-no\"]"
+      },
+      {
+        "name": "type",
+        "label": "订单类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "terminal",
+        "label": "订单来源",
+        "type": "number",
+        "required": false,
+        "testId": "field-terminal",
+        "selector": "[data-testid=\"field-terminal\"]"
+      },
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "user_ip",
+        "label": "用户 IP",
+        "type": "string",
+        "required": false,
+        "testId": "field-user_ip",
+        "selector": "[data-testid=\"field-user_ip\"]"
+      },
+      {
+        "name": "user_remark",
+        "label": "用户备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-user_remark",
+        "selector": "[data-testid=\"field-user_remark\"]"
+      },
+      {
+        "name": "status",
+        "label": "订单状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "product_count",
+        "label": "购买的商品数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-product_count",
+        "selector": "[data-testid=\"field-product_count\"]"
+      },
+      {
+        "name": "finish_time",
+        "label": "订单完成时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-finish_time",
+        "selector": "[data-testid=\"field-finish_time\"]"
+      },
+      {
+        "name": "cancel_time",
+        "label": "订单取消时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-cancel_time",
+        "selector": "[data-testid=\"field-cancel_time\"]"
+      },
+      {
+        "name": "cancel_type",
+        "label": "取消类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-cancel_type",
+        "selector": "[data-testid=\"field-cancel_type\"]"
+      },
+      {
+        "name": "remark",
+        "label": "商家备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      },
+      {
+        "name": "comment_status",
+        "label": "是否评价",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-comment_status",
+        "selector": "[data-testid=\"field-comment_status\"]"
+      },
+      {
+        "name": "brokerage_user_id",
+        "label": "推广人编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-brokerage_user_id",
+        "selector": "[data-testid=\"field-brokerage_user_id\"]"
+      },
+      {
+        "name": "pay_order_id",
+        "label": "支付订单编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-pay_order_id",
+        "selector": "[data-testid=\"field-pay_order_id\"]"
+      },
+      {
+        "name": "pay_status",
+        "label": "是否已支付",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-pay_status",
+        "selector": "[data-testid=\"field-pay_status\"]"
+      },
+      {
+        "name": "pay_time",
+        "label": "付款时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-pay_time",
+        "selector": "[data-testid=\"field-pay_time\"]"
+      },
+      {
+        "name": "pay_channel_code",
+        "label": "支付渠道",
+        "type": "string",
+        "required": false,
+        "testId": "field-pay_channel_code",
+        "selector": "[data-testid=\"field-pay_channel_code\"]"
+      },
+      {
+        "name": "total_price",
+        "label": "商品原价，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_price",
+        "selector": "[data-testid=\"field-total_price\"]"
+      },
+      {
+        "name": "discount_price",
+        "label": "优惠金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-discount_price",
+        "selector": "[data-testid=\"field-discount_price\"]"
+      },
+      {
+        "name": "delivery_price",
+        "label": "运费金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-delivery_price",
+        "selector": "[data-testid=\"field-delivery_price\"]"
+      },
+      {
+        "name": "adjust_price",
+        "label": "订单调价，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-adjust_price",
+        "selector": "[data-testid=\"field-adjust_price\"]"
+      },
+      {
+        "name": "pay_price",
+        "label": "应付金额（总），单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-pay_price",
+        "selector": "[data-testid=\"field-pay_price\"]"
+      },
+      {
+        "name": "delivery_type",
+        "label": "配送方式",
+        "type": "number",
+        "required": false,
+        "testId": "field-delivery_type",
+        "selector": "[data-testid=\"field-delivery_type\"]"
+      },
+      {
+        "name": "logistics_id",
+        "label": "发货物流公司编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-logistics_id",
+        "selector": "[data-testid=\"field-logistics_id\"]"
+      },
+      {
+        "name": "logistics_no",
+        "label": "发货物流单号",
+        "type": "string",
+        "required": false,
+        "testId": "field-logistics_no",
+        "selector": "[data-testid=\"field-logistics_no\"]"
+      },
+      {
+        "name": "delivery_time",
+        "label": "发货时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-delivery_time",
+        "selector": "[data-testid=\"field-delivery_time\"]"
+      },
+      {
+        "name": "receive_time",
+        "label": "收货时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-receive_time",
+        "selector": "[data-testid=\"field-receive_time\"]"
+      },
+      {
+        "name": "receiver_name",
+        "label": "收件人名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-receiver_name",
+        "selector": "[data-testid=\"field-receiver_name\"]"
+      },
+      {
+        "name": "receiver_mobile",
+        "label": "收件人手机",
+        "type": "string",
+        "required": false,
+        "testId": "field-receiver_mobile",
+        "selector": "[data-testid=\"field-receiver_mobile\"]"
+      },
+      {
+        "name": "receiver_area_id",
+        "label": "收件人地区编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-receiver_area_id",
+        "selector": "[data-testid=\"field-receiver_area_id\"]"
+      },
+      {
+        "name": "receiver_detail_address",
+        "label": "收件人详细地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-receiver_detail_address",
+        "selector": "[data-testid=\"field-receiver_detail_address\"]"
+      },
+      {
+        "name": "pick_up_store_id",
+        "label": "自提门店编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-pick_up_store_id",
+        "selector": "[data-testid=\"field-pick_up_store_id\"]"
+      },
+      {
+        "name": "pick_up_verify_code",
+        "label": "自提核销码",
+        "type": "string",
+        "required": false,
+        "testId": "field-pick_up_verify_code",
+        "selector": "[data-testid=\"field-pick_up_verify_code\"]"
+      },
+      {
+        "name": "refund_status",
+        "label": "售后状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-refund_status",
+        "selector": "[data-testid=\"field-refund_status\"]"
+      },
+      {
+        "name": "refund_price",
+        "label": "退款金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-refund_price",
+        "selector": "[data-testid=\"field-refund_price\"]"
+      },
+      {
+        "name": "coupon_id",
+        "label": "优惠劵编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-coupon_id",
+        "selector": "[data-testid=\"field-coupon_id\"]"
+      },
+      {
+        "name": "coupon_price",
+        "label": "优惠劵减免金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-coupon_price",
+        "selector": "[data-testid=\"field-coupon_price\"]"
+      },
+      {
+        "name": "use_point",
+        "label": "使用的积分",
+        "type": "number",
+        "required": false,
+        "testId": "field-use_point",
+        "selector": "[data-testid=\"field-use_point\"]"
+      },
+      {
+        "name": "point_price",
+        "label": "积分抵扣的金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-point_price",
+        "selector": "[data-testid=\"field-point_price\"]"
+      },
+      {
+        "name": "give_point",
+        "label": "赠送的积分",
+        "type": "number",
+        "required": false,
+        "testId": "field-give_point",
+        "selector": "[data-testid=\"field-give_point\"]"
+      },
+      {
+        "name": "refund_point",
+        "label": "退还的使用的积分",
+        "type": "number",
+        "required": false,
+        "testId": "field-refund_point",
+        "selector": "[data-testid=\"field-refund_point\"]"
+      },
+      {
+        "name": "vip_price",
+        "label": "VIP 减免金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-vip_price",
+        "selector": "[data-testid=\"field-vip_price\"]"
+      },
+      {
+        "name": "give_coupon_template_counts",
+        "label": "赠送的优惠劵",
+        "type": "string",
+        "required": false,
+        "testId": "field-give_coupon_template_counts",
+        "selector": "[data-testid=\"field-give_coupon_template_counts\"]"
+      },
+      {
+        "name": "give_coupon_ids",
+        "label": "赠送的优惠劵编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-give_coupon_ids",
+        "selector": "[data-testid=\"field-give_coupon_ids\"]"
+      },
+      {
+        "name": "seckill_activity_id",
+        "label": "秒杀活动编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-seckill_activity_id",
+        "selector": "[data-testid=\"field-seckill_activity_id\"]"
+      },
+      {
+        "name": "bargain_activity_id",
+        "label": "砍价活动编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-bargain_activity_id",
+        "selector": "[data-testid=\"field-bargain_activity_id\"]"
+      },
+      {
+        "name": "bargain_record_id",
+        "label": "砍价记录编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-bargain_record_id",
+        "selector": "[data-testid=\"field-bargain_record_id\"]"
+      },
+      {
+        "name": "combination_activity_id",
+        "label": "拼团活动编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-combination_activity_id",
+        "selector": "[data-testid=\"field-combination_activity_id\"]"
+      },
+      {
+        "name": "combination_head_id",
+        "label": "拼团团长编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-combination_head_id",
+        "selector": "[data-testid=\"field-combination_head_id\"]"
+      },
+      {
+        "name": "combination_record_id",
+        "label": "拼团记录编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-combination_record_id",
+        "selector": "[data-testid=\"field-combination_record_id\"]"
+      },
+      {
+        "name": "point_activity_id",
+        "label": "积分商城活动的编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-point_activity_id",
+        "selector": "[data-testid=\"field-point_activity_id\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "trade-order",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"trade-order\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"trade-order-form-overlay\"]",
+      "dialog": "[data-testid=\"trade-order-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "trade-order:search",
+      "reset": "trade-order:reset",
+      "refresh": "trade-order:refresh",
+      "create": "trade-order:create",
+      "edit": "trade-order:edit",
+      "delete": "trade-order:delete",
+      "submit": "trade-order:submit",
+      "cancel": "trade-order:cancel",
+      "close": "trade-order:close",
+      "row": "trade-order:row",
+      "pagination": "trade-order:pagination",
+      "fields": {
+        "no": "trade-order:field:no",
+        "type": "trade-order:field:type",
+        "terminal": "trade-order:field:terminal",
+        "user_id": "trade-order:field:user_id",
+        "user_ip": "trade-order:field:user_ip",
+        "user_remark": "trade-order:field:user_remark",
+        "status": "trade-order:field:status",
+        "product_count": "trade-order:field:product_count",
+        "finish_time": "trade-order:field:finish_time",
+        "cancel_time": "trade-order:field:cancel_time",
+        "cancel_type": "trade-order:field:cancel_type",
+        "remark": "trade-order:field:remark",
+        "comment_status": "trade-order:field:comment_status",
+        "brokerage_user_id": "trade-order:field:brokerage_user_id",
+        "pay_order_id": "trade-order:field:pay_order_id",
+        "pay_status": "trade-order:field:pay_status",
+        "pay_time": "trade-order:field:pay_time",
+        "pay_channel_code": "trade-order:field:pay_channel_code",
+        "total_price": "trade-order:field:total_price",
+        "discount_price": "trade-order:field:discount_price",
+        "delivery_price": "trade-order:field:delivery_price",
+        "adjust_price": "trade-order:field:adjust_price",
+        "pay_price": "trade-order:field:pay_price",
+        "delivery_type": "trade-order:field:delivery_type",
+        "logistics_id": "trade-order:field:logistics_id",
+        "logistics_no": "trade-order:field:logistics_no",
+        "delivery_time": "trade-order:field:delivery_time",
+        "receive_time": "trade-order:field:receive_time",
+        "receiver_name": "trade-order:field:receiver_name",
+        "receiver_mobile": "trade-order:field:receiver_mobile",
+        "receiver_area_id": "trade-order:field:receiver_area_id",
+        "receiver_detail_address": "trade-order:field:receiver_detail_address",
+        "pick_up_store_id": "trade-order:field:pick_up_store_id",
+        "pick_up_verify_code": "trade-order:field:pick_up_verify_code",
+        "refund_status": "trade-order:field:refund_status",
+        "refund_price": "trade-order:field:refund_price",
+        "coupon_id": "trade-order:field:coupon_id",
+        "coupon_price": "trade-order:field:coupon_price",
+        "use_point": "trade-order:field:use_point",
+        "point_price": "trade-order:field:point_price",
+        "give_point": "trade-order:field:give_point",
+        "refund_point": "trade-order:field:refund_point",
+        "vip_price": "trade-order:field:vip_price",
+        "give_coupon_template_counts": "trade-order:field:give_coupon_template_counts",
+        "give_coupon_ids": "trade-order:field:give_coupon_ids",
+        "seckill_activity_id": "trade-order:field:seckill_activity_id",
+        "bargain_activity_id": "trade-order:field:bargain_activity_id",
+        "bargain_record_id": "trade-order:field:bargain_record_id",
+        "combination_activity_id": "trade-order:field:combination_activity_id",
+        "combination_head_id": "trade-order:field:combination_head_id",
+        "combination_record_id": "trade-order:field:combination_record_id",
+        "point_activity_id": "trade-order:field:point_activity_id"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.trade-order",
+      "examples": [
+        "mall.trade-order__List__Refresh",
+        "mall.trade-order__ListItem__Open",
+        "mall.trade-order__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

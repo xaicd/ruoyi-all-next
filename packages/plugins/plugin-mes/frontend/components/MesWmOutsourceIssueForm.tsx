@@ -55,24 +55,36 @@ export function MesWmOutsourceIssueForm({ open, initialData, onClose, onSuccess 
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-wm-outsource-issue-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 外协发料单" : "新增MES 外协发料单"}
+        data-testid="mes-wm-outsource-issue-form"
+        data-agent-scope="mes-wm-outsource-issue:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesWmOutsourceIssue（源框架导入）" : "新增MesWmOutsourceIssue（源框架导入）"}
+            {isEdit ? "编辑MES 外协发料单" : "新增MES 外协发料单"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-wm-outsource-issue-form-close" data-agent-target="mes-wm-outsource-issue:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-wm-outsource-issue-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">发料单编号</label>
+          <label htmlFor="mes-wm-outsource-issue-code" className="block text-xs text-slate-600 mb-1">发料单编号</label>
           <input
             type="text"
+            id="mes-wm-outsource-issue-code"
+            data-testid="field-code"
+            data-agent-target="mes-wm-outsource-issue:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="发料单编号"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -82,9 +94,14 @@ export function MesWmOutsourceIssueForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">发料单名称</label>
+          <label htmlFor="mes-wm-outsource-issue-name" className="block text-xs text-slate-600 mb-1">发料单名称</label>
           <input
             type="text"
+            id="mes-wm-outsource-issue-name"
+            data-testid="field-name"
+            data-agent-target="mes-wm-outsource-issue:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="发料单名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -94,9 +111,14 @@ export function MesWmOutsourceIssueForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">供应商ID</label>
+          <label htmlFor="mes-wm-outsource-issue-vendor_id" className="block text-xs text-slate-600 mb-1">供应商ID</label>
           <input
             type="number"
+            id="mes-wm-outsource-issue-vendor_id"
+            data-testid="field-vendor_id"
+            data-agent-target="mes-wm-outsource-issue:field:vendor_id"
+            data-agent-state={formData.vendor_id == null || formData.vendor_id === "" ? "empty" : "filled"}
+            aria-label="供应商ID"
             value={formData.vendor_id != null ? String(formData.vendor_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, vendor_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -106,9 +128,14 @@ export function MesWmOutsourceIssueForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生产工单ID</label>
+          <label htmlFor="mes-wm-outsource-issue-work_order_id" className="block text-xs text-slate-600 mb-1">生产工单ID</label>
           <input
             type="number"
+            id="mes-wm-outsource-issue-work_order_id"
+            data-testid="field-work_order_id"
+            data-agent-target="mes-wm-outsource-issue:field:work_order_id"
+            data-agent-state={formData.work_order_id == null || formData.work_order_id === "" ? "empty" : "filled"}
+            aria-label="生产工单ID"
             value={formData.work_order_id != null ? String(formData.work_order_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, work_order_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -118,9 +145,14 @@ export function MesWmOutsourceIssueForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">发料日期</label>
+          <label htmlFor="mes-wm-outsource-issue-issue_date" className="block text-xs text-slate-600 mb-1">发料日期</label>
           <input
             type="text"
+            id="mes-wm-outsource-issue-issue_date"
+            data-testid="field-issue_date"
+            data-agent-target="mes-wm-outsource-issue:field:issue_date"
+            data-agent-state={formData.issue_date ? "filled" : "empty"}
+            aria-label="发料日期"
             value={formData.issue_date ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, issue_date: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -130,9 +162,14 @@ export function MesWmOutsourceIssueForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">单据状态</label>
+          <label htmlFor="mes-wm-outsource-issue-status" className="block text-xs text-slate-600 mb-1">单据状态</label>
           <input
             type="number"
+            id="mes-wm-outsource-issue-status"
+            data-testid="field-status"
+            data-agent-target="mes-wm-outsource-issue:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="单据状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -142,9 +179,14 @@ export function MesWmOutsourceIssueForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-wm-outsource-issue-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-wm-outsource-issue-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-wm-outsource-issue:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -158,6 +200,8 @@ export function MesWmOutsourceIssueForm({ open, initialData, onClose, onSuccess 
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-wm-outsource-issue-form-cancel"
+              data-agent-target="mes-wm-outsource-issue:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -165,6 +209,9 @@ export function MesWmOutsourceIssueForm({ open, initialData, onClose, onSuccess 
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-wm-outsource-issue-form-submit"
+              data-agent-target="mes-wm-outsource-issue:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

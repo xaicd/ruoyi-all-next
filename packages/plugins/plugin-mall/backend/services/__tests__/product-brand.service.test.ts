@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ProductBrandService } from "../product-brand.service"
 
 describe("ProductBrandService", () => {
-  it("should create and query ProductBrand（源框架导入）", async () => {
+  it("should create and query 商品品牌", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ProductBrandService.create({
-        name: "测试ProductBrand（源框架导入）",
+        name: "测试商品品牌",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("ProductBrandService", () => {
   
       const updated = await ProductBrandService.update(created.id, {
         id: created.id,
-        name: "更新ProductBrand（源框架导入）",
+        name: "更新商品品牌",
       } as any)
       expect(updated).toBeDefined()
   

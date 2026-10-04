@@ -1,0 +1,366 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "pay",
+  "entity": "PayTransfer",
+  "kebab": "pay-transfer",
+  "businessName": "转账单",
+  "permissionPrefix": "pay:pay_transfer",
+  "page": {
+    "route": "/admin/pay/pay-transfer",
+    "title": "转账单管理",
+    "titleSelector": "[data-testid=\"pay-transfer-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.pay/api",
+    "bffMount": "/api/v1/admin/pay",
+    "resource": "pay-transfer",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/pay-transfer",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/pay-transfer/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/pay-transfer"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/pay-transfer/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/pay-transfer/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"pay-transfer-title\"]",
+    "refresh": "[data-testid=\"pay-transfer-refresh\"]",
+    "createButton": "[data-testid=\"pay-transfer-create\"]",
+    "searchForm": "[data-testid=\"pay-transfer-search\"]",
+    "searchSubmit": "[data-testid=\"pay-transfer-search-submit\"]",
+    "searchReset": "[data-testid=\"pay-transfer-search-reset\"]",
+    "total": "[data-testid=\"pay-transfer-total\"]",
+    "table": "[data-testid=\"pay-transfer-table\"]",
+    "row": "[data-testid=\"pay-transfer-row\"]",
+    "editButton": "[data-testid=\"pay-transfer-edit\"]",
+    "deleteButton": "[data-testid=\"pay-transfer-delete\"]",
+    "form": "[data-testid=\"pay-transfer-form\"]",
+    "formError": "[data-testid=\"pay-transfer-form-error\"]",
+    "formSubmit": "[data-testid=\"pay-transfer-form-submit\"]",
+    "formCancel": "[data-testid=\"pay-transfer-form-cancel\"]",
+    "formClose": "[data-testid=\"pay-transfer-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "转账单列表",
+    "dialogLabel": {
+      "create": "新增转账单",
+      "edit": "编辑转账单"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "no",
+        "label": "转账单号",
+        "type": "string",
+        "required": false,
+        "testId": "field-no",
+        "selector": "[data-testid=\"field-no\"]"
+      },
+      {
+        "name": "app_id",
+        "label": "应用编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-app_id",
+        "selector": "[data-testid=\"field-app_id\"]"
+      },
+      {
+        "name": "channel_id",
+        "label": "转账渠道编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-channel_id",
+        "selector": "[data-testid=\"field-channel_id\"]"
+      },
+      {
+        "name": "channel_code",
+        "label": "转账渠道编码",
+        "type": "string",
+        "required": false,
+        "testId": "field-channel_code",
+        "selector": "[data-testid=\"field-channel_code\"]"
+      },
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "user_type",
+        "label": "用户类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_type",
+        "selector": "[data-testid=\"field-user_type\"]"
+      },
+      {
+        "name": "merchant_transfer_id",
+        "label": "商户转账单编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-merchant_transfer_id",
+        "selector": "[data-testid=\"field-merchant_transfer_id\"]"
+      },
+      {
+        "name": "subject",
+        "label": "转账标题",
+        "type": "string",
+        "required": false,
+        "testId": "field-subject",
+        "selector": "[data-testid=\"field-subject\"]"
+      },
+      {
+        "name": "price",
+        "label": "转账金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-price",
+        "selector": "[data-testid=\"field-price\"]"
+      },
+      {
+        "name": "user_account",
+        "label": "收款人账号",
+        "type": "string",
+        "required": false,
+        "testId": "field-user_account",
+        "selector": "[data-testid=\"field-user_account\"]"
+      },
+      {
+        "name": "user_name",
+        "label": "收款人姓名",
+        "type": "string",
+        "required": false,
+        "testId": "field-user_name",
+        "selector": "[data-testid=\"field-user_name\"]"
+      },
+      {
+        "name": "status",
+        "label": "转账状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "success_time",
+        "label": "订单转账成功时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-success_time",
+        "selector": "[data-testid=\"field-success_time\"]"
+      },
+      {
+        "name": "notify_url",
+        "label": "异步通知地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-notify_url",
+        "selector": "[data-testid=\"field-notify_url\"]"
+      },
+      {
+        "name": "user_ip",
+        "label": "用户 IP",
+        "type": "string",
+        "required": false,
+        "testId": "field-user_ip",
+        "selector": "[data-testid=\"field-user_ip\"]"
+      },
+      {
+        "name": "channel_extras",
+        "label": "渠道的额外参数",
+        "type": "string",
+        "required": false,
+        "testId": "field-channel_extras",
+        "selector": "[data-testid=\"field-channel_extras\"]"
+      },
+      {
+        "name": "channel_transfer_no",
+        "label": "渠道转账单号",
+        "type": "string",
+        "required": false,
+        "testId": "field-channel_transfer_no",
+        "selector": "[data-testid=\"field-channel_transfer_no\"]"
+      },
+      {
+        "name": "channel_error_code",
+        "label": "调用渠道的错误码",
+        "type": "string",
+        "required": false,
+        "testId": "field-channel_error_code",
+        "selector": "[data-testid=\"field-channel_error_code\"]"
+      },
+      {
+        "name": "channel_error_msg",
+        "label": "调用渠道的错误提示",
+        "type": "string",
+        "required": false,
+        "testId": "field-channel_error_msg",
+        "selector": "[data-testid=\"field-channel_error_msg\"]"
+      },
+      {
+        "name": "channel_notify_data",
+        "label": "渠道的同步/异步通知的内容",
+        "type": "string",
+        "required": false,
+        "testId": "field-channel_notify_data",
+        "selector": "[data-testid=\"field-channel_notify_data\"]"
+      },
+      {
+        "name": "channel_package_info",
+        "label": "渠道 package 信息",
+        "type": "string",
+        "required": false,
+        "testId": "field-channel_package_info",
+        "selector": "[data-testid=\"field-channel_package_info\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "pay-transfer",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"pay-transfer\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"pay-transfer-form-overlay\"]",
+      "dialog": "[data-testid=\"pay-transfer-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "pay-transfer:search",
+      "reset": "pay-transfer:reset",
+      "refresh": "pay-transfer:refresh",
+      "create": "pay-transfer:create",
+      "edit": "pay-transfer:edit",
+      "delete": "pay-transfer:delete",
+      "submit": "pay-transfer:submit",
+      "cancel": "pay-transfer:cancel",
+      "close": "pay-transfer:close",
+      "row": "pay-transfer:row",
+      "pagination": "pay-transfer:pagination",
+      "fields": {
+        "no": "pay-transfer:field:no",
+        "app_id": "pay-transfer:field:app_id",
+        "channel_id": "pay-transfer:field:channel_id",
+        "channel_code": "pay-transfer:field:channel_code",
+        "user_id": "pay-transfer:field:user_id",
+        "user_type": "pay-transfer:field:user_type",
+        "merchant_transfer_id": "pay-transfer:field:merchant_transfer_id",
+        "subject": "pay-transfer:field:subject",
+        "price": "pay-transfer:field:price",
+        "user_account": "pay-transfer:field:user_account",
+        "user_name": "pay-transfer:field:user_name",
+        "status": "pay-transfer:field:status",
+        "success_time": "pay-transfer:field:success_time",
+        "notify_url": "pay-transfer:field:notify_url",
+        "user_ip": "pay-transfer:field:user_ip",
+        "channel_extras": "pay-transfer:field:channel_extras",
+        "channel_transfer_no": "pay-transfer:field:channel_transfer_no",
+        "channel_error_code": "pay-transfer:field:channel_error_code",
+        "channel_error_msg": "pay-transfer:field:channel_error_msg",
+        "channel_notify_data": "pay-transfer:field:channel_notify_data",
+        "channel_package_info": "pay-transfer:field:channel_package_info"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "pay.pay-transfer",
+      "examples": [
+        "pay.pay-transfer__List__Refresh",
+        "pay.pay-transfer__ListItem__Open",
+        "pay.pay-transfer__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

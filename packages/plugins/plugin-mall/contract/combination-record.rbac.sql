@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for CombinationRecord（源框架导入） (CombinationRecord)
+-- Auto-generated RBAC & Menu Migration for 拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联 (CombinationRecord)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-combination-record',
   'mall-dir',
-  'CombinationRecord（源框架导入）管理',
+  '拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联管理',
   '/admin/mall/combination-record',
   'mall/combination-record/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-combination-record-query',  'menu-combination-record', '查询CombinationRecord（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:combination_record:query',  1, NOW(), NOW()),
-('menu-combination-record-create', 'menu-combination-record', '新增CombinationRecord（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:combination_record:create', 2, NOW(), NOW()),
-('menu-combination-record-update', 'menu-combination-record', '修改CombinationRecord（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:combination_record:update', 3, NOW(), NOW()),
-('menu-combination-record-delete', 'menu-combination-record', '删除CombinationRecord（源框架导入）', 'BUTTON', 'ACTIVE', 'mall:combination_record:delete', 4, NOW(), NOW())
+('menu-combination-record-query',  'menu-combination-record', '查询拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联', 'BUTTON', 'ACTIVE', 'mall:combination_record:query',  1, NOW(), NOW()),
+('menu-combination-record-create', 'menu-combination-record', '新增拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联', 'BUTTON', 'ACTIVE', 'mall:combination_record:create', 2, NOW(), NOW()),
+('menu-combination-record-update', 'menu-combination-record', '修改拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联', 'BUTTON', 'ACTIVE', 'mall:combination_record:update', 3, NOW(), NOW()),
+('menu-combination-record-delete', 'menu-combination-record', '删除拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联', 'BUTTON', 'ACTIVE', 'mall:combination_record:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

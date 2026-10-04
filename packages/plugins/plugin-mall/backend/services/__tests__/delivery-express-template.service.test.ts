@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { DeliveryExpressTemplateService } from "../delivery-express-template.service"
 
 describe("DeliveryExpressTemplateService", () => {
-  it("should create and query DeliveryExpressTemplate（源框架导入）", async () => {
+  it("should create and query 快递运费模板", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await DeliveryExpressTemplateService.create({
-        name: "测试DeliveryExpressTemplate（源框架导入）",
+        name: "测试快递运费模板",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("DeliveryExpressTemplateService", () => {
   
       const updated = await DeliveryExpressTemplateService.update(created.id, {
         id: created.id,
-        name: "更新DeliveryExpressTemplate（源框架导入）",
+        name: "更新快递运费模板",
       } as any)
       expect(updated).toBeDefined()
   

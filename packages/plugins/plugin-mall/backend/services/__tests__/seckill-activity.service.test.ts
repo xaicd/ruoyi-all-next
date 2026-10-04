@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { SeckillActivityService } from "../seckill-activity.service"
 
 describe("SeckillActivityService", () => {
-  it("should create and query SeckillActivity（源框架导入）", async () => {
+  it("should create and query 秒杀活动", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await SeckillActivityService.create({
         spu_id: 1,
@@ -21,7 +21,7 @@ describe("SeckillActivityService", () => {
   
       const updated = await SeckillActivityService.update(created.id, {
         id: created.id,
-        spu_id: "更新SeckillActivity（源框架导入）",
+        spu_id: "更新秒杀活动",
       } as any)
       expect(updated).toBeDefined()
   

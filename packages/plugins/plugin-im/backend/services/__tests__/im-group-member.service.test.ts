@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ImGroupMemberService } from "../im-group-member.service"
 
 describe("ImGroupMemberService", () => {
-  it("should create and query ImGroupMember（源框架导入）", async () => {
+  it("should create and query IM 群成员", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImGroupMemberService.create({
         group_id: 1,
@@ -21,7 +21,7 @@ describe("ImGroupMemberService", () => {
   
       const updated = await ImGroupMemberService.update(created.id, {
         id: created.id,
-        group_id: "更新ImGroupMember（源框架导入）",
+        group_id: "更新IM 群成员",
       } as any)
       expect(updated).toBeDefined()
   

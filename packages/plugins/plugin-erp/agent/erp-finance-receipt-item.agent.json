@@ -1,0 +1,249 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "erp",
+  "entity": "ErpFinanceReceiptItem",
+  "kebab": "erp-finance-receipt-item",
+  "businessName": "ERP 收款项",
+  "permissionPrefix": "erp:erp_finance_receipt_item",
+  "page": {
+    "route": "/admin/erp/erp-finance-receipt-item",
+    "title": "ERP 收款项管理",
+    "titleSelector": "[data-testid=\"erp-finance-receipt-item-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.erp/api",
+    "bffMount": "/api/v1/admin/erp",
+    "resource": "erp-finance-receipt-item",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/erp-finance-receipt-item",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/erp-finance-receipt-item/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/erp-finance-receipt-item"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/erp-finance-receipt-item/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/erp-finance-receipt-item/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"erp-finance-receipt-item-title\"]",
+    "refresh": "[data-testid=\"erp-finance-receipt-item-refresh\"]",
+    "createButton": "[data-testid=\"erp-finance-receipt-item-create\"]",
+    "searchForm": "[data-testid=\"erp-finance-receipt-item-search\"]",
+    "searchSubmit": "[data-testid=\"erp-finance-receipt-item-search-submit\"]",
+    "searchReset": "[data-testid=\"erp-finance-receipt-item-search-reset\"]",
+    "total": "[data-testid=\"erp-finance-receipt-item-total\"]",
+    "table": "[data-testid=\"erp-finance-receipt-item-table\"]",
+    "row": "[data-testid=\"erp-finance-receipt-item-row\"]",
+    "editButton": "[data-testid=\"erp-finance-receipt-item-edit\"]",
+    "deleteButton": "[data-testid=\"erp-finance-receipt-item-delete\"]",
+    "form": "[data-testid=\"erp-finance-receipt-item-form\"]",
+    "formError": "[data-testid=\"erp-finance-receipt-item-form-error\"]",
+    "formSubmit": "[data-testid=\"erp-finance-receipt-item-form-submit\"]",
+    "formCancel": "[data-testid=\"erp-finance-receipt-item-form-cancel\"]",
+    "formClose": "[data-testid=\"erp-finance-receipt-item-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "ERP 收款项列表",
+    "dialogLabel": {
+      "create": "新增ERP 收款项",
+      "edit": "编辑ERP 收款项"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "receipt_id",
+        "label": "收款单编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-receipt_id",
+        "selector": "[data-testid=\"field-receipt_id\"]"
+      },
+      {
+        "name": "biz_type",
+        "label": "业务类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-biz_type",
+        "selector": "[data-testid=\"field-biz_type\"]"
+      },
+      {
+        "name": "biz_id",
+        "label": "业务编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-biz_id",
+        "selector": "[data-testid=\"field-biz_id\"]"
+      },
+      {
+        "name": "biz_no",
+        "label": "业务单号",
+        "type": "string",
+        "required": false,
+        "testId": "field-biz_no",
+        "selector": "[data-testid=\"field-biz_no\"]"
+      },
+      {
+        "name": "total_price",
+        "label": "应收金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_price",
+        "selector": "[data-testid=\"field-total_price\"]"
+      },
+      {
+        "name": "receipted_price",
+        "label": "已收金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-receipted_price",
+        "selector": "[data-testid=\"field-receipted_price\"]"
+      },
+      {
+        "name": "receipt_price",
+        "label": "本次收款，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-receipt_price",
+        "selector": "[data-testid=\"field-receipt_price\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "erp-finance-receipt-item",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"erp-finance-receipt-item\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"erp-finance-receipt-item-form-overlay\"]",
+      "dialog": "[data-testid=\"erp-finance-receipt-item-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "erp-finance-receipt-item:search",
+      "reset": "erp-finance-receipt-item:reset",
+      "refresh": "erp-finance-receipt-item:refresh",
+      "create": "erp-finance-receipt-item:create",
+      "edit": "erp-finance-receipt-item:edit",
+      "delete": "erp-finance-receipt-item:delete",
+      "submit": "erp-finance-receipt-item:submit",
+      "cancel": "erp-finance-receipt-item:cancel",
+      "close": "erp-finance-receipt-item:close",
+      "row": "erp-finance-receipt-item:row",
+      "pagination": "erp-finance-receipt-item:pagination",
+      "fields": {
+        "receipt_id": "erp-finance-receipt-item:field:receipt_id",
+        "biz_type": "erp-finance-receipt-item:field:biz_type",
+        "biz_id": "erp-finance-receipt-item:field:biz_id",
+        "biz_no": "erp-finance-receipt-item:field:biz_no",
+        "total_price": "erp-finance-receipt-item:field:total_price",
+        "receipted_price": "erp-finance-receipt-item:field:receipted_price",
+        "receipt_price": "erp-finance-receipt-item:field:receipt_price",
+        "remark": "erp-finance-receipt-item:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "erp.erp-finance-receipt-item",
+      "examples": [
+        "erp.erp-finance-receipt-item__List__Refresh",
+        "erp.erp-finance-receipt-item__ListItem__Open",
+        "erp.erp-finance-receipt-item__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

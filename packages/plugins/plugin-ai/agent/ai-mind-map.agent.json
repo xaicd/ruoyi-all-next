@@ -1,0 +1,240 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "ai",
+  "entity": "AiMindMap",
+  "kebab": "ai-mind-map",
+  "businessName": "AI 思维导图",
+  "permissionPrefix": "ai:ai_mind_map",
+  "page": {
+    "route": "/admin/ai/ai-mind-map",
+    "title": "AI 思维导图管理",
+    "titleSelector": "[data-testid=\"ai-mind-map-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.ai/api",
+    "bffMount": "/api/v1/admin/ai",
+    "resource": "ai-mind-map",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/ai-mind-map",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/ai-mind-map/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/ai-mind-map"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/ai-mind-map/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/ai-mind-map/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"ai-mind-map-title\"]",
+    "refresh": "[data-testid=\"ai-mind-map-refresh\"]",
+    "createButton": "[data-testid=\"ai-mind-map-create\"]",
+    "searchForm": "[data-testid=\"ai-mind-map-search\"]",
+    "searchSubmit": "[data-testid=\"ai-mind-map-search-submit\"]",
+    "searchReset": "[data-testid=\"ai-mind-map-search-reset\"]",
+    "total": "[data-testid=\"ai-mind-map-total\"]",
+    "table": "[data-testid=\"ai-mind-map-table\"]",
+    "row": "[data-testid=\"ai-mind-map-row\"]",
+    "editButton": "[data-testid=\"ai-mind-map-edit\"]",
+    "deleteButton": "[data-testid=\"ai-mind-map-delete\"]",
+    "form": "[data-testid=\"ai-mind-map-form\"]",
+    "formError": "[data-testid=\"ai-mind-map-form-error\"]",
+    "formSubmit": "[data-testid=\"ai-mind-map-form-submit\"]",
+    "formCancel": "[data-testid=\"ai-mind-map-form-cancel\"]",
+    "formClose": "[data-testid=\"ai-mind-map-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "AI 思维导图列表",
+    "dialogLabel": {
+      "create": "新增AI 思维导图",
+      "edit": "编辑AI 思维导图"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "platform",
+        "label": "平台",
+        "type": "string",
+        "required": false,
+        "testId": "field-platform",
+        "selector": "[data-testid=\"field-platform\"]"
+      },
+      {
+        "name": "model_id",
+        "label": "模型编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-model_id",
+        "selector": "[data-testid=\"field-model_id\"]"
+      },
+      {
+        "name": "model",
+        "label": "模型",
+        "type": "string",
+        "required": false,
+        "testId": "field-model",
+        "selector": "[data-testid=\"field-model\"]"
+      },
+      {
+        "name": "prompt",
+        "label": "生成内容提示",
+        "type": "string",
+        "required": false,
+        "testId": "field-prompt",
+        "selector": "[data-testid=\"field-prompt\"]"
+      },
+      {
+        "name": "generated_content",
+        "label": "生成的内容",
+        "type": "string",
+        "required": false,
+        "testId": "field-generated_content",
+        "selector": "[data-testid=\"field-generated_content\"]"
+      },
+      {
+        "name": "error_message",
+        "label": "错误信息",
+        "type": "string",
+        "required": false,
+        "testId": "field-error_message",
+        "selector": "[data-testid=\"field-error_message\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "ai-mind-map",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"ai-mind-map\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"ai-mind-map-form-overlay\"]",
+      "dialog": "[data-testid=\"ai-mind-map-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "ai-mind-map:search",
+      "reset": "ai-mind-map:reset",
+      "refresh": "ai-mind-map:refresh",
+      "create": "ai-mind-map:create",
+      "edit": "ai-mind-map:edit",
+      "delete": "ai-mind-map:delete",
+      "submit": "ai-mind-map:submit",
+      "cancel": "ai-mind-map:cancel",
+      "close": "ai-mind-map:close",
+      "row": "ai-mind-map:row",
+      "pagination": "ai-mind-map:pagination",
+      "fields": {
+        "user_id": "ai-mind-map:field:user_id",
+        "platform": "ai-mind-map:field:platform",
+        "model_id": "ai-mind-map:field:model_id",
+        "model": "ai-mind-map:field:model",
+        "prompt": "ai-mind-map:field:prompt",
+        "generated_content": "ai-mind-map:field:generated_content",
+        "error_message": "ai-mind-map:field:error_message"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "ai.ai-mind-map",
+      "examples": [
+        "ai.ai-mind-map__List__Refresh",
+        "ai.ai-mind-map__ListItem__Open",
+        "ai.ai-mind-map__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

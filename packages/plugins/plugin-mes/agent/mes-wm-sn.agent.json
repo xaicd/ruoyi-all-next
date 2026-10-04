@@ -1,0 +1,222 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesWmSn",
+  "kebab": "mes-wm-sn",
+  "businessName": "MES SN 码",
+  "permissionPrefix": "mes:mes_wm_sn",
+  "page": {
+    "route": "/admin/mes/mes-wm-sn",
+    "title": "MES SN 码管理",
+    "titleSelector": "[data-testid=\"mes-wm-sn-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-wm-sn",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-wm-sn",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-wm-sn/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-wm-sn"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-wm-sn/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-wm-sn/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-wm-sn-title\"]",
+    "refresh": "[data-testid=\"mes-wm-sn-refresh\"]",
+    "createButton": "[data-testid=\"mes-wm-sn-create\"]",
+    "searchForm": "[data-testid=\"mes-wm-sn-search\"]",
+    "searchSubmit": "[data-testid=\"mes-wm-sn-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-wm-sn-search-reset\"]",
+    "total": "[data-testid=\"mes-wm-sn-total\"]",
+    "table": "[data-testid=\"mes-wm-sn-table\"]",
+    "row": "[data-testid=\"mes-wm-sn-row\"]",
+    "editButton": "[data-testid=\"mes-wm-sn-edit\"]",
+    "deleteButton": "[data-testid=\"mes-wm-sn-delete\"]",
+    "form": "[data-testid=\"mes-wm-sn-form\"]",
+    "formError": "[data-testid=\"mes-wm-sn-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-wm-sn-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-wm-sn-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-wm-sn-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES SN 码列表",
+    "dialogLabel": {
+      "create": "新增MES SN 码",
+      "edit": "编辑MES SN 码"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "uuid",
+        "label": "批次 UUID（用于标记同一批次生成的 SN 码）",
+        "type": "string",
+        "required": false,
+        "testId": "field-uuid",
+        "selector": "[data-testid=\"field-uuid\"]"
+      },
+      {
+        "name": "code",
+        "label": "SN 码（唯一）",
+        "type": "string",
+        "required": false,
+        "testId": "field-code",
+        "selector": "[data-testid=\"field-code\"]"
+      },
+      {
+        "name": "item_id",
+        "label": "物料编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-item_id",
+        "selector": "[data-testid=\"field-item_id\"]"
+      },
+      {
+        "name": "batch_code",
+        "label": "批次号",
+        "type": "string",
+        "required": false,
+        "testId": "field-batch_code",
+        "selector": "[data-testid=\"field-batch_code\"]"
+      },
+      {
+        "name": "work_order_id",
+        "label": "生产工单编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-work_order_id",
+        "selector": "[data-testid=\"field-work_order_id\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-wm-sn",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-wm-sn\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-wm-sn-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-wm-sn-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-wm-sn:search",
+      "reset": "mes-wm-sn:reset",
+      "refresh": "mes-wm-sn:refresh",
+      "create": "mes-wm-sn:create",
+      "edit": "mes-wm-sn:edit",
+      "delete": "mes-wm-sn:delete",
+      "submit": "mes-wm-sn:submit",
+      "cancel": "mes-wm-sn:cancel",
+      "close": "mes-wm-sn:close",
+      "row": "mes-wm-sn:row",
+      "pagination": "mes-wm-sn:pagination",
+      "fields": {
+        "uuid": "mes-wm-sn:field:uuid",
+        "code": "mes-wm-sn:field:code",
+        "item_id": "mes-wm-sn:field:item_id",
+        "batch_code": "mes-wm-sn:field:batch_code",
+        "work_order_id": "mes-wm-sn:field:work_order_id"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-wm-sn",
+      "examples": [
+        "mes.mes-wm-sn__List__Refresh",
+        "mes.mes-wm-sn__ListItem__Open",
+        "mes.mes-wm-sn__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

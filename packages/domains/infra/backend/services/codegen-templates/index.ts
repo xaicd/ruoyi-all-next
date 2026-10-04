@@ -14,6 +14,7 @@ import { generateAppPage } from "./frontend-page.template"
 import { generateTest } from "./test.template"
 import { generateRbacSql } from "./rbac-sql.template"
 import { generateTableDdl } from "./table-ddl.template"
+import { generateAgentContract } from "./agent-contract.template"
 
 export * from "./common"
 export * from "./types.template"
@@ -29,6 +30,8 @@ export * from "./frontend-list.template"
 export * from "./frontend-page.template"
 export * from "./test.template"
 export * from "./rbac-sql.template"
+export * from "./table-ddl.template"
+export * from "./agent-contract.template"
 
 export interface GenerateCodesOptions {
   includeClients?: boolean
@@ -62,6 +65,9 @@ export function generateAllCodegenOutputs(config: CodegenConfig, options?: Gener
     generateRbacSql(config),
     // 建表迁移: 没有它，生成的 Repository 会查一张不存在的表（内存回退下看不出来）
     generateTableDdl(config),
+    // Agent 操作契约: 与代码**同源产出**。新域一生成就自动可被
+    // agent-device / agent-browser 驱动，不需要另外补文档（文档必然过时）。
+    generateAgentContract(config),
     {
       path: "codegen-manifest.json",
       type: "manifest" as any,

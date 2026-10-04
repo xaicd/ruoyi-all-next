@@ -67,24 +67,36 @@ export function CombinationRecordForm({ open, initialData, onClose, onSuccess }:
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="combination-record-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联" : "新增拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联"}
+        data-testid="combination-record-form"
+        data-agent-scope="combination-record:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑CombinationRecord（源框架导入）" : "新增CombinationRecord（源框架导入）"}
+            {isEdit ? "编辑拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联" : "新增拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="combination-record-form-close" data-agent-target="combination-record:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="combination-record-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">拼团活动编号</label>
+          <label htmlFor="combination-record-activity_id" className="block text-xs text-slate-600 mb-1">拼团活动编号</label>
           <input
             type="number"
+            id="combination-record-activity_id"
+            data-testid="field-activity_id"
+            data-agent-target="combination-record:field:activity_id"
+            data-agent-state={formData.activity_id == null || formData.activity_id === "" ? "empty" : "filled"}
+            aria-label="拼团活动编号"
             value={formData.activity_id != null ? String(formData.activity_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, activity_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -94,9 +106,14 @@ export function CombinationRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">拼团商品单价</label>
+          <label htmlFor="combination-record-combination_price" className="block text-xs text-slate-600 mb-1">拼团商品单价</label>
           <input
             type="number"
+            id="combination-record-combination_price"
+            data-testid="field-combination_price"
+            data-agent-target="combination-record:field:combination_price"
+            data-agent-state={formData.combination_price == null || formData.combination_price === "" ? "empty" : "filled"}
+            aria-label="拼团商品单价"
             value={formData.combination_price != null ? String(formData.combination_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, combination_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -106,9 +123,14 @@ export function CombinationRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">SPU 编号</label>
+          <label htmlFor="combination-record-spu_id" className="block text-xs text-slate-600 mb-1">SPU 编号</label>
           <input
             type="number"
+            id="combination-record-spu_id"
+            data-testid="field-spu_id"
+            data-agent-target="combination-record:field:spu_id"
+            data-agent-state={formData.spu_id == null || formData.spu_id === "" ? "empty" : "filled"}
+            aria-label="SPU 编号"
             value={formData.spu_id != null ? String(formData.spu_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, spu_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -118,9 +140,14 @@ export function CombinationRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品名字</label>
+          <label htmlFor="combination-record-spu_name" className="block text-xs text-slate-600 mb-1">商品名字</label>
           <input
             type="text"
+            id="combination-record-spu_name"
+            data-testid="field-spu_name"
+            data-agent-target="combination-record:field:spu_name"
+            data-agent-state={formData.spu_name ? "filled" : "empty"}
+            aria-label="商品名字"
             value={formData.spu_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, spu_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -130,9 +157,14 @@ export function CombinationRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品图片</label>
+          <label htmlFor="combination-record-pic_url" className="block text-xs text-slate-600 mb-1">商品图片</label>
           <input
             type="text"
+            id="combination-record-pic_url"
+            data-testid="field-pic_url"
+            data-agent-target="combination-record:field:pic_url"
+            data-agent-state={formData.pic_url ? "filled" : "empty"}
+            aria-label="商品图片"
             value={formData.pic_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pic_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -142,9 +174,14 @@ export function CombinationRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">SKU 编号</label>
+          <label htmlFor="combination-record-sku_id" className="block text-xs text-slate-600 mb-1">SKU 编号</label>
           <input
             type="number"
+            id="combination-record-sku_id"
+            data-testid="field-sku_id"
+            data-agent-target="combination-record:field:sku_id"
+            data-agent-state={formData.sku_id == null || formData.sku_id === "" ? "empty" : "filled"}
+            aria-label="SKU 编号"
             value={formData.sku_id != null ? String(formData.sku_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sku_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -154,9 +191,14 @@ export function CombinationRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">购买的商品数量</label>
+          <label htmlFor="combination-record-count" className="block text-xs text-slate-600 mb-1">购买的商品数量</label>
           <input
             type="number"
+            id="combination-record-count"
+            data-testid="field-count"
+            data-agent-target="combination-record:field:count"
+            data-agent-state={formData.count == null || formData.count === "" ? "empty" : "filled"}
+            aria-label="购买的商品数量"
             value={formData.count != null ? String(formData.count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -166,9 +208,14 @@ export function CombinationRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="combination-record-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="combination-record-user_id"
+            data-testid="field-user_id"
+            data-agent-target="combination-record:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -178,9 +225,14 @@ export function CombinationRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户昵称</label>
+          <label htmlFor="combination-record-nickname" className="block text-xs text-slate-600 mb-1">用户昵称</label>
           <input
             type="text"
+            id="combination-record-nickname"
+            data-testid="field-nickname"
+            data-agent-target="combination-record:field:nickname"
+            data-agent-state={formData.nickname ? "filled" : "empty"}
+            aria-label="用户昵称"
             value={formData.nickname ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, nickname: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -190,9 +242,14 @@ export function CombinationRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户头像</label>
+          <label htmlFor="combination-record-avatar" className="block text-xs text-slate-600 mb-1">用户头像</label>
           <input
             type="text"
+            id="combination-record-avatar"
+            data-testid="field-avatar"
+            data-agent-target="combination-record:field:avatar"
+            data-agent-state={formData.avatar ? "filled" : "empty"}
+            aria-label="用户头像"
             value={formData.avatar ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, avatar: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -202,9 +259,14 @@ export function CombinationRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">团长编号</label>
+          <label htmlFor="combination-record-head_id" className="block text-xs text-slate-600 mb-1">团长编号</label>
           <input
             type="number"
+            id="combination-record-head_id"
+            data-testid="field-head_id"
+            data-agent-target="combination-record:field:head_id"
+            data-agent-state={formData.head_id == null || formData.head_id === "" ? "empty" : "filled"}
+            aria-label="团长编号"
             value={formData.head_id != null ? String(formData.head_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, head_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -214,9 +276,14 @@ export function CombinationRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">开团状态</label>
+          <label htmlFor="combination-record-status" className="block text-xs text-slate-600 mb-1">开团状态</label>
           <input
             type="number"
+            id="combination-record-status"
+            data-testid="field-status"
+            data-agent-target="combination-record:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="开团状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -226,9 +293,14 @@ export function CombinationRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">订单编号</label>
+          <label htmlFor="combination-record-order_id" className="block text-xs text-slate-600 mb-1">订单编号</label>
           <input
             type="number"
+            id="combination-record-order_id"
+            data-testid="field-order_id"
+            data-agent-target="combination-record:field:order_id"
+            data-agent-state={formData.order_id == null || formData.order_id === "" ? "empty" : "filled"}
+            aria-label="订单编号"
             value={formData.order_id != null ? String(formData.order_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, order_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -238,9 +310,14 @@ export function CombinationRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">开团需要人数</label>
+          <label htmlFor="combination-record-user_size" className="block text-xs text-slate-600 mb-1">开团需要人数</label>
           <input
             type="number"
+            id="combination-record-user_size"
+            data-testid="field-user_size"
+            data-agent-target="combination-record:field:user_size"
+            data-agent-state={formData.user_size == null || formData.user_size === "" ? "empty" : "filled"}
+            aria-label="开团需要人数"
             value={formData.user_size != null ? String(formData.user_size) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_size: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -250,9 +327,14 @@ export function CombinationRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">已加入拼团人数</label>
+          <label htmlFor="combination-record-user_count" className="block text-xs text-slate-600 mb-1">已加入拼团人数</label>
           <input
             type="number"
+            id="combination-record-user_count"
+            data-testid="field-user_count"
+            data-agent-target="combination-record:field:user_count"
+            data-agent-state={formData.user_count == null || formData.user_count === "" ? "empty" : "filled"}
+            aria-label="已加入拼团人数"
             value={formData.user_count != null ? String(formData.user_count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -264,18 +346,27 @@ export function CombinationRecordForm({ open, initialData, onClose, onSuccess }:
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="virtual_group"
+            id="combination-record-virtual_group"
+            data-testid="field-virtual_group"
+            data-agent-target="combination-record:field:virtual_group"
+            data-agent-state={formData.virtual_group ? "on" : "off"}
+            aria-label="是否虚拟成团"
             checked={Boolean(formData.virtual_group)}
             onChange={(e) => setFormData((prev) => ({ ...prev, virtual_group: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="virtual_group" className="text-xs text-slate-700 font-medium">是否虚拟成团</label>
+          <label htmlFor="combination-record-virtual_group" className="text-xs text-slate-700 font-medium">是否虚拟成团</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">过期时间</label>
+          <label htmlFor="combination-record-expire_time" className="block text-xs text-slate-600 mb-1">过期时间</label>
           <input
             type="text"
+            id="combination-record-expire_time"
+            data-testid="field-expire_time"
+            data-agent-target="combination-record:field:expire_time"
+            data-agent-state={formData.expire_time ? "filled" : "empty"}
+            aria-label="过期时间"
             value={formData.expire_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, expire_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -285,9 +376,14 @@ export function CombinationRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">开始时间 (订单付款后开始的时间)</label>
+          <label htmlFor="combination-record-start_time" className="block text-xs text-slate-600 mb-1">开始时间 (订单付款后开始的时间)</label>
           <input
             type="text"
+            id="combination-record-start_time"
+            data-testid="field-start_time"
+            data-agent-target="combination-record:field:start_time"
+            data-agent-state={formData.start_time ? "filled" : "empty"}
+            aria-label="开始时间 (订单付款后开始的时间)"
             value={formData.start_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, start_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -297,9 +393,14 @@ export function CombinationRecordForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">结束时间（成团时间/失败时间）</label>
+          <label htmlFor="combination-record-end_time" className="block text-xs text-slate-600 mb-1">结束时间（成团时间/失败时间）</label>
           <input
             type="text"
+            id="combination-record-end_time"
+            data-testid="field-end_time"
+            data-agent-target="combination-record:field:end_time"
+            data-agent-state={formData.end_time ? "filled" : "empty"}
+            aria-label="结束时间（成团时间/失败时间）"
             value={formData.end_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, end_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -313,6 +414,8 @@ export function CombinationRecordForm({ open, initialData, onClose, onSuccess }:
             <button
               type="button"
               onClick={onClose}
+              data-testid="combination-record-form-cancel"
+              data-agent-target="combination-record:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -320,6 +423,9 @@ export function CombinationRecordForm({ open, initialData, onClose, onSuccess }:
             <button
               type="submit"
               disabled={loading}
+              data-testid="combination-record-form-submit"
+              data-agent-target="combination-record:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

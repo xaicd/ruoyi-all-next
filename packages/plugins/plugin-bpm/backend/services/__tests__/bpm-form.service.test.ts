@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { BpmFormService } from "../bpm-form.service"
 
 describe("BpmFormService", () => {
-  it("should create and query BpmForm（源框架导入）", async () => {
+  it("should create and query BPM 工作流的表单定义用于工作流的申请表单，需要动态配置的场景", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await BpmFormService.create({
-        name: "测试BpmForm（源框架导入）",
+        name: "测试BPM 工作流的表单定义用于工作流的申请表单，需要动态配置的场景",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("BpmFormService", () => {
   
       const updated = await BpmFormService.update(created.id, {
         id: created.id,
-        name: "更新BpmForm（源框架导入）",
+        name: "更新BPM 工作流的表单定义用于工作流的申请表单，需要动态配置的场景",
       } as any)
       expect(updated).toBeDefined()
   

@@ -58,24 +58,36 @@ export function IotDeviceModbusConfigForm({ open, initialData, onClose, onSucces
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="iot-device-modbus-config-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑IoT 设备 Modbus 连接配置" : "新增IoT 设备 Modbus 连接配置"}
+        data-testid="iot-device-modbus-config-form"
+        data-agent-scope="iot-device-modbus-config:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑IotDeviceModbusConfig（源框架导入）" : "新增IotDeviceModbusConfig（源框架导入）"}
+            {isEdit ? "编辑IoT 设备 Modbus 连接配置" : "新增IoT 设备 Modbus 连接配置"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="iot-device-modbus-config-form-close" data-agent-target="iot-device-modbus-config:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="iot-device-modbus-config-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品编号</label>
+          <label htmlFor="iot-device-modbus-config-product_id" className="block text-xs text-slate-600 mb-1">产品编号</label>
           <input
             type="number"
+            id="iot-device-modbus-config-product_id"
+            data-testid="field-product_id"
+            data-agent-target="iot-device-modbus-config:field:product_id"
+            data-agent-state={formData.product_id == null || formData.product_id === "" ? "empty" : "filled"}
+            aria-label="产品编号"
             value={formData.product_id != null ? String(formData.product_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, product_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -85,9 +97,14 @@ export function IotDeviceModbusConfigForm({ open, initialData, onClose, onSucces
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备编号</label>
+          <label htmlFor="iot-device-modbus-config-device_id" className="block text-xs text-slate-600 mb-1">设备编号</label>
           <input
             type="number"
+            id="iot-device-modbus-config-device_id"
+            data-testid="field-device_id"
+            data-agent-target="iot-device-modbus-config:field:device_id"
+            data-agent-state={formData.device_id == null || formData.device_id === "" ? "empty" : "filled"}
+            aria-label="设备编号"
             value={formData.device_id != null ? String(formData.device_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, device_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -97,9 +114,14 @@ export function IotDeviceModbusConfigForm({ open, initialData, onClose, onSucces
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">Modbus 服务器 IP 地址</label>
+          <label htmlFor="iot-device-modbus-config-ip" className="block text-xs text-slate-600 mb-1">Modbus 服务器 IP 地址</label>
           <input
             type="text"
+            id="iot-device-modbus-config-ip"
+            data-testid="field-ip"
+            data-agent-target="iot-device-modbus-config:field:ip"
+            data-agent-state={formData.ip ? "filled" : "empty"}
+            aria-label="Modbus 服务器 IP 地址"
             value={formData.ip ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, ip: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -109,9 +131,14 @@ export function IotDeviceModbusConfigForm({ open, initialData, onClose, onSucces
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">Modbus 服务器端口</label>
+          <label htmlFor="iot-device-modbus-config-port" className="block text-xs text-slate-600 mb-1">Modbus 服务器端口</label>
           <input
             type="number"
+            id="iot-device-modbus-config-port"
+            data-testid="field-port"
+            data-agent-target="iot-device-modbus-config:field:port"
+            data-agent-state={formData.port == null || formData.port === "" ? "empty" : "filled"}
+            aria-label="Modbus 服务器端口"
             value={formData.port != null ? String(formData.port) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, port: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -121,9 +148,14 @@ export function IotDeviceModbusConfigForm({ open, initialData, onClose, onSucces
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">从站地址</label>
+          <label htmlFor="iot-device-modbus-config-slave_id" className="block text-xs text-slate-600 mb-1">从站地址</label>
           <input
             type="number"
+            id="iot-device-modbus-config-slave_id"
+            data-testid="field-slave_id"
+            data-agent-target="iot-device-modbus-config:field:slave_id"
+            data-agent-state={formData.slave_id == null || formData.slave_id === "" ? "empty" : "filled"}
+            aria-label="从站地址"
             value={formData.slave_id != null ? String(formData.slave_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, slave_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -133,9 +165,14 @@ export function IotDeviceModbusConfigForm({ open, initialData, onClose, onSucces
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">连接超时时间，单位：毫秒</label>
+          <label htmlFor="iot-device-modbus-config-timeout" className="block text-xs text-slate-600 mb-1">连接超时时间，单位：毫秒</label>
           <input
             type="number"
+            id="iot-device-modbus-config-timeout"
+            data-testid="field-timeout"
+            data-agent-target="iot-device-modbus-config:field:timeout"
+            data-agent-state={formData.timeout == null || formData.timeout === "" ? "empty" : "filled"}
+            aria-label="连接超时时间，单位：毫秒"
             value={formData.timeout != null ? String(formData.timeout) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, timeout: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -145,9 +182,14 @@ export function IotDeviceModbusConfigForm({ open, initialData, onClose, onSucces
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">重试间隔，单位：毫秒</label>
+          <label htmlFor="iot-device-modbus-config-retry_interval" className="block text-xs text-slate-600 mb-1">重试间隔，单位：毫秒</label>
           <input
             type="number"
+            id="iot-device-modbus-config-retry_interval"
+            data-testid="field-retry_interval"
+            data-agent-target="iot-device-modbus-config:field:retry_interval"
+            data-agent-state={formData.retry_interval == null || formData.retry_interval === "" ? "empty" : "filled"}
+            aria-label="重试间隔，单位：毫秒"
             value={formData.retry_interval != null ? String(formData.retry_interval) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, retry_interval: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -157,9 +199,14 @@ export function IotDeviceModbusConfigForm({ open, initialData, onClose, onSucces
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">模式</label>
+          <label htmlFor="iot-device-modbus-config-mode" className="block text-xs text-slate-600 mb-1">模式</label>
           <input
             type="number"
+            id="iot-device-modbus-config-mode"
+            data-testid="field-mode"
+            data-agent-target="iot-device-modbus-config:field:mode"
+            data-agent-state={formData.mode == null || formData.mode === "" ? "empty" : "filled"}
+            aria-label="模式"
             value={formData.mode != null ? String(formData.mode) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, mode: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -169,9 +216,14 @@ export function IotDeviceModbusConfigForm({ open, initialData, onClose, onSucces
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">数据帧格式</label>
+          <label htmlFor="iot-device-modbus-config-frame_format" className="block text-xs text-slate-600 mb-1">数据帧格式</label>
           <input
             type="number"
+            id="iot-device-modbus-config-frame_format"
+            data-testid="field-frame_format"
+            data-agent-target="iot-device-modbus-config:field:frame_format"
+            data-agent-state={formData.frame_format == null || formData.frame_format === "" ? "empty" : "filled"}
+            aria-label="数据帧格式"
             value={formData.frame_format != null ? String(formData.frame_format) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, frame_format: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -181,9 +233,14 @@ export function IotDeviceModbusConfigForm({ open, initialData, onClose, onSucces
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="iot-device-modbus-config-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="iot-device-modbus-config-status"
+            data-testid="field-status"
+            data-agent-target="iot-device-modbus-config:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -197,6 +254,8 @@ export function IotDeviceModbusConfigForm({ open, initialData, onClose, onSucces
             <button
               type="button"
               onClick={onClose}
+              data-testid="iot-device-modbus-config-form-cancel"
+              data-agent-target="iot-device-modbus-config:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -204,6 +263,9 @@ export function IotDeviceModbusConfigForm({ open, initialData, onClose, onSucces
             <button
               type="submit"
               disabled={loading}
+              data-testid="iot-device-modbus-config-form-submit"
+              data-agent-target="iot-device-modbus-config:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

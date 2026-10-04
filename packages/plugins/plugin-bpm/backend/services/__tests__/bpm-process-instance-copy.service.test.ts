@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { BpmProcessInstanceCopyService } from "../bpm-process-instance-copy.service"
 
 describe("BpmProcessInstanceCopyService", () => {
-  it("should create and query BpmProcessInstanceCopy（源框架导入）", async () => {
+  it("should create and query 流程抄送", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await BpmProcessInstanceCopyService.create({
         start_user_id: 1,
@@ -21,7 +21,7 @@ describe("BpmProcessInstanceCopyService", () => {
   
       const updated = await BpmProcessInstanceCopyService.update(created.id, {
         id: created.id,
-        start_user_id: "更新BpmProcessInstanceCopy（源框架导入）",
+        start_user_id: "更新流程抄送",
       } as any)
       expect(updated).toBeDefined()
   

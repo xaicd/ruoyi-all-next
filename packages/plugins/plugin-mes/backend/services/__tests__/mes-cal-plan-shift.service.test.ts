@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesCalPlanShiftService } from "../mes-cal-plan-shift.service"
 
 describe("MesCalPlanShiftService", () => {
-  it("should create and query MesCalPlanShift（源框架导入）", async () => {
+  it("should create and query MES 计划班次", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesCalPlanShiftService.create({
         plan_id: 1,
@@ -21,7 +21,7 @@ describe("MesCalPlanShiftService", () => {
   
       const updated = await MesCalPlanShiftService.update(created.id, {
         id: created.id,
-        plan_id: "更新MesCalPlanShift（源框架导入）",
+        plan_id: "更新MES 计划班次",
       } as any)
       expect(updated).toBeDefined()
   

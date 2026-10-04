@@ -52,24 +52,36 @@ export function MemberSignInRecordForm({ open, initialData, onClose, onSuccess }
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="member-sign-in-record-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑签到记录" : "新增签到记录"}
+        data-testid="member-sign-in-record-form"
+        data-agent-scope="member-sign-in-record:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MemberSignInRecord（源框架导入）" : "新增MemberSignInRecord（源框架导入）"}
+            {isEdit ? "编辑签到记录" : "新增签到记录"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="member-sign-in-record-form-close" data-agent-target="member-sign-in-record:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="member-sign-in-record-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">签到用户</label>
+          <label htmlFor="member-sign-in-record-user_id" className="block text-xs text-slate-600 mb-1">签到用户</label>
           <input
             type="number"
+            id="member-sign-in-record-user_id"
+            data-testid="field-user_id"
+            data-agent-target="member-sign-in-record:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="签到用户"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -79,9 +91,14 @@ export function MemberSignInRecordForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">第几天签到</label>
+          <label htmlFor="member-sign-in-record-day" className="block text-xs text-slate-600 mb-1">第几天签到</label>
           <input
             type="number"
+            id="member-sign-in-record-day"
+            data-testid="field-day"
+            data-agent-target="member-sign-in-record:field:day"
+            data-agent-state={formData.day == null || formData.day === "" ? "empty" : "filled"}
+            aria-label="第几天签到"
             value={formData.day != null ? String(formData.day) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, day: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -91,9 +108,14 @@ export function MemberSignInRecordForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">签到的积分</label>
+          <label htmlFor="member-sign-in-record-point" className="block text-xs text-slate-600 mb-1">签到的积分</label>
           <input
             type="number"
+            id="member-sign-in-record-point"
+            data-testid="field-point"
+            data-agent-target="member-sign-in-record:field:point"
+            data-agent-state={formData.point == null || formData.point === "" ? "empty" : "filled"}
+            aria-label="签到的积分"
             value={formData.point != null ? String(formData.point) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, point: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -103,9 +125,14 @@ export function MemberSignInRecordForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">签到的经验</label>
+          <label htmlFor="member-sign-in-record-experience" className="block text-xs text-slate-600 mb-1">签到的经验</label>
           <input
             type="number"
+            id="member-sign-in-record-experience"
+            data-testid="field-experience"
+            data-agent-target="member-sign-in-record:field:experience"
+            data-agent-state={formData.experience == null || formData.experience === "" ? "empty" : "filled"}
+            aria-label="签到的经验"
             value={formData.experience != null ? String(formData.experience) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, experience: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -119,6 +146,8 @@ export function MemberSignInRecordForm({ open, initialData, onClose, onSuccess }
             <button
               type="button"
               onClick={onClose}
+              data-testid="member-sign-in-record-form-cancel"
+              data-agent-target="member-sign-in-record:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -126,6 +155,9 @@ export function MemberSignInRecordForm({ open, initialData, onClose, onSuccess }
             <button
               type="submit"
               disabled={loading}
+              data-testid="member-sign-in-record-form-submit"
+              data-agent-target="member-sign-in-record:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

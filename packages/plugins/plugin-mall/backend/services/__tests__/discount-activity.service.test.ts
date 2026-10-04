@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { DiscountActivityService } from "../discount-activity.service"
 
 describe("DiscountActivityService", () => {
-  it("should create and query DiscountActivity（源框架导入）", async () => {
+  it("should create and query 限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一个活动；", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await DiscountActivityService.create({
-        name: "测试DiscountActivity（源框架导入）",
+        name: "测试限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一个活动；",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("DiscountActivityService", () => {
   
       const updated = await DiscountActivityService.update(created.id, {
         id: created.id,
-        name: "更新DiscountActivity（源框架导入）",
+        name: "更新限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一个活动；",
       } as any)
       expect(updated).toBeDefined()
   

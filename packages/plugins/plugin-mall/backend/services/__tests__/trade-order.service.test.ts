@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { TradeOrderService } from "../trade-order.service"
 
 describe("TradeOrderService", () => {
-  it("should create and query TradeOrder（源框架导入）", async () => {
+  it("should create and query 交易订单", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await TradeOrderService.create({
-        no: "测试TradeOrder（源框架导入）",
+        no: "测试交易订单",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("TradeOrderService", () => {
   
       const updated = await TradeOrderService.update(created.id, {
         id: created.id,
-        no: "更新TradeOrder（源框架导入）",
+        no: "更新交易订单",
       } as any)
       expect(updated).toBeDefined()
   

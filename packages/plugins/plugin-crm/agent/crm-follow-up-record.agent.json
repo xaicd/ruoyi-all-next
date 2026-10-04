@@ -1,0 +1,258 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "crm",
+  "entity": "CrmFollowUpRecord",
+  "kebab": "crm-follow-up-record",
+  "businessName": "跟进记录 DO用于记录客户、联系人的每一次跟进",
+  "permissionPrefix": "crm:crm_follow_up_record",
+  "page": {
+    "route": "/admin/crm/crm-follow-up-record",
+    "title": "跟进记录 DO用于记录客户、联系人的每一次跟进管理",
+    "titleSelector": "[data-testid=\"crm-follow-up-record-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.crm/api",
+    "bffMount": "/api/v1/admin/crm",
+    "resource": "crm-follow-up-record",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/crm-follow-up-record",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/crm-follow-up-record/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/crm-follow-up-record"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/crm-follow-up-record/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/crm-follow-up-record/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"crm-follow-up-record-title\"]",
+    "refresh": "[data-testid=\"crm-follow-up-record-refresh\"]",
+    "createButton": "[data-testid=\"crm-follow-up-record-create\"]",
+    "searchForm": "[data-testid=\"crm-follow-up-record-search\"]",
+    "searchSubmit": "[data-testid=\"crm-follow-up-record-search-submit\"]",
+    "searchReset": "[data-testid=\"crm-follow-up-record-search-reset\"]",
+    "total": "[data-testid=\"crm-follow-up-record-total\"]",
+    "table": "[data-testid=\"crm-follow-up-record-table\"]",
+    "row": "[data-testid=\"crm-follow-up-record-row\"]",
+    "editButton": "[data-testid=\"crm-follow-up-record-edit\"]",
+    "deleteButton": "[data-testid=\"crm-follow-up-record-delete\"]",
+    "form": "[data-testid=\"crm-follow-up-record-form\"]",
+    "formError": "[data-testid=\"crm-follow-up-record-form-error\"]",
+    "formSubmit": "[data-testid=\"crm-follow-up-record-form-submit\"]",
+    "formCancel": "[data-testid=\"crm-follow-up-record-form-cancel\"]",
+    "formClose": "[data-testid=\"crm-follow-up-record-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "跟进记录 DO用于记录客户、联系人的每一次跟进列表",
+    "dialogLabel": {
+      "create": "新增跟进记录 DO用于记录客户、联系人的每一次跟进",
+      "edit": "编辑跟进记录 DO用于记录客户、联系人的每一次跟进"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "biz_type",
+        "label": "数据类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-biz_type",
+        "selector": "[data-testid=\"field-biz_type\"]"
+      },
+      {
+        "name": "biz_id",
+        "label": "数据编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-biz_id",
+        "selector": "[data-testid=\"field-biz_id\"]"
+      },
+      {
+        "name": "type",
+        "label": "跟进类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "content",
+        "label": "跟进内容",
+        "type": "string",
+        "required": false,
+        "testId": "field-content",
+        "selector": "[data-testid=\"field-content\"]"
+      },
+      {
+        "name": "next_time",
+        "label": "下次联系时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-next_time",
+        "selector": "[data-testid=\"field-next_time\"]"
+      },
+      {
+        "name": "pic_urls",
+        "label": "图片",
+        "type": "string",
+        "required": false,
+        "testId": "field-pic_urls",
+        "selector": "[data-testid=\"field-pic_urls\"]"
+      },
+      {
+        "name": "file_urls",
+        "label": "附件",
+        "type": "string",
+        "required": false,
+        "testId": "field-file_urls",
+        "selector": "[data-testid=\"field-file_urls\"]"
+      },
+      {
+        "name": "business_ids",
+        "label": "关联的商机编号数组",
+        "type": "string",
+        "required": false,
+        "testId": "field-business_ids",
+        "selector": "[data-testid=\"field-business_ids\"]"
+      },
+      {
+        "name": "contact_ids",
+        "label": "关联的联系人编号数组",
+        "type": "string",
+        "required": false,
+        "testId": "field-contact_ids",
+        "selector": "[data-testid=\"field-contact_ids\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "crm-follow-up-record",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"crm-follow-up-record\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"crm-follow-up-record-form-overlay\"]",
+      "dialog": "[data-testid=\"crm-follow-up-record-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "crm-follow-up-record:search",
+      "reset": "crm-follow-up-record:reset",
+      "refresh": "crm-follow-up-record:refresh",
+      "create": "crm-follow-up-record:create",
+      "edit": "crm-follow-up-record:edit",
+      "delete": "crm-follow-up-record:delete",
+      "submit": "crm-follow-up-record:submit",
+      "cancel": "crm-follow-up-record:cancel",
+      "close": "crm-follow-up-record:close",
+      "row": "crm-follow-up-record:row",
+      "pagination": "crm-follow-up-record:pagination",
+      "fields": {
+        "biz_type": "crm-follow-up-record:field:biz_type",
+        "biz_id": "crm-follow-up-record:field:biz_id",
+        "type": "crm-follow-up-record:field:type",
+        "content": "crm-follow-up-record:field:content",
+        "next_time": "crm-follow-up-record:field:next_time",
+        "pic_urls": "crm-follow-up-record:field:pic_urls",
+        "file_urls": "crm-follow-up-record:field:file_urls",
+        "business_ids": "crm-follow-up-record:field:business_ids",
+        "contact_ids": "crm-follow-up-record:field:contact_ids"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "crm.crm-follow-up-record",
+      "examples": [
+        "crm.crm-follow-up-record__List__Refresh",
+        "crm.crm-follow-up-record__ListItem__Open",
+        "crm.crm-follow-up-record__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

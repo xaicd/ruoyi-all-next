@@ -56,24 +56,36 @@ export function IotOtaFirmwareForm({ open, initialData, onClose, onSuccess }: Io
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="iot-ota-firmware-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑IoT OTA 固件" : "新增IoT OTA 固件"}
+        data-testid="iot-ota-firmware-form"
+        data-agent-scope="iot-ota-firmware:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑IotOtaFirmware（源框架导入）" : "新增IotOtaFirmware（源框架导入）"}
+            {isEdit ? "编辑IoT OTA 固件" : "新增IoT OTA 固件"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="iot-ota-firmware-form-close" data-agent-target="iot-ota-firmware:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="iot-ota-firmware-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">固件名称</label>
+          <label htmlFor="iot-ota-firmware-name" className="block text-xs text-slate-600 mb-1">固件名称</label>
           <input
             type="text"
+            id="iot-ota-firmware-name"
+            data-testid="field-name"
+            data-agent-target="iot-ota-firmware:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="固件名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -83,9 +95,14 @@ export function IotOtaFirmwareForm({ open, initialData, onClose, onSuccess }: Io
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">固件描述</label>
+          <label htmlFor="iot-ota-firmware-description" className="block text-xs text-slate-600 mb-1">固件描述</label>
           <input
             type="text"
+            id="iot-ota-firmware-description"
+            data-testid="field-description"
+            data-agent-target="iot-ota-firmware:field:description"
+            data-agent-state={formData.description ? "filled" : "empty"}
+            aria-label="固件描述"
             value={formData.description ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -95,9 +112,14 @@ export function IotOtaFirmwareForm({ open, initialData, onClose, onSuccess }: Io
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">版本号</label>
+          <label htmlFor="iot-ota-firmware-version" className="block text-xs text-slate-600 mb-1">版本号</label>
           <input
             type="text"
+            id="iot-ota-firmware-version"
+            data-testid="field-version"
+            data-agent-target="iot-ota-firmware:field:version"
+            data-agent-state={formData.version ? "filled" : "empty"}
+            aria-label="版本号"
             value={formData.version ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, version: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -107,9 +129,14 @@ export function IotOtaFirmwareForm({ open, initialData, onClose, onSuccess }: Io
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品编号</label>
+          <label htmlFor="iot-ota-firmware-product_id" className="block text-xs text-slate-600 mb-1">产品编号</label>
           <input
             type="number"
+            id="iot-ota-firmware-product_id"
+            data-testid="field-product_id"
+            data-agent-target="iot-ota-firmware:field:product_id"
+            data-agent-state={formData.product_id == null || formData.product_id === "" ? "empty" : "filled"}
+            aria-label="产品编号"
             value={formData.product_id != null ? String(formData.product_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, product_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -119,9 +146,14 @@ export function IotOtaFirmwareForm({ open, initialData, onClose, onSuccess }: Io
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">固件文件 URL</label>
+          <label htmlFor="iot-ota-firmware-file_url" className="block text-xs text-slate-600 mb-1">固件文件 URL</label>
           <input
             type="text"
+            id="iot-ota-firmware-file_url"
+            data-testid="field-file_url"
+            data-agent-target="iot-ota-firmware:field:file_url"
+            data-agent-state={formData.file_url ? "filled" : "empty"}
+            aria-label="固件文件 URL"
             value={formData.file_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, file_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -131,9 +163,14 @@ export function IotOtaFirmwareForm({ open, initialData, onClose, onSuccess }: Io
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">固件文件大小</label>
+          <label htmlFor="iot-ota-firmware-file_size" className="block text-xs text-slate-600 mb-1">固件文件大小</label>
           <input
             type="number"
+            id="iot-ota-firmware-file_size"
+            data-testid="field-file_size"
+            data-agent-target="iot-ota-firmware:field:file_size"
+            data-agent-state={formData.file_size == null || formData.file_size === "" ? "empty" : "filled"}
+            aria-label="固件文件大小"
             value={formData.file_size != null ? String(formData.file_size) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, file_size: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -143,9 +180,14 @@ export function IotOtaFirmwareForm({ open, initialData, onClose, onSuccess }: Io
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">固件文件签名算法</label>
+          <label htmlFor="iot-ota-firmware-file_digest_algorithm" className="block text-xs text-slate-600 mb-1">固件文件签名算法</label>
           <input
             type="text"
+            id="iot-ota-firmware-file_digest_algorithm"
+            data-testid="field-file_digest_algorithm"
+            data-agent-target="iot-ota-firmware:field:file_digest_algorithm"
+            data-agent-state={formData.file_digest_algorithm ? "filled" : "empty"}
+            aria-label="固件文件签名算法"
             value={formData.file_digest_algorithm ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, file_digest_algorithm: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -155,9 +197,14 @@ export function IotOtaFirmwareForm({ open, initialData, onClose, onSuccess }: Io
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">固件文件签名结果</label>
+          <label htmlFor="iot-ota-firmware-file_digest_value" className="block text-xs text-slate-600 mb-1">固件文件签名结果</label>
           <input
             type="text"
+            id="iot-ota-firmware-file_digest_value"
+            data-testid="field-file_digest_value"
+            data-agent-target="iot-ota-firmware:field:file_digest_value"
+            data-agent-state={formData.file_digest_value ? "filled" : "empty"}
+            aria-label="固件文件签名结果"
             value={formData.file_digest_value ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, file_digest_value: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,6 +218,8 @@ export function IotOtaFirmwareForm({ open, initialData, onClose, onSuccess }: Io
             <button
               type="button"
               onClick={onClose}
+              data-testid="iot-ota-firmware-form-cancel"
+              data-agent-target="iot-ota-firmware:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -178,6 +227,9 @@ export function IotOtaFirmwareForm({ open, initialData, onClose, onSuccess }: Io
             <button
               type="submit"
               disabled={loading}
+              data-testid="iot-ota-firmware-form-submit"
+              data-agent-target="iot-ota-firmware:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

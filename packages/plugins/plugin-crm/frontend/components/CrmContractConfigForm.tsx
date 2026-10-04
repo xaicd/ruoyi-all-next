@@ -50,35 +50,51 @@ export function CrmContractConfigForm({ open, initialData, onClose, onSuccess }:
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="crm-contract-config-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑编号" : "新增编号"}
+        data-testid="crm-contract-config-form"
+        data-agent-scope="crm-contract-config:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑CrmContractConfig（源框架导入）" : "新增CrmContractConfig（源框架导入）"}
+            {isEdit ? "编辑编号" : "新增编号"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="crm-contract-config-form-close" data-agent-target="crm-contract-config:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="crm-contract-config-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="notify_enabled"
+            id="crm-contract-config-notify_enabled"
+            data-testid="field-notify_enabled"
+            data-agent-target="crm-contract-config:field:notify_enabled"
+            data-agent-state={formData.notify_enabled ? "on" : "off"}
+            aria-label="是否开启提前提醒"
             checked={Boolean(formData.notify_enabled)}
             onChange={(e) => setFormData((prev) => ({ ...prev, notify_enabled: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="notify_enabled" className="text-xs text-slate-700 font-medium">是否开启提前提醒</label>
+          <label htmlFor="crm-contract-config-notify_enabled" className="text-xs text-slate-700 font-medium">是否开启提前提醒</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">提前提醒天数</label>
+          <label htmlFor="crm-contract-config-notify_days" className="block text-xs text-slate-600 mb-1">提前提醒天数</label>
           <input
             type="number"
+            id="crm-contract-config-notify_days"
+            data-testid="field-notify_days"
+            data-agent-target="crm-contract-config:field:notify_days"
+            data-agent-state={formData.notify_days == null || formData.notify_days === "" ? "empty" : "filled"}
+            aria-label="提前提醒天数"
             value={formData.notify_days != null ? String(formData.notify_days) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, notify_days: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -92,6 +108,8 @@ export function CrmContractConfigForm({ open, initialData, onClose, onSuccess }:
             <button
               type="button"
               onClick={onClose}
+              data-testid="crm-contract-config-form-cancel"
+              data-agent-target="crm-contract-config:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -99,6 +117,9 @@ export function CrmContractConfigForm({ open, initialData, onClose, onSuccess }:
             <button
               type="submit"
               disabled={loading}
+              data-testid="crm-contract-config-form-submit"
+              data-agent-target="crm-contract-config:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

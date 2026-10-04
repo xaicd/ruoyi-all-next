@@ -2,7 +2,7 @@
 -- 来源: scripts/data/crm-source-tables.ts#CRM_TABLES
 -- 背景: 这些表的定义来自低代码 CodegenConfig；此前只生成代码、不生成建表 SQL，
 --       导致"仓储在查但无处创建"。本迁移补齐 DDL。
--- CrmBusiness（源框架导入）
+-- CRM 商机
 CREATE TABLE "crm_business" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -30,7 +30,7 @@ CREATE TABLE "crm_business" (
 );
 CREATE INDEX "crm_business_tenant_id_idx" ON "crm_business"("tenant_id");
 
--- CrmBusinessProduct（源框架导入）
+-- CRM 商机产品关联表 DOCrmBusinessDO : CrmBusinessProductDO = 1 : N
 CREATE TABLE "crm_business_product" (
     "id" TEXT NOT NULL,
     "business_id" BIGINT,
@@ -49,7 +49,7 @@ CREATE TABLE "crm_business_product" (
 );
 CREATE INDEX "crm_business_product_tenant_id_idx" ON "crm_business_product"("tenant_id");
 
--- CrmBusinessStatus（源框架导入）
+-- CRM 商机状态 DO注意，它是个配置表
 CREATE TABLE "crm_business_status" (
     "id" TEXT NOT NULL,
     "type_id" BIGINT,
@@ -66,7 +66,7 @@ CREATE TABLE "crm_business_status" (
 );
 CREATE INDEX "crm_business_status_tenant_id_idx" ON "crm_business_status"("tenant_id");
 
--- CrmBusinessStatusType（源框架导入）
+-- CRM 商机状态组 DO注意，它是个配置表
 CREATE TABLE "crm_business_status_type" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -81,7 +81,7 @@ CREATE TABLE "crm_business_status_type" (
 );
 CREATE INDEX "crm_business_status_type_tenant_id_idx" ON "crm_business_status_type"("tenant_id");
 
--- CrmClue（源框架导入）
+-- CRM 线索
 CREATE TABLE "crm_clue" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -113,7 +113,7 @@ CREATE TABLE "crm_clue" (
 );
 CREATE INDEX "crm_clue_tenant_id_idx" ON "crm_clue"("tenant_id");
 
--- CrmContact（源框架导入）
+-- CRM 联系人
 CREATE TABLE "crm_contact" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -144,7 +144,7 @@ CREATE TABLE "crm_contact" (
 );
 CREATE INDEX "crm_contact_tenant_id_idx" ON "crm_contact"("tenant_id");
 
--- CrmContactBusiness（源框架导入）
+-- CRM 联系人与商机的关联
 CREATE TABLE "crm_contact_business" (
     "id" TEXT NOT NULL,
     "contact_id" BIGINT,
@@ -159,7 +159,7 @@ CREATE TABLE "crm_contact_business" (
 );
 CREATE INDEX "crm_contact_business_tenant_id_idx" ON "crm_contact_business"("tenant_id");
 
--- CrmContract（源框架导入）
+-- CRM 合同
 CREATE TABLE "crm_contract" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -189,7 +189,7 @@ CREATE TABLE "crm_contract" (
 );
 CREATE INDEX "crm_contract_tenant_id_idx" ON "crm_contract"("tenant_id");
 
--- CrmContractConfig（源框架导入）
+-- 编号
 CREATE TABLE "crm_contract_config" (
     "id" TEXT NOT NULL,
     "notify_enabled" BOOLEAN,
@@ -204,7 +204,7 @@ CREATE TABLE "crm_contract_config" (
 );
 CREATE INDEX "crm_contract_config_tenant_id_idx" ON "crm_contract_config"("tenant_id");
 
--- CrmContractProduct（源框架导入）
+-- CRM 合同产品关联表
 CREATE TABLE "crm_contract_product" (
     "id" TEXT NOT NULL,
     "contract_id" BIGINT,
@@ -223,7 +223,7 @@ CREATE TABLE "crm_contract_product" (
 );
 CREATE INDEX "crm_contract_product_tenant_id_idx" ON "crm_contract_product"("tenant_id");
 
--- CrmCustomer（源框架导入）
+-- CRM 客户
 CREATE TABLE "crm_customer" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -256,7 +256,7 @@ CREATE TABLE "crm_customer" (
 );
 CREATE INDEX "crm_customer_tenant_id_idx" ON "crm_customer"("tenant_id");
 
--- CrmCustomerLimitConfig（源框架导入）
+-- 客户限制配置
 CREATE TABLE "crm_customer_limit_config" (
     "id" TEXT NOT NULL,
     "type" INTEGER,
@@ -274,7 +274,7 @@ CREATE TABLE "crm_customer_limit_config" (
 );
 CREATE INDEX "crm_customer_limit_config_tenant_id_idx" ON "crm_customer_limit_config"("tenant_id");
 
--- CrmCustomerPoolConfig（源框架导入）
+-- 客户公海配置
 CREATE TABLE "crm_customer_pool_config" (
     "id" TEXT NOT NULL,
     "enabled" BOOLEAN,
@@ -292,7 +292,7 @@ CREATE TABLE "crm_customer_pool_config" (
 );
 CREATE INDEX "crm_customer_pool_config_tenant_id_idx" ON "crm_customer_pool_config"("tenant_id");
 
--- CrmFollowUpRecord（源框架导入）
+-- 跟进记录 DO用于记录客户、联系人的每一次跟进
 CREATE TABLE "crm_follow_up_record" (
     "id" TEXT NOT NULL,
     "biz_type" INTEGER,
@@ -314,7 +314,7 @@ CREATE TABLE "crm_follow_up_record" (
 );
 CREATE INDEX "crm_follow_up_record_tenant_id_idx" ON "crm_follow_up_record"("tenant_id");
 
--- CrmOwnerRecord（源框架导入）
+-- CRM 负责人变更记录
 CREATE TABLE "crm_owner_record" (
     "id" TEXT NOT NULL,
     "biz_type" INTEGER,
@@ -331,7 +331,7 @@ CREATE TABLE "crm_owner_record" (
 );
 CREATE INDEX "crm_owner_record_tenant_id_idx" ON "crm_owner_record"("tenant_id");
 
--- CrmPerformanceConfig（源框架导入）
+-- CRM 业绩目标
 CREATE TABLE "crm_performance_config" (
     "id" TEXT NOT NULL,
     "biz_type" INTEGER,
@@ -361,7 +361,7 @@ CREATE TABLE "crm_performance_config" (
 );
 CREATE INDEX "crm_performance_config_tenant_id_idx" ON "crm_performance_config"("tenant_id");
 
--- CrmPermission（源框架导入）
+-- CRM 数据权限
 CREATE TABLE "crm_permission" (
     "id" TEXT NOT NULL,
     "biz_type" INTEGER,
@@ -378,7 +378,7 @@ CREATE TABLE "crm_permission" (
 );
 CREATE INDEX "crm_permission_tenant_id_idx" ON "crm_permission"("tenant_id");
 
--- CrmProduct（源框架导入）
+-- CRM 产品
 CREATE TABLE "crm_product" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -399,7 +399,7 @@ CREATE TABLE "crm_product" (
 );
 CREATE INDEX "crm_product_tenant_id_idx" ON "crm_product"("tenant_id");
 
--- CrmProductCategory（源框架导入）
+-- 产品分类
 CREATE TABLE "crm_product_category" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -414,7 +414,7 @@ CREATE TABLE "crm_product_category" (
 );
 CREATE INDEX "crm_product_category_tenant_id_idx" ON "crm_product_category"("tenant_id");
 
--- CrmReceivable（源框架导入）
+-- 回款
 CREATE TABLE "crm_receivable" (
     "id" TEXT NOT NULL,
     "no" VARCHAR(255),
@@ -438,7 +438,7 @@ CREATE TABLE "crm_receivable" (
 );
 CREATE INDEX "crm_receivable_tenant_id_idx" ON "crm_receivable"("tenant_id");
 
--- CrmReceivablePlan（源框架导入）
+-- CRM 回款计划
 CREATE TABLE "crm_receivable_plan" (
     "id" TEXT NOT NULL,
     "period" INTEGER,

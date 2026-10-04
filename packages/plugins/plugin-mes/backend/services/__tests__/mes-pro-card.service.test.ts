@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesProCardService } from "../mes-pro-card.service"
 
 describe("MesProCardService", () => {
-  it("should create and query MesProCard（源框架导入）", async () => {
+  it("should create and query MES 生产流转卡", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesProCardService.create({
-        code: "测试MesProCard（源框架导入）",
+        code: "测试MES 生产流转卡",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("MesProCardService", () => {
   
       const updated = await MesProCardService.update(created.id, {
         id: created.id,
-        code: "更新MesProCard（源框架导入）",
+        code: "更新MES 生产流转卡",
       } as any)
       expect(updated).toBeDefined()
   

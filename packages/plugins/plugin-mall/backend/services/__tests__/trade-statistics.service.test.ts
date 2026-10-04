@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { TradeStatisticsService } from "../trade-statistics.service"
 
 describe("TradeStatisticsService", () => {
-  it("should create and query TradeStatistics（源框架导入）", async () => {
+  it("should create and query 交易统计 DO以天为维度，统计全部的数据", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await TradeStatisticsService.create({
         time: new Date().toISOString(),
@@ -21,7 +21,7 @@ describe("TradeStatisticsService", () => {
   
       const updated = await TradeStatisticsService.update(created.id, {
         id: created.id,
-        time: "更新TradeStatistics（源框架导入）",
+        time: "更新交易统计 DO以天为维度，统计全部的数据",
       } as any)
       expect(updated).toBeDefined()
   

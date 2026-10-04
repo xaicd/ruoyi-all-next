@@ -32,4 +32,8 @@ rm -f packages/plugins/plugin-member/backend/services/__tests__/member-user.serv
 echo "  已恢复 member 手写对"
 
 echo ""
+echo "======== 4) 汇总 Agent 契约注册表 ========"
+node scripts/agent/collect-contracts.cjs
+
+echo ""
 echo "======== 全部完成 ========"

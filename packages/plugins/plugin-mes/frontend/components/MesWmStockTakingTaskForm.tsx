@@ -60,24 +60,36 @@ export function MesWmStockTakingTaskForm({ open, initialData, onClose, onSuccess
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-wm-stock-taking-task-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 盘点任务" : "新增MES 盘点任务"}
+        data-testid="mes-wm-stock-taking-task-form"
+        data-agent-scope="mes-wm-stock-taking-task:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesWmStockTakingTask（源框架导入）" : "新增MesWmStockTakingTask（源框架导入）"}
+            {isEdit ? "编辑MES 盘点任务" : "新增MES 盘点任务"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-wm-stock-taking-task-form-close" data-agent-target="mes-wm-stock-taking-task:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-wm-stock-taking-task-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">任务编码</label>
+          <label htmlFor="mes-wm-stock-taking-task-code" className="block text-xs text-slate-600 mb-1">任务编码</label>
           <input
             type="text"
+            id="mes-wm-stock-taking-task-code"
+            data-testid="field-code"
+            data-agent-target="mes-wm-stock-taking-task:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="任务编码"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -87,9 +99,14 @@ export function MesWmStockTakingTaskForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">任务名称</label>
+          <label htmlFor="mes-wm-stock-taking-task-name" className="block text-xs text-slate-600 mb-1">任务名称</label>
           <input
             type="text"
+            id="mes-wm-stock-taking-task-name"
+            data-testid="field-name"
+            data-agent-target="mes-wm-stock-taking-task:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="任务名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -99,9 +116,14 @@ export function MesWmStockTakingTaskForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">盘点日期</label>
+          <label htmlFor="mes-wm-stock-taking-task-taking_date" className="block text-xs text-slate-600 mb-1">盘点日期</label>
           <input
             type="text"
+            id="mes-wm-stock-taking-task-taking_date"
+            data-testid="field-taking_date"
+            data-agent-target="mes-wm-stock-taking-task:field:taking_date"
+            data-agent-state={formData.taking_date ? "filled" : "empty"}
+            aria-label="盘点日期"
             value={formData.taking_date ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, taking_date: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -111,9 +133,14 @@ export function MesWmStockTakingTaskForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">盘点类型</label>
+          <label htmlFor="mes-wm-stock-taking-task-type" className="block text-xs text-slate-600 mb-1">盘点类型</label>
           <input
             type="number"
+            id="mes-wm-stock-taking-task-type"
+            data-testid="field-type"
+            data-agent-target="mes-wm-stock-taking-task:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="盘点类型"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -123,9 +150,14 @@ export function MesWmStockTakingTaskForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">盘点人编号</label>
+          <label htmlFor="mes-wm-stock-taking-task-user_id" className="block text-xs text-slate-600 mb-1">盘点人编号</label>
           <input
             type="number"
+            id="mes-wm-stock-taking-task-user_id"
+            data-testid="field-user_id"
+            data-agent-target="mes-wm-stock-taking-task:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="盘点人编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -135,9 +167,14 @@ export function MesWmStockTakingTaskForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">盘点计划编号</label>
+          <label htmlFor="mes-wm-stock-taking-task-plan_id" className="block text-xs text-slate-600 mb-1">盘点计划编号</label>
           <input
             type="number"
+            id="mes-wm-stock-taking-task-plan_id"
+            data-testid="field-plan_id"
+            data-agent-target="mes-wm-stock-taking-task:field:plan_id"
+            data-agent-state={formData.plan_id == null || formData.plan_id === "" ? "empty" : "filled"}
+            aria-label="盘点计划编号"
             value={formData.plan_id != null ? String(formData.plan_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, plan_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -149,29 +186,42 @@ export function MesWmStockTakingTaskForm({ open, initialData, onClose, onSuccess
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="blind_flag"
+            id="mes-wm-stock-taking-task-blind_flag"
+            data-testid="field-blind_flag"
+            data-agent-target="mes-wm-stock-taking-task:field:blind_flag"
+            data-agent-state={formData.blind_flag ? "on" : "off"}
+            aria-label="是否盲盘"
             checked={Boolean(formData.blind_flag)}
             onChange={(e) => setFormData((prev) => ({ ...prev, blind_flag: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="blind_flag" className="text-xs text-slate-700 font-medium">是否盲盘</label>
+          <label htmlFor="mes-wm-stock-taking-task-blind_flag" className="text-xs text-slate-700 font-medium">是否盲盘</label>
         </div>
 
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="frozen"
+            id="mes-wm-stock-taking-task-frozen"
+            data-testid="field-frozen"
+            data-agent-target="mes-wm-stock-taking-task:field:frozen"
+            data-agent-state={formData.frozen ? "on" : "off"}
+            aria-label="是否冻结库存"
             checked={Boolean(formData.frozen)}
             onChange={(e) => setFormData((prev) => ({ ...prev, frozen: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="frozen" className="text-xs text-slate-700 font-medium">是否冻结库存</label>
+          <label htmlFor="mes-wm-stock-taking-task-frozen" className="text-xs text-slate-700 font-medium">是否冻结库存</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">开始时间</label>
+          <label htmlFor="mes-wm-stock-taking-task-start_time" className="block text-xs text-slate-600 mb-1">开始时间</label>
           <input
             type="text"
+            id="mes-wm-stock-taking-task-start_time"
+            data-testid="field-start_time"
+            data-agent-target="mes-wm-stock-taking-task:field:start_time"
+            data-agent-state={formData.start_time ? "filled" : "empty"}
+            aria-label="开始时间"
             value={formData.start_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, start_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -181,9 +231,14 @@ export function MesWmStockTakingTaskForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">结束时间</label>
+          <label htmlFor="mes-wm-stock-taking-task-end_time" className="block text-xs text-slate-600 mb-1">结束时间</label>
           <input
             type="text"
+            id="mes-wm-stock-taking-task-end_time"
+            data-testid="field-end_time"
+            data-agent-target="mes-wm-stock-taking-task:field:end_time"
+            data-agent-state={formData.end_time ? "filled" : "empty"}
+            aria-label="结束时间"
             value={formData.end_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, end_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -193,9 +248,14 @@ export function MesWmStockTakingTaskForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">任务状态</label>
+          <label htmlFor="mes-wm-stock-taking-task-status" className="block text-xs text-slate-600 mb-1">任务状态</label>
           <input
             type="number"
+            id="mes-wm-stock-taking-task-status"
+            data-testid="field-status"
+            data-agent-target="mes-wm-stock-taking-task:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="任务状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -205,9 +265,14 @@ export function MesWmStockTakingTaskForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-wm-stock-taking-task-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-wm-stock-taking-task-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-wm-stock-taking-task:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -221,6 +286,8 @@ export function MesWmStockTakingTaskForm({ open, initialData, onClose, onSuccess
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-wm-stock-taking-task-form-cancel"
+              data-agent-target="mes-wm-stock-taking-task:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -228,6 +295,9 @@ export function MesWmStockTakingTaskForm({ open, initialData, onClose, onSuccess
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-wm-stock-taking-task-form-submit"
+              data-agent-target="mes-wm-stock-taking-task:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

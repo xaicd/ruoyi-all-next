@@ -1,0 +1,411 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "TradeOrderItem",
+  "kebab": "trade-order-item",
+  "businessName": "交易订单项",
+  "permissionPrefix": "mall:trade_order_item",
+  "page": {
+    "route": "/admin/mall/trade-order-item",
+    "title": "交易订单项管理",
+    "titleSelector": "[data-testid=\"trade-order-item-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "trade-order-item",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/trade-order-item",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/trade-order-item/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/trade-order-item"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/trade-order-item/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/trade-order-item/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"trade-order-item-title\"]",
+    "refresh": "[data-testid=\"trade-order-item-refresh\"]",
+    "createButton": "[data-testid=\"trade-order-item-create\"]",
+    "searchForm": "[data-testid=\"trade-order-item-search\"]",
+    "searchSubmit": "[data-testid=\"trade-order-item-search-submit\"]",
+    "searchReset": "[data-testid=\"trade-order-item-search-reset\"]",
+    "total": "[data-testid=\"trade-order-item-total\"]",
+    "table": "[data-testid=\"trade-order-item-table\"]",
+    "row": "[data-testid=\"trade-order-item-row\"]",
+    "editButton": "[data-testid=\"trade-order-item-edit\"]",
+    "deleteButton": "[data-testid=\"trade-order-item-delete\"]",
+    "form": "[data-testid=\"trade-order-item-form\"]",
+    "formError": "[data-testid=\"trade-order-item-form-error\"]",
+    "formSubmit": "[data-testid=\"trade-order-item-form-submit\"]",
+    "formCancel": "[data-testid=\"trade-order-item-form-cancel\"]",
+    "formClose": "[data-testid=\"trade-order-item-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "交易订单项列表",
+    "dialogLabel": {
+      "create": "新增交易订单项",
+      "edit": "编辑交易订单项"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "order_id",
+        "label": "订单编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-order_id",
+        "selector": "[data-testid=\"field-order_id\"]"
+      },
+      {
+        "name": "cart_id",
+        "label": "购物车项编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-cart_id",
+        "selector": "[data-testid=\"field-cart_id\"]"
+      },
+      {
+        "name": "spu_id",
+        "label": "商品 SPU 编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-spu_id",
+        "selector": "[data-testid=\"field-spu_id\"]"
+      },
+      {
+        "name": "spu_name",
+        "label": "商品 SPU 名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-spu_name",
+        "selector": "[data-testid=\"field-spu_name\"]"
+      },
+      {
+        "name": "sku_id",
+        "label": "商品 SKU 编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-sku_id",
+        "selector": "[data-testid=\"field-sku_id\"]"
+      },
+      {
+        "name": "properties",
+        "label": "属性数组，JSON 格式",
+        "type": "string",
+        "required": false,
+        "testId": "field-properties",
+        "selector": "[data-testid=\"field-properties\"]"
+      },
+      {
+        "name": "pic_url",
+        "label": "商品图片",
+        "type": "string",
+        "required": false,
+        "testId": "field-pic_url",
+        "selector": "[data-testid=\"field-pic_url\"]"
+      },
+      {
+        "name": "count",
+        "label": "购买数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-count",
+        "selector": "[data-testid=\"field-count\"]"
+      },
+      {
+        "name": "comment_status",
+        "label": "是否评价",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-comment_status",
+        "selector": "[data-testid=\"field-comment_status\"]"
+      },
+      {
+        "name": "price",
+        "label": "商品原价（单），单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-price",
+        "selector": "[data-testid=\"field-price\"]"
+      },
+      {
+        "name": "discount_price",
+        "label": "优惠金额（总），单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-discount_price",
+        "selector": "[data-testid=\"field-discount_price\"]"
+      },
+      {
+        "name": "delivery_price",
+        "label": "运费金额（总），单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-delivery_price",
+        "selector": "[data-testid=\"field-delivery_price\"]"
+      },
+      {
+        "name": "adjust_price",
+        "label": "订单调价（总），单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-adjust_price",
+        "selector": "[data-testid=\"field-adjust_price\"]"
+      },
+      {
+        "name": "pay_price",
+        "label": "应付金额（总），单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-pay_price",
+        "selector": "[data-testid=\"field-pay_price\"]"
+      },
+      {
+        "name": "coupon_price",
+        "label": "优惠劵减免金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-coupon_price",
+        "selector": "[data-testid=\"field-coupon_price\"]"
+      },
+      {
+        "name": "point_price",
+        "label": "积分抵扣的金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-point_price",
+        "selector": "[data-testid=\"field-point_price\"]"
+      },
+      {
+        "name": "use_point",
+        "label": "使用的积分",
+        "type": "number",
+        "required": false,
+        "testId": "field-use_point",
+        "selector": "[data-testid=\"field-use_point\"]"
+      },
+      {
+        "name": "give_point",
+        "label": "赠送的积分",
+        "type": "number",
+        "required": false,
+        "testId": "field-give_point",
+        "selector": "[data-testid=\"field-give_point\"]"
+      },
+      {
+        "name": "vip_price",
+        "label": "VIP 减免金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-vip_price",
+        "selector": "[data-testid=\"field-vip_price\"]"
+      },
+      {
+        "name": "after_sale_id",
+        "label": "售后单编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-after_sale_id",
+        "selector": "[data-testid=\"field-after_sale_id\"]"
+      },
+      {
+        "name": "after_sale_status",
+        "label": "售后状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-after_sale_status",
+        "selector": "[data-testid=\"field-after_sale_status\"]"
+      },
+      {
+        "name": "property_id",
+        "label": "属性编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-property_id",
+        "selector": "[data-testid=\"field-property_id\"]"
+      },
+      {
+        "name": "property_name",
+        "label": "属性名字",
+        "type": "string",
+        "required": false,
+        "testId": "field-property_name",
+        "selector": "[data-testid=\"field-property_name\"]"
+      },
+      {
+        "name": "value_id",
+        "label": "属性值编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-value_id",
+        "selector": "[data-testid=\"field-value_id\"]"
+      },
+      {
+        "name": "value_name",
+        "label": "属性值名字",
+        "type": "string",
+        "required": false,
+        "testId": "field-value_name",
+        "selector": "[data-testid=\"field-value_name\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "trade-order-item",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"trade-order-item\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"trade-order-item-form-overlay\"]",
+      "dialog": "[data-testid=\"trade-order-item-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "trade-order-item:search",
+      "reset": "trade-order-item:reset",
+      "refresh": "trade-order-item:refresh",
+      "create": "trade-order-item:create",
+      "edit": "trade-order-item:edit",
+      "delete": "trade-order-item:delete",
+      "submit": "trade-order-item:submit",
+      "cancel": "trade-order-item:cancel",
+      "close": "trade-order-item:close",
+      "row": "trade-order-item:row",
+      "pagination": "trade-order-item:pagination",
+      "fields": {
+        "user_id": "trade-order-item:field:user_id",
+        "order_id": "trade-order-item:field:order_id",
+        "cart_id": "trade-order-item:field:cart_id",
+        "spu_id": "trade-order-item:field:spu_id",
+        "spu_name": "trade-order-item:field:spu_name",
+        "sku_id": "trade-order-item:field:sku_id",
+        "properties": "trade-order-item:field:properties",
+        "pic_url": "trade-order-item:field:pic_url",
+        "count": "trade-order-item:field:count",
+        "comment_status": "trade-order-item:field:comment_status",
+        "price": "trade-order-item:field:price",
+        "discount_price": "trade-order-item:field:discount_price",
+        "delivery_price": "trade-order-item:field:delivery_price",
+        "adjust_price": "trade-order-item:field:adjust_price",
+        "pay_price": "trade-order-item:field:pay_price",
+        "coupon_price": "trade-order-item:field:coupon_price",
+        "point_price": "trade-order-item:field:point_price",
+        "use_point": "trade-order-item:field:use_point",
+        "give_point": "trade-order-item:field:give_point",
+        "vip_price": "trade-order-item:field:vip_price",
+        "after_sale_id": "trade-order-item:field:after_sale_id",
+        "after_sale_status": "trade-order-item:field:after_sale_status",
+        "property_id": "trade-order-item:field:property_id",
+        "property_name": "trade-order-item:field:property_name",
+        "value_id": "trade-order-item:field:value_id",
+        "value_name": "trade-order-item:field:value_name"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.trade-order-item",
+      "examples": [
+        "mall.trade-order-item__List__Refresh",
+        "mall.trade-order-item__ListItem__Open",
+        "mall.trade-order-item__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

@@ -74,24 +74,36 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="iot-scene-rule-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑IoT 场景联动规则" : "新增IoT 场景联动规则"}
+        data-testid="iot-scene-rule-form"
+        data-agent-scope="iot-scene-rule:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑IotSceneRule（源框架导入）" : "新增IotSceneRule（源框架导入）"}
+            {isEdit ? "编辑IoT 场景联动规则" : "新增IoT 场景联动规则"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="iot-scene-rule-form-close" data-agent-target="iot-scene-rule:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="iot-scene-rule-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">场景联动名称</label>
+          <label htmlFor="iot-scene-rule-name" className="block text-xs text-slate-600 mb-1">场景联动名称</label>
           <input
             type="text"
+            id="iot-scene-rule-name"
+            data-testid="field-name"
+            data-agent-target="iot-scene-rule:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="场景联动名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -101,9 +113,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">场景联动描述</label>
+          <label htmlFor="iot-scene-rule-description" className="block text-xs text-slate-600 mb-1">场景联动描述</label>
           <input
             type="text"
+            id="iot-scene-rule-description"
+            data-testid="field-description"
+            data-agent-target="iot-scene-rule:field:description"
+            data-agent-state={formData.description ? "filled" : "empty"}
+            aria-label="场景联动描述"
             value={formData.description ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -113,9 +130,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">场景联动状态</label>
+          <label htmlFor="iot-scene-rule-status" className="block text-xs text-slate-600 mb-1">场景联动状态</label>
           <input
             type="number"
+            id="iot-scene-rule-status"
+            data-testid="field-status"
+            data-agent-target="iot-scene-rule:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="场景联动状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -125,9 +147,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">最后触发时间</label>
+          <label htmlFor="iot-scene-rule-last_trigger_time" className="block text-xs text-slate-600 mb-1">最后触发时间</label>
           <input
             type="text"
+            id="iot-scene-rule-last_trigger_time"
+            data-testid="field-last_trigger_time"
+            data-agent-target="iot-scene-rule:field:last_trigger_time"
+            data-agent-state={formData.last_trigger_time ? "filled" : "empty"}
+            aria-label="最后触发时间"
             value={formData.last_trigger_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, last_trigger_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -137,9 +164,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">场景定义配置</label>
+          <label htmlFor="iot-scene-rule-triggers" className="block text-xs text-slate-600 mb-1">场景定义配置</label>
           <input
             type="text"
+            id="iot-scene-rule-triggers"
+            data-testid="field-triggers"
+            data-agent-target="iot-scene-rule:field:triggers"
+            data-agent-state={formData.triggers ? "filled" : "empty"}
+            aria-label="场景定义配置"
             value={formData.triggers ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, triggers: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -149,9 +181,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">场景动作配置</label>
+          <label htmlFor="iot-scene-rule-actions" className="block text-xs text-slate-600 mb-1">场景动作配置</label>
           <input
             type="text"
+            id="iot-scene-rule-actions"
+            data-testid="field-actions"
+            data-agent-target="iot-scene-rule:field:actions"
+            data-agent-state={formData.actions ? "filled" : "empty"}
+            aria-label="场景动作配置"
             value={formData.actions ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, actions: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -161,9 +198,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">场景事件类型</label>
+          <label htmlFor="iot-scene-rule-type" className="block text-xs text-slate-600 mb-1">场景事件类型</label>
           <input
             type="number"
+            id="iot-scene-rule-type"
+            data-testid="field-type"
+            data-agent-target="iot-scene-rule:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="场景事件类型"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -173,9 +215,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品编号</label>
+          <label htmlFor="iot-scene-rule-product_id" className="block text-xs text-slate-600 mb-1">产品编号</label>
           <input
             type="number"
+            id="iot-scene-rule-product_id"
+            data-testid="field-product_id"
+            data-agent-target="iot-scene-rule:field:product_id"
+            data-agent-state={formData.product_id == null || formData.product_id === "" ? "empty" : "filled"}
+            aria-label="产品编号"
             value={formData.product_id != null ? String(formData.product_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, product_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -185,9 +232,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备编号</label>
+          <label htmlFor="iot-scene-rule-device_id" className="block text-xs text-slate-600 mb-1">设备编号</label>
           <input
             type="number"
+            id="iot-scene-rule-device_id"
+            data-testid="field-device_id"
+            data-agent-target="iot-scene-rule:field:device_id"
+            data-agent-state={formData.device_id == null || formData.device_id === "" ? "empty" : "filled"}
+            aria-label="设备编号"
             value={formData.device_id != null ? String(formData.device_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, device_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -197,9 +249,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">物模型标识符</label>
+          <label htmlFor="iot-scene-rule-identifier" className="block text-xs text-slate-600 mb-1">物模型标识符</label>
           <input
             type="text"
+            id="iot-scene-rule-identifier"
+            data-testid="field-identifier"
+            data-agent-target="iot-scene-rule:field:identifier"
+            data-agent-state={formData.identifier ? "filled" : "empty"}
+            aria-label="物模型标识符"
             value={formData.identifier ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, identifier: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -209,9 +266,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">操作符</label>
+          <label htmlFor="iot-scene-rule-operator" className="block text-xs text-slate-600 mb-1">操作符</label>
           <input
             type="text"
+            id="iot-scene-rule-operator"
+            data-testid="field-operator"
+            data-agent-target="iot-scene-rule:field:operator"
+            data-agent-state={formData.operator ? "filled" : "empty"}
+            aria-label="操作符"
             value={formData.operator ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, operator: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -221,9 +283,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">参数（属性值、在线状态）</label>
+          <label htmlFor="iot-scene-rule-value" className="block text-xs text-slate-600 mb-1">参数（属性值、在线状态）</label>
           <input
             type="text"
+            id="iot-scene-rule-value"
+            data-testid="field-value"
+            data-agent-target="iot-scene-rule:field:value"
+            data-agent-state={formData.value ? "filled" : "empty"}
+            aria-label="参数（属性值、在线状态）"
             value={formData.value ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, value: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -233,9 +300,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">CRON 表达式</label>
+          <label htmlFor="iot-scene-rule-cron_expression" className="block text-xs text-slate-600 mb-1">CRON 表达式</label>
           <input
             type="text"
+            id="iot-scene-rule-cron_expression"
+            data-testid="field-cron_expression"
+            data-agent-target="iot-scene-rule:field:cron_expression"
+            data-agent-state={formData.cron_expression ? "filled" : "empty"}
+            aria-label="CRON 表达式"
             value={formData.cron_expression ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, cron_expression: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -245,9 +317,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">触发条件分组（状态条件分组）的数组</label>
+          <label htmlFor="iot-scene-rule-condition_groups" className="block text-xs text-slate-600 mb-1">触发条件分组（状态条件分组）的数组</label>
           <input
             type="text"
+            id="iot-scene-rule-condition_groups"
+            data-testid="field-condition_groups"
+            data-agent-target="iot-scene-rule:field:condition_groups"
+            data-agent-state={formData.condition_groups ? "filled" : "empty"}
+            aria-label="触发条件分组（状态条件分组）的数组"
             value={formData.condition_groups ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, condition_groups: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -257,9 +334,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">触发条件类型</label>
+          <label htmlFor="iot-scene-rule-type" className="block text-xs text-slate-600 mb-1">触发条件类型</label>
           <input
             type="number"
+            id="iot-scene-rule-type"
+            data-testid="field-type"
+            data-agent-target="iot-scene-rule:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="触发条件类型"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -269,9 +351,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品编号</label>
+          <label htmlFor="iot-scene-rule-product_id" className="block text-xs text-slate-600 mb-1">产品编号</label>
           <input
             type="number"
+            id="iot-scene-rule-product_id"
+            data-testid="field-product_id"
+            data-agent-target="iot-scene-rule:field:product_id"
+            data-agent-state={formData.product_id == null || formData.product_id === "" ? "empty" : "filled"}
+            aria-label="产品编号"
             value={formData.product_id != null ? String(formData.product_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, product_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -281,9 +368,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备编号</label>
+          <label htmlFor="iot-scene-rule-device_id" className="block text-xs text-slate-600 mb-1">设备编号</label>
           <input
             type="number"
+            id="iot-scene-rule-device_id"
+            data-testid="field-device_id"
+            data-agent-target="iot-scene-rule:field:device_id"
+            data-agent-state={formData.device_id == null || formData.device_id === "" ? "empty" : "filled"}
+            aria-label="设备编号"
             value={formData.device_id != null ? String(formData.device_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, device_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -293,9 +385,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">标识符（属性）</label>
+          <label htmlFor="iot-scene-rule-identifier" className="block text-xs text-slate-600 mb-1">标识符（属性）</label>
           <input
             type="text"
+            id="iot-scene-rule-identifier"
+            data-testid="field-identifier"
+            data-agent-target="iot-scene-rule:field:identifier"
+            data-agent-state={formData.identifier ? "filled" : "empty"}
+            aria-label="标识符（属性）"
             value={formData.identifier ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, identifier: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -305,9 +402,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">操作符</label>
+          <label htmlFor="iot-scene-rule-operator" className="block text-xs text-slate-600 mb-1">操作符</label>
           <input
             type="text"
+            id="iot-scene-rule-operator"
+            data-testid="field-operator"
+            data-agent-target="iot-scene-rule:field:operator"
+            data-agent-state={formData.operator ? "filled" : "empty"}
+            aria-label="操作符"
             value={formData.operator ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, operator: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -317,9 +419,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">参数</label>
+          <label htmlFor="iot-scene-rule-param" className="block text-xs text-slate-600 mb-1">参数</label>
           <input
             type="text"
+            id="iot-scene-rule-param"
+            data-testid="field-param"
+            data-agent-target="iot-scene-rule:field:param"
+            data-agent-state={formData.param ? "filled" : "empty"}
+            aria-label="参数"
             value={formData.param ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, param: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -329,9 +436,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">执行类型</label>
+          <label htmlFor="iot-scene-rule-type" className="block text-xs text-slate-600 mb-1">执行类型</label>
           <input
             type="number"
+            id="iot-scene-rule-type"
+            data-testid="field-type"
+            data-agent-target="iot-scene-rule:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="执行类型"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -341,9 +453,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品编号</label>
+          <label htmlFor="iot-scene-rule-product_id" className="block text-xs text-slate-600 mb-1">产品编号</label>
           <input
             type="number"
+            id="iot-scene-rule-product_id"
+            data-testid="field-product_id"
+            data-agent-target="iot-scene-rule:field:product_id"
+            data-agent-state={formData.product_id == null || formData.product_id === "" ? "empty" : "filled"}
+            aria-label="产品编号"
             value={formData.product_id != null ? String(formData.product_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, product_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -353,9 +470,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备编号</label>
+          <label htmlFor="iot-scene-rule-device_id" className="block text-xs text-slate-600 mb-1">设备编号</label>
           <input
             type="number"
+            id="iot-scene-rule-device_id"
+            data-testid="field-device_id"
+            data-agent-target="iot-scene-rule:field:device_id"
+            data-agent-state={formData.device_id == null || formData.device_id === "" ? "empty" : "filled"}
+            aria-label="设备编号"
             value={formData.device_id != null ? String(formData.device_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, device_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -365,9 +487,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">标识符（服务）</label>
+          <label htmlFor="iot-scene-rule-identifier" className="block text-xs text-slate-600 mb-1">标识符（服务）</label>
           <input
             type="text"
+            id="iot-scene-rule-identifier"
+            data-testid="field-identifier"
+            data-agent-target="iot-scene-rule:field:identifier"
+            data-agent-state={formData.identifier ? "filled" : "empty"}
+            aria-label="标识符（服务）"
             value={formData.identifier ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, identifier: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -377,9 +504,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">请求参数</label>
+          <label htmlFor="iot-scene-rule-params" className="block text-xs text-slate-600 mb-1">请求参数</label>
           <input
             type="text"
+            id="iot-scene-rule-params"
+            data-testid="field-params"
+            data-agent-target="iot-scene-rule:field:params"
+            data-agent-state={formData.params ? "filled" : "empty"}
+            aria-label="请求参数"
             value={formData.params ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, params: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -389,9 +521,14 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">告警配置编号</label>
+          <label htmlFor="iot-scene-rule-alert_config_id" className="block text-xs text-slate-600 mb-1">告警配置编号</label>
           <input
             type="number"
+            id="iot-scene-rule-alert_config_id"
+            data-testid="field-alert_config_id"
+            data-agent-target="iot-scene-rule:field:alert_config_id"
+            data-agent-state={formData.alert_config_id == null || formData.alert_config_id === "" ? "empty" : "filled"}
+            aria-label="告警配置编号"
             value={formData.alert_config_id != null ? String(formData.alert_config_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, alert_config_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -405,6 +542,8 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
             <button
               type="button"
               onClick={onClose}
+              data-testid="iot-scene-rule-form-cancel"
+              data-agent-target="iot-scene-rule:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -412,6 +551,9 @@ export function IotSceneRuleForm({ open, initialData, onClose, onSuccess }: IotS
             <button
               type="submit"
               disabled={loading}
+              data-testid="iot-scene-rule-form-submit"
+              data-agent-target="iot-scene-rule:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

@@ -64,44 +64,63 @@ export function CrmPerformanceConfigListPage() {
     }
   }
 
+  // Agent-Native: 根节点暴露就绪信号；弹窗打开时基底打 inert，让无障碍树只留弹窗一层
+  const agentState = loading ? "loading" : formOpen ? "modal-open" : total === 0 ? "empty" : "ready"
+
   return (
-    <div className="p-6 space-y-4">
+    <div
+      data-agent-scope="crm-performance-config"
+      data-agent-state={agentState}
+      data-agent-page-ready={String(!loading)}
+      className="p-6 space-y-4"
+    >
+      {/* 弹窗打开时基底内容 inert —— Agent 不会误点到被遮挡的元素 */}
+      <div inert={formOpen ? true : undefined} className="space-y-4">
       {/* 页面头部 */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900">CrmPerformanceConfig（源框架导入）管理</h1>
-          <p className="text-xs text-slate-500 mt-0.5">CrmPerformanceConfig（源框架导入）列表与配置管理</p>
+          <h1 data-testid="crm-performance-config-title" className="text-xl font-bold tracking-tight text-slate-900">CRM 业绩目标管理</h1>
+          <p className="text-xs text-slate-500 mt-0.5">CRM 业绩目标列表与配置管理</p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={fetchData}
+            data-testid="crm-performance-config-refresh"
+            data-agent-target="crm-performance-config:refresh"
             className="px-3 py-1.5 text-xs text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
           >
             刷新
           </button>
           <button
             onClick={handleAdd}
+            data-testid="crm-performance-config-create"
+            data-agent-target="crm-performance-config:create"
             className="px-3.5 py-1.5 text-xs text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors font-medium shadow-xs"
           >
-            + 新增CrmPerformanceConfig（源框架导入）
+            + 新增CRM 业绩目标
           </button>
         </div>
       </div>
 
       {/* 搜索工具栏 */}
-      <form onSubmit={handleSearch} className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3">
+      <form
+        onSubmit={handleSearch}
+        data-testid="crm-performance-config-search"
+        data-agent-scope="crm-performance-config:search"
+        aria-label="CRM 业绩目标搜索"
+        className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3">
 
-          <button type="submit" className="px-3 py-1 text-xs text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition-colors">查询</button>
-          <button type="button" onClick={handleReset} className="px-3 py-1 text-xs text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors">重置</button>
+          <button type="submit" data-testid="crm-performance-config-search-submit" data-agent-target="crm-performance-config:search" className="px-3 py-1 text-xs text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition-colors">查询</button>
+          <button type="button" onClick={handleReset} data-testid="crm-performance-config-search-reset" data-agent-target="crm-performance-config:reset" className="px-3 py-1 text-xs text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors">重置</button>
         </div>
-        <div className="text-xs text-slate-500">共 <span className="font-semibold text-slate-700">{total}</span> 条记录</div>
+        <div className="text-xs text-slate-500">共 <span data-testid="crm-performance-config-total" className="font-semibold text-slate-700">{total}</span> 条记录</div>
       </form>
 
       {/* 数据表格 */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-slate-200">
+          <table data-testid="crm-performance-config-table" aria-label="CRM 业绩目标列表" className="min-w-full divide-y divide-slate-200">
             <thead className="bg-slate-50/80">
               <tr>
                 <th className="px-4 py-2.5 text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider">目标类型</th>
@@ -124,7 +143,14 @@ export function CrmPerformanceConfigListPage() {
                 </tr>
               ) : (
                 data.map((item) => (
-                  <tr key={item.id} className="hover:bg-slate-50/60 transition-colors">
+                  <tr
+                    key={item.id}
+                    data-testid="crm-performance-config-row"
+                    data-agent-target="crm-performance-config:row"
+                    data-agent-state={editItem?.id === item.id ? "editing" : "idle"}
+                    data-agent-id={item.id}
+                    className="hover:bg-slate-50/60 transition-colors"
+                  >
                   <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.biz_type ?? "-")}>{String(item.biz_type ?? "-")}</td>
                   <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.object_id ?? "-")}>{String(item.object_id ?? "-")}</td>
                   <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.object_type ?? "-")}>{String(item.object_type ?? "-")}</td>
@@ -132,8 +158,8 @@ export function CrmPerformanceConfigListPage() {
                   <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.year_target_price ?? "-")}>{String(item.year_target_price ?? "-")}</td>
                   <td className="px-4 py-2.5 text-xs text-slate-700 max-w-[200px] truncate" title={String(item.january_target_price ?? "-")}>{String(item.january_target_price ?? "-")}</td>
                     <td className="px-4 py-2.5 text-xs text-right whitespace-nowrap space-x-2">
-                      <button onClick={() => handleEdit(item)} className="text-blue-600 hover:text-blue-800 font-medium">编辑</button>
-                      <button onClick={() => handleDelete(item.id)} className="text-rose-600 hover:text-rose-800 font-medium">删除</button>
+                      <button onClick={() => handleEdit(item)} data-testid="crm-performance-config-edit" data-agent-target="crm-performance-config:edit" data-agent-id={item.id} aria-label={"编辑 " + item.id} className="text-blue-600 hover:text-blue-800 font-medium">编辑</button>
+                      <button onClick={() => handleDelete(item.id)} data-testid="crm-performance-config-delete" data-agent-target="crm-performance-config:delete" data-agent-id={item.id} aria-label={"删除 " + item.id} className="text-rose-600 hover:text-rose-800 font-medium">删除</button>
                     </td>
                   </tr>
                 ))
@@ -143,7 +169,7 @@ export function CrmPerformanceConfigListPage() {
         </div>
 
         {/* 分页组件 */}
-        <div className="p-3 border-t border-slate-200">
+        <div data-agent-target="crm-performance-config:pagination" className="p-3 border-t border-slate-200">
           <Pagination
             total={total}
             page={page}
@@ -152,6 +178,8 @@ export function CrmPerformanceConfigListPage() {
             onPageSizeChange={(ps) => setPageSize(ps)}
           />
         </div>
+      </div>
+
       </div>
 
       {/* 弹窗表单 */}

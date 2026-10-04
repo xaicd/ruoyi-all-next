@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesWmTransaction（源框架导入） (MesWmTransaction)
+-- Auto-generated RBAC & Menu Migration for MES 库存事务流水 DO记录每一笔库存增减事件，系统自动生成，只读查询，不允许人工维护。 (MesWmTransaction)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-wm-transaction',
   'mes-dir',
-  'MesWmTransaction（源框架导入）管理',
+  'MES 库存事务流水 DO记录每一笔库存增减事件，系统自动生成，只读查询，不允许人工维护。管理',
   '/admin/mes/mes-wm-transaction',
   'mes/mes-wm-transaction/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-wm-transaction-query',  'menu-mes-wm-transaction', '查询MesWmTransaction（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_transaction:query',  1, NOW(), NOW()),
-('menu-mes-wm-transaction-create', 'menu-mes-wm-transaction', '新增MesWmTransaction（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_transaction:create', 2, NOW(), NOW()),
-('menu-mes-wm-transaction-update', 'menu-mes-wm-transaction', '修改MesWmTransaction（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_transaction:update', 3, NOW(), NOW()),
-('menu-mes-wm-transaction-delete', 'menu-mes-wm-transaction', '删除MesWmTransaction（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_transaction:delete', 4, NOW(), NOW())
+('menu-mes-wm-transaction-query',  'menu-mes-wm-transaction', '查询MES 库存事务流水 DO记录每一笔库存增减事件，系统自动生成，只读查询，不允许人工维护。', 'BUTTON', 'ACTIVE', 'mes:mes_wm_transaction:query',  1, NOW(), NOW()),
+('menu-mes-wm-transaction-create', 'menu-mes-wm-transaction', '新增MES 库存事务流水 DO记录每一笔库存增减事件，系统自动生成，只读查询，不允许人工维护。', 'BUTTON', 'ACTIVE', 'mes:mes_wm_transaction:create', 2, NOW(), NOW()),
+('menu-mes-wm-transaction-update', 'menu-mes-wm-transaction', '修改MES 库存事务流水 DO记录每一笔库存增减事件，系统自动生成，只读查询，不允许人工维护。', 'BUTTON', 'ACTIVE', 'mes:mes_wm_transaction:update', 3, NOW(), NOW()),
+('menu-mes-wm-transaction-delete', 'menu-mes-wm-transaction', '删除MES 库存事务流水 DO记录每一笔库存增减事件，系统自动生成，只读查询，不允许人工维护。', 'BUTTON', 'ACTIVE', 'mes:mes_wm_transaction:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

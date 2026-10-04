@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for GoViewProject（源框架导入） (GoViewProject)
+-- Auto-generated RBAC & Menu Migration for GoView 项目表每个大屏图标，对应一个项目 (GoViewProject)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-go-view-project',
   'report-dir',
-  'GoViewProject（源框架导入）管理',
+  'GoView 项目表每个大屏图标，对应一个项目管理',
   '/admin/report/go-view-project',
   'report/go-view-project/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-go-view-project-query',  'menu-go-view-project', '查询GoViewProject（源框架导入）', 'BUTTON', 'ACTIVE', 'report:go_view_project:query',  1, NOW(), NOW()),
-('menu-go-view-project-create', 'menu-go-view-project', '新增GoViewProject（源框架导入）', 'BUTTON', 'ACTIVE', 'report:go_view_project:create', 2, NOW(), NOW()),
-('menu-go-view-project-update', 'menu-go-view-project', '修改GoViewProject（源框架导入）', 'BUTTON', 'ACTIVE', 'report:go_view_project:update', 3, NOW(), NOW()),
-('menu-go-view-project-delete', 'menu-go-view-project', '删除GoViewProject（源框架导入）', 'BUTTON', 'ACTIVE', 'report:go_view_project:delete', 4, NOW(), NOW())
+('menu-go-view-project-query',  'menu-go-view-project', '查询GoView 项目表每个大屏图标，对应一个项目', 'BUTTON', 'ACTIVE', 'report:go_view_project:query',  1, NOW(), NOW()),
+('menu-go-view-project-create', 'menu-go-view-project', '新增GoView 项目表每个大屏图标，对应一个项目', 'BUTTON', 'ACTIVE', 'report:go_view_project:create', 2, NOW(), NOW()),
+('menu-go-view-project-update', 'menu-go-view-project', '修改GoView 项目表每个大屏图标，对应一个项目', 'BUTTON', 'ACTIVE', 'report:go_view_project:update', 3, NOW(), NOW()),
+('menu-go-view-project-delete', 'menu-go-view-project', '删除GoView 项目表每个大屏图标，对应一个项目', 'BUTTON', 'ACTIVE', 'report:go_view_project:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

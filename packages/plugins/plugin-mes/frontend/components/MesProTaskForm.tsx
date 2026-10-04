@@ -69,24 +69,36 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-pro-task-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 生产任务" : "新增MES 生产任务"}
+        data-testid="mes-pro-task-form"
+        data-agent-scope="mes-pro-task:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesProTask（源框架导入）" : "新增MesProTask（源框架导入）"}
+            {isEdit ? "编辑MES 生产任务" : "新增MES 生产任务"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-pro-task-form-close" data-agent-target="mes-pro-task:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-pro-task-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">任务编码</label>
+          <label htmlFor="mes-pro-task-code" className="block text-xs text-slate-600 mb-1">任务编码</label>
           <input
             type="text"
+            id="mes-pro-task-code"
+            data-testid="field-code"
+            data-agent-target="mes-pro-task:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="任务编码"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -96,9 +108,14 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">任务名称</label>
+          <label htmlFor="mes-pro-task-name" className="block text-xs text-slate-600 mb-1">任务名称</label>
           <input
             type="text"
+            id="mes-pro-task-name"
+            data-testid="field-name"
+            data-agent-target="mes-pro-task:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="任务名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -108,9 +125,14 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生产工单编号</label>
+          <label htmlFor="mes-pro-task-work_order_id" className="block text-xs text-slate-600 mb-1">生产工单编号</label>
           <input
             type="number"
+            id="mes-pro-task-work_order_id"
+            data-testid="field-work_order_id"
+            data-agent-target="mes-pro-task:field:work_order_id"
+            data-agent-state={formData.work_order_id == null || formData.work_order_id === "" ? "empty" : "filled"}
+            aria-label="生产工单编号"
             value={formData.work_order_id != null ? String(formData.work_order_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, work_order_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -120,9 +142,14 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工作站编号</label>
+          <label htmlFor="mes-pro-task-workstation_id" className="block text-xs text-slate-600 mb-1">工作站编号</label>
           <input
             type="number"
+            id="mes-pro-task-workstation_id"
+            data-testid="field-workstation_id"
+            data-agent-target="mes-pro-task:field:workstation_id"
+            data-agent-state={formData.workstation_id == null || formData.workstation_id === "" ? "empty" : "filled"}
+            aria-label="工作站编号"
             value={formData.workstation_id != null ? String(formData.workstation_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, workstation_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -132,9 +159,14 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工艺路线编号</label>
+          <label htmlFor="mes-pro-task-route_id" className="block text-xs text-slate-600 mb-1">工艺路线编号</label>
           <input
             type="number"
+            id="mes-pro-task-route_id"
+            data-testid="field-route_id"
+            data-agent-target="mes-pro-task:field:route_id"
+            data-agent-state={formData.route_id == null || formData.route_id === "" ? "empty" : "filled"}
+            aria-label="工艺路线编号"
             value={formData.route_id != null ? String(formData.route_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, route_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -144,9 +176,14 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工序编号</label>
+          <label htmlFor="mes-pro-task-process_id" className="block text-xs text-slate-600 mb-1">工序编号</label>
           <input
             type="number"
+            id="mes-pro-task-process_id"
+            data-testid="field-process_id"
+            data-agent-target="mes-pro-task:field:process_id"
+            data-agent-state={formData.process_id == null || formData.process_id === "" ? "empty" : "filled"}
+            aria-label="工序编号"
             value={formData.process_id != null ? String(formData.process_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, process_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -156,9 +193,14 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品物料编号</label>
+          <label htmlFor="mes-pro-task-item_id" className="block text-xs text-slate-600 mb-1">产品物料编号</label>
           <input
             type="number"
+            id="mes-pro-task-item_id"
+            data-testid="field-item_id"
+            data-agent-target="mes-pro-task:field:item_id"
+            data-agent-state={formData.item_id == null || formData.item_id === "" ? "empty" : "filled"}
+            aria-label="产品物料编号"
             value={formData.item_id != null ? String(formData.item_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, item_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -168,9 +210,14 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">排产数量</label>
+          <label htmlFor="mes-pro-task-quantity" className="block text-xs text-slate-600 mb-1">排产数量</label>
           <input
             type="number"
+            id="mes-pro-task-quantity"
+            data-testid="field-quantity"
+            data-agent-target="mes-pro-task:field:quantity"
+            data-agent-state={formData.quantity == null || formData.quantity === "" ? "empty" : "filled"}
+            aria-label="排产数量"
             value={formData.quantity != null ? String(formData.quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -180,9 +227,14 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">已生产数量</label>
+          <label htmlFor="mes-pro-task-produced_quantity" className="block text-xs text-slate-600 mb-1">已生产数量</label>
           <input
             type="number"
+            id="mes-pro-task-produced_quantity"
+            data-testid="field-produced_quantity"
+            data-agent-target="mes-pro-task:field:produced_quantity"
+            data-agent-state={formData.produced_quantity == null || formData.produced_quantity === "" ? "empty" : "filled"}
+            aria-label="已生产数量"
             value={formData.produced_quantity != null ? String(formData.produced_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, produced_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -192,9 +244,14 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">合格品数量</label>
+          <label htmlFor="mes-pro-task-qualify_quantity" className="block text-xs text-slate-600 mb-1">合格品数量</label>
           <input
             type="number"
+            id="mes-pro-task-qualify_quantity"
+            data-testid="field-qualify_quantity"
+            data-agent-target="mes-pro-task:field:qualify_quantity"
+            data-agent-state={formData.qualify_quantity == null || formData.qualify_quantity === "" ? "empty" : "filled"}
+            aria-label="合格品数量"
             value={formData.qualify_quantity != null ? String(formData.qualify_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, qualify_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -204,9 +261,14 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">不良品数量</label>
+          <label htmlFor="mes-pro-task-unqualify_quantity" className="block text-xs text-slate-600 mb-1">不良品数量</label>
           <input
             type="number"
+            id="mes-pro-task-unqualify_quantity"
+            data-testid="field-unqualify_quantity"
+            data-agent-target="mes-pro-task:field:unqualify_quantity"
+            data-agent-state={formData.unqualify_quantity == null || formData.unqualify_quantity === "" ? "empty" : "filled"}
+            aria-label="不良品数量"
             value={formData.unqualify_quantity != null ? String(formData.unqualify_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, unqualify_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -216,9 +278,14 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">调整数量</label>
+          <label htmlFor="mes-pro-task-changed_quantity" className="block text-xs text-slate-600 mb-1">调整数量</label>
           <input
             type="number"
+            id="mes-pro-task-changed_quantity"
+            data-testid="field-changed_quantity"
+            data-agent-target="mes-pro-task:field:changed_quantity"
+            data-agent-state={formData.changed_quantity == null || formData.changed_quantity === "" ? "empty" : "filled"}
+            aria-label="调整数量"
             value={formData.changed_quantity != null ? String(formData.changed_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, changed_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -228,9 +295,14 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">客户编号</label>
+          <label htmlFor="mes-pro-task-client_id" className="block text-xs text-slate-600 mb-1">客户编号</label>
           <input
             type="number"
+            id="mes-pro-task-client_id"
+            data-testid="field-client_id"
+            data-agent-target="mes-pro-task:field:client_id"
+            data-agent-state={formData.client_id == null || formData.client_id === "" ? "empty" : "filled"}
+            aria-label="客户编号"
             value={formData.client_id != null ? String(formData.client_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, client_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -240,9 +312,14 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">开始生产时间</label>
+          <label htmlFor="mes-pro-task-start_time" className="block text-xs text-slate-600 mb-1">开始生产时间</label>
           <input
             type="text"
+            id="mes-pro-task-start_time"
+            data-testid="field-start_time"
+            data-agent-target="mes-pro-task:field:start_time"
+            data-agent-state={formData.start_time ? "filled" : "empty"}
+            aria-label="开始生产时间"
             value={formData.start_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, start_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -252,9 +329,14 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生产时长（工作日，1=8小时）</label>
+          <label htmlFor="mes-pro-task-duration" className="block text-xs text-slate-600 mb-1">生产时长（工作日，1=8小时）</label>
           <input
             type="number"
+            id="mes-pro-task-duration"
+            data-testid="field-duration"
+            data-agent-target="mes-pro-task:field:duration"
+            data-agent-state={formData.duration == null || formData.duration === "" ? "empty" : "filled"}
+            aria-label="生产时长（工作日，1=8小时）"
             value={formData.duration != null ? String(formData.duration) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, duration: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -264,9 +346,14 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">结束生产时间</label>
+          <label htmlFor="mes-pro-task-end_time" className="block text-xs text-slate-600 mb-1">结束生产时间</label>
           <input
             type="text"
+            id="mes-pro-task-end_time"
+            data-testid="field-end_time"
+            data-agent-target="mes-pro-task:field:end_time"
+            data-agent-state={formData.end_time ? "filled" : "empty"}
+            aria-label="结束生产时间"
             value={formData.end_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, end_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -276,9 +363,14 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">甘特图显示颜色</label>
+          <label htmlFor="mes-pro-task-color_code" className="block text-xs text-slate-600 mb-1">甘特图显示颜色</label>
           <input
             type="text"
+            id="mes-pro-task-color_code"
+            data-testid="field-color_code"
+            data-agent-target="mes-pro-task:field:color_code"
+            data-agent-state={formData.color_code ? "filled" : "empty"}
+            aria-label="甘特图显示颜色"
             value={formData.color_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, color_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -288,9 +380,14 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">完成日期</label>
+          <label htmlFor="mes-pro-task-finish_date" className="block text-xs text-slate-600 mb-1">完成日期</label>
           <input
             type="text"
+            id="mes-pro-task-finish_date"
+            data-testid="field-finish_date"
+            data-agent-target="mes-pro-task:field:finish_date"
+            data-agent-state={formData.finish_date ? "filled" : "empty"}
+            aria-label="完成日期"
             value={formData.finish_date ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, finish_date: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -300,9 +397,14 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">取消日期</label>
+          <label htmlFor="mes-pro-task-cancel_date" className="block text-xs text-slate-600 mb-1">取消日期</label>
           <input
             type="text"
+            id="mes-pro-task-cancel_date"
+            data-testid="field-cancel_date"
+            data-agent-target="mes-pro-task:field:cancel_date"
+            data-agent-state={formData.cancel_date ? "filled" : "empty"}
+            aria-label="取消日期"
             value={formData.cancel_date ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, cancel_date: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -312,9 +414,14 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">任务状态</label>
+          <label htmlFor="mes-pro-task-status" className="block text-xs text-slate-600 mb-1">任务状态</label>
           <input
             type="number"
+            id="mes-pro-task-status"
+            data-testid="field-status"
+            data-agent-target="mes-pro-task:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="任务状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -324,9 +431,14 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-pro-task-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-pro-task-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-pro-task:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -340,6 +452,8 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-pro-task-form-cancel"
+              data-agent-target="mes-pro-task:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -347,6 +461,9 @@ export function MesProTaskForm({ open, initialData, onClose, onSuccess }: MesPro
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-pro-task-form-submit"
+              data-agent-target="mes-pro-task:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

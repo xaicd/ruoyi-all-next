@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { CombinationProductService } from "../combination-product.service"
 
 describe("CombinationProductService", () => {
-  it("should create and query CombinationProduct（源框架导入）", async () => {
+  it("should create and query 拼团商品", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CombinationProductService.create({
         activity_id: 1,
@@ -21,7 +21,7 @@ describe("CombinationProductService", () => {
   
       const updated = await CombinationProductService.update(created.id, {
         id: created.id,
-        activity_id: "更新CombinationProduct（源框架导入）",
+        activity_id: "更新拼团商品",
       } as any)
       expect(updated).toBeDefined()
   

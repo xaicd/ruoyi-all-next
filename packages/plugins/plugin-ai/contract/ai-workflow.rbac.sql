@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for AiWorkflow（源框架导入） (AiWorkflow)
+-- Auto-generated RBAC & Menu Migration for AI 工作流 (AiWorkflow)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-ai-workflow',
   'ai-dir',
-  'AiWorkflow（源框架导入）管理',
+  'AI 工作流管理',
   '/admin/ai/ai-workflow',
   'ai/ai-workflow/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-ai-workflow-query',  'menu-ai-workflow', '查询AiWorkflow（源框架导入）', 'BUTTON', 'ACTIVE', 'ai:ai_workflow:query',  1, NOW(), NOW()),
-('menu-ai-workflow-create', 'menu-ai-workflow', '新增AiWorkflow（源框架导入）', 'BUTTON', 'ACTIVE', 'ai:ai_workflow:create', 2, NOW(), NOW()),
-('menu-ai-workflow-update', 'menu-ai-workflow', '修改AiWorkflow（源框架导入）', 'BUTTON', 'ACTIVE', 'ai:ai_workflow:update', 3, NOW(), NOW()),
-('menu-ai-workflow-delete', 'menu-ai-workflow', '删除AiWorkflow（源框架导入）', 'BUTTON', 'ACTIVE', 'ai:ai_workflow:delete', 4, NOW(), NOW())
+('menu-ai-workflow-query',  'menu-ai-workflow', '查询AI 工作流', 'BUTTON', 'ACTIVE', 'ai:ai_workflow:query',  1, NOW(), NOW()),
+('menu-ai-workflow-create', 'menu-ai-workflow', '新增AI 工作流', 'BUTTON', 'ACTIVE', 'ai:ai_workflow:create', 2, NOW(), NOW()),
+('menu-ai-workflow-update', 'menu-ai-workflow', '修改AI 工作流', 'BUTTON', 'ACTIVE', 'ai:ai_workflow:update', 3, NOW(), NOW()),
+('menu-ai-workflow-delete', 'menu-ai-workflow', '删除AI 工作流', 'BUTTON', 'ACTIVE', 'ai:ai_workflow:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesCalPlanShift（源框架导入） (MesCalPlanShift)
+-- Auto-generated RBAC & Menu Migration for MES 计划班次 (MesCalPlanShift)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-cal-plan-shift',
   'mes-dir',
-  'MesCalPlanShift（源框架导入）管理',
+  'MES 计划班次管理',
   '/admin/mes/mes-cal-plan-shift',
   'mes/mes-cal-plan-shift/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-cal-plan-shift-query',  'menu-mes-cal-plan-shift', '查询MesCalPlanShift（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_cal_plan_shift:query',  1, NOW(), NOW()),
-('menu-mes-cal-plan-shift-create', 'menu-mes-cal-plan-shift', '新增MesCalPlanShift（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_cal_plan_shift:create', 2, NOW(), NOW()),
-('menu-mes-cal-plan-shift-update', 'menu-mes-cal-plan-shift', '修改MesCalPlanShift（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_cal_plan_shift:update', 3, NOW(), NOW()),
-('menu-mes-cal-plan-shift-delete', 'menu-mes-cal-plan-shift', '删除MesCalPlanShift（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_cal_plan_shift:delete', 4, NOW(), NOW())
+('menu-mes-cal-plan-shift-query',  'menu-mes-cal-plan-shift', '查询MES 计划班次', 'BUTTON', 'ACTIVE', 'mes:mes_cal_plan_shift:query',  1, NOW(), NOW()),
+('menu-mes-cal-plan-shift-create', 'menu-mes-cal-plan-shift', '新增MES 计划班次', 'BUTTON', 'ACTIVE', 'mes:mes_cal_plan_shift:create', 2, NOW(), NOW()),
+('menu-mes-cal-plan-shift-update', 'menu-mes-cal-plan-shift', '修改MES 计划班次', 'BUTTON', 'ACTIVE', 'mes:mes_cal_plan_shift:update', 3, NOW(), NOW()),
+('menu-mes-cal-plan-shift-delete', 'menu-mes-cal-plan-shift', '删除MES 计划班次', 'BUTTON', 'ACTIVE', 'mes:mes_cal_plan_shift:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

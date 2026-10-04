@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ImGroupMessageService } from "../im-group-message.service"
 
 describe("ImGroupMessageService", () => {
-  it("should create and query ImGroupMessage（源框架导入）", async () => {
+  it("should create and query IM 群聊消息", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImGroupMessageService.create({
-        client_message_id: "测试ImGroupMessage（源框架导入）",
+        client_message_id: "测试IM 群聊消息",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("ImGroupMessageService", () => {
   
       const updated = await ImGroupMessageService.update(created.id, {
         id: created.id,
-        client_message_id: "更新ImGroupMessage（源框架导入）",
+        client_message_id: "更新IM 群聊消息",
       } as any)
       expect(updated).toBeDefined()
   

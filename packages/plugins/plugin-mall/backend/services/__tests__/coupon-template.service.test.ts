@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { CouponTemplateService } from "../coupon-template.service"
 
 describe("CouponTemplateService", () => {
-  it("should create and query CouponTemplate（源框架导入）", async () => {
+  it("should create and query 优惠劵模板 DO当用户领取时，会生成 优惠劵", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CouponTemplateService.create({
-        name: "测试CouponTemplate（源框架导入）",
+        name: "测试优惠劵模板 DO当用户领取时，会生成 优惠劵",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("CouponTemplateService", () => {
   
       const updated = await CouponTemplateService.update(created.id, {
         id: created.id,
-        name: "更新CouponTemplate（源框架导入）",
+        name: "更新优惠劵模板 DO当用户领取时，会生成 优惠劵",
       } as any)
       expect(updated).toBeDefined()
   

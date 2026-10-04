@@ -1,0 +1,285 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesWmStockTakingTask",
+  "kebab": "mes-wm-stock-taking-task",
+  "businessName": "MES 盘点任务",
+  "permissionPrefix": "mes:mes_wm_stock_taking_task",
+  "page": {
+    "route": "/admin/mes/mes-wm-stock-taking-task",
+    "title": "MES 盘点任务管理",
+    "titleSelector": "[data-testid=\"mes-wm-stock-taking-task-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-wm-stock-taking-task",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-wm-stock-taking-task",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-wm-stock-taking-task/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-wm-stock-taking-task"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-wm-stock-taking-task/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-wm-stock-taking-task/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-wm-stock-taking-task-title\"]",
+    "refresh": "[data-testid=\"mes-wm-stock-taking-task-refresh\"]",
+    "createButton": "[data-testid=\"mes-wm-stock-taking-task-create\"]",
+    "searchForm": "[data-testid=\"mes-wm-stock-taking-task-search\"]",
+    "searchSubmit": "[data-testid=\"mes-wm-stock-taking-task-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-wm-stock-taking-task-search-reset\"]",
+    "total": "[data-testid=\"mes-wm-stock-taking-task-total\"]",
+    "table": "[data-testid=\"mes-wm-stock-taking-task-table\"]",
+    "row": "[data-testid=\"mes-wm-stock-taking-task-row\"]",
+    "editButton": "[data-testid=\"mes-wm-stock-taking-task-edit\"]",
+    "deleteButton": "[data-testid=\"mes-wm-stock-taking-task-delete\"]",
+    "form": "[data-testid=\"mes-wm-stock-taking-task-form\"]",
+    "formError": "[data-testid=\"mes-wm-stock-taking-task-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-wm-stock-taking-task-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-wm-stock-taking-task-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-wm-stock-taking-task-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 盘点任务列表",
+    "dialogLabel": {
+      "create": "新增MES 盘点任务",
+      "edit": "编辑MES 盘点任务"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "code",
+        "label": "任务编码",
+        "type": "string",
+        "required": false,
+        "testId": "field-code",
+        "selector": "[data-testid=\"field-code\"]"
+      },
+      {
+        "name": "name",
+        "label": "任务名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "taking_date",
+        "label": "盘点日期",
+        "type": "string",
+        "required": false,
+        "testId": "field-taking_date",
+        "selector": "[data-testid=\"field-taking_date\"]"
+      },
+      {
+        "name": "type",
+        "label": "盘点类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "user_id",
+        "label": "盘点人编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "plan_id",
+        "label": "盘点计划编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-plan_id",
+        "selector": "[data-testid=\"field-plan_id\"]"
+      },
+      {
+        "name": "blind_flag",
+        "label": "是否盲盘",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-blind_flag",
+        "selector": "[data-testid=\"field-blind_flag\"]"
+      },
+      {
+        "name": "frozen",
+        "label": "是否冻结库存",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-frozen",
+        "selector": "[data-testid=\"field-frozen\"]"
+      },
+      {
+        "name": "start_time",
+        "label": "开始时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-start_time",
+        "selector": "[data-testid=\"field-start_time\"]"
+      },
+      {
+        "name": "end_time",
+        "label": "结束时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-end_time",
+        "selector": "[data-testid=\"field-end_time\"]"
+      },
+      {
+        "name": "status",
+        "label": "任务状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-wm-stock-taking-task",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-wm-stock-taking-task\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-wm-stock-taking-task-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-wm-stock-taking-task-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-wm-stock-taking-task:search",
+      "reset": "mes-wm-stock-taking-task:reset",
+      "refresh": "mes-wm-stock-taking-task:refresh",
+      "create": "mes-wm-stock-taking-task:create",
+      "edit": "mes-wm-stock-taking-task:edit",
+      "delete": "mes-wm-stock-taking-task:delete",
+      "submit": "mes-wm-stock-taking-task:submit",
+      "cancel": "mes-wm-stock-taking-task:cancel",
+      "close": "mes-wm-stock-taking-task:close",
+      "row": "mes-wm-stock-taking-task:row",
+      "pagination": "mes-wm-stock-taking-task:pagination",
+      "fields": {
+        "code": "mes-wm-stock-taking-task:field:code",
+        "name": "mes-wm-stock-taking-task:field:name",
+        "taking_date": "mes-wm-stock-taking-task:field:taking_date",
+        "type": "mes-wm-stock-taking-task:field:type",
+        "user_id": "mes-wm-stock-taking-task:field:user_id",
+        "plan_id": "mes-wm-stock-taking-task:field:plan_id",
+        "blind_flag": "mes-wm-stock-taking-task:field:blind_flag",
+        "frozen": "mes-wm-stock-taking-task:field:frozen",
+        "start_time": "mes-wm-stock-taking-task:field:start_time",
+        "end_time": "mes-wm-stock-taking-task:field:end_time",
+        "status": "mes-wm-stock-taking-task:field:status",
+        "remark": "mes-wm-stock-taking-task:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-wm-stock-taking-task",
+      "examples": [
+        "mes.mes-wm-stock-taking-task__List__Refresh",
+        "mes.mes-wm-stock-taking-task__ListItem__Open",
+        "mes.mes-wm-stock-taking-task__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

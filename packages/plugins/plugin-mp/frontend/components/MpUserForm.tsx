@@ -63,24 +63,36 @@ export function MpUserForm({ open, initialData, onClose, onSuccess }: MpUserForm
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mp-user-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑微信公众号粉丝" : "新增微信公众号粉丝"}
+        data-testid="mp-user-form"
+        data-agent-scope="mp-user:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MpUser（源框架导入）" : "新增MpUser（源框架导入）"}
+            {isEdit ? "编辑微信公众号粉丝" : "新增微信公众号粉丝"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mp-user-form-close" data-agent-target="mp-user:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mp-user-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">粉丝标识</label>
+          <label htmlFor="mp-user-openid" className="block text-xs text-slate-600 mb-1">粉丝标识</label>
           <input
             type="text"
+            id="mp-user-openid"
+            data-testid="field-openid"
+            data-agent-target="mp-user:field:openid"
+            data-agent-state={formData.openid ? "filled" : "empty"}
+            aria-label="粉丝标识"
             value={formData.openid ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, openid: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -90,9 +102,14 @@ export function MpUserForm({ open, initialData, onClose, onSuccess }: MpUserForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">微信生态唯一标识</label>
+          <label htmlFor="mp-user-union_id" className="block text-xs text-slate-600 mb-1">微信生态唯一标识</label>
           <input
             type="text"
+            id="mp-user-union_id"
+            data-testid="field-union_id"
+            data-agent-target="mp-user:field:union_id"
+            data-agent-state={formData.union_id ? "filled" : "empty"}
+            aria-label="微信生态唯一标识"
             value={formData.union_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, union_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -102,9 +119,14 @@ export function MpUserForm({ open, initialData, onClose, onSuccess }: MpUserForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">关注状态</label>
+          <label htmlFor="mp-user-subscribe_status" className="block text-xs text-slate-600 mb-1">关注状态</label>
           <input
             type="number"
+            id="mp-user-subscribe_status"
+            data-testid="field-subscribe_status"
+            data-agent-target="mp-user:field:subscribe_status"
+            data-agent-state={formData.subscribe_status == null || formData.subscribe_status === "" ? "empty" : "filled"}
+            aria-label="关注状态"
             value={formData.subscribe_status != null ? String(formData.subscribe_status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, subscribe_status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -114,9 +136,14 @@ export function MpUserForm({ open, initialData, onClose, onSuccess }: MpUserForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">关注时间</label>
+          <label htmlFor="mp-user-subscribe_time" className="block text-xs text-slate-600 mb-1">关注时间</label>
           <input
             type="text"
+            id="mp-user-subscribe_time"
+            data-testid="field-subscribe_time"
+            data-agent-target="mp-user:field:subscribe_time"
+            data-agent-state={formData.subscribe_time ? "filled" : "empty"}
+            aria-label="关注时间"
             value={formData.subscribe_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, subscribe_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -126,9 +153,14 @@ export function MpUserForm({ open, initialData, onClose, onSuccess }: MpUserForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">取消关注时间</label>
+          <label htmlFor="mp-user-unsubscribe_time" className="block text-xs text-slate-600 mb-1">取消关注时间</label>
           <input
             type="text"
+            id="mp-user-unsubscribe_time"
+            data-testid="field-unsubscribe_time"
+            data-agent-target="mp-user:field:unsubscribe_time"
+            data-agent-state={formData.unsubscribe_time ? "filled" : "empty"}
+            aria-label="取消关注时间"
             value={formData.unsubscribe_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, unsubscribe_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -138,9 +170,14 @@ export function MpUserForm({ open, initialData, onClose, onSuccess }: MpUserForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">昵称</label>
+          <label htmlFor="mp-user-nickname" className="block text-xs text-slate-600 mb-1">昵称</label>
           <input
             type="text"
+            id="mp-user-nickname"
+            data-testid="field-nickname"
+            data-agent-target="mp-user:field:nickname"
+            data-agent-state={formData.nickname ? "filled" : "empty"}
+            aria-label="昵称"
             value={formData.nickname ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, nickname: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -150,9 +187,14 @@ export function MpUserForm({ open, initialData, onClose, onSuccess }: MpUserForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">头像地址</label>
+          <label htmlFor="mp-user-head_image_url" className="block text-xs text-slate-600 mb-1">头像地址</label>
           <input
             type="text"
+            id="mp-user-head_image_url"
+            data-testid="field-head_image_url"
+            data-agent-target="mp-user:field:head_image_url"
+            data-agent-state={formData.head_image_url ? "filled" : "empty"}
+            aria-label="头像地址"
             value={formData.head_image_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, head_image_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -162,9 +204,14 @@ export function MpUserForm({ open, initialData, onClose, onSuccess }: MpUserForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">语言</label>
+          <label htmlFor="mp-user-language" className="block text-xs text-slate-600 mb-1">语言</label>
           <input
             type="text"
+            id="mp-user-language"
+            data-testid="field-language"
+            data-agent-target="mp-user:field:language"
+            data-agent-state={formData.language ? "filled" : "empty"}
+            aria-label="语言"
             value={formData.language ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, language: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -174,9 +221,14 @@ export function MpUserForm({ open, initialData, onClose, onSuccess }: MpUserForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">国家</label>
+          <label htmlFor="mp-user-country" className="block text-xs text-slate-600 mb-1">国家</label>
           <input
             type="text"
+            id="mp-user-country"
+            data-testid="field-country"
+            data-agent-target="mp-user:field:country"
+            data-agent-state={formData.country ? "filled" : "empty"}
+            aria-label="国家"
             value={formData.country ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, country: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -186,9 +238,14 @@ export function MpUserForm({ open, initialData, onClose, onSuccess }: MpUserForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">省份</label>
+          <label htmlFor="mp-user-province" className="block text-xs text-slate-600 mb-1">省份</label>
           <input
             type="text"
+            id="mp-user-province"
+            data-testid="field-province"
+            data-agent-target="mp-user:field:province"
+            data-agent-state={formData.province ? "filled" : "empty"}
+            aria-label="省份"
             value={formData.province ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, province: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -198,9 +255,14 @@ export function MpUserForm({ open, initialData, onClose, onSuccess }: MpUserForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">城市</label>
+          <label htmlFor="mp-user-city" className="block text-xs text-slate-600 mb-1">城市</label>
           <input
             type="text"
+            id="mp-user-city"
+            data-testid="field-city"
+            data-agent-target="mp-user:field:city"
+            data-agent-state={formData.city ? "filled" : "empty"}
+            aria-label="城市"
             value={formData.city ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, city: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -210,9 +272,14 @@ export function MpUserForm({ open, initialData, onClose, onSuccess }: MpUserForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mp-user-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mp-user-remark"
+            data-testid="field-remark"
+            data-agent-target="mp-user:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -222,9 +289,14 @@ export function MpUserForm({ open, initialData, onClose, onSuccess }: MpUserForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">标签编号数组</label>
+          <label htmlFor="mp-user-tag_ids" className="block text-xs text-slate-600 mb-1">标签编号数组</label>
           <input
             type="text"
+            id="mp-user-tag_ids"
+            data-testid="field-tag_ids"
+            data-agent-target="mp-user:field:tag_ids"
+            data-agent-state={formData.tag_ids ? "filled" : "empty"}
+            aria-label="标签编号数组"
             value={formData.tag_ids ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, tag_ids: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -234,9 +306,14 @@ export function MpUserForm({ open, initialData, onClose, onSuccess }: MpUserForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">公众号账号的编号</label>
+          <label htmlFor="mp-user-account_id" className="block text-xs text-slate-600 mb-1">公众号账号的编号</label>
           <input
             type="number"
+            id="mp-user-account_id"
+            data-testid="field-account_id"
+            data-agent-target="mp-user:field:account_id"
+            data-agent-state={formData.account_id == null || formData.account_id === "" ? "empty" : "filled"}
+            aria-label="公众号账号的编号"
             value={formData.account_id != null ? String(formData.account_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, account_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -246,9 +323,14 @@ export function MpUserForm({ open, initialData, onClose, onSuccess }: MpUserForm
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">公众号 appId</label>
+          <label htmlFor="mp-user-app_id" className="block text-xs text-slate-600 mb-1">公众号 appId</label>
           <input
             type="text"
+            id="mp-user-app_id"
+            data-testid="field-app_id"
+            data-agent-target="mp-user:field:app_id"
+            data-agent-state={formData.app_id ? "filled" : "empty"}
+            aria-label="公众号 appId"
             value={formData.app_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, app_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -262,6 +344,8 @@ export function MpUserForm({ open, initialData, onClose, onSuccess }: MpUserForm
             <button
               type="button"
               onClick={onClose}
+              data-testid="mp-user-form-cancel"
+              data-agent-target="mp-user:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -269,6 +353,9 @@ export function MpUserForm({ open, initialData, onClose, onSuccess }: MpUserForm
             <button
               type="submit"
               disabled={loading}
+              data-testid="mp-user-form-submit"
+              data-agent-target="mp-user:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

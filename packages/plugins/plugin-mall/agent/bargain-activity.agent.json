@@ -1,0 +1,312 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "BargainActivity",
+  "kebab": "bargain-activity",
+  "businessName": "砍价活动",
+  "permissionPrefix": "mall:bargain_activity",
+  "page": {
+    "route": "/admin/mall/bargain-activity",
+    "title": "砍价活动管理",
+    "titleSelector": "[data-testid=\"bargain-activity-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "bargain-activity",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/bargain-activity",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/bargain-activity/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/bargain-activity"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/bargain-activity/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/bargain-activity/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"bargain-activity-title\"]",
+    "refresh": "[data-testid=\"bargain-activity-refresh\"]",
+    "createButton": "[data-testid=\"bargain-activity-create\"]",
+    "searchForm": "[data-testid=\"bargain-activity-search\"]",
+    "searchSubmit": "[data-testid=\"bargain-activity-search-submit\"]",
+    "searchReset": "[data-testid=\"bargain-activity-search-reset\"]",
+    "total": "[data-testid=\"bargain-activity-total\"]",
+    "table": "[data-testid=\"bargain-activity-table\"]",
+    "row": "[data-testid=\"bargain-activity-row\"]",
+    "editButton": "[data-testid=\"bargain-activity-edit\"]",
+    "deleteButton": "[data-testid=\"bargain-activity-delete\"]",
+    "form": "[data-testid=\"bargain-activity-form\"]",
+    "formError": "[data-testid=\"bargain-activity-form-error\"]",
+    "formSubmit": "[data-testid=\"bargain-activity-form-submit\"]",
+    "formCancel": "[data-testid=\"bargain-activity-form-cancel\"]",
+    "formClose": "[data-testid=\"bargain-activity-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "砍价活动列表",
+    "dialogLabel": {
+      "create": "新增砍价活动",
+      "edit": "编辑砍价活动"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "砍价活动名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "start_time",
+        "label": "活动开始时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-start_time",
+        "selector": "[data-testid=\"field-start_time\"]"
+      },
+      {
+        "name": "end_time",
+        "label": "活动结束时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-end_time",
+        "selector": "[data-testid=\"field-end_time\"]"
+      },
+      {
+        "name": "status",
+        "label": "活动状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "spu_id",
+        "label": "商品 SPU 编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-spu_id",
+        "selector": "[data-testid=\"field-spu_id\"]"
+      },
+      {
+        "name": "sku_id",
+        "label": "商品 SKU 编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-sku_id",
+        "selector": "[data-testid=\"field-sku_id\"]"
+      },
+      {
+        "name": "bargain_first_price",
+        "label": "砍价起始价格，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-bargain_first_price",
+        "selector": "[data-testid=\"field-bargain_first_price\"]"
+      },
+      {
+        "name": "bargain_min_price",
+        "label": "砍价底价，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-bargain_min_price",
+        "selector": "[data-testid=\"field-bargain_min_price\"]"
+      },
+      {
+        "name": "stock",
+        "label": "砍价库存(剩余库存砍价时扣减)",
+        "type": "number",
+        "required": false,
+        "testId": "field-stock",
+        "selector": "[data-testid=\"field-stock\"]"
+      },
+      {
+        "name": "total_stock",
+        "label": "砍价总库存",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_stock",
+        "selector": "[data-testid=\"field-total_stock\"]"
+      },
+      {
+        "name": "help_max_count",
+        "label": "砍价人数",
+        "type": "number",
+        "required": false,
+        "testId": "field-help_max_count",
+        "selector": "[data-testid=\"field-help_max_count\"]"
+      },
+      {
+        "name": "bargain_count",
+        "label": "帮砍次数",
+        "type": "number",
+        "required": false,
+        "testId": "field-bargain_count",
+        "selector": "[data-testid=\"field-bargain_count\"]"
+      },
+      {
+        "name": "total_limit_count",
+        "label": "总限购数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_limit_count",
+        "selector": "[data-testid=\"field-total_limit_count\"]"
+      },
+      {
+        "name": "random_min_price",
+        "label": "用户每次砍价的最小金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-random_min_price",
+        "selector": "[data-testid=\"field-random_min_price\"]"
+      },
+      {
+        "name": "random_max_price",
+        "label": "用户每次砍价的最大金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-random_max_price",
+        "selector": "[data-testid=\"field-random_max_price\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "bargain-activity",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"bargain-activity\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"bargain-activity-form-overlay\"]",
+      "dialog": "[data-testid=\"bargain-activity-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "bargain-activity:search",
+      "reset": "bargain-activity:reset",
+      "refresh": "bargain-activity:refresh",
+      "create": "bargain-activity:create",
+      "edit": "bargain-activity:edit",
+      "delete": "bargain-activity:delete",
+      "submit": "bargain-activity:submit",
+      "cancel": "bargain-activity:cancel",
+      "close": "bargain-activity:close",
+      "row": "bargain-activity:row",
+      "pagination": "bargain-activity:pagination",
+      "fields": {
+        "name": "bargain-activity:field:name",
+        "start_time": "bargain-activity:field:start_time",
+        "end_time": "bargain-activity:field:end_time",
+        "status": "bargain-activity:field:status",
+        "spu_id": "bargain-activity:field:spu_id",
+        "sku_id": "bargain-activity:field:sku_id",
+        "bargain_first_price": "bargain-activity:field:bargain_first_price",
+        "bargain_min_price": "bargain-activity:field:bargain_min_price",
+        "stock": "bargain-activity:field:stock",
+        "total_stock": "bargain-activity:field:total_stock",
+        "help_max_count": "bargain-activity:field:help_max_count",
+        "bargain_count": "bargain-activity:field:bargain_count",
+        "total_limit_count": "bargain-activity:field:total_limit_count",
+        "random_min_price": "bargain-activity:field:random_min_price",
+        "random_max_price": "bargain-activity:field:random_max_price"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.bargain-activity",
+      "examples": [
+        "mall.bargain-activity__List__Refresh",
+        "mall.bargain-activity__ListItem__Open",
+        "mall.bargain-activity__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

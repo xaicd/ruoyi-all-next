@@ -1,0 +1,249 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "KeFuMessage",
+  "kebab": "ke-fu-message",
+  "businessName": "客服消息",
+  "permissionPrefix": "mall:ke_fu_message",
+  "page": {
+    "route": "/admin/mall/ke-fu-message",
+    "title": "客服消息管理",
+    "titleSelector": "[data-testid=\"ke-fu-message-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "ke-fu-message",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/ke-fu-message",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/ke-fu-message/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/ke-fu-message"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/ke-fu-message/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/ke-fu-message/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"ke-fu-message-title\"]",
+    "refresh": "[data-testid=\"ke-fu-message-refresh\"]",
+    "createButton": "[data-testid=\"ke-fu-message-create\"]",
+    "searchForm": "[data-testid=\"ke-fu-message-search\"]",
+    "searchSubmit": "[data-testid=\"ke-fu-message-search-submit\"]",
+    "searchReset": "[data-testid=\"ke-fu-message-search-reset\"]",
+    "total": "[data-testid=\"ke-fu-message-total\"]",
+    "table": "[data-testid=\"ke-fu-message-table\"]",
+    "row": "[data-testid=\"ke-fu-message-row\"]",
+    "editButton": "[data-testid=\"ke-fu-message-edit\"]",
+    "deleteButton": "[data-testid=\"ke-fu-message-delete\"]",
+    "form": "[data-testid=\"ke-fu-message-form\"]",
+    "formError": "[data-testid=\"ke-fu-message-form-error\"]",
+    "formSubmit": "[data-testid=\"ke-fu-message-form-submit\"]",
+    "formCancel": "[data-testid=\"ke-fu-message-form-cancel\"]",
+    "formClose": "[data-testid=\"ke-fu-message-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "客服消息列表",
+    "dialogLabel": {
+      "create": "新增客服消息",
+      "edit": "编辑客服消息"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "conversation_id",
+        "label": "会话编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-conversation_id",
+        "selector": "[data-testid=\"field-conversation_id\"]"
+      },
+      {
+        "name": "sender_id",
+        "label": "发送人编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-sender_id",
+        "selector": "[data-testid=\"field-sender_id\"]"
+      },
+      {
+        "name": "sender_type",
+        "label": "发送人类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-sender_type",
+        "selector": "[data-testid=\"field-sender_type\"]"
+      },
+      {
+        "name": "receiver_id",
+        "label": "接收人编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-receiver_id",
+        "selector": "[data-testid=\"field-receiver_id\"]"
+      },
+      {
+        "name": "receiver_type",
+        "label": "接收人类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-receiver_type",
+        "selector": "[data-testid=\"field-receiver_type\"]"
+      },
+      {
+        "name": "content_type",
+        "label": "消息类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-content_type",
+        "selector": "[data-testid=\"field-content_type\"]"
+      },
+      {
+        "name": "content",
+        "label": "消息",
+        "type": "string",
+        "required": false,
+        "testId": "field-content",
+        "selector": "[data-testid=\"field-content\"]"
+      },
+      {
+        "name": "read_status",
+        "label": "是/否已读",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-read_status",
+        "selector": "[data-testid=\"field-read_status\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "ke-fu-message",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"ke-fu-message\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"ke-fu-message-form-overlay\"]",
+      "dialog": "[data-testid=\"ke-fu-message-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "ke-fu-message:search",
+      "reset": "ke-fu-message:reset",
+      "refresh": "ke-fu-message:refresh",
+      "create": "ke-fu-message:create",
+      "edit": "ke-fu-message:edit",
+      "delete": "ke-fu-message:delete",
+      "submit": "ke-fu-message:submit",
+      "cancel": "ke-fu-message:cancel",
+      "close": "ke-fu-message:close",
+      "row": "ke-fu-message:row",
+      "pagination": "ke-fu-message:pagination",
+      "fields": {
+        "conversation_id": "ke-fu-message:field:conversation_id",
+        "sender_id": "ke-fu-message:field:sender_id",
+        "sender_type": "ke-fu-message:field:sender_type",
+        "receiver_id": "ke-fu-message:field:receiver_id",
+        "receiver_type": "ke-fu-message:field:receiver_type",
+        "content_type": "ke-fu-message:field:content_type",
+        "content": "ke-fu-message:field:content",
+        "read_status": "ke-fu-message:field:read_status"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.ke-fu-message",
+      "examples": [
+        "mall.ke-fu-message__List__Refresh",
+        "mall.ke-fu-message__ListItem__Open",
+        "mall.ke-fu-message__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

@@ -1,0 +1,240 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesMdProductSip",
+  "kebab": "mes-md-product-sip",
+  "businessName": "MES 产品SIP",
+  "permissionPrefix": "mes:mes_md_product_sip",
+  "page": {
+    "route": "/admin/mes/mes-md-product-sip",
+    "title": "MES 产品SIP管理",
+    "titleSelector": "[data-testid=\"mes-md-product-sip-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-md-product-sip",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-md-product-sip",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-md-product-sip/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-md-product-sip"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-md-product-sip/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-md-product-sip/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-md-product-sip-title\"]",
+    "refresh": "[data-testid=\"mes-md-product-sip-refresh\"]",
+    "createButton": "[data-testid=\"mes-md-product-sip-create\"]",
+    "searchForm": "[data-testid=\"mes-md-product-sip-search\"]",
+    "searchSubmit": "[data-testid=\"mes-md-product-sip-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-md-product-sip-search-reset\"]",
+    "total": "[data-testid=\"mes-md-product-sip-total\"]",
+    "table": "[data-testid=\"mes-md-product-sip-table\"]",
+    "row": "[data-testid=\"mes-md-product-sip-row\"]",
+    "editButton": "[data-testid=\"mes-md-product-sip-edit\"]",
+    "deleteButton": "[data-testid=\"mes-md-product-sip-delete\"]",
+    "form": "[data-testid=\"mes-md-product-sip-form\"]",
+    "formError": "[data-testid=\"mes-md-product-sip-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-md-product-sip-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-md-product-sip-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-md-product-sip-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 产品SIP列表",
+    "dialogLabel": {
+      "create": "新增MES 产品SIP",
+      "edit": "编辑MES 产品SIP"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "item_id",
+        "label": "物料产品编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-item_id",
+        "selector": "[data-testid=\"field-item_id\"]"
+      },
+      {
+        "name": "sort",
+        "label": "排列顺序",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      },
+      {
+        "name": "process_id",
+        "label": "工序编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-process_id",
+        "selector": "[data-testid=\"field-process_id\"]"
+      },
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "string",
+        "required": false,
+        "testId": "field-title",
+        "selector": "[data-testid=\"field-title\"]"
+      },
+      {
+        "name": "description",
+        "label": "详细描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      },
+      {
+        "name": "url",
+        "label": "图片地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-url",
+        "selector": "[data-testid=\"field-url\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-md-product-sip",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-md-product-sip\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-md-product-sip-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-md-product-sip-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-md-product-sip:search",
+      "reset": "mes-md-product-sip:reset",
+      "refresh": "mes-md-product-sip:refresh",
+      "create": "mes-md-product-sip:create",
+      "edit": "mes-md-product-sip:edit",
+      "delete": "mes-md-product-sip:delete",
+      "submit": "mes-md-product-sip:submit",
+      "cancel": "mes-md-product-sip:cancel",
+      "close": "mes-md-product-sip:close",
+      "row": "mes-md-product-sip:row",
+      "pagination": "mes-md-product-sip:pagination",
+      "fields": {
+        "item_id": "mes-md-product-sip:field:item_id",
+        "sort": "mes-md-product-sip:field:sort",
+        "process_id": "mes-md-product-sip:field:process_id",
+        "title": "mes-md-product-sip:field:title",
+        "description": "mes-md-product-sip:field:description",
+        "url": "mes-md-product-sip:field:url",
+        "remark": "mes-md-product-sip:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-md-product-sip",
+      "examples": [
+        "mes.mes-md-product-sip__List__Refresh",
+        "mes.mes-md-product-sip__ListItem__Open",
+        "mes.mes-md-product-sip__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

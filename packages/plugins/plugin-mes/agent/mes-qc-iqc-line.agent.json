@@ -1,0 +1,285 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesQcIqcLine",
+  "kebab": "mes-qc-iqc-line",
+  "businessName": "MES 来料检验单行",
+  "permissionPrefix": "mes:mes_qc_iqc_line",
+  "page": {
+    "route": "/admin/mes/mes-qc-iqc-line",
+    "title": "MES 来料检验单行管理",
+    "titleSelector": "[data-testid=\"mes-qc-iqc-line-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-qc-iqc-line",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-qc-iqc-line",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-qc-iqc-line/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-qc-iqc-line"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-qc-iqc-line/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-qc-iqc-line/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-qc-iqc-line-title\"]",
+    "refresh": "[data-testid=\"mes-qc-iqc-line-refresh\"]",
+    "createButton": "[data-testid=\"mes-qc-iqc-line-create\"]",
+    "searchForm": "[data-testid=\"mes-qc-iqc-line-search\"]",
+    "searchSubmit": "[data-testid=\"mes-qc-iqc-line-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-qc-iqc-line-search-reset\"]",
+    "total": "[data-testid=\"mes-qc-iqc-line-total\"]",
+    "table": "[data-testid=\"mes-qc-iqc-line-table\"]",
+    "row": "[data-testid=\"mes-qc-iqc-line-row\"]",
+    "editButton": "[data-testid=\"mes-qc-iqc-line-edit\"]",
+    "deleteButton": "[data-testid=\"mes-qc-iqc-line-delete\"]",
+    "form": "[data-testid=\"mes-qc-iqc-line-form\"]",
+    "formError": "[data-testid=\"mes-qc-iqc-line-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-qc-iqc-line-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-qc-iqc-line-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-qc-iqc-line-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 来料检验单行列表",
+    "dialogLabel": {
+      "create": "新增MES 来料检验单行",
+      "edit": "编辑MES 来料检验单行"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "iqc_id",
+        "label": "来料检验单 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-iqc_id",
+        "selector": "[data-testid=\"field-iqc_id\"]"
+      },
+      {
+        "name": "indicator_id",
+        "label": "检测指标 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-indicator_id",
+        "selector": "[data-testid=\"field-indicator_id\"]"
+      },
+      {
+        "name": "tool",
+        "label": "检测工具",
+        "type": "string",
+        "required": false,
+        "testId": "field-tool",
+        "selector": "[data-testid=\"field-tool\"]"
+      },
+      {
+        "name": "check_method",
+        "label": "检测方法",
+        "type": "string",
+        "required": false,
+        "testId": "field-check_method",
+        "selector": "[data-testid=\"field-check_method\"]"
+      },
+      {
+        "name": "standard_value",
+        "label": "标准值",
+        "type": "number",
+        "required": false,
+        "testId": "field-standard_value",
+        "selector": "[data-testid=\"field-standard_value\"]"
+      },
+      {
+        "name": "unit_measure_id",
+        "label": "计量单位 ID",
+        "type": "number",
+        "required": false,
+        "testId": "field-unit_measure_id",
+        "selector": "[data-testid=\"field-unit_measure_id\"]"
+      },
+      {
+        "name": "max_threshold",
+        "label": "误差上限",
+        "type": "number",
+        "required": false,
+        "testId": "field-max_threshold",
+        "selector": "[data-testid=\"field-max_threshold\"]"
+      },
+      {
+        "name": "min_threshold",
+        "label": "误差下限",
+        "type": "number",
+        "required": false,
+        "testId": "field-min_threshold",
+        "selector": "[data-testid=\"field-min_threshold\"]"
+      },
+      {
+        "name": "critical_quantity",
+        "label": "致命缺陷数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-critical_quantity",
+        "selector": "[data-testid=\"field-critical_quantity\"]"
+      },
+      {
+        "name": "major_quantity",
+        "label": "严重缺陷数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-major_quantity",
+        "selector": "[data-testid=\"field-major_quantity\"]"
+      },
+      {
+        "name": "minor_quantity",
+        "label": "轻微缺陷数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-minor_quantity",
+        "selector": "[data-testid=\"field-minor_quantity\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-qc-iqc-line",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-qc-iqc-line\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-qc-iqc-line-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-qc-iqc-line-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-qc-iqc-line:search",
+      "reset": "mes-qc-iqc-line:reset",
+      "refresh": "mes-qc-iqc-line:refresh",
+      "create": "mes-qc-iqc-line:create",
+      "edit": "mes-qc-iqc-line:edit",
+      "delete": "mes-qc-iqc-line:delete",
+      "submit": "mes-qc-iqc-line:submit",
+      "cancel": "mes-qc-iqc-line:cancel",
+      "close": "mes-qc-iqc-line:close",
+      "row": "mes-qc-iqc-line:row",
+      "pagination": "mes-qc-iqc-line:pagination",
+      "fields": {
+        "iqc_id": "mes-qc-iqc-line:field:iqc_id",
+        "indicator_id": "mes-qc-iqc-line:field:indicator_id",
+        "tool": "mes-qc-iqc-line:field:tool",
+        "check_method": "mes-qc-iqc-line:field:check_method",
+        "standard_value": "mes-qc-iqc-line:field:standard_value",
+        "unit_measure_id": "mes-qc-iqc-line:field:unit_measure_id",
+        "max_threshold": "mes-qc-iqc-line:field:max_threshold",
+        "min_threshold": "mes-qc-iqc-line:field:min_threshold",
+        "critical_quantity": "mes-qc-iqc-line:field:critical_quantity",
+        "major_quantity": "mes-qc-iqc-line:field:major_quantity",
+        "minor_quantity": "mes-qc-iqc-line:field:minor_quantity",
+        "remark": "mes-qc-iqc-line:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-qc-iqc-line",
+      "examples": [
+        "mes.mes-qc-iqc-line__List__Refresh",
+        "mes.mes-qc-iqc-line__ListItem__Open",
+        "mes.mes-qc-iqc-line__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

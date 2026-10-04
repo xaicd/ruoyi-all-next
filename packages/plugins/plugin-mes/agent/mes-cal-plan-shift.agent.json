@@ -1,0 +1,231 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesCalPlanShift",
+  "kebab": "mes-cal-plan-shift",
+  "businessName": "MES 计划班次",
+  "permissionPrefix": "mes:mes_cal_plan_shift",
+  "page": {
+    "route": "/admin/mes/mes-cal-plan-shift",
+    "title": "MES 计划班次管理",
+    "titleSelector": "[data-testid=\"mes-cal-plan-shift-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-cal-plan-shift",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-cal-plan-shift",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-cal-plan-shift/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-cal-plan-shift"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-cal-plan-shift/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-cal-plan-shift/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-cal-plan-shift-title\"]",
+    "refresh": "[data-testid=\"mes-cal-plan-shift-refresh\"]",
+    "createButton": "[data-testid=\"mes-cal-plan-shift-create\"]",
+    "searchForm": "[data-testid=\"mes-cal-plan-shift-search\"]",
+    "searchSubmit": "[data-testid=\"mes-cal-plan-shift-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-cal-plan-shift-search-reset\"]",
+    "total": "[data-testid=\"mes-cal-plan-shift-total\"]",
+    "table": "[data-testid=\"mes-cal-plan-shift-table\"]",
+    "row": "[data-testid=\"mes-cal-plan-shift-row\"]",
+    "editButton": "[data-testid=\"mes-cal-plan-shift-edit\"]",
+    "deleteButton": "[data-testid=\"mes-cal-plan-shift-delete\"]",
+    "form": "[data-testid=\"mes-cal-plan-shift-form\"]",
+    "formError": "[data-testid=\"mes-cal-plan-shift-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-cal-plan-shift-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-cal-plan-shift-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-cal-plan-shift-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 计划班次列表",
+    "dialogLabel": {
+      "create": "新增MES 计划班次",
+      "edit": "编辑MES 计划班次"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "plan_id",
+        "label": "排班计划编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-plan_id",
+        "selector": "[data-testid=\"field-plan_id\"]"
+      },
+      {
+        "name": "sort",
+        "label": "显示顺序",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      },
+      {
+        "name": "name",
+        "label": "班次名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "start_time",
+        "label": "开始时间（HH:mm 格式）",
+        "type": "string",
+        "required": false,
+        "testId": "field-start_time",
+        "selector": "[data-testid=\"field-start_time\"]"
+      },
+      {
+        "name": "end_time",
+        "label": "结束时间（HH:mm 格式）",
+        "type": "string",
+        "required": false,
+        "testId": "field-end_time",
+        "selector": "[data-testid=\"field-end_time\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-cal-plan-shift",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-cal-plan-shift\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-cal-plan-shift-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-cal-plan-shift-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-cal-plan-shift:search",
+      "reset": "mes-cal-plan-shift:reset",
+      "refresh": "mes-cal-plan-shift:refresh",
+      "create": "mes-cal-plan-shift:create",
+      "edit": "mes-cal-plan-shift:edit",
+      "delete": "mes-cal-plan-shift:delete",
+      "submit": "mes-cal-plan-shift:submit",
+      "cancel": "mes-cal-plan-shift:cancel",
+      "close": "mes-cal-plan-shift:close",
+      "row": "mes-cal-plan-shift:row",
+      "pagination": "mes-cal-plan-shift:pagination",
+      "fields": {
+        "plan_id": "mes-cal-plan-shift:field:plan_id",
+        "sort": "mes-cal-plan-shift:field:sort",
+        "name": "mes-cal-plan-shift:field:name",
+        "start_time": "mes-cal-plan-shift:field:start_time",
+        "end_time": "mes-cal-plan-shift:field:end_time",
+        "remark": "mes-cal-plan-shift:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-cal-plan-shift",
+      "examples": [
+        "mes.mes-cal-plan-shift__List__Refresh",
+        "mes.mes-cal-plan-shift__ListItem__Open",
+        "mes.mes-cal-plan-shift__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

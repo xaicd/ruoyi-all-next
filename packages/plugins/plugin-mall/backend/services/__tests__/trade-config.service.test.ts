@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { TradeConfigService } from "../trade-config.service"
 
 describe("TradeConfigService", () => {
-  it("should create and query TradeConfig（源框架导入）", async () => {
+  it("should create and query 交易中心配置", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await TradeConfigService.create({
-        after_sale_refund_reasons: "测试TradeConfig（源框架导入）",
+        after_sale_refund_reasons: "测试交易中心配置",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("TradeConfigService", () => {
   
       const updated = await TradeConfigService.update(created.id, {
         id: created.id,
-        after_sale_refund_reasons: "更新TradeConfig（源框架导入）",
+        after_sale_refund_reasons: "更新交易中心配置",
       } as any)
       expect(updated).toBeDefined()
   

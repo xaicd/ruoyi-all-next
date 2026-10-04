@@ -1,0 +1,285 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "im",
+  "entity": "ImGroupMember",
+  "kebab": "im-group-member",
+  "businessName": "IM 群成员",
+  "permissionPrefix": "im:im_group_member",
+  "page": {
+    "route": "/admin/im/im-group-member",
+    "title": "IM 群成员管理",
+    "titleSelector": "[data-testid=\"im-group-member-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.im/api",
+    "bffMount": "/api/v1/admin/im",
+    "resource": "im-group-member",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/im-group-member",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/im-group-member/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/im-group-member"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/im-group-member/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/im-group-member/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"im-group-member-title\"]",
+    "refresh": "[data-testid=\"im-group-member-refresh\"]",
+    "createButton": "[data-testid=\"im-group-member-create\"]",
+    "searchForm": "[data-testid=\"im-group-member-search\"]",
+    "searchSubmit": "[data-testid=\"im-group-member-search-submit\"]",
+    "searchReset": "[data-testid=\"im-group-member-search-reset\"]",
+    "total": "[data-testid=\"im-group-member-total\"]",
+    "table": "[data-testid=\"im-group-member-table\"]",
+    "row": "[data-testid=\"im-group-member-row\"]",
+    "editButton": "[data-testid=\"im-group-member-edit\"]",
+    "deleteButton": "[data-testid=\"im-group-member-delete\"]",
+    "form": "[data-testid=\"im-group-member-form\"]",
+    "formError": "[data-testid=\"im-group-member-form-error\"]",
+    "formSubmit": "[data-testid=\"im-group-member-form-submit\"]",
+    "formCancel": "[data-testid=\"im-group-member-form-cancel\"]",
+    "formClose": "[data-testid=\"im-group-member-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IM 群成员列表",
+    "dialogLabel": {
+      "create": "新增IM 群成员",
+      "edit": "编辑IM 群成员"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "group_id",
+        "label": "群编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-group_id",
+        "selector": "[data-testid=\"field-group_id\"]"
+      },
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "display_user_name",
+        "label": "组内显示名",
+        "type": "string",
+        "required": false,
+        "testId": "field-display_user_name",
+        "selector": "[data-testid=\"field-display_user_name\"]"
+      },
+      {
+        "name": "group_remark",
+        "label": "群备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-group_remark",
+        "selector": "[data-testid=\"field-group_remark\"]"
+      },
+      {
+        "name": "silent",
+        "label": "是否免打扰",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-silent",
+        "selector": "[data-testid=\"field-silent\"]"
+      },
+      {
+        "name": "status",
+        "label": "成员状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "role",
+        "label": "成员角色",
+        "type": "number",
+        "required": false,
+        "testId": "field-role",
+        "selector": "[data-testid=\"field-role\"]"
+      },
+      {
+        "name": "join_time",
+        "label": "入群时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-join_time",
+        "selector": "[data-testid=\"field-join_time\"]"
+      },
+      {
+        "name": "add_source",
+        "label": "加入来源",
+        "type": "number",
+        "required": false,
+        "testId": "field-add_source",
+        "selector": "[data-testid=\"field-add_source\"]"
+      },
+      {
+        "name": "inviter_user_id",
+        "label": "邀请人用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-inviter_user_id",
+        "selector": "[data-testid=\"field-inviter_user_id\"]"
+      },
+      {
+        "name": "quit_time",
+        "label": "退群时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-quit_time",
+        "selector": "[data-testid=\"field-quit_time\"]"
+      },
+      {
+        "name": "mute_end_time",
+        "label": "禁言到期时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-mute_end_time",
+        "selector": "[data-testid=\"field-mute_end_time\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "im-group-member",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"im-group-member\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"im-group-member-form-overlay\"]",
+      "dialog": "[data-testid=\"im-group-member-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "im-group-member:search",
+      "reset": "im-group-member:reset",
+      "refresh": "im-group-member:refresh",
+      "create": "im-group-member:create",
+      "edit": "im-group-member:edit",
+      "delete": "im-group-member:delete",
+      "submit": "im-group-member:submit",
+      "cancel": "im-group-member:cancel",
+      "close": "im-group-member:close",
+      "row": "im-group-member:row",
+      "pagination": "im-group-member:pagination",
+      "fields": {
+        "group_id": "im-group-member:field:group_id",
+        "user_id": "im-group-member:field:user_id",
+        "display_user_name": "im-group-member:field:display_user_name",
+        "group_remark": "im-group-member:field:group_remark",
+        "silent": "im-group-member:field:silent",
+        "status": "im-group-member:field:status",
+        "role": "im-group-member:field:role",
+        "join_time": "im-group-member:field:join_time",
+        "add_source": "im-group-member:field:add_source",
+        "inviter_user_id": "im-group-member:field:inviter_user_id",
+        "quit_time": "im-group-member:field:quit_time",
+        "mute_end_time": "im-group-member:field:mute_end_time"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "im.im-group-member",
+      "examples": [
+        "im.im-group-member__List__Refresh",
+        "im.im-group-member__ListItem__Open",
+        "im.im-group-member__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

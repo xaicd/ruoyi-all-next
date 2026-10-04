@@ -1,0 +1,222 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "ai",
+  "entity": "AiApiKey",
+  "kebab": "ai-api-key",
+  "businessName": "AI API 秘钥",
+  "permissionPrefix": "ai:ai_api_key",
+  "page": {
+    "route": "/admin/ai/ai-api-key",
+    "title": "AI API 秘钥管理",
+    "titleSelector": "[data-testid=\"ai-api-key-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.ai/api",
+    "bffMount": "/api/v1/admin/ai",
+    "resource": "ai-api-key",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/ai-api-key",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/ai-api-key/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/ai-api-key"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/ai-api-key/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/ai-api-key/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"ai-api-key-title\"]",
+    "refresh": "[data-testid=\"ai-api-key-refresh\"]",
+    "createButton": "[data-testid=\"ai-api-key-create\"]",
+    "searchForm": "[data-testid=\"ai-api-key-search\"]",
+    "searchSubmit": "[data-testid=\"ai-api-key-search-submit\"]",
+    "searchReset": "[data-testid=\"ai-api-key-search-reset\"]",
+    "total": "[data-testid=\"ai-api-key-total\"]",
+    "table": "[data-testid=\"ai-api-key-table\"]",
+    "row": "[data-testid=\"ai-api-key-row\"]",
+    "editButton": "[data-testid=\"ai-api-key-edit\"]",
+    "deleteButton": "[data-testid=\"ai-api-key-delete\"]",
+    "form": "[data-testid=\"ai-api-key-form\"]",
+    "formError": "[data-testid=\"ai-api-key-form-error\"]",
+    "formSubmit": "[data-testid=\"ai-api-key-form-submit\"]",
+    "formCancel": "[data-testid=\"ai-api-key-form-cancel\"]",
+    "formClose": "[data-testid=\"ai-api-key-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "AI API 秘钥列表",
+    "dialogLabel": {
+      "create": "新增AI API 秘钥",
+      "edit": "编辑AI API 秘钥"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "name",
+        "label": "名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "api_key",
+        "label": "密钥",
+        "type": "string",
+        "required": false,
+        "testId": "field-api_key",
+        "selector": "[data-testid=\"field-api_key\"]"
+      },
+      {
+        "name": "platform",
+        "label": "平台",
+        "type": "string",
+        "required": false,
+        "testId": "field-platform",
+        "selector": "[data-testid=\"field-platform\"]"
+      },
+      {
+        "name": "url",
+        "label": "API 地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-url",
+        "selector": "[data-testid=\"field-url\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "ai-api-key",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"ai-api-key\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"ai-api-key-form-overlay\"]",
+      "dialog": "[data-testid=\"ai-api-key-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "ai-api-key:search",
+      "reset": "ai-api-key:reset",
+      "refresh": "ai-api-key:refresh",
+      "create": "ai-api-key:create",
+      "edit": "ai-api-key:edit",
+      "delete": "ai-api-key:delete",
+      "submit": "ai-api-key:submit",
+      "cancel": "ai-api-key:cancel",
+      "close": "ai-api-key:close",
+      "row": "ai-api-key:row",
+      "pagination": "ai-api-key:pagination",
+      "fields": {
+        "name": "ai-api-key:field:name",
+        "api_key": "ai-api-key:field:api_key",
+        "platform": "ai-api-key:field:platform",
+        "url": "ai-api-key:field:url",
+        "status": "ai-api-key:field:status"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "ai.ai-api-key",
+      "examples": [
+        "ai.ai-api-key__List__Refresh",
+        "ai.ai-api-key__ListItem__Open",
+        "ai.ai-api-key__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

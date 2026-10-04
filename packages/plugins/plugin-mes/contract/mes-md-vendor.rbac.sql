@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesMdVendor（源框架导入） (MesMdVendor)
+-- Auto-generated RBAC & Menu Migration for MES 供应商 (MesMdVendor)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-md-vendor',
   'mes-dir',
-  'MesMdVendor（源框架导入）管理',
+  'MES 供应商管理',
   '/admin/mes/mes-md-vendor',
   'mes/mes-md-vendor/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-md-vendor-query',  'menu-mes-md-vendor', '查询MesMdVendor（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_md_vendor:query',  1, NOW(), NOW()),
-('menu-mes-md-vendor-create', 'menu-mes-md-vendor', '新增MesMdVendor（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_md_vendor:create', 2, NOW(), NOW()),
-('menu-mes-md-vendor-update', 'menu-mes-md-vendor', '修改MesMdVendor（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_md_vendor:update', 3, NOW(), NOW()),
-('menu-mes-md-vendor-delete', 'menu-mes-md-vendor', '删除MesMdVendor（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_md_vendor:delete', 4, NOW(), NOW())
+('menu-mes-md-vendor-query',  'menu-mes-md-vendor', '查询MES 供应商', 'BUTTON', 'ACTIVE', 'mes:mes_md_vendor:query',  1, NOW(), NOW()),
+('menu-mes-md-vendor-create', 'menu-mes-md-vendor', '新增MES 供应商', 'BUTTON', 'ACTIVE', 'mes:mes_md_vendor:create', 2, NOW(), NOW()),
+('menu-mes-md-vendor-update', 'menu-mes-md-vendor', '修改MES 供应商', 'BUTTON', 'ACTIVE', 'mes:mes_md_vendor:update', 3, NOW(), NOW()),
+('menu-mes-md-vendor-delete', 'menu-mes-md-vendor', '删除MES 供应商', 'BUTTON', 'ACTIVE', 'mes:mes_md_vendor:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

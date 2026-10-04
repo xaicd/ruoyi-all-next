@@ -1,0 +1,213 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "crm",
+  "entity": "CrmOwnerRecord",
+  "kebab": "crm-owner-record",
+  "businessName": "CRM 负责人变更记录",
+  "permissionPrefix": "crm:crm_owner_record",
+  "page": {
+    "route": "/admin/crm/crm-owner-record",
+    "title": "CRM 负责人变更记录管理",
+    "titleSelector": "[data-testid=\"crm-owner-record-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.crm/api",
+    "bffMount": "/api/v1/admin/crm",
+    "resource": "crm-owner-record",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/crm-owner-record",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/crm-owner-record/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/crm-owner-record"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/crm-owner-record/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/crm-owner-record/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"crm-owner-record-title\"]",
+    "refresh": "[data-testid=\"crm-owner-record-refresh\"]",
+    "createButton": "[data-testid=\"crm-owner-record-create\"]",
+    "searchForm": "[data-testid=\"crm-owner-record-search\"]",
+    "searchSubmit": "[data-testid=\"crm-owner-record-search-submit\"]",
+    "searchReset": "[data-testid=\"crm-owner-record-search-reset\"]",
+    "total": "[data-testid=\"crm-owner-record-total\"]",
+    "table": "[data-testid=\"crm-owner-record-table\"]",
+    "row": "[data-testid=\"crm-owner-record-row\"]",
+    "editButton": "[data-testid=\"crm-owner-record-edit\"]",
+    "deleteButton": "[data-testid=\"crm-owner-record-delete\"]",
+    "form": "[data-testid=\"crm-owner-record-form\"]",
+    "formError": "[data-testid=\"crm-owner-record-form-error\"]",
+    "formSubmit": "[data-testid=\"crm-owner-record-form-submit\"]",
+    "formCancel": "[data-testid=\"crm-owner-record-form-cancel\"]",
+    "formClose": "[data-testid=\"crm-owner-record-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "CRM 负责人变更记录列表",
+    "dialogLabel": {
+      "create": "新增CRM 负责人变更记录",
+      "edit": "编辑CRM 负责人变更记录"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "biz_type",
+        "label": "CRM 业务类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-biz_type",
+        "selector": "[data-testid=\"field-biz_type\"]"
+      },
+      {
+        "name": "biz_id",
+        "label": "CRM 业务编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-biz_id",
+        "selector": "[data-testid=\"field-biz_id\"]"
+      },
+      {
+        "name": "pre_owner_user_id",
+        "label": "变更前负责人",
+        "type": "number",
+        "required": false,
+        "testId": "field-pre_owner_user_id",
+        "selector": "[data-testid=\"field-pre_owner_user_id\"]"
+      },
+      {
+        "name": "post_owner_user_id",
+        "label": "变更后负责人",
+        "type": "number",
+        "required": false,
+        "testId": "field-post_owner_user_id",
+        "selector": "[data-testid=\"field-post_owner_user_id\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "crm-owner-record",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"crm-owner-record\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"crm-owner-record-form-overlay\"]",
+      "dialog": "[data-testid=\"crm-owner-record-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "crm-owner-record:search",
+      "reset": "crm-owner-record:reset",
+      "refresh": "crm-owner-record:refresh",
+      "create": "crm-owner-record:create",
+      "edit": "crm-owner-record:edit",
+      "delete": "crm-owner-record:delete",
+      "submit": "crm-owner-record:submit",
+      "cancel": "crm-owner-record:cancel",
+      "close": "crm-owner-record:close",
+      "row": "crm-owner-record:row",
+      "pagination": "crm-owner-record:pagination",
+      "fields": {
+        "biz_type": "crm-owner-record:field:biz_type",
+        "biz_id": "crm-owner-record:field:biz_id",
+        "pre_owner_user_id": "crm-owner-record:field:pre_owner_user_id",
+        "post_owner_user_id": "crm-owner-record:field:post_owner_user_id"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "crm.crm-owner-record",
+      "examples": [
+        "crm.crm-owner-record__List__Refresh",
+        "crm.crm-owner-record__ListItem__Open",
+        "crm.crm-owner-record__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

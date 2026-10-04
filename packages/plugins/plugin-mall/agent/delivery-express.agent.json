@@ -1,0 +1,222 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "DeliveryExpress",
+  "kebab": "delivery-express",
+  "businessName": "快递公司",
+  "permissionPrefix": "mall:delivery_express",
+  "page": {
+    "route": "/admin/mall/delivery-express",
+    "title": "快递公司管理",
+    "titleSelector": "[data-testid=\"delivery-express-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "delivery-express",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/delivery-express",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/delivery-express/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/delivery-express"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/delivery-express/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/delivery-express/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"delivery-express-title\"]",
+    "refresh": "[data-testid=\"delivery-express-refresh\"]",
+    "createButton": "[data-testid=\"delivery-express-create\"]",
+    "searchForm": "[data-testid=\"delivery-express-search\"]",
+    "searchSubmit": "[data-testid=\"delivery-express-search-submit\"]",
+    "searchReset": "[data-testid=\"delivery-express-search-reset\"]",
+    "total": "[data-testid=\"delivery-express-total\"]",
+    "table": "[data-testid=\"delivery-express-table\"]",
+    "row": "[data-testid=\"delivery-express-row\"]",
+    "editButton": "[data-testid=\"delivery-express-edit\"]",
+    "deleteButton": "[data-testid=\"delivery-express-delete\"]",
+    "form": "[data-testid=\"delivery-express-form\"]",
+    "formError": "[data-testid=\"delivery-express-form-error\"]",
+    "formSubmit": "[data-testid=\"delivery-express-form-submit\"]",
+    "formCancel": "[data-testid=\"delivery-express-form-cancel\"]",
+    "formClose": "[data-testid=\"delivery-express-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "快递公司列表",
+    "dialogLabel": {
+      "create": "新增快递公司",
+      "edit": "编辑快递公司"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "code",
+        "label": "快递公司 code",
+        "type": "string",
+        "required": false,
+        "testId": "field-code",
+        "selector": "[data-testid=\"field-code\"]"
+      },
+      {
+        "name": "name",
+        "label": "快递公司名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "logo",
+        "label": "快递公司 logo",
+        "type": "string",
+        "required": false,
+        "testId": "field-logo",
+        "selector": "[data-testid=\"field-logo\"]"
+      },
+      {
+        "name": "sort",
+        "label": "排序",
+        "type": "number",
+        "required": false,
+        "testId": "field-sort",
+        "selector": "[data-testid=\"field-sort\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "delivery-express",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"delivery-express\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"delivery-express-form-overlay\"]",
+      "dialog": "[data-testid=\"delivery-express-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "delivery-express:search",
+      "reset": "delivery-express:reset",
+      "refresh": "delivery-express:refresh",
+      "create": "delivery-express:create",
+      "edit": "delivery-express:edit",
+      "delete": "delivery-express:delete",
+      "submit": "delivery-express:submit",
+      "cancel": "delivery-express:cancel",
+      "close": "delivery-express:close",
+      "row": "delivery-express:row",
+      "pagination": "delivery-express:pagination",
+      "fields": {
+        "code": "delivery-express:field:code",
+        "name": "delivery-express:field:name",
+        "logo": "delivery-express:field:logo",
+        "sort": "delivery-express:field:sort",
+        "status": "delivery-express:field:status"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.delivery-express",
+      "examples": [
+        "mall.delivery-express__List__Refresh",
+        "mall.delivery-express__ListItem__Open",
+        "mall.delivery-express__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

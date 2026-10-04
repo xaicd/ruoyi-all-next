@@ -52,24 +52,36 @@ export function MesCalTeamForm({ open, initialData, onClose, onSuccess }: MesCal
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-cal-team-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 班组" : "新增MES 班组"}
+        data-testid="mes-cal-team-form"
+        data-agent-scope="mes-cal-team:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesCalTeam（源框架导入）" : "新增MesCalTeam（源框架导入）"}
+            {isEdit ? "编辑MES 班组" : "新增MES 班组"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-cal-team-form-close" data-agent-target="mes-cal-team:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-cal-team-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">班组编码</label>
+          <label htmlFor="mes-cal-team-code" className="block text-xs text-slate-600 mb-1">班组编码</label>
           <input
             type="text"
+            id="mes-cal-team-code"
+            data-testid="field-code"
+            data-agent-target="mes-cal-team:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="班组编码"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -79,9 +91,14 @@ export function MesCalTeamForm({ open, initialData, onClose, onSuccess }: MesCal
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">班组名称</label>
+          <label htmlFor="mes-cal-team-name" className="block text-xs text-slate-600 mb-1">班组名称</label>
           <input
             type="text"
+            id="mes-cal-team-name"
+            data-testid="field-name"
+            data-agent-target="mes-cal-team:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="班组名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -91,9 +108,14 @@ export function MesCalTeamForm({ open, initialData, onClose, onSuccess }: MesCal
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">班组类型</label>
+          <label htmlFor="mes-cal-team-calendar_type" className="block text-xs text-slate-600 mb-1">班组类型</label>
           <input
             type="number"
+            id="mes-cal-team-calendar_type"
+            data-testid="field-calendar_type"
+            data-agent-target="mes-cal-team:field:calendar_type"
+            data-agent-state={formData.calendar_type == null || formData.calendar_type === "" ? "empty" : "filled"}
+            aria-label="班组类型"
             value={formData.calendar_type != null ? String(formData.calendar_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, calendar_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -103,9 +125,14 @@ export function MesCalTeamForm({ open, initialData, onClose, onSuccess }: MesCal
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-cal-team-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-cal-team-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-cal-team:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -119,6 +146,8 @@ export function MesCalTeamForm({ open, initialData, onClose, onSuccess }: MesCal
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-cal-team-form-cancel"
+              data-agent-target="mes-cal-team:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -126,6 +155,9 @@ export function MesCalTeamForm({ open, initialData, onClose, onSuccess }: MesCal
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-cal-team-form-submit"
+              data-agent-target="mes-cal-team:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

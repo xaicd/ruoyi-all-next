@@ -55,24 +55,36 @@ export function MesWmWarehouseForm({ open, initialData, onClose, onSuccess }: Me
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-wm-warehouse-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 仓库" : "新增MES 仓库"}
+        data-testid="mes-wm-warehouse-form"
+        data-agent-scope="mes-wm-warehouse:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesWmWarehouse（源框架导入）" : "新增MesWmWarehouse（源框架导入）"}
+            {isEdit ? "编辑MES 仓库" : "新增MES 仓库"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-wm-warehouse-form-close" data-agent-target="mes-wm-warehouse:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-wm-warehouse-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">仓库编码</label>
+          <label htmlFor="mes-wm-warehouse-code" className="block text-xs text-slate-600 mb-1">仓库编码</label>
           <input
             type="text"
+            id="mes-wm-warehouse-code"
+            data-testid="field-code"
+            data-agent-target="mes-wm-warehouse:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="仓库编码"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -82,9 +94,14 @@ export function MesWmWarehouseForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">仓库名称</label>
+          <label htmlFor="mes-wm-warehouse-name" className="block text-xs text-slate-600 mb-1">仓库名称</label>
           <input
             type="text"
+            id="mes-wm-warehouse-name"
+            data-testid="field-name"
+            data-agent-target="mes-wm-warehouse:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="仓库名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -94,9 +111,14 @@ export function MesWmWarehouseForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">仓库地址</label>
+          <label htmlFor="mes-wm-warehouse-address" className="block text-xs text-slate-600 mb-1">仓库地址</label>
           <input
             type="text"
+            id="mes-wm-warehouse-address"
+            data-testid="field-address"
+            data-agent-target="mes-wm-warehouse:field:address"
+            data-agent-state={formData.address ? "filled" : "empty"}
+            aria-label="仓库地址"
             value={formData.address ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, address: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -106,9 +128,14 @@ export function MesWmWarehouseForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">面积</label>
+          <label htmlFor="mes-wm-warehouse-area" className="block text-xs text-slate-600 mb-1">面积</label>
           <input
             type="number"
+            id="mes-wm-warehouse-area"
+            data-testid="field-area"
+            data-agent-target="mes-wm-warehouse:field:area"
+            data-agent-state={formData.area == null || formData.area === "" ? "empty" : "filled"}
+            aria-label="面积"
             value={formData.area != null ? String(formData.area) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, area: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -118,9 +145,14 @@ export function MesWmWarehouseForm({ open, initialData, onClose, onSuccess }: Me
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">负责人用户编号</label>
+          <label htmlFor="mes-wm-warehouse-charge_user_id" className="block text-xs text-slate-600 mb-1">负责人用户编号</label>
           <input
             type="number"
+            id="mes-wm-warehouse-charge_user_id"
+            data-testid="field-charge_user_id"
+            data-agent-target="mes-wm-warehouse:field:charge_user_id"
+            data-agent-state={formData.charge_user_id == null || formData.charge_user_id === "" ? "empty" : "filled"}
+            aria-label="负责人用户编号"
             value={formData.charge_user_id != null ? String(formData.charge_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, charge_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -132,18 +164,27 @@ export function MesWmWarehouseForm({ open, initialData, onClose, onSuccess }: Me
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="frozen"
+            id="mes-wm-warehouse-frozen"
+            data-testid="field-frozen"
+            data-agent-target="mes-wm-warehouse:field:frozen"
+            data-agent-state={formData.frozen ? "on" : "off"}
+            aria-label="是否冻结"
             checked={Boolean(formData.frozen)}
             onChange={(e) => setFormData((prev) => ({ ...prev, frozen: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="frozen" className="text-xs text-slate-700 font-medium">是否冻结</label>
+          <label htmlFor="mes-wm-warehouse-frozen" className="text-xs text-slate-700 font-medium">是否冻结</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-wm-warehouse-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-wm-warehouse-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-wm-warehouse:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -157,6 +198,8 @@ export function MesWmWarehouseForm({ open, initialData, onClose, onSuccess }: Me
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-wm-warehouse-form-cancel"
+              data-agent-target="mes-wm-warehouse:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -164,6 +207,9 @@ export function MesWmWarehouseForm({ open, initialData, onClose, onSuccess }: Me
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-wm-warehouse-form-submit"
+              data-agent-target="mes-wm-warehouse:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

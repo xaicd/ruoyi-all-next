@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesMdUnitMeasureService } from "../mes-md-unit-measure.service"
 
 describe("MesMdUnitMeasureService", () => {
-  it("should create and query MesMdUnitMeasure（源框架导入）", async () => {
+  it("should create and query MES 计量单位", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesMdUnitMeasureService.create({
-        code: "测试MesMdUnitMeasure（源框架导入）",
+        code: "测试MES 计量单位",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("MesMdUnitMeasureService", () => {
   
       const updated = await MesMdUnitMeasureService.update(created.id, {
         id: created.id,
-        code: "更新MesMdUnitMeasure（源框架导入）",
+        code: "更新MES 计量单位",
       } as any)
       expect(updated).toBeDefined()
   

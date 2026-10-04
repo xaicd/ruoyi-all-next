@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesMdItemBatchConfigService } from "../mes-md-item-batch-config.service"
 
 describe("MesMdItemBatchConfigService", () => {
-  it("should create and query MesMdItemBatchConfig（源框架导入）", async () => {
+  it("should create and query MES 物料批次属性配置", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesMdItemBatchConfigService.create({
         item_id: 1,
@@ -21,7 +21,7 @@ describe("MesMdItemBatchConfigService", () => {
   
       const updated = await MesMdItemBatchConfigService.update(created.id, {
         id: created.id,
-        item_id: "更新MesMdItemBatchConfig（源框架导入）",
+        item_id: "更新MES 物料批次属性配置",
       } as any)
       expect(updated).toBeDefined()
   

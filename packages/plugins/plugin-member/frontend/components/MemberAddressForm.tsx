@@ -54,24 +54,36 @@ export function MemberAddressForm({ open, initialData, onClose, onSuccess }: Mem
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="member-address-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑用户收件地址" : "新增用户收件地址"}
+        data-testid="member-address-form"
+        data-agent-scope="member-address:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MemberAddress（源框架导入）" : "新增MemberAddress（源框架导入）"}
+            {isEdit ? "编辑用户收件地址" : "新增用户收件地址"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="member-address-form-close" data-agent-target="member-address:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="member-address-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="member-address-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="member-address-user_id"
+            data-testid="field-user_id"
+            data-agent-target="member-address:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -81,9 +93,14 @@ export function MemberAddressForm({ open, initialData, onClose, onSuccess }: Mem
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">收件人名称</label>
+          <label htmlFor="member-address-name" className="block text-xs text-slate-600 mb-1">收件人名称</label>
           <input
             type="text"
+            id="member-address-name"
+            data-testid="field-name"
+            data-agent-target="member-address:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="收件人名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -93,9 +110,14 @@ export function MemberAddressForm({ open, initialData, onClose, onSuccess }: Mem
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">手机号</label>
+          <label htmlFor="member-address-mobile" className="block text-xs text-slate-600 mb-1">手机号</label>
           <input
             type="text"
+            id="member-address-mobile"
+            data-testid="field-mobile"
+            data-agent-target="member-address:field:mobile"
+            data-agent-state={formData.mobile ? "filled" : "empty"}
+            aria-label="手机号"
             value={formData.mobile ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, mobile: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -105,9 +127,14 @@ export function MemberAddressForm({ open, initialData, onClose, onSuccess }: Mem
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">地区编号</label>
+          <label htmlFor="member-address-area_id" className="block text-xs text-slate-600 mb-1">地区编号</label>
           <input
             type="number"
+            id="member-address-area_id"
+            data-testid="field-area_id"
+            data-agent-target="member-address:field:area_id"
+            data-agent-state={formData.area_id == null || formData.area_id === "" ? "empty" : "filled"}
+            aria-label="地区编号"
             value={formData.area_id != null ? String(formData.area_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, area_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -117,9 +144,14 @@ export function MemberAddressForm({ open, initialData, onClose, onSuccess }: Mem
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">收件详细地址</label>
+          <label htmlFor="member-address-detail_address" className="block text-xs text-slate-600 mb-1">收件详细地址</label>
           <input
             type="text"
+            id="member-address-detail_address"
+            data-testid="field-detail_address"
+            data-agent-target="member-address:field:detail_address"
+            data-agent-state={formData.detail_address ? "filled" : "empty"}
+            aria-label="收件详细地址"
             value={formData.detail_address ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, detail_address: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -131,12 +163,16 @@ export function MemberAddressForm({ open, initialData, onClose, onSuccess }: Mem
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="default_status"
+            id="member-address-default_status"
+            data-testid="field-default_status"
+            data-agent-target="member-address:field:default_status"
+            data-agent-state={formData.default_status ? "on" : "off"}
+            aria-label="是否默认"
             checked={Boolean(formData.default_status)}
             onChange={(e) => setFormData((prev) => ({ ...prev, default_status: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="default_status" className="text-xs text-slate-700 font-medium">是否默认</label>
+          <label htmlFor="member-address-default_status" className="text-xs text-slate-700 font-medium">是否默认</label>
         </div>
           </div>
 
@@ -144,6 +180,8 @@ export function MemberAddressForm({ open, initialData, onClose, onSuccess }: Mem
             <button
               type="button"
               onClick={onClose}
+              data-testid="member-address-form-cancel"
+              data-agent-target="member-address:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -151,6 +189,9 @@ export function MemberAddressForm({ open, initialData, onClose, onSuccess }: Mem
             <button
               type="submit"
               disabled={loading}
+              data-testid="member-address-form-submit"
+              data-agent-target="member-address:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

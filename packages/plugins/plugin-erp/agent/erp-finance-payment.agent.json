@@ -1,0 +1,267 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "erp",
+  "entity": "ErpFinancePayment",
+  "kebab": "erp-finance-payment",
+  "businessName": "ERP 付款单",
+  "permissionPrefix": "erp:erp_finance_payment",
+  "page": {
+    "route": "/admin/erp/erp-finance-payment",
+    "title": "ERP 付款单管理",
+    "titleSelector": "[data-testid=\"erp-finance-payment-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.erp/api",
+    "bffMount": "/api/v1/admin/erp",
+    "resource": "erp-finance-payment",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/erp-finance-payment",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/erp-finance-payment/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/erp-finance-payment"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/erp-finance-payment/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/erp-finance-payment/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"erp-finance-payment-title\"]",
+    "refresh": "[data-testid=\"erp-finance-payment-refresh\"]",
+    "createButton": "[data-testid=\"erp-finance-payment-create\"]",
+    "searchForm": "[data-testid=\"erp-finance-payment-search\"]",
+    "searchSubmit": "[data-testid=\"erp-finance-payment-search-submit\"]",
+    "searchReset": "[data-testid=\"erp-finance-payment-search-reset\"]",
+    "total": "[data-testid=\"erp-finance-payment-total\"]",
+    "table": "[data-testid=\"erp-finance-payment-table\"]",
+    "row": "[data-testid=\"erp-finance-payment-row\"]",
+    "editButton": "[data-testid=\"erp-finance-payment-edit\"]",
+    "deleteButton": "[data-testid=\"erp-finance-payment-delete\"]",
+    "form": "[data-testid=\"erp-finance-payment-form\"]",
+    "formError": "[data-testid=\"erp-finance-payment-form-error\"]",
+    "formSubmit": "[data-testid=\"erp-finance-payment-form-submit\"]",
+    "formCancel": "[data-testid=\"erp-finance-payment-form-cancel\"]",
+    "formClose": "[data-testid=\"erp-finance-payment-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "ERP 付款单列表",
+    "dialogLabel": {
+      "create": "新增ERP 付款单",
+      "edit": "编辑ERP 付款单"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "no",
+        "label": "付款单号",
+        "type": "string",
+        "required": false,
+        "testId": "field-no",
+        "selector": "[data-testid=\"field-no\"]"
+      },
+      {
+        "name": "status",
+        "label": "付款状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "payment_time",
+        "label": "付款时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-payment_time",
+        "selector": "[data-testid=\"field-payment_time\"]"
+      },
+      {
+        "name": "finance_user_id",
+        "label": "财务人员编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-finance_user_id",
+        "selector": "[data-testid=\"field-finance_user_id\"]"
+      },
+      {
+        "name": "supplier_id",
+        "label": "供应商编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-supplier_id",
+        "selector": "[data-testid=\"field-supplier_id\"]"
+      },
+      {
+        "name": "account_id",
+        "label": "付款账户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-account_id",
+        "selector": "[data-testid=\"field-account_id\"]"
+      },
+      {
+        "name": "total_price",
+        "label": "合计价格，单位：元",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_price",
+        "selector": "[data-testid=\"field-total_price\"]"
+      },
+      {
+        "name": "discount_price",
+        "label": "优惠金额，单位：元",
+        "type": "number",
+        "required": false,
+        "testId": "field-discount_price",
+        "selector": "[data-testid=\"field-discount_price\"]"
+      },
+      {
+        "name": "payment_price",
+        "label": "实付金额，单位：分",
+        "type": "number",
+        "required": false,
+        "testId": "field-payment_price",
+        "selector": "[data-testid=\"field-payment_price\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "erp-finance-payment",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"erp-finance-payment\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"erp-finance-payment-form-overlay\"]",
+      "dialog": "[data-testid=\"erp-finance-payment-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "erp-finance-payment:search",
+      "reset": "erp-finance-payment:reset",
+      "refresh": "erp-finance-payment:refresh",
+      "create": "erp-finance-payment:create",
+      "edit": "erp-finance-payment:edit",
+      "delete": "erp-finance-payment:delete",
+      "submit": "erp-finance-payment:submit",
+      "cancel": "erp-finance-payment:cancel",
+      "close": "erp-finance-payment:close",
+      "row": "erp-finance-payment:row",
+      "pagination": "erp-finance-payment:pagination",
+      "fields": {
+        "no": "erp-finance-payment:field:no",
+        "status": "erp-finance-payment:field:status",
+        "payment_time": "erp-finance-payment:field:payment_time",
+        "finance_user_id": "erp-finance-payment:field:finance_user_id",
+        "supplier_id": "erp-finance-payment:field:supplier_id",
+        "account_id": "erp-finance-payment:field:account_id",
+        "total_price": "erp-finance-payment:field:total_price",
+        "discount_price": "erp-finance-payment:field:discount_price",
+        "payment_price": "erp-finance-payment:field:payment_price",
+        "remark": "erp-finance-payment:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "erp.erp-finance-payment",
+      "examples": [
+        "erp.erp-finance-payment__List__Refresh",
+        "erp.erp-finance-payment__ListItem__Open",
+        "erp.erp-finance-payment__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

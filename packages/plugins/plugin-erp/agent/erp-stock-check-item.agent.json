@@ -1,0 +1,267 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "erp",
+  "entity": "ErpStockCheckItem",
+  "kebab": "erp-stock-check-item",
+  "businessName": "ERP 库存盘点单项",
+  "permissionPrefix": "erp:erp_stock_check_item",
+  "page": {
+    "route": "/admin/erp/erp-stock-check-item",
+    "title": "ERP 库存盘点单项管理",
+    "titleSelector": "[data-testid=\"erp-stock-check-item-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.erp/api",
+    "bffMount": "/api/v1/admin/erp",
+    "resource": "erp-stock-check-item",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/erp-stock-check-item",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/erp-stock-check-item/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/erp-stock-check-item"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/erp-stock-check-item/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/erp-stock-check-item/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"erp-stock-check-item-title\"]",
+    "refresh": "[data-testid=\"erp-stock-check-item-refresh\"]",
+    "createButton": "[data-testid=\"erp-stock-check-item-create\"]",
+    "searchForm": "[data-testid=\"erp-stock-check-item-search\"]",
+    "searchSubmit": "[data-testid=\"erp-stock-check-item-search-submit\"]",
+    "searchReset": "[data-testid=\"erp-stock-check-item-search-reset\"]",
+    "total": "[data-testid=\"erp-stock-check-item-total\"]",
+    "table": "[data-testid=\"erp-stock-check-item-table\"]",
+    "row": "[data-testid=\"erp-stock-check-item-row\"]",
+    "editButton": "[data-testid=\"erp-stock-check-item-edit\"]",
+    "deleteButton": "[data-testid=\"erp-stock-check-item-delete\"]",
+    "form": "[data-testid=\"erp-stock-check-item-form\"]",
+    "formError": "[data-testid=\"erp-stock-check-item-form-error\"]",
+    "formSubmit": "[data-testid=\"erp-stock-check-item-form-submit\"]",
+    "formCancel": "[data-testid=\"erp-stock-check-item-form-cancel\"]",
+    "formClose": "[data-testid=\"erp-stock-check-item-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "ERP 库存盘点单项列表",
+    "dialogLabel": {
+      "create": "新增ERP 库存盘点单项",
+      "edit": "编辑ERP 库存盘点单项"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "check_id",
+        "label": "盘点编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-check_id",
+        "selector": "[data-testid=\"field-check_id\"]"
+      },
+      {
+        "name": "warehouse_id",
+        "label": "仓库编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-warehouse_id",
+        "selector": "[data-testid=\"field-warehouse_id\"]"
+      },
+      {
+        "name": "product_id",
+        "label": "产品编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-product_id",
+        "selector": "[data-testid=\"field-product_id\"]"
+      },
+      {
+        "name": "product_unit_id",
+        "label": "产品单位编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-product_unit_id",
+        "selector": "[data-testid=\"field-product_unit_id\"]"
+      },
+      {
+        "name": "product_price",
+        "label": "产品单价",
+        "type": "number",
+        "required": false,
+        "testId": "field-product_price",
+        "selector": "[data-testid=\"field-product_price\"]"
+      },
+      {
+        "name": "stock_count",
+        "label": "账面数量（当前库存）",
+        "type": "number",
+        "required": false,
+        "testId": "field-stock_count",
+        "selector": "[data-testid=\"field-stock_count\"]"
+      },
+      {
+        "name": "actual_count",
+        "label": "实际数量（实际库存）",
+        "type": "number",
+        "required": false,
+        "testId": "field-actual_count",
+        "selector": "[data-testid=\"field-actual_count\"]"
+      },
+      {
+        "name": "count",
+        "label": "盈亏数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-count",
+        "selector": "[data-testid=\"field-count\"]"
+      },
+      {
+        "name": "total_price",
+        "label": "合计金额，单位：元",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_price",
+        "selector": "[data-testid=\"field-total_price\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "erp-stock-check-item",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"erp-stock-check-item\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"erp-stock-check-item-form-overlay\"]",
+      "dialog": "[data-testid=\"erp-stock-check-item-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "erp-stock-check-item:search",
+      "reset": "erp-stock-check-item:reset",
+      "refresh": "erp-stock-check-item:refresh",
+      "create": "erp-stock-check-item:create",
+      "edit": "erp-stock-check-item:edit",
+      "delete": "erp-stock-check-item:delete",
+      "submit": "erp-stock-check-item:submit",
+      "cancel": "erp-stock-check-item:cancel",
+      "close": "erp-stock-check-item:close",
+      "row": "erp-stock-check-item:row",
+      "pagination": "erp-stock-check-item:pagination",
+      "fields": {
+        "check_id": "erp-stock-check-item:field:check_id",
+        "warehouse_id": "erp-stock-check-item:field:warehouse_id",
+        "product_id": "erp-stock-check-item:field:product_id",
+        "product_unit_id": "erp-stock-check-item:field:product_unit_id",
+        "product_price": "erp-stock-check-item:field:product_price",
+        "stock_count": "erp-stock-check-item:field:stock_count",
+        "actual_count": "erp-stock-check-item:field:actual_count",
+        "count": "erp-stock-check-item:field:count",
+        "total_price": "erp-stock-check-item:field:total_price",
+        "remark": "erp-stock-check-item:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "erp.erp-stock-check-item",
+      "examples": [
+        "erp.erp-stock-check-item__List__Refresh",
+        "erp.erp-stock-check-item__ListItem__Open",
+        "erp.erp-stock-check-item__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

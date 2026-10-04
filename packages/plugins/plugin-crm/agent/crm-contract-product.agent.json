@@ -1,0 +1,231 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "crm",
+  "entity": "CrmContractProduct",
+  "kebab": "crm-contract-product",
+  "businessName": "CRM 合同产品关联表",
+  "permissionPrefix": "crm:crm_contract_product",
+  "page": {
+    "route": "/admin/crm/crm-contract-product",
+    "title": "CRM 合同产品关联表管理",
+    "titleSelector": "[data-testid=\"crm-contract-product-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.crm/api",
+    "bffMount": "/api/v1/admin/crm",
+    "resource": "crm-contract-product",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/crm-contract-product",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/crm-contract-product/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/crm-contract-product"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/crm-contract-product/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/crm-contract-product/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"crm-contract-product-title\"]",
+    "refresh": "[data-testid=\"crm-contract-product-refresh\"]",
+    "createButton": "[data-testid=\"crm-contract-product-create\"]",
+    "searchForm": "[data-testid=\"crm-contract-product-search\"]",
+    "searchSubmit": "[data-testid=\"crm-contract-product-search-submit\"]",
+    "searchReset": "[data-testid=\"crm-contract-product-search-reset\"]",
+    "total": "[data-testid=\"crm-contract-product-total\"]",
+    "table": "[data-testid=\"crm-contract-product-table\"]",
+    "row": "[data-testid=\"crm-contract-product-row\"]",
+    "editButton": "[data-testid=\"crm-contract-product-edit\"]",
+    "deleteButton": "[data-testid=\"crm-contract-product-delete\"]",
+    "form": "[data-testid=\"crm-contract-product-form\"]",
+    "formError": "[data-testid=\"crm-contract-product-form-error\"]",
+    "formSubmit": "[data-testid=\"crm-contract-product-form-submit\"]",
+    "formCancel": "[data-testid=\"crm-contract-product-form-cancel\"]",
+    "formClose": "[data-testid=\"crm-contract-product-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "CRM 合同产品关联表列表",
+    "dialogLabel": {
+      "create": "新增CRM 合同产品关联表",
+      "edit": "编辑CRM 合同产品关联表"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "contract_id",
+        "label": "合同编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-contract_id",
+        "selector": "[data-testid=\"field-contract_id\"]"
+      },
+      {
+        "name": "product_id",
+        "label": "产品编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-product_id",
+        "selector": "[data-testid=\"field-product_id\"]"
+      },
+      {
+        "name": "product_price",
+        "label": "产品单价，单位：元",
+        "type": "number",
+        "required": false,
+        "testId": "field-product_price",
+        "selector": "[data-testid=\"field-product_price\"]"
+      },
+      {
+        "name": "contract_price",
+        "label": "合同价格, 单位：元",
+        "type": "number",
+        "required": false,
+        "testId": "field-contract_price",
+        "selector": "[data-testid=\"field-contract_price\"]"
+      },
+      {
+        "name": "count",
+        "label": "数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-count",
+        "selector": "[data-testid=\"field-count\"]"
+      },
+      {
+        "name": "total_price",
+        "label": "总计价格，单位：元",
+        "type": "number",
+        "required": false,
+        "testId": "field-total_price",
+        "selector": "[data-testid=\"field-total_price\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "crm-contract-product",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"crm-contract-product\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"crm-contract-product-form-overlay\"]",
+      "dialog": "[data-testid=\"crm-contract-product-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "crm-contract-product:search",
+      "reset": "crm-contract-product:reset",
+      "refresh": "crm-contract-product:refresh",
+      "create": "crm-contract-product:create",
+      "edit": "crm-contract-product:edit",
+      "delete": "crm-contract-product:delete",
+      "submit": "crm-contract-product:submit",
+      "cancel": "crm-contract-product:cancel",
+      "close": "crm-contract-product:close",
+      "row": "crm-contract-product:row",
+      "pagination": "crm-contract-product:pagination",
+      "fields": {
+        "contract_id": "crm-contract-product:field:contract_id",
+        "product_id": "crm-contract-product:field:product_id",
+        "product_price": "crm-contract-product:field:product_price",
+        "contract_price": "crm-contract-product:field:contract_price",
+        "count": "crm-contract-product:field:count",
+        "total_price": "crm-contract-product:field:total_price"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "crm.crm-contract-product",
+      "examples": [
+        "crm.crm-contract-product__List__Refresh",
+        "crm.crm-contract-product__ListItem__Open",
+        "crm.crm-contract-product__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

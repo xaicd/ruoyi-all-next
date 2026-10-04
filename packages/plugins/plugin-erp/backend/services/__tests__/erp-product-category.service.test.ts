@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ErpProductCategoryService } from "../erp-product-category.service"
 
 describe("ErpProductCategoryService", () => {
-  it("should create and query ErpProductCategory（源框架导入）", async () => {
+  it("should create and query ERP 产品分类", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ErpProductCategoryService.create({
         parent_id: 1,
@@ -21,7 +21,7 @@ describe("ErpProductCategoryService", () => {
   
       const updated = await ErpProductCategoryService.update(created.id, {
         id: created.id,
-        parent_id: "更新ErpProductCategory（源框架导入）",
+        parent_id: "更新ERP 产品分类",
       } as any)
       expect(updated).toBeDefined()
   

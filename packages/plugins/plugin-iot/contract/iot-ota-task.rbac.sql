@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for IotOtaTask（源框架导入） (IotOtaTask)
+-- Auto-generated RBAC & Menu Migration for IoT OTA 升级任务 (IotOtaTask)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-iot-ota-task',
   'iot-dir',
-  'IotOtaTask（源框架导入）管理',
+  'IoT OTA 升级任务管理',
   '/admin/iot/iot-ota-task',
   'iot/iot-ota-task/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-iot-ota-task-query',  'menu-iot-ota-task', '查询IotOtaTask（源框架导入）', 'BUTTON', 'ACTIVE', 'iot:iot_ota_task:query',  1, NOW(), NOW()),
-('menu-iot-ota-task-create', 'menu-iot-ota-task', '新增IotOtaTask（源框架导入）', 'BUTTON', 'ACTIVE', 'iot:iot_ota_task:create', 2, NOW(), NOW()),
-('menu-iot-ota-task-update', 'menu-iot-ota-task', '修改IotOtaTask（源框架导入）', 'BUTTON', 'ACTIVE', 'iot:iot_ota_task:update', 3, NOW(), NOW()),
-('menu-iot-ota-task-delete', 'menu-iot-ota-task', '删除IotOtaTask（源框架导入）', 'BUTTON', 'ACTIVE', 'iot:iot_ota_task:delete', 4, NOW(), NOW())
+('menu-iot-ota-task-query',  'menu-iot-ota-task', '查询IoT OTA 升级任务', 'BUTTON', 'ACTIVE', 'iot:iot_ota_task:query',  1, NOW(), NOW()),
+('menu-iot-ota-task-create', 'menu-iot-ota-task', '新增IoT OTA 升级任务', 'BUTTON', 'ACTIVE', 'iot:iot_ota_task:create', 2, NOW(), NOW()),
+('menu-iot-ota-task-update', 'menu-iot-ota-task', '修改IoT OTA 升级任务', 'BUTTON', 'ACTIVE', 'iot:iot_ota_task:update', 3, NOW(), NOW()),
+('menu-iot-ota-task-delete', 'menu-iot-ota-task', '删除IoT OTA 升级任务', 'BUTTON', 'ACTIVE', 'iot:iot_ota_task:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

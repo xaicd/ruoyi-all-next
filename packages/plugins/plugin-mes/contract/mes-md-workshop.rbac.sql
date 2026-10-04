@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesMdWorkshop（源框架导入） (MesMdWorkshop)
+-- Auto-generated RBAC & Menu Migration for MES 车间 (MesMdWorkshop)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-md-workshop',
   'mes-dir',
-  'MesMdWorkshop（源框架导入）管理',
+  'MES 车间管理',
   '/admin/mes/mes-md-workshop',
   'mes/mes-md-workshop/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-md-workshop-query',  'menu-mes-md-workshop', '查询MesMdWorkshop（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_md_workshop:query',  1, NOW(), NOW()),
-('menu-mes-md-workshop-create', 'menu-mes-md-workshop', '新增MesMdWorkshop（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_md_workshop:create', 2, NOW(), NOW()),
-('menu-mes-md-workshop-update', 'menu-mes-md-workshop', '修改MesMdWorkshop（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_md_workshop:update', 3, NOW(), NOW()),
-('menu-mes-md-workshop-delete', 'menu-mes-md-workshop', '删除MesMdWorkshop（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_md_workshop:delete', 4, NOW(), NOW())
+('menu-mes-md-workshop-query',  'menu-mes-md-workshop', '查询MES 车间', 'BUTTON', 'ACTIVE', 'mes:mes_md_workshop:query',  1, NOW(), NOW()),
+('menu-mes-md-workshop-create', 'menu-mes-md-workshop', '新增MES 车间', 'BUTTON', 'ACTIVE', 'mes:mes_md_workshop:create', 2, NOW(), NOW()),
+('menu-mes-md-workshop-update', 'menu-mes-md-workshop', '修改MES 车间', 'BUTTON', 'ACTIVE', 'mes:mes_md_workshop:update', 3, NOW(), NOW()),
+('menu-mes-md-workshop-delete', 'menu-mes-md-workshop', '删除MES 车间', 'BUTTON', 'ACTIVE', 'mes:mes_md_workshop:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesCalPlan（源框架导入） (MesCalPlan)
+-- Auto-generated RBAC & Menu Migration for MES 排班计划 (MesCalPlan)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-cal-plan',
   'mes-dir',
-  'MesCalPlan（源框架导入）管理',
+  'MES 排班计划管理',
   '/admin/mes/mes-cal-plan',
   'mes/mes-cal-plan/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-cal-plan-query',  'menu-mes-cal-plan', '查询MesCalPlan（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_cal_plan:query',  1, NOW(), NOW()),
-('menu-mes-cal-plan-create', 'menu-mes-cal-plan', '新增MesCalPlan（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_cal_plan:create', 2, NOW(), NOW()),
-('menu-mes-cal-plan-update', 'menu-mes-cal-plan', '修改MesCalPlan（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_cal_plan:update', 3, NOW(), NOW()),
-('menu-mes-cal-plan-delete', 'menu-mes-cal-plan', '删除MesCalPlan（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_cal_plan:delete', 4, NOW(), NOW())
+('menu-mes-cal-plan-query',  'menu-mes-cal-plan', '查询MES 排班计划', 'BUTTON', 'ACTIVE', 'mes:mes_cal_plan:query',  1, NOW(), NOW()),
+('menu-mes-cal-plan-create', 'menu-mes-cal-plan', '新增MES 排班计划', 'BUTTON', 'ACTIVE', 'mes:mes_cal_plan:create', 2, NOW(), NOW()),
+('menu-mes-cal-plan-update', 'menu-mes-cal-plan', '修改MES 排班计划', 'BUTTON', 'ACTIVE', 'mes:mes_cal_plan:update', 3, NOW(), NOW()),
+('menu-mes-cal-plan-delete', 'menu-mes-cal-plan', '删除MES 排班计划', 'BUTTON', 'ACTIVE', 'mes:mes_cal_plan:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

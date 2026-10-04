@@ -66,24 +66,36 @@ export function BrokerageWithdrawForm({ open, initialData, onClose, onSuccess }:
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="brokerage-withdraw-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑佣金提现" : "新增佣金提现"}
+        data-testid="brokerage-withdraw-form"
+        data-agent-scope="brokerage-withdraw:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑BrokerageWithdraw（源框架导入）" : "新增BrokerageWithdraw（源框架导入）"}
+            {isEdit ? "编辑佣金提现" : "新增佣金提现"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="brokerage-withdraw-form-close" data-agent-target="brokerage-withdraw:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="brokerage-withdraw-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="brokerage-withdraw-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="brokerage-withdraw-user_id"
+            data-testid="field-user_id"
+            data-agent-target="brokerage-withdraw:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -93,9 +105,14 @@ export function BrokerageWithdrawForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">提现金额，单位：分</label>
+          <label htmlFor="brokerage-withdraw-price" className="block text-xs text-slate-600 mb-1">提现金额，单位：分</label>
           <input
             type="number"
+            id="brokerage-withdraw-price"
+            data-testid="field-price"
+            data-agent-target="brokerage-withdraw:field:price"
+            data-agent-state={formData.price == null || formData.price === "" ? "empty" : "filled"}
+            aria-label="提现金额，单位：分"
             value={formData.price != null ? String(formData.price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -105,9 +122,14 @@ export function BrokerageWithdrawForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">提现手续费，单位：分</label>
+          <label htmlFor="brokerage-withdraw-fee_price" className="block text-xs text-slate-600 mb-1">提现手续费，单位：分</label>
           <input
             type="number"
+            id="brokerage-withdraw-fee_price"
+            data-testid="field-fee_price"
+            data-agent-target="brokerage-withdraw:field:fee_price"
+            data-agent-state={formData.fee_price == null || formData.fee_price === "" ? "empty" : "filled"}
+            aria-label="提现手续费，单位：分"
             value={formData.fee_price != null ? String(formData.fee_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, fee_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -117,9 +139,14 @@ export function BrokerageWithdrawForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">当前总佣金，单位：分</label>
+          <label htmlFor="brokerage-withdraw-total_price" className="block text-xs text-slate-600 mb-1">当前总佣金，单位：分</label>
           <input
             type="number"
+            id="brokerage-withdraw-total_price"
+            data-testid="field-total_price"
+            data-agent-target="brokerage-withdraw:field:total_price"
+            data-agent-state={formData.total_price == null || formData.total_price === "" ? "empty" : "filled"}
+            aria-label="当前总佣金，单位：分"
             value={formData.total_price != null ? String(formData.total_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, total_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -129,9 +156,14 @@ export function BrokerageWithdrawForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">提现类型</label>
+          <label htmlFor="brokerage-withdraw-type" className="block text-xs text-slate-600 mb-1">提现类型</label>
           <input
             type="number"
+            id="brokerage-withdraw-type"
+            data-testid="field-type"
+            data-agent-target="brokerage-withdraw:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="提现类型"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -141,9 +173,14 @@ export function BrokerageWithdrawForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">提现姓名</label>
+          <label htmlFor="brokerage-withdraw-user_name" className="block text-xs text-slate-600 mb-1">提现姓名</label>
           <input
             type="text"
+            id="brokerage-withdraw-user_name"
+            data-testid="field-user_name"
+            data-agent-target="brokerage-withdraw:field:user_name"
+            data-agent-state={formData.user_name ? "filled" : "empty"}
+            aria-label="提现姓名"
             value={formData.user_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -153,9 +190,14 @@ export function BrokerageWithdrawForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">提现账号</label>
+          <label htmlFor="brokerage-withdraw-user_account" className="block text-xs text-slate-600 mb-1">提现账号</label>
           <input
             type="text"
+            id="brokerage-withdraw-user_account"
+            data-testid="field-user_account"
+            data-agent-target="brokerage-withdraw:field:user_account"
+            data-agent-state={formData.user_account ? "filled" : "empty"}
+            aria-label="提现账号"
             value={formData.user_account ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_account: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -165,9 +207,14 @@ export function BrokerageWithdrawForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">收款码</label>
+          <label htmlFor="brokerage-withdraw-qr_code_url" className="block text-xs text-slate-600 mb-1">收款码</label>
           <input
             type="text"
+            id="brokerage-withdraw-qr_code_url"
+            data-testid="field-qr_code_url"
+            data-agent-target="brokerage-withdraw:field:qr_code_url"
+            data-agent-state={formData.qr_code_url ? "filled" : "empty"}
+            aria-label="收款码"
             value={formData.qr_code_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, qr_code_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -177,9 +224,14 @@ export function BrokerageWithdrawForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">银行名称</label>
+          <label htmlFor="brokerage-withdraw-bank_name" className="block text-xs text-slate-600 mb-1">银行名称</label>
           <input
             type="text"
+            id="brokerage-withdraw-bank_name"
+            data-testid="field-bank_name"
+            data-agent-target="brokerage-withdraw:field:bank_name"
+            data-agent-state={formData.bank_name ? "filled" : "empty"}
+            aria-label="银行名称"
             value={formData.bank_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, bank_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -189,9 +241,14 @@ export function BrokerageWithdrawForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">开户地址</label>
+          <label htmlFor="brokerage-withdraw-bank_address" className="block text-xs text-slate-600 mb-1">开户地址</label>
           <input
             type="text"
+            id="brokerage-withdraw-bank_address"
+            data-testid="field-bank_address"
+            data-agent-target="brokerage-withdraw:field:bank_address"
+            data-agent-state={formData.bank_address ? "filled" : "empty"}
+            aria-label="开户地址"
             value={formData.bank_address ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, bank_address: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -201,9 +258,14 @@ export function BrokerageWithdrawForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="brokerage-withdraw-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="brokerage-withdraw-status"
+            data-testid="field-status"
+            data-agent-target="brokerage-withdraw:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -213,9 +275,14 @@ export function BrokerageWithdrawForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">审核驳回原因</label>
+          <label htmlFor="brokerage-withdraw-audit_reason" className="block text-xs text-slate-600 mb-1">审核驳回原因</label>
           <input
             type="text"
+            id="brokerage-withdraw-audit_reason"
+            data-testid="field-audit_reason"
+            data-agent-target="brokerage-withdraw:field:audit_reason"
+            data-agent-state={formData.audit_reason ? "filled" : "empty"}
+            aria-label="审核驳回原因"
             value={formData.audit_reason ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, audit_reason: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -225,9 +292,14 @@ export function BrokerageWithdrawForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">审核时间</label>
+          <label htmlFor="brokerage-withdraw-audit_time" className="block text-xs text-slate-600 mb-1">审核时间</label>
           <input
             type="text"
+            id="brokerage-withdraw-audit_time"
+            data-testid="field-audit_time"
+            data-agent-target="brokerage-withdraw:field:audit_time"
+            data-agent-state={formData.audit_time ? "filled" : "empty"}
+            aria-label="审核时间"
             value={formData.audit_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, audit_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -237,9 +309,14 @@ export function BrokerageWithdrawForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="brokerage-withdraw-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="brokerage-withdraw-remark"
+            data-testid="field-remark"
+            data-agent-target="brokerage-withdraw:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -249,9 +326,14 @@ export function BrokerageWithdrawForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">转账单编号</label>
+          <label htmlFor="brokerage-withdraw-pay_transfer_id" className="block text-xs text-slate-600 mb-1">转账单编号</label>
           <input
             type="number"
+            id="brokerage-withdraw-pay_transfer_id"
+            data-testid="field-pay_transfer_id"
+            data-agent-target="brokerage-withdraw:field:pay_transfer_id"
+            data-agent-state={formData.pay_transfer_id == null || formData.pay_transfer_id === "" ? "empty" : "filled"}
+            aria-label="转账单编号"
             value={formData.pay_transfer_id != null ? String(formData.pay_transfer_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pay_transfer_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -261,9 +343,14 @@ export function BrokerageWithdrawForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">转账渠道</label>
+          <label htmlFor="brokerage-withdraw-transfer_channel_code" className="block text-xs text-slate-600 mb-1">转账渠道</label>
           <input
             type="text"
+            id="brokerage-withdraw-transfer_channel_code"
+            data-testid="field-transfer_channel_code"
+            data-agent-target="brokerage-withdraw:field:transfer_channel_code"
+            data-agent-state={formData.transfer_channel_code ? "filled" : "empty"}
+            aria-label="转账渠道"
             value={formData.transfer_channel_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, transfer_channel_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -273,9 +360,14 @@ export function BrokerageWithdrawForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">转账成功时间</label>
+          <label htmlFor="brokerage-withdraw-transfer_time" className="block text-xs text-slate-600 mb-1">转账成功时间</label>
           <input
             type="text"
+            id="brokerage-withdraw-transfer_time"
+            data-testid="field-transfer_time"
+            data-agent-target="brokerage-withdraw:field:transfer_time"
+            data-agent-state={formData.transfer_time ? "filled" : "empty"}
+            aria-label="转账成功时间"
             value={formData.transfer_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, transfer_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -285,9 +377,14 @@ export function BrokerageWithdrawForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">转账错误提示</label>
+          <label htmlFor="brokerage-withdraw-transfer_error_msg" className="block text-xs text-slate-600 mb-1">转账错误提示</label>
           <input
             type="text"
+            id="brokerage-withdraw-transfer_error_msg"
+            data-testid="field-transfer_error_msg"
+            data-agent-target="brokerage-withdraw:field:transfer_error_msg"
+            data-agent-state={formData.transfer_error_msg ? "filled" : "empty"}
+            aria-label="转账错误提示"
             value={formData.transfer_error_msg ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, transfer_error_msg: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -301,6 +398,8 @@ export function BrokerageWithdrawForm({ open, initialData, onClose, onSuccess }:
             <button
               type="button"
               onClick={onClose}
+              data-testid="brokerage-withdraw-form-cancel"
+              data-agent-target="brokerage-withdraw:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -308,6 +407,9 @@ export function BrokerageWithdrawForm({ open, initialData, onClose, onSuccess }:
             <button
               type="submit"
               disabled={loading}
+              data-testid="brokerage-withdraw-form-submit"
+              data-agent-target="brokerage-withdraw:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

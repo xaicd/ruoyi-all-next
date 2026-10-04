@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MpMaterialService } from "../mp-material.service"
 
 describe("MpMaterialService", () => {
-  it("should create and query MpMaterial（源框架导入）", async () => {
+  it("should create and query 公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MpMaterialService.create({
         account_id: 1,
@@ -21,7 +21,7 @@ describe("MpMaterialService", () => {
   
       const updated = await MpMaterialService.update(created.id, {
         id: created.id,
-        account_id: "更新MpMaterial（源框架导入）",
+        account_id: "更新公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_",
       } as any)
       expect(updated).toBeDefined()
   

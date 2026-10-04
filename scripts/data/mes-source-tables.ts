@@ -6,12 +6,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesCalHoliday",
-    businessName: "MesCalHoliday（源框架导入）",
+    businessName: "MES 假期设置",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_cal_holiday",
     table: {
       name: "mes_cal_holiday",
-      comment: "MesCalHoliday（源框架导入）",
+      comment: "MES 假期设置",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"day","type":"timestamp","tsType":"string","nullable":true,"comment":"日期","nullableInferred":true},
@@ -29,12 +29,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesCalPlan",
-    businessName: "MesCalPlan（源框架导入）",
+    businessName: "MES 排班计划",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_cal_plan",
     table: {
       name: "mes_cal_plan",
-      comment: "MesCalPlan（源框架导入）",
+      comment: "MES 排班计划",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"计划编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"计划编码","nullableInferred":true},
@@ -59,12 +59,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesCalPlanShift",
-    businessName: "MesCalPlanShift（源框架导入）",
+    businessName: "MES 计划班次",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_cal_plan_shift",
     table: {
       name: "mes_cal_plan_shift",
-      comment: "MesCalPlanShift（源框架导入）",
+      comment: "MES 计划班次",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"班次编号","isPk":true,"nullableInferred":true},
         {"name":"plan_id","type":"bigint","tsType":"number","nullable":true,"comment":"排班计划编号","nullableInferred":true},
@@ -85,12 +85,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesCalPlanTeam",
-    businessName: "MesCalPlanTeam（源框架导入）",
+    businessName: "MES 计划班组关联",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_cal_plan_team",
     table: {
       name: "mes_cal_plan_team",
-      comment: "MesCalPlanTeam（源框架导入）",
+      comment: "MES 计划班组关联",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"plan_id","type":"bigint","tsType":"number","nullable":true,"comment":"排班计划编号","nullableInferred":true},
@@ -108,12 +108,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesCalTeam",
-    businessName: "MesCalTeam（源框架导入）",
+    businessName: "MES 班组",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_cal_team",
     table: {
       name: "mes_cal_team",
-      comment: "MesCalTeam（源框架导入）",
+      comment: "MES 班组",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"班组编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"班组编码","nullableInferred":true},
@@ -132,12 +132,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesCalTeamMember",
-    businessName: "MesCalTeamMember（源框架导入）",
+    businessName: "MES 班组成员",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_cal_team_member",
     table: {
       name: "mes_cal_team_member",
-      comment: "MesCalTeamMember（源框架导入）",
+      comment: "MES 班组成员",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"班组成员编号","isPk":true,"nullableInferred":true},
         {"name":"team_id","type":"bigint","tsType":"number","nullable":true,"comment":"班组编号","nullableInferred":true},
@@ -155,12 +155,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesCalTeamShift",
-    businessName: "MesCalTeamShift（源框架导入）",
+    businessName: "MES 班组排班",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_cal_team_shift",
     table: {
       name: "mes_cal_team_shift",
-      comment: "MesCalTeamShift（源框架导入）",
+      comment: "MES 班组排班",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"plan_id","type":"bigint","tsType":"number","nullable":true,"comment":"排班计划编号","nullableInferred":true},
@@ -181,12 +181,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesDvCheckPlan",
-    businessName: "MesDvCheckPlan（源框架导入）",
+    businessName: "MES 点检保养方案",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_dv_check_plan",
     table: {
       name: "mes_dv_check_plan",
-      comment: "MesDvCheckPlan（源框架导入）",
+      comment: "MES 点检保养方案",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"方案编码","nullableInferred":true},
@@ -210,12 +210,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesDvCheckPlanMachinery",
-    businessName: "MesDvCheckPlanMachinery（源框架导入）",
+    businessName: "MES 点检保养方案设备",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_dv_check_plan_machinery",
     table: {
       name: "mes_dv_check_plan_machinery",
-      comment: "MesDvCheckPlanMachinery（源框架导入）",
+      comment: "MES 点检保养方案设备",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"plan_id","type":"bigint","tsType":"number","nullable":true,"comment":"方案编号","nullableInferred":true},
@@ -233,12 +233,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesDvCheckPlanSubject",
-    businessName: "MesDvCheckPlanSubject（源框架导入）",
+    businessName: "MES 点检保养方案项目",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_dv_check_plan_subject",
     table: {
       name: "mes_dv_check_plan_subject",
-      comment: "MesDvCheckPlanSubject（源框架导入）",
+      comment: "MES 点检保养方案项目",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"plan_id","type":"bigint","tsType":"number","nullable":true,"comment":"方案编号","nullableInferred":true},
@@ -256,12 +256,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesDvCheckRecord",
-    businessName: "MesDvCheckRecord（源框架导入）",
+    businessName: "MES 设备点检记录",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_dv_check_record",
     table: {
       name: "mes_dv_check_record",
-      comment: "MesDvCheckRecord（源框架导入）",
+      comment: "MES 设备点检记录",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"plan_id","type":"bigint","tsType":"number","nullable":true,"comment":"点检计划编号","nullableInferred":true},
@@ -282,12 +282,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesDvCheckRecordLine",
-    businessName: "MesDvCheckRecordLine（源框架导入）",
+    businessName: "MES 设备点检记录明细",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_dv_check_record_line",
     table: {
       name: "mes_dv_check_record_line",
-      comment: "MesDvCheckRecordLine（源框架导入）",
+      comment: "MES 设备点检记录明细",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"record_id","type":"bigint","tsType":"number","nullable":true,"comment":"点检记录编号","nullableInferred":true},
@@ -307,12 +307,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesDvMachinery",
-    businessName: "MesDvMachinery（源框架导入）",
+    businessName: "MES 设备台账",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_dv_machinery",
     table: {
       name: "mes_dv_machinery",
-      comment: "MesDvMachinery（源框架导入）",
+      comment: "MES 设备台账",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"设备编码","nullableInferred":true},
@@ -337,12 +337,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesDvMachineryType",
-    businessName: "MesDvMachineryType（源框架导入）",
+    businessName: "MES 设备类型",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_dv_machinery_type",
     table: {
       name: "mes_dv_machinery_type",
-      comment: "MesDvMachineryType（源框架导入）",
+      comment: "MES 设备类型",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"类型编码","nullableInferred":true},
@@ -363,12 +363,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesDvMaintenRecord",
-    businessName: "MesDvMaintenRecord（源框架导入）",
+    businessName: "MES 设备保养记录",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_dv_mainten_record",
     table: {
       name: "mes_dv_mainten_record",
-      comment: "MesDvMaintenRecord（源框架导入）",
+      comment: "MES 设备保养记录",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"plan_id","type":"bigint","tsType":"number","nullable":true,"comment":"计划编号","nullableInferred":true},
@@ -389,12 +389,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesDvMaintenRecordLine",
-    businessName: "MesDvMaintenRecordLine（源框架导入）",
+    businessName: "MES 设备保养记录明细",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_dv_mainten_record_line",
     table: {
       name: "mes_dv_mainten_record_line",
-      comment: "MesDvMaintenRecordLine（源框架导入）",
+      comment: "MES 设备保养记录明细",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"record_id","type":"bigint","tsType":"number","nullable":true,"comment":"保养记录编号","nullableInferred":true},
@@ -414,12 +414,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesDvRepair",
-    businessName: "MesDvRepair（源框架导入）",
+    businessName: "MES 维修工单",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_dv_repair",
     table: {
       name: "mes_dv_repair",
-      comment: "MesDvRepair（源框架导入）",
+      comment: "MES 维修工单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"维修工单编码","nullableInferred":true},
@@ -448,12 +448,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesDvRepairLine",
-    businessName: "MesDvRepairLine（源框架导入）",
+    businessName: "MES 维修工单行",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_dv_repair_line",
     table: {
       name: "mes_dv_repair_line",
-      comment: "MesDvRepairLine（源框架导入）",
+      comment: "MES 维修工单行",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"repair_id","type":"bigint","tsType":"number","nullable":true,"comment":"维修工单编号","nullableInferred":true},
@@ -474,12 +474,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesDvSubject",
-    businessName: "MesDvSubject（源框架导入）",
+    businessName: "MES 点检保养项目",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_dv_subject",
     table: {
       name: "mes_dv_subject",
-      comment: "MesDvSubject（源框架导入）",
+      comment: "MES 点检保养项目",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"项目编码","nullableInferred":true},
@@ -501,12 +501,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesMdAutoCodePart",
-    businessName: "MesMdAutoCodePart（源框架导入）",
+    businessName: "MES 编码规则组成",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_md_auto_code_part",
     table: {
       name: "mes_md_auto_code_part",
-      comment: "MesMdAutoCodePart（源框架导入）",
+      comment: "MES 编码规则组成",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"分段 ID","isPk":true,"nullableInferred":true},
         {"name":"rule_id","type":"bigint","tsType":"number","nullable":true,"comment":"规则 ID","nullableInferred":true},
@@ -532,12 +532,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesMdAutoCodeRecord",
-    businessName: "MesMdAutoCodeRecord（源框架导入）",
+    businessName: "MES 编码生成记录",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_md_auto_code_record",
     table: {
       name: "mes_md_auto_code_record",
-      comment: "MesMdAutoCodeRecord（源框架导入）",
+      comment: "MES 编码生成记录",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"记录 ID","isPk":true,"nullableInferred":true},
         {"name":"rule_id","type":"bigint","tsType":"number","nullable":true,"comment":"规则 ID","nullableInferred":true},
@@ -556,12 +556,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesMdAutoCodeRule",
-    businessName: "MesMdAutoCodeRule（源框架导入）",
+    businessName: "MES 编码规则",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_md_auto_code_rule",
     table: {
       name: "mes_md_auto_code_rule",
-      comment: "MesMdAutoCodeRule（源框架导入）",
+      comment: "MES 编码规则",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"规则 ID","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"规则编码","nullableInferred":true},
@@ -585,12 +585,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesMdClient",
-    businessName: "MesMdClient（源框架导入）",
+    businessName: "MES 客户",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_md_client",
     table: {
       name: "mes_md_client",
-      comment: "MesMdClient（源框架导入）",
+      comment: "MES 客户",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"客户编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"客户编码","nullableInferred":true},
@@ -625,12 +625,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesMdItem",
-    businessName: "MesMdItem（源框架导入）",
+    businessName: "MES 物料产品",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_md_item",
     table: {
       name: "mes_md_item",
-      comment: "MesMdItem（源框架导入）",
+      comment: "MES 物料产品",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"物料编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"物料编码","nullableInferred":true},
@@ -657,12 +657,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesMdItemBatchConfig",
-    businessName: "MesMdItemBatchConfig（源框架导入）",
+    businessName: "MES 物料批次属性配置",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_md_item_batch_config",
     table: {
       name: "mes_md_item_batch_config",
-      comment: "MesMdItemBatchConfig（源框架导入）",
+      comment: "MES 物料批次属性配置",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"item_id","type":"bigint","tsType":"number","nullable":true,"comment":"物料编号","nullableInferred":true},
@@ -692,12 +692,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesMdItemType",
-    businessName: "MesMdItemType（源框架导入）",
+    businessName: "MES 物料产品分类",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_md_item_type",
     table: {
       name: "mes_md_item_type",
-      comment: "MesMdItemType（源框架导入）",
+      comment: "MES 物料产品分类",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"分类编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"分类编码","nullableInferred":true},
@@ -719,12 +719,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesMdProductBom",
-    businessName: "MesMdProductBom（源框架导入）",
+    businessName: "MES 产品 BOM",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_md_product_bom",
     table: {
       name: "mes_md_product_bom",
-      comment: "MesMdProductBom（源框架导入）",
+      comment: "MES 产品 BOM",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"BOM编号","isPk":true,"nullableInferred":true},
         {"name":"item_id","type":"bigint","tsType":"number","nullable":true,"comment":"物料产品编号","nullableInferred":true},
@@ -744,12 +744,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesMdProductSip",
-    businessName: "MesMdProductSip（源框架导入）",
+    businessName: "MES 产品SIP",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_md_product_sip",
     table: {
       name: "mes_md_product_sip",
-      comment: "MesMdProductSip（源框架导入）",
+      comment: "MES 产品SIP",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"item_id","type":"bigint","tsType":"number","nullable":true,"comment":"物料产品编号","nullableInferred":true},
@@ -771,12 +771,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesMdProductSop",
-    businessName: "MesMdProductSop（源框架导入）",
+    businessName: "MES 产品SOP",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_md_product_sop",
     table: {
       name: "mes_md_product_sop",
-      comment: "MesMdProductSop（源框架导入）",
+      comment: "MES 产品SOP",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"item_id","type":"bigint","tsType":"number","nullable":true,"comment":"物料产品编号","nullableInferred":true},
@@ -798,12 +798,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesMdUnitMeasure",
-    businessName: "MesMdUnitMeasure（源框架导入）",
+    businessName: "MES 计量单位",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_md_unit_measure",
     table: {
       name: "mes_md_unit_measure",
-      comment: "MesMdUnitMeasure（源框架导入）",
+      comment: "MES 计量单位",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"单位编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"单位编码","nullableInferred":true},
@@ -825,12 +825,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesMdVendor",
-    businessName: "MesMdVendor（源框架导入）",
+    businessName: "MES 供应商",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_md_vendor",
     table: {
       name: "mes_md_vendor",
-      comment: "MesMdVendor（源框架导入）",
+      comment: "MES 供应商",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"供应商编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"供应商编码","nullableInferred":true},
@@ -866,12 +866,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesMdWorkshop",
-    businessName: "MesMdWorkshop（源框架导入）",
+    businessName: "MES 车间",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_md_workshop",
     table: {
       name: "mes_md_workshop",
-      comment: "MesMdWorkshop（源框架导入）",
+      comment: "MES 车间",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"车间编码","nullableInferred":true},
@@ -892,12 +892,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesMdWorkstation",
-    businessName: "MesMdWorkstation（源框架导入）",
+    businessName: "MES 工作站",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_md_workstation",
     table: {
       name: "mes_md_workstation",
-      comment: "MesMdWorkstation（源框架导入）",
+      comment: "MES 工作站",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"工作站编码","nullableInferred":true},
@@ -922,12 +922,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesMdWorkstationMachine",
-    businessName: "MesMdWorkstationMachine（源框架导入）",
+    businessName: "MES 设备资源",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_md_workstation_machine",
     table: {
       name: "mes_md_workstation_machine",
-      comment: "MesMdWorkstationMachine（源框架导入）",
+      comment: "MES 设备资源",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"workstation_id","type":"bigint","tsType":"number","nullable":true,"comment":"工作站编号","nullableInferred":true},
@@ -946,12 +946,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesMdWorkstationTool",
-    businessName: "MesMdWorkstationTool（源框架导入）",
+    businessName: "MES 工装夹具资源",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_md_workstation_tool",
     table: {
       name: "mes_md_workstation_tool",
-      comment: "MesMdWorkstationTool（源框架导入）",
+      comment: "MES 工装夹具资源",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"workstation_id","type":"bigint","tsType":"number","nullable":true,"comment":"工作站编号","nullableInferred":true},
@@ -970,12 +970,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesMdWorkstationWorker",
-    businessName: "MesMdWorkstationWorker（源框架导入）",
+    businessName: "MES 人力资源",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_md_workstation_worker",
     table: {
       name: "mes_md_workstation_worker",
-      comment: "MesMdWorkstationWorker（源框架导入）",
+      comment: "MES 人力资源",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"workstation_id","type":"bigint","tsType":"number","nullable":true,"comment":"工作站编号","nullableInferred":true},
@@ -994,12 +994,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesProAndonConfig",
-    businessName: "MesProAndonConfig（源框架导入）",
+    businessName: "MES 安灯呼叫配置",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_pro_andon_config",
     table: {
       name: "mes_pro_andon_config",
-      comment: "MesProAndonConfig（源框架导入）",
+      comment: "MES 安灯呼叫配置",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"reason","type":"varchar","tsType":"string","nullable":true,"comment":"呼叫原因","nullableInferred":true},
@@ -1019,12 +1019,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesProAndonRecord",
-    businessName: "MesProAndonRecord（源框架导入）",
+    businessName: "MES 安灯呼叫记录",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_pro_andon_record",
     table: {
       name: "mes_pro_andon_record",
-      comment: "MesProAndonRecord（源框架导入）",
+      comment: "MES 安灯呼叫记录",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"config_id","type":"bigint","tsType":"number","nullable":true,"comment":"安灯配置编号","nullableInferred":true},
@@ -1050,12 +1050,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesProCard",
-    businessName: "MesProCard（源框架导入）",
+    businessName: "MES 生产流转卡",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_pro_card",
     table: {
       name: "mes_pro_card",
-      comment: "MesProCard（源框架导入）",
+      comment: "MES 生产流转卡",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"流转卡编码","nullableInferred":true},
@@ -1077,12 +1077,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesProCardProcess",
-    businessName: "MesProCardProcess（源框架导入）",
+    businessName: "MES 流转卡工序记录",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_pro_card_process",
     table: {
       name: "mes_pro_card_process",
-      comment: "MesProCardProcess（源框架导入）",
+      comment: "MES 流转卡工序记录",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"card_id","type":"bigint","tsType":"number","nullable":true,"comment":"流转卡编号","nullableInferred":true},
@@ -1109,12 +1109,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesProFeedback",
-    businessName: "MesProFeedback（源框架导入）",
+    businessName: "MES 生产报工",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_pro_feedback",
     table: {
       name: "mes_pro_feedback",
-      comment: "MesProFeedback（源框架导入）",
+      comment: "MES 生产报工",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"报工单编号","nullableInferred":true},
@@ -1153,12 +1153,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesProProcess",
-    businessName: "MesProProcess（源框架导入）",
+    businessName: "MES 生产工序",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_pro_process",
     table: {
       name: "mes_pro_process",
-      comment: "MesProProcess（源框架导入）",
+      comment: "MES 生产工序",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"工序编码","nullableInferred":true},
@@ -1178,12 +1178,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesProProcessContent",
-    businessName: "MesProProcessContent（源框架导入）",
+    businessName: "MES 生产工序内容",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_pro_process_content",
     table: {
       name: "mes_pro_process_content",
-      comment: "MesProProcessContent（源框架导入）",
+      comment: "MES 生产工序内容",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"process_id","type":"bigint","tsType":"number","nullable":true,"comment":"工序编号","nullableInferred":true},
@@ -1205,12 +1205,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesProRoute",
-    businessName: "MesProRoute（源框架导入）",
+    businessName: "MES 工艺路线",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_pro_route",
     table: {
       name: "mes_pro_route",
-      comment: "MesProRoute（源框架导入）",
+      comment: "MES 工艺路线",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"工艺路线编码","nullableInferred":true},
@@ -1230,12 +1230,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesProRouteProcess",
-    businessName: "MesProRouteProcess（源框架导入）",
+    businessName: "MES 工艺路线工序",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_pro_route_process",
     table: {
       name: "mes_pro_route_process",
-      comment: "MesProRouteProcess（源框架导入）",
+      comment: "MES 工艺路线工序",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"route_id","type":"bigint","tsType":"number","nullable":true,"comment":"工艺路线编号","nullableInferred":true},
@@ -1261,12 +1261,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesProRouteProduct",
-    businessName: "MesProRouteProduct（源框架导入）",
+    businessName: "MES 工艺路线产品",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_pro_route_product",
     table: {
       name: "mes_pro_route_product",
-      comment: "MesProRouteProduct（源框架导入）",
+      comment: "MES 工艺路线产品",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"route_id","type":"bigint","tsType":"number","nullable":true,"comment":"工艺路线编号","nullableInferred":true},
@@ -1287,12 +1287,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesProRouteProductBom",
-    businessName: "MesProRouteProductBom（源框架导入）",
+    businessName: "MES 工艺路线产品 BOM",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_pro_route_product_bom",
     table: {
       name: "mes_pro_route_product_bom",
-      comment: "MesProRouteProductBom（源框架导入）",
+      comment: "MES 工艺路线产品 BOM",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"route_id","type":"bigint","tsType":"number","nullable":true,"comment":"工艺路线编号","nullableInferred":true},
@@ -1313,12 +1313,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesProTask",
-    businessName: "MesProTask（源框架导入）",
+    businessName: "MES 生产任务",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_pro_task",
     table: {
       name: "mes_pro_task",
-      comment: "MesProTask（源框架导入）",
+      comment: "MES 生产任务",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"任务编码","nullableInferred":true},
@@ -1354,12 +1354,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesProTaskIssue",
-    businessName: "MesProTaskIssue（源框架导入）",
+    businessName: "MES 生产任务投料",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_pro_task_issue",
     table: {
       name: "mes_pro_task_issue",
-      comment: "MesProTaskIssue（源框架导入）",
+      comment: "MES 生产任务投料",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"task_id","type":"bigint","tsType":"number","nullable":true,"comment":"生产任务编号","nullableInferred":true},
@@ -1388,12 +1388,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesProWorkOrder",
-    businessName: "MesProWorkOrder（源框架导入）",
+    businessName: "MES 生产工单",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_pro_work_order",
     table: {
       name: "mes_pro_work_order",
-      comment: "MesProWorkOrder（源框架导入）",
+      comment: "MES 生产工单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"工单编码","nullableInferred":true},
@@ -1427,12 +1427,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesProWorkOrderBom",
-    businessName: "MesProWorkOrderBom（源框架导入）",
+    businessName: "MES 生产工单 BOM",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_pro_work_order_bom",
     table: {
       name: "mes_pro_work_order_bom",
-      comment: "MesProWorkOrderBom（源框架导入）",
+      comment: "MES 生产工单 BOM",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"work_order_id","type":"bigint","tsType":"number","nullable":true,"comment":"生产工单编号","nullableInferred":true},
@@ -1451,12 +1451,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesProWorkRecord",
-    businessName: "MesProWorkRecord（源框架导入）",
+    businessName: "MES 用户工作站绑定关系（当前快照）",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_pro_work_record",
     table: {
       name: "mes_pro_work_record",
-      comment: "MesProWorkRecord（源框架导入）",
+      comment: "MES 用户工作站绑定关系（当前快照）",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},
@@ -1477,12 +1477,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesProWorkRecordLog",
-    businessName: "MesProWorkRecordLog（源框架导入）",
+    businessName: "MES 上下工记录流水",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_pro_work_record_log",
     table: {
       name: "mes_pro_work_record_log",
-      comment: "MesProWorkRecordLog（源框架导入）",
+      comment: "MES 上下工记录流水",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},
@@ -1501,12 +1501,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesQcDefect",
-    businessName: "MesQcDefect（源框架导入）",
+    businessName: "MES 缺陷类型",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_qc_defect",
     table: {
       name: "mes_qc_defect",
-      comment: "MesQcDefect（源框架导入）",
+      comment: "MES 缺陷类型",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"缺陷编码","nullableInferred":true},
@@ -1526,12 +1526,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesQcDefectRecord",
-    businessName: "MesQcDefectRecord（源框架导入）",
+    businessName: "MES 质检缺陷记录 DO通用缺陷记录表，通过 区分检验类型（IQC、IPQC、OQC、RQC），多模块复用",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_qc_defect_record",
     table: {
       name: "mes_qc_defect_record",
-      comment: "MesQcDefectRecord（源框架导入）",
+      comment: "MES 质检缺陷记录 DO通用缺陷记录表，通过 区分检验类型（IQC、IPQC、OQC、RQC），多模块复用",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"qc_type","type":"int","tsType":"number","nullable":true,"comment":"检验类型","nullableInferred":true},
@@ -1553,12 +1553,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesQcIndicator",
-    businessName: "MesQcIndicator（源框架导入）",
+    businessName: "MES 质检指标",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_qc_indicator",
     table: {
       name: "mes_qc_indicator",
-      comment: "MesQcIndicator（源框架导入）",
+      comment: "MES 质检指标",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"检测项编码","nullableInferred":true},
@@ -1580,12 +1580,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesQcIndicatorResult",
-    businessName: "MesQcIndicatorResult（源框架导入）",
+    businessName: "MES 检验结果记录",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_qc_indicator_result",
     table: {
       name: "mes_qc_indicator_result",
-      comment: "MesQcIndicatorResult（源框架导入）",
+      comment: "MES 检验结果记录",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"样品编号","nullableInferred":true},
@@ -1606,12 +1606,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesQcIndicatorResultDetail",
-    businessName: "MesQcIndicatorResultDetail（源框架导入）",
+    businessName: "MES 检验结果明细记录",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_qc_indicator_result_detail",
     table: {
       name: "mes_qc_indicator_result_detail",
-      comment: "MesQcIndicatorResultDetail（源框架导入）",
+      comment: "MES 检验结果明细记录",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"result_id","type":"bigint","tsType":"number","nullable":true,"comment":"关联检验结果 ID","nullableInferred":true},
@@ -1630,12 +1630,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesQcIpqc",
-    businessName: "MesQcIpqc（源框架导入）",
+    businessName: "MES 过程检验单（IPQC, In-Process Quality Control）",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_qc_ipqc",
     table: {
       name: "mes_qc_ipqc",
-      comment: "MesQcIpqc（源框架导入）",
+      comment: "MES 过程检验单（IPQC, In-Process Quality Control）",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"检验单编号","nullableInferred":true},
@@ -1680,12 +1680,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesQcIpqcLine",
-    businessName: "MesQcIpqcLine（源框架导入）",
+    businessName: "MES 过程检验单行",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_qc_ipqc_line",
     table: {
       name: "mes_qc_ipqc_line",
-      comment: "MesQcIpqcLine（源框架导入）",
+      comment: "MES 过程检验单行",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"ipqc_id","type":"bigint","tsType":"number","nullable":true,"comment":"过程检验单 ID","nullableInferred":true},
@@ -1712,12 +1712,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesQcIqc",
-    businessName: "MesQcIqc（源框架导入）",
+    businessName: "MES 来料检验单（IQC, Incoming Quality Control）",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_qc_iqc",
     table: {
       name: "mes_qc_iqc",
-      comment: "MesQcIqc（源框架导入）",
+      comment: "MES 来料检验单（IQC, Incoming Quality Control）",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"检验单编号","nullableInferred":true},
@@ -1758,12 +1758,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesQcIqcLine",
-    businessName: "MesQcIqcLine（源框架导入）",
+    businessName: "MES 来料检验单行",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_qc_iqc_line",
     table: {
       name: "mes_qc_iqc_line",
-      comment: "MesQcIqcLine（源框架导入）",
+      comment: "MES 来料检验单行",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"iqc_id","type":"bigint","tsType":"number","nullable":true,"comment":"来料检验单 ID","nullableInferred":true},
@@ -1790,12 +1790,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesQcOqc",
-    businessName: "MesQcOqc（源框架导入）",
+    businessName: "MES 出货检验单（OQC, Outgoing Quality Control）",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_qc_oqc",
     table: {
       name: "mes_qc_oqc",
-      comment: "MesQcOqc（源框架导入）",
+      comment: "MES 出货检验单（OQC, Outgoing Quality Control）",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"检验单编号","nullableInferred":true},
@@ -1838,12 +1838,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesQcOqcLine",
-    businessName: "MesQcOqcLine（源框架导入）",
+    businessName: "MES 出货检验单行",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_qc_oqc_line",
     table: {
       name: "mes_qc_oqc_line",
-      comment: "MesQcOqcLine（源框架导入）",
+      comment: "MES 出货检验单行",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"oqc_id","type":"bigint","tsType":"number","nullable":true,"comment":"出货检验单 ID","nullableInferred":true},
@@ -1870,12 +1870,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesQcRqc",
-    businessName: "MesQcRqc（源框架导入）",
+    businessName: "MES 退货检验单（RQC, Return Quality Control）",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_qc_rqc",
     table: {
       name: "mes_qc_rqc",
-      comment: "MesQcRqc（源框架导入）",
+      comment: "MES 退货检验单（RQC, Return Quality Control）",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"检验单编号","nullableInferred":true},
@@ -1914,12 +1914,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesQcRqcLine",
-    businessName: "MesQcRqcLine（源框架导入）",
+    businessName: "MES 退货检验行",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_qc_rqc_line",
     table: {
       name: "mes_qc_rqc_line",
-      comment: "MesQcRqcLine（源框架导入）",
+      comment: "MES 退货检验行",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"rqc_id","type":"bigint","tsType":"number","nullable":true,"comment":"退货检验单 ID","nullableInferred":true},
@@ -1946,12 +1946,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesQcTemplate",
-    businessName: "MesQcTemplate（源框架导入）",
+    businessName: "MES 质检方案",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_qc_template",
     table: {
       name: "mes_qc_template",
-      comment: "MesQcTemplate（源框架导入）",
+      comment: "MES 质检方案",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"方案编号","nullableInferred":true},
@@ -1971,12 +1971,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesQcTemplateIndicator",
-    businessName: "MesQcTemplateIndicator（源框架导入）",
+    businessName: "MES 质检方案-检测指标项",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_qc_template_indicator",
     table: {
       name: "mes_qc_template_indicator",
-      comment: "MesQcTemplateIndicator（源框架导入）",
+      comment: "MES 质检方案-检测指标项",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"template_id","type":"bigint","tsType":"number","nullable":true,"comment":"质检方案编号","nullableInferred":true},
@@ -2000,12 +2000,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesQcTemplateItem",
-    businessName: "MesQcTemplateItem（源框架导入）",
+    businessName: "MES 质检方案-产品关联",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_qc_template_item",
     table: {
       name: "mes_qc_template_item",
-      comment: "MesQcTemplateItem（源框架导入）",
+      comment: "MES 质检方案-产品关联",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"template_id","type":"bigint","tsType":"number","nullable":true,"comment":"质检方案编号","nullableInferred":true},
@@ -2028,12 +2028,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesTmTool",
-    businessName: "MesTmTool（源框架导入）",
+    businessName: "MES 工具台账",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_tm_tool",
     table: {
       name: "mes_tm_tool",
-      comment: "MesTmTool（源框架导入）",
+      comment: "MES 工具台账",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"工具编码","nullableInferred":true},
@@ -2060,12 +2060,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesTmToolType",
-    businessName: "MesTmToolType（源框架导入）",
+    businessName: "MES 工具类型",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_tm_tool_type",
     table: {
       name: "mes_tm_tool_type",
-      comment: "MesTmToolType（源框架导入）",
+      comment: "MES 工具类型",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"类型编码","nullableInferred":true},
@@ -2086,12 +2086,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmArrivalNotice",
-    businessName: "MesWmArrivalNotice（源框架导入）",
+    businessName: "MES 到货通知单",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_arrival_notice",
     table: {
       name: "mes_wm_arrival_notice",
-      comment: "MesWmArrivalNotice（源框架导入）",
+      comment: "MES 到货通知单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"通知单编码","nullableInferred":true},
@@ -2115,12 +2115,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmArrivalNoticeLine",
-    businessName: "MesWmArrivalNoticeLine（源框架导入）",
+    businessName: "MES 到货通知单行",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_arrival_notice_line",
     table: {
       name: "mes_wm_arrival_notice_line",
-      comment: "MesWmArrivalNoticeLine（源框架导入）",
+      comment: "MES 到货通知单行",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"notice_id","type":"bigint","tsType":"number","nullable":true,"comment":"到货通知单编号","nullableInferred":true},
@@ -2142,12 +2142,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmBarcode",
-    businessName: "MesWmBarcode（源框架导入）",
+    businessName: "MES 条码清单",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_barcode",
     table: {
       name: "mes_wm_barcode",
-      comment: "MesWmBarcode（源框架导入）",
+      comment: "MES 条码清单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"config_id","type":"bigint","tsType":"number","nullable":true,"comment":"条码配置编号","nullableInferred":true},
@@ -2171,17 +2171,17 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmBarcodeConfig",
-    businessName: "MesWmBarcodeConfig（源框架导入）",
+    businessName: "MES 条码配置",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_barcode_config",
     table: {
       name: "mes_wm_barcode_config",
-      comment: "MesWmBarcodeConfig（源框架导入）",
+      comment: "MES 条码配置",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"format","type":"int","tsType":"number","nullable":true,"comment":"条码格式","nullableInferred":true},
         {"name":"biz_type","type":"int","tsType":"number","nullable":true,"comment":"业务类型","nullableInferred":true},
-        {"name":"content_format","type":"varchar","tsType":"string","nullable":true,"comment":"内容格式模板（支持 {BUSINESSCODE} 占位符）","nullableInferred":true},
+        {"name":"content_format","type":"varchar","tsType":"string","nullable":true,"comment":"内容格式模板（支持 BUSINESSCODE 占位符）","nullableInferred":true},
         {"name":"content_example","type":"varchar","tsType":"string","nullable":true,"comment":"内容样例","nullableInferred":true},
         {"name":"auto_generate_flag","type":"boolean","tsType":"boolean","nullable":true,"comment":"是否自动生成","nullableInferred":true},
         {"name":"default_template","type":"varchar","tsType":"string","nullable":true,"comment":"默认打印模板","nullableInferred":true},
@@ -2199,12 +2199,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmBatch",
-    businessName: "MesWmBatch（源框架导入）",
+    businessName: "批次管理",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_batch",
     table: {
       name: "mes_wm_batch",
-      comment: "MesWmBatch（源框架导入）",
+      comment: "批次管理",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"批次ID","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"批次编码","nullableInferred":true},
@@ -2236,12 +2236,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmItemConsume",
-    businessName: "MesWmItemConsume（源框架导入）",
+    businessName: "MES 物料消耗记录",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_item_consume",
     table: {
       name: "mes_wm_item_consume",
-      comment: "MesWmItemConsume（源框架导入）",
+      comment: "MES 物料消耗记录",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"work_order_id","type":"bigint","tsType":"number","nullable":true,"comment":"生产工单编号","nullableInferred":true},
@@ -2264,12 +2264,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmItemConsumeDetail",
-    businessName: "MesWmItemConsumeDetail（源框架导入）",
+    businessName: "MES 物料消耗记录明细 DO记录 line 级别的消耗按线边库 FIFO 分配到具体批次的明细。一条 line 可能拆分为多条 detail（当一个批次库存不够，需要从下一个批次继续分配时）。",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_item_consume_detail",
     table: {
       name: "mes_wm_item_consume_detail",
-      comment: "MesWmItemConsumeDetail（源框架导入）",
+      comment: "MES 物料消耗记录明细 DO记录 line 级别的消耗按线边库 FIFO 分配到具体批次的明细。一条 line 可能拆分为多条 detail（当一个批次库存不够，需要从下一个批次继续分配时）。",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"consume_id","type":"bigint","tsType":"number","nullable":true,"comment":"消耗记录编号","nullableInferred":true},
@@ -2295,12 +2295,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmItemConsumeLine",
-    businessName: "MesWmItemConsumeLine（源框架导入）",
+    businessName: "MES 物料消耗记录行",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_item_consume_line",
     table: {
       name: "mes_wm_item_consume_line",
-      comment: "MesWmItemConsumeLine（源框架导入）",
+      comment: "MES 物料消耗记录行",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"consume_id","type":"bigint","tsType":"number","nullable":true,"comment":"消耗记录编号","nullableInferred":true},
@@ -2321,12 +2321,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmItemReceipt",
-    businessName: "MesWmItemReceipt（源框架导入）",
+    businessName: "MES 采购入库单",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_item_receipt",
     table: {
       name: "mes_wm_item_receipt",
-      comment: "MesWmItemReceipt（源框架导入）",
+      comment: "MES 采购入库单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"入库单编码","nullableInferred":true},
@@ -2350,12 +2350,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmItemReceiptDetail",
-    businessName: "MesWmItemReceiptDetail（源框架导入）",
+    businessName: "MES 采购入库明细",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_item_receipt_detail",
     table: {
       name: "mes_wm_item_receipt_detail",
-      comment: "MesWmItemReceiptDetail（源框架导入）",
+      comment: "MES 采购入库明细",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"line_id","type":"bigint","tsType":"number","nullable":true,"comment":"入库单行编号","nullableInferred":true},
@@ -2379,12 +2379,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmItemReceiptLine",
-    businessName: "MesWmItemReceiptLine（源框架导入）",
+    businessName: "MES 采购入库单行",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_item_receipt_line",
     table: {
       name: "mes_wm_item_receipt_line",
-      comment: "MesWmItemReceiptLine（源框架导入）",
+      comment: "MES 采购入库单行",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"receipt_id","type":"bigint","tsType":"number","nullable":true,"comment":"入库单编号","nullableInferred":true},
@@ -2409,12 +2409,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmMaterialStock",
-    businessName: "MesWmMaterialStock（源框架导入）",
+    businessName: "MES 库存台账（仓库现有量）",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_material_stock",
     table: {
       name: "mes_wm_material_stock",
-      comment: "MesWmMaterialStock（源框架导入）",
+      comment: "MES 库存台账（仓库现有量）",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"item_type_id","type":"bigint","tsType":"number","nullable":true,"comment":"物料分类编号","nullableInferred":true},
@@ -2440,12 +2440,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmMiscIssue",
-    businessName: "MesWmMiscIssue（源框架导入）",
+    businessName: "MES 杂项出库单",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_misc_issue",
     table: {
       name: "mes_wm_misc_issue",
-      comment: "MesWmMiscIssue（源框架导入）",
+      comment: "MES 杂项出库单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"出库单编号","nullableInferred":true},
@@ -2469,12 +2469,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmMiscIssueDetail",
-    businessName: "MesWmMiscIssueDetail（源框架导入）",
+    businessName: "MES 杂项出库明细",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_misc_issue_detail",
     table: {
       name: "mes_wm_misc_issue_detail",
-      comment: "MesWmMiscIssueDetail（源框架导入）",
+      comment: "MES 杂项出库明细",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"issue_id","type":"bigint","tsType":"number","nullable":true,"comment":"出库单ID","nullableInferred":true},
@@ -2500,12 +2500,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmMiscIssueLine",
-    businessName: "MesWmMiscIssueLine（源框架导入）",
+    businessName: "MES 杂项出库单行",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_misc_issue_line",
     table: {
       name: "mes_wm_misc_issue_line",
-      comment: "MesWmMiscIssueLine（源框架导入）",
+      comment: "MES 杂项出库单行",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"issue_id","type":"bigint","tsType":"number","nullable":true,"comment":"出库单编号","nullableInferred":true},
@@ -2531,12 +2531,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmMiscReceipt",
-    businessName: "MesWmMiscReceipt（源框架导入）",
+    businessName: "MES 杂项入库单",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_misc_receipt",
     table: {
       name: "mes_wm_misc_receipt",
-      comment: "MesWmMiscReceipt（源框架导入）",
+      comment: "MES 杂项入库单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"入库单编码","nullableInferred":true},
@@ -2560,12 +2560,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmMiscReceiptDetail",
-    businessName: "MesWmMiscReceiptDetail（源框架导入）",
+    businessName: "MES 杂项入库明细",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_misc_receipt_detail",
     table: {
       name: "mes_wm_misc_receipt_detail",
-      comment: "MesWmMiscReceiptDetail（源框架导入）",
+      comment: "MES 杂项入库明细",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"receipt_id","type":"bigint","tsType":"number","nullable":true,"comment":"入库单ID","nullableInferred":true},
@@ -2589,12 +2589,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmMiscReceiptLine",
-    businessName: "MesWmMiscReceiptLine（源框架导入）",
+    businessName: "MES 杂项入库单行",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_misc_receipt_line",
     table: {
       name: "mes_wm_misc_receipt_line",
-      comment: "MesWmMiscReceiptLine（源框架导入）",
+      comment: "MES 杂项入库单行",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"receipt_id","type":"bigint","tsType":"number","nullable":true,"comment":"入库单编号","nullableInferred":true},
@@ -2617,12 +2617,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmOutsourceIssue",
-    businessName: "MesWmOutsourceIssue（源框架导入）",
+    businessName: "MES 外协发料单",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_outsource_issue",
     table: {
       name: "mes_wm_outsource_issue",
-      comment: "MesWmOutsourceIssue（源框架导入）",
+      comment: "MES 外协发料单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"发料单ID","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"发料单编号","nullableInferred":true},
@@ -2644,12 +2644,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmOutsourceIssueDetail",
-    businessName: "MesWmOutsourceIssueDetail（源框架导入）",
+    businessName: "MES 外协发料单明细",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_outsource_issue_detail",
     table: {
       name: "mes_wm_outsource_issue_detail",
-      comment: "MesWmOutsourceIssueDetail（源框架导入）",
+      comment: "MES 外协发料单明细",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"明细ID","isPk":true,"nullableInferred":true},
         {"name":"line_id","type":"bigint","tsType":"number","nullable":true,"comment":"行ID","nullableInferred":true},
@@ -2674,12 +2674,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmOutsourceIssueLine",
-    businessName: "MesWmOutsourceIssueLine（源框架导入）",
+    businessName: "MES 外协发料单行",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_outsource_issue_line",
     table: {
       name: "mes_wm_outsource_issue_line",
-      comment: "MesWmOutsourceIssueLine（源框架导入）",
+      comment: "MES 外协发料单行",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"行ID","isPk":true,"nullableInferred":true},
         {"name":"issue_id","type":"bigint","tsType":"number","nullable":true,"comment":"发料单ID","nullableInferred":true},
@@ -2700,12 +2700,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmOutsourceReceipt",
-    businessName: "MesWmOutsourceReceipt（源框架导入）",
+    businessName: "MES 外协入库单",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_outsource_receipt",
     table: {
       name: "mes_wm_outsource_receipt",
-      comment: "MesWmOutsourceReceipt（源框架导入）",
+      comment: "MES 外协入库单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"入库单编码","nullableInferred":true},
@@ -2727,12 +2727,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmOutsourceReceiptDetail",
-    businessName: "MesWmOutsourceReceiptDetail（源框架导入）",
+    businessName: "MES 外协入库明细",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_outsource_receipt_detail",
     table: {
       name: "mes_wm_outsource_receipt_detail",
-      comment: "MesWmOutsourceReceiptDetail（源框架导入）",
+      comment: "MES 外协入库明细",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"line_id","type":"bigint","tsType":"number","nullable":true,"comment":"入库单行编号","nullableInferred":true},
@@ -2756,12 +2756,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmOutsourceReceiptLine",
-    businessName: "MesWmOutsourceReceiptLine（源框架导入）",
+    businessName: "MES 外协入库单行",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_outsource_receipt_line",
     table: {
       name: "mes_wm_outsource_receipt_line",
-      comment: "MesWmOutsourceReceiptLine（源框架导入）",
+      comment: "MES 外协入库单行",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"receipt_id","type":"bigint","tsType":"number","nullable":true,"comment":"入库单编号","nullableInferred":true},
@@ -2788,12 +2788,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmPackage",
-    businessName: "MesWmPackage（源框架导入）",
+    businessName: "MES 装箱单",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_package",
     table: {
       name: "mes_wm_package",
-      comment: "MesWmPackage（源框架导入）",
+      comment: "MES 装箱单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"MES 装箱单 DO","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"装箱单编号","nullableInferred":true},
@@ -2824,12 +2824,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmPackageLine",
-    businessName: "MesWmPackageLine（源框架导入）",
+    businessName: "MES 装箱明细",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_package_line",
     table: {
       name: "mes_wm_package_line",
-      comment: "MesWmPackageLine（源框架导入）",
+      comment: "MES 装箱明细",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"MES 装箱明细 DO","isPk":true,"nullableInferred":true},
         {"name":"package_id","type":"bigint","tsType":"number","nullable":true,"comment":"装箱单 ID","nullableInferred":true},
@@ -2851,12 +2851,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmProductIssue",
-    businessName: "MesWmProductIssue（源框架导入）",
+    businessName: "MES 领料出库单",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_product_issue",
     table: {
       name: "mes_wm_product_issue",
-      comment: "MesWmProductIssue（源框架导入）",
+      comment: "MES 领料出库单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"领料单编号","nullableInferred":true},
@@ -2880,12 +2880,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmProductIssueDetail",
-    businessName: "MesWmProductIssueDetail（源框架导入）",
+    businessName: "MES 领料出库明细",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_product_issue_detail",
     table: {
       name: "mes_wm_product_issue_detail",
-      comment: "MesWmProductIssueDetail（源框架导入）",
+      comment: "MES 领料出库明细",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"issue_id","type":"bigint","tsType":"number","nullable":true,"comment":"领料单ID","nullableInferred":true},
@@ -2911,12 +2911,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmProductIssueLine",
-    businessName: "MesWmProductIssueLine（源框架导入）",
+    businessName: "MES 领料出库单行",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_product_issue_line",
     table: {
       name: "mes_wm_product_issue_line",
-      comment: "MesWmProductIssueLine（源框架导入）",
+      comment: "MES 领料出库单行",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"issue_id","type":"bigint","tsType":"number","nullable":true,"comment":"领料单 ID","nullableInferred":true},
@@ -2936,12 +2936,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmProductProduce",
-    businessName: "MesWmProductProduce（源框架导入）",
+    businessName: "MES 生产入库单",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_product_produce",
     table: {
       name: "mes_wm_product_produce",
-      comment: "MesWmProductProduce（源框架导入）",
+      comment: "MES 生产入库单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"work_order_id","type":"bigint","tsType":"number","nullable":true,"comment":"生产工单 ID","nullableInferred":true},
@@ -2964,12 +2964,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmProductProduceDetail",
-    businessName: "MesWmProductProduceDetail（源框架导入）",
+    businessName: "MES 生产入库明细",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_product_produce_detail",
     table: {
       name: "mes_wm_product_produce_detail",
-      comment: "MesWmProductProduceDetail（源框架导入）",
+      comment: "MES 生产入库明细",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"produce_id","type":"bigint","tsType":"number","nullable":true,"comment":"入库单 ID","nullableInferred":true},
@@ -2994,12 +2994,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmProductProduceLine",
-    businessName: "MesWmProductProduceLine（源框架导入）",
+    businessName: "MES 生产入库单行",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_product_produce_line",
     table: {
       name: "mes_wm_product_produce_line",
-      comment: "MesWmProductProduceLine（源框架导入）",
+      comment: "MES 生产入库单行",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"produce_id","type":"bigint","tsType":"number","nullable":true,"comment":"入库单 ID","nullableInferred":true},
@@ -3024,12 +3024,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmProductReceipt",
-    businessName: "MesWmProductReceipt（源框架导入）",
+    businessName: "MES 产品收货（入库）单",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_product_receipt",
     table: {
       name: "mes_wm_product_receipt",
-      comment: "MesWmProductReceipt（源框架导入）",
+      comment: "MES 产品收货（入库）单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"收货单编码","nullableInferred":true},
@@ -3051,12 +3051,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmProductReceiptDetail",
-    businessName: "MesWmProductReceiptDetail（源框架导入）",
+    businessName: "MES 产品收货（入库）单明细",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_product_receipt_detail",
     table: {
       name: "mes_wm_product_receipt_detail",
-      comment: "MesWmProductReceiptDetail（源框架导入）",
+      comment: "MES 产品收货（入库）单明细",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"line_id","type":"bigint","tsType":"number","nullable":true,"comment":"收货单行编号","nullableInferred":true},
@@ -3080,12 +3080,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmProductReceiptLine",
-    businessName: "MesWmProductReceiptLine（源框架导入）",
+    businessName: "MES 产品收货（入库）单行",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_product_receipt_line",
     table: {
       name: "mes_wm_product_receipt_line",
-      comment: "MesWmProductReceiptLine（源框架导入）",
+      comment: "MES 产品收货（入库）单行",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"receipt_id","type":"bigint","tsType":"number","nullable":true,"comment":"收货单编号","nullableInferred":true},
@@ -3107,12 +3107,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmProductSales",
-    businessName: "MesWmProductSales（源框架导入）",
+    businessName: "MES 销售出库单",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_product_sales",
     table: {
       name: "mes_wm_product_sales",
-      comment: "MesWmProductSales（源框架导入）",
+      comment: "MES 销售出库单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"出库单号","nullableInferred":true},
@@ -3140,12 +3140,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmProductSalesDetail",
-    businessName: "MesWmProductSalesDetail（源框架导入）",
+    businessName: "MES 销售出库明细",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_product_sales_detail",
     table: {
       name: "mes_wm_product_sales_detail",
-      comment: "MesWmProductSalesDetail（源框架导入）",
+      comment: "MES 销售出库明细",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"line_id","type":"bigint","tsType":"number","nullable":true,"comment":"出库单行ID","nullableInferred":true},
@@ -3171,12 +3171,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmProductSalesLine",
-    businessName: "MesWmProductSalesLine（源框架导入）",
+    businessName: "MES 销售出库单行",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_product_sales_line",
     table: {
       name: "mes_wm_product_sales_line",
-      comment: "MesWmProductSalesLine（源框架导入）",
+      comment: "MES 销售出库单行",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"sales_id","type":"bigint","tsType":"number","nullable":true,"comment":"出库单ID","nullableInferred":true},
@@ -3202,12 +3202,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmReturnIssue",
-    businessName: "MesWmReturnIssue（源框架导入）",
+    businessName: "MES 生产退料单",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_return_issue",
     table: {
       name: "mes_wm_return_issue",
-      comment: "MesWmReturnIssue（源框架导入）",
+      comment: "MES 生产退料单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"退料单编号","nullableInferred":true},
@@ -3230,12 +3230,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmReturnIssueDetail",
-    businessName: "MesWmReturnIssueDetail（源框架导入）",
+    businessName: "MES 生产退料明细",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_return_issue_detail",
     table: {
       name: "mes_wm_return_issue_detail",
-      comment: "MesWmReturnIssueDetail（源框架导入）",
+      comment: "MES 生产退料明细",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"issue_id","type":"bigint","tsType":"number","nullable":true,"comment":"退料单 ID","nullableInferred":true},
@@ -3261,12 +3261,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmReturnIssueLine",
-    businessName: "MesWmReturnIssueLine（源框架导入）",
+    businessName: "MES 生产退料单行",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_return_issue_line",
     table: {
       name: "mes_wm_return_issue_line",
-      comment: "MesWmReturnIssueLine（源框架导入）",
+      comment: "MES 生产退料单行",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"issue_id","type":"bigint","tsType":"number","nullable":true,"comment":"退料单 ID","nullableInferred":true},
@@ -3291,12 +3291,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmReturnSales",
-    businessName: "MesWmReturnSales（源框架导入）",
+    businessName: "MES 销售退货单",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_return_sales",
     table: {
       name: "mes_wm_return_sales",
-      comment: "MesWmReturnSales（源框架导入）",
+      comment: "MES 销售退货单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"退货单编号","nullableInferred":true},
@@ -3319,12 +3319,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmReturnSalesDetail",
-    businessName: "MesWmReturnSalesDetail（源框架导入）",
+    businessName: "MES 销售退货明细",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_return_sales_detail",
     table: {
       name: "mes_wm_return_sales_detail",
-      comment: "MesWmReturnSalesDetail（源框架导入）",
+      comment: "MES 销售退货明细",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"return_id","type":"bigint","tsType":"number","nullable":true,"comment":"退货单 ID","nullableInferred":true},
@@ -3349,12 +3349,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmReturnSalesLine",
-    businessName: "MesWmReturnSalesLine（源框架导入）",
+    businessName: "MES 销售退货单行",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_return_sales_line",
     table: {
       name: "mes_wm_return_sales_line",
-      comment: "MesWmReturnSalesLine（源框架导入）",
+      comment: "MES 销售退货单行",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"return_id","type":"bigint","tsType":"number","nullable":true,"comment":"退货单 ID","nullableInferred":true},
@@ -3378,12 +3378,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmReturnVendor",
-    businessName: "MesWmReturnVendor（源框架导入）",
+    businessName: "MES 供应商退货单",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_return_vendor",
     table: {
       name: "mes_wm_return_vendor",
-      comment: "MesWmReturnVendor（源框架导入）",
+      comment: "MES 供应商退货单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"退货单编号","nullableInferred":true},
@@ -3408,12 +3408,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmReturnVendorDetail",
-    businessName: "MesWmReturnVendorDetail（源框架导入）",
+    businessName: "MES 供应商退货明细",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_return_vendor_detail",
     table: {
       name: "mes_wm_return_vendor_detail",
-      comment: "MesWmReturnVendorDetail（源框架导入）",
+      comment: "MES 供应商退货明细",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"return_id","type":"bigint","tsType":"number","nullable":true,"comment":"退货单 ID","nullableInferred":true},
@@ -3439,12 +3439,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmReturnVendorLine",
-    businessName: "MesWmReturnVendorLine（源框架导入）",
+    businessName: "MES 供应商退货单行",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_return_vendor_line",
     table: {
       name: "mes_wm_return_vendor_line",
-      comment: "MesWmReturnVendorLine（源框架导入）",
+      comment: "MES 供应商退货单行",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"return_id","type":"bigint","tsType":"number","nullable":true,"comment":"退货单 ID","nullableInferred":true},
@@ -3465,12 +3465,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmSalesNotice",
-    businessName: "MesWmSalesNotice（源框架导入）",
+    businessName: "MES 发货通知单",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_sales_notice",
     table: {
       name: "mes_wm_sales_notice",
-      comment: "MesWmSalesNotice（源框架导入）",
+      comment: "MES 发货通知单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"通知单编码","nullableInferred":true},
@@ -3495,12 +3495,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmSalesNoticeLine",
-    businessName: "MesWmSalesNoticeLine（源框架导入）",
+    businessName: "MES 发货通知单行",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_sales_notice_line",
     table: {
       name: "mes_wm_sales_notice_line",
-      comment: "MesWmSalesNoticeLine（源框架导入）",
+      comment: "MES 发货通知单行",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"notice_id","type":"bigint","tsType":"number","nullable":true,"comment":"发货通知单编号","nullableInferred":true},
@@ -3522,12 +3522,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmSn",
-    businessName: "MesWmSn（源框架导入）",
+    businessName: "MES SN 码",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_sn",
     table: {
       name: "mes_wm_sn",
-      comment: "MesWmSn（源框架导入）",
+      comment: "MES SN 码",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"uuid","type":"varchar","tsType":"string","nullable":true,"comment":"批次 UUID（用于标记同一批次生成的 SN 码）","nullableInferred":true},
@@ -3547,12 +3547,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmStockTakingPlan",
-    businessName: "MesWmStockTakingPlan（源框架导入）",
+    businessName: "MES 盘点方案",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_stock_taking_plan",
     table: {
       name: "mes_wm_stock_taking_plan",
-      comment: "MesWmStockTakingPlan（源框架导入）",
+      comment: "MES 盘点方案",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"方案编码","nullableInferred":true},
@@ -3576,12 +3576,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmStockTakingPlanParam",
-    businessName: "MesWmStockTakingPlanParam（源框架导入）",
+    businessName: "MES 盘点方案参数",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_stock_taking_plan_param",
     table: {
       name: "mes_wm_stock_taking_plan_param",
-      comment: "MesWmStockTakingPlanParam（源框架导入）",
+      comment: "MES 盘点方案参数",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"plan_id","type":"bigint","tsType":"number","nullable":true,"comment":"盘点方案编号","nullableInferred":true},
@@ -3602,12 +3602,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmStockTakingTask",
-    businessName: "MesWmStockTakingTask（源框架导入）",
+    businessName: "MES 盘点任务",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_stock_taking_task",
     table: {
       name: "mes_wm_stock_taking_task",
-      comment: "MesWmStockTakingTask（源框架导入）",
+      comment: "MES 盘点任务",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"任务编码","nullableInferred":true},
@@ -3634,12 +3634,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmStockTakingTaskLine",
-    businessName: "MesWmStockTakingTaskLine（源框架导入）",
+    businessName: "MES 盘点任务行",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_stock_taking_task_line",
     table: {
       name: "mes_wm_stock_taking_task_line",
-      comment: "MesWmStockTakingTaskLine（源框架导入）",
+      comment: "MES 盘点任务行",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"task_id","type":"bigint","tsType":"number","nullable":true,"comment":"盘点任务编号","nullableInferred":true},
@@ -3666,12 +3666,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmStockTakingTaskResult",
-    businessName: "MesWmStockTakingTaskResult（源框架导入）",
+    businessName: "MES 盘点结果",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_stock_taking_task_result",
     table: {
       name: "mes_wm_stock_taking_task_result",
-      comment: "MesWmStockTakingTaskResult（源框架导入）",
+      comment: "MES 盘点结果",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"task_id","type":"bigint","tsType":"number","nullable":true,"comment":"盘点任务编号","nullableInferred":true},
@@ -3698,12 +3698,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmTransaction",
-    businessName: "MesWmTransaction（源框架导入）",
+    businessName: "MES 库存事务流水 DO记录每一笔库存增减事件，系统自动生成，只读查询，不允许人工维护。",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_transaction",
     table: {
       name: "mes_wm_transaction",
-      comment: "MesWmTransaction（源框架导入）",
+      comment: "MES 库存事务流水 DO记录每一笔库存增减事件，系统自动生成，只读查询，不允许人工维护。",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"type","type":"int","tsType":"number","nullable":true,"comment":"事务类型","nullableInferred":true},
@@ -3735,12 +3735,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmTransfer",
-    businessName: "MesWmTransfer（源框架导入）",
+    businessName: "MES 转移单",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_transfer",
     table: {
       name: "mes_wm_transfer",
-      comment: "MesWmTransfer（源框架导入）",
+      comment: "MES 转移单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"转移单编号","nullableInferred":true},
@@ -3768,12 +3768,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmTransferDetail",
-    businessName: "MesWmTransferDetail（源框架导入）",
+    businessName: "MES 调拨明细",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_transfer_detail",
     table: {
       name: "mes_wm_transfer_detail",
-      comment: "MesWmTransferDetail（源框架导入）",
+      comment: "MES 调拨明细",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"line_id","type":"bigint","tsType":"number","nullable":true,"comment":"转移单行编号","nullableInferred":true},
@@ -3797,12 +3797,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmTransferLine",
-    businessName: "MesWmTransferLine（源框架导入）",
+    businessName: "MES 转移单行",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_transfer_line",
     table: {
       name: "mes_wm_transfer_line",
-      comment: "MesWmTransferLine（源框架导入）",
+      comment: "MES 转移单行",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"transfer_id","type":"bigint","tsType":"number","nullable":true,"comment":"转移单编号","nullableInferred":true},
@@ -3826,12 +3826,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmWarehouse",
-    businessName: "MesWmWarehouse（源框架导入）",
+    businessName: "MES 仓库",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_warehouse",
     table: {
       name: "mes_wm_warehouse",
-      comment: "MesWmWarehouse（源框架导入）",
+      comment: "MES 仓库",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"仓库编码","nullableInferred":true},
@@ -3853,12 +3853,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmWarehouseArea",
-    businessName: "MesWmWarehouseArea（源框架导入）",
+    businessName: "MES 库位",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_warehouse_area",
     table: {
       name: "mes_wm_warehouse_area",
-      comment: "MesWmWarehouseArea（源框架导入）",
+      comment: "MES 库位",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"库位编码","nullableInferred":true},
@@ -3886,12 +3886,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmWarehouseLocation",
-    businessName: "MesWmWarehouseLocation（源框架导入）",
+    businessName: "MES 库区",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_warehouse_location",
     table: {
       name: "mes_wm_warehouse_location",
-      comment: "MesWmWarehouseLocation（源框架导入）",
+      comment: "MES 库区",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"库区编码","nullableInferred":true},

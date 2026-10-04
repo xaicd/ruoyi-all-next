@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesProFeedbackService } from "../mes-pro-feedback.service"
 
 describe("MesProFeedbackService", () => {
-  it("should create and query MesProFeedback（源框架导入）", async () => {
+  it("should create and query MES 生产报工", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesProFeedbackService.create({
-        code: "测试MesProFeedback（源框架导入）",
+        code: "测试MES 生产报工",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("MesProFeedbackService", () => {
   
       const updated = await MesProFeedbackService.update(created.id, {
         id: created.id,
-        code: "更新MesProFeedback（源框架导入）",
+        code: "更新MES 生产报工",
       } as any)
       expect(updated).toBeDefined()
   

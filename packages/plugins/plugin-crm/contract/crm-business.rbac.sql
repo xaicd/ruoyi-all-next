@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for CrmBusiness（源框架导入） (CrmBusiness)
+-- Auto-generated RBAC & Menu Migration for CRM 商机 (CrmBusiness)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-crm-business',
   'crm-dir',
-  'CrmBusiness（源框架导入）管理',
+  'CRM 商机管理',
   '/admin/crm/crm-business',
   'crm/crm-business/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-crm-business-query',  'menu-crm-business', '查询CrmBusiness（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_business:query',  1, NOW(), NOW()),
-('menu-crm-business-create', 'menu-crm-business', '新增CrmBusiness（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_business:create', 2, NOW(), NOW()),
-('menu-crm-business-update', 'menu-crm-business', '修改CrmBusiness（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_business:update', 3, NOW(), NOW()),
-('menu-crm-business-delete', 'menu-crm-business', '删除CrmBusiness（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_business:delete', 4, NOW(), NOW())
+('menu-crm-business-query',  'menu-crm-business', '查询CRM 商机', 'BUTTON', 'ACTIVE', 'crm:crm_business:query',  1, NOW(), NOW()),
+('menu-crm-business-create', 'menu-crm-business', '新增CRM 商机', 'BUTTON', 'ACTIVE', 'crm:crm_business:create', 2, NOW(), NOW()),
+('menu-crm-business-update', 'menu-crm-business', '修改CRM 商机', 'BUTTON', 'ACTIVE', 'crm:crm_business:update', 3, NOW(), NOW()),
+('menu-crm-business-delete', 'menu-crm-business', '删除CRM 商机', 'BUTTON', 'ACTIVE', 'crm:crm_business:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

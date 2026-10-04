@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MemberSignInConfigService } from "../member-sign-in-config.service"
 
 describe("MemberSignInConfigService", () => {
-  it("should create and query MemberSignInConfig（源框架导入）", async () => {
+  it("should create and query 签到规则", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MemberSignInConfigService.create({
         day: 1,
@@ -21,7 +21,7 @@ describe("MemberSignInConfigService", () => {
   
       const updated = await MemberSignInConfigService.update(created.id, {
         id: created.id,
-        day: "更新MemberSignInConfig（源框架导入）",
+        day: "更新签到规则",
       } as any)
       expect(updated).toBeDefined()
   

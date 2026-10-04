@@ -1,0 +1,285 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesTmTool",
+  "kebab": "mes-tm-tool",
+  "businessName": "MES 工具台账",
+  "permissionPrefix": "mes:mes_tm_tool",
+  "page": {
+    "route": "/admin/mes/mes-tm-tool",
+    "title": "MES 工具台账管理",
+    "titleSelector": "[data-testid=\"mes-tm-tool-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-tm-tool",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-tm-tool",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-tm-tool/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-tm-tool"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-tm-tool/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-tm-tool/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-tm-tool-title\"]",
+    "refresh": "[data-testid=\"mes-tm-tool-refresh\"]",
+    "createButton": "[data-testid=\"mes-tm-tool-create\"]",
+    "searchForm": "[data-testid=\"mes-tm-tool-search\"]",
+    "searchSubmit": "[data-testid=\"mes-tm-tool-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-tm-tool-search-reset\"]",
+    "total": "[data-testid=\"mes-tm-tool-total\"]",
+    "table": "[data-testid=\"mes-tm-tool-table\"]",
+    "row": "[data-testid=\"mes-tm-tool-row\"]",
+    "editButton": "[data-testid=\"mes-tm-tool-edit\"]",
+    "deleteButton": "[data-testid=\"mes-tm-tool-delete\"]",
+    "form": "[data-testid=\"mes-tm-tool-form\"]",
+    "formError": "[data-testid=\"mes-tm-tool-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-tm-tool-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-tm-tool-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-tm-tool-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 工具台账列表",
+    "dialogLabel": {
+      "create": "新增MES 工具台账",
+      "edit": "编辑MES 工具台账"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "code",
+        "label": "工具编码",
+        "type": "string",
+        "required": false,
+        "testId": "field-code",
+        "selector": "[data-testid=\"field-code\"]"
+      },
+      {
+        "name": "name",
+        "label": "工具名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "brand",
+        "label": "品牌",
+        "type": "string",
+        "required": false,
+        "testId": "field-brand",
+        "selector": "[data-testid=\"field-brand\"]"
+      },
+      {
+        "name": "specification",
+        "label": "型号规格",
+        "type": "string",
+        "required": false,
+        "testId": "field-specification",
+        "selector": "[data-testid=\"field-specification\"]"
+      },
+      {
+        "name": "tool_type_id",
+        "label": "工具类型编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-tool_type_id",
+        "selector": "[data-testid=\"field-tool_type_id\"]"
+      },
+      {
+        "name": "quantity",
+        "label": "数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-quantity",
+        "selector": "[data-testid=\"field-quantity\"]"
+      },
+      {
+        "name": "available_quantity",
+        "label": "可用数量",
+        "type": "number",
+        "required": false,
+        "testId": "field-available_quantity",
+        "selector": "[data-testid=\"field-available_quantity\"]"
+      },
+      {
+        "name": "mainten_type",
+        "label": "保养维护类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-mainten_type",
+        "selector": "[data-testid=\"field-mainten_type\"]"
+      },
+      {
+        "name": "next_mainten_period",
+        "label": "下次保养周期（次数）",
+        "type": "number",
+        "required": false,
+        "testId": "field-next_mainten_period",
+        "selector": "[data-testid=\"field-next_mainten_period\"]"
+      },
+      {
+        "name": "next_mainten_date",
+        "label": "下次保养日期",
+        "type": "string",
+        "required": false,
+        "testId": "field-next_mainten_date",
+        "selector": "[data-testid=\"field-next_mainten_date\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-tm-tool",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-tm-tool\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-tm-tool-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-tm-tool-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-tm-tool:search",
+      "reset": "mes-tm-tool:reset",
+      "refresh": "mes-tm-tool:refresh",
+      "create": "mes-tm-tool:create",
+      "edit": "mes-tm-tool:edit",
+      "delete": "mes-tm-tool:delete",
+      "submit": "mes-tm-tool:submit",
+      "cancel": "mes-tm-tool:cancel",
+      "close": "mes-tm-tool:close",
+      "row": "mes-tm-tool:row",
+      "pagination": "mes-tm-tool:pagination",
+      "fields": {
+        "code": "mes-tm-tool:field:code",
+        "name": "mes-tm-tool:field:name",
+        "brand": "mes-tm-tool:field:brand",
+        "specification": "mes-tm-tool:field:specification",
+        "tool_type_id": "mes-tm-tool:field:tool_type_id",
+        "quantity": "mes-tm-tool:field:quantity",
+        "available_quantity": "mes-tm-tool:field:available_quantity",
+        "mainten_type": "mes-tm-tool:field:mainten_type",
+        "next_mainten_period": "mes-tm-tool:field:next_mainten_period",
+        "next_mainten_date": "mes-tm-tool:field:next_mainten_date",
+        "status": "mes-tm-tool:field:status",
+        "remark": "mes-tm-tool:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-tm-tool",
+      "examples": [
+        "mes.mes-tm-tool__List__Refresh",
+        "mes.mes-tm-tool__ListItem__Open",
+        "mes.mes-tm-tool__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

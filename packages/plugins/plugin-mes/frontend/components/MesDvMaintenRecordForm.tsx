@@ -54,24 +54,36 @@ export function MesDvMaintenRecordForm({ open, initialData, onClose, onSuccess }
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-dv-mainten-record-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 设备保养记录" : "新增MES 设备保养记录"}
+        data-testid="mes-dv-mainten-record-form"
+        data-agent-scope="mes-dv-mainten-record:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesDvMaintenRecord（源框架导入）" : "新增MesDvMaintenRecord（源框架导入）"}
+            {isEdit ? "编辑MES 设备保养记录" : "新增MES 设备保养记录"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-dv-mainten-record-form-close" data-agent-target="mes-dv-mainten-record:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-dv-mainten-record-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">计划编号</label>
+          <label htmlFor="mes-dv-mainten-record-plan_id" className="block text-xs text-slate-600 mb-1">计划编号</label>
           <input
             type="number"
+            id="mes-dv-mainten-record-plan_id"
+            data-testid="field-plan_id"
+            data-agent-target="mes-dv-mainten-record:field:plan_id"
+            data-agent-state={formData.plan_id == null || formData.plan_id === "" ? "empty" : "filled"}
+            aria-label="计划编号"
             value={formData.plan_id != null ? String(formData.plan_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, plan_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -81,9 +93,14 @@ export function MesDvMaintenRecordForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备编号</label>
+          <label htmlFor="mes-dv-mainten-record-machinery_id" className="block text-xs text-slate-600 mb-1">设备编号</label>
           <input
             type="number"
+            id="mes-dv-mainten-record-machinery_id"
+            data-testid="field-machinery_id"
+            data-agent-target="mes-dv-mainten-record:field:machinery_id"
+            data-agent-state={formData.machinery_id == null || formData.machinery_id === "" ? "empty" : "filled"}
+            aria-label="设备编号"
             value={formData.machinery_id != null ? String(formData.machinery_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, machinery_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -93,9 +110,14 @@ export function MesDvMaintenRecordForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">保养时间</label>
+          <label htmlFor="mes-dv-mainten-record-mainten_time" className="block text-xs text-slate-600 mb-1">保养时间</label>
           <input
             type="text"
+            id="mes-dv-mainten-record-mainten_time"
+            data-testid="field-mainten_time"
+            data-agent-target="mes-dv-mainten-record:field:mainten_time"
+            data-agent-state={formData.mainten_time ? "filled" : "empty"}
+            aria-label="保养时间"
             value={formData.mainten_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, mainten_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -105,9 +127,14 @@ export function MesDvMaintenRecordForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="mes-dv-mainten-record-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="mes-dv-mainten-record-user_id"
+            data-testid="field-user_id"
+            data-agent-target="mes-dv-mainten-record:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -117,9 +144,14 @@ export function MesDvMaintenRecordForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="mes-dv-mainten-record-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="mes-dv-mainten-record-status"
+            data-testid="field-status"
+            data-agent-target="mes-dv-mainten-record:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -129,9 +161,14 @@ export function MesDvMaintenRecordForm({ open, initialData, onClose, onSuccess }
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-dv-mainten-record-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-dv-mainten-record-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-dv-mainten-record:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -145,6 +182,8 @@ export function MesDvMaintenRecordForm({ open, initialData, onClose, onSuccess }
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-dv-mainten-record-form-cancel"
+              data-agent-target="mes-dv-mainten-record:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -152,6 +191,9 @@ export function MesDvMaintenRecordForm({ open, initialData, onClose, onSuccess }
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-dv-mainten-record-form-submit"
+              data-agent-target="mes-dv-mainten-record:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

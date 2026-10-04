@@ -78,24 +78,36 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-qc-ipqc-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 过程检验单（IPQC, In-Process Quality Control）" : "新增MES 过程检验单（IPQC, In-Process Quality Control）"}
+        data-testid="mes-qc-ipqc-form"
+        data-agent-scope="mes-qc-ipqc:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesQcIpqc（源框架导入）" : "新增MesQcIpqc（源框架导入）"}
+            {isEdit ? "编辑MES 过程检验单（IPQC, In-Process Quality Control）" : "新增MES 过程检验单（IPQC, In-Process Quality Control）"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-qc-ipqc-form-close" data-agent-target="mes-qc-ipqc:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-qc-ipqc-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">检验单编号</label>
+          <label htmlFor="mes-qc-ipqc-code" className="block text-xs text-slate-600 mb-1">检验单编号</label>
           <input
             type="text"
+            id="mes-qc-ipqc-code"
+            data-testid="field-code"
+            data-agent-target="mes-qc-ipqc:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="检验单编号"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -105,9 +117,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">检验单名称</label>
+          <label htmlFor="mes-qc-ipqc-name" className="block text-xs text-slate-600 mb-1">检验单名称</label>
           <input
             type="text"
+            id="mes-qc-ipqc-name"
+            data-testid="field-name"
+            data-agent-target="mes-qc-ipqc:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="检验单名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -117,9 +134,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">IPQC 检验类型</label>
+          <label htmlFor="mes-qc-ipqc-type" className="block text-xs text-slate-600 mb-1">IPQC 检验类型</label>
           <input
             type="number"
+            id="mes-qc-ipqc-type"
+            data-testid="field-type"
+            data-agent-target="mes-qc-ipqc:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="IPQC 检验类型"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -129,9 +151,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">检验模板 ID</label>
+          <label htmlFor="mes-qc-ipqc-template_id" className="block text-xs text-slate-600 mb-1">检验模板 ID</label>
           <input
             type="number"
+            id="mes-qc-ipqc-template_id"
+            data-testid="field-template_id"
+            data-agent-target="mes-qc-ipqc:field:template_id"
+            data-agent-state={formData.template_id == null || formData.template_id === "" ? "empty" : "filled"}
+            aria-label="检验模板 ID"
             value={formData.template_id != null ? String(formData.template_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, template_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -141,9 +168,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">来源单据类型</label>
+          <label htmlFor="mes-qc-ipqc-source_doc_type" className="block text-xs text-slate-600 mb-1">来源单据类型</label>
           <input
             type="number"
+            id="mes-qc-ipqc-source_doc_type"
+            data-testid="field-source_doc_type"
+            data-agent-target="mes-qc-ipqc:field:source_doc_type"
+            data-agent-state={formData.source_doc_type == null || formData.source_doc_type === "" ? "empty" : "filled"}
+            aria-label="来源单据类型"
             value={formData.source_doc_type != null ? String(formData.source_doc_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, source_doc_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -153,9 +185,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">来源单据 ID</label>
+          <label htmlFor="mes-qc-ipqc-source_doc_id" className="block text-xs text-slate-600 mb-1">来源单据 ID</label>
           <input
             type="number"
+            id="mes-qc-ipqc-source_doc_id"
+            data-testid="field-source_doc_id"
+            data-agent-target="mes-qc-ipqc:field:source_doc_id"
+            data-agent-state={formData.source_doc_id == null || formData.source_doc_id === "" ? "empty" : "filled"}
+            aria-label="来源单据 ID"
             value={formData.source_doc_id != null ? String(formData.source_doc_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, source_doc_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -165,9 +202,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">来源单据行 ID</label>
+          <label htmlFor="mes-qc-ipqc-source_line_id" className="block text-xs text-slate-600 mb-1">来源单据行 ID</label>
           <input
             type="number"
+            id="mes-qc-ipqc-source_line_id"
+            data-testid="field-source_line_id"
+            data-agent-target="mes-qc-ipqc:field:source_line_id"
+            data-agent-state={formData.source_line_id == null || formData.source_line_id === "" ? "empty" : "filled"}
+            aria-label="来源单据行 ID"
             value={formData.source_line_id != null ? String(formData.source_line_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, source_line_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -177,9 +219,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">来源单据编号（冗余）</label>
+          <label htmlFor="mes-qc-ipqc-source_doc_code" className="block text-xs text-slate-600 mb-1">来源单据编号（冗余）</label>
           <input
             type="text"
+            id="mes-qc-ipqc-source_doc_code"
+            data-testid="field-source_doc_code"
+            data-agent-target="mes-qc-ipqc:field:source_doc_code"
+            data-agent-state={formData.source_doc_code ? "filled" : "empty"}
+            aria-label="来源单据编号（冗余）"
             value={formData.source_doc_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, source_doc_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -189,9 +236,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生产工单 ID</label>
+          <label htmlFor="mes-qc-ipqc-work_order_id" className="block text-xs text-slate-600 mb-1">生产工单 ID</label>
           <input
             type="number"
+            id="mes-qc-ipqc-work_order_id"
+            data-testid="field-work_order_id"
+            data-agent-target="mes-qc-ipqc:field:work_order_id"
+            data-agent-state={formData.work_order_id == null || formData.work_order_id === "" ? "empty" : "filled"}
+            aria-label="生产工单 ID"
             value={formData.work_order_id != null ? String(formData.work_order_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, work_order_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -201,9 +253,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生产任务 ID</label>
+          <label htmlFor="mes-qc-ipqc-task_id" className="block text-xs text-slate-600 mb-1">生产任务 ID</label>
           <input
             type="number"
+            id="mes-qc-ipqc-task_id"
+            data-testid="field-task_id"
+            data-agent-target="mes-qc-ipqc:field:task_id"
+            data-agent-state={formData.task_id == null || formData.task_id === "" ? "empty" : "filled"}
+            aria-label="生产任务 ID"
             value={formData.task_id != null ? String(formData.task_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, task_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -213,9 +270,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工位 ID</label>
+          <label htmlFor="mes-qc-ipqc-workstation_id" className="block text-xs text-slate-600 mb-1">工位 ID</label>
           <input
             type="number"
+            id="mes-qc-ipqc-workstation_id"
+            data-testid="field-workstation_id"
+            data-agent-target="mes-qc-ipqc:field:workstation_id"
+            data-agent-state={formData.workstation_id == null || formData.workstation_id === "" ? "empty" : "filled"}
+            aria-label="工位 ID"
             value={formData.workstation_id != null ? String(formData.workstation_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, workstation_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -225,9 +287,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工序 ID</label>
+          <label htmlFor="mes-qc-ipqc-process_id" className="block text-xs text-slate-600 mb-1">工序 ID</label>
           <input
             type="number"
+            id="mes-qc-ipqc-process_id"
+            data-testid="field-process_id"
+            data-agent-target="mes-qc-ipqc:field:process_id"
+            data-agent-state={formData.process_id == null || formData.process_id === "" ? "empty" : "filled"}
+            aria-label="工序 ID"
             value={formData.process_id != null ? String(formData.process_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, process_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -237,9 +304,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品物料 ID</label>
+          <label htmlFor="mes-qc-ipqc-item_id" className="block text-xs text-slate-600 mb-1">产品物料 ID</label>
           <input
             type="number"
+            id="mes-qc-ipqc-item_id"
+            data-testid="field-item_id"
+            data-agent-target="mes-qc-ipqc:field:item_id"
+            data-agent-state={formData.item_id == null || formData.item_id === "" ? "empty" : "filled"}
+            aria-label="产品物料 ID"
             value={formData.item_id != null ? String(formData.item_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, item_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -249,9 +321,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">检测数量</label>
+          <label htmlFor="mes-qc-ipqc-check_quantity" className="block text-xs text-slate-600 mb-1">检测数量</label>
           <input
             type="number"
+            id="mes-qc-ipqc-check_quantity"
+            data-testid="field-check_quantity"
+            data-agent-target="mes-qc-ipqc:field:check_quantity"
+            data-agent-state={formData.check_quantity == null || formData.check_quantity === "" ? "empty" : "filled"}
+            aria-label="检测数量"
             value={formData.check_quantity != null ? String(formData.check_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, check_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -261,9 +338,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">合格品数量</label>
+          <label htmlFor="mes-qc-ipqc-qualified_quantity" className="block text-xs text-slate-600 mb-1">合格品数量</label>
           <input
             type="number"
+            id="mes-qc-ipqc-qualified_quantity"
+            data-testid="field-qualified_quantity"
+            data-agent-target="mes-qc-ipqc:field:qualified_quantity"
+            data-agent-state={formData.qualified_quantity == null || formData.qualified_quantity === "" ? "empty" : "filled"}
+            aria-label="合格品数量"
             value={formData.qualified_quantity != null ? String(formData.qualified_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, qualified_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -273,9 +355,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">不合格品数量</label>
+          <label htmlFor="mes-qc-ipqc-unqualified_quantity" className="block text-xs text-slate-600 mb-1">不合格品数量</label>
           <input
             type="number"
+            id="mes-qc-ipqc-unqualified_quantity"
+            data-testid="field-unqualified_quantity"
+            data-agent-target="mes-qc-ipqc:field:unqualified_quantity"
+            data-agent-state={formData.unqualified_quantity == null || formData.unqualified_quantity === "" ? "empty" : "filled"}
+            aria-label="不合格品数量"
             value={formData.unqualified_quantity != null ? String(formData.unqualified_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, unqualified_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -285,9 +372,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">工废数量</label>
+          <label htmlFor="mes-qc-ipqc-labor_scrap_quantity" className="block text-xs text-slate-600 mb-1">工废数量</label>
           <input
             type="number"
+            id="mes-qc-ipqc-labor_scrap_quantity"
+            data-testid="field-labor_scrap_quantity"
+            data-agent-target="mes-qc-ipqc:field:labor_scrap_quantity"
+            data-agent-state={formData.labor_scrap_quantity == null || formData.labor_scrap_quantity === "" ? "empty" : "filled"}
+            aria-label="工废数量"
             value={formData.labor_scrap_quantity != null ? String(formData.labor_scrap_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, labor_scrap_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -297,9 +389,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">料废数量</label>
+          <label htmlFor="mes-qc-ipqc-material_scrap_quantity" className="block text-xs text-slate-600 mb-1">料废数量</label>
           <input
             type="number"
+            id="mes-qc-ipqc-material_scrap_quantity"
+            data-testid="field-material_scrap_quantity"
+            data-agent-target="mes-qc-ipqc:field:material_scrap_quantity"
+            data-agent-state={formData.material_scrap_quantity == null || formData.material_scrap_quantity === "" ? "empty" : "filled"}
+            aria-label="料废数量"
             value={formData.material_scrap_quantity != null ? String(formData.material_scrap_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, material_scrap_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -309,9 +406,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">其他废品数量</label>
+          <label htmlFor="mes-qc-ipqc-other_scrap_quantity" className="block text-xs text-slate-600 mb-1">其他废品数量</label>
           <input
             type="number"
+            id="mes-qc-ipqc-other_scrap_quantity"
+            data-testid="field-other_scrap_quantity"
+            data-agent-target="mes-qc-ipqc:field:other_scrap_quantity"
+            data-agent-state={formData.other_scrap_quantity == null || formData.other_scrap_quantity === "" ? "empty" : "filled"}
+            aria-label="其他废品数量"
             value={formData.other_scrap_quantity != null ? String(formData.other_scrap_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, other_scrap_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -321,9 +423,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">致命缺陷率（%）</label>
+          <label htmlFor="mes-qc-ipqc-critical_rate" className="block text-xs text-slate-600 mb-1">致命缺陷率（%）</label>
           <input
             type="number"
+            id="mes-qc-ipqc-critical_rate"
+            data-testid="field-critical_rate"
+            data-agent-target="mes-qc-ipqc:field:critical_rate"
+            data-agent-state={formData.critical_rate == null || formData.critical_rate === "" ? "empty" : "filled"}
+            aria-label="致命缺陷率（%）"
             value={formData.critical_rate != null ? String(formData.critical_rate) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, critical_rate: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -333,9 +440,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">严重缺陷率（%）</label>
+          <label htmlFor="mes-qc-ipqc-major_rate" className="block text-xs text-slate-600 mb-1">严重缺陷率（%）</label>
           <input
             type="number"
+            id="mes-qc-ipqc-major_rate"
+            data-testid="field-major_rate"
+            data-agent-target="mes-qc-ipqc:field:major_rate"
+            data-agent-state={formData.major_rate == null || formData.major_rate === "" ? "empty" : "filled"}
+            aria-label="严重缺陷率（%）"
             value={formData.major_rate != null ? String(formData.major_rate) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, major_rate: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -345,9 +457,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">轻微缺陷率（%）</label>
+          <label htmlFor="mes-qc-ipqc-minor_rate" className="block text-xs text-slate-600 mb-1">轻微缺陷率（%）</label>
           <input
             type="number"
+            id="mes-qc-ipqc-minor_rate"
+            data-testid="field-minor_rate"
+            data-agent-target="mes-qc-ipqc:field:minor_rate"
+            data-agent-state={formData.minor_rate == null || formData.minor_rate === "" ? "empty" : "filled"}
+            aria-label="轻微缺陷率（%）"
             value={formData.minor_rate != null ? String(formData.minor_rate) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, minor_rate: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -357,9 +474,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">致命缺陷数量</label>
+          <label htmlFor="mes-qc-ipqc-critical_quantity" className="block text-xs text-slate-600 mb-1">致命缺陷数量</label>
           <input
             type="number"
+            id="mes-qc-ipqc-critical_quantity"
+            data-testid="field-critical_quantity"
+            data-agent-target="mes-qc-ipqc:field:critical_quantity"
+            data-agent-state={formData.critical_quantity == null || formData.critical_quantity === "" ? "empty" : "filled"}
+            aria-label="致命缺陷数量"
             value={formData.critical_quantity != null ? String(formData.critical_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, critical_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -369,9 +491,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">严重缺陷数量</label>
+          <label htmlFor="mes-qc-ipqc-major_quantity" className="block text-xs text-slate-600 mb-1">严重缺陷数量</label>
           <input
             type="number"
+            id="mes-qc-ipqc-major_quantity"
+            data-testid="field-major_quantity"
+            data-agent-target="mes-qc-ipqc:field:major_quantity"
+            data-agent-state={formData.major_quantity == null || formData.major_quantity === "" ? "empty" : "filled"}
+            aria-label="严重缺陷数量"
             value={formData.major_quantity != null ? String(formData.major_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, major_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -381,9 +508,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">轻微缺陷数量</label>
+          <label htmlFor="mes-qc-ipqc-minor_quantity" className="block text-xs text-slate-600 mb-1">轻微缺陷数量</label>
           <input
             type="number"
+            id="mes-qc-ipqc-minor_quantity"
+            data-testid="field-minor_quantity"
+            data-agent-target="mes-qc-ipqc:field:minor_quantity"
+            data-agent-state={formData.minor_quantity == null || formData.minor_quantity === "" ? "empty" : "filled"}
+            aria-label="轻微缺陷数量"
             value={formData.minor_quantity != null ? String(formData.minor_quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, minor_quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -393,9 +525,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">检测结果</label>
+          <label htmlFor="mes-qc-ipqc-check_result" className="block text-xs text-slate-600 mb-1">检测结果</label>
           <input
             type="number"
+            id="mes-qc-ipqc-check_result"
+            data-testid="field-check_result"
+            data-agent-target="mes-qc-ipqc:field:check_result"
+            data-agent-state={formData.check_result == null || formData.check_result === "" ? "empty" : "filled"}
+            aria-label="检测结果"
             value={formData.check_result != null ? String(formData.check_result) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, check_result: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -405,9 +542,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">检测日期</label>
+          <label htmlFor="mes-qc-ipqc-inspect_date" className="block text-xs text-slate-600 mb-1">检测日期</label>
           <input
             type="text"
+            id="mes-qc-ipqc-inspect_date"
+            data-testid="field-inspect_date"
+            data-agent-target="mes-qc-ipqc:field:inspect_date"
+            data-agent-state={formData.inspect_date ? "filled" : "empty"}
+            aria-label="检测日期"
             value={formData.inspect_date ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, inspect_date: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -417,9 +559,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">检测人员用户 ID</label>
+          <label htmlFor="mes-qc-ipqc-inspector_user_id" className="block text-xs text-slate-600 mb-1">检测人员用户 ID</label>
           <input
             type="number"
+            id="mes-qc-ipqc-inspector_user_id"
+            data-testid="field-inspector_user_id"
+            data-agent-target="mes-qc-ipqc:field:inspector_user_id"
+            data-agent-state={formData.inspector_user_id == null || formData.inspector_user_id === "" ? "empty" : "filled"}
+            aria-label="检测人员用户 ID"
             value={formData.inspector_user_id != null ? String(formData.inspector_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, inspector_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -429,9 +576,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="mes-qc-ipqc-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="mes-qc-ipqc-status"
+            data-testid="field-status"
+            data-agent-target="mes-qc-ipqc:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -441,9 +593,14 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-qc-ipqc-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-qc-ipqc-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-qc-ipqc:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -457,6 +614,8 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-qc-ipqc-form-cancel"
+              data-agent-target="mes-qc-ipqc:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -464,6 +623,9 @@ export function MesQcIpqcForm({ open, initialData, onClose, onSuccess }: MesQcIp
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-qc-ipqc-form-submit"
+              data-agent-target="mes-qc-ipqc:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

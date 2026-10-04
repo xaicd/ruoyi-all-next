@@ -1,0 +1,294 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "ai",
+  "entity": "AiWrite",
+  "kebab": "ai-write",
+  "businessName": "AI 写作",
+  "permissionPrefix": "ai:ai_write",
+  "page": {
+    "route": "/admin/ai/ai-write",
+    "title": "AI 写作管理",
+    "titleSelector": "[data-testid=\"ai-write-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.ai/api",
+    "bffMount": "/api/v1/admin/ai",
+    "resource": "ai-write",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/ai-write",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/ai-write/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/ai-write"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/ai-write/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/ai-write/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"ai-write-title\"]",
+    "refresh": "[data-testid=\"ai-write-refresh\"]",
+    "createButton": "[data-testid=\"ai-write-create\"]",
+    "searchForm": "[data-testid=\"ai-write-search\"]",
+    "searchSubmit": "[data-testid=\"ai-write-search-submit\"]",
+    "searchReset": "[data-testid=\"ai-write-search-reset\"]",
+    "total": "[data-testid=\"ai-write-total\"]",
+    "table": "[data-testid=\"ai-write-table\"]",
+    "row": "[data-testid=\"ai-write-row\"]",
+    "editButton": "[data-testid=\"ai-write-edit\"]",
+    "deleteButton": "[data-testid=\"ai-write-delete\"]",
+    "form": "[data-testid=\"ai-write-form\"]",
+    "formError": "[data-testid=\"ai-write-form-error\"]",
+    "formSubmit": "[data-testid=\"ai-write-form-submit\"]",
+    "formCancel": "[data-testid=\"ai-write-form-cancel\"]",
+    "formClose": "[data-testid=\"ai-write-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "AI 写作列表",
+    "dialogLabel": {
+      "create": "新增AI 写作",
+      "edit": "编辑AI 写作"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "type",
+        "label": "写作类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "platform",
+        "label": "平台",
+        "type": "string",
+        "required": false,
+        "testId": "field-platform",
+        "selector": "[data-testid=\"field-platform\"]"
+      },
+      {
+        "name": "model_id",
+        "label": "模型编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-model_id",
+        "selector": "[data-testid=\"field-model_id\"]"
+      },
+      {
+        "name": "model",
+        "label": "模型",
+        "type": "string",
+        "required": false,
+        "testId": "field-model",
+        "selector": "[data-testid=\"field-model\"]"
+      },
+      {
+        "name": "prompt",
+        "label": "生成内容提示",
+        "type": "string",
+        "required": false,
+        "testId": "field-prompt",
+        "selector": "[data-testid=\"field-prompt\"]"
+      },
+      {
+        "name": "generated_content",
+        "label": "生成的内容",
+        "type": "string",
+        "required": false,
+        "testId": "field-generated_content",
+        "selector": "[data-testid=\"field-generated_content\"]"
+      },
+      {
+        "name": "original_content",
+        "label": "原文",
+        "type": "string",
+        "required": false,
+        "testId": "field-original_content",
+        "selector": "[data-testid=\"field-original_content\"]"
+      },
+      {
+        "name": "length",
+        "label": "长度提示词",
+        "type": "number",
+        "required": false,
+        "testId": "field-length",
+        "selector": "[data-testid=\"field-length\"]"
+      },
+      {
+        "name": "format",
+        "label": "格式提示词",
+        "type": "number",
+        "required": false,
+        "testId": "field-format",
+        "selector": "[data-testid=\"field-format\"]"
+      },
+      {
+        "name": "tone",
+        "label": "语气提示词",
+        "type": "number",
+        "required": false,
+        "testId": "field-tone",
+        "selector": "[data-testid=\"field-tone\"]"
+      },
+      {
+        "name": "language",
+        "label": "语言提示词",
+        "type": "number",
+        "required": false,
+        "testId": "field-language",
+        "selector": "[data-testid=\"field-language\"]"
+      },
+      {
+        "name": "error_message",
+        "label": "错误信息",
+        "type": "string",
+        "required": false,
+        "testId": "field-error_message",
+        "selector": "[data-testid=\"field-error_message\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "ai-write",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"ai-write\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"ai-write-form-overlay\"]",
+      "dialog": "[data-testid=\"ai-write-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "ai-write:search",
+      "reset": "ai-write:reset",
+      "refresh": "ai-write:refresh",
+      "create": "ai-write:create",
+      "edit": "ai-write:edit",
+      "delete": "ai-write:delete",
+      "submit": "ai-write:submit",
+      "cancel": "ai-write:cancel",
+      "close": "ai-write:close",
+      "row": "ai-write:row",
+      "pagination": "ai-write:pagination",
+      "fields": {
+        "user_id": "ai-write:field:user_id",
+        "type": "ai-write:field:type",
+        "platform": "ai-write:field:platform",
+        "model_id": "ai-write:field:model_id",
+        "model": "ai-write:field:model",
+        "prompt": "ai-write:field:prompt",
+        "generated_content": "ai-write:field:generated_content",
+        "original_content": "ai-write:field:original_content",
+        "length": "ai-write:field:length",
+        "format": "ai-write:field:format",
+        "tone": "ai-write:field:tone",
+        "language": "ai-write:field:language",
+        "error_message": "ai-write:field:error_message"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "ai.ai-write",
+      "examples": [
+        "ai.ai-write__List__Refresh",
+        "ai.ai-write__ListItem__Open",
+        "ai.ai-write__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesWmWarehouseArea（源框架导入） (MesWmWarehouseArea)
+-- Auto-generated RBAC & Menu Migration for MES 库位 (MesWmWarehouseArea)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-wm-warehouse-area',
   'mes-dir',
-  'MesWmWarehouseArea（源框架导入）管理',
+  'MES 库位管理',
   '/admin/mes/mes-wm-warehouse-area',
   'mes/mes-wm-warehouse-area/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-wm-warehouse-area-query',  'menu-mes-wm-warehouse-area', '查询MesWmWarehouseArea（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_warehouse_area:query',  1, NOW(), NOW()),
-('menu-mes-wm-warehouse-area-create', 'menu-mes-wm-warehouse-area', '新增MesWmWarehouseArea（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_warehouse_area:create', 2, NOW(), NOW()),
-('menu-mes-wm-warehouse-area-update', 'menu-mes-wm-warehouse-area', '修改MesWmWarehouseArea（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_warehouse_area:update', 3, NOW(), NOW()),
-('menu-mes-wm-warehouse-area-delete', 'menu-mes-wm-warehouse-area', '删除MesWmWarehouseArea（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_warehouse_area:delete', 4, NOW(), NOW())
+('menu-mes-wm-warehouse-area-query',  'menu-mes-wm-warehouse-area', '查询MES 库位', 'BUTTON', 'ACTIVE', 'mes:mes_wm_warehouse_area:query',  1, NOW(), NOW()),
+('menu-mes-wm-warehouse-area-create', 'menu-mes-wm-warehouse-area', '新增MES 库位', 'BUTTON', 'ACTIVE', 'mes:mes_wm_warehouse_area:create', 2, NOW(), NOW()),
+('menu-mes-wm-warehouse-area-update', 'menu-mes-wm-warehouse-area', '修改MES 库位', 'BUTTON', 'ACTIVE', 'mes:mes_wm_warehouse_area:update', 3, NOW(), NOW()),
+('menu-mes-wm-warehouse-area-delete', 'menu-mes-wm-warehouse-area', '删除MES 库位', 'BUTTON', 'ACTIVE', 'mes:mes_wm_warehouse_area:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

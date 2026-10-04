@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for ImGroupRequest（源框架导入） (ImGroupRequest)
+-- Auto-generated RBAC & Menu Migration for IM 加群申请记录 DO配合「申请 - 审批」流程：用户主动申请：调 apply 接口落库（inviterUserId=null，handleResult=UNHANDLED）， (ImGroupRequest)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-im-group-request',
   'im-dir',
-  'ImGroupRequest（源框架导入）管理',
+  'IM 加群申请记录 DO配合「申请 - 审批」流程：用户主动申请：调 apply 接口落库（inviterUserId=null，handleResult=UNHANDLED），管理',
   '/admin/im/im-group-request',
   'im/im-group-request/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-im-group-request-query',  'menu-im-group-request', '查询ImGroupRequest（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_group_request:query',  1, NOW(), NOW()),
-('menu-im-group-request-create', 'menu-im-group-request', '新增ImGroupRequest（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_group_request:create', 2, NOW(), NOW()),
-('menu-im-group-request-update', 'menu-im-group-request', '修改ImGroupRequest（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_group_request:update', 3, NOW(), NOW()),
-('menu-im-group-request-delete', 'menu-im-group-request', '删除ImGroupRequest（源框架导入）', 'BUTTON', 'ACTIVE', 'im:im_group_request:delete', 4, NOW(), NOW())
+('menu-im-group-request-query',  'menu-im-group-request', '查询IM 加群申请记录 DO配合「申请 - 审批」流程：用户主动申请：调 apply 接口落库（inviterUserId=null，handleResult=UNHANDLED），', 'BUTTON', 'ACTIVE', 'im:im_group_request:query',  1, NOW(), NOW()),
+('menu-im-group-request-create', 'menu-im-group-request', '新增IM 加群申请记录 DO配合「申请 - 审批」流程：用户主动申请：调 apply 接口落库（inviterUserId=null，handleResult=UNHANDLED），', 'BUTTON', 'ACTIVE', 'im:im_group_request:create', 2, NOW(), NOW()),
+('menu-im-group-request-update', 'menu-im-group-request', '修改IM 加群申请记录 DO配合「申请 - 审批」流程：用户主动申请：调 apply 接口落库（inviterUserId=null，handleResult=UNHANDLED），', 'BUTTON', 'ACTIVE', 'im:im_group_request:update', 3, NOW(), NOW()),
+('menu-im-group-request-delete', 'menu-im-group-request', '删除IM 加群申请记录 DO配合「申请 - 审批」流程：用户主动申请：调 apply 接口落库（inviterUserId=null，handleResult=UNHANDLED），', 'BUTTON', 'ACTIVE', 'im:im_group_request:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

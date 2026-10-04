@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesWmMiscIssue（源框架导入） (MesWmMiscIssue)
+-- Auto-generated RBAC & Menu Migration for MES 杂项出库单 (MesWmMiscIssue)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-wm-misc-issue',
   'mes-dir',
-  'MesWmMiscIssue（源框架导入）管理',
+  'MES 杂项出库单管理',
   '/admin/mes/mes-wm-misc-issue',
   'mes/mes-wm-misc-issue/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-wm-misc-issue-query',  'menu-mes-wm-misc-issue', '查询MesWmMiscIssue（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_misc_issue:query',  1, NOW(), NOW()),
-('menu-mes-wm-misc-issue-create', 'menu-mes-wm-misc-issue', '新增MesWmMiscIssue（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_misc_issue:create', 2, NOW(), NOW()),
-('menu-mes-wm-misc-issue-update', 'menu-mes-wm-misc-issue', '修改MesWmMiscIssue（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_misc_issue:update', 3, NOW(), NOW()),
-('menu-mes-wm-misc-issue-delete', 'menu-mes-wm-misc-issue', '删除MesWmMiscIssue（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_misc_issue:delete', 4, NOW(), NOW())
+('menu-mes-wm-misc-issue-query',  'menu-mes-wm-misc-issue', '查询MES 杂项出库单', 'BUTTON', 'ACTIVE', 'mes:mes_wm_misc_issue:query',  1, NOW(), NOW()),
+('menu-mes-wm-misc-issue-create', 'menu-mes-wm-misc-issue', '新增MES 杂项出库单', 'BUTTON', 'ACTIVE', 'mes:mes_wm_misc_issue:create', 2, NOW(), NOW()),
+('menu-mes-wm-misc-issue-update', 'menu-mes-wm-misc-issue', '修改MES 杂项出库单', 'BUTTON', 'ACTIVE', 'mes:mes_wm_misc_issue:update', 3, NOW(), NOW()),
+('menu-mes-wm-misc-issue-delete', 'menu-mes-wm-misc-issue', '删除MES 杂项出库单', 'BUTTON', 'ACTIVE', 'mes:mes_wm_misc_issue:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

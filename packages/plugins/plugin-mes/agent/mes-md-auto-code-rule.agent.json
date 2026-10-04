@@ -1,0 +1,258 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesMdAutoCodeRule",
+  "kebab": "mes-md-auto-code-rule",
+  "businessName": "MES 编码规则",
+  "permissionPrefix": "mes:mes_md_auto_code_rule",
+  "page": {
+    "route": "/admin/mes/mes-md-auto-code-rule",
+    "title": "MES 编码规则管理",
+    "titleSelector": "[data-testid=\"mes-md-auto-code-rule-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-md-auto-code-rule",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-md-auto-code-rule",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-md-auto-code-rule/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-md-auto-code-rule"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-md-auto-code-rule/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-md-auto-code-rule/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-md-auto-code-rule-title\"]",
+    "refresh": "[data-testid=\"mes-md-auto-code-rule-refresh\"]",
+    "createButton": "[data-testid=\"mes-md-auto-code-rule-create\"]",
+    "searchForm": "[data-testid=\"mes-md-auto-code-rule-search\"]",
+    "searchSubmit": "[data-testid=\"mes-md-auto-code-rule-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-md-auto-code-rule-search-reset\"]",
+    "total": "[data-testid=\"mes-md-auto-code-rule-total\"]",
+    "table": "[data-testid=\"mes-md-auto-code-rule-table\"]",
+    "row": "[data-testid=\"mes-md-auto-code-rule-row\"]",
+    "editButton": "[data-testid=\"mes-md-auto-code-rule-edit\"]",
+    "deleteButton": "[data-testid=\"mes-md-auto-code-rule-delete\"]",
+    "form": "[data-testid=\"mes-md-auto-code-rule-form\"]",
+    "formError": "[data-testid=\"mes-md-auto-code-rule-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-md-auto-code-rule-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-md-auto-code-rule-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-md-auto-code-rule-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 编码规则列表",
+    "dialogLabel": {
+      "create": "新增MES 编码规则",
+      "edit": "编辑MES 编码规则"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "code",
+        "label": "规则编码",
+        "type": "string",
+        "required": false,
+        "testId": "field-code",
+        "selector": "[data-testid=\"field-code\"]"
+      },
+      {
+        "name": "name",
+        "label": "规则名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "description",
+        "label": "描述",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      },
+      {
+        "name": "max_length",
+        "label": "最大长度",
+        "type": "number",
+        "required": false,
+        "testId": "field-max_length",
+        "selector": "[data-testid=\"field-max_length\"]"
+      },
+      {
+        "name": "padded",
+        "label": "是否补齐",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-padded",
+        "selector": "[data-testid=\"field-padded\"]"
+      },
+      {
+        "name": "padded_char",
+        "label": "补齐字符",
+        "type": "string",
+        "required": false,
+        "testId": "field-padded_char",
+        "selector": "[data-testid=\"field-padded_char\"]"
+      },
+      {
+        "name": "padded_method",
+        "label": "补齐方式",
+        "type": "number",
+        "required": false,
+        "testId": "field-padded_method",
+        "selector": "[data-testid=\"field-padded_method\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-md-auto-code-rule",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-md-auto-code-rule\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-md-auto-code-rule-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-md-auto-code-rule-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-md-auto-code-rule:search",
+      "reset": "mes-md-auto-code-rule:reset",
+      "refresh": "mes-md-auto-code-rule:refresh",
+      "create": "mes-md-auto-code-rule:create",
+      "edit": "mes-md-auto-code-rule:edit",
+      "delete": "mes-md-auto-code-rule:delete",
+      "submit": "mes-md-auto-code-rule:submit",
+      "cancel": "mes-md-auto-code-rule:cancel",
+      "close": "mes-md-auto-code-rule:close",
+      "row": "mes-md-auto-code-rule:row",
+      "pagination": "mes-md-auto-code-rule:pagination",
+      "fields": {
+        "code": "mes-md-auto-code-rule:field:code",
+        "name": "mes-md-auto-code-rule:field:name",
+        "description": "mes-md-auto-code-rule:field:description",
+        "max_length": "mes-md-auto-code-rule:field:max_length",
+        "padded": "mes-md-auto-code-rule:field:padded",
+        "padded_char": "mes-md-auto-code-rule:field:padded_char",
+        "padded_method": "mes-md-auto-code-rule:field:padded_method",
+        "status": "mes-md-auto-code-rule:field:status",
+        "remark": "mes-md-auto-code-rule:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-md-auto-code-rule",
+      "examples": [
+        "mes.mes-md-auto-code-rule__List__Refresh",
+        "mes.mes-md-auto-code-rule__ListItem__Open",
+        "mes.mes-md-auto-code-rule__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

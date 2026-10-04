@@ -65,24 +65,36 @@ export function CrmPerformanceConfigForm({ open, initialData, onClose, onSuccess
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="crm-performance-config-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑CRM 业绩目标" : "新增CRM 业绩目标"}
+        data-testid="crm-performance-config-form"
+        data-agent-scope="crm-performance-config:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑CrmPerformanceConfig（源框架导入）" : "新增CrmPerformanceConfig（源框架导入）"}
+            {isEdit ? "编辑CRM 业绩目标" : "新增CRM 业绩目标"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="crm-performance-config-form-close" data-agent-target="crm-performance-config:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="crm-performance-config-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">目标类型</label>
+          <label htmlFor="crm-performance-config-biz_type" className="block text-xs text-slate-600 mb-1">目标类型</label>
           <input
             type="number"
+            id="crm-performance-config-biz_type"
+            data-testid="field-biz_type"
+            data-agent-target="crm-performance-config:field:biz_type"
+            data-agent-state={formData.biz_type == null || formData.biz_type === "" ? "empty" : "filled"}
+            aria-label="目标类型"
             value={formData.biz_type != null ? String(formData.biz_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -92,9 +104,14 @@ export function CrmPerformanceConfigForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">目标对象编号</label>
+          <label htmlFor="crm-performance-config-object_id" className="block text-xs text-slate-600 mb-1">目标对象编号</label>
           <input
             type="number"
+            id="crm-performance-config-object_id"
+            data-testid="field-object_id"
+            data-agent-target="crm-performance-config:field:object_id"
+            data-agent-state={formData.object_id == null || formData.object_id === "" ? "empty" : "filled"}
+            aria-label="目标对象编号"
             value={formData.object_id != null ? String(formData.object_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, object_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -104,9 +121,14 @@ export function CrmPerformanceConfigForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">目标对象类型</label>
+          <label htmlFor="crm-performance-config-object_type" className="block text-xs text-slate-600 mb-1">目标对象类型</label>
           <input
             type="number"
+            id="crm-performance-config-object_type"
+            data-testid="field-object_type"
+            data-agent-target="crm-performance-config:field:object_type"
+            data-agent-state={formData.object_type == null || formData.object_type === "" ? "empty" : "filled"}
+            aria-label="目标对象类型"
             value={formData.object_type != null ? String(formData.object_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, object_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -116,9 +138,14 @@ export function CrmPerformanceConfigForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">年份</label>
+          <label htmlFor="crm-performance-config-year" className="block text-xs text-slate-600 mb-1">年份</label>
           <input
             type="number"
+            id="crm-performance-config-year"
+            data-testid="field-year"
+            data-agent-target="crm-performance-config:field:year"
+            data-agent-state={formData.year == null || formData.year === "" ? "empty" : "filled"}
+            aria-label="年份"
             value={formData.year != null ? String(formData.year) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, year: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -128,9 +155,14 @@ export function CrmPerformanceConfigForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">年度目标金额</label>
+          <label htmlFor="crm-performance-config-year_target_price" className="block text-xs text-slate-600 mb-1">年度目标金额</label>
           <input
             type="number"
+            id="crm-performance-config-year_target_price"
+            data-testid="field-year_target_price"
+            data-agent-target="crm-performance-config:field:year_target_price"
+            data-agent-state={formData.year_target_price == null || formData.year_target_price === "" ? "empty" : "filled"}
+            aria-label="年度目标金额"
             value={formData.year_target_price != null ? String(formData.year_target_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, year_target_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -140,9 +172,14 @@ export function CrmPerformanceConfigForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">一月目标金额</label>
+          <label htmlFor="crm-performance-config-january_target_price" className="block text-xs text-slate-600 mb-1">一月目标金额</label>
           <input
             type="number"
+            id="crm-performance-config-january_target_price"
+            data-testid="field-january_target_price"
+            data-agent-target="crm-performance-config:field:january_target_price"
+            data-agent-state={formData.january_target_price == null || formData.january_target_price === "" ? "empty" : "filled"}
+            aria-label="一月目标金额"
             value={formData.january_target_price != null ? String(formData.january_target_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, january_target_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -152,9 +189,14 @@ export function CrmPerformanceConfigForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">二月目标金额</label>
+          <label htmlFor="crm-performance-config-february_target_price" className="block text-xs text-slate-600 mb-1">二月目标金额</label>
           <input
             type="number"
+            id="crm-performance-config-february_target_price"
+            data-testid="field-february_target_price"
+            data-agent-target="crm-performance-config:field:february_target_price"
+            data-agent-state={formData.february_target_price == null || formData.february_target_price === "" ? "empty" : "filled"}
+            aria-label="二月目标金额"
             value={formData.february_target_price != null ? String(formData.february_target_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, february_target_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -164,9 +206,14 @@ export function CrmPerformanceConfigForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">三月目标金额</label>
+          <label htmlFor="crm-performance-config-march_target_price" className="block text-xs text-slate-600 mb-1">三月目标金额</label>
           <input
             type="number"
+            id="crm-performance-config-march_target_price"
+            data-testid="field-march_target_price"
+            data-agent-target="crm-performance-config:field:march_target_price"
+            data-agent-state={formData.march_target_price == null || formData.march_target_price === "" ? "empty" : "filled"}
+            aria-label="三月目标金额"
             value={formData.march_target_price != null ? String(formData.march_target_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, march_target_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -176,9 +223,14 @@ export function CrmPerformanceConfigForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">四月目标金额</label>
+          <label htmlFor="crm-performance-config-april_target_price" className="block text-xs text-slate-600 mb-1">四月目标金额</label>
           <input
             type="number"
+            id="crm-performance-config-april_target_price"
+            data-testid="field-april_target_price"
+            data-agent-target="crm-performance-config:field:april_target_price"
+            data-agent-state={formData.april_target_price == null || formData.april_target_price === "" ? "empty" : "filled"}
+            aria-label="四月目标金额"
             value={formData.april_target_price != null ? String(formData.april_target_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, april_target_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -188,9 +240,14 @@ export function CrmPerformanceConfigForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">五月目标金额</label>
+          <label htmlFor="crm-performance-config-may_target_price" className="block text-xs text-slate-600 mb-1">五月目标金额</label>
           <input
             type="number"
+            id="crm-performance-config-may_target_price"
+            data-testid="field-may_target_price"
+            data-agent-target="crm-performance-config:field:may_target_price"
+            data-agent-state={formData.may_target_price == null || formData.may_target_price === "" ? "empty" : "filled"}
+            aria-label="五月目标金额"
             value={formData.may_target_price != null ? String(formData.may_target_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, may_target_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -200,9 +257,14 @@ export function CrmPerformanceConfigForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">六月目标金额</label>
+          <label htmlFor="crm-performance-config-june_target_price" className="block text-xs text-slate-600 mb-1">六月目标金额</label>
           <input
             type="number"
+            id="crm-performance-config-june_target_price"
+            data-testid="field-june_target_price"
+            data-agent-target="crm-performance-config:field:june_target_price"
+            data-agent-state={formData.june_target_price == null || formData.june_target_price === "" ? "empty" : "filled"}
+            aria-label="六月目标金额"
             value={formData.june_target_price != null ? String(formData.june_target_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, june_target_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -212,9 +274,14 @@ export function CrmPerformanceConfigForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">七月目标金额</label>
+          <label htmlFor="crm-performance-config-july_target_price" className="block text-xs text-slate-600 mb-1">七月目标金额</label>
           <input
             type="number"
+            id="crm-performance-config-july_target_price"
+            data-testid="field-july_target_price"
+            data-agent-target="crm-performance-config:field:july_target_price"
+            data-agent-state={formData.july_target_price == null || formData.july_target_price === "" ? "empty" : "filled"}
+            aria-label="七月目标金额"
             value={formData.july_target_price != null ? String(formData.july_target_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, july_target_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -224,9 +291,14 @@ export function CrmPerformanceConfigForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">八月目标金额</label>
+          <label htmlFor="crm-performance-config-august_target_price" className="block text-xs text-slate-600 mb-1">八月目标金额</label>
           <input
             type="number"
+            id="crm-performance-config-august_target_price"
+            data-testid="field-august_target_price"
+            data-agent-target="crm-performance-config:field:august_target_price"
+            data-agent-state={formData.august_target_price == null || formData.august_target_price === "" ? "empty" : "filled"}
+            aria-label="八月目标金额"
             value={formData.august_target_price != null ? String(formData.august_target_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, august_target_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -236,9 +308,14 @@ export function CrmPerformanceConfigForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">九月目标金额</label>
+          <label htmlFor="crm-performance-config-september_target_price" className="block text-xs text-slate-600 mb-1">九月目标金额</label>
           <input
             type="number"
+            id="crm-performance-config-september_target_price"
+            data-testid="field-september_target_price"
+            data-agent-target="crm-performance-config:field:september_target_price"
+            data-agent-state={formData.september_target_price == null || formData.september_target_price === "" ? "empty" : "filled"}
+            aria-label="九月目标金额"
             value={formData.september_target_price != null ? String(formData.september_target_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, september_target_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -248,9 +325,14 @@ export function CrmPerformanceConfigForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">十月目标金额</label>
+          <label htmlFor="crm-performance-config-october_target_price" className="block text-xs text-slate-600 mb-1">十月目标金额</label>
           <input
             type="number"
+            id="crm-performance-config-october_target_price"
+            data-testid="field-october_target_price"
+            data-agent-target="crm-performance-config:field:october_target_price"
+            data-agent-state={formData.october_target_price == null || formData.october_target_price === "" ? "empty" : "filled"}
+            aria-label="十月目标金额"
             value={formData.october_target_price != null ? String(formData.october_target_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, october_target_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -260,9 +342,14 @@ export function CrmPerformanceConfigForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">十一月目标金额</label>
+          <label htmlFor="crm-performance-config-november_target_price" className="block text-xs text-slate-600 mb-1">十一月目标金额</label>
           <input
             type="number"
+            id="crm-performance-config-november_target_price"
+            data-testid="field-november_target_price"
+            data-agent-target="crm-performance-config:field:november_target_price"
+            data-agent-state={formData.november_target_price == null || formData.november_target_price === "" ? "empty" : "filled"}
+            aria-label="十一月目标金额"
             value={formData.november_target_price != null ? String(formData.november_target_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, november_target_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -272,9 +359,14 @@ export function CrmPerformanceConfigForm({ open, initialData, onClose, onSuccess
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">十二月目标金额</label>
+          <label htmlFor="crm-performance-config-december_target_price" className="block text-xs text-slate-600 mb-1">十二月目标金额</label>
           <input
             type="number"
+            id="crm-performance-config-december_target_price"
+            data-testid="field-december_target_price"
+            data-agent-target="crm-performance-config:field:december_target_price"
+            data-agent-state={formData.december_target_price == null || formData.december_target_price === "" ? "empty" : "filled"}
+            aria-label="十二月目标金额"
             value={formData.december_target_price != null ? String(formData.december_target_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, december_target_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -288,6 +380,8 @@ export function CrmPerformanceConfigForm({ open, initialData, onClose, onSuccess
             <button
               type="button"
               onClick={onClose}
+              data-testid="crm-performance-config-form-cancel"
+              data-agent-target="crm-performance-config:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -295,6 +389,9 @@ export function CrmPerformanceConfigForm({ open, initialData, onClose, onSuccess
             <button
               type="submit"
               disabled={loading}
+              data-testid="crm-performance-config-form-submit"
+              data-agent-target="crm-performance-config:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

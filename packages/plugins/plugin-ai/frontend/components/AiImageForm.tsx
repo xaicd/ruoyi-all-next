@@ -63,24 +63,36 @@ export function AiImageForm({ open, initialData, onClose, onSuccess }: AiImageFo
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="ai-image-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑AI 绘画" : "新增AI 绘画"}
+        data-testid="ai-image-form"
+        data-agent-scope="ai-image:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑AiImage（源框架导入）" : "新增AiImage（源框架导入）"}
+            {isEdit ? "编辑AI 绘画" : "新增AI 绘画"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="ai-image-form-close" data-agent-target="ai-image:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="ai-image-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="ai-image-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="ai-image-user_id"
+            data-testid="field-user_id"
+            data-agent-target="ai-image:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -90,9 +102,14 @@ export function AiImageForm({ open, initialData, onClose, onSuccess }: AiImageFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">提示词</label>
+          <label htmlFor="ai-image-prompt" className="block text-xs text-slate-600 mb-1">提示词</label>
           <input
             type="text"
+            id="ai-image-prompt"
+            data-testid="field-prompt"
+            data-agent-target="ai-image:field:prompt"
+            data-agent-state={formData.prompt ? "filled" : "empty"}
+            aria-label="提示词"
             value={formData.prompt ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, prompt: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -102,9 +119,14 @@ export function AiImageForm({ open, initialData, onClose, onSuccess }: AiImageFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">平台</label>
+          <label htmlFor="ai-image-platform" className="block text-xs text-slate-600 mb-1">平台</label>
           <input
             type="text"
+            id="ai-image-platform"
+            data-testid="field-platform"
+            data-agent-target="ai-image:field:platform"
+            data-agent-state={formData.platform ? "filled" : "empty"}
+            aria-label="平台"
             value={formData.platform ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, platform: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -114,9 +136,14 @@ export function AiImageForm({ open, initialData, onClose, onSuccess }: AiImageFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">模型编号</label>
+          <label htmlFor="ai-image-model_id" className="block text-xs text-slate-600 mb-1">模型编号</label>
           <input
             type="number"
+            id="ai-image-model_id"
+            data-testid="field-model_id"
+            data-agent-target="ai-image:field:model_id"
+            data-agent-state={formData.model_id == null || formData.model_id === "" ? "empty" : "filled"}
+            aria-label="模型编号"
             value={formData.model_id != null ? String(formData.model_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, model_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -126,9 +153,14 @@ export function AiImageForm({ open, initialData, onClose, onSuccess }: AiImageFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">模型标识</label>
+          <label htmlFor="ai-image-model" className="block text-xs text-slate-600 mb-1">模型标识</label>
           <input
             type="text"
+            id="ai-image-model"
+            data-testid="field-model"
+            data-agent-target="ai-image:field:model"
+            data-agent-state={formData.model ? "filled" : "empty"}
+            aria-label="模型标识"
             value={formData.model ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, model: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -138,9 +170,14 @@ export function AiImageForm({ open, initialData, onClose, onSuccess }: AiImageFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">图片宽度</label>
+          <label htmlFor="ai-image-width" className="block text-xs text-slate-600 mb-1">图片宽度</label>
           <input
             type="number"
+            id="ai-image-width"
+            data-testid="field-width"
+            data-agent-target="ai-image:field:width"
+            data-agent-state={formData.width == null || formData.width === "" ? "empty" : "filled"}
+            aria-label="图片宽度"
             value={formData.width != null ? String(formData.width) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, width: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -150,9 +187,14 @@ export function AiImageForm({ open, initialData, onClose, onSuccess }: AiImageFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">图片高度</label>
+          <label htmlFor="ai-image-height" className="block text-xs text-slate-600 mb-1">图片高度</label>
           <input
             type="number"
+            id="ai-image-height"
+            data-testid="field-height"
+            data-agent-target="ai-image:field:height"
+            data-agent-state={formData.height == null || formData.height === "" ? "empty" : "filled"}
+            aria-label="图片高度"
             value={formData.height != null ? String(formData.height) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, height: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -162,9 +204,14 @@ export function AiImageForm({ open, initialData, onClose, onSuccess }: AiImageFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">生成状态</label>
+          <label htmlFor="ai-image-status" className="block text-xs text-slate-600 mb-1">生成状态</label>
           <input
             type="number"
+            id="ai-image-status"
+            data-testid="field-status"
+            data-agent-target="ai-image:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="生成状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -174,9 +221,14 @@ export function AiImageForm({ open, initialData, onClose, onSuccess }: AiImageFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">完成时间</label>
+          <label htmlFor="ai-image-finish_time" className="block text-xs text-slate-600 mb-1">完成时间</label>
           <input
             type="text"
+            id="ai-image-finish_time"
+            data-testid="field-finish_time"
+            data-agent-target="ai-image:field:finish_time"
+            data-agent-state={formData.finish_time ? "filled" : "empty"}
+            aria-label="完成时间"
             value={formData.finish_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, finish_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -186,9 +238,14 @@ export function AiImageForm({ open, initialData, onClose, onSuccess }: AiImageFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">绘画错误信息</label>
+          <label htmlFor="ai-image-error_message" className="block text-xs text-slate-600 mb-1">绘画错误信息</label>
           <input
             type="text"
+            id="ai-image-error_message"
+            data-testid="field-error_message"
+            data-agent-target="ai-image:field:error_message"
+            data-agent-state={formData.error_message ? "filled" : "empty"}
+            aria-label="绘画错误信息"
             value={formData.error_message ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, error_message: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -198,9 +255,14 @@ export function AiImageForm({ open, initialData, onClose, onSuccess }: AiImageFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">图片地址</label>
+          <label htmlFor="ai-image-pic_url" className="block text-xs text-slate-600 mb-1">图片地址</label>
           <input
             type="text"
+            id="ai-image-pic_url"
+            data-testid="field-pic_url"
+            data-agent-target="ai-image:field:pic_url"
+            data-agent-state={formData.pic_url ? "filled" : "empty"}
+            aria-label="图片地址"
             value={formData.pic_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pic_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -212,18 +274,27 @@ export function AiImageForm({ open, initialData, onClose, onSuccess }: AiImageFo
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="public_status"
+            id="ai-image-public_status"
+            data-testid="field-public_status"
+            data-agent-target="ai-image:field:public_status"
+            data-agent-state={formData.public_status ? "on" : "off"}
+            aria-label="是否公开"
             checked={Boolean(formData.public_status)}
             onChange={(e) => setFormData((prev) => ({ ...prev, public_status: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="public_status" className="text-xs text-slate-700 font-medium">是否公开</label>
+          <label htmlFor="ai-image-public_status" className="text-xs text-slate-700 font-medium">是否公开</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">绘制参数，不同 platform 的不同参数</label>
+          <label htmlFor="ai-image-options" className="block text-xs text-slate-600 mb-1">绘制参数，不同 platform 的不同参数</label>
           <input
             type="text"
+            id="ai-image-options"
+            data-testid="field-options"
+            data-agent-target="ai-image:field:options"
+            data-agent-state={formData.options ? "filled" : "empty"}
+            aria-label="绘制参数，不同 platform 的不同参数"
             value={formData.options ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, options: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -233,9 +304,14 @@ export function AiImageForm({ open, initialData, onClose, onSuccess }: AiImageFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">mj buttons 按钮</label>
+          <label htmlFor="ai-image-buttons" className="block text-xs text-slate-600 mb-1">mj buttons 按钮</label>
           <input
             type="text"
+            id="ai-image-buttons"
+            data-testid="field-buttons"
+            data-agent-target="ai-image:field:buttons"
+            data-agent-state={formData.buttons ? "filled" : "empty"}
+            aria-label="mj buttons 按钮"
             value={formData.buttons ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, buttons: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -245,9 +321,14 @@ export function AiImageForm({ open, initialData, onClose, onSuccess }: AiImageFo
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">任务编号</label>
+          <label htmlFor="ai-image-task_id" className="block text-xs text-slate-600 mb-1">任务编号</label>
           <input
             type="text"
+            id="ai-image-task_id"
+            data-testid="field-task_id"
+            data-agent-target="ai-image:field:task_id"
+            data-agent-state={formData.task_id ? "filled" : "empty"}
+            aria-label="任务编号"
             value={formData.task_id ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, task_id: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -261,6 +342,8 @@ export function AiImageForm({ open, initialData, onClose, onSuccess }: AiImageFo
             <button
               type="button"
               onClick={onClose}
+              data-testid="ai-image-form-cancel"
+              data-agent-target="ai-image:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -268,6 +351,9 @@ export function AiImageForm({ open, initialData, onClose, onSuccess }: AiImageFo
             <button
               type="submit"
               disabled={loading}
+              data-testid="ai-image-form-submit"
+              data-agent-target="ai-image:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

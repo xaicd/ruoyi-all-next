@@ -61,24 +61,36 @@ export function MesWmProductSalesForm({ open, initialData, onClose, onSuccess }:
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-wm-product-sales-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 销售出库单" : "新增MES 销售出库单"}
+        data-testid="mes-wm-product-sales-form"
+        data-agent-scope="mes-wm-product-sales:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesWmProductSales（源框架导入）" : "新增MesWmProductSales（源框架导入）"}
+            {isEdit ? "编辑MES 销售出库单" : "新增MES 销售出库单"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-wm-product-sales-form-close" data-agent-target="mes-wm-product-sales:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-wm-product-sales-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">出库单号</label>
+          <label htmlFor="mes-wm-product-sales-code" className="block text-xs text-slate-600 mb-1">出库单号</label>
           <input
             type="text"
+            id="mes-wm-product-sales-code"
+            data-testid="field-code"
+            data-agent-target="mes-wm-product-sales:field:code"
+            data-agent-state={formData.code ? "filled" : "empty"}
+            aria-label="出库单号"
             value={formData.code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -88,9 +100,14 @@ export function MesWmProductSalesForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">出库单名称</label>
+          <label htmlFor="mes-wm-product-sales-name" className="block text-xs text-slate-600 mb-1">出库单名称</label>
           <input
             type="text"
+            id="mes-wm-product-sales-name"
+            data-testid="field-name"
+            data-agent-target="mes-wm-product-sales:field:name"
+            data-agent-state={formData.name ? "filled" : "empty"}
+            aria-label="出库单名称"
             value={formData.name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -100,9 +117,14 @@ export function MesWmProductSalesForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">客户ID</label>
+          <label htmlFor="mes-wm-product-sales-client_id" className="block text-xs text-slate-600 mb-1">客户ID</label>
           <input
             type="number"
+            id="mes-wm-product-sales-client_id"
+            data-testid="field-client_id"
+            data-agent-target="mes-wm-product-sales:field:client_id"
+            data-agent-state={formData.client_id == null || formData.client_id === "" ? "empty" : "filled"}
+            aria-label="客户ID"
             value={formData.client_id != null ? String(formData.client_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, client_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -112,9 +134,14 @@ export function MesWmProductSalesForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">销售订单号</label>
+          <label htmlFor="mes-wm-product-sales-sales_order_code" className="block text-xs text-slate-600 mb-1">销售订单号</label>
           <input
             type="text"
+            id="mes-wm-product-sales-sales_order_code"
+            data-testid="field-sales_order_code"
+            data-agent-target="mes-wm-product-sales:field:sales_order_code"
+            data-agent-state={formData.sales_order_code ? "filled" : "empty"}
+            aria-label="销售订单号"
             value={formData.sales_order_code ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sales_order_code: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -124,9 +151,14 @@ export function MesWmProductSalesForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">发货通知单 ID</label>
+          <label htmlFor="mes-wm-product-sales-notice_id" className="block text-xs text-slate-600 mb-1">发货通知单 ID</label>
           <input
             type="number"
+            id="mes-wm-product-sales-notice_id"
+            data-testid="field-notice_id"
+            data-agent-target="mes-wm-product-sales:field:notice_id"
+            data-agent-state={formData.notice_id == null || formData.notice_id === "" ? "empty" : "filled"}
+            aria-label="发货通知单 ID"
             value={formData.notice_id != null ? String(formData.notice_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, notice_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -136,9 +168,14 @@ export function MesWmProductSalesForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">出库日期</label>
+          <label htmlFor="mes-wm-product-sales-sales_date" className="block text-xs text-slate-600 mb-1">出库日期</label>
           <input
             type="text"
+            id="mes-wm-product-sales-sales_date"
+            data-testid="field-sales_date"
+            data-agent-target="mes-wm-product-sales:field:sales_date"
+            data-agent-state={formData.sales_date ? "filled" : "empty"}
+            aria-label="出库日期"
             value={formData.sales_date ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sales_date: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -148,9 +185,14 @@ export function MesWmProductSalesForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">联系人</label>
+          <label htmlFor="mes-wm-product-sales-contact_name" className="block text-xs text-slate-600 mb-1">联系人</label>
           <input
             type="text"
+            id="mes-wm-product-sales-contact_name"
+            data-testid="field-contact_name"
+            data-agent-target="mes-wm-product-sales:field:contact_name"
+            data-agent-state={formData.contact_name ? "filled" : "empty"}
+            aria-label="联系人"
             value={formData.contact_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, contact_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -160,9 +202,14 @@ export function MesWmProductSalesForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">联系电话</label>
+          <label htmlFor="mes-wm-product-sales-contact_telephone" className="block text-xs text-slate-600 mb-1">联系电话</label>
           <input
             type="text"
+            id="mes-wm-product-sales-contact_telephone"
+            data-testid="field-contact_telephone"
+            data-agent-target="mes-wm-product-sales:field:contact_telephone"
+            data-agent-state={formData.contact_telephone ? "filled" : "empty"}
+            aria-label="联系电话"
             value={formData.contact_telephone ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, contact_telephone: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -172,9 +219,14 @@ export function MesWmProductSalesForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">收货地址</label>
+          <label htmlFor="mes-wm-product-sales-contact_address" className="block text-xs text-slate-600 mb-1">收货地址</label>
           <input
             type="text"
+            id="mes-wm-product-sales-contact_address"
+            data-testid="field-contact_address"
+            data-agent-target="mes-wm-product-sales:field:contact_address"
+            data-agent-state={formData.contact_address ? "filled" : "empty"}
+            aria-label="收货地址"
             value={formData.contact_address ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, contact_address: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -184,9 +236,14 @@ export function MesWmProductSalesForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">承运商</label>
+          <label htmlFor="mes-wm-product-sales-carrier" className="block text-xs text-slate-600 mb-1">承运商</label>
           <input
             type="text"
+            id="mes-wm-product-sales-carrier"
+            data-testid="field-carrier"
+            data-agent-target="mes-wm-product-sales:field:carrier"
+            data-agent-state={formData.carrier ? "filled" : "empty"}
+            aria-label="承运商"
             value={formData.carrier ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, carrier: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -196,9 +253,14 @@ export function MesWmProductSalesForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">运输单号</label>
+          <label htmlFor="mes-wm-product-sales-shipping_number" className="block text-xs text-slate-600 mb-1">运输单号</label>
           <input
             type="text"
+            id="mes-wm-product-sales-shipping_number"
+            data-testid="field-shipping_number"
+            data-agent-target="mes-wm-product-sales:field:shipping_number"
+            data-agent-state={formData.shipping_number ? "filled" : "empty"}
+            aria-label="运输单号"
             value={formData.shipping_number ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, shipping_number: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -208,9 +270,14 @@ export function MesWmProductSalesForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">状态</label>
+          <label htmlFor="mes-wm-product-sales-status" className="block text-xs text-slate-600 mb-1">状态</label>
           <input
             type="number"
+            id="mes-wm-product-sales-status"
+            data-testid="field-status"
+            data-agent-target="mes-wm-product-sales:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -220,9 +287,14 @@ export function MesWmProductSalesForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-wm-product-sales-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-wm-product-sales-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-wm-product-sales:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -236,6 +308,8 @@ export function MesWmProductSalesForm({ open, initialData, onClose, onSuccess }:
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-wm-product-sales-form-cancel"
+              data-agent-target="mes-wm-product-sales:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -243,6 +317,9 @@ export function MesWmProductSalesForm({ open, initialData, onClose, onSuccess }:
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-wm-product-sales-form-submit"
+              data-agent-target="mes-wm-product-sales:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ImConversationReadService } from "../im-conversation-read.service"
 
 describe("ImConversationReadService", () => {
-  it("should create and query ImConversationRead（源框架导入）", async () => {
+  it("should create and query IM 会话读位置 DO只表达「用户在某个会话的最大已读位置」，私聊 / 群聊 / 频道统一落这张表，是读位置的唯一权威。", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImConversationReadService.create({
         user_id: 1,
@@ -21,7 +21,7 @@ describe("ImConversationReadService", () => {
   
       const updated = await ImConversationReadService.update(created.id, {
         id: created.id,
-        user_id: "更新ImConversationRead（源框架导入）",
+        user_id: "更新IM 会话读位置 DO只表达「用户在某个会话的最大已读位置」，私聊 / 群聊 / 频道统一落这张表，是读位置的唯一权威。",
       } as any)
       expect(updated).toBeDefined()
   

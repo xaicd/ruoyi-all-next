@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MemberLevelService } from "../member-level.service"
 
 describe("MemberLevelService", () => {
-  it("should create and query MemberLevel（源框架导入）", async () => {
+  it("should create and query 会员等级 DO配置每个等级需要的积分", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MemberLevelService.create({
-        name: "测试MemberLevel（源框架导入）",
+        name: "测试会员等级 DO配置每个等级需要的积分",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("MemberLevelService", () => {
   
       const updated = await MemberLevelService.update(created.id, {
         id: created.id,
-        name: "更新MemberLevel（源框架导入）",
+        name: "更新会员等级 DO配置每个等级需要的积分",
       } as any)
       expect(updated).toBeDefined()
   

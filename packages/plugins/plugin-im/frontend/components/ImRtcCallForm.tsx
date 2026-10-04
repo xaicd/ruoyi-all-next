@@ -58,24 +58,36 @@ export function ImRtcCallForm({ open, initialData, onClose, onSuccess }: ImRtcCa
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="im-rtc-call-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑IM 通话记录 DO（房间级 / 主表）一通通话一行；状态机 CREATED → RUNNING → ENDED；和明细表 通过 关联" : "新增IM 通话记录 DO（房间级 / 主表）一通通话一行；状态机 CREATED → RUNNING → ENDED；和明细表 通过 关联"}
+        data-testid="im-rtc-call-form"
+        data-agent-scope="im-rtc-call:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑ImRtcCall（源框架导入）" : "新增ImRtcCall（源框架导入）"}
+            {isEdit ? "编辑IM 通话记录 DO（房间级 / 主表）一通通话一行；状态机 CREATED → RUNNING → ENDED；和明细表 通过 关联" : "新增IM 通话记录 DO（房间级 / 主表）一通通话一行；状态机 CREATED → RUNNING → ENDED；和明细表 通过 关联"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="im-rtc-call-form-close" data-agent-target="im-rtc-call:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="im-rtc-call-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">业务通话编号（UUID，同时作为 LiveKit 房间名）；唯一</label>
+          <label htmlFor="im-rtc-call-room" className="block text-xs text-slate-600 mb-1">业务通话编号（UUID，同时作为 LiveKit 房间名）；唯一</label>
           <input
             type="text"
+            id="im-rtc-call-room"
+            data-testid="field-room"
+            data-agent-target="im-rtc-call:field:room"
+            data-agent-state={formData.room ? "filled" : "empty"}
+            aria-label="业务通话编号（UUID，同时作为 LiveKit 房间名）；唯一"
             value={formData.room ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, room: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -85,9 +97,14 @@ export function ImRtcCallForm({ open, initialData, onClose, onSuccess }: ImRtcCa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">会话类型</label>
+          <label htmlFor="im-rtc-call-conversation_type" className="block text-xs text-slate-600 mb-1">会话类型</label>
           <input
             type="number"
+            id="im-rtc-call-conversation_type"
+            data-testid="field-conversation_type"
+            data-agent-target="im-rtc-call:field:conversation_type"
+            data-agent-state={formData.conversation_type == null || formData.conversation_type === "" ? "empty" : "filled"}
+            aria-label="会话类型"
             value={formData.conversation_type != null ? String(formData.conversation_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, conversation_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -97,9 +114,14 @@ export function ImRtcCallForm({ open, initialData, onClose, onSuccess }: ImRtcCa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">媒体类型</label>
+          <label htmlFor="im-rtc-call-media_type" className="block text-xs text-slate-600 mb-1">媒体类型</label>
           <input
             type="number"
+            id="im-rtc-call-media_type"
+            data-testid="field-media_type"
+            data-agent-target="im-rtc-call:field:media_type"
+            data-agent-state={formData.media_type == null || formData.media_type === "" ? "empty" : "filled"}
+            aria-label="媒体类型"
             value={formData.media_type != null ? String(formData.media_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, media_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -109,9 +131,14 @@ export function ImRtcCallForm({ open, initialData, onClose, onSuccess }: ImRtcCa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">发起人用户编号</label>
+          <label htmlFor="im-rtc-call-inviter_user_id" className="block text-xs text-slate-600 mb-1">发起人用户编号</label>
           <input
             type="number"
+            id="im-rtc-call-inviter_user_id"
+            data-testid="field-inviter_user_id"
+            data-agent-target="im-rtc-call:field:inviter_user_id"
+            data-agent-state={formData.inviter_user_id == null || formData.inviter_user_id === "" ? "empty" : "filled"}
+            aria-label="发起人用户编号"
             value={formData.inviter_user_id != null ? String(formData.inviter_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, inviter_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -121,9 +148,14 @@ export function ImRtcCallForm({ open, initialData, onClose, onSuccess }: ImRtcCa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">群编号；私聊为 NULL</label>
+          <label htmlFor="im-rtc-call-group_id" className="block text-xs text-slate-600 mb-1">群编号；私聊为 NULL</label>
           <input
             type="number"
+            id="im-rtc-call-group_id"
+            data-testid="field-group_id"
+            data-agent-target="im-rtc-call:field:group_id"
+            data-agent-state={formData.group_id == null || formData.group_id === "" ? "empty" : "filled"}
+            aria-label="群编号；私聊为 NULL"
             value={formData.group_id != null ? String(formData.group_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, group_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -133,9 +165,14 @@ export function ImRtcCallForm({ open, initialData, onClose, onSuccess }: ImRtcCa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">通话状态</label>
+          <label htmlFor="im-rtc-call-status" className="block text-xs text-slate-600 mb-1">通话状态</label>
           <input
             type="number"
+            id="im-rtc-call-status"
+            data-testid="field-status"
+            data-agent-target="im-rtc-call:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="通话状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -145,9 +182,14 @@ export function ImRtcCallForm({ open, initialData, onClose, onSuccess }: ImRtcCa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">结束原因；通话未结束时为 NULL</label>
+          <label htmlFor="im-rtc-call-end_reason" className="block text-xs text-slate-600 mb-1">结束原因；通话未结束时为 NULL</label>
           <input
             type="number"
+            id="im-rtc-call-end_reason"
+            data-testid="field-end_reason"
+            data-agent-target="im-rtc-call:field:end_reason"
+            data-agent-state={formData.end_reason == null || formData.end_reason === "" ? "empty" : "filled"}
+            aria-label="结束原因；通话未结束时为 NULL"
             value={formData.end_reason != null ? String(formData.end_reason) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, end_reason: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -157,9 +199,14 @@ export function ImRtcCallForm({ open, initialData, onClose, onSuccess }: ImRtcCa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">发起时间</label>
+          <label htmlFor="im-rtc-call-start_time" className="block text-xs text-slate-600 mb-1">发起时间</label>
           <input
             type="text"
+            id="im-rtc-call-start_time"
+            data-testid="field-start_time"
+            data-agent-target="im-rtc-call:field:start_time"
+            data-agent-state={formData.start_time ? "filled" : "empty"}
+            aria-label="发起时间"
             value={formData.start_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, start_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -169,9 +216,14 @@ export function ImRtcCallForm({ open, initialData, onClose, onSuccess }: ImRtcCa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">接通时间</label>
+          <label htmlFor="im-rtc-call-accept_time" className="block text-xs text-slate-600 mb-1">接通时间</label>
           <input
             type="text"
+            id="im-rtc-call-accept_time"
+            data-testid="field-accept_time"
+            data-agent-target="im-rtc-call:field:accept_time"
+            data-agent-state={formData.accept_time ? "filled" : "empty"}
+            aria-label="接通时间"
             value={formData.accept_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, accept_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -181,9 +233,14 @@ export function ImRtcCallForm({ open, initialData, onClose, onSuccess }: ImRtcCa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">通话结束时间</label>
+          <label htmlFor="im-rtc-call-end_time" className="block text-xs text-slate-600 mb-1">通话结束时间</label>
           <input
             type="text"
+            id="im-rtc-call-end_time"
+            data-testid="field-end_time"
+            data-agent-target="im-rtc-call:field:end_time"
+            data-agent-state={formData.end_time ? "filled" : "empty"}
+            aria-label="通话结束时间"
             value={formData.end_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, end_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -197,6 +254,8 @@ export function ImRtcCallForm({ open, initialData, onClose, onSuccess }: ImRtcCa
             <button
               type="button"
               onClick={onClose}
+              data-testid="im-rtc-call-form-cancel"
+              data-agent-target="im-rtc-call:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -204,6 +263,9 @@ export function ImRtcCallForm({ open, initialData, onClose, onSuccess }: ImRtcCa
             <button
               type="submit"
               disabled={loading}
+              data-testid="im-rtc-call-form-submit"
+              data-agent-target="im-rtc-call:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

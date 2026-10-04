@@ -76,24 +76,36 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="after-sale-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑售后订单，用于处理 交易订单的退款退货流程" : "新增售后订单，用于处理 交易订单的退款退货流程"}
+        data-testid="after-sale-form"
+        data-agent-scope="after-sale:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑AfterSale（源框架导入）" : "新增AfterSale（源框架导入）"}
+            {isEdit ? "编辑售后订单，用于处理 交易订单的退款退货流程" : "新增售后订单，用于处理 交易订单的退款退货流程"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="after-sale-form-close" data-agent-target="after-sale:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="after-sale-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">售后单号</label>
+          <label htmlFor="after-sale-no" className="block text-xs text-slate-600 mb-1">售后单号</label>
           <input
             type="text"
+            id="after-sale-no"
+            data-testid="field-no"
+            data-agent-target="after-sale:field:no"
+            data-agent-state={formData.no ? "filled" : "empty"}
+            aria-label="售后单号"
             value={formData.no ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, no: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -103,9 +115,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">退款状态</label>
+          <label htmlFor="after-sale-status" className="block text-xs text-slate-600 mb-1">退款状态</label>
           <input
             type="number"
+            id="after-sale-status"
+            data-testid="field-status"
+            data-agent-target="after-sale:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="退款状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -115,9 +132,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">售后方式</label>
+          <label htmlFor="after-sale-way" className="block text-xs text-slate-600 mb-1">售后方式</label>
           <input
             type="number"
+            id="after-sale-way"
+            data-testid="field-way"
+            data-agent-target="after-sale:field:way"
+            data-agent-state={formData.way == null || formData.way === "" ? "empty" : "filled"}
+            aria-label="售后方式"
             value={formData.way != null ? String(formData.way) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, way: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -127,9 +149,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">售后类型</label>
+          <label htmlFor="after-sale-type" className="block text-xs text-slate-600 mb-1">售后类型</label>
           <input
             type="number"
+            id="after-sale-type"
+            data-testid="field-type"
+            data-agent-target="after-sale:field:type"
+            data-agent-state={formData.type == null || formData.type === "" ? "empty" : "filled"}
+            aria-label="售后类型"
             value={formData.type != null ? String(formData.type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -139,9 +166,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="after-sale-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="after-sale-user_id"
+            data-testid="field-user_id"
+            data-agent-target="after-sale:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -151,9 +183,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">申请原因</label>
+          <label htmlFor="after-sale-apply_reason" className="block text-xs text-slate-600 mb-1">申请原因</label>
           <input
             type="text"
+            id="after-sale-apply_reason"
+            data-testid="field-apply_reason"
+            data-agent-target="after-sale:field:apply_reason"
+            data-agent-state={formData.apply_reason ? "filled" : "empty"}
+            aria-label="申请原因"
             value={formData.apply_reason ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, apply_reason: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -163,9 +200,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">补充描述</label>
+          <label htmlFor="after-sale-apply_description" className="block text-xs text-slate-600 mb-1">补充描述</label>
           <input
             type="text"
+            id="after-sale-apply_description"
+            data-testid="field-apply_description"
+            data-agent-target="after-sale:field:apply_description"
+            data-agent-state={formData.apply_description ? "filled" : "empty"}
+            aria-label="补充描述"
             value={formData.apply_description ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, apply_description: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -175,9 +217,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">补充凭证图片</label>
+          <label htmlFor="after-sale-apply_pic_urls" className="block text-xs text-slate-600 mb-1">补充凭证图片</label>
           <input
             type="text"
+            id="after-sale-apply_pic_urls"
+            data-testid="field-apply_pic_urls"
+            data-agent-target="after-sale:field:apply_pic_urls"
+            data-agent-state={formData.apply_pic_urls ? "filled" : "empty"}
+            aria-label="补充凭证图片"
             value={formData.apply_pic_urls ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, apply_pic_urls: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -187,9 +234,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">交易订单编号</label>
+          <label htmlFor="after-sale-order_id" className="block text-xs text-slate-600 mb-1">交易订单编号</label>
           <input
             type="number"
+            id="after-sale-order_id"
+            data-testid="field-order_id"
+            data-agent-target="after-sale:field:order_id"
+            data-agent-state={formData.order_id == null || formData.order_id === "" ? "empty" : "filled"}
+            aria-label="交易订单编号"
             value={formData.order_id != null ? String(formData.order_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, order_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -199,9 +251,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">订单流水号</label>
+          <label htmlFor="after-sale-order_no" className="block text-xs text-slate-600 mb-1">订单流水号</label>
           <input
             type="text"
+            id="after-sale-order_no"
+            data-testid="field-order_no"
+            data-agent-target="after-sale:field:order_no"
+            data-agent-state={formData.order_no ? "filled" : "empty"}
+            aria-label="订单流水号"
             value={formData.order_no ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, order_no: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -211,9 +268,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">交易订单项编号</label>
+          <label htmlFor="after-sale-order_item_id" className="block text-xs text-slate-600 mb-1">交易订单项编号</label>
           <input
             type="number"
+            id="after-sale-order_item_id"
+            data-testid="field-order_item_id"
+            data-agent-target="after-sale:field:order_item_id"
+            data-agent-state={formData.order_item_id == null || formData.order_item_id === "" ? "empty" : "filled"}
+            aria-label="交易订单项编号"
             value={formData.order_item_id != null ? String(formData.order_item_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, order_item_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -223,9 +285,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品 SPU 编号</label>
+          <label htmlFor="after-sale-spu_id" className="block text-xs text-slate-600 mb-1">商品 SPU 编号</label>
           <input
             type="number"
+            id="after-sale-spu_id"
+            data-testid="field-spu_id"
+            data-agent-target="after-sale:field:spu_id"
+            data-agent-state={formData.spu_id == null || formData.spu_id === "" ? "empty" : "filled"}
+            aria-label="商品 SPU 编号"
             value={formData.spu_id != null ? String(formData.spu_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, spu_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -235,9 +302,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品 SPU 名称</label>
+          <label htmlFor="after-sale-spu_name" className="block text-xs text-slate-600 mb-1">商品 SPU 名称</label>
           <input
             type="text"
+            id="after-sale-spu_name"
+            data-testid="field-spu_name"
+            data-agent-target="after-sale:field:spu_name"
+            data-agent-state={formData.spu_name ? "filled" : "empty"}
+            aria-label="商品 SPU 名称"
             value={formData.spu_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, spu_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -247,9 +319,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品 SKU 编号</label>
+          <label htmlFor="after-sale-sku_id" className="block text-xs text-slate-600 mb-1">商品 SKU 编号</label>
           <input
             type="number"
+            id="after-sale-sku_id"
+            data-testid="field-sku_id"
+            data-agent-target="after-sale:field:sku_id"
+            data-agent-state={formData.sku_id == null || formData.sku_id === "" ? "empty" : "filled"}
+            aria-label="商品 SKU 编号"
             value={formData.sku_id != null ? String(formData.sku_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sku_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -259,9 +336,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">属性数组，JSON 格式</label>
+          <label htmlFor="after-sale-properties" className="block text-xs text-slate-600 mb-1">属性数组，JSON 格式</label>
           <input
             type="text"
+            id="after-sale-properties"
+            data-testid="field-properties"
+            data-agent-target="after-sale:field:properties"
+            data-agent-state={formData.properties ? "filled" : "empty"}
+            aria-label="属性数组，JSON 格式"
             value={formData.properties ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, properties: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -271,9 +353,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品图片</label>
+          <label htmlFor="after-sale-pic_url" className="block text-xs text-slate-600 mb-1">商品图片</label>
           <input
             type="text"
+            id="after-sale-pic_url"
+            data-testid="field-pic_url"
+            data-agent-target="after-sale:field:pic_url"
+            data-agent-state={formData.pic_url ? "filled" : "empty"}
+            aria-label="商品图片"
             value={formData.pic_url ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pic_url: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -283,9 +370,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">退货商品数量</label>
+          <label htmlFor="after-sale-count" className="block text-xs text-slate-600 mb-1">退货商品数量</label>
           <input
             type="number"
+            id="after-sale-count"
+            data-testid="field-count"
+            data-agent-target="after-sale:field:count"
+            data-agent-state={formData.count == null || formData.count === "" ? "empty" : "filled"}
+            aria-label="退货商品数量"
             value={formData.count != null ? String(formData.count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -295,9 +387,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">审批时间</label>
+          <label htmlFor="after-sale-audit_time" className="block text-xs text-slate-600 mb-1">审批时间</label>
           <input
             type="text"
+            id="after-sale-audit_time"
+            data-testid="field-audit_time"
+            data-agent-target="after-sale:field:audit_time"
+            data-agent-state={formData.audit_time ? "filled" : "empty"}
+            aria-label="审批时间"
             value={formData.audit_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, audit_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -307,9 +404,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">审批人</label>
+          <label htmlFor="after-sale-audit_user_id" className="block text-xs text-slate-600 mb-1">审批人</label>
           <input
             type="number"
+            id="after-sale-audit_user_id"
+            data-testid="field-audit_user_id"
+            data-agent-target="after-sale:field:audit_user_id"
+            data-agent-state={formData.audit_user_id == null || formData.audit_user_id === "" ? "empty" : "filled"}
+            aria-label="审批人"
             value={formData.audit_user_id != null ? String(formData.audit_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, audit_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -319,9 +421,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">审批备注</label>
+          <label htmlFor="after-sale-audit_reason" className="block text-xs text-slate-600 mb-1">审批备注</label>
           <input
             type="text"
+            id="after-sale-audit_reason"
+            data-testid="field-audit_reason"
+            data-agent-target="after-sale:field:audit_reason"
+            data-agent-state={formData.audit_reason ? "filled" : "empty"}
+            aria-label="审批备注"
             value={formData.audit_reason ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, audit_reason: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -331,9 +438,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">退款金额，单位：分。</label>
+          <label htmlFor="after-sale-refund_price" className="block text-xs text-slate-600 mb-1">退款金额，单位：分。</label>
           <input
             type="number"
+            id="after-sale-refund_price"
+            data-testid="field-refund_price"
+            data-agent-target="after-sale:field:refund_price"
+            data-agent-state={formData.refund_price == null || formData.refund_price === "" ? "empty" : "filled"}
+            aria-label="退款金额，单位：分。"
             value={formData.refund_price != null ? String(formData.refund_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, refund_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -343,9 +455,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">支付退款编号</label>
+          <label htmlFor="after-sale-pay_refund_id" className="block text-xs text-slate-600 mb-1">支付退款编号</label>
           <input
             type="number"
+            id="after-sale-pay_refund_id"
+            data-testid="field-pay_refund_id"
+            data-agent-target="after-sale:field:pay_refund_id"
+            data-agent-state={formData.pay_refund_id == null || formData.pay_refund_id === "" ? "empty" : "filled"}
+            aria-label="支付退款编号"
             value={formData.pay_refund_id != null ? String(formData.pay_refund_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, pay_refund_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -355,9 +472,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">退款时间</label>
+          <label htmlFor="after-sale-refund_time" className="block text-xs text-slate-600 mb-1">退款时间</label>
           <input
             type="text"
+            id="after-sale-refund_time"
+            data-testid="field-refund_time"
+            data-agent-target="after-sale:field:refund_time"
+            data-agent-state={formData.refund_time ? "filled" : "empty"}
+            aria-label="退款时间"
             value={formData.refund_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, refund_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -367,9 +489,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">退货物流公司编号</label>
+          <label htmlFor="after-sale-logistics_id" className="block text-xs text-slate-600 mb-1">退货物流公司编号</label>
           <input
             type="number"
+            id="after-sale-logistics_id"
+            data-testid="field-logistics_id"
+            data-agent-target="after-sale:field:logistics_id"
+            data-agent-state={formData.logistics_id == null || formData.logistics_id === "" ? "empty" : "filled"}
+            aria-label="退货物流公司编号"
             value={formData.logistics_id != null ? String(formData.logistics_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, logistics_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -379,9 +506,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">退货物流单号</label>
+          <label htmlFor="after-sale-logistics_no" className="block text-xs text-slate-600 mb-1">退货物流单号</label>
           <input
             type="text"
+            id="after-sale-logistics_no"
+            data-testid="field-logistics_no"
+            data-agent-target="after-sale:field:logistics_no"
+            data-agent-state={formData.logistics_no ? "filled" : "empty"}
+            aria-label="退货物流单号"
             value={formData.logistics_no ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, logistics_no: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -391,9 +523,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">退货时间</label>
+          <label htmlFor="after-sale-delivery_time" className="block text-xs text-slate-600 mb-1">退货时间</label>
           <input
             type="text"
+            id="after-sale-delivery_time"
+            data-testid="field-delivery_time"
+            data-agent-target="after-sale:field:delivery_time"
+            data-agent-state={formData.delivery_time ? "filled" : "empty"}
+            aria-label="退货时间"
             value={formData.delivery_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, delivery_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -403,9 +540,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">收货时间</label>
+          <label htmlFor="after-sale-receive_time" className="block text-xs text-slate-600 mb-1">收货时间</label>
           <input
             type="text"
+            id="after-sale-receive_time"
+            data-testid="field-receive_time"
+            data-agent-target="after-sale:field:receive_time"
+            data-agent-state={formData.receive_time ? "filled" : "empty"}
+            aria-label="收货时间"
             value={formData.receive_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, receive_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -415,9 +557,14 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">收货备注</label>
+          <label htmlFor="after-sale-receive_reason" className="block text-xs text-slate-600 mb-1">收货备注</label>
           <input
             type="text"
+            id="after-sale-receive_reason"
+            data-testid="field-receive_reason"
+            data-agent-target="after-sale:field:receive_reason"
+            data-agent-state={formData.receive_reason ? "filled" : "empty"}
+            aria-label="收货备注"
             value={formData.receive_reason ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, receive_reason: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -431,6 +578,8 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
             <button
               type="button"
               onClick={onClose}
+              data-testid="after-sale-form-cancel"
+              data-agent-target="after-sale:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -438,6 +587,9 @@ export function AfterSaleForm({ open, initialData, onClose, onSuccess }: AfterSa
             <button
               type="submit"
               disabled={loading}
+              data-testid="after-sale-form-submit"
+              data-agent-target="after-sale:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesWmArrivalNoticeService } from "../mes-wm-arrival-notice.service"
 
 describe("MesWmArrivalNoticeService", () => {
-  it("should create and query MesWmArrivalNotice（源框架导入）", async () => {
+  it("should create and query MES 到货通知单", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmArrivalNoticeService.create({
-        code: "测试MesWmArrivalNotice（源框架导入）",
+        code: "测试MES 到货通知单",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("MesWmArrivalNoticeService", () => {
   
       const updated = await MesWmArrivalNoticeService.update(created.id, {
         id: created.id,
-        code: "更新MesWmArrivalNotice（源框架导入）",
+        code: "更新MES 到货通知单",
       } as any)
       expect(updated).toBeDefined()
   

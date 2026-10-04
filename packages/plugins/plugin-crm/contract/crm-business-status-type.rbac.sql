@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for CrmBusinessStatusType（源框架导入） (CrmBusinessStatusType)
+-- Auto-generated RBAC & Menu Migration for CRM 商机状态组 DO注意，它是个配置表 (CrmBusinessStatusType)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-crm-business-status-type',
   'crm-dir',
-  'CrmBusinessStatusType（源框架导入）管理',
+  'CRM 商机状态组 DO注意，它是个配置表管理',
   '/admin/crm/crm-business-status-type',
   'crm/crm-business-status-type/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-crm-business-status-type-query',  'menu-crm-business-status-type', '查询CrmBusinessStatusType（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_business_status_type:query',  1, NOW(), NOW()),
-('menu-crm-business-status-type-create', 'menu-crm-business-status-type', '新增CrmBusinessStatusType（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_business_status_type:create', 2, NOW(), NOW()),
-('menu-crm-business-status-type-update', 'menu-crm-business-status-type', '修改CrmBusinessStatusType（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_business_status_type:update', 3, NOW(), NOW()),
-('menu-crm-business-status-type-delete', 'menu-crm-business-status-type', '删除CrmBusinessStatusType（源框架导入）', 'BUTTON', 'ACTIVE', 'crm:crm_business_status_type:delete', 4, NOW(), NOW())
+('menu-crm-business-status-type-query',  'menu-crm-business-status-type', '查询CRM 商机状态组 DO注意，它是个配置表', 'BUTTON', 'ACTIVE', 'crm:crm_business_status_type:query',  1, NOW(), NOW()),
+('menu-crm-business-status-type-create', 'menu-crm-business-status-type', '新增CRM 商机状态组 DO注意，它是个配置表', 'BUTTON', 'ACTIVE', 'crm:crm_business_status_type:create', 2, NOW(), NOW()),
+('menu-crm-business-status-type-update', 'menu-crm-business-status-type', '修改CRM 商机状态组 DO注意，它是个配置表', 'BUTTON', 'ACTIVE', 'crm:crm_business_status_type:update', 3, NOW(), NOW()),
+('menu-crm-business-status-type-delete', 'menu-crm-business-status-type', '删除CRM 商机状态组 DO注意，它是个配置表', 'BUTTON', 'ACTIVE', 'crm:crm_business_status_type:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

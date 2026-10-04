@@ -60,6 +60,26 @@ function columnType(javaType: string): { type: string; tsType: string } | null {
 
 const JAVA_PRIMITIVES = new Set(["int", "long", "double", "float", "boolean", "short", "byte", "char"])
 
+/**
+ * 注释会**被生成器插进多种宿主**: TS 字符串字面量、JSX 文本、SQL 注释。
+ * 源框架的 javadoc 里存在引号、反引号、URL、`${}` 这类会**破坏宿主语法**的字符 ——
+ * 后果不是"显示难看"，而是**生成出来的代码编译不过**（实测踩过两次:
+ * 一次 `{@link}` 进 JSX、一次引号进字符串字面量）。
+ * 在数据入口统一消毒，比在每个模板里各转义一遍更可靠。
+ */
+function sanitizeComment(text: string): string {
+  return text
+    .replace(/\{@[a-z]+\s+[^}]*\}/gi, "") // javadoc 内联标签
+    .replace(/<\/?[a-z][^>]*>/gi, "")        // 原始 HTML 标签（源注释里常见 `<a href=...>`）
+    .replace(/[<>]/g, "")                    // 残留尖括号（宿主是 JSX 文本）
+    .replace(/[{}]/g, "")                    // 花括号（JSX 会当表达式起始；也是 javadoc 枚举写法的残留）
+    .replace(/["'`\\]/g, "")               // 引号/反引号/反斜杠（宿主是字符串字面量）
+    .replace(/\$\{/g, "")                   // 模板字符串插值
+    .replace(/[\r\n\t]+/g, " ")            // 换行
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
 const toSnake = (value: string) => value.replace(/([a-z0-9])([A-Z])/g, "$1_$2").toLowerCase()
 
 function walk(dir: string, out: string[]) {
@@ -77,6 +97,20 @@ function parseEntity(file: string): ParsedTable | null {
   const tableMatch = source.match(/@TableName\(\s*(?:value\s*=\s*)?["']([a-z0-9_]+)["']/)
   if (!tableMatch) return null
   const className = path.basename(file, ".java").replace(/DO$/, "")
+  // 类级 javadoc 就是这张表的业务名 —— 直接当 UI 标题用。
+  // （不能拿类名或加技术后缀，那会显示在每个页面标题上。）
+  const classDoc = source.match(/\/\*\*([\s\S]*?)\*\//)
+  const businessName =
+    (classDoc?.[1] ?? "")
+      .split("\n")
+      .map((line) => line.replace(/^\s*\*?\s?/, "").trim())
+      .filter((line) => line && !line.startsWith("@"))
+      .join("")
+      .replace(/\{@[a-z]+\s+[^}]*\}/gi, "")
+      .replace(/\s*DO\s*$/, "")   // 类名后缀不是业务名
+      .trim() || className
+  // businessName 有 1–100 字的上限（校验器会拒），源 javadoc 偶有超长整段说明。
+  const displayName = sanitizeComment(businessName.length > 100 ? businessName.slice(0, 100) : businessName) || className
 
   const columns: Array<Record<string, unknown>> = []
   const lines = source.split("\n")
@@ -100,7 +134,7 @@ function parseEntity(file: string): ParsedTable | null {
     // 注释进 JSX 前必须干净: 源框架的 javadoc 里常有 `{@link X#y()}` 这类内联标签，
     // 原样带进去会在**编译期**炸（JSX 把 `{` 当表达式起始）。
     const rawComment = javadoc.filter(Boolean).slice(0, 1).join("") || name
-    const comment = rawComment.replace(/\{@[a-z]+\s+[^}]*\}/gi, "").replace(/\s+/g, " ").trim() || name
+    const comment = sanitizeComment(rawComment) || name
     const isPrimitive = JAVA_PRIMITIVES.has(javaType.trim())
     // 主键判定: 标注了 @TableId，**或者**列名就叫 id —— 后者是稳妥兜底。
     // 漏判的后果不是报错而是"建出来的表没有主键"（实测踩到: 源框架有的实体没写 @TableId）。
@@ -120,7 +154,7 @@ function parseEntity(file: string): ParsedTable | null {
     javadoc = []
   }
   if (columns.length === 0) return null
-  return { table: tableMatch[1], comment: `${className}（源框架导入）`, className, columns }
+  return { table: tableMatch[1], comment: displayName, className, columns }
 }
 
 function main() {
@@ -165,14 +199,14 @@ export const ${domain.replace(/[^a-z0-9]/gi, "_").toUpperCase()}_TABLES: Codegen
 ${entries
   .map(
     ({ table, columns }) => `  {
-    moduleName: "${domain}",
-    className: "${table.className}",
-    businessName: "${table.comment}",
-    parentMenuId: "${domain}-dir",
-    permissionPrefix: "${domain}:${toSnake(table.className).replace(/-/g, "")}",
+    moduleName: ${JSON.stringify(domain)},
+    className: ${JSON.stringify(table.className)},
+    businessName: ${JSON.stringify(table.comment)},
+    parentMenuId: ${JSON.stringify(`${domain}-dir`)},
+    permissionPrefix: ${JSON.stringify(`${domain}:${toSnake(table.className).replace(/-/g, "")}`)},
     table: {
-      name: "${table.table}",
-      comment: "${table.comment}",
+      name: ${JSON.stringify(table.table)},
+      comment: ${JSON.stringify(table.comment)},
       columns: [
 ${columns.map((column) => `        ${JSON.stringify(column)},`).join("\n")}
       ],

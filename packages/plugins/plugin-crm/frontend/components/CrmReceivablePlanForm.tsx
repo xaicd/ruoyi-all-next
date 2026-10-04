@@ -59,24 +59,36 @@ export function CrmReceivablePlanForm({ open, initialData, onClose, onSuccess }:
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="crm-receivable-plan-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑CRM 回款计划" : "新增CRM 回款计划"}
+        data-testid="crm-receivable-plan-form"
+        data-agent-scope="crm-receivable-plan:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑CrmReceivablePlan（源框架导入）" : "新增CrmReceivablePlan（源框架导入）"}
+            {isEdit ? "编辑CRM 回款计划" : "新增CRM 回款计划"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="crm-receivable-plan-form-close" data-agent-target="crm-receivable-plan:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="crm-receivable-plan-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">期数</label>
+          <label htmlFor="crm-receivable-plan-period" className="block text-xs text-slate-600 mb-1">期数</label>
           <input
             type="number"
+            id="crm-receivable-plan-period"
+            data-testid="field-period"
+            data-agent-target="crm-receivable-plan:field:period"
+            data-agent-state={formData.period == null || formData.period === "" ? "empty" : "filled"}
+            aria-label="期数"
             value={formData.period != null ? String(formData.period) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, period: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -86,9 +98,14 @@ export function CrmReceivablePlanForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">客户编号</label>
+          <label htmlFor="crm-receivable-plan-customer_id" className="block text-xs text-slate-600 mb-1">客户编号</label>
           <input
             type="number"
+            id="crm-receivable-plan-customer_id"
+            data-testid="field-customer_id"
+            data-agent-target="crm-receivable-plan:field:customer_id"
+            data-agent-state={formData.customer_id == null || formData.customer_id === "" ? "empty" : "filled"}
+            aria-label="客户编号"
             value={formData.customer_id != null ? String(formData.customer_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, customer_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -98,9 +115,14 @@ export function CrmReceivablePlanForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">合同编号</label>
+          <label htmlFor="crm-receivable-plan-contract_id" className="block text-xs text-slate-600 mb-1">合同编号</label>
           <input
             type="number"
+            id="crm-receivable-plan-contract_id"
+            data-testid="field-contract_id"
+            data-agent-target="crm-receivable-plan:field:contract_id"
+            data-agent-state={formData.contract_id == null || formData.contract_id === "" ? "empty" : "filled"}
+            aria-label="合同编号"
             value={formData.contract_id != null ? String(formData.contract_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, contract_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -110,9 +132,14 @@ export function CrmReceivablePlanForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">负责人编号</label>
+          <label htmlFor="crm-receivable-plan-owner_user_id" className="block text-xs text-slate-600 mb-1">负责人编号</label>
           <input
             type="number"
+            id="crm-receivable-plan-owner_user_id"
+            data-testid="field-owner_user_id"
+            data-agent-target="crm-receivable-plan:field:owner_user_id"
+            data-agent-state={formData.owner_user_id == null || formData.owner_user_id === "" ? "empty" : "filled"}
+            aria-label="负责人编号"
             value={formData.owner_user_id != null ? String(formData.owner_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, owner_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -122,9 +149,14 @@ export function CrmReceivablePlanForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">计划回款日期</label>
+          <label htmlFor="crm-receivable-plan-return_time" className="block text-xs text-slate-600 mb-1">计划回款日期</label>
           <input
             type="text"
+            id="crm-receivable-plan-return_time"
+            data-testid="field-return_time"
+            data-agent-target="crm-receivable-plan:field:return_time"
+            data-agent-state={formData.return_time ? "filled" : "empty"}
+            aria-label="计划回款日期"
             value={formData.return_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, return_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -134,9 +166,14 @@ export function CrmReceivablePlanForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">计划回款类型</label>
+          <label htmlFor="crm-receivable-plan-return_type" className="block text-xs text-slate-600 mb-1">计划回款类型</label>
           <input
             type="number"
+            id="crm-receivable-plan-return_type"
+            data-testid="field-return_type"
+            data-agent-target="crm-receivable-plan:field:return_type"
+            data-agent-state={formData.return_type == null || formData.return_type === "" ? "empty" : "filled"}
+            aria-label="计划回款类型"
             value={formData.return_type != null ? String(formData.return_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, return_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -146,9 +183,14 @@ export function CrmReceivablePlanForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">计划回款金额，单位：元</label>
+          <label htmlFor="crm-receivable-plan-price" className="block text-xs text-slate-600 mb-1">计划回款金额，单位：元</label>
           <input
             type="number"
+            id="crm-receivable-plan-price"
+            data-testid="field-price"
+            data-agent-target="crm-receivable-plan:field:price"
+            data-agent-state={formData.price == null || formData.price === "" ? "empty" : "filled"}
+            aria-label="计划回款金额，单位：元"
             value={formData.price != null ? String(formData.price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -158,9 +200,14 @@ export function CrmReceivablePlanForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">回款编号，关联</label>
+          <label htmlFor="crm-receivable-plan-receivable_id" className="block text-xs text-slate-600 mb-1">回款编号，关联</label>
           <input
             type="number"
+            id="crm-receivable-plan-receivable_id"
+            data-testid="field-receivable_id"
+            data-agent-target="crm-receivable-plan:field:receivable_id"
+            data-agent-state={formData.receivable_id == null || formData.receivable_id === "" ? "empty" : "filled"}
+            aria-label="回款编号，关联"
             value={formData.receivable_id != null ? String(formData.receivable_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, receivable_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -170,9 +217,14 @@ export function CrmReceivablePlanForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">提前几天提醒</label>
+          <label htmlFor="crm-receivable-plan-remind_days" className="block text-xs text-slate-600 mb-1">提前几天提醒</label>
           <input
             type="number"
+            id="crm-receivable-plan-remind_days"
+            data-testid="field-remind_days"
+            data-agent-target="crm-receivable-plan:field:remind_days"
+            data-agent-state={formData.remind_days == null || formData.remind_days === "" ? "empty" : "filled"}
+            aria-label="提前几天提醒"
             value={formData.remind_days != null ? String(formData.remind_days) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remind_days: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -182,9 +234,14 @@ export function CrmReceivablePlanForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">提醒日期</label>
+          <label htmlFor="crm-receivable-plan-remind_time" className="block text-xs text-slate-600 mb-1">提醒日期</label>
           <input
             type="text"
+            id="crm-receivable-plan-remind_time"
+            data-testid="field-remind_time"
+            data-agent-target="crm-receivable-plan:field:remind_time"
+            data-agent-state={formData.remind_time ? "filled" : "empty"}
+            aria-label="提醒日期"
             value={formData.remind_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remind_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -194,9 +251,14 @@ export function CrmReceivablePlanForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="crm-receivable-plan-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="crm-receivable-plan-remark"
+            data-testid="field-remark"
+            data-agent-target="crm-receivable-plan:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -210,6 +272,8 @@ export function CrmReceivablePlanForm({ open, initialData, onClose, onSuccess }:
             <button
               type="button"
               onClick={onClose}
+              data-testid="crm-receivable-plan-form-cancel"
+              data-agent-target="crm-receivable-plan:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -217,6 +281,9 @@ export function CrmReceivablePlanForm({ open, initialData, onClose, onSuccess }:
             <button
               type="submit"
               disabled={loading}
+              data-testid="crm-receivable-plan-form-submit"
+              data-agent-target="crm-receivable-plan:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ErpFinanceReceiptItemService } from "../erp-finance-receipt-item.service"
 
 describe("ErpFinanceReceiptItemService", () => {
-  it("should create and query ErpFinanceReceiptItem（源框架导入）", async () => {
+  it("should create and query ERP 收款项", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ErpFinanceReceiptItemService.create({
         receipt_id: 1,
@@ -21,7 +21,7 @@ describe("ErpFinanceReceiptItemService", () => {
   
       const updated = await ErpFinanceReceiptItemService.update(created.id, {
         id: created.id,
-        receipt_id: "更新ErpFinanceReceiptItem（源框架导入）",
+        receipt_id: "更新ERP 收款项",
       } as any)
       expect(updated).toBeDefined()
   

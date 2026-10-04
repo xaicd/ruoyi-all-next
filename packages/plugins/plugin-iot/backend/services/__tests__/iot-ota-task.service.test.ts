@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { IotOtaTaskService } from "../iot-ota-task.service"
 
 describe("IotOtaTaskService", () => {
-  it("should create and query IotOtaTask（源框架导入）", async () => {
+  it("should create and query IoT OTA 升级任务", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await IotOtaTaskService.create({
-        name: "测试IotOtaTask（源框架导入）",
+        name: "测试IoT OTA 升级任务",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("IotOtaTaskService", () => {
   
       const updated = await IotOtaTaskService.update(created.id, {
         id: created.id,
-        name: "更新IotOtaTask（源框架导入）",
+        name: "更新IoT OTA 升级任务",
       } as any)
       expect(updated).toBeDefined()
   

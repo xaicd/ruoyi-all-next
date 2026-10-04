@@ -1,0 +1,321 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "ai",
+  "entity": "AiMusic",
+  "kebab": "ai-music",
+  "businessName": "AI 音乐",
+  "permissionPrefix": "ai:ai_music",
+  "page": {
+    "route": "/admin/ai/ai-music",
+    "title": "AI 音乐管理",
+    "titleSelector": "[data-testid=\"ai-music-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.ai/api",
+    "bffMount": "/api/v1/admin/ai",
+    "resource": "ai-music",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/ai-music",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/ai-music/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/ai-music"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/ai-music/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/ai-music/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"ai-music-title\"]",
+    "refresh": "[data-testid=\"ai-music-refresh\"]",
+    "createButton": "[data-testid=\"ai-music-create\"]",
+    "searchForm": "[data-testid=\"ai-music-search\"]",
+    "searchSubmit": "[data-testid=\"ai-music-search-submit\"]",
+    "searchReset": "[data-testid=\"ai-music-search-reset\"]",
+    "total": "[data-testid=\"ai-music-total\"]",
+    "table": "[data-testid=\"ai-music-table\"]",
+    "row": "[data-testid=\"ai-music-row\"]",
+    "editButton": "[data-testid=\"ai-music-edit\"]",
+    "deleteButton": "[data-testid=\"ai-music-delete\"]",
+    "form": "[data-testid=\"ai-music-form\"]",
+    "formError": "[data-testid=\"ai-music-form-error\"]",
+    "formSubmit": "[data-testid=\"ai-music-form-submit\"]",
+    "formCancel": "[data-testid=\"ai-music-form-cancel\"]",
+    "formClose": "[data-testid=\"ai-music-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "AI 音乐列表",
+    "dialogLabel": {
+      "create": "新增AI 音乐",
+      "edit": "编辑AI 音乐"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "title",
+        "label": "音乐名称",
+        "type": "string",
+        "required": false,
+        "testId": "field-title",
+        "selector": "[data-testid=\"field-title\"]"
+      },
+      {
+        "name": "lyric",
+        "label": "歌词",
+        "type": "string",
+        "required": false,
+        "testId": "field-lyric",
+        "selector": "[data-testid=\"field-lyric\"]"
+      },
+      {
+        "name": "image_url",
+        "label": "图片地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-image_url",
+        "selector": "[data-testid=\"field-image_url\"]"
+      },
+      {
+        "name": "audio_url",
+        "label": "音频地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-audio_url",
+        "selector": "[data-testid=\"field-audio_url\"]"
+      },
+      {
+        "name": "video_url",
+        "label": "视频地址",
+        "type": "string",
+        "required": false,
+        "testId": "field-video_url",
+        "selector": "[data-testid=\"field-video_url\"]"
+      },
+      {
+        "name": "status",
+        "label": "音乐状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      },
+      {
+        "name": "generate_mode",
+        "label": "生成模式",
+        "type": "number",
+        "required": false,
+        "testId": "field-generate_mode",
+        "selector": "[data-testid=\"field-generate_mode\"]"
+      },
+      {
+        "name": "description",
+        "label": "描述词",
+        "type": "string",
+        "required": false,
+        "testId": "field-description",
+        "selector": "[data-testid=\"field-description\"]"
+      },
+      {
+        "name": "platform",
+        "label": "平台",
+        "type": "string",
+        "required": false,
+        "testId": "field-platform",
+        "selector": "[data-testid=\"field-platform\"]"
+      },
+      {
+        "name": "model",
+        "label": "模型",
+        "type": "string",
+        "required": false,
+        "testId": "field-model",
+        "selector": "[data-testid=\"field-model\"]"
+      },
+      {
+        "name": "tags",
+        "label": "音乐风格标签",
+        "type": "string",
+        "required": false,
+        "testId": "field-tags",
+        "selector": "[data-testid=\"field-tags\"]"
+      },
+      {
+        "name": "duration",
+        "label": "音乐时长",
+        "type": "number",
+        "required": false,
+        "testId": "field-duration",
+        "selector": "[data-testid=\"field-duration\"]"
+      },
+      {
+        "name": "public_status",
+        "label": "是否公开",
+        "type": "boolean",
+        "required": false,
+        "testId": "field-public_status",
+        "selector": "[data-testid=\"field-public_status\"]"
+      },
+      {
+        "name": "task_id",
+        "label": "任务编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-task_id",
+        "selector": "[data-testid=\"field-task_id\"]"
+      },
+      {
+        "name": "error_message",
+        "label": "错误信息",
+        "type": "string",
+        "required": false,
+        "testId": "field-error_message",
+        "selector": "[data-testid=\"field-error_message\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "ai-music",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"ai-music\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"ai-music-form-overlay\"]",
+      "dialog": "[data-testid=\"ai-music-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "ai-music:search",
+      "reset": "ai-music:reset",
+      "refresh": "ai-music:refresh",
+      "create": "ai-music:create",
+      "edit": "ai-music:edit",
+      "delete": "ai-music:delete",
+      "submit": "ai-music:submit",
+      "cancel": "ai-music:cancel",
+      "close": "ai-music:close",
+      "row": "ai-music:row",
+      "pagination": "ai-music:pagination",
+      "fields": {
+        "user_id": "ai-music:field:user_id",
+        "title": "ai-music:field:title",
+        "lyric": "ai-music:field:lyric",
+        "image_url": "ai-music:field:image_url",
+        "audio_url": "ai-music:field:audio_url",
+        "video_url": "ai-music:field:video_url",
+        "status": "ai-music:field:status",
+        "generate_mode": "ai-music:field:generate_mode",
+        "description": "ai-music:field:description",
+        "platform": "ai-music:field:platform",
+        "model": "ai-music:field:model",
+        "tags": "ai-music:field:tags",
+        "duration": "ai-music:field:duration",
+        "public_status": "ai-music:field:public_status",
+        "task_id": "ai-music:field:task_id",
+        "error_message": "ai-music:field:error_message"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "ai.ai-music",
+      "examples": [
+        "ai.ai-music__List__Refresh",
+        "ai.ai-music__ListItem__Open",
+        "ai.ai-music__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

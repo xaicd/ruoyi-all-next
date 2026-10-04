@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesWmStockTakingPlanParamService } from "../mes-wm-stock-taking-plan-param.service"
 
 describe("MesWmStockTakingPlanParamService", () => {
-  it("should create and query MesWmStockTakingPlanParam（源框架导入）", async () => {
+  it("should create and query MES 盘点方案参数", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmStockTakingPlanParamService.create({
         plan_id: 1,
@@ -21,7 +21,7 @@ describe("MesWmStockTakingPlanParamService", () => {
   
       const updated = await MesWmStockTakingPlanParamService.update(created.id, {
         id: created.id,
-        plan_id: "更新MesWmStockTakingPlanParam（源框架导入）",
+        plan_id: "更新MES 盘点方案参数",
       } as any)
       expect(updated).toBeDefined()
   

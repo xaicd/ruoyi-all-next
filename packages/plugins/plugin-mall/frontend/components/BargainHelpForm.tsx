@@ -52,24 +52,36 @@ export function BargainHelpForm({ open, initialData, onClose, onSuccess }: Barga
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="bargain-help-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑砍价助力" : "新增砍价助力"}
+        data-testid="bargain-help-form"
+        data-agent-scope="bargain-help:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑BargainHelp（源框架导入）" : "新增BargainHelp（源框架导入）"}
+            {isEdit ? "编辑砍价助力" : "新增砍价助力"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="bargain-help-form-close" data-agent-target="bargain-help:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="bargain-help-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">砍价活动编号</label>
+          <label htmlFor="bargain-help-activity_id" className="block text-xs text-slate-600 mb-1">砍价活动编号</label>
           <input
             type="number"
+            id="bargain-help-activity_id"
+            data-testid="field-activity_id"
+            data-agent-target="bargain-help:field:activity_id"
+            data-agent-state={formData.activity_id == null || formData.activity_id === "" ? "empty" : "filled"}
+            aria-label="砍价活动编号"
             value={formData.activity_id != null ? String(formData.activity_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, activity_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -79,9 +91,14 @@ export function BargainHelpForm({ open, initialData, onClose, onSuccess }: Barga
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">砍价记录编号</label>
+          <label htmlFor="bargain-help-record_id" className="block text-xs text-slate-600 mb-1">砍价记录编号</label>
           <input
             type="number"
+            id="bargain-help-record_id"
+            data-testid="field-record_id"
+            data-agent-target="bargain-help:field:record_id"
+            data-agent-state={formData.record_id == null || formData.record_id === "" ? "empty" : "filled"}
+            aria-label="砍价记录编号"
             value={formData.record_id != null ? String(formData.record_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, record_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -91,9 +108,14 @@ export function BargainHelpForm({ open, initialData, onClose, onSuccess }: Barga
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="bargain-help-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="bargain-help-user_id"
+            data-testid="field-user_id"
+            data-agent-target="bargain-help:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -103,9 +125,14 @@ export function BargainHelpForm({ open, initialData, onClose, onSuccess }: Barga
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">减少价格，单位：分</label>
+          <label htmlFor="bargain-help-reduce_price" className="block text-xs text-slate-600 mb-1">减少价格，单位：分</label>
           <input
             type="number"
+            id="bargain-help-reduce_price"
+            data-testid="field-reduce_price"
+            data-agent-target="bargain-help:field:reduce_price"
+            data-agent-state={formData.reduce_price == null || formData.reduce_price === "" ? "empty" : "filled"}
+            aria-label="减少价格，单位：分"
             value={formData.reduce_price != null ? String(formData.reduce_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, reduce_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -119,6 +146,8 @@ export function BargainHelpForm({ open, initialData, onClose, onSuccess }: Barga
             <button
               type="button"
               onClick={onClose}
+              data-testid="bargain-help-form-cancel"
+              data-agent-target="bargain-help:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -126,6 +155,9 @@ export function BargainHelpForm({ open, initialData, onClose, onSuccess }: Barga
             <button
               type="submit"
               disabled={loading}
+              data-testid="bargain-help-form-submit"
+              data-agent-target="bargain-help:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

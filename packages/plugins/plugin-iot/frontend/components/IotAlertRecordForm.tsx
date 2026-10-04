@@ -57,24 +57,36 @@ export function IotAlertRecordForm({ open, initialData, onClose, onSuccess }: Io
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="iot-alert-record-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑IoT 告警记录" : "新增IoT 告警记录"}
+        data-testid="iot-alert-record-form"
+        data-agent-scope="iot-alert-record:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑IotAlertRecord（源框架导入）" : "新增IotAlertRecord（源框架导入）"}
+            {isEdit ? "编辑IoT 告警记录" : "新增IoT 告警记录"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="iot-alert-record-form-close" data-agent-target="iot-alert-record:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="iot-alert-record-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">告警名称</label>
+          <label htmlFor="iot-alert-record-config_id" className="block text-xs text-slate-600 mb-1">告警名称</label>
           <input
             type="number"
+            id="iot-alert-record-config_id"
+            data-testid="field-config_id"
+            data-agent-target="iot-alert-record:field:config_id"
+            data-agent-state={formData.config_id == null || formData.config_id === "" ? "empty" : "filled"}
+            aria-label="告警名称"
             value={formData.config_id != null ? String(formData.config_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, config_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -84,9 +96,14 @@ export function IotAlertRecordForm({ open, initialData, onClose, onSuccess }: Io
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">告警名称</label>
+          <label htmlFor="iot-alert-record-config_name" className="block text-xs text-slate-600 mb-1">告警名称</label>
           <input
             type="text"
+            id="iot-alert-record-config_name"
+            data-testid="field-config_name"
+            data-agent-target="iot-alert-record:field:config_name"
+            data-agent-state={formData.config_name ? "filled" : "empty"}
+            aria-label="告警名称"
             value={formData.config_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, config_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -96,9 +113,14 @@ export function IotAlertRecordForm({ open, initialData, onClose, onSuccess }: Io
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">告警级别</label>
+          <label htmlFor="iot-alert-record-config_level" className="block text-xs text-slate-600 mb-1">告警级别</label>
           <input
             type="number"
+            id="iot-alert-record-config_level"
+            data-testid="field-config_level"
+            data-agent-target="iot-alert-record:field:config_level"
+            data-agent-state={formData.config_level == null || formData.config_level === "" ? "empty" : "filled"}
+            aria-label="告警级别"
             value={formData.config_level != null ? String(formData.config_level) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, config_level: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -108,9 +130,14 @@ export function IotAlertRecordForm({ open, initialData, onClose, onSuccess }: Io
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">场景规则编号</label>
+          <label htmlFor="iot-alert-record-scene_rule_id" className="block text-xs text-slate-600 mb-1">场景规则编号</label>
           <input
             type="number"
+            id="iot-alert-record-scene_rule_id"
+            data-testid="field-scene_rule_id"
+            data-agent-target="iot-alert-record:field:scene_rule_id"
+            data-agent-state={formData.scene_rule_id == null || formData.scene_rule_id === "" ? "empty" : "filled"}
+            aria-label="场景规则编号"
             value={formData.scene_rule_id != null ? String(formData.scene_rule_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, scene_rule_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -120,9 +147,14 @@ export function IotAlertRecordForm({ open, initialData, onClose, onSuccess }: Io
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">产品编号</label>
+          <label htmlFor="iot-alert-record-product_id" className="block text-xs text-slate-600 mb-1">产品编号</label>
           <input
             type="number"
+            id="iot-alert-record-product_id"
+            data-testid="field-product_id"
+            data-agent-target="iot-alert-record:field:product_id"
+            data-agent-state={formData.product_id == null || formData.product_id === "" ? "empty" : "filled"}
+            aria-label="产品编号"
             value={formData.product_id != null ? String(formData.product_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, product_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -132,9 +164,14 @@ export function IotAlertRecordForm({ open, initialData, onClose, onSuccess }: Io
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">设备编号</label>
+          <label htmlFor="iot-alert-record-device_id" className="block text-xs text-slate-600 mb-1">设备编号</label>
           <input
             type="number"
+            id="iot-alert-record-device_id"
+            data-testid="field-device_id"
+            data-agent-target="iot-alert-record:field:device_id"
+            data-agent-state={formData.device_id == null || formData.device_id === "" ? "empty" : "filled"}
+            aria-label="设备编号"
             value={formData.device_id != null ? String(formData.device_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, device_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -144,9 +181,14 @@ export function IotAlertRecordForm({ open, initialData, onClose, onSuccess }: Io
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">触发的设备消息</label>
+          <label htmlFor="iot-alert-record-device_message" className="block text-xs text-slate-600 mb-1">触发的设备消息</label>
           <input
             type="text"
+            id="iot-alert-record-device_message"
+            data-testid="field-device_message"
+            data-agent-target="iot-alert-record:field:device_message"
+            data-agent-state={formData.device_message ? "filled" : "empty"}
+            aria-label="触发的设备消息"
             value={formData.device_message ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, device_message: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -158,18 +200,27 @@ export function IotAlertRecordForm({ open, initialData, onClose, onSuccess }: Io
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="process_status"
+            id="iot-alert-record-process_status"
+            data-testid="field-process_status"
+            data-agent-target="iot-alert-record:field:process_status"
+            data-agent-state={formData.process_status ? "on" : "off"}
+            aria-label="是否处理"
             checked={Boolean(formData.process_status)}
             onChange={(e) => setFormData((prev) => ({ ...prev, process_status: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="process_status" className="text-xs text-slate-700 font-medium">是否处理</label>
+          <label htmlFor="iot-alert-record-process_status" className="text-xs text-slate-700 font-medium">是否处理</label>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">处理结果（备注）</label>
+          <label htmlFor="iot-alert-record-process_remark" className="block text-xs text-slate-600 mb-1">处理结果（备注）</label>
           <input
             type="text"
+            id="iot-alert-record-process_remark"
+            data-testid="field-process_remark"
+            data-agent-target="iot-alert-record:field:process_remark"
+            data-agent-state={formData.process_remark ? "filled" : "empty"}
+            aria-label="处理结果（备注）"
             value={formData.process_remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, process_remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -183,6 +234,8 @@ export function IotAlertRecordForm({ open, initialData, onClose, onSuccess }: Io
             <button
               type="button"
               onClick={onClose}
+              data-testid="iot-alert-record-form-cancel"
+              data-agent-target="iot-alert-record:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -190,6 +243,9 @@ export function IotAlertRecordForm({ open, initialData, onClose, onSuccess }: Io
             <button
               type="submit"
               disabled={loading}
+              data-testid="iot-alert-record-form-submit"
+              data-agent-target="iot-alert-record:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

@@ -56,24 +56,36 @@ export function ErpFinancePaymentItemForm({ open, initialData, onClose, onSucces
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="erp-finance-payment-item-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑ERP 付款项" : "新增ERP 付款项"}
+        data-testid="erp-finance-payment-item-form"
+        data-agent-scope="erp-finance-payment-item:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑ErpFinancePaymentItem（源框架导入）" : "新增ErpFinancePaymentItem（源框架导入）"}
+            {isEdit ? "编辑ERP 付款项" : "新增ERP 付款项"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="erp-finance-payment-item-form-close" data-agent-target="erp-finance-payment-item:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="erp-finance-payment-item-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">付款单编号</label>
+          <label htmlFor="erp-finance-payment-item-payment_id" className="block text-xs text-slate-600 mb-1">付款单编号</label>
           <input
             type="number"
+            id="erp-finance-payment-item-payment_id"
+            data-testid="field-payment_id"
+            data-agent-target="erp-finance-payment-item:field:payment_id"
+            data-agent-state={formData.payment_id == null || formData.payment_id === "" ? "empty" : "filled"}
+            aria-label="付款单编号"
             value={formData.payment_id != null ? String(formData.payment_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, payment_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -83,9 +95,14 @@ export function ErpFinancePaymentItemForm({ open, initialData, onClose, onSucces
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">业务类型</label>
+          <label htmlFor="erp-finance-payment-item-biz_type" className="block text-xs text-slate-600 mb-1">业务类型</label>
           <input
             type="number"
+            id="erp-finance-payment-item-biz_type"
+            data-testid="field-biz_type"
+            data-agent-target="erp-finance-payment-item:field:biz_type"
+            data-agent-state={formData.biz_type == null || formData.biz_type === "" ? "empty" : "filled"}
+            aria-label="业务类型"
             value={formData.biz_type != null ? String(formData.biz_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -95,9 +112,14 @@ export function ErpFinancePaymentItemForm({ open, initialData, onClose, onSucces
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">业务编号</label>
+          <label htmlFor="erp-finance-payment-item-biz_id" className="block text-xs text-slate-600 mb-1">业务编号</label>
           <input
             type="number"
+            id="erp-finance-payment-item-biz_id"
+            data-testid="field-biz_id"
+            data-agent-target="erp-finance-payment-item:field:biz_id"
+            data-agent-state={formData.biz_id == null || formData.biz_id === "" ? "empty" : "filled"}
+            aria-label="业务编号"
             value={formData.biz_id != null ? String(formData.biz_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -107,9 +129,14 @@ export function ErpFinancePaymentItemForm({ open, initialData, onClose, onSucces
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">业务单号</label>
+          <label htmlFor="erp-finance-payment-item-biz_no" className="block text-xs text-slate-600 mb-1">业务单号</label>
           <input
             type="text"
+            id="erp-finance-payment-item-biz_no"
+            data-testid="field-biz_no"
+            data-agent-target="erp-finance-payment-item:field:biz_no"
+            data-agent-state={formData.biz_no ? "filled" : "empty"}
+            aria-label="业务单号"
             value={formData.biz_no ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, biz_no: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -119,9 +146,14 @@ export function ErpFinancePaymentItemForm({ open, initialData, onClose, onSucces
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">应付金额，单位：分</label>
+          <label htmlFor="erp-finance-payment-item-total_price" className="block text-xs text-slate-600 mb-1">应付金额，单位：分</label>
           <input
             type="number"
+            id="erp-finance-payment-item-total_price"
+            data-testid="field-total_price"
+            data-agent-target="erp-finance-payment-item:field:total_price"
+            data-agent-state={formData.total_price == null || formData.total_price === "" ? "empty" : "filled"}
+            aria-label="应付金额，单位：分"
             value={formData.total_price != null ? String(formData.total_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, total_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -131,9 +163,14 @@ export function ErpFinancePaymentItemForm({ open, initialData, onClose, onSucces
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">已付金额，单位：分</label>
+          <label htmlFor="erp-finance-payment-item-paid_price" className="block text-xs text-slate-600 mb-1">已付金额，单位：分</label>
           <input
             type="number"
+            id="erp-finance-payment-item-paid_price"
+            data-testid="field-paid_price"
+            data-agent-target="erp-finance-payment-item:field:paid_price"
+            data-agent-state={formData.paid_price == null || formData.paid_price === "" ? "empty" : "filled"}
+            aria-label="已付金额，单位：分"
             value={formData.paid_price != null ? String(formData.paid_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, paid_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -143,9 +180,14 @@ export function ErpFinancePaymentItemForm({ open, initialData, onClose, onSucces
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">本次付款，单位：分</label>
+          <label htmlFor="erp-finance-payment-item-payment_price" className="block text-xs text-slate-600 mb-1">本次付款，单位：分</label>
           <input
             type="number"
+            id="erp-finance-payment-item-payment_price"
+            data-testid="field-payment_price"
+            data-agent-target="erp-finance-payment-item:field:payment_price"
+            data-agent-state={formData.payment_price == null || formData.payment_price === "" ? "empty" : "filled"}
+            aria-label="本次付款，单位：分"
             value={formData.payment_price != null ? String(formData.payment_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, payment_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -155,9 +197,14 @@ export function ErpFinancePaymentItemForm({ open, initialData, onClose, onSucces
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="erp-finance-payment-item-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="erp-finance-payment-item-remark"
+            data-testid="field-remark"
+            data-agent-target="erp-finance-payment-item:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -171,6 +218,8 @@ export function ErpFinancePaymentItemForm({ open, initialData, onClose, onSucces
             <button
               type="button"
               onClick={onClose}
+              data-testid="erp-finance-payment-item-form-cancel"
+              data-agent-target="erp-finance-payment-item:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -178,6 +227,9 @@ export function ErpFinancePaymentItemForm({ open, initialData, onClose, onSucces
             <button
               type="submit"
               disabled={loading}
+              data-testid="erp-finance-payment-item-form-submit"
+              data-agent-target="erp-finance-payment-item:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

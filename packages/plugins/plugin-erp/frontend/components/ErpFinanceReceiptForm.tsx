@@ -58,24 +58,36 @@ export function ErpFinanceReceiptForm({ open, initialData, onClose, onSuccess }:
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="erp-finance-receipt-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑ERP 收款单" : "新增ERP 收款单"}
+        data-testid="erp-finance-receipt-form"
+        data-agent-scope="erp-finance-receipt:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑ErpFinanceReceipt（源框架导入）" : "新增ErpFinanceReceipt（源框架导入）"}
+            {isEdit ? "编辑ERP 收款单" : "新增ERP 收款单"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="erp-finance-receipt-form-close" data-agent-target="erp-finance-receipt:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="erp-finance-receipt-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">收款单号</label>
+          <label htmlFor="erp-finance-receipt-no" className="block text-xs text-slate-600 mb-1">收款单号</label>
           <input
             type="text"
+            id="erp-finance-receipt-no"
+            data-testid="field-no"
+            data-agent-target="erp-finance-receipt:field:no"
+            data-agent-state={formData.no ? "filled" : "empty"}
+            aria-label="收款单号"
             value={formData.no ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, no: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -85,9 +97,14 @@ export function ErpFinanceReceiptForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">收款状态</label>
+          <label htmlFor="erp-finance-receipt-status" className="block text-xs text-slate-600 mb-1">收款状态</label>
           <input
             type="number"
+            id="erp-finance-receipt-status"
+            data-testid="field-status"
+            data-agent-target="erp-finance-receipt:field:status"
+            data-agent-state={formData.status == null || formData.status === "" ? "empty" : "filled"}
+            aria-label="收款状态"
             value={formData.status != null ? String(formData.status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -97,9 +114,14 @@ export function ErpFinanceReceiptForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">收款时间</label>
+          <label htmlFor="erp-finance-receipt-receipt_time" className="block text-xs text-slate-600 mb-1">收款时间</label>
           <input
             type="text"
+            id="erp-finance-receipt-receipt_time"
+            data-testid="field-receipt_time"
+            data-agent-target="erp-finance-receipt:field:receipt_time"
+            data-agent-state={formData.receipt_time ? "filled" : "empty"}
+            aria-label="收款时间"
             value={formData.receipt_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, receipt_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -109,9 +131,14 @@ export function ErpFinanceReceiptForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">财务人员编号</label>
+          <label htmlFor="erp-finance-receipt-finance_user_id" className="block text-xs text-slate-600 mb-1">财务人员编号</label>
           <input
             type="number"
+            id="erp-finance-receipt-finance_user_id"
+            data-testid="field-finance_user_id"
+            data-agent-target="erp-finance-receipt:field:finance_user_id"
+            data-agent-state={formData.finance_user_id == null || formData.finance_user_id === "" ? "empty" : "filled"}
+            aria-label="财务人员编号"
             value={formData.finance_user_id != null ? String(formData.finance_user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, finance_user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -121,9 +148,14 @@ export function ErpFinanceReceiptForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">客户编号</label>
+          <label htmlFor="erp-finance-receipt-customer_id" className="block text-xs text-slate-600 mb-1">客户编号</label>
           <input
             type="number"
+            id="erp-finance-receipt-customer_id"
+            data-testid="field-customer_id"
+            data-agent-target="erp-finance-receipt:field:customer_id"
+            data-agent-state={formData.customer_id == null || formData.customer_id === "" ? "empty" : "filled"}
+            aria-label="客户编号"
             value={formData.customer_id != null ? String(formData.customer_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, customer_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -133,9 +165,14 @@ export function ErpFinanceReceiptForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">收款账户编号</label>
+          <label htmlFor="erp-finance-receipt-account_id" className="block text-xs text-slate-600 mb-1">收款账户编号</label>
           <input
             type="number"
+            id="erp-finance-receipt-account_id"
+            data-testid="field-account_id"
+            data-agent-target="erp-finance-receipt:field:account_id"
+            data-agent-state={formData.account_id == null || formData.account_id === "" ? "empty" : "filled"}
+            aria-label="收款账户编号"
             value={formData.account_id != null ? String(formData.account_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, account_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -145,9 +182,14 @@ export function ErpFinanceReceiptForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">合计价格，单位：元</label>
+          <label htmlFor="erp-finance-receipt-total_price" className="block text-xs text-slate-600 mb-1">合计价格，单位：元</label>
           <input
             type="number"
+            id="erp-finance-receipt-total_price"
+            data-testid="field-total_price"
+            data-agent-target="erp-finance-receipt:field:total_price"
+            data-agent-state={formData.total_price == null || formData.total_price === "" ? "empty" : "filled"}
+            aria-label="合计价格，单位：元"
             value={formData.total_price != null ? String(formData.total_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, total_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -157,9 +199,14 @@ export function ErpFinanceReceiptForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">优惠金额，单位：元</label>
+          <label htmlFor="erp-finance-receipt-discount_price" className="block text-xs text-slate-600 mb-1">优惠金额，单位：元</label>
           <input
             type="number"
+            id="erp-finance-receipt-discount_price"
+            data-testid="field-discount_price"
+            data-agent-target="erp-finance-receipt:field:discount_price"
+            data-agent-state={formData.discount_price == null || formData.discount_price === "" ? "empty" : "filled"}
+            aria-label="优惠金额，单位：元"
             value={formData.discount_price != null ? String(formData.discount_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, discount_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -169,9 +216,14 @@ export function ErpFinanceReceiptForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">实付金额，单位：分</label>
+          <label htmlFor="erp-finance-receipt-receipt_price" className="block text-xs text-slate-600 mb-1">实付金额，单位：分</label>
           <input
             type="number"
+            id="erp-finance-receipt-receipt_price"
+            data-testid="field-receipt_price"
+            data-agent-target="erp-finance-receipt:field:receipt_price"
+            data-agent-state={formData.receipt_price == null || formData.receipt_price === "" ? "empty" : "filled"}
+            aria-label="实付金额，单位：分"
             value={formData.receipt_price != null ? String(formData.receipt_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, receipt_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -181,9 +233,14 @@ export function ErpFinanceReceiptForm({ open, initialData, onClose, onSuccess }:
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="erp-finance-receipt-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="erp-finance-receipt-remark"
+            data-testid="field-remark"
+            data-agent-target="erp-finance-receipt:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -197,6 +254,8 @@ export function ErpFinanceReceiptForm({ open, initialData, onClose, onSuccess }:
             <button
               type="button"
               onClick={onClose}
+              data-testid="erp-finance-receipt-form-cancel"
+              data-agent-target="erp-finance-receipt:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -204,6 +263,9 @@ export function ErpFinanceReceiptForm({ open, initialData, onClose, onSuccess }:
             <button
               type="submit"
               disabled={loading}
+              data-testid="erp-finance-receipt-form-submit"
+              data-agent-target="erp-finance-receipt:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

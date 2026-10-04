@@ -57,24 +57,36 @@ export function MesWmTransferDetailForm({ open, initialData, onClose, onSuccess 
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="mes-wm-transfer-detail-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑MES 调拨明细" : "新增MES 调拨明细"}
+        data-testid="mes-wm-transfer-detail-form"
+        data-agent-scope="mes-wm-transfer-detail:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑MesWmTransferDetail（源框架导入）" : "新增MesWmTransferDetail（源框架导入）"}
+            {isEdit ? "编辑MES 调拨明细" : "新增MES 调拨明细"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="mes-wm-transfer-detail-form-close" data-agent-target="mes-wm-transfer-detail:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="mes-wm-transfer-detail-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">转移单行编号</label>
+          <label htmlFor="mes-wm-transfer-detail-line_id" className="block text-xs text-slate-600 mb-1">转移单行编号</label>
           <input
             type="number"
+            id="mes-wm-transfer-detail-line_id"
+            data-testid="field-line_id"
+            data-agent-target="mes-wm-transfer-detail:field:line_id"
+            data-agent-state={formData.line_id == null || formData.line_id === "" ? "empty" : "filled"}
+            aria-label="转移单行编号"
             value={formData.line_id != null ? String(formData.line_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, line_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -84,9 +96,14 @@ export function MesWmTransferDetailForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">转移单编号</label>
+          <label htmlFor="mes-wm-transfer-detail-transfer_id" className="block text-xs text-slate-600 mb-1">转移单编号</label>
           <input
             type="number"
+            id="mes-wm-transfer-detail-transfer_id"
+            data-testid="field-transfer_id"
+            data-agent-target="mes-wm-transfer-detail:field:transfer_id"
+            data-agent-state={formData.transfer_id == null || formData.transfer_id === "" ? "empty" : "filled"}
+            aria-label="转移单编号"
             value={formData.transfer_id != null ? String(formData.transfer_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, transfer_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -96,9 +113,14 @@ export function MesWmTransferDetailForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">物料编号</label>
+          <label htmlFor="mes-wm-transfer-detail-item_id" className="block text-xs text-slate-600 mb-1">物料编号</label>
           <input
             type="number"
+            id="mes-wm-transfer-detail-item_id"
+            data-testid="field-item_id"
+            data-agent-target="mes-wm-transfer-detail:field:item_id"
+            data-agent-state={formData.item_id == null || formData.item_id === "" ? "empty" : "filled"}
+            aria-label="物料编号"
             value={formData.item_id != null ? String(formData.item_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, item_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -108,9 +130,14 @@ export function MesWmTransferDetailForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">上架数量</label>
+          <label htmlFor="mes-wm-transfer-detail-quantity" className="block text-xs text-slate-600 mb-1">上架数量</label>
           <input
             type="number"
+            id="mes-wm-transfer-detail-quantity"
+            data-testid="field-quantity"
+            data-agent-target="mes-wm-transfer-detail:field:quantity"
+            data-agent-state={formData.quantity == null || formData.quantity === "" ? "empty" : "filled"}
+            aria-label="上架数量"
             value={formData.quantity != null ? String(formData.quantity) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, quantity: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -120,9 +147,14 @@ export function MesWmTransferDetailForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">批次编号</label>
+          <label htmlFor="mes-wm-transfer-detail-batch_id" className="block text-xs text-slate-600 mb-1">批次编号</label>
           <input
             type="number"
+            id="mes-wm-transfer-detail-batch_id"
+            data-testid="field-batch_id"
+            data-agent-target="mes-wm-transfer-detail:field:batch_id"
+            data-agent-state={formData.batch_id == null || formData.batch_id === "" ? "empty" : "filled"}
+            aria-label="批次编号"
             value={formData.batch_id != null ? String(formData.batch_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, batch_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -132,9 +164,14 @@ export function MesWmTransferDetailForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">移入仓库编号</label>
+          <label htmlFor="mes-wm-transfer-detail-to_warehouse_id" className="block text-xs text-slate-600 mb-1">移入仓库编号</label>
           <input
             type="number"
+            id="mes-wm-transfer-detail-to_warehouse_id"
+            data-testid="field-to_warehouse_id"
+            data-agent-target="mes-wm-transfer-detail:field:to_warehouse_id"
+            data-agent-state={formData.to_warehouse_id == null || formData.to_warehouse_id === "" ? "empty" : "filled"}
+            aria-label="移入仓库编号"
             value={formData.to_warehouse_id != null ? String(formData.to_warehouse_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, to_warehouse_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -144,9 +181,14 @@ export function MesWmTransferDetailForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">移入库区编号</label>
+          <label htmlFor="mes-wm-transfer-detail-to_location_id" className="block text-xs text-slate-600 mb-1">移入库区编号</label>
           <input
             type="number"
+            id="mes-wm-transfer-detail-to_location_id"
+            data-testid="field-to_location_id"
+            data-agent-target="mes-wm-transfer-detail:field:to_location_id"
+            data-agent-state={formData.to_location_id == null || formData.to_location_id === "" ? "empty" : "filled"}
+            aria-label="移入库区编号"
             value={formData.to_location_id != null ? String(formData.to_location_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, to_location_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -156,9 +198,14 @@ export function MesWmTransferDetailForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">移入库位编号</label>
+          <label htmlFor="mes-wm-transfer-detail-to_area_id" className="block text-xs text-slate-600 mb-1">移入库位编号</label>
           <input
             type="number"
+            id="mes-wm-transfer-detail-to_area_id"
+            data-testid="field-to_area_id"
+            data-agent-target="mes-wm-transfer-detail:field:to_area_id"
+            data-agent-state={formData.to_area_id == null || formData.to_area_id === "" ? "empty" : "filled"}
+            aria-label="移入库位编号"
             value={formData.to_area_id != null ? String(formData.to_area_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, to_area_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -168,9 +215,14 @@ export function MesWmTransferDetailForm({ open, initialData, onClose, onSuccess 
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">备注</label>
+          <label htmlFor="mes-wm-transfer-detail-remark" className="block text-xs text-slate-600 mb-1">备注</label>
           <input
             type="text"
+            id="mes-wm-transfer-detail-remark"
+            data-testid="field-remark"
+            data-agent-target="mes-wm-transfer-detail:field:remark"
+            data-agent-state={formData.remark ? "filled" : "empty"}
+            aria-label="备注"
             value={formData.remark ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, remark: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -184,6 +236,8 @@ export function MesWmTransferDetailForm({ open, initialData, onClose, onSuccess 
             <button
               type="button"
               onClick={onClose}
+              data-testid="mes-wm-transfer-detail-form-cancel"
+              data-agent-target="mes-wm-transfer-detail:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -191,6 +245,9 @@ export function MesWmTransferDetailForm({ open, initialData, onClose, onSuccess 
             <button
               type="submit"
               disabled={loading}
+              data-testid="mes-wm-transfer-detail-form-submit"
+              data-agent-target="mes-wm-transfer-detail:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

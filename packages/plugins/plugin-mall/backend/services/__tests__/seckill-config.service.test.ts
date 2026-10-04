@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { SeckillConfigService } from "../seckill-config.service"
 
 describe("SeckillConfigService", () => {
-  it("should create and query SeckillConfig（源框架导入）", async () => {
+  it("should create and query 秒杀时段", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await SeckillConfigService.create({
-        name: "测试SeckillConfig（源框架导入）",
+        name: "测试秒杀时段",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("SeckillConfigService", () => {
   
       const updated = await SeckillConfigService.update(created.id, {
         id: created.id,
-        name: "更新SeckillConfig（源框架导入）",
+        name: "更新秒杀时段",
       } as any)
       expect(updated).toBeDefined()
   

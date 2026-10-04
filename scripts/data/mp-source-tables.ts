@@ -6,12 +6,12 @@ export const MP_TABLES: CodegenConfig[] = [
   {
     moduleName: "mp",
     className: "MpAccount",
-    businessName: "MpAccount（源框架导入）",
+    businessName: "公众号账号",
     parentMenuId: "mp-dir",
     permissionPrefix: "mp:mp_account",
     table: {
       name: "mp_account",
-      comment: "MpAccount（源框架导入）",
+      comment: "公众号账号",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"公众号名称","nullableInferred":true},
@@ -34,12 +34,12 @@ export const MP_TABLES: CodegenConfig[] = [
   {
     moduleName: "mp",
     className: "MpAutoReply",
-    businessName: "MpAutoReply（源框架导入）",
+    businessName: "公众号消息自动回复",
     parentMenuId: "mp-dir",
     permissionPrefix: "mp:mp_auto_reply",
     table: {
       name: "mp_auto_reply",
-      comment: "MpAutoReply（源框架导入）",
+      comment: "公众号消息自动回复",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"主键","isPk":true,"nullableInferred":true},
         {"name":"account_id","type":"bigint","tsType":"number","nullable":true,"comment":"公众号账号的编号","nullableInferred":true},
@@ -71,12 +71,12 @@ export const MP_TABLES: CodegenConfig[] = [
   {
     moduleName: "mp",
     className: "MpMaterial",
-    businessName: "MpMaterial（源框架导入）",
+    businessName: "公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_",
     parentMenuId: "mp-dir",
     permissionPrefix: "mp:mp_material",
     table: {
       name: "mp_material",
-      comment: "MpMaterial（源框架导入）",
+      comment: "公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"主键","isPk":true,"nullableInferred":true},
         {"name":"account_id","type":"bigint","tsType":"number","nullable":true,"comment":"公众号账号的编号","nullableInferred":true},
@@ -101,12 +101,12 @@ export const MP_TABLES: CodegenConfig[] = [
   {
     moduleName: "mp",
     className: "MpMenu",
-    businessName: "MpMenu（源框架导入）",
+    businessName: "公众号菜单",
     parentMenuId: "mp-dir",
     permissionPrefix: "mp:mp_menu",
     table: {
       name: "mp_menu",
-      comment: "MpMenu（源框架导入）",
+      comment: "公众号菜单",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"account_id","type":"bigint","tsType":"number","nullable":true,"comment":"公众号账号的编号","nullableInferred":true},
@@ -142,12 +142,12 @@ export const MP_TABLES: CodegenConfig[] = [
   {
     moduleName: "mp",
     className: "MpMessage",
-    businessName: "MpMessage（源框架导入）",
+    businessName: "公众号消息",
     parentMenuId: "mp-dir",
     permissionPrefix: "mp:mp_message",
     table: {
       name: "mp_message",
-      comment: "MpMessage（源框架导入）",
+      comment: "公众号消息",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"主键","isPk":true,"nullableInferred":true},
         {"name":"msg_id","type":"bigint","tsType":"number","nullable":true,"comment":"微信公众号消息 id","nullableInferred":true},
@@ -192,12 +192,12 @@ export const MP_TABLES: CodegenConfig[] = [
   {
     moduleName: "mp",
     className: "MpMessageTemplate",
-    businessName: "MpMessageTemplate（源框架导入）",
+    businessName: "公众号模版消息",
     parentMenuId: "mp-dir",
     permissionPrefix: "mp:mp_message_template",
     table: {
       name: "mp_message_template",
-      comment: "MpMessageTemplate（源框架导入）",
+      comment: "公众号模版消息",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"主键","isPk":true,"nullableInferred":true},
         {"name":"account_id","type":"bigint","tsType":"number","nullable":true,"comment":"公众号账号的编号","nullableInferred":true},
@@ -220,12 +220,12 @@ export const MP_TABLES: CodegenConfig[] = [
   {
     moduleName: "mp",
     className: "MpTag",
-    businessName: "MpTag（源框架导入）",
+    businessName: "公众号标签",
     parentMenuId: "mp-dir",
     permissionPrefix: "mp:mp_tag",
     table: {
       name: "mp_tag",
-      comment: "MpTag（源框架导入）",
+      comment: "公众号标签",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"主键","isPk":true,"nullableInferred":true},
         {"name":"tag_id","type":"bigint","tsType":"number","nullable":true,"comment":"公众号标签 id","nullableInferred":true},
@@ -245,12 +245,12 @@ export const MP_TABLES: CodegenConfig[] = [
   {
     moduleName: "mp",
     className: "MpUser",
-    businessName: "MpUser（源框架导入）",
+    businessName: "微信公众号粉丝",
     parentMenuId: "mp-dir",
     permissionPrefix: "mp:mp_user",
     table: {
       name: "mp_user",
-      comment: "MpUser（源框架导入）",
+      comment: "微信公众号粉丝",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"openid","type":"varchar","tsType":"string","nullable":true,"comment":"粉丝标识","nullableInferred":true},

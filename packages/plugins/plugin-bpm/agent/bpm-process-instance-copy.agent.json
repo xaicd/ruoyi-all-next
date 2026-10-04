@@ -1,0 +1,267 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "bpm",
+  "entity": "BpmProcessInstanceCopy",
+  "kebab": "bpm-process-instance-copy",
+  "businessName": "流程抄送",
+  "permissionPrefix": "bpm:bpm_process_instance_copy",
+  "page": {
+    "route": "/admin/bpm/bpm-process-instance-copy",
+    "title": "流程抄送管理",
+    "titleSelector": "[data-testid=\"bpm-process-instance-copy-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.bpm/api",
+    "bffMount": "/api/v1/admin/bpm",
+    "resource": "bpm-process-instance-copy",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/bpm-process-instance-copy",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/bpm-process-instance-copy/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/bpm-process-instance-copy"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/bpm-process-instance-copy/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/bpm-process-instance-copy/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"bpm-process-instance-copy-title\"]",
+    "refresh": "[data-testid=\"bpm-process-instance-copy-refresh\"]",
+    "createButton": "[data-testid=\"bpm-process-instance-copy-create\"]",
+    "searchForm": "[data-testid=\"bpm-process-instance-copy-search\"]",
+    "searchSubmit": "[data-testid=\"bpm-process-instance-copy-search-submit\"]",
+    "searchReset": "[data-testid=\"bpm-process-instance-copy-search-reset\"]",
+    "total": "[data-testid=\"bpm-process-instance-copy-total\"]",
+    "table": "[data-testid=\"bpm-process-instance-copy-table\"]",
+    "row": "[data-testid=\"bpm-process-instance-copy-row\"]",
+    "editButton": "[data-testid=\"bpm-process-instance-copy-edit\"]",
+    "deleteButton": "[data-testid=\"bpm-process-instance-copy-delete\"]",
+    "form": "[data-testid=\"bpm-process-instance-copy-form\"]",
+    "formError": "[data-testid=\"bpm-process-instance-copy-form-error\"]",
+    "formSubmit": "[data-testid=\"bpm-process-instance-copy-form-submit\"]",
+    "formCancel": "[data-testid=\"bpm-process-instance-copy-form-cancel\"]",
+    "formClose": "[data-testid=\"bpm-process-instance-copy-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "流程抄送列表",
+    "dialogLabel": {
+      "create": "新增流程抄送",
+      "edit": "编辑流程抄送"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "start_user_id",
+        "label": "发起人 Id",
+        "type": "number",
+        "required": false,
+        "testId": "field-start_user_id",
+        "selector": "[data-testid=\"field-start_user_id\"]"
+      },
+      {
+        "name": "process_instance_name",
+        "label": "流程名",
+        "type": "string",
+        "required": false,
+        "testId": "field-process_instance_name",
+        "selector": "[data-testid=\"field-process_instance_name\"]"
+      },
+      {
+        "name": "process_instance_id",
+        "label": "流程实例的编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-process_instance_id",
+        "selector": "[data-testid=\"field-process_instance_id\"]"
+      },
+      {
+        "name": "process_definition_id",
+        "label": "流程实例的流程定义编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-process_definition_id",
+        "selector": "[data-testid=\"field-process_definition_id\"]"
+      },
+      {
+        "name": "category",
+        "label": "流程分类",
+        "type": "string",
+        "required": false,
+        "testId": "field-category",
+        "selector": "[data-testid=\"field-category\"]"
+      },
+      {
+        "name": "activity_id",
+        "label": "流程活动的编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-activity_id",
+        "selector": "[data-testid=\"field-activity_id\"]"
+      },
+      {
+        "name": "activity_name",
+        "label": "流程活动的名字",
+        "type": "string",
+        "required": false,
+        "testId": "field-activity_name",
+        "selector": "[data-testid=\"field-activity_name\"]"
+      },
+      {
+        "name": "task_id",
+        "label": "流程活动的编号",
+        "type": "string",
+        "required": false,
+        "testId": "field-task_id",
+        "selector": "[data-testid=\"field-task_id\"]"
+      },
+      {
+        "name": "user_id",
+        "label": "用户编号（被抄送的用户编号）",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "reason",
+        "label": "抄送意见",
+        "type": "string",
+        "required": false,
+        "testId": "field-reason",
+        "selector": "[data-testid=\"field-reason\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "bpm-process-instance-copy",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"bpm-process-instance-copy\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"bpm-process-instance-copy-form-overlay\"]",
+      "dialog": "[data-testid=\"bpm-process-instance-copy-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "bpm-process-instance-copy:search",
+      "reset": "bpm-process-instance-copy:reset",
+      "refresh": "bpm-process-instance-copy:refresh",
+      "create": "bpm-process-instance-copy:create",
+      "edit": "bpm-process-instance-copy:edit",
+      "delete": "bpm-process-instance-copy:delete",
+      "submit": "bpm-process-instance-copy:submit",
+      "cancel": "bpm-process-instance-copy:cancel",
+      "close": "bpm-process-instance-copy:close",
+      "row": "bpm-process-instance-copy:row",
+      "pagination": "bpm-process-instance-copy:pagination",
+      "fields": {
+        "start_user_id": "bpm-process-instance-copy:field:start_user_id",
+        "process_instance_name": "bpm-process-instance-copy:field:process_instance_name",
+        "process_instance_id": "bpm-process-instance-copy:field:process_instance_id",
+        "process_definition_id": "bpm-process-instance-copy:field:process_definition_id",
+        "category": "bpm-process-instance-copy:field:category",
+        "activity_id": "bpm-process-instance-copy:field:activity_id",
+        "activity_name": "bpm-process-instance-copy:field:activity_name",
+        "task_id": "bpm-process-instance-copy:field:task_id",
+        "user_id": "bpm-process-instance-copy:field:user_id",
+        "reason": "bpm-process-instance-copy:field:reason"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "bpm.bpm-process-instance-copy",
+      "examples": [
+        "bpm.bpm-process-instance-copy__List__Refresh",
+        "bpm.bpm-process-instance-copy__ListItem__Open",
+        "bpm.bpm-process-instance-copy__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

@@ -1,0 +1,204 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mes",
+  "entity": "MesCalTeamMember",
+  "kebab": "mes-cal-team-member",
+  "businessName": "MES 班组成员",
+  "permissionPrefix": "mes:mes_cal_team_member",
+  "page": {
+    "route": "/admin/mes/mes-cal-team-member",
+    "title": "MES 班组成员管理",
+    "titleSelector": "[data-testid=\"mes-cal-team-member-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mes/api",
+    "bffMount": "/api/v1/admin/mes",
+    "resource": "mes-cal-team-member",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/mes-cal-team-member",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/mes-cal-team-member/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/mes-cal-team-member"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/mes-cal-team-member/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/mes-cal-team-member/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"mes-cal-team-member-title\"]",
+    "refresh": "[data-testid=\"mes-cal-team-member-refresh\"]",
+    "createButton": "[data-testid=\"mes-cal-team-member-create\"]",
+    "searchForm": "[data-testid=\"mes-cal-team-member-search\"]",
+    "searchSubmit": "[data-testid=\"mes-cal-team-member-search-submit\"]",
+    "searchReset": "[data-testid=\"mes-cal-team-member-search-reset\"]",
+    "total": "[data-testid=\"mes-cal-team-member-total\"]",
+    "table": "[data-testid=\"mes-cal-team-member-table\"]",
+    "row": "[data-testid=\"mes-cal-team-member-row\"]",
+    "editButton": "[data-testid=\"mes-cal-team-member-edit\"]",
+    "deleteButton": "[data-testid=\"mes-cal-team-member-delete\"]",
+    "form": "[data-testid=\"mes-cal-team-member-form\"]",
+    "formError": "[data-testid=\"mes-cal-team-member-form-error\"]",
+    "formSubmit": "[data-testid=\"mes-cal-team-member-form-submit\"]",
+    "formCancel": "[data-testid=\"mes-cal-team-member-form-cancel\"]",
+    "formClose": "[data-testid=\"mes-cal-team-member-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "MES 班组成员列表",
+    "dialogLabel": {
+      "create": "新增MES 班组成员",
+      "edit": "编辑MES 班组成员"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "team_id",
+        "label": "班组编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-team_id",
+        "selector": "[data-testid=\"field-team_id\"]"
+      },
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "remark",
+        "label": "备注",
+        "type": "string",
+        "required": false,
+        "testId": "field-remark",
+        "selector": "[data-testid=\"field-remark\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "mes-cal-team-member",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"mes-cal-team-member\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"mes-cal-team-member-form-overlay\"]",
+      "dialog": "[data-testid=\"mes-cal-team-member-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "mes-cal-team-member:search",
+      "reset": "mes-cal-team-member:reset",
+      "refresh": "mes-cal-team-member:refresh",
+      "create": "mes-cal-team-member:create",
+      "edit": "mes-cal-team-member:edit",
+      "delete": "mes-cal-team-member:delete",
+      "submit": "mes-cal-team-member:submit",
+      "cancel": "mes-cal-team-member:cancel",
+      "close": "mes-cal-team-member:close",
+      "row": "mes-cal-team-member:row",
+      "pagination": "mes-cal-team-member:pagination",
+      "fields": {
+        "team_id": "mes-cal-team-member:field:team_id",
+        "user_id": "mes-cal-team-member:field:user_id",
+        "remark": "mes-cal-team-member:field:remark"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mes.mes-cal-team-member",
+      "examples": [
+        "mes.mes-cal-team-member__List__Refresh",
+        "mes.mes-cal-team-member__ListItem__Open",
+        "mes.mes-cal-team-member__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

@@ -1,0 +1,231 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "im",
+  "entity": "ImChannelMessage",
+  "kebab": "im-channel-message",
+  "businessName": "IM 频道消息 DO业务语义：- 一次推送 1 行； 为空表示全员- 冗余 便于按频道检索- 存推送时 payload 的 JSON 快照（title / coverUrl / summa",
+  "permissionPrefix": "im:im_channel_message",
+  "page": {
+    "route": "/admin/im/im-channel-message",
+    "title": "IM 频道消息 DO业务语义：- 一次推送 1 行； 为空表示全员- 冗余 便于按频道检索- 存推送时 payload 的 JSON 快照（title / coverUrl / summa管理",
+    "titleSelector": "[data-testid=\"im-channel-message-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.im/api",
+    "bffMount": "/api/v1/admin/im",
+    "resource": "im-channel-message",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/im-channel-message",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/im-channel-message/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/im-channel-message"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/im-channel-message/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/im-channel-message/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"im-channel-message-title\"]",
+    "refresh": "[data-testid=\"im-channel-message-refresh\"]",
+    "createButton": "[data-testid=\"im-channel-message-create\"]",
+    "searchForm": "[data-testid=\"im-channel-message-search\"]",
+    "searchSubmit": "[data-testid=\"im-channel-message-search-submit\"]",
+    "searchReset": "[data-testid=\"im-channel-message-search-reset\"]",
+    "total": "[data-testid=\"im-channel-message-total\"]",
+    "table": "[data-testid=\"im-channel-message-table\"]",
+    "row": "[data-testid=\"im-channel-message-row\"]",
+    "editButton": "[data-testid=\"im-channel-message-edit\"]",
+    "deleteButton": "[data-testid=\"im-channel-message-delete\"]",
+    "form": "[data-testid=\"im-channel-message-form\"]",
+    "formError": "[data-testid=\"im-channel-message-form-error\"]",
+    "formSubmit": "[data-testid=\"im-channel-message-form-submit\"]",
+    "formCancel": "[data-testid=\"im-channel-message-form-cancel\"]",
+    "formClose": "[data-testid=\"im-channel-message-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IM 频道消息 DO业务语义：- 一次推送 1 行； 为空表示全员- 冗余 便于按频道检索- 存推送时 payload 的 JSON 快照（title / coverUrl / summa列表",
+    "dialogLabel": {
+      "create": "新增IM 频道消息 DO业务语义：- 一次推送 1 行； 为空表示全员- 冗余 便于按频道检索- 存推送时 payload 的 JSON 快照（title / coverUrl / summa",
+      "edit": "编辑IM 频道消息 DO业务语义：- 一次推送 1 行； 为空表示全员- 冗余 便于按频道检索- 存推送时 payload 的 JSON 快照（title / coverUrl / summa"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "channel_id",
+        "label": "频道编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-channel_id",
+        "selector": "[data-testid=\"field-channel_id\"]"
+      },
+      {
+        "name": "material_id",
+        "label": "关联素材编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-material_id",
+        "selector": "[data-testid=\"field-material_id\"]"
+      },
+      {
+        "name": "type",
+        "label": "消息类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-type",
+        "selector": "[data-testid=\"field-type\"]"
+      },
+      {
+        "name": "content",
+        "label": "消息内容；推送时 payload 的 JSON 快照",
+        "type": "string",
+        "required": false,
+        "testId": "field-content",
+        "selector": "[data-testid=\"field-content\"]"
+      },
+      {
+        "name": "receiver_user_ids",
+        "label": "接收人编号列表；为空表示全员",
+        "type": "string",
+        "required": false,
+        "testId": "field-receiver_user_ids",
+        "selector": "[data-testid=\"field-receiver_user_ids\"]"
+      },
+      {
+        "name": "send_time",
+        "label": "发送时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-send_time",
+        "selector": "[data-testid=\"field-send_time\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "im-channel-message",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"im-channel-message\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"im-channel-message-form-overlay\"]",
+      "dialog": "[data-testid=\"im-channel-message-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "im-channel-message:search",
+      "reset": "im-channel-message:reset",
+      "refresh": "im-channel-message:refresh",
+      "create": "im-channel-message:create",
+      "edit": "im-channel-message:edit",
+      "delete": "im-channel-message:delete",
+      "submit": "im-channel-message:submit",
+      "cancel": "im-channel-message:cancel",
+      "close": "im-channel-message:close",
+      "row": "im-channel-message:row",
+      "pagination": "im-channel-message:pagination",
+      "fields": {
+        "channel_id": "im-channel-message:field:channel_id",
+        "material_id": "im-channel-message:field:material_id",
+        "type": "im-channel-message:field:type",
+        "content": "im-channel-message:field:content",
+        "receiver_user_ids": "im-channel-message:field:receiver_user_ids",
+        "send_time": "im-channel-message:field:send_time"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "im.im-channel-message",
+      "examples": [
+        "im.im-channel-message__List__Refresh",
+        "im.im-channel-message__ListItem__Open",
+        "im.im-channel-message__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

@@ -1,0 +1,222 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "im",
+  "entity": "ImConversationRead",
+  "kebab": "im-conversation-read",
+  "businessName": "IM 会话读位置 DO只表达「用户在某个会话的最大已读位置」，私聊 / 群聊 / 频道统一落这张表，是读位置的唯一权威。",
+  "permissionPrefix": "im:im_conversation_read",
+  "page": {
+    "route": "/admin/im/im-conversation-read",
+    "title": "IM 会话读位置 DO只表达「用户在某个会话的最大已读位置」，私聊 / 群聊 / 频道统一落这张表，是读位置的唯一权威。管理",
+    "titleSelector": "[data-testid=\"im-conversation-read-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.im/api",
+    "bffMount": "/api/v1/admin/im",
+    "resource": "im-conversation-read",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/im-conversation-read",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/im-conversation-read/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/im-conversation-read"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/im-conversation-read/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/im-conversation-read/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"im-conversation-read-title\"]",
+    "refresh": "[data-testid=\"im-conversation-read-refresh\"]",
+    "createButton": "[data-testid=\"im-conversation-read-create\"]",
+    "searchForm": "[data-testid=\"im-conversation-read-search\"]",
+    "searchSubmit": "[data-testid=\"im-conversation-read-search-submit\"]",
+    "searchReset": "[data-testid=\"im-conversation-read-search-reset\"]",
+    "total": "[data-testid=\"im-conversation-read-total\"]",
+    "table": "[data-testid=\"im-conversation-read-table\"]",
+    "row": "[data-testid=\"im-conversation-read-row\"]",
+    "editButton": "[data-testid=\"im-conversation-read-edit\"]",
+    "deleteButton": "[data-testid=\"im-conversation-read-delete\"]",
+    "form": "[data-testid=\"im-conversation-read-form\"]",
+    "formError": "[data-testid=\"im-conversation-read-form-error\"]",
+    "formSubmit": "[data-testid=\"im-conversation-read-form-submit\"]",
+    "formCancel": "[data-testid=\"im-conversation-read-form-cancel\"]",
+    "formClose": "[data-testid=\"im-conversation-read-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "IM 会话读位置 DO只表达「用户在某个会话的最大已读位置」，私聊 / 群聊 / 频道统一落这张表，是读位置的唯一权威。列表",
+    "dialogLabel": {
+      "create": "新增IM 会话读位置 DO只表达「用户在某个会话的最大已读位置」，私聊 / 群聊 / 频道统一落这张表，是读位置的唯一权威。",
+      "edit": "编辑IM 会话读位置 DO只表达「用户在某个会话的最大已读位置」，私聊 / 群聊 / 频道统一落这张表，是读位置的唯一权威。"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "conversation_type",
+        "label": "会话类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-conversation_type",
+        "selector": "[data-testid=\"field-conversation_type\"]"
+      },
+      {
+        "name": "target_id",
+        "label": "目标编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-target_id",
+        "selector": "[data-testid=\"field-target_id\"]"
+      },
+      {
+        "name": "message_id",
+        "label": "最大已读消息编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-message_id",
+        "selector": "[data-testid=\"field-message_id\"]"
+      },
+      {
+        "name": "read_time",
+        "label": "最近已读时间",
+        "type": "string",
+        "required": false,
+        "testId": "field-read_time",
+        "selector": "[data-testid=\"field-read_time\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "im-conversation-read",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"im-conversation-read\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"im-conversation-read-form-overlay\"]",
+      "dialog": "[data-testid=\"im-conversation-read-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "im-conversation-read:search",
+      "reset": "im-conversation-read:reset",
+      "refresh": "im-conversation-read:refresh",
+      "create": "im-conversation-read:create",
+      "edit": "im-conversation-read:edit",
+      "delete": "im-conversation-read:delete",
+      "submit": "im-conversation-read:submit",
+      "cancel": "im-conversation-read:cancel",
+      "close": "im-conversation-read:close",
+      "row": "im-conversation-read:row",
+      "pagination": "im-conversation-read:pagination",
+      "fields": {
+        "user_id": "im-conversation-read:field:user_id",
+        "conversation_type": "im-conversation-read:field:conversation_type",
+        "target_id": "im-conversation-read:field:target_id",
+        "message_id": "im-conversation-read:field:message_id",
+        "read_time": "im-conversation-read:field:read_time"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "im.im-conversation-read",
+      "examples": [
+        "im.im-conversation-read__List__Refresh",
+        "im.im-conversation-read__ListItem__Open",
+        "im.im-conversation-read__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

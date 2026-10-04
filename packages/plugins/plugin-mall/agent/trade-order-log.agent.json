@@ -1,0 +1,240 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "mall",
+  "entity": "TradeOrderLog",
+  "kebab": "trade-order-log",
+  "businessName": "订单日志",
+  "permissionPrefix": "mall:trade_order_log",
+  "page": {
+    "route": "/admin/mall/trade-order-log",
+    "title": "订单日志管理",
+    "titleSelector": "[data-testid=\"trade-order-log-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/plugins/ruoyi.mall/api",
+    "bffMount": "/api/v1/admin/mall",
+    "resource": "trade-order-log",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/trade-order-log",
+        "query": [
+          "page",
+          "pageSize"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/trade-order-log/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/trade-order-log"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/trade-order-log/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/trade-order-log/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"trade-order-log-title\"]",
+    "refresh": "[data-testid=\"trade-order-log-refresh\"]",
+    "createButton": "[data-testid=\"trade-order-log-create\"]",
+    "searchForm": "[data-testid=\"trade-order-log-search\"]",
+    "searchSubmit": "[data-testid=\"trade-order-log-search-submit\"]",
+    "searchReset": "[data-testid=\"trade-order-log-search-reset\"]",
+    "total": "[data-testid=\"trade-order-log-total\"]",
+    "table": "[data-testid=\"trade-order-log-table\"]",
+    "row": "[data-testid=\"trade-order-log-row\"]",
+    "editButton": "[data-testid=\"trade-order-log-edit\"]",
+    "deleteButton": "[data-testid=\"trade-order-log-delete\"]",
+    "form": "[data-testid=\"trade-order-log-form\"]",
+    "formError": "[data-testid=\"trade-order-log-form-error\"]",
+    "formSubmit": "[data-testid=\"trade-order-log-form-submit\"]",
+    "formCancel": "[data-testid=\"trade-order-log-form-cancel\"]",
+    "formClose": "[data-testid=\"trade-order-log-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "订单日志列表",
+    "dialogLabel": {
+      "create": "新增订单日志",
+      "edit": "编辑订单日志"
+    },
+    "searchFields": [],
+    "fields": [
+      {
+        "name": "user_id",
+        "label": "用户编号",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_id",
+        "selector": "[data-testid=\"field-user_id\"]"
+      },
+      {
+        "name": "user_type",
+        "label": "用户类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-user_type",
+        "selector": "[data-testid=\"field-user_type\"]"
+      },
+      {
+        "name": "order_id",
+        "label": "订单号",
+        "type": "number",
+        "required": false,
+        "testId": "field-order_id",
+        "selector": "[data-testid=\"field-order_id\"]"
+      },
+      {
+        "name": "before_status",
+        "label": "操作前状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-before_status",
+        "selector": "[data-testid=\"field-before_status\"]"
+      },
+      {
+        "name": "after_status",
+        "label": "操作后状态",
+        "type": "number",
+        "required": false,
+        "testId": "field-after_status",
+        "selector": "[data-testid=\"field-after_status\"]"
+      },
+      {
+        "name": "operate_type",
+        "label": "操作类型",
+        "type": "number",
+        "required": false,
+        "testId": "field-operate_type",
+        "selector": "[data-testid=\"field-operate_type\"]"
+      },
+      {
+        "name": "content",
+        "label": "订单日志信息",
+        "type": "string",
+        "required": false,
+        "testId": "field-content",
+        "selector": "[data-testid=\"field-content\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "trade-order-log",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"trade-order-log\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "editing"
+      ],
+      "form": [
+        "open",
+        "submitting",
+        "error"
+      ]
+    },
+    "modal": {
+      "overlay": "[data-testid=\"trade-order-log-form-overlay\"]",
+      "dialog": "[data-testid=\"trade-order-log-form\"]",
+      "pruneAttribute": "inert",
+      "pruneTarget": "页面基底内容容器"
+    },
+    "targets": {
+      "search": "trade-order-log:search",
+      "reset": "trade-order-log:reset",
+      "refresh": "trade-order-log:refresh",
+      "create": "trade-order-log:create",
+      "edit": "trade-order-log:edit",
+      "delete": "trade-order-log:delete",
+      "submit": "trade-order-log:submit",
+      "cancel": "trade-order-log:cancel",
+      "close": "trade-order-log:close",
+      "row": "trade-order-log:row",
+      "pagination": "trade-order-log:pagination",
+      "fields": {
+        "user_id": "trade-order-log:field:user_id",
+        "user_type": "trade-order-log:field:user_type",
+        "order_id": "trade-order-log:field:order_id",
+        "before_status": "trade-order-log:field:before_status",
+        "after_status": "trade-order-log:field:after_status",
+        "operate_type": "trade-order-log:field:operate_type",
+        "content": "trade-order-log:field:content"
+      }
+    },
+    "mobile": {
+      "testIdScheme": "[Screen]__[Component]__[Action]",
+      "screen": "mall.trade-order-log",
+      "examples": [
+        "mall.trade-order-log__List__Refresh",
+        "mall.trade-order-log__ListItem__Open",
+        "mall.trade-order-log__Form__Submit"
+      ]
+    }
+  },
+  "journey": [
+    "goto",
+    "assertTitle",
+    "search",
+    "openCreateForm",
+    "fillForm",
+    "submitForm",
+    "edit",
+    "delete"
+  ],
+  "ops": {
+    "automations": [
+      {
+        "name": "health",
+        "kind": "query",
+        "description": "列表接口连通性 + 返回结构",
+        "method": "list"
+      },
+      {
+        "name": "seed-sample",
+        "kind": "mutation",
+        "description": "写入一条样例数据（幂等靠业务字段）",
+        "method": "create"
+      },
+      {
+        "name": "purge-sample",
+        "kind": "mutation",
+        "description": "清理本契约造的样例数据",
+        "method": "delete"
+      }
+    ]
+  }
+}

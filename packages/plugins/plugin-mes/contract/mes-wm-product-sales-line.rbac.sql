@@ -1,5 +1,5 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for MesWmProductSalesLine（源框架导入） (MesWmProductSalesLine)
+-- Auto-generated RBAC & Menu Migration for MES 销售出库单行 (MesWmProductSalesLine)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
@@ -7,7 +7,7 @@ INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type,
 VALUES (
   'menu-mes-wm-product-sales-line',
   'mes-dir',
-  'MesWmProductSalesLine（源框架导入）管理',
+  'MES 销售出库单行管理',
   '/admin/mes/mes-wm-product-sales-line',
   'mes/mes-wm-product-sales-line/index',
   'table',
@@ -22,10 +22,10 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
 INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-mes-wm-product-sales-line-query',  'menu-mes-wm-product-sales-line', '查询MesWmProductSalesLine（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_product_sales_line:query',  1, NOW(), NOW()),
-('menu-mes-wm-product-sales-line-create', 'menu-mes-wm-product-sales-line', '新增MesWmProductSalesLine（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_product_sales_line:create', 2, NOW(), NOW()),
-('menu-mes-wm-product-sales-line-update', 'menu-mes-wm-product-sales-line', '修改MesWmProductSalesLine（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_product_sales_line:update', 3, NOW(), NOW()),
-('menu-mes-wm-product-sales-line-delete', 'menu-mes-wm-product-sales-line', '删除MesWmProductSalesLine（源框架导入）', 'BUTTON', 'ACTIVE', 'mes:mes_wm_product_sales_line:delete', 4, NOW(), NOW())
+('menu-mes-wm-product-sales-line-query',  'menu-mes-wm-product-sales-line', '查询MES 销售出库单行', 'BUTTON', 'ACTIVE', 'mes:mes_wm_product_sales_line:query',  1, NOW(), NOW()),
+('menu-mes-wm-product-sales-line-create', 'menu-mes-wm-product-sales-line', '新增MES 销售出库单行', 'BUTTON', 'ACTIVE', 'mes:mes_wm_product_sales_line:create', 2, NOW(), NOW()),
+('menu-mes-wm-product-sales-line-update', 'menu-mes-wm-product-sales-line', '修改MES 销售出库单行', 'BUTTON', 'ACTIVE', 'mes:mes_wm_product_sales_line:update', 3, NOW(), NOW()),
+('menu-mes-wm-product-sales-line-delete', 'menu-mes-wm-product-sales-line', '删除MES 销售出库单行', 'BUTTON', 'ACTIVE', 'mes:mes_wm_product_sales_line:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)

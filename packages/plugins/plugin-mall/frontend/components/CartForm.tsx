@@ -53,24 +53,36 @@ export function CartForm({ open, initialData, onClose, onSuccess }: CartFormProp
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="cart-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑购物车的商品信息 DO每个商品，对应一条记录，通过 和 关联" : "新增购物车的商品信息 DO每个商品，对应一条记录，通过 和 关联"}
+        data-testid="cart-form"
+        data-agent-scope="cart:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑Cart（源框架导入）" : "新增Cart（源框架导入）"}
+            {isEdit ? "编辑购物车的商品信息 DO每个商品，对应一条记录，通过 和 关联" : "新增购物车的商品信息 DO每个商品，对应一条记录，通过 和 关联"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="cart-form-close" data-agent-target="cart:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="cart-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">用户编号</label>
+          <label htmlFor="cart-user_id" className="block text-xs text-slate-600 mb-1">用户编号</label>
           <input
             type="number"
+            id="cart-user_id"
+            data-testid="field-user_id"
+            data-agent-target="cart:field:user_id"
+            data-agent-state={formData.user_id == null || formData.user_id === "" ? "empty" : "filled"}
+            aria-label="用户编号"
             value={formData.user_id != null ? String(formData.user_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, user_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -80,9 +92,14 @@ export function CartForm({ open, initialData, onClose, onSuccess }: CartFormProp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品 SPU 编号</label>
+          <label htmlFor="cart-spu_id" className="block text-xs text-slate-600 mb-1">商品 SPU 编号</label>
           <input
             type="number"
+            id="cart-spu_id"
+            data-testid="field-spu_id"
+            data-agent-target="cart:field:spu_id"
+            data-agent-state={formData.spu_id == null || formData.spu_id === "" ? "empty" : "filled"}
+            aria-label="商品 SPU 编号"
             value={formData.spu_id != null ? String(formData.spu_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, spu_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -92,9 +109,14 @@ export function CartForm({ open, initialData, onClose, onSuccess }: CartFormProp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品 SKU 编号</label>
+          <label htmlFor="cart-sku_id" className="block text-xs text-slate-600 mb-1">商品 SKU 编号</label>
           <input
             type="number"
+            id="cart-sku_id"
+            data-testid="field-sku_id"
+            data-agent-target="cart:field:sku_id"
+            data-agent-state={formData.sku_id == null || formData.sku_id === "" ? "empty" : "filled"}
+            aria-label="商品 SKU 编号"
             value={formData.sku_id != null ? String(formData.sku_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sku_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -104,9 +126,14 @@ export function CartForm({ open, initialData, onClose, onSuccess }: CartFormProp
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品购买数量</label>
+          <label htmlFor="cart-count" className="block text-xs text-slate-600 mb-1">商品购买数量</label>
           <input
             type="number"
+            id="cart-count"
+            data-testid="field-count"
+            data-agent-target="cart:field:count"
+            data-agent-state={formData.count == null || formData.count === "" ? "empty" : "filled"}
+            aria-label="商品购买数量"
             value={formData.count != null ? String(formData.count) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, count: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -118,12 +145,16 @@ export function CartForm({ open, initialData, onClose, onSuccess }: CartFormProp
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id="selected"
+            id="cart-selected"
+            data-testid="field-selected"
+            data-agent-target="cart:field:selected"
+            data-agent-state={formData.selected ? "on" : "off"}
+            aria-label="是否选中"
             checked={Boolean(formData.selected)}
             onChange={(e) => setFormData((prev) => ({ ...prev, selected: e.target.checked }))}
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="selected" className="text-xs text-slate-700 font-medium">是否选中</label>
+          <label htmlFor="cart-selected" className="text-xs text-slate-700 font-medium">是否选中</label>
         </div>
           </div>
 
@@ -131,6 +162,8 @@ export function CartForm({ open, initialData, onClose, onSuccess }: CartFormProp
             <button
               type="button"
               onClick={onClose}
+              data-testid="cart-form-cancel"
+              data-agent-target="cart:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -138,6 +171,9 @@ export function CartForm({ open, initialData, onClose, onSuccess }: CartFormProp
             <button
               type="submit"
               disabled={loading}
+              data-testid="cart-form-submit"
+              data-agent-target="cart:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}

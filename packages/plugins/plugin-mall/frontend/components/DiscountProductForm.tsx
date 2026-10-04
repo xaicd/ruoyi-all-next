@@ -58,24 +58,36 @@ export function DiscountProductForm({ open, initialData, onClose, onSuccess }: D
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div data-testid="discount-product-form-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "编辑限时折扣商品" : "新增限时折扣商品"}
+        data-testid="discount-product-form"
+        data-agent-scope="discount-product:form"
+        data-agent-state={loading ? "submitting" : error ? "error" : "open"}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-slate-800">
-            {isEdit ? "编辑DiscountProduct（源框架导入）" : "新增DiscountProduct（源框架导入）"}
+            {isEdit ? "编辑限时折扣商品" : "新增限时折扣商品"}
           </h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
+          <button onClick={onClose} data-testid="discount-product-form-close" data-agent-target="discount-product:close" aria-label="关闭" className="text-slate-400 hover:text-slate-600 text-lg leading-none">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3 max-h-[70vh] overflow-y-auto">
             {error && (
-              <div className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
+              <div data-testid="discount-product-form-error" role="alert" className="p-2 text-xs text-red-600 bg-red-50 rounded border border-red-200">{error}</div>
             )}
         <div>
-          <label className="block text-xs text-slate-600 mb-1">限时折扣活动的编号</label>
+          <label htmlFor="discount-product-activity_id" className="block text-xs text-slate-600 mb-1">限时折扣活动的编号</label>
           <input
             type="number"
+            id="discount-product-activity_id"
+            data-testid="field-activity_id"
+            data-agent-target="discount-product:field:activity_id"
+            data-agent-state={formData.activity_id == null || formData.activity_id === "" ? "empty" : "filled"}
+            aria-label="限时折扣活动的编号"
             value={formData.activity_id != null ? String(formData.activity_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, activity_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -85,9 +97,14 @@ export function DiscountProductForm({ open, initialData, onClose, onSuccess }: D
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品 SPU 编号</label>
+          <label htmlFor="discount-product-spu_id" className="block text-xs text-slate-600 mb-1">商品 SPU 编号</label>
           <input
             type="number"
+            id="discount-product-spu_id"
+            data-testid="field-spu_id"
+            data-agent-target="discount-product:field:spu_id"
+            data-agent-state={formData.spu_id == null || formData.spu_id === "" ? "empty" : "filled"}
+            aria-label="商品 SPU 编号"
             value={formData.spu_id != null ? String(formData.spu_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, spu_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -97,9 +114,14 @@ export function DiscountProductForm({ open, initialData, onClose, onSuccess }: D
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">商品 SKU 编号</label>
+          <label htmlFor="discount-product-sku_id" className="block text-xs text-slate-600 mb-1">商品 SKU 编号</label>
           <input
             type="number"
+            id="discount-product-sku_id"
+            data-testid="field-sku_id"
+            data-agent-target="discount-product:field:sku_id"
+            data-agent-state={formData.sku_id == null || formData.sku_id === "" ? "empty" : "filled"}
+            aria-label="商品 SKU 编号"
             value={formData.sku_id != null ? String(formData.sku_id) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, sku_id: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -109,9 +131,14 @@ export function DiscountProductForm({ open, initialData, onClose, onSuccess }: D
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">折扣类型</label>
+          <label htmlFor="discount-product-discount_type" className="block text-xs text-slate-600 mb-1">折扣类型</label>
           <input
             type="number"
+            id="discount-product-discount_type"
+            data-testid="field-discount_type"
+            data-agent-target="discount-product:field:discount_type"
+            data-agent-state={formData.discount_type == null || formData.discount_type === "" ? "empty" : "filled"}
+            aria-label="折扣类型"
             value={formData.discount_type != null ? String(formData.discount_type) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, discount_type: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -121,9 +148,14 @@ export function DiscountProductForm({ open, initialData, onClose, onSuccess }: D
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">折扣百分比</label>
+          <label htmlFor="discount-product-discount_percent" className="block text-xs text-slate-600 mb-1">折扣百分比</label>
           <input
             type="number"
+            id="discount-product-discount_percent"
+            data-testid="field-discount_percent"
+            data-agent-target="discount-product:field:discount_percent"
+            data-agent-state={formData.discount_percent == null || formData.discount_percent === "" ? "empty" : "filled"}
+            aria-label="折扣百分比"
             value={formData.discount_percent != null ? String(formData.discount_percent) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, discount_percent: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -133,9 +165,14 @@ export function DiscountProductForm({ open, initialData, onClose, onSuccess }: D
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">优惠金额，单位：分</label>
+          <label htmlFor="discount-product-discount_price" className="block text-xs text-slate-600 mb-1">优惠金额，单位：分</label>
           <input
             type="number"
+            id="discount-product-discount_price"
+            data-testid="field-discount_price"
+            data-agent-target="discount-product:field:discount_price"
+            data-agent-state={formData.discount_price == null || formData.discount_price === "" ? "empty" : "filled"}
+            aria-label="优惠金额，单位：分"
             value={formData.discount_price != null ? String(formData.discount_price) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, discount_price: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -145,9 +182,14 @@ export function DiscountProductForm({ open, initialData, onClose, onSuccess }: D
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">活动标题</label>
+          <label htmlFor="discount-product-activity_name" className="block text-xs text-slate-600 mb-1">活动标题</label>
           <input
             type="text"
+            id="discount-product-activity_name"
+            data-testid="field-activity_name"
+            data-agent-target="discount-product:field:activity_name"
+            data-agent-state={formData.activity_name ? "filled" : "empty"}
+            aria-label="活动标题"
             value={formData.activity_name ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, activity_name: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -157,9 +199,14 @@ export function DiscountProductForm({ open, initialData, onClose, onSuccess }: D
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">活动状态</label>
+          <label htmlFor="discount-product-activity_status" className="block text-xs text-slate-600 mb-1">活动状态</label>
           <input
             type="number"
+            id="discount-product-activity_status"
+            data-testid="field-activity_status"
+            data-agent-target="discount-product:field:activity_status"
+            data-agent-state={formData.activity_status == null || formData.activity_status === "" ? "empty" : "filled"}
+            aria-label="活动状态"
             value={formData.activity_status != null ? String(formData.activity_status) : ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, activity_status: e.target.value === "" ? undefined : Number(e.target.value) }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -169,9 +216,14 @@ export function DiscountProductForm({ open, initialData, onClose, onSuccess }: D
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">活动开始时间点</label>
+          <label htmlFor="discount-product-activity_start_time" className="block text-xs text-slate-600 mb-1">活动开始时间点</label>
           <input
             type="text"
+            id="discount-product-activity_start_time"
+            data-testid="field-activity_start_time"
+            data-agent-target="discount-product:field:activity_start_time"
+            data-agent-state={formData.activity_start_time ? "filled" : "empty"}
+            aria-label="活动开始时间点"
             value={formData.activity_start_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, activity_start_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -181,9 +233,14 @@ export function DiscountProductForm({ open, initialData, onClose, onSuccess }: D
         </div>
 
         <div>
-          <label className="block text-xs text-slate-600 mb-1">活动结束时间点</label>
+          <label htmlFor="discount-product-activity_end_time" className="block text-xs text-slate-600 mb-1">活动结束时间点</label>
           <input
             type="text"
+            id="discount-product-activity_end_time"
+            data-testid="field-activity_end_time"
+            data-agent-target="discount-product:field:activity_end_time"
+            data-agent-state={formData.activity_end_time ? "filled" : "empty"}
+            aria-label="活动结束时间点"
             value={formData.activity_end_time ?? ""}
             onChange={(e) => setFormData((prev) => ({ ...prev, activity_end_time: e.target.value }))}
             className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -197,6 +254,8 @@ export function DiscountProductForm({ open, initialData, onClose, onSuccess }: D
             <button
               type="button"
               onClick={onClose}
+              data-testid="discount-product-form-cancel"
+              data-agent-target="discount-product:cancel"
               className="px-4 py-1.5 text-xs text-slate-600 hover:text-slate-800 border border-slate-300 rounded hover:bg-slate-100 transition-colors"
             >
               取消
@@ -204,6 +263,9 @@ export function DiscountProductForm({ open, initialData, onClose, onSuccess }: D
             <button
               type="submit"
               disabled={loading}
+              data-testid="discount-product-form-submit"
+              data-agent-target="discount-product:submit"
+              data-agent-state={loading ? "busy" : "idle"}
               className="px-4 py-1.5 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {loading ? "保存中..." : "保存"}
