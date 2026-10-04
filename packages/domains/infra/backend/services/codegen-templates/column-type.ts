@@ -90,10 +90,13 @@ export function tableDdl(table: {
   if (pk.length > 0) {
     lines.push(`    CONSTRAINT "${table.name}_pkey" PRIMARY KEY (${pk.map((name) => `"${name}"`).join(", ")})`)
   }
-  const statements = [`CREATE TABLE "${table.name}" (\n${lines.join(",\n")}\n);`]
+  // 幂等: 这些表可能**已由更早的迁移建过**（先有域、后补元数据的情况很常见）。
+  // 不加 IF NOT EXISTS 的话，全新库上 `prisma migrate deploy` 会直接失败在
+  // `relation "x" already exists` —— 实测踩到过，且只在全新建库时暴露。
+  const statements = [`CREATE TABLE IF NOT EXISTS "${table.name}" (\n${lines.join(",\n")}\n);`]
   // 多租户过滤（AGENTS §4.8）几乎总是按 tenant_id 走，补索引。
   if (columns.some((column) => column.name === "tenant_id")) {
-    statements.push(`CREATE INDEX "${table.name}_tenant_id_idx" ON "${table.name}"("tenant_id");`)
+    statements.push(`CREATE INDEX IF NOT EXISTS "${table.name}_tenant_id_idx" ON "${table.name}"("tenant_id");`)
   }
   return `-- ${table.comment ?? table.name}\n${statements.join("\n")}`
 }

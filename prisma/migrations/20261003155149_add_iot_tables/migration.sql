@@ -3,7 +3,7 @@
 -- 背景: 这些表的定义来自低代码 CodegenConfig；此前只生成代码、不生成建表 SQL，
 --       导致"仓储在查但无处创建"。本迁移补齐 DDL。
 -- IoT 告警配置
-CREATE TABLE "iot_alert_config" (
+CREATE TABLE IF NOT EXISTS "iot_alert_config" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "description" VARCHAR(255),
@@ -23,10 +23,10 @@ CREATE TABLE "iot_alert_config" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "iot_alert_config_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "iot_alert_config_tenant_id_idx" ON "iot_alert_config"("tenant_id");
+CREATE INDEX IF NOT EXISTS "iot_alert_config_tenant_id_idx" ON "iot_alert_config"("tenant_id");
 
 -- IoT 告警记录
-CREATE TABLE "iot_alert_record" (
+CREATE TABLE IF NOT EXISTS "iot_alert_record" (
     "id" TEXT NOT NULL,
     "config_id" BIGINT,
     "config_name" VARCHAR(255),
@@ -45,10 +45,10 @@ CREATE TABLE "iot_alert_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "iot_alert_record_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "iot_alert_record_tenant_id_idx" ON "iot_alert_record"("tenant_id");
+CREATE INDEX IF NOT EXISTS "iot_alert_record_tenant_id_idx" ON "iot_alert_record"("tenant_id");
 
 -- IoT 数据流转规则 DO监听 数据源，转发到 数据目的
-CREATE TABLE "iot_data_rule" (
+CREATE TABLE IF NOT EXISTS "iot_data_rule" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "description" VARCHAR(255),
@@ -67,10 +67,10 @@ CREATE TABLE "iot_data_rule" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "iot_data_rule_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "iot_data_rule_tenant_id_idx" ON "iot_data_rule"("tenant_id");
+CREATE INDEX IF NOT EXISTS "iot_data_rule_tenant_id_idx" ON "iot_data_rule"("tenant_id");
 
 -- IoT 数据流转目的
-CREATE TABLE "iot_data_sink" (
+CREATE TABLE IF NOT EXISTS "iot_data_sink" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "description" VARCHAR(255),
@@ -85,10 +85,10 @@ CREATE TABLE "iot_data_sink" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "iot_data_sink_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "iot_data_sink_tenant_id_idx" ON "iot_data_sink"("tenant_id");
+CREATE INDEX IF NOT EXISTS "iot_data_sink_tenant_id_idx" ON "iot_data_sink"("tenant_id");
 
 -- IoT 设备
-CREATE TABLE "iot_device" (
+CREATE TABLE IF NOT EXISTS "iot_device" (
     "id" TEXT NOT NULL,
     "device_name" VARCHAR(255),
     "nickname" VARCHAR(255),
@@ -116,10 +116,10 @@ CREATE TABLE "iot_device" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "iot_device_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "iot_device_tenant_id_idx" ON "iot_device"("tenant_id");
+CREATE INDEX IF NOT EXISTS "iot_device_tenant_id_idx" ON "iot_device"("tenant_id");
 
 -- IoT 设备分组
-CREATE TABLE "iot_device_group" (
+CREATE TABLE IF NOT EXISTS "iot_device_group" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "status" INTEGER,
@@ -132,10 +132,10 @@ CREATE TABLE "iot_device_group" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "iot_device_group_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "iot_device_group_tenant_id_idx" ON "iot_device_group"("tenant_id");
+CREATE INDEX IF NOT EXISTS "iot_device_group_tenant_id_idx" ON "iot_device_group"("tenant_id");
 
 -- IoT 设备 Modbus 连接配置
-CREATE TABLE "iot_device_modbus_config" (
+CREATE TABLE IF NOT EXISTS "iot_device_modbus_config" (
     "id" TEXT NOT NULL,
     "product_id" BIGINT,
     "device_id" BIGINT,
@@ -155,10 +155,10 @@ CREATE TABLE "iot_device_modbus_config" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "iot_device_modbus_config_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "iot_device_modbus_config_tenant_id_idx" ON "iot_device_modbus_config"("tenant_id");
+CREATE INDEX IF NOT EXISTS "iot_device_modbus_config_tenant_id_idx" ON "iot_device_modbus_config"("tenant_id");
 
 -- IoT 设备 Modbus 点位配置
-CREATE TABLE "iot_device_modbus_point" (
+CREATE TABLE IF NOT EXISTS "iot_device_modbus_point" (
     "id" TEXT NOT NULL,
     "device_id" BIGINT,
     "thing_model_id" BIGINT,
@@ -180,10 +180,10 @@ CREATE TABLE "iot_device_modbus_point" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "iot_device_modbus_point_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "iot_device_modbus_point_tenant_id_idx" ON "iot_device_modbus_point"("tenant_id");
+CREATE INDEX IF NOT EXISTS "iot_device_modbus_point_tenant_id_idx" ON "iot_device_modbus_point"("tenant_id");
 
 -- IoT OTA 固件
-CREATE TABLE "iot_ota_firmware" (
+CREATE TABLE IF NOT EXISTS "iot_ota_firmware" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "description" VARCHAR(255),
@@ -201,10 +201,10 @@ CREATE TABLE "iot_ota_firmware" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "iot_ota_firmware_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "iot_ota_firmware_tenant_id_idx" ON "iot_ota_firmware"("tenant_id");
+CREATE INDEX IF NOT EXISTS "iot_ota_firmware_tenant_id_idx" ON "iot_ota_firmware"("tenant_id");
 
 -- IoT OTA 升级任务
-CREATE TABLE "iot_ota_task" (
+CREATE TABLE IF NOT EXISTS "iot_ota_task" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "description" VARCHAR(255),
@@ -221,10 +221,10 @@ CREATE TABLE "iot_ota_task" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "iot_ota_task_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "iot_ota_task_tenant_id_idx" ON "iot_ota_task"("tenant_id");
+CREATE INDEX IF NOT EXISTS "iot_ota_task_tenant_id_idx" ON "iot_ota_task"("tenant_id");
 
 -- IoT OTA 升级任务记录
-CREATE TABLE "iot_ota_task_record" (
+CREATE TABLE IF NOT EXISTS "iot_ota_task_record" (
     "id" TEXT NOT NULL,
     "firmware_id" BIGINT,
     "task_id" BIGINT,
@@ -241,10 +241,10 @@ CREATE TABLE "iot_ota_task_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "iot_ota_task_record_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "iot_ota_task_record_tenant_id_idx" ON "iot_ota_task_record"("tenant_id");
+CREATE INDEX IF NOT EXISTS "iot_ota_task_record_tenant_id_idx" ON "iot_ota_task_record"("tenant_id");
 
 -- IoT 产品
-CREATE TABLE "iot_product" (
+CREATE TABLE IF NOT EXISTS "iot_product" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "product_key" VARCHAR(255),
@@ -267,10 +267,10 @@ CREATE TABLE "iot_product" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "iot_product_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "iot_product_tenant_id_idx" ON "iot_product"("tenant_id");
+CREATE INDEX IF NOT EXISTS "iot_product_tenant_id_idx" ON "iot_product"("tenant_id");
 
 -- IoT 产品分类
-CREATE TABLE "iot_product_category" (
+CREATE TABLE IF NOT EXISTS "iot_product_category" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "sort" INTEGER,
@@ -284,10 +284,10 @@ CREATE TABLE "iot_product_category" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "iot_product_category_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "iot_product_category_tenant_id_idx" ON "iot_product_category"("tenant_id");
+CREATE INDEX IF NOT EXISTS "iot_product_category_tenant_id_idx" ON "iot_product_category"("tenant_id");
 
 -- IoT 场景联动规则
-CREATE TABLE "iot_scene_rule" (
+CREATE TABLE IF NOT EXISTS "iot_scene_rule" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "description" VARCHAR(255),
@@ -303,16 +303,7 @@ CREATE TABLE "iot_scene_rule" (
     "value" VARCHAR(255),
     "cron_expression" VARCHAR(255),
     "condition_groups" TEXT,
-    "type" INTEGER,
-    "product_id" BIGINT,
-    "device_id" BIGINT,
-    "identifier" VARCHAR(255),
-    "operator" VARCHAR(255),
     "param" VARCHAR(255),
-    "type" INTEGER,
-    "product_id" BIGINT,
-    "device_id" BIGINT,
-    "identifier" VARCHAR(255),
     "params" VARCHAR(255),
     "alert_config_id" BIGINT,
     "tenant_id" VARCHAR(64) NOT NULL,
@@ -323,10 +314,10 @@ CREATE TABLE "iot_scene_rule" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "iot_scene_rule_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "iot_scene_rule_tenant_id_idx" ON "iot_scene_rule"("tenant_id");
+CREATE INDEX IF NOT EXISTS "iot_scene_rule_tenant_id_idx" ON "iot_scene_rule"("tenant_id");
 
 -- IoT 产品物模型功能 DO每个 和 是“一对多”的关系，它的每个属性、事件、服务都对应一条记录
-CREATE TABLE "iot_thing_model" (
+CREATE TABLE IF NOT EXISTS "iot_thing_model" (
     "id" TEXT NOT NULL,
     "identifier" VARCHAR(255),
     "name" VARCHAR(255),
@@ -345,4 +336,4 @@ CREATE TABLE "iot_thing_model" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "iot_thing_model_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "iot_thing_model_tenant_id_idx" ON "iot_thing_model"("tenant_id");
+CREATE INDEX IF NOT EXISTS "iot_thing_model_tenant_id_idx" ON "iot_thing_model"("tenant_id");

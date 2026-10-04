@@ -56,12 +56,12 @@ export const BPM_TABLES: CodegenConfig[] = [
   {
     moduleName: "bpm",
     className: "BpmOALeave",
-    businessName: "OA 请假申请 DO 请假天数，目前先简单做。一般是分成请假上午和下午，可以是 1 整天，可以是 0.5 半天",
+    businessName: "OA 请假申请 DO 请假天数，目前先简单做。一般是分成请假上午和下午，可以是 ",
     parentMenuId: "bpm-dir",
     permissionPrefix: "bpm:bpm_oaleave",
     table: {
       name: "bpm_oa_leave",
-      comment: "OA 请假申请 DO 请假天数，目前先简单做。一般是分成请假上午和下午，可以是 1 整天，可以是 0.5 半天",
+      comment: "OA 请假申请 DO 请假天数，目前先简单做。一般是分成请假上午和下午，可以是 ",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"请假表单主键","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"申请人的用户编号","nullableInferred":true},
@@ -186,12 +186,12 @@ export const BPM_TABLES: CodegenConfig[] = [
   {
     moduleName: "bpm",
     className: "BpmProcessListener",
-    businessName: "BPM 流程监听器 DO目的：本质上它是流程监听器的模版，用于 BPMN 在设计时，直接选择这些模版",
+    businessName: "BPM 流程监听器 DO目的：本质上它是流程监听器的模版，用于 BPMN 在设计",
     parentMenuId: "bpm-dir",
     permissionPrefix: "bpm:bpm_process_listener",
     table: {
       name: "bpm_process_listener",
-      comment: "BPM 流程监听器 DO目的：本质上它是流程监听器的模版，用于 BPMN 在设计时，直接选择这些模版",
+      comment: "BPM 流程监听器 DO目的：本质上它是流程监听器的模版，用于 BPMN 在设计",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"主键 ID，自增","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"监听器名字","nullableInferred":true},

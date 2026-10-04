@@ -1526,12 +1526,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesQcDefectRecord",
-    businessName: "MES 质检缺陷记录 DO通用缺陷记录表，通过 区分检验类型（IQC、IPQC、OQC、RQC），多模块复用",
+    businessName: "MES 质检缺陷记录 DO通用缺陷记录表，通过 区分检验类型（IQC、IPQC、",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_qc_defect_record",
     table: {
       name: "mes_qc_defect_record",
-      comment: "MES 质检缺陷记录 DO通用缺陷记录表，通过 区分检验类型（IQC、IPQC、OQC、RQC），多模块复用",
+      comment: "MES 质检缺陷记录 DO通用缺陷记录表，通过 区分检验类型（IQC、IPQC、",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"qc_type","type":"int","tsType":"number","nullable":true,"comment":"检验类型","nullableInferred":true},
@@ -1630,12 +1630,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesQcIpqc",
-    businessName: "MES 过程检验单（IPQC, In-Process Quality Control）",
+    businessName: "MES 过程检验单（IPQC, In-Process Quality Contr",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_qc_ipqc",
     table: {
       name: "mes_qc_ipqc",
-      comment: "MES 过程检验单（IPQC, In-Process Quality Control）",
+      comment: "MES 过程检验单（IPQC, In-Process Quality Contr",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"检验单编号","nullableInferred":true},
@@ -2264,12 +2264,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmItemConsumeDetail",
-    businessName: "MES 物料消耗记录明细 DO记录 line 级别的消耗按线边库 FIFO 分配到具体批次的明细。一条 line 可能拆分为多条 detail（当一个批次库存不够，需要从下一个批次继续分配时）。",
+    businessName: "MES 物料消耗记录明细 DO记录 line 级别的消耗按线边库 FIFO 分配",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_item_consume_detail",
     table: {
       name: "mes_wm_item_consume_detail",
-      comment: "MES 物料消耗记录明细 DO记录 line 级别的消耗按线边库 FIFO 分配到具体批次的明细。一条 line 可能拆分为多条 detail（当一个批次库存不够，需要从下一个批次继续分配时）。",
+      comment: "MES 物料消耗记录明细 DO记录 line 级别的消耗按线边库 FIFO 分配",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"consume_id","type":"bigint","tsType":"number","nullable":true,"comment":"消耗记录编号","nullableInferred":true},
@@ -3698,12 +3698,12 @@ export const MES_TABLES: CodegenConfig[] = [
   {
     moduleName: "mes",
     className: "MesWmTransaction",
-    businessName: "MES 库存事务流水 DO记录每一笔库存增减事件，系统自动生成，只读查询，不允许人工维护。",
+    businessName: "MES 库存事务流水 DO记录每一笔库存增减事件，系统自动生成，只读查询，不允许",
     parentMenuId: "mes-dir",
     permissionPrefix: "mes:mes_wm_transaction",
     table: {
       name: "mes_wm_transaction",
-      comment: "MES 库存事务流水 DO记录每一笔库存增减事件，系统自动生成，只读查询，不允许人工维护。",
+      comment: "MES 库存事务流水 DO记录每一笔库存增减事件，系统自动生成，只读查询，不允许",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
         {"name":"type","type":"int","tsType":"number","nullable":true,"comment":"事务类型","nullableInferred":true},

@@ -3,7 +3,7 @@
 -- 背景: 这些表的定义来自低代码 CodegenConfig；此前只生成代码、不生成建表 SQL，
 --       导致"仓储在查但无处创建"。本迁移补齐 DDL。
 -- GoView 项目表每个大屏图标，对应一个项目
-CREATE TABLE "report_go_view_project" (
+CREATE TABLE IF NOT EXISTS "report_go_view_project" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "pic_url" VARCHAR(255),
@@ -18,4 +18,4 @@ CREATE TABLE "report_go_view_project" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "report_go_view_project_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "report_go_view_project_tenant_id_idx" ON "report_go_view_project"("tenant_id");
+CREATE INDEX IF NOT EXISTS "report_go_view_project_tenant_id_idx" ON "report_go_view_project"("tenant_id");

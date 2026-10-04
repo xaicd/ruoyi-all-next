@@ -110,7 +110,9 @@ function parseEntity(file: string): ParsedTable | null {
       .replace(/\s*DO\s*$/, "")   // 类名后缀不是业务名
       .trim() || className
   // businessName 有 1–100 字的上限（校验器会拒），源 javadoc 偶有超长整段说明。
-  const displayName = sanitizeComment(businessName.length > 100 ? businessName.slice(0, 100) : businessName) || className
+  // 上限要同时满足: system_menu.name 是 varchar(50)，而菜单名会加「新增/修改/删除」前缀。
+  // 取 40 —— 100 会让 rbac.sql 在真实库上直接失败（value too long for character varying(50)）。
+  const displayName = sanitizeComment(businessName.length > 40 ? businessName.slice(0, 40) : businessName) || className
 
   const columns: Array<Record<string, unknown>> = []
   const lines = source.split("\n")
@@ -154,7 +156,16 @@ function parseEntity(file: string): ParsedTable | null {
     javadoc = []
   }
   if (columns.length === 0) return null
-  return { table: tableMatch[1], comment: displayName, className, columns }
+  // 去重: 源实体的字段偶有重复声明（继承/覆写），同名列进 DDL 会直接失败
+  // （`column "type" specified more than once`），而这只在建库时才暴露。
+  const seen = new Set<string>()
+  const deduped = columns.filter((column) => {
+    const name = String(column.name)
+    if (seen.has(name)) return false
+    seen.add(name)
+    return true
+  })
+  return { table: tableMatch[1], comment: displayName, className, columns: deduped }
 }
 
 function main() {

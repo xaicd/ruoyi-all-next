@@ -3,7 +3,7 @@
 -- 背景: 这些表的定义来自低代码 CodegenConfig；此前只生成代码、不生成建表 SQL，
 --       导致"仓储在查但无处创建"。本迁移补齐 DDL。
 -- 公众号账号
-CREATE TABLE "mp_account" (
+CREATE TABLE IF NOT EXISTS "mp_account" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "account" VARCHAR(255),
@@ -21,10 +21,10 @@ CREATE TABLE "mp_account" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mp_account_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mp_account_tenant_id_idx" ON "mp_account"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mp_account_tenant_id_idx" ON "mp_account"("tenant_id");
 
 -- 公众号消息自动回复
-CREATE TABLE "mp_auto_reply" (
+CREATE TABLE IF NOT EXISTS "mp_auto_reply" (
     "id" TEXT NOT NULL,
     "account_id" BIGINT,
     "app_id" VARCHAR(255),
@@ -51,10 +51,10 @@ CREATE TABLE "mp_auto_reply" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mp_auto_reply_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mp_auto_reply_tenant_id_idx" ON "mp_auto_reply"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mp_auto_reply_tenant_id_idx" ON "mp_auto_reply"("tenant_id");
 
 -- 公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_
-CREATE TABLE "mp_material" (
+CREATE TABLE IF NOT EXISTS "mp_material" (
     "id" TEXT NOT NULL,
     "account_id" BIGINT,
     "app_id" VARCHAR(255),
@@ -74,10 +74,10 @@ CREATE TABLE "mp_material" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mp_material_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mp_material_tenant_id_idx" ON "mp_material"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mp_material_tenant_id_idx" ON "mp_material"("tenant_id");
 
 -- 公众号菜单
-CREATE TABLE "mp_menu" (
+CREATE TABLE IF NOT EXISTS "mp_menu" (
     "id" TEXT NOT NULL,
     "account_id" BIGINT,
     "app_id" VARCHAR(255),
@@ -108,10 +108,10 @@ CREATE TABLE "mp_menu" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mp_menu_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mp_menu_tenant_id_idx" ON "mp_menu"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mp_menu_tenant_id_idx" ON "mp_menu"("tenant_id");
 
 -- 公众号消息
-CREATE TABLE "mp_message" (
+CREATE TABLE IF NOT EXISTS "mp_message" (
     "id" TEXT NOT NULL,
     "msg_id" BIGINT,
     "account_id" BIGINT,
@@ -139,10 +139,7 @@ CREATE TABLE "mp_message" (
     "hq_music_url" VARCHAR(255),
     "event" VARCHAR(255),
     "event_key" VARCHAR(255),
-    "title" VARCHAR(255),
-    "description" VARCHAR(255),
     "pic_url" VARCHAR(255),
-    "url" VARCHAR(255),
     "tenant_id" VARCHAR(64) NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
@@ -151,10 +148,10 @@ CREATE TABLE "mp_message" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mp_message_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mp_message_tenant_id_idx" ON "mp_message"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mp_message_tenant_id_idx" ON "mp_message"("tenant_id");
 
 -- 公众号模版消息
-CREATE TABLE "mp_message_template" (
+CREATE TABLE IF NOT EXISTS "mp_message_template" (
     "id" TEXT NOT NULL,
     "account_id" BIGINT,
     "app_id" VARCHAR(255),
@@ -172,10 +169,10 @@ CREATE TABLE "mp_message_template" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mp_message_template_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mp_message_template_tenant_id_idx" ON "mp_message_template"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mp_message_template_tenant_id_idx" ON "mp_message_template"("tenant_id");
 
 -- 公众号标签
-CREATE TABLE "mp_tag" (
+CREATE TABLE IF NOT EXISTS "mp_tag" (
     "id" TEXT NOT NULL,
     "tag_id" BIGINT,
     "name" VARCHAR(255),
@@ -190,10 +187,10 @@ CREATE TABLE "mp_tag" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mp_tag_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mp_tag_tenant_id_idx" ON "mp_tag"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mp_tag_tenant_id_idx" ON "mp_tag"("tenant_id");
 
 -- 微信公众号粉丝
-CREATE TABLE "mp_user" (
+CREATE TABLE IF NOT EXISTS "mp_user" (
     "id" TEXT NOT NULL,
     "openid" VARCHAR(255),
     "union_id" VARCHAR(255),
@@ -218,4 +215,4 @@ CREATE TABLE "mp_user" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mp_user_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mp_user_tenant_id_idx" ON "mp_user"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mp_user_tenant_id_idx" ON "mp_user"("tenant_id");

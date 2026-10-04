@@ -31,12 +31,12 @@ export const AI_TABLES: CodegenConfig[] = [
   {
     moduleName: "ai",
     className: "AiChatConversation",
-    businessName: "AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它的消息关联在一起",
+    businessName: "AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它",
     parentMenuId: "ai-dir",
     permissionPrefix: "ai:ai_chat_conversation",
     table: {
       name: "ai_chat_conversation",
-      comment: "AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它的消息关联在一起",
+      comment: "AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"ID 编号，自增","isPk":true,"nullableInferred":true},
         {"name":"user_id","type":"bigint","tsType":"number","nullable":true,"comment":"用户编号","nullableInferred":true},

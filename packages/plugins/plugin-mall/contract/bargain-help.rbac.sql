@@ -3,7 +3,7 @@
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
-INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type, status, permission, create_time, update_time)
+INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type, status, permission, created_at, updated_at)
 VALUES (
   'menu-bargain-help',
   'mall-dir',
@@ -21,7 +21,7 @@ VALUES (
 ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
-INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
+INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, created_at, updated_at) VALUES
 ('menu-bargain-help-query',  'menu-bargain-help', '查询砍价助力', 'BUTTON', 'ACTIVE', 'mall:bargain_help:query',  1, NOW(), NOW()),
 ('menu-bargain-help-create', 'menu-bargain-help', '新增砍价助力', 'BUTTON', 'ACTIVE', 'mall:bargain_help:create', 2, NOW(), NOW()),
 ('menu-bargain-help-update', 'menu-bargain-help', '修改砍价助力', 'BUTTON', 'ACTIVE', 'mall:bargain_help:update', 3, NOW(), NOW()),
@@ -29,19 +29,19 @@ INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, cr
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)
-INSERT INTO system_role_menu (role_id, menu_id) VALUES
-('1', 'menu-bargain-help'),
-('1', 'menu-bargain-help-query'),
-('1', 'menu-bargain-help-create'),
-('1', 'menu-bargain-help-update'),
-('1', 'menu-bargain-help-delete')
+INSERT INTO system_role_menu (id, role_id, menu_id) VALUES
+('menu-bargain-help-rm',        '1', 'menu-bargain-help'),
+('menu-bargain-help-rm-query',  '1', 'menu-bargain-help-query'),
+('menu-bargain-help-rm-create', '1', 'menu-bargain-help-create'),
+('menu-bargain-help-rm-update', '1', 'menu-bargain-help-update'),
+('menu-bargain-help-rm-delete', '1', 'menu-bargain-help-delete')
 ON CONFLICT DO NOTHING;
 
 -- 4. 挂载系统租户套餐 (system_tenant_package_menu，实现租户开户默认立即可见)
-INSERT INTO system_tenant_package_menu (package_id, menu_id) VALUES
-('1', 'menu-bargain-help'),
-('1', 'menu-bargain-help-query'),
-('1', 'menu-bargain-help-create'),
-('1', 'menu-bargain-help-update'),
-('1', 'menu-bargain-help-delete')
+INSERT INTO system_tenant_package_menu (id, package_id, menu_id) VALUES
+('menu-bargain-help-pm',        '1', 'menu-bargain-help'),
+('menu-bargain-help-pm-query',  '1', 'menu-bargain-help-query'),
+('menu-bargain-help-pm-create', '1', 'menu-bargain-help-create'),
+('menu-bargain-help-pm-update', '1', 'menu-bargain-help-update'),
+('menu-bargain-help-pm-delete', '1', 'menu-bargain-help-delete')
 ON CONFLICT DO NOTHING;

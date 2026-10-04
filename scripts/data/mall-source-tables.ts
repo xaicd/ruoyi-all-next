@@ -527,12 +527,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "CombinationRecord",
-    businessName: "拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联",
+    businessName: "拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:combination_record",
     table: {
       name: "promotion_combination_record",
-      comment: "拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联",
+      comment: "拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号，主键自增","isPk":true,"nullableInferred":true},
         {"name":"activity_id","type":"bigint","tsType":"number","nullable":true,"comment":"拼团活动编号","nullableInferred":true},
@@ -642,12 +642,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "DiscountActivity",
-    businessName: "限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一个活动；",
+    businessName: "限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:discount_activity",
     table: {
       name: "promotion_discount_activity",
-      comment: "限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一个活动；",
+      comment: "限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"活动编号，主键自增","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"活动标题","nullableInferred":true},
@@ -722,12 +722,12 @@ export const MALL_TABLES: CodegenConfig[] = [
   {
     moduleName: "mall",
     className: "DiyTemplate",
-    businessName: "装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. 如果需要使用某个模版，则将 设置为 true，表示已使用，有且仅有一个",
+    businessName: "装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. ",
     parentMenuId: "mall-dir",
     permissionPrefix: "mall:diy_template",
     table: {
       name: "promotion_diy_template",
-      comment: "装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. 如果需要使用某个模版，则将 设置为 true，表示已使用，有且仅有一个",
+      comment: "装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. ",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"装修模板编号","isPk":true,"nullableInferred":true},
         {"name":"name","type":"varchar","tsType":"string","nullable":true,"comment":"模板名称","nullableInferred":true},

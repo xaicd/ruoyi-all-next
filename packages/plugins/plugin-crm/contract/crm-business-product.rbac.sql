@@ -1,13 +1,13 @@
 -- ============================================================
--- Auto-generated RBAC & Menu Migration for CRM 商机产品关联表 DOCrmBusinessDO : CrmBusinessProductDO = 1 : N (CrmBusinessProduct)
+-- Auto-generated RBAC & Menu Migration for CRM 商机产品关联表 DOCrmBusinessDO : CrmBusines (CrmBusinessProduct)
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
-INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type, status, permission, create_time, update_time)
+INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type, status, permission, created_at, updated_at)
 VALUES (
   'menu-crm-business-product',
   'crm-dir',
-  'CRM 商机产品关联表 DOCrmBusinessDO : CrmBusinessProductDO = 1 : N管理',
+  'CRM 商机产品关联表 DOCrmBusinessDO : CrmBusines管理',
   '/admin/crm/crm-business-product',
   'crm/crm-business-product/index',
   'table',
@@ -21,27 +21,27 @@ VALUES (
 ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
-INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
-('menu-crm-business-product-query',  'menu-crm-business-product', '查询CRM 商机产品关联表 DOCrmBusinessDO : CrmBusinessProductDO = 1 : N', 'BUTTON', 'ACTIVE', 'crm:crm_business_product:query',  1, NOW(), NOW()),
-('menu-crm-business-product-create', 'menu-crm-business-product', '新增CRM 商机产品关联表 DOCrmBusinessDO : CrmBusinessProductDO = 1 : N', 'BUTTON', 'ACTIVE', 'crm:crm_business_product:create', 2, NOW(), NOW()),
-('menu-crm-business-product-update', 'menu-crm-business-product', '修改CRM 商机产品关联表 DOCrmBusinessDO : CrmBusinessProductDO = 1 : N', 'BUTTON', 'ACTIVE', 'crm:crm_business_product:update', 3, NOW(), NOW()),
-('menu-crm-business-product-delete', 'menu-crm-business-product', '删除CRM 商机产品关联表 DOCrmBusinessDO : CrmBusinessProductDO = 1 : N', 'BUTTON', 'ACTIVE', 'crm:crm_business_product:delete', 4, NOW(), NOW())
+INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, created_at, updated_at) VALUES
+('menu-crm-business-product-query',  'menu-crm-business-product', '查询CRM 商机产品关联表 DOCrmBusinessDO : CrmBusines', 'BUTTON', 'ACTIVE', 'crm:crm_business_product:query',  1, NOW(), NOW()),
+('menu-crm-business-product-create', 'menu-crm-business-product', '新增CRM 商机产品关联表 DOCrmBusinessDO : CrmBusines', 'BUTTON', 'ACTIVE', 'crm:crm_business_product:create', 2, NOW(), NOW()),
+('menu-crm-business-product-update', 'menu-crm-business-product', '修改CRM 商机产品关联表 DOCrmBusinessDO : CrmBusines', 'BUTTON', 'ACTIVE', 'crm:crm_business_product:update', 3, NOW(), NOW()),
+('menu-crm-business-product-delete', 'menu-crm-business-product', '删除CRM 商机产品关联表 DOCrmBusinessDO : CrmBusines', 'BUTTON', 'ACTIVE', 'crm:crm_business_product:delete', 4, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)
-INSERT INTO system_role_menu (role_id, menu_id) VALUES
-('1', 'menu-crm-business-product'),
-('1', 'menu-crm-business-product-query'),
-('1', 'menu-crm-business-product-create'),
-('1', 'menu-crm-business-product-update'),
-('1', 'menu-crm-business-product-delete')
+INSERT INTO system_role_menu (id, role_id, menu_id) VALUES
+('menu-crm-business-product-rm',        '1', 'menu-crm-business-product'),
+('menu-crm-business-product-rm-query',  '1', 'menu-crm-business-product-query'),
+('menu-crm-business-product-rm-create', '1', 'menu-crm-business-product-create'),
+('menu-crm-business-product-rm-update', '1', 'menu-crm-business-product-update'),
+('menu-crm-business-product-rm-delete', '1', 'menu-crm-business-product-delete')
 ON CONFLICT DO NOTHING;
 
 -- 4. 挂载系统租户套餐 (system_tenant_package_menu，实现租户开户默认立即可见)
-INSERT INTO system_tenant_package_menu (package_id, menu_id) VALUES
-('1', 'menu-crm-business-product'),
-('1', 'menu-crm-business-product-query'),
-('1', 'menu-crm-business-product-create'),
-('1', 'menu-crm-business-product-update'),
-('1', 'menu-crm-business-product-delete')
+INSERT INTO system_tenant_package_menu (id, package_id, menu_id) VALUES
+('menu-crm-business-product-pm',        '1', 'menu-crm-business-product'),
+('menu-crm-business-product-pm-query',  '1', 'menu-crm-business-product-query'),
+('menu-crm-business-product-pm-create', '1', 'menu-crm-business-product-create'),
+('menu-crm-business-product-pm-update', '1', 'menu-crm-business-product-update'),
+('menu-crm-business-product-pm-delete', '1', 'menu-crm-business-product-delete')
 ON CONFLICT DO NOTHING;

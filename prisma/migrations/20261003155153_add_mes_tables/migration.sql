@@ -3,7 +3,7 @@
 -- 背景: 这些表的定义来自低代码 CodegenConfig；此前只生成代码、不生成建表 SQL，
 --       导致"仓储在查但无处创建"。本迁移补齐 DDL。
 -- MES 假期设置
-CREATE TABLE "mes_cal_holiday" (
+CREATE TABLE IF NOT EXISTS "mes_cal_holiday" (
     "id" TEXT NOT NULL,
     "day" TIMESTAMP(3),
     "type" INTEGER,
@@ -16,10 +16,10 @@ CREATE TABLE "mes_cal_holiday" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_cal_holiday_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_cal_holiday_tenant_id_idx" ON "mes_cal_holiday"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_cal_holiday_tenant_id_idx" ON "mes_cal_holiday"("tenant_id");
 
 -- MES 排班计划
-CREATE TABLE "mes_cal_plan" (
+CREATE TABLE IF NOT EXISTS "mes_cal_plan" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -39,10 +39,10 @@ CREATE TABLE "mes_cal_plan" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_cal_plan_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_cal_plan_tenant_id_idx" ON "mes_cal_plan"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_cal_plan_tenant_id_idx" ON "mes_cal_plan"("tenant_id");
 
 -- MES 计划班次
-CREATE TABLE "mes_cal_plan_shift" (
+CREATE TABLE IF NOT EXISTS "mes_cal_plan_shift" (
     "id" TEXT NOT NULL,
     "plan_id" BIGINT,
     "sort" INTEGER,
@@ -58,10 +58,10 @@ CREATE TABLE "mes_cal_plan_shift" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_cal_plan_shift_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_cal_plan_shift_tenant_id_idx" ON "mes_cal_plan_shift"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_cal_plan_shift_tenant_id_idx" ON "mes_cal_plan_shift"("tenant_id");
 
 -- MES 计划班组关联
-CREATE TABLE "mes_cal_plan_team" (
+CREATE TABLE IF NOT EXISTS "mes_cal_plan_team" (
     "id" TEXT NOT NULL,
     "plan_id" BIGINT,
     "team_id" BIGINT,
@@ -74,10 +74,10 @@ CREATE TABLE "mes_cal_plan_team" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_cal_plan_team_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_cal_plan_team_tenant_id_idx" ON "mes_cal_plan_team"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_cal_plan_team_tenant_id_idx" ON "mes_cal_plan_team"("tenant_id");
 
 -- MES 班组
-CREATE TABLE "mes_cal_team" (
+CREATE TABLE IF NOT EXISTS "mes_cal_team" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -91,10 +91,10 @@ CREATE TABLE "mes_cal_team" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_cal_team_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_cal_team_tenant_id_idx" ON "mes_cal_team"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_cal_team_tenant_id_idx" ON "mes_cal_team"("tenant_id");
 
 -- MES 班组成员
-CREATE TABLE "mes_cal_team_member" (
+CREATE TABLE IF NOT EXISTS "mes_cal_team_member" (
     "id" TEXT NOT NULL,
     "team_id" BIGINT,
     "user_id" BIGINT,
@@ -107,10 +107,10 @@ CREATE TABLE "mes_cal_team_member" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_cal_team_member_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_cal_team_member_tenant_id_idx" ON "mes_cal_team_member"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_cal_team_member_tenant_id_idx" ON "mes_cal_team_member"("tenant_id");
 
 -- MES 班组排班
-CREATE TABLE "mes_cal_team_shift" (
+CREATE TABLE IF NOT EXISTS "mes_cal_team_shift" (
     "id" TEXT NOT NULL,
     "plan_id" BIGINT,
     "team_id" BIGINT,
@@ -126,10 +126,10 @@ CREATE TABLE "mes_cal_team_shift" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_cal_team_shift_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_cal_team_shift_tenant_id_idx" ON "mes_cal_team_shift"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_cal_team_shift_tenant_id_idx" ON "mes_cal_team_shift"("tenant_id");
 
 -- MES 点检保养方案
-CREATE TABLE "mes_dv_check_plan" (
+CREATE TABLE IF NOT EXISTS "mes_dv_check_plan" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -148,10 +148,10 @@ CREATE TABLE "mes_dv_check_plan" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_dv_check_plan_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_dv_check_plan_tenant_id_idx" ON "mes_dv_check_plan"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_dv_check_plan_tenant_id_idx" ON "mes_dv_check_plan"("tenant_id");
 
 -- MES 点检保养方案设备
-CREATE TABLE "mes_dv_check_plan_machinery" (
+CREATE TABLE IF NOT EXISTS "mes_dv_check_plan_machinery" (
     "id" TEXT NOT NULL,
     "plan_id" BIGINT,
     "machinery_id" BIGINT,
@@ -164,10 +164,10 @@ CREATE TABLE "mes_dv_check_plan_machinery" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_dv_check_plan_machinery_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_dv_check_plan_machinery_tenant_id_idx" ON "mes_dv_check_plan_machinery"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_dv_check_plan_machinery_tenant_id_idx" ON "mes_dv_check_plan_machinery"("tenant_id");
 
 -- MES 点检保养方案项目
-CREATE TABLE "mes_dv_check_plan_subject" (
+CREATE TABLE IF NOT EXISTS "mes_dv_check_plan_subject" (
     "id" TEXT NOT NULL,
     "plan_id" BIGINT,
     "subject_id" BIGINT,
@@ -180,10 +180,10 @@ CREATE TABLE "mes_dv_check_plan_subject" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_dv_check_plan_subject_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_dv_check_plan_subject_tenant_id_idx" ON "mes_dv_check_plan_subject"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_dv_check_plan_subject_tenant_id_idx" ON "mes_dv_check_plan_subject"("tenant_id");
 
 -- MES 设备点检记录
-CREATE TABLE "mes_dv_check_record" (
+CREATE TABLE IF NOT EXISTS "mes_dv_check_record" (
     "id" TEXT NOT NULL,
     "plan_id" BIGINT,
     "machinery_id" BIGINT,
@@ -199,10 +199,10 @@ CREATE TABLE "mes_dv_check_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_dv_check_record_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_dv_check_record_tenant_id_idx" ON "mes_dv_check_record"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_dv_check_record_tenant_id_idx" ON "mes_dv_check_record"("tenant_id");
 
 -- MES 设备点检记录明细
-CREATE TABLE "mes_dv_check_record_line" (
+CREATE TABLE IF NOT EXISTS "mes_dv_check_record_line" (
     "id" TEXT NOT NULL,
     "record_id" BIGINT,
     "subject_id" BIGINT,
@@ -217,10 +217,10 @@ CREATE TABLE "mes_dv_check_record_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_dv_check_record_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_dv_check_record_line_tenant_id_idx" ON "mes_dv_check_record_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_dv_check_record_line_tenant_id_idx" ON "mes_dv_check_record_line"("tenant_id");
 
 -- MES 设备台账
-CREATE TABLE "mes_dv_machinery" (
+CREATE TABLE IF NOT EXISTS "mes_dv_machinery" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -240,10 +240,10 @@ CREATE TABLE "mes_dv_machinery" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_dv_machinery_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_dv_machinery_tenant_id_idx" ON "mes_dv_machinery"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_dv_machinery_tenant_id_idx" ON "mes_dv_machinery"("tenant_id");
 
 -- MES 设备类型
-CREATE TABLE "mes_dv_machinery_type" (
+CREATE TABLE IF NOT EXISTS "mes_dv_machinery_type" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -259,10 +259,10 @@ CREATE TABLE "mes_dv_machinery_type" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_dv_machinery_type_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_dv_machinery_type_tenant_id_idx" ON "mes_dv_machinery_type"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_dv_machinery_type_tenant_id_idx" ON "mes_dv_machinery_type"("tenant_id");
 
 -- MES 设备保养记录
-CREATE TABLE "mes_dv_mainten_record" (
+CREATE TABLE IF NOT EXISTS "mes_dv_mainten_record" (
     "id" TEXT NOT NULL,
     "plan_id" BIGINT,
     "machinery_id" BIGINT,
@@ -278,10 +278,10 @@ CREATE TABLE "mes_dv_mainten_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_dv_mainten_record_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_dv_mainten_record_tenant_id_idx" ON "mes_dv_mainten_record"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_dv_mainten_record_tenant_id_idx" ON "mes_dv_mainten_record"("tenant_id");
 
 -- MES 设备保养记录明细
-CREATE TABLE "mes_dv_mainten_record_line" (
+CREATE TABLE IF NOT EXISTS "mes_dv_mainten_record_line" (
     "id" TEXT NOT NULL,
     "record_id" BIGINT,
     "subject_id" BIGINT,
@@ -296,10 +296,10 @@ CREATE TABLE "mes_dv_mainten_record_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_dv_mainten_record_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_dv_mainten_record_line_tenant_id_idx" ON "mes_dv_mainten_record_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_dv_mainten_record_line_tenant_id_idx" ON "mes_dv_mainten_record_line"("tenant_id");
 
 -- MES 维修工单
-CREATE TABLE "mes_dv_repair" (
+CREATE TABLE IF NOT EXISTS "mes_dv_repair" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -323,10 +323,10 @@ CREATE TABLE "mes_dv_repair" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_dv_repair_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_dv_repair_tenant_id_idx" ON "mes_dv_repair"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_dv_repair_tenant_id_idx" ON "mes_dv_repair"("tenant_id");
 
 -- MES 维修工单行
-CREATE TABLE "mes_dv_repair_line" (
+CREATE TABLE IF NOT EXISTS "mes_dv_repair_line" (
     "id" TEXT NOT NULL,
     "repair_id" BIGINT,
     "subject_id" BIGINT,
@@ -342,10 +342,10 @@ CREATE TABLE "mes_dv_repair_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_dv_repair_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_dv_repair_line_tenant_id_idx" ON "mes_dv_repair_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_dv_repair_line_tenant_id_idx" ON "mes_dv_repair_line"("tenant_id");
 
 -- MES 点检保养项目
-CREATE TABLE "mes_dv_subject" (
+CREATE TABLE IF NOT EXISTS "mes_dv_subject" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -362,10 +362,10 @@ CREATE TABLE "mes_dv_subject" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_dv_subject_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_dv_subject_tenant_id_idx" ON "mes_dv_subject"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_dv_subject_tenant_id_idx" ON "mes_dv_subject"("tenant_id");
 
 -- MES 编码规则组成
-CREATE TABLE "mes_md_auto_code_part" (
+CREATE TABLE IF NOT EXISTS "mes_md_auto_code_part" (
     "id" TEXT NOT NULL,
     "rule_id" BIGINT,
     "sort" INTEGER,
@@ -386,10 +386,10 @@ CREATE TABLE "mes_md_auto_code_part" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_md_auto_code_part_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_md_auto_code_part_tenant_id_idx" ON "mes_md_auto_code_part"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_md_auto_code_part_tenant_id_idx" ON "mes_md_auto_code_part"("tenant_id");
 
 -- MES 编码生成记录
-CREATE TABLE "mes_md_auto_code_record" (
+CREATE TABLE IF NOT EXISTS "mes_md_auto_code_record" (
     "id" TEXT NOT NULL,
     "rule_id" BIGINT,
     "result" VARCHAR(255),
@@ -403,10 +403,10 @@ CREATE TABLE "mes_md_auto_code_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_md_auto_code_record_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_md_auto_code_record_tenant_id_idx" ON "mes_md_auto_code_record"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_md_auto_code_record_tenant_id_idx" ON "mes_md_auto_code_record"("tenant_id");
 
 -- MES 编码规则
-CREATE TABLE "mes_md_auto_code_rule" (
+CREATE TABLE IF NOT EXISTS "mes_md_auto_code_rule" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -425,10 +425,10 @@ CREATE TABLE "mes_md_auto_code_rule" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_md_auto_code_rule_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_md_auto_code_rule_tenant_id_idx" ON "mes_md_auto_code_rule"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_md_auto_code_rule_tenant_id_idx" ON "mes_md_auto_code_rule"("tenant_id");
 
 -- MES 客户
-CREATE TABLE "mes_md_client" (
+CREATE TABLE IF NOT EXISTS "mes_md_client" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -458,10 +458,10 @@ CREATE TABLE "mes_md_client" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_md_client_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_md_client_tenant_id_idx" ON "mes_md_client"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_md_client_tenant_id_idx" ON "mes_md_client"("tenant_id");
 
 -- MES 物料产品
-CREATE TABLE "mes_md_item" (
+CREATE TABLE IF NOT EXISTS "mes_md_item" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -483,10 +483,10 @@ CREATE TABLE "mes_md_item" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_md_item_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_md_item_tenant_id_idx" ON "mes_md_item"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_md_item_tenant_id_idx" ON "mes_md_item"("tenant_id");
 
 -- MES 物料批次属性配置
-CREATE TABLE "mes_md_item_batch_config" (
+CREATE TABLE IF NOT EXISTS "mes_md_item_batch_config" (
     "id" TEXT NOT NULL,
     "item_id" BIGINT,
     "produce_date_flag" BOOLEAN,
@@ -511,10 +511,10 @@ CREATE TABLE "mes_md_item_batch_config" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_md_item_batch_config_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_md_item_batch_config_tenant_id_idx" ON "mes_md_item_batch_config"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_md_item_batch_config_tenant_id_idx" ON "mes_md_item_batch_config"("tenant_id");
 
 -- MES 物料产品分类
-CREATE TABLE "mes_md_item_type" (
+CREATE TABLE IF NOT EXISTS "mes_md_item_type" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -531,10 +531,10 @@ CREATE TABLE "mes_md_item_type" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_md_item_type_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_md_item_type_tenant_id_idx" ON "mes_md_item_type"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_md_item_type_tenant_id_idx" ON "mes_md_item_type"("tenant_id");
 
 -- MES 产品 BOM
-CREATE TABLE "mes_md_product_bom" (
+CREATE TABLE IF NOT EXISTS "mes_md_product_bom" (
     "id" TEXT NOT NULL,
     "item_id" BIGINT,
     "bom_item_id" BIGINT,
@@ -549,10 +549,10 @@ CREATE TABLE "mes_md_product_bom" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_md_product_bom_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_md_product_bom_tenant_id_idx" ON "mes_md_product_bom"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_md_product_bom_tenant_id_idx" ON "mes_md_product_bom"("tenant_id");
 
 -- MES 产品SIP
-CREATE TABLE "mes_md_product_sip" (
+CREATE TABLE IF NOT EXISTS "mes_md_product_sip" (
     "id" TEXT NOT NULL,
     "item_id" BIGINT,
     "sort" INTEGER,
@@ -569,10 +569,10 @@ CREATE TABLE "mes_md_product_sip" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_md_product_sip_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_md_product_sip_tenant_id_idx" ON "mes_md_product_sip"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_md_product_sip_tenant_id_idx" ON "mes_md_product_sip"("tenant_id");
 
 -- MES 产品SOP
-CREATE TABLE "mes_md_product_sop" (
+CREATE TABLE IF NOT EXISTS "mes_md_product_sop" (
     "id" TEXT NOT NULL,
     "item_id" BIGINT,
     "sort" INTEGER,
@@ -589,10 +589,10 @@ CREATE TABLE "mes_md_product_sop" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_md_product_sop_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_md_product_sop_tenant_id_idx" ON "mes_md_product_sop"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_md_product_sop_tenant_id_idx" ON "mes_md_product_sop"("tenant_id");
 
 -- MES 计量单位
-CREATE TABLE "mes_md_unit_measure" (
+CREATE TABLE IF NOT EXISTS "mes_md_unit_measure" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -609,10 +609,10 @@ CREATE TABLE "mes_md_unit_measure" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_md_unit_measure_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_md_unit_measure_tenant_id_idx" ON "mes_md_unit_measure"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_md_unit_measure_tenant_id_idx" ON "mes_md_unit_measure"("tenant_id");
 
 -- MES 供应商
-CREATE TABLE "mes_md_vendor" (
+CREATE TABLE IF NOT EXISTS "mes_md_vendor" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -643,10 +643,10 @@ CREATE TABLE "mes_md_vendor" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_md_vendor_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_md_vendor_tenant_id_idx" ON "mes_md_vendor"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_md_vendor_tenant_id_idx" ON "mes_md_vendor"("tenant_id");
 
 -- MES 车间
-CREATE TABLE "mes_md_workshop" (
+CREATE TABLE IF NOT EXISTS "mes_md_workshop" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -662,10 +662,10 @@ CREATE TABLE "mes_md_workshop" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_md_workshop_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_md_workshop_tenant_id_idx" ON "mes_md_workshop"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_md_workshop_tenant_id_idx" ON "mes_md_workshop"("tenant_id");
 
 -- MES 工作站
-CREATE TABLE "mes_md_workstation" (
+CREATE TABLE IF NOT EXISTS "mes_md_workstation" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -685,10 +685,10 @@ CREATE TABLE "mes_md_workstation" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_md_workstation_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_md_workstation_tenant_id_idx" ON "mes_md_workstation"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_md_workstation_tenant_id_idx" ON "mes_md_workstation"("tenant_id");
 
 -- MES 设备资源
-CREATE TABLE "mes_md_workstation_machine" (
+CREATE TABLE IF NOT EXISTS "mes_md_workstation_machine" (
     "id" TEXT NOT NULL,
     "workstation_id" BIGINT,
     "machinery_id" BIGINT,
@@ -702,10 +702,10 @@ CREATE TABLE "mes_md_workstation_machine" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_md_workstation_machine_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_md_workstation_machine_tenant_id_idx" ON "mes_md_workstation_machine"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_md_workstation_machine_tenant_id_idx" ON "mes_md_workstation_machine"("tenant_id");
 
 -- MES 工装夹具资源
-CREATE TABLE "mes_md_workstation_tool" (
+CREATE TABLE IF NOT EXISTS "mes_md_workstation_tool" (
     "id" TEXT NOT NULL,
     "workstation_id" BIGINT,
     "tool_type_id" BIGINT,
@@ -719,10 +719,10 @@ CREATE TABLE "mes_md_workstation_tool" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_md_workstation_tool_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_md_workstation_tool_tenant_id_idx" ON "mes_md_workstation_tool"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_md_workstation_tool_tenant_id_idx" ON "mes_md_workstation_tool"("tenant_id");
 
 -- MES 人力资源
-CREATE TABLE "mes_md_workstation_worker" (
+CREATE TABLE IF NOT EXISTS "mes_md_workstation_worker" (
     "id" TEXT NOT NULL,
     "workstation_id" BIGINT,
     "post_id" BIGINT,
@@ -736,10 +736,10 @@ CREATE TABLE "mes_md_workstation_worker" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_md_workstation_worker_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_md_workstation_worker_tenant_id_idx" ON "mes_md_workstation_worker"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_md_workstation_worker_tenant_id_idx" ON "mes_md_workstation_worker"("tenant_id");
 
 -- MES 安灯呼叫配置
-CREATE TABLE "mes_pro_andon_config" (
+CREATE TABLE IF NOT EXISTS "mes_pro_andon_config" (
     "id" TEXT NOT NULL,
     "reason" VARCHAR(255),
     "level" INTEGER,
@@ -754,10 +754,10 @@ CREATE TABLE "mes_pro_andon_config" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_pro_andon_config_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_pro_andon_config_tenant_id_idx" ON "mes_pro_andon_config"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_pro_andon_config_tenant_id_idx" ON "mes_pro_andon_config"("tenant_id");
 
 -- MES 安灯呼叫记录
-CREATE TABLE "mes_pro_andon_record" (
+CREATE TABLE IF NOT EXISTS "mes_pro_andon_record" (
     "id" TEXT NOT NULL,
     "config_id" BIGINT,
     "workstation_id" BIGINT,
@@ -778,10 +778,10 @@ CREATE TABLE "mes_pro_andon_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_pro_andon_record_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_pro_andon_record_tenant_id_idx" ON "mes_pro_andon_record"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_pro_andon_record_tenant_id_idx" ON "mes_pro_andon_record"("tenant_id");
 
 -- MES 生产流转卡
-CREATE TABLE "mes_pro_card" (
+CREATE TABLE IF NOT EXISTS "mes_pro_card" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "work_order_id" BIGINT,
@@ -798,10 +798,10 @@ CREATE TABLE "mes_pro_card" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_pro_card_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_pro_card_tenant_id_idx" ON "mes_pro_card"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_pro_card_tenant_id_idx" ON "mes_pro_card"("tenant_id");
 
 -- MES 流转卡工序记录
-CREATE TABLE "mes_pro_card_process" (
+CREATE TABLE IF NOT EXISTS "mes_pro_card_process" (
     "id" TEXT NOT NULL,
     "card_id" BIGINT,
     "sort" INTEGER,
@@ -823,10 +823,10 @@ CREATE TABLE "mes_pro_card_process" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_pro_card_process_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_pro_card_process_tenant_id_idx" ON "mes_pro_card_process"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_pro_card_process_tenant_id_idx" ON "mes_pro_card_process"("tenant_id");
 
 -- MES 生产报工
-CREATE TABLE "mes_pro_feedback" (
+CREATE TABLE IF NOT EXISTS "mes_pro_feedback" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "type" INTEGER,
@@ -860,10 +860,10 @@ CREATE TABLE "mes_pro_feedback" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_pro_feedback_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_pro_feedback_tenant_id_idx" ON "mes_pro_feedback"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_pro_feedback_tenant_id_idx" ON "mes_pro_feedback"("tenant_id");
 
 -- MES 生产工序
-CREATE TABLE "mes_pro_process" (
+CREATE TABLE IF NOT EXISTS "mes_pro_process" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -878,10 +878,10 @@ CREATE TABLE "mes_pro_process" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_pro_process_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_pro_process_tenant_id_idx" ON "mes_pro_process"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_pro_process_tenant_id_idx" ON "mes_pro_process"("tenant_id");
 
 -- MES 生产工序内容
-CREATE TABLE "mes_pro_process_content" (
+CREATE TABLE IF NOT EXISTS "mes_pro_process_content" (
     "id" TEXT NOT NULL,
     "process_id" BIGINT,
     "sort" INTEGER,
@@ -898,10 +898,10 @@ CREATE TABLE "mes_pro_process_content" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_pro_process_content_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_pro_process_content_tenant_id_idx" ON "mes_pro_process_content"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_pro_process_content_tenant_id_idx" ON "mes_pro_process_content"("tenant_id");
 
 -- MES 工艺路线
-CREATE TABLE "mes_pro_route" (
+CREATE TABLE IF NOT EXISTS "mes_pro_route" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -916,10 +916,10 @@ CREATE TABLE "mes_pro_route" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_pro_route_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_pro_route_tenant_id_idx" ON "mes_pro_route"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_pro_route_tenant_id_idx" ON "mes_pro_route"("tenant_id");
 
 -- MES 工艺路线工序
-CREATE TABLE "mes_pro_route_process" (
+CREATE TABLE IF NOT EXISTS "mes_pro_route_process" (
     "id" TEXT NOT NULL,
     "route_id" BIGINT,
     "process_id" BIGINT,
@@ -940,10 +940,10 @@ CREATE TABLE "mes_pro_route_process" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_pro_route_process_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_pro_route_process_tenant_id_idx" ON "mes_pro_route_process"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_pro_route_process_tenant_id_idx" ON "mes_pro_route_process"("tenant_id");
 
 -- MES 工艺路线产品
-CREATE TABLE "mes_pro_route_product" (
+CREATE TABLE IF NOT EXISTS "mes_pro_route_product" (
     "id" TEXT NOT NULL,
     "route_id" BIGINT,
     "item_id" BIGINT,
@@ -959,10 +959,10 @@ CREATE TABLE "mes_pro_route_product" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_pro_route_product_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_pro_route_product_tenant_id_idx" ON "mes_pro_route_product"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_pro_route_product_tenant_id_idx" ON "mes_pro_route_product"("tenant_id");
 
 -- MES 工艺路线产品 BOM
-CREATE TABLE "mes_pro_route_product_bom" (
+CREATE TABLE IF NOT EXISTS "mes_pro_route_product_bom" (
     "id" TEXT NOT NULL,
     "route_id" BIGINT,
     "process_id" BIGINT,
@@ -978,10 +978,10 @@ CREATE TABLE "mes_pro_route_product_bom" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_pro_route_product_bom_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_pro_route_product_bom_tenant_id_idx" ON "mes_pro_route_product_bom"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_pro_route_product_bom_tenant_id_idx" ON "mes_pro_route_product_bom"("tenant_id");
 
 -- MES 生产任务
-CREATE TABLE "mes_pro_task" (
+CREATE TABLE IF NOT EXISTS "mes_pro_task" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -1012,10 +1012,10 @@ CREATE TABLE "mes_pro_task" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_pro_task_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_pro_task_tenant_id_idx" ON "mes_pro_task"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_pro_task_tenant_id_idx" ON "mes_pro_task"("tenant_id");
 
 -- MES 生产任务投料
-CREATE TABLE "mes_pro_task_issue" (
+CREATE TABLE IF NOT EXISTS "mes_pro_task_issue" (
     "id" TEXT NOT NULL,
     "task_id" BIGINT,
     "work_order_id" BIGINT,
@@ -1039,10 +1039,10 @@ CREATE TABLE "mes_pro_task_issue" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_pro_task_issue_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_pro_task_issue_tenant_id_idx" ON "mes_pro_task_issue"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_pro_task_issue_tenant_id_idx" ON "mes_pro_task_issue"("tenant_id");
 
 -- MES 生产工单
-CREATE TABLE "mes_pro_work_order" (
+CREATE TABLE IF NOT EXISTS "mes_pro_work_order" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -1071,10 +1071,10 @@ CREATE TABLE "mes_pro_work_order" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_pro_work_order_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_pro_work_order_tenant_id_idx" ON "mes_pro_work_order"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_pro_work_order_tenant_id_idx" ON "mes_pro_work_order"("tenant_id");
 
 -- MES 生产工单 BOM
-CREATE TABLE "mes_pro_work_order_bom" (
+CREATE TABLE IF NOT EXISTS "mes_pro_work_order_bom" (
     "id" TEXT NOT NULL,
     "work_order_id" BIGINT,
     "item_id" BIGINT,
@@ -1088,10 +1088,10 @@ CREATE TABLE "mes_pro_work_order_bom" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_pro_work_order_bom_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_pro_work_order_bom_tenant_id_idx" ON "mes_pro_work_order_bom"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_pro_work_order_bom_tenant_id_idx" ON "mes_pro_work_order_bom"("tenant_id");
 
 -- MES 用户工作站绑定关系（当前快照）
-CREATE TABLE "mes_pro_work_record" (
+CREATE TABLE IF NOT EXISTS "mes_pro_work_record" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
     "workstation_id" BIGINT,
@@ -1107,10 +1107,10 @@ CREATE TABLE "mes_pro_work_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_pro_work_record_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_pro_work_record_tenant_id_idx" ON "mes_pro_work_record"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_pro_work_record_tenant_id_idx" ON "mes_pro_work_record"("tenant_id");
 
 -- MES 上下工记录流水
-CREATE TABLE "mes_pro_work_record_log" (
+CREATE TABLE IF NOT EXISTS "mes_pro_work_record_log" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
     "workstation_id" BIGINT,
@@ -1124,10 +1124,10 @@ CREATE TABLE "mes_pro_work_record_log" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_pro_work_record_log_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_pro_work_record_log_tenant_id_idx" ON "mes_pro_work_record_log"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_pro_work_record_log_tenant_id_idx" ON "mes_pro_work_record_log"("tenant_id");
 
 -- MES 缺陷类型
-CREATE TABLE "mes_qc_defect" (
+CREATE TABLE IF NOT EXISTS "mes_qc_defect" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -1142,10 +1142,10 @@ CREATE TABLE "mes_qc_defect" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_qc_defect_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_qc_defect_tenant_id_idx" ON "mes_qc_defect"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_qc_defect_tenant_id_idx" ON "mes_qc_defect"("tenant_id");
 
 -- MES 质检缺陷记录 DO通用缺陷记录表，通过 区分检验类型（IQC、IPQC、OQC、RQC），多模块复用
-CREATE TABLE "mes_qc_defect_record" (
+CREATE TABLE IF NOT EXISTS "mes_qc_defect_record" (
     "id" TEXT NOT NULL,
     "qc_type" INTEGER,
     "qc_id" BIGINT,
@@ -1162,10 +1162,10 @@ CREATE TABLE "mes_qc_defect_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_qc_defect_record_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_qc_defect_record_tenant_id_idx" ON "mes_qc_defect_record"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_qc_defect_record_tenant_id_idx" ON "mes_qc_defect_record"("tenant_id");
 
 -- MES 质检指标
-CREATE TABLE "mes_qc_indicator" (
+CREATE TABLE IF NOT EXISTS "mes_qc_indicator" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -1182,10 +1182,10 @@ CREATE TABLE "mes_qc_indicator" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_qc_indicator_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_qc_indicator_tenant_id_idx" ON "mes_qc_indicator"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_qc_indicator_tenant_id_idx" ON "mes_qc_indicator"("tenant_id");
 
 -- MES 检验结果记录
-CREATE TABLE "mes_qc_indicator_result" (
+CREATE TABLE IF NOT EXISTS "mes_qc_indicator_result" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "qc_id" BIGINT,
@@ -1201,10 +1201,10 @@ CREATE TABLE "mes_qc_indicator_result" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_qc_indicator_result_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_qc_indicator_result_tenant_id_idx" ON "mes_qc_indicator_result"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_qc_indicator_result_tenant_id_idx" ON "mes_qc_indicator_result"("tenant_id");
 
 -- MES 检验结果明细记录
-CREATE TABLE "mes_qc_indicator_result_detail" (
+CREATE TABLE IF NOT EXISTS "mes_qc_indicator_result_detail" (
     "id" TEXT NOT NULL,
     "result_id" BIGINT,
     "indicator_id" BIGINT,
@@ -1218,10 +1218,10 @@ CREATE TABLE "mes_qc_indicator_result_detail" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_qc_indicator_result_detail_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_qc_indicator_result_detail_tenant_id_idx" ON "mes_qc_indicator_result_detail"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_qc_indicator_result_detail_tenant_id_idx" ON "mes_qc_indicator_result_detail"("tenant_id");
 
 -- MES 过程检验单（IPQC, In-Process Quality Control）
-CREATE TABLE "mes_qc_ipqc" (
+CREATE TABLE IF NOT EXISTS "mes_qc_ipqc" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -1261,10 +1261,10 @@ CREATE TABLE "mes_qc_ipqc" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_qc_ipqc_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_qc_ipqc_tenant_id_idx" ON "mes_qc_ipqc"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_qc_ipqc_tenant_id_idx" ON "mes_qc_ipqc"("tenant_id");
 
 -- MES 过程检验单行
-CREATE TABLE "mes_qc_ipqc_line" (
+CREATE TABLE IF NOT EXISTS "mes_qc_ipqc_line" (
     "id" TEXT NOT NULL,
     "ipqc_id" BIGINT,
     "indicator_id" BIGINT,
@@ -1286,10 +1286,10 @@ CREATE TABLE "mes_qc_ipqc_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_qc_ipqc_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_qc_ipqc_line_tenant_id_idx" ON "mes_qc_ipqc_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_qc_ipqc_line_tenant_id_idx" ON "mes_qc_ipqc_line"("tenant_id");
 
 -- MES 来料检验单（IQC, Incoming Quality Control）
-CREATE TABLE "mes_qc_iqc" (
+CREATE TABLE IF NOT EXISTS "mes_qc_iqc" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -1325,10 +1325,10 @@ CREATE TABLE "mes_qc_iqc" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_qc_iqc_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_qc_iqc_tenant_id_idx" ON "mes_qc_iqc"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_qc_iqc_tenant_id_idx" ON "mes_qc_iqc"("tenant_id");
 
 -- MES 来料检验单行
-CREATE TABLE "mes_qc_iqc_line" (
+CREATE TABLE IF NOT EXISTS "mes_qc_iqc_line" (
     "id" TEXT NOT NULL,
     "iqc_id" BIGINT,
     "indicator_id" BIGINT,
@@ -1350,10 +1350,10 @@ CREATE TABLE "mes_qc_iqc_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_qc_iqc_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_qc_iqc_line_tenant_id_idx" ON "mes_qc_iqc_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_qc_iqc_line_tenant_id_idx" ON "mes_qc_iqc_line"("tenant_id");
 
 -- MES 出货检验单（OQC, Outgoing Quality Control）
-CREATE TABLE "mes_qc_oqc" (
+CREATE TABLE IF NOT EXISTS "mes_qc_oqc" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -1391,10 +1391,10 @@ CREATE TABLE "mes_qc_oqc" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_qc_oqc_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_qc_oqc_tenant_id_idx" ON "mes_qc_oqc"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_qc_oqc_tenant_id_idx" ON "mes_qc_oqc"("tenant_id");
 
 -- MES 出货检验单行
-CREATE TABLE "mes_qc_oqc_line" (
+CREATE TABLE IF NOT EXISTS "mes_qc_oqc_line" (
     "id" TEXT NOT NULL,
     "oqc_id" BIGINT,
     "indicator_id" BIGINT,
@@ -1416,10 +1416,10 @@ CREATE TABLE "mes_qc_oqc_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_qc_oqc_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_qc_oqc_line_tenant_id_idx" ON "mes_qc_oqc_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_qc_oqc_line_tenant_id_idx" ON "mes_qc_oqc_line"("tenant_id");
 
 -- MES 退货检验单（RQC, Return Quality Control）
-CREATE TABLE "mes_qc_rqc" (
+CREATE TABLE IF NOT EXISTS "mes_qc_rqc" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -1453,10 +1453,10 @@ CREATE TABLE "mes_qc_rqc" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_qc_rqc_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_qc_rqc_tenant_id_idx" ON "mes_qc_rqc"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_qc_rqc_tenant_id_idx" ON "mes_qc_rqc"("tenant_id");
 
 -- MES 退货检验行
-CREATE TABLE "mes_qc_rqc_line" (
+CREATE TABLE IF NOT EXISTS "mes_qc_rqc_line" (
     "id" TEXT NOT NULL,
     "rqc_id" BIGINT,
     "indicator_id" BIGINT,
@@ -1478,10 +1478,10 @@ CREATE TABLE "mes_qc_rqc_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_qc_rqc_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_qc_rqc_line_tenant_id_idx" ON "mes_qc_rqc_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_qc_rqc_line_tenant_id_idx" ON "mes_qc_rqc_line"("tenant_id");
 
 -- MES 质检方案
-CREATE TABLE "mes_qc_template" (
+CREATE TABLE IF NOT EXISTS "mes_qc_template" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -1496,10 +1496,10 @@ CREATE TABLE "mes_qc_template" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_qc_template_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_qc_template_tenant_id_idx" ON "mes_qc_template"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_qc_template_tenant_id_idx" ON "mes_qc_template"("tenant_id");
 
 -- MES 质检方案-检测指标项
-CREATE TABLE "mes_qc_template_indicator" (
+CREATE TABLE IF NOT EXISTS "mes_qc_template_indicator" (
     "id" TEXT NOT NULL,
     "template_id" BIGINT,
     "indicator_id" BIGINT,
@@ -1518,10 +1518,10 @@ CREATE TABLE "mes_qc_template_indicator" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_qc_template_indicator_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_qc_template_indicator_tenant_id_idx" ON "mes_qc_template_indicator"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_qc_template_indicator_tenant_id_idx" ON "mes_qc_template_indicator"("tenant_id");
 
 -- MES 质检方案-产品关联
-CREATE TABLE "mes_qc_template_item" (
+CREATE TABLE IF NOT EXISTS "mes_qc_template_item" (
     "id" TEXT NOT NULL,
     "template_id" BIGINT,
     "item_id" BIGINT,
@@ -1539,10 +1539,10 @@ CREATE TABLE "mes_qc_template_item" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_qc_template_item_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_qc_template_item_tenant_id_idx" ON "mes_qc_template_item"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_qc_template_item_tenant_id_idx" ON "mes_qc_template_item"("tenant_id");
 
 -- MES 工具台账
-CREATE TABLE "mes_tm_tool" (
+CREATE TABLE IF NOT EXISTS "mes_tm_tool" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -1564,10 +1564,10 @@ CREATE TABLE "mes_tm_tool" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_tm_tool_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_tm_tool_tenant_id_idx" ON "mes_tm_tool"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_tm_tool_tenant_id_idx" ON "mes_tm_tool"("tenant_id");
 
 -- MES 工具类型
-CREATE TABLE "mes_tm_tool_type" (
+CREATE TABLE IF NOT EXISTS "mes_tm_tool_type" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -1583,10 +1583,10 @@ CREATE TABLE "mes_tm_tool_type" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_tm_tool_type_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_tm_tool_type_tenant_id_idx" ON "mes_tm_tool_type"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_tm_tool_type_tenant_id_idx" ON "mes_tm_tool_type"("tenant_id");
 
 -- MES 到货通知单
-CREATE TABLE "mes_wm_arrival_notice" (
+CREATE TABLE IF NOT EXISTS "mes_wm_arrival_notice" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -1605,10 +1605,10 @@ CREATE TABLE "mes_wm_arrival_notice" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_arrival_notice_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_arrival_notice_tenant_id_idx" ON "mes_wm_arrival_notice"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_arrival_notice_tenant_id_idx" ON "mes_wm_arrival_notice"("tenant_id");
 
 -- MES 到货通知单行
-CREATE TABLE "mes_wm_arrival_notice_line" (
+CREATE TABLE IF NOT EXISTS "mes_wm_arrival_notice_line" (
     "id" TEXT NOT NULL,
     "notice_id" BIGINT,
     "item_id" BIGINT,
@@ -1625,10 +1625,10 @@ CREATE TABLE "mes_wm_arrival_notice_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_arrival_notice_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_arrival_notice_line_tenant_id_idx" ON "mes_wm_arrival_notice_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_arrival_notice_line_tenant_id_idx" ON "mes_wm_arrival_notice_line"("tenant_id");
 
 -- MES 条码清单
-CREATE TABLE "mes_wm_barcode" (
+CREATE TABLE IF NOT EXISTS "mes_wm_barcode" (
     "id" TEXT NOT NULL,
     "config_id" BIGINT,
     "format" INTEGER,
@@ -1647,10 +1647,10 @@ CREATE TABLE "mes_wm_barcode" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_barcode_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_barcode_tenant_id_idx" ON "mes_wm_barcode"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_barcode_tenant_id_idx" ON "mes_wm_barcode"("tenant_id");
 
 -- MES 条码配置
-CREATE TABLE "mes_wm_barcode_config" (
+CREATE TABLE IF NOT EXISTS "mes_wm_barcode_config" (
     "id" TEXT NOT NULL,
     "format" INTEGER,
     "biz_type" INTEGER,
@@ -1668,10 +1668,10 @@ CREATE TABLE "mes_wm_barcode_config" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_barcode_config_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_barcode_config_tenant_id_idx" ON "mes_wm_barcode_config"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_barcode_config_tenant_id_idx" ON "mes_wm_barcode_config"("tenant_id");
 
 -- 批次管理
-CREATE TABLE "mes_wm_batch" (
+CREATE TABLE IF NOT EXISTS "mes_wm_batch" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "item_id" BIGINT,
@@ -1698,10 +1698,10 @@ CREATE TABLE "mes_wm_batch" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_batch_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_batch_tenant_id_idx" ON "mes_wm_batch"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_batch_tenant_id_idx" ON "mes_wm_batch"("tenant_id");
 
 -- MES 物料消耗记录
-CREATE TABLE "mes_wm_item_consume" (
+CREATE TABLE IF NOT EXISTS "mes_wm_item_consume" (
     "id" TEXT NOT NULL,
     "work_order_id" BIGINT,
     "task_id" BIGINT,
@@ -1719,10 +1719,10 @@ CREATE TABLE "mes_wm_item_consume" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_item_consume_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_item_consume_tenant_id_idx" ON "mes_wm_item_consume"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_item_consume_tenant_id_idx" ON "mes_wm_item_consume"("tenant_id");
 
 -- MES 物料消耗记录明细 DO记录 line 级别的消耗按线边库 FIFO 分配到具体批次的明细。一条 line 可能拆分为多条 detail（当一个批次库存不够，需要从下一个批次继续分配时）。
-CREATE TABLE "mes_wm_item_consume_detail" (
+CREATE TABLE IF NOT EXISTS "mes_wm_item_consume_detail" (
     "id" TEXT NOT NULL,
     "consume_id" BIGINT,
     "line_id" BIGINT,
@@ -1743,10 +1743,10 @@ CREATE TABLE "mes_wm_item_consume_detail" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_item_consume_detail_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_item_consume_detail_tenant_id_idx" ON "mes_wm_item_consume_detail"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_item_consume_detail_tenant_id_idx" ON "mes_wm_item_consume_detail"("tenant_id");
 
 -- MES 物料消耗记录行
-CREATE TABLE "mes_wm_item_consume_line" (
+CREATE TABLE IF NOT EXISTS "mes_wm_item_consume_line" (
     "id" TEXT NOT NULL,
     "consume_id" BIGINT,
     "item_id" BIGINT,
@@ -1762,10 +1762,10 @@ CREATE TABLE "mes_wm_item_consume_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_item_consume_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_item_consume_line_tenant_id_idx" ON "mes_wm_item_consume_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_item_consume_line_tenant_id_idx" ON "mes_wm_item_consume_line"("tenant_id");
 
 -- MES 采购入库单
-CREATE TABLE "mes_wm_item_receipt" (
+CREATE TABLE IF NOT EXISTS "mes_wm_item_receipt" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -1784,10 +1784,10 @@ CREATE TABLE "mes_wm_item_receipt" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_item_receipt_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_item_receipt_tenant_id_idx" ON "mes_wm_item_receipt"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_item_receipt_tenant_id_idx" ON "mes_wm_item_receipt"("tenant_id");
 
 -- MES 采购入库明细
-CREATE TABLE "mes_wm_item_receipt_detail" (
+CREATE TABLE IF NOT EXISTS "mes_wm_item_receipt_detail" (
     "id" TEXT NOT NULL,
     "line_id" BIGINT,
     "receipt_id" BIGINT,
@@ -1806,10 +1806,10 @@ CREATE TABLE "mes_wm_item_receipt_detail" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_item_receipt_detail_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_item_receipt_detail_tenant_id_idx" ON "mes_wm_item_receipt_detail"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_item_receipt_detail_tenant_id_idx" ON "mes_wm_item_receipt_detail"("tenant_id");
 
 -- MES 采购入库单行
-CREATE TABLE "mes_wm_item_receipt_line" (
+CREATE TABLE IF NOT EXISTS "mes_wm_item_receipt_line" (
     "id" TEXT NOT NULL,
     "receipt_id" BIGINT,
     "arrival_notice_line_id" BIGINT,
@@ -1829,10 +1829,10 @@ CREATE TABLE "mes_wm_item_receipt_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_item_receipt_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_item_receipt_line_tenant_id_idx" ON "mes_wm_item_receipt_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_item_receipt_line_tenant_id_idx" ON "mes_wm_item_receipt_line"("tenant_id");
 
 -- MES 库存台账（仓库现有量）
-CREATE TABLE "mes_wm_material_stock" (
+CREATE TABLE IF NOT EXISTS "mes_wm_material_stock" (
     "id" TEXT NOT NULL,
     "item_type_id" BIGINT,
     "item_id" BIGINT,
@@ -1853,10 +1853,10 @@ CREATE TABLE "mes_wm_material_stock" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_material_stock_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_material_stock_tenant_id_idx" ON "mes_wm_material_stock"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_material_stock_tenant_id_idx" ON "mes_wm_material_stock"("tenant_id");
 
 -- MES 杂项出库单
-CREATE TABLE "mes_wm_misc_issue" (
+CREATE TABLE IF NOT EXISTS "mes_wm_misc_issue" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -1875,10 +1875,10 @@ CREATE TABLE "mes_wm_misc_issue" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_misc_issue_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_misc_issue_tenant_id_idx" ON "mes_wm_misc_issue"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_misc_issue_tenant_id_idx" ON "mes_wm_misc_issue"("tenant_id");
 
 -- MES 杂项出库明细
-CREATE TABLE "mes_wm_misc_issue_detail" (
+CREATE TABLE IF NOT EXISTS "mes_wm_misc_issue_detail" (
     "id" TEXT NOT NULL,
     "issue_id" BIGINT,
     "line_id" BIGINT,
@@ -1899,10 +1899,10 @@ CREATE TABLE "mes_wm_misc_issue_detail" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_misc_issue_detail_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_misc_issue_detail_tenant_id_idx" ON "mes_wm_misc_issue_detail"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_misc_issue_detail_tenant_id_idx" ON "mes_wm_misc_issue_detail"("tenant_id");
 
 -- MES 杂项出库单行
-CREATE TABLE "mes_wm_misc_issue_line" (
+CREATE TABLE IF NOT EXISTS "mes_wm_misc_issue_line" (
     "id" TEXT NOT NULL,
     "issue_id" BIGINT,
     "source_doc_line_id" BIGINT,
@@ -1923,10 +1923,10 @@ CREATE TABLE "mes_wm_misc_issue_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_misc_issue_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_misc_issue_line_tenant_id_idx" ON "mes_wm_misc_issue_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_misc_issue_line_tenant_id_idx" ON "mes_wm_misc_issue_line"("tenant_id");
 
 -- MES 杂项入库单
-CREATE TABLE "mes_wm_misc_receipt" (
+CREATE TABLE IF NOT EXISTS "mes_wm_misc_receipt" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -1945,10 +1945,10 @@ CREATE TABLE "mes_wm_misc_receipt" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_misc_receipt_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_misc_receipt_tenant_id_idx" ON "mes_wm_misc_receipt"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_misc_receipt_tenant_id_idx" ON "mes_wm_misc_receipt"("tenant_id");
 
 -- MES 杂项入库明细
-CREATE TABLE "mes_wm_misc_receipt_detail" (
+CREATE TABLE IF NOT EXISTS "mes_wm_misc_receipt_detail" (
     "id" TEXT NOT NULL,
     "receipt_id" BIGINT,
     "line_id" BIGINT,
@@ -1967,10 +1967,10 @@ CREATE TABLE "mes_wm_misc_receipt_detail" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_misc_receipt_detail_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_misc_receipt_detail_tenant_id_idx" ON "mes_wm_misc_receipt_detail"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_misc_receipt_detail_tenant_id_idx" ON "mes_wm_misc_receipt_detail"("tenant_id");
 
 -- MES 杂项入库单行
-CREATE TABLE "mes_wm_misc_receipt_line" (
+CREATE TABLE IF NOT EXISTS "mes_wm_misc_receipt_line" (
     "id" TEXT NOT NULL,
     "receipt_id" BIGINT,
     "item_id" BIGINT,
@@ -1988,10 +1988,10 @@ CREATE TABLE "mes_wm_misc_receipt_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_misc_receipt_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_misc_receipt_line_tenant_id_idx" ON "mes_wm_misc_receipt_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_misc_receipt_line_tenant_id_idx" ON "mes_wm_misc_receipt_line"("tenant_id");
 
 -- MES 外协发料单
-CREATE TABLE "mes_wm_outsource_issue" (
+CREATE TABLE IF NOT EXISTS "mes_wm_outsource_issue" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -2008,10 +2008,10 @@ CREATE TABLE "mes_wm_outsource_issue" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_outsource_issue_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_outsource_issue_tenant_id_idx" ON "mes_wm_outsource_issue"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_outsource_issue_tenant_id_idx" ON "mes_wm_outsource_issue"("tenant_id");
 
 -- MES 外协发料单明细
-CREATE TABLE "mes_wm_outsource_issue_detail" (
+CREATE TABLE IF NOT EXISTS "mes_wm_outsource_issue_detail" (
     "id" TEXT NOT NULL,
     "line_id" BIGINT,
     "issue_id" BIGINT,
@@ -2031,10 +2031,10 @@ CREATE TABLE "mes_wm_outsource_issue_detail" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_outsource_issue_detail_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_outsource_issue_detail_tenant_id_idx" ON "mes_wm_outsource_issue_detail"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_outsource_issue_detail_tenant_id_idx" ON "mes_wm_outsource_issue_detail"("tenant_id");
 
 -- MES 外协发料单行
-CREATE TABLE "mes_wm_outsource_issue_line" (
+CREATE TABLE IF NOT EXISTS "mes_wm_outsource_issue_line" (
     "id" TEXT NOT NULL,
     "issue_id" BIGINT,
     "material_stock_id" BIGINT,
@@ -2050,10 +2050,10 @@ CREATE TABLE "mes_wm_outsource_issue_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_outsource_issue_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_outsource_issue_line_tenant_id_idx" ON "mes_wm_outsource_issue_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_outsource_issue_line_tenant_id_idx" ON "mes_wm_outsource_issue_line"("tenant_id");
 
 -- MES 外协入库单
-CREATE TABLE "mes_wm_outsource_receipt" (
+CREATE TABLE IF NOT EXISTS "mes_wm_outsource_receipt" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -2070,10 +2070,10 @@ CREATE TABLE "mes_wm_outsource_receipt" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_outsource_receipt_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_outsource_receipt_tenant_id_idx" ON "mes_wm_outsource_receipt"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_outsource_receipt_tenant_id_idx" ON "mes_wm_outsource_receipt"("tenant_id");
 
 -- MES 外协入库明细
-CREATE TABLE "mes_wm_outsource_receipt_detail" (
+CREATE TABLE IF NOT EXISTS "mes_wm_outsource_receipt_detail" (
     "id" TEXT NOT NULL,
     "line_id" BIGINT,
     "receipt_id" BIGINT,
@@ -2092,10 +2092,10 @@ CREATE TABLE "mes_wm_outsource_receipt_detail" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_outsource_receipt_detail_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_outsource_receipt_detail_tenant_id_idx" ON "mes_wm_outsource_receipt_detail"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_outsource_receipt_detail_tenant_id_idx" ON "mes_wm_outsource_receipt_detail"("tenant_id");
 
 -- MES 外协入库单行
-CREATE TABLE "mes_wm_outsource_receipt_line" (
+CREATE TABLE IF NOT EXISTS "mes_wm_outsource_receipt_line" (
     "id" TEXT NOT NULL,
     "receipt_id" BIGINT,
     "item_id" BIGINT,
@@ -2117,10 +2117,10 @@ CREATE TABLE "mes_wm_outsource_receipt_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_outsource_receipt_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_outsource_receipt_line_tenant_id_idx" ON "mes_wm_outsource_receipt_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_outsource_receipt_line_tenant_id_idx" ON "mes_wm_outsource_receipt_line"("tenant_id");
 
 -- MES 装箱单
-CREATE TABLE "mes_wm_package" (
+CREATE TABLE IF NOT EXISTS "mes_wm_package" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "parent_id" BIGINT,
@@ -2146,10 +2146,10 @@ CREATE TABLE "mes_wm_package" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_package_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_package_tenant_id_idx" ON "mes_wm_package"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_package_tenant_id_idx" ON "mes_wm_package"("tenant_id");
 
 -- MES 装箱明细
-CREATE TABLE "mes_wm_package_line" (
+CREATE TABLE IF NOT EXISTS "mes_wm_package_line" (
     "id" TEXT NOT NULL,
     "package_id" BIGINT,
     "material_stock_id" BIGINT,
@@ -2166,10 +2166,10 @@ CREATE TABLE "mes_wm_package_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_package_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_package_line_tenant_id_idx" ON "mes_wm_package_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_package_line_tenant_id_idx" ON "mes_wm_package_line"("tenant_id");
 
 -- MES 领料出库单
-CREATE TABLE "mes_wm_product_issue" (
+CREATE TABLE IF NOT EXISTS "mes_wm_product_issue" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -2188,10 +2188,10 @@ CREATE TABLE "mes_wm_product_issue" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_product_issue_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_product_issue_tenant_id_idx" ON "mes_wm_product_issue"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_product_issue_tenant_id_idx" ON "mes_wm_product_issue"("tenant_id");
 
 -- MES 领料出库明细
-CREATE TABLE "mes_wm_product_issue_detail" (
+CREATE TABLE IF NOT EXISTS "mes_wm_product_issue_detail" (
     "id" TEXT NOT NULL,
     "issue_id" BIGINT,
     "line_id" BIGINT,
@@ -2212,10 +2212,10 @@ CREATE TABLE "mes_wm_product_issue_detail" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_product_issue_detail_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_product_issue_detail_tenant_id_idx" ON "mes_wm_product_issue_detail"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_product_issue_detail_tenant_id_idx" ON "mes_wm_product_issue_detail"("tenant_id");
 
 -- MES 领料出库单行
-CREATE TABLE "mes_wm_product_issue_line" (
+CREATE TABLE IF NOT EXISTS "mes_wm_product_issue_line" (
     "id" TEXT NOT NULL,
     "issue_id" BIGINT,
     "item_id" BIGINT,
@@ -2230,10 +2230,10 @@ CREATE TABLE "mes_wm_product_issue_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_product_issue_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_product_issue_line_tenant_id_idx" ON "mes_wm_product_issue_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_product_issue_line_tenant_id_idx" ON "mes_wm_product_issue_line"("tenant_id");
 
 -- MES 生产入库单
-CREATE TABLE "mes_wm_product_produce" (
+CREATE TABLE IF NOT EXISTS "mes_wm_product_produce" (
     "id" TEXT NOT NULL,
     "work_order_id" BIGINT,
     "feedback_id" BIGINT,
@@ -2251,10 +2251,10 @@ CREATE TABLE "mes_wm_product_produce" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_product_produce_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_product_produce_tenant_id_idx" ON "mes_wm_product_produce"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_product_produce_tenant_id_idx" ON "mes_wm_product_produce"("tenant_id");
 
 -- MES 生产入库明细
-CREATE TABLE "mes_wm_product_produce_detail" (
+CREATE TABLE IF NOT EXISTS "mes_wm_product_produce_detail" (
     "id" TEXT NOT NULL,
     "produce_id" BIGINT,
     "line_id" BIGINT,
@@ -2274,10 +2274,10 @@ CREATE TABLE "mes_wm_product_produce_detail" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_product_produce_detail_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_product_produce_detail_tenant_id_idx" ON "mes_wm_product_produce_detail"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_product_produce_detail_tenant_id_idx" ON "mes_wm_product_produce_detail"("tenant_id");
 
 -- MES 生产入库单行
-CREATE TABLE "mes_wm_product_produce_line" (
+CREATE TABLE IF NOT EXISTS "mes_wm_product_produce_line" (
     "id" TEXT NOT NULL,
     "produce_id" BIGINT,
     "feedback_id" BIGINT,
@@ -2297,10 +2297,10 @@ CREATE TABLE "mes_wm_product_produce_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_product_produce_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_product_produce_line_tenant_id_idx" ON "mes_wm_product_produce_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_product_produce_line_tenant_id_idx" ON "mes_wm_product_produce_line"("tenant_id");
 
 -- MES 产品收货（入库）单
-CREATE TABLE "mes_wm_product_receipt" (
+CREATE TABLE IF NOT EXISTS "mes_wm_product_receipt" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -2317,10 +2317,10 @@ CREATE TABLE "mes_wm_product_receipt" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_product_receipt_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_product_receipt_tenant_id_idx" ON "mes_wm_product_receipt"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_product_receipt_tenant_id_idx" ON "mes_wm_product_receipt"("tenant_id");
 
 -- MES 产品收货（入库）单明细
-CREATE TABLE "mes_wm_product_receipt_detail" (
+CREATE TABLE IF NOT EXISTS "mes_wm_product_receipt_detail" (
     "id" TEXT NOT NULL,
     "line_id" BIGINT,
     "receipt_id" BIGINT,
@@ -2339,10 +2339,10 @@ CREATE TABLE "mes_wm_product_receipt_detail" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_product_receipt_detail_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_product_receipt_detail_tenant_id_idx" ON "mes_wm_product_receipt_detail"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_product_receipt_detail_tenant_id_idx" ON "mes_wm_product_receipt_detail"("tenant_id");
 
 -- MES 产品收货（入库）单行
-CREATE TABLE "mes_wm_product_receipt_line" (
+CREATE TABLE IF NOT EXISTS "mes_wm_product_receipt_line" (
     "id" TEXT NOT NULL,
     "receipt_id" BIGINT,
     "item_id" BIGINT,
@@ -2359,10 +2359,10 @@ CREATE TABLE "mes_wm_product_receipt_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_product_receipt_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_product_receipt_line_tenant_id_idx" ON "mes_wm_product_receipt_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_product_receipt_line_tenant_id_idx" ON "mes_wm_product_receipt_line"("tenant_id");
 
 -- MES 销售出库单
-CREATE TABLE "mes_wm_product_sales" (
+CREATE TABLE IF NOT EXISTS "mes_wm_product_sales" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -2385,10 +2385,10 @@ CREATE TABLE "mes_wm_product_sales" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_product_sales_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_product_sales_tenant_id_idx" ON "mes_wm_product_sales"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_product_sales_tenant_id_idx" ON "mes_wm_product_sales"("tenant_id");
 
 -- MES 销售出库明细
-CREATE TABLE "mes_wm_product_sales_detail" (
+CREATE TABLE IF NOT EXISTS "mes_wm_product_sales_detail" (
     "id" TEXT NOT NULL,
     "line_id" BIGINT,
     "sales_id" BIGINT,
@@ -2409,10 +2409,10 @@ CREATE TABLE "mes_wm_product_sales_detail" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_product_sales_detail_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_product_sales_detail_tenant_id_idx" ON "mes_wm_product_sales_detail"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_product_sales_detail_tenant_id_idx" ON "mes_wm_product_sales_detail"("tenant_id");
 
 -- MES 销售出库单行
-CREATE TABLE "mes_wm_product_sales_line" (
+CREATE TABLE IF NOT EXISTS "mes_wm_product_sales_line" (
     "id" TEXT NOT NULL,
     "sales_id" BIGINT,
     "notice_line_id" BIGINT,
@@ -2433,10 +2433,10 @@ CREATE TABLE "mes_wm_product_sales_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_product_sales_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_product_sales_line_tenant_id_idx" ON "mes_wm_product_sales_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_product_sales_line_tenant_id_idx" ON "mes_wm_product_sales_line"("tenant_id");
 
 -- MES 生产退料单
-CREATE TABLE "mes_wm_return_issue" (
+CREATE TABLE IF NOT EXISTS "mes_wm_return_issue" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -2454,10 +2454,10 @@ CREATE TABLE "mes_wm_return_issue" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_return_issue_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_return_issue_tenant_id_idx" ON "mes_wm_return_issue"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_return_issue_tenant_id_idx" ON "mes_wm_return_issue"("tenant_id");
 
 -- MES 生产退料明细
-CREATE TABLE "mes_wm_return_issue_detail" (
+CREATE TABLE IF NOT EXISTS "mes_wm_return_issue_detail" (
     "id" TEXT NOT NULL,
     "issue_id" BIGINT,
     "line_id" BIGINT,
@@ -2478,10 +2478,10 @@ CREATE TABLE "mes_wm_return_issue_detail" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_return_issue_detail_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_return_issue_detail_tenant_id_idx" ON "mes_wm_return_issue_detail"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_return_issue_detail_tenant_id_idx" ON "mes_wm_return_issue_detail"("tenant_id");
 
 -- MES 生产退料单行
-CREATE TABLE "mes_wm_return_issue_line" (
+CREATE TABLE IF NOT EXISTS "mes_wm_return_issue_line" (
     "id" TEXT NOT NULL,
     "issue_id" BIGINT,
     "material_stock_id" BIGINT,
@@ -2501,10 +2501,10 @@ CREATE TABLE "mes_wm_return_issue_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_return_issue_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_return_issue_line_tenant_id_idx" ON "mes_wm_return_issue_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_return_issue_line_tenant_id_idx" ON "mes_wm_return_issue_line"("tenant_id");
 
 -- MES 销售退货单
-CREATE TABLE "mes_wm_return_sales" (
+CREATE TABLE IF NOT EXISTS "mes_wm_return_sales" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -2522,10 +2522,10 @@ CREATE TABLE "mes_wm_return_sales" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_return_sales_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_return_sales_tenant_id_idx" ON "mes_wm_return_sales"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_return_sales_tenant_id_idx" ON "mes_wm_return_sales"("tenant_id");
 
 -- MES 销售退货明细
-CREATE TABLE "mes_wm_return_sales_detail" (
+CREATE TABLE IF NOT EXISTS "mes_wm_return_sales_detail" (
     "id" TEXT NOT NULL,
     "return_id" BIGINT,
     "line_id" BIGINT,
@@ -2545,10 +2545,10 @@ CREATE TABLE "mes_wm_return_sales_detail" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_return_sales_detail_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_return_sales_detail_tenant_id_idx" ON "mes_wm_return_sales_detail"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_return_sales_detail_tenant_id_idx" ON "mes_wm_return_sales_detail"("tenant_id");
 
 -- MES 销售退货单行
-CREATE TABLE "mes_wm_return_sales_line" (
+CREATE TABLE IF NOT EXISTS "mes_wm_return_sales_line" (
     "id" TEXT NOT NULL,
     "return_id" BIGINT,
     "item_id" BIGINT,
@@ -2567,10 +2567,10 @@ CREATE TABLE "mes_wm_return_sales_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_return_sales_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_return_sales_line_tenant_id_idx" ON "mes_wm_return_sales_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_return_sales_line_tenant_id_idx" ON "mes_wm_return_sales_line"("tenant_id");
 
 -- MES 供应商退货单
-CREATE TABLE "mes_wm_return_vendor" (
+CREATE TABLE IF NOT EXISTS "mes_wm_return_vendor" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -2590,10 +2590,10 @@ CREATE TABLE "mes_wm_return_vendor" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_return_vendor_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_return_vendor_tenant_id_idx" ON "mes_wm_return_vendor"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_return_vendor_tenant_id_idx" ON "mes_wm_return_vendor"("tenant_id");
 
 -- MES 供应商退货明细
-CREATE TABLE "mes_wm_return_vendor_detail" (
+CREATE TABLE IF NOT EXISTS "mes_wm_return_vendor_detail" (
     "id" TEXT NOT NULL,
     "return_id" BIGINT,
     "line_id" BIGINT,
@@ -2614,10 +2614,10 @@ CREATE TABLE "mes_wm_return_vendor_detail" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_return_vendor_detail_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_return_vendor_detail_tenant_id_idx" ON "mes_wm_return_vendor_detail"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_return_vendor_detail_tenant_id_idx" ON "mes_wm_return_vendor_detail"("tenant_id");
 
 -- MES 供应商退货单行
-CREATE TABLE "mes_wm_return_vendor_line" (
+CREATE TABLE IF NOT EXISTS "mes_wm_return_vendor_line" (
     "id" TEXT NOT NULL,
     "return_id" BIGINT,
     "item_id" BIGINT,
@@ -2633,10 +2633,10 @@ CREATE TABLE "mes_wm_return_vendor_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_return_vendor_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_return_vendor_line_tenant_id_idx" ON "mes_wm_return_vendor_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_return_vendor_line_tenant_id_idx" ON "mes_wm_return_vendor_line"("tenant_id");
 
 -- MES 发货通知单
-CREATE TABLE "mes_wm_sales_notice" (
+CREATE TABLE IF NOT EXISTS "mes_wm_sales_notice" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -2656,10 +2656,10 @@ CREATE TABLE "mes_wm_sales_notice" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_sales_notice_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_sales_notice_tenant_id_idx" ON "mes_wm_sales_notice"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_sales_notice_tenant_id_idx" ON "mes_wm_sales_notice"("tenant_id");
 
 -- MES 发货通知单行
-CREATE TABLE "mes_wm_sales_notice_line" (
+CREATE TABLE IF NOT EXISTS "mes_wm_sales_notice_line" (
     "id" TEXT NOT NULL,
     "notice_id" BIGINT,
     "item_id" BIGINT,
@@ -2676,10 +2676,10 @@ CREATE TABLE "mes_wm_sales_notice_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_sales_notice_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_sales_notice_line_tenant_id_idx" ON "mes_wm_sales_notice_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_sales_notice_line_tenant_id_idx" ON "mes_wm_sales_notice_line"("tenant_id");
 
 -- MES SN 码
-CREATE TABLE "mes_wm_sn" (
+CREATE TABLE IF NOT EXISTS "mes_wm_sn" (
     "id" TEXT NOT NULL,
     "uuid" VARCHAR(255),
     "code" VARCHAR(255),
@@ -2694,10 +2694,10 @@ CREATE TABLE "mes_wm_sn" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_sn_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_sn_tenant_id_idx" ON "mes_wm_sn"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_sn_tenant_id_idx" ON "mes_wm_sn"("tenant_id");
 
 -- MES 盘点方案
-CREATE TABLE "mes_wm_stock_taking_plan" (
+CREATE TABLE IF NOT EXISTS "mes_wm_stock_taking_plan" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -2716,10 +2716,10 @@ CREATE TABLE "mes_wm_stock_taking_plan" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_stock_taking_plan_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_stock_taking_plan_tenant_id_idx" ON "mes_wm_stock_taking_plan"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_stock_taking_plan_tenant_id_idx" ON "mes_wm_stock_taking_plan"("tenant_id");
 
 -- MES 盘点方案参数
-CREATE TABLE "mes_wm_stock_taking_plan_param" (
+CREATE TABLE IF NOT EXISTS "mes_wm_stock_taking_plan_param" (
     "id" TEXT NOT NULL,
     "plan_id" BIGINT,
     "type" INTEGER,
@@ -2735,10 +2735,10 @@ CREATE TABLE "mes_wm_stock_taking_plan_param" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_stock_taking_plan_param_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_stock_taking_plan_param_tenant_id_idx" ON "mes_wm_stock_taking_plan_param"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_stock_taking_plan_param_tenant_id_idx" ON "mes_wm_stock_taking_plan_param"("tenant_id");
 
 -- MES 盘点任务
-CREATE TABLE "mes_wm_stock_taking_task" (
+CREATE TABLE IF NOT EXISTS "mes_wm_stock_taking_task" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -2760,10 +2760,10 @@ CREATE TABLE "mes_wm_stock_taking_task" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_stock_taking_task_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_stock_taking_task_tenant_id_idx" ON "mes_wm_stock_taking_task"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_stock_taking_task_tenant_id_idx" ON "mes_wm_stock_taking_task"("tenant_id");
 
 -- MES 盘点任务行
-CREATE TABLE "mes_wm_stock_taking_task_line" (
+CREATE TABLE IF NOT EXISTS "mes_wm_stock_taking_task_line" (
     "id" TEXT NOT NULL,
     "task_id" BIGINT,
     "material_stock_id" BIGINT,
@@ -2785,10 +2785,10 @@ CREATE TABLE "mes_wm_stock_taking_task_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_stock_taking_task_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_stock_taking_task_line_tenant_id_idx" ON "mes_wm_stock_taking_task_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_stock_taking_task_line_tenant_id_idx" ON "mes_wm_stock_taking_task_line"("tenant_id");
 
 -- MES 盘点结果
-CREATE TABLE "mes_wm_stock_taking_task_result" (
+CREATE TABLE IF NOT EXISTS "mes_wm_stock_taking_task_result" (
     "id" TEXT NOT NULL,
     "task_id" BIGINT,
     "line_id" BIGINT,
@@ -2810,10 +2810,10 @@ CREATE TABLE "mes_wm_stock_taking_task_result" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_stock_taking_task_result_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_stock_taking_task_result_tenant_id_idx" ON "mes_wm_stock_taking_task_result"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_stock_taking_task_result_tenant_id_idx" ON "mes_wm_stock_taking_task_result"("tenant_id");
 
 -- MES 库存事务流水 DO记录每一笔库存增减事件，系统自动生成，只读查询，不允许人工维护。
-CREATE TABLE "mes_wm_transaction" (
+CREATE TABLE IF NOT EXISTS "mes_wm_transaction" (
     "id" TEXT NOT NULL,
     "type" INTEGER,
     "biz_type" INTEGER,
@@ -2840,10 +2840,10 @@ CREATE TABLE "mes_wm_transaction" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_transaction_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_transaction_tenant_id_idx" ON "mes_wm_transaction"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_transaction_tenant_id_idx" ON "mes_wm_transaction"("tenant_id");
 
 -- MES 转移单
-CREATE TABLE "mes_wm_transfer" (
+CREATE TABLE IF NOT EXISTS "mes_wm_transfer" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -2866,10 +2866,10 @@ CREATE TABLE "mes_wm_transfer" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_transfer_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_transfer_tenant_id_idx" ON "mes_wm_transfer"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_transfer_tenant_id_idx" ON "mes_wm_transfer"("tenant_id");
 
 -- MES 调拨明细
-CREATE TABLE "mes_wm_transfer_detail" (
+CREATE TABLE IF NOT EXISTS "mes_wm_transfer_detail" (
     "id" TEXT NOT NULL,
     "line_id" BIGINT,
     "transfer_id" BIGINT,
@@ -2888,10 +2888,10 @@ CREATE TABLE "mes_wm_transfer_detail" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_transfer_detail_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_transfer_detail_tenant_id_idx" ON "mes_wm_transfer_detail"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_transfer_detail_tenant_id_idx" ON "mes_wm_transfer_detail"("tenant_id");
 
 -- MES 转移单行
-CREATE TABLE "mes_wm_transfer_line" (
+CREATE TABLE IF NOT EXISTS "mes_wm_transfer_line" (
     "id" TEXT NOT NULL,
     "transfer_id" BIGINT,
     "material_stock_id" BIGINT,
@@ -2910,10 +2910,10 @@ CREATE TABLE "mes_wm_transfer_line" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_transfer_line_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_transfer_line_tenant_id_idx" ON "mes_wm_transfer_line"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_transfer_line_tenant_id_idx" ON "mes_wm_transfer_line"("tenant_id");
 
 -- MES 仓库
-CREATE TABLE "mes_wm_warehouse" (
+CREATE TABLE IF NOT EXISTS "mes_wm_warehouse" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -2930,10 +2930,10 @@ CREATE TABLE "mes_wm_warehouse" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_warehouse_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_warehouse_tenant_id_idx" ON "mes_wm_warehouse"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_warehouse_tenant_id_idx" ON "mes_wm_warehouse"("tenant_id");
 
 -- MES 库位
-CREATE TABLE "mes_wm_warehouse_area" (
+CREATE TABLE IF NOT EXISTS "mes_wm_warehouse_area" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -2956,10 +2956,10 @@ CREATE TABLE "mes_wm_warehouse_area" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_warehouse_area_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_warehouse_area_tenant_id_idx" ON "mes_wm_warehouse_area"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_warehouse_area_tenant_id_idx" ON "mes_wm_warehouse_area"("tenant_id");
 
 -- MES 库区
-CREATE TABLE "mes_wm_warehouse_location" (
+CREATE TABLE IF NOT EXISTS "mes_wm_warehouse_location" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -2975,4 +2975,4 @@ CREATE TABLE "mes_wm_warehouse_location" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mes_wm_warehouse_location_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "mes_wm_warehouse_location_tenant_id_idx" ON "mes_wm_warehouse_location"("tenant_id");
+CREATE INDEX IF NOT EXISTS "mes_wm_warehouse_location_tenant_id_idx" ON "mes_wm_warehouse_location"("tenant_id");

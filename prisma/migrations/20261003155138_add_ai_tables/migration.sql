@@ -3,7 +3,7 @@
 -- 背景: 这些表的定义来自低代码 CodegenConfig；此前只生成代码、不生成建表 SQL，
 --       导致"仓储在查但无处创建"。本迁移补齐 DDL。
 -- AI API 秘钥
-CREATE TABLE "ai_api_key" (
+CREATE TABLE IF NOT EXISTS "ai_api_key" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "api_key" VARCHAR(255),
@@ -18,10 +18,10 @@ CREATE TABLE "ai_api_key" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_api_key_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "ai_api_key_tenant_id_idx" ON "ai_api_key"("tenant_id");
+CREATE INDEX IF NOT EXISTS "ai_api_key_tenant_id_idx" ON "ai_api_key"("tenant_id");
 
 -- AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它的消息关联在一起
-CREATE TABLE "ai_chat_conversation" (
+CREATE TABLE IF NOT EXISTS "ai_chat_conversation" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
     "title" VARCHAR(255),
@@ -42,10 +42,10 @@ CREATE TABLE "ai_chat_conversation" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_chat_conversation_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "ai_chat_conversation_tenant_id_idx" ON "ai_chat_conversation"("tenant_id");
+CREATE INDEX IF NOT EXISTS "ai_chat_conversation_tenant_id_idx" ON "ai_chat_conversation"("tenant_id");
 
 -- AI Chat 消息
-CREATE TABLE "ai_chat_message" (
+CREATE TABLE IF NOT EXISTS "ai_chat_message" (
     "id" TEXT NOT NULL,
     "conversation_id" BIGINT,
     "reply_id" BIGINT,
@@ -68,10 +68,10 @@ CREATE TABLE "ai_chat_message" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_chat_message_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "ai_chat_message_tenant_id_idx" ON "ai_chat_message"("tenant_id");
+CREATE INDEX IF NOT EXISTS "ai_chat_message_tenant_id_idx" ON "ai_chat_message"("tenant_id");
 
 -- AI 聊天角色
-CREATE TABLE "ai_chat_role" (
+CREATE TABLE IF NOT EXISTS "ai_chat_role" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "avatar" VARCHAR(255),
@@ -94,10 +94,10 @@ CREATE TABLE "ai_chat_role" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_chat_role_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "ai_chat_role_tenant_id_idx" ON "ai_chat_role"("tenant_id");
+CREATE INDEX IF NOT EXISTS "ai_chat_role_tenant_id_idx" ON "ai_chat_role"("tenant_id");
 
 -- AI 绘画
-CREATE TABLE "ai_image" (
+CREATE TABLE IF NOT EXISTS "ai_image" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
     "prompt" VARCHAR(255),
@@ -122,10 +122,10 @@ CREATE TABLE "ai_image" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_image_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "ai_image_tenant_id_idx" ON "ai_image"("tenant_id");
+CREATE INDEX IF NOT EXISTS "ai_image_tenant_id_idx" ON "ai_image"("tenant_id");
 
 -- AI 知识库
-CREATE TABLE "ai_knowledge" (
+CREATE TABLE IF NOT EXISTS "ai_knowledge" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "description" VARCHAR(255),
@@ -142,10 +142,10 @@ CREATE TABLE "ai_knowledge" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_knowledge_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "ai_knowledge_tenant_id_idx" ON "ai_knowledge"("tenant_id");
+CREATE INDEX IF NOT EXISTS "ai_knowledge_tenant_id_idx" ON "ai_knowledge"("tenant_id");
 
 -- AI 知识库-文档
-CREATE TABLE "ai_knowledge_document" (
+CREATE TABLE IF NOT EXISTS "ai_knowledge_document" (
     "id" TEXT NOT NULL,
     "knowledge_id" BIGINT,
     "name" VARCHAR(255),
@@ -164,10 +164,10 @@ CREATE TABLE "ai_knowledge_document" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_knowledge_document_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "ai_knowledge_document_tenant_id_idx" ON "ai_knowledge_document"("tenant_id");
+CREATE INDEX IF NOT EXISTS "ai_knowledge_document_tenant_id_idx" ON "ai_knowledge_document"("tenant_id");
 
 -- AI 知识库-文档分段
-CREATE TABLE "ai_knowledge_segment" (
+CREATE TABLE IF NOT EXISTS "ai_knowledge_segment" (
     "id" TEXT NOT NULL,
     "knowledge_id" BIGINT,
     "document_id" BIGINT,
@@ -185,10 +185,10 @@ CREATE TABLE "ai_knowledge_segment" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_knowledge_segment_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "ai_knowledge_segment_tenant_id_idx" ON "ai_knowledge_segment"("tenant_id");
+CREATE INDEX IF NOT EXISTS "ai_knowledge_segment_tenant_id_idx" ON "ai_knowledge_segment"("tenant_id");
 
 -- AI 思维导图
-CREATE TABLE "ai_mind_map" (
+CREATE TABLE IF NOT EXISTS "ai_mind_map" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
     "platform" VARCHAR(255),
@@ -205,10 +205,10 @@ CREATE TABLE "ai_mind_map" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_mind_map_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "ai_mind_map_tenant_id_idx" ON "ai_mind_map"("tenant_id");
+CREATE INDEX IF NOT EXISTS "ai_mind_map_tenant_id_idx" ON "ai_mind_map"("tenant_id");
 
 -- AI 模型 DO默认模型： 为开启，并且 排序第一
-CREATE TABLE "ai_model" (
+CREATE TABLE IF NOT EXISTS "ai_model" (
     "id" TEXT NOT NULL,
     "key_id" BIGINT,
     "name" VARCHAR(255),
@@ -228,10 +228,10 @@ CREATE TABLE "ai_model" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_model_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "ai_model_tenant_id_idx" ON "ai_model"("tenant_id");
+CREATE INDEX IF NOT EXISTS "ai_model_tenant_id_idx" ON "ai_model"("tenant_id");
 
 -- AI 音乐
-CREATE TABLE "ai_music" (
+CREATE TABLE IF NOT EXISTS "ai_music" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
     "title" VARCHAR(255),
@@ -257,10 +257,10 @@ CREATE TABLE "ai_music" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_music_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "ai_music_tenant_id_idx" ON "ai_music"("tenant_id");
+CREATE INDEX IF NOT EXISTS "ai_music_tenant_id_idx" ON "ai_music"("tenant_id");
 
 -- AI 工具
-CREATE TABLE "ai_tool" (
+CREATE TABLE IF NOT EXISTS "ai_tool" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "description" VARCHAR(255),
@@ -273,10 +273,10 @@ CREATE TABLE "ai_tool" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_tool_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "ai_tool_tenant_id_idx" ON "ai_tool"("tenant_id");
+CREATE INDEX IF NOT EXISTS "ai_tool_tenant_id_idx" ON "ai_tool"("tenant_id");
 
 -- AI 工作流
-CREATE TABLE "ai_workflow" (
+CREATE TABLE IF NOT EXISTS "ai_workflow" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "code" VARCHAR(255),
@@ -291,10 +291,10 @@ CREATE TABLE "ai_workflow" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_workflow_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "ai_workflow_tenant_id_idx" ON "ai_workflow"("tenant_id");
+CREATE INDEX IF NOT EXISTS "ai_workflow_tenant_id_idx" ON "ai_workflow"("tenant_id");
 
 -- AI 写作
-CREATE TABLE "ai_write" (
+CREATE TABLE IF NOT EXISTS "ai_write" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
     "type" INTEGER,
@@ -317,4 +317,4 @@ CREATE TABLE "ai_write" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_write_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "ai_write_tenant_id_idx" ON "ai_write"("tenant_id");
+CREATE INDEX IF NOT EXISTS "ai_write_tenant_id_idx" ON "ai_write"("tenant_id");

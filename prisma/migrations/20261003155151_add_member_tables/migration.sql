@@ -3,7 +3,7 @@
 -- 背景: 这些表的定义来自低代码 CodegenConfig；此前只生成代码、不生成建表 SQL，
 --       导致"仓储在查但无处创建"。本迁移补齐 DDL。
 -- 用户收件地址
-CREATE TABLE "member_address" (
+CREATE TABLE IF NOT EXISTS "member_address" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
     "name" VARCHAR(255),
@@ -19,10 +19,10 @@ CREATE TABLE "member_address" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_address_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "member_address_tenant_id_idx" ON "member_address"("tenant_id");
+CREATE INDEX IF NOT EXISTS "member_address_tenant_id_idx" ON "member_address"("tenant_id");
 
 -- 会员配置
-CREATE TABLE "member_config" (
+CREATE TABLE IF NOT EXISTS "member_config" (
     "id" TEXT NOT NULL,
     "point_trade_deduct_enable" BOOLEAN,
     "point_trade_deduct_unit_price" INTEGER,
@@ -36,10 +36,10 @@ CREATE TABLE "member_config" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_config_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "member_config_tenant_id_idx" ON "member_config"("tenant_id");
+CREATE INDEX IF NOT EXISTS "member_config_tenant_id_idx" ON "member_config"("tenant_id");
 
 -- 会员经验记录
-CREATE TABLE "member_experience_record" (
+CREATE TABLE IF NOT EXISTS "member_experience_record" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
     "biz_type" INTEGER,
@@ -56,10 +56,10 @@ CREATE TABLE "member_experience_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_experience_record_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "member_experience_record_tenant_id_idx" ON "member_experience_record"("tenant_id");
+CREATE INDEX IF NOT EXISTS "member_experience_record_tenant_id_idx" ON "member_experience_record"("tenant_id");
 
 -- 用户分组
-CREATE TABLE "member_group" (
+CREATE TABLE IF NOT EXISTS "member_group" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "remark" VARCHAR(255),
@@ -72,10 +72,10 @@ CREATE TABLE "member_group" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_group_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "member_group_tenant_id_idx" ON "member_group"("tenant_id");
+CREATE INDEX IF NOT EXISTS "member_group_tenant_id_idx" ON "member_group"("tenant_id");
 
 -- 会员等级 DO配置每个等级需要的积分
-CREATE TABLE "member_level" (
+CREATE TABLE IF NOT EXISTS "member_level" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "level" INTEGER,
@@ -92,10 +92,10 @@ CREATE TABLE "member_level" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_level_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "member_level_tenant_id_idx" ON "member_level"("tenant_id");
+CREATE INDEX IF NOT EXISTS "member_level_tenant_id_idx" ON "member_level"("tenant_id");
 
 -- 会员等级记录 DO用户每次等级发生变更时，记录一条日志
-CREATE TABLE "member_level_record" (
+CREATE TABLE IF NOT EXISTS "member_level_record" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
     "level_id" BIGINT,
@@ -113,10 +113,10 @@ CREATE TABLE "member_level_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_level_record_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "member_level_record_tenant_id_idx" ON "member_level_record"("tenant_id");
+CREATE INDEX IF NOT EXISTS "member_level_record_tenant_id_idx" ON "member_level_record"("tenant_id");
 
 -- 用户积分记录
-CREATE TABLE "member_point_record" (
+CREATE TABLE IF NOT EXISTS "member_point_record" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
     "biz_id" VARCHAR(255),
@@ -133,10 +133,10 @@ CREATE TABLE "member_point_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_point_record_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "member_point_record_tenant_id_idx" ON "member_point_record"("tenant_id");
+CREATE INDEX IF NOT EXISTS "member_point_record_tenant_id_idx" ON "member_point_record"("tenant_id");
 
 -- 签到规则
-CREATE TABLE "member_sign_in_config" (
+CREATE TABLE IF NOT EXISTS "member_sign_in_config" (
     "id" TEXT NOT NULL,
     "day" INTEGER,
     "point" INTEGER,
@@ -150,10 +150,10 @@ CREATE TABLE "member_sign_in_config" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_sign_in_config_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "member_sign_in_config_tenant_id_idx" ON "member_sign_in_config"("tenant_id");
+CREATE INDEX IF NOT EXISTS "member_sign_in_config_tenant_id_idx" ON "member_sign_in_config"("tenant_id");
 
 -- 签到记录
-CREATE TABLE "member_sign_in_record" (
+CREATE TABLE IF NOT EXISTS "member_sign_in_record" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
     "day" INTEGER,
@@ -167,10 +167,10 @@ CREATE TABLE "member_sign_in_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_sign_in_record_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "member_sign_in_record_tenant_id_idx" ON "member_sign_in_record"("tenant_id");
+CREATE INDEX IF NOT EXISTS "member_sign_in_record_tenant_id_idx" ON "member_sign_in_record"("tenant_id");
 
 -- 会员标签
-CREATE TABLE "member_tag" (
+CREATE TABLE IF NOT EXISTS "member_tag" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "tenant_id" VARCHAR(64) NOT NULL,
@@ -181,10 +181,10 @@ CREATE TABLE "member_tag" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_tag_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "member_tag_tenant_id_idx" ON "member_tag"("tenant_id");
+CREATE INDEX IF NOT EXISTS "member_tag_tenant_id_idx" ON "member_tag"("tenant_id");
 
 -- 会员用户 DOuk_mobile 索引：基于 字段
-CREATE TABLE "member_user" (
+CREATE TABLE IF NOT EXISTS "member_user" (
     "id" TEXT NOT NULL,
     "mobile" VARCHAR(255),
     "email" VARCHAR(255),
@@ -214,4 +214,4 @@ CREATE TABLE "member_user" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_user_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "member_user_tenant_id_idx" ON "member_user"("tenant_id");
+CREATE INDEX IF NOT EXISTS "member_user_tenant_id_idx" ON "member_user"("tenant_id");

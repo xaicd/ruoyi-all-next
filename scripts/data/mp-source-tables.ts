@@ -71,12 +71,12 @@ export const MP_TABLES: CodegenConfig[] = [
   {
     moduleName: "mp",
     className: "MpMaterial",
-    businessName: "公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_",
+    businessName: "公众号素材 DO1. a href=https://developers.wei",
     parentMenuId: "mp-dir",
     permissionPrefix: "mp:mp_material",
     table: {
       name: "mp_material",
-      comment: "公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_",
+      comment: "公众号素材 DO1. a href=https://developers.wei",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"主键","isPk":true,"nullableInferred":true},
         {"name":"account_id","type":"bigint","tsType":"number","nullable":true,"comment":"公众号账号的编号","nullableInferred":true},
@@ -176,10 +176,7 @@ export const MP_TABLES: CodegenConfig[] = [
         {"name":"hq_music_url","type":"varchar","tsType":"string","nullable":true,"comment":"高质量音乐链接","nullableInferred":true},
         {"name":"event","type":"varchar","tsType":"string","nullable":true,"comment":"事件类型","nullableInferred":true},
         {"name":"event_key","type":"varchar","tsType":"string","nullable":true,"comment":"事件 Key","nullableInferred":true},
-        {"name":"title","type":"varchar","tsType":"string","nullable":true,"comment":"图文消息标题","nullableInferred":true},
-        {"name":"description","type":"varchar","tsType":"string","nullable":true,"comment":"图文消息描述","nullableInferred":true},
         {"name":"pic_url","type":"varchar","tsType":"string","nullable":true,"comment":"图片链接","nullableInferred":true},
-        {"name":"url","type":"varchar","tsType":"string","nullable":true,"comment":"点击图文消息跳转链接","nullableInferred":true},
         {"name":"tenant_id","type":"varchar","tsType":"string","nullable":false,"comment":"租户ID","nullableInferred":false},
         {"name":"created_by","type":"varchar","tsType":"string","nullable":true,"comment":"创建者","nullableInferred":true},
         {"name":"created_at","type":"timestamp","tsType":"string","nullable":false,"comment":"创建时间","nullableInferred":true},

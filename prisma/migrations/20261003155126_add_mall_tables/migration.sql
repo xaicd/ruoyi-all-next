@@ -3,7 +3,7 @@
 -- 背景: 这些表的定义来自低代码 CodegenConfig；此前只生成代码、不生成建表 SQL，
 --       导致"仓储在查但无处创建"。本迁移补齐 DDL。
 -- 商品品牌
-CREATE TABLE "product_brand" (
+CREATE TABLE IF NOT EXISTS "product_brand" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "pic_url" VARCHAR(255),
@@ -18,10 +18,10 @@ CREATE TABLE "product_brand" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "product_brand_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "product_brand_tenant_id_idx" ON "product_brand"("tenant_id");
+CREATE INDEX IF NOT EXISTS "product_brand_tenant_id_idx" ON "product_brand"("tenant_id");
 
 -- 商品浏览记录
-CREATE TABLE "product_browse_history" (
+CREATE TABLE IF NOT EXISTS "product_browse_history" (
     "id" TEXT NOT NULL,
     "spu_id" BIGINT,
     "user_id" BIGINT,
@@ -34,10 +34,10 @@ CREATE TABLE "product_browse_history" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "product_browse_history_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "product_browse_history_tenant_id_idx" ON "product_browse_history"("tenant_id");
+CREATE INDEX IF NOT EXISTS "product_browse_history_tenant_id_idx" ON "product_browse_history"("tenant_id");
 
 -- 商品分类
-CREATE TABLE "product_category" (
+CREATE TABLE IF NOT EXISTS "product_category" (
     "id" TEXT NOT NULL,
     "parent_id" BIGINT,
     "name" VARCHAR(255),
@@ -52,10 +52,10 @@ CREATE TABLE "product_category" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "product_category_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "product_category_tenant_id_idx" ON "product_category"("tenant_id");
+CREATE INDEX IF NOT EXISTS "product_category_tenant_id_idx" ON "product_category"("tenant_id");
 
 -- 商品评论
-CREATE TABLE "product_comment" (
+CREATE TABLE IF NOT EXISTS "product_comment" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
     "user_nickname" VARCHAR(255),
@@ -86,10 +86,10 @@ CREATE TABLE "product_comment" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "product_comment_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "product_comment_tenant_id_idx" ON "product_comment"("tenant_id");
+CREATE INDEX IF NOT EXISTS "product_comment_tenant_id_idx" ON "product_comment"("tenant_id");
 
 -- 商品收藏
-CREATE TABLE "product_favorite" (
+CREATE TABLE IF NOT EXISTS "product_favorite" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
     "spu_id" BIGINT,
@@ -101,10 +101,10 @@ CREATE TABLE "product_favorite" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "product_favorite_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "product_favorite_tenant_id_idx" ON "product_favorite"("tenant_id");
+CREATE INDEX IF NOT EXISTS "product_favorite_tenant_id_idx" ON "product_favorite"("tenant_id");
 
 -- 商品属性项
-CREATE TABLE "product_property" (
+CREATE TABLE IF NOT EXISTS "product_property" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "remark" VARCHAR(255),
@@ -116,10 +116,10 @@ CREATE TABLE "product_property" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "product_property_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "product_property_tenant_id_idx" ON "product_property"("tenant_id");
+CREATE INDEX IF NOT EXISTS "product_property_tenant_id_idx" ON "product_property"("tenant_id");
 
 -- 商品属性值
-CREATE TABLE "product_property_value" (
+CREATE TABLE IF NOT EXISTS "product_property_value" (
     "id" TEXT NOT NULL,
     "property_id" BIGINT,
     "name" VARCHAR(255),
@@ -132,10 +132,10 @@ CREATE TABLE "product_property_value" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "product_property_value_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "product_property_value_tenant_id_idx" ON "product_property_value"("tenant_id");
+CREATE INDEX IF NOT EXISTS "product_property_value_tenant_id_idx" ON "product_property_value"("tenant_id");
 
 -- 商品 SKU
-CREATE TABLE "product_sku" (
+CREATE TABLE IF NOT EXISTS "product_sku" (
     "id" TEXT NOT NULL,
     "spu_id" BIGINT,
     "properties" TEXT,
@@ -162,10 +162,10 @@ CREATE TABLE "product_sku" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "product_sku_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "product_sku_tenant_id_idx" ON "product_sku"("tenant_id");
+CREATE INDEX IF NOT EXISTS "product_sku_tenant_id_idx" ON "product_sku"("tenant_id");
 
 -- 商品 SPU
-CREATE TABLE "product_spu" (
+CREATE TABLE IF NOT EXISTS "product_spu" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "keyword" VARCHAR(255),
@@ -197,10 +197,10 @@ CREATE TABLE "product_spu" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "product_spu_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "product_spu_tenant_id_idx" ON "product_spu"("tenant_id");
+CREATE INDEX IF NOT EXISTS "product_spu_tenant_id_idx" ON "product_spu"("tenant_id");
 
 -- 商品统计
-CREATE TABLE "product_statistics" (
+CREATE TABLE IF NOT EXISTS "product_statistics" (
     "id" TEXT NOT NULL,
     "time" TIMESTAMP(3),
     "spu_id" BIGINT,
@@ -222,10 +222,10 @@ CREATE TABLE "product_statistics" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "product_statistics_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "product_statistics_tenant_id_idx" ON "product_statistics"("tenant_id");
+CREATE INDEX IF NOT EXISTS "product_statistics_tenant_id_idx" ON "product_statistics"("tenant_id");
 
 -- 文章管理
-CREATE TABLE "promotion_article" (
+CREATE TABLE IF NOT EXISTS "promotion_article" (
     "id" TEXT NOT NULL,
     "category_id" BIGINT,
     "spu_id" BIGINT,
@@ -247,10 +247,10 @@ CREATE TABLE "promotion_article" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_article_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_article_tenant_id_idx" ON "promotion_article"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_article_tenant_id_idx" ON "promotion_article"("tenant_id");
 
 -- 文章分类
-CREATE TABLE "promotion_article_category" (
+CREATE TABLE IF NOT EXISTS "promotion_article_category" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "pic_url" VARCHAR(255),
@@ -264,10 +264,10 @@ CREATE TABLE "promotion_article_category" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_article_category_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_article_category_tenant_id_idx" ON "promotion_article_category"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_article_category_tenant_id_idx" ON "promotion_article_category"("tenant_id");
 
 -- banner
-CREATE TABLE "promotion_banner" (
+CREATE TABLE IF NOT EXISTS "promotion_banner" (
     "id" TEXT NOT NULL,
     "title" VARCHAR(255),
     "url" VARCHAR(255),
@@ -285,10 +285,10 @@ CREATE TABLE "promotion_banner" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_banner_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_banner_tenant_id_idx" ON "promotion_banner"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_banner_tenant_id_idx" ON "promotion_banner"("tenant_id");
 
 -- 砍价活动
-CREATE TABLE "promotion_bargain_activity" (
+CREATE TABLE IF NOT EXISTS "promotion_bargain_activity" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "start_time" TIMESTAMP(3),
@@ -313,10 +313,10 @@ CREATE TABLE "promotion_bargain_activity" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_bargain_activity_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_bargain_activity_tenant_id_idx" ON "promotion_bargain_activity"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_bargain_activity_tenant_id_idx" ON "promotion_bargain_activity"("tenant_id");
 
 -- 砍价助力
-CREATE TABLE "promotion_bargain_help" (
+CREATE TABLE IF NOT EXISTS "promotion_bargain_help" (
     "id" TEXT NOT NULL,
     "activity_id" BIGINT,
     "record_id" BIGINT,
@@ -330,10 +330,10 @@ CREATE TABLE "promotion_bargain_help" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_bargain_help_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_bargain_help_tenant_id_idx" ON "promotion_bargain_help"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_bargain_help_tenant_id_idx" ON "promotion_bargain_help"("tenant_id");
 
 -- 砍价记录 DO TO
-CREATE TABLE "promotion_bargain_record" (
+CREATE TABLE IF NOT EXISTS "promotion_bargain_record" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
     "activity_id" BIGINT,
@@ -352,10 +352,10 @@ CREATE TABLE "promotion_bargain_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_bargain_record_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_bargain_record_tenant_id_idx" ON "promotion_bargain_record"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_bargain_record_tenant_id_idx" ON "promotion_bargain_record"("tenant_id");
 
 -- 拼团活动
-CREATE TABLE "promotion_combination_activity" (
+CREATE TABLE IF NOT EXISTS "promotion_combination_activity" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "spu_id" BIGINT,
@@ -375,10 +375,10 @@ CREATE TABLE "promotion_combination_activity" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_combination_activity_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_combination_activity_tenant_id_idx" ON "promotion_combination_activity"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_combination_activity_tenant_id_idx" ON "promotion_combination_activity"("tenant_id");
 
 -- 拼团商品
-CREATE TABLE "promotion_combination_product" (
+CREATE TABLE IF NOT EXISTS "promotion_combination_product" (
     "id" TEXT NOT NULL,
     "activity_id" BIGINT,
     "spu_id" BIGINT,
@@ -395,10 +395,10 @@ CREATE TABLE "promotion_combination_product" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_combination_product_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_combination_product_tenant_id_idx" ON "promotion_combination_product"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_combination_product_tenant_id_idx" ON "promotion_combination_product"("tenant_id");
 
 -- 拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联
-CREATE TABLE "promotion_combination_record" (
+CREATE TABLE IF NOT EXISTS "promotion_combination_record" (
     "id" TEXT NOT NULL,
     "activity_id" BIGINT,
     "combination_price" INTEGER,
@@ -427,10 +427,10 @@ CREATE TABLE "promotion_combination_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_combination_record_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_combination_record_tenant_id_idx" ON "promotion_combination_record"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_combination_record_tenant_id_idx" ON "promotion_combination_record"("tenant_id");
 
 -- 优惠劵
-CREATE TABLE "promotion_coupon" (
+CREATE TABLE IF NOT EXISTS "promotion_coupon" (
     "id" TEXT NOT NULL,
     "template_id" BIGINT,
     "name" VARCHAR(255),
@@ -456,10 +456,10 @@ CREATE TABLE "promotion_coupon" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_coupon_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_coupon_tenant_id_idx" ON "promotion_coupon"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_coupon_tenant_id_idx" ON "promotion_coupon"("tenant_id");
 
 -- 优惠劵模板 DO当用户领取时，会生成 优惠劵
-CREATE TABLE "promotion_coupon_template" (
+CREATE TABLE IF NOT EXISTS "promotion_coupon_template" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "description" VARCHAR(255),
@@ -489,10 +489,10 @@ CREATE TABLE "promotion_coupon_template" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_coupon_template_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_coupon_template_tenant_id_idx" ON "promotion_coupon_template"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_coupon_template_tenant_id_idx" ON "promotion_coupon_template"("tenant_id");
 
 -- 限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一个活动；
-CREATE TABLE "promotion_discount_activity" (
+CREATE TABLE IF NOT EXISTS "promotion_discount_activity" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "status" INTEGER,
@@ -507,10 +507,10 @@ CREATE TABLE "promotion_discount_activity" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_discount_activity_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_discount_activity_tenant_id_idx" ON "promotion_discount_activity"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_discount_activity_tenant_id_idx" ON "promotion_discount_activity"("tenant_id");
 
 -- 限时折扣商品
-CREATE TABLE "promotion_discount_product" (
+CREATE TABLE IF NOT EXISTS "promotion_discount_product" (
     "id" TEXT NOT NULL,
     "activity_id" BIGINT,
     "spu_id" BIGINT,
@@ -530,10 +530,10 @@ CREATE TABLE "promotion_discount_product" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_discount_product_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_discount_product_tenant_id_idx" ON "promotion_discount_product"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_discount_product_tenant_id_idx" ON "promotion_discount_product"("tenant_id");
 
 -- 装修页面
-CREATE TABLE "promotion_diy_page" (
+CREATE TABLE IF NOT EXISTS "promotion_diy_page" (
     "id" TEXT NOT NULL,
     "template_id" BIGINT,
     "name" VARCHAR(255),
@@ -548,10 +548,10 @@ CREATE TABLE "promotion_diy_page" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_diy_page_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_diy_page_tenant_id_idx" ON "promotion_diy_page"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_diy_page_tenant_id_idx" ON "promotion_diy_page"("tenant_id");
 
 -- 装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. 如果需要使用某个模版，则将 设置为 true，表示已使用，有且仅有一个
-CREATE TABLE "promotion_diy_template" (
+CREATE TABLE IF NOT EXISTS "promotion_diy_template" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "used" BOOLEAN,
@@ -567,10 +567,10 @@ CREATE TABLE "promotion_diy_template" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_diy_template_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_diy_template_tenant_id_idx" ON "promotion_diy_template"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_diy_template_tenant_id_idx" ON "promotion_diy_template"("tenant_id");
 
 -- 客服会话
-CREATE TABLE "promotion_kefu_conversation" (
+CREATE TABLE IF NOT EXISTS "promotion_kefu_conversation" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
     "last_message_time" TIMESTAMP(3),
@@ -588,10 +588,10 @@ CREATE TABLE "promotion_kefu_conversation" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_kefu_conversation_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_kefu_conversation_tenant_id_idx" ON "promotion_kefu_conversation"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_kefu_conversation_tenant_id_idx" ON "promotion_kefu_conversation"("tenant_id");
 
 -- 客服消息
-CREATE TABLE "promotion_kefu_message" (
+CREATE TABLE IF NOT EXISTS "promotion_kefu_message" (
     "id" TEXT NOT NULL,
     "conversation_id" BIGINT,
     "sender_id" BIGINT,
@@ -609,10 +609,10 @@ CREATE TABLE "promotion_kefu_message" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_kefu_message_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_kefu_message_tenant_id_idx" ON "promotion_kefu_message"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_kefu_message_tenant_id_idx" ON "promotion_kefu_message"("tenant_id");
 
 -- 积分商城活动
-CREATE TABLE "promotion_point_activity" (
+CREATE TABLE IF NOT EXISTS "promotion_point_activity" (
     "id" TEXT NOT NULL,
     "spu_id" BIGINT,
     "status" INTEGER,
@@ -628,10 +628,10 @@ CREATE TABLE "promotion_point_activity" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_point_activity_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_point_activity_tenant_id_idx" ON "promotion_point_activity"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_point_activity_tenant_id_idx" ON "promotion_point_activity"("tenant_id");
 
 -- 积分商城商品
-CREATE TABLE "promotion_point_product" (
+CREATE TABLE IF NOT EXISTS "promotion_point_product" (
     "id" TEXT NOT NULL,
     "activity_id" BIGINT,
     "spu_id" BIGINT,
@@ -649,10 +649,10 @@ CREATE TABLE "promotion_point_product" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_point_product_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_point_product_tenant_id_idx" ON "promotion_point_product"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_point_product_tenant_id_idx" ON "promotion_point_product"("tenant_id");
 
 -- 满减送活动
-CREATE TABLE "promotion_reward_activity" (
+CREATE TABLE IF NOT EXISTS "promotion_reward_activity" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "status" INTEGER,
@@ -676,10 +676,10 @@ CREATE TABLE "promotion_reward_activity" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_reward_activity_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_reward_activity_tenant_id_idx" ON "promotion_reward_activity"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_reward_activity_tenant_id_idx" ON "promotion_reward_activity"("tenant_id");
 
 -- 秒杀活动
-CREATE TABLE "promotion_seckill_activity" (
+CREATE TABLE IF NOT EXISTS "promotion_seckill_activity" (
     "id" TEXT NOT NULL,
     "spu_id" BIGINT,
     "name" VARCHAR(255),
@@ -701,10 +701,10 @@ CREATE TABLE "promotion_seckill_activity" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_seckill_activity_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_seckill_activity_tenant_id_idx" ON "promotion_seckill_activity"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_seckill_activity_tenant_id_idx" ON "promotion_seckill_activity"("tenant_id");
 
 -- 秒杀时段
-CREATE TABLE "promotion_seckill_config" (
+CREATE TABLE IF NOT EXISTS "promotion_seckill_config" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "start_time" VARCHAR(255),
@@ -719,10 +719,10 @@ CREATE TABLE "promotion_seckill_config" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_seckill_config_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_seckill_config_tenant_id_idx" ON "promotion_seckill_config"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_seckill_config_tenant_id_idx" ON "promotion_seckill_config"("tenant_id");
 
 -- 秒杀参与商品
-CREATE TABLE "promotion_seckill_product" (
+CREATE TABLE IF NOT EXISTS "promotion_seckill_product" (
     "id" TEXT NOT NULL,
     "activity_id" BIGINT,
     "config_ids" TEXT,
@@ -741,10 +741,10 @@ CREATE TABLE "promotion_seckill_product" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_seckill_product_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "promotion_seckill_product_tenant_id_idx" ON "promotion_seckill_product"("tenant_id");
+CREATE INDEX IF NOT EXISTS "promotion_seckill_product_tenant_id_idx" ON "promotion_seckill_product"("tenant_id");
 
 -- 售后订单，用于处理 交易订单的退款退货流程
-CREATE TABLE "trade_after_sale" (
+CREATE TABLE IF NOT EXISTS "trade_after_sale" (
     "id" TEXT NOT NULL,
     "no" VARCHAR(255),
     "status" INTEGER,
@@ -782,10 +782,10 @@ CREATE TABLE "trade_after_sale" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_after_sale_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "trade_after_sale_tenant_id_idx" ON "trade_after_sale"("tenant_id");
+CREATE INDEX IF NOT EXISTS "trade_after_sale_tenant_id_idx" ON "trade_after_sale"("tenant_id");
 
 -- 交易售后日志
-CREATE TABLE "trade_after_sale_log" (
+CREATE TABLE IF NOT EXISTS "trade_after_sale_log" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
     "user_type" INTEGER,
@@ -802,10 +802,10 @@ CREATE TABLE "trade_after_sale_log" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_after_sale_log_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "trade_after_sale_log_tenant_id_idx" ON "trade_after_sale_log"("tenant_id");
+CREATE INDEX IF NOT EXISTS "trade_after_sale_log_tenant_id_idx" ON "trade_after_sale_log"("tenant_id");
 
 -- 佣金记录
-CREATE TABLE "trade_brokerage_record" (
+CREATE TABLE IF NOT EXISTS "trade_brokerage_record" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
     "biz_id" VARCHAR(255),
@@ -827,10 +827,10 @@ CREATE TABLE "trade_brokerage_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_brokerage_record_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "trade_brokerage_record_tenant_id_idx" ON "trade_brokerage_record"("tenant_id");
+CREATE INDEX IF NOT EXISTS "trade_brokerage_record_tenant_id_idx" ON "trade_brokerage_record"("tenant_id");
 
 -- 分销用户
-CREATE TABLE "trade_brokerage_user" (
+CREATE TABLE IF NOT EXISTS "trade_brokerage_user" (
     "id" TEXT NOT NULL,
     "bind_user_id" BIGINT,
     "bind_user_time" TIMESTAMP(3),
@@ -846,10 +846,10 @@ CREATE TABLE "trade_brokerage_user" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_brokerage_user_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "trade_brokerage_user_tenant_id_idx" ON "trade_brokerage_user"("tenant_id");
+CREATE INDEX IF NOT EXISTS "trade_brokerage_user_tenant_id_idx" ON "trade_brokerage_user"("tenant_id");
 
 -- 佣金提现
-CREATE TABLE "trade_brokerage_withdraw" (
+CREATE TABLE IF NOT EXISTS "trade_brokerage_withdraw" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
     "price" INTEGER,
@@ -877,10 +877,10 @@ CREATE TABLE "trade_brokerage_withdraw" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_brokerage_withdraw_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "trade_brokerage_withdraw_tenant_id_idx" ON "trade_brokerage_withdraw"("tenant_id");
+CREATE INDEX IF NOT EXISTS "trade_brokerage_withdraw_tenant_id_idx" ON "trade_brokerage_withdraw"("tenant_id");
 
 -- 购物车的商品信息 DO每个商品，对应一条记录，通过 和 关联
-CREATE TABLE "trade_cart" (
+CREATE TABLE IF NOT EXISTS "trade_cart" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
     "spu_id" BIGINT,
@@ -895,10 +895,10 @@ CREATE TABLE "trade_cart" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_cart_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "trade_cart_tenant_id_idx" ON "trade_cart"("tenant_id");
+CREATE INDEX IF NOT EXISTS "trade_cart_tenant_id_idx" ON "trade_cart"("tenant_id");
 
 -- 交易中心配置
-CREATE TABLE "trade_config" (
+CREATE TABLE IF NOT EXISTS "trade_config" (
     "id" TEXT NOT NULL,
     "after_sale_refund_reasons" TEXT,
     "after_sale_return_reasons" TEXT,
@@ -923,10 +923,10 @@ CREATE TABLE "trade_config" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_config_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "trade_config_tenant_id_idx" ON "trade_config"("tenant_id");
+CREATE INDEX IF NOT EXISTS "trade_config_tenant_id_idx" ON "trade_config"("tenant_id");
 
 -- 快递公司
-CREATE TABLE "trade_delivery_express" (
+CREATE TABLE IF NOT EXISTS "trade_delivery_express" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
     "name" VARCHAR(255),
@@ -941,10 +941,10 @@ CREATE TABLE "trade_delivery_express" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_delivery_express_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "trade_delivery_express_tenant_id_idx" ON "trade_delivery_express"("tenant_id");
+CREATE INDEX IF NOT EXISTS "trade_delivery_express_tenant_id_idx" ON "trade_delivery_express"("tenant_id");
 
 -- 快递运费模板
-CREATE TABLE "trade_delivery_express_template" (
+CREATE TABLE IF NOT EXISTS "trade_delivery_express_template" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "charge_mode" INTEGER,
@@ -957,10 +957,10 @@ CREATE TABLE "trade_delivery_express_template" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_delivery_express_template_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "trade_delivery_express_template_tenant_id_idx" ON "trade_delivery_express_template"("tenant_id");
+CREATE INDEX IF NOT EXISTS "trade_delivery_express_template_tenant_id_idx" ON "trade_delivery_express_template"("tenant_id");
 
 -- 快递运费模板计费配置
-CREATE TABLE "trade_delivery_express_template_charge" (
+CREATE TABLE IF NOT EXISTS "trade_delivery_express_template_charge" (
     "id" TEXT NOT NULL,
     "template_id" BIGINT,
     "area_ids" TEXT,
@@ -977,10 +977,10 @@ CREATE TABLE "trade_delivery_express_template_charge" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_delivery_express_template_charge_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "trade_delivery_express_template_charge_tenant_id_idx" ON "trade_delivery_express_template_charge"("tenant_id");
+CREATE INDEX IF NOT EXISTS "trade_delivery_express_template_charge_tenant_id_idx" ON "trade_delivery_express_template_charge"("tenant_id");
 
 -- 快递运费模板包邮配置
-CREATE TABLE "trade_delivery_express_template_free" (
+CREATE TABLE IF NOT EXISTS "trade_delivery_express_template_free" (
     "id" TEXT NOT NULL,
     "template_id" BIGINT,
     "area_ids" TEXT,
@@ -994,10 +994,10 @@ CREATE TABLE "trade_delivery_express_template_free" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_delivery_express_template_free_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "trade_delivery_express_template_free_tenant_id_idx" ON "trade_delivery_express_template_free"("tenant_id");
+CREATE INDEX IF NOT EXISTS "trade_delivery_express_template_free_tenant_id_idx" ON "trade_delivery_express_template_free"("tenant_id");
 
 -- 自提门店
-CREATE TABLE "trade_delivery_pick_up_store" (
+CREATE TABLE IF NOT EXISTS "trade_delivery_pick_up_store" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "introduction" VARCHAR(255),
@@ -1019,10 +1019,10 @@ CREATE TABLE "trade_delivery_pick_up_store" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_delivery_pick_up_store_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "trade_delivery_pick_up_store_tenant_id_idx" ON "trade_delivery_pick_up_store"("tenant_id");
+CREATE INDEX IF NOT EXISTS "trade_delivery_pick_up_store_tenant_id_idx" ON "trade_delivery_pick_up_store"("tenant_id");
 
 -- 交易订单
-CREATE TABLE "trade_order" (
+CREATE TABLE IF NOT EXISTS "trade_order" (
     "id" TEXT NOT NULL,
     "no" VARCHAR(255),
     "type" INTEGER,
@@ -1084,10 +1084,10 @@ CREATE TABLE "trade_order" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_order_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "trade_order_tenant_id_idx" ON "trade_order"("tenant_id");
+CREATE INDEX IF NOT EXISTS "trade_order_tenant_id_idx" ON "trade_order"("tenant_id");
 
 -- 交易订单项
-CREATE TABLE "trade_order_item" (
+CREATE TABLE IF NOT EXISTS "trade_order_item" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
     "order_id" BIGINT,
@@ -1123,10 +1123,10 @@ CREATE TABLE "trade_order_item" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_order_item_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "trade_order_item_tenant_id_idx" ON "trade_order_item"("tenant_id");
+CREATE INDEX IF NOT EXISTS "trade_order_item_tenant_id_idx" ON "trade_order_item"("tenant_id");
 
 -- 订单日志
-CREATE TABLE "trade_order_log" (
+CREATE TABLE IF NOT EXISTS "trade_order_log" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
     "user_type" INTEGER,
@@ -1143,10 +1143,10 @@ CREATE TABLE "trade_order_log" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_order_log_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "trade_order_log_tenant_id_idx" ON "trade_order_log"("tenant_id");
+CREATE INDEX IF NOT EXISTS "trade_order_log_tenant_id_idx" ON "trade_order_log"("tenant_id");
 
 -- 交易统计 DO以天为维度，统计全部的数据
-CREATE TABLE "trade_statistics" (
+CREATE TABLE IF NOT EXISTS "trade_statistics" (
     "id" TEXT NOT NULL,
     "time" TIMESTAMP(3),
     "order_create_count" INTEGER,
@@ -1168,4 +1168,4 @@ CREATE TABLE "trade_statistics" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_statistics_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "trade_statistics_tenant_id_idx" ON "trade_statistics"("tenant_id");
+CREATE INDEX IF NOT EXISTS "trade_statistics_tenant_id_idx" ON "trade_statistics"("tenant_id");

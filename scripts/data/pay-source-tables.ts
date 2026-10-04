@@ -6,12 +6,12 @@ export const PAY_TABLES: CodegenConfig[] = [
   {
     moduleName: "pay",
     className: "PayApp",
-    businessName: "支付应用 DO一个商户下，可能会有多个支付应用。例如说，京东有京东商城、京东到家等等不过一般来说，一个商户，只有一个应用哈~即 PayMerchantDO : PayAppDO = 1 : n",
+    businessName: "支付应用 DO一个商户下，可能会有多个支付应用。例如说，京东有京东商城、京东到家",
     parentMenuId: "pay-dir",
     permissionPrefix: "pay:pay_app",
     table: {
       name: "pay_app",
-      comment: "支付应用 DO一个商户下，可能会有多个支付应用。例如说，京东有京东商城、京东到家等等不过一般来说，一个商户，只有一个应用哈~即 PayMerchantDO : PayAppDO = 1 : n",
+      comment: "支付应用 DO一个商户下，可能会有多个支付应用。例如说，京东有京东商城、京东到家",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"应用编号，数据库自增","isPk":true,"nullableInferred":true},
         {"name":"app_key","type":"varchar","tsType":"string","nullable":true,"comment":"应用标识","nullableInferred":true},
@@ -33,12 +33,12 @@ export const PAY_TABLES: CodegenConfig[] = [
   {
     moduleName: "pay",
     className: "PayChannel",
-    businessName: "支付渠道 DO一个应用下，会有多种支付渠道，例如说微信支付、支付宝支付等等即 PayAppDO : PayChannelDO = 1 : n",
+    businessName: "支付渠道 DO一个应用下，会有多种支付渠道，例如说微信支付、支付宝支付等等即 P",
     parentMenuId: "pay-dir",
     permissionPrefix: "pay:pay_channel",
     table: {
       name: "pay_channel",
-      comment: "支付渠道 DO一个应用下，会有多种支付渠道，例如说微信支付、支付宝支付等等即 PayAppDO : PayChannelDO = 1 : n",
+      comment: "支付渠道 DO一个应用下，会有多种支付渠道，例如说微信支付、支付宝支付等等即 P",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"渠道编号，数据库自增","isPk":true,"nullableInferred":true},
         {"name":"code","type":"varchar","tsType":"string","nullable":true,"comment":"渠道编码","nullableInferred":true},
@@ -120,12 +120,12 @@ export const PAY_TABLES: CodegenConfig[] = [
   {
     moduleName: "pay",
     className: "PayNotifyLog",
-    businessName: "商户支付、退款等的通知 Log每次通知时，都会在该表中，记录一次 Log，方便排查问题",
+    businessName: "商户支付、退款等的通知 Log每次通知时，都会在该表中，记录一次 Log，方便排",
     parentMenuId: "pay-dir",
     permissionPrefix: "pay:pay_notify_log",
     table: {
       name: "pay_notify_log",
-      comment: "商户支付、退款等的通知 Log每次通知时，都会在该表中，记录一次 Log，方便排查问题",
+      comment: "商户支付、退款等的通知 Log每次通知时，都会在该表中，记录一次 Log，方便排",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"日志编号，自增","isPk":true,"nullableInferred":true},
         {"name":"task_id","type":"bigint","tsType":"number","nullable":true,"comment":"通知任务编号","nullableInferred":true},
@@ -144,12 +144,12 @@ export const PAY_TABLES: CodegenConfig[] = [
   {
     moduleName: "pay",
     className: "PayNotifyTask",
-    businessName: "支付通知在支付系统收到支付渠道的支付、退款的结果后，需要不断的通知到业务系统，直到成功。",
+    businessName: "支付通知在支付系统收到支付渠道的支付、退款的结果后，需要不断的通知到业务系统，直",
     parentMenuId: "pay-dir",
     permissionPrefix: "pay:pay_notify_task",
     table: {
       name: "pay_notify_task",
-      comment: "支付通知在支付系统收到支付渠道的支付、退款的结果后，需要不断的通知到业务系统，直到成功。",
+      comment: "支付通知在支付系统收到支付渠道的支付、退款的结果后，需要不断的通知到业务系统，直",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号，自增","isPk":true,"nullableInferred":true},
         {"name":"app_id","type":"bigint","tsType":"number","nullable":true,"comment":"应用编号","nullableInferred":true},
@@ -247,12 +247,12 @@ export const PAY_TABLES: CodegenConfig[] = [
   {
     moduleName: "pay",
     className: "PayRefund",
-    businessName: "支付退款单 DO一个支付订单，可以拥有多个支付退款单即 PayOrderDO : PayRefundDO = 1 : n",
+    businessName: "支付退款单 DO一个支付订单，可以拥有多个支付退款单即 PayOrderDO :",
     parentMenuId: "pay-dir",
     permissionPrefix: "pay:pay_refund",
     table: {
       name: "pay_refund",
-      comment: "支付退款单 DO一个支付订单，可以拥有多个支付退款单即 PayOrderDO : PayRefundDO = 1 : n",
+      comment: "支付退款单 DO一个支付订单，可以拥有多个支付退款单即 PayOrderDO :",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"退款单编号，数据库自增","isPk":true,"nullableInferred":true},
         {"name":"no","type":"varchar","tsType":"string","nullable":true,"comment":"外部退款号，根据规则生成","nullableInferred":true},

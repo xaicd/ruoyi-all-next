@@ -3,7 +3,7 @@
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
-INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type, status, permission, create_time, update_time)
+INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type, status, permission, created_at, updated_at)
 VALUES (
   'menu-ke-fu-message',
   'mall-dir',
@@ -21,7 +21,7 @@ VALUES (
 ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
-INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
+INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, created_at, updated_at) VALUES
 ('menu-ke-fu-message-query',  'menu-ke-fu-message', '查询客服消息', 'BUTTON', 'ACTIVE', 'mall:ke_fu_message:query',  1, NOW(), NOW()),
 ('menu-ke-fu-message-create', 'menu-ke-fu-message', '新增客服消息', 'BUTTON', 'ACTIVE', 'mall:ke_fu_message:create', 2, NOW(), NOW()),
 ('menu-ke-fu-message-update', 'menu-ke-fu-message', '修改客服消息', 'BUTTON', 'ACTIVE', 'mall:ke_fu_message:update', 3, NOW(), NOW()),
@@ -29,19 +29,19 @@ INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, cr
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)
-INSERT INTO system_role_menu (role_id, menu_id) VALUES
-('1', 'menu-ke-fu-message'),
-('1', 'menu-ke-fu-message-query'),
-('1', 'menu-ke-fu-message-create'),
-('1', 'menu-ke-fu-message-update'),
-('1', 'menu-ke-fu-message-delete')
+INSERT INTO system_role_menu (id, role_id, menu_id) VALUES
+('menu-ke-fu-message-rm',        '1', 'menu-ke-fu-message'),
+('menu-ke-fu-message-rm-query',  '1', 'menu-ke-fu-message-query'),
+('menu-ke-fu-message-rm-create', '1', 'menu-ke-fu-message-create'),
+('menu-ke-fu-message-rm-update', '1', 'menu-ke-fu-message-update'),
+('menu-ke-fu-message-rm-delete', '1', 'menu-ke-fu-message-delete')
 ON CONFLICT DO NOTHING;
 
 -- 4. 挂载系统租户套餐 (system_tenant_package_menu，实现租户开户默认立即可见)
-INSERT INTO system_tenant_package_menu (package_id, menu_id) VALUES
-('1', 'menu-ke-fu-message'),
-('1', 'menu-ke-fu-message-query'),
-('1', 'menu-ke-fu-message-create'),
-('1', 'menu-ke-fu-message-update'),
-('1', 'menu-ke-fu-message-delete')
+INSERT INTO system_tenant_package_menu (id, package_id, menu_id) VALUES
+('menu-ke-fu-message-pm',        '1', 'menu-ke-fu-message'),
+('menu-ke-fu-message-pm-query',  '1', 'menu-ke-fu-message-query'),
+('menu-ke-fu-message-pm-create', '1', 'menu-ke-fu-message-create'),
+('menu-ke-fu-message-pm-update', '1', 'menu-ke-fu-message-update'),
+('menu-ke-fu-message-pm-delete', '1', 'menu-ke-fu-message-delete')
 ON CONFLICT DO NOTHING;

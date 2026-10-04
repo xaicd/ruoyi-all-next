@@ -3,7 +3,7 @@
 -- ============================================================
 
 -- 1. 插入菜单目录/页面节点 (system_menu)
-INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type, status, permission, create_time, update_time)
+INSERT INTO system_menu (id, parent_id, name, path, component, icon, sort, type, status, permission, created_at, updated_at)
 VALUES (
   'menu-iot-data-sink',
   'iot-dir',
@@ -21,7 +21,7 @@ VALUES (
 ON CONFLICT (id) DO NOTHING;
 
 -- 2. 插入 4 大动词按钮权限
-INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, create_time, update_time) VALUES
+INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, created_at, updated_at) VALUES
 ('menu-iot-data-sink-query',  'menu-iot-data-sink', '查询IoT 数据流转目的', 'BUTTON', 'ACTIVE', 'iot:iot_data_sink:query',  1, NOW(), NOW()),
 ('menu-iot-data-sink-create', 'menu-iot-data-sink', '新增IoT 数据流转目的', 'BUTTON', 'ACTIVE', 'iot:iot_data_sink:create', 2, NOW(), NOW()),
 ('menu-iot-data-sink-update', 'menu-iot-data-sink', '修改IoT 数据流转目的', 'BUTTON', 'ACTIVE', 'iot:iot_data_sink:update', 3, NOW(), NOW()),
@@ -29,19 +29,19 @@ INSERT INTO system_menu (id, parent_id, name, type, status, permission, sort, cr
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. 关联管理员角色 (system_role_menu)
-INSERT INTO system_role_menu (role_id, menu_id) VALUES
-('1', 'menu-iot-data-sink'),
-('1', 'menu-iot-data-sink-query'),
-('1', 'menu-iot-data-sink-create'),
-('1', 'menu-iot-data-sink-update'),
-('1', 'menu-iot-data-sink-delete')
+INSERT INTO system_role_menu (id, role_id, menu_id) VALUES
+('menu-iot-data-sink-rm',        '1', 'menu-iot-data-sink'),
+('menu-iot-data-sink-rm-query',  '1', 'menu-iot-data-sink-query'),
+('menu-iot-data-sink-rm-create', '1', 'menu-iot-data-sink-create'),
+('menu-iot-data-sink-rm-update', '1', 'menu-iot-data-sink-update'),
+('menu-iot-data-sink-rm-delete', '1', 'menu-iot-data-sink-delete')
 ON CONFLICT DO NOTHING;
 
 -- 4. 挂载系统租户套餐 (system_tenant_package_menu，实现租户开户默认立即可见)
-INSERT INTO system_tenant_package_menu (package_id, menu_id) VALUES
-('1', 'menu-iot-data-sink'),
-('1', 'menu-iot-data-sink-query'),
-('1', 'menu-iot-data-sink-create'),
-('1', 'menu-iot-data-sink-update'),
-('1', 'menu-iot-data-sink-delete')
+INSERT INTO system_tenant_package_menu (id, package_id, menu_id) VALUES
+('menu-iot-data-sink-pm',        '1', 'menu-iot-data-sink'),
+('menu-iot-data-sink-pm-query',  '1', 'menu-iot-data-sink-query'),
+('menu-iot-data-sink-pm-create', '1', 'menu-iot-data-sink-create'),
+('menu-iot-data-sink-pm-update', '1', 'menu-iot-data-sink-update'),
+('menu-iot-data-sink-pm-delete', '1', 'menu-iot-data-sink-delete')
 ON CONFLICT DO NOTHING;

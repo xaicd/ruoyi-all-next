@@ -3,7 +3,7 @@
 -- 背景: 这些表的定义来自低代码 CodegenConfig；此前只生成代码、不生成建表 SQL，
 --       导致"仓储在查但无处创建"。本迁移补齐 DDL。
 -- CRM 商机
-CREATE TABLE "crm_business" (
+CREATE TABLE IF NOT EXISTS "crm_business" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "customer_id" BIGINT,
@@ -28,10 +28,10 @@ CREATE TABLE "crm_business" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_business_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "crm_business_tenant_id_idx" ON "crm_business"("tenant_id");
+CREATE INDEX IF NOT EXISTS "crm_business_tenant_id_idx" ON "crm_business"("tenant_id");
 
 -- CRM 商机产品关联表 DOCrmBusinessDO : CrmBusinessProductDO = 1 : N
-CREATE TABLE "crm_business_product" (
+CREATE TABLE IF NOT EXISTS "crm_business_product" (
     "id" TEXT NOT NULL,
     "business_id" BIGINT,
     "product_id" BIGINT,
@@ -47,10 +47,10 @@ CREATE TABLE "crm_business_product" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_business_product_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "crm_business_product_tenant_id_idx" ON "crm_business_product"("tenant_id");
+CREATE INDEX IF NOT EXISTS "crm_business_product_tenant_id_idx" ON "crm_business_product"("tenant_id");
 
 -- CRM 商机状态 DO注意，它是个配置表
-CREATE TABLE "crm_business_status" (
+CREATE TABLE IF NOT EXISTS "crm_business_status" (
     "id" TEXT NOT NULL,
     "type_id" BIGINT,
     "name" VARCHAR(255),
@@ -64,10 +64,10 @@ CREATE TABLE "crm_business_status" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_business_status_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "crm_business_status_tenant_id_idx" ON "crm_business_status"("tenant_id");
+CREATE INDEX IF NOT EXISTS "crm_business_status_tenant_id_idx" ON "crm_business_status"("tenant_id");
 
 -- CRM 商机状态组 DO注意，它是个配置表
-CREATE TABLE "crm_business_status_type" (
+CREATE TABLE IF NOT EXISTS "crm_business_status_type" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "dept_ids" TEXT,
@@ -79,10 +79,10 @@ CREATE TABLE "crm_business_status_type" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_business_status_type_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "crm_business_status_type_tenant_id_idx" ON "crm_business_status_type"("tenant_id");
+CREATE INDEX IF NOT EXISTS "crm_business_status_type_tenant_id_idx" ON "crm_business_status_type"("tenant_id");
 
 -- CRM 线索
-CREATE TABLE "crm_clue" (
+CREATE TABLE IF NOT EXISTS "crm_clue" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "follow_up_status" BOOLEAN,
@@ -111,10 +111,10 @@ CREATE TABLE "crm_clue" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_clue_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "crm_clue_tenant_id_idx" ON "crm_clue"("tenant_id");
+CREATE INDEX IF NOT EXISTS "crm_clue_tenant_id_idx" ON "crm_clue"("tenant_id");
 
 -- CRM 联系人
-CREATE TABLE "crm_contact" (
+CREATE TABLE IF NOT EXISTS "crm_contact" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "customer_id" BIGINT,
@@ -142,10 +142,10 @@ CREATE TABLE "crm_contact" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_contact_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "crm_contact_tenant_id_idx" ON "crm_contact"("tenant_id");
+CREATE INDEX IF NOT EXISTS "crm_contact_tenant_id_idx" ON "crm_contact"("tenant_id");
 
 -- CRM 联系人与商机的关联
-CREATE TABLE "crm_contact_business" (
+CREATE TABLE IF NOT EXISTS "crm_contact_business" (
     "id" TEXT NOT NULL,
     "contact_id" BIGINT,
     "business_id" BIGINT,
@@ -157,10 +157,10 @@ CREATE TABLE "crm_contact_business" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_contact_business_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "crm_contact_business_tenant_id_idx" ON "crm_contact_business"("tenant_id");
+CREATE INDEX IF NOT EXISTS "crm_contact_business_tenant_id_idx" ON "crm_contact_business"("tenant_id");
 
 -- CRM 合同
-CREATE TABLE "crm_contract" (
+CREATE TABLE IF NOT EXISTS "crm_contract" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "no" VARCHAR(255),
@@ -187,10 +187,10 @@ CREATE TABLE "crm_contract" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_contract_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "crm_contract_tenant_id_idx" ON "crm_contract"("tenant_id");
+CREATE INDEX IF NOT EXISTS "crm_contract_tenant_id_idx" ON "crm_contract"("tenant_id");
 
 -- 编号
-CREATE TABLE "crm_contract_config" (
+CREATE TABLE IF NOT EXISTS "crm_contract_config" (
     "id" TEXT NOT NULL,
     "notify_enabled" BOOLEAN,
     "notify_days" INTEGER,
@@ -202,10 +202,10 @@ CREATE TABLE "crm_contract_config" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_contract_config_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "crm_contract_config_tenant_id_idx" ON "crm_contract_config"("tenant_id");
+CREATE INDEX IF NOT EXISTS "crm_contract_config_tenant_id_idx" ON "crm_contract_config"("tenant_id");
 
 -- CRM 合同产品关联表
-CREATE TABLE "crm_contract_product" (
+CREATE TABLE IF NOT EXISTS "crm_contract_product" (
     "id" TEXT NOT NULL,
     "contract_id" BIGINT,
     "product_id" BIGINT,
@@ -221,10 +221,10 @@ CREATE TABLE "crm_contract_product" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_contract_product_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "crm_contract_product_tenant_id_idx" ON "crm_contract_product"("tenant_id");
+CREATE INDEX IF NOT EXISTS "crm_contract_product_tenant_id_idx" ON "crm_contract_product"("tenant_id");
 
 -- CRM 客户
-CREATE TABLE "crm_customer" (
+CREATE TABLE IF NOT EXISTS "crm_customer" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "follow_up_status" BOOLEAN,
@@ -254,10 +254,10 @@ CREATE TABLE "crm_customer" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_customer_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "crm_customer_tenant_id_idx" ON "crm_customer"("tenant_id");
+CREATE INDEX IF NOT EXISTS "crm_customer_tenant_id_idx" ON "crm_customer"("tenant_id");
 
 -- 客户限制配置
-CREATE TABLE "crm_customer_limit_config" (
+CREATE TABLE IF NOT EXISTS "crm_customer_limit_config" (
     "id" TEXT NOT NULL,
     "type" INTEGER,
     "user_ids" TEXT,
@@ -272,10 +272,10 @@ CREATE TABLE "crm_customer_limit_config" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_customer_limit_config_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "crm_customer_limit_config_tenant_id_idx" ON "crm_customer_limit_config"("tenant_id");
+CREATE INDEX IF NOT EXISTS "crm_customer_limit_config_tenant_id_idx" ON "crm_customer_limit_config"("tenant_id");
 
 -- 客户公海配置
-CREATE TABLE "crm_customer_pool_config" (
+CREATE TABLE IF NOT EXISTS "crm_customer_pool_config" (
     "id" TEXT NOT NULL,
     "enabled" BOOLEAN,
     "contact_expire_days" INTEGER,
@@ -290,10 +290,10 @@ CREATE TABLE "crm_customer_pool_config" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_customer_pool_config_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "crm_customer_pool_config_tenant_id_idx" ON "crm_customer_pool_config"("tenant_id");
+CREATE INDEX IF NOT EXISTS "crm_customer_pool_config_tenant_id_idx" ON "crm_customer_pool_config"("tenant_id");
 
 -- 跟进记录 DO用于记录客户、联系人的每一次跟进
-CREATE TABLE "crm_follow_up_record" (
+CREATE TABLE IF NOT EXISTS "crm_follow_up_record" (
     "id" TEXT NOT NULL,
     "biz_type" INTEGER,
     "biz_id" BIGINT,
@@ -312,10 +312,10 @@ CREATE TABLE "crm_follow_up_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_follow_up_record_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "crm_follow_up_record_tenant_id_idx" ON "crm_follow_up_record"("tenant_id");
+CREATE INDEX IF NOT EXISTS "crm_follow_up_record_tenant_id_idx" ON "crm_follow_up_record"("tenant_id");
 
 -- CRM 负责人变更记录
-CREATE TABLE "crm_owner_record" (
+CREATE TABLE IF NOT EXISTS "crm_owner_record" (
     "id" TEXT NOT NULL,
     "biz_type" INTEGER,
     "biz_id" BIGINT,
@@ -329,10 +329,10 @@ CREATE TABLE "crm_owner_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_owner_record_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "crm_owner_record_tenant_id_idx" ON "crm_owner_record"("tenant_id");
+CREATE INDEX IF NOT EXISTS "crm_owner_record_tenant_id_idx" ON "crm_owner_record"("tenant_id");
 
 -- CRM 业绩目标
-CREATE TABLE "crm_performance_config" (
+CREATE TABLE IF NOT EXISTS "crm_performance_config" (
     "id" TEXT NOT NULL,
     "biz_type" INTEGER,
     "object_id" BIGINT,
@@ -359,10 +359,10 @@ CREATE TABLE "crm_performance_config" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_performance_config_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "crm_performance_config_tenant_id_idx" ON "crm_performance_config"("tenant_id");
+CREATE INDEX IF NOT EXISTS "crm_performance_config_tenant_id_idx" ON "crm_performance_config"("tenant_id");
 
 -- CRM 数据权限
-CREATE TABLE "crm_permission" (
+CREATE TABLE IF NOT EXISTS "crm_permission" (
     "id" TEXT NOT NULL,
     "biz_type" INTEGER,
     "biz_id" BIGINT,
@@ -376,10 +376,10 @@ CREATE TABLE "crm_permission" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_permission_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "crm_permission_tenant_id_idx" ON "crm_permission"("tenant_id");
+CREATE INDEX IF NOT EXISTS "crm_permission_tenant_id_idx" ON "crm_permission"("tenant_id");
 
 -- CRM 产品
-CREATE TABLE "crm_product" (
+CREATE TABLE IF NOT EXISTS "crm_product" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "no" VARCHAR(255),
@@ -397,10 +397,10 @@ CREATE TABLE "crm_product" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_product_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "crm_product_tenant_id_idx" ON "crm_product"("tenant_id");
+CREATE INDEX IF NOT EXISTS "crm_product_tenant_id_idx" ON "crm_product"("tenant_id");
 
 -- 产品分类
-CREATE TABLE "crm_product_category" (
+CREATE TABLE IF NOT EXISTS "crm_product_category" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "parent_id" BIGINT,
@@ -412,10 +412,10 @@ CREATE TABLE "crm_product_category" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_product_category_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "crm_product_category_tenant_id_idx" ON "crm_product_category"("tenant_id");
+CREATE INDEX IF NOT EXISTS "crm_product_category_tenant_id_idx" ON "crm_product_category"("tenant_id");
 
 -- 回款
-CREATE TABLE "crm_receivable" (
+CREATE TABLE IF NOT EXISTS "crm_receivable" (
     "id" TEXT NOT NULL,
     "no" VARCHAR(255),
     "plan_id" BIGINT,
@@ -436,10 +436,10 @@ CREATE TABLE "crm_receivable" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_receivable_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "crm_receivable_tenant_id_idx" ON "crm_receivable"("tenant_id");
+CREATE INDEX IF NOT EXISTS "crm_receivable_tenant_id_idx" ON "crm_receivable"("tenant_id");
 
 -- CRM 回款计划
-CREATE TABLE "crm_receivable_plan" (
+CREATE TABLE IF NOT EXISTS "crm_receivable_plan" (
     "id" TEXT NOT NULL,
     "period" INTEGER,
     "customer_id" BIGINT,
@@ -460,4 +460,4 @@ CREATE TABLE "crm_receivable_plan" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_receivable_plan_pkey" PRIMARY KEY ("id")
 );
-CREATE INDEX "crm_receivable_plan_tenant_id_idx" ON "crm_receivable_plan"("tenant_id");
+CREATE INDEX IF NOT EXISTS "crm_receivable_plan_tenant_id_idx" ON "crm_receivable_plan"("tenant_id");

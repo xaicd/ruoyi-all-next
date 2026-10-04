@@ -41,12 +41,12 @@ export const CRM_TABLES: CodegenConfig[] = [
   {
     moduleName: "crm",
     className: "CrmBusinessProduct",
-    businessName: "CRM 商机产品关联表 DOCrmBusinessDO : CrmBusinessProductDO = 1 : N",
+    businessName: "CRM 商机产品关联表 DOCrmBusinessDO : CrmBusines",
     parentMenuId: "crm-dir",
     permissionPrefix: "crm:crm_business_product",
     table: {
       name: "crm_business_product",
-      comment: "CRM 商机产品关联表 DOCrmBusinessDO : CrmBusinessProductDO = 1 : N",
+      comment: "CRM 商机产品关联表 DOCrmBusinessDO : CrmBusines",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"主键","isPk":true,"nullableInferred":true},
         {"name":"business_id","type":"bigint","tsType":"number","nullable":true,"comment":"商机编号","nullableInferred":true},
