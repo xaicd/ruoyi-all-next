@@ -812,7 +812,17 @@ function main() {
 
     const catalog = JSON.parse(fs.readFileSync(path.join(SOURCE_ROOT, CATALOG_REL), "utf8"))
     const plan = resolveHatchPlan(catalog, parsed)
-    const targetArg = parsed.target || "D:/workspace/cw/agent-zqall"
+    // **必须显式给目标路径**。这里原先有个硬编码默认值（一个 Windows 路径）——
+    // 不带参数运行就会往那个路径孵化。实测: 误执行该 CLI 时在仓库里造出几千个
+    // 嵌套目录，因为相对路径解析到了仓库根，等于往自己家里写垃圾。
+    // 没有显式目标就报用法退出 —— 不要有「默认往哪写」这种事。
+    if (!parsed.target) {
+      console.error("[REACTOR] 缺少目标路径。用法:")
+      console.error("  node scripts/clone-project-base.cjs <目标路径> [--profile base|minimal|standard] [--bundle a,b]")
+      process.exitCode = 2
+      return Promise.resolve()
+    }
+    const targetArg = parsed.target
     return runProjectReactor(targetArg, plan, catalog, { dryRun: parsed.dryRun })
   } catch (err) {
     console.error("[REACTOR ERROR]", err.message || err)
