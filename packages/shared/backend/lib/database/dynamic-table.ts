@@ -163,12 +163,18 @@ export async function mutateColumnAtomic(
   const db = await getKyselyDb()
   const table = sqlTable(tableName)
   const columnRef = sqlColumn(column)
-  const statement =
-    delta > 0
-      ? sql`update ${table} set ${columnRef} = ${columnRef} + ${sqlValue(delta)} where ${where}`
-      : sql`update ${table} set ${columnRef} = ${columnRef} - ${sqlValue(Math.abs(delta))} where ${where}`
-  const result = await statement.execute(db)
-  return Number(result.numAffectedRows ?? 0)
+  const deltaSql = delta > 0 ? sql`+ ${sqlValue(delta)}` : sql`- ${sqlValue(Math.abs(delta))}`
+  if (getProtocolFamily() === "mysql") {
+    // MySQL 没有 returning，只能读影响行数
+    const result = await sql`update ${table} set ${columnRef} = ${columnRef} ${deltaSql} where ${where}`.execute(db)
+    return Number(result.numAffectedRows ?? 0)
+  }
+  // PostgreSQL: 用 returning + 行数。
+  // **不能读 numAffectedRows** —— 那是 MySQL 的字段，PG 路径下是 undefined，
+  // 会让本函数**永远返回 0**（= 每次都误判为"库存不足"）。这个坑是真实库用例抓到的，
+  // 内存回退与类型检查都不会暴露。同文件的 updateDynamicRow 用的就是这个写法。
+  const result = await sql<{ id: string }>`update ${table} set ${columnRef} = ${columnRef} ${deltaSql} where ${where} returning id`.execute(db)
+  return result.rows.length
 }
 
 export async function updateDynamicRow(tableName: string, values: Record<string, unknown>, where: RawBuilder<unknown>): Promise<Record<string, unknown> | null> {

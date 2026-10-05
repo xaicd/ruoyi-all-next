@@ -60,7 +60,16 @@ export function getDataSourceConfig(): DataSourceConfig {
   const envDriver = process.env.DB_DRIVER as DatabaseDriver | undefined
   const envUrl = process.env.DATABASE_URL ?? ""
   const driver: DatabaseDriver = envDriver ?? (envUrl ? detectDriverFromUrl(envUrl) : "memory")
-  const protocolFamily = DRIVER_PROTOCOL_MAP[driver] ?? "sqlite"
+  // 未知驱动**必须报错**，不能静默降级。
+  // 原先这里是 `?? "sqlite"` —— 于是 `DB_DRIVER=postgres`（少个 ql）会被当成 sqlite，
+  // 一切"照常工作"，只是行为完全不同（真正的静默失效）。实测: 协议族被识别成 sqlite，
+  // 依赖影响行数的原子更新**永远返回 0**，表现为"库存永远不足"。
+  if (!(driver in DRIVER_PROTOCOL_MAP)) {
+    throw new Error(
+      `未知的数据库驱动 DB_DRIVER=${driver}；合法值: ${Object.keys(DRIVER_PROTOCOL_MAP).join(", ")}（注意是 postgresql 不是 postgres）`,
+    )
+  }
+  const protocolFamily = DRIVER_PROTOCOL_MAP[driver]
   const tier = DRIVER_TIER_MAP[driver] ?? "A"
   const poolSize = Number(process.env.DB_POOL_SIZE ?? 10)
 
