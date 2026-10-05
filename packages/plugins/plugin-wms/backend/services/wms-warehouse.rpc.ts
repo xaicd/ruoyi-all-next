@@ -14,22 +14,22 @@ export class WmsWarehouseRpc {
       return WmsWarehouseService.page(query, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsWarehouse.get", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsWarehouse.get", async (req) => {
       const { id } = req.data as { id: string }
       return WmsWarehouseService.get(id, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsWarehouse.create", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsWarehouse.create", async (req) => {
       const data = req.data as WmsWarehouseCreateDTO
       return WmsWarehouseService.create(data, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsWarehouse.update", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsWarehouse.update", async (req) => {
       const { id, ...rest } = req.data as WmsWarehouseUpdateDTO
       return WmsWarehouseService.update(id, rest as any, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsWarehouse.delete", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsWarehouse.delete", async (req) => {
       const { id } = req.data as { id: string }
       return WmsWarehouseService.delete(id, req.actorId, req.tenantId)
     })

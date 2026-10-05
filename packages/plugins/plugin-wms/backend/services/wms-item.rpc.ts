@@ -14,22 +14,22 @@ export class WmsItemRpc {
       return WmsItemService.page(query, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsItem.get", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsItem.get", async (req) => {
       const { id } = req.data as { id: string }
       return WmsItemService.get(id, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsItem.create", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsItem.create", async (req) => {
       const data = req.data as WmsItemCreateDTO
       return WmsItemService.create(data, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsItem.update", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsItem.update", async (req) => {
       const { id, ...rest } = req.data as WmsItemUpdateDTO
       return WmsItemService.update(id, rest as any, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsItem.delete", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsItem.delete", async (req) => {
       const { id } = req.data as { id: string }
       return WmsItemService.delete(id, req.actorId, req.tenantId)
     })

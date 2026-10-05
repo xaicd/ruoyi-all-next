@@ -14,22 +14,22 @@ export class WmsReceiptOrderRpc {
       return WmsReceiptOrderService.page(query, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsReceiptOrder.get", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsReceiptOrder.get", async (req) => {
       const { id } = req.data as { id: string }
       return WmsReceiptOrderService.get(id, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsReceiptOrder.create", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsReceiptOrder.create", async (req) => {
       const data = req.data as WmsReceiptOrderCreateDTO
       return WmsReceiptOrderService.create(data, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsReceiptOrder.update", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsReceiptOrder.update", async (req) => {
       const { id, ...rest } = req.data as WmsReceiptOrderUpdateDTO
       return WmsReceiptOrderService.update(id, rest as any, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsReceiptOrder.delete", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsReceiptOrder.delete", async (req) => {
       const { id } = req.data as { id: string }
       return WmsReceiptOrderService.delete(id, req.actorId, req.tenantId)
     })

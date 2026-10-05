@@ -14,22 +14,22 @@ export class WmsItemCategoryRpc {
       return WmsItemCategoryService.page(query, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsItemCategory.get", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsItemCategory.get", async (req) => {
       const { id } = req.data as { id: string }
       return WmsItemCategoryService.get(id, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsItemCategory.create", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsItemCategory.create", async (req) => {
       const data = req.data as WmsItemCategoryCreateDTO
       return WmsItemCategoryService.create(data, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsItemCategory.update", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsItemCategory.update", async (req) => {
       const { id, ...rest } = req.data as WmsItemCategoryUpdateDTO
       return WmsItemCategoryService.update(id, rest as any, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsItemCategory.delete", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsItemCategory.delete", async (req) => {
       const { id } = req.data as { id: string }
       return WmsItemCategoryService.delete(id, req.actorId, req.tenantId)
     })

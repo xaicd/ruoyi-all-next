@@ -14,22 +14,22 @@ export class WmsItemSkuRpc {
       return WmsItemSkuService.page(query, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsItemSku.get", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsItemSku.get", async (req) => {
       const { id } = req.data as { id: string }
       return WmsItemSkuService.get(id, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsItemSku.create", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsItemSku.create", async (req) => {
       const data = req.data as WmsItemSkuCreateDTO
       return WmsItemSkuService.create(data, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsItemSku.update", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsItemSku.update", async (req) => {
       const { id, ...rest } = req.data as WmsItemSkuUpdateDTO
       return WmsItemSkuService.update(id, rest as any, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsItemSku.delete", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsItemSku.delete", async (req) => {
       const { id } = req.data as { id: string }
       return WmsItemSkuService.delete(id, req.actorId, req.tenantId)
     })

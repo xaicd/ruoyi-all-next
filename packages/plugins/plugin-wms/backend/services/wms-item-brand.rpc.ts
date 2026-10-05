@@ -14,22 +14,22 @@ export class WmsItemBrandRpc {
       return WmsItemBrandService.page(query, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsItemBrand.get", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsItemBrand.get", async (req) => {
       const { id } = req.data as { id: string }
       return WmsItemBrandService.get(id, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsItemBrand.create", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsItemBrand.create", async (req) => {
       const data = req.data as WmsItemBrandCreateDTO
       return WmsItemBrandService.create(data, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsItemBrand.update", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsItemBrand.update", async (req) => {
       const { id, ...rest } = req.data as WmsItemBrandUpdateDTO
       return WmsItemBrandService.update(id, rest as any, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsItemBrand.delete", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsItemBrand.delete", async (req) => {
       const { id } = req.data as { id: string }
       return WmsItemBrandService.delete(id, req.actorId, req.tenantId)
     })

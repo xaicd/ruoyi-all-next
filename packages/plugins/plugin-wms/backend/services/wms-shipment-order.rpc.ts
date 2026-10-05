@@ -14,22 +14,22 @@ export class WmsShipmentOrderRpc {
       return WmsShipmentOrderService.page(query, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsShipmentOrder.get", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsShipmentOrder.get", async (req) => {
       const { id } = req.data as { id: string }
       return WmsShipmentOrderService.get(id, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsShipmentOrder.create", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsShipmentOrder.create", async (req) => {
       const data = req.data as WmsShipmentOrderCreateDTO
       return WmsShipmentOrderService.create(data, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsShipmentOrder.update", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsShipmentOrder.update", async (req) => {
       const { id, ...rest } = req.data as WmsShipmentOrderUpdateDTO
       return WmsShipmentOrderService.update(id, rest as any, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsShipmentOrder.delete", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsShipmentOrder.delete", async (req) => {
       const { id } = req.data as { id: string }
       return WmsShipmentOrderService.delete(id, req.actorId, req.tenantId)
     })

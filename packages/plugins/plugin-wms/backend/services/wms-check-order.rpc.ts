@@ -14,22 +14,22 @@ export class WmsCheckOrderRpc {
       return WmsCheckOrderService.page(query, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsCheckOrder.get", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsCheckOrder.get", async (req) => {
       const { id } = req.data as { id: string }
       return WmsCheckOrderService.get(id, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsCheckOrder.create", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsCheckOrder.create", async (req) => {
       const data = req.data as WmsCheckOrderCreateDTO
       return WmsCheckOrderService.create(data, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsCheckOrder.update", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsCheckOrder.update", async (req) => {
       const { id, ...rest } = req.data as WmsCheckOrderUpdateDTO
       return WmsCheckOrderService.update(id, rest as any, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsCheckOrder.delete", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsCheckOrder.delete", async (req) => {
       const { id } = req.data as { id: string }
       return WmsCheckOrderService.delete(id, req.actorId, req.tenantId)
     })

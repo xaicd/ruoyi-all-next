@@ -14,22 +14,22 @@ export class WmsInventoryRpc {
       return WmsInventoryService.page(query, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsInventory.get", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsInventory.get", async (req) => {
       const { id } = req.data as { id: string }
       return WmsInventoryService.get(id, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsInventory.create", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsInventory.create", async (req) => {
       const data = req.data as WmsInventoryCreateDTO
       return WmsInventoryService.create(data, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsInventory.update", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsInventory.update", async (req) => {
       const { id, ...rest } = req.data as WmsInventoryUpdateDTO
       return WmsInventoryService.update(id, rest as any, req.actorId, req.tenantId)
     })
 
-    bus.registerHandler("ruoyi.cmd.wms.wmsInventory.delete", async (req) => {
+    serviceBus.registerHandler("ruoyi.cmd.wms.wmsInventory.delete", async (req) => {
       const { id } = req.data as { id: string }
       return WmsInventoryService.delete(id, req.actorId, req.tenantId)
     })
