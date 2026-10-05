@@ -5,6 +5,13 @@
  * 保留 trace / 计时 / 租户上下文 / 统一错误处理 / 访问日志。
  */
 
+import {
+  checkRouteIdempotency,
+  checkRouteRateLimit,
+  isMutationMethod,
+  toProtectionResponse,
+  type RouteRateLimitRule,
+} from "./route-protection"
 import type { AuthContext } from "../auth/context"
 import { requireAppAuth, optionalAppAuth } from "../auth/guards"
 import { toTenantContext } from "../auth/tenant"
@@ -17,6 +24,13 @@ import { traceContext } from "../lib/trace-context"
 export type AppRouteOptions = {
   /** true = 允许游客（optionalAppAuth，无 token 也放行为 GUEST）；默认 false = 必须登录 */
   optional?: boolean
+  /**
+   * 声明式限流（对齐 yudao-cloud 的 `@RateLimiter`）。**默认关闭**。
+   * C 端接口最容易被打，限流在这里尤其要紧。
+   */
+  rateLimit?: RouteRateLimitRule
+  /** 声明式幂等（对齐 `@Idempotent`）—— 仅对写操作生效，依赖 `Idempotency-Key` 头。默认关闭。 */
+  idempotent?: boolean
 }
 
 type AppRouteHandler<TArgs extends unknown[]> = (
@@ -44,7 +58,21 @@ export function withAppRoute<TArgs extends unknown[]>(
         const auth = options.optional ? optionalAppAuth(request) : requireAppAuth(request)
         userId = auth.userId
         tenantId = auth.tenantId
-        response = await runWithTenantContext(toTenantContext(auth), () => handler(request, auth, ...args))
+        // ---- 声明式防护（默认关闭；由路由显式声明）----
+        const rateDecision = options.rateLimit
+          ? checkRouteRateLimit(request, { userId: auth.userId }, path, options.rateLimit)
+          : { allowed: true as const }
+        if (!rateDecision.allowed) {
+          response = toProtectionResponse(rateDecision)
+        } else {
+          const idempotencyDecision =
+            options.idempotent && isMutationMethod(request.method)
+              ? checkRouteIdempotency(request, path)
+              : { allowed: true as const }
+          response = idempotencyDecision.allowed
+            ? await runWithTenantContext(toTenantContext(auth), () => handler(request, auth, ...args))
+            : toProtectionResponse(idempotencyDecision)
+        }
       } catch (error) {
         response = handleApiError(error, { request, operation: trace.operationName })
       }
