@@ -1,5 +1,14 @@
 /**
- * 库存不变量（wms 是库存的归属域；erp/mes 需要扣减时应经 Facade 调本域，不得各自实现）。
+ * 库存不变量（**存储层原语**，不是某个域的业务逻辑）。
+ *
+ * 为什么住 shared 而不是 wms 域内:
+ *   「先查再判断再写」在并发下会双双通过检查（超卖），唯一正确的做法是把条件写进
+ *   **同一条 UPDATE** 并看影响行数。这是**存储层原语**，与 `base-mapper` / `dynamic-table`
+ *   同类 —— 所以放 shared 不违反 AGENTS §17.1（那条禁的是"往 shared 堆业务逻辑"）。
+ *
+ *   各域（wms / erp / mes）**各自持有自己的库存表与策略**（允许不允许负库存、
+ *   用哪个列、预占怎么表达），共用这里的判定与执行契约。这样既不强制统一数据模型
+ *   （源框架里 erp 与 wms 本就是两套），也不必跨域 import。
  *
  * 从源框架 `ErpStockServiceImpl.updateStockCountIncrement` 忠实移植，并按本仓模型扩展:
  * 本仓的 `wms_inventory` 比源的单一 `count` 多一层**预占**（`locked_qty`），

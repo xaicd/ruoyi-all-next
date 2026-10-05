@@ -31,7 +31,7 @@ import {
   type StockMutationKind,
   type StockMutationPlan,
   type StockMutationOptions,
-} from "./inventory-invariant"
+} from "@/modules/shared/backend/lib/inventory-invariant"
 import { WmsInventoryRepository } from "../repositories/wms-inventory.repository"
 import { wmsStockOpSchema } from "../validators/inventory-op.validator"
 

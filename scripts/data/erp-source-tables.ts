@@ -678,7 +678,7 @@ export const ERP_TABLES: CodegenConfig[] = [
       comment: "ERP 产品库存",
       columns: [
         {"name":"id","type":"bigint","tsType":"number","nullable":false,"comment":"编号","isPk":true,"nullableInferred":true},
-        {"name":"product_id","type":"bigint","tsType":"number","nullable":true,"comment":"产品编号","nullableInferred":true},
+        {"name":"product_id","queryType":"EQ","type":"bigint","tsType":"number","nullable":true,"comment":"产品编号","nullableInferred":true},
         {"name":"warehouse_id","type":"bigint","tsType":"number","nullable":true,"comment":"仓库编号","nullableInferred":true},
         {"name":"count","type":"decimal","tsType":"number","nullable":true,"comment":"库存数量","precision":18,"scale":2,"nullableInferred":true},
         {"name":"tenant_id","type":"varchar","tsType":"string","nullable":false,"comment":"租户ID","nullableInferred":false},

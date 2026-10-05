@@ -3,7 +3,7 @@ import {
   availableQty, planDeduct, planReplenish, planLock, planRelease,
   executePlan, InsufficientStockError,
   type InventoryRow, type StockMutationPlan, type StockMutationExecutor,
-} from "../inventory-invariant"
+} from "@/modules/shared/backend/lib/inventory-invariant"
 
 const row = (qty: number, lockedQty = 0): InventoryRow => ({ id: "inv1", qty, lockedQty })
 
