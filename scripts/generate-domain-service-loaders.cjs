@@ -42,17 +42,42 @@ function render() {
   const catalog = JSON.parse(fs.readFileSync(CATALOG, "utf8"))
   const domains = Object.keys(catalog.domains ?? {}).sort()
 
+  /** 域对应的真实目录（plugins/plugin-<域> 或 domains/<域>）。 */
+  function servicesDir(domain) {
+    for (const [root, name] of [["packages/plugins", `plugin-${domain}`], ["packages/domains", domain]]) {
+      const dir = path.join(ROOT, root, name, "backend", "services")
+      if (fs.existsSync(dir)) return dir
+    }
+    return null
+  }
+
   const lines = []
+  const missing = []
   for (const domain of domains) {
-    const modules = new Set(["index"])
+    const dir = servicesDir(domain)
+    const referenced = new Set()
     for (const action of catalog.domains[domain].actions ?? []) {
-      if (typeof action.module === "string" && action.module) modules.add(action.module)
+      if (typeof action.module === "string" && action.module) referenced.add(action.module)
+    }
+    // `index` 是**可选**的 barrel —— 有的域没有它（codegen 不产出），
+    // 无条件生成会让 build 直接炸（`Can't resolve '@/modules/<域>/backend/services/index'`，实测）。
+    // 但 catalog **显式引用**的模块若不存在，那是真的配置错误 -> 报错，不静默跳过。
+    const modules = new Set()
+    if (dir && fs.existsSync(path.join(dir, "index.ts"))) modules.add("index")
+    for (const moduleName of referenced) {
+      if (dir && fs.existsSync(path.join(dir, `${moduleName}.ts`))) modules.add(moduleName)
+      else missing.push(`${domain} -> ${moduleName}`)
     }
     lines.push(`  ${JSON.stringify(domain)}: {`)
     for (const moduleName of [...modules].sort()) {
       lines.push(`    ${JSON.stringify(moduleName)}: () => import("@/modules/${domain}/backend/services/${moduleName}"),`)
     }
     lines.push("  },")
+  }
+  if (missing.length > 0) {
+    console.error(`[domain-loaders] FAIL: catalog 引用了不存在的服务模块（跨域调用会在运行时失败）:`)
+    for (const item of missing) console.error(`  · ${item}`)
+    process.exit(1)
   }
 
   return `/**

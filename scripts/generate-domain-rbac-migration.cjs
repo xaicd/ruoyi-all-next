@@ -25,9 +25,15 @@ const SLUG = "domain_rbac_menus"
 const write = process.argv.includes("--write")
 
 /**
- * 迁移名: 首次生成时取当前时间戳（保证排在建表迁移**之后**），
- * 之后**复用同一个目录** —— 这样既顺序正确，重跑又不会每次生出一个新迁移。
- * （固定写死一个早起时间戳会让它在建表之前执行而失败。）
+ * 输出路径: **内容变了就产出一个新的带时间戳迁移**，内容没变就复用最近那个。
+ *
+ * 早先这里是"固定名 + 原地重写"，为的是输出确定性 —— 但那个设计有个硬伤（实测踩到）:
+ * 迁移**一旦被应用过**，再改它的内容 Prisma 不会重跑（它认为已完成），
+ * 表现是"新加了域，菜单迁移里也有它，但库里就是没有菜单"。
+ *
+ * 现在的规则与 Prisma 自身的模型一致:
+ *   * 与"最近一个"聚合迁移内容相同 -> 复用（不产生新文件，输出仍然确定）
+ *   * 内容不同 -> 新建 `<时间戳>_domain_rbac_menus`（会被正常应用）
  */
 function resolveOutput() {
   const base = path.join(ROOT, MIGRATION_DIR)
@@ -165,10 +171,16 @@ function main() {
     console.log(`\n  (dry-run: 未写入。加 --write 写入 prisma/migrations/${MIGRATION_NAME}/migration.sql)`)
     return
   }
-  fs.mkdirSync(path.dirname(OUT), { recursive: true })
   const previous = fs.existsSync(OUT) ? fs.readFileSync(OUT, "utf8") : null
-  fs.writeFileSync(OUT, content)
-  console.log(`  ✓ ${previous === content ? "无变化" : "已更新"} ${path.relative(ROOT, OUT)}`)
+  if (previous === content) {
+    console.log(`  ✓ 无变化 ${path.relative(ROOT, OUT)}`)
+    return
+  }
+  // 内容变了 —— 如果目标已被应用过，原地改是无效的，必须换一个新迁移
+  const target = previous === null ? OUT : path.join(ROOT, MIGRATION_DIR, `${new Date().toISOString().replace(/[-:T]/g, "").slice(0, 14)}_${SLUG}`, "migration.sql")
+  fs.mkdirSync(path.dirname(target), { recursive: true })
+  fs.writeFileSync(target, content)
+  console.log(`  ✓ 已写 ${path.relative(ROOT, target)}${previous === null ? "" : "（内容有变化 -> 新迁移，保证会被应用）"}`)
 }
 
 main()

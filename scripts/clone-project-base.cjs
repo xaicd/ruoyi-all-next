@@ -576,11 +576,23 @@ function applyHatchPatches(destRoot, plan, sourceCatalog, targetName) {
 
   // 生成物必须用**生成器**重建，不要手工改 —— 手工改出来的与真源不一致，
   // 孵化工程的 `check` 会直接报漂移（实测）。这条命令只依赖 node 与 catalog，无需装依赖。
-  try {
-    execSync("node scripts/write-domain-manifests.cjs", { cwd: destRoot, stdio: "pipe" })
-    console.log("[REACTOR GEN] 已用生成器重建域清单（domain:manifests）")
-  } catch (error) {
-    throw new Error(`重建域清单失败（孵化产物会带着漂移的生成物）: ${error.message}`)
+  // 裁剪会改变域集，**所有由域集派生的产物都必须重建** —— 少建一个，
+  // 孵化工程的 check 就会报漂移（实测: agent 契约注册表还是基座那份 324，
+  // 而新工程只有 15 份）。这些都是纯 node 脚本，不依赖 pnpm install。
+  const derivedBuilders = [
+    ["scripts/write-domain-manifests.cjs", [], "域清单(domain:manifests)"],
+    ["scripts/agent/collect-contracts.cjs", [], "Agent 契约注册表(agent:contracts)"],
+    ["scripts/generate-page-schemas.cjs", ["--write"], "C 端页面 schema(agent:page-schemas)"],
+    ["scripts/generate-domain-service-loaders.cjs", ["--write"], "跨域 loader(domain:loaders)"],
+  ]
+  for (const [script, args, label] of derivedBuilders) {
+    if (!fs.existsSync(path.join(destRoot, script))) continue
+    try {
+      execSync(`node ${script}${args.length ? " " + args.join(" ") : ""}`, { cwd: destRoot, stdio: "pipe" })
+      console.log(`[REACTOR GEN] 已重建${label}`)
+    } catch (error) {
+      throw new Error(`重建${label}失败（孵化产物会带着漂移的生成物）: ${error.message}`)
+    }
   }
 
   assertNoStaleDomainReferences(destRoot, plan)
