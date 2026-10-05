@@ -1,6 +1,6 @@
 import React from "react"
 import { View, Text, TextInput, Switch, StyleSheet } from "react-native"
-import type { FieldDef } from "./shared/api"
+import type { FieldDef } from "./shared/types"
 
 /**
  * Schema 驱动渲染器（Expo/RN 版）—— 与 Web(portal) 端消费同一份端无关「页面 Schema」，

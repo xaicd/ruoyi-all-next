@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from "react"
-import { SafeAreaView, ScrollView, View, Text, TextInput, TouchableOpacity, ActivityIndicator, StyleSheet } from "react-native"
+import { SafeAreaView, ScrollView, View, Text, TextInput, TouchableOpacity, ActivityIndicator, StyleSheet, Alert } from "react-native"
 import { StatusBar } from "expo-status-bar"
 import {
-  fetchAppearance,
-  fetchPageSchema,
-  memberLogin,
-  fetchProfile,
-  updateProfile,
-  DEMO_CREDENTIALS,
-  type Appearance,
-  type MemberPublic,
-  type PageSchema,
-} from "./shared/api"
+  MetaApi,
+  MemberAuthApi,
+  MemberUserApi,
+} from "./api"
+import { DEMO_CREDENTIALS } from "./shared/config"
+import type { Appearance, MemberPublic, PageSchema } from "./shared/types"
 import { SchemaDetailView, SchemaForm } from "./SchemaFieldRenderer"
+import { setPresenter } from "./shared/request"
+
+// 反馈呈现器由 App 注入 —— api 层只声明意图（loading 文案 / 成功提示），不引 UI 依赖。
+// RN 没有全局 toast，这里用 Alert 兜住错误与成功；真实项目可换成自定义 Toast。
+setPresenter({
+  showLoading: () => {},
+  hideLoading: () => {},
+  showSuccess: (message) => Alert.alert("提示", message),
+  showError: (message) => Alert.alert("出错了", message),
+})
 
 export default function App() {
   const [appearance, setAppearance] = useState<Appearance | null>(null)
@@ -29,16 +35,16 @@ export default function App() {
   const brand = appearance?.primaryColor || "#4f46e5"
 
   useEffect(() => {
-    fetchAppearance().then(setAppearance).catch(() => {})
-    fetchPageSchema("member_user").then(setSchema).catch(() => {})
+    MetaApi.appearance().then(setAppearance).catch(() => {})
+    MetaApi.pageSchema("member_user").then(setSchema).catch(() => {})
   }, [])
 
   const doLogin = async () => {
     setLoading(true)
     setError("")
     try {
-      const { member: m } = await memberLogin(account, password)
-      const full = await fetchProfile().catch(() => m)
+      const { member: m } = await MemberAuthApi.login({ account, password })
+      const full = await MemberUserApi.profile().catch(() => m)
       setMember(full)
       setDraft({ ...(full.extraFields ?? {}) })
     } catch (e: any) {
@@ -52,7 +58,7 @@ export default function App() {
     setLoading(true)
     setError("")
     try {
-      const updated = await updateProfile({ extraFields: draft })
+      const updated = await MemberUserApi.updateProfile({ extraFields: draft })
       setMember(updated)
       setDraft({ ...(updated.extraFields ?? {}) })
       setEditing(false)
