@@ -6,6 +6,7 @@ import { SEED_DEPTS } from "../prisma/data/depts.seed-data"
 import { SEED_DICT_DATA } from "../prisma/data/dict-data.seed-data"
 import { SEED_DICT_TYPES } from "../prisma/data/dict-types.seed-data"
 import { withCompanionPackageMenuIds } from "@/modules/shared/backend/constants/companion-menu"
+import { SIDEBAR_COMPONENT_ROUTES } from "@/modules/system/backend/services/sidebar-component-routes"
 import { SEED_MENUS } from "../prisma/data/menus.seed-data"
 import { INFRA_CONFIG_DEFAULTS } from "@/modules/infra/backend/repositories/config.repository"
 import { SEED_POSTS } from "../prisma/data/posts.seed-data"
@@ -159,6 +160,17 @@ async function main() {
     for (const menu of await insertableMenus()) {
       await client.query(`INSERT INTO system_menu (id, name, permission, type, parent_id, path, component, icon, sort, status, visible, keep_alive, created_at, updated_at, deleted) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,false) ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, permission = EXCLUDED.permission, type = EXCLUDED.type, parent_id = EXCLUDED.parent_id, path = EXCLUDED.path, component = EXCLUDED.component, icon = EXCLUDED.icon, sort = EXCLUDED.sort, status = EXCLUDED.status, visible = EXCLUDED.visible, keep_alive = EXCLUDED.keep_alive, updated_at = EXCLUDED.updated_at, deleted = false`, [menu.id, menu.name, menu.permission, menu.type, menu.parentId, menu.path, menu.component, menu.icon, menu.sort, menu.status, menu.visible, menu.keepAlive, menu.createdAt, menu.updatedAt])
     }
+    // 种子菜单来资源框架的 SQL，其中只有一部分在本仓有落地页 —— component 映射不到、
+    // path 又不是绝对路由的那种，渲染出来就是点不动的死条目（侧边栏 href 为 null）。
+    // 这里统一隐藏（不删，可逆），规则与 menu.service.ts 共用同一张映射表，不会漂移。
+    const reachableComponents = Object.keys(SIDEBAR_COMPONENT_ROUTES)
+    await client.query(
+      `UPDATE system_menu SET visible = false, updated_at = NOW()
+       WHERE type = 'MENU' AND component IS NOT NULL AND component <> ''
+         AND NOT (component = ANY($1))
+         AND (path IS NULL OR path NOT LIKE '/%')`,
+      [reachableComponents],
+    )
     const tenantMenuScope = new TenantMenuScope(await fullMenuCatalog())
     for (const pkg of SEED_TENANT_PACKAGES) {
       await client.query(`DELETE FROM system_tenant_package_menu WHERE package_id = $1`, [pkg.id])
