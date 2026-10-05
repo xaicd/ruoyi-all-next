@@ -3217,28 +3217,24 @@
           "method": "deductStock",
           "service": "inventoryStockOps",
           "module": "inventory-stock-ops",
-          "target": "deductStock",
           "schema": "wmsStockOpSchema"
         },
         {
           "method": "lockStock",
           "service": "inventoryStockOps",
           "module": "inventory-stock-ops",
-          "target": "lockStock",
           "schema": "wmsStockOpSchema"
         },
         {
           "method": "releaseStock",
           "service": "inventoryStockOps",
           "module": "inventory-stock-ops",
-          "target": "releaseStock",
           "schema": "wmsStockOpSchema"
         },
         {
           "method": "replenishStock",
           "service": "inventoryStockOps",
           "module": "inventory-stock-ops",
-          "target": "replenishStock",
           "schema": "wmsStockOpSchema"
         }
       ]

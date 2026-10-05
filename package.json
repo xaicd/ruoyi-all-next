@@ -60,7 +60,7 @@
     "standards:baseline": "node scripts/check-engineering-standards.cjs --write-baseline",
     "evolution:backlog": "node scripts/build-evolution-backlog.cjs",
     "mcp:serve": "node scripts/mcp/ruoyi-mcp-server.cjs",
-    "check": "npm run domain:manifests:check && npm run contracts:sync && npm run domain:loaders:check && npm run domain:check && npm run microservice:check && npm run harness:check && npm run admin:routes:check && npm run foundation:ontology:check && npm run skills:check && npm run compat:check && npm run standards:check && npm run agent:native:check && npm run agent:contracts:check && npm run evolution:backlog && node scripts/write-harness-trace.cjs",
+    "check": "npm run domain:manifests:check && npm run contracts:sync && npm run rpc:actions:check && npm run domain:loaders:check && npm run domain:check && npm run microservice:check && npm run harness:check && npm run admin:routes:check && npm run foundation:ontology:check && npm run skills:check && npm run compat:check && npm run standards:check && npm run agent:native:check && npm run agent:contracts:check && npm run evolution:backlog && node scripts/write-harness-trace.cjs",
     "domain:dev": "node scripts/pack-domain.cjs --dev --materialize",
     "domain:build": "node scripts/pack-domain.cjs --build --materialize",
     "domain:up": "node scripts/domain-up.cjs",
@@ -94,7 +94,9 @@
     "agent:native:audit": "node scripts/check-agent-native.cjs --audit",
     "agent:native:baseline": "node scripts/check-agent-native.cjs --update-baseline",
     "domain:loaders": "node scripts/generate-domain-service-loaders.cjs --write",
-    "domain:loaders:check": "node scripts/generate-domain-service-loaders.cjs --check"
+    "domain:loaders:check": "node scripts/generate-domain-service-loaders.cjs --check",
+    "rpc:actions": "tsx scripts/generate-rpc-actions.ts --write",
+    "rpc:actions:check": "tsx scripts/generate-rpc-actions.ts --check"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",
