@@ -23,6 +23,10 @@
 import fs from "node:fs"
 import path from "node:path"
 import { execFileSync } from "node:child_process"
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { writeGeneratedFile } = require("./lib/generated-file.cjs") as {
+  writeGeneratedFile: (file: string, content: string, options?: { force?: boolean }) => "written" | "skipped-handwritten"
+}
 
 import { CodegenEngineService } from "../packages/domains/infra/backend/services/codegen-engine.service"
 import type { CodegenConfig } from "../packages/domains/infra/backend/services/codegen-templates"
@@ -98,15 +102,20 @@ function main() {
     })
     for (const output of kept) {
       const full = path.resolve(ROOT, output.path)
-      if (fs.existsSync(full) && !force) {
+      // 安全写入: 目标存在且**没有生成标记** => 那是手写文件，默认**拒绝覆盖**
+      // （member 的手写仓储被批量重生成覆盖过两次，见 scripts/lib/generated-file.cjs）
+      const result = writeGeneratedFile(full, output.content, { force })
+      if (result === "skipped-handwritten") {
         skipped++
         continue
       }
-      fs.mkdirSync(path.dirname(full), { recursive: true })
-      fs.writeFileSync(full, output.content)
+      if (fs.existsSync(full) && !force && !result) {
+        skipped++
+        continue
+      }
       written++
     }
-    console.log(`  ✓ ${config.className} -> 新写 ${kept.length - skipped} / 跳过已有 ${skipped}`)
+    console.log(`  ✓ ${config.className} -> 新写 ${kept.length - skipped} / 跳过 ${skipped}（已存在或手写）`)
   }
   console.log(`  合计: 新写 ${written} 个文件（跳过 ${skipped} 个已存在；--force 可覆盖）`)
 

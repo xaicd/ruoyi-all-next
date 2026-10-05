@@ -60,7 +60,7 @@
     "standards:baseline": "node scripts/check-engineering-standards.cjs --write-baseline",
     "evolution:backlog": "node scripts/build-evolution-backlog.cjs",
     "mcp:serve": "node scripts/mcp/ruoyi-mcp-server.cjs",
-    "check": "npm run domain:manifests:check && npm run contracts:sync && npm run rpc:actions:check && npm run domain:loaders:check && npm run domain:check && npm run microservice:check && npm run harness:check && npm run admin:routes:check && npm run foundation:ontology:check && npm run skills:check && npm run compat:check && npm run standards:check && npm run agent:native:check && npm run agent:contracts:check && npm run agent:page-schemas:check && npm run evolution:backlog && node scripts/write-harness-trace.cjs",
+    "check": "npm run domain:manifests:check && npm run contracts:sync && npm run rpc:actions:check && npm run domain:loaders:check && npm run domain:check && npm run microservice:check && npm run harness:check && npm run admin:routes:check && npm run foundation:ontology:check && npm run skills:check && npm run compat:check && npm run standards:check && npm run agent:native:check && npm run agent:contracts:check && npm run agent:page-schemas:check && npm run handwritten:check && npm run evolution:backlog && node scripts/write-harness-trace.cjs",
     "domain:dev": "node scripts/pack-domain.cjs --dev --materialize",
     "domain:build": "node scripts/pack-domain.cjs --build --materialize",
     "domain:up": "node scripts/domain-up.cjs",
@@ -98,7 +98,10 @@
     "rpc:actions": "tsx scripts/generate-rpc-actions.ts --write",
     "rpc:actions:check": "tsx scripts/generate-rpc-actions.ts --check",
     "agent:page-schemas": "node scripts/generate-page-schemas.cjs --write",
-    "agent:page-schemas:check": "node scripts/generate-page-schemas.cjs --check"
+    "agent:page-schemas:check": "node scripts/generate-page-schemas.cjs --check",
+    "handwritten:check": "node scripts/check-handwritten-files.cjs",
+    "handwritten:audit": "node scripts/check-handwritten-files.cjs --audit",
+    "handwritten:baseline": "node scripts/check-handwritten-files.cjs --update-baseline"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",
