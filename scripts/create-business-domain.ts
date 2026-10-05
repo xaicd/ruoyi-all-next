@@ -125,11 +125,20 @@ function main() {
   step(5, "重生成契约与清单（顺序固定）")
   // rpc-actions.json 与 domain-service-loaders.ts 是**两个**派生物（后者由前者派生），
   // 少跑一个就会让 domain-loaders:check 失败 —— 实测在全新工程上踩到过。
+  // rpc-actions.json 是**上游**（loader 等由它派生），先单独生成
   run("npx", ["tsx", "scripts/generate-rpc-actions.ts", "--write"])
-  run("node", ["scripts/generate-domain-service-loaders.cjs", "--write"])
-  // 菜单/权限的聚合迁移也在派生链上: 新域的 rbac.sql 刚生成，聚合迁移必须跟着重建 ——
-  // 否则"页面生成了、侧边栏里点不到"（实测: 本仓早期就是这个形态）。
-  run("node", ["scripts/generate-domain-rbac-migration.cjs", "--write"])
+  // 其余派生物清单**共用**（scripts/lib/derived-artifacts.cjs）—— 与孵化器同一份。
+  // 少跑一个就会让门禁失败（这轮漏过两次: loader、agent 契约注册表）。
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { DERIVED_ARTIFACTS } = require("./lib/derived-artifacts.cjs") as {
+    DERIVED_ARTIFACTS: Array<{ script: string; args: string[]; label: string }>
+  }
+  for (const { script, args, label } of DERIVED_ARTIFACTS) {
+    if (!fs.existsSync(path.join(ROOT, script))) continue
+    if (script.endsWith(".cjs")) run("node", [script, ...args])
+    else run("npx", ["tsx", script, ...args])
+    console.log(`  已重建${label}`)
+  }
   // contracts 会重写 module.manifest.json，必须跑在 manifests **之前** —— 反了会一直报漂移。
   run("pnpm", ["run", "domain:contracts"])
   run("pnpm", ["run", "domain:seams"])

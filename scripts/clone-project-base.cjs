@@ -579,13 +579,10 @@ function applyHatchPatches(destRoot, plan, sourceCatalog, targetName) {
   // 裁剪会改变域集，**所有由域集派生的产物都必须重建** —— 少建一个，
   // 孵化工程的 check 就会报漂移（实测: agent 契约注册表还是基座那份 324，
   // 而新工程只有 15 份）。这些都是纯 node 脚本，不依赖 pnpm install。
-  const derivedBuilders = [
-    ["scripts/write-domain-manifests.cjs", [], "域清单(domain:manifests)"],
-    ["scripts/agent/collect-contracts.cjs", [], "Agent 契约注册表(agent:contracts)"],
-    ["scripts/generate-page-schemas.cjs", ["--write"], "C 端页面 schema(agent:page-schemas)"],
-    ["scripts/generate-domain-service-loaders.cjs", ["--write"], "跨域 loader(domain:loaders)"],
-  ]
-  for (const [script, args, label] of derivedBuilders) {
+  // 派生物清单**共用**（scripts/lib/derived-artifacts.cjs）——
+  // 漏一个的表现是门禁对不上（'注册表 14 vs 实际 15'），这一轮已经漏过两次。
+  const { DERIVED_ARTIFACTS } = require("./lib/derived-artifacts.cjs")
+  for (const [script, args, label] of DERIVED_ARTIFACTS) {
     if (!fs.existsSync(path.join(destRoot, script))) continue
     try {
       execSync(`node ${script}${args.length ? " " + args.join(" ") : ""}`, { cwd: destRoot, stdio: "pipe" })
