@@ -1,3 +1,10 @@
+import {
+  checkRouteIdempotency,
+  checkRouteRateLimit,
+  isMutationMethod,
+  toProtectionResponse,
+  type RouteRateLimitRule,
+} from "./route-protection"
 import type { PermissionCode } from "../constants/permissions"
 import type { AuthContext } from "../auth/context"
 import { requireAdminAuth, requirePlatformAdmin } from "../auth/guards"
@@ -11,6 +18,15 @@ import { traceContext } from "../lib/trace-context"
 export type AdminRouteOptions = {
   permission?: PermissionCode
   platformOnly?: boolean
+  /**
+   * 声明式限流（对齐 yudao-cloud 的 `@RateLimiter`）—— 挂在路由上，不写在业务里。
+   * **默认关闭**: 本包装器服务于所有 admin 路由，不能引入隐式行为变化。
+   */
+  rateLimit?: RouteRateLimitRule
+  /**
+   * 声明式幂等（对齐 `@Idempotent`）—— 仅对写操作生效，依赖 `Idempotency-Key` 头。默认关闭。
+   */
+  idempotent?: boolean
 }
 
 type AdminRouteHandler<TArgs extends unknown[]> = (
@@ -55,7 +71,23 @@ export function withAdminRoute<TArgs extends unknown[]>(
           : await requireAdminAuth(request, options.permission)
         userId = auth.userId
         tenantId = auth.tenantId
-        response = await runWithTenantContext(toTenantContext(auth), () => handler(request, auth, ...args))
+        // ---- 声明式防护（默认关闭；由路由显式声明）----
+        // 顺序: 限流 -> 幂等 -> 业务。放在鉴权之后、业务之前 ——
+        // 既避免未鉴权请求打满计数器，也保证被拒的请求不产生副作用。
+        const rateDecision = options.rateLimit
+          ? checkRouteRateLimit(request, { userId: auth.userId }, path, options.rateLimit)
+          : { allowed: true as const }
+        if (!rateDecision.allowed) {
+          response = toProtectionResponse(rateDecision)
+        } else {
+          const idempotencyDecision =
+            options.idempotent && isMutationMethod(request.method)
+              ? checkRouteIdempotency(request, path)
+              : { allowed: true as const }
+          response = idempotencyDecision.allowed
+            ? await runWithTenantContext(toTenantContext(auth), () => handler(request, auth, ...args))
+            : toProtectionResponse(idempotencyDecision)
+        }
       } catch (error) {
         response = handleApiError(error, { request, operation: trace.operationName })
       }

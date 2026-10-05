@@ -1,8 +1,8 @@
 {
   "version": 1,
   "kind": "evolution-backlog",
-  "generatedAt": "2026-10-05T09:47:52.218Z",
-  "head": "3069d454",
+  "generatedAt": "2026-10-05T10:00:35.120Z",
+  "head": "937d7492",
   "note": "Aggregated from real gate artifacts. Read-only signal for external agents; no agent loop runs in this repository (AGENTS.md §18).",
   "summary": {
     "blocker": 0,
@@ -46,7 +46,7 @@
       "files": [
         "docs/architecture/artifacts/harness-trace-latest.json"
       ],
-      "evidence": "trace.head=9b6bebbb, current HEAD=3069d454",
+      "evidence": "trace.head=3069d454, current HEAD=937d7492",
       "command": "npm run check",
       "action": "Re-run the gates so the recorded evidence matches the current revision."
     },

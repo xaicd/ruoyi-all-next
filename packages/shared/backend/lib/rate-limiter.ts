@@ -66,7 +66,14 @@ export const rateLimiter = {
    * const result = rateLimiter.check({ ip: "1.2.3.4", userId: "user-001", api: "/api/v1/admin/system/auth/login" })
    * if (!result.allowed) return NextResponse.json({ error: "请求过于频繁" }, { status: 429 })
    */
-  check(ctx: { ip?: string; userId?: string; api?: string }): RateLimitResult {
+  /**
+     * 检查请求是否允许。
+     *
+     * `rules` 可覆盖内置规则 —— 声明式路由防护（withAdminRoute 的 rateLimit 选项）
+     * 靠它把"这个接口允许多少"落到实处。**不收规则就等于没防护**（实测踩到:
+     * 收了参数却仍用 DEFAULT_RULES，规则被静默忽略）。
+     */
+    check(ctx: { ip?: string; userId?: string; api?: string }, rules: RateLimitRule[] = DEFAULT_RULES): RateLimitResult {
     // 白名单直接放行
     if (ctx.ip && whitelist.has(ctx.ip)) return { allowed: true, remaining: 999, resetAt: 0 }
     if (ctx.userId && whitelist.has(ctx.userId)) return { allowed: true, remaining: 999, resetAt: 0 }
@@ -78,7 +85,7 @@ export const rateLimiter = {
     }
 
     // 逐条检查规则
-    for (const rule of DEFAULT_RULES) {
+    for (const rule of rules) {
       let key: string | undefined
       switch (rule.dimension) {
         case "ip": key = ctx.ip ? `ip:${ctx.ip}` : undefined; break

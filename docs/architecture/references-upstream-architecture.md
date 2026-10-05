@@ -138,3 +138,52 @@ const AuthUtil = {
 - **协议**：上游用 Feign/HTTP；本仓按 §3.3 用自研 NATS/gRPC，**不改**
 - **服务发现/注册中心**：上游用 Nacos 系；本仓当前是 catalog + 静态 loader，**不改**
 - **uni-app 技术栈**：本仓 C 端是 `clients/expo`，**只学组织方式，不搬框架**
+
+---
+
+## 六、第二次深入：`protection` 与框架能力全景
+
+### 6.1 yudao-cloud 的框架能力清单（starter 维度）
+
+`common` / `biz-data-permission` / `biz-ip` / `biz-tenant` / `env` / `excel` / `job` /
+`monitor` / `mq` / `mybatis` / **`protection`** / `redis` / `rpc` / `security` / `test` /
+`web` / `websocket`
+
+对照本仓:
+
+| 上游 starter | 本仓对应 | 状态 |
+|---|---|---|
+| mybatis | `dynamic-table` / `base-mapper` | ✅ |
+| rpc | `rpc-facade` / `service-bus` | ✅ |
+| biz-tenant | `lib/biz-tenant` | ✅ |
+| mq | `broker` / `serviceBus` / outbox | ✅ |
+| job / monitor | infra 的 job、api-logs | ✅ |
+| security | `lib` 鉴权 | ✅ |
+| test | `TestingKit` | ✅ |
+| **protection** | 原语有、**声明式入口缺** | ⚠️ 本轮补 |
+| websocket / excel / env / redis | —— | 未评估 |
+
+### 6.2 `protection` 的范式：**三件防护做成注解**
+
+| 注解 | 作用 | key 解析可插拔 |
+|---|---|---|
+| `@RateLimiter` | 限流 | 默认/用户/IP/服务节点/SpEL 表达式 |
+| `@Idempotent` | 防重复提交 | —— |
+| `@ApiSignature` | 接口签名（防篡改/防重放） | —— |
+
+**最值得学的一点不是这三件防护本身，而是它们"挂在方法上"** ——
+哪些接口有防护在路由表上一眼可见，也不会有人漏写。
+
+### 6.3 本仓的差距与落地
+
+本仓 `rateLimiter` / `protection-idempotent` / `protection-signature` **原语早就有**，
+但只有**命令式**入口（要在每个 handler 里手动调）—— 结果是很少被用上。
+
+本轮补上声明式入口: `withAdminRoute(request, { rateLimit, idempotent })`，
+**默认关闭**（这个包装器服务于所有 admin 路由，不能有隐式行为变化）。
+
+途中抓到一个"看起来能用其实没用"的实现错误: 防护助手收了规则却**没传给限流器**
+（它仍用内置 DEFAULT_RULES），规则被静默忽略、防护等于空转 —— 被测试当场抓到。
+已给限流器加 `check(ctx, rules)` 入口（默认内置规则，向后兼容）。
+
+**仍待做**: `withAppRoute` 同样接入；`signature` 尚未做成声明式选项。
