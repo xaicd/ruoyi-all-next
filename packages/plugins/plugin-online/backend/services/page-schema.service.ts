@@ -16,19 +16,37 @@ import {
   type PageSchema,
 } from "@/modules/online/backend/validators/page-schema.validators"
 import { ensureColumns } from "@/modules/online/backend/adapters/persistence/schema-ddl"
+import { generatedPageSchema } from "@/modules/shared/contract/page-schemas.generated"
 
 const keyOf = (entity: string) => `page.schema.${entity}`
 
 // 内存兜底（仅无真实库时）
 const MEMORY_STORE = new Map<string, string>()
 
+/**
+ * 取该实体的页面 schema。
+ *
+ * 优先级: system_config 里的配置 > **由 Agent 契约生成的兜底** > 空默认。
+ *
+ * 中间那层是关键: 没有它，新生成的业务域在 C 端是**空白页**
+ * （defaultPageSchema 的 fields 是空的）。而契约由表元数据生成，
+ * 所以"新域建好 -> C 端立刻有真实字段"，无需人工再录一遍。
+ * 配置仍然优先，低代码可编辑性不受影响。
+ */
 function parseOrDefault(entity: string, raw: string | null): PageSchema {
-  if (!raw) return defaultPageSchema(entity)
-  try {
-    return pageSchemaSchema.parse(JSON.parse(raw))
-  } catch {
-    return defaultPageSchema(entity)
+  if (raw) {
+    try {
+      const parsed = pageSchemaSchema.parse(JSON.parse(raw))
+      if (parsed.fields.length > 0) return parsed
+    } catch {
+      // 配置坏了 -> 退到生成物，而不是直接给空页面（静默降级到"能看"比"空白"好）
+    }
   }
+  const generated = generatedPageSchema(entity)
+  if (generated && generated.fields.length > 0) {
+    return { entity: generated.entity, title: generated.title, fields: generated.fields as PageSchema["fields"] }
+  }
+  return defaultPageSchema(entity)
 }
 
 async function readRaw(key: string): Promise<string | null> {
