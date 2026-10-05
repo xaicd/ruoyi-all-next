@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "promotion_article"
 const TABLE_COLUMNS = ["id","category_id","spu_id","title","author","pic_url","introduction","browse_count","sort","status","recommend_hot","recommend_banner","content","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["category_id","spu_id","title","author","pic_url","introduction","browse_count","sort","status","recommend_hot","recommend_banner","content"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"category_id","operator":"="},{"name":"spu_id","operator":"="},{"name":"title","operator":"LIKE"},{"name":"status","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "sort"
 const HAS_TENANT = true
 const HAS_DELETED = true

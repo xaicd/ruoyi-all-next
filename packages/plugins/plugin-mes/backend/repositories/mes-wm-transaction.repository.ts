@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mes_wm_transaction"
 const TABLE_COLUMNS = ["id","type","biz_type","biz_id","biz_code","biz_line_id","material_stock_id","related_transaction_id","item_id","quantity","batch_id","batch_code","warehouse_id","location_id","area_id","transaction_time","erp_time","receipt_time","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["type","biz_type","biz_id","biz_code","biz_line_id","material_stock_id","related_transaction_id","item_id","quantity","batch_id","batch_code","warehouse_id","location_id","area_id","transaction_time","erp_time","receipt_time"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"type","operator":"="},{"name":"biz_type","operator":"="},{"name":"biz_id","operator":"="},{"name":"biz_line_id","operator":"="},{"name":"material_stock_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

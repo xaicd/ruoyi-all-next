@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mes_dv_repair"
 const TABLE_COLUMNS = ["id","code","name","machinery_id","require_date","finish_date","confirm_date","result","accepted_user_id","confirm_user_id","source_doc_type","source_doc_id","source_doc_code","status","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["code","name","machinery_id","require_date","finish_date","confirm_date","result","accepted_user_id","confirm_user_id","source_doc_type","source_doc_id","source_doc_code","status","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"code","operator":"LIKE"},{"name":"name","operator":"LIKE"},{"name":"machinery_id","operator":"="},{"name":"accepted_user_id","operator":"="},{"name":"confirm_user_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

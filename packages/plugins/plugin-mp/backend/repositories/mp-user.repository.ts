@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mp_user"
 const TABLE_COLUMNS = ["id","openid","union_id","subscribe_status","subscribe_time","unsubscribe_time","nickname","head_image_url","language","country","province","city","remark","tag_ids","account_id","app_id","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["openid","union_id","subscribe_status","subscribe_time","unsubscribe_time","nickname","head_image_url","language","country","province","city","remark","tag_ids","account_id","app_id"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"union_id","operator":"="},{"name":"tag_ids","operator":"="},{"name":"account_id","operator":"="},{"name":"app_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

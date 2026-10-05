@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mes_md_item_batch_config"
 const TABLE_COLUMNS = ["id","item_id","produce_date_flag","expire_date_flag","receipt_date_flag","vendor_flag","client_flag","sales_order_code_flag","purchase_order_code_flag","work_order_flag","task_flag","workstation_flag","tool_flag","mold_flag","lot_number_flag","quality_status_flag","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["item_id","produce_date_flag","expire_date_flag","receipt_date_flag","vendor_flag","client_flag","sales_order_code_flag","purchase_order_code_flag","work_order_flag","task_flag","workstation_flag","tool_flag","mold_flag","lot_number_flag","quality_status_flag"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"item_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

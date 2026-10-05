@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mp_auto_reply"
 const TABLE_COLUMNS = ["id","account_id","app_id","type","request_keyword","request_match","request_message_type","response_message_type","response_content","response_media_id","response_media_url","response_title","response_description","response_thumb_media_id","response_thumb_media_url","response_articles","response_music_url","response_hq_music_url","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["account_id","app_id","type","request_keyword","request_match","request_message_type","response_message_type","response_content","response_media_id","response_media_url","response_title","response_description","response_thumb_media_id","response_thumb_media_url","response_articles","response_music_url","response_hq_music_url"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"account_id","operator":"="},{"name":"app_id","operator":"="},{"name":"type","operator":"="},{"name":"response_media_id","operator":"="},{"name":"response_thumb_media_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

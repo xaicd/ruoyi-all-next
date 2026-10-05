@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mes_cal_team_member"
 const TABLE_COLUMNS = ["id","team_id","user_id","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["team_id","user_id","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"team_id","operator":"="},{"name":"user_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

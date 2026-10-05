@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "crm_customer_limit_config"
 const TABLE_COLUMNS = ["id","type","user_ids","dept_ids","max_count","deal_count_enabled","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["type","user_ids","dept_ids","max_count","deal_count_enabled"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"type","operator":"="},{"name":"user_ids","operator":"="},{"name":"dept_ids","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

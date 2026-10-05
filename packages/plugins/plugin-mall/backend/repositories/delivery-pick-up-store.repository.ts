@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "trade_delivery_pick_up_store"
 const TABLE_COLUMNS = ["id","name","introduction","phone","area_id","detail_address","logo","opening_time","closing_time","latitude","longitude","verify_user_ids","status","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["name","introduction","phone","area_id","detail_address","logo","opening_time","closing_time","latitude","longitude","verify_user_ids","status"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"name","operator":"LIKE"},{"name":"phone","operator":"LIKE"},{"name":"area_id","operator":"="},{"name":"verify_user_ids","operator":"="},{"name":"status","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

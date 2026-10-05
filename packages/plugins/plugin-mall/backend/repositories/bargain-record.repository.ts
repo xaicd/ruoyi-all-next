@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "promotion_bargain_record"
 const TABLE_COLUMNS = ["id","user_id","activity_id","spu_id","sku_id","bargain_first_price","bargain_price","status","end_time","order_id","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["user_id","activity_id","spu_id","sku_id","bargain_first_price","bargain_price","status","end_time","order_id"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"user_id","operator":"="},{"name":"activity_id","operator":"="},{"name":"spu_id","operator":"="},{"name":"sku_id","operator":"="},{"name":"status","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

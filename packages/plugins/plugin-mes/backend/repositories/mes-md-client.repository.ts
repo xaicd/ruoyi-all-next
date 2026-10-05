@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mes_md_client"
 const TABLE_COLUMNS = ["id","code","name","nickname","english_name","description","logo","type","address","website","email","telephone","contact1_name","contact1_telephone","contact1_email","contact2_name","contact2_telephone","contact2_email","credit_code","status","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["code","name","nickname","english_name","description","logo","type","address","website","email","telephone","contact1_name","contact1_telephone","contact1_email","contact2_name","contact2_telephone","contact2_email","credit_code","status","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"code","operator":"LIKE"},{"name":"name","operator":"LIKE"},{"name":"type","operator":"="},{"name":"email","operator":"LIKE"},{"name":"status","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

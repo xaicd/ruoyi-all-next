@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "bpm_user_group"
 const TABLE_COLUMNS = ["id","name","description","status","user_ids","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["name","description","status","user_ids"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"name","operator":"LIKE"},{"name":"status","operator":"="},{"name":"user_ids","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

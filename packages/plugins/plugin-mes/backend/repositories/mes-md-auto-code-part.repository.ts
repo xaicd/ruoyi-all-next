@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mes_md_auto_code_part"
 const TABLE_COLUMNS = ["id","rule_id","sort","type","length","date_format","fix_character","serial_start_no","serial_step","cycle_flag","cycle_method","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["rule_id","sort","type","length","date_format","fix_character","serial_start_no","serial_step","cycle_flag","cycle_method","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"rule_id","operator":"="},{"name":"type","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "sort"
 const HAS_TENANT = true
 const HAS_DELETED = true

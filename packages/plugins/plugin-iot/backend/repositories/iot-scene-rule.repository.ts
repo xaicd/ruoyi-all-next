@@ -20,9 +20,9 @@ import {
 } from "@/modules/shared/backend/lib/database"
 
 const TABLE_NAME = "iot_scene_rule"
-const TABLE_COLUMNS = ["id","name","description","status","last_trigger_time","triggers","actions","type","product_id","device_id","identifier","operator","value","cron_expression","condition_groups","type","product_id","device_id","identifier","operator","param","type","product_id","device_id","identifier","params","alert_config_id","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
-const WRITABLE_COLUMNS = ["name","description","status","last_trigger_time","triggers","actions","type","product_id","device_id","identifier","operator","value","cron_expression","condition_groups","type","product_id","device_id","identifier","operator","param","type","product_id","device_id","identifier","params","alert_config_id"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const TABLE_COLUMNS = ["id","name","description","status","last_trigger_time","triggers","actions","type","product_id","device_id","identifier","operator","value","cron_expression","condition_groups","param","params","alert_config_id","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
+const WRITABLE_COLUMNS = ["name","description","status","last_trigger_time","triggers","actions","type","product_id","device_id","identifier","operator","value","cron_expression","condition_groups","param","params","alert_config_id"] as const
+const FILTERS = [{"name":"name","operator":"LIKE"},{"name":"status","operator":"="},{"name":"type","operator":"="},{"name":"product_id","operator":"="},{"name":"device_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

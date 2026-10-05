@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mes_qc_defect_record"
 const TABLE_COLUMNS = ["id","qc_type","qc_id","line_id","name","level","quantity","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["qc_type","qc_id","line_id","name","level","quantity","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"qc_id","operator":"="},{"name":"line_id","operator":"="},{"name":"name","operator":"LIKE"},{"name":"level","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

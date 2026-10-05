@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "ai_chat_conversation"
 const TABLE_COLUMNS = ["id","user_id","title","pinned","pinned_time","role_id","model_id","model","system_message","temperature","max_tokens","max_contexts","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["user_id","title","pinned","pinned_time","role_id","model_id","model","system_message","temperature","max_tokens","max_contexts"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"user_id","operator":"="},{"name":"title","operator":"LIKE"},{"name":"role_id","operator":"="},{"name":"model_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

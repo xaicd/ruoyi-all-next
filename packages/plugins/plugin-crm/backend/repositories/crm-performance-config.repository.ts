@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "crm_performance_config"
 const TABLE_COLUMNS = ["id","biz_type","object_id","object_type","year","year_target_price","january_target_price","february_target_price","march_target_price","april_target_price","may_target_price","june_target_price","july_target_price","august_target_price","september_target_price","october_target_price","november_target_price","december_target_price","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["biz_type","object_id","object_type","year","year_target_price","january_target_price","february_target_price","march_target_price","april_target_price","may_target_price","june_target_price","july_target_price","august_target_price","september_target_price","october_target_price","november_target_price","december_target_price"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"biz_type","operator":"="},{"name":"object_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

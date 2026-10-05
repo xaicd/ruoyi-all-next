@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "iot_device"
 const TABLE_COLUMNS = ["id","device_name","nickname","serial_number","pic_url","group_ids","product_id","product_key","device_type","gateway_id","state","online_time","offline_time","active_time","firmware_id","device_secret","latitude","longitude","config","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["device_name","nickname","serial_number","pic_url","group_ids","product_id","product_key","device_type","gateway_id","state","online_time","offline_time","active_time","firmware_id","device_secret","latitude","longitude","config"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"group_ids","operator":"="},{"name":"product_id","operator":"="},{"name":"gateway_id","operator":"="},{"name":"state","operator":"="},{"name":"firmware_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

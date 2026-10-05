@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mp_message_template"
 const TABLE_COLUMNS = ["id","account_id","app_id","template_id","title","content","example","primary_industry","deputy_industry","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["account_id","app_id","template_id","title","content","example","primary_industry","deputy_industry"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"account_id","operator":"="},{"name":"app_id","operator":"="},{"name":"template_id","operator":"="},{"name":"title","operator":"LIKE"}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

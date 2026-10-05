@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mes_wm_barcode"
 const TABLE_COLUMNS = ["id","config_id","format","biz_type","content","biz_id","biz_code","biz_name","status","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["config_id","format","biz_type","content","biz_id","biz_code","biz_name","status","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"config_id","operator":"="},{"name":"biz_type","operator":"="},{"name":"biz_id","operator":"="},{"name":"status","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

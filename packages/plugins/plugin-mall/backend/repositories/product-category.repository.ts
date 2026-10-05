@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "product_category"
 const TABLE_COLUMNS = ["id","parent_id","name","pic_url","sort","status","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["parent_id","name","pic_url","sort","status"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"parent_id","operator":"="},{"name":"name","operator":"LIKE"},{"name":"status","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "sort"
 const HAS_TENANT = true
 const HAS_DELETED = true

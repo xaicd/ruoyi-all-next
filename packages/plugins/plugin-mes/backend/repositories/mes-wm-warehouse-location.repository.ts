@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mes_wm_warehouse_location"
 const TABLE_COLUMNS = ["id","code","name","warehouse_id","area","frozen","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["code","name","warehouse_id","area","frozen","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"code","operator":"LIKE"},{"name":"name","operator":"LIKE"},{"name":"warehouse_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

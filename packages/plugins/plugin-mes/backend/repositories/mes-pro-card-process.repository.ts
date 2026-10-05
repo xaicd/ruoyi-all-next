@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mes_pro_card_process"
 const TABLE_COLUMNS = ["id","card_id","sort","process_id","input_time","output_time","input_quantity","output_quantity","unqualified_quantity","workstation_id","user_id","ipqc_id","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["card_id","sort","process_id","input_time","output_time","input_quantity","output_quantity","unqualified_quantity","workstation_id","user_id","ipqc_id","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"card_id","operator":"="},{"name":"process_id","operator":"="},{"name":"workstation_id","operator":"="},{"name":"user_id","operator":"="},{"name":"ipqc_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "sort"
 const HAS_TENANT = true
 const HAS_DELETED = true

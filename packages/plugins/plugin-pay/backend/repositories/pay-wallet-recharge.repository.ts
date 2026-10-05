@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "pay_wallet_recharge"
 const TABLE_COLUMNS = ["id","wallet_id","total_price","pay_price","bonus_price","package_id","pay_status","pay_order_id","pay_channel_code","pay_time","pay_refund_id","refund_total_price","refund_pay_price","refund_bonus_price","refund_time","refund_status","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["wallet_id","total_price","pay_price","bonus_price","package_id","pay_status","pay_order_id","pay_channel_code","pay_time","pay_refund_id","refund_total_price","refund_pay_price","refund_bonus_price","refund_time","refund_status"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"wallet_id","operator":"="},{"name":"package_id","operator":"="},{"name":"pay_order_id","operator":"="},{"name":"pay_refund_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

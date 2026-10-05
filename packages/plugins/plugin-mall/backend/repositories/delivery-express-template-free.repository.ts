@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "trade_delivery_express_template_free"
 const TABLE_COLUMNS = ["id","template_id","area_ids","free_price","free_count","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["template_id","area_ids","free_price","free_count"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"template_id","operator":"="},{"name":"area_ids","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

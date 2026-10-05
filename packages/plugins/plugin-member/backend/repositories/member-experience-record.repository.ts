@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "member_experience_record"
 const TABLE_COLUMNS = ["id","user_id","biz_type","biz_id","title","description","experience","total_experience","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["user_id","biz_type","biz_id","title","description","experience","total_experience"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"user_id","operator":"="},{"name":"biz_type","operator":"="},{"name":"biz_id","operator":"="},{"name":"title","operator":"LIKE"}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

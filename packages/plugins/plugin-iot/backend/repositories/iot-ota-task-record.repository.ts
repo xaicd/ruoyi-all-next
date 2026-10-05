@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "iot_ota_task_record"
 const TABLE_COLUMNS = ["id","firmware_id","task_id","device_id","from_firmware_id","status","progress","description","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["firmware_id","task_id","device_id","from_firmware_id","status","progress","description"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"firmware_id","operator":"="},{"name":"task_id","operator":"="},{"name":"device_id","operator":"="},{"name":"from_firmware_id","operator":"="},{"name":"status","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "trade_order_item"
 const TABLE_COLUMNS = ["id","user_id","order_id","cart_id","spu_id","spu_name","sku_id","properties","pic_url","count","comment_status","price","discount_price","delivery_price","adjust_price","pay_price","coupon_price","point_price","use_point","give_point","vip_price","after_sale_id","after_sale_status","property_id","property_name","value_id","value_name","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["user_id","order_id","cart_id","spu_id","spu_name","sku_id","properties","pic_url","count","comment_status","price","discount_price","delivery_price","adjust_price","pay_price","coupon_price","point_price","use_point","give_point","vip_price","after_sale_id","after_sale_status","property_id","property_name","value_id","value_name"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"user_id","operator":"="},{"name":"order_id","operator":"="},{"name":"cart_id","operator":"="},{"name":"spu_id","operator":"="},{"name":"sku_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mes_wm_batch"
 const TABLE_COLUMNS = ["id","code","item_id","produce_date","expire_date","receipt_date","vendor_id","client_id","sales_order_code","purchase_order_code","work_order_id","task_id","workstation_id","tool_id","mold_id","lot_number","quality_status","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["code","item_id","produce_date","expire_date","receipt_date","vendor_id","client_id","sales_order_code","purchase_order_code","work_order_id","task_id","workstation_id","tool_id","mold_id","lot_number","quality_status","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"code","operator":"LIKE"},{"name":"item_id","operator":"="},{"name":"vendor_id","operator":"="},{"name":"client_id","operator":"="},{"name":"work_order_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "im_rtc_call"
 const TABLE_COLUMNS = ["id","room","conversation_type","media_type","inviter_user_id","group_id","status","end_reason","start_time","accept_time","end_time","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["room","conversation_type","media_type","inviter_user_id","group_id","status","end_reason","start_time","accept_time","end_time"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"inviter_user_id","operator":"="},{"name":"group_id","operator":"="},{"name":"status","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

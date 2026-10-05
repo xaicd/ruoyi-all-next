@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "pay_wallet_transaction"
 const TABLE_COLUMNS = ["id","no","wallet_id","biz_type","biz_id","title","price","balance","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["no","wallet_id","biz_type","biz_id","title","price","balance"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"no","operator":"LIKE"},{"name":"wallet_id","operator":"="},{"name":"biz_type","operator":"="},{"name":"biz_id","operator":"="},{"name":"title","operator":"LIKE"}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "ai_knowledge_document"
 const TABLE_COLUMNS = ["id","knowledge_id","name","url","content","content_length","tokens","segment_max_tokens","retrieval_count","status","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["knowledge_id","name","url","content","content_length","tokens","segment_max_tokens","retrieval_count","status"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"knowledge_id","operator":"="},{"name":"name","operator":"LIKE"},{"name":"status","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

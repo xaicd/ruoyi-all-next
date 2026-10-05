@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mes_wm_item_receipt"
 const TABLE_COLUMNS = ["id","code","name","iqc_id","notice_id","purchase_order_code","vendor_id","receipt_date","status","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["code","name","iqc_id","notice_id","purchase_order_code","vendor_id","receipt_date","status","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"code","operator":"LIKE"},{"name":"name","operator":"LIKE"},{"name":"iqc_id","operator":"="},{"name":"notice_id","operator":"="},{"name":"vendor_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mes_pro_andon_record"
 const TABLE_COLUMNS = ["id","config_id","workstation_id","user_id","work_order_id","process_id","reason","level","status","handle_time","handler_user_id","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["config_id","workstation_id","user_id","work_order_id","process_id","reason","level","status","handle_time","handler_user_id","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"config_id","operator":"="},{"name":"workstation_id","operator":"="},{"name":"user_id","operator":"="},{"name":"work_order_id","operator":"="},{"name":"process_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

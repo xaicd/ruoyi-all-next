@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "trade_brokerage_user"
 const TABLE_COLUMNS = ["id","bind_user_id","bind_user_time","brokerage_enabled","brokerage_time","brokerage_price","frozen_price","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["bind_user_id","bind_user_time","brokerage_enabled","brokerage_time","brokerage_price","frozen_price"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"bind_user_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

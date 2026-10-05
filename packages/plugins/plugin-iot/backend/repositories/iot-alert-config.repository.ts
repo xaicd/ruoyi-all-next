@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "iot_alert_config"
 const TABLE_COLUMNS = ["id","name","description","level","status","scene_rule_ids","receive_user_ids","receive_types","sms_template_code","mail_template_code","notify_template_code","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["name","description","level","status","scene_rule_ids","receive_user_ids","receive_types","sms_template_code","mail_template_code","notify_template_code"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"name","operator":"LIKE"},{"name":"level","operator":"="},{"name":"status","operator":"="},{"name":"scene_rule_ids","operator":"="},{"name":"receive_user_ids","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

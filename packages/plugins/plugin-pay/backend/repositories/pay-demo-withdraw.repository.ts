@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "pay_demo_withdraw"
 const TABLE_COLUMNS = ["id","subject","price","user_account","user_name","type","status","pay_transfer_id","transfer_channel_code","transfer_time","transfer_error_msg","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["subject","price","user_account","user_name","type","status","pay_transfer_id","transfer_channel_code","transfer_time","transfer_error_msg"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"subject","operator":"LIKE"},{"name":"type","operator":"="},{"name":"status","operator":"="},{"name":"pay_transfer_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

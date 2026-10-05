@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "crm_receivable"
 const TABLE_COLUMNS = ["id","no","plan_id","customer_id","contract_id","owner_user_id","return_time","return_type","price","remark","process_instance_id","audit_status","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["no","plan_id","customer_id","contract_id","owner_user_id","return_time","return_type","price","remark","process_instance_id","audit_status"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"no","operator":"LIKE"},{"name":"plan_id","operator":"="},{"name":"customer_id","operator":"="},{"name":"contract_id","operator":"="},{"name":"owner_user_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

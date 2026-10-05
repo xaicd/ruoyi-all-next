@@ -20,9 +20,9 @@ import {
 } from "@/modules/shared/backend/lib/database"
 
 const TABLE_NAME = "mp_message"
-const TABLE_COLUMNS = ["id","msg_id","account_id","app_id","user_id","openid","type","send_from","content","media_id","media_url","recognition","format","title","description","thumb_media_id","thumb_media_url","url","location_x","location_y","scale","label","articles","music_url","hq_music_url","event","event_key","title","description","pic_url","url","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
-const WRITABLE_COLUMNS = ["msg_id","account_id","app_id","user_id","openid","type","send_from","content","media_id","media_url","recognition","format","title","description","thumb_media_id","thumb_media_url","url","location_x","location_y","scale","label","articles","music_url","hq_music_url","event","event_key","title","description","pic_url","url"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const TABLE_COLUMNS = ["id","msg_id","account_id","app_id","user_id","openid","type","send_from","content","media_id","media_url","recognition","format","title","description","thumb_media_id","thumb_media_url","url","location_x","location_y","scale","label","articles","music_url","hq_music_url","event","event_key","pic_url","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
+const WRITABLE_COLUMNS = ["msg_id","account_id","app_id","user_id","openid","type","send_from","content","media_id","media_url","recognition","format","title","description","thumb_media_id","thumb_media_url","url","location_x","location_y","scale","label","articles","music_url","hq_music_url","event","event_key","pic_url"] as const
+const FILTERS = [{"name":"msg_id","operator":"="},{"name":"account_id","operator":"="},{"name":"app_id","operator":"="},{"name":"user_id","operator":"="},{"name":"type","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

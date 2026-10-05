@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "im_group_member"
 const TABLE_COLUMNS = ["id","group_id","user_id","display_user_name","group_remark","silent","status","role","join_time","add_source","inviter_user_id","quit_time","mute_end_time","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["group_id","user_id","display_user_name","group_remark","silent","status","role","join_time","add_source","inviter_user_id","quit_time","mute_end_time"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"group_id","operator":"="},{"name":"user_id","operator":"="},{"name":"status","operator":"="},{"name":"inviter_user_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

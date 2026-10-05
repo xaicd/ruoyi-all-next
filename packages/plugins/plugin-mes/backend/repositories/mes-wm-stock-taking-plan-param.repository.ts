@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mes_wm_stock_taking_plan_param"
 const TABLE_COLUMNS = ["id","plan_id","type","value_id","value_code","value_name","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["plan_id","type","value_id","value_code","value_name","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"plan_id","operator":"="},{"name":"type","operator":"="},{"name":"value_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

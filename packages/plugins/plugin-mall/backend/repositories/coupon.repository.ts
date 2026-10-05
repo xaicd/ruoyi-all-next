@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "promotion_coupon"
 const TABLE_COLUMNS = ["id","template_id","name","status","user_id","take_type","use_price","valid_start_time","valid_end_time","product_scope","product_scope_values","discount_type","discount_percent","discount_price","discount_limit_price","use_order_id","use_time","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["template_id","name","status","user_id","take_type","use_price","valid_start_time","valid_end_time","product_scope","product_scope_values","discount_type","discount_percent","discount_price","discount_limit_price","use_order_id","use_time"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"template_id","operator":"="},{"name":"name","operator":"LIKE"},{"name":"status","operator":"="},{"name":"user_id","operator":"="},{"name":"use_order_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

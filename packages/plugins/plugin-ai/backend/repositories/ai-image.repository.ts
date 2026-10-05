@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "ai_image"
 const TABLE_COLUMNS = ["id","user_id","prompt","platform","model_id","model","width","height","status","finish_time","error_message","pic_url","public_status","options","buttons","task_id","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["user_id","prompt","platform","model_id","model","width","height","status","finish_time","error_message","pic_url","public_status","options","buttons","task_id"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"user_id","operator":"="},{"name":"model_id","operator":"="},{"name":"status","operator":"="},{"name":"task_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mes_wm_outsource_receipt_line"
 const TABLE_COLUMNS = ["id","receipt_id","item_id","quantity","batch_id","batch_code","production_date","expire_date","lot_number","remark","iqc_id","iqc_check_flag","quality_status","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["receipt_id","item_id","quantity","batch_id","batch_code","production_date","expire_date","lot_number","remark","iqc_id","iqc_check_flag","quality_status"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"receipt_id","operator":"="},{"name":"item_id","operator":"="},{"name":"batch_id","operator":"="},{"name":"iqc_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

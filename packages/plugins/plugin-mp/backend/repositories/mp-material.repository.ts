@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mp_material"
 const TABLE_COLUMNS = ["id","account_id","app_id","media_id","type","permanent","url","name","mp_url","title","introduction","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["account_id","app_id","media_id","type","permanent","url","name","mp_url","title","introduction"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"account_id","operator":"="},{"name":"app_id","operator":"="},{"name":"media_id","operator":"="},{"name":"type","operator":"="},{"name":"name","operator":"LIKE"}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

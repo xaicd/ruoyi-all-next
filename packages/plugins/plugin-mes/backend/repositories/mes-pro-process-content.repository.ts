@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mes_pro_process_content"
 const TABLE_COLUMNS = ["id","process_id","sort","content","device","material","doc_url","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["process_id","sort","content","device","material","doc_url","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"process_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "sort"
 const HAS_TENANT = true
 const HAS_DELETED = true

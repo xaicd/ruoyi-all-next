@@ -58,6 +58,8 @@ function columnType(javaType: string): { type: string; tsType: string } | null {
   return { type: "varchar", tsType: "string" }
 }
 
+import { deriveQueryType } from "./lib/query-types"
+
 const JAVA_PRIMITIVES = new Set(["int", "long", "double", "float", "boolean", "short", "byte", "char"])
 
 /**
@@ -150,6 +152,7 @@ function parseEntity(file: string): ParsedTable | null {
       comment,
       ...(isPk ? { isPk: true } : {}),
       ...(mapped.type === "decimal" ? { precision: 18, scale: 2 } : {}),
+      ...(deriveQueryType(toSnake(name)) ? { queryType: deriveQueryType(toSnake(name)) } : {}),
       nullableInferred: true,
     })
     pendingTableId = false
@@ -165,6 +168,14 @@ function parseEntity(file: string): ParsedTable | null {
     seen.add(name)
     return true
   })
+  // 可查字段限 5 个 —— 启发式推导出来的东西不能把搜索栏淹了
+  let remaining = 5
+  for (const column of deduped) {
+    if (column.queryType) {
+      if (remaining > 0) remaining -= 1
+      else delete column.queryType
+    }
+  }
   return { table: tableMatch[1], comment: displayName, className, columns: deduped }
 }
 
@@ -240,4 +251,5 @@ ${columns.map((column) => `        ${JSON.stringify(column)},`).join("\n")}
   }
 }
 
-main()
+// 只有直接执行时才跑 CLI —— 被 import 时不应产生副作用
+if (require.main === module) main()

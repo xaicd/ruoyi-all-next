@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mes_qc_rqc_line"
 const TABLE_COLUMNS = ["id","rqc_id","indicator_id","tool","check_method","standard_value","unit_measure_id","max_threshold","min_threshold","critical_quantity","major_quantity","minor_quantity","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["rqc_id","indicator_id","tool","check_method","standard_value","unit_measure_id","max_threshold","min_threshold","critical_quantity","major_quantity","minor_quantity","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"rqc_id","operator":"="},{"name":"indicator_id","operator":"="},{"name":"unit_measure_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

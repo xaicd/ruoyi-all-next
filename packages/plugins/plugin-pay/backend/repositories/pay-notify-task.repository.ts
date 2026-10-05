@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "pay_notify_task"
 const TABLE_COLUMNS = ["id","app_id","type","data_id","merchant_order_id","merchant_refund_id","merchant_transfer_id","status","next_notify_time","last_execute_time","notify_times","max_notify_times","notify_url","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["app_id","type","data_id","merchant_order_id","merchant_refund_id","merchant_transfer_id","status","next_notify_time","last_execute_time","notify_times","max_notify_times","notify_url"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"app_id","operator":"="},{"name":"type","operator":"="},{"name":"data_id","operator":"="},{"name":"merchant_order_id","operator":"="},{"name":"merchant_refund_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

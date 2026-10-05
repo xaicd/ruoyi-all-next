@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mes_pro_feedback"
 const TABLE_COLUMNS = ["id","code","type","channel","feedback_time","workstation_id","route_id","process_id","work_order_id","task_id","item_id","expire_date","lot_number","scheduled_quantity","feedback_quantity","qualified_quantity","unqualified_quantity","uncheck_quantity","labor_scrap_quantity","material_scrap_quantity","other_scrap_quantity","feedback_user_id","approve_user_id","status","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["code","type","channel","feedback_time","workstation_id","route_id","process_id","work_order_id","task_id","item_id","expire_date","lot_number","scheduled_quantity","feedback_quantity","qualified_quantity","unqualified_quantity","uncheck_quantity","labor_scrap_quantity","material_scrap_quantity","other_scrap_quantity","feedback_user_id","approve_user_id","status","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"code","operator":"LIKE"},{"name":"type","operator":"="},{"name":"workstation_id","operator":"="},{"name":"route_id","operator":"="},{"name":"process_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

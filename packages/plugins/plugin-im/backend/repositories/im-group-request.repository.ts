@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "im_group_request"
 const TABLE_COLUMNS = ["id","group_id","user_id","inviter_user_id","apply_content","add_source","handle_result","handle_user_id","handle_content","handle_time","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["group_id","user_id","inviter_user_id","apply_content","add_source","handle_result","handle_user_id","handle_content","handle_time"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"group_id","operator":"="},{"name":"user_id","operator":"="},{"name":"inviter_user_id","operator":"="},{"name":"handle_user_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

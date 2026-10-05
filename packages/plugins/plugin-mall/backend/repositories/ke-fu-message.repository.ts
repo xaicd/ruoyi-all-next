@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "promotion_kefu_message"
 const TABLE_COLUMNS = ["id","conversation_id","sender_id","sender_type","receiver_id","receiver_type","content_type","content","read_status","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["conversation_id","sender_id","sender_type","receiver_id","receiver_type","content_type","content","read_status"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"conversation_id","operator":"="},{"name":"sender_id","operator":"="},{"name":"receiver_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

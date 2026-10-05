@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "product_spu"
 const TABLE_COLUMNS = ["id","name","keyword","introduction","description","category_id","brand_id","pic_url","slider_pic_urls","sort","status","spec_type","price","market_price","cost_price","stock","delivery_types","delivery_template_id","give_integral","sub_commission_type","sales_count","virtual_sales_count","browse_count","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["name","keyword","introduction","description","category_id","brand_id","pic_url","slider_pic_urls","sort","status","spec_type","price","market_price","cost_price","stock","delivery_types","delivery_template_id","give_integral","sub_commission_type","sales_count","virtual_sales_count","browse_count"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"name","operator":"LIKE"},{"name":"category_id","operator":"="},{"name":"brand_id","operator":"="},{"name":"status","operator":"="},{"name":"delivery_template_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "sort"
 const HAS_TENANT = true
 const HAS_DELETED = true

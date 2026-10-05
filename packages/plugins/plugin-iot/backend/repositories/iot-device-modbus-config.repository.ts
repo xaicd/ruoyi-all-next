@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "iot_device_modbus_config"
 const TABLE_COLUMNS = ["id","product_id","device_id","ip","port","slave_id","timeout","retry_interval","mode","frame_format","status","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["product_id","device_id","ip","port","slave_id","timeout","retry_interval","mode","frame_format","status"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"product_id","operator":"="},{"name":"device_id","operator":"="},{"name":"slave_id","operator":"="},{"name":"status","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

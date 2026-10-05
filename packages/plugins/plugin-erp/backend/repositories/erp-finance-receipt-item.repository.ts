@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "erp_finance_receipt_item"
 const TABLE_COLUMNS = ["id","receipt_id","biz_type","biz_id","biz_no","total_price","receipted_price","receipt_price","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["receipt_id","biz_type","biz_id","biz_no","total_price","receipted_price","receipt_price","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"receipt_id","operator":"="},{"name":"biz_type","operator":"="},{"name":"biz_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

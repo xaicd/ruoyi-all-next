@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "pay_order"
 const TABLE_COLUMNS = ["id","app_id","channel_id","channel_code","user_id","user_type","merchant_order_id","subject","body","notify_url","price","channel_fee_rate","channel_fee_price","status","user_ip","expire_time","success_time","extension_id","no","refund_price","channel_user_id","channel_order_no","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["app_id","channel_id","channel_code","user_id","user_type","merchant_order_id","subject","body","notify_url","price","channel_fee_rate","channel_fee_price","status","user_ip","expire_time","success_time","extension_id","no","refund_price","channel_user_id","channel_order_no"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"app_id","operator":"="},{"name":"channel_id","operator":"="},{"name":"user_id","operator":"="},{"name":"merchant_order_id","operator":"="},{"name":"subject","operator":"LIKE"}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

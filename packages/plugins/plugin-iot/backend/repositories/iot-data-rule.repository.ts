@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "iot_data_rule"
 const TABLE_COLUMNS = ["id","name","description","status","source_configs","sink_ids","method","product_id","device_id","identifier","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["name","description","status","source_configs","sink_ids","method","product_id","device_id","identifier"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"name","operator":"LIKE"},{"name":"status","operator":"="},{"name":"sink_ids","operator":"="},{"name":"product_id","operator":"="},{"name":"device_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

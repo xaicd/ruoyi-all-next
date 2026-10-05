@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mes_tm_tool"
 const TABLE_COLUMNS = ["id","code","name","brand","specification","tool_type_id","quantity","available_quantity","mainten_type","next_mainten_period","next_mainten_date","status","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["code","name","brand","specification","tool_type_id","quantity","available_quantity","mainten_type","next_mainten_period","next_mainten_date","status","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"code","operator":"LIKE"},{"name":"name","operator":"LIKE"},{"name":"tool_type_id","operator":"="},{"name":"status","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

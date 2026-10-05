@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mes_wm_arrival_notice_line"
 const TABLE_COLUMNS = ["id","notice_id","item_id","arrival_quantity","qualified_quantity","iqc_check_flag","iqc_id","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["notice_id","item_id","arrival_quantity","qualified_quantity","iqc_check_flag","iqc_id","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"notice_id","operator":"="},{"name":"item_id","operator":"="},{"name":"iqc_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

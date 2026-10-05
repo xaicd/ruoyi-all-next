@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mes_pro_work_record"
 const TABLE_COLUMNS = ["id","user_id","workstation_id","type","clock_in_time","clock_out_time","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["user_id","workstation_id","type","clock_in_time","clock_out_time","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"user_id","operator":"="},{"name":"workstation_id","operator":"="},{"name":"type","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

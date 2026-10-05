@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "iot_thing_model"
 const TABLE_COLUMNS = ["id","identifier","name","description","product_id","product_key","type","property","event","service","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["identifier","name","description","product_id","product_key","type","property","event","service"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"name","operator":"LIKE"},{"name":"product_id","operator":"="},{"name":"type","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "promotion_bargain_activity"
 const TABLE_COLUMNS = ["id","name","start_time","end_time","status","spu_id","sku_id","bargain_first_price","bargain_min_price","stock","total_stock","help_max_count","bargain_count","total_limit_count","random_min_price","random_max_price","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["name","start_time","end_time","status","spu_id","sku_id","bargain_first_price","bargain_min_price","stock","total_stock","help_max_count","bargain_count","total_limit_count","random_min_price","random_max_price"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"name","operator":"LIKE"},{"name":"status","operator":"="},{"name":"spu_id","operator":"="},{"name":"sku_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

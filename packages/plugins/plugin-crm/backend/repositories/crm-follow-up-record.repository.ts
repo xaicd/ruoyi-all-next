@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "crm_follow_up_record"
 const TABLE_COLUMNS = ["id","biz_type","biz_id","type","content","next_time","pic_urls","file_urls","business_ids","contact_ids","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["biz_type","biz_id","type","content","next_time","pic_urls","file_urls","business_ids","contact_ids"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"biz_type","operator":"="},{"name":"biz_id","operator":"="},{"name":"type","operator":"="},{"name":"business_ids","operator":"="},{"name":"contact_ids","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

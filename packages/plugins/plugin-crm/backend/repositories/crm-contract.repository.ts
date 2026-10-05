@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "crm_contract"
 const TABLE_COLUMNS = ["id","name","no","customer_id","business_id","contact_last_time","owner_user_id","process_instance_id","audit_status","order_date","start_time","end_time","total_product_price","discount_percent","total_price","sign_contact_id","sign_user_id","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["name","no","customer_id","business_id","contact_last_time","owner_user_id","process_instance_id","audit_status","order_date","start_time","end_time","total_product_price","discount_percent","total_price","sign_contact_id","sign_user_id","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"name","operator":"LIKE"},{"name":"no","operator":"LIKE"},{"name":"customer_id","operator":"="},{"name":"business_id","operator":"="},{"name":"owner_user_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

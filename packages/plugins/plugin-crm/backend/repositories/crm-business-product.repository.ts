@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "crm_business_product"
 const TABLE_COLUMNS = ["id","business_id","product_id","product_price","business_price","count","total_price","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["business_id","product_id","product_price","business_price","count","total_price"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"business_id","operator":"="},{"name":"product_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

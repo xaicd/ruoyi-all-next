@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "erp_finance_payment"
 const TABLE_COLUMNS = ["id","no","status","payment_time","finance_user_id","supplier_id","account_id","total_price","discount_price","payment_price","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["no","status","payment_time","finance_user_id","supplier_id","account_id","total_price","discount_price","payment_price","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"no","operator":"LIKE"},{"name":"status","operator":"="},{"name":"finance_user_id","operator":"="},{"name":"supplier_id","operator":"="},{"name":"account_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

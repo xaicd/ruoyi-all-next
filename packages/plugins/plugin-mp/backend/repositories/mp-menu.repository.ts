@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mp_menu"
 const TABLE_COLUMNS = ["id","account_id","app_id","name","menu_key","parent_id","type","url","mini_program_app_id","mini_program_page_path","article_id","reply_message_type","reply_content","reply_media_id","reply_media_url","reply_title","reply_description","reply_thumb_media_id","reply_thumb_media_url","reply_articles","reply_music_url","reply_hq_music_url","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["account_id","app_id","name","menu_key","parent_id","type","url","mini_program_app_id","mini_program_page_path","article_id","reply_message_type","reply_content","reply_media_id","reply_media_url","reply_title","reply_description","reply_thumb_media_id","reply_thumb_media_url","reply_articles","reply_music_url","reply_hq_music_url"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"account_id","operator":"="},{"name":"app_id","operator":"="},{"name":"name","operator":"LIKE"},{"name":"parent_id","operator":"="},{"name":"type","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "product_sku"
 const TABLE_COLUMNS = ["id","spu_id","properties","price","market_price","cost_price","bar_code","pic_url","stock","weight","volume","first_brokerage_price","second_brokerage_price","sales_count","property_id","property_name","value_id","value_name","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["spu_id","properties","price","market_price","cost_price","bar_code","pic_url","stock","weight","volume","first_brokerage_price","second_brokerage_price","sales_count","property_id","property_name","value_id","value_name"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"spu_id","operator":"="},{"name":"property_id","operator":"="},{"name":"value_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

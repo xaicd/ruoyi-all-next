@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "erp_sale_out_items"
 const TABLE_COLUMNS = ["id","out_id","order_item_id","warehouse_id","product_id","product_unit_id","product_price","count","total_price","tax_percent","tax_price","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["out_id","order_item_id","warehouse_id","product_id","product_unit_id","product_price","count","total_price","tax_percent","tax_price","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"out_id","operator":"="},{"name":"order_item_id","operator":"="},{"name":"warehouse_id","operator":"="},{"name":"product_id","operator":"="},{"name":"product_unit_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

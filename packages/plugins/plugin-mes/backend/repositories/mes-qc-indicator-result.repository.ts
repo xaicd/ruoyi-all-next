@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "mes_qc_indicator_result"
 const TABLE_COLUMNS = ["id","code","qc_id","qc_type","item_id","sn","remark","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["code","qc_id","qc_type","item_id","sn","remark"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"code","operator":"LIKE"},{"name":"qc_id","operator":"="},{"name":"item_id","operator":"="},{"name":"sn","operator":"LIKE"}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

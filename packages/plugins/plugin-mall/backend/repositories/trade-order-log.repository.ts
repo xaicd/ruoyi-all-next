@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "trade_order_log"
 const TABLE_COLUMNS = ["id","user_id","user_type","order_id","before_status","after_status","operate_type","content","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["user_id","user_type","order_id","before_status","after_status","operate_type","content"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"user_id","operator":"="},{"name":"order_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

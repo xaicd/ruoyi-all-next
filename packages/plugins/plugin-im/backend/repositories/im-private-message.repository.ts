@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "im_private_message"
 const TABLE_COLUMNS = ["id","client_message_id","sender_id","receiver_id","type","content","status","receipt_status","send_time","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["client_message_id","sender_id","receiver_id","type","content","status","receipt_status","send_time"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"client_message_id","operator":"="},{"name":"sender_id","operator":"="},{"name":"receiver_id","operator":"="},{"name":"type","operator":"="},{"name":"status","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

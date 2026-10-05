@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "ai_mind_map"
 const TABLE_COLUMNS = ["id","user_id","platform","model_id","model","prompt","generated_content","error_message","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["user_id","platform","model_id","model","prompt","generated_content","error_message"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"user_id","operator":"="},{"name":"model_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

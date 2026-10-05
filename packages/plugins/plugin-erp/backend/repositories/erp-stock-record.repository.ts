@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "erp_stock_record"
 const TABLE_COLUMNS = ["id","product_id","warehouse_id","count","total_count","biz_type","biz_id","biz_item_id","biz_no","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["product_id","warehouse_id","count","total_count","biz_type","biz_id","biz_item_id","biz_no"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"product_id","operator":"="},{"name":"warehouse_id","operator":"="},{"name":"biz_type","operator":"="},{"name":"biz_id","operator":"="},{"name":"biz_item_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true

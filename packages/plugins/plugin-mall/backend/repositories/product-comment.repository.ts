@@ -22,7 +22,7 @@ import {
 const TABLE_NAME = "product_comment"
 const TABLE_COLUMNS = ["id","user_id","user_nickname","user_avatar","anonymous","order_id","order_item_id","spu_id","spu_name","sku_id","sku_pic_url","sku_properties","visible","scores","description_scores","benefit_scores","content","pic_urls","reply_status","reply_user_id","reply_content","reply_time","tenant_id","created_by","created_at","updated_by","updated_at","deleted"] as const
 const WRITABLE_COLUMNS = ["user_id","user_nickname","user_avatar","anonymous","order_id","order_item_id","spu_id","spu_name","sku_id","sku_pic_url","sku_properties","visible","scores","description_scores","benefit_scores","content","pic_urls","reply_status","reply_user_id","reply_content","reply_time"] as const
-const FILTERS = [] as Array<{ name: string; operator: DynamicQueryOperator }>
+const FILTERS = [{"name":"user_id","operator":"="},{"name":"order_id","operator":"="},{"name":"order_item_id","operator":"="},{"name":"spu_id","operator":"="},{"name":"sku_id","operator":"="}] as Array<{ name: string; operator: DynamicQueryOperator }>
 const ORDER_COLUMN = "created_at"
 const HAS_TENANT = true
 const HAS_DELETED = true
