@@ -61,7 +61,11 @@
   "facadeMethods": [
     "ping",
     "listWarehouses",
-    "checkin"
+    "checkin",
+    "deductStock",
+    "lockStock",
+    "releaseStock",
+    "replenishStock"
   ],
   "rpc": [
     {
@@ -75,12 +79,32 @@
     {
       "service": "WmsService",
       "method": "Checkin"
+    },
+    {
+      "service": "WmsService",
+      "method": "DeductStock"
+    },
+    {
+      "service": "WmsService",
+      "method": "LockStock"
+    },
+    {
+      "service": "WmsService",
+      "method": "ReleaseStock"
+    },
+    {
+      "service": "WmsService",
+      "method": "ReplenishStock"
     }
   ],
   "actions": [
     "wms.ping",
     "wms.listWarehouses",
-    "wms.checkin"
+    "wms.checkin",
+    "wms.deductStock",
+    "wms.lockStock",
+    "wms.releaseStock",
+    "wms.replenishStock"
   ],
   "permissions": [
     "wms:operation:checkin",

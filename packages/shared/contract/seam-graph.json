@@ -736,7 +736,11 @@
         "methods": [
           "ping",
           "listWarehouses",
-          "checkin"
+          "checkin",
+          "deductStock",
+          "lockStock",
+          "releaseStock",
+          "replenishStock"
         ]
       },
       "consumer": {

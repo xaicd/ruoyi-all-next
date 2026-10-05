@@ -33,6 +33,7 @@ import {
   type StockMutationOptions,
 } from "./inventory-invariant"
 import { WmsInventoryRepository } from "../repositories/wms-inventory.repository"
+import { wmsStockOpSchema } from "../validators/inventory-op.validator"
 
 const TABLE_NAME = "wms_inventory"
 
@@ -143,6 +144,45 @@ export const inventoryStockOps = {
   release(inventoryId: string, amount: number) {
     return this.apply(inventoryId, "release", amount)
   },
+
+  // ---- 跨域入口（payload 形状）----
+  // broker 派发调用的是 target(payload)，且按 holder[method] 查找 —— 所以这几个
+  // 必须挂在**本对象上**，名字与 rpc-actions.json 的 method 一致。
+  // 位置参数那套（deduct/lock/...）保留给同进程直接调用。
+
+  /** 出库/消耗（erp/mes 等经 Facade 调本方法，不各自实现扣减） */
+  deductStock(payload: unknown) {
+    return handleStockOp(payload, "deduct", true)
+  },
+  lockStock(payload: unknown) {
+    return handleStockOp(payload, "lock")
+  },
+  releaseStock(payload: unknown) {
+    return handleStockOp(payload, "release")
+  },
+  replenishStock(payload: unknown) {
+    return handleStockOp(payload, "replenish")
+  },
+}
+
+/**
+ * **RPC 形状的入口**（跨域调用走这几个）。
+ *
+ * 为什么必须单独一层: broker 派发调用的是 `target(payload)` —— **只传一个对象**。
+ * 把 `deduct(inventoryId, amount, options)` 直接挂上去，payload 会被当成 inventoryId
+ * 收下，然后静默做错事。这里显式校验后转给位置参数的 API。
+ */
+async function handleStockOp(payload: unknown, kind: "deduct" | "lock" | "release" | "replenish", allowNegativeFromPayload = false) {
+  // broker 的调用约定: 派发过来的是**请求对象**，业务入参在 `.data` 里
+  // （生成的 rpc 模板用的就是 `req.data`）。直接当业务对象解包会取到 undefined，
+  // 表现为"数量必须为正: undefined"。
+  const request = (payload ?? {}) as { data?: unknown }
+  const parsed = wmsStockOpSchema.safeParse(request.data ?? payload)
+  if (!parsed.success) {
+    throw new ApiError("VALIDATION_ERROR", `库存操作入参非法: ${parsed.error.issues.map((i) => i.path.join(".") + " " + i.message).join("; ")}`)
+  }
+  const { inventoryId, amount, allowNegative } = parsed.data
+  return inventoryStockOps.apply(inventoryId, kind, amount, allowNegativeFromPayload && allowNegative ? { allowNegative: true } : {})
 }
 
 /** 供测试与调用方直接使用纯函数（不碰存储）。 */

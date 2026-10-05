@@ -110,5 +110,6 @@ export const DOMAIN_SERVICE_LOADERS: Record<string, Record<string, Loader>> = {
   },
   "wms": {
     "index": () => import("@/modules/wms/backend/services/index"),
+    "inventory-stock-ops": () => import("@/modules/wms/backend/services/inventory-stock-ops"),
   },
 }

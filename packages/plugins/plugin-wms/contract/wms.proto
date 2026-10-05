@@ -28,8 +28,28 @@ message CheckinRequest {
   optional string note = 3;
 }
 
+message DeductStockRequest {
+  optional int32 n = 1;
+}
+
+message LockStockRequest {
+  optional int32 n = 1;
+}
+
+message ReleaseStockRequest {
+  optional int32 n = 1;
+}
+
+message ReplenishStockRequest {
+  optional int32 n = 1;
+}
+
 service WmsService {
   rpc Ping(PingRequest) returns (JsonReply);
   rpc ListWarehouses(ListWarehousesRequest) returns (JsonReply);
   rpc Checkin(CheckinRequest) returns (JsonReply);
+  rpc DeductStock(DeductStockRequest) returns (JsonReply);
+  rpc LockStock(LockStockRequest) returns (JsonReply);
+  rpc ReleaseStock(ReleaseStockRequest) returns (JsonReply);
+  rpc ReplenishStock(ReplenishStockRequest) returns (JsonReply);
 }
