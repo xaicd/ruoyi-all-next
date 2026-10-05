@@ -3503,7 +3503,6 @@
           "method": "listPublicModels",
           "service": "AigwRelayService",
           "module": "aigw-relay.service",
-          "target": "listPublicModels",
           "schema": "aigwListPublicModelsSchema",
           "fields": []
         },
@@ -3511,7 +3510,6 @@
           "method": "embed",
           "service": "AigwRelayService",
           "module": "aigw-relay.service",
-          "target": "embed",
           "schema": "aigwEmbedSchema",
           "fields": [
             {

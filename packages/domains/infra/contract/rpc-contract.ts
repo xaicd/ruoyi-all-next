@@ -1,0 +1,57 @@
+/**
+ * infra 域的跨域 RPC 契约（**代码**，由 scripts/bootstrap-rpc-contracts.ts 从既有 catalog 反向生成）。
+ *
+ * 之后 `rpc-actions.json` 是**派生物** —— 加方法请改这里，再跑
+ * `npx tsx scripts/generate-rpc-actions.ts --write`（门禁 `rpc:actions:check` 会拦漂移）。
+ */
+import { defineRpcContract } from "@/modules/shared/backend/lib/rpc-contract"
+
+export const INFRA_RPC_CONTRACT = defineRpcContract("infra", {
+  ping: { schema: "ping" },
+  updateConfig: { service: "InfraConfigService", module: "config.service", schema: "updateConfigSchema" },
+  previewCodegen: { service: "CodegenEngineService", module: "codegen-engine.service", schema: "infraCodegenPreviewSchema" },
+  generateCodegen: { service: "CodegenEngineService", module: "codegen-engine.service", schema: "infraCodegenPreviewSchema" },
+  previewTemplate: { service: "InfraTemplateEngineService", module: "template-engine.service", target: "preview", schema: "templatePreviewSchema" },
+  generateTemplate: { service: "InfraTemplateEngineService", module: "template-engine.service", target: "generate", schema: "infraCodegenExportSchema" },
+  listQueryDataSources: { service: "DataSourceConfigService", module: "data-source-config.service", schema: "listQueryDataSourcesSchema" },
+  getQueryConnection: { service: "DataSourceConfigService", module: "data-source-config.service", schema: "getQueryConnectionSchema" },
+  listConfigs: { service: "InfraConfigService", module: "config.service", target: "list", schema: "infraConfigListSchema" },
+  getConfigByKey: { service: "InfraConfigService", module: "config.service", schema: "getConfigByKeySchema" },
+  createConfig: { service: "InfraConfigService", module: "config.service", target: "create", schema: "infraConfigCreateSchema" },
+  listJobs: { service: "InfraJobService", module: "job.service", target: "list", schema: "infraJobListSchema" },
+  createJob: { service: "InfraJobService", module: "job.service", target: "create", schema: "infraJobCreateSchema" },
+  listFiles: { service: "InfraFileService", module: "file.service", target: "list", schema: "infraFileListSchema" },
+  recordFile: { service: "InfraFileService", module: "file.service", target: "recordUpload", schema: "infraFileRecordSchema" },
+  pageDataSourceConfigs: { service: "DataSourceConfigService", module: "data-source-config.service", target: "page", schema: "dataSourceConfigPageSchema" },
+  getConfig: { service: "InfraConfigService", module: "config.service", schema: "infraResourceIdSchema", fieldsRef: "resourceId" },
+  updateConfigItem: { service: "InfraConfigService", module: "config.service", schema: "infraConfigItemUpdateSchema" },
+  deleteConfig: { service: "InfraConfigService", module: "config.service", schema: "infraResourceIdSchema", fieldsRef: "resourceId" },
+  getJob: { service: "InfraJobService", module: "job.service", schema: "infraResourceIdSchema", fieldsRef: "resourceId" },
+  updateJob: { service: "InfraJobService", module: "job.service", target: "update", schema: "infraJobUpdateSchema" },
+  deleteJob: { service: "InfraJobService", module: "job.service", schema: "infraResourceIdSchema", fieldsRef: "resourceId" },
+  triggerJob: { service: "InfraJobService", module: "job.service", schema: "infraResourceIdSchema", fieldsRef: "resourceId" },
+  updateJobStatus: { service: "InfraJobService", module: "job.service", schema: "infraResourceStatusSchema", fieldsRef: "resourceStatus" },
+  getFile: { service: "InfraFileService", module: "file.service", schema: "infraResourceIdSchema", fieldsRef: "resourceId" },
+  deleteFile: { service: "InfraFileService", module: "file.service", schema: "infraResourceIdSchema", fieldsRef: "resourceId" },
+  listPages: { service: "InfraPageService", module: "page.service", schema: "infraPageListSchema" },
+  getPage: { service: "InfraPageService", module: "page.service", schema: "infraResourceIdSchema", fieldsRef: "resourceId" },
+  getPageBySlug: { service: "InfraPageService", module: "page.service", schema: "getPageBySlugSchema" },
+  pageApiErrorLogs: { service: "ApiErrorLogService", module: "api-error-log.service", target: "page", schema: "apiErrorLogQuerySchema", fieldsRef: "pageQuery" },
+  getApiErrorLog: { service: "ApiErrorLogService", module: "api-error-log.service", schema: "infraResourceIdSchema", fieldsRef: "resourceId" },
+  processApiErrorLog: { service: "ApiErrorLogService", module: "api-error-log.service", schema: "processApiErrorLogSchema" },
+  pageApiAccessLogs: { service: "ApiAccessLogService", module: "api-access-log.service", target: "page", schema: "infraPageQuerySchema", fieldsRef: "pageQuery" },
+  getApiAccessLog: { service: "ApiAccessLogService", module: "api-access-log.service", schema: "infraResourceIdSchema", fieldsRef: "resourceId" },
+  testDataSourceConnection: { service: "DataSourceConfigService", module: "data-source-config.service", target: "testConnection", schema: "testDataSourceConnectionSchema" },
+  listCodegenTables: { service: "CodegenTableService", module: "codegen-table.service", schema: "codegenTableListSchema" },
+  getCodegenTable: { service: "CodegenTableService", module: "codegen-table.service", schema: "codegenTableIdSchema" },
+  updateCodegenTable: { service: "CodegenTableService", module: "codegen-table.service", schema: "codegenTableUpdateSchema" },
+  deleteCodegenTable: { service: "CodegenTableService", module: "codegen-table.service", schema: "codegenTableIdSchema" },
+  deleteCodegenTables: { service: "CodegenTableService", module: "codegen-table.service", schema: "codegenTableIdsSchema" },
+  exportApiAccessLogs: { service: "ApiAccessLogService", module: "api-access-log.service", schema: "infraPageQuerySchema", fieldsRef: "pageQuery" },
+  exportApiErrorLogs: { service: "ApiErrorLogService", module: "api-error-log.service", schema: "apiErrorLogQuerySchema", fieldsRef: "pageQuery" },
+  runAuditLogRetention: { service: "AuditLogRetentionService", module: "audit-log-retention.service", target: "run", schema: "auditLogRetentionSchema" },
+  listCodegenCandidates: { service: "CodegenTableService", module: "codegen-table.service", schema: "codegenCandidateQuerySchema" },
+  importCodegenTables: { service: "CodegenTableService", module: "codegen-table.service", schema: "codegenImportSchema" },
+  generateCodegenArchive: { service: "CodegenTableService", module: "codegen-table.service", schema: "codegenTableIdSchema" },
+  listCodegenCatalog: { service: "CodegenTableService", module: "codegen-table.service", schema: "emptyPayloadSchema", fieldsRef: "ping" },
+})
