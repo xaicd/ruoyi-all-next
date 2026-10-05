@@ -57,8 +57,14 @@ export interface StockMutationPlan {
   conditionalUpdate: {
     column: "qty" | "locked_qty"
     guard: string
-    /** 负库存开关打开时，deduct 的 guard 放宽为无条件 */
-    guardDisabledWhenNegativeAllowed: boolean
+    /**
+     * **要不要应用上面的 guard**（由 planner 结合 options 算好的**判定结果**）。
+     *
+     * 早先这里放的是"负库存打开时放宽"这种**条件性描述**，执行器拿到 plan 后
+     * 无从判断该不该加 guard（它并不知道 allowNegative）—— 契约缺口，实测被测试抓到。
+     * 现在只给结果，不给需要二次推理的描述。
+     */
+    guardApplies: boolean
   }
 }
 
@@ -74,7 +80,7 @@ function invalid(kind: StockMutationKind, row: InventoryRow, reason: StockMutati
     reason,
     nextQty: row.qty,
     nextLockedQty: row.lockedQty,
-    conditionalUpdate: { column: kind === "lock" || kind === "release" ? "locked_qty" : "qty", guard: "invalid-delta", guardDisabledWhenNegativeAllowed: false },
+    conditionalUpdate: { column: kind === "lock" || kind === "release" ? "locked_qty" : "qty", guard: "invalid-delta", guardApplies: true },
   }
 }
 
@@ -95,7 +101,8 @@ export function planDeduct(row: InventoryRow, amount: number, options: StockMuta
     conditionalUpdate: {
       column: "qty",
       guard: `qty >= ${amount}`,
-      guardDisabledWhenNegativeAllowed: true,
+      // 允许负库存时就不加 guard —— 结果在这里算好，执行器直接用
+      guardApplies: !options.allowNegative,
     },
   }
 }
@@ -108,7 +115,7 @@ export function planReplenish(row: InventoryRow, amount: number): StockMutationP
     allowed: true,
     nextQty: row.qty + amount,
     nextLockedQty: row.lockedQty,
-    conditionalUpdate: { column: "qty", guard: "1 = 1", guardDisabledWhenNegativeAllowed: false },
+    conditionalUpdate: { column: "qty", guard: "1 = 1", guardApplies: false },
   }
 }
 
@@ -124,7 +131,7 @@ export function planLock(row: InventoryRow, amount: number): StockMutationPlan {
     conditionalUpdate: {
       column: "locked_qty",
       guard: `(qty - locked_qty) >= ${amount}`,
-      guardDisabledWhenNegativeAllowed: false,
+      guardApplies: true,
     },
   }
 }
@@ -141,7 +148,7 @@ export function planRelease(row: InventoryRow, amount: number): StockMutationPla
     conditionalUpdate: {
       column: "locked_qty",
       guard: `locked_qty >= ${amount}`,
-      guardDisabledWhenNegativeAllowed: false,
+      guardApplies: true,
     },
   }
 }
@@ -169,23 +176,22 @@ export class InsufficientStockError extends Error {
 }
 
 /**
- * 规划 + 执行。并发安全的落点就是这里:
+ * 执行一个已规划好的变更。并发安全的落点就是这里:
  * 规划通过**不代表**成功 —— 必须看条件更新返回的行数。
+ *
+ * **刻意要求显式传入 plan，而不是靠 delta 的正负去猜操作类型**:
+ * `lock` 与 `replenish` 都是正数，靠符号推断会把"预占"错当成"入库"（我在写这版时
+ * 真踩了），而那种错误不会报错，只会静默把库存改错。
  */
-export async function applyStockMutation(
+export async function executePlan(
   row: InventoryRow,
-  delta: number,
+  plan: StockMutationPlan,
+  amount: number,
   executor: StockMutationExecutor,
-  options: StockMutationOptions = {},
 ): Promise<{ qty: number; lockedQty: number }> {
-  // 入参约定: **负数 = 出库**，正数 = 入库（与"增量"直觉一致）。
-  // planner 本身只收正数，取绝对值在这里做，且只做一次。
-  const amount = Math.abs(delta)
   if (!Number.isFinite(amount) || amount <= 0) {
-    throw new InsufficientStockError(row.id, "deduct", `库存变更数量非法: ${delta}`)
+    throw new InsufficientStockError(row.id, plan.kind, `库存变更数量非法: ${amount}`)
   }
-  const plan = delta < 0 ? planDeduct(row, amount, options) : planReplenish(row, amount)
-
   if (!plan.allowed) {
     throw new InsufficientStockError(row.id, plan.kind, `库存不可用（${plan.reason}）: inventory=${row.id}`)
   }

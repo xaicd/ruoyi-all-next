@@ -138,6 +138,39 @@ export async function insertDynamicRow(tableName: string, values: Record<string,
   return mapDbRow(result.rows[0])
 }
 
+/**
+ * **原子的列增减（带 guard）** —— 返回值是影响行数，即"成功与否"本身。
+ *
+ * 为什么必须有这个原语:"先查库存 → 判断够不够 → 再写"在并发下**两个请求会双双通过检查**，
+ * 各自扣一次 —— 超卖。只有把条件写进**同一条 UPDATE** 才能保证正确:
+ *
+ *     UPDATE t SET col = col ± N WHERE <归属条件> AND <guard>
+ *
+ * 返回 0 行 = 条件不满足（并发下被别人先拿走了），调用方**必须据此报错**，
+ * 不能当作成功，也不能回退成"那就无条件写吧"。
+ *
+ * 与 `updateDynamicRow` 的区别: 那个写的是**字面量**值，表达不了 `col = col - N`。
+ */
+export async function mutateColumnAtomic(
+  tableName: string,
+  column: string,
+  delta: number,
+  where: RawBuilder<unknown>,
+): Promise<number> {
+  if (!Number.isFinite(delta) || delta === 0) {
+    throw new ApiError("VALIDATION_ERROR", `列增减量必须是非零有限数: ${delta}`)
+  }
+  const db = await getKyselyDb()
+  const table = sqlTable(tableName)
+  const columnRef = sqlColumn(column)
+  const statement =
+    delta > 0
+      ? sql`update ${table} set ${columnRef} = ${columnRef} + ${sqlValue(delta)} where ${where}`
+      : sql`update ${table} set ${columnRef} = ${columnRef} - ${sqlValue(Math.abs(delta))} where ${where}`
+  const result = await statement.execute(db)
+  return Number(result.numAffectedRows ?? 0)
+}
+
 export async function updateDynamicRow(tableName: string, values: Record<string, unknown>, where: RawBuilder<unknown>): Promise<Record<string, unknown> | null> {
   const db = await getKyselyDb()
   const table = sqlTable(tableName)

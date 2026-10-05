@@ -46,6 +46,7 @@ export {
   existsDynamicRow,
   insertDynamicRow,
   updateDynamicRow,
+  mutateColumnAtomic,
   deleteDynamicRow,
 } from "./dynamic-table"
 export type { DynamicPersistScope, DynamicQueryOperator } from "./dynamic-table"

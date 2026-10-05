@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest"
 import {
   availableQty, planDeduct, planReplenish, planLock, planRelease,
-  applyStockMutation, InsufficientStockError,
+  executePlan, InsufficientStockError,
   type InventoryRow, type StockMutationPlan, type StockMutationExecutor,
 } from "../inventory-invariant"
 
@@ -16,7 +16,7 @@ function executor(state: { qty: number; lockedQty: number }, opts: { failGuard?:
     async applyConditionalUpdate(_id: string, plan: StockMutationPlan, amount: number) {
       if (opts.failGuard) return 0 // 条件不满足（并发被别人先拿走）
       if (plan.kind === "deduct") {
-        if (state.qty < amount && !plan.conditionalUpdate.guardDisabledWhenNegativeAllowed) return 0
+        if (state.qty < amount && plan.conditionalUpdate.guardApplies) return 0
         state.qty -= amount
       } else if (plan.kind === "replenish") {
         state.qty += amount
@@ -55,7 +55,7 @@ describe("库存不变量（对齐源框架 ErpStockServiceImpl.updateStockCount
     const p = planDeduct(row(3), 4, { allowNegative: true })
     expect(p.allowed).toBe(true)
     expect(p.nextQty).toBe(-1)
-    expect(p.conditionalUpdate.guardDisabledWhenNegativeAllowed).toBe(true)
+    expect(p.conditionalUpdate.guardApplies).toBe(false)
   })
 
   it("非正数/非法数量一律拒绝（避免用 0 或负数绕过语义）", () => {
@@ -90,22 +90,23 @@ describe("库存不变量（对齐源框架 ErpStockServiceImpl.updateStockCount
     expect(planB.allowed).toBe(true)
 
     const ex = executor(state)
-    await expect(applyStockMutation({ id: "inv1", ...state }, -5, ex)).resolves.toEqual({ qty: 0, lockedQty: 0 })
+    const plan = planDeduct({ id: "inv1", ...state }, 5)
+    await expect(executePlan({ id: "inv1", ...state }, plan, 5, ex)).resolves.toEqual({ qty: 0, lockedQty: 0 })
     // 第二个: 规划仍然"通过"，但条件更新影响 0 行 -> 抛错
-    await expect(applyStockMutation({ id: "inv1", ...state }, -5, ex)).rejects.toBeInstanceOf(InsufficientStockError)
+    await expect(executePlan({ id: "inv1", ...state }, plan, 5, ex)).rejects.toBeInstanceOf(InsufficientStockError)
     expect(state.qty).toBe(0)
   })
 
   it("执行器返回 0 行（guard 不满足）时抛 InsufficientStockError", async () => {
     await expect(
-      applyStockMutation(row(100), -5, executor({ qty: 100, lockedQty: 0 }, { failGuard: true })),
+      executePlan(row(100), planDeduct(row(100), 5), 5, executor({ qty: 100, lockedQty: 0 }, { failGuard: true })),
     ).rejects.toBeInstanceOf(InsufficientStockError)
   })
 
   it("规划阶段就不可用时，不触碰执行器", async () => {
     let called = 0
     const spy: StockMutationExecutor = { async applyConditionalUpdate() { called++; return 1 } }
-    await expect(applyStockMutation(row(1), -5, spy)).rejects.toThrow(/库存不可用/)
+    await expect(executePlan(row(1), planDeduct(row(1), 5), 5, spy)).rejects.toThrow(/库存不可用/)
     expect(called).toBe(0)
   })
 })
