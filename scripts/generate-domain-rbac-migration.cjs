@@ -80,8 +80,11 @@ const DOMAIN_LABEL = {
 function main() {
   const files = collectSql()
   if (files.length === 0) {
-    console.error("[domain-rbac] 没有找到任何 *.rbac.sql")
-    process.exit(1)
+    // **没有业务域是合法状态**（base profile 只有 system + infra，没有 domain menu）。
+    // 早先这里 exit 1 —— 结果孵化器把它当失败（`execSync` 抛错），
+    // 于是"孵一个 base 工程"这条最基本的路径直接走不通。这不是错误，是空集。
+    console.log("[domain-rbac] 没有业务域（无 *.rbac.sql）—— 跳过菜单聚合迁移")
+    return
   }
 
   // 收集父菜单: id -> 所属域

@@ -582,7 +582,7 @@ function applyHatchPatches(destRoot, plan, sourceCatalog, targetName) {
   // 派生物清单**共用**（scripts/lib/derived-artifacts.cjs）——
   // 漏一个的表现是门禁对不上（'注册表 14 vs 实际 15'），这一轮已经漏过两次。
   const { DERIVED_ARTIFACTS } = require("./lib/derived-artifacts.cjs")
-  for (const [script, args, label] of DERIVED_ARTIFACTS) {
+  for (const { script, args, label } of DERIVED_ARTIFACTS) {
     if (!fs.existsSync(path.join(destRoot, script))) continue
     try {
       execSync(`node ${script}${args.length ? " " + args.join(" ") : ""}`, { cwd: destRoot, stdio: "pipe" })
@@ -825,13 +825,13 @@ function main() {
     const targetArg = parsed.target
     return runProjectReactor(targetArg, plan, catalog, { dryRun: parsed.dryRun })
   } catch (err) {
-    console.error("[REACTOR ERROR]", err.message || err)
+    console.error("[REACTOR ERROR]", err.stack || err.message || err)
     process.exitCode = 1
     return Promise.resolve()
   }
 }
 
 main().catch((err) => {
-  console.error("[REACTOR ERROR]", err.message || err)
+  console.error("[REACTOR ERROR]", err.stack || err.message || err)
   process.exit(1)
 })
