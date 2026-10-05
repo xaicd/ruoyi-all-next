@@ -24,14 +24,14 @@ const demoConfig = {
 }
 
 describe("CodegenEngineService dual-mode RPC", () => {
-  it("emits an RPC binding file that forbids cross-domain Service imports", () => {
+    it("派发信息落在 actions/manifest 上，且不再产出已废弃的 *.rpc.ts 绑定层", () => {
     const outputs = CodegenEngineService.generate(demoConfig)
-    const rpc = outputs.find((item) => item.path.endsWith("demo-widget.rpc.ts"))
-    const service = outputs.find((item) => item.type === "service")
-    expect(rpc?.content).toContain("createDomainFacade")
-    expect(rpc?.content).toContain('domain: "infra"')
-    expect(rpc?.content).toContain("registerActionSchemas")
-    expect(service?.content).toContain("createDomainFacade")
+      const service = outputs.find((item) => item.type === "service")
+      // 旧设计产出的 `*.rpc.ts` 调的是 `serviceBus.registerHandler`（该 API 不存在），
+      // 且全仓无人注册 —— 整层是坏的死代码。派发的真实路径是
+      // rpc-actions.json + domain-service-loaders（由 generate-domain-service-loaders.cjs 生成）。
+      // 这条断言防止它被悄悄加回来。
+      expect(outputs.some((item) => item.path.endsWith(".rpc.ts"))).toBe(false)
     expect(service?.content).toContain("never import this Service")
     expect(service?.content).not.toContain("MOCK_DATA")
     expect(service?.content).toContain("DemoWidgetRepository")
@@ -53,7 +53,8 @@ describe("CodegenEngineService dual-mode RPC", () => {
   it("wraps preview/generate as RPC-stable { files } payloads", async () => {
     const preview = await CodegenEngineService.previewCodegen(demoConfig)
     const generated = await CodegenEngineService.generateCodegen(demoConfig)
-    expect(preview.files.some((item) => item.path.endsWith("demo-widget.rpc.ts"))).toBe(true)
+    expect(preview.files.some((item) => item.path.endsWith("demo-widget.actions.ts"))).toBe(true)
+    expect(preview.files.some((item) => item.path.endsWith(".rpc.ts"))).toBe(false)
     expect(generated.files).toHaveLength(preview.files.length)
   })
 

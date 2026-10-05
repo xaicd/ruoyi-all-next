@@ -1,13 +1,18 @@
 /**
  * 各域 services 的**静态** loader 映射（两级: 域 -> 模块）。
  *
+ * 由 scripts/generate-domain-service-loaders.cjs 从 rpc-actions.json 生成，**勿手改**
+ * （加了域或模块后跑该脚本重生成；--check 是门禁）。
+ *
  * 为什么不能用模板字符串动态 import:
  *   broker 原先写 import(`@/modules/${domain}/backend/services/${module}`) ——
  *   这类「前缀 + 动态段」Turbopack 无法解析（实测 build 报
- *   'Module not found: Can\'t resolve \'@/modules/\' <dynamic>' / strip_prefix prefix is too long），
+ *   'Module not found: Can't resolve \'@/modules/\' <dynamic>' / strip_prefix prefix is too long），
  *   改相对路径同样失败。显式列出每条 (域, 模块) 后动态前缀消失。
  *
- * 模块清单取自 rpc-actions.json 实际用到的 module 值（+ index），是有限集合。
+ * 为什么必须从 catalog 生成:
+ *   这张表此前是手工维护的（文件头写着"清单取自 rpc-actions.json"，却没人真的生成它）——
+ *   注册新域/新模块时漏登记，跨域调用只会在**运行时**才炸。现在两者同源。
  */
 
 type Loader = () => Promise<Record<string, unknown>>

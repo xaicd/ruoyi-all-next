@@ -14,3 +14,4 @@ export const wmsCheckinSchema = z.object({
 
 export type WmsPageQueryInput = z.infer<typeof wmsPageQuerySchema>
 export type WmsCheckinInput = z.infer<typeof wmsCheckinSchema>
+export { wmsStockOpSchema, type WmsStockOpInput } from "./inventory-op.validator"

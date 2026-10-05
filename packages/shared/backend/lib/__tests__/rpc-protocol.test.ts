@@ -370,7 +370,9 @@ describe("dual-mode broker invoke and facade", () => {
     expect(preview.success, preview.error).toBe(true)
     expect(preview.invokeMode).toBe("sdk")
     const files = (preview.data as { files?: Array<{ path: string; content: string }> } | undefined)?.files ?? []
-    expect(files.some((item) => item.path.endsWith("demo-widget.rpc.ts") && item.content.includes("createDomainFacade"))).toBe(true)
+      // 派发契约: 生成物里带 actions（catalog 据此派发），且不再有已废弃的 rpc 绑定层
+      expect(files.some((item) => item.path.endsWith("demo-widget.actions.ts"))).toBe(true)
+      expect(files.some((item) => item.path.endsWith(".rpc.ts"))).toBe(false)
   })
 
   it("uses HTTP RPC when BFF splits pay via upstream", async () => {

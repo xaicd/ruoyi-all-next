@@ -4,7 +4,6 @@ import { generateTypes } from "./types.template"
 import { generateValidator } from "./validator.template"
 import { generateRepository } from "./repository.template"
 import { generateService } from "./service.template"
-import { generateRpc } from "./rpc.template"
 import { generateActions } from "./actions.template"
 import { generateRoute, generateActionRoutes } from "./route.template"
 import { generateApiClient } from "./frontend-api.template"
@@ -21,7 +20,6 @@ export * from "./types.template"
 export * from "./validator.template"
 export * from "./repository.template"
 export * from "./service.template"
-export * from "./rpc.template"
 export * from "./actions.template"
 export * from "./route.template"
 export * from "./frontend-api.template"
@@ -53,7 +51,6 @@ export function generateAllCodegenOutputs(config: CodegenConfig, options?: Gener
 
   outputs.push(
     generateService(config),
-    generateRpc(config),
     generateActions(config),
     generateRoute(config),
     ...generateActionRoutes(config),

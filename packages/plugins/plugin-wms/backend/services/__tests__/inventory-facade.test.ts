@@ -55,7 +55,9 @@ describe("跨域 Facade: 库存操作", () => {
       wmsFacade.deductStock({ inventoryId, amount: -5 }),
     )
     expect(result.success).toBe(false)
-    expect(String(result.error)).toMatch(/入参非法/)
+    // 注意: 现在 broker 会**先用 catalog 里的 schema 校验**（contracts:sync 生成的 actions
+    // 把 wmsStockOpSchema 接上了），所以非法入参在这里就被拦下，错误是 ValidationError。
+    expect(String(result.error)).toMatch(/ValidationError|入参非法/)
   })
 
   it("lockStock 预占走的是 locked_qty，不是 qty", async () => {
