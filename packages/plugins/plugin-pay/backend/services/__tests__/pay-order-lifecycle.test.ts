@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest"
-import { applyPaidCallback, applyClosedCallback, shouldExpire, canTransition } from "../pay-order-lifecycle"
+import { applyPaidCallback, applyClosedCallback, shouldExpire, canTransition, PAY_ORDER_MACHINE } from "../pay-order-lifecycle"
+import { nextStates, validateStateMachine } from "@/modules/shared/backend/lib/state-machine"
 
 const order = (status: string) => ({ id: "o1", status })
 const ext = (orderId = "o1", status = "WAITING") => ({ id: "e1", orderId, status })
@@ -57,5 +58,16 @@ describe("支付订单生命周期（对齐源框架 PayOrderServiceImpl 的不�
     expect(canTransition("SUCCESS", "CLOSED")).toBe(true)
     expect(canTransition("SUCCESS", "WAITING")).toBe(false)
     expect(canTransition("CLOSED", "SUCCESS")).toBe(false)
+  })
+})
+
+describe("支付订单状态机（声明式定义的自洽性）", () => {
+  it("定义本身自洽（不引用未声明状态、终态无迁出、动作唯一）", () => {
+    expect(validateStateMachine(PAY_ORDER_MACHINE)).toEqual([])
+  })
+
+  it("nextStates 给出可迁移目标 —— 前端可据此渲染「还能做什么」，与后端同一真源", () => {
+    expect(nextStates(PAY_ORDER_MACHINE, "WAITING").sort()).toEqual(["CLOSED", "SUCCESS"])
+    expect(nextStates(PAY_ORDER_MACHINE, "CLOSED")).toEqual([])
   })
 })

@@ -14,6 +14,8 @@
  * 状态机是手写资产。
  */
 
+import { canTransition as canMachineTransition, defineStateMachine } from "@/modules/shared/backend/lib/state-machine"
+
 export type PayOrderStatus = "WAITING" | "SUCCESS" | "CLOSED"
 
 export interface PayOrderLike {
@@ -96,12 +98,27 @@ export function shouldExpire(order: PayOrderLike, createdAt: string | Date, expi
   return now.getTime() - created.getTime() >= expireMinutes * 60_000
 }
 
-/** 状态迁移是否合法（供路由/服务做入参校验，避免绕过上面两个回调入口直接改状态）。 */
+/**
+ * 支付订单的状态机 —— 用 shared 的**声明式**原语，而不是手写一张表。
+ *
+ * 换成原语的好处（不只是"少几行"）:
+ *   * 规则集中一处，`nextStates` 可给前端渲染"这个单子还能做什么"，与后端同一真源
+ *   * `assertTransition` 让**非法迁移抛错**而不是静默通过
+ *   * `validateStateMachine` 能在测试里抓出定义本身的错（引用了未声明状态、终态有迁出）
+ */
+export const PAY_ORDER_MACHINE = defineStateMachine({
+  name: "pay-order",
+  states: ["WAITING", "SUCCESS", "CLOSED"] as const,
+  terminal: ["CLOSED"] as const,
+  transitions: [
+    { from: "WAITING", to: "SUCCESS", action: "pay" },
+    { from: "WAITING", to: "CLOSED", action: "close" },
+    // 已支付只能经退款关闭 —— 与 applyClosedCallback 的不降级规则同源
+    { from: "SUCCESS", to: "CLOSED", action: "refund" },
+  ],
+})
+
+/** 状态迁移是否合法（薄封装，保持既有调用方不变）。 */
 export function canTransition(from: PayOrderStatus | string, to: PayOrderStatus | string): boolean {
-  const allowed: Record<string, PayOrderStatus[]> = {
-    WAITING: ["SUCCESS", "CLOSED"],
-    SUCCESS: ["CLOSED"], // 仅退款流程可关闭
-    CLOSED: [],
-  }
-  return (allowed[from] ?? []).includes(to as PayOrderStatus)
+  return canMachineTransition(PAY_ORDER_MACHINE, from as PayOrderStatus, to as PayOrderStatus)
 }
