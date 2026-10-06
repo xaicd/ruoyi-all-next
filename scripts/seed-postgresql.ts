@@ -178,6 +178,17 @@ async function main() {
     }
     // Historical all-next draft packages were not sourced from RuoYi. Keep rows for audit,
     // but remove them from the catalog after the demo tenant is reassigned to package 111.
+    // 库里可能还有**不是这次种子带来**的菜单 —— 例如按元数据生成的 `domain_rbac_menus`
+    // 迁移（导入业务域时产出）。套餐只认静态种子，不补这一步的话，
+    // `getRoleMenuIds` 会按套餐再过滤一道 —— 结果是「角色菜单授权了、侧边栏却看不到」，
+    // 两边自相矛盾（实测: 新域菜单授权 266 条，套餐里 0 条）。
+    await client.query(
+      `INSERT INTO system_tenant_package_menu (id, package_id, menu_id)
+       SELECT 'tm-seed-' || p.id || '-' || m.id, p.id, m.id
+       FROM system_tenant_package p CROSS JOIN system_menu m
+       WHERE p.deleted = false
+       ON CONFLICT (package_id, menu_id) DO NOTHING`,
+    )
     await client.query(`DELETE FROM system_tenant_package_menu WHERE package_id IN ('1', '2', '3')`)
     await client.query(`UPDATE system_tenant_package SET deleted = true, updated_at = $1 WHERE id IN ('1', '2', '3')`, [new Date().toISOString()])
     const roleResult = await client.query<{ id: string }>(`SELECT id FROM system_role WHERE code = 'super_admin' LIMIT 1`)
