@@ -66,6 +66,29 @@ check("Rule-Mounting", () => {
   if (!agentsMd.includes("HIGH-ORDER-INVERSE-THINKING.md") || !agentsMd.includes("§23")) {
     throw new Error("AGENTS.md 必须在 Universal Directives 与 §23 登记高阶反向思维准则！");
   }
+
+  // 检查通用高阶反向提示词库文件存在性与 5 大模版完备性
+  const promptLibPath = path.join(ROOT, "docs/architecture/universal-high-order-inverse-prompts.md");
+  if (!fs.existsSync(promptLibPath)) {
+    throw new Error("缺失 docs/architecture/universal-high-order-inverse-prompts.md 通用提示词库文件！");
+  }
+  const promptLibContent = fs.readFileSync(promptLibPath, "utf8");
+  if (!promptLibContent.includes("模版 1") || !promptLibContent.includes("模版 5")) {
+    throw new Error("universal-high-order-inverse-prompts.md 必须完整包含五大核心反向提示词模版！");
+  }
+
+  // 检查 AI-Driven 全生命周期 6 大阶段治理大纲
+  const lifecyclePath = path.join(ROOT, "docs/architecture/ai-driven-full-lifecycle-governance-and-reinforcement.md");
+  if (!fs.existsSync(lifecyclePath)) {
+    throw new Error("缺失 docs/architecture/ai-driven-full-lifecycle-governance-and-reinforcement.md 全生命周期治理大纲！");
+  }
+  const lifecycleContent = fs.readFileSync(lifecyclePath, "utf8");
+  const requiredPhases = ["需求", "设计", "开发", "测试", "运营", "运维"];
+  for (const phase of requiredPhases) {
+    if (!lifecycleContent.includes(phase)) {
+      throw new Error(`全生命周期治理大纲必须包含【${phase}】阶段的强化规范！`);
+    }
+  }
 });
 
 // 2. 反假 Mock 与反空壳测试断言扫描
