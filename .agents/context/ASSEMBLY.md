@@ -7,6 +7,7 @@ DigitalStaff Native / Cursor / 其他 Agent 应按下面顺序加载。`inject` 
 | order | name | path | inject | 何时加载 |
 |---|---|---|---|---|
 | -100 | identity | `.agents/context/IDENTITY.md` | 无 | 每次进入本仓库 |
+| -50 | high-order-inverse-thinking | `.agents/rules/HIGH-ORDER-INVERSE-THINKING.md` | 无 | 每次进入本仓库（高阶反向思维：敲代码/写单测/改接口全程监督） |
 | 0 | soul | `.agents/context/SOUL.md` | 无 | 每次进入本仓库 |
 | 40 | ontology-navigation | `docs/architecture/ruoyi-all-next-ontology-navigation.md` | 无 | 每次进入本仓库（导航总纲：定位模块/工具/预览/skills + 新应用派生 + 基座自进化） |
 | 50 | agent-profile | `packages/shared/contract/agent-profile.json` | 无 | 孵化、NPC、架构演进 |

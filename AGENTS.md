@@ -18,6 +18,7 @@
 > 6. **SpaceX 级全链路测试验证与真实数据库驱动 (SpaceX-Grade Testing & Zero Fake Mock)**：代码变更必须跑通 4 层金字塔测试矩阵（L1单测、L2集成、L3契约、L4 E2E）；100% 由真实数据库/嵌入式 SQLite 支撑，严禁前端伪造 Mock！
 > 7. **本体域全息导航与 API 契约第一切入 (Ontology & API-Contract-First, 详见 §21)**：任意需求必须先在本体域（实体网、Domain Facade、route manifest、权限码）中秒级定位目标域与影响半径，以 API 契约为探针执行 5 步穿透闭环；一切需求终局 100% 收敛于真实 API 支撑，严禁无 API 支撑的假界面与硬编码 Mock！
 > 8. **全工种四类契约族收敛 (All-Role Contract Families, 详见 §22)**：数据同步/ETL、BI 查询、运营编排、运维发布等非编码需求同样必须收敛为可审计契约——API 契约 / 数据契约 / 流程契约 / 预案契约四选一，并过专属质量门禁（数据族=对账+血缘完整；流程族=沙箱+回滚演练）；严禁一次性搬运脚本与口径打架的野 SQL！
+> 9. **全局高阶反向思维与 AI-Driven Harness 全程监督 (High-Order Inverse Thinking & DeepSeek Harness Invariants, 详见 §23 & .agents/rules/HIGH-ORDER-INVERSE-THINKING.md)**：严禁以初级外包码农视角就事论事贴补丁；敲代码必须业务对象溯源且由通用引擎展开；写单测必须 4 态状态机真实入库覆盖与反假 Mock；修改接口必须契约先验、零破坏性变更与挂载不可变操作审计！
 
 ---
 
@@ -862,6 +863,25 @@ npm run check
 4. **BI 查询与指标语义层范式**：指标口径定义一次（口径/维度/过滤）、处处复用，严禁各报表各写 SQL 口径打架；即席查询三防线（行级权限 ➔ 超时/限行/只读副本资源隔离 ➔ 全量审计）；AI NL-to-SQL 只允许生成绑定语义层白名单指标的查询，严禁裸拼 SQL。
 5. **运营编排铁律**：编排 = 状态机 DSL + 四类触发器，人工节点复用 HITL 审批；每节点强制携带 traceId 可观测可回放；长流程必须定义补偿/回滚路径；定时任务必须分布式幂等锁防重入。工具决策顺序：`bpm` 域内置编排 ➔ n8n/Node-RED（轻量）➔ Temporal/Camunda（企业级）。
 6. **五维决策普适化与专属质量门禁**：五维帕累托从编码需求普适至全工种；每族契约配专属门禁——数据族 = 对账通过 + 血缘完整 + 质量规则 100% 执行；流程族 = 沙箱演练 + 回滚演练双通过；预案族 = 预演环境演练 + 回滚计时达标；API 族 = 4 层测试全绿。本体域一等公民同步扩展登记**数据资产**（表/管道/指标/报表）、**流程拓扑**与**预案库**。
+
+### 23. 全局高阶反向思维与 AI-Driven 基座 Harness 进化规范 (High-Order Inverse Thinking & DeepSeek Harness Invariants)
+
+作为面向生产级的重型业务开发模板，本工程深度吸收 Palantir 体系与 DeepSeek Harness (dsh) 核心架构精髓，对代码、单测、接口执行全生命周期自动化守卫监督：
+
+1. **四大合一反向穿透协议**：
+   - **业务本体溯源**：任何代码变更必须对应明确的业务对象（Object）与状态机流转动词（ActionType），消灭死报表与死接口；
+   - **极简减法原则**：能删代码修绝不贴补丁，强制复用 `BaseMapper` / `BaseService` 与低代码引擎展开，严禁大模型生成样板代码；
+   - **真实场景复原**：兼顾 PC 运营端与移动端真实环境，严禁由于代码变更引发物理遮挡、断层或盲点击；
+   - **不可变证据闭环**：所有修改必须提供编译 0 报错、测试全覆盖与不可变审计流水证据。
+
+2. **三大全程监督铁律 (敲代码 / 写单测 / 改接口)**：
+   - **敲代码时**：单函数圈复杂度 < 10、函数行数 < 50 行；跨域必走 Domain Facade；严禁空 catch 吞异常；
+   - **写单测时**：严禁 `expect(true).toBe(true)` 或只断言 `toBeDefined` 等空壳测试；必须基于真实 SQLite/Postgres 测试数据库进行 4 态状态机正反向断言；
+   - **改接口时**：接口必接 Zod/DTO 强类型校验；零破坏性向下兼容；所有写操作必接不可变操作审计（Audit Log）。
+
+3. **静态守卫与持续门禁**：
+   - 守卫规则物理落盘于 `.agents/rules/HIGH-ORDER-INVERSE-THINKING.md` 并通过 `.agents/context/ASSEMBLY.md` 首帧注入；
+   - 执行 `node scripts/guard-high-order-invariants.cjs` 实施工程守卫扫描，保障重型业务模板的纯洁性与确定性演进。
 
 <!-- BEGIN:nextjs-agent-rules -->
 

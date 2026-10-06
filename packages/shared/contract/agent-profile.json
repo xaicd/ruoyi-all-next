@@ -15,6 +15,7 @@
     "file": ".agents/context/ASSEMBLY.md",
     "sections": [
       { "name": "identity", "order": -100, "path": ".agents/context/IDENTITY.md" },
+      { "name": "high-order-inverse-thinking", "order": -50, "path": ".agents/rules/HIGH-ORDER-INVERSE-THINKING.md" },
       { "name": "soul", "order": 0, "path": ".agents/context/SOUL.md" },
       { "name": "seams", "order": 50, "path": "packages/shared/contract/agent-profile.json" },
       { "name": "seam-graph", "order": 55, "path": "packages/shared/contract/seam-graph.json" },
