@@ -64,6 +64,7 @@
         "ruoyi_action_lookup",
         "ruoyi_codegen_targets",
         "ruoyi_compat_info",
+        "ruoyi_delivery_status",
         "ruoyi_domain_list",
         "ruoyi_domain_resolve",
         "ruoyi_domain_seam",
@@ -72,7 +73,8 @@
         "ruoyi_plugin_list",
         "ruoyi_skills_list",
         "ruoyi_standards_report"
-      ]
+      ],
+      "count": 12
     },
     "evolution": {
       "traceArtifact": "docs/architecture/artifacts/harness-trace-latest.json",

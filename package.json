@@ -101,7 +101,9 @@
     "agent:page-schemas:check": "node scripts/generate-page-schemas.cjs --check",
     "handwritten:check": "node scripts/check-handwritten-files.cjs",
     "handwritten:audit": "node scripts/check-handwritten-files.cjs --audit",
-    "handwritten:baseline": "node scripts/check-handwritten-files.cjs --update-baseline"
+    "handwritten:baseline": "node scripts/check-handwritten-files.cjs --update-baseline",
+    "delivery:check": "node scripts/check-delivery.cjs",
+    "delivery:status": "node scripts/check-delivery.cjs --json"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",

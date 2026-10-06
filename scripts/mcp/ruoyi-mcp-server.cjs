@@ -378,6 +378,22 @@ const TOOLS = [
       }
     },
   },
+  {
+    name: "ruoyi_delivery_status",
+    description:
+      "AI-driven delivery status across all phases (requirement / prototype / ui-design / architecture / development / testing / ops / operations / implementation): which artifacts exist, which are missing, and the Skill + gate command per phase. Use this to decide what to do next instead of re-reading AGENTS.md.",
+    inputSchema: {
+      type: "object",
+      properties: { phase: { type: "string", description: "Optional phase id, e.g. testing" } },
+      additionalProperties: false,
+    },
+    run(args) {
+      const { execFileSync } = require("node:child_process")
+      const argv = ["scripts/check-delivery.cjs", "--json"]
+      if (args.phase) argv.push("--phase", String(args.phase))
+      return JSON.parse(execFileSync("node", argv, { cwd: ROOT, encoding: "utf8" }))
+    },
+  },
 ]
 
 const TOOL_NAMES = TOOLS.map((tool) => tool.name)
