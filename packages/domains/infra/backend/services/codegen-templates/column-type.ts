@@ -17,7 +17,8 @@ export function pgType(column: {
   scale?: number
 }): string {
   // 主键走 TEXT，与仓库既有迁移一致（id 是应用侧生成的字符串，不是自增列）。
-  if (column.isPk || column.name === "id") return "TEXT"
+  // **本仓约定: id 一律 TEXT** —— 主键与所有外键（`*_id`）都是。
+    if (column.isPk || column.name === "id") return "TEXT"
   switch (column.type) {
     case "varchar":
       if (column.maxLength) return `VARCHAR(${column.maxLength})`
