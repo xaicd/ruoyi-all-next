@@ -21,7 +21,7 @@ describe("MesQcTemplateItemService", () => {
   
       const updated = await MesQcTemplateItemService.update(created.id, {
         id: created.id,
-        template_id: "更新MES 质检方案-产品关联",
+          template_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

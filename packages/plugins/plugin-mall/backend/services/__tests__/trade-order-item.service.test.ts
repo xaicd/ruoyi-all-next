@@ -21,7 +21,7 @@ describe("TradeOrderItemService", () => {
   
       const updated = await TradeOrderItemService.update(created.id, {
         id: created.id,
-        user_id: "更新交易订单项",
+          user_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

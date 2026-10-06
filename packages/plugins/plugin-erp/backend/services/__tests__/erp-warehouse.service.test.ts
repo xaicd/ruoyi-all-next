@@ -21,7 +21,7 @@ describe("ErpWarehouseService", () => {
   
       const updated = await ErpWarehouseService.update(created.id, {
         id: created.id,
-        name: "更新ERP 仓库",
+          name: "测试更新ERP 仓库",
       } as any)
       expect(updated).toBeDefined()
   

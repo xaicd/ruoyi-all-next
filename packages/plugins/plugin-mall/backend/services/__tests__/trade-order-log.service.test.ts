@@ -21,7 +21,7 @@ describe("TradeOrderLogService", () => {
   
       const updated = await TradeOrderLogService.update(created.id, {
         id: created.id,
-        user_id: "更新订单日志",
+          user_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

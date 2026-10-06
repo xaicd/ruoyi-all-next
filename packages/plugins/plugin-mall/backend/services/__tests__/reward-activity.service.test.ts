@@ -21,7 +21,7 @@ describe("RewardActivityService", () => {
   
       const updated = await RewardActivityService.update(created.id, {
         id: created.id,
-        name: "更新满减送活动",
+          name: "测试更新满减送活动",
       } as any)
       expect(updated).toBeDefined()
   

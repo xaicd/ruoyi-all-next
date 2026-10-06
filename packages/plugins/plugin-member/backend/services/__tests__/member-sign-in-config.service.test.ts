@@ -21,7 +21,7 @@ describe("MemberSignInConfigService", () => {
   
       const updated = await MemberSignInConfigService.update(created.id, {
         id: created.id,
-        day: "更新签到规则",
+          day: 1,
       } as any)
       expect(updated).toBeDefined()
   

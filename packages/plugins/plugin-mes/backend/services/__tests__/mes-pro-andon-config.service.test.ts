@@ -21,7 +21,7 @@ describe("MesProAndonConfigService", () => {
   
       const updated = await MesProAndonConfigService.update(created.id, {
         id: created.id,
-        reason: "更新MES 安灯呼叫配置",
+          reason: "测试更新MES 安灯呼叫配置",
       } as any)
       expect(updated).toBeDefined()
   

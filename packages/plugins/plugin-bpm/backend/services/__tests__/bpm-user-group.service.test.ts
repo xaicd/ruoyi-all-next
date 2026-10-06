@@ -21,7 +21,7 @@ describe("BpmUserGroupService", () => {
   
       const updated = await BpmUserGroupService.update(created.id, {
         id: created.id,
-        name: "更新BPM 用户组",
+          name: "测试更新BPM 用户组",
       } as any)
       expect(updated).toBeDefined()
   

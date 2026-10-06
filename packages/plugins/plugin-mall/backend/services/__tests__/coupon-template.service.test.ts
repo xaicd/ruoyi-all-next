@@ -21,7 +21,7 @@ describe("CouponTemplateService", () => {
   
       const updated = await CouponTemplateService.update(created.id, {
         id: created.id,
-        name: "更新优惠劵模板 DO当用户领取时，会生成 优惠劵",
+          name: "测试更新优惠劵模板 DO当用户领取时，会生成 优惠劵",
       } as any)
       expect(updated).toBeDefined()
   

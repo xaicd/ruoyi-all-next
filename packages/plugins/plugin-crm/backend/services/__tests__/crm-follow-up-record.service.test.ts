@@ -21,7 +21,7 @@ describe("CrmFollowUpRecordService", () => {
   
       const updated = await CrmFollowUpRecordService.update(created.id, {
         id: created.id,
-        biz_type: "更新跟进记录 DO用于记录客户、联系人的每一次跟进",
+          biz_type: 1,
       } as any)
       expect(updated).toBeDefined()
   

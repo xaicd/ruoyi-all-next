@@ -21,7 +21,7 @@ describe("DeliveryExpressService", () => {
   
       const updated = await DeliveryExpressService.update(created.id, {
         id: created.id,
-        code: "更新快递公司",
+          code: "测试更新快递公司",
       } as any)
       expect(updated).toBeDefined()
   

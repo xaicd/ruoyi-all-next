@@ -21,7 +21,7 @@ describe("ImGroupMemberService", () => {
   
       const updated = await ImGroupMemberService.update(created.id, {
         id: created.id,
-        group_id: "更新IM 群成员",
+          group_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

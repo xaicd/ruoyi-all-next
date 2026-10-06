@@ -21,7 +21,7 @@ describe("BpmProcessInstanceCopyService", () => {
   
       const updated = await BpmProcessInstanceCopyService.update(created.id, {
         id: created.id,
-        start_user_id: "更新流程抄送",
+          start_user_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

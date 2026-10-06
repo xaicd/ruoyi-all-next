@@ -21,7 +21,7 @@ describe("MpUserService", () => {
   
       const updated = await MpUserService.update(created.id, {
         id: created.id,
-        openid: "更新微信公众号粉丝",
+          openid: "测试更新微信公众号粉丝",
       } as any)
       expect(updated).toBeDefined()
   

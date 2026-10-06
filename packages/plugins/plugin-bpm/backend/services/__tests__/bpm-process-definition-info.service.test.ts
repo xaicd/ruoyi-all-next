@@ -21,7 +21,7 @@ describe("BpmProcessDefinitionInfoService", () => {
   
       const updated = await BpmProcessDefinitionInfoService.update(created.id, {
         id: created.id,
-        process_definition_id: "更新BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表",
+          process_definition_id: "测试更新BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表",
       } as any)
       expect(updated).toBeDefined()
   

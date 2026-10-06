@@ -21,7 +21,7 @@ describe("CrmProductCategoryService", () => {
   
       const updated = await CrmProductCategoryService.update(created.id, {
         id: created.id,
-        name: "更新产品分类",
+          name: "测试更新产品分类",
       } as any)
       expect(updated).toBeDefined()
   

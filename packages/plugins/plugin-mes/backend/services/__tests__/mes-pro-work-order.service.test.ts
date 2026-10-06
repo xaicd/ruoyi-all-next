@@ -21,7 +21,7 @@ describe("MesProWorkOrderService", () => {
   
       const updated = await MesProWorkOrderService.update(created.id, {
         id: created.id,
-        code: "更新MES 生产工单",
+          code: "测试更新MES 生产工单",
       } as any)
       expect(updated).toBeDefined()
   

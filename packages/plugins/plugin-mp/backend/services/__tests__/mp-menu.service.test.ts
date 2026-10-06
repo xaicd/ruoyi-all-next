@@ -21,7 +21,7 @@ describe("MpMenuService", () => {
   
       const updated = await MpMenuService.update(created.id, {
         id: created.id,
-        account_id: "更新公众号菜单",
+          account_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

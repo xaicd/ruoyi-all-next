@@ -21,7 +21,7 @@ describe("MesCalTeamMemberService", () => {
   
       const updated = await MesCalTeamMemberService.update(created.id, {
         id: created.id,
-        team_id: "更新MES 班组成员",
+          team_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

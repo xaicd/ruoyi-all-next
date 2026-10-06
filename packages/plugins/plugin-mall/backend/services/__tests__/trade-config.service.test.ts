@@ -21,7 +21,7 @@ describe("TradeConfigService", () => {
   
       const updated = await TradeConfigService.update(created.id, {
         id: created.id,
-        after_sale_refund_reasons: "更新交易中心配置",
+          after_sale_refund_reasons: "测试更新交易中心配置",
       } as any)
       expect(updated).toBeDefined()
   

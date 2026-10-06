@@ -21,7 +21,7 @@ describe("CouponService", () => {
   
       const updated = await CouponService.update(created.id, {
         id: created.id,
-        template_id: "更新优惠劵",
+          template_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

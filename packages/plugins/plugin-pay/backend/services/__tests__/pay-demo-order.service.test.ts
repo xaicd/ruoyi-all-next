@@ -21,7 +21,7 @@ describe("PayDemoOrderService", () => {
   
       const updated = await PayDemoOrderService.update(created.id, {
         id: created.id,
-        user_id: "更新示例订单演示业务系统的订单，如何接入 pay 系统的支付与退款",
+          user_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

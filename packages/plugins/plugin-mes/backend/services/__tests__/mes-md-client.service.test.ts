@@ -21,7 +21,7 @@ describe("MesMdClientService", () => {
   
       const updated = await MesMdClientService.update(created.id, {
         id: created.id,
-        code: "更新MES 客户",
+          code: "测试更新MES 客户",
       } as any)
       expect(updated).toBeDefined()
   

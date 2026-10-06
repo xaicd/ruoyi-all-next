@@ -21,7 +21,7 @@ describe("PayWalletRechargeService", () => {
   
       const updated = await PayWalletRechargeService.update(created.id, {
         id: created.id,
-        wallet_id: "更新会员钱包充值",
+          wallet_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

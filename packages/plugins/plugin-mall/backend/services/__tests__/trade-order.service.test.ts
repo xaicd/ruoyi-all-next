@@ -21,7 +21,7 @@ describe("TradeOrderService", () => {
   
       const updated = await TradeOrderService.update(created.id, {
         id: created.id,
-        no: "更新交易订单",
+          no: "测试更新交易订单",
       } as any)
       expect(updated).toBeDefined()
   

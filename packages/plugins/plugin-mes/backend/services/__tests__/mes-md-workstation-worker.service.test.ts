@@ -21,7 +21,7 @@ describe("MesMdWorkstationWorkerService", () => {
   
       const updated = await MesMdWorkstationWorkerService.update(created.id, {
         id: created.id,
-        workstation_id: "更新MES 人力资源",
+          workstation_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

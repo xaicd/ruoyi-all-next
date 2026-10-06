@@ -21,7 +21,7 @@ describe("GoViewProjectService", () => {
   
       const updated = await GoViewProjectService.update(created.id, {
         id: created.id,
-        name: "更新GoView 项目表每个大屏图标，对应一个项目",
+          name: "测试更新GoView 项目表每个大屏图标，对应一个项目",
       } as any)
       expect(updated).toBeDefined()
   

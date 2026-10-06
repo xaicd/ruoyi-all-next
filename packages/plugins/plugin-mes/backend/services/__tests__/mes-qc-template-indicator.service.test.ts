@@ -21,7 +21,7 @@ describe("MesQcTemplateIndicatorService", () => {
   
       const updated = await MesQcTemplateIndicatorService.update(created.id, {
         id: created.id,
-        template_id: "更新MES 质检方案-检测指标项",
+          template_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

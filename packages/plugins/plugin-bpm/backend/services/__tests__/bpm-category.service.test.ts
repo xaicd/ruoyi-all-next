@@ -21,7 +21,7 @@ describe("BpmCategoryService", () => {
   
       const updated = await BpmCategoryService.update(created.id, {
         id: created.id,
-        name: "更新BPM 流程分类",
+          name: "测试更新BPM 流程分类",
       } as any)
       expect(updated).toBeDefined()
   

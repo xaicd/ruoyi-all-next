@@ -21,7 +21,7 @@ describe("MesWmStockTakingTaskService", () => {
   
       const updated = await MesWmStockTakingTaskService.update(created.id, {
         id: created.id,
-        code: "更新MES 盘点任务",
+          code: "测试更新MES 盘点任务",
       } as any)
       expect(updated).toBeDefined()
   

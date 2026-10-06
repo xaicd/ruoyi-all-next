@@ -21,7 +21,7 @@ describe("IotDeviceService", () => {
   
       const updated = await IotDeviceService.update(created.id, {
         id: created.id,
-        device_name: "更新IoT 设备",
+          device_name: "测试更新IoT 设备",
       } as any)
       expect(updated).toBeDefined()
   

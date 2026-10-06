@@ -21,7 +21,7 @@ describe("MesWmProductReceiptService", () => {
   
       const updated = await MesWmProductReceiptService.update(created.id, {
         id: created.id,
-        code: "更新MES 产品收货（入库）单",
+          code: "测试更新MES 产品收货（入库）单",
       } as any)
       expect(updated).toBeDefined()
   

@@ -21,7 +21,7 @@ describe("MesDvCheckPlanService", () => {
   
       const updated = await MesDvCheckPlanService.update(created.id, {
         id: created.id,
-        code: "更新MES 点检保养方案",
+          code: "测试更新MES 点检保养方案",
       } as any)
       expect(updated).toBeDefined()
   

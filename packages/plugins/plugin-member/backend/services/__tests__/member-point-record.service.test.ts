@@ -21,7 +21,7 @@ describe("MemberPointRecordService", () => {
   
       const updated = await MemberPointRecordService.update(created.id, {
         id: created.id,
-        user_id: "更新用户积分记录",
+          user_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

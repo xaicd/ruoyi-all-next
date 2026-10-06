@@ -21,7 +21,7 @@ describe("MesWmPackageLineService", () => {
   
       const updated = await MesWmPackageLineService.update(created.id, {
         id: created.id,
-        package_id: "更新MES 装箱明细",
+          package_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

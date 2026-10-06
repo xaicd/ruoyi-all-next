@@ -21,7 +21,7 @@ describe("DiyPageService", () => {
   
       const updated = await DiyPageService.update(created.id, {
         id: created.id,
-        template_id: "更新装修页面",
+          template_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

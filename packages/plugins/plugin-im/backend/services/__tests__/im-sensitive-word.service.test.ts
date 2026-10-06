@@ -21,7 +21,7 @@ describe("ImSensitiveWordService", () => {
   
       const updated = await ImSensitiveWordService.update(created.id, {
         id: created.id,
-        word: "更新IM 敏感词",
+          word: "测试更新IM 敏感词",
       } as any)
       expect(updated).toBeDefined()
   

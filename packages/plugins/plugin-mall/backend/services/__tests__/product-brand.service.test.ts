@@ -21,7 +21,7 @@ describe("ProductBrandService", () => {
   
       const updated = await ProductBrandService.update(created.id, {
         id: created.id,
-        name: "更新商品品牌",
+          name: "测试更新商品品牌",
       } as any)
       expect(updated).toBeDefined()
   

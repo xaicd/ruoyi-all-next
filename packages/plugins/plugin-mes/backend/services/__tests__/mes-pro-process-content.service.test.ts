@@ -21,7 +21,7 @@ describe("MesProProcessContentService", () => {
   
       const updated = await MesProProcessContentService.update(created.id, {
         id: created.id,
-        process_id: "更新MES 生产工序内容",
+          process_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

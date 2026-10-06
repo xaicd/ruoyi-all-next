@@ -21,7 +21,7 @@ describe("MesWmWarehouseLocationService", () => {
   
       const updated = await MesWmWarehouseLocationService.update(created.id, {
         id: created.id,
-        code: "更新MES 库区",
+          code: "测试更新MES 库区",
       } as any)
       expect(updated).toBeDefined()
   

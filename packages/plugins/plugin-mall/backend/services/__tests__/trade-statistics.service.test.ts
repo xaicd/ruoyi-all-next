@@ -21,7 +21,7 @@ describe("TradeStatisticsService", () => {
   
       const updated = await TradeStatisticsService.update(created.id, {
         id: created.id,
-        time: "更新交易统计 DO以天为维度，统计全部的数据",
+          time: new Date().toISOString(),
       } as any)
       expect(updated).toBeDefined()
   

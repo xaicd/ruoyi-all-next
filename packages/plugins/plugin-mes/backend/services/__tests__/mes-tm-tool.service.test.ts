@@ -21,7 +21,7 @@ describe("MesTmToolService", () => {
   
       const updated = await MesTmToolService.update(created.id, {
         id: created.id,
-        code: "更新MES 工具台账",
+          code: "测试更新MES 工具台账",
       } as any)
       expect(updated).toBeDefined()
   

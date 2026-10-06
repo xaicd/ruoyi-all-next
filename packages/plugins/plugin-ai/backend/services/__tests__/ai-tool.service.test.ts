@@ -21,7 +21,7 @@ describe("AiToolService", () => {
   
       const updated = await AiToolService.update(created.id, {
         id: created.id,
-        name: "更新AI 工具",
+          name: "测试更新AI 工具",
       } as any)
       expect(updated).toBeDefined()
   

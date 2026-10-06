@@ -21,7 +21,7 @@ describe("MesWmSnService", () => {
   
       const updated = await MesWmSnService.update(created.id, {
         id: created.id,
-        uuid: "更新MES SN 码",
+          uuid: "测试更新MES SN 码",
       } as any)
       expect(updated).toBeDefined()
   

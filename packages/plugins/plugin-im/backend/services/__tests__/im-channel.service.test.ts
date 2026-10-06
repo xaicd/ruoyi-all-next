@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ImChannelService } from "../im-channel.service"
 
 describe("ImChannelService", () => {
-  it("should create and query IM 频道 DO业务语义：- 频道是运营单向推送的主体；C 端用户不能向频道发消息- 是业务码（API / 字典外露），id 是数字主键给前端会话 targetId 用", async () => {
+  it("should create and query IM 频道 DO业务语义：- 频道是运营单向推送的主体；C 端用户不能向频道发消", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImChannelService.create({
-        code: "测试IM 频道 DO业务语义：- 频道是运营单向推送的主体；C 端用户不能向频道发消息- 是业务码（API / 字典外露），id 是数字主键给前端会话 targetId 用",
+        code: "测试IM 频道 DO业务语义：- 频道是运营单向推送的主体；C 端用户不能向频道发消",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("ImChannelService", () => {
   
       const updated = await ImChannelService.update(created.id, {
         id: created.id,
-        code: "更新IM 频道 DO业务语义：- 频道是运营单向推送的主体；C 端用户不能向频道发消息- 是业务码（API / 字典外露），id 是数字主键给前端会话 targetId 用",
+          code: "测试更新IM 频道 DO业务语义：- 频道是运营单向推送的主体；C 端用户不能向频道发消",
       } as any)
       expect(updated).toBeDefined()
   

@@ -21,7 +21,7 @@ describe("ImFaceUserItemService", () => {
   
       const updated = await ImFaceUserItemService.update(created.id, {
         id: created.id,
-        user_id: "更新IM 用户私有表情 DO（个人表情包，对照微信「我的表情」）",
+          user_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

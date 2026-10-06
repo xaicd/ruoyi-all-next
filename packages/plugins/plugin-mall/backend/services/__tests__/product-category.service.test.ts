@@ -21,7 +21,7 @@ describe("ProductCategoryService", () => {
   
       const updated = await ProductCategoryService.update(created.id, {
         id: created.id,
-        parent_id: "更新商品分类",
+          parent_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

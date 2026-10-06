@@ -21,7 +21,7 @@ describe("MemberTagService", () => {
   
       const updated = await MemberTagService.update(created.id, {
         id: created.id,
-        name: "更新会员标签",
+          name: "测试更新会员标签",
       } as any)
       expect(updated).toBeDefined()
   

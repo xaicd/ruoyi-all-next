@@ -21,7 +21,7 @@ describe("SeckillProductService", () => {
   
       const updated = await SeckillProductService.update(created.id, {
         id: created.id,
-        activity_id: "更新秒杀参与商品",
+          activity_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

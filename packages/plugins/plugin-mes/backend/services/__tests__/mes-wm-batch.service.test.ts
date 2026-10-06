@@ -21,7 +21,7 @@ describe("MesWmBatchService", () => {
   
       const updated = await MesWmBatchService.update(created.id, {
         id: created.id,
-        code: "更新批次管理",
+          code: "测试更新批次管理",
       } as any)
       expect(updated).toBeDefined()
   

@@ -21,7 +21,7 @@ describe("ArticleCategoryService", () => {
   
       const updated = await ArticleCategoryService.update(created.id, {
         id: created.id,
-        name: "更新文章分类",
+          name: "测试更新文章分类",
       } as any)
       expect(updated).toBeDefined()
   

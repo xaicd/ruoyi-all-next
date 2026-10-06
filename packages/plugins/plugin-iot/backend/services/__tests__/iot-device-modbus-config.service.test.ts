@@ -21,7 +21,7 @@ describe("IotDeviceModbusConfigService", () => {
   
       const updated = await IotDeviceModbusConfigService.update(created.id, {
         id: created.id,
-        product_id: "更新IoT 设备 Modbus 连接配置",
+          product_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

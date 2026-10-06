@@ -21,7 +21,7 @@ describe("AiApiKeyService", () => {
   
       const updated = await AiApiKeyService.update(created.id, {
         id: created.id,
-        name: "更新AI API 秘钥",
+          name: "测试更新AI API 秘钥",
       } as any)
       expect(updated).toBeDefined()
   

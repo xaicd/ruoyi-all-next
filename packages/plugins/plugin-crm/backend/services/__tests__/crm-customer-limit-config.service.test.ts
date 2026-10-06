@@ -21,7 +21,7 @@ describe("CrmCustomerLimitConfigService", () => {
   
       const updated = await CrmCustomerLimitConfigService.update(created.id, {
         id: created.id,
-        type: "更新客户限制配置",
+          type: 1,
       } as any)
       expect(updated).toBeDefined()
   

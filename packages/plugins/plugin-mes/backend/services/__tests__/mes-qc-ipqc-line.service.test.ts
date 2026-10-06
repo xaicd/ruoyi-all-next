@@ -21,7 +21,7 @@ describe("MesQcIpqcLineService", () => {
   
       const updated = await MesQcIpqcLineService.update(created.id, {
         id: created.id,
-        ipqc_id: "更新MES 过程检验单行",
+          ipqc_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

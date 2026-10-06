@@ -21,7 +21,7 @@ describe("MesProRouteProductBomService", () => {
   
       const updated = await MesProRouteProductBomService.update(created.id, {
         id: created.id,
-        route_id: "更新MES 工艺路线产品 BOM",
+          route_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

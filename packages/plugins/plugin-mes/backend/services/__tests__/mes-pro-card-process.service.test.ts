@@ -21,7 +21,7 @@ describe("MesProCardProcessService", () => {
   
       const updated = await MesProCardProcessService.update(created.id, {
         id: created.id,
-        card_id: "更新MES 流转卡工序记录",
+          card_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

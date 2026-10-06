@@ -21,7 +21,7 @@ describe("MemberSignInRecordService", () => {
   
       const updated = await MemberSignInRecordService.update(created.id, {
         id: created.id,
-        user_id: "更新签到记录",
+          user_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

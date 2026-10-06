@@ -21,7 +21,7 @@ describe("ProductCommentService", () => {
   
       const updated = await ProductCommentService.update(created.id, {
         id: created.id,
-        user_id: "更新商品评论",
+          user_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

@@ -21,7 +21,7 @@ describe("BrokerageRecordService", () => {
   
       const updated = await BrokerageRecordService.update(created.id, {
         id: created.id,
-        user_id: "更新佣金记录",
+          user_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

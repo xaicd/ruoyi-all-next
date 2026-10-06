@@ -21,7 +21,7 @@ describe("MpMessageService", () => {
   
       const updated = await MpMessageService.update(created.id, {
         id: created.id,
-        msg_id: "更新公众号消息",
+          msg_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

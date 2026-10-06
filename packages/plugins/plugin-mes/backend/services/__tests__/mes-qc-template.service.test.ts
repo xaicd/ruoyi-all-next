@@ -21,7 +21,7 @@ describe("MesQcTemplateService", () => {
   
       const updated = await MesQcTemplateService.update(created.id, {
         id: created.id,
-        code: "更新MES 质检方案",
+          code: "测试更新MES 质检方案",
       } as any)
       expect(updated).toBeDefined()
   

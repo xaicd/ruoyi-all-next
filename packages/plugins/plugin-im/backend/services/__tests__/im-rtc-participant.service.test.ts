@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ImRtcParticipantService } from "../im-rtc-participant.service"
 
 describe("ImRtcParticipantService", () => {
-  it("should create and query IM 通话参与者 DO（用户级 / 明细表）一通通话每个参与者一行；通过 关联主表 终态闭合：通话 ENDED 时所有明细 status 必属 LEFT / REJECTED / NO", async () => {
+  it("should create and query IM 通话参与者 DO（用户级 / 明细表）一通通话每个参与者一行；通过 关联主", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImRtcParticipantService.create({
         call_id: 1,
@@ -21,7 +21,7 @@ describe("ImRtcParticipantService", () => {
   
       const updated = await ImRtcParticipantService.update(created.id, {
         id: created.id,
-        call_id: "更新IM 通话参与者 DO（用户级 / 明细表）一通通话每个参与者一行；通过 关联主表 终态闭合：通话 ENDED 时所有明细 status 必属 LEFT / REJECTED / NO",
+          call_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

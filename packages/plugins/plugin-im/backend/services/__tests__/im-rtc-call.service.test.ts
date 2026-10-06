@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ImRtcCallService } from "../im-rtc-call.service"
 
 describe("ImRtcCallService", () => {
-  it("should create and query IM 通话记录 DO（房间级 / 主表）一通通话一行；状态机 CREATED → RUNNING → ENDED；和明细表 通过 关联", async () => {
+  it("should create and query IM 通话记录 DO（房间级 / 主表）一通通话一行；状态机 CREATED →", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImRtcCallService.create({
-        room: "测试IM 通话记录 DO（房间级 / 主表）一通通话一行；状态机 CREATED → RUNNING → ENDED；和明细表 通过 关联",
+        room: "测试IM 通话记录 DO（房间级 / 主表）一通通话一行；状态机 CREATED →",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("ImRtcCallService", () => {
   
       const updated = await ImRtcCallService.update(created.id, {
         id: created.id,
-        room: "更新IM 通话记录 DO（房间级 / 主表）一通通话一行；状态机 CREATED → RUNNING → ENDED；和明细表 通过 关联",
+          room: "测试更新IM 通话记录 DO（房间级 / 主表）一通通话一行；状态机 CREATED →",
       } as any)
       expect(updated).toBeDefined()
   

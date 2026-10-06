@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { CombinationRecordService } from "../combination-record.service"
 
 describe("CombinationRecordService", () => {
-  it("should create and query 拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联", async () => {
+  it("should create and query 拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CombinationRecordService.create({
         activity_id: 1,
@@ -21,7 +21,7 @@ describe("CombinationRecordService", () => {
   
       const updated = await CombinationRecordService.update(created.id, {
         id: created.id,
-        activity_id: "更新拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联",
+          activity_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

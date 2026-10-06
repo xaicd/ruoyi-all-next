@@ -21,7 +21,7 @@ describe("PayDemoWithdrawService", () => {
   
       const updated = await PayDemoWithdrawService.update(created.id, {
         id: created.id,
-        subject: "更新示例提现订单演示业务系统的转账业务",
+          subject: "测试更新示例提现订单演示业务系统的转账业务",
       } as any)
       expect(updated).toBeDefined()
   

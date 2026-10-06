@@ -21,7 +21,7 @@ describe("ImFacePackService", () => {
   
       const updated = await ImFacePackService.update(created.id, {
         id: created.id,
-        name: "更新IM 表情包 DO（运营配置的系统表情包元数据）",
+          name: "测试更新IM 表情包 DO（运营配置的系统表情包元数据）",
       } as any)
       expect(updated).toBeDefined()
   

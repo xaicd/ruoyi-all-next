@@ -21,7 +21,7 @@ describe("ProductBrowseHistoryService", () => {
   
       const updated = await ProductBrowseHistoryService.update(created.id, {
         id: created.id,
-        spu_id: "更新商品浏览记录",
+          spu_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

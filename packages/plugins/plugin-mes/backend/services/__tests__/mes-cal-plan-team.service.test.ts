@@ -21,7 +21,7 @@ describe("MesCalPlanTeamService", () => {
   
       const updated = await MesCalPlanTeamService.update(created.id, {
         id: created.id,
-        plan_id: "更新MES 计划班组关联",
+          plan_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

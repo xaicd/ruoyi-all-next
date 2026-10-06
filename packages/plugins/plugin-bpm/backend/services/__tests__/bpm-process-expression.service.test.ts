@@ -21,7 +21,7 @@ describe("BpmProcessExpressionService", () => {
   
       const updated = await BpmProcessExpressionService.update(created.id, {
         id: created.id,
-        name: "更新BPM 流程表达式",
+          name: "测试更新BPM 流程表达式",
       } as any)
       expect(updated).toBeDefined()
   

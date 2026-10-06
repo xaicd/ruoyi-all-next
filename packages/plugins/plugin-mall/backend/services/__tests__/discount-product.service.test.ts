@@ -21,7 +21,7 @@ describe("DiscountProductService", () => {
   
       const updated = await DiscountProductService.update(created.id, {
         id: created.id,
-        activity_id: "更新限时折扣商品",
+          activity_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

@@ -21,7 +21,7 @@ describe("CrmCustomerPoolConfigService", () => {
   
       const updated = await CrmCustomerPoolConfigService.update(created.id, {
         id: created.id,
-        enabled: "更新客户公海配置",
+          enabled: true,
       } as any)
       expect(updated).toBeDefined()
   

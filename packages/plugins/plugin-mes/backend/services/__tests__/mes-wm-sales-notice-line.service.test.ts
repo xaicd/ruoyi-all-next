@@ -21,7 +21,7 @@ describe("MesWmSalesNoticeLineService", () => {
   
       const updated = await MesWmSalesNoticeLineService.update(created.id, {
         id: created.id,
-        notice_id: "更新MES 发货通知单行",
+          notice_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

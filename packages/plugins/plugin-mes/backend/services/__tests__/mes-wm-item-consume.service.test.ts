@@ -21,7 +21,7 @@ describe("MesWmItemConsumeService", () => {
   
       const updated = await MesWmItemConsumeService.update(created.id, {
         id: created.id,
-        work_order_id: "更新MES 物料消耗记录",
+          work_order_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

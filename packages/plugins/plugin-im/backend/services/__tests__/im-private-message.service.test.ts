@@ -21,7 +21,7 @@ describe("ImPrivateMessageService", () => {
   
       const updated = await ImPrivateMessageService.update(created.id, {
         id: created.id,
-        client_message_id: "更新IM 私聊消息",
+          client_message_id: "测试更新IM 私聊消息",
       } as any)
       expect(updated).toBeDefined()
   

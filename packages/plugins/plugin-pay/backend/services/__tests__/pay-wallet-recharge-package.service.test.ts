@@ -21,7 +21,7 @@ describe("PayWalletRechargePackageService", () => {
   
       const updated = await PayWalletRechargePackageService.update(created.id, {
         id: created.id,
-        name: "更新会员钱包充值套餐 DO通过充值套餐时，可以赠送一定金额；",
+          name: "测试更新会员钱包充值套餐 DO通过充值套餐时，可以赠送一定金额；",
       } as any)
       expect(updated).toBeDefined()
   

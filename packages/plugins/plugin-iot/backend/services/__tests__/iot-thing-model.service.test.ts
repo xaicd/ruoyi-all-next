@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { IotThingModelService } from "../iot-thing-model.service"
 
 describe("IotThingModelService", () => {
-  it("should create and query IoT 产品物模型功能 DO每个 和 是“一对多”的关系，它的每个属性、事件、服务都对应一条记录", async () => {
+  it("should create and query IoT 产品物模型功能 DO每个 和 是“一对多”的关系，它的每个属性、事件、服", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await IotThingModelService.create({
-        identifier: "测试IoT 产品物模型功能 DO每个 和 是“一对多”的关系，它的每个属性、事件、服务都对应一条记录",
+        identifier: "测试IoT 产品物模型功能 DO每个 和 是“一对多”的关系，它的每个属性、事件、服",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("IotThingModelService", () => {
   
       const updated = await IotThingModelService.update(created.id, {
         id: created.id,
-        identifier: "更新IoT 产品物模型功能 DO每个 和 是“一对多”的关系，它的每个属性、事件、服务都对应一条记录",
+          identifier: "测试更新IoT 产品物模型功能 DO每个 和 是“一对多”的关系，它的每个属性、事件、服",
       } as any)
       expect(updated).toBeDefined()
   

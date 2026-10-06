@@ -21,7 +21,7 @@ describe("MemberLevelService", () => {
   
       const updated = await MemberLevelService.update(created.id, {
         id: created.id,
-        name: "更新会员等级 DO配置每个等级需要的积分",
+          name: "测试更新会员等级 DO配置每个等级需要的积分",
       } as any)
       expect(updated).toBeDefined()
   

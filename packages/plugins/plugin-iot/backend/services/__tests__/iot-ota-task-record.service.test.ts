@@ -21,7 +21,7 @@ describe("IotOtaTaskRecordService", () => {
   
       const updated = await IotOtaTaskRecordService.update(created.id, {
         id: created.id,
-        firmware_id: "更新IoT OTA 升级任务记录",
+          firmware_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

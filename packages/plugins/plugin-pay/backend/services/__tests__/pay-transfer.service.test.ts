@@ -21,7 +21,7 @@ describe("PayTransferService", () => {
   
       const updated = await PayTransferService.update(created.id, {
         id: created.id,
-        no: "更新转账单",
+          no: "测试更新转账单",
       } as any)
       expect(updated).toBeDefined()
   

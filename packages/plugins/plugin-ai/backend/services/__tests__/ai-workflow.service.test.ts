@@ -21,7 +21,7 @@ describe("AiWorkflowService", () => {
   
       const updated = await AiWorkflowService.update(created.id, {
         id: created.id,
-        name: "更新AI 工作流",
+          name: "测试更新AI 工作流",
       } as any)
       expect(updated).toBeDefined()
   

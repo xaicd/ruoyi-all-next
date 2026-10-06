@@ -21,7 +21,7 @@ describe("CrmReceivablePlanService", () => {
   
       const updated = await CrmReceivablePlanService.update(created.id, {
         id: created.id,
-        period: "更新CRM 回款计划",
+          period: 1,
       } as any)
       expect(updated).toBeDefined()
   

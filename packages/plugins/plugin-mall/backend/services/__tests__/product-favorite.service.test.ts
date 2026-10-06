@@ -21,7 +21,7 @@ describe("ProductFavoriteService", () => {
   
       const updated = await ProductFavoriteService.update(created.id, {
         id: created.id,
-        user_id: "更新商品收藏",
+          user_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

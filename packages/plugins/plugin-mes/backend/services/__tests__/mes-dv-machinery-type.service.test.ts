@@ -21,7 +21,7 @@ describe("MesDvMachineryTypeService", () => {
   
       const updated = await MesDvMachineryTypeService.update(created.id, {
         id: created.id,
-        code: "更新MES 设备类型",
+          code: "测试更新MES 设备类型",
       } as any)
       expect(updated).toBeDefined()
   

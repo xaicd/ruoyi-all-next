@@ -21,7 +21,7 @@ describe("MesCalHolidayService", () => {
   
       const updated = await MesCalHolidayService.update(created.id, {
         id: created.id,
-        day: "更新MES 假期设置",
+          day: new Date().toISOString(),
       } as any)
       expect(updated).toBeDefined()
   

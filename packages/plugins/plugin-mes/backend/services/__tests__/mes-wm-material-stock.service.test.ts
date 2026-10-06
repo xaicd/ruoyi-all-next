@@ -21,7 +21,7 @@ describe("MesWmMaterialStockService", () => {
   
       const updated = await MesWmMaterialStockService.update(created.id, {
         id: created.id,
-        item_type_id: "更新MES 库存台账（仓库现有量）",
+          item_type_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

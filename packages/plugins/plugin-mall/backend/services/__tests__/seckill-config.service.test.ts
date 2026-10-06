@@ -21,7 +21,7 @@ describe("SeckillConfigService", () => {
   
       const updated = await SeckillConfigService.update(created.id, {
         id: created.id,
-        name: "更新秒杀时段",
+          name: "测试更新秒杀时段",
       } as any)
       expect(updated).toBeDefined()
   

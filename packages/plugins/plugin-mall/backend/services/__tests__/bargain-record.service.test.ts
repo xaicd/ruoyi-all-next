@@ -21,7 +21,7 @@ describe("BargainRecordService", () => {
   
       const updated = await BargainRecordService.update(created.id, {
         id: created.id,
-        user_id: "更新砍价记录 DO TO",
+          user_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

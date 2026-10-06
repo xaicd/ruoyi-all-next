@@ -21,7 +21,7 @@ describe("MpAutoReplyService", () => {
   
       const updated = await MpAutoReplyService.update(created.id, {
         id: created.id,
-        account_id: "更新公众号消息自动回复",
+          account_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

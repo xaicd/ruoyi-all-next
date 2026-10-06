@@ -21,7 +21,7 @@ describe("MemberGroupService", () => {
   
       const updated = await MemberGroupService.update(created.id, {
         id: created.id,
-        name: "更新用户分组",
+          name: "测试更新用户分组",
       } as any)
       expect(updated).toBeDefined()
   

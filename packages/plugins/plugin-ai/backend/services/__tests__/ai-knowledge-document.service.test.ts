@@ -21,7 +21,7 @@ describe("AiKnowledgeDocumentService", () => {
   
       const updated = await AiKnowledgeDocumentService.update(created.id, {
         id: created.id,
-        knowledge_id: "更新AI 知识库-文档",
+          knowledge_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

@@ -21,7 +21,7 @@ describe("MesWmTransferLineService", () => {
   
       const updated = await MesWmTransferLineService.update(created.id, {
         id: created.id,
-        transfer_id: "更新MES 转移单行",
+          transfer_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

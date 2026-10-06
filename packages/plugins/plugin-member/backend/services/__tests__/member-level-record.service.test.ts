@@ -21,7 +21,7 @@ describe("MemberLevelRecordService", () => {
   
       const updated = await MemberLevelRecordService.update(created.id, {
         id: created.id,
-        user_id: "更新会员等级记录 DO用户每次等级发生变更时，记录一条日志",
+          user_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

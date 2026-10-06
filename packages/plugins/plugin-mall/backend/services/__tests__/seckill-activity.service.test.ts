@@ -21,7 +21,7 @@ describe("SeckillActivityService", () => {
   
       const updated = await SeckillActivityService.update(created.id, {
         id: created.id,
-        spu_id: "更新秒杀活动",
+          spu_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

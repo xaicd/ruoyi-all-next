@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { PayNotifyLogService } from "../pay-notify-log.service"
 
 describe("PayNotifyLogService", () => {
-  it("should create and query 商户支付、退款等的通知 Log每次通知时，都会在该表中，记录一次 Log，方便排查问题", async () => {
+  it("should create and query 商户支付、退款等的通知 Log每次通知时，都会在该表中，记录一次 Log，方便排", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await PayNotifyLogService.create({
         task_id: 1,
@@ -21,7 +21,7 @@ describe("PayNotifyLogService", () => {
   
       const updated = await PayNotifyLogService.update(created.id, {
         id: created.id,
-        task_id: "更新商户支付、退款等的通知 Log每次通知时，都会在该表中，记录一次 Log，方便排查问题",
+          task_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

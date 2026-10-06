@@ -21,7 +21,7 @@ describe("AfterSaleService", () => {
   
       const updated = await AfterSaleService.update(created.id, {
         id: created.id,
-        no: "更新售后订单，用于处理 交易订单的退款退货流程",
+          no: "测试更新售后订单，用于处理 交易订单的退款退货流程",
       } as any)
       expect(updated).toBeDefined()
   

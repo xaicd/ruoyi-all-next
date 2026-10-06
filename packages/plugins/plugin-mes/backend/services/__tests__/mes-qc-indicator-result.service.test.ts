@@ -21,7 +21,7 @@ describe("MesQcIndicatorResultService", () => {
   
       const updated = await MesQcIndicatorResultService.update(created.id, {
         id: created.id,
-        code: "更新MES 检验结果记录",
+          code: "测试更新MES 检验结果记录",
       } as any)
       expect(updated).toBeDefined()
   

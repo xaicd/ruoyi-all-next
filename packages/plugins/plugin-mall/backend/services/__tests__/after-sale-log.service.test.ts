@@ -21,7 +21,7 @@ describe("AfterSaleLogService", () => {
   
       const updated = await AfterSaleLogService.update(created.id, {
         id: created.id,
-        user_id: "更新交易售后日志",
+          user_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

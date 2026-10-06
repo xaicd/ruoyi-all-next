@@ -21,7 +21,7 @@ describe("MesWmOutsourceIssueLineService", () => {
   
       const updated = await MesWmOutsourceIssueLineService.update(created.id, {
         id: created.id,
-        issue_id: "更新MES 外协发料单行",
+          issue_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

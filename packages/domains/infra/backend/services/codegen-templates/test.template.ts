@@ -21,18 +21,27 @@ function isRequiredColumn(column: ConfiguredColumn): boolean {
  * not-null constraint` —— 这类测试**只在内存模式下成立**，等于没测。
  */
 function sampleValue(column: ConfiguredColumn, businessName: string): string {
+  // **按数据库类型判**，不要只看 tsType —— 元数据里存在 `tsType: "string"` 但
+  // 物理列是 integer 的情况（导入器的启发式推断），只按 tsType 会生成字符串，
+  // 连真实库时报 `invalid input syntax for type integer`（实测 20 例）。
+  const dbType = (column.type ?? "").toLowerCase()
+  if (["int", "integer", "bigint", "smallint", "decimal", "numeric", "float", "double"].includes(dbType)) {
+    return dbType.startsWith("decimal") || dbType.startsWith("numeric") || dbType.startsWith("float") || dbType.startsWith("double") ? "1.5" : "1"
+  }
+  if (["boolean", "bool"].includes(dbType)) return "true"
+  if (["timestamp", "timestamptz", "date", "datetime"].includes(dbType)) return "new Date().toISOString()"
   switch (column.tsType) {
     case "number":
-      return String(column.type === "decimal" ? 1.5 : 1)
+      return column.type === "decimal" ? "1.5" : "1"
     case "boolean":
       return "true"
     case "string":
       if (column.type === "timestamp" || column.name.endsWith("_time") || column.name.endsWith("_at")) {
         return "new Date().toISOString()"
       }
-      return `\"测试${businessName}\"`
+      return `"测试${businessName}"`
     default:
-      return `\"测试${businessName}\"`
+      return `"测试${businessName}"`
   }
 }
 
@@ -40,7 +49,7 @@ export function generateTest(config: CodegenConfig): CodegenOutput {
   const { className, businessName } = config
   const kebab = toKebab(className)
   const writeCols = formColumns(config)
-  const firstCol = writeCols[0]?.name || "name"
+  const updateCol = writeCols[0] ?? { name: "name", tsType: "string", type: "varchar" }
 
   // 必填列必须全部填上 —— 否则连真实库就挂（内存模式掩盖了它）。
   const requiredCols = writeCols.filter(isRequiredColumn)
@@ -67,7 +76,7 @@ ${createPayload}
 
     const updated = await ${className}Service.update(created.id, {
       id: created.id,
-      ${firstCol}: "更新${businessName}",
+        ${updateCol.name}: ${sampleValue(updateCol as ConfiguredColumn, `更新${businessName}`)},
     } as any)
     expect(updated).toBeDefined()
 

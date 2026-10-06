@@ -21,7 +21,7 @@ describe("MesMdItemBatchConfigService", () => {
   
       const updated = await MesMdItemBatchConfigService.update(created.id, {
         id: created.id,
-        item_id: "更新MES 物料批次属性配置",
+          item_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

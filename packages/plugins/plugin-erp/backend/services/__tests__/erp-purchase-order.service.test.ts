@@ -21,7 +21,7 @@ describe("ErpPurchaseOrderService", () => {
   
       const updated = await ErpPurchaseOrderService.update(created.id, {
         id: created.id,
-        no: "更新ERP 采购订单",
+          no: "测试更新ERP 采购订单",
       } as any)
       expect(updated).toBeDefined()
   

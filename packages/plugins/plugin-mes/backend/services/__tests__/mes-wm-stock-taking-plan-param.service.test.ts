@@ -21,7 +21,7 @@ describe("MesWmStockTakingPlanParamService", () => {
   
       const updated = await MesWmStockTakingPlanParamService.update(created.id, {
         id: created.id,
-        plan_id: "更新MES 盘点方案参数",
+          plan_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

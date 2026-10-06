@@ -21,7 +21,7 @@ describe("CrmPermissionService", () => {
   
       const updated = await CrmPermissionService.update(created.id, {
         id: created.id,
-        biz_type: "更新CRM 数据权限",
+          biz_type: 1,
       } as any)
       expect(updated).toBeDefined()
   

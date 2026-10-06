@@ -21,7 +21,7 @@ describe("ProductStatisticsService", () => {
   
       const updated = await ProductStatisticsService.update(created.id, {
         id: created.id,
-        time: "更新商品统计",
+          time: new Date().toISOString(),
       } as any)
       expect(updated).toBeDefined()
   

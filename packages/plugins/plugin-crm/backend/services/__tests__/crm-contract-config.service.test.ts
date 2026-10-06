@@ -21,7 +21,7 @@ describe("CrmContractConfigService", () => {
   
       const updated = await CrmContractConfigService.update(created.id, {
         id: created.id,
-        notify_enabled: "更新编号",
+          notify_enabled: true,
       } as any)
       expect(updated).toBeDefined()
   

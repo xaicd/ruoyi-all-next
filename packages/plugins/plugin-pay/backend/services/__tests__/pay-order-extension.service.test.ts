@@ -21,7 +21,7 @@ describe("PayOrderExtensionService", () => {
   
       const updated = await PayOrderExtensionService.update(created.id, {
         id: created.id,
-        no: "更新支付订单拓展 DO每次调用支付渠道，都会生成一条对应记录",
+          no: "测试更新支付订单拓展 DO每次调用支付渠道，都会生成一条对应记录",
       } as any)
       expect(updated).toBeDefined()
   

@@ -21,7 +21,7 @@ describe("ErpStockInItemService", () => {
   
       const updated = await ErpStockInItemService.update(created.id, {
         id: created.id,
-        in_id: "更新ERP 其它入库单项",
+          in_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

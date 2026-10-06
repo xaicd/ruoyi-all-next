@@ -21,7 +21,7 @@ describe("ErpFinancePaymentItemService", () => {
   
       const updated = await ErpFinancePaymentItemService.update(created.id, {
         id: created.id,
-        payment_id: "更新ERP 付款项",
+          payment_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

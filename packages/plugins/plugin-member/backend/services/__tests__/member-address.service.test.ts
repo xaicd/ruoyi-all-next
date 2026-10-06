@@ -21,7 +21,7 @@ describe("MemberAddressService", () => {
   
       const updated = await MemberAddressService.update(created.id, {
         id: created.id,
-        user_id: "更新用户收件地址",
+          user_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

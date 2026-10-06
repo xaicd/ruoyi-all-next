@@ -21,7 +21,7 @@ describe("AiChatRoleService", () => {
   
       const updated = await AiChatRoleService.update(created.id, {
         id: created.id,
-        name: "更新AI 聊天角色",
+          name: "测试更新AI 聊天角色",
       } as any)
       expect(updated).toBeDefined()
   

@@ -21,7 +21,7 @@ describe("PointProductService", () => {
   
       const updated = await PointProductService.update(created.id, {
         id: created.id,
-        activity_id: "更新积分商城商品",
+          activity_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

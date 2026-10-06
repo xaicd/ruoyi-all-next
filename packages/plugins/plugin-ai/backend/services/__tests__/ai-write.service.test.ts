@@ -21,7 +21,7 @@ describe("AiWriteService", () => {
   
       const updated = await AiWriteService.update(created.id, {
         id: created.id,
-        user_id: "更新AI 写作",
+          user_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

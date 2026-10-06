@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { PayChannelService } from "../pay-channel.service"
 
 describe("PayChannelService", () => {
-  it("should create and query 支付渠道 DO一个应用下，会有多种支付渠道，例如说微信支付、支付宝支付等等即 PayAppDO : PayChannelDO = 1 : n", async () => {
+  it("should create and query 支付渠道 DO一个应用下，会有多种支付渠道，例如说微信支付、支付宝支付等等即 P", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await PayChannelService.create({
-        code: "测试支付渠道 DO一个应用下，会有多种支付渠道，例如说微信支付、支付宝支付等等即 PayAppDO : PayChannelDO = 1 : n",
+        code: "测试支付渠道 DO一个应用下，会有多种支付渠道，例如说微信支付、支付宝支付等等即 P",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("PayChannelService", () => {
   
       const updated = await PayChannelService.update(created.id, {
         id: created.id,
-        code: "更新支付渠道 DO一个应用下，会有多种支付渠道，例如说微信支付、支付宝支付等等即 PayAppDO : PayChannelDO = 1 : n",
+          code: "测试更新支付渠道 DO一个应用下，会有多种支付渠道，例如说微信支付、支付宝支付等等即 P",
       } as any)
       expect(updated).toBeDefined()
   

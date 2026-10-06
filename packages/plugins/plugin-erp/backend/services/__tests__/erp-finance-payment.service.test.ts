@@ -21,7 +21,7 @@ describe("ErpFinancePaymentService", () => {
   
       const updated = await ErpFinancePaymentService.update(created.id, {
         id: created.id,
-        no: "更新ERP 付款单",
+          no: "测试更新ERP 付款单",
       } as any)
       expect(updated).toBeDefined()
   

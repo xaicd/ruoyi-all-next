@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { BpmProcessListenerService } from "../bpm-process-listener.service"
 
 describe("BpmProcessListenerService", () => {
-  it("should create and query BPM 流程监听器 DO目的：本质上它是流程监听器的模版，用于 BPMN 在设计时，直接选择这些模版", async () => {
+  it("should create and query BPM 流程监听器 DO目的：本质上它是流程监听器的模版，用于 BPMN 在设计", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await BpmProcessListenerService.create({
-        name: "测试BPM 流程监听器 DO目的：本质上它是流程监听器的模版，用于 BPMN 在设计时，直接选择这些模版",
+        name: "测试BPM 流程监听器 DO目的：本质上它是流程监听器的模版，用于 BPMN 在设计",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("BpmProcessListenerService", () => {
   
       const updated = await BpmProcessListenerService.update(created.id, {
         id: created.id,
-        name: "更新BPM 流程监听器 DO目的：本质上它是流程监听器的模版，用于 BPMN 在设计时，直接选择这些模版",
+          name: "测试更新BPM 流程监听器 DO目的：本质上它是流程监听器的模版，用于 BPMN 在设计",
       } as any)
       expect(updated).toBeDefined()
   

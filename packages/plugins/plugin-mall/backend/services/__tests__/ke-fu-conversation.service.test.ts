@@ -21,7 +21,7 @@ describe("KeFuConversationService", () => {
   
       const updated = await KeFuConversationService.update(created.id, {
         id: created.id,
-        user_id: "更新客服会话",
+          user_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

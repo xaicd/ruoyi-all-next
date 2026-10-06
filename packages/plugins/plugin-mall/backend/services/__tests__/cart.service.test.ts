@@ -21,7 +21,7 @@ describe("CartService", () => {
   
       const updated = await CartService.update(created.id, {
         id: created.id,
-        user_id: "更新购物车的商品信息 DO每个商品，对应一条记录，通过 和 关联",
+          user_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

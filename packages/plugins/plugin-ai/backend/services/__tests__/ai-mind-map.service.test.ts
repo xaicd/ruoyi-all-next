@@ -21,7 +21,7 @@ describe("AiMindMapService", () => {
   
       const updated = await AiMindMapService.update(created.id, {
         id: created.id,
-        user_id: "更新AI 思维导图",
+          user_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

@@ -21,7 +21,7 @@ describe("MesProWorkRecordLogService", () => {
   
       const updated = await MesProWorkRecordLogService.update(created.id, {
         id: created.id,
-        user_id: "更新MES 上下工记录流水",
+          user_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

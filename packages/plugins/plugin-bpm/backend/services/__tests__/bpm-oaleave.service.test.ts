@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { BpmOALeaveService } from "../bpm-oaleave.service"
 
 describe("BpmOALeaveService", () => {
-  it("should create and query OA 请假申请 DO 请假天数，目前先简单做。一般是分成请假上午和下午，可以是 1 整天，可以是 0.5 半天", async () => {
+  it("should create and query OA 请假申请 DO 请假天数，目前先简单做。一般是分成请假上午和下午，可以是 ", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await BpmOALeaveService.create({
         user_id: 1,
@@ -21,7 +21,7 @@ describe("BpmOALeaveService", () => {
   
       const updated = await BpmOALeaveService.update(created.id, {
         id: created.id,
-        user_id: "更新OA 请假申请 DO 请假天数，目前先简单做。一般是分成请假上午和下午，可以是 1 整天，可以是 0.5 半天",
+          user_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

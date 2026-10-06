@@ -21,7 +21,7 @@ describe("AiKnowledgeSegmentService", () => {
   
       const updated = await AiKnowledgeSegmentService.update(created.id, {
         id: created.id,
-        knowledge_id: "更新AI 知识库-文档分段",
+          knowledge_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

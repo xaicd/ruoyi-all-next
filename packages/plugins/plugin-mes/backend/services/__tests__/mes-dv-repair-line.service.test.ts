@@ -21,7 +21,7 @@ describe("MesDvRepairLineService", () => {
   
       const updated = await MesDvRepairLineService.update(created.id, {
         id: created.id,
-        repair_id: "更新MES 维修工单行",
+          repair_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

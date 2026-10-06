@@ -21,7 +21,7 @@ describe("MemberConfigService", () => {
   
       const updated = await MemberConfigService.update(created.id, {
         id: created.id,
-        point_trade_deduct_enable: "更新会员配置",
+          point_trade_deduct_enable: true,
       } as any)
       expect(updated).toBeDefined()
   

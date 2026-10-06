@@ -21,7 +21,7 @@ describe("MesMdAutoCodeRuleService", () => {
   
       const updated = await MesMdAutoCodeRuleService.update(created.id, {
         id: created.id,
-        code: "更新MES 编码规则",
+          code: "测试更新MES 编码规则",
       } as any)
       expect(updated).toBeDefined()
   

@@ -21,7 +21,7 @@ describe("CrmBusinessStatusTypeService", () => {
   
       const updated = await CrmBusinessStatusTypeService.update(created.id, {
         id: created.id,
-        name: "更新CRM 商机状态组 DO注意，它是个配置表",
+          name: "测试更新CRM 商机状态组 DO注意，它是个配置表",
       } as any)
       expect(updated).toBeDefined()
   

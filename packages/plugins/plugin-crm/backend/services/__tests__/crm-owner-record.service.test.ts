@@ -21,7 +21,7 @@ describe("CrmOwnerRecordService", () => {
   
       const updated = await CrmOwnerRecordService.update(created.id, {
         id: created.id,
-        biz_type: "更新CRM 负责人变更记录",
+          biz_type: 1,
       } as any)
       expect(updated).toBeDefined()
   

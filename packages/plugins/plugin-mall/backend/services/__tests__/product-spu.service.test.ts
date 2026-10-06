@@ -21,7 +21,7 @@ describe("ProductSpuService", () => {
   
       const updated = await ProductSpuService.update(created.id, {
         id: created.id,
-        name: "更新商品 SPU",
+          name: "测试更新商品 SPU",
       } as any)
       expect(updated).toBeDefined()
   

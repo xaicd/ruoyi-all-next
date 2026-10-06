@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { MesQcDefectRecordService } from "../mes-qc-defect-record.service"
 
 describe("MesQcDefectRecordService", () => {
-  it("should create and query MES 质检缺陷记录 DO通用缺陷记录表，通过 区分检验类型（IQC、IPQC、OQC、RQC），多模块复用", async () => {
+  it("should create and query MES 质检缺陷记录 DO通用缺陷记录表，通过 区分检验类型（IQC、IPQC、", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesQcDefectRecordService.create({
         qc_type: 1,
@@ -21,7 +21,7 @@ describe("MesQcDefectRecordService", () => {
   
       const updated = await MesQcDefectRecordService.update(created.id, {
         id: created.id,
-        qc_type: "更新MES 质检缺陷记录 DO通用缺陷记录表，通过 区分检验类型（IQC、IPQC、OQC、RQC），多模块复用",
+          qc_type: 1,
       } as any)
       expect(updated).toBeDefined()
   

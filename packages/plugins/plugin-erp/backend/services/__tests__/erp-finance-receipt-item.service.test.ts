@@ -21,7 +21,7 @@ describe("ErpFinanceReceiptItemService", () => {
   
       const updated = await ErpFinanceReceiptItemService.update(created.id, {
         id: created.id,
-        receipt_id: "更新ERP 收款项",
+          receipt_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

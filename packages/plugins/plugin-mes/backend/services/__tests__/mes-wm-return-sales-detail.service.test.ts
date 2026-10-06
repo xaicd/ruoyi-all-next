@@ -21,7 +21,7 @@ describe("MesWmReturnSalesDetailService", () => {
   
       const updated = await MesWmReturnSalesDetailService.update(created.id, {
         id: created.id,
-        return_id: "更新MES 销售退货明细",
+          return_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

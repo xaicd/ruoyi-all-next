@@ -21,7 +21,7 @@ describe("IotDataRuleService", () => {
   
       const updated = await IotDataRuleService.update(created.id, {
         id: created.id,
-        name: "更新IoT 数据流转规则 DO监听 数据源，转发到 数据目的",
+          name: "测试更新IoT 数据流转规则 DO监听 数据源，转发到 数据目的",
       } as any)
       expect(updated).toBeDefined()
   

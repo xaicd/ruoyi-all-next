@@ -21,7 +21,7 @@ describe("MesWmBarcodeConfigService", () => {
   
       const updated = await MesWmBarcodeConfigService.update(created.id, {
         id: created.id,
-        format: "更新MES 条码配置",
+          format: 1,
       } as any)
       expect(updated).toBeDefined()
   

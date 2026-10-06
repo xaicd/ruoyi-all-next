@@ -21,7 +21,7 @@ describe("MesProTaskIssueService", () => {
   
       const updated = await MesProTaskIssueService.update(created.id, {
         id: created.id,
-        task_id: "更新MES 生产任务投料",
+          task_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

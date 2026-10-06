@@ -21,7 +21,7 @@ describe("IotAlertConfigService", () => {
   
       const updated = await IotAlertConfigService.update(created.id, {
         id: created.id,
-        name: "更新IoT 告警配置",
+          name: "测试更新IoT 告警配置",
       } as any)
       expect(updated).toBeDefined()
   

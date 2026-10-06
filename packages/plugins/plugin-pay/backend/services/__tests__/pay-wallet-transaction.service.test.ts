@@ -21,7 +21,7 @@ describe("PayWalletTransactionService", () => {
   
       const updated = await PayWalletTransactionService.update(created.id, {
         id: created.id,
-        no: "更新会员钱包流水",
+          no: "测试更新会员钱包流水",
       } as any)
       expect(updated).toBeDefined()
   

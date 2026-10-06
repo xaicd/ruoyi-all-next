@@ -4,10 +4,10 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { DiyTemplateService } from "../diy-template.service"
 
 describe("DiyTemplateService", () => {
-  it("should create and query 装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. 如果需要使用某个模版，则将 设置为 true，表示已使用，有且仅有一个", async () => {
+  it("should create and query 装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. ", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await DiyTemplateService.create({
-        name: "测试装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. 如果需要使用某个模版，则将 设置为 true，表示已使用，有且仅有一个",
+        name: "测试装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. ",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("DiyTemplateService", () => {
   
       const updated = await DiyTemplateService.update(created.id, {
         id: created.id,
-        name: "更新装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. 如果需要使用某个模版，则将 设置为 true，表示已使用，有且仅有一个",
+          name: "测试更新装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. ",
       } as any)
       expect(updated).toBeDefined()
   

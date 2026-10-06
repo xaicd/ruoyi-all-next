@@ -21,7 +21,7 @@ describe("MesMdProductSopService", () => {
   
       const updated = await MesMdProductSopService.update(created.id, {
         id: created.id,
-        item_id: "更新MES 产品SOP",
+          item_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

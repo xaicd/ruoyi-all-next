@@ -21,7 +21,7 @@ describe("ProductPropertyValueService", () => {
   
       const updated = await ProductPropertyValueService.update(created.id, {
         id: created.id,
-        property_id: "更新商品属性值",
+          property_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

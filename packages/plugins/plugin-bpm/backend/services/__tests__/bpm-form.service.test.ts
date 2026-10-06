@@ -21,7 +21,7 @@ describe("BpmFormService", () => {
   
       const updated = await BpmFormService.update(created.id, {
         id: created.id,
-        name: "更新BPM 工作流的表单定义用于工作流的申请表单，需要动态配置的场景",
+          name: "测试更新BPM 工作流的表单定义用于工作流的申请表单，需要动态配置的场景",
       } as any)
       expect(updated).toBeDefined()
   

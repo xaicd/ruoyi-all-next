@@ -21,7 +21,7 @@ describe("IotDeviceModbusPointService", () => {
   
       const updated = await IotDeviceModbusPointService.update(created.id, {
         id: created.id,
-        device_id: "更新IoT 设备 Modbus 点位配置",
+          device_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

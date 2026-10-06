@@ -21,7 +21,7 @@ describe("IotDeviceGroupService", () => {
   
       const updated = await IotDeviceGroupService.update(created.id, {
         id: created.id,
-        name: "更新IoT 设备分组",
+          name: "测试更新IoT 设备分组",
       } as any)
       expect(updated).toBeDefined()
   

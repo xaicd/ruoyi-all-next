@@ -21,7 +21,7 @@ describe("CombinationProductService", () => {
   
       const updated = await CombinationProductService.update(created.id, {
         id: created.id,
-        activity_id: "更新拼团商品",
+          activity_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

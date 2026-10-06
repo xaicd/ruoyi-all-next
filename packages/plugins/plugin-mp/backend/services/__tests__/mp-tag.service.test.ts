@@ -21,7 +21,7 @@ describe("MpTagService", () => {
   
       const updated = await MpTagService.update(created.id, {
         id: created.id,
-        tag_id: "更新公众号标签",
+          tag_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

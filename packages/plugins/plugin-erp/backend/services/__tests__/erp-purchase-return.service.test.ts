@@ -21,7 +21,7 @@ describe("ErpPurchaseReturnService", () => {
   
       const updated = await ErpPurchaseReturnService.update(created.id, {
         id: created.id,
-        no: "更新ERP 采购退货",
+          no: "测试更新ERP 采购退货",
       } as any)
       expect(updated).toBeDefined()
   

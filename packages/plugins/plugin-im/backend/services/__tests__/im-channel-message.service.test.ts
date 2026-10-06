@@ -4,7 +4,7 @@ import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { ImChannelMessageService } from "../im-channel-message.service"
 
 describe("ImChannelMessageService", () => {
-  it("should create and query IM 频道消息 DO业务语义：- 一次推送 1 行； 为空表示全员- 冗余 便于按频道检索- 存推送时 payload 的 JSON 快照（title / coverUrl / summa", async () => {
+  it("should create and query IM 频道消息 DO业务语义：- 一次推送 1 行； 为空表示全员- 冗余 便于", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImChannelMessageService.create({
         channel_id: 1,
@@ -21,7 +21,7 @@ describe("ImChannelMessageService", () => {
   
       const updated = await ImChannelMessageService.update(created.id, {
         id: created.id,
-        channel_id: "更新IM 频道消息 DO业务语义：- 一次推送 1 行； 为空表示全员- 冗余 便于按频道检索- 存推送时 payload 的 JSON 快照（title / coverUrl / summa",
+          channel_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

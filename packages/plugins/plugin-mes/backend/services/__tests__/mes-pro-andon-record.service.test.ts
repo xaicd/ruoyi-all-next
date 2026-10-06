@@ -21,7 +21,7 @@ describe("MesProAndonRecordService", () => {
   
       const updated = await MesProAndonRecordService.update(created.id, {
         id: created.id,
-        config_id: "更新MES 安灯呼叫记录",
+          config_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

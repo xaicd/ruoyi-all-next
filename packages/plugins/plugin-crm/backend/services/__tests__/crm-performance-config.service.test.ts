@@ -21,7 +21,7 @@ describe("CrmPerformanceConfigService", () => {
   
       const updated = await CrmPerformanceConfigService.update(created.id, {
         id: created.id,
-        biz_type: "更新CRM 业绩目标",
+          biz_type: 1,
       } as any)
       expect(updated).toBeDefined()
   

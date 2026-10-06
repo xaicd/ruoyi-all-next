@@ -21,7 +21,7 @@ describe("CrmCustomerService", () => {
   
       const updated = await CrmCustomerService.update(created.id, {
         id: created.id,
-        name: "更新CRM 客户",
+          name: "测试更新CRM 客户",
       } as any)
       expect(updated).toBeDefined()
   

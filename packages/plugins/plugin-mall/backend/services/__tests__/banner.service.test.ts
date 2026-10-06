@@ -21,7 +21,7 @@ describe("BannerService", () => {
   
       const updated = await BannerService.update(created.id, {
         id: created.id,
-        title: "更新banner",
+          title: "测试更新banner",
       } as any)
       expect(updated).toBeDefined()
   

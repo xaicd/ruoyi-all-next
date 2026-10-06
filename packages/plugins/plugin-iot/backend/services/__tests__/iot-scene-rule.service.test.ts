@@ -21,7 +21,7 @@ describe("IotSceneRuleService", () => {
   
       const updated = await IotSceneRuleService.update(created.id, {
         id: created.id,
-        name: "更新IoT 场景联动规则",
+          name: "测试更新IoT 场景联动规则",
       } as any)
       expect(updated).toBeDefined()
   

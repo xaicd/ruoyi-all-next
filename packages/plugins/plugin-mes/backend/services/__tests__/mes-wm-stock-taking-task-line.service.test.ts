@@ -21,7 +21,7 @@ describe("MesWmStockTakingTaskLineService", () => {
   
       const updated = await MesWmStockTakingTaskLineService.update(created.id, {
         id: created.id,
-        task_id: "更新MES 盘点任务行",
+          task_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

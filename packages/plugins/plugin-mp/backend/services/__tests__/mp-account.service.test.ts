@@ -21,7 +21,7 @@ describe("MpAccountService", () => {
   
       const updated = await MpAccountService.update(created.id, {
         id: created.id,
-        name: "更新公众号账号",
+          name: "测试更新公众号账号",
       } as any)
       expect(updated).toBeDefined()
   

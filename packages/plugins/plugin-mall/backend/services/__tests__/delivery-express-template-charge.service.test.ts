@@ -21,7 +21,7 @@ describe("DeliveryExpressTemplateChargeService", () => {
   
       const updated = await DeliveryExpressTemplateChargeService.update(created.id, {
         id: created.id,
-        template_id: "更新快递运费模板计费配置",
+          template_id: 1,
       } as any)
       expect(updated).toBeDefined()
   

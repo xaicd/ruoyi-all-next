@@ -21,7 +21,7 @@ describe("AiMusicService", () => {
   
       const updated = await AiMusicService.update(created.id, {
         id: created.id,
-        user_id: "更新AI 音乐",
+          user_id: 1,
       } as any)
       expect(updated).toBeDefined()
   
