@@ -37,11 +37,11 @@ CREATE TABLE IF NOT EXISTS "ai_chat_conversation" (
     "id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
     "title" VARCHAR(255) NOT NULL,
-    "pinned" BOOLEAN,
+    "pinned" BOOLEAN NOT NULL,
     "pinned_time" TIMESTAMP(3),
     "role_id" TEXT,
     "model_id" TEXT,
-    "model" VARCHAR(255),
+    "model" VARCHAR(255) NOT NULL,
     "system_message" VARCHAR(255),
     "temperature" DECIMAL(18,2),
     "max_tokens" INTEGER,
@@ -52,18 +52,19 @@ CREATE TABLE IF NOT EXISTS "ai_chat_conversation" (
     "updated_by" VARCHAR(255),
     "updated_at" TIMESTAMP(3) NOT NULL,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "system_prompt" TEXT,
     CONSTRAINT "ai_chat_conversation_pkey" PRIMARY KEY ("id")
 );
 ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "user_id" TEXT NOT NULL;
 ALTER TABLE "ai_chat_conversation" ALTER COLUMN "user_id" TYPE TEXT USING "user_id"::TEXT;
 ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "title" VARCHAR(255) NOT NULL;
-ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "pinned" BOOLEAN;
+ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "pinned" BOOLEAN NOT NULL;
 ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "pinned_time" TIMESTAMP(3);
 ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "role_id" TEXT;
 ALTER TABLE "ai_chat_conversation" ALTER COLUMN "role_id" TYPE TEXT USING "role_id"::TEXT;
 ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "model_id" TEXT;
 ALTER TABLE "ai_chat_conversation" ALTER COLUMN "model_id" TYPE TEXT USING "model_id"::TEXT;
-ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "model" VARCHAR(255);
+ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "model" VARCHAR(255) NOT NULL;
 ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "system_message" VARCHAR(255);
 ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "temperature" DECIMAL(18,2);
 ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "max_tokens" INTEGER;
@@ -75,19 +76,20 @@ ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "created_at" TIMESTA
 ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
 ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "system_prompt" TEXT;
 CREATE INDEX IF NOT EXISTS "ai_chat_conversation_tenant_id_idx" ON "ai_chat_conversation"("tenant_id");
 
 -- AI Chat 消息
 CREATE TABLE IF NOT EXISTS "ai_chat_message" (
     "id" TEXT NOT NULL,
-    "conversation_id" TEXT,
+    "conversation_id" TEXT NOT NULL,
     "reply_id" TEXT,
     "type" VARCHAR(255),
     "user_id" TEXT,
     "role_id" TEXT,
     "model" VARCHAR(255),
     "model_id" TEXT,
-    "content" VARCHAR(255),
+    "content" VARCHAR(255) NOT NULL,
     "reasoning_content" VARCHAR(255),
     "use_context" BOOLEAN,
     "segment_ids" TEXT,
@@ -99,9 +101,11 @@ CREATE TABLE IF NOT EXISTS "ai_chat_message" (
     "updated_by" VARCHAR(255),
     "updated_at" TIMESTAMP(3) NOT NULL,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "role" VARCHAR(255) NOT NULL,
+    "tokens" INTEGER NOT NULL,
     CONSTRAINT "ai_chat_message_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "conversation_id" TEXT;
+ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "conversation_id" TEXT NOT NULL;
 ALTER TABLE "ai_chat_message" ALTER COLUMN "conversation_id" TYPE TEXT USING "conversation_id"::TEXT;
 ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "reply_id" TEXT;
 ALTER TABLE "ai_chat_message" ALTER COLUMN "reply_id" TYPE TEXT USING "reply_id"::TEXT;
@@ -113,7 +117,7 @@ ALTER TABLE "ai_chat_message" ALTER COLUMN "role_id" TYPE TEXT USING "role_id"::
 ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "model" VARCHAR(255);
 ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "model_id" TEXT;
 ALTER TABLE "ai_chat_message" ALTER COLUMN "model_id" TYPE TEXT USING "model_id"::TEXT;
-ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "content" VARCHAR(255);
+ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "content" VARCHAR(255) NOT NULL;
 ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "reasoning_content" VARCHAR(255);
 ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "use_context" BOOLEAN;
 ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "segment_ids" TEXT;
@@ -126,6 +130,8 @@ ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3)
 ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
 ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "role" VARCHAR(255) NOT NULL;
+ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "tokens" INTEGER NOT NULL;
 CREATE INDEX IF NOT EXISTS "ai_chat_message_tenant_id_idx" ON "ai_chat_message"("tenant_id");
 
 -- AI 聊天角色
@@ -386,8 +392,8 @@ CREATE TABLE IF NOT EXISTS "ai_model" (
     "model" VARCHAR(255),
     "platform" VARCHAR(255),
     "type" INTEGER,
-    "sort" INTEGER,
-    "status" VARCHAR(255),
+    "sort" INTEGER NOT NULL,
+    "status" VARCHAR(255) NOT NULL,
     "temperature" DECIMAL(18,2),
     "max_tokens" INTEGER,
     "max_contexts" INTEGER,
@@ -397,6 +403,11 @@ CREATE TABLE IF NOT EXISTS "ai_model" (
     "updated_by" VARCHAR(255),
     "updated_at" TIMESTAMP(3) NOT NULL,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "model_key" VARCHAR(255) NOT NULL,
+    "input_ratio" VARCHAR(255) NOT NULL,
+    "output_ratio" VARCHAR(255) NOT NULL,
+    "provider" VARCHAR(255) NOT NULL,
+    "description" VARCHAR(255),
     CONSTRAINT "ai_model_pkey" PRIMARY KEY ("id")
 );
 ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "key_id" TEXT;
@@ -405,8 +416,8 @@ ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255) NOT NULL;
 ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "model" VARCHAR(255);
 ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "platform" VARCHAR(255);
 ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "type" INTEGER;
-ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "sort" INTEGER;
-ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "status" VARCHAR(255);
+ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "sort" INTEGER NOT NULL;
+ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "status" VARCHAR(255) NOT NULL;
 ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "temperature" DECIMAL(18,2);
 ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "max_tokens" INTEGER;
 ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "max_contexts" INTEGER;
@@ -417,6 +428,11 @@ ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NU
 ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
 ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "model_key" VARCHAR(255) NOT NULL;
+ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "input_ratio" VARCHAR(255) NOT NULL;
+ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "output_ratio" VARCHAR(255) NOT NULL;
+ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "provider" VARCHAR(255) NOT NULL;
+ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
 CREATE INDEX IF NOT EXISTS "ai_model_tenant_id_idx" ON "ai_model"("tenant_id");
 
 -- AI 音乐

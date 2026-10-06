@@ -8,6 +8,9 @@ describe("AiMusicService", () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AiMusicService.create({
         title: "测试AI 音乐",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

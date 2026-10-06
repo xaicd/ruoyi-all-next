@@ -8,6 +8,15 @@ describe("AiModelService", () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AiModelService.create({
         name: "测试AI 模型 DO默认模型： 为开启，并且 排序第一",
+        sort: 1,
+        status: "测试AI 模型 DO默认模型： 为开启，并且 排序第一",
+        model_key: "测试AI 模型 DO默认模型： 为开启，并且 排序第一",
+        input_ratio: "测试AI 模型 DO默认模型： 为开启，并且 排序第一",
+        output_ratio: "测试AI 模型 DO默认模型： 为开启，并且 排序第一",
+        provider: "测试AI 模型 DO默认模型： 为开启，并且 排序第一",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

@@ -8,6 +8,12 @@ describe("AiChatMessageService", () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AiChatMessageService.create({
         conversation_id: "测试AI Chat 消息",
+        content: "测试AI Chat 消息",
+        role: "测试AI Chat 消息",
+        tokens: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

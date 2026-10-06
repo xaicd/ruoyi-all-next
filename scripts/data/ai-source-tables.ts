@@ -157,7 +157,7 @@ export const AI_TABLES: CodegenConfig[] = [
           "name": "pinned",
           "type": "boolean",
           "tsType": "boolean",
-          "nullable": true,
+          "nullable": false,
           "comment": "是否置顶",
           "nullableInferred": true
         },
@@ -191,7 +191,7 @@ export const AI_TABLES: CodegenConfig[] = [
           "name": "model",
           "type": "varchar",
           "tsType": "string",
-          "nullable": true,
+          "nullable": false,
           "comment": "模型标志",
           "nullableInferred": true
         },
@@ -277,7 +277,15 @@ export const AI_TABLES: CodegenConfig[] = [
           "defaultValueTyped": false,
           "comment": "逻辑删除",
           "nullableInferred": false
-        }
+        },
+        {
+          "name": "system_prompt",
+          "type": "text",
+          "tsType": "string",
+          "nullable": true,
+          "comment": "表里已有、元数据此前未登记",
+          "nullableInferred": true
+        },
       ]
     }
   },
@@ -304,7 +312,7 @@ export const AI_TABLES: CodegenConfig[] = [
           "name": "conversation_id",
           "type": "varchar",
           "tsType": "string",
-          "nullable": true,
+          "nullable": false,
           "comment": "对话编号",
           "nullableInferred": true,
           "queryType": "="
@@ -365,7 +373,7 @@ export const AI_TABLES: CodegenConfig[] = [
           "name": "content",
           "type": "varchar",
           "tsType": "string",
-          "nullable": true,
+          "nullable": false,
           "comment": "聊天内容",
           "nullableInferred": true
         },
@@ -457,11 +465,19 @@ export const AI_TABLES: CodegenConfig[] = [
           "defaultValueTyped": false,
           "comment": "逻辑删除",
           "nullableInferred": false
-        }
+        },
         {
           "name": "role",
           "type": "varchar",
           "tsType": "string",
+          "nullable": false,
+          "comment": "表里已有、元数据此前未登记",
+          "nullableInferred": true
+        },
+        {
+          "name": "tokens",
+          "type": "int",
+          "tsType": "number",
           "nullable": false,
           "comment": "表里已有、元数据此前未登记",
           "nullableInferred": true
@@ -1456,7 +1472,7 @@ export const AI_TABLES: CodegenConfig[] = [
           "name": "sort",
           "type": "int",
           "tsType": "number",
-          "nullable": true,
+          "nullable": false,
           "comment": "排序值",
           "nullableInferred": true
         },
@@ -1464,7 +1480,7 @@ export const AI_TABLES: CodegenConfig[] = [
           "name": "status",
           "type": "varchar",
           "tsType": "string",
-          "nullable": true,
+          "nullable": false,
           "comment": "状态",
           "nullableInferred": true,
           "queryType": "="
@@ -1543,12 +1559,44 @@ export const AI_TABLES: CodegenConfig[] = [
           "defaultValueTyped": false,
           "comment": "逻辑删除",
           "nullableInferred": false
-        }
+        },
         {
           "name": "model_key",
           "type": "varchar",
           "tsType": "string",
           "nullable": false,
+          "comment": "表里已有、元数据此前未登记",
+          "nullableInferred": true
+        },
+        {
+          "name": "input_ratio",
+          "type": "varchar",
+          "tsType": "string",
+          "nullable": false,
+          "comment": "表里已有、元数据此前未登记",
+          "nullableInferred": true
+        },
+        {
+          "name": "output_ratio",
+          "type": "varchar",
+          "tsType": "string",
+          "nullable": false,
+          "comment": "表里已有、元数据此前未登记",
+          "nullableInferred": true
+        },
+        {
+          "name": "provider",
+          "type": "varchar",
+          "tsType": "string",
+          "nullable": false,
+          "comment": "表里已有、元数据此前未登记",
+          "nullableInferred": true
+        },
+        {
+          "name": "description",
+          "type": "varchar",
+          "tsType": "string",
+          "nullable": true,
           "comment": "表里已有、元数据此前未登记",
           "nullableInferred": true
         },

@@ -319,12 +319,12 @@ CREATE TABLE IF NOT EXISTS "member_user" (
     "mobile" VARCHAR(255),
     "email" VARCHAR(255),
     "password" VARCHAR(255),
-    "status" VARCHAR(255),
+    "status" VARCHAR(255) NOT NULL,
     "register_ip" VARCHAR(255),
     "register_terminal" INTEGER,
     "login_ip" VARCHAR(255),
     "login_date" TIMESTAMP(3),
-    "nickname" VARCHAR(255),
+    "nickname" VARCHAR(255) NOT NULL,
     "avatar" VARCHAR(255),
     "name" VARCHAR(255),
     "sex" INTEGER,
@@ -337,22 +337,30 @@ CREATE TABLE IF NOT EXISTS "member_user" (
     "experience" INTEGER,
     "group_id" TEXT,
     "tenant_id" TEXT NOT NULL,
-    "created_by" VARCHAR(255),
+    "created_by" VARCHAR(255) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL,
-    "updated_by" VARCHAR(255),
+    "updated_by" VARCHAR(255) NOT NULL,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "extra_fields" VARCHAR(255),
+    "deleted_at" TIMESTAMP(3),
+    "remark" VARCHAR(255),
+    "account" VARCHAR(255) NOT NULL,
+    "password_hash" VARCHAR(255) NOT NULL,
+    "password_salt" VARCHAR(255) NOT NULL,
+    "avatar_url" VARCHAR(255),
+    "member_level" VARCHAR(255) NOT NULL,
     CONSTRAINT "member_user_pkey" PRIMARY KEY ("id")
 );
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "mobile" VARCHAR(255);
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "email" VARCHAR(255);
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "password" VARCHAR(255);
-ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "status" VARCHAR(255);
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "status" VARCHAR(255) NOT NULL;
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "register_ip" VARCHAR(255);
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "register_terminal" INTEGER;
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "login_ip" VARCHAR(255);
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "login_date" TIMESTAMP(3);
-ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "nickname" VARCHAR(255);
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "nickname" VARCHAR(255) NOT NULL;
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "avatar" VARCHAR(255);
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "sex" INTEGER;
@@ -369,9 +377,17 @@ ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "group_id" TEXT;
 ALTER TABLE "member_user" ALTER COLUMN "group_id" TYPE TEXT USING "group_id"::TEXT;
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
 ALTER TABLE "member_user" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
-ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255) NOT NULL;
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
-ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255) NOT NULL;
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "extra_fields" VARCHAR(255);
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "deleted_at" TIMESTAMP(3);
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "account" VARCHAR(255) NOT NULL;
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "password_hash" VARCHAR(255) NOT NULL;
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "password_salt" VARCHAR(255) NOT NULL;
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "avatar_url" VARCHAR(255);
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "member_level" VARCHAR(255) NOT NULL;
 CREATE INDEX IF NOT EXISTS "member_user_tenant_id_idx" ON "member_user"("tenant_id");

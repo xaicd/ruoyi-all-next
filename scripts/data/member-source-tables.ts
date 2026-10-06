@@ -1193,7 +1193,7 @@ export const MEMBER_TABLES: CodegenConfig[] = [
           "name": "status",
           "type": "varchar",
           "tsType": "string",
-          "nullable": true,
+          "nullable": false,
           "comment": "帐号状态",
           "nullableInferred": true,
           "queryType": "="
@@ -1234,7 +1234,7 @@ export const MEMBER_TABLES: CodegenConfig[] = [
           "name": "nickname",
           "type": "varchar",
           "tsType": "string",
-          "nullable": true,
+          "nullable": false,
           "comment": "用户昵称",
           "nullableInferred": true
         },
@@ -1340,7 +1340,7 @@ export const MEMBER_TABLES: CodegenConfig[] = [
           "name": "created_by",
           "type": "varchar",
           "tsType": "string",
-          "nullable": true,
+          "nullable": false,
           "comment": "创建者",
           "nullableInferred": true
         },
@@ -1356,7 +1356,7 @@ export const MEMBER_TABLES: CodegenConfig[] = [
           "name": "updated_by",
           "type": "varchar",
           "tsType": "string",
-          "nullable": true,
+          "nullable": false,
           "comment": "更新者",
           "nullableInferred": true
         },
@@ -1376,7 +1376,71 @@ export const MEMBER_TABLES: CodegenConfig[] = [
           "defaultValueTyped": false,
           "comment": "逻辑删除",
           "nullableInferred": false
-        }
+        },
+        {
+          "name": "extra_fields",
+          "type": "varchar",
+          "tsType": "string",
+          "nullable": true,
+          "comment": "表里已有、元数据此前未登记",
+          "nullableInferred": true
+        },
+        {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "tsType": "string",
+          "nullable": true,
+          "comment": "表里已有、元数据此前未登记",
+          "nullableInferred": true
+        },
+        {
+          "name": "remark",
+          "type": "varchar",
+          "tsType": "string",
+          "nullable": true,
+          "comment": "表里已有、元数据此前未登记",
+          "nullableInferred": true
+        },
+        {
+          "name": "account",
+          "type": "varchar",
+          "tsType": "string",
+          "nullable": false,
+          "comment": "表里已有、元数据此前未登记",
+          "nullableInferred": true
+        },
+        {
+          "name": "password_hash",
+          "type": "varchar",
+          "tsType": "string",
+          "nullable": false,
+          "comment": "表里已有、元数据此前未登记",
+          "nullableInferred": true
+        },
+        {
+          "name": "password_salt",
+          "type": "varchar",
+          "tsType": "string",
+          "nullable": false,
+          "comment": "表里已有、元数据此前未登记",
+          "nullableInferred": true
+        },
+        {
+          "name": "avatar_url",
+          "type": "varchar",
+          "tsType": "string",
+          "nullable": true,
+          "comment": "表里已有、元数据此前未登记",
+          "nullableInferred": true
+        },
+        {
+          "name": "member_level",
+          "type": "varchar",
+          "tsType": "string",
+          "nullable": false,
+          "comment": "表里已有、元数据此前未登记",
+          "nullableInferred": true
+        },
       ]
     }
   }

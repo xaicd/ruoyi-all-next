@@ -9,6 +9,11 @@ describe("AiChatConversationService", () => {
       const created = await AiChatConversationService.create({
         user_id: "测试AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它",
         title: "测试AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它",
+        pinned: true,
+        model: "测试AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

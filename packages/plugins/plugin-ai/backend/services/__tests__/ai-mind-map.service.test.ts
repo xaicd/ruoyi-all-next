@@ -7,7 +7,9 @@ describe("AiMindMapService", () => {
   it("should create and query AI 思维导图", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AiMindMapService.create({
-        user_id: "测试AI 思维导图",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

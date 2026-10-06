@@ -8,6 +8,9 @@ describe("AiChatRoleService", () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AiChatRoleService.create({
         name: "测试AI 聊天角色",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
