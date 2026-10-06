@@ -7,7 +7,7 @@ describe("AiKnowledgeDocumentService", () => {
   it("should create and query AI 知识库-文档", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AiKnowledgeDocumentService.create({
-        knowledge_id: 1,
+        name: "测试AI 知识库-文档",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

@@ -5,7 +5,7 @@
 -- AI API 秘钥
 CREATE TABLE IF NOT EXISTS "ai_api_key" (
     "id" TEXT NOT NULL,
-    "name" VARCHAR(255),
+    "name" VARCHAR(255) NOT NULL,
     "api_key" VARCHAR(255),
     "platform" VARCHAR(255),
     "url" VARCHAR(255),
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS "ai_api_key" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_api_key_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "ai_api_key" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "ai_api_key" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255) NOT NULL;
 ALTER TABLE "ai_api_key" ADD COLUMN IF NOT EXISTS "api_key" VARCHAR(255);
 ALTER TABLE "ai_api_key" ADD COLUMN IF NOT EXISTS "platform" VARCHAR(255);
 ALTER TABLE "ai_api_key" ADD COLUMN IF NOT EXISTS "url" VARCHAR(255);
@@ -35,7 +35,7 @@ CREATE INDEX IF NOT EXISTS "ai_api_key_tenant_id_idx" ON "ai_api_key"("tenant_id
 CREATE TABLE IF NOT EXISTS "ai_chat_conversation" (
     "id" TEXT NOT NULL,
     "user_id" VARCHAR(255),
-    "title" VARCHAR(255),
+    "title" VARCHAR(255) NOT NULL,
     "pinned" BOOLEAN,
     "pinned_time" TIMESTAMP(3),
     "role_id" BIGINT,
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS "ai_chat_conversation" (
     CONSTRAINT "ai_chat_conversation_pkey" PRIMARY KEY ("id")
 );
 ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "user_id" VARCHAR(255);
-ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "title" VARCHAR(255);
+ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "title" VARCHAR(255) NOT NULL;
 ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "pinned" BOOLEAN;
 ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "pinned_time" TIMESTAMP(3);
 ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "role_id" BIGINT;
@@ -120,7 +120,7 @@ CREATE INDEX IF NOT EXISTS "ai_chat_message_tenant_id_idx" ON "ai_chat_message"(
 -- AI 聊天角色
 CREATE TABLE IF NOT EXISTS "ai_chat_role" (
     "id" TEXT NOT NULL,
-    "name" VARCHAR(255),
+    "name" VARCHAR(255) NOT NULL,
     "avatar" VARCHAR(255),
     "category" VARCHAR(255),
     "description" VARCHAR(255),
@@ -141,7 +141,7 @@ CREATE TABLE IF NOT EXISTS "ai_chat_role" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_chat_role_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "ai_chat_role" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "ai_chat_role" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255) NOT NULL;
 ALTER TABLE "ai_chat_role" ADD COLUMN IF NOT EXISTS "avatar" VARCHAR(255);
 ALTER TABLE "ai_chat_role" ADD COLUMN IF NOT EXISTS "category" VARCHAR(255);
 ALTER TABLE "ai_chat_role" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
@@ -214,7 +214,7 @@ CREATE INDEX IF NOT EXISTS "ai_image_tenant_id_idx" ON "ai_image"("tenant_id");
 -- AI 知识库
 CREATE TABLE IF NOT EXISTS "ai_knowledge" (
     "id" TEXT NOT NULL,
-    "name" VARCHAR(255),
+    "name" VARCHAR(255) NOT NULL,
     "description" VARCHAR(255),
     "embedding_model_id" BIGINT,
     "embedding_model" VARCHAR(255),
@@ -229,7 +229,7 @@ CREATE TABLE IF NOT EXISTS "ai_knowledge" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_knowledge_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "ai_knowledge" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "ai_knowledge" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255) NOT NULL;
 ALTER TABLE "ai_knowledge" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
 ALTER TABLE "ai_knowledge" ADD COLUMN IF NOT EXISTS "embedding_model_id" BIGINT;
 ALTER TABLE "ai_knowledge" ADD COLUMN IF NOT EXISTS "embedding_model" VARCHAR(255);
@@ -248,7 +248,7 @@ CREATE INDEX IF NOT EXISTS "ai_knowledge_tenant_id_idx" ON "ai_knowledge"("tenan
 CREATE TABLE IF NOT EXISTS "ai_knowledge_document" (
     "id" TEXT NOT NULL,
     "knowledge_id" BIGINT,
-    "name" VARCHAR(255),
+    "name" VARCHAR(255) NOT NULL,
     "url" VARCHAR(255),
     "content" VARCHAR(255),
     "content_length" INTEGER,
@@ -265,7 +265,7 @@ CREATE TABLE IF NOT EXISTS "ai_knowledge_document" (
     CONSTRAINT "ai_knowledge_document_pkey" PRIMARY KEY ("id")
 );
 ALTER TABLE "ai_knowledge_document" ADD COLUMN IF NOT EXISTS "knowledge_id" BIGINT;
-ALTER TABLE "ai_knowledge_document" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "ai_knowledge_document" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255) NOT NULL;
 ALTER TABLE "ai_knowledge_document" ADD COLUMN IF NOT EXISTS "url" VARCHAR(255);
 ALTER TABLE "ai_knowledge_document" ADD COLUMN IF NOT EXISTS "content" VARCHAR(255);
 ALTER TABLE "ai_knowledge_document" ADD COLUMN IF NOT EXISTS "content_length" INTEGER;
@@ -353,7 +353,7 @@ CREATE INDEX IF NOT EXISTS "ai_mind_map_tenant_id_idx" ON "ai_mind_map"("tenant_
 CREATE TABLE IF NOT EXISTS "ai_model" (
     "id" TEXT NOT NULL,
     "key_id" BIGINT,
-    "name" VARCHAR(255),
+    "name" VARCHAR(255) NOT NULL,
     "model" VARCHAR(255),
     "platform" VARCHAR(255),
     "type" INTEGER,
@@ -371,7 +371,7 @@ CREATE TABLE IF NOT EXISTS "ai_model" (
     CONSTRAINT "ai_model_pkey" PRIMARY KEY ("id")
 );
 ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "key_id" BIGINT;
-ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255) NOT NULL;
 ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "model" VARCHAR(255);
 ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "platform" VARCHAR(255);
 ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "type" INTEGER;
@@ -392,7 +392,7 @@ CREATE INDEX IF NOT EXISTS "ai_model_tenant_id_idx" ON "ai_model"("tenant_id");
 CREATE TABLE IF NOT EXISTS "ai_music" (
     "id" TEXT NOT NULL,
     "user_id" VARCHAR(255),
-    "title" VARCHAR(255),
+    "title" VARCHAR(255) NOT NULL,
     "lyric" VARCHAR(255),
     "image_url" VARCHAR(255),
     "audio_url" VARCHAR(255),
@@ -416,7 +416,7 @@ CREATE TABLE IF NOT EXISTS "ai_music" (
     CONSTRAINT "ai_music_pkey" PRIMARY KEY ("id")
 );
 ALTER TABLE "ai_music" ADD COLUMN IF NOT EXISTS "user_id" VARCHAR(255);
-ALTER TABLE "ai_music" ADD COLUMN IF NOT EXISTS "title" VARCHAR(255);
+ALTER TABLE "ai_music" ADD COLUMN IF NOT EXISTS "title" VARCHAR(255) NOT NULL;
 ALTER TABLE "ai_music" ADD COLUMN IF NOT EXISTS "lyric" VARCHAR(255);
 ALTER TABLE "ai_music" ADD COLUMN IF NOT EXISTS "image_url" VARCHAR(255);
 ALTER TABLE "ai_music" ADD COLUMN IF NOT EXISTS "audio_url" VARCHAR(255);
@@ -442,7 +442,7 @@ CREATE INDEX IF NOT EXISTS "ai_music_tenant_id_idx" ON "ai_music"("tenant_id");
 -- AI 工具
 CREATE TABLE IF NOT EXISTS "ai_tool" (
     "id" TEXT NOT NULL,
-    "name" VARCHAR(255),
+    "name" VARCHAR(255) NOT NULL,
     "description" VARCHAR(255),
     "status" VARCHAR(255),
     "tenant_id" VARCHAR(64) NOT NULL,
@@ -453,7 +453,7 @@ CREATE TABLE IF NOT EXISTS "ai_tool" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_tool_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "ai_tool" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "ai_tool" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255) NOT NULL;
 ALTER TABLE "ai_tool" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
 ALTER TABLE "ai_tool" ADD COLUMN IF NOT EXISTS "status" VARCHAR(255);
 ALTER TABLE "ai_tool" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
@@ -467,7 +467,7 @@ CREATE INDEX IF NOT EXISTS "ai_tool_tenant_id_idx" ON "ai_tool"("tenant_id");
 -- AI 工作流
 CREATE TABLE IF NOT EXISTS "ai_workflow" (
     "id" TEXT NOT NULL,
-    "name" VARCHAR(255),
+    "name" VARCHAR(255) NOT NULL,
     "code" VARCHAR(255),
     "graph" VARCHAR(255),
     "remark" VARCHAR(255),
@@ -480,7 +480,7 @@ CREATE TABLE IF NOT EXISTS "ai_workflow" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_workflow_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "ai_workflow" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "ai_workflow" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255) NOT NULL;
 ALTER TABLE "ai_workflow" ADD COLUMN IF NOT EXISTS "code" VARCHAR(255);
 ALTER TABLE "ai_workflow" ADD COLUMN IF NOT EXISTS "graph" VARCHAR(255);
 ALTER TABLE "ai_workflow" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);

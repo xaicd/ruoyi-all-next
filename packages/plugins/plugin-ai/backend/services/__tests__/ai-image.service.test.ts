@@ -7,7 +7,7 @@ describe("AiImageService", () => {
   it("should create and query AI 绘画", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AiImageService.create({
-        user_id: 1,
+        user_id: "测试AI 绘画",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("AiImageService", () => {
   
       const updated = await AiImageService.update(created.id, {
         id: created.id,
-          user_id: 1,
+          user_id: "测试更新AI 绘画",
       } as any)
       expect(updated).toBeDefined()
   

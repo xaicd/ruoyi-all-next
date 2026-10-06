@@ -26,7 +26,7 @@ export const AI_TABLES: CodegenConfig[] = [
           "name": "name",
           "type": "varchar",
           "tsType": "string",
-          "nullable": true,
+          "nullable": false,
           "comment": "名称",
           "nullableInferred": true,
           "queryType": "LIKE"
@@ -148,7 +148,7 @@ export const AI_TABLES: CodegenConfig[] = [
           "name": "title",
           "type": "varchar",
           "tsType": "string",
-          "nullable": true,
+          "nullable": false,
           "comment": "对话标题",
           "nullableInferred": true,
           "queryType": "LIKE"
@@ -484,7 +484,7 @@ export const AI_TABLES: CodegenConfig[] = [
           "name": "name",
           "type": "varchar",
           "tsType": "string",
-          "nullable": true,
+          "nullable": false,
           "comment": "角色名称",
           "nullableInferred": true,
           "queryType": "LIKE"
@@ -859,7 +859,7 @@ export const AI_TABLES: CodegenConfig[] = [
           "name": "name",
           "type": "varchar",
           "tsType": "string",
-          "nullable": true,
+          "nullable": false,
           "comment": "知识库名称",
           "nullableInferred": true,
           "queryType": "LIKE"
@@ -1000,7 +1000,7 @@ export const AI_TABLES: CodegenConfig[] = [
           "name": "name",
           "type": "varchar",
           "tsType": "string",
-          "nullable": true,
+          "nullable": false,
           "comment": "文档名称",
           "nullableInferred": true,
           "queryType": "LIKE"
@@ -1414,7 +1414,7 @@ export const AI_TABLES: CodegenConfig[] = [
           "name": "name",
           "type": "varchar",
           "tsType": "string",
-          "nullable": true,
+          "nullable": false,
           "comment": "模型名称",
           "nullableInferred": true,
           "queryType": "LIKE"
@@ -1571,7 +1571,7 @@ export const AI_TABLES: CodegenConfig[] = [
           "name": "title",
           "type": "varchar",
           "tsType": "string",
-          "nullable": true,
+          "nullable": false,
           "comment": "音乐名称",
           "nullableInferred": true,
           "queryType": "LIKE"
@@ -1767,7 +1767,7 @@ export const AI_TABLES: CodegenConfig[] = [
           "name": "name",
           "type": "varchar",
           "tsType": "string",
-          "nullable": true,
+          "nullable": false,
           "comment": "工具名称",
           "nullableInferred": true,
           "queryType": "LIKE"
@@ -1864,7 +1864,7 @@ export const AI_TABLES: CodegenConfig[] = [
           "name": "name",
           "type": "varchar",
           "tsType": "string",
-          "nullable": true,
+          "nullable": false,
           "comment": "工作流名称",
           "nullableInferred": true,
           "queryType": "LIKE"

@@ -7,7 +7,7 @@ describe("AiModelService", () => {
   it("should create and query AI 模型 DO默认模型： 为开启，并且 排序第一", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AiModelService.create({
-        key_id: 1,
+        name: "测试AI 模型 DO默认模型： 为开启，并且 排序第一",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

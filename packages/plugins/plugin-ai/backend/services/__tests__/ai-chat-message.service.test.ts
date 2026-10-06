@@ -7,7 +7,7 @@ describe("AiChatMessageService", () => {
   it("should create and query AI Chat 消息", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AiChatMessageService.create({
-        conversation_id: 1,
+        conversation_id: "测试AI Chat 消息",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("AiChatMessageService", () => {
   
       const updated = await AiChatMessageService.update(created.id, {
         id: created.id,
-          conversation_id: 1,
+          conversation_id: "测试更新AI Chat 消息",
       } as any)
       expect(updated).toBeDefined()
   
