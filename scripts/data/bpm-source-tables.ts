@@ -251,8 +251,8 @@ export const BPM_TABLES: CodegenConfig[] = [
         },
         {
           "name": "user_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "申请人的用户编号",
           "nullableInferred": true,
@@ -449,8 +449,8 @@ export const BPM_TABLES: CodegenConfig[] = [
         },
         {
           "name": "form_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "动态表单编号",
           "nullableInferred": true,
@@ -795,8 +795,8 @@ export const BPM_TABLES: CodegenConfig[] = [
         },
         {
           "name": "start_user_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "发起人 Id",
           "nullableInferred": true,
@@ -864,8 +864,8 @@ export const BPM_TABLES: CodegenConfig[] = [
         },
         {
           "name": "user_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "用户编号（被抄送的用户编号）",
           "nullableInferred": true

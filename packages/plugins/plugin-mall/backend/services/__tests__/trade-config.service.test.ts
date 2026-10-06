@@ -7,7 +7,9 @@ describe("TradeConfigService", () => {
   it("should create and query 交易中心配置", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await TradeConfigService.create({
-        after_sale_refund_reasons: "测试交易中心配置",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

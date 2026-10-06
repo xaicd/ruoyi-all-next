@@ -7,7 +7,9 @@ describe("ImFaceUserItemService", () => {
   it("should create and query IM 用户私有表情 DO（个人表情包，对照微信「我的表情」）", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImFaceUserItemService.create({
-        user_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("ImFaceUserItemService", () => {
   
       const updated = await ImFaceUserItemService.update(created.id, {
         id: created.id,
-          user_id: 1,
+          user_id: "测试更新IM 用户私有表情 DO（个人表情包，对照微信「我的表情」）",
       } as any)
       expect(updated).toBeDefined()
   

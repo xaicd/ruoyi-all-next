@@ -7,7 +7,9 @@ describe("MesWmTransactionService", () => {
   it("should create and query MES 库存事务流水 DO记录每一笔库存增减事件，系统自动生成，只读查询，不允许", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmTransactionService.create({
-        type: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

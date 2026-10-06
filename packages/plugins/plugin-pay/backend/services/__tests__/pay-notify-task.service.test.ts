@@ -7,7 +7,9 @@ describe("PayNotifyTaskService", () => {
   it("should create and query 支付通知在支付系统收到支付渠道的支付、退款的结果后，需要不断的通知到业务系统，直", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await PayNotifyTaskService.create({
-        app_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("PayNotifyTaskService", () => {
   
       const updated = await PayNotifyTaskService.update(created.id, {
         id: created.id,
-          app_id: 1,
+          app_id: "测试更新支付通知在支付系统收到支付渠道的支付、退款的结果后，需要不断的通知到业务系统，直",
       } as any)
       expect(updated).toBeDefined()
   

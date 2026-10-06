@@ -7,7 +7,9 @@ describe("BpmCategoryService", () => {
   it("should create and query BPM 流程分类", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await BpmCategoryService.create({
-        name: "测试BPM 流程分类",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

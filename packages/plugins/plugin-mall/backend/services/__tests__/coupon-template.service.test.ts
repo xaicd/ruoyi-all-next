@@ -7,7 +7,9 @@ describe("CouponTemplateService", () => {
   it("should create and query 优惠劵模板 DO当用户领取时，会生成 优惠劵", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CouponTemplateService.create({
-        name: "测试优惠劵模板 DO当用户领取时，会生成 优惠劵",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

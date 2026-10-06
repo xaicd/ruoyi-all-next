@@ -7,7 +7,9 @@ describe("MesWmOutsourceReceiptDetailService", () => {
   it("should create and query MES 外协入库明细", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmOutsourceReceiptDetailService.create({
-        line_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesWmOutsourceReceiptDetailService", () => {
   
       const updated = await MesWmOutsourceReceiptDetailService.update(created.id, {
         id: created.id,
-          line_id: 1,
+          line_id: "测试更新MES 外协入库明细",
       } as any)
       expect(updated).toBeDefined()
   

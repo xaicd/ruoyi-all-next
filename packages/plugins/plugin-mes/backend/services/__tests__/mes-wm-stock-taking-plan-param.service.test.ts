@@ -7,7 +7,9 @@ describe("MesWmStockTakingPlanParamService", () => {
   it("should create and query MES 盘点方案参数", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmStockTakingPlanParamService.create({
-        plan_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesWmStockTakingPlanParamService", () => {
   
       const updated = await MesWmStockTakingPlanParamService.update(created.id, {
         id: created.id,
-          plan_id: 1,
+          plan_id: "测试更新MES 盘点方案参数",
       } as any)
       expect(updated).toBeDefined()
   

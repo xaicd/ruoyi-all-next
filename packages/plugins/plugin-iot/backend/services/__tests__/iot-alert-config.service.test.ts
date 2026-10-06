@@ -7,7 +7,9 @@ describe("IotAlertConfigService", () => {
   it("should create and query IoT 告警配置", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await IotAlertConfigService.create({
-        name: "测试IoT 告警配置",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

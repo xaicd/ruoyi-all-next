@@ -7,7 +7,9 @@ describe("MesMdUnitMeasureService", () => {
   it("should create and query MES 计量单位", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesMdUnitMeasureService.create({
-        code: "测试MES 计量单位",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

@@ -7,7 +7,9 @@ describe("CrmBusinessStatusTypeService", () => {
   it("should create and query CRM 商机状态组 DO注意，它是个配置表", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CrmBusinessStatusTypeService.create({
-        name: "测试CRM 商机状态组 DO注意，它是个配置表",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

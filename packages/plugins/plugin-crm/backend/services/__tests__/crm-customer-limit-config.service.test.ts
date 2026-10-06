@@ -7,7 +7,9 @@ describe("CrmCustomerLimitConfigService", () => {
   it("should create and query 客户限制配置", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CrmCustomerLimitConfigService.create({
-        type: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

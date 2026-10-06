@@ -18,7 +18,8 @@ export function pgType(column: {
 }): string {
   // 主键走 TEXT，与仓库既有迁移一致（id 是应用侧生成的字符串，不是自增列）。
   // **本仓约定: id 一律 TEXT** —— 主键与所有外键（`*_id`）都是。
-    if (column.isPk || column.name === "id") return "TEXT"
+    // **id 类列一律 TEXT**（主键与所有外键 `*_id`）—— 生成仓储写的是 UUID 字符串。
+    if (column.isPk || column.name === "id" || column.name.endsWith("_id")) return "TEXT"
   switch (column.type) {
     case "varchar":
       if (column.maxLength) return `VARCHAR(${column.maxLength})`
@@ -104,6 +105,12 @@ export function tableDdl(table: {
   for (const column of columns) {
     if (column.isPk) continue
     statements.push(`ALTER TABLE "${table.name}" ADD COLUMN IF NOT EXISTS ${columnLine(column).trim()};`)
+    // 表若已由更早的迁移建过，`CREATE TABLE IF NOT EXISTS` 会跳过 -> 老列类型留着（如 bigint），
+    // 而仓储写的是 UUID -> `invalid input syntax for type bigint: "<uuid>"`。
+    // 只对 **id 类列**做类型收敛（上次对全部列一刀切，把别的转换也改了，导致迁移失败）。
+    if (column.isPk || column.name === "id" || column.name.endsWith("_id")) {
+      statements.push(`ALTER TABLE "${table.name}" ALTER COLUMN "${column.name}" TYPE TEXT USING "${column.name}"::TEXT;`)
+    }
   }
   // 多租户过滤（AGENTS §4.8）几乎总是按 tenant_id 走，补索引。
   if (columns.some((column) => column.name === "tenant_id")) {

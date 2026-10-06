@@ -7,7 +7,9 @@ describe("ImRtcCallService", () => {
   it("should create and query IM 通话记录 DO（房间级 / 主表）一通通话一行；状态机 CREATED →", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImRtcCallService.create({
-        room: "测试IM 通话记录 DO（房间级 / 主表）一通通话一行；状态机 CREATED →",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

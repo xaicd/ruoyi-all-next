@@ -7,7 +7,9 @@ describe("BargainActivityService", () => {
   it("should create and query 砍价活动", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await BargainActivityService.create({
-        name: "测试砍价活动",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

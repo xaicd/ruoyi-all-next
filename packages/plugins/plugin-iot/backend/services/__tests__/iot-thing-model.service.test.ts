@@ -7,7 +7,9 @@ describe("IotThingModelService", () => {
   it("should create and query IoT 产品物模型功能 DO每个 和 是“一对多”的关系，它的每个属性、事件、服", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await IotThingModelService.create({
-        identifier: "测试IoT 产品物模型功能 DO每个 和 是“一对多”的关系，它的每个属性、事件、服",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

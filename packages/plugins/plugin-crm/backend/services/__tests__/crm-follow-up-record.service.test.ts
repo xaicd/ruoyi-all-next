@@ -7,7 +7,9 @@ describe("CrmFollowUpRecordService", () => {
   it("should create and query 跟进记录 DO用于记录客户、联系人的每一次跟进", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CrmFollowUpRecordService.create({
-        biz_type: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

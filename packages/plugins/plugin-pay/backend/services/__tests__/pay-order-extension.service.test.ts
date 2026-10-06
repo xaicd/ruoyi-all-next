@@ -7,7 +7,9 @@ describe("PayOrderExtensionService", () => {
   it("should create and query 支付订单拓展 DO每次调用支付渠道，都会生成一条对应记录", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await PayOrderExtensionService.create({
-        no: "测试支付订单拓展 DO每次调用支付渠道，都会生成一条对应记录",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

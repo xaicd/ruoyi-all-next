@@ -7,7 +7,9 @@ describe("ErpFinancePaymentService", () => {
   it("should create and query ERP 付款单", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ErpFinancePaymentService.create({
-        no: "测试ERP 付款单",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

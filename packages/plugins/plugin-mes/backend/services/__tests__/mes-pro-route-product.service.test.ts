@@ -7,7 +7,9 @@ describe("MesProRouteProductService", () => {
   it("should create and query MES 工艺路线产品", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesProRouteProductService.create({
-        route_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesProRouteProductService", () => {
   
       const updated = await MesProRouteProductService.update(created.id, {
         id: created.id,
-          route_id: 1,
+          route_id: "测试更新MES 工艺路线产品",
       } as any)
       expect(updated).toBeDefined()
   

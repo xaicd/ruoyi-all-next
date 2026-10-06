@@ -7,7 +7,9 @@ describe("MesDvCheckRecordService", () => {
   it("should create and query MES 设备点检记录", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesDvCheckRecordService.create({
-        plan_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesDvCheckRecordService", () => {
   
       const updated = await MesDvCheckRecordService.update(created.id, {
         id: created.id,
-          plan_id: 1,
+          plan_id: "测试更新MES 设备点检记录",
       } as any)
       expect(updated).toBeDefined()
   

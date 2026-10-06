@@ -7,7 +7,9 @@ describe("MesMdItemBatchConfigService", () => {
   it("should create and query MES 物料批次属性配置", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesMdItemBatchConfigService.create({
-        item_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesMdItemBatchConfigService", () => {
   
       const updated = await MesMdItemBatchConfigService.update(created.id, {
         id: created.id,
-          item_id: 1,
+          item_id: "测试更新MES 物料批次属性配置",
       } as any)
       expect(updated).toBeDefined()
   

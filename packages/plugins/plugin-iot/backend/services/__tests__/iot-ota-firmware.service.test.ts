@@ -7,7 +7,9 @@ describe("IotOtaFirmwareService", () => {
   it("should create and query IoT OTA 固件", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await IotOtaFirmwareService.create({
-        name: "测试IoT OTA 固件",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

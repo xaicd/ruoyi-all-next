@@ -7,7 +7,9 @@ describe("ProductSkuService", () => {
   it("should create and query 商品 SKU", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ProductSkuService.create({
-        spu_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("ProductSkuService", () => {
   
       const updated = await ProductSkuService.update(created.id, {
         id: created.id,
-          spu_id: 1,
+          spu_id: "测试更新商品 SKU",
       } as any)
       expect(updated).toBeDefined()
   

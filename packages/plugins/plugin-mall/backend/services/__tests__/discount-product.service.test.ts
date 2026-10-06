@@ -7,7 +7,9 @@ describe("DiscountProductService", () => {
   it("should create and query 限时折扣商品", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await DiscountProductService.create({
-        activity_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("DiscountProductService", () => {
   
       const updated = await DiscountProductService.update(created.id, {
         id: created.id,
-          activity_id: 1,
+          activity_id: "测试更新限时折扣商品",
       } as any)
       expect(updated).toBeDefined()
   

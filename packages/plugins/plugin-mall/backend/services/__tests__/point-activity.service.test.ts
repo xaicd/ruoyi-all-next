@@ -7,7 +7,9 @@ describe("PointActivityService", () => {
   it("should create and query 积分商城活动", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await PointActivityService.create({
-        spu_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("PointActivityService", () => {
   
       const updated = await PointActivityService.update(created.id, {
         id: created.id,
-          spu_id: 1,
+          spu_id: "测试更新积分商城活动",
       } as any)
       expect(updated).toBeDefined()
   

@@ -8,6 +8,9 @@ describe("CrmProductService", () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CrmProductService.create({
         unit: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

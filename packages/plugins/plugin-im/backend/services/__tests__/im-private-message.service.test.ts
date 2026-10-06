@@ -7,7 +7,9 @@ describe("ImPrivateMessageService", () => {
   it("should create and query IM 私聊消息", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImPrivateMessageService.create({
-        client_message_id: "测试IM 私聊消息",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

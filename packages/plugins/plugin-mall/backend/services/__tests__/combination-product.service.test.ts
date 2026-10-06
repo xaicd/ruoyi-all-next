@@ -7,7 +7,9 @@ describe("CombinationProductService", () => {
   it("should create and query 拼团商品", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CombinationProductService.create({
-        activity_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("CombinationProductService", () => {
   
       const updated = await CombinationProductService.update(created.id, {
         id: created.id,
-          activity_id: 1,
+          activity_id: "测试更新拼团商品",
       } as any)
       expect(updated).toBeDefined()
   

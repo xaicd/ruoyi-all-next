@@ -21,7 +21,7 @@ describe("AiModelService", () => {
   
       const updated = await AiModelService.update(created.id, {
         id: created.id,
-          key_id: 1,
+          key_id: "测试更新AI 模型 DO默认模型： 为开启，并且 排序第一",
       } as any)
       expect(updated).toBeDefined()
   

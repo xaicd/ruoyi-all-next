@@ -7,7 +7,9 @@ describe("ImRtcParticipantService", () => {
   it("should create and query IM 通话参与者 DO（用户级 / 明细表）一通通话每个参与者一行；通过 关联主", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImRtcParticipantService.create({
-        call_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("ImRtcParticipantService", () => {
   
       const updated = await ImRtcParticipantService.update(created.id, {
         id: created.id,
-          call_id: 1,
+          call_id: "测试更新IM 通话参与者 DO（用户级 / 明细表）一通通话每个参与者一行；通过 关联主",
       } as any)
       expect(updated).toBeDefined()
   

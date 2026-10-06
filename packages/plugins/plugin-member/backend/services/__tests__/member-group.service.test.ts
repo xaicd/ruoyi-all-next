@@ -7,7 +7,9 @@ describe("MemberGroupService", () => {
   it("should create and query 用户分组", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MemberGroupService.create({
-        name: "测试用户分组",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

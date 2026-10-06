@@ -7,7 +7,9 @@ describe("PayChannelService", () => {
   it("should create and query 支付渠道 DO一个应用下，会有多种支付渠道，例如说微信支付、支付宝支付等等即 P", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await PayChannelService.create({
-        code: "测试支付渠道 DO一个应用下，会有多种支付渠道，例如说微信支付、支付宝支付等等即 P",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

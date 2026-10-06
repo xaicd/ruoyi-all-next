@@ -7,7 +7,9 @@ describe("IotDataRuleService", () => {
   it("should create and query IoT 数据流转规则 DO监听 数据源，转发到 数据目的", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await IotDataRuleService.create({
-        name: "测试IoT 数据流转规则 DO监听 数据源，转发到 数据目的",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

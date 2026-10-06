@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS "bpm_category" (
     "description" VARCHAR(255),
     "status" INTEGER,
     "sort" INTEGER,
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -23,7 +23,8 @@ ALTER TABLE "bpm_category" ADD COLUMN IF NOT EXISTS "code" VARCHAR(255);
 ALTER TABLE "bpm_category" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
 ALTER TABLE "bpm_category" ADD COLUMN IF NOT EXISTS "status" INTEGER;
 ALTER TABLE "bpm_category" ADD COLUMN IF NOT EXISTS "sort" INTEGER;
-ALTER TABLE "bpm_category" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "bpm_category" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "bpm_category" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "bpm_category" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "bpm_category" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "bpm_category" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -39,7 +40,7 @@ CREATE TABLE IF NOT EXISTS "bpm_form" (
     "conf" VARCHAR(255),
     "fields" TEXT,
     "remark" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -52,7 +53,8 @@ ALTER TABLE "bpm_form" ADD COLUMN IF NOT EXISTS "status" INTEGER;
 ALTER TABLE "bpm_form" ADD COLUMN IF NOT EXISTS "conf" VARCHAR(255);
 ALTER TABLE "bpm_form" ADD COLUMN IF NOT EXISTS "fields" TEXT;
 ALTER TABLE "bpm_form" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
-ALTER TABLE "bpm_form" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "bpm_form" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "bpm_form" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "bpm_form" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "bpm_form" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "bpm_form" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -63,15 +65,15 @@ CREATE INDEX IF NOT EXISTS "bpm_form_tenant_id_idx" ON "bpm_form"("tenant_id");
 -- OA 请假申请 DO 请假天数，目前先简单做。一般是分成请假上午和下午，可以是 
 CREATE TABLE IF NOT EXISTS "bpm_oa_leave" (
     "id" TEXT NOT NULL,
-    "user_id" BIGINT,
+    "user_id" TEXT,
     "type" INTEGER,
     "reason" VARCHAR(255),
     "start_time" TIMESTAMP(3),
     "end_time" TIMESTAMP(3),
     "day" BIGINT,
     "status" INTEGER,
-    "process_instance_id" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "process_instance_id" TEXT,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -79,15 +81,18 @@ CREATE TABLE IF NOT EXISTS "bpm_oa_leave" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "bpm_oa_leave_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "user_id" TEXT;
+ALTER TABLE "bpm_oa_leave" ALTER COLUMN "user_id" TYPE TEXT USING "user_id"::TEXT;
 ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "type" INTEGER;
 ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "reason" VARCHAR(255);
 ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "start_time" TIMESTAMP(3);
 ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "end_time" TIMESTAMP(3);
 ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "day" BIGINT;
 ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "status" INTEGER;
-ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "process_instance_id" VARCHAR(255);
-ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "process_instance_id" TEXT;
+ALTER TABLE "bpm_oa_leave" ALTER COLUMN "process_instance_id" TYPE TEXT USING "process_instance_id"::TEXT;
+ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "bpm_oa_leave" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -98,14 +103,14 @@ CREATE INDEX IF NOT EXISTS "bpm_oa_leave_tenant_id_idx" ON "bpm_oa_leave"("tenan
 -- BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表
 CREATE TABLE IF NOT EXISTS "bpm_process_definition_info" (
     "id" TEXT NOT NULL,
-    "process_definition_id" VARCHAR(255),
-    "model_id" VARCHAR(255),
+    "process_definition_id" TEXT,
+    "model_id" TEXT,
     "model_type" INTEGER,
     "category" VARCHAR(255),
     "icon" VARCHAR(255),
     "description" VARCHAR(255),
     "form_type" INTEGER,
-    "form_id" BIGINT,
+    "form_id" TEXT,
     "form_conf" VARCHAR(255),
     "form_fields" TEXT,
     "form_custom_create_path" VARCHAR(255),
@@ -127,7 +132,7 @@ CREATE TABLE IF NOT EXISTS "bpm_process_definition_info" (
     "task_before_trigger_setting" VARCHAR(255),
     "task_after_trigger_setting" VARCHAR(255),
     "print_template_setting" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -135,14 +140,17 @@ CREATE TABLE IF NOT EXISTS "bpm_process_definition_info" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "bpm_process_definition_info_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "process_definition_id" VARCHAR(255);
-ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "model_id" VARCHAR(255);
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "process_definition_id" TEXT;
+ALTER TABLE "bpm_process_definition_info" ALTER COLUMN "process_definition_id" TYPE TEXT USING "process_definition_id"::TEXT;
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "model_id" TEXT;
+ALTER TABLE "bpm_process_definition_info" ALTER COLUMN "model_id" TYPE TEXT USING "model_id"::TEXT;
 ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "model_type" INTEGER;
 ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "category" VARCHAR(255);
 ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "icon" VARCHAR(255);
 ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
 ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "form_type" INTEGER;
-ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "form_id" BIGINT;
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "form_id" TEXT;
+ALTER TABLE "bpm_process_definition_info" ALTER COLUMN "form_id" TYPE TEXT USING "form_id"::TEXT;
 ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "form_conf" VARCHAR(255);
 ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "form_fields" TEXT;
 ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "form_custom_create_path" VARCHAR(255);
@@ -164,7 +172,8 @@ ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "process_afte
 ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "task_before_trigger_setting" VARCHAR(255);
 ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "task_after_trigger_setting" VARCHAR(255);
 ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "print_template_setting" VARCHAR(255);
-ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "bpm_process_definition_info" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -178,7 +187,7 @@ CREATE TABLE IF NOT EXISTS "bpm_process_expression" (
     "name" VARCHAR(255),
     "status" INTEGER,
     "expression" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -189,7 +198,8 @@ CREATE TABLE IF NOT EXISTS "bpm_process_expression" (
 ALTER TABLE "bpm_process_expression" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
 ALTER TABLE "bpm_process_expression" ADD COLUMN IF NOT EXISTS "status" INTEGER;
 ALTER TABLE "bpm_process_expression" ADD COLUMN IF NOT EXISTS "expression" VARCHAR(255);
-ALTER TABLE "bpm_process_expression" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "bpm_process_expression" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "bpm_process_expression" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "bpm_process_expression" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "bpm_process_expression" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "bpm_process_expression" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -200,17 +210,17 @@ CREATE INDEX IF NOT EXISTS "bpm_process_expression_tenant_id_idx" ON "bpm_proces
 -- 流程抄送
 CREATE TABLE IF NOT EXISTS "bpm_process_instance_copy" (
     "id" TEXT NOT NULL,
-    "start_user_id" BIGINT,
+    "start_user_id" TEXT,
     "process_instance_name" VARCHAR(255),
-    "process_instance_id" VARCHAR(255),
-    "process_definition_id" VARCHAR(255),
+    "process_instance_id" TEXT,
+    "process_definition_id" TEXT,
     "category" VARCHAR(255),
-    "activity_id" VARCHAR(255),
+    "activity_id" TEXT,
     "activity_name" VARCHAR(255),
-    "task_id" VARCHAR(255),
-    "user_id" BIGINT,
+    "task_id" TEXT,
+    "user_id" TEXT,
     "reason" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -218,17 +228,24 @@ CREATE TABLE IF NOT EXISTS "bpm_process_instance_copy" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "bpm_process_instance_copy_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "start_user_id" BIGINT;
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "start_user_id" TEXT;
+ALTER TABLE "bpm_process_instance_copy" ALTER COLUMN "start_user_id" TYPE TEXT USING "start_user_id"::TEXT;
 ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "process_instance_name" VARCHAR(255);
-ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "process_instance_id" VARCHAR(255);
-ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "process_definition_id" VARCHAR(255);
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "process_instance_id" TEXT;
+ALTER TABLE "bpm_process_instance_copy" ALTER COLUMN "process_instance_id" TYPE TEXT USING "process_instance_id"::TEXT;
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "process_definition_id" TEXT;
+ALTER TABLE "bpm_process_instance_copy" ALTER COLUMN "process_definition_id" TYPE TEXT USING "process_definition_id"::TEXT;
 ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "category" VARCHAR(255);
-ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "activity_id" VARCHAR(255);
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "activity_id" TEXT;
+ALTER TABLE "bpm_process_instance_copy" ALTER COLUMN "activity_id" TYPE TEXT USING "activity_id"::TEXT;
 ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "activity_name" VARCHAR(255);
-ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "task_id" VARCHAR(255);
-ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "task_id" TEXT;
+ALTER TABLE "bpm_process_instance_copy" ALTER COLUMN "task_id" TYPE TEXT USING "task_id"::TEXT;
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "user_id" TEXT;
+ALTER TABLE "bpm_process_instance_copy" ALTER COLUMN "user_id" TYPE TEXT USING "user_id"::TEXT;
 ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "reason" VARCHAR(255);
-ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "bpm_process_instance_copy" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -245,7 +262,7 @@ CREATE TABLE IF NOT EXISTS "bpm_process_listener" (
     "event" VARCHAR(255),
     "value_type" VARCHAR(255),
     "value" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -259,7 +276,8 @@ ALTER TABLE "bpm_process_listener" ADD COLUMN IF NOT EXISTS "type" VARCHAR(255);
 ALTER TABLE "bpm_process_listener" ADD COLUMN IF NOT EXISTS "event" VARCHAR(255);
 ALTER TABLE "bpm_process_listener" ADD COLUMN IF NOT EXISTS "value_type" VARCHAR(255);
 ALTER TABLE "bpm_process_listener" ADD COLUMN IF NOT EXISTS "value" VARCHAR(255);
-ALTER TABLE "bpm_process_listener" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "bpm_process_listener" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "bpm_process_listener" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "bpm_process_listener" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "bpm_process_listener" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "bpm_process_listener" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -274,7 +292,7 @@ CREATE TABLE IF NOT EXISTS "bpm_user_group" (
     "description" VARCHAR(255),
     "status" INTEGER,
     "user_ids" TEXT,
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -286,7 +304,8 @@ ALTER TABLE "bpm_user_group" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
 ALTER TABLE "bpm_user_group" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
 ALTER TABLE "bpm_user_group" ADD COLUMN IF NOT EXISTS "status" INTEGER;
 ALTER TABLE "bpm_user_group" ADD COLUMN IF NOT EXISTS "user_ids" TEXT;
-ALTER TABLE "bpm_user_group" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "bpm_user_group" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "bpm_user_group" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "bpm_user_group" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "bpm_user_group" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "bpm_user_group" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);

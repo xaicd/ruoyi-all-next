@@ -7,7 +7,9 @@ describe("MpUserService", () => {
   it("should create and query 微信公众号粉丝", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MpUserService.create({
-        openid: "测试微信公众号粉丝",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

@@ -7,7 +7,9 @@ describe("MesWmItemConsumeService", () => {
   it("should create and query MES 物料消耗记录", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmItemConsumeService.create({
-        work_order_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesWmItemConsumeService", () => {
   
       const updated = await MesWmItemConsumeService.update(created.id, {
         id: created.id,
-          work_order_id: 1,
+          work_order_id: "测试更新MES 物料消耗记录",
       } as any)
       expect(updated).toBeDefined()
   

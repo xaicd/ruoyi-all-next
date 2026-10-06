@@ -7,7 +7,9 @@ describe("MesMdAutoCodeRecordService", () => {
   it("should create and query MES 编码生成记录", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesMdAutoCodeRecordService.create({
-        rule_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesMdAutoCodeRecordService", () => {
   
       const updated = await MesMdAutoCodeRecordService.update(created.id, {
         id: created.id,
-          rule_id: 1,
+          rule_id: "测试更新MES 编码生成记录",
       } as any)
       expect(updated).toBeDefined()
   

@@ -7,7 +7,9 @@ describe("ImSensitiveWordService", () => {
   it("should create and query IM 敏感词", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImSensitiveWordService.create({
-        word: "测试IM 敏感词",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

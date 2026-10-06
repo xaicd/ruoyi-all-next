@@ -7,7 +7,9 @@ describe("BpmOALeaveService", () => {
   it("should create and query OA 请假申请 DO 请假天数，目前先简单做。一般是分成请假上午和下午，可以是 ", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await BpmOALeaveService.create({
-        user_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("BpmOALeaveService", () => {
   
       const updated = await BpmOALeaveService.update(created.id, {
         id: created.id,
-          user_id: 1,
+          user_id: "测试更新OA 请假申请 DO 请假天数，目前先简单做。一般是分成请假上午和下午，可以是 ",
       } as any)
       expect(updated).toBeDefined()
   

@@ -7,7 +7,9 @@ describe("PayDemoWithdrawService", () => {
   it("should create and query 示例提现订单演示业务系统的转账业务", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await PayDemoWithdrawService.create({
-        subject: "测试示例提现订单演示业务系统的转账业务",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

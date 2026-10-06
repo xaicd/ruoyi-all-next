@@ -7,7 +7,9 @@ describe("DiscountActivityService", () => {
   it("should create and query 限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await DiscountActivityService.create({
-        name: "测试限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

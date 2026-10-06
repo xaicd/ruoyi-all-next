@@ -7,7 +7,9 @@ describe("BrokerageUserService", () => {
   it("should create and query 分销用户", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await BrokerageUserService.create({
-        bind_user_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("BrokerageUserService", () => {
   
       const updated = await BrokerageUserService.update(created.id, {
         id: created.id,
-          bind_user_id: 1,
+          bind_user_id: "测试更新分销用户",
       } as any)
       expect(updated).toBeDefined()
   

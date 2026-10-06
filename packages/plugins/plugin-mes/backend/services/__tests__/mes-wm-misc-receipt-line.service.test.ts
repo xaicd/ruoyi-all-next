@@ -7,7 +7,9 @@ describe("MesWmMiscReceiptLineService", () => {
   it("should create and query MES 杂项入库单行", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmMiscReceiptLineService.create({
-        receipt_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesWmMiscReceiptLineService", () => {
   
       const updated = await MesWmMiscReceiptLineService.update(created.id, {
         id: created.id,
-          receipt_id: 1,
+          receipt_id: "测试更新MES 杂项入库单行",
       } as any)
       expect(updated).toBeDefined()
   

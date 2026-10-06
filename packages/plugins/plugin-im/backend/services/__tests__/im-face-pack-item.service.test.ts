@@ -7,7 +7,9 @@ describe("ImFacePackItemService", () => {
   it("should create and query IM 表情包项 DO（系统表情包内的单张表情图）", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImFacePackItemService.create({
-        pack_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("ImFacePackItemService", () => {
   
       const updated = await ImFacePackItemService.update(created.id, {
         id: created.id,
-          pack_id: 1,
+          pack_id: "测试更新IM 表情包项 DO（系统表情包内的单张表情图）",
       } as any)
       expect(updated).toBeDefined()
   

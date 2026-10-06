@@ -7,7 +7,9 @@ describe("ImChannelService", () => {
   it("should create and query IM 频道 DO业务语义：- 频道是运营单向推送的主体；C 端用户不能向频道发消", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImChannelService.create({
-        code: "测试IM 频道 DO业务语义：- 频道是运营单向推送的主体；C 端用户不能向频道发消",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

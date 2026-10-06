@@ -7,7 +7,9 @@ describe("MesWmStockTakingTaskResultService", () => {
   it("should create and query MES 盘点结果", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmStockTakingTaskResultService.create({
-        task_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesWmStockTakingTaskResultService", () => {
   
       const updated = await MesWmStockTakingTaskResultService.update(created.id, {
         id: created.id,
-          task_id: 1,
+          task_id: "测试更新MES 盘点结果",
       } as any)
       expect(updated).toBeDefined()
   

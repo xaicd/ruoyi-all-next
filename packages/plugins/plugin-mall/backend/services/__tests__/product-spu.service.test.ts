@@ -7,7 +7,9 @@ describe("ProductSpuService", () => {
   it("should create and query 商品 SPU", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ProductSpuService.create({
-        name: "测试商品 SPU",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

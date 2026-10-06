@@ -7,7 +7,9 @@ describe("MesQcTemplateIndicatorService", () => {
   it("should create and query MES 质检方案-检测指标项", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesQcTemplateIndicatorService.create({
-        template_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesQcTemplateIndicatorService", () => {
   
       const updated = await MesQcTemplateIndicatorService.update(created.id, {
         id: created.id,
-          template_id: 1,
+          template_id: "测试更新MES 质检方案-检测指标项",
       } as any)
       expect(updated).toBeDefined()
   

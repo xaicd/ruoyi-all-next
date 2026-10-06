@@ -7,7 +7,9 @@ describe("MesQcDefectService", () => {
   it("should create and query MES 缺陷类型", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesQcDefectService.create({
-        code: "测试MES 缺陷类型",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

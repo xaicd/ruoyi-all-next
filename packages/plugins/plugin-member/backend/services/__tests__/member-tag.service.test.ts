@@ -7,7 +7,9 @@ describe("MemberTagService", () => {
   it("should create and query 会员标签", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MemberTagService.create({
-        name: "测试会员标签",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

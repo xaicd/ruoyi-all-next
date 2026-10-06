@@ -5,13 +5,13 @@
 -- 用户收件地址
 CREATE TABLE IF NOT EXISTS "member_address" (
     "id" TEXT NOT NULL,
-    "user_id" BIGINT,
+    "user_id" TEXT,
     "name" VARCHAR(255),
     "mobile" VARCHAR(255),
-    "area_id" BIGINT,
+    "area_id" TEXT,
     "detail_address" VARCHAR(255),
     "default_status" BOOLEAN,
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -19,13 +19,16 @@ CREATE TABLE IF NOT EXISTS "member_address" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_address_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "user_id" TEXT;
+ALTER TABLE "member_address" ALTER COLUMN "user_id" TYPE TEXT USING "user_id"::TEXT;
 ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
 ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "mobile" VARCHAR(255);
-ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "area_id" BIGINT;
+ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "area_id" TEXT;
+ALTER TABLE "member_address" ALTER COLUMN "area_id" TYPE TEXT USING "area_id"::TEXT;
 ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "detail_address" VARCHAR(255);
 ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "default_status" BOOLEAN;
-ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "member_address" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -40,7 +43,7 @@ CREATE TABLE IF NOT EXISTS "member_config" (
     "point_trade_deduct_unit_price" INTEGER,
     "point_trade_deduct_max_price" INTEGER,
     "point_trade_give_point" INTEGER,
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -52,7 +55,8 @@ ALTER TABLE "member_config" ADD COLUMN IF NOT EXISTS "point_trade_deduct_enable"
 ALTER TABLE "member_config" ADD COLUMN IF NOT EXISTS "point_trade_deduct_unit_price" INTEGER;
 ALTER TABLE "member_config" ADD COLUMN IF NOT EXISTS "point_trade_deduct_max_price" INTEGER;
 ALTER TABLE "member_config" ADD COLUMN IF NOT EXISTS "point_trade_give_point" INTEGER;
-ALTER TABLE "member_config" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "member_config" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "member_config" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "member_config" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "member_config" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "member_config" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -63,14 +67,14 @@ CREATE INDEX IF NOT EXISTS "member_config_tenant_id_idx" ON "member_config"("ten
 -- 会员经验记录
 CREATE TABLE IF NOT EXISTS "member_experience_record" (
     "id" TEXT NOT NULL,
-    "user_id" BIGINT,
+    "user_id" TEXT,
     "biz_type" INTEGER,
-    "biz_id" VARCHAR(255),
+    "biz_id" TEXT,
     "title" VARCHAR(255),
     "description" VARCHAR(255),
     "experience" INTEGER,
     "total_experience" INTEGER,
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -78,14 +82,17 @@ CREATE TABLE IF NOT EXISTS "member_experience_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_experience_record_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "user_id" TEXT;
+ALTER TABLE "member_experience_record" ALTER COLUMN "user_id" TYPE TEXT USING "user_id"::TEXT;
 ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "biz_type" INTEGER;
-ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "biz_id" VARCHAR(255);
+ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "biz_id" TEXT;
+ALTER TABLE "member_experience_record" ALTER COLUMN "biz_id" TYPE TEXT USING "biz_id"::TEXT;
 ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "title" VARCHAR(255);
 ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
 ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "experience" INTEGER;
 ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "total_experience" INTEGER;
-ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "member_experience_record" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -99,7 +106,7 @@ CREATE TABLE IF NOT EXISTS "member_group" (
     "name" VARCHAR(255),
     "remark" VARCHAR(255),
     "status" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -110,7 +117,8 @@ CREATE TABLE IF NOT EXISTS "member_group" (
 ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
 ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
 ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "status" VARCHAR(255);
-ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "member_group" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -128,7 +136,7 @@ CREATE TABLE IF NOT EXISTS "member_level" (
     "icon" VARCHAR(255),
     "background_url" VARCHAR(255),
     "status" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -143,7 +151,8 @@ ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "discount_percent" INTEGER;
 ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "icon" VARCHAR(255);
 ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "background_url" VARCHAR(255);
 ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "status" VARCHAR(255);
-ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "member_level" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -154,15 +163,15 @@ CREATE INDEX IF NOT EXISTS "member_level_tenant_id_idx" ON "member_level"("tenan
 -- 会员等级记录 DO用户每次等级发生变更时，记录一条日志
 CREATE TABLE IF NOT EXISTS "member_level_record" (
     "id" TEXT NOT NULL,
-    "user_id" BIGINT,
-    "level_id" BIGINT,
+    "user_id" TEXT,
+    "level_id" TEXT,
     "level" INTEGER,
     "discount_percent" INTEGER,
     "experience" INTEGER,
     "user_experience" INTEGER,
     "remark" VARCHAR(255),
     "description" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -170,15 +179,18 @@ CREATE TABLE IF NOT EXISTS "member_level_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_level_record_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
-ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "level_id" BIGINT;
+ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "user_id" TEXT;
+ALTER TABLE "member_level_record" ALTER COLUMN "user_id" TYPE TEXT USING "user_id"::TEXT;
+ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "level_id" TEXT;
+ALTER TABLE "member_level_record" ALTER COLUMN "level_id" TYPE TEXT USING "level_id"::TEXT;
 ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "level" INTEGER;
 ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "discount_percent" INTEGER;
 ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "experience" INTEGER;
 ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "user_experience" INTEGER;
 ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
 ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
-ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "member_level_record" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -189,14 +201,14 @@ CREATE INDEX IF NOT EXISTS "member_level_record_tenant_id_idx" ON "member_level_
 -- 用户积分记录
 CREATE TABLE IF NOT EXISTS "member_point_record" (
     "id" TEXT NOT NULL,
-    "user_id" BIGINT,
-    "biz_id" VARCHAR(255),
+    "user_id" TEXT,
+    "biz_id" TEXT,
     "biz_type" INTEGER,
     "title" VARCHAR(255),
     "description" VARCHAR(255),
     "point" INTEGER,
     "total_point" INTEGER,
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -204,14 +216,17 @@ CREATE TABLE IF NOT EXISTS "member_point_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_point_record_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
-ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "biz_id" VARCHAR(255);
+ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "user_id" TEXT;
+ALTER TABLE "member_point_record" ALTER COLUMN "user_id" TYPE TEXT USING "user_id"::TEXT;
+ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "biz_id" TEXT;
+ALTER TABLE "member_point_record" ALTER COLUMN "biz_id" TYPE TEXT USING "biz_id"::TEXT;
 ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "biz_type" INTEGER;
 ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "title" VARCHAR(255);
 ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
 ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "point" INTEGER;
 ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "total_point" INTEGER;
-ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "member_point_record" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -226,7 +241,7 @@ CREATE TABLE IF NOT EXISTS "member_sign_in_config" (
     "point" INTEGER,
     "experience" INTEGER,
     "status" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -238,7 +253,8 @@ ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "day" INTEGER;
 ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "point" INTEGER;
 ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "experience" INTEGER;
 ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "status" VARCHAR(255);
-ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "member_sign_in_config" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -249,11 +265,11 @@ CREATE INDEX IF NOT EXISTS "member_sign_in_config_tenant_id_idx" ON "member_sign
 -- 签到记录
 CREATE TABLE IF NOT EXISTS "member_sign_in_record" (
     "id" TEXT NOT NULL,
-    "user_id" BIGINT,
+    "user_id" TEXT,
     "day" INTEGER,
     "point" INTEGER,
     "experience" INTEGER,
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -261,11 +277,13 @@ CREATE TABLE IF NOT EXISTS "member_sign_in_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_sign_in_record_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "member_sign_in_record" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "member_sign_in_record" ADD COLUMN IF NOT EXISTS "user_id" TEXT;
+ALTER TABLE "member_sign_in_record" ALTER COLUMN "user_id" TYPE TEXT USING "user_id"::TEXT;
 ALTER TABLE "member_sign_in_record" ADD COLUMN IF NOT EXISTS "day" INTEGER;
 ALTER TABLE "member_sign_in_record" ADD COLUMN IF NOT EXISTS "point" INTEGER;
 ALTER TABLE "member_sign_in_record" ADD COLUMN IF NOT EXISTS "experience" INTEGER;
-ALTER TABLE "member_sign_in_record" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "member_sign_in_record" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "member_sign_in_record" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "member_sign_in_record" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "member_sign_in_record" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "member_sign_in_record" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -277,7 +295,7 @@ CREATE INDEX IF NOT EXISTS "member_sign_in_record_tenant_id_idx" ON "member_sign
 CREATE TABLE IF NOT EXISTS "member_tag" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -286,7 +304,8 @@ CREATE TABLE IF NOT EXISTS "member_tag" (
     CONSTRAINT "member_tag_pkey" PRIMARY KEY ("id")
 );
 ALTER TABLE "member_tag" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
-ALTER TABLE "member_tag" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "member_tag" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "member_tag" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "member_tag" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "member_tag" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "member_tag" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -310,14 +329,14 @@ CREATE TABLE IF NOT EXISTS "member_user" (
     "name" VARCHAR(255),
     "sex" INTEGER,
     "birthday" TIMESTAMP(3),
-    "area_id" INTEGER,
+    "area_id" TEXT,
     "mark" VARCHAR(255),
     "point" INTEGER,
     "tag_ids" TEXT,
-    "level_id" BIGINT,
+    "level_id" TEXT,
     "experience" INTEGER,
-    "group_id" BIGINT,
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "group_id" TEXT,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -338,14 +357,18 @@ ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "avatar" VARCHAR(255);
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "sex" INTEGER;
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "birthday" TIMESTAMP(3);
-ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "area_id" INTEGER;
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "area_id" TEXT;
+ALTER TABLE "member_user" ALTER COLUMN "area_id" TYPE TEXT USING "area_id"::TEXT;
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "mark" VARCHAR(255);
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "point" INTEGER;
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "tag_ids" TEXT;
-ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "level_id" BIGINT;
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "level_id" TEXT;
+ALTER TABLE "member_user" ALTER COLUMN "level_id" TYPE TEXT USING "level_id"::TEXT;
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "experience" INTEGER;
-ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "group_id" BIGINT;
-ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "group_id" TEXT;
+ALTER TABLE "member_user" ALTER COLUMN "group_id" TYPE TEXT USING "group_id"::TEXT;
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "member_user" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);

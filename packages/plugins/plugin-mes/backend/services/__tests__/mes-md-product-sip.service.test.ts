@@ -7,7 +7,9 @@ describe("MesMdProductSipService", () => {
   it("should create and query MES 产品SIP", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesMdProductSipService.create({
-        item_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesMdProductSipService", () => {
   
       const updated = await MesMdProductSipService.update(created.id, {
         id: created.id,
-          item_id: 1,
+          item_id: "测试更新MES 产品SIP",
       } as any)
       expect(updated).toBeDefined()
   

@@ -7,7 +7,9 @@ describe("MesWmWarehouseLocationService", () => {
   it("should create and query MES 库区", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmWarehouseLocationService.create({
-        code: "测试MES 库区",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

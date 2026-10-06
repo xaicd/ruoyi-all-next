@@ -7,7 +7,9 @@ describe("BannerService", () => {
   it("should create and query banner", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await BannerService.create({
-        title: "测试banner",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

@@ -7,7 +7,9 @@ describe("ArticleService", () => {
   it("should create and query 文章管理", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ArticleService.create({
-        category_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("ArticleService", () => {
   
       const updated = await ArticleService.update(created.id, {
         id: created.id,
-          category_id: 1,
+          category_id: "测试更新文章管理",
       } as any)
       expect(updated).toBeDefined()
   

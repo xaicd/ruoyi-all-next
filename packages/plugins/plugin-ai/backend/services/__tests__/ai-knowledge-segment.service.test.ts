@@ -7,7 +7,7 @@ describe("AiKnowledgeSegmentService", () => {
   it("should create and query AI 知识库-文档分段", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AiKnowledgeSegmentService.create({
-        knowledge_id: 1,
+        knowledge_id: "测试AI 知识库-文档分段",
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +21,7 @@ describe("AiKnowledgeSegmentService", () => {
   
       const updated = await AiKnowledgeSegmentService.update(created.id, {
         id: created.id,
-          knowledge_id: 1,
+          knowledge_id: "测试更新AI 知识库-文档分段",
       } as any)
       expect(updated).toBeDefined()
   

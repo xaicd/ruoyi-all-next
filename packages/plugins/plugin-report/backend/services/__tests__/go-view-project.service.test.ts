@@ -7,7 +7,9 @@ describe("GoViewProjectService", () => {
   it("should create and query GoView 项目表每个大屏图标，对应一个项目", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await GoViewProjectService.create({
-        name: "测试GoView 项目表每个大屏图标，对应一个项目",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

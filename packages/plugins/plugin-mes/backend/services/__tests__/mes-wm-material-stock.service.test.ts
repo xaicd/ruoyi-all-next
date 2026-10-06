@@ -7,7 +7,9 @@ describe("MesWmMaterialStockService", () => {
   it("should create and query MES 库存台账（仓库现有量）", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmMaterialStockService.create({
-        item_type_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesWmMaterialStockService", () => {
   
       const updated = await MesWmMaterialStockService.update(created.id, {
         id: created.id,
-          item_type_id: 1,
+          item_type_id: "测试更新MES 库存台账（仓库现有量）",
       } as any)
       expect(updated).toBeDefined()
   

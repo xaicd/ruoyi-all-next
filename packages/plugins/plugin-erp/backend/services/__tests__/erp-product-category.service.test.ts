@@ -7,7 +7,9 @@ describe("ErpProductCategoryService", () => {
   it("should create and query ERP 产品分类", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ErpProductCategoryService.create({
-        parent_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("ErpProductCategoryService", () => {
   
       const updated = await ErpProductCategoryService.update(created.id, {
         id: created.id,
-          parent_id: 1,
+          parent_id: "测试更新ERP 产品分类",
       } as any)
       expect(updated).toBeDefined()
   

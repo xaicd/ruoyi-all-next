@@ -7,7 +7,9 @@ describe("ErpFinancePaymentItemService", () => {
   it("should create and query ERP 付款项", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ErpFinancePaymentItemService.create({
-        payment_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("ErpFinancePaymentItemService", () => {
   
       const updated = await ErpFinancePaymentItemService.update(created.id, {
         id: created.id,
-          payment_id: 1,
+          payment_id: "测试更新ERP 付款项",
       } as any)
       expect(updated).toBeDefined()
   

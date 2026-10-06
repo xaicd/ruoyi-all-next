@@ -7,7 +7,9 @@ describe("MesWmTransferDetailService", () => {
   it("should create and query MES 调拨明细", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmTransferDetailService.create({
-        line_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesWmTransferDetailService", () => {
   
       const updated = await MesWmTransferDetailService.update(created.id, {
         id: created.id,
-          line_id: 1,
+          line_id: "测试更新MES 调拨明细",
       } as any)
       expect(updated).toBeDefined()
   

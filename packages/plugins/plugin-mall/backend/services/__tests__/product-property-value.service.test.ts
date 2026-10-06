@@ -7,7 +7,9 @@ describe("ProductPropertyValueService", () => {
   it("should create and query 商品属性值", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ProductPropertyValueService.create({
-        property_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("ProductPropertyValueService", () => {
   
       const updated = await ProductPropertyValueService.update(created.id, {
         id: created.id,
-          property_id: 1,
+          property_id: "测试更新商品属性值",
       } as any)
       expect(updated).toBeDefined()
   

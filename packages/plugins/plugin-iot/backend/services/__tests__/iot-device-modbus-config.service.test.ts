@@ -7,7 +7,9 @@ describe("IotDeviceModbusConfigService", () => {
   it("should create and query IoT 设备 Modbus 连接配置", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await IotDeviceModbusConfigService.create({
-        product_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("IotDeviceModbusConfigService", () => {
   
       const updated = await IotDeviceModbusConfigService.update(created.id, {
         id: created.id,
-          product_id: 1,
+          product_id: "测试更新IoT 设备 Modbus 连接配置",
       } as any)
       expect(updated).toBeDefined()
   

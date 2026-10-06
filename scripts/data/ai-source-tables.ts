@@ -139,7 +139,7 @@ export const AI_TABLES: CodegenConfig[] = [
           "name": "user_id",
           "type": "varchar",
           "tsType": "string",
-          "nullable": true,
+          "nullable": false,
           "comment": "用户编号",
           "nullableInferred": true,
           "queryType": "="
@@ -171,8 +171,8 @@ export const AI_TABLES: CodegenConfig[] = [
         },
         {
           "name": "role_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "角色编号",
           "nullableInferred": true,
@@ -180,8 +180,8 @@ export const AI_TABLES: CodegenConfig[] = [
         },
         {
           "name": "model_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "模型编号",
           "nullableInferred": true,
@@ -311,8 +311,8 @@ export const AI_TABLES: CodegenConfig[] = [
         },
         {
           "name": "reply_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "回复消息编号",
           "nullableInferred": true,
@@ -338,8 +338,8 @@ export const AI_TABLES: CodegenConfig[] = [
         },
         {
           "name": "role_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "角色编号",
           "nullableInferred": true,
@@ -355,8 +355,8 @@ export const AI_TABLES: CodegenConfig[] = [
         },
         {
           "name": "model_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "模型编号",
           "nullableInferred": true
@@ -458,6 +458,14 @@ export const AI_TABLES: CodegenConfig[] = [
           "comment": "逻辑删除",
           "nullableInferred": false
         }
+        {
+          "name": "role",
+          "type": "varchar",
+          "tsType": "string",
+          "nullable": false,
+          "comment": "表里已有、元数据此前未登记",
+          "nullableInferred": true
+        },
       ]
     }
   },
@@ -533,8 +541,8 @@ export const AI_TABLES: CodegenConfig[] = [
         },
         {
           "name": "model_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "模型编号",
           "nullableInferred": true,
@@ -687,8 +695,8 @@ export const AI_TABLES: CodegenConfig[] = [
         },
         {
           "name": "model_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "模型编号",
           "nullableInferred": true,
@@ -874,8 +882,8 @@ export const AI_TABLES: CodegenConfig[] = [
         },
         {
           "name": "embedding_model_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "向量模型编号",
           "nullableInferred": true,
@@ -989,8 +997,8 @@ export const AI_TABLES: CodegenConfig[] = [
         },
         {
           "name": "knowledge_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "知识库编号",
           "nullableInferred": true,
@@ -1135,8 +1143,8 @@ export const AI_TABLES: CodegenConfig[] = [
         },
         {
           "name": "knowledge_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "知识库编号",
           "nullableInferred": true,
@@ -1144,8 +1152,8 @@ export const AI_TABLES: CodegenConfig[] = [
         },
         {
           "name": "document_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "文档编号",
           "nullableInferred": true,
@@ -1291,8 +1299,8 @@ export const AI_TABLES: CodegenConfig[] = [
         },
         {
           "name": "model_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "模型编号",
           "nullableInferred": true,
@@ -1403,8 +1411,8 @@ export const AI_TABLES: CodegenConfig[] = [
         },
         {
           "name": "key_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "API 秘钥编号",
           "nullableInferred": true,
@@ -1536,6 +1544,14 @@ export const AI_TABLES: CodegenConfig[] = [
           "comment": "逻辑删除",
           "nullableInferred": false
         }
+        {
+          "name": "model_key",
+          "type": "varchar",
+          "tsType": "string",
+          "nullable": false,
+          "comment": "表里已有、元数据此前未登记",
+          "nullableInferred": true
+        },
       ]
     }
   },
@@ -2002,8 +2018,8 @@ export const AI_TABLES: CodegenConfig[] = [
         },
         {
           "name": "model_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "模型编号",
           "nullableInferred": true,

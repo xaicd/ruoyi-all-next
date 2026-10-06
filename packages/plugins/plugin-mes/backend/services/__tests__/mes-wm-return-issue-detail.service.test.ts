@@ -7,7 +7,9 @@ describe("MesWmReturnIssueDetailService", () => {
   it("should create and query MES 生产退料明细", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmReturnIssueDetailService.create({
-        issue_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesWmReturnIssueDetailService", () => {
   
       const updated = await MesWmReturnIssueDetailService.update(created.id, {
         id: created.id,
-          issue_id: 1,
+          issue_id: "测试更新MES 生产退料明细",
       } as any)
       expect(updated).toBeDefined()
   

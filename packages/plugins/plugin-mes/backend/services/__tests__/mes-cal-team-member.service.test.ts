@@ -7,7 +7,9 @@ describe("MesCalTeamMemberService", () => {
   it("should create and query MES 班组成员", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesCalTeamMemberService.create({
-        team_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesCalTeamMemberService", () => {
   
       const updated = await MesCalTeamMemberService.update(created.id, {
         id: created.id,
-          team_id: 1,
+          team_id: "测试更新MES 班组成员",
       } as any)
       expect(updated).toBeDefined()
   

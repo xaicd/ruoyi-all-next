@@ -7,7 +7,9 @@ describe("IotOtaTaskRecordService", () => {
   it("should create and query IoT OTA 升级任务记录", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await IotOtaTaskRecordService.create({
-        firmware_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("IotOtaTaskRecordService", () => {
   
       const updated = await IotOtaTaskRecordService.update(created.id, {
         id: created.id,
-          firmware_id: 1,
+          firmware_id: "测试更新IoT OTA 升级任务记录",
       } as any)
       expect(updated).toBeDefined()
   

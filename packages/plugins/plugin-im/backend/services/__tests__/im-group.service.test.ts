@@ -7,7 +7,9 @@ describe("ImGroupService", () => {
   it("should create and query IM 群信息", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImGroupService.create({
-        name: "测试IM 群信息",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

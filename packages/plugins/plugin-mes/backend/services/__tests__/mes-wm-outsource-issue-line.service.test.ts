@@ -7,7 +7,9 @@ describe("MesWmOutsourceIssueLineService", () => {
   it("should create and query MES 外协发料单行", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmOutsourceIssueLineService.create({
-        issue_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesWmOutsourceIssueLineService", () => {
   
       const updated = await MesWmOutsourceIssueLineService.update(created.id, {
         id: created.id,
-          issue_id: 1,
+          issue_id: "测试更新MES 外协发料单行",
       } as any)
       expect(updated).toBeDefined()
   

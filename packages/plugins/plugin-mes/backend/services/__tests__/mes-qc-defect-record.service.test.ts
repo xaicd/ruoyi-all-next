@@ -7,7 +7,9 @@ describe("MesQcDefectRecordService", () => {
   it("should create and query MES 质检缺陷记录 DO通用缺陷记录表，通过 区分检验类型（IQC、IPQC、", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesQcDefectRecordService.create({
-        qc_type: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

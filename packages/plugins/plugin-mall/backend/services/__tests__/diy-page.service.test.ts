@@ -7,7 +7,9 @@ describe("DiyPageService", () => {
   it("should create and query 装修页面", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await DiyPageService.create({
-        template_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("DiyPageService", () => {
   
       const updated = await DiyPageService.update(created.id, {
         id: created.id,
-          template_id: 1,
+          template_id: "测试更新装修页面",
       } as any)
       expect(updated).toBeDefined()
   

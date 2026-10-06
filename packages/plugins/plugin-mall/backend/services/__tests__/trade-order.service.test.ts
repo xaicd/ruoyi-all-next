@@ -7,7 +7,9 @@ describe("TradeOrderService", () => {
   it("should create and query 交易订单", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await TradeOrderService.create({
-        no: "测试交易订单",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

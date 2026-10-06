@@ -7,7 +7,9 @@ describe("MpAutoReplyService", () => {
   it("should create and query 公众号消息自动回复", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MpAutoReplyService.create({
-        account_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MpAutoReplyService", () => {
   
       const updated = await MpAutoReplyService.update(created.id, {
         id: created.id,
-          account_id: 1,
+          account_id: "测试更新公众号消息自动回复",
       } as any)
       expect(updated).toBeDefined()
   

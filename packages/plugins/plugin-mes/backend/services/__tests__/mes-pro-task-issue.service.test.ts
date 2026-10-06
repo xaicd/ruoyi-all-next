@@ -7,7 +7,9 @@ describe("MesProTaskIssueService", () => {
   it("should create and query MES 生产任务投料", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesProTaskIssueService.create({
-        task_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesProTaskIssueService", () => {
   
       const updated = await MesProTaskIssueService.update(created.id, {
         id: created.id,
-          task_id: 1,
+          task_id: "测试更新MES 生产任务投料",
       } as any)
       expect(updated).toBeDefined()
   

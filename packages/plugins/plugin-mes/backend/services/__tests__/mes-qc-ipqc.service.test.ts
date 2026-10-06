@@ -7,7 +7,9 @@ describe("MesQcIpqcService", () => {
   it("should create and query MES 过程检验单（IPQC, In-Process Quality Contr", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesQcIpqcService.create({
-        code: "测试MES 过程检验单（IPQC, In-Process Quality Contr",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

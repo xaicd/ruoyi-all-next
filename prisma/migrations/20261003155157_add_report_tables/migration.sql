@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS "report_go_view_project" (
     "content" VARCHAR(255),
     "status" INTEGER,
     "remark" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -23,7 +23,8 @@ ALTER TABLE "report_go_view_project" ADD COLUMN IF NOT EXISTS "pic_url" VARCHAR(
 ALTER TABLE "report_go_view_project" ADD COLUMN IF NOT EXISTS "content" VARCHAR(255);
 ALTER TABLE "report_go_view_project" ADD COLUMN IF NOT EXISTS "status" INTEGER;
 ALTER TABLE "report_go_view_project" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
-ALTER TABLE "report_go_view_project" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "report_go_view_project" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "report_go_view_project" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "report_go_view_project" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "report_go_view_project" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "report_go_view_project" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);

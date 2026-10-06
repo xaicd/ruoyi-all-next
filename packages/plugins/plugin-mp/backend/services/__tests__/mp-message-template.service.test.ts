@@ -7,7 +7,9 @@ describe("MpMessageTemplateService", () => {
   it("should create and query 公众号模版消息", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MpMessageTemplateService.create({
-        account_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MpMessageTemplateService", () => {
   
       const updated = await MpMessageTemplateService.update(created.id, {
         id: created.id,
-          account_id: 1,
+          account_id: "测试更新公众号模版消息",
       } as any)
       expect(updated).toBeDefined()
   

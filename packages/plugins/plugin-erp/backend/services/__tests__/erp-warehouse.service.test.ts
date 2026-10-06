@@ -7,7 +7,9 @@ describe("ErpWarehouseService", () => {
   it("should create and query ERP 仓库", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ErpWarehouseService.create({
-        name: "测试ERP 仓库",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

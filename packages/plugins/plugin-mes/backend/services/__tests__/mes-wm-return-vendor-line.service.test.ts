@@ -7,7 +7,9 @@ describe("MesWmReturnVendorLineService", () => {
   it("should create and query MES 供应商退货单行", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmReturnVendorLineService.create({
-        return_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesWmReturnVendorLineService", () => {
   
       const updated = await MesWmReturnVendorLineService.update(created.id, {
         id: created.id,
-          return_id: 1,
+          return_id: "测试更新MES 供应商退货单行",
       } as any)
       expect(updated).toBeDefined()
   

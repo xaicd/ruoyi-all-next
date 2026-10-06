@@ -7,7 +7,9 @@ describe("ImConversationReadService", () => {
   it("should create and query IM 会话读位置 DO只表达「用户在某个会话的最大已读位置」，私聊 / 群聊 /", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImConversationReadService.create({
-        user_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("ImConversationReadService", () => {
   
       const updated = await ImConversationReadService.update(created.id, {
         id: created.id,
-          user_id: 1,
+          user_id: "测试更新IM 会话读位置 DO只表达「用户在某个会话的最大已读位置」，私聊 / 群聊 /",
       } as any)
       expect(updated).toBeDefined()
   

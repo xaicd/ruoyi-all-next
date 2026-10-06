@@ -49,11 +49,21 @@ export function generateTest(config: CodegenConfig): CodegenOutput {
   const { className, businessName } = config
   const kebab = toKebab(className)
   const writeCols = formColumns(config)
+  // 必填列要取**表里所有 NOT NULL 列**，不能只看 formColumns ——
+  // 有些列不在表单里（如 model_key），但表要求非空，只填表单列就会
+  // `null value in column "..." violates not-null constraint`（实测）。
+    const requiredTableCols = (config.table.columns as ConfiguredColumn[]).filter(
+      (column) => isRequiredColumn(column) && column.name !== "id" && column.name !== "tenant_id",
+    )
+    const payloadCols: ConfiguredColumn[] = [
+      ...writeCols,
+      ...requiredTableCols.filter((column) => !writeCols.some((existing) => existing.name === column.name)),
+    ]
   const updateCol = writeCols[0] ?? { name: "name", tsType: "string", type: "varchar" }
 
   // 必填列必须全部填上 —— 否则连真实库就挂（内存模式掩盖了它）。
-  const requiredCols = writeCols.filter(isRequiredColumn)
-  const createPayloadCols = requiredCols.length > 0 ? requiredCols : writeCols.slice(0, 1)
+  const requiredCols = payloadCols.filter(isRequiredColumn)
+  const createPayloadCols = requiredCols.length > 0 ? requiredCols : payloadCols.slice(0, 1)
   const createPayload = createPayloadCols.map((column) => `      ${column.name}: ${sampleValue(column, businessName)},`).join("\n")
 
   // 租户托管列（tenant_id）不在 formColumns 里 —— 它由**全局上下文**提供（AGENTS §4.8）。

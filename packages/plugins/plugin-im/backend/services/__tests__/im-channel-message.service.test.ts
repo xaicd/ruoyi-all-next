@@ -7,7 +7,9 @@ describe("ImChannelMessageService", () => {
   it("should create and query IM 频道消息 DO业务语义：- 一次推送 1 行； 为空表示全员- 冗余 便于", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImChannelMessageService.create({
-        channel_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("ImChannelMessageService", () => {
   
       const updated = await ImChannelMessageService.update(created.id, {
         id: created.id,
-          channel_id: 1,
+          channel_id: "测试更新IM 频道消息 DO业务语义：- 一次推送 1 行； 为空表示全员- 冗余 便于",
       } as any)
       expect(updated).toBeDefined()
   

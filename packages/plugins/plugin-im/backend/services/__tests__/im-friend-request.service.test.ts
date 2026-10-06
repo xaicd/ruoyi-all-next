@@ -7,7 +7,9 @@ describe("ImFriendRequestService", () => {
   it("should create and query IM 好友申请记录 DO配合「申请 - 审批」流程：- 发起方调 apply 接", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImFriendRequestService.create({
-        from_user_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("ImFriendRequestService", () => {
   
       const updated = await ImFriendRequestService.update(created.id, {
         id: created.id,
-          from_user_id: 1,
+          from_user_id: "测试更新IM 好友申请记录 DO配合「申请 - 审批」流程：- 发起方调 apply 接",
       } as any)
       expect(updated).toBeDefined()
   

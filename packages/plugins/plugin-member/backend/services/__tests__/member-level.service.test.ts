@@ -7,7 +7,9 @@ describe("MemberLevelService", () => {
   it("should create and query 会员等级 DO配置每个等级需要的积分", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MemberLevelService.create({
-        name: "测试会员等级 DO配置每个等级需要的积分",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

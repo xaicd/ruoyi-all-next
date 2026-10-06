@@ -7,7 +7,9 @@ describe("MesWmSnService", () => {
   it("should create and query MES SN 码", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmSnService.create({
-        uuid: "测试MES SN 码",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

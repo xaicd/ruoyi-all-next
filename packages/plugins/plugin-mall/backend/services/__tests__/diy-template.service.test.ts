@@ -7,7 +7,9 @@ describe("DiyTemplateService", () => {
   it("should create and query 装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. ", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await DiyTemplateService.create({
-        name: "测试装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. ",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

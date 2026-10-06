@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS "iot_alert_config" (
     "sms_template_code" VARCHAR(255),
     "mail_template_code" VARCHAR(255),
     "notify_template_code" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -33,7 +33,8 @@ ALTER TABLE "iot_alert_config" ADD COLUMN IF NOT EXISTS "receive_types" TEXT;
 ALTER TABLE "iot_alert_config" ADD COLUMN IF NOT EXISTS "sms_template_code" VARCHAR(255);
 ALTER TABLE "iot_alert_config" ADD COLUMN IF NOT EXISTS "mail_template_code" VARCHAR(255);
 ALTER TABLE "iot_alert_config" ADD COLUMN IF NOT EXISTS "notify_template_code" VARCHAR(255);
-ALTER TABLE "iot_alert_config" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "iot_alert_config" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "iot_alert_config" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "iot_alert_config" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "iot_alert_config" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "iot_alert_config" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -44,16 +45,16 @@ CREATE INDEX IF NOT EXISTS "iot_alert_config_tenant_id_idx" ON "iot_alert_config
 -- IoT 告警记录
 CREATE TABLE IF NOT EXISTS "iot_alert_record" (
     "id" TEXT NOT NULL,
-    "config_id" BIGINT,
+    "config_id" TEXT,
     "config_name" VARCHAR(255),
     "config_level" INTEGER,
-    "scene_rule_id" BIGINT,
-    "product_id" BIGINT,
-    "device_id" BIGINT,
+    "scene_rule_id" TEXT,
+    "product_id" TEXT,
+    "device_id" TEXT,
     "device_message" VARCHAR(255),
     "process_status" BOOLEAN,
     "process_remark" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -61,16 +62,21 @@ CREATE TABLE IF NOT EXISTS "iot_alert_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "iot_alert_record_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "iot_alert_record" ADD COLUMN IF NOT EXISTS "config_id" BIGINT;
+ALTER TABLE "iot_alert_record" ADD COLUMN IF NOT EXISTS "config_id" TEXT;
+ALTER TABLE "iot_alert_record" ALTER COLUMN "config_id" TYPE TEXT USING "config_id"::TEXT;
 ALTER TABLE "iot_alert_record" ADD COLUMN IF NOT EXISTS "config_name" VARCHAR(255);
 ALTER TABLE "iot_alert_record" ADD COLUMN IF NOT EXISTS "config_level" INTEGER;
-ALTER TABLE "iot_alert_record" ADD COLUMN IF NOT EXISTS "scene_rule_id" BIGINT;
-ALTER TABLE "iot_alert_record" ADD COLUMN IF NOT EXISTS "product_id" BIGINT;
-ALTER TABLE "iot_alert_record" ADD COLUMN IF NOT EXISTS "device_id" BIGINT;
+ALTER TABLE "iot_alert_record" ADD COLUMN IF NOT EXISTS "scene_rule_id" TEXT;
+ALTER TABLE "iot_alert_record" ALTER COLUMN "scene_rule_id" TYPE TEXT USING "scene_rule_id"::TEXT;
+ALTER TABLE "iot_alert_record" ADD COLUMN IF NOT EXISTS "product_id" TEXT;
+ALTER TABLE "iot_alert_record" ALTER COLUMN "product_id" TYPE TEXT USING "product_id"::TEXT;
+ALTER TABLE "iot_alert_record" ADD COLUMN IF NOT EXISTS "device_id" TEXT;
+ALTER TABLE "iot_alert_record" ALTER COLUMN "device_id" TYPE TEXT USING "device_id"::TEXT;
 ALTER TABLE "iot_alert_record" ADD COLUMN IF NOT EXISTS "device_message" VARCHAR(255);
 ALTER TABLE "iot_alert_record" ADD COLUMN IF NOT EXISTS "process_status" BOOLEAN;
 ALTER TABLE "iot_alert_record" ADD COLUMN IF NOT EXISTS "process_remark" VARCHAR(255);
-ALTER TABLE "iot_alert_record" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "iot_alert_record" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "iot_alert_record" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "iot_alert_record" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "iot_alert_record" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "iot_alert_record" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -87,10 +93,10 @@ CREATE TABLE IF NOT EXISTS "iot_data_rule" (
     "source_configs" TEXT,
     "sink_ids" TEXT,
     "method" VARCHAR(255),
-    "product_id" BIGINT,
-    "device_id" BIGINT,
+    "product_id" TEXT,
+    "device_id" TEXT,
     "identifier" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -104,10 +110,13 @@ ALTER TABLE "iot_data_rule" ADD COLUMN IF NOT EXISTS "status" INTEGER;
 ALTER TABLE "iot_data_rule" ADD COLUMN IF NOT EXISTS "source_configs" TEXT;
 ALTER TABLE "iot_data_rule" ADD COLUMN IF NOT EXISTS "sink_ids" TEXT;
 ALTER TABLE "iot_data_rule" ADD COLUMN IF NOT EXISTS "method" VARCHAR(255);
-ALTER TABLE "iot_data_rule" ADD COLUMN IF NOT EXISTS "product_id" BIGINT;
-ALTER TABLE "iot_data_rule" ADD COLUMN IF NOT EXISTS "device_id" BIGINT;
+ALTER TABLE "iot_data_rule" ADD COLUMN IF NOT EXISTS "product_id" TEXT;
+ALTER TABLE "iot_data_rule" ALTER COLUMN "product_id" TYPE TEXT USING "product_id"::TEXT;
+ALTER TABLE "iot_data_rule" ADD COLUMN IF NOT EXISTS "device_id" TEXT;
+ALTER TABLE "iot_data_rule" ALTER COLUMN "device_id" TYPE TEXT USING "device_id"::TEXT;
 ALTER TABLE "iot_data_rule" ADD COLUMN IF NOT EXISTS "identifier" VARCHAR(255);
-ALTER TABLE "iot_data_rule" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "iot_data_rule" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "iot_data_rule" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "iot_data_rule" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "iot_data_rule" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "iot_data_rule" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -123,7 +132,7 @@ CREATE TABLE IF NOT EXISTS "iot_data_sink" (
     "status" INTEGER,
     "type" INTEGER,
     "config" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -136,7 +145,8 @@ ALTER TABLE "iot_data_sink" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
 ALTER TABLE "iot_data_sink" ADD COLUMN IF NOT EXISTS "status" INTEGER;
 ALTER TABLE "iot_data_sink" ADD COLUMN IF NOT EXISTS "type" INTEGER;
 ALTER TABLE "iot_data_sink" ADD COLUMN IF NOT EXISTS "config" VARCHAR(255);
-ALTER TABLE "iot_data_sink" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "iot_data_sink" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "iot_data_sink" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "iot_data_sink" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "iot_data_sink" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "iot_data_sink" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -152,20 +162,20 @@ CREATE TABLE IF NOT EXISTS "iot_device" (
     "serial_number" VARCHAR(255),
     "pic_url" VARCHAR(255),
     "group_ids" TEXT,
-    "product_id" BIGINT,
+    "product_id" TEXT,
     "product_key" VARCHAR(255),
     "device_type" INTEGER,
-    "gateway_id" BIGINT,
+    "gateway_id" TEXT,
     "state" INTEGER,
     "online_time" TIMESTAMP(3),
     "offline_time" TIMESTAMP(3),
     "active_time" TIMESTAMP(3),
-    "firmware_id" BIGINT,
+    "firmware_id" TEXT,
     "device_secret" VARCHAR(255),
     "latitude" DECIMAL(18,2),
     "longitude" DECIMAL(18,2),
     "config" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -178,20 +188,24 @@ ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "nickname" VARCHAR(255);
 ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "serial_number" VARCHAR(255);
 ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "pic_url" VARCHAR(255);
 ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "group_ids" TEXT;
-ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "product_id" BIGINT;
+ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "product_id" TEXT;
+ALTER TABLE "iot_device" ALTER COLUMN "product_id" TYPE TEXT USING "product_id"::TEXT;
 ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "product_key" VARCHAR(255);
 ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "device_type" INTEGER;
-ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "gateway_id" BIGINT;
+ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "gateway_id" TEXT;
+ALTER TABLE "iot_device" ALTER COLUMN "gateway_id" TYPE TEXT USING "gateway_id"::TEXT;
 ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "state" INTEGER;
 ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "online_time" TIMESTAMP(3);
 ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "offline_time" TIMESTAMP(3);
 ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "active_time" TIMESTAMP(3);
-ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "firmware_id" BIGINT;
+ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "firmware_id" TEXT;
+ALTER TABLE "iot_device" ALTER COLUMN "firmware_id" TYPE TEXT USING "firmware_id"::TEXT;
 ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "device_secret" VARCHAR(255);
 ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "latitude" DECIMAL(18,2);
 ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "longitude" DECIMAL(18,2);
 ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "config" VARCHAR(255);
-ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "iot_device" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "iot_device" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -205,7 +219,7 @@ CREATE TABLE IF NOT EXISTS "iot_device_group" (
     "name" VARCHAR(255),
     "status" INTEGER,
     "description" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -216,7 +230,8 @@ CREATE TABLE IF NOT EXISTS "iot_device_group" (
 ALTER TABLE "iot_device_group" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
 ALTER TABLE "iot_device_group" ADD COLUMN IF NOT EXISTS "status" INTEGER;
 ALTER TABLE "iot_device_group" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
-ALTER TABLE "iot_device_group" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "iot_device_group" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "iot_device_group" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "iot_device_group" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "iot_device_group" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "iot_device_group" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -227,17 +242,17 @@ CREATE INDEX IF NOT EXISTS "iot_device_group_tenant_id_idx" ON "iot_device_group
 -- IoT 设备 Modbus 连接配置
 CREATE TABLE IF NOT EXISTS "iot_device_modbus_config" (
     "id" TEXT NOT NULL,
-    "product_id" BIGINT,
-    "device_id" BIGINT,
+    "product_id" TEXT,
+    "device_id" TEXT,
     "ip" VARCHAR(255),
     "port" INTEGER,
-    "slave_id" INTEGER,
+    "slave_id" TEXT,
     "timeout" INTEGER,
     "retry_interval" INTEGER,
     "mode" INTEGER,
     "frame_format" INTEGER,
     "status" INTEGER,
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -245,17 +260,21 @@ CREATE TABLE IF NOT EXISTS "iot_device_modbus_config" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "iot_device_modbus_config_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "iot_device_modbus_config" ADD COLUMN IF NOT EXISTS "product_id" BIGINT;
-ALTER TABLE "iot_device_modbus_config" ADD COLUMN IF NOT EXISTS "device_id" BIGINT;
+ALTER TABLE "iot_device_modbus_config" ADD COLUMN IF NOT EXISTS "product_id" TEXT;
+ALTER TABLE "iot_device_modbus_config" ALTER COLUMN "product_id" TYPE TEXT USING "product_id"::TEXT;
+ALTER TABLE "iot_device_modbus_config" ADD COLUMN IF NOT EXISTS "device_id" TEXT;
+ALTER TABLE "iot_device_modbus_config" ALTER COLUMN "device_id" TYPE TEXT USING "device_id"::TEXT;
 ALTER TABLE "iot_device_modbus_config" ADD COLUMN IF NOT EXISTS "ip" VARCHAR(255);
 ALTER TABLE "iot_device_modbus_config" ADD COLUMN IF NOT EXISTS "port" INTEGER;
-ALTER TABLE "iot_device_modbus_config" ADD COLUMN IF NOT EXISTS "slave_id" INTEGER;
+ALTER TABLE "iot_device_modbus_config" ADD COLUMN IF NOT EXISTS "slave_id" TEXT;
+ALTER TABLE "iot_device_modbus_config" ALTER COLUMN "slave_id" TYPE TEXT USING "slave_id"::TEXT;
 ALTER TABLE "iot_device_modbus_config" ADD COLUMN IF NOT EXISTS "timeout" INTEGER;
 ALTER TABLE "iot_device_modbus_config" ADD COLUMN IF NOT EXISTS "retry_interval" INTEGER;
 ALTER TABLE "iot_device_modbus_config" ADD COLUMN IF NOT EXISTS "mode" INTEGER;
 ALTER TABLE "iot_device_modbus_config" ADD COLUMN IF NOT EXISTS "frame_format" INTEGER;
 ALTER TABLE "iot_device_modbus_config" ADD COLUMN IF NOT EXISTS "status" INTEGER;
-ALTER TABLE "iot_device_modbus_config" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "iot_device_modbus_config" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "iot_device_modbus_config" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "iot_device_modbus_config" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "iot_device_modbus_config" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "iot_device_modbus_config" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -266,8 +285,8 @@ CREATE INDEX IF NOT EXISTS "iot_device_modbus_config_tenant_id_idx" ON "iot_devi
 -- IoT 设备 Modbus 点位配置
 CREATE TABLE IF NOT EXISTS "iot_device_modbus_point" (
     "id" TEXT NOT NULL,
-    "device_id" BIGINT,
-    "thing_model_id" BIGINT,
+    "device_id" TEXT,
+    "thing_model_id" TEXT,
     "identifier" VARCHAR(255),
     "name" VARCHAR(255),
     "function_code" INTEGER,
@@ -278,7 +297,7 @@ CREATE TABLE IF NOT EXISTS "iot_device_modbus_point" (
     "scale" DECIMAL(18,2),
     "poll_interval" INTEGER,
     "status" INTEGER,
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -286,8 +305,10 @@ CREATE TABLE IF NOT EXISTS "iot_device_modbus_point" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "iot_device_modbus_point_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "iot_device_modbus_point" ADD COLUMN IF NOT EXISTS "device_id" BIGINT;
-ALTER TABLE "iot_device_modbus_point" ADD COLUMN IF NOT EXISTS "thing_model_id" BIGINT;
+ALTER TABLE "iot_device_modbus_point" ADD COLUMN IF NOT EXISTS "device_id" TEXT;
+ALTER TABLE "iot_device_modbus_point" ALTER COLUMN "device_id" TYPE TEXT USING "device_id"::TEXT;
+ALTER TABLE "iot_device_modbus_point" ADD COLUMN IF NOT EXISTS "thing_model_id" TEXT;
+ALTER TABLE "iot_device_modbus_point" ALTER COLUMN "thing_model_id" TYPE TEXT USING "thing_model_id"::TEXT;
 ALTER TABLE "iot_device_modbus_point" ADD COLUMN IF NOT EXISTS "identifier" VARCHAR(255);
 ALTER TABLE "iot_device_modbus_point" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
 ALTER TABLE "iot_device_modbus_point" ADD COLUMN IF NOT EXISTS "function_code" INTEGER;
@@ -298,7 +319,8 @@ ALTER TABLE "iot_device_modbus_point" ADD COLUMN IF NOT EXISTS "raw_data_type" V
 ALTER TABLE "iot_device_modbus_point" ADD COLUMN IF NOT EXISTS "scale" DECIMAL(18,2);
 ALTER TABLE "iot_device_modbus_point" ADD COLUMN IF NOT EXISTS "poll_interval" INTEGER;
 ALTER TABLE "iot_device_modbus_point" ADD COLUMN IF NOT EXISTS "status" INTEGER;
-ALTER TABLE "iot_device_modbus_point" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "iot_device_modbus_point" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "iot_device_modbus_point" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "iot_device_modbus_point" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "iot_device_modbus_point" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "iot_device_modbus_point" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -312,12 +334,12 @@ CREATE TABLE IF NOT EXISTS "iot_ota_firmware" (
     "name" VARCHAR(255),
     "description" VARCHAR(255),
     "version" VARCHAR(255),
-    "product_id" BIGINT,
+    "product_id" TEXT,
     "file_url" VARCHAR(255),
     "file_size" BIGINT,
     "file_digest_algorithm" VARCHAR(255),
     "file_digest_value" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -328,12 +350,14 @@ CREATE TABLE IF NOT EXISTS "iot_ota_firmware" (
 ALTER TABLE "iot_ota_firmware" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
 ALTER TABLE "iot_ota_firmware" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
 ALTER TABLE "iot_ota_firmware" ADD COLUMN IF NOT EXISTS "version" VARCHAR(255);
-ALTER TABLE "iot_ota_firmware" ADD COLUMN IF NOT EXISTS "product_id" BIGINT;
+ALTER TABLE "iot_ota_firmware" ADD COLUMN IF NOT EXISTS "product_id" TEXT;
+ALTER TABLE "iot_ota_firmware" ALTER COLUMN "product_id" TYPE TEXT USING "product_id"::TEXT;
 ALTER TABLE "iot_ota_firmware" ADD COLUMN IF NOT EXISTS "file_url" VARCHAR(255);
 ALTER TABLE "iot_ota_firmware" ADD COLUMN IF NOT EXISTS "file_size" BIGINT;
 ALTER TABLE "iot_ota_firmware" ADD COLUMN IF NOT EXISTS "file_digest_algorithm" VARCHAR(255);
 ALTER TABLE "iot_ota_firmware" ADD COLUMN IF NOT EXISTS "file_digest_value" VARCHAR(255);
-ALTER TABLE "iot_ota_firmware" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "iot_ota_firmware" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "iot_ota_firmware" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "iot_ota_firmware" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "iot_ota_firmware" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "iot_ota_firmware" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -346,12 +370,12 @@ CREATE TABLE IF NOT EXISTS "iot_ota_task" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "description" VARCHAR(255),
-    "firmware_id" BIGINT,
+    "firmware_id" TEXT,
     "status" INTEGER,
     "device_scope" INTEGER,
     "device_total_count" INTEGER,
     "device_success_count" INTEGER,
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -361,12 +385,14 @@ CREATE TABLE IF NOT EXISTS "iot_ota_task" (
 );
 ALTER TABLE "iot_ota_task" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
 ALTER TABLE "iot_ota_task" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
-ALTER TABLE "iot_ota_task" ADD COLUMN IF NOT EXISTS "firmware_id" BIGINT;
+ALTER TABLE "iot_ota_task" ADD COLUMN IF NOT EXISTS "firmware_id" TEXT;
+ALTER TABLE "iot_ota_task" ALTER COLUMN "firmware_id" TYPE TEXT USING "firmware_id"::TEXT;
 ALTER TABLE "iot_ota_task" ADD COLUMN IF NOT EXISTS "status" INTEGER;
 ALTER TABLE "iot_ota_task" ADD COLUMN IF NOT EXISTS "device_scope" INTEGER;
 ALTER TABLE "iot_ota_task" ADD COLUMN IF NOT EXISTS "device_total_count" INTEGER;
 ALTER TABLE "iot_ota_task" ADD COLUMN IF NOT EXISTS "device_success_count" INTEGER;
-ALTER TABLE "iot_ota_task" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "iot_ota_task" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "iot_ota_task" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "iot_ota_task" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "iot_ota_task" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "iot_ota_task" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -377,14 +403,14 @@ CREATE INDEX IF NOT EXISTS "iot_ota_task_tenant_id_idx" ON "iot_ota_task"("tenan
 -- IoT OTA 升级任务记录
 CREATE TABLE IF NOT EXISTS "iot_ota_task_record" (
     "id" TEXT NOT NULL,
-    "firmware_id" BIGINT,
-    "task_id" BIGINT,
-    "device_id" BIGINT,
-    "from_firmware_id" BIGINT,
+    "firmware_id" TEXT,
+    "task_id" TEXT,
+    "device_id" TEXT,
+    "from_firmware_id" TEXT,
     "status" INTEGER,
     "progress" INTEGER,
     "description" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -392,14 +418,19 @@ CREATE TABLE IF NOT EXISTS "iot_ota_task_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "iot_ota_task_record_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "iot_ota_task_record" ADD COLUMN IF NOT EXISTS "firmware_id" BIGINT;
-ALTER TABLE "iot_ota_task_record" ADD COLUMN IF NOT EXISTS "task_id" BIGINT;
-ALTER TABLE "iot_ota_task_record" ADD COLUMN IF NOT EXISTS "device_id" BIGINT;
-ALTER TABLE "iot_ota_task_record" ADD COLUMN IF NOT EXISTS "from_firmware_id" BIGINT;
+ALTER TABLE "iot_ota_task_record" ADD COLUMN IF NOT EXISTS "firmware_id" TEXT;
+ALTER TABLE "iot_ota_task_record" ALTER COLUMN "firmware_id" TYPE TEXT USING "firmware_id"::TEXT;
+ALTER TABLE "iot_ota_task_record" ADD COLUMN IF NOT EXISTS "task_id" TEXT;
+ALTER TABLE "iot_ota_task_record" ALTER COLUMN "task_id" TYPE TEXT USING "task_id"::TEXT;
+ALTER TABLE "iot_ota_task_record" ADD COLUMN IF NOT EXISTS "device_id" TEXT;
+ALTER TABLE "iot_ota_task_record" ALTER COLUMN "device_id" TYPE TEXT USING "device_id"::TEXT;
+ALTER TABLE "iot_ota_task_record" ADD COLUMN IF NOT EXISTS "from_firmware_id" TEXT;
+ALTER TABLE "iot_ota_task_record" ALTER COLUMN "from_firmware_id" TYPE TEXT USING "from_firmware_id"::TEXT;
 ALTER TABLE "iot_ota_task_record" ADD COLUMN IF NOT EXISTS "status" INTEGER;
 ALTER TABLE "iot_ota_task_record" ADD COLUMN IF NOT EXISTS "progress" INTEGER;
 ALTER TABLE "iot_ota_task_record" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
-ALTER TABLE "iot_ota_task_record" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "iot_ota_task_record" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "iot_ota_task_record" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "iot_ota_task_record" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "iot_ota_task_record" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "iot_ota_task_record" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -414,7 +445,7 @@ CREATE TABLE IF NOT EXISTS "iot_product" (
     "product_key" VARCHAR(255),
     "product_secret" VARCHAR(255),
     "register_enabled" BOOLEAN,
-    "category_id" BIGINT,
+    "category_id" TEXT,
     "icon" VARCHAR(255),
     "pic_url" VARCHAR(255),
     "description" VARCHAR(255),
@@ -423,7 +454,7 @@ CREATE TABLE IF NOT EXISTS "iot_product" (
     "net_type" INTEGER,
     "protocol_type" VARCHAR(255),
     "serialize_type" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -435,7 +466,8 @@ ALTER TABLE "iot_product" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
 ALTER TABLE "iot_product" ADD COLUMN IF NOT EXISTS "product_key" VARCHAR(255);
 ALTER TABLE "iot_product" ADD COLUMN IF NOT EXISTS "product_secret" VARCHAR(255);
 ALTER TABLE "iot_product" ADD COLUMN IF NOT EXISTS "register_enabled" BOOLEAN;
-ALTER TABLE "iot_product" ADD COLUMN IF NOT EXISTS "category_id" BIGINT;
+ALTER TABLE "iot_product" ADD COLUMN IF NOT EXISTS "category_id" TEXT;
+ALTER TABLE "iot_product" ALTER COLUMN "category_id" TYPE TEXT USING "category_id"::TEXT;
 ALTER TABLE "iot_product" ADD COLUMN IF NOT EXISTS "icon" VARCHAR(255);
 ALTER TABLE "iot_product" ADD COLUMN IF NOT EXISTS "pic_url" VARCHAR(255);
 ALTER TABLE "iot_product" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
@@ -444,7 +476,8 @@ ALTER TABLE "iot_product" ADD COLUMN IF NOT EXISTS "device_type" INTEGER;
 ALTER TABLE "iot_product" ADD COLUMN IF NOT EXISTS "net_type" INTEGER;
 ALTER TABLE "iot_product" ADD COLUMN IF NOT EXISTS "protocol_type" VARCHAR(255);
 ALTER TABLE "iot_product" ADD COLUMN IF NOT EXISTS "serialize_type" VARCHAR(255);
-ALTER TABLE "iot_product" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "iot_product" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "iot_product" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "iot_product" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "iot_product" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "iot_product" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -459,7 +492,7 @@ CREATE TABLE IF NOT EXISTS "iot_product_category" (
     "sort" INTEGER,
     "status" INTEGER,
     "description" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -471,7 +504,8 @@ ALTER TABLE "iot_product_category" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
 ALTER TABLE "iot_product_category" ADD COLUMN IF NOT EXISTS "sort" INTEGER;
 ALTER TABLE "iot_product_category" ADD COLUMN IF NOT EXISTS "status" INTEGER;
 ALTER TABLE "iot_product_category" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
-ALTER TABLE "iot_product_category" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "iot_product_category" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "iot_product_category" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "iot_product_category" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "iot_product_category" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "iot_product_category" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -489,8 +523,8 @@ CREATE TABLE IF NOT EXISTS "iot_scene_rule" (
     "triggers" TEXT,
     "actions" TEXT,
     "type" INTEGER,
-    "product_id" BIGINT,
-    "device_id" BIGINT,
+    "product_id" TEXT,
+    "device_id" TEXT,
     "identifier" VARCHAR(255),
     "operator" VARCHAR(255),
     "value" VARCHAR(255),
@@ -498,8 +532,8 @@ CREATE TABLE IF NOT EXISTS "iot_scene_rule" (
     "condition_groups" TEXT,
     "param" VARCHAR(255),
     "params" VARCHAR(255),
-    "alert_config_id" BIGINT,
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "alert_config_id" TEXT,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -514,8 +548,10 @@ ALTER TABLE "iot_scene_rule" ADD COLUMN IF NOT EXISTS "last_trigger_time" TIMEST
 ALTER TABLE "iot_scene_rule" ADD COLUMN IF NOT EXISTS "triggers" TEXT;
 ALTER TABLE "iot_scene_rule" ADD COLUMN IF NOT EXISTS "actions" TEXT;
 ALTER TABLE "iot_scene_rule" ADD COLUMN IF NOT EXISTS "type" INTEGER;
-ALTER TABLE "iot_scene_rule" ADD COLUMN IF NOT EXISTS "product_id" BIGINT;
-ALTER TABLE "iot_scene_rule" ADD COLUMN IF NOT EXISTS "device_id" BIGINT;
+ALTER TABLE "iot_scene_rule" ADD COLUMN IF NOT EXISTS "product_id" TEXT;
+ALTER TABLE "iot_scene_rule" ALTER COLUMN "product_id" TYPE TEXT USING "product_id"::TEXT;
+ALTER TABLE "iot_scene_rule" ADD COLUMN IF NOT EXISTS "device_id" TEXT;
+ALTER TABLE "iot_scene_rule" ALTER COLUMN "device_id" TYPE TEXT USING "device_id"::TEXT;
 ALTER TABLE "iot_scene_rule" ADD COLUMN IF NOT EXISTS "identifier" VARCHAR(255);
 ALTER TABLE "iot_scene_rule" ADD COLUMN IF NOT EXISTS "operator" VARCHAR(255);
 ALTER TABLE "iot_scene_rule" ADD COLUMN IF NOT EXISTS "value" VARCHAR(255);
@@ -523,8 +559,10 @@ ALTER TABLE "iot_scene_rule" ADD COLUMN IF NOT EXISTS "cron_expression" VARCHAR(
 ALTER TABLE "iot_scene_rule" ADD COLUMN IF NOT EXISTS "condition_groups" TEXT;
 ALTER TABLE "iot_scene_rule" ADD COLUMN IF NOT EXISTS "param" VARCHAR(255);
 ALTER TABLE "iot_scene_rule" ADD COLUMN IF NOT EXISTS "params" VARCHAR(255);
-ALTER TABLE "iot_scene_rule" ADD COLUMN IF NOT EXISTS "alert_config_id" BIGINT;
-ALTER TABLE "iot_scene_rule" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "iot_scene_rule" ADD COLUMN IF NOT EXISTS "alert_config_id" TEXT;
+ALTER TABLE "iot_scene_rule" ALTER COLUMN "alert_config_id" TYPE TEXT USING "alert_config_id"::TEXT;
+ALTER TABLE "iot_scene_rule" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "iot_scene_rule" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "iot_scene_rule" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "iot_scene_rule" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "iot_scene_rule" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
@@ -538,13 +576,13 @@ CREATE TABLE IF NOT EXISTS "iot_thing_model" (
     "identifier" VARCHAR(255),
     "name" VARCHAR(255),
     "description" VARCHAR(255),
-    "product_id" BIGINT,
+    "product_id" TEXT,
     "product_key" VARCHAR(255),
     "type" INTEGER,
     "property" VARCHAR(255),
     "event" VARCHAR(255),
     "service" VARCHAR(255),
-    "tenant_id" VARCHAR(64) NOT NULL,
+    "tenant_id" TEXT NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
@@ -555,13 +593,15 @@ CREATE TABLE IF NOT EXISTS "iot_thing_model" (
 ALTER TABLE "iot_thing_model" ADD COLUMN IF NOT EXISTS "identifier" VARCHAR(255);
 ALTER TABLE "iot_thing_model" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
 ALTER TABLE "iot_thing_model" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
-ALTER TABLE "iot_thing_model" ADD COLUMN IF NOT EXISTS "product_id" BIGINT;
+ALTER TABLE "iot_thing_model" ADD COLUMN IF NOT EXISTS "product_id" TEXT;
+ALTER TABLE "iot_thing_model" ALTER COLUMN "product_id" TYPE TEXT USING "product_id"::TEXT;
 ALTER TABLE "iot_thing_model" ADD COLUMN IF NOT EXISTS "product_key" VARCHAR(255);
 ALTER TABLE "iot_thing_model" ADD COLUMN IF NOT EXISTS "type" INTEGER;
 ALTER TABLE "iot_thing_model" ADD COLUMN IF NOT EXISTS "property" VARCHAR(255);
 ALTER TABLE "iot_thing_model" ADD COLUMN IF NOT EXISTS "event" VARCHAR(255);
 ALTER TABLE "iot_thing_model" ADD COLUMN IF NOT EXISTS "service" VARCHAR(255);
-ALTER TABLE "iot_thing_model" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "iot_thing_model" ADD COLUMN IF NOT EXISTS "tenant_id" TEXT NOT NULL;
+ALTER TABLE "iot_thing_model" ALTER COLUMN "tenant_id" TYPE TEXT USING "tenant_id"::TEXT;
 ALTER TABLE "iot_thing_model" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "iot_thing_model" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
 ALTER TABLE "iot_thing_model" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);

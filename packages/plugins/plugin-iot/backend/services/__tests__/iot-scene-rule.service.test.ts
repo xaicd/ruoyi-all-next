@@ -7,7 +7,9 @@ describe("IotSceneRuleService", () => {
   it("should create and query IoT 场景联动规则", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await IotSceneRuleService.create({
-        name: "测试IoT 场景联动规则",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

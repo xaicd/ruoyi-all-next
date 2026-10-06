@@ -7,7 +7,9 @@ describe("CrmClueService", () => {
   it("should create and query CRM 线索", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CrmClueService.create({
-        name: "测试CRM 线索",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

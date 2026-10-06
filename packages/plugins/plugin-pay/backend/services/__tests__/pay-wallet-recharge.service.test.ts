@@ -7,7 +7,9 @@ describe("PayWalletRechargeService", () => {
   it("should create and query 会员钱包充值", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await PayWalletRechargeService.create({
-        wallet_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("PayWalletRechargeService", () => {
   
       const updated = await PayWalletRechargeService.update(created.id, {
         id: created.id,
-          wallet_id: 1,
+          wallet_id: "测试更新会员钱包充值",
       } as any)
       expect(updated).toBeDefined()
   

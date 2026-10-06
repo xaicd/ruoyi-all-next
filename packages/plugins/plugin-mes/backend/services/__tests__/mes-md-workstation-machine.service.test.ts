@@ -7,7 +7,9 @@ describe("MesMdWorkstationMachineService", () => {
   it("should create and query MES 设备资源", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesMdWorkstationMachineService.create({
-        workstation_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesMdWorkstationMachineService", () => {
   
       const updated = await MesMdWorkstationMachineService.update(created.id, {
         id: created.id,
-          workstation_id: 1,
+          workstation_id: "测试更新MES 设备资源",
       } as any)
       expect(updated).toBeDefined()
   

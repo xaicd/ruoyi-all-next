@@ -7,7 +7,9 @@ describe("ErpStockService", () => {
   it("should create and query ERP 产品库存", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ErpStockService.create({
-        product_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

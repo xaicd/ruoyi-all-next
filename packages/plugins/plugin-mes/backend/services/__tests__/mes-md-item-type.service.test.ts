@@ -7,7 +7,9 @@ describe("MesMdItemTypeService", () => {
   it("should create and query MES 物料产品分类", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesMdItemTypeService.create({
-        code: "测试MES 物料产品分类",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

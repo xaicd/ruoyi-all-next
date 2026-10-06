@@ -7,7 +7,9 @@ describe("CrmPermissionService", () => {
   it("should create and query CRM 数据权限", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CrmPermissionService.create({
-        biz_type: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

@@ -7,7 +7,9 @@ describe("PayAppService", () => {
   it("should create and query 支付应用 DO一个商户下，可能会有多个支付应用。例如说，京东有京东商城、京东到家", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await PayAppService.create({
-        app_key: "测试支付应用 DO一个商户下，可能会有多个支付应用。例如说，京东有京东商城、京东到家",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

@@ -7,7 +7,9 @@ describe("ImGroupMemberService", () => {
   it("should create and query IM 群成员", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImGroupMemberService.create({
-        group_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("ImGroupMemberService", () => {
   
       const updated = await ImGroupMemberService.update(created.id, {
         id: created.id,
-          group_id: 1,
+          group_id: "测试更新IM 群成员",
       } as any)
       expect(updated).toBeDefined()
   

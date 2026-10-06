@@ -7,7 +7,9 @@ describe("BpmFormService", () => {
   it("should create and query BPM 工作流的表单定义用于工作流的申请表单，需要动态配置的场景", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await BpmFormService.create({
-        name: "测试BPM 工作流的表单定义用于工作流的申请表单，需要动态配置的场景",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

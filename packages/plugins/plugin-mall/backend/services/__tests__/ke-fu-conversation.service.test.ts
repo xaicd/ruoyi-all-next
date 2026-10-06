@@ -7,7 +7,9 @@ describe("KeFuConversationService", () => {
   it("should create and query 客服会话", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await KeFuConversationService.create({
-        user_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("KeFuConversationService", () => {
   
       const updated = await KeFuConversationService.update(created.id, {
         id: created.id,
-          user_id: 1,
+          user_id: "测试更新客服会话",
       } as any)
       expect(updated).toBeDefined()
   

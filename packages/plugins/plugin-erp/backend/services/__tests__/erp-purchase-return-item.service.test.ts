@@ -7,7 +7,9 @@ describe("ErpPurchaseReturnItemService", () => {
   it("should create and query ERP 采购退货项", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ErpPurchaseReturnItemService.create({
-        return_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("ErpPurchaseReturnItemService", () => {
   
       const updated = await ErpPurchaseReturnItemService.update(created.id, {
         id: created.id,
-          return_id: 1,
+          return_id: "测试更新ERP 采购退货项",
       } as any)
       expect(updated).toBeDefined()
   

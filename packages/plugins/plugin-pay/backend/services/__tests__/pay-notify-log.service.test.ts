@@ -7,7 +7,9 @@ describe("PayNotifyLogService", () => {
   it("should create and query 商户支付、退款等的通知 Log每次通知时，都会在该表中，记录一次 Log，方便排", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await PayNotifyLogService.create({
-        task_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("PayNotifyLogService", () => {
   
       const updated = await PayNotifyLogService.update(created.id, {
         id: created.id,
-          task_id: 1,
+          task_id: "测试更新商户支付、退款等的通知 Log每次通知时，都会在该表中，记录一次 Log，方便排",
       } as any)
       expect(updated).toBeDefined()
   

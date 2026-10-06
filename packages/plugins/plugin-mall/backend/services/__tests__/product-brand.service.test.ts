@@ -7,7 +7,9 @@ describe("ProductBrandService", () => {
   it("should create and query 商品品牌", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ProductBrandService.create({
-        name: "测试商品品牌",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

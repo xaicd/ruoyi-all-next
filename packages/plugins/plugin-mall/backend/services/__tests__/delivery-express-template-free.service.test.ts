@@ -7,7 +7,9 @@ describe("DeliveryExpressTemplateFreeService", () => {
   it("should create and query 快递运费模板包邮配置", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await DeliveryExpressTemplateFreeService.create({
-        template_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("DeliveryExpressTemplateFreeService", () => {
   
       const updated = await DeliveryExpressTemplateFreeService.update(created.id, {
         id: created.id,
-          template_id: 1,
+          template_id: "测试更新快递运费模板包邮配置",
       } as any)
       expect(updated).toBeDefined()
   

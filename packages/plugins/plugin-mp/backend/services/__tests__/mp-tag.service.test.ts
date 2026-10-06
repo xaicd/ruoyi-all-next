@@ -7,7 +7,9 @@ describe("MpTagService", () => {
   it("should create and query 公众号标签", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MpTagService.create({
-        tag_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MpTagService", () => {
   
       const updated = await MpTagService.update(created.id, {
         id: created.id,
-          tag_id: 1,
+          tag_id: "测试更新公众号标签",
       } as any)
       expect(updated).toBeDefined()
   

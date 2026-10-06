@@ -7,7 +7,9 @@ describe("MesWmProductProduceDetailService", () => {
   it("should create and query MES 生产入库明细", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmProductProduceDetailService.create({
-        produce_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesWmProductProduceDetailService", () => {
   
       const updated = await MesWmProductProduceDetailService.update(created.id, {
         id: created.id,
-          produce_id: 1,
+          produce_id: "测试更新MES 生产入库明细",
       } as any)
       expect(updated).toBeDefined()
   

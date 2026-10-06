@@ -7,7 +7,9 @@ describe("ProductBrowseHistoryService", () => {
   it("should create and query 商品浏览记录", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ProductBrowseHistoryService.create({
-        spu_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("ProductBrowseHistoryService", () => {
   
       const updated = await ProductBrowseHistoryService.update(created.id, {
         id: created.id,
-          spu_id: 1,
+          spu_id: "测试更新商品浏览记录",
       } as any)
       expect(updated).toBeDefined()
   

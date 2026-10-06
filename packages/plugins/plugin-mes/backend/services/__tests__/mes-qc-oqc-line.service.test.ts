@@ -7,7 +7,9 @@ describe("MesQcOqcLineService", () => {
   it("should create and query MES 出货检验单行", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesQcOqcLineService.create({
-        oqc_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesQcOqcLineService", () => {
   
       const updated = await MesQcOqcLineService.update(created.id, {
         id: created.id,
-          oqc_id: 1,
+          oqc_id: "测试更新MES 出货检验单行",
       } as any)
       expect(updated).toBeDefined()
   

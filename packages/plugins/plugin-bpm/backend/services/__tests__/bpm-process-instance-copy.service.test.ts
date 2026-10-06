@@ -7,7 +7,9 @@ describe("BpmProcessInstanceCopyService", () => {
   it("should create and query 流程抄送", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await BpmProcessInstanceCopyService.create({
-        start_user_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("BpmProcessInstanceCopyService", () => {
   
       const updated = await BpmProcessInstanceCopyService.update(created.id, {
         id: created.id,
-          start_user_id: 1,
+          start_user_id: "测试更新流程抄送",
       } as any)
       expect(updated).toBeDefined()
   

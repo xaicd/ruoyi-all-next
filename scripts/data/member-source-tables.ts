@@ -24,8 +24,8 @@ export const MEMBER_TABLES: CodegenConfig[] = [
         },
         {
           "name": "user_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "用户编号",
           "nullableInferred": true,
@@ -51,8 +51,8 @@ export const MEMBER_TABLES: CodegenConfig[] = [
         },
         {
           "name": "area_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "地区编号",
           "nullableInferred": true,
@@ -250,8 +250,8 @@ export const MEMBER_TABLES: CodegenConfig[] = [
         },
         {
           "name": "user_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "用户编号",
           "nullableInferred": true,
@@ -608,8 +608,8 @@ export const MEMBER_TABLES: CodegenConfig[] = [
         },
         {
           "name": "user_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "用户编号",
           "nullableInferred": true,
@@ -617,8 +617,8 @@ export const MEMBER_TABLES: CodegenConfig[] = [
         },
         {
           "name": "level_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "等级编号",
           "nullableInferred": true,
@@ -746,8 +746,8 @@ export const MEMBER_TABLES: CodegenConfig[] = [
         },
         {
           "name": "user_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "用户编号",
           "nullableInferred": true,
@@ -981,8 +981,8 @@ export const MEMBER_TABLES: CodegenConfig[] = [
         },
         {
           "name": "user_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "签到用户",
           "nullableInferred": true,
@@ -1306,8 +1306,8 @@ export const MEMBER_TABLES: CodegenConfig[] = [
         },
         {
           "name": "level_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "会员级别编号",
           "nullableInferred": true
@@ -1322,8 +1322,8 @@ export const MEMBER_TABLES: CodegenConfig[] = [
         },
         {
           "name": "group_id",
-          "type": "bigint",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "用户分组编号",
           "nullableInferred": true

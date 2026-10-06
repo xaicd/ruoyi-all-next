@@ -7,7 +7,9 @@ describe("ErpSaleOutItemService", () => {
   it("should create and query ERP 销售出库项", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ErpSaleOutItemService.create({
-        out_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("ErpSaleOutItemService", () => {
   
       const updated = await ErpSaleOutItemService.update(created.id, {
         id: created.id,
-          out_id: 1,
+          out_id: "测试更新ERP 销售出库项",
       } as any)
       expect(updated).toBeDefined()
   

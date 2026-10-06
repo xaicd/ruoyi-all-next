@@ -7,7 +7,9 @@ describe("MesProWorkRecordService", () => {
   it("should create and query MES 用户工作站绑定关系（当前快照）", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesProWorkRecordService.create({
-        user_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesProWorkRecordService", () => {
   
       const updated = await MesProWorkRecordService.update(created.id, {
         id: created.id,
-          user_id: 1,
+          user_id: "测试更新MES 用户工作站绑定关系（当前快照）",
       } as any)
       expect(updated).toBeDefined()
   

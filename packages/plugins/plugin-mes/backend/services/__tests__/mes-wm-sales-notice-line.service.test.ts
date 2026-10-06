@@ -7,7 +7,9 @@ describe("MesWmSalesNoticeLineService", () => {
   it("should create and query MES 发货通知单行", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmSalesNoticeLineService.create({
-        notice_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesWmSalesNoticeLineService", () => {
   
       const updated = await MesWmSalesNoticeLineService.update(created.id, {
         id: created.id,
-          notice_id: 1,
+          notice_id: "测试更新MES 发货通知单行",
       } as any)
       expect(updated).toBeDefined()
   

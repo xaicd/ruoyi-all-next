@@ -7,7 +7,9 @@ describe("ErpFinanceReceiptItemService", () => {
   it("should create and query ERP 收款项", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ErpFinanceReceiptItemService.create({
-        receipt_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("ErpFinanceReceiptItemService", () => {
   
       const updated = await ErpFinanceReceiptItemService.update(created.id, {
         id: created.id,
-          receipt_id: 1,
+          receipt_id: "测试更新ERP 收款项",
       } as any)
       expect(updated).toBeDefined()
   

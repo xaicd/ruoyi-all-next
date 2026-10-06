@@ -7,7 +7,9 @@ describe("MesWmPackageService", () => {
   it("should create and query MES 装箱单", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmPackageService.create({
-        code: "测试MES 装箱单",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

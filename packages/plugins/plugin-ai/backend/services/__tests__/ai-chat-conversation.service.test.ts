@@ -7,6 +7,7 @@ describe("AiChatConversationService", () => {
   it("should create and query AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AiChatConversationService.create({
+        user_id: "测试AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它",
         title: "测试AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它",
       } as any)
       expect(created).toBeDefined()

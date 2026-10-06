@@ -7,7 +7,9 @@ describe("DeliveryExpressTemplateService", () => {
   it("should create and query 快递运费模板", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await DeliveryExpressTemplateService.create({
-        name: "测试快递运费模板",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

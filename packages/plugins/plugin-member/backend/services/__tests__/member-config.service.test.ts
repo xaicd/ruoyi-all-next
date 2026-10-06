@@ -7,7 +7,9 @@ describe("MemberConfigService", () => {
   it("should create and query 会员配置", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MemberConfigService.create({
-        point_trade_deduct_enable: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

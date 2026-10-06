@@ -7,7 +7,9 @@ describe("MemberSignInRecordService", () => {
   it("should create and query 签到记录", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MemberSignInRecordService.create({
-        user_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MemberSignInRecordService", () => {
   
       const updated = await MemberSignInRecordService.update(created.id, {
         id: created.id,
-          user_id: 1,
+          user_id: "测试更新签到记录",
       } as any)
       expect(updated).toBeDefined()
   

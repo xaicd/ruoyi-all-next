@@ -7,7 +7,9 @@ describe("MesProProcessContentService", () => {
   it("should create and query MES 生产工序内容", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesProProcessContentService.create({
-        process_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MesProProcessContentService", () => {
   
       const updated = await MesProProcessContentService.update(created.id, {
         id: created.id,
-          process_id: 1,
+          process_id: "测试更新MES 生产工序内容",
       } as any)
       expect(updated).toBeDefined()
   

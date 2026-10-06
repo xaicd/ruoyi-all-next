@@ -7,7 +7,9 @@ describe("AfterSaleService", () => {
   it("should create and query 售后订单，用于处理 交易订单的退款退货流程", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await AfterSaleService.create({
-        no: "测试售后订单，用于处理 交易订单的退款退货流程",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

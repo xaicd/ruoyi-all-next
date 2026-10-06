@@ -7,7 +7,9 @@ describe("ImFriendService", () => {
   it("should create and query IM 好友关系 DO业务语义：- 双向关系：A-B 互为好友会存 2 条记录（u", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImFriendService.create({
-        user_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("ImFriendService", () => {
   
       const updated = await ImFriendService.update(created.id, {
         id: created.id,
-          user_id: 1,
+          user_id: "测试更新IM 好友关系 DO业务语义：- 双向关系：A-B 互为好友会存 2 条记录（u",
       } as any)
       expect(updated).toBeDefined()
   

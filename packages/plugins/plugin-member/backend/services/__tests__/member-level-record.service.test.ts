@@ -7,7 +7,9 @@ describe("MemberLevelRecordService", () => {
   it("should create and query 会员等级记录 DO用户每次等级发生变更时，记录一条日志", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MemberLevelRecordService.create({
-        user_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("MemberLevelRecordService", () => {
   
       const updated = await MemberLevelRecordService.update(created.id, {
         id: created.id,
-          user_id: 1,
+          user_id: "测试更新会员等级记录 DO用户每次等级发生变更时，记录一条日志",
       } as any)
       expect(updated).toBeDefined()
   

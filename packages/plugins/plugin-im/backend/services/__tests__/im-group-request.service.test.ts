@@ -7,7 +7,9 @@ describe("ImGroupRequestService", () => {
   it("should create and query IM 加群申请记录 DO配合「申请 - 审批」流程：用户主动申请：调 apply", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ImGroupRequestService.create({
-        group_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("ImGroupRequestService", () => {
   
       const updated = await ImGroupRequestService.update(created.id, {
         id: created.id,
-          group_id: 1,
+          group_id: "测试更新IM 加群申请记录 DO配合「申请 - 审批」流程：用户主动申请：调 apply",
       } as any)
       expect(updated).toBeDefined()
   

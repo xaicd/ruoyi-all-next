@@ -7,7 +7,9 @@ describe("CombinationRecordService", () => {
   it("should create and query 拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CombinationRecordService.create({
-        activity_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("CombinationRecordService", () => {
   
       const updated = await CombinationRecordService.update(created.id, {
         id: created.id,
-          activity_id: 1,
+          activity_id: "测试更新拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人",
       } as any)
       expect(updated).toBeDefined()
   

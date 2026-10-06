@@ -7,7 +7,9 @@ describe("MesWmArrivalNoticeService", () => {
   it("should create and query MES 到货通知单", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await MesWmArrivalNoticeService.create({
-        code: "测试MES 到货通知单",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

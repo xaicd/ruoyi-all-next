@@ -7,7 +7,9 @@ describe("ErpStockCheckItemService", () => {
   it("should create and query ERP 库存盘点单项", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ErpStockCheckItemService.create({
-        check_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("ErpStockCheckItemService", () => {
   
       const updated = await ErpStockCheckItemService.update(created.id, {
         id: created.id,
-          check_id: 1,
+          check_id: "测试更新ERP 库存盘点单项",
       } as any)
       expect(updated).toBeDefined()
   

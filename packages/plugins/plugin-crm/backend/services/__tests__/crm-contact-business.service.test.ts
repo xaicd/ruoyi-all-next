@@ -7,7 +7,9 @@ describe("CrmContactBusinessService", () => {
   it("should create and query CRM 联系人与商机的关联", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CrmContactBusinessService.create({
-        contact_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("CrmContactBusinessService", () => {
   
       const updated = await CrmContactBusinessService.update(created.id, {
         id: created.id,
-          contact_id: 1,
+          contact_id: "测试更新CRM 联系人与商机的关联",
       } as any)
       expect(updated).toBeDefined()
   

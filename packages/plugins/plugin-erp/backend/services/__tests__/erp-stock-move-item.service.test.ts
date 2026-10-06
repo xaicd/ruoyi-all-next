@@ -7,7 +7,9 @@ describe("ErpStockMoveItemService", () => {
   it("should create and query ERP 库存调拨单项", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await ErpStockMoveItemService.create({
-        move_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("ErpStockMoveItemService", () => {
   
       const updated = await ErpStockMoveItemService.update(created.id, {
         id: created.id,
-          move_id: 1,
+          move_id: "测试更新ERP 库存调拨单项",
       } as any)
       expect(updated).toBeDefined()
   

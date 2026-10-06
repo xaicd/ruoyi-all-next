@@ -7,7 +7,9 @@ describe("SeckillActivityService", () => {
   it("should create and query 秒杀活动", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await SeckillActivityService.create({
-        spu_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("SeckillActivityService", () => {
   
       const updated = await SeckillActivityService.update(created.id, {
         id: created.id,
-          spu_id: 1,
+          spu_id: "测试更新秒杀活动",
       } as any)
       expect(updated).toBeDefined()
   

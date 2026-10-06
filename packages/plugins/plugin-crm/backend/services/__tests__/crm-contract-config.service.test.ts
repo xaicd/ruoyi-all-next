@@ -7,7 +7,9 @@ describe("CrmContractConfigService", () => {
   it("should create and query 编号", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CrmContractConfigService.create({
-        notify_enabled: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

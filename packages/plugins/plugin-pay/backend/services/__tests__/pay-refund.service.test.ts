@@ -7,7 +7,9 @@ describe("PayRefundService", () => {
   it("should create and query 支付退款单 DO一个支付订单，可以拥有多个支付退款单即 PayOrderDO :", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await PayRefundService.create({
-        no: "测试支付退款单 DO一个支付订单，可以拥有多个支付退款单即 PayOrderDO :",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()

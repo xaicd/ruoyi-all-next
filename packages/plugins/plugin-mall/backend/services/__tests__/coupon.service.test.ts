@@ -7,7 +7,9 @@ describe("CouponService", () => {
   it("should create and query 优惠劵", async () => {
     await runWithTenantContext({ tenantId: "1" }, async () => {
       const created = await CouponService.create({
-        template_id: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted: true,
       } as any)
       expect(created).toBeDefined()
       expect(created.id).toBeDefined()
@@ -21,7 +23,7 @@ describe("CouponService", () => {
   
       const updated = await CouponService.update(created.id, {
         id: created.id,
-          template_id: 1,
+          template_id: "测试更新优惠劵",
       } as any)
       expect(updated).toBeDefined()
   
