@@ -140,24 +140,39 @@ function serialize<T>(id: string, work: () => Promise<T>): Promise<T> {
 
 const PURCHASE_ORDER_TABLE = "erp_purchase_order"
 
+/**
+ * 状态在**库里是 Integer**（源框架 `ErpAuditStatus`: PROCESS=10 / APPROVE=20）——
+ * 可读的状态名是我们内部的表达，**存储边界**负责翻译。
+ * 早先直接把 "PROCESS" 写进去，真实库报 `invalid input syntax for type integer: "PROCESS"`
+ * （内存回退不校验类型，所以只有真实库暴露）。
+ */
+const AUDIT_TO_DB: Record<ErpAuditStatus, number> = { PROCESS: 10, APPROVE: 20 }
+const DB_TO_AUDIT: Record<number, ErpAuditStatus> = { 10: "PROCESS", 20: "APPROVE" }
+
 /** 采购订单的存储适配器。 */
 export const purchaseOrderAuditStore: AuditStore = {
-  findById: (id) => ErpPurchaseOrderRepository.findById(id) as Promise<{ status?: unknown } | null>,
+  async findById(id) {
+    const row = (await ErpPurchaseOrderRepository.findById(id)) as { status?: unknown } | null
+    if (!row) return null
+    // 出库边界翻译: 库里的 10/20 -> 可读状态名
+    return { ...row, status: DB_TO_AUDIT[Number(row.status)] ?? row.status }
+  },
 
   async setStatusIfCurrent(id, expectedFrom, next) {
+    const dbNext = AUDIT_TO_DB[next]
     if (!hasDb()) {
       return serialize(id, async () => {
         const latest = (await ErpPurchaseOrderRepository.findById(id)) as { status?: unknown } | null
-        if (String(latest?.status ?? "") !== expectedFrom) return false
-        await ErpPurchaseOrderRepository.update(id, { status: next } as never)
+        if (DB_TO_AUDIT[Number(latest?.status)] !== expectedFrom) return false
+        await ErpPurchaseOrderRepository.update(id, { status: dbNext } as never)
         return true
       })
     }
     const tenantId = currentTenant()
     const updated = await updateRow(
       PURCHASE_ORDER_TABLE,
-      { status: next },
-      andAll([eqCol("id", id), eqCol("status", expectedFrom), tenantId ? eqCol("tenant_id", tenantId) : eqCol("id", id)]),
+      { status: dbNext },
+      andAll([eqCol("id", id), eqCol("status", AUDIT_TO_DB[expectedFrom]), tenantId ? eqCol("tenant_id", tenantId) : eqCol("id", id)]),
     )
     return Boolean(updated)
   },

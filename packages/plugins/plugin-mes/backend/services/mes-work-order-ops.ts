@@ -38,6 +38,20 @@ export const MES_WORK_ORDER_MACHINE: StateMachine<WorkOrderStatus> = defineState
 const TABLE_NAME = "mes_pro_work_order"
 
 /**
+ * 状态在**库里是 Integer**（源框架 `MesProWorkOrderStatusEnum`: PREPARE=0 / CONFIRMED=1 /
+ * FINISHED=2 / CANCELED=3）—— 可读状态名是内部表达，**存储边界**负责翻译。
+ * 早先直接写 "PREPARE"，真实库报 `invalid input syntax for type integer: "PROCESS"`。
+ */
+const STATUS_TO_DB: Record<WorkOrderStatus, number> = { PREPARE: 0, CONFIRMED: 1, FINISHED: 2, CANCELED: 3 }
+const DB_TO_STATUS: Record<number, WorkOrderStatus> = { 0: "PREPARE", 1: "CONFIRMED", 2: "FINISHED", 3: "CANCELED" }
+
+/** 库里的数字状态 -> 可读状态名（外部读到时用）。 */
+function readStatus(value: unknown): string {
+  const asNumber = Number(value)
+  return DB_TO_STATUS[asNumber] ?? String(value ?? "")
+}
+
+/**
  * 内存回退的串行化队列。
  *
  * 真实库靠**条件更新**保证并发安全（`WHERE status = 前置`，0 行即冲突）。
@@ -73,7 +87,7 @@ async function applyTransition(id: string, from: WorkOrderStatus, to: WorkOrderS
   const existing = await MesProWorkOrderRepository.findById(id)
   if (!existing) throw new ApiError("NOT_FOUND", `工单不存在: ${id}`)
 
-  const current = String((existing as { status?: unknown }).status ?? "")
+  const current = readStatus((existing as { status?: unknown }).status)
   // 先做**快速失败**（给调用方明确原因），再做并发安全的落地
   assertTransition(MES_WORK_ORDER_MACHINE, current as WorkOrderStatus, to, { action })
 
@@ -81,21 +95,23 @@ async function applyTransition(id: string, from: WorkOrderStatus, to: WorkOrderS
     // 内存回退: 串行化 + 重新核对，与 SQL 的条件更新同语义（§4.8）
     return serialize(id, async () => {
       const latest = await MesProWorkOrderRepository.findById(id)
-      const latestStatus = String((latest as { status?: unknown } | null)?.status ?? "")
+      const latestStatus = readStatus((latest as { status?: unknown } | null)?.status)
       if (latestStatus !== from) {
         throw new ApiError("CONFLICT", `工单状态已被并发修改（期望 ${from}，实际 ${latestStatus}）`)
       }
-      return MesProWorkOrderRepository.update(id, { status: to, ...patch } as never)
+      const row = (await MesProWorkOrderRepository.update(id, { status: STATUS_TO_DB[to as WorkOrderStatus], ...patch } as never)) as Record<string, unknown>
+      // 出口同样归一: 库里是数字，对外给可读状态名（与 readStatus 对称）
+      return { ...row, status: readStatus(row?.status) }
     })
   }
 
-  const where = joinAnd([eqColumn("id", id), eqColumn("status", from), tenantPredicate()])
-  const updated = await updateDynamicRow(TABLE_NAME, { status: to, ...patch }, where)
+  const where = joinAnd([eqColumn("id", id), eqColumn("status", STATUS_TO_DB[from]), tenantPredicate()])
+  const updated = await updateDynamicRow(TABLE_NAME, { status: STATUS_TO_DB[to as WorkOrderStatus], ...patch }, where)
   if (!updated) {
     // 影响 0 行 = 有人在我们读取之后改了状态
     throw new ApiError("CONFLICT", `工单状态已被并发修改（期望 ${from}）`)
   }
-  return updated
+  return { ...updated, status: readStatus((updated as { status?: unknown }).status) }
 }
 
 export const mesWorkOrderOps = {

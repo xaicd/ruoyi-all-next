@@ -398,8 +398,8 @@ export const MEMBER_TABLES: CodegenConfig[] = [
         },
         {
           "name": "status",
-          "type": "int",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "状态",
           "nullableInferred": true,
@@ -528,8 +528,8 @@ export const MEMBER_TABLES: CodegenConfig[] = [
         },
         {
           "name": "status",
-          "type": "int",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "状态",
           "nullableInferred": true,
@@ -901,8 +901,8 @@ export const MEMBER_TABLES: CodegenConfig[] = [
         },
         {
           "name": "status",
-          "type": "int",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "状态",
           "nullableInferred": true,
@@ -1191,8 +1191,8 @@ export const MEMBER_TABLES: CodegenConfig[] = [
         },
         {
           "name": "status",
-          "type": "int",
-          "tsType": "number",
+          "type": "varchar",
+          "tsType": "string",
           "nullable": true,
           "comment": "帐号状态",
           "nullableInferred": true,

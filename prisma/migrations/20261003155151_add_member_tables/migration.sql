@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS "member_group" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "remark" VARCHAR(255),
-    "status" INTEGER,
+    "status" VARCHAR(255),
     "tenant_id" VARCHAR(64) NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS "member_group" (
 );
 ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
 ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
-ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "status" VARCHAR(255);
 ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
 ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS "member_level" (
     "discount_percent" INTEGER,
     "icon" VARCHAR(255),
     "background_url" VARCHAR(255),
-    "status" INTEGER,
+    "status" VARCHAR(255),
     "tenant_id" VARCHAR(64) NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
@@ -142,7 +142,7 @@ ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "experience" INTEGER;
 ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "discount_percent" INTEGER;
 ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "icon" VARCHAR(255);
 ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "background_url" VARCHAR(255);
-ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "status" VARCHAR(255);
 ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
 ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
@@ -225,7 +225,7 @@ CREATE TABLE IF NOT EXISTS "member_sign_in_config" (
     "day" INTEGER,
     "point" INTEGER,
     "experience" INTEGER,
-    "status" INTEGER,
+    "status" VARCHAR(255),
     "tenant_id" VARCHAR(64) NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
@@ -237,7 +237,7 @@ CREATE TABLE IF NOT EXISTS "member_sign_in_config" (
 ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "day" INTEGER;
 ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "point" INTEGER;
 ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "experience" INTEGER;
-ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "status" VARCHAR(255);
 ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
 ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
@@ -300,7 +300,7 @@ CREATE TABLE IF NOT EXISTS "member_user" (
     "mobile" VARCHAR(255),
     "email" VARCHAR(255),
     "password" VARCHAR(255),
-    "status" INTEGER,
+    "status" VARCHAR(255),
     "register_ip" VARCHAR(255),
     "register_terminal" INTEGER,
     "login_ip" VARCHAR(255),
@@ -328,7 +328,7 @@ CREATE TABLE IF NOT EXISTS "member_user" (
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "mobile" VARCHAR(255);
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "email" VARCHAR(255);
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "password" VARCHAR(255);
-ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "status" VARCHAR(255);
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "register_ip" VARCHAR(255);
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "register_terminal" INTEGER;
 ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "login_ip" VARCHAR(255);

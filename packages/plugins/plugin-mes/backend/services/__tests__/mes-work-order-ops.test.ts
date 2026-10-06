@@ -6,7 +6,8 @@ import { MES_WORK_ORDER_MACHINE, canEditWorkOrder, mesWorkOrderOps } from "../me
 import { MesProWorkOrderRepository } from "../../repositories/mes-pro-work-order.repository"
 import { validateStateMachine, nextStates } from "@/modules/shared/backend/lib/state-machine"
 
-async function createWorkOrder(status = "PREPARE") {
+/** 建单用**库里的数字状态**（MesProWorkOrderStatusEnum: PREPARE=0）——元数据里 status 是 int。 */
+async function createWorkOrder(status: number = 0) {
   const row = await MesProWorkOrderRepository.create({ code: `WO-${Date.now()}-${Math.random()}`, name: "测试工单", status })
   return String((row as { id: string }).id)
 }
@@ -64,7 +65,8 @@ describe("mes 工单状态机（移植自源框架）", () => {
     expect(results.filter((r) => r.status === "fulfilled")).toHaveLength(1)
     expect(results.filter((r) => r.status === "rejected")).toHaveLength(1)
     const row = await MesProWorkOrderRepository.findById(id)
-    expect((row as { status: string }).status).toBe("CONFIRMED")
+    // 仓储返回的是**库里的数字状态**（CONFIRMED=1）——可读状态名只在 ops 的边界上出现
+    expect(Number((row as { status: unknown }).status)).toBe(1)
   })
 
   it("availableActions 给前端渲染按钮（与后端同一真源）", async () => {

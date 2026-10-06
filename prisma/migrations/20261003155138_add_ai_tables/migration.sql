@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS "ai_api_key" (
     "api_key" VARCHAR(255),
     "platform" VARCHAR(255),
     "url" VARCHAR(255),
-    "status" INTEGER,
+    "status" VARCHAR(255),
     "tenant_id" VARCHAR(64) NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
@@ -22,7 +22,7 @@ ALTER TABLE "ai_api_key" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
 ALTER TABLE "ai_api_key" ADD COLUMN IF NOT EXISTS "api_key" VARCHAR(255);
 ALTER TABLE "ai_api_key" ADD COLUMN IF NOT EXISTS "platform" VARCHAR(255);
 ALTER TABLE "ai_api_key" ADD COLUMN IF NOT EXISTS "url" VARCHAR(255);
-ALTER TABLE "ai_api_key" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "ai_api_key" ADD COLUMN IF NOT EXISTS "status" VARCHAR(255);
 ALTER TABLE "ai_api_key" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
 ALTER TABLE "ai_api_key" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "ai_api_key" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
@@ -34,7 +34,7 @@ CREATE INDEX IF NOT EXISTS "ai_api_key_tenant_id_idx" ON "ai_api_key"("tenant_id
 -- AI Chat 对话 DO用户每次发起 Chat 聊天时，会创建一个 对象，将它
 CREATE TABLE IF NOT EXISTS "ai_chat_conversation" (
     "id" TEXT NOT NULL,
-    "user_id" BIGINT,
+    "user_id" VARCHAR(255),
     "title" VARCHAR(255),
     "pinned" BOOLEAN,
     "pinned_time" TIMESTAMP(3),
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS "ai_chat_conversation" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_chat_conversation_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "user_id" VARCHAR(255);
 ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "title" VARCHAR(255);
 ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "pinned" BOOLEAN;
 ALTER TABLE "ai_chat_conversation" ADD COLUMN IF NOT EXISTS "pinned_time" TIMESTAMP(3);
@@ -75,10 +75,10 @@ CREATE INDEX IF NOT EXISTS "ai_chat_conversation_tenant_id_idx" ON "ai_chat_conv
 -- AI Chat 消息
 CREATE TABLE IF NOT EXISTS "ai_chat_message" (
     "id" TEXT NOT NULL,
-    "conversation_id" BIGINT,
+    "conversation_id" VARCHAR(255),
     "reply_id" BIGINT,
     "type" VARCHAR(255),
-    "user_id" BIGINT,
+    "user_id" VARCHAR(255),
     "role_id" BIGINT,
     "model" VARCHAR(255),
     "model_id" BIGINT,
@@ -96,10 +96,10 @@ CREATE TABLE IF NOT EXISTS "ai_chat_message" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_chat_message_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "conversation_id" BIGINT;
+ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "conversation_id" VARCHAR(255);
 ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "reply_id" BIGINT;
 ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "type" VARCHAR(255);
-ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "user_id" VARCHAR(255);
 ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "role_id" BIGINT;
 ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "model" VARCHAR(255);
 ALTER TABLE "ai_chat_message" ADD COLUMN IF NOT EXISTS "model_id" BIGINT;
@@ -125,14 +125,14 @@ CREATE TABLE IF NOT EXISTS "ai_chat_role" (
     "category" VARCHAR(255),
     "description" VARCHAR(255),
     "system_message" VARCHAR(255),
-    "user_id" BIGINT,
+    "user_id" VARCHAR(255),
     "model_id" BIGINT,
     "knowledge_ids" TEXT,
     "tool_ids" TEXT,
     "mcp_client_names" TEXT,
     "public_status" BOOLEAN,
     "sort" INTEGER,
-    "status" INTEGER,
+    "status" VARCHAR(255),
     "tenant_id" VARCHAR(64) NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
@@ -146,14 +146,14 @@ ALTER TABLE "ai_chat_role" ADD COLUMN IF NOT EXISTS "avatar" VARCHAR(255);
 ALTER TABLE "ai_chat_role" ADD COLUMN IF NOT EXISTS "category" VARCHAR(255);
 ALTER TABLE "ai_chat_role" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
 ALTER TABLE "ai_chat_role" ADD COLUMN IF NOT EXISTS "system_message" VARCHAR(255);
-ALTER TABLE "ai_chat_role" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "ai_chat_role" ADD COLUMN IF NOT EXISTS "user_id" VARCHAR(255);
 ALTER TABLE "ai_chat_role" ADD COLUMN IF NOT EXISTS "model_id" BIGINT;
 ALTER TABLE "ai_chat_role" ADD COLUMN IF NOT EXISTS "knowledge_ids" TEXT;
 ALTER TABLE "ai_chat_role" ADD COLUMN IF NOT EXISTS "tool_ids" TEXT;
 ALTER TABLE "ai_chat_role" ADD COLUMN IF NOT EXISTS "mcp_client_names" TEXT;
 ALTER TABLE "ai_chat_role" ADD COLUMN IF NOT EXISTS "public_status" BOOLEAN;
 ALTER TABLE "ai_chat_role" ADD COLUMN IF NOT EXISTS "sort" INTEGER;
-ALTER TABLE "ai_chat_role" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "ai_chat_role" ADD COLUMN IF NOT EXISTS "status" VARCHAR(255);
 ALTER TABLE "ai_chat_role" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
 ALTER TABLE "ai_chat_role" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "ai_chat_role" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
@@ -165,14 +165,14 @@ CREATE INDEX IF NOT EXISTS "ai_chat_role_tenant_id_idx" ON "ai_chat_role"("tenan
 -- AI 绘画
 CREATE TABLE IF NOT EXISTS "ai_image" (
     "id" TEXT NOT NULL,
-    "user_id" BIGINT,
+    "user_id" VARCHAR(255),
     "prompt" VARCHAR(255),
     "platform" VARCHAR(255),
     "model_id" BIGINT,
     "model" VARCHAR(255),
     "width" INTEGER,
     "height" INTEGER,
-    "status" INTEGER,
+    "status" VARCHAR(255),
     "finish_time" TIMESTAMP(3),
     "error_message" VARCHAR(255),
     "pic_url" VARCHAR(255),
@@ -188,14 +188,14 @@ CREATE TABLE IF NOT EXISTS "ai_image" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_image_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "ai_image" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "ai_image" ADD COLUMN IF NOT EXISTS "user_id" VARCHAR(255);
 ALTER TABLE "ai_image" ADD COLUMN IF NOT EXISTS "prompt" VARCHAR(255);
 ALTER TABLE "ai_image" ADD COLUMN IF NOT EXISTS "platform" VARCHAR(255);
 ALTER TABLE "ai_image" ADD COLUMN IF NOT EXISTS "model_id" BIGINT;
 ALTER TABLE "ai_image" ADD COLUMN IF NOT EXISTS "model" VARCHAR(255);
 ALTER TABLE "ai_image" ADD COLUMN IF NOT EXISTS "width" INTEGER;
 ALTER TABLE "ai_image" ADD COLUMN IF NOT EXISTS "height" INTEGER;
-ALTER TABLE "ai_image" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "ai_image" ADD COLUMN IF NOT EXISTS "status" VARCHAR(255);
 ALTER TABLE "ai_image" ADD COLUMN IF NOT EXISTS "finish_time" TIMESTAMP(3);
 ALTER TABLE "ai_image" ADD COLUMN IF NOT EXISTS "error_message" VARCHAR(255);
 ALTER TABLE "ai_image" ADD COLUMN IF NOT EXISTS "pic_url" VARCHAR(255);
@@ -220,7 +220,7 @@ CREATE TABLE IF NOT EXISTS "ai_knowledge" (
     "embedding_model" VARCHAR(255),
     "top_k" INTEGER,
     "similarity_threshold" DECIMAL(18,2),
-    "status" INTEGER,
+    "status" VARCHAR(255),
     "tenant_id" VARCHAR(64) NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
@@ -235,7 +235,7 @@ ALTER TABLE "ai_knowledge" ADD COLUMN IF NOT EXISTS "embedding_model_id" BIGINT;
 ALTER TABLE "ai_knowledge" ADD COLUMN IF NOT EXISTS "embedding_model" VARCHAR(255);
 ALTER TABLE "ai_knowledge" ADD COLUMN IF NOT EXISTS "top_k" INTEGER;
 ALTER TABLE "ai_knowledge" ADD COLUMN IF NOT EXISTS "similarity_threshold" DECIMAL(18,2);
-ALTER TABLE "ai_knowledge" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "ai_knowledge" ADD COLUMN IF NOT EXISTS "status" VARCHAR(255);
 ALTER TABLE "ai_knowledge" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
 ALTER TABLE "ai_knowledge" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "ai_knowledge" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
@@ -255,7 +255,7 @@ CREATE TABLE IF NOT EXISTS "ai_knowledge_document" (
     "tokens" INTEGER,
     "segment_max_tokens" INTEGER,
     "retrieval_count" INTEGER,
-    "status" INTEGER,
+    "status" VARCHAR(255),
     "tenant_id" VARCHAR(64) NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
@@ -272,7 +272,7 @@ ALTER TABLE "ai_knowledge_document" ADD COLUMN IF NOT EXISTS "content_length" IN
 ALTER TABLE "ai_knowledge_document" ADD COLUMN IF NOT EXISTS "tokens" INTEGER;
 ALTER TABLE "ai_knowledge_document" ADD COLUMN IF NOT EXISTS "segment_max_tokens" INTEGER;
 ALTER TABLE "ai_knowledge_document" ADD COLUMN IF NOT EXISTS "retrieval_count" INTEGER;
-ALTER TABLE "ai_knowledge_document" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "ai_knowledge_document" ADD COLUMN IF NOT EXISTS "status" VARCHAR(255);
 ALTER TABLE "ai_knowledge_document" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
 ALTER TABLE "ai_knowledge_document" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "ai_knowledge_document" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
@@ -291,7 +291,7 @@ CREATE TABLE IF NOT EXISTS "ai_knowledge_segment" (
     "vector_id" VARCHAR(255),
     "tokens" INTEGER,
     "retrieval_count" INTEGER,
-    "status" INTEGER,
+    "status" VARCHAR(255),
     "tenant_id" VARCHAR(64) NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
@@ -307,7 +307,7 @@ ALTER TABLE "ai_knowledge_segment" ADD COLUMN IF NOT EXISTS "content_length" INT
 ALTER TABLE "ai_knowledge_segment" ADD COLUMN IF NOT EXISTS "vector_id" VARCHAR(255);
 ALTER TABLE "ai_knowledge_segment" ADD COLUMN IF NOT EXISTS "tokens" INTEGER;
 ALTER TABLE "ai_knowledge_segment" ADD COLUMN IF NOT EXISTS "retrieval_count" INTEGER;
-ALTER TABLE "ai_knowledge_segment" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "ai_knowledge_segment" ADD COLUMN IF NOT EXISTS "status" VARCHAR(255);
 ALTER TABLE "ai_knowledge_segment" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
 ALTER TABLE "ai_knowledge_segment" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "ai_knowledge_segment" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
@@ -319,7 +319,7 @@ CREATE INDEX IF NOT EXISTS "ai_knowledge_segment_tenant_id_idx" ON "ai_knowledge
 -- AI 思维导图
 CREATE TABLE IF NOT EXISTS "ai_mind_map" (
     "id" TEXT NOT NULL,
-    "user_id" BIGINT,
+    "user_id" VARCHAR(255),
     "platform" VARCHAR(255),
     "model_id" BIGINT,
     "model" VARCHAR(255),
@@ -334,7 +334,7 @@ CREATE TABLE IF NOT EXISTS "ai_mind_map" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_mind_map_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "ai_mind_map" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "ai_mind_map" ADD COLUMN IF NOT EXISTS "user_id" VARCHAR(255);
 ALTER TABLE "ai_mind_map" ADD COLUMN IF NOT EXISTS "platform" VARCHAR(255);
 ALTER TABLE "ai_mind_map" ADD COLUMN IF NOT EXISTS "model_id" BIGINT;
 ALTER TABLE "ai_mind_map" ADD COLUMN IF NOT EXISTS "model" VARCHAR(255);
@@ -358,7 +358,7 @@ CREATE TABLE IF NOT EXISTS "ai_model" (
     "platform" VARCHAR(255),
     "type" INTEGER,
     "sort" INTEGER,
-    "status" INTEGER,
+    "status" VARCHAR(255),
     "temperature" DECIMAL(18,2),
     "max_tokens" INTEGER,
     "max_contexts" INTEGER,
@@ -376,7 +376,7 @@ ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "model" VARCHAR(255);
 ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "platform" VARCHAR(255);
 ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "type" INTEGER;
 ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "sort" INTEGER;
-ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "status" VARCHAR(255);
 ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "temperature" DECIMAL(18,2);
 ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "max_tokens" INTEGER;
 ALTER TABLE "ai_model" ADD COLUMN IF NOT EXISTS "max_contexts" INTEGER;
@@ -391,13 +391,13 @@ CREATE INDEX IF NOT EXISTS "ai_model_tenant_id_idx" ON "ai_model"("tenant_id");
 -- AI 音乐
 CREATE TABLE IF NOT EXISTS "ai_music" (
     "id" TEXT NOT NULL,
-    "user_id" BIGINT,
+    "user_id" VARCHAR(255),
     "title" VARCHAR(255),
     "lyric" VARCHAR(255),
     "image_url" VARCHAR(255),
     "audio_url" VARCHAR(255),
     "video_url" VARCHAR(255),
-    "status" INTEGER,
+    "status" VARCHAR(255),
     "generate_mode" INTEGER,
     "description" VARCHAR(255),
     "platform" VARCHAR(255),
@@ -415,13 +415,13 @@ CREATE TABLE IF NOT EXISTS "ai_music" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_music_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "ai_music" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "ai_music" ADD COLUMN IF NOT EXISTS "user_id" VARCHAR(255);
 ALTER TABLE "ai_music" ADD COLUMN IF NOT EXISTS "title" VARCHAR(255);
 ALTER TABLE "ai_music" ADD COLUMN IF NOT EXISTS "lyric" VARCHAR(255);
 ALTER TABLE "ai_music" ADD COLUMN IF NOT EXISTS "image_url" VARCHAR(255);
 ALTER TABLE "ai_music" ADD COLUMN IF NOT EXISTS "audio_url" VARCHAR(255);
 ALTER TABLE "ai_music" ADD COLUMN IF NOT EXISTS "video_url" VARCHAR(255);
-ALTER TABLE "ai_music" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "ai_music" ADD COLUMN IF NOT EXISTS "status" VARCHAR(255);
 ALTER TABLE "ai_music" ADD COLUMN IF NOT EXISTS "generate_mode" INTEGER;
 ALTER TABLE "ai_music" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
 ALTER TABLE "ai_music" ADD COLUMN IF NOT EXISTS "platform" VARCHAR(255);
@@ -444,7 +444,7 @@ CREATE TABLE IF NOT EXISTS "ai_tool" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
     "description" VARCHAR(255),
-    "status" INTEGER,
+    "status" VARCHAR(255),
     "tenant_id" VARCHAR(64) NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
@@ -455,7 +455,7 @@ CREATE TABLE IF NOT EXISTS "ai_tool" (
 );
 ALTER TABLE "ai_tool" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
 ALTER TABLE "ai_tool" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
-ALTER TABLE "ai_tool" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "ai_tool" ADD COLUMN IF NOT EXISTS "status" VARCHAR(255);
 ALTER TABLE "ai_tool" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
 ALTER TABLE "ai_tool" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "ai_tool" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
@@ -471,7 +471,7 @@ CREATE TABLE IF NOT EXISTS "ai_workflow" (
     "code" VARCHAR(255),
     "graph" VARCHAR(255),
     "remark" VARCHAR(255),
-    "status" INTEGER,
+    "status" VARCHAR(255),
     "tenant_id" VARCHAR(64) NOT NULL,
     "created_by" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL,
@@ -484,7 +484,7 @@ ALTER TABLE "ai_workflow" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
 ALTER TABLE "ai_workflow" ADD COLUMN IF NOT EXISTS "code" VARCHAR(255);
 ALTER TABLE "ai_workflow" ADD COLUMN IF NOT EXISTS "graph" VARCHAR(255);
 ALTER TABLE "ai_workflow" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
-ALTER TABLE "ai_workflow" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "ai_workflow" ADD COLUMN IF NOT EXISTS "status" VARCHAR(255);
 ALTER TABLE "ai_workflow" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
 ALTER TABLE "ai_workflow" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
 ALTER TABLE "ai_workflow" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
@@ -496,7 +496,7 @@ CREATE INDEX IF NOT EXISTS "ai_workflow_tenant_id_idx" ON "ai_workflow"("tenant_
 -- AI 写作
 CREATE TABLE IF NOT EXISTS "ai_write" (
     "id" TEXT NOT NULL,
-    "user_id" BIGINT,
+    "user_id" VARCHAR(255),
     "type" INTEGER,
     "platform" VARCHAR(255),
     "model_id" BIGINT,
@@ -517,7 +517,7 @@ CREATE TABLE IF NOT EXISTS "ai_write" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "ai_write_pkey" PRIMARY KEY ("id")
 );
-ALTER TABLE "ai_write" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "ai_write" ADD COLUMN IF NOT EXISTS "user_id" VARCHAR(255);
 ALTER TABLE "ai_write" ADD COLUMN IF NOT EXISTS "type" INTEGER;
 ALTER TABLE "ai_write" ADD COLUMN IF NOT EXISTS "platform" VARCHAR(255);
 ALTER TABLE "ai_write" ADD COLUMN IF NOT EXISTS "model_id" BIGINT;

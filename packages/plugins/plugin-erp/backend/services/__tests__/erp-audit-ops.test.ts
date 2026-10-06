@@ -8,11 +8,15 @@ import {
 import { validateStateMachine, nextStates } from "@/modules/shared/backend/lib/state-machine"
 import { ErpPurchaseOrderRepository } from "../../repositories/erp-purchase-order.repository"
 
-async function createOrder(status = "PROCESS") {
+/** 建单要用**库里的数字状态**（ErpAuditStatus: PROCESS=10 / APPROVE=20）——元数据里 status 是 int。 */
+async function createOrder(status: number = 10) {
   const row = await ErpPurchaseOrderRepository.create({ no: `PO-${Date.now()}-${Math.random()}`, status })
   return String((row as { id: string }).id)
 }
-const statusOf = async (id: string) => String(((await ErpPurchaseOrderRepository.findById(id)) as { status?: unknown } | null)?.status ?? "")
+const statusOf = async (id: string) =>
+  ({ 10: "PROCESS", 20: "APPROVE" } as Record<number, string>)[
+    Number(((await ErpPurchaseOrderRepository.findById(id)) as { status?: unknown } | null)?.status)
+  ] ?? ""
 
 describe("ERP 审核状态规则", () => {
   it("状态机定义自洽；两个状态都不是终态（可以反审核）", () => {
