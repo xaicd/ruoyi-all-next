@@ -18,4 +18,15 @@ CREATE TABLE IF NOT EXISTS "report_go_view_project" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "report_go_view_project_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "report_go_view_project" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "report_go_view_project" ADD COLUMN IF NOT EXISTS "pic_url" VARCHAR(255);
+ALTER TABLE "report_go_view_project" ADD COLUMN IF NOT EXISTS "content" VARCHAR(255);
+ALTER TABLE "report_go_view_project" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "report_go_view_project" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "report_go_view_project" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "report_go_view_project" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "report_go_view_project" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "report_go_view_project" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "report_go_view_project" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "report_go_view_project" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "report_go_view_project_tenant_id_idx" ON "report_go_view_project"("tenant_id");

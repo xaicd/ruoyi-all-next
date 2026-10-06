@@ -94,6 +94,16 @@ export function tableDdl(table: {
   // 不加 IF NOT EXISTS 的话，全新库上 `prisma migrate deploy` 会直接失败在
   // `relation "x" already exists` —— 实测踩到过，且只在全新建库时暴露。
   const statements = [`CREATE TABLE IF NOT EXISTS "${table.name}" (\n${lines.join(",\n")}\n);`]
+  // **列级收敛** —— 只靠 CREATE TABLE IF NOT EXISTS 不够（实测踩到）:
+  // 表若已由更早的迁移建过，`IF NOT EXISTS` 会让整条 CREATE 变成 no-op，
+  // 于是「表存在但列不全」这种**漂移被静默忽略** —— 仓储按元数据写入时才发现
+  // `column "deleted" does not exist`（真实库模式 197 个测试因此失败）。
+  // 逐列 ADD COLUMN IF NOT EXISTS 把漂移收敛回来，对全新库则是 no-op。
+  // 主键列不在此列 —— 已存在的表无法用 ADD COLUMN 补主键。
+  for (const column of columns) {
+    if (column.isPk) continue
+    statements.push(`ALTER TABLE "${table.name}" ADD COLUMN IF NOT EXISTS ${columnLine(column).trim()};`)
+  }
   // 多租户过滤（AGENTS §4.8）几乎总是按 tenant_id 走，补索引。
   if (columns.some((column) => column.name === "tenant_id")) {
     statements.push(`CREATE INDEX IF NOT EXISTS "${table.name}_tenant_id_idx" ON "${table.name}"("tenant_id");`)

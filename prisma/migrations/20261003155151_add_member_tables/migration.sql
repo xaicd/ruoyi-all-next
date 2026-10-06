@@ -19,6 +19,18 @@ CREATE TABLE IF NOT EXISTS "member_address" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_address_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "mobile" VARCHAR(255);
+ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "area_id" BIGINT;
+ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "detail_address" VARCHAR(255);
+ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "default_status" BOOLEAN;
+ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "member_address" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "member_address_tenant_id_idx" ON "member_address"("tenant_id");
 
 -- 会员配置
@@ -36,6 +48,16 @@ CREATE TABLE IF NOT EXISTS "member_config" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_config_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "member_config" ADD COLUMN IF NOT EXISTS "point_trade_deduct_enable" BOOLEAN;
+ALTER TABLE "member_config" ADD COLUMN IF NOT EXISTS "point_trade_deduct_unit_price" INTEGER;
+ALTER TABLE "member_config" ADD COLUMN IF NOT EXISTS "point_trade_deduct_max_price" INTEGER;
+ALTER TABLE "member_config" ADD COLUMN IF NOT EXISTS "point_trade_give_point" INTEGER;
+ALTER TABLE "member_config" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "member_config" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "member_config" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "member_config" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "member_config" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "member_config" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "member_config_tenant_id_idx" ON "member_config"("tenant_id");
 
 -- 会员经验记录
@@ -56,6 +78,19 @@ CREATE TABLE IF NOT EXISTS "member_experience_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_experience_record_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "biz_type" INTEGER;
+ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "biz_id" VARCHAR(255);
+ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "title" VARCHAR(255);
+ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
+ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "experience" INTEGER;
+ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "total_experience" INTEGER;
+ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "member_experience_record" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "member_experience_record_tenant_id_idx" ON "member_experience_record"("tenant_id");
 
 -- 用户分组
@@ -72,6 +107,15 @@ CREATE TABLE IF NOT EXISTS "member_group" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_group_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "member_group" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "member_group_tenant_id_idx" ON "member_group"("tenant_id");
 
 -- 会员等级 DO配置每个等级需要的积分
@@ -92,6 +136,19 @@ CREATE TABLE IF NOT EXISTS "member_level" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_level_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "level" INTEGER;
+ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "experience" INTEGER;
+ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "discount_percent" INTEGER;
+ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "icon" VARCHAR(255);
+ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "background_url" VARCHAR(255);
+ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "member_level" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "member_level_tenant_id_idx" ON "member_level"("tenant_id");
 
 -- 会员等级记录 DO用户每次等级发生变更时，记录一条日志
@@ -113,6 +170,20 @@ CREATE TABLE IF NOT EXISTS "member_level_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_level_record_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "level_id" BIGINT;
+ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "level" INTEGER;
+ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "discount_percent" INTEGER;
+ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "experience" INTEGER;
+ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "user_experience" INTEGER;
+ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
+ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "member_level_record" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "member_level_record_tenant_id_idx" ON "member_level_record"("tenant_id");
 
 -- 用户积分记录
@@ -133,6 +204,19 @@ CREATE TABLE IF NOT EXISTS "member_point_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_point_record_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "biz_id" VARCHAR(255);
+ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "biz_type" INTEGER;
+ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "title" VARCHAR(255);
+ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
+ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "point" INTEGER;
+ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "total_point" INTEGER;
+ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "member_point_record" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "member_point_record_tenant_id_idx" ON "member_point_record"("tenant_id");
 
 -- 签到规则
@@ -150,6 +234,16 @@ CREATE TABLE IF NOT EXISTS "member_sign_in_config" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_sign_in_config_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "day" INTEGER;
+ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "point" INTEGER;
+ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "experience" INTEGER;
+ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "member_sign_in_config" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "member_sign_in_config_tenant_id_idx" ON "member_sign_in_config"("tenant_id");
 
 -- 签到记录
@@ -167,6 +261,16 @@ CREATE TABLE IF NOT EXISTS "member_sign_in_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_sign_in_record_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "member_sign_in_record" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "member_sign_in_record" ADD COLUMN IF NOT EXISTS "day" INTEGER;
+ALTER TABLE "member_sign_in_record" ADD COLUMN IF NOT EXISTS "point" INTEGER;
+ALTER TABLE "member_sign_in_record" ADD COLUMN IF NOT EXISTS "experience" INTEGER;
+ALTER TABLE "member_sign_in_record" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "member_sign_in_record" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "member_sign_in_record" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "member_sign_in_record" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "member_sign_in_record" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "member_sign_in_record" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "member_sign_in_record_tenant_id_idx" ON "member_sign_in_record"("tenant_id");
 
 -- 会员标签
@@ -181,6 +285,13 @@ CREATE TABLE IF NOT EXISTS "member_tag" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_tag_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "member_tag" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "member_tag" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "member_tag" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "member_tag" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "member_tag" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "member_tag" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "member_tag" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "member_tag_tenant_id_idx" ON "member_tag"("tenant_id");
 
 -- 会员用户 DOuk_mobile 索引：基于 字段
@@ -214,4 +325,30 @@ CREATE TABLE IF NOT EXISTS "member_user" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "member_user_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "mobile" VARCHAR(255);
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "email" VARCHAR(255);
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "password" VARCHAR(255);
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "register_ip" VARCHAR(255);
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "register_terminal" INTEGER;
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "login_ip" VARCHAR(255);
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "login_date" TIMESTAMP(3);
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "nickname" VARCHAR(255);
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "avatar" VARCHAR(255);
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "sex" INTEGER;
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "birthday" TIMESTAMP(3);
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "area_id" INTEGER;
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "mark" VARCHAR(255);
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "point" INTEGER;
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "tag_ids" TEXT;
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "level_id" BIGINT;
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "experience" INTEGER;
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "group_id" BIGINT;
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "member_user" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "member_user_tenant_id_idx" ON "member_user"("tenant_id");

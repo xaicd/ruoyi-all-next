@@ -2,7 +2,7 @@
 -- 来源: scripts/data/pay-source-tables.ts#PAY_TABLES
 -- 背景: 这些表的定义来自低代码 CodegenConfig；此前只生成代码、不生成建表 SQL，
 --       导致"仓储在查但无处创建"。本迁移补齐 DDL。
--- 支付应用 DO一个商户下，可能会有多个支付应用。例如说，京东有京东商城、京东到家等等不过一般来说，一个商户，只有一个应用哈~即 PayMerchantDO : PayAppDO = 1 : n
+-- 支付应用 DO一个商户下，可能会有多个支付应用。例如说，京东有京东商城、京东到家
 CREATE TABLE IF NOT EXISTS "pay_app" (
     "id" TEXT NOT NULL,
     "app_key" VARCHAR(255),
@@ -20,9 +20,22 @@ CREATE TABLE IF NOT EXISTS "pay_app" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "pay_app_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "pay_app" ADD COLUMN IF NOT EXISTS "app_key" VARCHAR(255);
+ALTER TABLE "pay_app" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "pay_app" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "pay_app" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "pay_app" ADD COLUMN IF NOT EXISTS "order_notify_url" VARCHAR(255);
+ALTER TABLE "pay_app" ADD COLUMN IF NOT EXISTS "refund_notify_url" VARCHAR(255);
+ALTER TABLE "pay_app" ADD COLUMN IF NOT EXISTS "transfer_notify_url" VARCHAR(255);
+ALTER TABLE "pay_app" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "pay_app" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "pay_app" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_app" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "pay_app" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_app" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "pay_app_tenant_id_idx" ON "pay_app"("tenant_id");
 
--- 支付渠道 DO一个应用下，会有多种支付渠道，例如说微信支付、支付宝支付等等即 PayAppDO : PayChannelDO = 1 : n
+-- 支付渠道 DO一个应用下，会有多种支付渠道，例如说微信支付、支付宝支付等等即 P
 CREATE TABLE IF NOT EXISTS "pay_channel" (
     "id" TEXT NOT NULL,
     "code" VARCHAR(255),
@@ -39,6 +52,18 @@ CREATE TABLE IF NOT EXISTS "pay_channel" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "pay_channel_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "pay_channel" ADD COLUMN IF NOT EXISTS "code" VARCHAR(255);
+ALTER TABLE "pay_channel" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "pay_channel" ADD COLUMN IF NOT EXISTS "fee_rate" DECIMAL(18,2);
+ALTER TABLE "pay_channel" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "pay_channel" ADD COLUMN IF NOT EXISTS "app_id" BIGINT;
+ALTER TABLE "pay_channel" ADD COLUMN IF NOT EXISTS "config" VARCHAR(255);
+ALTER TABLE "pay_channel" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "pay_channel" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "pay_channel" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_channel" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "pay_channel" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_channel" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "pay_channel_tenant_id_idx" ON "pay_channel"("tenant_id");
 
 -- 示例订单演示业务系统的订单，如何接入 pay 系统的支付与退款
@@ -63,6 +88,23 @@ CREATE TABLE IF NOT EXISTS "pay_demo_order" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "pay_demo_order_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "pay_demo_order" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "pay_demo_order" ADD COLUMN IF NOT EXISTS "spu_id" BIGINT;
+ALTER TABLE "pay_demo_order" ADD COLUMN IF NOT EXISTS "spu_name" VARCHAR(255);
+ALTER TABLE "pay_demo_order" ADD COLUMN IF NOT EXISTS "price" INTEGER;
+ALTER TABLE "pay_demo_order" ADD COLUMN IF NOT EXISTS "pay_status" BOOLEAN;
+ALTER TABLE "pay_demo_order" ADD COLUMN IF NOT EXISTS "pay_order_id" BIGINT;
+ALTER TABLE "pay_demo_order" ADD COLUMN IF NOT EXISTS "pay_time" TIMESTAMP(3);
+ALTER TABLE "pay_demo_order" ADD COLUMN IF NOT EXISTS "pay_channel_code" VARCHAR(255);
+ALTER TABLE "pay_demo_order" ADD COLUMN IF NOT EXISTS "pay_refund_id" BIGINT;
+ALTER TABLE "pay_demo_order" ADD COLUMN IF NOT EXISTS "refund_price" INTEGER;
+ALTER TABLE "pay_demo_order" ADD COLUMN IF NOT EXISTS "refund_time" TIMESTAMP(3);
+ALTER TABLE "pay_demo_order" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "pay_demo_order" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "pay_demo_order" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_demo_order" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "pay_demo_order" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_demo_order" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "pay_demo_order_tenant_id_idx" ON "pay_demo_order"("tenant_id");
 
 -- 示例提现订单演示业务系统的转账业务
@@ -86,9 +128,25 @@ CREATE TABLE IF NOT EXISTS "pay_demo_withdraw" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "pay_demo_withdraw_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "pay_demo_withdraw" ADD COLUMN IF NOT EXISTS "subject" VARCHAR(255);
+ALTER TABLE "pay_demo_withdraw" ADD COLUMN IF NOT EXISTS "price" INTEGER;
+ALTER TABLE "pay_demo_withdraw" ADD COLUMN IF NOT EXISTS "user_account" VARCHAR(255);
+ALTER TABLE "pay_demo_withdraw" ADD COLUMN IF NOT EXISTS "user_name" VARCHAR(255);
+ALTER TABLE "pay_demo_withdraw" ADD COLUMN IF NOT EXISTS "type" INTEGER;
+ALTER TABLE "pay_demo_withdraw" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "pay_demo_withdraw" ADD COLUMN IF NOT EXISTS "pay_transfer_id" BIGINT;
+ALTER TABLE "pay_demo_withdraw" ADD COLUMN IF NOT EXISTS "transfer_channel_code" VARCHAR(255);
+ALTER TABLE "pay_demo_withdraw" ADD COLUMN IF NOT EXISTS "transfer_time" TIMESTAMP(3);
+ALTER TABLE "pay_demo_withdraw" ADD COLUMN IF NOT EXISTS "transfer_error_msg" VARCHAR(255);
+ALTER TABLE "pay_demo_withdraw" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "pay_demo_withdraw" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "pay_demo_withdraw" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_demo_withdraw" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "pay_demo_withdraw" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_demo_withdraw" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "pay_demo_withdraw_tenant_id_idx" ON "pay_demo_withdraw"("tenant_id");
 
--- 商户支付、退款等的通知 Log每次通知时，都会在该表中，记录一次 Log，方便排查问题
+-- 商户支付、退款等的通知 Log每次通知时，都会在该表中，记录一次 Log，方便排
 CREATE TABLE IF NOT EXISTS "pay_notify_log" (
     "id" TEXT NOT NULL,
     "task_id" BIGINT,
@@ -103,9 +161,19 @@ CREATE TABLE IF NOT EXISTS "pay_notify_log" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "pay_notify_log_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "pay_notify_log" ADD COLUMN IF NOT EXISTS "task_id" BIGINT;
+ALTER TABLE "pay_notify_log" ADD COLUMN IF NOT EXISTS "notify_times" INTEGER;
+ALTER TABLE "pay_notify_log" ADD COLUMN IF NOT EXISTS "response" VARCHAR(255);
+ALTER TABLE "pay_notify_log" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "pay_notify_log" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "pay_notify_log" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "pay_notify_log" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_notify_log" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "pay_notify_log" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_notify_log" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "pay_notify_log_tenant_id_idx" ON "pay_notify_log"("tenant_id");
 
--- 支付通知在支付系统收到支付渠道的支付、退款的结果后，需要不断的通知到业务系统，直到成功。
+-- 支付通知在支付系统收到支付渠道的支付、退款的结果后，需要不断的通知到业务系统，直
 CREATE TABLE IF NOT EXISTS "pay_notify_task" (
     "id" TEXT NOT NULL,
     "app_id" BIGINT,
@@ -128,6 +196,24 @@ CREATE TABLE IF NOT EXISTS "pay_notify_task" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "pay_notify_task_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "pay_notify_task" ADD COLUMN IF NOT EXISTS "app_id" BIGINT;
+ALTER TABLE "pay_notify_task" ADD COLUMN IF NOT EXISTS "type" INTEGER;
+ALTER TABLE "pay_notify_task" ADD COLUMN IF NOT EXISTS "data_id" BIGINT;
+ALTER TABLE "pay_notify_task" ADD COLUMN IF NOT EXISTS "merchant_order_id" VARCHAR(255);
+ALTER TABLE "pay_notify_task" ADD COLUMN IF NOT EXISTS "merchant_refund_id" VARCHAR(255);
+ALTER TABLE "pay_notify_task" ADD COLUMN IF NOT EXISTS "merchant_transfer_id" VARCHAR(255);
+ALTER TABLE "pay_notify_task" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "pay_notify_task" ADD COLUMN IF NOT EXISTS "next_notify_time" TIMESTAMP(3);
+ALTER TABLE "pay_notify_task" ADD COLUMN IF NOT EXISTS "last_execute_time" TIMESTAMP(3);
+ALTER TABLE "pay_notify_task" ADD COLUMN IF NOT EXISTS "notify_times" INTEGER;
+ALTER TABLE "pay_notify_task" ADD COLUMN IF NOT EXISTS "max_notify_times" INTEGER;
+ALTER TABLE "pay_notify_task" ADD COLUMN IF NOT EXISTS "notify_url" VARCHAR(255);
+ALTER TABLE "pay_notify_task" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "pay_notify_task" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "pay_notify_task" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_notify_task" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "pay_notify_task" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_notify_task" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "pay_notify_task_tenant_id_idx" ON "pay_notify_task"("tenant_id");
 
 -- 支付订单
@@ -162,6 +248,33 @@ CREATE TABLE IF NOT EXISTS "pay_order" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "pay_order_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "app_id" BIGINT;
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "channel_id" BIGINT;
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "channel_code" VARCHAR(255);
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "user_type" INTEGER;
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "merchant_order_id" VARCHAR(255);
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "subject" VARCHAR(255);
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "body" VARCHAR(255);
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "notify_url" VARCHAR(255);
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "price" INTEGER;
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "channel_fee_rate" DECIMAL(18,2);
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "channel_fee_price" INTEGER;
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "user_ip" VARCHAR(255);
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "expire_time" TIMESTAMP(3);
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "success_time" TIMESTAMP(3);
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "extension_id" BIGINT;
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "no" VARCHAR(255);
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "refund_price" INTEGER;
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "channel_user_id" VARCHAR(255);
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "channel_order_no" VARCHAR(255);
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_order" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "pay_order_tenant_id_idx" ON "pay_order"("tenant_id");
 
 -- 支付订单拓展 DO每次调用支付渠道，都会生成一条对应记录
@@ -185,9 +298,25 @@ CREATE TABLE IF NOT EXISTS "pay_order_extension" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "pay_order_extension_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "pay_order_extension" ADD COLUMN IF NOT EXISTS "no" VARCHAR(255);
+ALTER TABLE "pay_order_extension" ADD COLUMN IF NOT EXISTS "order_id" BIGINT;
+ALTER TABLE "pay_order_extension" ADD COLUMN IF NOT EXISTS "channel_id" BIGINT;
+ALTER TABLE "pay_order_extension" ADD COLUMN IF NOT EXISTS "channel_code" VARCHAR(255);
+ALTER TABLE "pay_order_extension" ADD COLUMN IF NOT EXISTS "user_ip" VARCHAR(255);
+ALTER TABLE "pay_order_extension" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "pay_order_extension" ADD COLUMN IF NOT EXISTS "channel_extras" TEXT;
+ALTER TABLE "pay_order_extension" ADD COLUMN IF NOT EXISTS "channel_error_code" VARCHAR(255);
+ALTER TABLE "pay_order_extension" ADD COLUMN IF NOT EXISTS "channel_error_msg" VARCHAR(255);
+ALTER TABLE "pay_order_extension" ADD COLUMN IF NOT EXISTS "channel_notify_data" VARCHAR(255);
+ALTER TABLE "pay_order_extension" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "pay_order_extension" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "pay_order_extension" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_order_extension" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "pay_order_extension" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_order_extension" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "pay_order_extension_tenant_id_idx" ON "pay_order_extension"("tenant_id");
 
--- 支付退款单 DO一个支付订单，可以拥有多个支付退款单即 PayOrderDO : PayRefundDO = 1 : n
+-- 支付退款单 DO一个支付订单，可以拥有多个支付退款单即 PayOrderDO :
 CREATE TABLE IF NOT EXISTS "pay_refund" (
     "id" TEXT NOT NULL,
     "no" VARCHAR(255),
@@ -220,6 +349,34 @@ CREATE TABLE IF NOT EXISTS "pay_refund" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "pay_refund_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "no" VARCHAR(255);
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "app_id" BIGINT;
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "channel_id" BIGINT;
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "channel_code" VARCHAR(255);
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "order_id" BIGINT;
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "order_no" VARCHAR(255);
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "user_type" INTEGER;
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "merchant_order_id" VARCHAR(255);
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "merchant_refund_id" VARCHAR(255);
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "notify_url" VARCHAR(255);
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "pay_price" INTEGER;
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "refund_price" INTEGER;
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "reason" VARCHAR(255);
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "user_ip" VARCHAR(255);
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "channel_order_no" VARCHAR(255);
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "channel_refund_no" VARCHAR(255);
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "success_time" TIMESTAMP(3);
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "channel_error_code" VARCHAR(255);
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "channel_error_msg" VARCHAR(255);
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "channel_notify_data" VARCHAR(255);
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_refund" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "pay_refund_tenant_id_idx" ON "pay_refund"("tenant_id");
 
 -- 转账单
@@ -254,6 +411,33 @@ CREATE TABLE IF NOT EXISTS "pay_transfer" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "pay_transfer_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "no" VARCHAR(255);
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "app_id" BIGINT;
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "channel_id" BIGINT;
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "channel_code" VARCHAR(255);
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "user_type" INTEGER;
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "merchant_transfer_id" VARCHAR(255);
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "subject" VARCHAR(255);
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "price" INTEGER;
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "user_account" VARCHAR(255);
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "user_name" VARCHAR(255);
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "success_time" TIMESTAMP(3);
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "notify_url" VARCHAR(255);
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "user_ip" VARCHAR(255);
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "channel_extras" TEXT;
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "channel_transfer_no" VARCHAR(255);
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "channel_error_code" VARCHAR(255);
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "channel_error_msg" VARCHAR(255);
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "channel_notify_data" VARCHAR(255);
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "channel_package_info" VARCHAR(255);
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_transfer" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "pay_transfer_tenant_id_idx" ON "pay_transfer"("tenant_id");
 
 -- 会员钱包
@@ -273,6 +457,18 @@ CREATE TABLE IF NOT EXISTS "pay_wallet" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "pay_wallet_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "pay_wallet" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "pay_wallet" ADD COLUMN IF NOT EXISTS "user_type" INTEGER;
+ALTER TABLE "pay_wallet" ADD COLUMN IF NOT EXISTS "balance" INTEGER;
+ALTER TABLE "pay_wallet" ADD COLUMN IF NOT EXISTS "freeze_price" INTEGER;
+ALTER TABLE "pay_wallet" ADD COLUMN IF NOT EXISTS "total_expense" INTEGER;
+ALTER TABLE "pay_wallet" ADD COLUMN IF NOT EXISTS "total_recharge" INTEGER;
+ALTER TABLE "pay_wallet" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "pay_wallet" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "pay_wallet" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_wallet" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "pay_wallet" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_wallet" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "pay_wallet_tenant_id_idx" ON "pay_wallet"("tenant_id");
 
 -- 会员钱包充值
@@ -301,6 +497,27 @@ CREATE TABLE IF NOT EXISTS "pay_wallet_recharge" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "pay_wallet_recharge_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "pay_wallet_recharge" ADD COLUMN IF NOT EXISTS "wallet_id" BIGINT;
+ALTER TABLE "pay_wallet_recharge" ADD COLUMN IF NOT EXISTS "total_price" INTEGER;
+ALTER TABLE "pay_wallet_recharge" ADD COLUMN IF NOT EXISTS "pay_price" INTEGER;
+ALTER TABLE "pay_wallet_recharge" ADD COLUMN IF NOT EXISTS "bonus_price" INTEGER;
+ALTER TABLE "pay_wallet_recharge" ADD COLUMN IF NOT EXISTS "package_id" BIGINT;
+ALTER TABLE "pay_wallet_recharge" ADD COLUMN IF NOT EXISTS "pay_status" BOOLEAN;
+ALTER TABLE "pay_wallet_recharge" ADD COLUMN IF NOT EXISTS "pay_order_id" BIGINT;
+ALTER TABLE "pay_wallet_recharge" ADD COLUMN IF NOT EXISTS "pay_channel_code" VARCHAR(255);
+ALTER TABLE "pay_wallet_recharge" ADD COLUMN IF NOT EXISTS "pay_time" TIMESTAMP(3);
+ALTER TABLE "pay_wallet_recharge" ADD COLUMN IF NOT EXISTS "pay_refund_id" BIGINT;
+ALTER TABLE "pay_wallet_recharge" ADD COLUMN IF NOT EXISTS "refund_total_price" INTEGER;
+ALTER TABLE "pay_wallet_recharge" ADD COLUMN IF NOT EXISTS "refund_pay_price" INTEGER;
+ALTER TABLE "pay_wallet_recharge" ADD COLUMN IF NOT EXISTS "refund_bonus_price" INTEGER;
+ALTER TABLE "pay_wallet_recharge" ADD COLUMN IF NOT EXISTS "refund_time" TIMESTAMP(3);
+ALTER TABLE "pay_wallet_recharge" ADD COLUMN IF NOT EXISTS "refund_status" INTEGER;
+ALTER TABLE "pay_wallet_recharge" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "pay_wallet_recharge" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "pay_wallet_recharge" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_wallet_recharge" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "pay_wallet_recharge" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_wallet_recharge" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "pay_wallet_recharge_tenant_id_idx" ON "pay_wallet_recharge"("tenant_id");
 
 -- 会员钱包充值套餐 DO通过充值套餐时，可以赠送一定金额；
@@ -318,6 +535,16 @@ CREATE TABLE IF NOT EXISTS "pay_wallet_recharge_package" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "pay_wallet_recharge_package_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "pay_wallet_recharge_package" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "pay_wallet_recharge_package" ADD COLUMN IF NOT EXISTS "pay_price" INTEGER;
+ALTER TABLE "pay_wallet_recharge_package" ADD COLUMN IF NOT EXISTS "bonus_price" INTEGER;
+ALTER TABLE "pay_wallet_recharge_package" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "pay_wallet_recharge_package" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "pay_wallet_recharge_package" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "pay_wallet_recharge_package" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_wallet_recharge_package" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "pay_wallet_recharge_package" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_wallet_recharge_package" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "pay_wallet_recharge_package_tenant_id_idx" ON "pay_wallet_recharge_package"("tenant_id");
 
 -- 会员钱包流水
@@ -338,4 +565,17 @@ CREATE TABLE IF NOT EXISTS "pay_wallet_transaction" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "pay_wallet_transaction_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "pay_wallet_transaction" ADD COLUMN IF NOT EXISTS "no" VARCHAR(255);
+ALTER TABLE "pay_wallet_transaction" ADD COLUMN IF NOT EXISTS "wallet_id" BIGINT;
+ALTER TABLE "pay_wallet_transaction" ADD COLUMN IF NOT EXISTS "biz_type" INTEGER;
+ALTER TABLE "pay_wallet_transaction" ADD COLUMN IF NOT EXISTS "biz_id" VARCHAR(255);
+ALTER TABLE "pay_wallet_transaction" ADD COLUMN IF NOT EXISTS "title" VARCHAR(255);
+ALTER TABLE "pay_wallet_transaction" ADD COLUMN IF NOT EXISTS "price" INTEGER;
+ALTER TABLE "pay_wallet_transaction" ADD COLUMN IF NOT EXISTS "balance" INTEGER;
+ALTER TABLE "pay_wallet_transaction" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "pay_wallet_transaction" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "pay_wallet_transaction" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_wallet_transaction" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "pay_wallet_transaction" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "pay_wallet_transaction" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "pay_wallet_transaction_tenant_id_idx" ON "pay_wallet_transaction"("tenant_id");

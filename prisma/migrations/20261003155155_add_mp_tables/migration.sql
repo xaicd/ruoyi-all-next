@@ -21,6 +21,20 @@ CREATE TABLE IF NOT EXISTS "mp_account" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mp_account_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "mp_account" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "mp_account" ADD COLUMN IF NOT EXISTS "account" VARCHAR(255);
+ALTER TABLE "mp_account" ADD COLUMN IF NOT EXISTS "app_id" VARCHAR(255);
+ALTER TABLE "mp_account" ADD COLUMN IF NOT EXISTS "app_secret" VARCHAR(255);
+ALTER TABLE "mp_account" ADD COLUMN IF NOT EXISTS "token" VARCHAR(255);
+ALTER TABLE "mp_account" ADD COLUMN IF NOT EXISTS "aes_key" VARCHAR(255);
+ALTER TABLE "mp_account" ADD COLUMN IF NOT EXISTS "qr_code_url" VARCHAR(255);
+ALTER TABLE "mp_account" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "mp_account" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "mp_account" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "mp_account" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "mp_account" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "mp_account" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "mp_account" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "mp_account_tenant_id_idx" ON "mp_account"("tenant_id");
 
 -- 公众号消息自动回复
@@ -51,9 +65,32 @@ CREATE TABLE IF NOT EXISTS "mp_auto_reply" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mp_auto_reply_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "account_id" BIGINT;
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "app_id" VARCHAR(255);
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "type" INTEGER;
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "request_keyword" VARCHAR(255);
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "request_match" INTEGER;
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "request_message_type" VARCHAR(255);
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "response_message_type" VARCHAR(255);
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "response_content" VARCHAR(255);
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "response_media_id" VARCHAR(255);
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "response_media_url" VARCHAR(255);
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "response_title" VARCHAR(255);
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "response_description" VARCHAR(255);
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "response_thumb_media_id" VARCHAR(255);
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "response_thumb_media_url" VARCHAR(255);
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "response_articles" TEXT;
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "response_music_url" VARCHAR(255);
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "response_hq_music_url" VARCHAR(255);
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "mp_auto_reply" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "mp_auto_reply_tenant_id_idx" ON "mp_auto_reply"("tenant_id");
 
--- 公众号素材 DO1. a href=https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_
+-- 公众号素材 DO1. a href=https://developers.wei
 CREATE TABLE IF NOT EXISTS "mp_material" (
     "id" TEXT NOT NULL,
     "account_id" BIGINT,
@@ -74,6 +111,22 @@ CREATE TABLE IF NOT EXISTS "mp_material" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mp_material_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "mp_material" ADD COLUMN IF NOT EXISTS "account_id" BIGINT;
+ALTER TABLE "mp_material" ADD COLUMN IF NOT EXISTS "app_id" VARCHAR(255);
+ALTER TABLE "mp_material" ADD COLUMN IF NOT EXISTS "media_id" VARCHAR(255);
+ALTER TABLE "mp_material" ADD COLUMN IF NOT EXISTS "type" VARCHAR(255);
+ALTER TABLE "mp_material" ADD COLUMN IF NOT EXISTS "permanent" BOOLEAN;
+ALTER TABLE "mp_material" ADD COLUMN IF NOT EXISTS "url" VARCHAR(255);
+ALTER TABLE "mp_material" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "mp_material" ADD COLUMN IF NOT EXISTS "mp_url" VARCHAR(255);
+ALTER TABLE "mp_material" ADD COLUMN IF NOT EXISTS "title" VARCHAR(255);
+ALTER TABLE "mp_material" ADD COLUMN IF NOT EXISTS "introduction" VARCHAR(255);
+ALTER TABLE "mp_material" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "mp_material" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "mp_material" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "mp_material" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "mp_material" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "mp_material" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "mp_material_tenant_id_idx" ON "mp_material"("tenant_id");
 
 -- 公众号菜单
@@ -108,6 +161,33 @@ CREATE TABLE IF NOT EXISTS "mp_menu" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mp_menu_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "account_id" BIGINT;
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "app_id" VARCHAR(255);
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "menu_key" VARCHAR(255);
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "parent_id" BIGINT;
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "type" VARCHAR(255);
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "url" VARCHAR(255);
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "mini_program_app_id" VARCHAR(255);
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "mini_program_page_path" VARCHAR(255);
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "article_id" VARCHAR(255);
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "reply_message_type" VARCHAR(255);
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "reply_content" VARCHAR(255);
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "reply_media_id" VARCHAR(255);
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "reply_media_url" VARCHAR(255);
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "reply_title" VARCHAR(255);
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "reply_description" VARCHAR(255);
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "reply_thumb_media_id" VARCHAR(255);
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "reply_thumb_media_url" VARCHAR(255);
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "reply_articles" TEXT;
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "reply_music_url" VARCHAR(255);
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "reply_hq_music_url" VARCHAR(255);
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "mp_menu" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "mp_menu_tenant_id_idx" ON "mp_menu"("tenant_id");
 
 -- 公众号消息
@@ -148,6 +228,39 @@ CREATE TABLE IF NOT EXISTS "mp_message" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mp_message_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "msg_id" BIGINT;
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "account_id" BIGINT;
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "app_id" VARCHAR(255);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "openid" VARCHAR(255);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "type" VARCHAR(255);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "send_from" INTEGER;
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "content" VARCHAR(255);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "media_id" VARCHAR(255);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "media_url" VARCHAR(255);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "recognition" VARCHAR(255);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "format" VARCHAR(255);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "title" VARCHAR(255);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "thumb_media_id" VARCHAR(255);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "thumb_media_url" VARCHAR(255);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "url" VARCHAR(255);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "location_x" DECIMAL(18,2);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "location_y" DECIMAL(18,2);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "scale" DECIMAL(18,2);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "label" VARCHAR(255);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "articles" TEXT;
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "music_url" VARCHAR(255);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "hq_music_url" VARCHAR(255);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "event" VARCHAR(255);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "event_key" VARCHAR(255);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "pic_url" VARCHAR(255);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "mp_message" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "mp_message_tenant_id_idx" ON "mp_message"("tenant_id");
 
 -- 公众号模版消息
@@ -169,6 +282,20 @@ CREATE TABLE IF NOT EXISTS "mp_message_template" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mp_message_template_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "mp_message_template" ADD COLUMN IF NOT EXISTS "account_id" BIGINT;
+ALTER TABLE "mp_message_template" ADD COLUMN IF NOT EXISTS "app_id" VARCHAR(255);
+ALTER TABLE "mp_message_template" ADD COLUMN IF NOT EXISTS "template_id" VARCHAR(255);
+ALTER TABLE "mp_message_template" ADD COLUMN IF NOT EXISTS "title" VARCHAR(255);
+ALTER TABLE "mp_message_template" ADD COLUMN IF NOT EXISTS "content" VARCHAR(255);
+ALTER TABLE "mp_message_template" ADD COLUMN IF NOT EXISTS "example" VARCHAR(255);
+ALTER TABLE "mp_message_template" ADD COLUMN IF NOT EXISTS "primary_industry" VARCHAR(255);
+ALTER TABLE "mp_message_template" ADD COLUMN IF NOT EXISTS "deputy_industry" VARCHAR(255);
+ALTER TABLE "mp_message_template" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "mp_message_template" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "mp_message_template" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "mp_message_template" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "mp_message_template" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "mp_message_template" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "mp_message_template_tenant_id_idx" ON "mp_message_template"("tenant_id");
 
 -- 公众号标签
@@ -187,6 +314,17 @@ CREATE TABLE IF NOT EXISTS "mp_tag" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mp_tag_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "mp_tag" ADD COLUMN IF NOT EXISTS "tag_id" BIGINT;
+ALTER TABLE "mp_tag" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "mp_tag" ADD COLUMN IF NOT EXISTS "count" INTEGER;
+ALTER TABLE "mp_tag" ADD COLUMN IF NOT EXISTS "account_id" BIGINT;
+ALTER TABLE "mp_tag" ADD COLUMN IF NOT EXISTS "app_id" VARCHAR(255);
+ALTER TABLE "mp_tag" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "mp_tag" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "mp_tag" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "mp_tag" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "mp_tag" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "mp_tag" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "mp_tag_tenant_id_idx" ON "mp_tag"("tenant_id");
 
 -- 微信公众号粉丝
@@ -215,4 +353,25 @@ CREATE TABLE IF NOT EXISTS "mp_user" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "mp_user_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "mp_user" ADD COLUMN IF NOT EXISTS "openid" VARCHAR(255);
+ALTER TABLE "mp_user" ADD COLUMN IF NOT EXISTS "union_id" VARCHAR(255);
+ALTER TABLE "mp_user" ADD COLUMN IF NOT EXISTS "subscribe_status" INTEGER;
+ALTER TABLE "mp_user" ADD COLUMN IF NOT EXISTS "subscribe_time" TIMESTAMP(3);
+ALTER TABLE "mp_user" ADD COLUMN IF NOT EXISTS "unsubscribe_time" TIMESTAMP(3);
+ALTER TABLE "mp_user" ADD COLUMN IF NOT EXISTS "nickname" VARCHAR(255);
+ALTER TABLE "mp_user" ADD COLUMN IF NOT EXISTS "head_image_url" VARCHAR(255);
+ALTER TABLE "mp_user" ADD COLUMN IF NOT EXISTS "language" VARCHAR(255);
+ALTER TABLE "mp_user" ADD COLUMN IF NOT EXISTS "country" VARCHAR(255);
+ALTER TABLE "mp_user" ADD COLUMN IF NOT EXISTS "province" VARCHAR(255);
+ALTER TABLE "mp_user" ADD COLUMN IF NOT EXISTS "city" VARCHAR(255);
+ALTER TABLE "mp_user" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "mp_user" ADD COLUMN IF NOT EXISTS "tag_ids" TEXT;
+ALTER TABLE "mp_user" ADD COLUMN IF NOT EXISTS "account_id" BIGINT;
+ALTER TABLE "mp_user" ADD COLUMN IF NOT EXISTS "app_id" VARCHAR(255);
+ALTER TABLE "mp_user" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "mp_user" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "mp_user" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "mp_user" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "mp_user" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "mp_user" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "mp_user_tenant_id_idx" ON "mp_user"("tenant_id");

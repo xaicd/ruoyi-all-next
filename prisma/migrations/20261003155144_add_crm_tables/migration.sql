@@ -28,9 +28,30 @@ CREATE TABLE IF NOT EXISTS "crm_business" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_business_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "crm_business" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "crm_business" ADD COLUMN IF NOT EXISTS "customer_id" BIGINT;
+ALTER TABLE "crm_business" ADD COLUMN IF NOT EXISTS "follow_up_status" BOOLEAN;
+ALTER TABLE "crm_business" ADD COLUMN IF NOT EXISTS "contact_last_time" TIMESTAMP(3);
+ALTER TABLE "crm_business" ADD COLUMN IF NOT EXISTS "contact_next_time" TIMESTAMP(3);
+ALTER TABLE "crm_business" ADD COLUMN IF NOT EXISTS "owner_user_id" BIGINT;
+ALTER TABLE "crm_business" ADD COLUMN IF NOT EXISTS "status_type_id" BIGINT;
+ALTER TABLE "crm_business" ADD COLUMN IF NOT EXISTS "status_id" BIGINT;
+ALTER TABLE "crm_business" ADD COLUMN IF NOT EXISTS "end_status" INTEGER;
+ALTER TABLE "crm_business" ADD COLUMN IF NOT EXISTS "end_remark" VARCHAR(255);
+ALTER TABLE "crm_business" ADD COLUMN IF NOT EXISTS "deal_time" TIMESTAMP(3);
+ALTER TABLE "crm_business" ADD COLUMN IF NOT EXISTS "total_product_price" DECIMAL(18,2);
+ALTER TABLE "crm_business" ADD COLUMN IF NOT EXISTS "discount_percent" DECIMAL(18,2);
+ALTER TABLE "crm_business" ADD COLUMN IF NOT EXISTS "total_price" DECIMAL(18,2);
+ALTER TABLE "crm_business" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "crm_business" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "crm_business" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "crm_business" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_business" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "crm_business" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_business" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "crm_business_tenant_id_idx" ON "crm_business"("tenant_id");
 
--- CRM 商机产品关联表 DOCrmBusinessDO : CrmBusinessProductDO = 1 : N
+-- CRM 商机产品关联表 DOCrmBusinessDO : CrmBusines
 CREATE TABLE IF NOT EXISTS "crm_business_product" (
     "id" TEXT NOT NULL,
     "business_id" BIGINT,
@@ -47,6 +68,18 @@ CREATE TABLE IF NOT EXISTS "crm_business_product" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_business_product_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "crm_business_product" ADD COLUMN IF NOT EXISTS "business_id" BIGINT;
+ALTER TABLE "crm_business_product" ADD COLUMN IF NOT EXISTS "product_id" BIGINT;
+ALTER TABLE "crm_business_product" ADD COLUMN IF NOT EXISTS "product_price" DECIMAL(18,2);
+ALTER TABLE "crm_business_product" ADD COLUMN IF NOT EXISTS "business_price" DECIMAL(18,2);
+ALTER TABLE "crm_business_product" ADD COLUMN IF NOT EXISTS "count" DECIMAL(18,2);
+ALTER TABLE "crm_business_product" ADD COLUMN IF NOT EXISTS "total_price" DECIMAL(18,2);
+ALTER TABLE "crm_business_product" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "crm_business_product" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "crm_business_product" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_business_product" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "crm_business_product" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_business_product" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "crm_business_product_tenant_id_idx" ON "crm_business_product"("tenant_id");
 
 -- CRM 商机状态 DO注意，它是个配置表
@@ -64,6 +97,16 @@ CREATE TABLE IF NOT EXISTS "crm_business_status" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_business_status_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "crm_business_status" ADD COLUMN IF NOT EXISTS "type_id" BIGINT;
+ALTER TABLE "crm_business_status" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "crm_business_status" ADD COLUMN IF NOT EXISTS "percent" INTEGER;
+ALTER TABLE "crm_business_status" ADD COLUMN IF NOT EXISTS "sort" INTEGER;
+ALTER TABLE "crm_business_status" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "crm_business_status" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "crm_business_status" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_business_status" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "crm_business_status" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_business_status" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "crm_business_status_tenant_id_idx" ON "crm_business_status"("tenant_id");
 
 -- CRM 商机状态组 DO注意，它是个配置表
@@ -79,6 +122,14 @@ CREATE TABLE IF NOT EXISTS "crm_business_status_type" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_business_status_type_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "crm_business_status_type" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "crm_business_status_type" ADD COLUMN IF NOT EXISTS "dept_ids" TEXT;
+ALTER TABLE "crm_business_status_type" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "crm_business_status_type" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "crm_business_status_type" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_business_status_type" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "crm_business_status_type" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_business_status_type" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "crm_business_status_type_tenant_id_idx" ON "crm_business_status_type"("tenant_id");
 
 -- CRM 线索
@@ -111,6 +162,31 @@ CREATE TABLE IF NOT EXISTS "crm_clue" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_clue_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "follow_up_status" BOOLEAN;
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "contact_last_time" TIMESTAMP(3);
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "contact_last_content" VARCHAR(255);
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "contact_next_time" TIMESTAMP(3);
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "owner_user_id" BIGINT;
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "transform_status" BOOLEAN;
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "customer_id" BIGINT;
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "mobile" VARCHAR(255);
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "telephone" VARCHAR(255);
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "qq" VARCHAR(255);
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "wechat" VARCHAR(255);
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "email" VARCHAR(255);
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "area_id" INTEGER;
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "detail_address" VARCHAR(255);
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "industry_id" INTEGER;
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "level" INTEGER;
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "source" INTEGER;
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_clue" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "crm_clue_tenant_id_idx" ON "crm_clue"("tenant_id");
 
 -- CRM 联系人
@@ -142,6 +218,30 @@ CREATE TABLE IF NOT EXISTS "crm_contact" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_contact_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "customer_id" BIGINT;
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "contact_last_time" TIMESTAMP(3);
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "contact_last_content" VARCHAR(255);
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "contact_next_time" TIMESTAMP(3);
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "owner_user_id" BIGINT;
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "mobile" VARCHAR(255);
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "telephone" VARCHAR(255);
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "email" VARCHAR(255);
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "qq" BIGINT;
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "wechat" VARCHAR(255);
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "area_id" INTEGER;
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "detail_address" VARCHAR(255);
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "sex" INTEGER;
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "master" BOOLEAN;
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "post" VARCHAR(255);
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "parent_id" BIGINT;
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_contact" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "crm_contact_tenant_id_idx" ON "crm_contact"("tenant_id");
 
 -- CRM 联系人与商机的关联
@@ -157,6 +257,14 @@ CREATE TABLE IF NOT EXISTS "crm_contact_business" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_contact_business_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "crm_contact_business" ADD COLUMN IF NOT EXISTS "contact_id" BIGINT;
+ALTER TABLE "crm_contact_business" ADD COLUMN IF NOT EXISTS "business_id" BIGINT;
+ALTER TABLE "crm_contact_business" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "crm_contact_business" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "crm_contact_business" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_contact_business" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "crm_contact_business" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_contact_business" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "crm_contact_business_tenant_id_idx" ON "crm_contact_business"("tenant_id");
 
 -- CRM 合同
@@ -187,6 +295,29 @@ CREATE TABLE IF NOT EXISTS "crm_contract" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_contract_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "no" VARCHAR(255);
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "customer_id" BIGINT;
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "business_id" BIGINT;
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "contact_last_time" TIMESTAMP(3);
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "owner_user_id" BIGINT;
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "process_instance_id" VARCHAR(255);
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "audit_status" INTEGER;
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "order_date" TIMESTAMP(3);
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "start_time" TIMESTAMP(3);
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "end_time" TIMESTAMP(3);
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "total_product_price" DECIMAL(18,2);
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "discount_percent" DECIMAL(18,2);
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "total_price" DECIMAL(18,2);
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "sign_contact_id" BIGINT;
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "sign_user_id" BIGINT;
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_contract" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "crm_contract_tenant_id_idx" ON "crm_contract"("tenant_id");
 
 -- 编号
@@ -202,6 +333,14 @@ CREATE TABLE IF NOT EXISTS "crm_contract_config" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_contract_config_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "crm_contract_config" ADD COLUMN IF NOT EXISTS "notify_enabled" BOOLEAN;
+ALTER TABLE "crm_contract_config" ADD COLUMN IF NOT EXISTS "notify_days" INTEGER;
+ALTER TABLE "crm_contract_config" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "crm_contract_config" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "crm_contract_config" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_contract_config" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "crm_contract_config" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_contract_config" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "crm_contract_config_tenant_id_idx" ON "crm_contract_config"("tenant_id");
 
 -- CRM 合同产品关联表
@@ -221,6 +360,18 @@ CREATE TABLE IF NOT EXISTS "crm_contract_product" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_contract_product_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "crm_contract_product" ADD COLUMN IF NOT EXISTS "contract_id" BIGINT;
+ALTER TABLE "crm_contract_product" ADD COLUMN IF NOT EXISTS "product_id" BIGINT;
+ALTER TABLE "crm_contract_product" ADD COLUMN IF NOT EXISTS "product_price" DECIMAL(18,2);
+ALTER TABLE "crm_contract_product" ADD COLUMN IF NOT EXISTS "contract_price" DECIMAL(18,2);
+ALTER TABLE "crm_contract_product" ADD COLUMN IF NOT EXISTS "count" DECIMAL(18,2);
+ALTER TABLE "crm_contract_product" ADD COLUMN IF NOT EXISTS "total_price" DECIMAL(18,2);
+ALTER TABLE "crm_contract_product" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "crm_contract_product" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "crm_contract_product" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_contract_product" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "crm_contract_product" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_contract_product" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "crm_contract_product_tenant_id_idx" ON "crm_contract_product"("tenant_id");
 
 -- CRM 客户
@@ -254,6 +405,32 @@ CREATE TABLE IF NOT EXISTS "crm_customer" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_customer_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "follow_up_status" BOOLEAN;
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "contact_last_time" TIMESTAMP(3);
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "contact_last_content" VARCHAR(255);
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "contact_next_time" TIMESTAMP(3);
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "owner_user_id" BIGINT;
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "owner_time" TIMESTAMP(3);
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "lock_status" BOOLEAN;
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "deal_status" BOOLEAN;
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "mobile" VARCHAR(255);
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "telephone" VARCHAR(255);
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "qq" VARCHAR(255);
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "wechat" VARCHAR(255);
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "email" VARCHAR(255);
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "area_id" INTEGER;
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "detail_address" VARCHAR(255);
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "industry_id" INTEGER;
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "level" INTEGER;
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "source" INTEGER;
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_customer" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "crm_customer_tenant_id_idx" ON "crm_customer"("tenant_id");
 
 -- 客户限制配置
@@ -272,6 +449,17 @@ CREATE TABLE IF NOT EXISTS "crm_customer_limit_config" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_customer_limit_config_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "crm_customer_limit_config" ADD COLUMN IF NOT EXISTS "type" INTEGER;
+ALTER TABLE "crm_customer_limit_config" ADD COLUMN IF NOT EXISTS "user_ids" TEXT;
+ALTER TABLE "crm_customer_limit_config" ADD COLUMN IF NOT EXISTS "dept_ids" TEXT;
+ALTER TABLE "crm_customer_limit_config" ADD COLUMN IF NOT EXISTS "max_count" INTEGER;
+ALTER TABLE "crm_customer_limit_config" ADD COLUMN IF NOT EXISTS "deal_count_enabled" BOOLEAN;
+ALTER TABLE "crm_customer_limit_config" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "crm_customer_limit_config" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "crm_customer_limit_config" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_customer_limit_config" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "crm_customer_limit_config" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_customer_limit_config" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "crm_customer_limit_config_tenant_id_idx" ON "crm_customer_limit_config"("tenant_id");
 
 -- 客户公海配置
@@ -290,6 +478,17 @@ CREATE TABLE IF NOT EXISTS "crm_customer_pool_config" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_customer_pool_config_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "crm_customer_pool_config" ADD COLUMN IF NOT EXISTS "enabled" BOOLEAN;
+ALTER TABLE "crm_customer_pool_config" ADD COLUMN IF NOT EXISTS "contact_expire_days" INTEGER;
+ALTER TABLE "crm_customer_pool_config" ADD COLUMN IF NOT EXISTS "deal_expire_days" INTEGER;
+ALTER TABLE "crm_customer_pool_config" ADD COLUMN IF NOT EXISTS "notify_enabled" BOOLEAN;
+ALTER TABLE "crm_customer_pool_config" ADD COLUMN IF NOT EXISTS "notify_days" INTEGER;
+ALTER TABLE "crm_customer_pool_config" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "crm_customer_pool_config" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "crm_customer_pool_config" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_customer_pool_config" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "crm_customer_pool_config" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_customer_pool_config" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "crm_customer_pool_config_tenant_id_idx" ON "crm_customer_pool_config"("tenant_id");
 
 -- 跟进记录 DO用于记录客户、联系人的每一次跟进
@@ -312,6 +511,21 @@ CREATE TABLE IF NOT EXISTS "crm_follow_up_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_follow_up_record_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "crm_follow_up_record" ADD COLUMN IF NOT EXISTS "biz_type" INTEGER;
+ALTER TABLE "crm_follow_up_record" ADD COLUMN IF NOT EXISTS "biz_id" BIGINT;
+ALTER TABLE "crm_follow_up_record" ADD COLUMN IF NOT EXISTS "type" INTEGER;
+ALTER TABLE "crm_follow_up_record" ADD COLUMN IF NOT EXISTS "content" VARCHAR(255);
+ALTER TABLE "crm_follow_up_record" ADD COLUMN IF NOT EXISTS "next_time" TIMESTAMP(3);
+ALTER TABLE "crm_follow_up_record" ADD COLUMN IF NOT EXISTS "pic_urls" TEXT;
+ALTER TABLE "crm_follow_up_record" ADD COLUMN IF NOT EXISTS "file_urls" TEXT;
+ALTER TABLE "crm_follow_up_record" ADD COLUMN IF NOT EXISTS "business_ids" TEXT;
+ALTER TABLE "crm_follow_up_record" ADD COLUMN IF NOT EXISTS "contact_ids" TEXT;
+ALTER TABLE "crm_follow_up_record" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "crm_follow_up_record" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "crm_follow_up_record" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_follow_up_record" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "crm_follow_up_record" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_follow_up_record" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "crm_follow_up_record_tenant_id_idx" ON "crm_follow_up_record"("tenant_id");
 
 -- CRM 负责人变更记录
@@ -329,6 +543,16 @@ CREATE TABLE IF NOT EXISTS "crm_owner_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_owner_record_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "crm_owner_record" ADD COLUMN IF NOT EXISTS "biz_type" INTEGER;
+ALTER TABLE "crm_owner_record" ADD COLUMN IF NOT EXISTS "biz_id" BIGINT;
+ALTER TABLE "crm_owner_record" ADD COLUMN IF NOT EXISTS "pre_owner_user_id" BIGINT;
+ALTER TABLE "crm_owner_record" ADD COLUMN IF NOT EXISTS "post_owner_user_id" BIGINT;
+ALTER TABLE "crm_owner_record" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "crm_owner_record" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "crm_owner_record" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_owner_record" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "crm_owner_record" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_owner_record" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "crm_owner_record_tenant_id_idx" ON "crm_owner_record"("tenant_id");
 
 -- CRM 业绩目标
@@ -359,6 +583,29 @@ CREATE TABLE IF NOT EXISTS "crm_performance_config" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_performance_config_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "biz_type" INTEGER;
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "object_id" BIGINT;
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "object_type" INTEGER;
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "year" INTEGER;
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "year_target_price" DECIMAL(18,2);
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "january_target_price" DECIMAL(18,2);
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "february_target_price" DECIMAL(18,2);
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "march_target_price" DECIMAL(18,2);
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "april_target_price" DECIMAL(18,2);
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "may_target_price" DECIMAL(18,2);
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "june_target_price" DECIMAL(18,2);
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "july_target_price" DECIMAL(18,2);
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "august_target_price" DECIMAL(18,2);
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "september_target_price" DECIMAL(18,2);
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "october_target_price" DECIMAL(18,2);
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "november_target_price" DECIMAL(18,2);
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "december_target_price" DECIMAL(18,2);
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_performance_config" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "crm_performance_config_tenant_id_idx" ON "crm_performance_config"("tenant_id");
 
 -- CRM 数据权限
@@ -376,6 +623,16 @@ CREATE TABLE IF NOT EXISTS "crm_permission" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_permission_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "crm_permission" ADD COLUMN IF NOT EXISTS "biz_type" INTEGER;
+ALTER TABLE "crm_permission" ADD COLUMN IF NOT EXISTS "biz_id" BIGINT;
+ALTER TABLE "crm_permission" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "crm_permission" ADD COLUMN IF NOT EXISTS "level" INTEGER;
+ALTER TABLE "crm_permission" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "crm_permission" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "crm_permission" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_permission" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "crm_permission" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_permission" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "crm_permission_tenant_id_idx" ON "crm_permission"("tenant_id");
 
 -- CRM 产品
@@ -397,6 +654,20 @@ CREATE TABLE IF NOT EXISTS "crm_product" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_product_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "crm_product" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "crm_product" ADD COLUMN IF NOT EXISTS "no" VARCHAR(255);
+ALTER TABLE "crm_product" ADD COLUMN IF NOT EXISTS "unit" INTEGER NOT NULL;
+ALTER TABLE "crm_product" ADD COLUMN IF NOT EXISTS "price" DECIMAL(18,2);
+ALTER TABLE "crm_product" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "crm_product" ADD COLUMN IF NOT EXISTS "category_id" BIGINT;
+ALTER TABLE "crm_product" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
+ALTER TABLE "crm_product" ADD COLUMN IF NOT EXISTS "owner_user_id" BIGINT;
+ALTER TABLE "crm_product" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "crm_product" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "crm_product" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_product" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "crm_product" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_product" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "crm_product_tenant_id_idx" ON "crm_product"("tenant_id");
 
 -- 产品分类
@@ -412,6 +683,14 @@ CREATE TABLE IF NOT EXISTS "crm_product_category" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_product_category_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "crm_product_category" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "crm_product_category" ADD COLUMN IF NOT EXISTS "parent_id" BIGINT;
+ALTER TABLE "crm_product_category" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "crm_product_category" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "crm_product_category" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_product_category" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "crm_product_category" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_product_category" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "crm_product_category_tenant_id_idx" ON "crm_product_category"("tenant_id");
 
 -- 回款
@@ -436,6 +715,23 @@ CREATE TABLE IF NOT EXISTS "crm_receivable" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_receivable_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "crm_receivable" ADD COLUMN IF NOT EXISTS "no" VARCHAR(255);
+ALTER TABLE "crm_receivable" ADD COLUMN IF NOT EXISTS "plan_id" BIGINT;
+ALTER TABLE "crm_receivable" ADD COLUMN IF NOT EXISTS "customer_id" BIGINT;
+ALTER TABLE "crm_receivable" ADD COLUMN IF NOT EXISTS "contract_id" BIGINT;
+ALTER TABLE "crm_receivable" ADD COLUMN IF NOT EXISTS "owner_user_id" BIGINT;
+ALTER TABLE "crm_receivable" ADD COLUMN IF NOT EXISTS "return_time" TIMESTAMP(3);
+ALTER TABLE "crm_receivable" ADD COLUMN IF NOT EXISTS "return_type" INTEGER;
+ALTER TABLE "crm_receivable" ADD COLUMN IF NOT EXISTS "price" DECIMAL(18,2);
+ALTER TABLE "crm_receivable" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "crm_receivable" ADD COLUMN IF NOT EXISTS "process_instance_id" VARCHAR(255);
+ALTER TABLE "crm_receivable" ADD COLUMN IF NOT EXISTS "audit_status" INTEGER;
+ALTER TABLE "crm_receivable" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "crm_receivable" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "crm_receivable" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_receivable" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "crm_receivable" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_receivable" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "crm_receivable_tenant_id_idx" ON "crm_receivable"("tenant_id");
 
 -- CRM 回款计划
@@ -460,4 +756,21 @@ CREATE TABLE IF NOT EXISTS "crm_receivable_plan" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "crm_receivable_plan_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "crm_receivable_plan" ADD COLUMN IF NOT EXISTS "period" INTEGER;
+ALTER TABLE "crm_receivable_plan" ADD COLUMN IF NOT EXISTS "customer_id" BIGINT;
+ALTER TABLE "crm_receivable_plan" ADD COLUMN IF NOT EXISTS "contract_id" BIGINT;
+ALTER TABLE "crm_receivable_plan" ADD COLUMN IF NOT EXISTS "owner_user_id" BIGINT;
+ALTER TABLE "crm_receivable_plan" ADD COLUMN IF NOT EXISTS "return_time" TIMESTAMP(3);
+ALTER TABLE "crm_receivable_plan" ADD COLUMN IF NOT EXISTS "return_type" INTEGER;
+ALTER TABLE "crm_receivable_plan" ADD COLUMN IF NOT EXISTS "price" DECIMAL(18,2);
+ALTER TABLE "crm_receivable_plan" ADD COLUMN IF NOT EXISTS "receivable_id" BIGINT;
+ALTER TABLE "crm_receivable_plan" ADD COLUMN IF NOT EXISTS "remind_days" INTEGER;
+ALTER TABLE "crm_receivable_plan" ADD COLUMN IF NOT EXISTS "remind_time" TIMESTAMP(3);
+ALTER TABLE "crm_receivable_plan" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "crm_receivable_plan" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "crm_receivable_plan" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "crm_receivable_plan" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_receivable_plan" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "crm_receivable_plan" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "crm_receivable_plan" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "crm_receivable_plan_tenant_id_idx" ON "crm_receivable_plan"("tenant_id");

@@ -18,6 +18,17 @@ CREATE TABLE IF NOT EXISTS "product_brand" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "product_brand_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "product_brand" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "product_brand" ADD COLUMN IF NOT EXISTS "pic_url" VARCHAR(255);
+ALTER TABLE "product_brand" ADD COLUMN IF NOT EXISTS "sort" INTEGER;
+ALTER TABLE "product_brand" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
+ALTER TABLE "product_brand" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "product_brand" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "product_brand" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "product_brand" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "product_brand" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "product_brand" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "product_brand" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "product_brand_tenant_id_idx" ON "product_brand"("tenant_id");
 
 -- 商品浏览记录
@@ -34,6 +45,15 @@ CREATE TABLE IF NOT EXISTS "product_browse_history" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "product_browse_history_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "product_browse_history" ADD COLUMN IF NOT EXISTS "spu_id" BIGINT;
+ALTER TABLE "product_browse_history" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "product_browse_history" ADD COLUMN IF NOT EXISTS "user_deleted" BOOLEAN;
+ALTER TABLE "product_browse_history" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "product_browse_history" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "product_browse_history" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "product_browse_history" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "product_browse_history" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "product_browse_history" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "product_browse_history_tenant_id_idx" ON "product_browse_history"("tenant_id");
 
 -- 商品分类
@@ -52,6 +72,17 @@ CREATE TABLE IF NOT EXISTS "product_category" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "product_category_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "product_category" ADD COLUMN IF NOT EXISTS "parent_id" BIGINT;
+ALTER TABLE "product_category" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "product_category" ADD COLUMN IF NOT EXISTS "pic_url" VARCHAR(255);
+ALTER TABLE "product_category" ADD COLUMN IF NOT EXISTS "sort" INTEGER;
+ALTER TABLE "product_category" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "product_category" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "product_category" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "product_category" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "product_category" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "product_category" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "product_category" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "product_category_tenant_id_idx" ON "product_category"("tenant_id");
 
 -- 商品评论
@@ -86,6 +117,33 @@ CREATE TABLE IF NOT EXISTS "product_comment" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "product_comment_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "user_nickname" VARCHAR(255);
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "user_avatar" VARCHAR(255);
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "anonymous" BOOLEAN;
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "order_id" BIGINT;
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "order_item_id" BIGINT;
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "spu_id" BIGINT;
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "spu_name" VARCHAR(255);
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "sku_id" BIGINT;
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "sku_pic_url" VARCHAR(255);
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "sku_properties" TEXT;
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "visible" BOOLEAN;
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "scores" INTEGER;
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "description_scores" INTEGER;
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "benefit_scores" INTEGER;
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "content" VARCHAR(255);
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "pic_urls" TEXT;
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "reply_status" BOOLEAN;
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "reply_user_id" BIGINT;
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "reply_content" VARCHAR(255);
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "reply_time" TIMESTAMP(3);
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "product_comment" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "product_comment_tenant_id_idx" ON "product_comment"("tenant_id");
 
 -- 商品收藏
@@ -101,6 +159,14 @@ CREATE TABLE IF NOT EXISTS "product_favorite" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "product_favorite_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "product_favorite" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "product_favorite" ADD COLUMN IF NOT EXISTS "spu_id" BIGINT;
+ALTER TABLE "product_favorite" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "product_favorite" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "product_favorite" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "product_favorite" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "product_favorite" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "product_favorite" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "product_favorite_tenant_id_idx" ON "product_favorite"("tenant_id");
 
 -- 商品属性项
@@ -116,6 +182,14 @@ CREATE TABLE IF NOT EXISTS "product_property" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "product_property_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "product_property" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "product_property" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "product_property" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "product_property" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "product_property" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "product_property" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "product_property" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "product_property" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "product_property_tenant_id_idx" ON "product_property"("tenant_id");
 
 -- 商品属性值
@@ -132,6 +206,15 @@ CREATE TABLE IF NOT EXISTS "product_property_value" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "product_property_value_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "product_property_value" ADD COLUMN IF NOT EXISTS "property_id" BIGINT;
+ALTER TABLE "product_property_value" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "product_property_value" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "product_property_value" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "product_property_value" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "product_property_value" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "product_property_value" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "product_property_value" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "product_property_value" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "product_property_value_tenant_id_idx" ON "product_property_value"("tenant_id");
 
 -- 商品 SKU
@@ -162,6 +245,29 @@ CREATE TABLE IF NOT EXISTS "product_sku" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "product_sku_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "spu_id" BIGINT;
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "properties" TEXT;
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "price" INTEGER;
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "market_price" INTEGER;
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "cost_price" INTEGER;
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "bar_code" VARCHAR(255);
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "pic_url" VARCHAR(255);
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "stock" INTEGER;
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "weight" DECIMAL(18,2);
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "volume" DECIMAL(18,2);
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "first_brokerage_price" INTEGER;
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "second_brokerage_price" INTEGER;
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "sales_count" INTEGER;
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "property_id" BIGINT;
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "property_name" VARCHAR(255);
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "value_id" BIGINT;
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "value_name" VARCHAR(255);
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "product_sku" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "product_sku_tenant_id_idx" ON "product_sku"("tenant_id");
 
 -- 商品 SPU
@@ -197,6 +303,34 @@ CREATE TABLE IF NOT EXISTS "product_spu" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "product_spu_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "keyword" VARCHAR(255);
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "introduction" VARCHAR(255);
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "category_id" BIGINT;
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "brand_id" BIGINT;
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "pic_url" VARCHAR(255);
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "slider_pic_urls" TEXT;
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "sort" INTEGER;
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "spec_type" BOOLEAN;
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "price" INTEGER;
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "market_price" INTEGER;
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "cost_price" INTEGER;
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "stock" INTEGER;
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "delivery_types" TEXT;
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "delivery_template_id" BIGINT;
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "give_integral" INTEGER;
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "sub_commission_type" BOOLEAN;
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "sales_count" INTEGER;
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "virtual_sales_count" INTEGER;
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "browse_count" INTEGER;
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "product_spu" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "product_spu_tenant_id_idx" ON "product_spu"("tenant_id");
 
 -- 商品统计
@@ -222,6 +356,24 @@ CREATE TABLE IF NOT EXISTS "product_statistics" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "product_statistics_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "product_statistics" ADD COLUMN IF NOT EXISTS "time" TIMESTAMP(3);
+ALTER TABLE "product_statistics" ADD COLUMN IF NOT EXISTS "spu_id" BIGINT;
+ALTER TABLE "product_statistics" ADD COLUMN IF NOT EXISTS "browse_count" INTEGER;
+ALTER TABLE "product_statistics" ADD COLUMN IF NOT EXISTS "browse_user_count" INTEGER;
+ALTER TABLE "product_statistics" ADD COLUMN IF NOT EXISTS "favorite_count" INTEGER;
+ALTER TABLE "product_statistics" ADD COLUMN IF NOT EXISTS "cart_count" INTEGER;
+ALTER TABLE "product_statistics" ADD COLUMN IF NOT EXISTS "order_count" INTEGER;
+ALTER TABLE "product_statistics" ADD COLUMN IF NOT EXISTS "order_pay_count" INTEGER;
+ALTER TABLE "product_statistics" ADD COLUMN IF NOT EXISTS "order_pay_price" INTEGER;
+ALTER TABLE "product_statistics" ADD COLUMN IF NOT EXISTS "after_sale_count" INTEGER;
+ALTER TABLE "product_statistics" ADD COLUMN IF NOT EXISTS "after_sale_refund_price" INTEGER;
+ALTER TABLE "product_statistics" ADD COLUMN IF NOT EXISTS "browse_convert_percent" INTEGER;
+ALTER TABLE "product_statistics" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "product_statistics" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "product_statistics" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "product_statistics" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "product_statistics" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "product_statistics" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "product_statistics_tenant_id_idx" ON "product_statistics"("tenant_id");
 
 -- 文章管理
@@ -247,6 +399,24 @@ CREATE TABLE IF NOT EXISTS "promotion_article" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_article_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_article" ADD COLUMN IF NOT EXISTS "category_id" BIGINT;
+ALTER TABLE "promotion_article" ADD COLUMN IF NOT EXISTS "spu_id" BIGINT;
+ALTER TABLE "promotion_article" ADD COLUMN IF NOT EXISTS "title" VARCHAR(255);
+ALTER TABLE "promotion_article" ADD COLUMN IF NOT EXISTS "author" VARCHAR(255);
+ALTER TABLE "promotion_article" ADD COLUMN IF NOT EXISTS "pic_url" VARCHAR(255);
+ALTER TABLE "promotion_article" ADD COLUMN IF NOT EXISTS "introduction" VARCHAR(255);
+ALTER TABLE "promotion_article" ADD COLUMN IF NOT EXISTS "browse_count" INTEGER;
+ALTER TABLE "promotion_article" ADD COLUMN IF NOT EXISTS "sort" INTEGER;
+ALTER TABLE "promotion_article" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "promotion_article" ADD COLUMN IF NOT EXISTS "recommend_hot" BOOLEAN;
+ALTER TABLE "promotion_article" ADD COLUMN IF NOT EXISTS "recommend_banner" BOOLEAN;
+ALTER TABLE "promotion_article" ADD COLUMN IF NOT EXISTS "content" VARCHAR(255);
+ALTER TABLE "promotion_article" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_article" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_article" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_article" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_article" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_article" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_article_tenant_id_idx" ON "promotion_article"("tenant_id");
 
 -- 文章分类
@@ -264,6 +434,16 @@ CREATE TABLE IF NOT EXISTS "promotion_article_category" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_article_category_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_article_category" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "promotion_article_category" ADD COLUMN IF NOT EXISTS "pic_url" VARCHAR(255);
+ALTER TABLE "promotion_article_category" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "promotion_article_category" ADD COLUMN IF NOT EXISTS "sort" INTEGER;
+ALTER TABLE "promotion_article_category" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_article_category" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_article_category" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_article_category" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_article_category" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_article_category" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_article_category_tenant_id_idx" ON "promotion_article_category"("tenant_id");
 
 -- banner
@@ -285,6 +465,20 @@ CREATE TABLE IF NOT EXISTS "promotion_banner" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_banner_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_banner" ADD COLUMN IF NOT EXISTS "title" VARCHAR(255);
+ALTER TABLE "promotion_banner" ADD COLUMN IF NOT EXISTS "url" VARCHAR(255);
+ALTER TABLE "promotion_banner" ADD COLUMN IF NOT EXISTS "pic_url" VARCHAR(255);
+ALTER TABLE "promotion_banner" ADD COLUMN IF NOT EXISTS "sort" INTEGER;
+ALTER TABLE "promotion_banner" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "promotion_banner" ADD COLUMN IF NOT EXISTS "position" INTEGER;
+ALTER TABLE "promotion_banner" ADD COLUMN IF NOT EXISTS "memo" VARCHAR(255);
+ALTER TABLE "promotion_banner" ADD COLUMN IF NOT EXISTS "browse_count" INTEGER;
+ALTER TABLE "promotion_banner" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_banner" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_banner" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_banner" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_banner" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_banner" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_banner_tenant_id_idx" ON "promotion_banner"("tenant_id");
 
 -- 砍价活动
@@ -313,6 +507,27 @@ CREATE TABLE IF NOT EXISTS "promotion_bargain_activity" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_bargain_activity_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_bargain_activity" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "promotion_bargain_activity" ADD COLUMN IF NOT EXISTS "start_time" TIMESTAMP(3);
+ALTER TABLE "promotion_bargain_activity" ADD COLUMN IF NOT EXISTS "end_time" TIMESTAMP(3);
+ALTER TABLE "promotion_bargain_activity" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "promotion_bargain_activity" ADD COLUMN IF NOT EXISTS "spu_id" BIGINT;
+ALTER TABLE "promotion_bargain_activity" ADD COLUMN IF NOT EXISTS "sku_id" BIGINT;
+ALTER TABLE "promotion_bargain_activity" ADD COLUMN IF NOT EXISTS "bargain_first_price" INTEGER;
+ALTER TABLE "promotion_bargain_activity" ADD COLUMN IF NOT EXISTS "bargain_min_price" INTEGER;
+ALTER TABLE "promotion_bargain_activity" ADD COLUMN IF NOT EXISTS "stock" INTEGER;
+ALTER TABLE "promotion_bargain_activity" ADD COLUMN IF NOT EXISTS "total_stock" INTEGER;
+ALTER TABLE "promotion_bargain_activity" ADD COLUMN IF NOT EXISTS "help_max_count" INTEGER;
+ALTER TABLE "promotion_bargain_activity" ADD COLUMN IF NOT EXISTS "bargain_count" INTEGER;
+ALTER TABLE "promotion_bargain_activity" ADD COLUMN IF NOT EXISTS "total_limit_count" INTEGER;
+ALTER TABLE "promotion_bargain_activity" ADD COLUMN IF NOT EXISTS "random_min_price" INTEGER;
+ALTER TABLE "promotion_bargain_activity" ADD COLUMN IF NOT EXISTS "random_max_price" INTEGER;
+ALTER TABLE "promotion_bargain_activity" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_bargain_activity" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_bargain_activity" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_bargain_activity" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_bargain_activity" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_bargain_activity" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_bargain_activity_tenant_id_idx" ON "promotion_bargain_activity"("tenant_id");
 
 -- 砍价助力
@@ -330,6 +545,16 @@ CREATE TABLE IF NOT EXISTS "promotion_bargain_help" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_bargain_help_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_bargain_help" ADD COLUMN IF NOT EXISTS "activity_id" BIGINT;
+ALTER TABLE "promotion_bargain_help" ADD COLUMN IF NOT EXISTS "record_id" BIGINT;
+ALTER TABLE "promotion_bargain_help" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "promotion_bargain_help" ADD COLUMN IF NOT EXISTS "reduce_price" INTEGER;
+ALTER TABLE "promotion_bargain_help" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_bargain_help" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_bargain_help" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_bargain_help" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_bargain_help" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_bargain_help" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_bargain_help_tenant_id_idx" ON "promotion_bargain_help"("tenant_id");
 
 -- 砍价记录 DO TO
@@ -352,6 +577,21 @@ CREATE TABLE IF NOT EXISTS "promotion_bargain_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_bargain_record_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_bargain_record" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "promotion_bargain_record" ADD COLUMN IF NOT EXISTS "activity_id" BIGINT;
+ALTER TABLE "promotion_bargain_record" ADD COLUMN IF NOT EXISTS "spu_id" BIGINT;
+ALTER TABLE "promotion_bargain_record" ADD COLUMN IF NOT EXISTS "sku_id" BIGINT;
+ALTER TABLE "promotion_bargain_record" ADD COLUMN IF NOT EXISTS "bargain_first_price" INTEGER;
+ALTER TABLE "promotion_bargain_record" ADD COLUMN IF NOT EXISTS "bargain_price" INTEGER;
+ALTER TABLE "promotion_bargain_record" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "promotion_bargain_record" ADD COLUMN IF NOT EXISTS "end_time" TIMESTAMP(3);
+ALTER TABLE "promotion_bargain_record" ADD COLUMN IF NOT EXISTS "order_id" BIGINT;
+ALTER TABLE "promotion_bargain_record" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_bargain_record" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_bargain_record" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_bargain_record" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_bargain_record" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_bargain_record" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_bargain_record_tenant_id_idx" ON "promotion_bargain_record"("tenant_id");
 
 -- 拼团活动
@@ -375,6 +615,22 @@ CREATE TABLE IF NOT EXISTS "promotion_combination_activity" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_combination_activity_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_combination_activity" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "promotion_combination_activity" ADD COLUMN IF NOT EXISTS "spu_id" BIGINT;
+ALTER TABLE "promotion_combination_activity" ADD COLUMN IF NOT EXISTS "total_limit_count" INTEGER;
+ALTER TABLE "promotion_combination_activity" ADD COLUMN IF NOT EXISTS "single_limit_count" INTEGER;
+ALTER TABLE "promotion_combination_activity" ADD COLUMN IF NOT EXISTS "start_time" TIMESTAMP(3);
+ALTER TABLE "promotion_combination_activity" ADD COLUMN IF NOT EXISTS "end_time" TIMESTAMP(3);
+ALTER TABLE "promotion_combination_activity" ADD COLUMN IF NOT EXISTS "user_size" INTEGER;
+ALTER TABLE "promotion_combination_activity" ADD COLUMN IF NOT EXISTS "virtual_group" BOOLEAN;
+ALTER TABLE "promotion_combination_activity" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "promotion_combination_activity" ADD COLUMN IF NOT EXISTS "limit_duration" INTEGER;
+ALTER TABLE "promotion_combination_activity" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_combination_activity" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_combination_activity" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_combination_activity" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_combination_activity" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_combination_activity" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_combination_activity_tenant_id_idx" ON "promotion_combination_activity"("tenant_id");
 
 -- 拼团商品
@@ -395,9 +651,22 @@ CREATE TABLE IF NOT EXISTS "promotion_combination_product" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_combination_product_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_combination_product" ADD COLUMN IF NOT EXISTS "activity_id" BIGINT;
+ALTER TABLE "promotion_combination_product" ADD COLUMN IF NOT EXISTS "spu_id" BIGINT;
+ALTER TABLE "promotion_combination_product" ADD COLUMN IF NOT EXISTS "sku_id" BIGINT;
+ALTER TABLE "promotion_combination_product" ADD COLUMN IF NOT EXISTS "combination_price" INTEGER;
+ALTER TABLE "promotion_combination_product" ADD COLUMN IF NOT EXISTS "activity_status" INTEGER;
+ALTER TABLE "promotion_combination_product" ADD COLUMN IF NOT EXISTS "activity_start_time" TIMESTAMP(3);
+ALTER TABLE "promotion_combination_product" ADD COLUMN IF NOT EXISTS "activity_end_time" TIMESTAMP(3);
+ALTER TABLE "promotion_combination_product" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_combination_product" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_combination_product" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_combination_product" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_combination_product" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_combination_product" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_combination_product_tenant_id_idx" ON "promotion_combination_product"("tenant_id");
 
--- 拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人的拼团记录，通过 关联
+-- 拼团记录 DO1. 用户参与拼团时，会创建一条记录2. 团长的拼团记录，和参团人
 CREATE TABLE IF NOT EXISTS "promotion_combination_record" (
     "id" TEXT NOT NULL,
     "activity_id" BIGINT,
@@ -427,6 +696,31 @@ CREATE TABLE IF NOT EXISTS "promotion_combination_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_combination_record_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "activity_id" BIGINT;
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "combination_price" INTEGER;
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "spu_id" BIGINT;
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "spu_name" VARCHAR(255);
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "pic_url" VARCHAR(255);
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "sku_id" BIGINT;
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "count" INTEGER;
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "nickname" VARCHAR(255);
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "avatar" VARCHAR(255);
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "head_id" BIGINT;
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "order_id" BIGINT;
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "user_size" INTEGER;
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "user_count" INTEGER;
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "virtual_group" BOOLEAN;
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "expire_time" TIMESTAMP(3);
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "start_time" TIMESTAMP(3);
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "end_time" TIMESTAMP(3);
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_combination_record" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_combination_record_tenant_id_idx" ON "promotion_combination_record"("tenant_id");
 
 -- 优惠劵
@@ -456,6 +750,28 @@ CREATE TABLE IF NOT EXISTS "promotion_coupon" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_coupon_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_coupon" ADD COLUMN IF NOT EXISTS "template_id" BIGINT;
+ALTER TABLE "promotion_coupon" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "promotion_coupon" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "promotion_coupon" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "promotion_coupon" ADD COLUMN IF NOT EXISTS "take_type" INTEGER;
+ALTER TABLE "promotion_coupon" ADD COLUMN IF NOT EXISTS "use_price" INTEGER;
+ALTER TABLE "promotion_coupon" ADD COLUMN IF NOT EXISTS "valid_start_time" TIMESTAMP(3);
+ALTER TABLE "promotion_coupon" ADD COLUMN IF NOT EXISTS "valid_end_time" TIMESTAMP(3);
+ALTER TABLE "promotion_coupon" ADD COLUMN IF NOT EXISTS "product_scope" INTEGER;
+ALTER TABLE "promotion_coupon" ADD COLUMN IF NOT EXISTS "product_scope_values" TEXT;
+ALTER TABLE "promotion_coupon" ADD COLUMN IF NOT EXISTS "discount_type" INTEGER;
+ALTER TABLE "promotion_coupon" ADD COLUMN IF NOT EXISTS "discount_percent" INTEGER;
+ALTER TABLE "promotion_coupon" ADD COLUMN IF NOT EXISTS "discount_price" INTEGER;
+ALTER TABLE "promotion_coupon" ADD COLUMN IF NOT EXISTS "discount_limit_price" INTEGER;
+ALTER TABLE "promotion_coupon" ADD COLUMN IF NOT EXISTS "use_order_id" BIGINT;
+ALTER TABLE "promotion_coupon" ADD COLUMN IF NOT EXISTS "use_time" TIMESTAMP(3);
+ALTER TABLE "promotion_coupon" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_coupon" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_coupon" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_coupon" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_coupon" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_coupon" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_coupon_tenant_id_idx" ON "promotion_coupon"("tenant_id");
 
 -- 优惠劵模板 DO当用户领取时，会生成 优惠劵
@@ -489,9 +805,35 @@ CREATE TABLE IF NOT EXISTS "promotion_coupon_template" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_coupon_template_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "total_count" INTEGER;
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "take_limit_count" INTEGER;
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "take_type" INTEGER;
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "use_price" INTEGER;
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "product_scope" INTEGER;
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "product_scope_values" TEXT;
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "validity_type" INTEGER;
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "valid_start_time" TIMESTAMP(3);
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "valid_end_time" TIMESTAMP(3);
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "fixed_start_term" INTEGER;
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "fixed_end_term" INTEGER;
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "discount_type" INTEGER;
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "discount_percent" INTEGER;
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "discount_price" INTEGER;
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "discount_limit_price" INTEGER;
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "take_count" INTEGER;
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "use_count" INTEGER;
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_coupon_template" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_coupon_template_tenant_id_idx" ON "promotion_coupon_template"("tenant_id");
 
--- 限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一个活动；
+-- 限时折扣活动 DO一个活动下，可以有 商品；一个商品，在指定时间段内，只能属于一
 CREATE TABLE IF NOT EXISTS "promotion_discount_activity" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -507,6 +849,17 @@ CREATE TABLE IF NOT EXISTS "promotion_discount_activity" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_discount_activity_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_discount_activity" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "promotion_discount_activity" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "promotion_discount_activity" ADD COLUMN IF NOT EXISTS "start_time" TIMESTAMP(3);
+ALTER TABLE "promotion_discount_activity" ADD COLUMN IF NOT EXISTS "end_time" TIMESTAMP(3);
+ALTER TABLE "promotion_discount_activity" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "promotion_discount_activity" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_discount_activity" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_discount_activity" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_discount_activity" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_discount_activity" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_discount_activity" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_discount_activity_tenant_id_idx" ON "promotion_discount_activity"("tenant_id");
 
 -- 限时折扣商品
@@ -530,6 +883,22 @@ CREATE TABLE IF NOT EXISTS "promotion_discount_product" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_discount_product_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_discount_product" ADD COLUMN IF NOT EXISTS "activity_id" BIGINT;
+ALTER TABLE "promotion_discount_product" ADD COLUMN IF NOT EXISTS "spu_id" BIGINT;
+ALTER TABLE "promotion_discount_product" ADD COLUMN IF NOT EXISTS "sku_id" BIGINT;
+ALTER TABLE "promotion_discount_product" ADD COLUMN IF NOT EXISTS "discount_type" INTEGER;
+ALTER TABLE "promotion_discount_product" ADD COLUMN IF NOT EXISTS "discount_percent" INTEGER;
+ALTER TABLE "promotion_discount_product" ADD COLUMN IF NOT EXISTS "discount_price" INTEGER;
+ALTER TABLE "promotion_discount_product" ADD COLUMN IF NOT EXISTS "activity_name" VARCHAR(255);
+ALTER TABLE "promotion_discount_product" ADD COLUMN IF NOT EXISTS "activity_status" INTEGER;
+ALTER TABLE "promotion_discount_product" ADD COLUMN IF NOT EXISTS "activity_start_time" TIMESTAMP(3);
+ALTER TABLE "promotion_discount_product" ADD COLUMN IF NOT EXISTS "activity_end_time" TIMESTAMP(3);
+ALTER TABLE "promotion_discount_product" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_discount_product" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_discount_product" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_discount_product" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_discount_product" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_discount_product" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_discount_product_tenant_id_idx" ON "promotion_discount_product"("tenant_id");
 
 -- 装修页面
@@ -548,9 +917,20 @@ CREATE TABLE IF NOT EXISTS "promotion_diy_page" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_diy_page_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_diy_page" ADD COLUMN IF NOT EXISTS "template_id" BIGINT;
+ALTER TABLE "promotion_diy_page" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "promotion_diy_page" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "promotion_diy_page" ADD COLUMN IF NOT EXISTS "preview_pic_urls" TEXT;
+ALTER TABLE "promotion_diy_page" ADD COLUMN IF NOT EXISTS "property" VARCHAR(255);
+ALTER TABLE "promotion_diy_page" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_diy_page" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_diy_page" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_diy_page" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_diy_page" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_diy_page" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_diy_page_tenant_id_idx" ON "promotion_diy_page"("tenant_id");
 
--- 装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. 如果需要使用某个模版，则将 设置为 true，表示已使用，有且仅有一个
+-- 装修模板 DO1. 新建一个模版，下面可以包含多个 页面，例如说首页、我的2. 
 CREATE TABLE IF NOT EXISTS "promotion_diy_template" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -567,6 +947,18 @@ CREATE TABLE IF NOT EXISTS "promotion_diy_template" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_diy_template_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_diy_template" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "promotion_diy_template" ADD COLUMN IF NOT EXISTS "used" BOOLEAN;
+ALTER TABLE "promotion_diy_template" ADD COLUMN IF NOT EXISTS "used_time" TIMESTAMP(3);
+ALTER TABLE "promotion_diy_template" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "promotion_diy_template" ADD COLUMN IF NOT EXISTS "preview_pic_urls" TEXT;
+ALTER TABLE "promotion_diy_template" ADD COLUMN IF NOT EXISTS "property" VARCHAR(255);
+ALTER TABLE "promotion_diy_template" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_diy_template" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_diy_template" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_diy_template" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_diy_template" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_diy_template" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_diy_template_tenant_id_idx" ON "promotion_diy_template"("tenant_id");
 
 -- 客服会话
@@ -588,6 +980,20 @@ CREATE TABLE IF NOT EXISTS "promotion_kefu_conversation" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_kefu_conversation_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_kefu_conversation" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "promotion_kefu_conversation" ADD COLUMN IF NOT EXISTS "last_message_time" TIMESTAMP(3);
+ALTER TABLE "promotion_kefu_conversation" ADD COLUMN IF NOT EXISTS "last_message_content" VARCHAR(255);
+ALTER TABLE "promotion_kefu_conversation" ADD COLUMN IF NOT EXISTS "last_message_content_type" INTEGER;
+ALTER TABLE "promotion_kefu_conversation" ADD COLUMN IF NOT EXISTS "admin_pinned" BOOLEAN;
+ALTER TABLE "promotion_kefu_conversation" ADD COLUMN IF NOT EXISTS "user_deleted" BOOLEAN;
+ALTER TABLE "promotion_kefu_conversation" ADD COLUMN IF NOT EXISTS "admin_deleted" BOOLEAN;
+ALTER TABLE "promotion_kefu_conversation" ADD COLUMN IF NOT EXISTS "admin_unread_message_count" INTEGER;
+ALTER TABLE "promotion_kefu_conversation" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_kefu_conversation" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_kefu_conversation" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_kefu_conversation" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_kefu_conversation" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_kefu_conversation" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_kefu_conversation_tenant_id_idx" ON "promotion_kefu_conversation"("tenant_id");
 
 -- 客服消息
@@ -609,6 +1015,20 @@ CREATE TABLE IF NOT EXISTS "promotion_kefu_message" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_kefu_message_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_kefu_message" ADD COLUMN IF NOT EXISTS "conversation_id" BIGINT;
+ALTER TABLE "promotion_kefu_message" ADD COLUMN IF NOT EXISTS "sender_id" BIGINT;
+ALTER TABLE "promotion_kefu_message" ADD COLUMN IF NOT EXISTS "sender_type" INTEGER;
+ALTER TABLE "promotion_kefu_message" ADD COLUMN IF NOT EXISTS "receiver_id" BIGINT;
+ALTER TABLE "promotion_kefu_message" ADD COLUMN IF NOT EXISTS "receiver_type" INTEGER;
+ALTER TABLE "promotion_kefu_message" ADD COLUMN IF NOT EXISTS "content_type" INTEGER;
+ALTER TABLE "promotion_kefu_message" ADD COLUMN IF NOT EXISTS "content" VARCHAR(255);
+ALTER TABLE "promotion_kefu_message" ADD COLUMN IF NOT EXISTS "read_status" BOOLEAN;
+ALTER TABLE "promotion_kefu_message" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_kefu_message" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_kefu_message" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_kefu_message" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_kefu_message" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_kefu_message" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_kefu_message_tenant_id_idx" ON "promotion_kefu_message"("tenant_id");
 
 -- 积分商城活动
@@ -628,6 +1048,18 @@ CREATE TABLE IF NOT EXISTS "promotion_point_activity" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_point_activity_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_point_activity" ADD COLUMN IF NOT EXISTS "spu_id" BIGINT;
+ALTER TABLE "promotion_point_activity" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "promotion_point_activity" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "promotion_point_activity" ADD COLUMN IF NOT EXISTS "sort" INTEGER;
+ALTER TABLE "promotion_point_activity" ADD COLUMN IF NOT EXISTS "stock" INTEGER;
+ALTER TABLE "promotion_point_activity" ADD COLUMN IF NOT EXISTS "total_stock" INTEGER;
+ALTER TABLE "promotion_point_activity" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_point_activity" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_point_activity" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_point_activity" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_point_activity" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_point_activity" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_point_activity_tenant_id_idx" ON "promotion_point_activity"("tenant_id");
 
 -- 积分商城商品
@@ -649,6 +1081,20 @@ CREATE TABLE IF NOT EXISTS "promotion_point_product" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_point_product_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_point_product" ADD COLUMN IF NOT EXISTS "activity_id" BIGINT;
+ALTER TABLE "promotion_point_product" ADD COLUMN IF NOT EXISTS "spu_id" BIGINT;
+ALTER TABLE "promotion_point_product" ADD COLUMN IF NOT EXISTS "sku_id" BIGINT;
+ALTER TABLE "promotion_point_product" ADD COLUMN IF NOT EXISTS "count" INTEGER;
+ALTER TABLE "promotion_point_product" ADD COLUMN IF NOT EXISTS "point" INTEGER;
+ALTER TABLE "promotion_point_product" ADD COLUMN IF NOT EXISTS "price" INTEGER;
+ALTER TABLE "promotion_point_product" ADD COLUMN IF NOT EXISTS "stock" INTEGER;
+ALTER TABLE "promotion_point_product" ADD COLUMN IF NOT EXISTS "activity_status" INTEGER;
+ALTER TABLE "promotion_point_product" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_point_product" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_point_product" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_point_product" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_point_product" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_point_product" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_point_product_tenant_id_idx" ON "promotion_point_product"("tenant_id");
 
 -- 满减送活动
@@ -676,6 +1122,26 @@ CREATE TABLE IF NOT EXISTS "promotion_reward_activity" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_reward_activity_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_reward_activity" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "promotion_reward_activity" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "promotion_reward_activity" ADD COLUMN IF NOT EXISTS "start_time" TIMESTAMP(3);
+ALTER TABLE "promotion_reward_activity" ADD COLUMN IF NOT EXISTS "end_time" TIMESTAMP(3);
+ALTER TABLE "promotion_reward_activity" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "promotion_reward_activity" ADD COLUMN IF NOT EXISTS "condition_type" INTEGER;
+ALTER TABLE "promotion_reward_activity" ADD COLUMN IF NOT EXISTS "product_scope" INTEGER;
+ALTER TABLE "promotion_reward_activity" ADD COLUMN IF NOT EXISTS "product_scope_values" TEXT;
+ALTER TABLE "promotion_reward_activity" ADD COLUMN IF NOT EXISTS "rules" TEXT;
+ALTER TABLE "promotion_reward_activity" ADD COLUMN IF NOT EXISTS "limit" INTEGER;
+ALTER TABLE "promotion_reward_activity" ADD COLUMN IF NOT EXISTS "discount_price" INTEGER;
+ALTER TABLE "promotion_reward_activity" ADD COLUMN IF NOT EXISTS "free_delivery" BOOLEAN;
+ALTER TABLE "promotion_reward_activity" ADD COLUMN IF NOT EXISTS "point" INTEGER;
+ALTER TABLE "promotion_reward_activity" ADD COLUMN IF NOT EXISTS "give_coupon_template_counts" TEXT;
+ALTER TABLE "promotion_reward_activity" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_reward_activity" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_reward_activity" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_reward_activity" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_reward_activity" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_reward_activity" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_reward_activity_tenant_id_idx" ON "promotion_reward_activity"("tenant_id");
 
 -- 秒杀活动
@@ -701,6 +1167,24 @@ CREATE TABLE IF NOT EXISTS "promotion_seckill_activity" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_seckill_activity_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_seckill_activity" ADD COLUMN IF NOT EXISTS "spu_id" BIGINT;
+ALTER TABLE "promotion_seckill_activity" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "promotion_seckill_activity" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "promotion_seckill_activity" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "promotion_seckill_activity" ADD COLUMN IF NOT EXISTS "start_time" TIMESTAMP(3);
+ALTER TABLE "promotion_seckill_activity" ADD COLUMN IF NOT EXISTS "end_time" TIMESTAMP(3);
+ALTER TABLE "promotion_seckill_activity" ADD COLUMN IF NOT EXISTS "sort" INTEGER;
+ALTER TABLE "promotion_seckill_activity" ADD COLUMN IF NOT EXISTS "config_ids" TEXT;
+ALTER TABLE "promotion_seckill_activity" ADD COLUMN IF NOT EXISTS "total_limit_count" INTEGER;
+ALTER TABLE "promotion_seckill_activity" ADD COLUMN IF NOT EXISTS "single_limit_count" INTEGER;
+ALTER TABLE "promotion_seckill_activity" ADD COLUMN IF NOT EXISTS "stock" INTEGER;
+ALTER TABLE "promotion_seckill_activity" ADD COLUMN IF NOT EXISTS "total_stock" INTEGER;
+ALTER TABLE "promotion_seckill_activity" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_seckill_activity" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_seckill_activity" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_seckill_activity" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_seckill_activity" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_seckill_activity" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_seckill_activity_tenant_id_idx" ON "promotion_seckill_activity"("tenant_id");
 
 -- 秒杀时段
@@ -719,6 +1203,17 @@ CREATE TABLE IF NOT EXISTS "promotion_seckill_config" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_seckill_config_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_seckill_config" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "promotion_seckill_config" ADD COLUMN IF NOT EXISTS "start_time" VARCHAR(255);
+ALTER TABLE "promotion_seckill_config" ADD COLUMN IF NOT EXISTS "end_time" VARCHAR(255);
+ALTER TABLE "promotion_seckill_config" ADD COLUMN IF NOT EXISTS "slider_pic_urls" TEXT;
+ALTER TABLE "promotion_seckill_config" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "promotion_seckill_config" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_seckill_config" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_seckill_config" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_seckill_config" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_seckill_config" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_seckill_config" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_seckill_config_tenant_id_idx" ON "promotion_seckill_config"("tenant_id");
 
 -- 秒杀参与商品
@@ -741,6 +1236,21 @@ CREATE TABLE IF NOT EXISTS "promotion_seckill_product" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "promotion_seckill_product_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "promotion_seckill_product" ADD COLUMN IF NOT EXISTS "activity_id" BIGINT;
+ALTER TABLE "promotion_seckill_product" ADD COLUMN IF NOT EXISTS "config_ids" TEXT;
+ALTER TABLE "promotion_seckill_product" ADD COLUMN IF NOT EXISTS "spu_id" BIGINT;
+ALTER TABLE "promotion_seckill_product" ADD COLUMN IF NOT EXISTS "sku_id" BIGINT;
+ALTER TABLE "promotion_seckill_product" ADD COLUMN IF NOT EXISTS "seckill_price" INTEGER;
+ALTER TABLE "promotion_seckill_product" ADD COLUMN IF NOT EXISTS "stock" INTEGER;
+ALTER TABLE "promotion_seckill_product" ADD COLUMN IF NOT EXISTS "activity_status" INTEGER;
+ALTER TABLE "promotion_seckill_product" ADD COLUMN IF NOT EXISTS "activity_start_time" TIMESTAMP(3);
+ALTER TABLE "promotion_seckill_product" ADD COLUMN IF NOT EXISTS "activity_end_time" TIMESTAMP(3);
+ALTER TABLE "promotion_seckill_product" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "promotion_seckill_product" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "promotion_seckill_product" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_seckill_product" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "promotion_seckill_product" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "promotion_seckill_product" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "promotion_seckill_product_tenant_id_idx" ON "promotion_seckill_product"("tenant_id");
 
 -- 售后订单，用于处理 交易订单的退款退货流程
@@ -782,6 +1292,40 @@ CREATE TABLE IF NOT EXISTS "trade_after_sale" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_after_sale_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "no" VARCHAR(255);
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "way" INTEGER;
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "type" INTEGER;
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "apply_reason" VARCHAR(255);
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "apply_description" VARCHAR(255);
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "apply_pic_urls" TEXT;
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "order_id" BIGINT;
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "order_no" VARCHAR(255);
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "order_item_id" BIGINT;
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "spu_id" BIGINT;
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "spu_name" VARCHAR(255);
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "sku_id" BIGINT;
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "properties" TEXT;
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "pic_url" VARCHAR(255);
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "count" INTEGER;
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "audit_time" TIMESTAMP(3);
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "audit_user_id" BIGINT;
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "audit_reason" VARCHAR(255);
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "refund_price" INTEGER;
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "pay_refund_id" BIGINT;
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "refund_time" TIMESTAMP(3);
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "logistics_id" BIGINT;
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "logistics_no" VARCHAR(255);
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "delivery_time" TIMESTAMP(3);
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "receive_time" TIMESTAMP(3);
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "receive_reason" VARCHAR(255);
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_after_sale" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "trade_after_sale_tenant_id_idx" ON "trade_after_sale"("tenant_id");
 
 -- 交易售后日志
@@ -802,6 +1346,19 @@ CREATE TABLE IF NOT EXISTS "trade_after_sale_log" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_after_sale_log_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "trade_after_sale_log" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "trade_after_sale_log" ADD COLUMN IF NOT EXISTS "user_type" INTEGER;
+ALTER TABLE "trade_after_sale_log" ADD COLUMN IF NOT EXISTS "after_sale_id" BIGINT;
+ALTER TABLE "trade_after_sale_log" ADD COLUMN IF NOT EXISTS "before_status" INTEGER;
+ALTER TABLE "trade_after_sale_log" ADD COLUMN IF NOT EXISTS "after_status" INTEGER;
+ALTER TABLE "trade_after_sale_log" ADD COLUMN IF NOT EXISTS "operate_type" INTEGER;
+ALTER TABLE "trade_after_sale_log" ADD COLUMN IF NOT EXISTS "content" VARCHAR(255);
+ALTER TABLE "trade_after_sale_log" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "trade_after_sale_log" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "trade_after_sale_log" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_after_sale_log" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "trade_after_sale_log" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_after_sale_log" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "trade_after_sale_log_tenant_id_idx" ON "trade_after_sale_log"("tenant_id");
 
 -- 佣金记录
@@ -827,6 +1384,24 @@ CREATE TABLE IF NOT EXISTS "trade_brokerage_record" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_brokerage_record_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "trade_brokerage_record" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "trade_brokerage_record" ADD COLUMN IF NOT EXISTS "biz_id" VARCHAR(255);
+ALTER TABLE "trade_brokerage_record" ADD COLUMN IF NOT EXISTS "biz_type" INTEGER;
+ALTER TABLE "trade_brokerage_record" ADD COLUMN IF NOT EXISTS "title" VARCHAR(255);
+ALTER TABLE "trade_brokerage_record" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
+ALTER TABLE "trade_brokerage_record" ADD COLUMN IF NOT EXISTS "price" INTEGER;
+ALTER TABLE "trade_brokerage_record" ADD COLUMN IF NOT EXISTS "total_price" INTEGER;
+ALTER TABLE "trade_brokerage_record" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "trade_brokerage_record" ADD COLUMN IF NOT EXISTS "frozen_days" INTEGER;
+ALTER TABLE "trade_brokerage_record" ADD COLUMN IF NOT EXISTS "unfreeze_time" TIMESTAMP(3);
+ALTER TABLE "trade_brokerage_record" ADD COLUMN IF NOT EXISTS "source_user_level" INTEGER;
+ALTER TABLE "trade_brokerage_record" ADD COLUMN IF NOT EXISTS "source_user_id" BIGINT;
+ALTER TABLE "trade_brokerage_record" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "trade_brokerage_record" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "trade_brokerage_record" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_brokerage_record" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "trade_brokerage_record" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_brokerage_record" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "trade_brokerage_record_tenant_id_idx" ON "trade_brokerage_record"("tenant_id");
 
 -- 分销用户
@@ -846,6 +1421,18 @@ CREATE TABLE IF NOT EXISTS "trade_brokerage_user" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_brokerage_user_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "trade_brokerage_user" ADD COLUMN IF NOT EXISTS "bind_user_id" BIGINT;
+ALTER TABLE "trade_brokerage_user" ADD COLUMN IF NOT EXISTS "bind_user_time" TIMESTAMP(3);
+ALTER TABLE "trade_brokerage_user" ADD COLUMN IF NOT EXISTS "brokerage_enabled" BOOLEAN;
+ALTER TABLE "trade_brokerage_user" ADD COLUMN IF NOT EXISTS "brokerage_time" TIMESTAMP(3);
+ALTER TABLE "trade_brokerage_user" ADD COLUMN IF NOT EXISTS "brokerage_price" INTEGER;
+ALTER TABLE "trade_brokerage_user" ADD COLUMN IF NOT EXISTS "frozen_price" INTEGER;
+ALTER TABLE "trade_brokerage_user" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "trade_brokerage_user" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "trade_brokerage_user" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_brokerage_user" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "trade_brokerage_user" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_brokerage_user" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "trade_brokerage_user_tenant_id_idx" ON "trade_brokerage_user"("tenant_id");
 
 -- 佣金提现
@@ -877,6 +1464,30 @@ CREATE TABLE IF NOT EXISTS "trade_brokerage_withdraw" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_brokerage_withdraw_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "price" INTEGER;
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "fee_price" INTEGER;
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "total_price" INTEGER;
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "type" INTEGER;
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "user_name" VARCHAR(255);
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "user_account" VARCHAR(255);
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "qr_code_url" VARCHAR(255);
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "bank_name" VARCHAR(255);
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "bank_address" VARCHAR(255);
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "audit_reason" VARCHAR(255);
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "audit_time" TIMESTAMP(3);
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "pay_transfer_id" BIGINT;
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "transfer_channel_code" VARCHAR(255);
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "transfer_time" TIMESTAMP(3);
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "transfer_error_msg" VARCHAR(255);
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_brokerage_withdraw" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "trade_brokerage_withdraw_tenant_id_idx" ON "trade_brokerage_withdraw"("tenant_id");
 
 -- 购物车的商品信息 DO每个商品，对应一条记录，通过 和 关联
@@ -895,6 +1506,17 @@ CREATE TABLE IF NOT EXISTS "trade_cart" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_cart_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "trade_cart" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "trade_cart" ADD COLUMN IF NOT EXISTS "spu_id" BIGINT;
+ALTER TABLE "trade_cart" ADD COLUMN IF NOT EXISTS "sku_id" BIGINT;
+ALTER TABLE "trade_cart" ADD COLUMN IF NOT EXISTS "count" INTEGER;
+ALTER TABLE "trade_cart" ADD COLUMN IF NOT EXISTS "selected" BOOLEAN;
+ALTER TABLE "trade_cart" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "trade_cart" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "trade_cart" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_cart" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "trade_cart" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_cart" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "trade_cart_tenant_id_idx" ON "trade_cart"("tenant_id");
 
 -- 交易中心配置
@@ -923,6 +1545,27 @@ CREATE TABLE IF NOT EXISTS "trade_config" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_config_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "trade_config" ADD COLUMN IF NOT EXISTS "after_sale_refund_reasons" TEXT;
+ALTER TABLE "trade_config" ADD COLUMN IF NOT EXISTS "after_sale_return_reasons" TEXT;
+ALTER TABLE "trade_config" ADD COLUMN IF NOT EXISTS "delivery_express_free_enabled" BOOLEAN;
+ALTER TABLE "trade_config" ADD COLUMN IF NOT EXISTS "delivery_express_free_price" INTEGER;
+ALTER TABLE "trade_config" ADD COLUMN IF NOT EXISTS "delivery_pick_up_enabled" BOOLEAN;
+ALTER TABLE "trade_config" ADD COLUMN IF NOT EXISTS "brokerage_enabled" BOOLEAN;
+ALTER TABLE "trade_config" ADD COLUMN IF NOT EXISTS "brokerage_enabled_condition" INTEGER;
+ALTER TABLE "trade_config" ADD COLUMN IF NOT EXISTS "brokerage_bind_mode" INTEGER;
+ALTER TABLE "trade_config" ADD COLUMN IF NOT EXISTS "brokerage_poster_urls" TEXT;
+ALTER TABLE "trade_config" ADD COLUMN IF NOT EXISTS "brokerage_first_percent" INTEGER;
+ALTER TABLE "trade_config" ADD COLUMN IF NOT EXISTS "brokerage_second_percent" INTEGER;
+ALTER TABLE "trade_config" ADD COLUMN IF NOT EXISTS "brokerage_withdraw_min_price" INTEGER;
+ALTER TABLE "trade_config" ADD COLUMN IF NOT EXISTS "brokerage_withdraw_fee_percent" INTEGER;
+ALTER TABLE "trade_config" ADD COLUMN IF NOT EXISTS "brokerage_frozen_days" INTEGER;
+ALTER TABLE "trade_config" ADD COLUMN IF NOT EXISTS "brokerage_withdraw_types" TEXT;
+ALTER TABLE "trade_config" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "trade_config" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "trade_config" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_config" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "trade_config" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_config" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "trade_config_tenant_id_idx" ON "trade_config"("tenant_id");
 
 -- 快递公司
@@ -941,6 +1584,17 @@ CREATE TABLE IF NOT EXISTS "trade_delivery_express" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_delivery_express_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "trade_delivery_express" ADD COLUMN IF NOT EXISTS "code" VARCHAR(255);
+ALTER TABLE "trade_delivery_express" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "trade_delivery_express" ADD COLUMN IF NOT EXISTS "logo" VARCHAR(255);
+ALTER TABLE "trade_delivery_express" ADD COLUMN IF NOT EXISTS "sort" INTEGER;
+ALTER TABLE "trade_delivery_express" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "trade_delivery_express" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "trade_delivery_express" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "trade_delivery_express" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_delivery_express" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "trade_delivery_express" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_delivery_express" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "trade_delivery_express_tenant_id_idx" ON "trade_delivery_express"("tenant_id");
 
 -- 快递运费模板
@@ -957,6 +1611,15 @@ CREATE TABLE IF NOT EXISTS "trade_delivery_express_template" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_delivery_express_template_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "trade_delivery_express_template" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "trade_delivery_express_template" ADD COLUMN IF NOT EXISTS "charge_mode" INTEGER;
+ALTER TABLE "trade_delivery_express_template" ADD COLUMN IF NOT EXISTS "sort" INTEGER;
+ALTER TABLE "trade_delivery_express_template" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "trade_delivery_express_template" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "trade_delivery_express_template" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_delivery_express_template" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "trade_delivery_express_template" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_delivery_express_template" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "trade_delivery_express_template_tenant_id_idx" ON "trade_delivery_express_template"("tenant_id");
 
 -- 快递运费模板计费配置
@@ -977,6 +1640,19 @@ CREATE TABLE IF NOT EXISTS "trade_delivery_express_template_charge" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_delivery_express_template_charge_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "trade_delivery_express_template_charge" ADD COLUMN IF NOT EXISTS "template_id" BIGINT;
+ALTER TABLE "trade_delivery_express_template_charge" ADD COLUMN IF NOT EXISTS "area_ids" TEXT;
+ALTER TABLE "trade_delivery_express_template_charge" ADD COLUMN IF NOT EXISTS "charge_mode" INTEGER;
+ALTER TABLE "trade_delivery_express_template_charge" ADD COLUMN IF NOT EXISTS "start_count" DECIMAL(18,2);
+ALTER TABLE "trade_delivery_express_template_charge" ADD COLUMN IF NOT EXISTS "start_price" INTEGER;
+ALTER TABLE "trade_delivery_express_template_charge" ADD COLUMN IF NOT EXISTS "extra_count" DECIMAL(18,2);
+ALTER TABLE "trade_delivery_express_template_charge" ADD COLUMN IF NOT EXISTS "extra_price" INTEGER;
+ALTER TABLE "trade_delivery_express_template_charge" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "trade_delivery_express_template_charge" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "trade_delivery_express_template_charge" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_delivery_express_template_charge" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "trade_delivery_express_template_charge" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_delivery_express_template_charge" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "trade_delivery_express_template_charge_tenant_id_idx" ON "trade_delivery_express_template_charge"("tenant_id");
 
 -- 快递运费模板包邮配置
@@ -994,6 +1670,16 @@ CREATE TABLE IF NOT EXISTS "trade_delivery_express_template_free" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_delivery_express_template_free_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "trade_delivery_express_template_free" ADD COLUMN IF NOT EXISTS "template_id" BIGINT;
+ALTER TABLE "trade_delivery_express_template_free" ADD COLUMN IF NOT EXISTS "area_ids" TEXT;
+ALTER TABLE "trade_delivery_express_template_free" ADD COLUMN IF NOT EXISTS "free_price" INTEGER;
+ALTER TABLE "trade_delivery_express_template_free" ADD COLUMN IF NOT EXISTS "free_count" INTEGER;
+ALTER TABLE "trade_delivery_express_template_free" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "trade_delivery_express_template_free" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "trade_delivery_express_template_free" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_delivery_express_template_free" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "trade_delivery_express_template_free" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_delivery_express_template_free" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "trade_delivery_express_template_free_tenant_id_idx" ON "trade_delivery_express_template_free"("tenant_id");
 
 -- 自提门店
@@ -1019,6 +1705,24 @@ CREATE TABLE IF NOT EXISTS "trade_delivery_pick_up_store" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_delivery_pick_up_store_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "trade_delivery_pick_up_store" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "trade_delivery_pick_up_store" ADD COLUMN IF NOT EXISTS "introduction" VARCHAR(255);
+ALTER TABLE "trade_delivery_pick_up_store" ADD COLUMN IF NOT EXISTS "phone" VARCHAR(255);
+ALTER TABLE "trade_delivery_pick_up_store" ADD COLUMN IF NOT EXISTS "area_id" INTEGER;
+ALTER TABLE "trade_delivery_pick_up_store" ADD COLUMN IF NOT EXISTS "detail_address" VARCHAR(255);
+ALTER TABLE "trade_delivery_pick_up_store" ADD COLUMN IF NOT EXISTS "logo" VARCHAR(255);
+ALTER TABLE "trade_delivery_pick_up_store" ADD COLUMN IF NOT EXISTS "opening_time" VARCHAR(255);
+ALTER TABLE "trade_delivery_pick_up_store" ADD COLUMN IF NOT EXISTS "closing_time" VARCHAR(255);
+ALTER TABLE "trade_delivery_pick_up_store" ADD COLUMN IF NOT EXISTS "latitude" DECIMAL(18,2);
+ALTER TABLE "trade_delivery_pick_up_store" ADD COLUMN IF NOT EXISTS "longitude" DECIMAL(18,2);
+ALTER TABLE "trade_delivery_pick_up_store" ADD COLUMN IF NOT EXISTS "verify_user_ids" TEXT;
+ALTER TABLE "trade_delivery_pick_up_store" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "trade_delivery_pick_up_store" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "trade_delivery_pick_up_store" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "trade_delivery_pick_up_store" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_delivery_pick_up_store" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "trade_delivery_pick_up_store" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_delivery_pick_up_store" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "trade_delivery_pick_up_store_tenant_id_idx" ON "trade_delivery_pick_up_store"("tenant_id");
 
 -- 交易订单
@@ -1084,6 +1788,64 @@ CREATE TABLE IF NOT EXISTS "trade_order" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_order_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "no" VARCHAR(255);
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "type" INTEGER;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "terminal" INTEGER;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "user_ip" VARCHAR(255);
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "user_remark" VARCHAR(255);
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "product_count" INTEGER;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "finish_time" TIMESTAMP(3);
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "cancel_time" TIMESTAMP(3);
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "cancel_type" INTEGER;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "comment_status" BOOLEAN;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "brokerage_user_id" BIGINT;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "pay_order_id" BIGINT;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "pay_status" BOOLEAN;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "pay_time" TIMESTAMP(3);
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "pay_channel_code" VARCHAR(255);
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "total_price" INTEGER;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "discount_price" INTEGER;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "delivery_price" INTEGER;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "adjust_price" INTEGER;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "pay_price" INTEGER;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "delivery_type" INTEGER;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "logistics_id" BIGINT;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "logistics_no" VARCHAR(255);
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "delivery_time" TIMESTAMP(3);
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "receive_time" TIMESTAMP(3);
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "receiver_name" VARCHAR(255);
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "receiver_mobile" VARCHAR(255);
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "receiver_area_id" INTEGER;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "receiver_detail_address" VARCHAR(255);
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "pick_up_store_id" BIGINT;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "pick_up_verify_code" VARCHAR(255);
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "refund_status" INTEGER;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "refund_price" INTEGER;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "coupon_id" BIGINT;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "coupon_price" INTEGER;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "use_point" INTEGER;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "point_price" INTEGER;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "give_point" INTEGER;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "refund_point" INTEGER;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "vip_price" INTEGER;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "give_coupon_template_counts" TEXT;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "give_coupon_ids" TEXT;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "seckill_activity_id" BIGINT;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "bargain_activity_id" BIGINT;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "bargain_record_id" BIGINT;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "combination_activity_id" BIGINT;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "combination_head_id" BIGINT;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "combination_record_id" BIGINT;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "point_activity_id" BIGINT;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_order" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "trade_order_tenant_id_idx" ON "trade_order"("tenant_id");
 
 -- 交易订单项
@@ -1123,6 +1885,38 @@ CREATE TABLE IF NOT EXISTS "trade_order_item" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_order_item_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "order_id" BIGINT;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "cart_id" BIGINT;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "spu_id" BIGINT;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "spu_name" VARCHAR(255);
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "sku_id" BIGINT;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "properties" TEXT;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "pic_url" VARCHAR(255);
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "count" INTEGER;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "comment_status" BOOLEAN;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "price" INTEGER;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "discount_price" INTEGER;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "delivery_price" INTEGER;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "adjust_price" INTEGER;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "pay_price" INTEGER;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "coupon_price" INTEGER;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "point_price" INTEGER;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "use_point" INTEGER;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "give_point" INTEGER;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "vip_price" INTEGER;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "after_sale_id" BIGINT;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "after_sale_status" INTEGER;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "property_id" BIGINT;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "property_name" VARCHAR(255);
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "value_id" BIGINT;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "value_name" VARCHAR(255);
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_order_item" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "trade_order_item_tenant_id_idx" ON "trade_order_item"("tenant_id");
 
 -- 订单日志
@@ -1143,6 +1937,19 @@ CREATE TABLE IF NOT EXISTS "trade_order_log" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_order_log_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "trade_order_log" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "trade_order_log" ADD COLUMN IF NOT EXISTS "user_type" INTEGER;
+ALTER TABLE "trade_order_log" ADD COLUMN IF NOT EXISTS "order_id" BIGINT;
+ALTER TABLE "trade_order_log" ADD COLUMN IF NOT EXISTS "before_status" INTEGER;
+ALTER TABLE "trade_order_log" ADD COLUMN IF NOT EXISTS "after_status" INTEGER;
+ALTER TABLE "trade_order_log" ADD COLUMN IF NOT EXISTS "operate_type" INTEGER;
+ALTER TABLE "trade_order_log" ADD COLUMN IF NOT EXISTS "content" VARCHAR(255);
+ALTER TABLE "trade_order_log" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "trade_order_log" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "trade_order_log" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_order_log" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "trade_order_log" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_order_log" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "trade_order_log_tenant_id_idx" ON "trade_order_log"("tenant_id");
 
 -- 交易统计 DO以天为维度，统计全部的数据
@@ -1168,4 +1975,22 @@ CREATE TABLE IF NOT EXISTS "trade_statistics" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "trade_statistics_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "trade_statistics" ADD COLUMN IF NOT EXISTS "time" TIMESTAMP(3);
+ALTER TABLE "trade_statistics" ADD COLUMN IF NOT EXISTS "order_create_count" INTEGER;
+ALTER TABLE "trade_statistics" ADD COLUMN IF NOT EXISTS "order_pay_count" INTEGER;
+ALTER TABLE "trade_statistics" ADD COLUMN IF NOT EXISTS "order_pay_price" INTEGER;
+ALTER TABLE "trade_statistics" ADD COLUMN IF NOT EXISTS "after_sale_count" INTEGER;
+ALTER TABLE "trade_statistics" ADD COLUMN IF NOT EXISTS "after_sale_refund_price" INTEGER;
+ALTER TABLE "trade_statistics" ADD COLUMN IF NOT EXISTS "brokerage_settlement_price" INTEGER;
+ALTER TABLE "trade_statistics" ADD COLUMN IF NOT EXISTS "wallet_pay_price" INTEGER;
+ALTER TABLE "trade_statistics" ADD COLUMN IF NOT EXISTS "recharge_pay_count" INTEGER;
+ALTER TABLE "trade_statistics" ADD COLUMN IF NOT EXISTS "recharge_pay_price" INTEGER;
+ALTER TABLE "trade_statistics" ADD COLUMN IF NOT EXISTS "recharge_refund_count" INTEGER;
+ALTER TABLE "trade_statistics" ADD COLUMN IF NOT EXISTS "recharge_refund_price" INTEGER;
+ALTER TABLE "trade_statistics" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "trade_statistics" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "trade_statistics" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_statistics" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "trade_statistics" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "trade_statistics" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "trade_statistics_tenant_id_idx" ON "trade_statistics"("tenant_id");

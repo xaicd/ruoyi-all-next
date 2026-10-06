@@ -18,6 +18,17 @@ CREATE TABLE IF NOT EXISTS "bpm_category" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "bpm_category_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "bpm_category" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "bpm_category" ADD COLUMN IF NOT EXISTS "code" VARCHAR(255);
+ALTER TABLE "bpm_category" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
+ALTER TABLE "bpm_category" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "bpm_category" ADD COLUMN IF NOT EXISTS "sort" INTEGER;
+ALTER TABLE "bpm_category" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "bpm_category" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "bpm_category" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "bpm_category" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "bpm_category" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "bpm_category" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "bpm_category_tenant_id_idx" ON "bpm_category"("tenant_id");
 
 -- BPM 工作流的表单定义用于工作流的申请表单，需要动态配置的场景
@@ -36,9 +47,20 @@ CREATE TABLE IF NOT EXISTS "bpm_form" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "bpm_form_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "bpm_form" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "bpm_form" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "bpm_form" ADD COLUMN IF NOT EXISTS "conf" VARCHAR(255);
+ALTER TABLE "bpm_form" ADD COLUMN IF NOT EXISTS "fields" TEXT;
+ALTER TABLE "bpm_form" ADD COLUMN IF NOT EXISTS "remark" VARCHAR(255);
+ALTER TABLE "bpm_form" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "bpm_form" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "bpm_form" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "bpm_form" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "bpm_form" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "bpm_form" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "bpm_form_tenant_id_idx" ON "bpm_form"("tenant_id");
 
--- OA 请假申请 DO 请假天数，目前先简单做。一般是分成请假上午和下午，可以是 1 整天，可以是 0.5 半天
+-- OA 请假申请 DO 请假天数，目前先简单做。一般是分成请假上午和下午，可以是 
 CREATE TABLE IF NOT EXISTS "bpm_oa_leave" (
     "id" TEXT NOT NULL,
     "user_id" BIGINT,
@@ -57,6 +79,20 @@ CREATE TABLE IF NOT EXISTS "bpm_oa_leave" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "bpm_oa_leave_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "type" INTEGER;
+ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "reason" VARCHAR(255);
+ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "start_time" TIMESTAMP(3);
+ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "end_time" TIMESTAMP(3);
+ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "day" BIGINT;
+ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "process_instance_id" VARCHAR(255);
+ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "bpm_oa_leave" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "bpm_oa_leave_tenant_id_idx" ON "bpm_oa_leave"("tenant_id");
 
 -- BPM 流程定义的拓信息主要解决 Flowable 不支持拓展字段，所以新建该表
@@ -99,6 +135,41 @@ CREATE TABLE IF NOT EXISTS "bpm_process_definition_info" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "bpm_process_definition_info_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "process_definition_id" VARCHAR(255);
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "model_id" VARCHAR(255);
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "model_type" INTEGER;
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "category" VARCHAR(255);
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "icon" VARCHAR(255);
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "form_type" INTEGER;
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "form_id" BIGINT;
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "form_conf" VARCHAR(255);
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "form_fields" TEXT;
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "form_custom_create_path" VARCHAR(255);
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "form_custom_view_path" VARCHAR(255);
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "simple_model" VARCHAR(255);
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "visible" BOOLEAN;
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "sort" BIGINT;
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "start_user_ids" TEXT;
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "start_dept_ids" TEXT;
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "manager_user_ids" TEXT;
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "allow_cancel_running_process" BOOLEAN;
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "allow_withdraw_task" BOOLEAN;
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "process_id_rule" VARCHAR(255);
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "auto_approval_type" INTEGER;
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "title_setting" VARCHAR(255);
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "summary_setting" VARCHAR(255);
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "process_before_trigger_setting" VARCHAR(255);
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "process_after_trigger_setting" VARCHAR(255);
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "task_before_trigger_setting" VARCHAR(255);
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "task_after_trigger_setting" VARCHAR(255);
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "print_template_setting" VARCHAR(255);
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "bpm_process_definition_info" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "bpm_process_definition_info_tenant_id_idx" ON "bpm_process_definition_info"("tenant_id");
 
 -- BPM 流程表达式
@@ -115,6 +186,15 @@ CREATE TABLE IF NOT EXISTS "bpm_process_expression" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "bpm_process_expression_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "bpm_process_expression" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "bpm_process_expression" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "bpm_process_expression" ADD COLUMN IF NOT EXISTS "expression" VARCHAR(255);
+ALTER TABLE "bpm_process_expression" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "bpm_process_expression" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "bpm_process_expression" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "bpm_process_expression" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "bpm_process_expression" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "bpm_process_expression" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "bpm_process_expression_tenant_id_idx" ON "bpm_process_expression"("tenant_id");
 
 -- 流程抄送
@@ -138,9 +218,25 @@ CREATE TABLE IF NOT EXISTS "bpm_process_instance_copy" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "bpm_process_instance_copy_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "start_user_id" BIGINT;
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "process_instance_name" VARCHAR(255);
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "process_instance_id" VARCHAR(255);
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "process_definition_id" VARCHAR(255);
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "category" VARCHAR(255);
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "activity_id" VARCHAR(255);
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "activity_name" VARCHAR(255);
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "task_id" VARCHAR(255);
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "user_id" BIGINT;
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "reason" VARCHAR(255);
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "bpm_process_instance_copy" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "bpm_process_instance_copy_tenant_id_idx" ON "bpm_process_instance_copy"("tenant_id");
 
--- BPM 流程监听器 DO目的：本质上它是流程监听器的模版，用于 BPMN 在设计时，直接选择这些模版
+-- BPM 流程监听器 DO目的：本质上它是流程监听器的模版，用于 BPMN 在设计
 CREATE TABLE IF NOT EXISTS "bpm_process_listener" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255),
@@ -157,6 +253,18 @@ CREATE TABLE IF NOT EXISTS "bpm_process_listener" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "bpm_process_listener_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "bpm_process_listener" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "bpm_process_listener" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "bpm_process_listener" ADD COLUMN IF NOT EXISTS "type" VARCHAR(255);
+ALTER TABLE "bpm_process_listener" ADD COLUMN IF NOT EXISTS "event" VARCHAR(255);
+ALTER TABLE "bpm_process_listener" ADD COLUMN IF NOT EXISTS "value_type" VARCHAR(255);
+ALTER TABLE "bpm_process_listener" ADD COLUMN IF NOT EXISTS "value" VARCHAR(255);
+ALTER TABLE "bpm_process_listener" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "bpm_process_listener" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "bpm_process_listener" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "bpm_process_listener" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "bpm_process_listener" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "bpm_process_listener" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "bpm_process_listener_tenant_id_idx" ON "bpm_process_listener"("tenant_id");
 
 -- BPM 用户组
@@ -174,4 +282,14 @@ CREATE TABLE IF NOT EXISTS "bpm_user_group" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "bpm_user_group_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "bpm_user_group" ADD COLUMN IF NOT EXISTS "name" VARCHAR(255);
+ALTER TABLE "bpm_user_group" ADD COLUMN IF NOT EXISTS "description" VARCHAR(255);
+ALTER TABLE "bpm_user_group" ADD COLUMN IF NOT EXISTS "status" INTEGER;
+ALTER TABLE "bpm_user_group" ADD COLUMN IF NOT EXISTS "user_ids" TEXT;
+ALTER TABLE "bpm_user_group" ADD COLUMN IF NOT EXISTS "tenant_id" VARCHAR(64) NOT NULL;
+ALTER TABLE "bpm_user_group" ADD COLUMN IF NOT EXISTS "created_by" VARCHAR(255);
+ALTER TABLE "bpm_user_group" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "bpm_user_group" ADD COLUMN IF NOT EXISTS "updated_by" VARCHAR(255);
+ALTER TABLE "bpm_user_group" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "bpm_user_group" ADD COLUMN IF NOT EXISTS "deleted" BOOLEAN NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS "bpm_user_group_tenant_id_idx" ON "bpm_user_group"("tenant_id");
