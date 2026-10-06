@@ -1,6 +1,7 @@
 /**
  * ERP 审核状态规则 —— 忠实移植自源框架 `ErpAuditStatus` + `ErpPurchaseOrderServiceImpl`。
  */
+import { runWithTenantContext } from "@/modules/shared/backend/lib/biz-tenant"
 import { describe, it, expect } from "vitest"
 import {
   ERP_AUDIT_MACHINE, auditActions, auditPurchaseOrder, canMutateAuditedDoc, reverseBlockedReason,
@@ -17,6 +18,13 @@ const statusOf = async (id: string) =>
   ({ 10: "PROCESS", 20: "APPROVE" } as Record<number, string>)[
     Number(((await ErpPurchaseOrderRepository.findById(id)) as { status?: unknown } | null)?.status)
   ] ?? ""
+
+/**
+ * 这些用例直接驱动仓储/服务，**必须带租户上下文** —— 业务表 tenant_id 非空
+ * （AGENTS §4.8: 租户从全局上下文取）。生成的测试模板本来就会包这一层，
+ * 手写的这几个漏了，于是真实库报 `null value in column "tenant_id"`。
+ */
+const asTenant = <T>(work: () => Promise<T>) => runWithTenantContext({ tenantId: "1" }, work)
 
 describe("ERP 审核状态规则", () => {
   it("状态机定义自洽；两个状态都不是终态（可以反审核）", () => {
@@ -42,37 +50,37 @@ describe("ERP 审核状态规则", () => {
     expect(auditActions("APPROVE", { inCount: 3 }).unapproveBlockedReason).toMatch(/入库/)
   })
 
-  it("审核: PROCESS -> APPROVE", async () => {
+  it("审核: PROCESS -> APPROVE", () => asTenant(async () => {
     const id = await createOrder()
     expect((await auditPurchaseOrder(id, "APPROVE")).status).toBe("APPROVE")
     expect(await statusOf(id)).toBe("APPROVE")
-  })
+  }))
 
-  it("反审核: APPROVE -> PROCESS（无下游单据时）", async () => {
+  it("反审核: APPROVE -> PROCESS（无下游单据时）", () => asTenant(async () => {
     const id = await createOrder()
     await auditPurchaseOrder(id, "APPROVE")
     expect((await auditPurchaseOrder(id, "PROCESS")).status).toBe("PROCESS")
-  })
+  }))
 
-  it("★ 重复审核报错（状态非翻转 -> 非法迁移）", async () => {
+  it("★ 重复审核报错（状态非翻转 -> 非法迁移）", () => asTenant(async () => {
     const id = await createOrder()
     await auditPurchaseOrder(id, "APPROVE")
     await expect(auditPurchaseOrder(id, "APPROVE")).rejects.toThrow(/非法状态迁移/)
-  })
+  }))
 
-  it("★ 反审核被守卫拦住时**状态没被改动**", async () => {
+  it("★ 反审核被守卫拦住时**状态没被改动**", () => asTenant(async () => {
     const id = await createOrder()
     await auditPurchaseOrder(id, "APPROVE")
     await expect(auditPurchaseOrder(id, "PROCESS", { inCount: 1 })).rejects.toThrow(/入库|出库/)
     expect(await statusOf(id)).toBe("APPROVE")
-  })
+  }))
 
-  it("★ 并发审核只有一个成功", async () => {
+  it("★ 并发审核只有一个成功", () => asTenant(async () => {
     const id = await createOrder()
     const results = await Promise.allSettled([auditPurchaseOrder(id, "APPROVE"), auditPurchaseOrder(id, "APPROVE")])
     expect(results.filter((r) => r.status === "fulfilled")).toHaveLength(1)
     expect(await statusOf(id)).toBe("APPROVE")
-  })
+  }))
 
   it("auditActions 给前端渲染按钮（与后端同一真源）", () => {
     expect(auditActions("PROCESS")).toMatchObject({ canApprove: true, canEdit: true, canUnapprove: false })
