@@ -90,25 +90,38 @@ function inspectFeatureDocs(featureDir, docName) {
  */
 function inspectBugs(featureDir) {
   const file = path.join(featureDir, "bugs.md")
-  if (!fs.existsSync(file)) return { present: false, open: 0, malformed: 0 }
+  if (!fs.existsSync(file)) return { present: false, open: 0, malformed: 0, unknown: 0 }
+  const KNOWN = new Set(["未修", "已修", "不修"])
+  const cellsOf = (line) => line.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map((cell) => cell.trim())
   const rows = fs
     .readFileSync(file, "utf8")
     .split("\n")
-    .filter((line) => line.trim().startsWith("|") && !/^\s*\|\s*-+/.test(line) && !/\|\s*ID\s*\|/.test(line))
+    .filter((line) => line.trim().startsWith("|"))
+    .filter((line) => !cellsOf(line).includes("ID"))       // 表头
+    .filter((line) => !cellsOf(line).every((cell) => /^:?-+:?$/.test(cell))) // 分隔线（允许空格/对齐冒号）
+
   let open = 0
   let malformed = 0
+  let unknown = 0
   for (const row of rows) {
-    // 不能过滤空单元格 —— 那会**打乱列位置**：`| B2 | 现象 | | | 未修 |` 里的
-    // 空列被删掉后只剩 3 列，整行被判为格式不对而跳过（实测踩到）。只剥首尾空段。
-    const cells = row.split("|").map((cell) => cell.trim())
-    while (cells.length > 0 && cells[0] === "") cells.shift()
-    while (cells.length > 0 && cells[cells.length - 1] === "") cells.pop()
-    if (cells.length < 5) continue
+    // 先剥掉**结构性的**首尾竖线，再 split —— 这样"末尾空列"不会被吞掉。
+    // （早先直接 split 再删尾部空串，把 `| B1 | 现象 | cmd | cmd | |` 这样的行
+    //   删成 4 列而整行跳过 —— 空状态的行会**凭空消失**，实测踩到。）
+    const cells = cellsOf(row)
+    if (cells.length < 5) {
+      malformed += 1 // 少列: 不能当没看见
+      continue
+    }
     const status = cells[cells.length - 1]
-    if (status === "未修" || status === "修中" || status === "") open += 1
+    if (status === "" || status === "未修") open += 1
+    if (status !== "" && !KNOWN.has(status)) {
+      // 状态写错字（未休 / Fixed / OPEN…）—— 静默忽略等于把真缺陷藏起来
+      unknown += 1
+      malformed += 1
+    }
     if (!cells[2] || !cells[3]) malformed += 1 // 复现命令 / 验证命令
   }
-  return { present: true, open, malformed }
+  return { present: true, open, malformed, unknown }
 }
 
 function main() {
