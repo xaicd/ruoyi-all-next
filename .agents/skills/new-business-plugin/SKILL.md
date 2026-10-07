@@ -5,6 +5,23 @@ description: 从一句业务需求（如"做个电商平台"）到新业务域�
 
 # 新业务域 → 第一方插件 全链路交付
 
+
+## 走交付链，不要手写文档
+
+**先读 `AGENTS.md` §3.4「AI-Driven 交付链」** —— 从一句话需求到交付的 12 步与全部入口都在那里。
+
+最短路径:
+
+    npm run feature:new -- --name <名> --domain <域> --title "<标题>"   # 产 brief.json
+    # 填 brief（模型只写这一份）
+    npm run feature:build -- --name <名>                                 # 展开 6 文档 + evidence + runbook
+    npm run delivery:check -- --feature <名>                             # 逐条「还缺什么」
+    npm run domain:new <域>                                              # 建域
+    npm run check && npm run task:verify -- --feature <名> --summary      # 门禁 + 从 git 追溯
+
+**记住两半**: 规划链在 `docs/features/<名>/`，实现在 `<域>` 的目录 ——
+特性目录里不放业务代码。
+
 ## 把既有域的原语接进业务域（库存 / 支付）
 
 电商类业务**不要重写**库存扣减与支付状态机 —— 那两样已经在 `wms` / `pay` 里做成了

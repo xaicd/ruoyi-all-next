@@ -156,6 +156,38 @@
 6. 以域为独立扩展单元，支持独立构建、部署、水平扩缩、配置和迁移所有权；不得承诺无边界的“无限扩展”，容量目标须由 SLO、压测和资源预算确定。
 7. 低代码模板、Codegen ZIP 与 Online 代码下载必须遵守同一双模：生成 Service 可被 broker 调用；跨域走 Domain Facade；同进程 SDK，拆分后 RPC。禁止生成跨域直接 import Service 的代码。Online 预览/下载必须走 `infraPlatformFacade`，不得 import `CodegenEngineService`；字典选项必须走 `systemPublicFacade.getDictDataByType`，不得 import `SystemDictService`。`shared` 鉴权必须走 `systemPlatformFacade.resolveTenantEntitlement`，不得 import `TenantEntitlementService`。
 
+## 3.4 AI-Driven 交付链（**给一句话需求，按这个顺序走**）
+
+> 这套机制的存在意义: 从「一句话需求」到「交付」之间，**每一步都可执行、可校验、可追溯**，
+> 且凡「我说做过了」都换成**可核验的记录**（产物看文件、任务看 git、门禁看退出码、
+> gate 看证据、上线看指纹、实施看实测记录）。**不要手写文档，也不要凭记忆猜顺序。**
+
+| 步骤 | 命令 | 产物 / 证据 |
+|---|---|---|
+| 1. 立特性 | `npm run feature:new -- --name <名> --domain <域> --title "<标题>"` | `brief.json`（**模型只写这一份**，约 500 token） |
+| 2. 填 brief | 编辑 `docs/features/<名>/brief.json` | 目标/角色/故事/约束/验收/不变量/表/任务(含归属与白名单) |
+| 3. 展开 | `npm run feature:build -- --name <名>` | 6 份文档 + `evidence.json` + `runbook.json`（**结构不可能缺**） |
+| 4. 看进度 | `npm run delivery:check -- --feature <名>` | 11 阶段 / 6 gate / 任务树 / 缺陷，逐条「还缺什么」 |
+| 5. 建域 | `npm run domain:new <域>` | 建表迁移 + codegen + 注册插件（**按域，不按特性**） |
+| 6. 门禁 | `npm run check` / `build` / `domain:pack <域>` | **退出码** |
+| 7. 建库 | `npx prisma migrate deploy` + 种子 | 表 / 菜单 / 授权 |
+| 8. 业务逻辑 | 写成 Service + 测试 | 复用既有原语（条件更新、状态机、幂等） |
+| 9. 追溯 | `npm run task:verify -- --feature <名> --summary` | **从 git 推导**完成度；单任务核对白名单（1 Task = 1 Commit） |
+| 10. 上线 | `npm run fingerprint` → `fingerprint:verify` | 确认上线的就是测试过的那份 |
+| 11. 实施 | `npm run runbook -- --feature <名> --check/--dry-run/--run` | 割接 + **失败自动回滚** + **实测**耗时 |
+| 12. 运营 | `npm run agent:ops -- <域>.<实体> health/seed-sample/purge-sample` | 接口体检 + 造数/清数 |
+
+要点（都是实测踩出来的）:
+
+1. **特性是两半**: 规划链在 `docs/features/<名>/`，**实现在域目录**（`plugin-<域>/` 等）。
+   特性目录里**不该**有业务代码 —— 打包/拆分部署/边界门禁都按**域**工作。
+2. **定制业务不回写基座**（§17.3）。基座只建原生域；`shop`/`points` 这类落在**衍生工程**。
+3. **骨架不算完成**: 检查器认得出「还有 N 处 待填」，不会假绿。
+4. **孵化出的工程必须有 git 仓库** —— 任务痕迹与指纹都建立在 git 上（孵化器已自动 `git init`）。
+5. **提交必须带 `[T<ID>]`**（方括号），并在该任务的文件白名单内 —— 否则 `task:verify` 会拦，
+   裸 `T1` 会误匹配到「顺口提到」的提交。
+6. **G5 说 passed ⇒ 必须有一份全过的 `runbook-result.json`**；`not_applicable` 必须给理由。
+
 ## 4. 编码规范（强制）
 
 ### 4.1 Route 薄层
