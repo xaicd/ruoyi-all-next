@@ -146,3 +146,6 @@ db_backup_*.sql
 ruoyi/**
 apps/ruoyi-all-next/
 apps/ruoyi
+
+# 派生证据快照: 每次跑 check 都会变，作为缓存而非源
+/docs/architecture/artifacts/evolution-backlog.json
