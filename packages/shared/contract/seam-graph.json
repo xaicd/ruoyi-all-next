@@ -150,9 +150,7 @@
       },
       "consumer": {
         "adminApi": "src/app/api/v1/admin/system",
-        "adminPages": "src/app/(admin-pages)/admin/system",
-        "modulePages": "packages/domains/system/frontend/pages",
-        "moduleCpcPages": "packages/domains/system/frontend/cpc-pages"
+        "modulePages": "packages/domains/system/frontend/pages"
       },
       "rolesComplete": true
     },
@@ -310,7 +308,6 @@
         "appApi": "src/app/api/v1/plugins/ruoyi.bpm/api",
         "openApi": "src/app/api/v1/plugins/ruoyi.bpm/api",
         "frontendApi": "packages/plugins/plugin-bpm/frontend/api",
-        "adminPages": "src/app/(admin-pages)/admin/bpm",
         "modulePages": "packages/plugins/plugin-bpm/frontend/pages"
       },
       "rolesComplete": true
@@ -360,7 +357,6 @@
         "appApi": "src/app/api/v1/plugins/ruoyi.pay/api",
         "openApi": "src/app/api/v1/plugins/ruoyi.pay/api",
         "frontendApi": "packages/plugins/plugin-pay/frontend/api",
-        "adminPages": "src/app/(admin-pages)/admin/pay",
         "modulePages": "packages/plugins/plugin-pay/frontend/pages"
       },
       "rolesComplete": true
@@ -395,7 +391,6 @@
         "appApi": "src/app/api/v1/plugins/ruoyi.report/api",
         "openApi": "src/app/api/v1/plugins/ruoyi.report/api",
         "frontendApi": "packages/plugins/plugin-report/frontend/api",
-        "adminPages": "src/app/(admin-pages)/admin/report",
         "modulePages": "packages/plugins/plugin-report/frontend/pages"
       },
       "rolesComplete": true
@@ -438,7 +433,6 @@
         "appApi": "src/app/api/v1/plugins/ruoyi.mp/api",
         "openApi": "src/app/api/v1/plugins/ruoyi.mp/api",
         "frontendApi": "packages/plugins/plugin-mp/frontend/api",
-        "adminPages": "src/app/(admin-pages)/admin/mp",
         "modulePages": "packages/plugins/plugin-mp/frontend/pages"
       },
       "rolesComplete": true
@@ -522,7 +516,6 @@
         "appApi": "src/app/api/v1/plugins/ruoyi.mall/api",
         "openApi": "src/app/api/v1/plugins/ruoyi.mall/api",
         "frontendApi": "packages/plugins/plugin-mall/frontend/api",
-        "adminPages": "src/app/(admin-pages)/admin/mall",
         "modulePages": "packages/plugins/plugin-mall/frontend/pages"
       },
       "rolesComplete": true
@@ -570,7 +563,6 @@
         "appApi": "src/app/api/v1/plugins/ruoyi.member/api",
         "openApi": "src/app/api/v1/plugins/ruoyi.member/api",
         "frontendApi": "packages/plugins/plugin-member/frontend/api",
-        "adminPages": "src/app/(admin-pages)/admin/member",
         "modulePages": "packages/plugins/plugin-member/frontend/pages"
       },
       "rolesComplete": true
@@ -626,7 +618,6 @@
         "appApi": "src/app/api/v1/plugins/ruoyi.crm/api",
         "openApi": "src/app/api/v1/plugins/ruoyi.crm/api",
         "frontendApi": "packages/plugins/plugin-crm/frontend/api",
-        "adminPages": "src/app/(admin-pages)/admin/crm",
         "modulePages": "packages/plugins/plugin-crm/frontend/pages"
       },
       "rolesComplete": true
@@ -694,7 +685,6 @@
         "appApi": "src/app/api/v1/plugins/ruoyi.erp/api",
         "openApi": "src/app/api/v1/plugins/ruoyi.erp/api",
         "frontendApi": "packages/plugins/plugin-erp/frontend/api",
-        "adminPages": "src/app/(admin-pages)/admin/erp",
         "modulePages": "packages/plugins/plugin-erp/frontend/pages"
       },
       "rolesComplete": true
@@ -748,7 +738,6 @@
         "appApi": "src/app/api/v1/plugins/ruoyi.wms/api",
         "openApi": "src/app/api/v1/plugins/ruoyi.wms/api",
         "frontendApi": "packages/plugins/plugin-wms/frontend/api",
-        "adminPages": "src/app/(admin-pages)/admin/wms",
         "modulePages": "packages/plugins/plugin-wms/frontend/pages"
       },
       "rolesComplete": true
@@ -915,7 +904,6 @@
         "appApi": "src/app/api/v1/plugins/ruoyi.mes/api",
         "openApi": "src/app/api/v1/plugins/ruoyi.mes/api",
         "frontendApi": "packages/plugins/plugin-mes/frontend/api",
-        "adminPages": "src/app/(admin-pages)/admin/mes",
         "modulePages": "packages/plugins/plugin-mes/frontend/pages"
       },
       "rolesComplete": true
@@ -968,7 +956,6 @@
         "appApi": "src/app/api/v1/plugins/ruoyi.ai/api",
         "openApi": "src/app/api/v1/plugins/ruoyi.ai/api",
         "frontendApi": "packages/plugins/plugin-ai/frontend/api",
-        "adminPages": "src/app/(admin-pages)/admin/ai",
         "modulePages": "packages/plugins/plugin-ai/frontend/pages"
       },
       "rolesComplete": true
@@ -1008,7 +995,6 @@
         "appApi": "src/app/api/v1/plugins/ruoyi.aigw/api",
         "openApi": "src/app/api/v1/plugins/ruoyi.aigw/api",
         "frontendApi": "packages/plugins/plugin-aigw/frontend/api",
-        "adminPages": "src/app/(admin-pages)/admin/aigw",
         "modulePages": "packages/plugins/plugin-aigw/frontend/pages",
         "cpcPages": "src/app/(cpc-pages)/cpc/aigw",
         "moduleCpcPages": "packages/plugins/plugin-aigw/frontend/cpc-pages"
@@ -1061,7 +1047,6 @@
         "appApi": "src/app/api/v1/plugins/ruoyi.iot/api",
         "openApi": "src/app/api/v1/plugins/ruoyi.iot/api",
         "frontendApi": "packages/plugins/plugin-iot/frontend/api",
-        "adminPages": "src/app/(admin-pages)/admin/iot",
         "modulePages": "packages/plugins/plugin-iot/frontend/pages"
       },
       "rolesComplete": true
@@ -1112,7 +1097,6 @@
         "appApi": "src/app/api/v1/plugins/ruoyi.im/api",
         "openApi": "src/app/api/v1/plugins/ruoyi.im/api",
         "frontendApi": "packages/plugins/plugin-im/frontend/api",
-        "adminPages": "src/app/(admin-pages)/admin/im",
         "modulePages": "packages/plugins/plugin-im/frontend/pages"
       },
       "rolesComplete": true

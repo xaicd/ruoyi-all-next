@@ -1,0 +1,2857 @@
+{
+  "$schema": "ruoyi.admin-pages/v1",
+  "note": "admin 路由 → 页面实现的**声明**（真源）。由 scripts/generate-admin-pages.cjs 展开成「一个派发器 + 一张映射表」；页面实现在各域包里。手写页面（kind=unknown）保持为文件，静态路由优先于派发器。",
+  "pages": [
+    {
+      "slug": "ai/ai-api-key",
+      "kind": "page",
+      "exportName": "AiApiKeyListPage",
+      "module": "@/modules/ai/frontend/pages/ai-api-key-list.page"
+    },
+    {
+      "slug": "ai/ai-chat-conversation",
+      "kind": "page",
+      "exportName": "AiChatConversationListPage",
+      "module": "@/modules/ai/frontend/pages/ai-chat-conversation-list.page"
+    },
+    {
+      "slug": "ai/ai-chat-message",
+      "kind": "page",
+      "exportName": "AiChatMessageListPage",
+      "module": "@/modules/ai/frontend/pages/ai-chat-message-list.page"
+    },
+    {
+      "slug": "ai/ai-chat-role",
+      "kind": "page",
+      "exportName": "AiChatRoleListPage",
+      "module": "@/modules/ai/frontend/pages/ai-chat-role-list.page"
+    },
+    {
+      "slug": "ai/ai-image",
+      "kind": "page",
+      "exportName": "AiImageListPage",
+      "module": "@/modules/ai/frontend/pages/ai-image-list.page"
+    },
+    {
+      "slug": "ai/ai-knowledge",
+      "kind": "page",
+      "exportName": "AiKnowledgeListPage",
+      "module": "@/modules/ai/frontend/pages/ai-knowledge-list.page"
+    },
+    {
+      "slug": "ai/ai-knowledge-document",
+      "kind": "page",
+      "exportName": "AiKnowledgeDocumentListPage",
+      "module": "@/modules/ai/frontend/pages/ai-knowledge-document-list.page"
+    },
+    {
+      "slug": "ai/ai-knowledge-segment",
+      "kind": "page",
+      "exportName": "AiKnowledgeSegmentListPage",
+      "module": "@/modules/ai/frontend/pages/ai-knowledge-segment-list.page"
+    },
+    {
+      "slug": "ai/ai-mind-map",
+      "kind": "page",
+      "exportName": "AiMindMapListPage",
+      "module": "@/modules/ai/frontend/pages/ai-mind-map-list.page"
+    },
+    {
+      "slug": "ai/ai-model",
+      "kind": "page",
+      "exportName": "AiModelListPage",
+      "module": "@/modules/ai/frontend/pages/ai-model-list.page"
+    },
+    {
+      "slug": "ai/ai-music",
+      "kind": "page",
+      "exportName": "AiMusicListPage",
+      "module": "@/modules/ai/frontend/pages/ai-music-list.page"
+    },
+    {
+      "slug": "ai/ai-tool",
+      "kind": "page",
+      "exportName": "AiToolListPage",
+      "module": "@/modules/ai/frontend/pages/ai-tool-list.page"
+    },
+    {
+      "slug": "ai/ai-workflow",
+      "kind": "page",
+      "exportName": "AiWorkflowListPage",
+      "module": "@/modules/ai/frontend/pages/ai-workflow-list.page"
+    },
+    {
+      "slug": "ai/ai-write",
+      "kind": "page",
+      "exportName": "AiWriteListPage",
+      "module": "@/modules/ai/frontend/pages/ai-write-list.page"
+    },
+    {
+      "slug": "aigw/agent-sandbox",
+      "kind": "page",
+      "exportName": "AgentSandboxPage",
+      "module": "@/modules/aigw/frontend/pages/agent-sandbox.page"
+    },
+    {
+      "slug": "aigw/channels",
+      "kind": "page",
+      "exportName": "AigwChannelsPage",
+      "module": "@/modules/aigw/frontend/pages/channels.page"
+    },
+    {
+      "slug": "aigw/chats",
+      "kind": "page",
+      "exportName": "AigwChatsPage",
+      "module": "@/modules/aigw/frontend/pages/chats.page"
+    },
+    {
+      "slug": "aigw/models",
+      "kind": "page",
+      "exportName": "AigwModelsPage",
+      "module": "@/modules/aigw/frontend/pages/models.page"
+    },
+    {
+      "slug": "aigw/playground",
+      "kind": "page",
+      "exportName": "AigwPlaygroundPage",
+      "module": "@/modules/aigw/frontend/pages/playground.page"
+    },
+    {
+      "slug": "aigw/tokens",
+      "kind": "page",
+      "exportName": "AigwTokensPage",
+      "module": "@/modules/aigw/frontend/pages/tokens.page"
+    },
+    {
+      "slug": "aigw/usages",
+      "kind": "page",
+      "exportName": "AigwUsagesPage",
+      "module": "@/modules/aigw/frontend/pages/usages.page"
+    },
+    {
+      "slug": "aigw/workbench",
+      "kind": "page",
+      "exportName": "AigwWorkbenchPage",
+      "module": "@/modules/aigw/frontend/pages/workbench.page"
+    },
+    {
+      "slug": "bpm/bpm-category",
+      "kind": "page",
+      "exportName": "BpmCategoryListPage",
+      "module": "@/modules/bpm/frontend/pages/bpm-category-list.page"
+    },
+    {
+      "slug": "bpm/bpm-comment",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/bpm/frontend/pages/bpm-comment.page"
+    },
+    {
+      "slug": "bpm/bpm-form",
+      "kind": "page",
+      "exportName": "BpmFormListPage",
+      "module": "@/modules/bpm/frontend/pages/bpm-form-list.page"
+    },
+    {
+      "slug": "bpm/bpm-model",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/bpm/frontend/pages/bpm-model.page"
+    },
+    {
+      "slug": "bpm/bpm-oaleave",
+      "kind": "page",
+      "exportName": "BpmOALeaveListPage",
+      "module": "@/modules/bpm/frontend/pages/bpm-oaleave-list.page"
+    },
+    {
+      "slug": "bpm/bpm-process-definition",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/bpm/frontend/pages/bpm-process-definition.page"
+    },
+    {
+      "slug": "bpm/bpm-process-definition-info",
+      "kind": "page",
+      "exportName": "BpmProcessDefinitionInfoListPage",
+      "module": "@/modules/bpm/frontend/pages/bpm-process-definition-info-list.page"
+    },
+    {
+      "slug": "bpm/bpm-process-expression",
+      "kind": "page",
+      "exportName": "BpmProcessExpressionListPage",
+      "module": "@/modules/bpm/frontend/pages/bpm-process-expression-list.page"
+    },
+    {
+      "slug": "bpm/bpm-process-instance",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/bpm/frontend/pages/bpm-process-instance.page"
+    },
+    {
+      "slug": "bpm/bpm-process-instance-copy",
+      "kind": "page",
+      "exportName": "BpmProcessInstanceCopyListPage",
+      "module": "@/modules/bpm/frontend/pages/bpm-process-instance-copy-list.page"
+    },
+    {
+      "slug": "bpm/bpm-process-listener",
+      "kind": "page",
+      "exportName": "BpmProcessListenerListPage",
+      "module": "@/modules/bpm/frontend/pages/bpm-process-listener-list.page"
+    },
+    {
+      "slug": "bpm/bpm-task",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/bpm/frontend/pages/bpm-task.page"
+    },
+    {
+      "slug": "bpm/bpm-user-group",
+      "kind": "page",
+      "exportName": "BpmUserGroupListPage",
+      "module": "@/modules/bpm/frontend/pages/bpm-user-group-list.page"
+    },
+    {
+      "slug": "bpm/process-definitions",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/bpm/frontend/pages/process-definitions.page"
+    },
+    {
+      "slug": "bpm/tasks",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/bpm/frontend/pages/tasks.page"
+    },
+    {
+      "slug": "crm/clues",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/crm/frontend/pages/clues.page"
+    },
+    {
+      "slug": "crm/crm-business",
+      "kind": "page",
+      "exportName": "CrmBusinessListPage",
+      "module": "@/modules/crm/frontend/pages/crm-business-list.page"
+    },
+    {
+      "slug": "crm/crm-business-product",
+      "kind": "page",
+      "exportName": "CrmBusinessProductListPage",
+      "module": "@/modules/crm/frontend/pages/crm-business-product-list.page"
+    },
+    {
+      "slug": "crm/crm-business-status",
+      "kind": "page",
+      "exportName": "CrmBusinessStatusListPage",
+      "module": "@/modules/crm/frontend/pages/crm-business-status-list.page"
+    },
+    {
+      "slug": "crm/crm-business-status-type",
+      "kind": "page",
+      "exportName": "CrmBusinessStatusTypeListPage",
+      "module": "@/modules/crm/frontend/pages/crm-business-status-type-list.page"
+    },
+    {
+      "slug": "crm/crm-clue",
+      "kind": "page",
+      "exportName": "CrmClueListPage",
+      "module": "@/modules/crm/frontend/pages/crm-clue-list.page"
+    },
+    {
+      "slug": "crm/crm-contact",
+      "kind": "page",
+      "exportName": "CrmContactListPage",
+      "module": "@/modules/crm/frontend/pages/crm-contact-list.page"
+    },
+    {
+      "slug": "crm/crm-contact-business",
+      "kind": "page",
+      "exportName": "CrmContactBusinessListPage",
+      "module": "@/modules/crm/frontend/pages/crm-contact-business-list.page"
+    },
+    {
+      "slug": "crm/crm-contract",
+      "kind": "page",
+      "exportName": "CrmContractListPage",
+      "module": "@/modules/crm/frontend/pages/crm-contract-list.page"
+    },
+    {
+      "slug": "crm/crm-contract-config",
+      "kind": "page",
+      "exportName": "CrmContractConfigListPage",
+      "module": "@/modules/crm/frontend/pages/crm-contract-config-list.page"
+    },
+    {
+      "slug": "crm/crm-contract-product",
+      "kind": "page",
+      "exportName": "CrmContractProductListPage",
+      "module": "@/modules/crm/frontend/pages/crm-contract-product-list.page"
+    },
+    {
+      "slug": "crm/crm-customer",
+      "kind": "page",
+      "exportName": "CrmCustomerListPage",
+      "module": "@/modules/crm/frontend/pages/crm-customer-list.page"
+    },
+    {
+      "slug": "crm/crm-customer-limit-config",
+      "kind": "page",
+      "exportName": "CrmCustomerLimitConfigListPage",
+      "module": "@/modules/crm/frontend/pages/crm-customer-limit-config-list.page"
+    },
+    {
+      "slug": "crm/crm-customer-pool-config",
+      "kind": "page",
+      "exportName": "CrmCustomerPoolConfigListPage",
+      "module": "@/modules/crm/frontend/pages/crm-customer-pool-config-list.page"
+    },
+    {
+      "slug": "crm/crm-follow-up-record",
+      "kind": "page",
+      "exportName": "CrmFollowUpRecordListPage",
+      "module": "@/modules/crm/frontend/pages/crm-follow-up-record-list.page"
+    },
+    {
+      "slug": "crm/crm-operate-log",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/crm/frontend/pages/crm-operate-log.page"
+    },
+    {
+      "slug": "crm/crm-owner-record",
+      "kind": "page",
+      "exportName": "CrmOwnerRecordListPage",
+      "module": "@/modules/crm/frontend/pages/crm-owner-record-list.page"
+    },
+    {
+      "slug": "crm/crm-performance-config",
+      "kind": "page",
+      "exportName": "CrmPerformanceConfigListPage",
+      "module": "@/modules/crm/frontend/pages/crm-performance-config-list.page"
+    },
+    {
+      "slug": "crm/crm-permission",
+      "kind": "page",
+      "exportName": "CrmPermissionListPage",
+      "module": "@/modules/crm/frontend/pages/crm-permission-list.page"
+    },
+    {
+      "slug": "crm/crm-product",
+      "kind": "page",
+      "exportName": "CrmProductListPage",
+      "module": "@/modules/crm/frontend/pages/crm-product-list.page"
+    },
+    {
+      "slug": "crm/crm-product-category",
+      "kind": "page",
+      "exportName": "CrmProductCategoryListPage",
+      "module": "@/modules/crm/frontend/pages/crm-product-category-list.page"
+    },
+    {
+      "slug": "crm/crm-receivable",
+      "kind": "page",
+      "exportName": "CrmReceivableListPage",
+      "module": "@/modules/crm/frontend/pages/crm-receivable-list.page"
+    },
+    {
+      "slug": "crm/crm-receivable-plan",
+      "kind": "page",
+      "exportName": "CrmReceivablePlanListPage",
+      "module": "@/modules/crm/frontend/pages/crm-receivable-plan-list.page"
+    },
+    {
+      "slug": "crm/crm-statistics-customer",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/crm/frontend/pages/crm-statistics-customer.page"
+    },
+    {
+      "slug": "crm/crm-statistics-funnel",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/crm/frontend/pages/crm-statistics-funnel.page"
+    },
+    {
+      "slug": "crm/crm-statistics-performance",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/crm/frontend/pages/crm-statistics-performance.page"
+    },
+    {
+      "slug": "crm/crm-statistics-performance-target",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/crm/frontend/pages/crm-statistics-performance-target.page"
+    },
+    {
+      "slug": "crm/crm-statistics-portrait",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/crm/frontend/pages/crm-statistics-portrait.page"
+    },
+    {
+      "slug": "crm/crm-statistics-product",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/crm/frontend/pages/crm-statistics-product.page"
+    },
+    {
+      "slug": "crm/crm-statistics-rank",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/crm/frontend/pages/crm-statistics-rank.page"
+    },
+    {
+      "slug": "crm/customers",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/crm/frontend/pages/customers.page"
+    },
+    {
+      "slug": "erp/erp-account",
+      "kind": "page",
+      "exportName": "ErpAccountListPage",
+      "module": "@/modules/erp/frontend/pages/erp-account-list.page"
+    },
+    {
+      "slug": "erp/erp-customer",
+      "kind": "page",
+      "exportName": "ErpCustomerListPage",
+      "module": "@/modules/erp/frontend/pages/erp-customer-list.page"
+    },
+    {
+      "slug": "erp/erp-finance-payment",
+      "kind": "page",
+      "exportName": "ErpFinancePaymentListPage",
+      "module": "@/modules/erp/frontend/pages/erp-finance-payment-list.page"
+    },
+    {
+      "slug": "erp/erp-finance-payment-item",
+      "kind": "page",
+      "exportName": "ErpFinancePaymentItemListPage",
+      "module": "@/modules/erp/frontend/pages/erp-finance-payment-item-list.page"
+    },
+    {
+      "slug": "erp/erp-finance-receipt",
+      "kind": "page",
+      "exportName": "ErpFinanceReceiptListPage",
+      "module": "@/modules/erp/frontend/pages/erp-finance-receipt-list.page"
+    },
+    {
+      "slug": "erp/erp-finance-receipt-item",
+      "kind": "page",
+      "exportName": "ErpFinanceReceiptItemListPage",
+      "module": "@/modules/erp/frontend/pages/erp-finance-receipt-item-list.page"
+    },
+    {
+      "slug": "erp/erp-product",
+      "kind": "page",
+      "exportName": "ErpProductListPage",
+      "module": "@/modules/erp/frontend/pages/erp-product-list.page"
+    },
+    {
+      "slug": "erp/erp-product-category",
+      "kind": "page",
+      "exportName": "ErpProductCategoryListPage",
+      "module": "@/modules/erp/frontend/pages/erp-product-category-list.page"
+    },
+    {
+      "slug": "erp/erp-product-unit",
+      "kind": "page",
+      "exportName": "ErpProductUnitListPage",
+      "module": "@/modules/erp/frontend/pages/erp-product-unit-list.page"
+    },
+    {
+      "slug": "erp/erp-purchase-in",
+      "kind": "page",
+      "exportName": "ErpPurchaseInListPage",
+      "module": "@/modules/erp/frontend/pages/erp-purchase-in-list.page"
+    },
+    {
+      "slug": "erp/erp-purchase-in-item",
+      "kind": "page",
+      "exportName": "ErpPurchaseInItemListPage",
+      "module": "@/modules/erp/frontend/pages/erp-purchase-in-item-list.page"
+    },
+    {
+      "slug": "erp/erp-purchase-order",
+      "kind": "page",
+      "exportName": "ErpPurchaseOrderListPage",
+      "module": "@/modules/erp/frontend/pages/erp-purchase-order-list.page"
+    },
+    {
+      "slug": "erp/erp-purchase-order-item",
+      "kind": "page",
+      "exportName": "ErpPurchaseOrderItemListPage",
+      "module": "@/modules/erp/frontend/pages/erp-purchase-order-item-list.page"
+    },
+    {
+      "slug": "erp/erp-purchase-return",
+      "kind": "page",
+      "exportName": "ErpPurchaseReturnListPage",
+      "module": "@/modules/erp/frontend/pages/erp-purchase-return-list.page"
+    },
+    {
+      "slug": "erp/erp-purchase-return-item",
+      "kind": "page",
+      "exportName": "ErpPurchaseReturnItemListPage",
+      "module": "@/modules/erp/frontend/pages/erp-purchase-return-item-list.page"
+    },
+    {
+      "slug": "erp/erp-purchase-statistics",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/erp/frontend/pages/erp-purchase-statistics.page"
+    },
+    {
+      "slug": "erp/erp-sale-order",
+      "kind": "page",
+      "exportName": "ErpSaleOrderListPage",
+      "module": "@/modules/erp/frontend/pages/erp-sale-order-list.page"
+    },
+    {
+      "slug": "erp/erp-sale-order-item",
+      "kind": "page",
+      "exportName": "ErpSaleOrderItemListPage",
+      "module": "@/modules/erp/frontend/pages/erp-sale-order-item-list.page"
+    },
+    {
+      "slug": "erp/erp-sale-out",
+      "kind": "page",
+      "exportName": "ErpSaleOutListPage",
+      "module": "@/modules/erp/frontend/pages/erp-sale-out-list.page"
+    },
+    {
+      "slug": "erp/erp-sale-out-item",
+      "kind": "page",
+      "exportName": "ErpSaleOutItemListPage",
+      "module": "@/modules/erp/frontend/pages/erp-sale-out-item-list.page"
+    },
+    {
+      "slug": "erp/erp-sale-return",
+      "kind": "page",
+      "exportName": "ErpSaleReturnListPage",
+      "module": "@/modules/erp/frontend/pages/erp-sale-return-list.page"
+    },
+    {
+      "slug": "erp/erp-sale-return-item",
+      "kind": "page",
+      "exportName": "ErpSaleReturnItemListPage",
+      "module": "@/modules/erp/frontend/pages/erp-sale-return-item-list.page"
+    },
+    {
+      "slug": "erp/erp-sale-statistics",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/erp/frontend/pages/erp-sale-statistics.page"
+    },
+    {
+      "slug": "erp/erp-stock",
+      "kind": "page",
+      "exportName": "ErpStockListPage",
+      "module": "@/modules/erp/frontend/pages/erp-stock-list.page"
+    },
+    {
+      "slug": "erp/erp-stock-check",
+      "kind": "page",
+      "exportName": "ErpStockCheckListPage",
+      "module": "@/modules/erp/frontend/pages/erp-stock-check-list.page"
+    },
+    {
+      "slug": "erp/erp-stock-check-item",
+      "kind": "page",
+      "exportName": "ErpStockCheckItemListPage",
+      "module": "@/modules/erp/frontend/pages/erp-stock-check-item-list.page"
+    },
+    {
+      "slug": "erp/erp-stock-in",
+      "kind": "page",
+      "exportName": "ErpStockInListPage",
+      "module": "@/modules/erp/frontend/pages/erp-stock-in-list.page"
+    },
+    {
+      "slug": "erp/erp-stock-in-item",
+      "kind": "page",
+      "exportName": "ErpStockInItemListPage",
+      "module": "@/modules/erp/frontend/pages/erp-stock-in-item-list.page"
+    },
+    {
+      "slug": "erp/erp-stock-move",
+      "kind": "page",
+      "exportName": "ErpStockMoveListPage",
+      "module": "@/modules/erp/frontend/pages/erp-stock-move-list.page"
+    },
+    {
+      "slug": "erp/erp-stock-move-item",
+      "kind": "page",
+      "exportName": "ErpStockMoveItemListPage",
+      "module": "@/modules/erp/frontend/pages/erp-stock-move-item-list.page"
+    },
+    {
+      "slug": "erp/erp-stock-out",
+      "kind": "page",
+      "exportName": "ErpStockOutListPage",
+      "module": "@/modules/erp/frontend/pages/erp-stock-out-list.page"
+    },
+    {
+      "slug": "erp/erp-stock-out-item",
+      "kind": "page",
+      "exportName": "ErpStockOutItemListPage",
+      "module": "@/modules/erp/frontend/pages/erp-stock-out-item-list.page"
+    },
+    {
+      "slug": "erp/erp-stock-record",
+      "kind": "page",
+      "exportName": "ErpStockRecordListPage",
+      "module": "@/modules/erp/frontend/pages/erp-stock-record-list.page"
+    },
+    {
+      "slug": "erp/erp-supplier",
+      "kind": "page",
+      "exportName": "ErpSupplierListPage",
+      "module": "@/modules/erp/frontend/pages/erp-supplier-list.page"
+    },
+    {
+      "slug": "erp/erp-warehouse",
+      "kind": "page",
+      "exportName": "ErpWarehouseListPage",
+      "module": "@/modules/erp/frontend/pages/erp-warehouse-list.page"
+    },
+    {
+      "slug": "erp/orders",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/erp/frontend/pages/orders.page"
+    },
+    {
+      "slug": "erp/products",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/erp/frontend/pages/products.page"
+    },
+    {
+      "slug": "im/conversations",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/im/frontend/pages/conversations.page"
+    },
+    {
+      "slug": "im/im-channel",
+      "kind": "page",
+      "exportName": "ImChannelListPage",
+      "module": "@/modules/im/frontend/pages/im-channel-list.page"
+    },
+    {
+      "slug": "im/im-channel-manager",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/im/frontend/pages/im-channel-manager.page"
+    },
+    {
+      "slug": "im/im-channel-material",
+      "kind": "page",
+      "exportName": "ImChannelMaterialListPage",
+      "module": "@/modules/im/frontend/pages/im-channel-material-list.page"
+    },
+    {
+      "slug": "im/im-channel-material-manager",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/im/frontend/pages/im-channel-material-manager.page"
+    },
+    {
+      "slug": "im/im-channel-message",
+      "kind": "page",
+      "exportName": "ImChannelMessageListPage",
+      "module": "@/modules/im/frontend/pages/im-channel-message-list.page"
+    },
+    {
+      "slug": "im/im-channel-message-manager",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/im/frontend/pages/im-channel-message-manager.page"
+    },
+    {
+      "slug": "im/im-conversation-read",
+      "kind": "page",
+      "exportName": "ImConversationReadListPage",
+      "module": "@/modules/im/frontend/pages/im-conversation-read-list.page"
+    },
+    {
+      "slug": "im/im-face-pack",
+      "kind": "page",
+      "exportName": "ImFacePackListPage",
+      "module": "@/modules/im/frontend/pages/im-face-pack-list.page"
+    },
+    {
+      "slug": "im/im-face-pack-item",
+      "kind": "page",
+      "exportName": "ImFacePackItemListPage",
+      "module": "@/modules/im/frontend/pages/im-face-pack-item-list.page"
+    },
+    {
+      "slug": "im/im-face-pack-item-manager",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/im/frontend/pages/im-face-pack-item-manager.page"
+    },
+    {
+      "slug": "im/im-face-pack-manager",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/im/frontend/pages/im-face-pack-manager.page"
+    },
+    {
+      "slug": "im/im-face-user-item",
+      "kind": "page",
+      "exportName": "ImFaceUserItemListPage",
+      "module": "@/modules/im/frontend/pages/im-face-user-item-list.page"
+    },
+    {
+      "slug": "im/im-face-user-item-manager",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/im/frontend/pages/im-face-user-item-manager.page"
+    },
+    {
+      "slug": "im/im-friend",
+      "kind": "page",
+      "exportName": "ImFriendListPage",
+      "module": "@/modules/im/frontend/pages/im-friend-list.page"
+    },
+    {
+      "slug": "im/im-friend-manager",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/im/frontend/pages/im-friend-manager.page"
+    },
+    {
+      "slug": "im/im-friend-request",
+      "kind": "page",
+      "exportName": "ImFriendRequestListPage",
+      "module": "@/modules/im/frontend/pages/im-friend-request-list.page"
+    },
+    {
+      "slug": "im/im-friend-request-manager",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/im/frontend/pages/im-friend-request-manager.page"
+    },
+    {
+      "slug": "im/im-group",
+      "kind": "page",
+      "exportName": "ImGroupListPage",
+      "module": "@/modules/im/frontend/pages/im-group-list.page"
+    },
+    {
+      "slug": "im/im-group-manager",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/im/frontend/pages/im-group-manager.page"
+    },
+    {
+      "slug": "im/im-group-member",
+      "kind": "page",
+      "exportName": "ImGroupMemberListPage",
+      "module": "@/modules/im/frontend/pages/im-group-member-list.page"
+    },
+    {
+      "slug": "im/im-group-member-manager",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/im/frontend/pages/im-group-member-manager.page"
+    },
+    {
+      "slug": "im/im-group-message",
+      "kind": "page",
+      "exportName": "ImGroupMessageListPage",
+      "module": "@/modules/im/frontend/pages/im-group-message-list.page"
+    },
+    {
+      "slug": "im/im-group-message-manager",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/im/frontend/pages/im-group-message-manager.page"
+    },
+    {
+      "slug": "im/im-group-request",
+      "kind": "page",
+      "exportName": "ImGroupRequestListPage",
+      "module": "@/modules/im/frontend/pages/im-group-request-list.page"
+    },
+    {
+      "slug": "im/im-group-request-manager",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/im/frontend/pages/im-group-request-manager.page"
+    },
+    {
+      "slug": "im/im-private-message",
+      "kind": "page",
+      "exportName": "ImPrivateMessageListPage",
+      "module": "@/modules/im/frontend/pages/im-private-message-list.page"
+    },
+    {
+      "slug": "im/im-private-message-manager",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/im/frontend/pages/im-private-message-manager.page"
+    },
+    {
+      "slug": "im/im-rtc-call",
+      "kind": "page",
+      "exportName": "ImRtcCallListPage",
+      "module": "@/modules/im/frontend/pages/im-rtc-call-list.page"
+    },
+    {
+      "slug": "im/im-rtc-call-manager",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/im/frontend/pages/im-rtc-call-manager.page"
+    },
+    {
+      "slug": "im/im-rtc-live-kit",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/im/frontend/pages/im-rtc-live-kit.page"
+    },
+    {
+      "slug": "im/im-rtc-participant",
+      "kind": "page",
+      "exportName": "ImRtcParticipantListPage",
+      "module": "@/modules/im/frontend/pages/im-rtc-participant-list.page"
+    },
+    {
+      "slug": "im/im-sensitive-word",
+      "kind": "page",
+      "exportName": "ImSensitiveWordListPage",
+      "module": "@/modules/im/frontend/pages/im-sensitive-word-list.page"
+    },
+    {
+      "slug": "im/im-sensitive-word-manager",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/im/frontend/pages/im-sensitive-word-manager.page"
+    },
+    {
+      "slug": "im/im-statistics-manager",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/im/frontend/pages/im-statistics-manager.page"
+    },
+    {
+      "slug": "infra/api-access-log",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/infra/frontend/pages/api-access-log.page"
+    },
+    {
+      "slug": "infra/api-error-logs",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/infra/frontend/pages/api-error-logs.page"
+    },
+    {
+      "slug": "infra/api-logs",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/infra/frontend/pages/api-logs.page"
+    },
+    {
+      "slug": "infra/codegen",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/infra/frontend/pages/codegen.page"
+    },
+    {
+      "slug": "infra/codegen/edit",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/infra/frontend/pages/codegen.page"
+    },
+    {
+      "slug": "infra/configs",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/infra/frontend/pages/configs.page"
+    },
+    {
+      "slug": "infra/data-source-config",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/infra/frontend/pages/db-configs.page"
+    },
+    {
+      "slug": "infra/db-configs",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/infra/frontend/pages/db-configs.page"
+    },
+    {
+      "slug": "infra/demo01contact",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/infra/frontend/pages/demo01contact.page"
+    },
+    {
+      "slug": "infra/demo02category",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/infra/frontend/pages/demo02category.page"
+    },
+    {
+      "slug": "infra/demo03student-erp",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/infra/frontend/pages/demo03student-erp.page"
+    },
+    {
+      "slug": "infra/demo03student-inner",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/infra/frontend/pages/demo03student-inner.page"
+    },
+    {
+      "slug": "infra/demo03student-normal",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/infra/frontend/pages/demo03student-normal.page"
+    },
+    {
+      "slug": "infra/file-configs",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/infra/frontend/pages/file-configs.page"
+    },
+    {
+      "slug": "infra/files",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/infra/frontend/pages/files.page"
+    },
+    {
+      "slug": "infra/job",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/infra/frontend/pages/job.page"
+    },
+    {
+      "slug": "infra/job-center",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/infra/frontend/pages/job-center.page"
+    },
+    {
+      "slug": "infra/job-logs",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/infra/frontend/pages/job-logs.page"
+    },
+    {
+      "slug": "infra/online-definitions",
+      "kind": "page",
+      "exportName": "OnlineDefinitionsListPage",
+      "module": "@/modules/online/frontend/pages/online-definitions-list.page"
+    },
+    {
+      "slug": "infra/online-definitions/[code]",
+      "kind": "page",
+      "exportName": "OnlineDefinitionDesignerPage",
+      "module": "@/modules/online/frontend/pages/online-definition-designer.page"
+    },
+    {
+      "slug": "infra/online-definitions/[code]/test",
+      "kind": "redirect",
+      "target": "/admin/infra/online-runtime/${encodeURIComponent(code)}"
+    },
+    {
+      "slug": "infra/online-definitions/new",
+      "kind": "page",
+      "exportName": "OnlineDefinitionCreatePage",
+      "module": "@/modules/online/frontend/pages/online-definition-create.page"
+    },
+    {
+      "slug": "infra/online-runtime/[definitionCode]",
+      "kind": "page",
+      "exportName": "OnlineFormRuntimePage",
+      "module": "@/modules/online/frontend/pages/online-form-runtime.page"
+    },
+    {
+      "slug": "infra/online-test",
+      "kind": "unknown"
+    },
+    {
+      "slug": "infra/page-builder",
+      "kind": "redirect",
+      "target": "/admin/infra/online-definitions"
+    },
+    {
+      "slug": "infra/pages/[slug]",
+      "kind": "redirect",
+      "target": "/admin/infra/online-definitions"
+    },
+    {
+      "slug": "infra/redis",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/infra/frontend/pages/redis.page"
+    },
+    {
+      "slug": "infra/template-engine",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/infra/frontend/pages/template-engine.page"
+    },
+    {
+      "slug": "iot/alerts",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/iot/frontend/pages/iot-alerts.page"
+    },
+    {
+      "slug": "iot/devices",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/iot/frontend/pages/iot-devices.page"
+    },
+    {
+      "slug": "iot/iot-alert-config",
+      "kind": "page",
+      "exportName": "IotAlertConfigListPage",
+      "module": "@/modules/iot/frontend/pages/iot-alert-config-list.page"
+    },
+    {
+      "slug": "iot/iot-alert-record",
+      "kind": "page",
+      "exportName": "IotAlertRecordListPage",
+      "module": "@/modules/iot/frontend/pages/iot-alert-record-list.page"
+    },
+    {
+      "slug": "iot/iot-data-rule",
+      "kind": "page",
+      "exportName": "IotDataRuleListPage",
+      "module": "@/modules/iot/frontend/pages/iot-data-rule-list.page"
+    },
+    {
+      "slug": "iot/iot-data-sink",
+      "kind": "page",
+      "exportName": "IotDataSinkListPage",
+      "module": "@/modules/iot/frontend/pages/iot-data-sink-list.page"
+    },
+    {
+      "slug": "iot/iot-device",
+      "kind": "page",
+      "exportName": "IotDeviceListPage",
+      "module": "@/modules/iot/frontend/pages/iot-device-list.page"
+    },
+    {
+      "slug": "iot/iot-device-group",
+      "kind": "page",
+      "exportName": "IotDeviceGroupListPage",
+      "module": "@/modules/iot/frontend/pages/iot-device-group-list.page"
+    },
+    {
+      "slug": "iot/iot-device-message",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/iot/frontend/pages/iot-device-message.page"
+    },
+    {
+      "slug": "iot/iot-device-modbus-config",
+      "kind": "page",
+      "exportName": "IotDeviceModbusConfigListPage",
+      "module": "@/modules/iot/frontend/pages/iot-device-modbus-config-list.page"
+    },
+    {
+      "slug": "iot/iot-device-modbus-point",
+      "kind": "page",
+      "exportName": "IotDeviceModbusPointListPage",
+      "module": "@/modules/iot/frontend/pages/iot-device-modbus-point-list.page"
+    },
+    {
+      "slug": "iot/iot-device-property",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/iot/frontend/pages/iot-device-property.page"
+    },
+    {
+      "slug": "iot/iot-ota-firmware",
+      "kind": "page",
+      "exportName": "IotOtaFirmwareListPage",
+      "module": "@/modules/iot/frontend/pages/iot-ota-firmware-list.page"
+    },
+    {
+      "slug": "iot/iot-ota-task",
+      "kind": "page",
+      "exportName": "IotOtaTaskListPage",
+      "module": "@/modules/iot/frontend/pages/iot-ota-task-list.page"
+    },
+    {
+      "slug": "iot/iot-ota-task-record",
+      "kind": "page",
+      "exportName": "IotOtaTaskRecordListPage",
+      "module": "@/modules/iot/frontend/pages/iot-ota-task-record-list.page"
+    },
+    {
+      "slug": "iot/iot-product",
+      "kind": "page",
+      "exportName": "IotProductListPage",
+      "module": "@/modules/iot/frontend/pages/iot-product-list.page"
+    },
+    {
+      "slug": "iot/iot-product-category",
+      "kind": "page",
+      "exportName": "IotProductCategoryListPage",
+      "module": "@/modules/iot/frontend/pages/iot-product-category-list.page"
+    },
+    {
+      "slug": "iot/iot-scene-rule",
+      "kind": "page",
+      "exportName": "IotSceneRuleListPage",
+      "module": "@/modules/iot/frontend/pages/iot-scene-rule-list.page"
+    },
+    {
+      "slug": "iot/iot-statistics",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/iot/frontend/pages/iot-statistics.page"
+    },
+    {
+      "slug": "iot/iot-thing-model",
+      "kind": "page",
+      "exportName": "IotThingModelListPage",
+      "module": "@/modules/iot/frontend/pages/iot-thing-model-list.page"
+    },
+    {
+      "slug": "mall/after-sale",
+      "kind": "page",
+      "exportName": "AfterSaleListPage",
+      "module": "@/modules/mall/frontend/pages/after-sale-list.page"
+    },
+    {
+      "slug": "mall/after-sale-log",
+      "kind": "page",
+      "exportName": "AfterSaleLogListPage",
+      "module": "@/modules/mall/frontend/pages/after-sale-log-list.page"
+    },
+    {
+      "slug": "mall/article",
+      "kind": "page",
+      "exportName": "ArticleListPage",
+      "module": "@/modules/mall/frontend/pages/article-list.page"
+    },
+    {
+      "slug": "mall/article-category",
+      "kind": "page",
+      "exportName": "ArticleCategoryListPage",
+      "module": "@/modules/mall/frontend/pages/article-category-list.page"
+    },
+    {
+      "slug": "mall/banner",
+      "kind": "page",
+      "exportName": "BannerListPage",
+      "module": "@/modules/mall/frontend/pages/banner-list.page"
+    },
+    {
+      "slug": "mall/bargain-activity",
+      "kind": "page",
+      "exportName": "BargainActivityListPage",
+      "module": "@/modules/mall/frontend/pages/bargain-activity-list.page"
+    },
+    {
+      "slug": "mall/bargain-help",
+      "kind": "page",
+      "exportName": "BargainHelpListPage",
+      "module": "@/modules/mall/frontend/pages/bargain-help-list.page"
+    },
+    {
+      "slug": "mall/bargain-record",
+      "kind": "page",
+      "exportName": "BargainRecordListPage",
+      "module": "@/modules/mall/frontend/pages/bargain-record-list.page"
+    },
+    {
+      "slug": "mall/brokerage-record",
+      "kind": "page",
+      "exportName": "BrokerageRecordListPage",
+      "module": "@/modules/mall/frontend/pages/brokerage-record-list.page"
+    },
+    {
+      "slug": "mall/brokerage-user",
+      "kind": "page",
+      "exportName": "BrokerageUserListPage",
+      "module": "@/modules/mall/frontend/pages/brokerage-user-list.page"
+    },
+    {
+      "slug": "mall/brokerage-withdraw",
+      "kind": "page",
+      "exportName": "BrokerageWithdrawListPage",
+      "module": "@/modules/mall/frontend/pages/brokerage-withdraw-list.page"
+    },
+    {
+      "slug": "mall/cart",
+      "kind": "page",
+      "exportName": "CartListPage",
+      "module": "@/modules/mall/frontend/pages/cart-list.page"
+    },
+    {
+      "slug": "mall/combination-activity",
+      "kind": "page",
+      "exportName": "CombinationActivityListPage",
+      "module": "@/modules/mall/frontend/pages/combination-activity-list.page"
+    },
+    {
+      "slug": "mall/combination-product",
+      "kind": "page",
+      "exportName": "CombinationProductListPage",
+      "module": "@/modules/mall/frontend/pages/combination-product-list.page"
+    },
+    {
+      "slug": "mall/combination-record",
+      "kind": "page",
+      "exportName": "CombinationRecordListPage",
+      "module": "@/modules/mall/frontend/pages/combination-record-list.page"
+    },
+    {
+      "slug": "mall/coupon",
+      "kind": "page",
+      "exportName": "CouponListPage",
+      "module": "@/modules/mall/frontend/pages/coupon-list.page"
+    },
+    {
+      "slug": "mall/coupon-template",
+      "kind": "page",
+      "exportName": "CouponTemplateListPage",
+      "module": "@/modules/mall/frontend/pages/coupon-template-list.page"
+    },
+    {
+      "slug": "mall/delivery-express",
+      "kind": "page",
+      "exportName": "DeliveryExpressListPage",
+      "module": "@/modules/mall/frontend/pages/delivery-express-list.page"
+    },
+    {
+      "slug": "mall/delivery-express-template",
+      "kind": "page",
+      "exportName": "DeliveryExpressTemplateListPage",
+      "module": "@/modules/mall/frontend/pages/delivery-express-template-list.page"
+    },
+    {
+      "slug": "mall/delivery-express-template-charge",
+      "kind": "page",
+      "exportName": "DeliveryExpressTemplateChargeListPage",
+      "module": "@/modules/mall/frontend/pages/delivery-express-template-charge-list.page"
+    },
+    {
+      "slug": "mall/delivery-express-template-free",
+      "kind": "page",
+      "exportName": "DeliveryExpressTemplateFreeListPage",
+      "module": "@/modules/mall/frontend/pages/delivery-express-template-free-list.page"
+    },
+    {
+      "slug": "mall/delivery-pick-up-store",
+      "kind": "page",
+      "exportName": "DeliveryPickUpStoreListPage",
+      "module": "@/modules/mall/frontend/pages/delivery-pick-up-store-list.page"
+    },
+    {
+      "slug": "mall/discount-activity",
+      "kind": "page",
+      "exportName": "DiscountActivityListPage",
+      "module": "@/modules/mall/frontend/pages/discount-activity-list.page"
+    },
+    {
+      "slug": "mall/discount-product",
+      "kind": "page",
+      "exportName": "DiscountProductListPage",
+      "module": "@/modules/mall/frontend/pages/discount-product-list.page"
+    },
+    {
+      "slug": "mall/diy-page",
+      "kind": "page",
+      "exportName": "DiyPageListPage",
+      "module": "@/modules/mall/frontend/pages/diy-page-list.page"
+    },
+    {
+      "slug": "mall/diy-template",
+      "kind": "page",
+      "exportName": "DiyTemplateListPage",
+      "module": "@/modules/mall/frontend/pages/diy-template-list.page"
+    },
+    {
+      "slug": "mall/ke-fu-conversation",
+      "kind": "page",
+      "exportName": "KeFuConversationListPage",
+      "module": "@/modules/mall/frontend/pages/ke-fu-conversation-list.page"
+    },
+    {
+      "slug": "mall/ke-fu-message",
+      "kind": "page",
+      "exportName": "KeFuMessageListPage",
+      "module": "@/modules/mall/frontend/pages/ke-fu-message-list.page"
+    },
+    {
+      "slug": "mall/member-statistics",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/mall/frontend/pages/member-statistics.page"
+    },
+    {
+      "slug": "mall/orders",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/mall/frontend/pages/orders.page"
+    },
+    {
+      "slug": "mall/pay-statistics",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/mall/frontend/pages/pay-statistics.page"
+    },
+    {
+      "slug": "mall/point-activity",
+      "kind": "page",
+      "exportName": "PointActivityListPage",
+      "module": "@/modules/mall/frontend/pages/point-activity-list.page"
+    },
+    {
+      "slug": "mall/point-product",
+      "kind": "page",
+      "exportName": "PointProductListPage",
+      "module": "@/modules/mall/frontend/pages/point-product-list.page"
+    },
+    {
+      "slug": "mall/product-brand",
+      "kind": "page",
+      "exportName": "ProductBrandListPage",
+      "module": "@/modules/mall/frontend/pages/product-brand-list.page"
+    },
+    {
+      "slug": "mall/product-browse-history",
+      "kind": "page",
+      "exportName": "ProductBrowseHistoryListPage",
+      "module": "@/modules/mall/frontend/pages/product-browse-history-list.page"
+    },
+    {
+      "slug": "mall/product-category",
+      "kind": "page",
+      "exportName": "ProductCategoryListPage",
+      "module": "@/modules/mall/frontend/pages/product-category-list.page"
+    },
+    {
+      "slug": "mall/product-comment",
+      "kind": "page",
+      "exportName": "ProductCommentListPage",
+      "module": "@/modules/mall/frontend/pages/product-comment-list.page"
+    },
+    {
+      "slug": "mall/product-favorite",
+      "kind": "page",
+      "exportName": "ProductFavoriteListPage",
+      "module": "@/modules/mall/frontend/pages/product-favorite-list.page"
+    },
+    {
+      "slug": "mall/product-property",
+      "kind": "page",
+      "exportName": "ProductPropertyListPage",
+      "module": "@/modules/mall/frontend/pages/product-property-list.page"
+    },
+    {
+      "slug": "mall/product-property-value",
+      "kind": "page",
+      "exportName": "ProductPropertyValueListPage",
+      "module": "@/modules/mall/frontend/pages/product-property-value-list.page"
+    },
+    {
+      "slug": "mall/product-sku",
+      "kind": "page",
+      "exportName": "ProductSkuListPage",
+      "module": "@/modules/mall/frontend/pages/product-sku-list.page"
+    },
+    {
+      "slug": "mall/product-spu",
+      "kind": "page",
+      "exportName": "ProductSpuListPage",
+      "module": "@/modules/mall/frontend/pages/product-spu-list.page"
+    },
+    {
+      "slug": "mall/product-statistics",
+      "kind": "page",
+      "exportName": "ProductStatisticsListPage",
+      "module": "@/modules/mall/frontend/pages/product-statistics-list.page"
+    },
+    {
+      "slug": "mall/products",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/mall/frontend/pages/products.page"
+    },
+    {
+      "slug": "mall/reward-activity",
+      "kind": "page",
+      "exportName": "RewardActivityListPage",
+      "module": "@/modules/mall/frontend/pages/reward-activity-list.page"
+    },
+    {
+      "slug": "mall/seckill-activity",
+      "kind": "page",
+      "exportName": "SeckillActivityListPage",
+      "module": "@/modules/mall/frontend/pages/seckill-activity-list.page"
+    },
+    {
+      "slug": "mall/seckill-config",
+      "kind": "page",
+      "exportName": "SeckillConfigListPage",
+      "module": "@/modules/mall/frontend/pages/seckill-config-list.page"
+    },
+    {
+      "slug": "mall/seckill-product",
+      "kind": "page",
+      "exportName": "SeckillProductListPage",
+      "module": "@/modules/mall/frontend/pages/seckill-product-list.page"
+    },
+    {
+      "slug": "mall/trade-config",
+      "kind": "page",
+      "exportName": "TradeConfigListPage",
+      "module": "@/modules/mall/frontend/pages/trade-config-list.page"
+    },
+    {
+      "slug": "mall/trade-order",
+      "kind": "page",
+      "exportName": "TradeOrderListPage",
+      "module": "@/modules/mall/frontend/pages/trade-order-list.page"
+    },
+    {
+      "slug": "mall/trade-order-item",
+      "kind": "page",
+      "exportName": "TradeOrderItemListPage",
+      "module": "@/modules/mall/frontend/pages/trade-order-item-list.page"
+    },
+    {
+      "slug": "mall/trade-order-log",
+      "kind": "page",
+      "exportName": "TradeOrderLogListPage",
+      "module": "@/modules/mall/frontend/pages/trade-order-log-list.page"
+    },
+    {
+      "slug": "mall/trade-statistics",
+      "kind": "page",
+      "exportName": "TradeStatisticsListPage",
+      "module": "@/modules/mall/frontend/pages/trade-statistics-list.page"
+    },
+    {
+      "slug": "member/address",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/member/frontend/pages/address.page"
+    },
+    {
+      "slug": "member/levels",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/member/frontend/pages/member-levels.page"
+    },
+    {
+      "slug": "member/member-address",
+      "kind": "page",
+      "exportName": "MemberAddressListPage",
+      "module": "@/modules/member/frontend/pages/member-address-list.page"
+    },
+    {
+      "slug": "member/member-config",
+      "kind": "page",
+      "exportName": "MemberConfigListPage",
+      "module": "@/modules/member/frontend/pages/member-config-list.page"
+    },
+    {
+      "slug": "member/member-experience-record",
+      "kind": "page",
+      "exportName": "MemberExperienceRecordListPage",
+      "module": "@/modules/member/frontend/pages/member-experience-record-list.page"
+    },
+    {
+      "slug": "member/member-group",
+      "kind": "page",
+      "exportName": "MemberGroupListPage",
+      "module": "@/modules/member/frontend/pages/member-group-list.page"
+    },
+    {
+      "slug": "member/member-level",
+      "kind": "page",
+      "exportName": "MemberLevelListPage",
+      "module": "@/modules/member/frontend/pages/member-level-list.page"
+    },
+    {
+      "slug": "member/member-level-record",
+      "kind": "page",
+      "exportName": "MemberLevelRecordListPage",
+      "module": "@/modules/member/frontend/pages/member-level-record-list.page"
+    },
+    {
+      "slug": "member/member-point-record",
+      "kind": "page",
+      "exportName": "MemberPointRecordListPage",
+      "module": "@/modules/member/frontend/pages/member-point-record-list.page"
+    },
+    {
+      "slug": "member/member-sign-in-config",
+      "kind": "page",
+      "exportName": "MemberSignInConfigListPage",
+      "module": "@/modules/member/frontend/pages/member-sign-in-config-list.page"
+    },
+    {
+      "slug": "member/member-sign-in-record",
+      "kind": "page",
+      "exportName": "MemberSignInRecordListPage",
+      "module": "@/modules/member/frontend/pages/member-sign-in-record-list.page"
+    },
+    {
+      "slug": "member/member-tag",
+      "kind": "page",
+      "exportName": "MemberTagListPage",
+      "module": "@/modules/member/frontend/pages/member-tag-list.page"
+    },
+    {
+      "slug": "member/member-user",
+      "kind": "page",
+      "exportName": "MemberUserListPage",
+      "module": "@/modules/member/frontend/pages/member-user-list.page"
+    },
+    {
+      "slug": "member/points",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/member/frontend/pages/member-points.page"
+    },
+    {
+      "slug": "member/users",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/member/frontend/pages/member-users.page"
+    },
+    {
+      "slug": "mes/mes-cal-calendar",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/mes/frontend/pages/mes-cal-calendar.page"
+    },
+    {
+      "slug": "mes/mes-cal-holiday",
+      "kind": "page",
+      "exportName": "MesCalHolidayListPage",
+      "module": "@/modules/mes/frontend/pages/mes-cal-holiday-list.page"
+    },
+    {
+      "slug": "mes/mes-cal-plan",
+      "kind": "page",
+      "exportName": "MesCalPlanListPage",
+      "module": "@/modules/mes/frontend/pages/mes-cal-plan-list.page"
+    },
+    {
+      "slug": "mes/mes-cal-plan-shift",
+      "kind": "page",
+      "exportName": "MesCalPlanShiftListPage",
+      "module": "@/modules/mes/frontend/pages/mes-cal-plan-shift-list.page"
+    },
+    {
+      "slug": "mes/mes-cal-plan-team",
+      "kind": "page",
+      "exportName": "MesCalPlanTeamListPage",
+      "module": "@/modules/mes/frontend/pages/mes-cal-plan-team-list.page"
+    },
+    {
+      "slug": "mes/mes-cal-team",
+      "kind": "page",
+      "exportName": "MesCalTeamListPage",
+      "module": "@/modules/mes/frontend/pages/mes-cal-team-list.page"
+    },
+    {
+      "slug": "mes/mes-cal-team-member",
+      "kind": "page",
+      "exportName": "MesCalTeamMemberListPage",
+      "module": "@/modules/mes/frontend/pages/mes-cal-team-member-list.page"
+    },
+    {
+      "slug": "mes/mes-cal-team-shift",
+      "kind": "page",
+      "exportName": "MesCalTeamShiftListPage",
+      "module": "@/modules/mes/frontend/pages/mes-cal-team-shift-list.page"
+    },
+    {
+      "slug": "mes/mes-dv-check-plan",
+      "kind": "page",
+      "exportName": "MesDvCheckPlanListPage",
+      "module": "@/modules/mes/frontend/pages/mes-dv-check-plan-list.page"
+    },
+    {
+      "slug": "mes/mes-dv-check-plan-machinery",
+      "kind": "page",
+      "exportName": "MesDvCheckPlanMachineryListPage",
+      "module": "@/modules/mes/frontend/pages/mes-dv-check-plan-machinery-list.page"
+    },
+    {
+      "slug": "mes/mes-dv-check-plan-subject",
+      "kind": "page",
+      "exportName": "MesDvCheckPlanSubjectListPage",
+      "module": "@/modules/mes/frontend/pages/mes-dv-check-plan-subject-list.page"
+    },
+    {
+      "slug": "mes/mes-dv-check-record",
+      "kind": "page",
+      "exportName": "MesDvCheckRecordListPage",
+      "module": "@/modules/mes/frontend/pages/mes-dv-check-record-list.page"
+    },
+    {
+      "slug": "mes/mes-dv-check-record-line",
+      "kind": "page",
+      "exportName": "MesDvCheckRecordLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-dv-check-record-line-list.page"
+    },
+    {
+      "slug": "mes/mes-dv-machinery",
+      "kind": "page",
+      "exportName": "MesDvMachineryListPage",
+      "module": "@/modules/mes/frontend/pages/mes-dv-machinery-list.page"
+    },
+    {
+      "slug": "mes/mes-dv-machinery-type",
+      "kind": "page",
+      "exportName": "MesDvMachineryTypeListPage",
+      "module": "@/modules/mes/frontend/pages/mes-dv-machinery-type-list.page"
+    },
+    {
+      "slug": "mes/mes-dv-mainten-record",
+      "kind": "page",
+      "exportName": "MesDvMaintenRecordListPage",
+      "module": "@/modules/mes/frontend/pages/mes-dv-mainten-record-list.page"
+    },
+    {
+      "slug": "mes/mes-dv-mainten-record-line",
+      "kind": "page",
+      "exportName": "MesDvMaintenRecordLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-dv-mainten-record-line-list.page"
+    },
+    {
+      "slug": "mes/mes-dv-repair",
+      "kind": "page",
+      "exportName": "MesDvRepairListPage",
+      "module": "@/modules/mes/frontend/pages/mes-dv-repair-list.page"
+    },
+    {
+      "slug": "mes/mes-dv-repair-line",
+      "kind": "page",
+      "exportName": "MesDvRepairLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-dv-repair-line-list.page"
+    },
+    {
+      "slug": "mes/mes-dv-subject",
+      "kind": "page",
+      "exportName": "MesDvSubjectListPage",
+      "module": "@/modules/mes/frontend/pages/mes-dv-subject-list.page"
+    },
+    {
+      "slug": "mes/mes-home-statistics",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/mes/frontend/pages/mes-home-statistics.page"
+    },
+    {
+      "slug": "mes/mes-md-auto-code-part",
+      "kind": "page",
+      "exportName": "MesMdAutoCodePartListPage",
+      "module": "@/modules/mes/frontend/pages/mes-md-auto-code-part-list.page"
+    },
+    {
+      "slug": "mes/mes-md-auto-code-record",
+      "kind": "page",
+      "exportName": "MesMdAutoCodeRecordListPage",
+      "module": "@/modules/mes/frontend/pages/mes-md-auto-code-record-list.page"
+    },
+    {
+      "slug": "mes/mes-md-auto-code-rule",
+      "kind": "page",
+      "exportName": "MesMdAutoCodeRuleListPage",
+      "module": "@/modules/mes/frontend/pages/mes-md-auto-code-rule-list.page"
+    },
+    {
+      "slug": "mes/mes-md-client",
+      "kind": "page",
+      "exportName": "MesMdClientListPage",
+      "module": "@/modules/mes/frontend/pages/mes-md-client-list.page"
+    },
+    {
+      "slug": "mes/mes-md-item",
+      "kind": "page",
+      "exportName": "MesMdItemListPage",
+      "module": "@/modules/mes/frontend/pages/mes-md-item-list.page"
+    },
+    {
+      "slug": "mes/mes-md-item-batch-config",
+      "kind": "page",
+      "exportName": "MesMdItemBatchConfigListPage",
+      "module": "@/modules/mes/frontend/pages/mes-md-item-batch-config-list.page"
+    },
+    {
+      "slug": "mes/mes-md-item-type",
+      "kind": "page",
+      "exportName": "MesMdItemTypeListPage",
+      "module": "@/modules/mes/frontend/pages/mes-md-item-type-list.page"
+    },
+    {
+      "slug": "mes/mes-md-product-bom",
+      "kind": "page",
+      "exportName": "MesMdProductBomListPage",
+      "module": "@/modules/mes/frontend/pages/mes-md-product-bom-list.page"
+    },
+    {
+      "slug": "mes/mes-md-product-sip",
+      "kind": "page",
+      "exportName": "MesMdProductSipListPage",
+      "module": "@/modules/mes/frontend/pages/mes-md-product-sip-list.page"
+    },
+    {
+      "slug": "mes/mes-md-product-sop",
+      "kind": "page",
+      "exportName": "MesMdProductSopListPage",
+      "module": "@/modules/mes/frontend/pages/mes-md-product-sop-list.page"
+    },
+    {
+      "slug": "mes/mes-md-unit-measure",
+      "kind": "page",
+      "exportName": "MesMdUnitMeasureListPage",
+      "module": "@/modules/mes/frontend/pages/mes-md-unit-measure-list.page"
+    },
+    {
+      "slug": "mes/mes-md-vendor",
+      "kind": "page",
+      "exportName": "MesMdVendorListPage",
+      "module": "@/modules/mes/frontend/pages/mes-md-vendor-list.page"
+    },
+    {
+      "slug": "mes/mes-md-workshop",
+      "kind": "page",
+      "exportName": "MesMdWorkshopListPage",
+      "module": "@/modules/mes/frontend/pages/mes-md-workshop-list.page"
+    },
+    {
+      "slug": "mes/mes-md-workstation",
+      "kind": "page",
+      "exportName": "MesMdWorkstationListPage",
+      "module": "@/modules/mes/frontend/pages/mes-md-workstation-list.page"
+    },
+    {
+      "slug": "mes/mes-md-workstation-machine",
+      "kind": "page",
+      "exportName": "MesMdWorkstationMachineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-md-workstation-machine-list.page"
+    },
+    {
+      "slug": "mes/mes-md-workstation-tool",
+      "kind": "page",
+      "exportName": "MesMdWorkstationToolListPage",
+      "module": "@/modules/mes/frontend/pages/mes-md-workstation-tool-list.page"
+    },
+    {
+      "slug": "mes/mes-md-workstation-worker",
+      "kind": "page",
+      "exportName": "MesMdWorkstationWorkerListPage",
+      "module": "@/modules/mes/frontend/pages/mes-md-workstation-worker-list.page"
+    },
+    {
+      "slug": "mes/mes-pro-andon-config",
+      "kind": "page",
+      "exportName": "MesProAndonConfigListPage",
+      "module": "@/modules/mes/frontend/pages/mes-pro-andon-config-list.page"
+    },
+    {
+      "slug": "mes/mes-pro-andon-record",
+      "kind": "page",
+      "exportName": "MesProAndonRecordListPage",
+      "module": "@/modules/mes/frontend/pages/mes-pro-andon-record-list.page"
+    },
+    {
+      "slug": "mes/mes-pro-card",
+      "kind": "page",
+      "exportName": "MesProCardListPage",
+      "module": "@/modules/mes/frontend/pages/mes-pro-card-list.page"
+    },
+    {
+      "slug": "mes/mes-pro-card-process",
+      "kind": "page",
+      "exportName": "MesProCardProcessListPage",
+      "module": "@/modules/mes/frontend/pages/mes-pro-card-process-list.page"
+    },
+    {
+      "slug": "mes/mes-pro-feedback",
+      "kind": "page",
+      "exportName": "MesProFeedbackListPage",
+      "module": "@/modules/mes/frontend/pages/mes-pro-feedback-list.page"
+    },
+    {
+      "slug": "mes/mes-pro-process",
+      "kind": "page",
+      "exportName": "MesProProcessListPage",
+      "module": "@/modules/mes/frontend/pages/mes-pro-process-list.page"
+    },
+    {
+      "slug": "mes/mes-pro-process-content",
+      "kind": "page",
+      "exportName": "MesProProcessContentListPage",
+      "module": "@/modules/mes/frontend/pages/mes-pro-process-content-list.page"
+    },
+    {
+      "slug": "mes/mes-pro-route",
+      "kind": "page",
+      "exportName": "MesProRouteListPage",
+      "module": "@/modules/mes/frontend/pages/mes-pro-route-list.page"
+    },
+    {
+      "slug": "mes/mes-pro-route-process",
+      "kind": "page",
+      "exportName": "MesProRouteProcessListPage",
+      "module": "@/modules/mes/frontend/pages/mes-pro-route-process-list.page"
+    },
+    {
+      "slug": "mes/mes-pro-route-product",
+      "kind": "page",
+      "exportName": "MesProRouteProductListPage",
+      "module": "@/modules/mes/frontend/pages/mes-pro-route-product-list.page"
+    },
+    {
+      "slug": "mes/mes-pro-route-product-bom",
+      "kind": "page",
+      "exportName": "MesProRouteProductBomListPage",
+      "module": "@/modules/mes/frontend/pages/mes-pro-route-product-bom-list.page"
+    },
+    {
+      "slug": "mes/mes-pro-task",
+      "kind": "page",
+      "exportName": "MesProTaskListPage",
+      "module": "@/modules/mes/frontend/pages/mes-pro-task-list.page"
+    },
+    {
+      "slug": "mes/mes-pro-task-issue",
+      "kind": "page",
+      "exportName": "MesProTaskIssueListPage",
+      "module": "@/modules/mes/frontend/pages/mes-pro-task-issue-list.page"
+    },
+    {
+      "slug": "mes/mes-pro-work-order",
+      "kind": "page",
+      "exportName": "MesProWorkOrderListPage",
+      "module": "@/modules/mes/frontend/pages/mes-pro-work-order-list.page"
+    },
+    {
+      "slug": "mes/mes-pro-work-order-bom",
+      "kind": "page",
+      "exportName": "MesProWorkOrderBomListPage",
+      "module": "@/modules/mes/frontend/pages/mes-pro-work-order-bom-list.page"
+    },
+    {
+      "slug": "mes/mes-pro-work-record",
+      "kind": "page",
+      "exportName": "MesProWorkRecordListPage",
+      "module": "@/modules/mes/frontend/pages/mes-pro-work-record-list.page"
+    },
+    {
+      "slug": "mes/mes-pro-work-record-log",
+      "kind": "page",
+      "exportName": "MesProWorkRecordLogListPage",
+      "module": "@/modules/mes/frontend/pages/mes-pro-work-record-log-list.page"
+    },
+    {
+      "slug": "mes/mes-qc-defect",
+      "kind": "page",
+      "exportName": "MesQcDefectListPage",
+      "module": "@/modules/mes/frontend/pages/mes-qc-defect-list.page"
+    },
+    {
+      "slug": "mes/mes-qc-defect-record",
+      "kind": "page",
+      "exportName": "MesQcDefectRecordListPage",
+      "module": "@/modules/mes/frontend/pages/mes-qc-defect-record-list.page"
+    },
+    {
+      "slug": "mes/mes-qc-indicator",
+      "kind": "page",
+      "exportName": "MesQcIndicatorListPage",
+      "module": "@/modules/mes/frontend/pages/mes-qc-indicator-list.page"
+    },
+    {
+      "slug": "mes/mes-qc-indicator-result",
+      "kind": "page",
+      "exportName": "MesQcIndicatorResultListPage",
+      "module": "@/modules/mes/frontend/pages/mes-qc-indicator-result-list.page"
+    },
+    {
+      "slug": "mes/mes-qc-indicator-result-detail",
+      "kind": "page",
+      "exportName": "MesQcIndicatorResultDetailListPage",
+      "module": "@/modules/mes/frontend/pages/mes-qc-indicator-result-detail-list.page"
+    },
+    {
+      "slug": "mes/mes-qc-ipqc",
+      "kind": "page",
+      "exportName": "MesQcIpqcListPage",
+      "module": "@/modules/mes/frontend/pages/mes-qc-ipqc-list.page"
+    },
+    {
+      "slug": "mes/mes-qc-ipqc-line",
+      "kind": "page",
+      "exportName": "MesQcIpqcLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-qc-ipqc-line-list.page"
+    },
+    {
+      "slug": "mes/mes-qc-iqc",
+      "kind": "page",
+      "exportName": "MesQcIqcListPage",
+      "module": "@/modules/mes/frontend/pages/mes-qc-iqc-list.page"
+    },
+    {
+      "slug": "mes/mes-qc-iqc-line",
+      "kind": "page",
+      "exportName": "MesQcIqcLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-qc-iqc-line-list.page"
+    },
+    {
+      "slug": "mes/mes-qc-oqc",
+      "kind": "page",
+      "exportName": "MesQcOqcListPage",
+      "module": "@/modules/mes/frontend/pages/mes-qc-oqc-list.page"
+    },
+    {
+      "slug": "mes/mes-qc-oqc-line",
+      "kind": "page",
+      "exportName": "MesQcOqcLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-qc-oqc-line-list.page"
+    },
+    {
+      "slug": "mes/mes-qc-pending-inspect",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/mes/frontend/pages/mes-qc-pending-inspect.page"
+    },
+    {
+      "slug": "mes/mes-qc-rqc",
+      "kind": "page",
+      "exportName": "MesQcRqcListPage",
+      "module": "@/modules/mes/frontend/pages/mes-qc-rqc-list.page"
+    },
+    {
+      "slug": "mes/mes-qc-rqc-line",
+      "kind": "page",
+      "exportName": "MesQcRqcLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-qc-rqc-line-list.page"
+    },
+    {
+      "slug": "mes/mes-qc-template",
+      "kind": "page",
+      "exportName": "MesQcTemplateListPage",
+      "module": "@/modules/mes/frontend/pages/mes-qc-template-list.page"
+    },
+    {
+      "slug": "mes/mes-qc-template-indicator",
+      "kind": "page",
+      "exportName": "MesQcTemplateIndicatorListPage",
+      "module": "@/modules/mes/frontend/pages/mes-qc-template-indicator-list.page"
+    },
+    {
+      "slug": "mes/mes-qc-template-item",
+      "kind": "page",
+      "exportName": "MesQcTemplateItemListPage",
+      "module": "@/modules/mes/frontend/pages/mes-qc-template-item-list.page"
+    },
+    {
+      "slug": "mes/mes-tm-tool",
+      "kind": "page",
+      "exportName": "MesTmToolListPage",
+      "module": "@/modules/mes/frontend/pages/mes-tm-tool-list.page"
+    },
+    {
+      "slug": "mes/mes-tm-tool-type",
+      "kind": "page",
+      "exportName": "MesTmToolTypeListPage",
+      "module": "@/modules/mes/frontend/pages/mes-tm-tool-type-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-arrival-notice",
+      "kind": "page",
+      "exportName": "MesWmArrivalNoticeListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-arrival-notice-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-arrival-notice-line",
+      "kind": "page",
+      "exportName": "MesWmArrivalNoticeLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-arrival-notice-line-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-barcode",
+      "kind": "page",
+      "exportName": "MesWmBarcodeListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-barcode-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-barcode-config",
+      "kind": "page",
+      "exportName": "MesWmBarcodeConfigListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-barcode-config-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-batch",
+      "kind": "page",
+      "exportName": "MesWmBatchListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-batch-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-item-consume",
+      "kind": "page",
+      "exportName": "MesWmItemConsumeListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-item-consume-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-item-consume-detail",
+      "kind": "page",
+      "exportName": "MesWmItemConsumeDetailListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-item-consume-detail-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-item-consume-line",
+      "kind": "page",
+      "exportName": "MesWmItemConsumeLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-item-consume-line-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-item-receipt",
+      "kind": "page",
+      "exportName": "MesWmItemReceiptListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-item-receipt-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-item-receipt-detail",
+      "kind": "page",
+      "exportName": "MesWmItemReceiptDetailListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-item-receipt-detail-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-item-receipt-line",
+      "kind": "page",
+      "exportName": "MesWmItemReceiptLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-item-receipt-line-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-material-stock",
+      "kind": "page",
+      "exportName": "MesWmMaterialStockListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-material-stock-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-misc-issue",
+      "kind": "page",
+      "exportName": "MesWmMiscIssueListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-misc-issue-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-misc-issue-detail",
+      "kind": "page",
+      "exportName": "MesWmMiscIssueDetailListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-misc-issue-detail-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-misc-issue-line",
+      "kind": "page",
+      "exportName": "MesWmMiscIssueLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-misc-issue-line-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-misc-receipt",
+      "kind": "page",
+      "exportName": "MesWmMiscReceiptListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-misc-receipt-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-misc-receipt-detail",
+      "kind": "page",
+      "exportName": "MesWmMiscReceiptDetailListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-misc-receipt-detail-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-misc-receipt-line",
+      "kind": "page",
+      "exportName": "MesWmMiscReceiptLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-misc-receipt-line-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-outsource-issue",
+      "kind": "page",
+      "exportName": "MesWmOutsourceIssueListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-outsource-issue-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-outsource-issue-detail",
+      "kind": "page",
+      "exportName": "MesWmOutsourceIssueDetailListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-outsource-issue-detail-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-outsource-issue-line",
+      "kind": "page",
+      "exportName": "MesWmOutsourceIssueLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-outsource-issue-line-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-outsource-receipt",
+      "kind": "page",
+      "exportName": "MesWmOutsourceReceiptListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-outsource-receipt-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-outsource-receipt-detail",
+      "kind": "page",
+      "exportName": "MesWmOutsourceReceiptDetailListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-outsource-receipt-detail-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-outsource-receipt-line",
+      "kind": "page",
+      "exportName": "MesWmOutsourceReceiptLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-outsource-receipt-line-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-package",
+      "kind": "page",
+      "exportName": "MesWmPackageListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-package-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-package-line",
+      "kind": "page",
+      "exportName": "MesWmPackageLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-package-line-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-product-issue",
+      "kind": "page",
+      "exportName": "MesWmProductIssueListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-product-issue-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-product-issue-detail",
+      "kind": "page",
+      "exportName": "MesWmProductIssueDetailListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-product-issue-detail-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-product-issue-line",
+      "kind": "page",
+      "exportName": "MesWmProductIssueLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-product-issue-line-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-product-produce",
+      "kind": "page",
+      "exportName": "MesWmProductProduceListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-product-produce-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-product-produce-detail",
+      "kind": "page",
+      "exportName": "MesWmProductProduceDetailListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-product-produce-detail-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-product-produce-line",
+      "kind": "page",
+      "exportName": "MesWmProductProduceLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-product-produce-line-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-product-receipt",
+      "kind": "page",
+      "exportName": "MesWmProductReceiptListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-product-receipt-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-product-receipt-detail",
+      "kind": "page",
+      "exportName": "MesWmProductReceiptDetailListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-product-receipt-detail-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-product-receipt-line",
+      "kind": "page",
+      "exportName": "MesWmProductReceiptLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-product-receipt-line-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-product-sales",
+      "kind": "page",
+      "exportName": "MesWmProductSalesListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-product-sales-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-product-sales-detail",
+      "kind": "page",
+      "exportName": "MesWmProductSalesDetailListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-product-sales-detail-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-product-sales-line",
+      "kind": "page",
+      "exportName": "MesWmProductSalesLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-product-sales-line-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-return-issue",
+      "kind": "page",
+      "exportName": "MesWmReturnIssueListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-return-issue-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-return-issue-detail",
+      "kind": "page",
+      "exportName": "MesWmReturnIssueDetailListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-return-issue-detail-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-return-issue-line",
+      "kind": "page",
+      "exportName": "MesWmReturnIssueLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-return-issue-line-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-return-sales",
+      "kind": "page",
+      "exportName": "MesWmReturnSalesListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-return-sales-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-return-sales-detail",
+      "kind": "page",
+      "exportName": "MesWmReturnSalesDetailListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-return-sales-detail-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-return-sales-line",
+      "kind": "page",
+      "exportName": "MesWmReturnSalesLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-return-sales-line-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-return-vendor",
+      "kind": "page",
+      "exportName": "MesWmReturnVendorListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-return-vendor-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-return-vendor-detail",
+      "kind": "page",
+      "exportName": "MesWmReturnVendorDetailListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-return-vendor-detail-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-return-vendor-line",
+      "kind": "page",
+      "exportName": "MesWmReturnVendorLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-return-vendor-line-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-sales-notice",
+      "kind": "page",
+      "exportName": "MesWmSalesNoticeListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-sales-notice-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-sales-notice-line",
+      "kind": "page",
+      "exportName": "MesWmSalesNoticeLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-sales-notice-line-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-sn",
+      "kind": "page",
+      "exportName": "MesWmSnListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-sn-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-stock-taking-plan",
+      "kind": "page",
+      "exportName": "MesWmStockTakingPlanListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-stock-taking-plan-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-stock-taking-plan-param",
+      "kind": "page",
+      "exportName": "MesWmStockTakingPlanParamListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-stock-taking-plan-param-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-stock-taking-task",
+      "kind": "page",
+      "exportName": "MesWmStockTakingTaskListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-stock-taking-task-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-stock-taking-task-line",
+      "kind": "page",
+      "exportName": "MesWmStockTakingTaskLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-stock-taking-task-line-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-stock-taking-task-result",
+      "kind": "page",
+      "exportName": "MesWmStockTakingTaskResultListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-stock-taking-task-result-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-transaction",
+      "kind": "page",
+      "exportName": "MesWmTransactionListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-transaction-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-transfer",
+      "kind": "page",
+      "exportName": "MesWmTransferListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-transfer-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-transfer-detail",
+      "kind": "page",
+      "exportName": "MesWmTransferDetailListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-transfer-detail-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-transfer-line",
+      "kind": "page",
+      "exportName": "MesWmTransferLineListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-transfer-line-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-warehouse",
+      "kind": "page",
+      "exportName": "MesWmWarehouseListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-warehouse-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-warehouse-area",
+      "kind": "page",
+      "exportName": "MesWmWarehouseAreaListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-warehouse-area-list.page"
+    },
+    {
+      "slug": "mes/mes-wm-warehouse-location",
+      "kind": "page",
+      "exportName": "MesWmWarehouseLocationListPage",
+      "module": "@/modules/mes/frontend/pages/mes-wm-warehouse-location-list.page"
+    },
+    {
+      "slug": "mes/work-orders",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/mes/frontend/pages/work-orders.page"
+    },
+    {
+      "slug": "mp/accounts",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/mp/frontend/pages/accounts.page"
+    },
+    {
+      "slug": "mp/fans",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/mp/frontend/pages/fans.page"
+    },
+    {
+      "slug": "mp/mp-account",
+      "kind": "page",
+      "exportName": "MpAccountListPage",
+      "module": "@/modules/mp/frontend/pages/mp-account-list.page"
+    },
+    {
+      "slug": "mp/mp-auto-reply",
+      "kind": "page",
+      "exportName": "MpAutoReplyListPage",
+      "module": "@/modules/mp/frontend/pages/mp-auto-reply-list.page"
+    },
+    {
+      "slug": "mp/mp-draft",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/mp/frontend/pages/mp-draft.page"
+    },
+    {
+      "slug": "mp/mp-free-publish",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/mp/frontend/pages/mp-free-publish.page"
+    },
+    {
+      "slug": "mp/mp-material",
+      "kind": "page",
+      "exportName": "MpMaterialListPage",
+      "module": "@/modules/mp/frontend/pages/mp-material-list.page"
+    },
+    {
+      "slug": "mp/mp-menu",
+      "kind": "page",
+      "exportName": "MpMenuListPage",
+      "module": "@/modules/mp/frontend/pages/mp-menu-list.page"
+    },
+    {
+      "slug": "mp/mp-message",
+      "kind": "page",
+      "exportName": "MpMessageListPage",
+      "module": "@/modules/mp/frontend/pages/mp-message-list.page"
+    },
+    {
+      "slug": "mp/mp-message-template",
+      "kind": "page",
+      "exportName": "MpMessageTemplateListPage",
+      "module": "@/modules/mp/frontend/pages/mp-message-template-list.page"
+    },
+    {
+      "slug": "mp/mp-open",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/mp/frontend/pages/mp-open.page"
+    },
+    {
+      "slug": "mp/mp-statistics",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/mp/frontend/pages/mp-statistics.page"
+    },
+    {
+      "slug": "mp/mp-tag",
+      "kind": "page",
+      "exportName": "MpTagListPage",
+      "module": "@/modules/mp/frontend/pages/mp-tag-list.page"
+    },
+    {
+      "slug": "mp/mp-user",
+      "kind": "page",
+      "exportName": "MpUserListPage",
+      "module": "@/modules/mp/frontend/pages/mp-user-list.page"
+    },
+    {
+      "slug": "overview/dashboard",
+      "kind": "page",
+      "exportName": "React",
+      "module": "react"
+    },
+    {
+      "slug": "pay/orders",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/pay/frontend/pages/orders.page"
+    },
+    {
+      "slug": "pay/pay-app",
+      "kind": "page",
+      "exportName": "PayAppListPage",
+      "module": "@/modules/pay/frontend/pages/pay-app-list.page"
+    },
+    {
+      "slug": "pay/pay-channel",
+      "kind": "page",
+      "exportName": "PayChannelListPage",
+      "module": "@/modules/pay/frontend/pages/pay-channel-list.page"
+    },
+    {
+      "slug": "pay/pay-demo-order",
+      "kind": "page",
+      "exportName": "PayDemoOrderListPage",
+      "module": "@/modules/pay/frontend/pages/pay-demo-order-list.page"
+    },
+    {
+      "slug": "pay/pay-demo-withdraw",
+      "kind": "page",
+      "exportName": "PayDemoWithdrawListPage",
+      "module": "@/modules/pay/frontend/pages/pay-demo-withdraw-list.page"
+    },
+    {
+      "slug": "pay/pay-notify",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/pay/frontend/pages/pay-notify.page"
+    },
+    {
+      "slug": "pay/pay-notify-log",
+      "kind": "page",
+      "exportName": "PayNotifyLogListPage",
+      "module": "@/modules/pay/frontend/pages/pay-notify-log-list.page"
+    },
+    {
+      "slug": "pay/pay-notify-task",
+      "kind": "page",
+      "exportName": "PayNotifyTaskListPage",
+      "module": "@/modules/pay/frontend/pages/pay-notify-task-list.page"
+    },
+    {
+      "slug": "pay/pay-order",
+      "kind": "page",
+      "exportName": "PayOrderListPage",
+      "module": "@/modules/pay/frontend/pages/pay-order-list.page"
+    },
+    {
+      "slug": "pay/pay-order-extension",
+      "kind": "page",
+      "exportName": "PayOrderExtensionListPage",
+      "module": "@/modules/pay/frontend/pages/pay-order-extension-list.page"
+    },
+    {
+      "slug": "pay/pay-refund",
+      "kind": "page",
+      "exportName": "PayRefundListPage",
+      "module": "@/modules/pay/frontend/pages/pay-refund-list.page"
+    },
+    {
+      "slug": "pay/pay-transfer",
+      "kind": "page",
+      "exportName": "PayTransferListPage",
+      "module": "@/modules/pay/frontend/pages/pay-transfer-list.page"
+    },
+    {
+      "slug": "pay/pay-wallet",
+      "kind": "page",
+      "exportName": "PayWalletListPage",
+      "module": "@/modules/pay/frontend/pages/pay-wallet-list.page"
+    },
+    {
+      "slug": "pay/pay-wallet-recharge",
+      "kind": "page",
+      "exportName": "PayWalletRechargeListPage",
+      "module": "@/modules/pay/frontend/pages/pay-wallet-recharge-list.page"
+    },
+    {
+      "slug": "pay/pay-wallet-recharge-package",
+      "kind": "page",
+      "exportName": "PayWalletRechargePackageListPage",
+      "module": "@/modules/pay/frontend/pages/pay-wallet-recharge-package-list.page"
+    },
+    {
+      "slug": "pay/pay-wallet-transaction",
+      "kind": "page",
+      "exportName": "PayWalletTransactionListPage",
+      "module": "@/modules/pay/frontend/pages/pay-wallet-transaction-list.page"
+    },
+    {
+      "slug": "pay/refunds",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/pay/frontend/pages/refunds.page"
+    },
+    {
+      "slug": "report/boards",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/report/frontend/pages/report-boards.page"
+    },
+    {
+      "slug": "report/go-view-data",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/report/frontend/pages/go-view-data.page"
+    },
+    {
+      "slug": "report/go-view-project",
+      "kind": "page",
+      "exportName": "GoViewProjectListPage",
+      "module": "@/modules/report/frontend/pages/go-view-project-list.page"
+    },
+    {
+      "slug": "scheme/factories",
+      "kind": "page",
+      "exportName": "React",
+      "module": "react"
+    },
+    {
+      "slug": "system/area",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/area.page"
+    },
+    {
+      "slug": "system/depts",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/depts.page"
+    },
+    {
+      "slug": "system/dict-data",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/dict-data.page"
+    },
+    {
+      "slug": "system/dict-type",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/dict-type.page"
+    },
+    {
+      "slug": "system/dicts",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/dicts.page"
+    },
+    {
+      "slug": "system/ip-areas",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/ip-areas.page"
+    },
+    {
+      "slug": "system/login-logs",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/login-logs.page"
+    },
+    {
+      "slug": "system/mail-accounts",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/mail-accounts.page"
+    },
+    {
+      "slug": "system/mail-logs",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/mail-logs.page"
+    },
+    {
+      "slug": "system/mail-template",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/mail-template.page"
+    },
+    {
+      "slug": "system/menus",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/menus.page"
+    },
+    {
+      "slug": "system/notices",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/notices.page"
+    },
+    {
+      "slug": "system/notify-messages",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/notify-messages.page"
+    },
+    {
+      "slug": "system/notify-templates",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/notify-templates.page"
+    },
+    {
+      "slug": "system/oauth2-clients",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/oauth2-clients.page"
+    },
+    {
+      "slug": "system/oauth2-tokens",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/oauth2-tokens.page"
+    },
+    {
+      "slug": "system/online-users",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/online-users.page"
+    },
+    {
+      "slug": "system/operate-logs",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/operate-logs.page"
+    },
+    {
+      "slug": "system/posts",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/posts.page"
+    },
+    {
+      "slug": "system/roles",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/roles.page"
+    },
+    {
+      "slug": "system/sms-callback",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/sms-callback.page"
+    },
+    {
+      "slug": "system/sms-channels",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/sms-channels.page"
+    },
+    {
+      "slug": "system/sms-logs",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/sms-logs.page"
+    },
+    {
+      "slug": "system/sms-template",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/sms-template.page"
+    },
+    {
+      "slug": "system/social-client",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/social-client.page"
+    },
+    {
+      "slug": "system/social-users",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/social-users.page"
+    },
+    {
+      "slug": "system/tenant-packages",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/tenant-packages.page"
+    },
+    {
+      "slug": "system/tenants",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/tenants.page"
+    },
+    {
+      "slug": "system/user-profile",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/user-profile.page"
+    },
+    {
+      "slug": "system/users",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/system/frontend/pages/users.page"
+    },
+    {
+      "slug": "wms/wms-check-order",
+      "kind": "page",
+      "exportName": "WmsCheckOrderListPage",
+      "module": "@/modules/wms/frontend/pages/wms-check-order-list.page"
+    },
+    {
+      "slug": "wms/wms-check-order-detail",
+      "kind": "page",
+      "exportName": "WmsCheckOrderDetailListPage",
+      "module": "@/modules/wms/frontend/pages/wms-check-order-detail-list.page"
+    },
+    {
+      "slug": "wms/wms-home-statistics",
+      "kind": "page",
+      "exportName": "default",
+      "module": "@/modules/wms/frontend/pages/wms-home-statistics.page"
+    },
+    {
+      "slug": "wms/wms-inventory",
+      "kind": "page",
+      "exportName": "WmsInventoryListPage",
+      "module": "@/modules/wms/frontend/pages/wms-inventory-list.page"
+    },
+    {
+      "slug": "wms/wms-inventory-history",
+      "kind": "page",
+      "exportName": "WmsInventoryHistoryListPage",
+      "module": "@/modules/wms/frontend/pages/wms-inventory-history-list.page"
+    },
+    {
+      "slug": "wms/wms-item",
+      "kind": "page",
+      "exportName": "WmsItemListPage",
+      "module": "@/modules/wms/frontend/pages/wms-item-list.page"
+    },
+    {
+      "slug": "wms/wms-item-brand",
+      "kind": "page",
+      "exportName": "WmsItemBrandListPage",
+      "module": "@/modules/wms/frontend/pages/wms-item-brand-list.page"
+    },
+    {
+      "slug": "wms/wms-item-category",
+      "kind": "page",
+      "exportName": "WmsItemCategoryListPage",
+      "module": "@/modules/wms/frontend/pages/wms-item-category-list.page"
+    },
+    {
+      "slug": "wms/wms-item-sku",
+      "kind": "page",
+      "exportName": "WmsItemSkuListPage",
+      "module": "@/modules/wms/frontend/pages/wms-item-sku-list.page"
+    },
+    {
+      "slug": "wms/wms-merchant",
+      "kind": "page",
+      "exportName": "WmsMerchantListPage",
+      "module": "@/modules/wms/frontend/pages/wms-merchant-list.page"
+    },
+    {
+      "slug": "wms/wms-movement-order",
+      "kind": "page",
+      "exportName": "WmsMovementOrderListPage",
+      "module": "@/modules/wms/frontend/pages/wms-movement-order-list.page"
+    },
+    {
+      "slug": "wms/wms-movement-order-detail",
+      "kind": "page",
+      "exportName": "WmsMovementOrderDetailListPage",
+      "module": "@/modules/wms/frontend/pages/wms-movement-order-detail-list.page"
+    },
+    {
+      "slug": "wms/wms-receipt-order",
+      "kind": "page",
+      "exportName": "WmsReceiptOrderListPage",
+      "module": "@/modules/wms/frontend/pages/wms-receipt-order-list.page"
+    },
+    {
+      "slug": "wms/wms-receipt-order-detail",
+      "kind": "page",
+      "exportName": "WmsReceiptOrderDetailListPage",
+      "module": "@/modules/wms/frontend/pages/wms-receipt-order-detail-list.page"
+    },
+    {
+      "slug": "wms/wms-shipment-order",
+      "kind": "page",
+      "exportName": "WmsShipmentOrderListPage",
+      "module": "@/modules/wms/frontend/pages/wms-shipment-order-list.page"
+    },
+    {
+      "slug": "wms/wms-shipment-order-detail",
+      "kind": "page",
+      "exportName": "WmsShipmentOrderDetailListPage",
+      "module": "@/modules/wms/frontend/pages/wms-shipment-order-detail-list.page"
+    },
+    {
+      "slug": "wms/wms-warehouse",
+      "kind": "page",
+      "exportName": "WmsWarehouseListPage",
+      "module": "@/modules/wms/frontend/pages/wms-warehouse-list.page"
+    }
+  ]
+}

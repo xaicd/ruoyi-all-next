@@ -61,7 +61,7 @@
     "standards:baseline": "node scripts/check-engineering-standards.cjs --write-baseline",
     "evolution:backlog": "node scripts/build-evolution-backlog.cjs",
     "mcp:serve": "node scripts/mcp/ruoyi-mcp-server.cjs",
-    "check": "npm run domain:manifests:check && npm run contracts:sync && npm run rpc:actions:check && npm run domain:loaders:check && npm run domain:check && npm run microservice:check && npm run harness:check && npm run admin:routes:check && npm run foundation:ontology:check && npm run skills:check && npm run compat:check && npm run standards:check && npm run agent:native:check && npm run agent:contracts:check && npm run agent:page-schemas:check && npm run handwritten:check && npm run evolution:backlog && node scripts/write-harness-trace.cjs && npm run delivery:hints",
+    "check": "npm run domain:manifests:check && npm run contracts:sync && npm run rpc:actions:check && npm run domain:loaders:check && npm run domain:check && npm run microservice:check && npm run harness:check && npm run admin:routes:check && npm run admin:pages:check && npm run foundation:ontology:check && npm run skills:check && npm run compat:check && npm run standards:check && npm run agent:native:check && npm run agent:contracts:check && npm run agent:page-schemas:check && npm run handwritten:check && npm run evolution:backlog && node scripts/write-harness-trace.cjs && npm run delivery:hints",
     "domain:dev": "node scripts/pack-domain.cjs --dev --materialize",
     "domain:build": "node scripts/pack-domain.cjs --build --materialize",
     "domain:up": "node scripts/domain-up.cjs",
@@ -114,7 +114,9 @@
     "runbook": "node scripts/agent/run-runbook.cjs",
     "deliver": "node scripts/deliver.cjs",
     "plugins:register": "npx tsx scripts/register-plugins.ts",
-    "smoke:login": "node scripts/smoke-login.cjs"
+    "smoke:login": "node scripts/smoke-login.cjs",
+    "admin:pages": "node scripts/generate-admin-pages.cjs --write",
+    "admin:pages:check": "node scripts/generate-admin-pages.cjs --check"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",
