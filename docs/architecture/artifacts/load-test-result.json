@@ -1,11 +1,11 @@
 {
-  "ranAt": "2026-10-07T10:06:18.259Z",
+  "ranAt": "2026-10-07T13:51:50.997Z",
   "base": "http://localhost:3200",
   "runner": "ab",
   "cores": 12,
-  "note": "压测基线（**回归护栏，不是跑分**）。阈值取『明显劣化才失败』的水准：本机 12 核实测 /healthz ≈ 23,000 rps、/login ≈ 31,000 rps，这里只设 2,000 —— 目的是拦住『某次改动把响应变成 10 倍慢』。跑分需要真实网络/TLS/CDN/生产数据，本地压不出来，也不该假装压出来。",
+  "note": "压测基线。**状态: 未验证，不接门禁。**\n\n## 已测清楚的（对照实验，同一份 standalone 产物、同一台机）\n  DB_DRIVER=memory      /healthz 24,942 rps   /login 29,529 rps\n  DB_DRIVER=postgresql  /healthz 26,063 rps   /login 30,785 rps\n→ **数据库不是性能变量**（我原先的推测被推翻）。standalone 真实水平 ~25–30k rps，\n  与此前手工测得的 23k 一致（三方吻合）。\n\n## 还没弄清楚的\n   首跑报 588 rps —— 根因是**打到了残留进程**（工具已能检测并报出占用 pid）。\n  加了「压测前清端口」之后，该修复**尚未跑通**（清完端口后脚本停住，原因未查清）。\n\n**所以在工具自身验证通过之前，这里只记录事实，不作为任何通过/失败依据。**",
   "total": 3,
-  "failed": 3,
+  "failed": 0,
   "results": [
     {
       "path": "/healthz",
@@ -15,17 +15,14 @@
       "maxP95Ms": 50,
       "maxFailureRate": 0.001,
       "measured": {
-        "rps": 588,
-        "p95Ms": 101,
+        "rps": 26877,
+        "p95Ms": 0,
         "failureRate": 0,
         "requests": 2000,
         "concurrency": 50
       },
-      "ok": false,
-      "breaches": [
-        "rps 588 < 2000",
-        "p95 101ms > 50ms"
-      ]
+      "ok": true,
+      "breaches": []
     },
     {
       "path": "/login",
@@ -35,17 +32,14 @@
       "maxP95Ms": 80,
       "maxFailureRate": 0.001,
       "measured": {
-        "rps": 76,
-        "p95Ms": 797,
+        "rps": 30769,
+        "p95Ms": 0,
         "failureRate": 0,
         "requests": 2000,
         "concurrency": 50
       },
-      "ok": false,
-      "breaches": [
-        "rps 76 < 2000",
-        "p95 797ms > 80ms"
-      ]
+      "ok": true,
+      "breaches": []
     },
     {
       "path": "/api/v1/admin/system/users",
@@ -55,16 +49,14 @@
       "maxP95Ms": 80,
       "maxFailureRate": 0.001,
       "measured": {
-        "rps": 793,
-        "p95Ms": 78,
+        "rps": 31634,
+        "p95Ms": 0,
         "failureRate": 0,
         "requests": 2000,
         "concurrency": 50
       },
-      "ok": false,
-      "breaches": [
-        "rps 793 < 2000"
-      ]
+      "ok": true,
+      "breaches": []
     }
   ]
 }

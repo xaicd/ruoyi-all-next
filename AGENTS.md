@@ -174,6 +174,8 @@
 | 11. 实施 | `npm run runbook -- --feature <名> --check/--dry-run/--run` | 割接 + **失败自动回滚** + **实测**耗时 |
 | 12. 运营 | `npm run agent:ops -- <域>.<实体> health/seed-sample/purge-sample` | 接口体检 + 造数/清数 |
 | 13. 冒烟（**平台可用性**） | `npm run smoke:login` | 建库→迁移→种子→登记插件→起服务→**登录 200**→受保护接口 200。自管理环境，跑完清场 |
+| 14. **渗透** | `npm run security:scan` | 12 项: 未认证/伪造 token/伪造 tenant/插件挂载/不泄露栈/安全响应头/错误口令/两个**阴性对照**。接进 CI + G5 |
+| 15. **压测**（容量护栏） | `npm run load:test` | 打**生产产物**，出 rps/p95/失败率并对阈值。接进 CI + G5 |
 
 要点（都是实测踩出来的）:
 
@@ -184,7 +186,12 @@
 4. **孵化出的工程必须有 git 仓库** —— 任务痕迹与指纹都建立在 git 上（孵化器已自动 `git init`）。
 5. **提交必须带 `[T<ID>]`**（方括号），并在该任务的文件白名单内 —— 否则 `task:verify` 会拦，
    裸 `T1` 会误匹配到「顺口提到」的提交。
-6. **G5 说 passed ⇒ 必须有一份全过的 `runbook-result.json`**；`not_applicable` 必须给理由。
+6. **G5 说 passed ⇒ 三样齐全**: 全过的 `runbook-result.json` + 全过的 `security-scan-result.json`
+   + 达阈值的 `load-test-result.json`，且**都不超过 7 天**（`not_applicable` 必须给理由）。
+7. **压测的阈值是回归护栏，不是跑分**: 实测 standalone ~25–30k rps，阈值只设 5,000 ——
+   目的是拦"吞吐被打成十分之一"。真实容量必须在生产用真实流量压，**本地压不出来也不该假装压出来**。
+8. **压测前必须清端口**: 否则会打到残留的 dev 进程，拿到低一个数量级的数字
+   （实测: 报 588 rps，实际 26,877 —— **不是产品慢，是打错了进程**）。
 7. **平台级冒烟必须进 CI**（`npm run smoke:login`）。教训: 门禁（check/build/fingerprint/
    task:verify）**全绿而登录链是断的** —— 因为门禁测的是**机制**，不是**产品能不能用**。
 8. **`TENANT_PLATFORM_USERNAMES` 必须包含引导管理员**。基座的 `.env` 里曾是一台机器的残留

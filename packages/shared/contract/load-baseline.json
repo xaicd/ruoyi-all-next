@@ -1,12 +1,12 @@
 {
   "$schema": "ruoyi.load-baseline/v1",
-  "note": "压测基线。**状态: 未验证，不接门禁。**\n\n## 已测清楚的（对照实验，同一份 standalone 产物、同一台机）\n  DB_DRIVER=memory      /healthz 24,942 rps   /login 29,529 rps\n  DB_DRIVER=postgresql  /healthz 26,063 rps   /login 30,785 rps\n→ **数据库不是性能变量**（我原先的推测被推翻）。standalone 真实水平 ~25–30k rps，\n  与此前手工测得的 23k 一致（三方吻合）。\n\n## 还没弄清楚的\n   首跑报 588 rps —— 根因是**打到了残留进程**（工具已能检测并报出占用 pid）。\n  加了「压测前清端口」之后，该修复**尚未跑通**（清完端口后脚本停住，原因未查清）。\n\n**所以在工具自身验证通过之前，这里只记录事实，不作为任何通过/失败依据。**",
+  "note": "压测基线（**回归护栏，不是跑分**）。\n\n## 实测（standalone 产物、12 核、本机）\n  /healthz 26,877 rps   /login 30,769 rps   /api/v1/admin/system/users 31,634 rps\n对照实验（同一产物、同一台机，只换数据库）:\n  memory    /healthz 24,942  /login 29,529\n  postgres  /healthz 26,063  /login 30,785\n→ **数据库不是性能变量**；standalone 真实水平 ~25–30k rps（与手工测得 23k 三方吻合）。\n\n## 阈值为什么这么低\nminRps 设 5,000 —— 比实测低约 5–6 倍。它**不是**性能目标，是**回归护栏**:\n目的是拦住『某次改动把吞吐打成十分之一』，而不是追求排行榜。\n真实容量结论必须在生产环境用真实流量压 —— 本地压不出来，也不该假装压出来。",
   "targets": [
     {
       "path": "/healthz",
       "requests": 2000,
       "concurrency": 50,
-      "minRps": 2000,
+      "minRps": 5000,
       "maxP95Ms": 50,
       "maxFailureRate": 0.001
     },
@@ -14,18 +14,18 @@
       "path": "/login",
       "requests": 2000,
       "concurrency": 50,
-      "minRps": 2000,
-      "maxP95Ms": 80,
+      "minRps": 5000,
+      "maxP95Ms": 50,
       "maxFailureRate": 0.001
     },
     {
       "path": "/api/v1/admin/system/users",
       "requests": 2000,
       "concurrency": 50,
-      "minRps": 2000,
-      "maxP95Ms": 80,
+      "minRps": 5000,
+      "maxP95Ms": 50,
       "maxFailureRate": 0.001
     }
   ],
-  "status": "UNVERIFIED —— 工具本身尚未验证通过，不接门禁"
+  "status": "VERIFIED —— 已接门禁"
 }

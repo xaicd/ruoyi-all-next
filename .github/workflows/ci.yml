@@ -78,3 +78,23 @@ jobs:
       - name: 失败时输出扫描结果
         if: failure()
         run: cat docs/architecture/artifacts/security-scan-result.json 2>/dev/null || true
+
+  # 容量回归护栏（§3.3 第 6 条: 容量目标须由 SLO、**压测**和资源预算确定）
+  load:
+    runs-on: ubuntu-latest
+    needs: gates
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: 压测（自管理环境，打生产产物）
+        run: pnpm run load:test
+      - name: 失败时输出压测结果
+        if: failure()
+        run: cat docs/architecture/artifacts/load-test-result.json 2>/dev/null || true

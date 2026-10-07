@@ -181,6 +181,22 @@ function inspectEvidence(featureDir, gateIds) {
       }
     }
   }
+  // 第三条: 同条件 —— 上线前也要有一份**新鲜且过阈值**的压测结果（§3.3 第 6 条）
+  if (g5?.status === "passed") {
+    const loadPath = path.join(ROOT, "docs", "architecture", "artifacts", "load-test-result.json")
+    if (!fs.existsSync(loadPath)) {
+      problems.push("G5_PRE 标了 passed 但没有 load-test-result.json（没跑过压测）")
+    } else {
+      try {
+        const load = JSON.parse(fs.readFileSync(loadPath, "utf8"))
+        if (load.failed > 0) problems.push(`G5_PRE 标了 passed，但压测有 ${load.failed} 项未达阈值`)
+        const ageDays = (Date.now() - new Date(load.ranAt).getTime()) / 86400000
+        if (ageDays > 7) problems.push(`压测结果已过期 ${ageDays.toFixed(1)} 天（>7 天），请重跑 load:test`)
+      } catch (error) {
+        problems.push(`load-test-result.json 不是合法 JSON —— ${error.message}`)
+      }
+    }
+  }
   // 第二条: 同条件 —— 写成裸块会让未标 passed 的特性也被要求交割接记录（实测踩到）
   if (g5?.status === "passed") {
     const resultPath = path.join(featureDir, "runbook-result.json")

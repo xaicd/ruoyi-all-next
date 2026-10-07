@@ -112,6 +112,17 @@ async function main() {
   if (targets.length === 0) { console.error("[load] 基线里没有 targets"); process.exit(1) }
 
   console.log(`\n=== 压测（${BASE}）runner=${hasAb ? "ab" : "node"} 核数=${os.cpus().length} ===\n`)
+  // **必须在启动应用之前清端口**。写这一版时插到了启动之后 ——
+  // 于是它把自己刚起的服务杀掉了，脚本随后停住（实测）。
+  // 只在自管理环境时清；`--base` 模式下使用者可能就是想压已有实例，不能碰。
+  if (!arg("--base")) {
+    const occupied = spawnSync("lsof", ["-ti:3200"], { encoding: "utf8" }).stdout?.trim()
+    if (occupied) {
+      console.log(`[load] 端口 3200 已被占用（pid ${occupied.split("\n").join(", ")}）—— 先清掉，避免打到残留进程`)
+      for (const pid of occupied.split("\n")) spawnSync("kill", ["-9", pid])
+      await new Promise((r) => setTimeout(r, 1500))
+    }
+  }
 
   if (!arg("--base")) {
     const healthy = sh("docker", ["inspect", "--format={{.State.Health.Status}}", CONTAINER]).stdout?.trim() === "healthy"
@@ -149,16 +160,6 @@ async function main() {
       await new Promise((r) => setTimeout(r, 3000))
     }
     if (!ready) { console.log("[load] 服务没起起来:\n" + fs.readFileSync(logFile, "utf8").slice(-600)); process.exit(1) }
-  }
-
-  // **先确认端口上跑的是我们刚起的那个进程** —— 否则会打着残留的 dev 进程，
-  // 拿到低一个数量级的数字（实测: 报 588 rps，而 standalone 实际 26,000 rps）。
-  // 做法: 起服务前清端口；起不来（EADDRINUSE）就直接失败，不静默打着别人的服务。
-  const listening = spawnSync("lsof", ["-ti:3200"], { encoding: "utf8" })
-  if (listening.stdout?.trim()) {
-    console.log(`[load] 端口 3200 已被占用（pid ${listening.stdout.trim().split("\n").join(",")}）—— 先清掉再压，避免打到残留进程`)
-    for (const pid of listening.stdout.trim().split("\n")) spawnSync("kill", ["-9", pid])
-    await new Promise((r) => setTimeout(r, 1500))
   }
 
   const results = []
