@@ -164,6 +164,24 @@ function inspectEvidence(featureDir, gateIds) {
   // 这条是"证据不可自报"在实施轨上的落点: "回滚 10 分钟内"是声明，
   // runbook-result.json 里的耗时才是实测。没有实测记录的 passed 只是声称。
   const g5 = (data.gates ?? {}).G5_PRE
+  // G5 是"上线前"：指纹一致 + 割接演练 + **安全扫描绿**，三样缺一不可。
+  // 安全扫描结果由 `npm run security:scan` 落盘（自管理环境、对着跑起来的应用打真实请求）。
+  if (g5?.status === "passed") {
+    const secPath = path.join(ROOT, "docs", "architecture", "artifacts", "security-scan-result.json")
+    if (!fs.existsSync(secPath)) {
+      problems.push("G5_PRE 标了 passed 但没有 security-scan-result.json（没跑过安全扫描）")
+    } else {
+      try {
+        const scan = JSON.parse(fs.readFileSync(secPath, "utf8"))
+        if (scan.failed > 0) problems.push(`G5_PRE 标了 passed，但安全扫描有 ${scan.failed} 项失败`)
+        const ageDays = (Date.now() - new Date(scan.scannedAt).getTime()) / 86400000
+        if (ageDays > 7) problems.push(`安全扫描结果已过期 ${ageDays.toFixed(1)} 天（>7 天），请重跑 security:scan`)
+      } catch (error) {
+        problems.push(`security-scan-result.json 不是合法 JSON —— ${error.message}`)
+      }
+    }
+  }
+  // 第二条: 同条件 —— 写成裸块会让未标 passed 的特性也被要求交割接记录（实测踩到）
   if (g5?.status === "passed") {
     const resultPath = path.join(featureDir, "runbook-result.json")
     if (!fs.existsSync(resultPath)) {

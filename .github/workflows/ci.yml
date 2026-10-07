@@ -56,3 +56,25 @@ jobs:
       - name: 失败时输出应用日志
         if: failure()
         run: cat /tmp/smoke-login-app.log 2>/dev/null | tail -60 || true
+
+  # 上线前安全扫描: 对着跑起来的应用打真实请求
+  #   §3.2.1 路由保护基线 / §4.8 伪造 tenant / §4.5 不泄露栈 / 安全响应头 / 阴性对照
+  # 与 smoke 分开成独立 job: 它更慢，且失败原因完全不同（一个测"能不能用"，一个测"能不能被打"）
+  security:
+    runs-on: ubuntu-latest
+    needs: gates
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: 安全扫描（自管理环境）
+        run: pnpm run security:scan
+      - name: 失败时输出扫描结果
+        if: failure()
+        run: cat docs/architecture/artifacts/security-scan-result.json 2>/dev/null || true

@@ -44,6 +44,25 @@ describe("证据账本", () => {
     expect(g4).toHaveLength(1) // 需求/运营/实施 三个阶段共用 G4_DS
   })
 
+  it("G5_PRE 标 passed 但没跑过安全扫描 → 拦下（上线前必须扫过）", () => {
+    // 规则读的是仓库级产物（docs/architecture/artifacts/security-scan-result.json），
+    // 所以必须**临时移开再恢复** —— 否则本机跑过扫描时这条测试永远不会触发。
+    const scan = path.join(ROOT, "docs", "architecture", "artifacts", "security-scan-result.json")
+    const backup = fs.existsSync(scan) ? fs.readFileSync(scan, "utf8") : null
+    fs.rmSync(scan, { force: true })
+    const all = ["G0_DAR", "G1_FDA", "G2_CoreSWE", "G3_FDSE", "G4_DS"]
+    const pending = Object.fromEntries(all.map((gate) => [gate, { status: "pending", owner: "-", evidence: [], summary: "" }]))
+    const result = inspect({
+      ...pending,
+      // G5 同时要求 runbook-result 与 security-scan-result；这里只给 runbook，
+      // 且故意清掉扫描结果，验证"缺安全扫描"能被单独识别。
+      G5_PRE: { status: "passed", owner: "sre", evidence: ["runbook-result.json: 2 步，全过"], summary: "指纹一致" },
+    })
+    const mentionSecurity = result.problems.some((item) => item.includes("安全扫描") || item.includes("security-scan"))
+    if (backup !== null) { fs.mkdirSync(path.dirname(scan), { recursive: true }); fs.writeFileSync(scan, backup) }
+    expect(mentionSecurity).toBe(true)
+  })
+
   it("合法的 passed（有证据 + 有说明）不被误伤 —— 未登记的 gate 才是问题", () => {
     const all = ["G0_DAR", "G1_FDA", "G2_CoreSWE", "G3_FDSE", "G4_DS", "G5_PRE"]
     const pending = Object.fromEntries(all.map((gate) => [gate, { status: "pending", owner: "-", evidence: [], summary: "" }]))
