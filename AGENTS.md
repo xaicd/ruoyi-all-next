@@ -176,6 +176,7 @@
 | 10. 上线 | `npm run fingerprint` → `fingerprint:verify` | 确认上线的就是测试过的那份 |
 | 11. 实施 | `npm run runbook -- --feature <名> --check/--dry-run/--run` | 割接 + **失败自动回滚** + **实测**耗时 |
 | 12. 运营 | `npm run agent:ops -- <域>.<实体> health/seed-sample/purge-sample` | 接口体检 + 造数/清数 |
+| 13. 冒烟（**平台可用性**） | `npm run smoke:login` | 建库→迁移→种子→登记插件→起服务→**登录 200**→受保护接口 200。自管理环境，跑完清场 |
 
 要点（都是实测踩出来的）:
 
@@ -187,6 +188,11 @@
 5. **提交必须带 `[T<ID>]`**（方括号），并在该任务的文件白名单内 —— 否则 `task:verify` 会拦，
    裸 `T1` 会误匹配到「顺口提到」的提交。
 6. **G5 说 passed ⇒ 必须有一份全过的 `runbook-result.json`**；`not_applicable` 必须给理由。
+7. **平台级冒烟必须进 CI**（`npm run smoke:login`）。教训: 门禁（check/build/fingerprint/
+   task:verify）**全绿而登录链是断的** —— 因为门禁测的是**机制**，不是**产品能不能用**。
+8. **`TENANT_PLATFORM_USERNAMES` 必须包含引导管理员**。基座的 `.env` 里曾是一台机器的残留
+   （`vps_adm`），`admin` 不被认作平台用户 → 登录按租户找用户 → 找不到 → **401**。
+   孵化器已为衍生工程处理（`clone-project-base.cjs` 写 `bootstrap.username`），基座自身也已修正。
 
 ## 4. 编码规范（强制）
 

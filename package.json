@@ -113,7 +113,8 @@
     "feature:build": "node scripts/build-feature.cjs",
     "runbook": "node scripts/agent/run-runbook.cjs",
     "deliver": "node scripts/deliver.cjs",
-    "plugins:register": "npx tsx scripts/register-plugins.ts"
+    "plugins:register": "npx tsx scripts/register-plugins.ts",
+    "smoke:login": "node scripts/smoke-login.cjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",
