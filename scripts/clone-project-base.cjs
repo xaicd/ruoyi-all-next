@@ -798,6 +798,9 @@ async function runProjectReactor(targetDir, plan, sourceCatalog, options = {}) {
   console.log("  提示: 启动前若 shell 里已有同名环境变量（尤其 DATABASE_URL / DB_DRIVER /")
   console.log("        TENANT_*），它会**覆盖 .env** —— 那样工程会连到别的库、或把平台")
   console.log("        管理员当成租户账号，表现为「登录说用户名或密码错误」（实测踩过）。")
+  console.log("")
+  console.log("  提示: 起服务后跑一次 npm run smoke:login —— 它会自己建库/迁移/种子/起服务，")
+  console.log("        验到「登录 200 + 受保护接口 200」为止。今天就是这条抓住了登录 401。")
   console.log("================================================================")
   // 派生工程必须有版本控制 —— 否则任务痕迹（commit 里的 [T1]）与环境指纹
   // （commit + 脏树）全都无从取证，整套交付治理会空转。

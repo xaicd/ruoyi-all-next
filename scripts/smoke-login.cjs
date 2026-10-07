@@ -23,7 +23,10 @@ const path = require("node:path")
 const ROOT = path.resolve(__dirname, "..")
 const KEEP = process.argv.includes("--keep")
 const DB = "ruoyi_smoke"
-const PORT = process.env.SMOKE_PORT || "3299"
+// 端口必须与 `pnpm run dev` 实际监听的一致 —— 仓库的 dev 脚本是
+// `prisma generate && next dev -p 3200`，**写死了 3200**，给 PORT 环境变量无效。
+// 实测踩到: 冒烟探 3201 而应用在 3200，报起服务失败（其实服务是好的）。
+const PORT = process.env.SMOKE_PORT || "3200"
 const BASE = `http://localhost:${PORT}`
 const PASSWORD = "Smoke@123456"
 const SALT = "smoke-salt"

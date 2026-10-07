@@ -1,0 +1,58 @@
+# CI: 门禁 + 平台可用性冒烟
+#
+# 为什么最后一节必须有（实测教训）:
+#   今天 check / build / fingerprint / task:verify **全绿**，而**登录链是断的** ——
+#   因为上面这些门禁测的是**机制**（契约一致、结构守卫、制品指纹），
+#   不是**产品能不能用**（能不能建库、种子、登录、调到受保护接口）。
+#   `smoke:login` 自管理环境（起库/建库/迁移/种子/登记插件/起服务），跑完清场。
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: 门禁（契约 / 边界 / 规范 / 结构守卫）
+        run: pnpm run check
+      - name: 单元与集成测试（内存模式）
+        run: env -u DATABASE_URL -u DB_DRIVER pnpm exec vitest run
+      - name: 生产构建
+        run: pnpm run build
+
+  # 平台可用性: 建库 → 迁移 → 种子 → 登记插件 → 起服务 → 登录 → 受保护接口
+  smoke:
+    runs-on: ubuntu-latest
+    needs: gates
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: 登录冒烟（自管理环境）
+        run: pnpm run smoke:login
+      - name: 失败时输出应用日志
+        if: failure()
+        run: cat /tmp/smoke-login-app.log 2>/dev/null | tail -60 || true
