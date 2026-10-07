@@ -163,6 +163,42 @@ function inspectEvidence(featureDir, gateIds) {
   return { present: true, totals, problems }
 }
 
+
+/**
+ * 任务树体检 —— 对齐 CMMI「主线-支线任务树」。
+ *
+ * 两条规矩:
+ *  1. **不许孤儿任务**: 归属必须是 `main` 或某个**已存在**的任务 ID
+ *  2. **文件白名单必填**: 没有白名单，"1 Task = 1 Commit" 就无从核对
+ */
+function inspectTasks(featureDir) {
+  const file = path.join(featureDir, "tasks.md")
+  if (!fs.existsSync(file)) return { present: false, total: 0, orphans: [], noWhitelist: 0 }
+  const cellsOf = (line) => line.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map((cell) => cell.trim())
+  const rows = fs
+    .readFileSync(file, "utf8")
+    .split("\n")
+    .filter((line) => line.trim().startsWith("|"))
+    .filter((line) => !cellsOf(line).includes("ID"))
+    .filter((line) => !cellsOf(line).every((cell) => /^:?-+:?$/.test(cell)))
+    .map(cellsOf)
+    .filter((cells) => cells.length >= 4)
+    .filter((cells) => /^T\d/.test(cells[0]))
+
+  const ids = new Set(rows.map((cells) => cells[0]))
+  const orphans = []
+  let noWhitelist = 0
+  for (const cells of rows) {
+    const parent = cells[1]
+    if (parent !== "main" && !ids.has(parent)) orphans.push(`${cells[0]} 归属 '${parent}' 不存在`)
+    // `-` = 显式的"本任务不改文件"（纯验证类任务），是合法的
+    if (!cells[3] || (cells[3] !== "-" && cells[3].includes("待填"))) noWhitelist += 1
+  }
+  // 0 条不是"健康" —— 没有任务树等于没规划（早先误报成"无孤儿任务"，实测踩到）
+  if (rows.length === 0) return { present: true, total: 0, orphans: [], noWhitelist: 0, empty: true }
+  return { present: true, total: rows.length, orphans, noWhitelist }
+}
+
 function main() {
   const manifest = JSON.parse(fs.readFileSync(MANIFEST, "utf8"))
   const phases = only ? manifest.phases.filter((phase) => phase.id === only) : manifest.phases
@@ -235,6 +271,7 @@ function main() {
   let distinctTotal = missingArtifacts + distinctSkeletons.size
 
   const bugs = scoped ? inspectBugs(path.join(ROOT, "docs", "features", scoped.name)) : null
+  const tasks = scoped ? inspectTasks(path.join(ROOT, "docs", "features", scoped.name)) : null
   const evidence = scoped
     ? inspectEvidence(
         path.join(ROOT, "docs", "features", scoped.name),
@@ -245,9 +282,10 @@ function main() {
     : null
   if (bugs && bugs.malformed > 0) distinctTotal += 1
   if (evidence) distinctTotal += evidence.problems.length
+  if (tasks) distinctTotal += tasks.orphans.length + (tasks.noWhitelist > 0 ? 1 : 0) + (tasks.empty ? 1 : 0)
 
   if (asJson) {
-    console.log(JSON.stringify({ phases: result, missingTotal: distinctTotal, distinctSkeletons: [...distinctSkeletons], bugs, evidence }, null, 2))
+    console.log(JSON.stringify({ phases: result, missingTotal: distinctTotal, distinctSkeletons: [...distinctSkeletons], bugs, evidence, tasks }, null, 2))
     return
   }
   for (const phase of result) {
@@ -273,6 +311,12 @@ function main() {
     console.log(`   注意: 一个域可以承载多个特性；特性目录里**不该**有业务代码。`)
   }
   console.log(`\n[delivery] ${result.length} 个阶段，独立缺陷 ${distinctTotal} 项（缺失产物 ${missingArtifacts} + 未填文档 ${distinctSkeletons.size}）`)
+  if (tasks && tasks.present) {
+    if (tasks.empty) console.log(`   ✗ 任务表是空的 —— 没有任务树等于没规划`)
+    else if (tasks.orphans.length === 0 && tasks.noWhitelist === 0) console.log(`[delivery] 任务树: ${tasks.total} 条，无孤儿任务`)
+    for (const orphan of tasks.orphans) console.log(`   ✗ 孤儿任务: ${orphan}`)
+    if (tasks.noWhitelist > 0) console.log(`   ✗ ${tasks.noWhitelist} 条任务没有文件白名单（1 Task = 1 Commit 无从核对）`)
+  }
   if (evidence) {
     if (!evidence.present) console.log(`[delivery] 证据: 没有 evidence.json —— gate 无从留痕`)
     else {

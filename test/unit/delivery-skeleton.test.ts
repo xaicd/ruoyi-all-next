@@ -15,6 +15,9 @@ const FIXTURE = path.join(ROOT, "docs", "features", "__skeleton_fixture__")
  */
 describe("delivery 检查器的骨架判定", () => {
   beforeAll(() => {
+    // 幂等: 夹具目录若残留（上次跑崩/被中断），create-feature 会**拒绝覆盖**而 exit 2，
+    // 整个 beforeAll 抛错 → 这个文件的用例全被跳过。先清后建。
+    fs.rmSync(FIXTURE, { recursive: true, force: true })
     execFileSync("npx", ["tsx", "scripts/create-feature.ts", "--name", "__skeleton_fixture__", "--domain", "fixture", "--title", "骨架夹具"], { cwd: ROOT, stdio: "ignore" })
   })
   afterAll(() => fs.rmSync(FIXTURE, { recursive: true, force: true }))

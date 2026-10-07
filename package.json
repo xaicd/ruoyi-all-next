@@ -106,7 +106,8 @@
     "delivery:check": "node scripts/check-delivery.cjs",
     "delivery:status": "node scripts/check-delivery.cjs --json",
     "feature:new": "npx tsx scripts/create-feature.ts",
-    "delivery:hints": "node scripts/delivery-hints.cjs"
+    "delivery:hints": "node scripts/delivery-hints.cjs",
+    "task:verify": "node scripts/verify-task-commit.cjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",
