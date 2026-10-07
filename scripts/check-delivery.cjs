@@ -58,6 +58,28 @@ function expand(pattern) {
   return [...new Set(walk(ROOT, 0))]
 }
 
+
+/**
+ * 文档是否**还只是骨架**。
+ *
+ * 这一条是必须的: 生成器产出的骨架如果被检查器当成"产物已存在"，就会**假绿** ——
+ * 一个没写任何内容的 docs/features/x/requirements.md 不该让"需求"阶段通过。
+ * 判据取**可数的硬指标**（占位符、条目数），不用主观判断。
+ */
+function inspectFeatureDocs(featureDir, docName) {
+  const file = path.join(featureDir, docName)
+  if (!fs.existsSync(file)) return { ok: false, reason: "文档不存在" }
+  const text = fs.readFileSync(file, "utf8")
+  const placeholders = (text.match(/<!--\s*待填/g) || []).length
+  if (placeholders > 0) return { ok: false, reason: `还有 ${placeholders} 处 <!-- 待填 -->` }
+  const counts = {
+    "requirements.md": () => (text.match(/^\s*\d+\.\s*\*\*P[0-2]\*\*/gm) || []).length + " 条用户故事",
+    "design.md": () => (text.match(/^##\s*\d+\.\s*关键不变量/gm) || []).length + " 节不变量",
+    "tasks.md": () => (text.match(/^- \[ \]/gm) || []).length + " 个任务",
+  }
+  return { ok: true, detail: counts[docName] ? counts[docName]() : "" }
+}
+
 function main() {
   const manifest = JSON.parse(fs.readFileSync(MANIFEST, "utf8"))
   const phases = only ? manifest.phases.filter((phase) => phase.id === only) : manifest.phases
@@ -89,8 +111,22 @@ function main() {
       if (hits.length > 0) found.push({ pattern, count: hits.length, sample: path.relative(ROOT, hits[0]) })
       else missing.push(pattern)
     }
+    // 文档产物存在 ≠ 写完了 —— 骨架必须暴露出来，否则就是假绿
+    let skeleton = null
+    if (scoped) {
+      const docs = { requirement: ["requirements.md"], prototype: ["prototype.md"],
+        "ui-design": ["design.md"], architecture: ["design.md"], implementation: ["tasks.md"] }[phase.id]
+      if (docs) {
+        const checks = docs.map((doc) => ({ doc, ...inspectFeatureDocs(path.join(ROOT, "docs", "features", scoped.name), doc) }))
+        const bad = checks.filter((item) => !item.ok)
+        if (bad.length > 0) {
+          skeleton = bad.map((item) => `${item.doc}: ${item.reason}`).join("; ")
+          missingTotal += 1
+        }
+      }
+    }
     missingTotal += missing.length
-    result.push({ id: phase.id, name: phase.name, skill: phase.skill, gate: phase.gate, found, missing })
+    result.push({ id: phase.id, name: phase.name, skill: phase.skill, gate: phase.gate, found, missing, skeleton })
   }
 
   if (asJson) {
@@ -98,8 +134,10 @@ function main() {
     return
   }
   for (const phase of result) {
-    console.log(`\n${phase.missing.length === 0 ? "✅" : "⚠️"} ${phase.name}（${phase.id}）  技能: ${phase.skill}  门禁: ${phase.gate}`)
+    const mark = phase.missing.length === 0 && !phase.skeleton ? "✅" : "⚠️"
+    console.log(`\n${mark} ${phase.name}（${phase.id}）  技能: ${phase.skill}  门禁: ${phase.gate}`)
     for (const item of phase.found) console.log(`   ✓ ${item.pattern}  (${item.count} 个，如 ${item.sample})`)
+    if (phase.skeleton) console.log(`   ✗ 骨架未填: ${phase.skeleton}`)
     for (const item of phase.missing) console.log(`   ✗ ${item}  —— 尚无产物`)
   }
   console.log(`\n[delivery] ${result.length} 个阶段，缺失产物 ${missingTotal} 项`)
