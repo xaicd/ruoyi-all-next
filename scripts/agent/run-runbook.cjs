@@ -106,12 +106,37 @@ const runOne = (step) => {
   return { ok: result.status === 0, elapsedMs: Date.now() - started, output: `${result.stdout ?? ""}${result.stderr ?? ""}` }
 }
 
+const RESULT_PATH = path.join(ROOT, "docs", "features", feature, "runbook-result.json")
+const record = { feature, ranAt: new Date().toISOString(), windowMinutes: runbook.window?.minutes ?? null, steps: [], rolledBack: false, ok: false, totalMs: 0 }
+
+/** 把运行**事实**写进 runbook-result.json，并把指针追加进 evidence.json 的 G5 证据。
+ *  注意: 这里**只记录**，不替 agent 把 G5 判成 passed —— 判定权在 evidence.json，
+ *  而检查器会要求「G5 说 passed ⇒ 必须存在一份全过的运行记录」。 */
+function persist(resultOk) {
+  record.ok = resultOk
+  fs.writeFileSync(RESULT_PATH, JSON.stringify(record, null, 2) + "\n")
+  const evidencePath = path.join(ROOT, "docs", "features", feature, "evidence.json")
+  if (!fs.existsSync(evidencePath)) return
+  try {
+    const ledger = JSON.parse(fs.readFileSync(evidencePath, "utf8"))
+    const gate = ledger.gates?.G5_PRE
+    if (!gate) return
+    const pointer = `runbook-result.json: ${record.steps.length} 步，${resultOk ? "全过" : record.rolledBack ? "失败并已回滚" : "失败"}，用时 ${(record.totalMs / 1000).toFixed(1)}s`
+    gate.evidence = [...(gate.evidence ?? []).filter((item) => !String(item).startsWith("runbook-result.json:")), pointer]
+    fs.writeFileSync(evidencePath, JSON.stringify(ledger, null, 2) + "\n")
+    console.log(`[runbook] 运行结果已落盘，并把指针写入 evidence.json 的 G5 证据`)
+  } catch (error) {
+    console.log(`[runbook] 运行结果已落盘（evidence.json 回写失败: ${error.message}）`)
+  }
+}
+
 console.log(`[runbook] 开始割接 ${feature}（窗口 ${runbook.window?.minutes ?? "?"} 分钟）`)
 const totalStart = Date.now()
 let failed = null
 for (const step of steps) {
   process.stdout.write(`   ▶ ${step.id} ${step.name} ... `)
   const result = runOne(step)
+  record.steps.push({ id: step.id, name: step.name, ok: result.ok, elapsedMs: result.elapsedMs })
   if (result.ok) {
     console.log(`OK (${(result.elapsedMs / 1000).toFixed(1)}s)`)
     continue
@@ -124,6 +149,8 @@ for (const step of steps) {
 
 if (failed) {
   if (process.argv.includes("--no-rollback") || rollback.length === 0) {
+    record.totalMs = Date.now() - totalStart
+    persist(false)
     console.log(`[runbook] 失败于 ${failed.id}，未执行回滚（--no-rollback 或无回滚路径）`)
     process.exit(1)
   }
@@ -134,15 +161,24 @@ if (failed) {
     const result = runOne(step)
     console.log(result.ok ? `OK (${(result.elapsedMs / 1000).toFixed(1)}s)` : `FAIL (${(result.elapsedMs / 1000).toFixed(1)}s)`)
     if (!result.ok) {
+      record.totalMs = Date.now() - totalStart
+      record.rolledBack = true
+      persist(false)
       console.log(`[runbook] 回滚步骤失败 —— 需人工介入`)
       process.exit(2)
     }
   }
-  console.log(`[runbook] 回滚完成，用时 ${((Date.now() - rollbackStart) / 1000).toFixed(1)}s（这是实测的回滚耗时，不是声明值）`)
+  record.totalMs = Date.now() - totalStart
+  record.rolledBack = true
+  record.rollbackMs = Date.now() - rollbackStart
+  persist(false)
+  console.log(`[runbook] 回滚完成，用时 ${(record.rollbackMs / 1000).toFixed(1)}s（这是实测的回滚耗时，不是声明值）`)
   process.exit(1)
 }
 
 const elapsed = (Date.now() - totalStart) / 1000
+record.totalMs = Date.now() - totalStart
+persist(elapsed <= (runbook.window?.minutes ?? 0) * 60)
 const budget = (runbook.window?.minutes ?? 0) * 60
 console.log(`[runbook] 割接完成，用时 ${elapsed.toFixed(1)}s / 窗口 ${budget}s ${elapsed <= budget ? "（在窗口内）" : "（**超出窗口**）"}`)
 process.exit(elapsed <= budget ? 0 : 1)

@@ -1,7 +1,7 @@
 import { execFileSync } from "node:child_process"
 import fs from "node:fs"
 import path from "node:path"
-import { afterEach, describe, expect, it } from "vitest"
+import { afterEach, beforeEach, describe, expect, it } from "vitest"
 
 const ROOT = path.resolve(__dirname, "../..")
 const DIR = path.join(ROOT, "docs", "features", "__rb_test__")
@@ -76,5 +76,58 @@ describe("实施轨 runbook", () => {
       rollback: [{ id: "R1", name: "回滚", command: "exit 0" }],
     })
     expect(run(["--check"]).status).toBe(0)
+  })
+})
+
+/**
+ * G5 的 passed 必须有**实测**支撑 —— 这是"证据不可自报"在实施轨上的落点。
+ */
+describe("G5 证据规则", () => {
+  // afterEach 会删掉整个目录 —— 每个用例都要先建回来（写这条时踩到: 直接 ENOENT）
+  beforeEach(() => fs.mkdirSync(DIR, { recursive: true }))
+  const EVIDENCE = path.join(DIR, "evidence.json")
+  const RESULT = path.join(DIR, "runbook-result.json")
+
+  function inspectDelivery(): { output: string; status: number } {
+    fs.writeFileSync(path.join(DIR, "feature.json"), JSON.stringify({ name: "__rb_test__", domain: "x" }))
+    try {
+      return { status: 0, output: execFileSync("node", ["scripts/check-delivery.cjs", "--feature", "__rb_test__", "--json"], { cwd: ROOT, encoding: "utf8" }) }
+    } catch (error) {
+      const e = error as { status?: number; stdout?: string }
+      return { status: e.status ?? 1, output: e.stdout ?? "" }
+    }
+  }
+
+  // 六个 gate 都要登记 —— 只登记 G5 会让未登记污染断言（写这条时踩到）
+  const gate = (status: string, evidence: string[]) => ({
+    schemaVersion: 1,
+    gates: {
+      ...Object.fromEntries(
+        ["G0_DAR", "G1_FDA", "G2_CoreSWE", "G3_FDSE", "G4_DS"].map((g) => [g, { status: "pending", owner: "-", evidence: [], summary: "" }]),
+      ),
+      G5_PRE: { status, owner: "sre", evidence, summary: "指纹一致" },
+    },
+  })
+
+  it("G5=passed 但没有运行记录 → 拦下（声称 ≠ 实测）", () => {
+    fs.mkdirSync(DIR, { recursive: true })
+    fs.writeFileSync(EVIDENCE, JSON.stringify(gate("passed", ["npm run fingerprint --verify -> PASS"])))
+    fs.rmSync(RESULT, { force: true })
+    const out = JSON.parse(inspectDelivery().output)
+    expect(out.evidence.problems.some((p: string) => p.includes("没有 runbook-result.json"))).toBe(true)
+  })
+
+  it("G5=passed 但运行记录显示失败 → 拦下", () => {
+    fs.writeFileSync(EVIDENCE, JSON.stringify(gate("passed", ["runbook-result.json: x"])))
+    fs.writeFileSync(RESULT, JSON.stringify({ feature: "__rb_test__", ok: false, steps: [{ id: "S4", ok: false }] }))
+    const out = JSON.parse(inspectDelivery().output)
+    expect(out.evidence.problems.some((p: string) => p.includes("运行记录显示失败"))).toBe(true)
+  })
+
+  it("G5=passed 且有全过的运行记录 → 不被误伤", () => {
+    fs.writeFileSync(EVIDENCE, JSON.stringify(gate("passed", ["runbook-result.json: 2 步，全过，用时 1.0s"])))
+    fs.writeFileSync(RESULT, JSON.stringify({ feature: "__rb_test__", ok: true, steps: [{ id: "S1", ok: true }, { id: "S2", ok: true }] }))
+    const out = JSON.parse(inspectDelivery().output)
+    expect(out.evidence.problems).toHaveLength(0)
   })
 })

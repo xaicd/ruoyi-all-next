@@ -160,6 +160,26 @@ function inspectEvidence(featureDir, gateIds) {
     if (status === "passed" && (entry.evidence ?? []).length === 0) problems.push(`${gate} 标了 passed 却没有证据`)
     if (status === "not_applicable" && !String(entry.summary ?? "").trim()) problems.push(`${gate} 标了 not_applicable 却没写理由`)
   }
+  // G5 说 passed ⇒ **必须**存在一份全过的 runbook 运行记录。
+  // 这条是"证据不可自报"在实施轨上的落点: "回滚 10 分钟内"是声明，
+  // runbook-result.json 里的耗时才是实测。没有实测记录的 passed 只是声称。
+  const g5 = (data.gates ?? {}).G5_PRE
+  if (g5?.status === "passed") {
+    const resultPath = path.join(featureDir, "runbook-result.json")
+    if (!fs.existsSync(resultPath)) {
+      problems.push("G5_PRE 标了 passed 却没有 runbook-result.json（没有实测的割接记录）")
+    } else {
+      try {
+        const result = JSON.parse(fs.readFileSync(resultPath, "utf8"))
+        const failed = (result.steps ?? []).filter((step) => !step.ok)
+        if (!result.ok || failed.length > 0) {
+          problems.push(`G5_PRE 标了 passed，但运行记录显示失败（${failed.map((step) => step.id).join(", ") || "整体未通过"}）`)
+        }
+      } catch (error) {
+        problems.push(`runbook-result.json 不是合法 JSON —— ${error.message}`)
+      }
+    }
+  }
   return { present: true, totals, problems }
 }
 
