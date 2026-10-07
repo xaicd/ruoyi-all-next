@@ -131,7 +131,6 @@ function main() {
         const bad = checks.filter((item) => !item.ok)
         if (bad.length > 0) {
           skeleton = bad.map((item) => `${item.doc}: ${item.reason}`).join("; ")
-          missingTotal += 1
         }
       }
     }
@@ -139,8 +138,21 @@ function main() {
     result.push({ id: phase.id, name: phase.name, skill: phase.skill, gate: phase.gate, found, missing, skeleton })
   }
 
+  // 同一份文档可能同时是两个阶段的产物（design.md 之于 UI 设计与架构设计）。
+  // 展示时两个阶段都要显示它（都真的依赖它），但**计数必须去重**，
+  // 否则一个缺陷被报两次，`missingTotal` 虚高 —— 这是实测发现的 bug。
+  const distinctSkeletons = new Set()
+  for (const phase of result) {
+    for (const part of (phase.skeleton ?? "").split("; ")) {
+      const doc = part.split(":")[0].trim()
+      if (doc) distinctSkeletons.add(doc)
+    }
+  }
+  const missingArtifacts = result.reduce((sum, phase) => sum + phase.missing.length, 0)
+  const distinctTotal = missingArtifacts + distinctSkeletons.size
+
   if (asJson) {
-    console.log(JSON.stringify({ phases: result, missingTotal }, null, 2))
+    console.log(JSON.stringify({ phases: result, missingTotal: distinctTotal, distinctSkeletons: [...distinctSkeletons] }, null, 2))
     return
   }
   for (const phase of result) {
@@ -165,7 +177,7 @@ function main() {
     console.log(`   元数据  scripts/data/${scoped.domain}-tables.ts（表定义真源，AGENTS §9.5）`)
     console.log(`   注意: 一个域可以承载多个特性；特性目录里**不该**有业务代码。`)
   }
-  console.log(`\n[delivery] ${result.length} 个阶段，缺失产物 ${missingTotal} 项`)
+  console.log(`\n[delivery] ${result.length} 个阶段，独立缺陷 ${distinctTotal} 项（缺失产物 ${missingArtifacts} + 未填文档 ${distinctSkeletons.size}）`)
 }
 
 main()
