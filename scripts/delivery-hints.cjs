@@ -31,10 +31,20 @@ for (const name of features) {
   let data
   try {
     data = JSON.parse(
-      execFileSync("node", ["scripts/check-delivery.cjs", "--feature", name, "--json"], { cwd: ROOT, encoding: "utf8" }),
+      execFileSync("node", ["scripts/check-delivery.cjs", "--feature", name, "--json"], { cwd: ROOT, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }),
     )
-  } catch {
-    console.log(`[delivery] ${name}: 检查失败（跳过）`)
+  } catch (error) {
+    // 不吞原因: 静默跳过会让"检查器坏了"看起来像"没问题"
+    // execFileSync 的 message 只有 "Command failed"，真因在 stderr —— 取出来
+    const stderr = error && error.stderr
+    const raw = stderr ? String(stderr) : error instanceof Error ? error.message : String(error)
+    const reason = raw
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.startsWith("[delivery]"))
+      .map((line) => line.replace(/^\[delivery\]\s*/, ""))
+      .join(" ") || raw.split("\n")[0]
+    console.log(`[delivery] ${name}: 检查失败 —— ${reason}`)
     continue
   }
   const unfinished = data.phases.filter((phase) => phase.missing.length > 0 || phase.skeleton)

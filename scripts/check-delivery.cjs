@@ -96,7 +96,17 @@ function main() {
       console.error(`[delivery] 找不到特性描述: docs/features/${feature}/feature.json`)
       process.exit(2)
     }
-    const meta = JSON.parse(fs.readFileSync(descriptor, "utf8"))
+    let meta
+    try {
+      meta = JSON.parse(fs.readFileSync(descriptor, "utf8"))
+    } catch (error) {
+      console.error(`[delivery] ${path.relative(ROOT, descriptor)} 不是合法 JSON —— ${error.message}`)
+      process.exit(2)
+    }
+    if (!meta.domain || !meta.name) {
+      console.error(`[delivery] ${path.relative(ROOT, descriptor)} 缺少 name 或 domain`)
+      process.exit(2)
+    }
     scoped = { domain: meta.domain, name: meta.name }
   }
 

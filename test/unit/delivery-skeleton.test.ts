@@ -27,6 +27,21 @@ describe("delivery 检查器的骨架判定", () => {
     expect(data.missingTotal).toBeGreaterThan(0)
   })
 
+  it("坏掉的 feature.json 给出清晰错误而不是栈（exit 2）", () => {
+    const dir = path.join(ROOT, "docs", "features", "__bad_json__")
+    fs.mkdirSync(dir, { recursive: true })
+    fs.writeFileSync(path.join(dir, "feature.json"), "{ broken")
+    try {
+      execFileSync("node", ["scripts/check-delivery.cjs", "--feature", "__bad_json__"], { cwd: ROOT, stdio: "pipe" })
+      throw new Error("应当以非 0 退出")
+    } catch (error) {
+      const status = (error as { status?: number }).status
+      expect(status).toBe(2)
+    } finally {
+      fs.rmSync(dir, { recursive: true, force: true })
+    }
+  })
+
   it("已经填好的特性不被误伤", () => {
     const out = execFileSync("node", ["scripts/check-delivery.cjs", "--feature", "ecommerce", "--json"], { cwd: ROOT, encoding: "utf8" })
     const data = JSON.parse(out)
