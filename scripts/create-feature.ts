@@ -117,6 +117,15 @@ const files: Record<string, string> = {
 * 开发：待开始
 * 独立测试：待开始
 `,
+  "bugs.md": `# 缺陷：${title}
+
+> 每条缺陷必须带**复现命令**与**验证命令**。没有复现步骤的缺陷描述**无法被独立验证** ——
+> 那它就只是一句话，不是缺陷记录（对齐 §6.1「独立测试」的精神）。
+> 状态取值: \`未修\` / \`已修\` / \`不修\`。空表是合法的（当前无缺陷）。
+
+| ID | 现象 | 复现命令 | 验证命令 | 状态 |
+|---|---|---|---|---|
+`,
 }
 
 for (const [file, content] of Object.entries(files)) {
@@ -130,5 +139,5 @@ fs.writeFileSync(
     2,
   ) + "\n",
 )
-console.log(`[feature] 已生成骨架 docs/features/${name}/（4 份文档 + feature.json）`)
+console.log(`[feature] 已生成骨架 docs/features/${name}/（5 份文档 + feature.json）`)
 console.log(`[feature] 下一步: 填完 <!-- 待填 --> 小节，然后 node scripts/check-delivery.cjs --feature ${name}`)

@@ -27,6 +27,33 @@ describe("delivery 检查器的骨架判定", () => {
     expect(data.missingTotal).toBeGreaterThan(0)
   })
 
+  it("缺陷清单: 未修的被数出来，缺复现/验证命令的被标出来", () => {
+    const dir = path.join(ROOT, "docs", "features", "__bugs__")
+    fs.mkdirSync(dir, { recursive: true })
+    fs.writeFileSync(path.join(dir, "feature.json"), JSON.stringify({ name: "__bugs__", domain: "x" }))
+    fs.writeFileSync(
+      path.join(dir, "bugs.md"),
+      [
+        "# 缺陷", "",
+        "| ID | 现象 | 复现命令 | 验证命令 | 状态 |",
+        "|---|---|---|---|---|",
+        "| B1 | 下单超卖 | npm run repro:b1 | npm run verify:b1 | 未修 |",
+        "| B2 | 弹窗遮罩点不中 | | | 未修 |",
+        "| B3 | 已修的历史问题 | cmd | cmd | 已修 |",
+        "",
+      ].join("\n"),
+    )
+    try {
+      const out = execFileSync("node", ["scripts/check-delivery.cjs", "--feature", "__bugs__", "--json"], { cwd: ROOT, encoding: "utf8" })
+      const bugs = JSON.parse(out).bugs
+      expect(bugs.present).toBe(true)
+      expect(bugs.open).toBe(2)      // B1 + B2（已修的 B3 不算）
+      expect(bugs.malformed).toBe(1) // B2 缺复现/验证命令
+    } finally {
+      fs.rmSync(dir, { recursive: true, force: true })
+    }
+  })
+
   it("坏掉的 feature.json 给出清晰错误而不是栈（exit 2）", () => {
     const dir = path.join(ROOT, "docs", "features", "__bad_json__")
     fs.mkdirSync(dir, { recursive: true })

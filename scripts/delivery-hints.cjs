@@ -49,9 +49,12 @@ for (const name of features) {
   }
   const unfinished = data.phases.filter((phase) => phase.missing.length > 0 || phase.skeleton)
   if (unfinished.length === 0) {
-    console.log(`[delivery] ${name}: 9 个阶段产物已齐`)
+    const bugs = data.bugs && data.bugs.present ? data.bugs : null
+    console.log(`[delivery] ${name}: 9 个阶段产物已齐${bugs && bugs.open > 0 ? `；但未修缺陷 ${bugs.open} 条` : ""}`)
     continue
   }
   const reasons = unfinished.map((phase) => `${phase.name}${phase.skeleton ? "(骨架未填)" : "(缺产物)"}`)
-  console.log(`[delivery] ${name}: 待完成 ${unfinished.length} 个阶段 —— ${reasons.join("、")}`)
+  const bugs = data.bugs && data.bugs.present ? data.bugs : null
+  const bugNote = bugs ? (bugs.open > 0 ? `；未修缺陷 ${bugs.open} 条` : "") : "；没有 bugs.md"
+  console.log(`[delivery] ${name}: 待完成 ${unfinished.length} 个阶段 —— ${reasons.join("、")}${bugNote}`)
 }

@@ -80,6 +80,37 @@ function inspectFeatureDocs(featureDir, docName) {
   return { ok: true, detail: counts[docName] ? counts[docName]() : "" }
 }
 
+
+/**
+ * 缺陷清单体检。
+ *
+ * 两条硬规矩（对齐 §6.1「独立测试」）:
+ *  1. 未修的缺陷必须**被看到** —— 否则"修完了吗"只能靠人记
+ *  2. 每条缺陷必须带**复现命令**与**验证命令** —— 没有复现步骤的描述无法被独立验证
+ */
+function inspectBugs(featureDir) {
+  const file = path.join(featureDir, "bugs.md")
+  if (!fs.existsSync(file)) return { present: false, open: 0, malformed: 0 }
+  const rows = fs
+    .readFileSync(file, "utf8")
+    .split("\n")
+    .filter((line) => line.trim().startsWith("|") && !/^\s*\|\s*-+/.test(line) && !/\|\s*ID\s*\|/.test(line))
+  let open = 0
+  let malformed = 0
+  for (const row of rows) {
+    // 不能过滤空单元格 —— 那会**打乱列位置**：`| B2 | 现象 | | | 未修 |` 里的
+    // 空列被删掉后只剩 3 列，整行被判为格式不对而跳过（实测踩到）。只剥首尾空段。
+    const cells = row.split("|").map((cell) => cell.trim())
+    while (cells.length > 0 && cells[0] === "") cells.shift()
+    while (cells.length > 0 && cells[cells.length - 1] === "") cells.pop()
+    if (cells.length < 5) continue
+    const status = cells[cells.length - 1]
+    if (status === "未修" || status === "修中" || status === "") open += 1
+    if (!cells[2] || !cells[3]) malformed += 1 // 复现命令 / 验证命令
+  }
+  return { present: true, open, malformed }
+}
+
 function main() {
   const manifest = JSON.parse(fs.readFileSync(MANIFEST, "utf8"))
   const phases = only ? manifest.phases.filter((phase) => phase.id === only) : manifest.phases
@@ -149,10 +180,13 @@ function main() {
     }
   }
   const missingArtifacts = result.reduce((sum, phase) => sum + phase.missing.length, 0)
-  const distinctTotal = missingArtifacts + distinctSkeletons.size
+  let distinctTotal = missingArtifacts + distinctSkeletons.size
+
+  const bugs = scoped ? inspectBugs(path.join(ROOT, "docs", "features", scoped.name)) : null
+  if (bugs && bugs.malformed > 0) distinctTotal += 1
 
   if (asJson) {
-    console.log(JSON.stringify({ phases: result, missingTotal: distinctTotal, distinctSkeletons: [...distinctSkeletons] }, null, 2))
+    console.log(JSON.stringify({ phases: result, missingTotal: distinctTotal, distinctSkeletons: [...distinctSkeletons], bugs }, null, 2))
     return
   }
   for (const phase of result) {
@@ -178,6 +212,12 @@ function main() {
     console.log(`   注意: 一个域可以承载多个特性；特性目录里**不该**有业务代码。`)
   }
   console.log(`\n[delivery] ${result.length} 个阶段，独立缺陷 ${distinctTotal} 项（缺失产物 ${missingArtifacts} + 未填文档 ${distinctSkeletons.size}）`)
+  if (bugs) {
+    if (!bugs.present) console.log(`[delivery] 提示: 没有 bugs.md —— 缺陷无处记录（npm run feature:new 会生成）`)
+    else {
+      console.log(`[delivery] 缺陷: 未修 ${bugs.open} 条${bugs.malformed > 0 ? ` —— 有 ${bugs.malformed} 条缺复现/验证命令` : ""}`)
+    }
+  }
 }
 
 main()
