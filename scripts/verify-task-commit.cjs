@@ -50,7 +50,22 @@ function toRegExp(pattern) {
   return new RegExp("^" + escaped.replace(/\u0000/g, "(?:.*/)?").replace(/\u0001/g, ".*") + "$")
 }
 
-const git = (args) => execFileSync("git", args, { cwd: ROOT, encoding: "utf8" }).trim()
+/**
+ * 跑一条 git 命令。**不是 git 仓库时必须给清晰信息** ——
+ * 整套治理（任务痕迹、指纹里的 commit）都建立在 git 上，没有仓库就无从取证。
+ * 早先这里直接抛出 execFileSync 的栈（实测在刚孵化的工程里踩到）。
+ */
+const git = (args) => {
+  try {
+    return execFileSync("git", args, { cwd: ROOT, encoding: "utf8" }).trim()
+  } catch (error) {
+    if (!fs.existsSync(path.join(ROOT, ".git"))) {
+      console.error("[task] 这不是 git 仓库 —— 任务痕迹与指纹都建立在 git 上，请先 `git init` 并提交")
+      process.exit(2)
+    }
+    throw error
+  }
+}
 
 if (process.argv.includes("--summary")) {
   const log = git(["log", "--pretty=%H%x09%s", "-n", "300"])

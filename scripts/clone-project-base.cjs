@@ -9,7 +9,7 @@
 
 const fs = require("node:fs")
 const path = require("node:path")
-const { execSync } = require("node:child_process")
+const { execSync, spawnSync } = require("node:child_process")
 const { Client } = require("pg")
 const {
   parseArgv,
@@ -799,6 +799,20 @@ async function runProjectReactor(targetDir, plan, sourceCatalog, options = {}) {
   console.log("        TENANT_*），它会**覆盖 .env** —— 那样工程会连到别的库、或把平台")
   console.log("        管理员当成租户账号，表现为「登录说用户名或密码错误」（实测踩过）。")
   console.log("================================================================")
+  // 派生工程必须有版本控制 —— 否则任务痕迹（commit 里的 [T1]）与环境指纹
+  // （commit + 脏树）全都无从取证，整套交付治理会空转。
+  // 实测: 刚孵化的工程跑 `task:verify` 直接抛 "not a git repository"。
+  if (!fs.existsSync(path.join(resolvedTarget, ".git"))) {
+    const gitInit = (args) => spawnSync("git", args, { cwd: resolvedTarget, stdio: "ignore" })
+    gitInit(["init", "-q"])
+    gitInit(["add", "-A"])
+    gitInit([
+      "-c", "user.email=hatch@local", "-c", "user.name=hatch",
+      "commit", "-q", "-m", "chore: 孵化自 ruoyi-all-next 基座\n\nCo-authored-by: CommandCodeBot <noreply@commandcode.ai>",
+    ])
+    console.log("[reactor] 已 git init 并提交首个快照（任务痕迹与指纹需要它）")
+  }
+
   return plan
 }
 
