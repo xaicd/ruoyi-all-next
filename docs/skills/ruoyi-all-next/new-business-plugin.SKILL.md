@@ -5,6 +5,31 @@ description: 从一句业务需求（如"做个电商平台"）到新业务域�
 
 # 新业务域 → 第一方插件 全链路交付
 
+## 把既有域的原语接进业务域（库存 / 支付）
+
+电商类业务**不要重写**库存扣减与支付状态机 —— 那两样已经在 `wms` / `pay` 里做成了
+**条件更新**与**状态机**。业务域只写"决策"，把"保证"留在原语里。
+
+**跨域必须走 Facade**（AGENTS §3.3）:
+
+```ts
+import { wmsFacade } from "@/modules/wms/contract/wms.facade"      // 不 import 它的 Service
+import { defineStateMachine } from "@/modules/shared/backend/lib/state-machine"
+```
+
+三条落地要点（都有对应测试）:
+
+1. **预占失败就不建单** —— `wmsFacade.lockStock({ inventoryId, amount })` 是条件更新
+   （不足则影响 0 行）。拿到 0 行**直接返回失败**，别插订单 —— 失败方**不改变数据**。
+2. **回调幂等靠"条件更新"，不是靠判断** —— `setStatusIfCurrent(id, "PENDING", "PAID")`
+   返回 false 就**不发业务事件**。重复回调天然幂等，且已支付不会被降级。
+3. **只有合法前置状态能做动作** —— 取消只允许 `PENDING`；用状态机声明，别写 if。
+
+**测什么**: 单测 mock 的是 **Facade 端口**（测决策逻辑）；Facade 背后的真实条件更新
+由**那个域自己的库级测试**覆盖 —— 不要在这里再 mock 一遍数据库。
+
+参考实现: `docs/features/ecommerce/tasks.md` 的 T10（`shop-order-ops.ts` + 3 条测试）。
+
 ## 1. 何时启用
 
 用户说「**要做一个 X 平台 / 加一个业务域 / 定制一块业务**」这类**从零起新域**的需求时。
