@@ -118,6 +118,15 @@ function main() {
   if (orphaned.length > 0) {
     drifted.push(...orphaned.map((name) => `${mirrorRel(name)} (no source skill)`))
   }
+  // 写模式下**删掉孤儿镜像** —— 此前只报告不删除，导致源技能被移除后
+  // 镜像一直留着，check 永远红（实测: 撤掉 5 个技能后镜像仍 30 个）。
+  const removed = []
+  if (!checkOnly) {
+    for (const name of orphaned) {
+      const full = abs(mirrorRel(name))
+      if (fs.existsSync(full)) { fs.rmSync(full); removed.push(mirrorRel(name)) }
+    }
+  }
 
   const readmeFull = abs(README_REL)
   if (!fs.existsSync(readmeFull)) fail(`missing ${README_REL}`)
@@ -139,7 +148,8 @@ function main() {
   if (unregistered.length > 0) {
     console.log(`[skills] WARN: ${README_REL} does not reference: ${unregistered.join(", ")}`)
   }
-  console.log(`[skills] synced ${written.length} mirror(s) from .agents/skills (${names.length} total)`)
+  for (const rel of removed) console.log(`  - removed ${rel}`)
+  console.log(`[skills] synced ${written.length} mirror(s) from .agents/skills (${names.length} total)${removed.length ? `, removed ${removed.length} orphan(s)` : ""}`)
   for (const rel of written) console.log(`  - ${rel}`)
 }
 

@@ -67,3 +67,32 @@ Skill 写法见 [skill-authoring.SKILL.md](./skill-authoring.SKILL.md)。
 
 H5 / uni-app / Flutter / desktop-pc 走同一管道。渠道契约：`packages/shared/contract/client-channels.json`。  
 目录：`clients/<channel>/{app,shared,modules/<domain>}`。禁止为客户端另开 API 前缀。
+
+## 引入的上游 Skill（Anthropic 官方，Apache-2.0）
+
+来源 `github.com/anthropics/skills`。**从属于本仓库规范**：本 README 开头那句
+「本仓库 Skill + AGENTS.md + 本仓库文档 > 外部 GitHub Skill」对它们同样适用 —— 冲突时以本仓为准。
+
+| Skill | 用途 |
+|---|---|
+| mcp-builder | 编写 MCP 服务器（本仓有 MCP 工具面） |
+| skill-creator | 编写技能本身 |
+| webapp-testing | 浏览器/E2E 测试 |
+| frontend-design | 前端设计与实现 |
+| canvas-design | 视觉稿与画布设计 |
+| theme-factory | 主题生成 |
+| brand-guidelines | 品牌规范 |
+
+**未引入**（不是开源，或未声明许可）：`docx` / `pdf` / `pptx` / `xlsx`（Proprietary，
+© Anthropic PBC, All rights reserved）、`doc-coauthoring`（无 LICENSE.txt）。
+判据与记录见 [../upstream/NOTICE.md](../upstream/NOTICE.md) —— 逐个读 LICENSE.txt 得出，
+不靠仓库首页「Many skills are Apache 2.0」那句话推断。
+
+## 压测与渗透
+
+**尚无技能。** 曾引入 5 个（8 / 14 星来源），**已按 star > 20k 的标准撤回**。
+来源评审与 >20k 仓库清单见 [../upstream/NOTICE.md](../upstream/NOTICE.md)。
+
+执行层的现状:
+* 渗透 —— `npm run security:scan` 已有工具（尚未接进门禁）
+* 压测 —— **无工具、无技能**

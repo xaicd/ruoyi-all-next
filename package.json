@@ -116,7 +116,8 @@
     "plugins:register": "npx tsx scripts/register-plugins.ts",
     "smoke:login": "node scripts/smoke-login.cjs",
     "admin:pages": "node scripts/generate-admin-pages.cjs --write",
-    "admin:pages:check": "node scripts/generate-admin-pages.cjs --check"
+    "admin:pages:check": "node scripts/generate-admin-pages.cjs --check",
+    "security:scan": "node scripts/security-scan.cjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",

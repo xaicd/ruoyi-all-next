@@ -1,0 +1,53 @@
+{
+  "scannedAt": "2026-10-07T09:04:46.480Z",
+  "base": "http://localhost:3200",
+  "total": 9,
+  "failed": 2,
+  "findings": [
+    {
+      "name": "起服务",
+      "ok": true,
+      "detail": "http://localhost:3200"
+    },
+    {
+      "name": "未认证访问 admin API 全部被拒（401/403）",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "伪造 token 被拒（401）",
+      "ok": true,
+      "detail": "HTTP 401"
+    },
+    {
+      "name": "伪造 x-tenant-id 不得放行",
+      "ok": true,
+      "detail": "HTTP 401"
+    },
+    {
+      "name": "插件挂载点未认证被拒（或 404 未挂载，均非 200）",
+      "ok": true,
+      "detail": "HTTP 404"
+    },
+    {
+      "name": "错误响应不泄露栈/内部路径",
+      "ok": true,
+      "detail": "HTTP 401"
+    },
+    {
+      "name": "基础安全响应头存在",
+      "ok": false,
+      "detail": "缺: x-content-type-options, x-frame-options, content-security-policy"
+    },
+    {
+      "name": "错误口令返回 401",
+      "ok": true,
+      "detail": "HTTP 401"
+    },
+    {
+      "name": "阴性对照: 正确口令能登录（避免「全拒」冒充安全）",
+      "ok": false,
+      "detail": "HTTP 401"
+    }
+  ]
+}
