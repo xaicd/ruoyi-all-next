@@ -140,6 +140,21 @@ function main() {
     if (phase.skeleton) console.log(`   ✗ 骨架未填: ${phase.skeleton}`)
     for (const item of phase.missing) console.log(`   ✗ ${item}  —— 尚无产物`)
   }
+  if (scoped) {
+    // 特性目录**只有规划链**；代码落在**域**的目录里（这是故意的: 打包与拆分部署按域工作）
+    const dirOf = path.join(ROOT, "packages", "plugins", `plugin-${scoped.domain}`)
+    const legacy = path.join(ROOT, "packages", "domains", scoped.domain)
+    const created = fs.existsSync(dirOf) ? dirOf : fs.existsSync(legacy) ? legacy : null
+    console.log(`\n[delivery] 特性的两半:`)
+    console.log(`   规划链  docs/features/${scoped.name}/   （四件套 + feature.json）`)
+    console.log(
+      created
+        ? `   实现    ${path.relative(ROOT, created)}/   （域名 ${scoped.domain} —— 打包/拆分部署按域工作）`
+        : `   实现    尚未创建（域名 ${scoped.domain}）—— npm run domain:new ${scoped.domain}`,
+    )
+    console.log(`   元数据  scripts/data/${scoped.domain}-tables.ts（表定义真源，AGENTS §9.5）`)
+    console.log(`   注意: 一个域可以承载多个特性；特性目录里**不该**有业务代码。`)
+  }
   console.log(`\n[delivery] ${result.length} 个阶段，缺失产物 ${missingTotal} 项`)
 }
 
