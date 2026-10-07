@@ -19,6 +19,7 @@ const ROOT = path.resolve(__dirname, "..")
 const MANIFEST = path.join(ROOT, "packages", "shared", "contract", "delivery-phases.json")
 const asJson = process.argv.includes("--json")
 const only = process.argv.includes("--phase") ? process.argv[process.argv.indexOf("--phase") + 1] : null
+const feature = process.argv.includes("--feature") ? process.argv[process.argv.indexOf("--feature") + 1] : null
 const SKIP = new Set(["node_modules", ".git", ".next", ".next-ruoyi", "dist", "coverage"])
 
 /**
@@ -63,10 +64,27 @@ function main() {
   const result = []
   let missingTotal = 0
 
+  // 按特性收窄: 读 feature.json 拿到 domain，把 {domain} 占位替换掉，
+  // 并**用 featureScopedArtifacts 取代**基座级模式 —— 否则 `packages/plugins/**`
+  // 会把整个基座算进来，开发阶段永远是绿的（那是"假绿"，实测踩到）。
+  let scoped = null
+  if (feature) {
+    const descriptor = path.join(ROOT, "docs", "features", feature, "feature.json")
+    if (!fs.existsSync(descriptor)) {
+      console.error(`[delivery] 找不到特性描述: docs/features/${feature}/feature.json`)
+      process.exit(2)
+    }
+    const meta = JSON.parse(fs.readFileSync(descriptor, "utf8"))
+    scoped = { domain: meta.domain, name: meta.name }
+  }
+
   for (const phase of phases) {
     const found = []
     const missing = []
-    for (const pattern of phase.artifacts) {
+    const patterns = scoped && phase.featureScopedArtifacts
+      ? phase.featureScopedArtifacts.map((item) => item.replace(/\{domain\}/g, scoped.domain))
+      : phase.artifacts
+    for (const pattern of patterns) {
       const hits = expand(pattern)
       if (hits.length > 0) found.push({ pattern, count: hits.length, sample: path.relative(ROOT, hits[0]) })
       else missing.push(pattern)

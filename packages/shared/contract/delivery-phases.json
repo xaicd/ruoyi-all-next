@@ -1,59 +1,110 @@
 {
   "$schema": "ruoyi.delivery.phases/v1",
-  "note": "AI-Driven 全环节交付清单：每个阶段的产物、启用的 Skill、以及该阶段的门禁命令。由 scripts/check-delivery.cjs 校验实际产物；经 MCP 暴露给 agent 查询『还缺什么』。",
+  "note": "AI-Driven 全环节交付清单。带 {domain} 的产物按**特性**收窄（node scripts/check-delivery.cjs --feature <名>）；不带的是基座级就绪度。",
   "phases": [
     {
-      "id": "requirement", "name": "需求",
-      "artifacts": ["docs/features/**/requirements.md", "docs/features/**/sprint-prod/*.md"],
+      "id": "requirement",
+      "name": "需求",
+      "artifacts": [
+        "docs/features/**/requirements.md",
+        "docs/features/**/sprint-prod/*.md"
+      ],
       "skill": "product-requirements",
       "gate": "npm run standards:check",
       "outputsUserSees": "需求文档（可追溯的单向推导链起点）"
     },
     {
-      "id": "prototype", "name": "原型设计",
-      "artifacts": ["docs/features/**/prototype*", "docs/features/**/design.md"],
+      "id": "prototype",
+      "name": "原型设计",
+      "artifacts": [
+        "docs/features/**/prototype*",
+        "docs/features/**/design.md"
+      ],
       "skill": "product-requirements",
       "gate": "npm run ui-framework:check"
     },
     {
-      "id": "ui-design", "name": "UI 设计",
-      "artifacts": ["docs/features/**/design.md"],
+      "id": "ui-design",
+      "name": "UI 设计",
+      "artifacts": [
+        "docs/features/**/design.md"
+      ],
       "skill": "ui-design",
       "gate": "npm run standards:check"
     },
     {
-      "id": "architecture", "name": "架构设计",
-      "artifacts": ["docs/features/**/design.md", "docs/architecture/artifacts/harness-trace-latest.json"],
+      "id": "architecture",
+      "name": "架构设计",
+      "artifacts": [
+        "docs/features/**/design.md",
+        "docs/architecture/artifacts/harness-trace-latest.json"
+      ],
       "skill": "architecture-design",
       "gate": "npm run microservice:check"
     },
     {
-      "id": "development", "name": "开发",
-      "artifacts": ["docs/features/**/tasks.md", "packages/plugins/**", "src/app/api/v1/**"],
+      "id": "development",
+      "name": "开发",
+      "artifacts": [
+        "docs/features/**/tasks.md",
+        "packages/plugins/**",
+        "src/app/api/v1/**"
+      ],
       "skill": "new-business-plugin",
-      "gate": "npm run check"
+      "gate": "npm run check",
+      "featureScopedArtifacts": [
+        "packages/plugins/plugin-{domain}/contract/**",
+        "packages/plugins/plugin-{domain}/backend/**",
+        "packages/plugins/plugin-{domain}/frontend/**",
+        "packages/plugins/plugin-{domain}/routes/**"
+      ],
+      "note": "插件形态下处理器在插件内 routes/，Next 侧只有动态挂载（没有实体文件）——模式必须按插件布局写"
     },
     {
-      "id": "testing", "name": "测试",
-      "artifacts": ["docs/agent/contracts.json", "test/e2e/**", "**/__tests__/**"],
+      "id": "testing",
+      "name": "测试",
+      "artifacts": [
+        "docs/agent/contracts.json",
+        "test/e2e/**",
+        "**/__tests__/**"
+      ],
       "skill": "automated-testing",
-      "gate": "npm run verify:real-db"
+      "gate": "npm run verify:real-db",
+      "featureScopedArtifacts": [
+        "packages/plugins/plugin-{domain}/backend/services/__tests__/**"
+      ]
     },
     {
-      "id": "ops", "name": "运维",
-      "artifacts": ["deploy/**", "Dockerfile", "docs/skills/**/devops*"],
+      "id": "ops",
+      "name": "运维",
+      "artifacts": [
+        "deploy/**",
+        "Dockerfile",
+        "docs/skills/**/devops*"
+      ],
       "skill": "devops",
       "gate": "npm run build"
     },
     {
-      "id": "operations", "name": "运营",
-      "artifacts": ["docs/agent/contracts.json", "scripts/agent/run-ops.cjs"],
+      "id": "operations",
+      "name": "运营",
+      "artifacts": [
+        "docs/agent/contracts.json",
+        "scripts/agent/run-ops.cjs"
+      ],
       "skill": "new-business-plugin",
-      "gate": "npm run agent:ops:health"
+      "gate": "npm run agent:ops:health",
+      "featureScopedArtifacts": [
+        "packages/plugins/plugin-{domain}/agent/**"
+      ]
     },
     {
-      "id": "implementation", "name": "实施",
-      "artifacts": ["docs/features/**/tasks.md", "docs/features/sprint-prod/*.md"],
+      "id": "implementation",
+      "name": "实施",
+      "artifacts": [
+        "docs/features/**/tasks.md",
+        "docs/features/sprint-prod/*.md"
+      ],
       "skill": "product-requirements",
       "gate": "npm run check"
     }

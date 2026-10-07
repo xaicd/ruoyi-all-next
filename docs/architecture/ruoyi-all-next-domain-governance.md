@@ -22,6 +22,7 @@
 
 | 域 | 能力状态 | DB Tier | UI Stack | 微服务阶段 | Skill 绑定 | TestRefs | SplitNote |
 |---|---|---|---|---|---|---|---|
+| shop | plugin | B | — | — | — | — | —
 | system | PARTIAL | Tier-A | React-radix | A | database-compatibility + ui-framework-governance + microservice-evolution | packages/domains/system/backend/services/__tests__/online-user.service.test.ts | 单体内聚，先补真实会话存储后再拆分 |
 | infra | PARTIAL | Tier-A | React-radix | A | database-compatibility + ui-framework-governance + microservice-evolution | packages/domains/infra/backend/services/__tests__/infra-services.test.ts | 单体内聚，保留调度与配置适配层 |
 | bpm | PARTIAL | Tier-A | React-radix | A | database-compatibility + ui-framework-governance + microservice-evolution | packages/plugins/plugin-bpm/backend/services/__tests__/process.service.test.ts | 单体内聚，待流程实例增长后独立服务 | **第一方插件**(kind=plugin): 保留域级特征(可 API-only 独立打包/运行/部署, `npm run domain:up -- bpm`), 同时支持合并运行; 路由经 /api/v1/plugins/ruoyi.bpm/api/** 挂载 
