@@ -1,7 +1,19 @@
 {
   "$schema": "ruoyi.delivery.phases/v1",
-  "note": "AI-Driven 全环节交付清单。带 {domain} 的产物按**特性**收窄（node scripts/check-delivery.cjs --feature <名>）；不带的是基座级就绪度。",
+  "note": "AI-Driven 全环节交付清单。带 {domain} 的产物按特性收窄（--feature <名>）。每阶段挂 gate 编号与负责角色，证据写进 docs/features/<名>/evidence.json —— 对齐 CMMI 的 G0-G5 与『证据不可跨角色借用』。",
   "phases": [
+    {
+      "id": "selection",
+      "name": "选型与研判",
+      "gate": "G0_DAR",
+      "owner": "架构/售前",
+      "artifacts": [
+        "docs/features/**/selection.md"
+      ],
+      "skill": "product-requirements",
+      "gateCommand": "npm run standards:check",
+      "note": "立项**前**的门禁: 竞品对标、开源生态扫描、License 合规、加权打分。缺这一道就会「需求未明先定框架」"
+    },
     {
       "id": "requirement",
       "name": "需求",
@@ -10,8 +22,9 @@
         "docs/features/**/sprint-prod/*.md"
       ],
       "skill": "product-requirements",
-      "gate": "npm run standards:check",
-      "outputsUserSees": "需求文档（可追溯的单向推导链起点）"
+      "gate": "G4_DS",
+      "outputsUserSees": "需求文档（可追溯的单向推导链起点）",
+      "owner": "产品/业务"
     },
     {
       "id": "prototype",
@@ -21,7 +34,8 @@
         "docs/features/**/design.md"
       ],
       "skill": "product-requirements",
-      "gate": "npm run ui-framework:check"
+      "gate": "G3_FDSE",
+      "owner": "前端/交互"
     },
     {
       "id": "ui-design",
@@ -30,7 +44,8 @@
         "docs/features/**/design.md"
       ],
       "skill": "ui-design",
-      "gate": "npm run standards:check"
+      "gate": "G3_FDSE",
+      "owner": "前端/交互"
     },
     {
       "id": "architecture",
@@ -40,7 +55,8 @@
         "docs/architecture/artifacts/harness-trace-latest.json"
       ],
       "skill": "architecture-design",
-      "gate": "npm run microservice:check"
+      "gate": "G1_FDA",
+      "owner": "架构"
     },
     {
       "id": "development",
@@ -51,14 +67,15 @@
         "src/app/api/v1/**"
       ],
       "skill": "new-business-plugin",
-      "gate": "npm run check",
+      "gate": "G2_CoreSWE",
       "featureScopedArtifacts": [
         "packages/plugins/plugin-{domain}/contract/**",
         "packages/plugins/plugin-{domain}/backend/**",
         "packages/plugins/plugin-{domain}/frontend/**",
         "packages/plugins/plugin-{domain}/routes/**"
       ],
-      "note": "插件形态下处理器在插件内 routes/，Next 侧只有动态挂载（没有实体文件）——模式必须按插件布局写"
+      "note": "插件形态下处理器在插件内 routes/，Next 侧只有动态挂载（没有实体文件）——模式必须按插件布局写",
+      "owner": "开发"
     },
     {
       "id": "testing",
@@ -69,10 +86,11 @@
         "**/__tests__/**"
       ],
       "skill": "automated-testing",
-      "gate": "npm run verify:real-db",
+      "gate": "G3_FDSE",
       "featureScopedArtifacts": [
         "packages/plugins/plugin-{domain}/backend/services/__tests__/**"
-      ]
+      ],
+      "owner": "测试"
     },
     {
       "id": "ops",
@@ -83,7 +101,8 @@
         "docs/skills/**/devops*"
       ],
       "skill": "devops",
-      "gate": "npm run build"
+      "gate": "G2_CoreSWE",
+      "owner": "开发"
     },
     {
       "id": "operations",
@@ -93,10 +112,23 @@
         "scripts/agent/run-ops.cjs"
       ],
       "skill": "new-business-plugin",
-      "gate": "npm run agent:ops:health",
+      "gate": "G4_DS",
       "featureScopedArtifacts": [
         "packages/plugins/plugin-{domain}/agent/**"
-      ]
+      ],
+      "owner": "运营"
+    },
+    {
+      "id": "infra",
+      "name": "实施轨（基础设施/网络策略）",
+      "gate": "G5_PRE",
+      "owner": "实施/SRE",
+      "artifacts": [
+        "docs/features/**/deployment.md"
+      ],
+      "skill": "devops",
+      "gateCommand": "npm run build",
+      "note": "双轨的另一轨: 端口策略矩阵、网络域、割接会签、秒级回滚 SOP。运营商项目 40% 风险在这里"
     },
     {
       "id": "implementation",
@@ -106,7 +138,16 @@
         "docs/features/sprint-prod/*.md"
       ],
       "skill": "product-requirements",
-      "gate": "npm run check"
+      "gate": "G4_DS",
+      "owner": "实施"
     }
-  ]
+  ],
+  "gateModel": {
+    "G0_DAR": "选型门禁: 竞品对标 / 开源扫描 / License 合规 —— 没有结论不许立项",
+    "G1_FDA": "领域边界 / 权限矩阵 / 守恒断言（不变量）",
+    "G2_CoreSWE": "门禁全绿 / 契约一致 / 结构守卫 / commit",
+    "G3_FDSE": "状态机覆盖 / E2E / 异常路径",
+    "G4_DS": "业务旅程 / 验收标准 / go-no-go",
+    "G5_PRE": "环境指纹 / 制品不可变 / 拨测 / 回滚 SOP"
+  }
 }

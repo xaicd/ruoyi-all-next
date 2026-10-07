@@ -56,5 +56,7 @@ for (const name of features) {
   const reasons = unfinished.map((phase) => `${phase.name}${phase.skeleton ? "(骨架未填)" : "(缺产物)"}`)
   const bugs = data.bugs && data.bugs.present ? data.bugs : null
   const bugNote = bugs ? (bugs.open > 0 ? `；未修缺陷 ${bugs.open} 条` : "") : "；没有 bugs.md"
-  console.log(`[delivery] ${name}: 待完成 ${unfinished.length} 个阶段 —— ${reasons.join("、")}${bugNote}`)
+  const ev = data.evidence
+  const gateNote = ev && ev.present ? `；gate ${ev.totals.passed ?? 0} 通过${ev.problems.length ? `（${ev.problems.length} 处证据问题）` : ""}` : "；无证据台账"
+  console.log(`[delivery] ${name}: 待完成 ${unfinished.length} 个阶段 —— ${reasons.join("、")}${bugNote}${gateNote}`)
 }

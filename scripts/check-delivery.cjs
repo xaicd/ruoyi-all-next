@@ -124,6 +124,45 @@ function inspectBugs(featureDir) {
   return { present: true, open, malformed, unknown }
 }
 
+
+/**
+ * 证据账本体检 —— 对齐 CMMI 的 G1-G5 与「证据不可跨角色借用」。
+ *
+ * 三条硬规则，都是为了治**「自报」**:
+ *  1. `passed` **必须**有证据（路径或命令）—— 否则只是"我说过了"
+ *  2. `not_applicable` **必须**有理由 —— 否则静默跳过会变成"没做也没事"
+ *  3. 状态必须是四个已知值之一 —— 写错字等于把 gate 藏起来
+ */
+function inspectEvidence(featureDir, gateIds) {
+  const file = path.join(featureDir, "evidence.json")
+  if (!fs.existsSync(file)) return { present: false, totals: {}, problems: ["没有 evidence.json"] }
+  let data
+  try {
+    data = JSON.parse(fs.readFileSync(file, "utf8"))
+  } catch (error) {
+    return { present: true, totals: {}, problems: [`evidence.json 不是合法 JSON —— ${error.message}`] }
+  }
+  const KNOWN = new Set(["passed", "pending", "blocked", "not_applicable"])
+  const totals = {}
+  const problems = []
+  for (const gate of gateIds) {
+    const entry = (data.gates ?? {})[gate]
+    if (!entry) {
+      problems.push(`${gate} 未登记`)
+      continue
+    }
+    const status = entry.status
+    if (!KNOWN.has(status)) {
+      problems.push(`${gate} 状态不认识: ${status}`) // 错字等于把 gate 藏起来，且不再往下判
+      continue
+    }
+    totals[status] = (totals[status] ?? 0) + 1
+    if (status === "passed" && (entry.evidence ?? []).length === 0) problems.push(`${gate} 标了 passed 却没有证据`)
+    if (status === "not_applicable" && !String(entry.summary ?? "").trim()) problems.push(`${gate} 标了 not_applicable 却没写理由`)
+  }
+  return { present: true, totals, problems }
+}
+
 function main() {
   const manifest = JSON.parse(fs.readFileSync(MANIFEST, "utf8"))
   const phases = only ? manifest.phases.filter((phase) => phase.id === only) : manifest.phases
@@ -196,10 +235,19 @@ function main() {
   let distinctTotal = missingArtifacts + distinctSkeletons.size
 
   const bugs = scoped ? inspectBugs(path.join(ROOT, "docs", "features", scoped.name)) : null
+  const evidence = scoped
+    ? inspectEvidence(
+        path.join(ROOT, "docs", "features", scoped.name),
+        // 去重: 多个阶段可能共用同一 gate（G4_DS 之于需求/运营/实施），
+        // 不去重会把同一个问题报 3 次 —— 和 design.md 那次是同一类错。
+        [...new Set(manifest.phases.map((phase) => phase.gate).filter(Boolean))],
+      )
+    : null
   if (bugs && bugs.malformed > 0) distinctTotal += 1
+  if (evidence) distinctTotal += evidence.problems.length
 
   if (asJson) {
-    console.log(JSON.stringify({ phases: result, missingTotal: distinctTotal, distinctSkeletons: [...distinctSkeletons], bugs }, null, 2))
+    console.log(JSON.stringify({ phases: result, missingTotal: distinctTotal, distinctSkeletons: [...distinctSkeletons], bugs, evidence }, null, 2))
     return
   }
   for (const phase of result) {
@@ -225,6 +273,17 @@ function main() {
     console.log(`   注意: 一个域可以承载多个特性；特性目录里**不该**有业务代码。`)
   }
   console.log(`\n[delivery] ${result.length} 个阶段，独立缺陷 ${distinctTotal} 项（缺失产物 ${missingArtifacts} + 未填文档 ${distinctSkeletons.size}）`)
+  if (evidence) {
+    if (!evidence.present) console.log(`[delivery] 证据: 没有 evidence.json —— gate 无从留痕`)
+    else {
+      const passed = evidence.totals.passed ?? 0
+      const total = new Set(manifest.phases.map((phase) => phase.gate).filter(Boolean)).size
+      console.log(`[delivery] 证据: ${passed}/${total} gate 通过${
+        Object.entries(evidence.totals).filter(([key]) => key !== "passed" && key !== "pending").map(([key, value]) => `，${key} ${value}`).join("")
+      }`)
+      for (const problem of evidence.problems) console.log(`   ✗ ${problem}`)
+    }
+  }
   if (bugs) {
     if (!bugs.present) console.log(`[delivery] 提示: 没有 bugs.md —— 缺陷无处记录（npm run feature:new 会生成）`)
     else {
