@@ -1,0 +1,70 @@
+{
+  "ranAt": "2026-10-07T10:06:18.259Z",
+  "base": "http://localhost:3200",
+  "runner": "ab",
+  "cores": 12,
+  "note": "压测基线（**回归护栏，不是跑分**）。阈值取『明显劣化才失败』的水准：本机 12 核实测 /healthz ≈ 23,000 rps、/login ≈ 31,000 rps，这里只设 2,000 —— 目的是拦住『某次改动把响应变成 10 倍慢』。跑分需要真实网络/TLS/CDN/生产数据，本地压不出来，也不该假装压出来。",
+  "total": 3,
+  "failed": 3,
+  "results": [
+    {
+      "path": "/healthz",
+      "requests": 2000,
+      "concurrency": 50,
+      "minRps": 2000,
+      "maxP95Ms": 50,
+      "maxFailureRate": 0.001,
+      "measured": {
+        "rps": 588,
+        "p95Ms": 101,
+        "failureRate": 0,
+        "requests": 2000,
+        "concurrency": 50
+      },
+      "ok": false,
+      "breaches": [
+        "rps 588 < 2000",
+        "p95 101ms > 50ms"
+      ]
+    },
+    {
+      "path": "/login",
+      "requests": 2000,
+      "concurrency": 50,
+      "minRps": 2000,
+      "maxP95Ms": 80,
+      "maxFailureRate": 0.001,
+      "measured": {
+        "rps": 76,
+        "p95Ms": 797,
+        "failureRate": 0,
+        "requests": 2000,
+        "concurrency": 50
+      },
+      "ok": false,
+      "breaches": [
+        "rps 76 < 2000",
+        "p95 797ms > 80ms"
+      ]
+    },
+    {
+      "path": "/api/v1/admin/system/users",
+      "requests": 2000,
+      "concurrency": 50,
+      "minRps": 2000,
+      "maxP95Ms": 80,
+      "maxFailureRate": 0.001,
+      "measured": {
+        "rps": 793,
+        "p95Ms": 78,
+        "failureRate": 0,
+        "requests": 2000,
+        "concurrency": 50
+      },
+      "ok": false,
+      "breaches": [
+        "rps 793 < 2000"
+      ]
+    }
+  ]
+}

@@ -117,7 +117,8 @@
     "smoke:login": "node scripts/smoke-login.cjs",
     "admin:pages": "node scripts/generate-admin-pages.cjs --write",
     "admin:pages:check": "node scripts/generate-admin-pages.cjs --check",
-    "security:scan": "node scripts/security-scan.cjs"
+    "security:scan": "node scripts/security-scan.cjs",
+    "load:test": "node scripts/load-test.cjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",

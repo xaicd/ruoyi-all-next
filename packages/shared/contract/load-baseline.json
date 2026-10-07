@@ -1,0 +1,31 @@
+{
+  "$schema": "ruoyi.load-baseline/v1",
+  "note": "压测基线。**状态: 未验证，不接门禁。**\n本工具首跑得到 /healthz 588 rps、/login 76 rps、/api/v1/admin/system/users 793 rps；\n而我此前手工在 standalone 产物上测得 /healthz 23,185 rps。**两者差 39 倍，未解释清楚。**\n未验证的推测: 手工那次是 DB_DRIVER=memory（无数据库），本工具跑的是真实 DB，\n/healthz 可能碰库 —— 但没有证据，所以不据此定阈值。\n**在差异被解释清楚之前，阈值只是占位，不得作为通过/失败依据。**",
+  "targets": [
+    {
+      "path": "/healthz",
+      "requests": 2000,
+      "concurrency": 50,
+      "minRps": 2000,
+      "maxP95Ms": 50,
+      "maxFailureRate": 0.001
+    },
+    {
+      "path": "/login",
+      "requests": 2000,
+      "concurrency": 50,
+      "minRps": 2000,
+      "maxP95Ms": 80,
+      "maxFailureRate": 0.001
+    },
+    {
+      "path": "/api/v1/admin/system/users",
+      "requests": 2000,
+      "concurrency": 50,
+      "minRps": 2000,
+      "maxP95Ms": 80,
+      "maxFailureRate": 0.001
+    }
+  ],
+  "status": "UNVERIFIED —— 尚未接成门禁"
+}

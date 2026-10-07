@@ -1,0 +1,186 @@
+#!/usr/bin/env node
+/**
+ * 压测（容量回归护栏）—— 全流程交付链最后一个没有工具的环节。
+ *
+ * 依据 AGENTS §3.3 第 6 条: 「容量目标须由 **SLO、压测和资源预算** 确定」——
+ * 但此前没有任何压测工具，这条规定是空转的。
+ *
+ * **定位是回归护栏，不是跑分**:
+ *   阈值取"明显劣化才失败"的水准（本机实测 /healthz ≈ 23k rps，阈值只设 2000），
+ *   目的是拦住"某次改动把响应变成 10 倍慢"这类事，而不是追求排行榜。
+ *   跑分需要真实网络、TLS、CDN 与生产数据 —— 本地压不出来，也不该假装压出来。
+ *
+ * 优先用 `ab`（若可用，数字更权威），否则用内置 Node runner（CI 上 ab 不保证存在）。
+ *
+ * 用法:
+ *   node scripts/load-test.cjs                        # 自管理环境，跑完清场
+ *   node scripts/load-test.cjs --base http://host:port  # 对已有实例跑
+ *   node scripts/load-test.cjs --keep
+ */
+const { spawnSync, spawn } = require("node:child_process")
+const fs = require("node:fs")
+const http = require("node:http")
+const os = require("node:os")
+const path = require("node:path")
+
+const ROOT = path.resolve(__dirname, "..")
+const KEEP = process.argv.includes("--keep")
+const arg = (flag) => { const i = process.argv.indexOf(flag); return i >= 0 ? process.argv[i + 1] : undefined }
+const BASE = arg("--base") || "http://localhost:3200"
+const DB = "ruoyi_loadtest"
+const URL = `postgresql://ruoyi:ruoyi123@localhost:5433/${DB}?schema=public`
+const PASSWORD = "LoadTest@123456"
+const SALT = "loadtest-salt"
+const CONTAINER = "ruoyi-dev-postgres-1"
+
+const BASELINE_REL = "packages/shared/contract/load-baseline.json"
+const RESULT_REL = "docs/architecture/artifacts/load-test-result.json"
+
+const sh = (cmd, args, env = {}) => spawnSync(cmd, args, { cwd: ROOT, encoding: "utf8", env: { ...process.env, ...env } })
+const psql = (db, sql) => sh("docker", ["exec", CONTAINER, "psql", "-U", "ruoyi", "-d", db, "-t", "-A", "-c", sql])
+const hasAb = spawnSync("ab", ["-V"], { encoding: "utf8" }).status === 0
+
+/** 内置 Node runner: 固定并发打 N 个请求，统计 rps / p95 / 失败率。 */
+function runNode(target) {
+  return new Promise((resolve) => {
+    const total = target.requests ?? 2000
+    const concurrency = target.concurrency ?? 50
+    const path0 = target.path.startsWith("/") ? target.path : `/${target.path}`
+    const latencies = []
+    let done = 0
+    let failed = 0
+    const started = Date.now()
+
+    const once = () => new Promise((next) => {
+      const t0 = Date.now()
+      const req = http.get(`${BASE}${path0}`, (res) => {
+        res.resume()
+        res.on("end", () => {
+          latencies.push(Date.now() - t0)
+          if (res.statusCode >= 500) failed += 1
+          next()
+        })
+      })
+      req.on("error", () => { failed += 1; next() })
+      req.setTimeout(10000, () => { req.destroy(); failed += 1; next() })
+    })
+
+    const worker = async () => { while (done < total) { done += 1; await once() } }
+    Promise.all(Array.from({ length: concurrency }, worker)).then(() => {
+      const elapsedMs = Date.now() - started
+      latencies.sort((a, b) => a - b)
+      resolve({
+        rps: Math.round((total / elapsedMs) * 1000),
+        p95Ms: latencies[Math.min(latencies.length - 1, Math.floor(latencies.length * 0.95))] ?? 0,
+        failureRate: total === 0 ? 1 : failed / total,
+        requests: total,
+        concurrency,
+      })
+    })
+  })
+}
+
+/** 用 ab 跑一次（数字更权威）。 */
+function runAb(target) {
+  const total = target.requests ?? 2000
+  const concurrency = target.concurrency ?? 50
+  const r = sh("ab", ["-n", String(total), "-c", String(concurrency), "-q", `${BASE}${target.path}`])
+  if (r.status !== 0) return null
+  const rps = Number(/Requests per second:\s+([\d.]+)/.exec(r.stdout)?.[1] ?? 0)
+  const p95 = Number(/^\s*95%\s+(\d+)/m.exec(r.stdout)?.[1] ?? 0)
+  const failed = Number(/Failed requests:\s+(\d+)/.exec(r.stdout)?.[1] ?? 0)
+  if (!rps) return null
+  return { rps: Math.round(rps), p95Ms: p95, failureRate: failed / total, requests: total, concurrency }
+}
+
+let app = null
+let startedPostgres = false
+let envLocalBackup = null
+const cleanup = async () => {
+  if (KEEP) { console.log(`\n[load] --keep: 服务留在 ${BASE}`); return }
+  if (app) app.kill("SIGTERM")
+  const envLocal = path.join(ROOT, ".env.local")
+  if (envLocalBackup === null) fs.rmSync(envLocal, { force: true })
+  else fs.writeFileSync(envLocal, envLocalBackup)
+  psql("postgres", `DROP DATABASE IF EXISTS ${DB}`)
+  if (startedPostgres) sh("pnpm", ["run", "db:down"])
+}
+
+async function main() {
+  const baseline = JSON.parse(fs.readFileSync(path.join(ROOT, BASELINE_REL), "utf8"))
+  const targets = baseline.targets ?? []
+  if (targets.length === 0) { console.error("[load] 基线里没有 targets"); process.exit(1) }
+
+  console.log(`\n=== 压测（${BASE}）runner=${hasAb ? "ab" : "node"} 核数=${os.cpus().length} ===\n`)
+
+  if (!arg("--base")) {
+    const healthy = sh("docker", ["inspect", "--format={{.State.Health.Status}}", CONTAINER]).stdout?.trim() === "healthy"
+    if (!healthy) { startedPostgres = true; sh("pnpm", ["run", "db:up"]) }
+    for (let i = 0; i < 20; i += 1) {
+      if (sh("docker", ["inspect", "--format={{.State.Health.Status}}", CONTAINER]).stdout?.trim() === "healthy") break
+      await new Promise((r) => setTimeout(r, 3000))
+    }
+    psql("postgres", `DROP DATABASE IF EXISTS ${DB}`)
+    psql("postgres", `CREATE DATABASE ${DB}`)
+    sh("npx", ["prisma", "migrate", "deploy"], { DATABASE_URL: URL })
+    sh("npx", ["tsx", "scripts/seed-postgresql.ts"], { DATABASE_URL: URL, DB_DRIVER: "postgresql", ADMIN_BOOTSTRAP_USERNAME: "admin", ADMIN_BOOTSTRAP_PASSWORD: PASSWORD, ADMIN_BOOTSTRAP_SALT: SALT })
+    sh("npx", ["tsx", "scripts/register-plugins.ts"], { DATABASE_URL: URL })
+
+    const envLocal = path.join(ROOT, ".env.local")
+    envLocalBackup = fs.existsSync(envLocal) ? fs.readFileSync(envLocal, "utf8") : null
+    fs.writeFileSync(envLocal, `DATABASE_URL=${URL}\nDB_DRIVER=postgresql\nTENANT_MODE=disabled\nTENANT_PLATFORM_USERNAMES=admin\nADMIN_BOOTSTRAP_USERNAME=admin\nADMIN_BOOTSTRAP_PASSWORD=${PASSWORD}\nADMIN_BOOTSTRAP_SALT=${SALT}\n`)
+    const logFile = path.join(os.tmpdir(), "load-test-app.log")
+    fs.writeFileSync(logFile, "")
+    // **必须打生产产物**。dev 模式（Turbopack 按需编译）实测 /healthz 只有 598 rps，
+    // 而 standalone 产物是 23,185 rps —— 差 39 倍。拿 dev 数字做容量基线是自欺。
+    const standalone = path.join(ROOT, ".next-ruoyi", "standalone", "server.js")
+    if (!fs.existsSync(standalone)) {
+      console.log("[load] 没有生产产物，先构建（pnpm run build）…")
+      const built = sh("pnpm", ["run", "build"])
+      if (built.status !== 0) { console.log("[load] 构建失败:\n" + built.stdout + built.stderr); process.exit(1) }
+    }
+    app = spawn("node", [standalone], {
+      cwd: path.join(ROOT, ".next-ruoyi", "standalone"), stdio: ["ignore", fs.openSync(logFile, "w"), fs.openSync(logFile, "w")],
+      env: { ...process.env, NODE_ENV: "production", PORT: new globalThis.URL(BASE).port || "3200", DATABASE_URL: URL, DB_DRIVER: "postgresql", TENANT_MODE: "disabled", TENANT_PLATFORM_USERNAMES: "admin", ADMIN_BOOTSTRAP_USERNAME: "admin", ADMIN_BOOTSTRAP_PASSWORD: PASSWORD, ADMIN_BOOTSTRAP_SALT: SALT },
+    })
+    let ready = false
+    for (let i = 0; i < 40; i += 1) {
+      try { if ((await fetch(`${BASE}/`, { signal: AbortSignal.timeout(2000) })).status < 500) { ready = true; break } } catch { /* 未就绪 */ }
+      await new Promise((r) => setTimeout(r, 3000))
+    }
+    if (!ready) { console.log("[load] 服务没起起来:\n" + fs.readFileSync(logFile, "utf8").slice(-600)); process.exit(1) }
+  }
+
+  const results = []
+  for (const target of targets) {
+    const measured = hasAb ? runAb(target) : null
+    const result = measured ?? (await runNode(target))
+    const breaches = []
+    if (target.minRps && result.rps < target.minRps) breaches.push(`rps ${result.rps} < ${target.minRps}`)
+    if (target.maxP95Ms && result.p95Ms > target.maxP95Ms) breaches.push(`p95 ${result.p95Ms}ms > ${target.maxP95Ms}ms`)
+    if (target.maxFailureRate != null && result.failureRate > target.maxFailureRate) breaches.push(`失败率 ${(result.failureRate * 100).toFixed(2)}% > ${target.maxFailureRate * 100}%`)
+    const ok = breaches.length === 0
+    results.push({ ...target, measured: result, ok, breaches })
+    console.log(`  ${ok ? "✓" : "✗"} ${target.path}  rps=${result.rps}  p95=${result.p95Ms}ms  失败率=${(result.failureRate * 100).toFixed(2)}%${ok ? "" : `  ← ${breaches.join("; ")}`}`)
+  }
+
+  const failed = results.filter((r) => !r.ok)
+  const out = {
+    ranAt: new Date().toISOString(),
+    base: BASE,
+    runner: hasAb ? "ab" : "node",
+    cores: os.cpus().length,
+    note: baseline.note,
+    total: results.length,
+    failed: failed.length,
+    results,
+  }
+  fs.mkdirSync(path.dirname(path.join(ROOT, RESULT_REL)), { recursive: true })
+  fs.writeFileSync(path.join(ROOT, RESULT_REL), JSON.stringify(out, null, 2) + "\n")
+  console.log(`\n[load] ${results.length - failed.length}/${results.length} 通过 —— 结果落盘 ${RESULT_REL}`)
+  process.exitCode = failed.length === 0 ? 0 : 1
+}
+
+main()
+  .catch((error) => { console.error(`  ✗ 压测异常: ${error.message}`); process.exitCode = 1 })
+  .finally(cleanup)
