@@ -107,7 +107,9 @@
     "delivery:status": "node scripts/check-delivery.cjs --json",
     "feature:new": "npx tsx scripts/create-feature.ts",
     "delivery:hints": "node scripts/delivery-hints.cjs",
-    "task:verify": "node scripts/verify-task-commit.cjs"
+    "task:verify": "node scripts/verify-task-commit.cjs",
+    "fingerprint": "node scripts/env-fingerprint.cjs --write",
+    "fingerprint:verify": "node scripts/env-fingerprint.cjs --verify"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",

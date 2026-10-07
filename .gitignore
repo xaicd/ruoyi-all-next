@@ -149,3 +149,6 @@ apps/ruoyi
 
 # 派生证据快照: 每次跑 check 都会变，作为缓存而非源
 /docs/architecture/artifacts/evolution-backlog.json
+
+# 环境指纹: 每次构建都会变，作为流水线产物而非源
+/docs/architecture/artifacts/env-fingerprint.json
