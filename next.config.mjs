@@ -14,6 +14,10 @@ const basePath = rawBasePath && rawBasePath !== "/"
 const nextConfig = {
   distDir: ".next-ruoyi",
   output: "standalone",
+    // monorepo: 显式声明仓库根，否则 standalone 的依赖追踪以 app 目录为根。
+    // 现在 app 就在仓库根，行为不变；一旦宿主搬进 apps/web/ 就必须保留这一行，
+    // 否则产物不会带上工作区依赖（Next + pnpm monorepo 的经典要求）。
+    outputFileTracingRoot: import.meta.dirname,
   ...(basePath ? { basePath, assetPrefix: basePath } : {}),
   typescript: {
     ignoreBuildErrors: true,
