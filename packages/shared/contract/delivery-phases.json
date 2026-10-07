@@ -124,11 +124,12 @@
       "gate": "G5_PRE",
       "owner": "实施/SRE",
       "artifacts": [
-        "docs/features/**/deployment.md"
+        "docs/features/**/deployment.md",
+        "docs/features/**/runbook.json"
       ],
       "skill": "devops",
       "gateCommand": "npm run build",
-      "note": "双轨的另一轨: 端口策略矩阵、网络域、割接会签、秒级回滚 SOP。运营商项目 40% 风险在这里"
+      "note": "双轨的另一轨: 端口策略矩阵、网络域、割接会签、**可执行 runbook**（计时 + 失败自动回滚）。运营商项目 40% 风险在这里"
     },
     {
       "id": "implementation",

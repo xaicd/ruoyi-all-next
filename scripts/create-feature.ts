@@ -81,6 +81,9 @@ const brief = {
     { id: "T3", parent: "main", title: "<!-- 待填 -->", files: ["-"] },
   ],
   dependencies: "<!-- 待填: 画出 DAG，如 T1 → T2 -->",
+  // 实施轨（可选）: 不填则用标准四步骨架 + 三步回滚
+  windowMinutes: 10,
+  // cutover / rollback: 覆盖默认的割接与回滚步骤（不可逆步骤必须标 irreversible: true）
 }
 
 fs.writeFileSync(path.join(dir, "brief.json"), JSON.stringify(brief, null, 2) + "\n")

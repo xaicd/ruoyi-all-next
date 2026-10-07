@@ -110,7 +110,8 @@
     "task:verify": "node scripts/verify-task-commit.cjs",
     "fingerprint": "node scripts/env-fingerprint.cjs --write",
     "fingerprint:verify": "node scripts/env-fingerprint.cjs --verify",
-    "feature:build": "node scripts/build-feature.cjs"
+    "feature:build": "node scripts/build-feature.cjs",
+    "runbook": "node scripts/agent/run-runbook.cjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",

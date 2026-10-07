@@ -199,6 +199,29 @@ files["bugs.md"] = `# 缺陷：${brief.title}
 |---|---|---|---|---|
 `
 
+// 实施轨的可执行 runbook —— 由 brief 的 deployment 段展开；缺省给标准四步骨架。
+files["runbook.json"] = JSON.stringify(
+  {
+    feature: name,
+    note: "实施轨的可执行割接方案。不可逆步骤**必须**有 rollback，否则 --check 会拦下。",
+    window: { minutes: brief.windowMinutes ?? 10 },
+    steps: (brief.cutover ?? [
+      { id: "S1", name: "预检: 环境指纹一致（测试过的 == 要上线的）", command: "npm run fingerprint:verify", timeoutMs: 60000 },
+      { id: "S2", name: "停写（置只读）", command: "echo '置只读 —— 换成真实的只读开关命令'", timeoutMs: 60000 },
+      { id: "S3", name: "执行迁移", command: "npx prisma migrate deploy", timeoutMs: 300000, irreversible: true },
+      { id: "S4", name: "健康检查: 插件接口可达", command: `node scripts/agent/run-ops.cjs ${brief.domain}.${(brief.entities?.[0]?.table ?? "root")} health`, timeoutMs: 60000 },
+      { id: "S5", name: "业务冒烟: 关键路径", command: "npm run test:agent -- --grep @smoke", timeoutMs: 300000 },
+    ]),
+    rollback: brief.rollback ?? [
+      { id: "R1", name: "回退到上一指纹版本", command: "echo '换成真实的回退命令（如切换镜像 tag）'", timeoutMs: 120000 },
+      { id: "R2", name: "健康检查通过", command: "npm run fingerprint:verify", timeoutMs: 60000 },
+      { id: "R3", name: "核实数据未被破坏", command: "npm run verify:real-db -- --reuse", timeoutMs: 600000 },
+    ],
+  },
+  null,
+  2,
+) + "\n"
+
 if (process.argv.includes("--dry-run")) {
   console.log(`[feature] dry-run: 将展开 ${Object.keys(files).length} 份文档 -> docs/features/${name}/`)
   process.exit(0)
