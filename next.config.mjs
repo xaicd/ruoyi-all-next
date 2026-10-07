@@ -18,6 +18,34 @@ const nextConfig = {
     // 现在 app 就在仓库根，行为不变；一旦宿主搬进 apps/web/ 就必须保留这一行，
     // 否则产物不会带上工作区依赖（Next + pnpm monorepo 的经典要求）。
     outputFileTracingRoot: import.meta.dirname,
+    // 安全响应头 —— security:scan 首跑抓到的真问题（三项全缺）。
+    // 用 Next 的 headers() 统一注入，覆盖所有路由；CSP 与登录页无冲突。
+    async headers() {
+      return [
+        {
+          source: "/:path*",
+          headers: [
+            { key: "X-Content-Type-Options", value: "nosniff" },
+            { key: "X-Frame-Options", value: "DENY" },
+            { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+            {
+              key: "Content-Security-Policy",
+              value: [
+                "default-src 'self'",
+                "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+                "style-src 'self' 'unsafe-inline'",
+                "img-src 'self' data: blob:",
+                "font-src 'self' data:",
+                "connect-src 'self'",
+                "frame-ancestors 'none'",
+                "object-src 'none'",
+                "base-uri 'self'",
+              ].join("; "),
+            },
+          ],
+        },
+      ]
+    },
   ...(basePath ? { basePath, assetPrefix: basePath } : {}),
   typescript: {
     ignoreBuildErrors: true,

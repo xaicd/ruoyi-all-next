@@ -1,9 +1,14 @@
 {
-  "scannedAt": "2026-10-07T09:04:46.480Z",
+  "scannedAt": "2026-10-07T09:22:16.782Z",
   "base": "http://localhost:3200",
-  "total": 9,
-  "failed": 2,
+  "total": 10,
+  "failed": 1,
   "findings": [
+    {
+      "name": "种子建出 admin（表名须加引号：system_user 是保留字）",
+      "ok": true,
+      "detail": "count=1"
+    },
     {
       "name": "起服务",
       "ok": true,
@@ -36,8 +41,8 @@
     },
     {
       "name": "基础安全响应头存在",
-      "ok": false,
-      "detail": "缺: x-content-type-options, x-frame-options, content-security-policy"
+      "ok": true,
+      "detail": "齐全"
     },
     {
       "name": "错误口令返回 401",

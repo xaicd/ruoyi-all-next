@@ -79,7 +79,7 @@ async function main() {
 
     const envLocal = path.join(ROOT, ".env.local")
     envLocalBackup = fs.existsSync(envLocal) ? fs.readFileSync(envLocal, "utf8") : null
-    fs.writeFileSync(envLocal, `DATABASE_URL=${URL}\nDB_DRIVER=postgresql\nADMIN_BOOTSTRAP_USERNAME=admin\nADMIN_BOOTSTRAP_PASSWORD=${PASSWORD}\nADMIN_BOOTSTRAP_SALT=${SALT}\n`)
+    fs.writeFileSync(envLocal, `DATABASE_URL=${URL}\nDB_DRIVER=postgresql\nTENANT_MODE=disabled\nTENANT_PLATFORM_USERNAMES=admin\nADMIN_BOOTSTRAP_USERNAME=admin\nADMIN_BOOTSTRAP_PASSWORD=${PASSWORD}\nADMIN_BOOTSTRAP_SALT=${SALT}\n`)
     const logFile = path.join(os.tmpdir(), "security-scan-app.log")
     fs.writeFileSync(logFile, "")
     app = spawn("pnpm", ["run", "dev"], {
@@ -92,6 +92,9 @@ async function main() {
       await new Promise((r) => setTimeout(r, 3000))
     }
     if (!ready) { step("起服务", false); console.log(fs.readFileSync(logFile, "utf8").slice(-600)); return }
+    // 先确认种子真的建了 admin —— 否则 401 时无从判断是种子失败还是鉴权失败
+    const seeded = psql("ruoyi_secscan", "SELECT count(*) FROM \"system_user\" WHERE username='admin'")
+    step("种子建出 admin（表名须加引号：system_user 是保留字）", seeded.stdout?.trim() === "1", `count=${seeded.stdout?.trim()}`)
     step("起服务", true, BASE)
   }
 
@@ -151,7 +154,11 @@ main()
     const out = path.join(ROOT, "docs", "architecture", "artifacts", "security-scan-result.json")
     fs.mkdirSync(path.dirname(out), { recursive: true })
     fs.writeFileSync(out, JSON.stringify(report, null, 2) + "\n")
-    console.log(`\n[sec] ${findings.length - failed.length}/${findings.length} 通过 —— 结果落盘 ${path.relative(ROOT, out)}`)
+    if (failed.length > 0) {
+    const logFile = path.join(os.tmpdir(), "security-scan-app.log")
+    if (fs.existsSync(logFile)) console.log(`[sec] 应用日志尾部（失败时必看）:\n` + fs.readFileSync(logFile, "utf8").split("\n").slice(-12).join("\n"))
+  }
+  console.log(`\n[sec] ${findings.length - failed.length}/${findings.length} 通过 —— 结果落盘 ${path.relative(ROOT, out)}`)
     await cleanup()
     process.exit(failed.length === 0 ? 0 : 1)
   })
