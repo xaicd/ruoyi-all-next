@@ -74,16 +74,24 @@ async function main() {
     psql("postgres", `DROP DATABASE IF EXISTS ${DB}`)
     psql("postgres", `CREATE DATABASE ${DB}`)
     sh("npx", ["prisma", "migrate", "deploy"], { DATABASE_URL: URL })
-    sh("npx", ["tsx", "scripts/seed-postgresql.ts"], { DATABASE_URL: URL, DB_DRIVER: "postgresql", ADMIN_BOOTSTRAP_USERNAME: "admin", ADMIN_BOOTSTRAP_PASSWORD: PASSWORD, ADMIN_BOOTSTRAP_SALT: SALT })
+    // **必须检查种子自己的退出码** —— 它可能建完 admin 之后才失败，
+    // 那样 admin-count 会通过而登录永远 401（实测踩到，整整查了一轮）
+    const seed = sh("npx", ["tsx", "scripts/seed-postgresql.ts"], { DATABASE_URL: URL, DB_DRIVER: "postgresql", ADMIN_BOOTSTRAP_USERNAME: "admin", ADMIN_BOOTSTRAP_PASSWORD: PASSWORD, ADMIN_BOOTSTRAP_SALT: SALT })
+    if (seed.status !== 0) {
+      step("种子执行成功", false, "见下方日志尾部")
+      console.log((seed.stdout + seed.stderr).split("\n").slice(-12).map((l) => `      ${l}`).join("\n"))
+      return
+    }
+    step("种子执行成功", true)
     sh("npx", ["tsx", "scripts/register-plugins.ts"], { DATABASE_URL: URL })
 
     const envLocal = path.join(ROOT, ".env.local")
     envLocalBackup = fs.existsSync(envLocal) ? fs.readFileSync(envLocal, "utf8") : null
     fs.writeFileSync(envLocal, `DATABASE_URL=${URL}\nDB_DRIVER=postgresql\nTENANT_MODE=disabled\nTENANT_PLATFORM_USERNAMES=admin\nADMIN_BOOTSTRAP_USERNAME=admin\nADMIN_BOOTSTRAP_PASSWORD=${PASSWORD}\nADMIN_BOOTSTRAP_SALT=${SALT}\n`)
     const logFile = path.join(os.tmpdir(), "security-scan-app.log")
-    fs.writeFileSync(logFile, "")
+    fs.writeFileSync(logFile, "") // 每轮截断
     app = spawn("pnpm", ["run", "dev"], {
-      cwd: ROOT, stdio: ["ignore", fs.openSync(logFile, "a"), fs.openSync(logFile, "a")],
+      cwd: ROOT, stdio: ["ignore", fs.openSync(logFile, "w"), fs.openSync(logFile, "w")],
       env: { ...process.env, DATABASE_URL: URL, DB_DRIVER: "postgresql", TENANT_MODE: "disabled", TENANT_PLATFORM_USERNAMES: "admin", ADMIN_BOOTSTRAP_USERNAME: "admin", ADMIN_BOOTSTRAP_PASSWORD: PASSWORD, ADMIN_BOOTSTRAP_SALT: SALT },
     })
     let ready = false

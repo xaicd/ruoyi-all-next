@@ -1,9 +1,14 @@
 {
-  "scannedAt": "2026-10-07T09:22:16.782Z",
+  "scannedAt": "2026-10-07T09:29:54.526Z",
   "base": "http://localhost:3200",
-  "total": 10,
-  "failed": 1,
+  "total": 12,
+  "failed": 0,
   "findings": [
+    {
+      "name": "种子执行成功",
+      "ok": true,
+      "detail": ""
+    },
     {
       "name": "种子建出 admin（表名须加引号：system_user 是保留字）",
       "ok": true,
@@ -51,8 +56,13 @@
     },
     {
       "name": "阴性对照: 正确口令能登录（避免「全拒」冒充安全）",
-      "ok": false,
-      "detail": "HTTP 401"
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "阴性对照: 合法 token 能访问受保护接口",
+      "ok": true,
+      "detail": "HTTP 200"
     }
   ]
 }
