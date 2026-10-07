@@ -151,6 +151,16 @@ async function main() {
     if (!ready) { console.log("[load] 服务没起起来:\n" + fs.readFileSync(logFile, "utf8").slice(-600)); process.exit(1) }
   }
 
+  // **先确认端口上跑的是我们刚起的那个进程** —— 否则会打着残留的 dev 进程，
+  // 拿到低一个数量级的数字（实测: 报 588 rps，而 standalone 实际 26,000 rps）。
+  // 做法: 起服务前清端口；起不来（EADDRINUSE）就直接失败，不静默打着别人的服务。
+  const listening = spawnSync("lsof", ["-ti:3200"], { encoding: "utf8" })
+  if (listening.stdout?.trim()) {
+    console.log(`[load] 端口 3200 已被占用（pid ${listening.stdout.trim().split("\n").join(",")}）—— 先清掉再压，避免打到残留进程`)
+    for (const pid of listening.stdout.trim().split("\n")) spawnSync("kill", ["-9", pid])
+    await new Promise((r) => setTimeout(r, 1500))
+  }
+
   const results = []
   for (const target of targets) {
     const measured = hasAb ? runAb(target) : null
