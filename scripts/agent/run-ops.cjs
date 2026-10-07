@@ -34,6 +34,23 @@ function loadRegistry() {
   return JSON.parse(fs.readFileSync(REGISTRY, "utf8"))
 }
 
+/**
+ * 预检: 运营轨跑的是**真实接口**，所以应用必须在跑。
+ * 裸 `fetch failed` 对使用者毫无信息（实测踩到）—— 这里直接说清"没在跑"和"怎么起"。
+ */
+async function preflight() {
+  try {
+    await fetch(baseUrl, { method: "GET" })
+  } catch (error) {
+    console.error(
+      `[agent:ops] 连不上应用 ${baseUrl}\n` +
+        `  运营轨跑的是真实接口，需要应用在运行。先 \`npm run dev\`，或设置 RUOYI_AGENT_BASE_URL。\n` +
+        `  原始错误: ${error instanceof Error ? error.message : String(error)}`,
+    )
+    process.exit(2)
+  }
+}
+
 async function login() {
   if (!password) return null
   const response = await fetch(`${baseUrl}/api/v1/admin/system/auth`, {
@@ -122,6 +139,7 @@ async function runOp(contract, op, token) {
 
 async function main() {
   const [target, op = "health"] = process.argv.slice(2).filter((arg) => !arg.startsWith("--"))
+  await preflight()
   const registry = loadRegistry()
 
   if (target === "list" || (!target && !op)) {

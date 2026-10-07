@@ -170,7 +170,7 @@
 | 4. 看进度 | `npm run delivery:check -- --feature <名>` | 11 阶段 / 6 gate / 任务树 / 缺陷，逐条「还缺什么」 |
 | 5. 建域 | `npm run domain:new <域>` | 建表迁移 + codegen + 注册插件（**按域，不按特性**） |
 | 6. 门禁 | `npm run check` / `build` / `domain:pack <域>` | **退出码** |
-| 7. 建库 | `npx prisma migrate deploy` + 种子 | 表 / 菜单 / 授权 |
+| 7. 建库 | `npx prisma migrate deploy` + 种子 + `npm run plugins:register` | 表 / 菜单 / 授权 / **插件登记**（不登记则插件接口全 404） |
 | 8. 业务逻辑 | 写成 Service + 测试 | 复用既有原语（条件更新、状态机、幂等） |
 | 9. 追溯 | `npm run task:verify -- --feature <名> --summary` | **从 git 推导**完成度；单任务核对白名单（1 Task = 1 Commit） |
 | 10. 上线 | `npm run fingerprint` → `fingerprint:verify` | 确认上线的就是测试过的那份 |

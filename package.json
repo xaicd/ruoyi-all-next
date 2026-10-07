@@ -112,7 +112,8 @@
     "fingerprint:verify": "node scripts/env-fingerprint.cjs --verify",
     "feature:build": "node scripts/build-feature.cjs",
     "runbook": "node scripts/agent/run-runbook.cjs",
-    "deliver": "node scripts/deliver.cjs"
+    "deliver": "node scripts/deliver.cjs",
+    "plugins:register": "npx tsx scripts/register-plugins.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",
