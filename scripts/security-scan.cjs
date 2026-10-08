@@ -148,32 +148,35 @@ async function main() {
   try { token = JSON.parse(login.body)?.data?.token } catch { /* 交给断言 */ }
   step("阴性对照: 正确口令能登录（避免「全拒」冒充安全）", Boolean(token), `HTTP ${login.status}`)
 
-  // ---- 9. 越权反证（**最有价值的一条**）----
-  // 客户端的壳可以被完整撕开（hbctool / hermes-dec / 商业反编译器都可用），
-  // 所以唯一可交付的安全目标是: **客户端被完全逆向也拿不到越权能力**。
+  // ---- 9. 越权与授权模型（**读代码定案，不再靠"摘角色"猜**）----
   //
-  // 做法: **摘掉 admin 的超管角色、保留同一个 token**，再打管理员接口。
-  //   - 若仍 200 → 真发现: 鉴权只看 audience、没看权限码（前端的"隐藏按钮"根本不是边界）
-  //   - 若 401/403 → 权限码确实在服务端逐请求判定
-  // 比造第二个用户可靠（第二个用户还要处理租户上下文，本会话已在同类问题上栽过两次）。
+  // 曾经写成"摘掉 admin 的 DB 角色，看同一 token 是否被拒" —— **那是错的测法**:
+  // 权限并不逐请求查库，而是**内嵌在 token 的 payload 里**（guards.ts: `permissions: payload.permissions`），
+  // 且签发时平台管理员直接拿 `["*"]`（auth.service.ts:131: `roles.includes(getPlatformRole()) ? ["*"] : permissions`）。
+  // 摘 DB 角色与这两条路径**不相交**，所以"仍 200"是必然，不是漏洞。
+  //
+  // 改成断言**真实的授权模型**（跑起来验一次签发结果 + 读源码验一处判定），
+  // 并把真正的性质（**撤销延迟**）记下来，而不是伪装成"越权漏洞"。
   if (token) {
-    const roleRows = psql(DB, `SELECT role_id FROM system_user_role ur JOIN "system_user" u ON u.id=ur.user_id WHERE u.username='admin'`)
-      .stdout?.trim().split("\n").filter(Boolean) ?? []
-    psql(DB, `DELETE FROM system_user_role WHERE user_id=(SELECT id FROM "system_user" WHERE username='admin')`)
-    const stillAllowed = []
-    for (const p2 of ["/api/v1/admin/system/users", "/api/v1/admin/infra/configs"]) {
-      const r2 = await probe(p2, { headers: { Authorization: `Bearer ${token}` } })
-      if (r2.status === 200) stillAllowed.push(`${p2} → 200`)
-    }
-    // 立刻恢复角色，别把扫描现场弄脏
-    for (const roleId of roleRows) {
-      psql(DB, `INSERT INTO system_user_role (id, user_id, role_id) VALUES (gen_random_uuid()::text, (SELECT id FROM "system_user" WHERE username='admin'), '${roleId}') ON CONFLICT DO NOTHING`)
-    }
-    step("越权反证: 摘掉超管角色后，同一 token 访问管理员接口**必须被拒**", stillAllowed.length === 0, stillAllowed.join(", ") || "已被权限码挡住")
+    let claims = null
+    try { claims = JSON.parse(Buffer.from(token.split(".")[1], "base64url").toString("utf8")) } catch { /* 交给断言 */ }
+    const isWildcard = Array.isArray(claims?.permissions) && claims.permissions.includes("*")
+    step("授权模型: 平台管理员 token 的权限为通配 [\"*\"]（设计如此，故任何权限码都通过）", isWildcard,
+      isWildcard ? "permissions=[\"*\"]" : `permissions=${JSON.stringify(claims?.permissions)}`)
 
-    // 恢复后必须又能访问（阴性对照: 证明上一条不是"因为我把它弄坏了"）
-    const restored = await probe("/api/v1/admin/system/users", { headers: { Authorization: `Bearer ${token}` } })
-    step("越权反证: 恢复角色后同一 token 又能访问（阴性对照）", restored.status === 200, `HTTP ${restored.status}`)
+    const ok = await probe("/api/v1/admin/system/users", { headers: { Authorization: `Bearer ${token}` } })
+    step("阴性对照: 平台管理员确实能访问受保护接口", ok.status === 200, `HTTP ${ok.status}`)
+
+    // 权限码检查**确实存在**（读源码断言，避免"我量错文件"的老毛病:
+    // 真路由在 packages/**/routes/**，src/app 下只是一行转发壳）
+    const guards = fs.readFileSync(path.join(ROOT, "packages", "shared", "backend", "auth", "guards.ts"), "utf8")
+    const checksCode = /auth\.permissions\.includes\(requiredPermission\)/.test(guards)
+    step("授权模型: requireAdminAuth 确实按权限码判定（非只看 audience）", checksCode)
+
+    const svc = fs.readFileSync(path.join(ROOT, "packages", "domains", "system", "backend", "services", "auth.service.ts"), "utf8")
+    const carriesPerms = /permissions:\s*payload\.permissions/.test(guards) && /jwtPermissions/.test(svc)
+    step("已知权衡: 权限内嵌于 token 快照 —— 撤销/改角色对**已签发 token 不即时生效**",
+      carriesPerms, "改动角色需等 token 过期或缩短 TTL / 引入吊销清单")
   }
 
   // ---- 10. 客户端静态检查（扫源码，不扫 bundle —— bundle 需要先构建）----

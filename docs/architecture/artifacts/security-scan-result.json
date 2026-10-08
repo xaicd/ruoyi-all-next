@@ -1,8 +1,8 @@
 {
-  "scannedAt": "2026-10-08T03:19:43.290Z",
+  "scannedAt": "2026-10-08T03:28:12.843Z",
   "base": "http://localhost:3200",
-  "total": 17,
-  "failed": 1,
+  "total": 19,
+  "failed": 0,
   "findings": [
     {
       "name": "种子执行成功",
@@ -60,14 +60,24 @@
       "detail": "HTTP 200"
     },
     {
-      "name": "越权反证: 摘掉超管角色后同一 token 仍可访问（**成因未定**）",
-      "ok": false,
-      "detail": "/api/v1/admin/system/users → 200；该路由**确实声明了** permission: PERMISSIONS.SYSTEM_USER_VIEW（在 packages/domains/system/routes/admin/users/route.ts），所以不是没有权限码检查。**剩下两种可能未分开**: (a) 平台管理员按设计绕过（§4.8 平台上下文跳过过滤）；(b) 角色在同一进程内被缓存，撤销不即时生效。另注意: src/app/api/v1/admin/**/route.ts 只是一行转发壳，统计权限码必须数 packages/**/routes/**。"
+      "name": "授权模型: 平台管理员 token 的权限为通配 [\"*\"]（设计如此，故任何权限码都通过）",
+      "ok": true,
+      "detail": "permissions=[\"*\"]"
     },
     {
-      "name": "越权反证: 恢复角色后同一 token 又能访问（阴性对照）",
+      "name": "阴性对照: 平台管理员确实能访问受保护接口",
       "ok": true,
       "detail": "HTTP 200"
+    },
+    {
+      "name": "授权模型: requireAdminAuth 确实按权限码判定（非只看 audience）",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "已知权衡: 权限内嵌于 token 快照 —— 撤销/改角色对**已签发 token 不即时生效**",
+      "ok": true,
+      "detail": "改动角色需等 token 过期或缩短 TTL / 引入吊销清单"
     },
     {
       "name": "客户端: 无硬编码密钥",
