@@ -60,9 +60,9 @@
       "detail": "HTTP 200"
     },
     {
-      "name": "越权反证: 摘掉超管角色后，同一 token 访问管理员接口**必须被拒**",
+      "name": "越权反证: 摘掉超管角色后同一 token 仍可访问（**成因未定**）",
       "ok": false,
-      "detail": "/api/v1/admin/system/users → 200, /api/v1/admin/infra/configs → 200"
+      "detail": "/api/v1/admin/system/users → 200；该路由**确实声明了** permission: PERMISSIONS.SYSTEM_USER_VIEW（在 packages/domains/system/routes/admin/users/route.ts），所以不是没有权限码检查。**剩下两种可能未分开**: (a) 平台管理员按设计绕过（§4.8 平台上下文跳过过滤）；(b) 角色在同一进程内被缓存，撤销不即时生效。另注意: src/app/api/v1/admin/**/route.ts 只是一行转发壳，统计权限码必须数 packages/**/routes/**。"
     },
     {
       "name": "越权反证: 恢复角色后同一 token 又能访问（阴性对照）",
