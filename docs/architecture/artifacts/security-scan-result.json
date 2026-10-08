@@ -1,8 +1,8 @@
 {
-  "scannedAt": "2026-10-07T09:29:54.526Z",
+  "scannedAt": "2026-10-08T03:19:43.290Z",
   "base": "http://localhost:3200",
-  "total": 12,
-  "failed": 0,
+  "total": 17,
+  "failed": 1,
   "findings": [
     {
       "name": "种子执行成功",
@@ -58,6 +58,31 @@
       "name": "阴性对照: 正确口令能登录（避免「全拒」冒充安全）",
       "ok": true,
       "detail": "HTTP 200"
+    },
+    {
+      "name": "越权反证: 摘掉超管角色后，同一 token 访问管理员接口**必须被拒**",
+      "ok": false,
+      "detail": "/api/v1/admin/system/users → 200, /api/v1/admin/infra/configs → 200"
+    },
+    {
+      "name": "越权反证: 恢复角色后同一 token 又能访问（阴性对照）",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "客户端: 无硬编码密钥",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "客户端: EXPO_PUBLIC_* 全在白名单内（它们等于公开）",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "客户端: token 不落 AsyncStorage（应使用 SecureStore）",
+      "ok": true,
+      "detail": ""
     },
     {
       "name": "阴性对照: 合法 token 能访问受保护接口",

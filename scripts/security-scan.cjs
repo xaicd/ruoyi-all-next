@@ -19,6 +19,7 @@
  *   node scripts/security-scan.cjs --base http://localhost:3200   # 对已有实例跑
  */
 const { spawnSync, spawn } = require("node:child_process")
+const crypto0 = require("node:crypto")
 const fs = require("node:fs")
 const os = require("node:os")
 const path = require("node:path")
@@ -87,12 +88,12 @@ async function main() {
 
     const envLocal = path.join(ROOT, ".env.local")
     envLocalBackup = fs.existsSync(envLocal) ? fs.readFileSync(envLocal, "utf8") : null
-    fs.writeFileSync(envLocal, `DATABASE_URL=${URL}\nDB_DRIVER=postgresql\nTENANT_MODE=disabled\nTENANT_PLATFORM_USERNAMES=admin\nADMIN_BOOTSTRAP_USERNAME=admin\nADMIN_BOOTSTRAP_PASSWORD=${PASSWORD}\nADMIN_BOOTSTRAP_SALT=${SALT}\n`)
+    fs.writeFileSync(envLocal, `DATABASE_URL=${URL}\nDB_DRIVER=postgresql\nTENANT_MODE=disabled\nTENANT_PLATFORM_USERNAMES=admin,secscan_lowpriv\nADMIN_BOOTSTRAP_USERNAME=admin\nADMIN_BOOTSTRAP_PASSWORD=${PASSWORD}\nADMIN_BOOTSTRAP_SALT=${SALT}\n`)
     const logFile = path.join(os.tmpdir(), "security-scan-app.log")
     fs.writeFileSync(logFile, "") // 每轮截断
     app = spawn("pnpm", ["run", "dev"], {
       cwd: ROOT, stdio: ["ignore", fs.openSync(logFile, "w"), fs.openSync(logFile, "w")],
-      env: { ...process.env, DATABASE_URL: URL, DB_DRIVER: "postgresql", TENANT_MODE: "disabled", TENANT_PLATFORM_USERNAMES: "admin", ADMIN_BOOTSTRAP_USERNAME: "admin", ADMIN_BOOTSTRAP_PASSWORD: PASSWORD, ADMIN_BOOTSTRAP_SALT: SALT },
+      env: { ...process.env, DATABASE_URL: URL, DB_DRIVER: "postgresql", TENANT_MODE: "disabled", TENANT_PLATFORM_USERNAMES: "admin,secscan_lowpriv", ADMIN_BOOTSTRAP_USERNAME: "admin", ADMIN_BOOTSTRAP_PASSWORD: PASSWORD, ADMIN_BOOTSTRAP_SALT: SALT },
     })
     let ready = false
     for (let i = 0; i < 40; i += 1) {
@@ -147,7 +148,76 @@ async function main() {
   try { token = JSON.parse(login.body)?.data?.token } catch { /* 交给断言 */ }
   step("阴性对照: 正确口令能登录（避免「全拒」冒充安全）", Boolean(token), `HTTP ${login.status}`)
 
-  // ---- 9. 带合法 token 访问受保护接口应 200（证明上面不是"全都被拒"）----
+  // ---- 9. 越权反证（**最有价值的一条**）----
+  // 客户端的壳可以被完整撕开（hbctool / hermes-dec / 商业反编译器都可用），
+  // 所以唯一可交付的安全目标是: **客户端被完全逆向也拿不到越权能力**。
+  //
+  // 做法: **摘掉 admin 的超管角色、保留同一个 token**，再打管理员接口。
+  //   - 若仍 200 → 真发现: 鉴权只看 audience、没看权限码（前端的"隐藏按钮"根本不是边界）
+  //   - 若 401/403 → 权限码确实在服务端逐请求判定
+  // 比造第二个用户可靠（第二个用户还要处理租户上下文，本会话已在同类问题上栽过两次）。
+  if (token) {
+    const roleRows = psql(DB, `SELECT role_id FROM system_user_role ur JOIN "system_user" u ON u.id=ur.user_id WHERE u.username='admin'`)
+      .stdout?.trim().split("\n").filter(Boolean) ?? []
+    psql(DB, `DELETE FROM system_user_role WHERE user_id=(SELECT id FROM "system_user" WHERE username='admin')`)
+    const stillAllowed = []
+    for (const p2 of ["/api/v1/admin/system/users", "/api/v1/admin/infra/configs"]) {
+      const r2 = await probe(p2, { headers: { Authorization: `Bearer ${token}` } })
+      if (r2.status === 200) stillAllowed.push(`${p2} → 200`)
+    }
+    // 立刻恢复角色，别把扫描现场弄脏
+    for (const roleId of roleRows) {
+      psql(DB, `INSERT INTO system_user_role (id, user_id, role_id) VALUES (gen_random_uuid()::text, (SELECT id FROM "system_user" WHERE username='admin'), '${roleId}') ON CONFLICT DO NOTHING`)
+    }
+    step("越权反证: 摘掉超管角色后，同一 token 访问管理员接口**必须被拒**", stillAllowed.length === 0, stillAllowed.join(", ") || "已被权限码挡住")
+
+    // 恢复后必须又能访问（阴性对照: 证明上一条不是"因为我把它弄坏了"）
+    const restored = await probe("/api/v1/admin/system/users", { headers: { Authorization: `Bearer ${token}` } })
+    step("越权反证: 恢复角色后同一 token 又能访问（阴性对照）", restored.status === 200, `HTTP ${restored.status}`)
+  }
+
+  // ---- 10. 客户端静态检查（扫源码，不扫 bundle —— bundle 需要先构建）----
+  const CLIENT = path.join(ROOT, "clients", "expo")
+  const clientFiles = []
+  const walkClient = (dir) => {
+    if (!fs.existsSync(dir)) return
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (["node_modules", ".expo", "dist", "android", "ios"].includes(e.name)) continue
+      const full = path.join(dir, e.name)
+      if (e.isDirectory()) walkClient(full)
+      else if (/\.(ts|tsx|js|jsx|json)$/.test(e.name)) clientFiles.push(full)
+    }
+  }
+  walkClient(CLIENT)
+
+  // 10a. 客户端里不得出现**硬编码秘密**
+  const secretHits = []
+  for (const f of clientFiles) {
+    const text = fs.readFileSync(f, "utf8")
+    if (/(api[_-]?key|secret|private[_-]?key|password)\s*[:=]\s*["'`][A-Za-z0-9_\-+/]{16,}["'`]/i.test(text)) {
+      secretHits.push(path.relative(ROOT, f))
+    }
+  }
+  step("客户端: 无硬编码密钥", secretHits.length === 0, secretHits.join(", "))
+
+  // 10b. EXPO_PUBLIC_* 白名单 —— 这些会被**内联进 bundle**，等于公开发布
+  const ALLOWED_PUBLIC = ["EXPO_PUBLIC_API_BASE"]
+  const publicHits = []
+  for (const f of clientFiles) {
+    for (const m of fs.readFileSync(f, "utf8").matchAll(/EXPO_PUBLIC_([A-Z0-9_]+)/g)) publicHits.push(`EXPO_PUBLIC_${m[1]}`)
+  }
+  const undeclared = [...new Set(publicHits)].filter((n) => !ALLOWED_PUBLIC.includes(n))
+  step("客户端: EXPO_PUBLIC_* 全在白名单内（它们等于公开）", undeclared.length === 0, undeclared.join(", "))
+
+  // 10c. token 不得存 AsyncStorage（必须 SecureStore）
+  const insecureStore = []
+  for (const f of clientFiles) {
+    const text = fs.readFileSync(f, "utf8")
+    if (/AsyncStorage\.setItem\([^)]*(token|jwt|auth|credential)/i.test(text)) insecureStore.push(path.relative(ROOT, f))
+  }
+  step("客户端: token 不落 AsyncStorage（应使用 SecureStore）", insecureStore.length === 0, insecureStore.join(", "))
+
+  // ---- 11. 带合法 token 访问受保护接口应 200（证明上面不是"全都被拒"）----
   if (token) {
     const ok = await probe("/api/v1/admin/system/menus/sidebar", { headers: { Authorization: `Bearer ${token}` } })
     step("阴性对照: 合法 token 能访问受保护接口", ok.status === 200, `HTTP ${ok.status}`)
