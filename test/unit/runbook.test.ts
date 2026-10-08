@@ -125,9 +125,23 @@ describe("G5 证据规则", () => {
   })
 
   it("G5=passed 且有全过的运行记录 → 不被误伤", () => {
-    fs.writeFileSync(EVIDENCE, JSON.stringify(gate("passed", ["runbook-result.json: 2 步，全过，用时 1.0s"])))
-    fs.writeFileSync(RESULT, JSON.stringify({ feature: "__rb_test__", ok: true, steps: [{ id: "S1", ok: true }, { id: "S2", ok: true }] }))
-    const out = JSON.parse(inspectDelivery().output)
-    expect(out.evidence.problems).toHaveLength(0)
+    // G5 现在要**三样**: runbook 记录 + 安全扫描绿 + 压测达阈值（后两者是仓级产物）。
+    // 夹具必须把三样都造齐，否则测的是"新规则拦下了夹具"，不是"不误伤"。
+    const artifacts = path.join(ROOT, "docs", "architecture", "artifacts")
+    const security = path.join(artifacts, "security-scan-result.json")
+    const load = path.join(artifacts, "load-test-result.json")
+    const backup = { security: fs.existsSync(security) ? fs.readFileSync(security, "utf8") : null, load: fs.existsSync(load) ? fs.readFileSync(load, "utf8") : null }
+    fs.mkdirSync(artifacts, { recursive: true })
+    fs.writeFileSync(security, JSON.stringify({ scannedAt: new Date().toISOString(), failed: 0 }))
+    fs.writeFileSync(load, JSON.stringify({ ranAt: new Date().toISOString(), failed: 0 }))
+    try {
+      fs.writeFileSync(EVIDENCE, JSON.stringify(gate("passed", ["runbook-result.json: 2 步，全过，用时 1.0s"])))
+      fs.writeFileSync(RESULT, JSON.stringify({ feature: "__rb_test__", ok: true, steps: [{ id: "S1", ok: true }, { id: "S2", ok: true }] }))
+      const out = JSON.parse(inspectDelivery().output)
+      expect(out.evidence.problems).toHaveLength(0)
+    } finally {
+      if (backup.security === null) fs.rmSync(security, { force: true }); else fs.writeFileSync(security, backup.security)
+      if (backup.load === null) fs.rmSync(load, { force: true }); else fs.writeFileSync(load, backup.load)
+    }
   })
 })
