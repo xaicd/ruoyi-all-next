@@ -1,0 +1,9 @@
+# Cursor Forwarder for ruoyi-all-next
+# The authoritative rules for this project live in `.agents/rules/` and `AGENTS.md`.
+
+- Core Directives: `.agents/rules/RULE-0-UNIVERSAL-DIRECTIVES.md`
+- High-Order Inverse Thinking: `.agents/rules/HIGH-ORDER-INVERSE-THINKING.md`
+- Engineering Deliverables: `.agents/rules/SPEC-FIRST-ENGINEERING-ARTIFACTS.md`
+- Project Initialization: `.agents/rules/PROJECT-INIT-AND-REFACTOR.md`
+- Multi-Tenant Isolation: `.agents/rules/MULTI-TENANT-ISOLATION.md`
+- Engineering Gates: `AGENTS.md`

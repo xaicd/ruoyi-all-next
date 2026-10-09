@@ -35,7 +35,7 @@ export class TestingKit {
     const dbPath = path.join(tmpDir, 'test.db');
     
     // 初始化表结构与种子数据
-    await bootstrapSqlite(dbPath);
+    await bootstrapSqlite(dbPath, { username: 'supervip', password: 'Test@SuperVip2026!' });
 
     const nativeDb = new Database(dbPath);
     nativeDb.pragma('journal_mode = WAL');
@@ -113,8 +113,8 @@ export class TestingKit {
       viewport: { width: 1280, height: 800 },
       defaultTimeout: 10000,
       adminCredentials: {
-        username: 'admin',
-        password: 'admin123'
+        username: 'supervip',
+        password: process.env.ADMIN_BOOTSTRAP_PASSWORD || 'Test@SuperVip2026!'
       }
     };
   }

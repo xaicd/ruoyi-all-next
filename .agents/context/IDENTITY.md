@@ -15,3 +15,11 @@
 ## 机器可读入口
 
 先读 `packages/shared/contract/agent-profile.json`，再读生成的 `seam-graph.json` 与 `domain-catalog.json`。域名与可拆分边界以 catalog 为准，不要在对话里发明新域。
+
+## 执行环境与宿主机桥接 (Execution Environment & Host Bridge)
+
+- **当前运行环境**：Agent 当前运行在 Linux 容器沙箱内（`/.dockerenv`）。
+- **Mac 宿主机能力桥接**：工作区由 macOS 宿主机（`macdeMac-Studio.local arm64`）挂载而来。
+- **透明宿主机代理执行 (`scripts/host-exec.sh`)**：当需要 Mac 宿主机原生能力（如 Xcode iOS 模拟器、Android 原生模拟器、宿主机进程与服务检查、Coolie 开发环境交互等）时，直接调用：
+  `bash scripts/host-exec.sh <command>`（已预配无密码 SSH Key 互信，自动打通网络路由与 PATH 依赖）。
+

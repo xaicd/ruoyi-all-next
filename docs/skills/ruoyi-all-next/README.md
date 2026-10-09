@@ -32,8 +32,8 @@ Skill 写法见 [skill-authoring.SKILL.md](./skill-authoring.SKILL.md)。
 | 用户在做 | 必开 |
 |---|---|
 | 新增/修改 Skill | skill-authoring |
-| 新业务项目孵化、DigitalStaff NPC 模板、DeepSeek Harness 进化 | agent-harness、product-requirements |
-| 新功能、客户端、业务项目初始化 | product-requirements |
+| 新业务项目孵化、DigitalStaff NPC 模板、DeepSeek Harness 进化 | agent-harness、project-init、product-requirements |
+| 新功能、客户端、业务项目初始化 | product-requirements、project-init |
 | 新功能一站式交付（RBAC + 全动词 API + 页面 + 权限 + 测试） | new-feature |
 | 新业务域/新平台（起底座 -> 建表 -> codegen -> 注册插件 -> 编译/打包/预览） | new-business-plugin |
 | 管理端/C 端页面或视觉 | ui-design、ui-framework-governance、ui-ux-pro-max |
@@ -61,6 +61,7 @@ Skill 写法见 [skill-authoring.SKILL.md](./skill-authoring.SKILL.md)。
 | microservice-evolution.SKILL.md | A/B/C 拆分 |
 | plugin-authoring.SKILL.md | 可安装插件：包结构 / manifest / capability / worker 协议 |
 | agent-harness.SKILL.md | NPC 工作区模板与 Harness 思想进化 |
+| project-init.SKILL.md | 业务项目初始化与原地重构（对标 ProjectReactor.java） |
 | ../../../.kiro/steering/ui-ux-pro-max/SKILL.md | 视觉/UX 检索 |
 
 ## 5. 客户端

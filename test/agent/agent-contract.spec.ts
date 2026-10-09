@@ -35,8 +35,8 @@ const registry = fs.existsSync(registryPath)
   ? (JSON.parse(fs.readFileSync(registryPath, 'utf8')) as { contracts: Contract[] })
   : { contracts: [] };
 
-const USERNAME = process.env.RUOYI_AGENT_USERNAME || 'admin';
-const PASSWORD = process.env.RUOYI_AGENT_PASSWORD || 'admin123';
+const USERNAME = process.env.RUOYI_AGENT_USERNAME || process.env.ADMIN_BOOTSTRAP_USERNAME || 'supervip';
+const PASSWORD = process.env.RUOYI_AGENT_PASSWORD || process.env.ADMIN_BOOTSTRAP_PASSWORD || '';
 
 async function login(page: import('@playwright/test').Page): Promise<boolean> {
   const response = await page.request.post('/api/v1/admin/system/auth', {

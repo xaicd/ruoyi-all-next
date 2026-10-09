@@ -13,6 +13,7 @@ const DERIVED_ARTIFACTS = [
   { script: "scripts/generate-page-schemas.cjs", args: ["--write"], label: "C 端页面 schema(agent:page-schemas)" },
   { script: "scripts/generate-domain-service-loaders.cjs", args: ["--write"], label: "跨域 loader(domain:loaders)" },
   { script: "scripts/generate-domain-rbac-migration.cjs", args: ["--write"], label: "菜单/权限迁移" },
+  { script: "scripts/generate-admin-pages.cjs", args: ["--write"], label: "管理端页面清单(admin:pages)" },
 ]
 
 module.exports = { DERIVED_ARTIFACTS }

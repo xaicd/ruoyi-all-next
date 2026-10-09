@@ -362,6 +362,25 @@ function pruneDomainReferenceLists(destRoot, plan) {
     }
   }
 
+  // 4.7) admin-pages.json 管理端页面清单: 剔除被裁域的页面
+  {
+    const rel = "packages/shared/contract/admin-pages.json"
+    const text = read(rel)
+    if (text) {
+      const json = JSON.parse(text)
+      const beforeCount = (json.pages ?? []).length
+      json.pages = (json.pages ?? []).filter((page) => {
+        const m = page.module ? page.module.match(/^@\/modules\/([a-z0-9_]+)\//) : null
+        const domain = m ? m[1] : (page.slug ? page.slug.split("/")[0] : null)
+        if (!domain) return true
+        return keep.has(domain)
+      })
+      write(rel, `${JSON.stringify(json, null, 2)}\n`)
+      const removed = beforeCount - json.pages.length
+      if (removed > 0) dropped.push(`${rel}: 剔除 ${removed} 个被裁域的管理端页面条目`)
+    }
+  }
+
   // 4.9) 测试文件里**按域名字符串**引用被裁域的，一并剔除。
   //      两类: 一类把域名当任意标签（registerService("pay")），一类就是**专门测该域**的。
   //      两类在裁剪后的工程里都跑不了 —— 前者因为 broker 会按 catalog 校验域名，

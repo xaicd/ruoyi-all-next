@@ -46,7 +46,7 @@ if (mode === "docker") {
   run("docker compose -f deploy/docker-compose.local.yml up --build -d")
   log("INFO", "容器已启动")
   log("INFO", "访问: http://localhost:3100")
-  log("INFO", "登录: admin / admin123")
+  log("INFO", "登录: supervip (密码见 .env.local 或终端初始化日志)")
   process.exit(0)
 }
 
@@ -100,7 +100,7 @@ console.log("")
 log("INFO", "═══════════════════════════════════════")
 log("INFO", "  应用地址: http://localhost:3100")
 log("INFO", "  登录页面: http://localhost:3100/login")
-log("INFO", "  默认账号: admin / admin123")
+log("INFO", "  平台账号: supervip (密码见 .env.local 或终端初始化日志)")
 log("INFO", "  数据模式: 内存（重启后数据重置）")
 log("INFO", "═══════════════════════════════════════")
 console.log("")

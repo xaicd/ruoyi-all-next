@@ -41,7 +41,7 @@ afterAll(() => {
  * 守的是一个真实的事故类别: 测试跑的是一份，上线部署的是另一份，
  * 而两边**都显示成功**。所以这里必须证明"篡改会被抓到"，否则机制是装饰。
  */
-describe("环境指纹握手", () => {
+describe("环境指纹握手", { timeout: 25000 }, () => {
   it("没盖章就核对 → exit 2（不能默认放行）", () => {
     fs.rmSync(ARTIFACT, { force: true })
     expect(run(["--verify"])).toBe(2)

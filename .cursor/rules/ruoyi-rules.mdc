@@ -1,0 +1,17 @@
+---
+description: RuoYi-All-Next Architecture Rules & Invariants
+globs: *
+alwaysApply: true
+---
+
+# Cursor Rules for ruoyi-all-next
+
+All engineering rules and architectural standards are unified in `.agents/rules/` and `AGENTS.md`.
+
+You MUST read and adhere to:
+1. `.agents/rules/RULE-0-UNIVERSAL-DIRECTIVES.md` - Mandatory Rule 0, zero token waste, SpaceX testing
+2. `.agents/rules/HIGH-ORDER-INVERSE-THINKING.md` - High-order inverse thinking & code review invariants
+3. `.agents/rules/SPEC-FIRST-ENGINEERING-ARTIFACTS.md` - Spec-first physical engineering deliverables
+4. `.agents/rules/PROJECT-INIT-AND-REFACTOR.md` - ProjectReactor initialization and SQLite bootstrap
+5. `.agents/rules/MULTI-TENANT-ISOLATION.md` - Multi-tenant context scoping & isolation
+6. `AGENTS.md` - 10 Quality Gates & architecture boundary

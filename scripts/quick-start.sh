@@ -40,7 +40,7 @@ if [ "$MODE" = "docker" ]; then
   docker compose -f deploy/docker-compose.local.yml up --build -d
   log_info "容器已启动"
   log_info "访问: http://localhost:3100"
-  log_info "登录: admin / admin123"
+  log_info "登录: supervip (密码见 .env.local 或终端初始化日志)"
   exit 0
 fi
 
@@ -110,7 +110,7 @@ echo ""
 log_info "═══════════════════════════════════════"
 log_info "  应用地址: http://localhost:3100"
 log_info "  登录页面: http://localhost:3100/login"
-log_info "  默认账号: admin / admin123"
+log_info "  平台账号: supervip (密码见 .env.local 或终端初始化日志)"
 log_info "  数据模式: 内存（重启后数据重置）"
 log_info "═══════════════════════════════════════"
 echo ""

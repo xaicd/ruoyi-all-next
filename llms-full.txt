@@ -1,0 +1,148 @@
+# ruoyi-all-next: Complete Engineering Specification & Operational Manual
+# (For Long-Context LLMs & Autonomous Coding Agents)
+
+> Version: 2026.10-V1  
+> Architecture: Next.js 16 + React 19 + TypeScript 5 + SQLite (Kysely) / PostgreSQL (Prisma 7)  
+> Workspace Mode: AI-Native Workspace Bundle & Modular Monolith with Progressive Microservice Evolution  
+
+---
+
+## 1. Top-Priority Universal Directives (MANDATORY RULE 0)
+
+1. **Zero Token Waste (零算力与 Token 浪费)**:
+   - 严禁大模型人肉逐行生成几百行千篇一律的重复 CRUD、样板代码、冗余 DDL 或静态 HTML 骨架。
+   - 业务开发强制采用 Schema / DSL 极简声明式驱动（大模型输出压缩至 <500 Tokens），由底座通用引擎展开。
+2. **Architecture Pattern Mastery (极致复用通用架构底座)**:
+   - 业务数据访问强制继承 `BaseMapper<T>`、`QueryWrapper<T>`、`BaseService<T>` 与 `createBaseSchema`。
+   - 自动继承多租户隔离、逻辑删除、8 大基础审计底座字段（`creator`, `create_time`, `updater`, `update_time`, `deleted`, `tenant_id`, etc.），严禁手写重复 SQL。
+3. **Prioritize Existing Low-Code Tooling (存量工具优先)**:
+   - 优先复用本底座脚手架 (`scripts/scaffold-feature`、`scripts/project-init.cjs`、`scripts/hatch.sh`)。
+4. **SpaceX-Grade Testing & Zero Fake Mock (真实数据库驱动)**:
+   - 代码变更必须跑通 4 层金字塔测试矩阵（L1 单测、L2 集成、L3 契约、L4 E2E）。
+   - 100% 由真实本地 SQLite / PostgreSQL 数据库支撑，严禁编写仅在前端伪造假 Mock 的假测试。
+5. **Ontology & API-Contract-First (本体域全息导航与契约切入)**:
+   - 任何需求必须先在本体域（`packages/shared/backend/constants/domain-catalog.json`、Domain Facade、Route Manifest、权限码）中秒级定位目标域与影响半径。
+6. **High-Order Inverse Thinking & DeepSeek Harness (高阶反向思维与 Harness 约束)**:
+   - 严禁初级外包码农视角就事论事贴补丁；写代码必须业务对象溯源，写单测必须覆盖 4 态状态机（成功、冲突、回滚、幂等），修改接口必须契约先验与零破坏性变更。
+7. **No Artifact, No Done (工单物理资产交付闭环)**:
+   - 严禁口头声明完工；每个工单必须基于 8 要素 Brief 派发，且必须产出 5 选 1 物理工程资产（源码提交、OpenAPI 契约、真实 DB 状态机单测报告、回滚 Runbook、安全扫描报告）。
+
+---
+
+## 2. 物理目录结构与三层物理边界 (Architectural Seams)
+
+```
+ruoyi-all-next/
+├── packages/
+│   ├── shared/                       # 核心公共基座 SDK（永远是 SDK，严禁当作微服务）
+│   │   ├── backend/
+│   │   │   ├── constants/            # 权限码、菜单树、domain-catalog.json（权威真源）
+│   │   │   └── lib/                  # 鉴权网关、biz-tenant 租户上下文、服务总线、审计日志
+│   │   └── contract/                 # 跨域共享契约、OpenAPI 规范、DTO 定义
+│   │
+│   ├── domains/                      # 平台基础地基（永不拆分、平台伴生）
+│   │   ├── system/                   # RBAC、用户、角色、租户、部门、字典、认证鉴权
+│   │   └── infra/                    # 系统配置、定时任务、文件存储、低代码生成引擎
+│   │
+│   └── plugins/                      # 15 个第一方可插拔业务域（插件化生命周期，支持独立打包）
+│       ├── plugin-bpm/               # 流程审批中心
+│       ├── plugin-pay/               # 支付通道与退款
+│       ├── plugin-mall/              # 数字化商城系统
+│       ├── plugin-crm/               # 客户关系中台
+│       ├── plugin-erp/               # 经营中台与进销存
+│       ├── plugin-wms/               # 仓储管理中心
+│       ├── plugin-mes/               # 制造执行系统
+│       ├── plugin-ai/                # 大模型中台与网关
+│       ├── plugin-report/            # 商业智能报表
+│       ├── plugin-mp/                # 微信公众号中台
+│       ├── plugin-member/            # 会员中心
+│       ├── plugin-iot/               # 物联网中心
+│       └── plugin-im/                # 即时通讯中心
+│
+├── src/app/                          # Next.js BFF 路由薄壳与 Admin 页面入口
+│   ├── api/v1/admin/                 # 管理后台 REST API
+│   ├── (admin-pages)/admin/          # 管理后台前端页面
+│   ├── login/                        # 动态管理员登录页面
+│   └── proxy.ts                      # 反向代理与微服务上游调度网关
+│
+├── clients/expo/                     # 跨端移动应用渠道
+├── docs/                             # 架构方案、8 要素 Brief、交付资产规范
+├── scripts/                          # 脚手架与门禁（scaffold, project-init, check, hatch）
+└── data/                             # 真实本地数据库存储（data/ruoyi.db）
+```
+
+### 🚨 跨域调用三原则（门禁强校验）：
+1. **严禁跨域直接 import**：禁止在业务域内直接 import 其它域的 Service、Repository 或 Prisma Model；
+2. **强制 Domain Facade / Broker**：跨域同步调用必须走 `createDomainFacade("<domain>")` 或 `broker.call("ruoyi.cmd.<domain>.<method>")`；
+3. **双模无缝切换**：单体运行时走内存 SDK 直接调用，微服务独立部署时自动切换为 RPC，对外契约完全等价。
+
+---
+
+## 3. 17 原生业务域编目 (Domain Catalog)
+
+| 域标识 (Domain) | 分类 (Layer) | 关键实体 (Key Entities) | 门面 (Facade) | 独立可打包 (Packable) |
+|---|---|---|---|---|
+| `system` | platform | User, Role, Dept, Menu, Post, Dict, Tenant | `systemPlatformFacade` | 否（平台地基） |
+| `infra` | platform | Config, Job, File, DataSource, Codegen | `infraPlatformFacade` | 否（平台地基） |
+| `bpm` | plugin | ProcessInstance, Task, Definition, Form | `bpmFacade` | 是 |
+| `pay` | plugin | Order, Refund, Channel, Wallet | `payFacade` | 是 |
+| `mall` | plugin | Spu, Sku, Order, Category, Cart | `mallFacade` | 是 |
+| `member` | plugin | User, Level, Group, Tag, Address | `memberFacade` | 是 |
+| `crm` | plugin | Customer, Clue, Business, Contact | `crmFacade` | 是 |
+| `erp` | plugin | Purchase, Sale, Stock, Finance | `erpFacade` | 是 |
+| `wms` | plugin | Warehouse, Area, Inbound, Outbound | `wmsFacade` | 是 |
+| `mes` | plugin | WorkOrder, Route, Plan, QC | `mesFacade` | 是 |
+| `ai` | plugin | Chat, Model, Prompt, Knowledge | `aiFacade` | 是 |
+| `iot` | plugin | Device, Product, Alert, Rule | `iotFacade` | 是 |
+| `im` | plugin | Message, Conversation, Friend, Group | `imFacade` | 是 |
+| `mp` | plugin | Account, Tag, User, Message, Menu | `mpFacade` | 是 |
+| `report` | plugin | GovReport, Analytics, Screen | `reportFacade` | 是 |
+| `online` | platform/domain | Form, Table, DynamicEntity | `onlineFacade` | 否 |
+| `aigw` | platform/domain | Token, Relay, Usage | `aigwFacade` | 否 |
+
+---
+
+## 4. 运行时安全与多租户隔离底座 (Security Invariants)
+
+1. **废除硬编码凭据与弱口令**：
+   - 废除 `admin / admin123`；平台管理员账号为 `supervip`；
+   - 密码由系统启动时通过密码学安全随机函数生成 16 位高熵密码，并存入 `.env.local`。
+2. **多租户隔离唯一权威**：
+   - 租户上下文必须且只能来自 `getCurrentTenantId()`；
+   - 严禁信任或依赖客户端透传的 `tenantId` 参数。
+3. **真实数据库驱动**：
+   - 默认支持 Tier-A 零配置 SQLite 本地数据库（`data/ruoyi.db`），同时原生支持 PostgreSQL 与 MySQL 生产部署；
+   - 所有测试与业务流转必须经过真实数据库状态机持久化。
+4. **日志与审计规范**：
+   - 严禁在生产路径中使用 `console.log`；
+   - 必须使用 `domainLog` 记录关键业务事件，涉及状态流转、资金、权限等敏感操作强制调用 `auditLog`。
+
+---
+
+## 5. 10 大 SpaceX 级质量门禁 (`npm run check`)
+
+每次代码交付前，必须保证 `npm run check` 退出码为 0：
+1. **Engineering Standards Check**: 规范分层、禁止 `src/modules` 遗留目录、检查导出大小写别名（PascalCase + camelCase）。
+2. **Microservice Boundaries**: 拦截跨域直接 import，校验 Domain Facade 与 Broker Subject 契约。
+3. **Harness Invariants**: 检查 AI-Driven 流程完整性，确保任务白名单与提交痕迹对齐。
+4. **Route Handlers**: 校验所有 Next.js API Routes 具备 Validator，统一错误响应语义。
+5. **Schemas & Dialects**: 校验 SQLite / PostgreSQL 双方言抽象与数据模型一致性。
+6. **High-Order Inverse Invariants**: 检验反向高阶思维不变量（零假 Mock、状态机四态流转、不可变审计）。
+7. **Task Traceability**: 验证 Git Commit 与 `[T<ID>]` 任务工单双向追踪。
+8. **Security Surface**: 扫描未授权访问、Token 伪造、Tenant 越权与敏感信息泄露。
+9. **Agent Discovery Surface**: 校验 `llms.txt`、`compat-manifest.json`、`agent-profile.json`、`.well-known/agent.json` 无漂移。
+10. **TypeScript Type Check**: `tsc --noEmit` 零类型报错。
+
+---
+
+## 6. 免下载历史的“10秒极速骨架派生” (Zero-Git-History Hatching)
+
+```bash
+# 1. 仅下载干净的代码骨架（10秒内完成，0MB Git 冗余历史）
+npx degit xaicd/ruoyi-all-next#main my-app
+
+# 2. 进入目录并一键重命名业务品牌、生成 SQLite 本地库
+cd my-app && pnpm install
+npm run project:init -- --name "my-app" --title "我的新业务系统"
+npm run dev
+```

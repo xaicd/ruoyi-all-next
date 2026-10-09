@@ -1,0 +1,48 @@
+{
+  "schema_version": "v1",
+  "name_for_model": "ruoyi_all_next",
+  "name_for_human": "RuoYi All Next",
+  "description_for_model": "Enterprise-grade fullstack business project template and DigitalStaff NPC workspace bundle based on Next.js 16, React 19, and TypeScript 5. Features 17 native domains, 26 agent skills, 12 MCP tools, zero-mock local SQLite / PostgreSQL support, and zero-clone instant skeleton hatching.",
+  "description_for_human": "Next.js 16 + React 19 Enterprise Foundation & Agent Workspace Bundle",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "/api/v1/openapi.json"
+  },
+  "discovery": {
+    "llms": "/llms.txt",
+    "compat_manifest": "/compat-manifest.json",
+    "agent_profile": "/agent-profile.json",
+    "domain_catalog": "/packages/shared/backend/constants/domain-catalog.json"
+  },
+  "mcp": {
+    "server": "scripts/mcp/ruoyi-mcp-server.cjs",
+    "transport": "stdio",
+    "tools_count": 12
+  },
+  "skills": {
+    "directory": ".agents/skills",
+    "count": 26
+  },
+  "hatch": {
+    "description": "Zero-git-history instant skeleton derivation",
+    "recommended_workflow": [
+      "npx degit xaicd/ruoyi-all-next#main my-app",
+      "cd my-app && pnpm install",
+      "npm run project:init -- --name \"my-app\" --title \"我的新业务系统\"",
+      "npm run dev"
+    ],
+    "one_line_curl": "curl -fsSL https://raw.githubusercontent.com/xaicd/ruoyi-all-next/main/scripts/hatch.sh | bash -s -- <my-app> --profile base",
+    "degit": "npx degit xaicd/ruoyi-all-next#main <my-app>",
+    "in_repo_command": "npm run project:create -- <target-dir> --profile base",
+    "profiles": [
+      "base",
+      "minimal",
+      "standard",
+      "vertical",
+      "creator"
+    ]
+  }
+}

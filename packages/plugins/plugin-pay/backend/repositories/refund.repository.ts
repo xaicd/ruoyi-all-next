@@ -3,6 +3,7 @@
  */
 
 import type { PageResult } from "@/modules/shared/backend/lib/database"
+import { getCurrentTenantId, isPlatformContext, isTenantRequired } from "@/modules/shared/backend/lib/biz-tenant"
 
 export type PayRefundRow = {
   id: string
@@ -14,19 +15,31 @@ export type PayRefundRow = {
   channelCode: string
   channelRefundNo: string | null
   successTime: string | null
+  tenantId?: string | null
   createdAt: string
 }
 
-export type PayRefundListParams = { page: number; pageSize: number; keyword?: string; status?: string }
+export type PayRefundListParams = { page: number; pageSize: number; keyword?: string; status?: string; tenantId?: string }
+
+function currentTenantId(): string | undefined {
+  const tenantId = getCurrentTenantId()
+  if (tenantId) return tenantId
+  if (isTenantRequired() && !isPlatformContext()) throw new Error("退款单数据访问缺少租户上下文")
+  return undefined
+}
 
 const MEMORY_STORE: PayRefundRow[] = [
-  { id: "1", orderId: "5", merchantOrderId: "ORD20260105001", reason: "用户申请退款", amount: 5000, status: "SUCCESS", channelCode: "alipay_pc", channelRefundNo: "RF2026010600001", successTime: "2026-01-06T10:00:00.000Z", createdAt: "2026-01-06T09:30:00.000Z" },
-  { id: "2", orderId: "2", merchantOrderId: "ORD20260102001", reason: "商品质量问题", amount: 599900, status: "WAITING", channelCode: "alipay_pc", channelRefundNo: null, successTime: null, createdAt: "2026-01-08T14:00:00.000Z" },
+  { id: "1", orderId: "5", merchantOrderId: "ORD20260105001", reason: "用户申请退款", amount: 5000, status: "SUCCESS", channelCode: "alipay_pc", channelRefundNo: "RF2026010600001", successTime: "2026-01-06T10:00:00.000Z", tenantId: "default", createdAt: "2026-01-06T09:30:00.000Z" },
+  { id: "2", orderId: "2", merchantOrderId: "ORD20260102001", reason: "商品质量问题", amount: 599900, status: "WAITING", channelCode: "alipay_pc", channelRefundNo: null, successTime: null, tenantId: "default", createdAt: "2026-01-08T14:00:00.000Z" },
 ]
 
 export const PayRefundRepository = {
   async findList(params: PayRefundListParams): Promise<PageResult<PayRefundRow>> {
+    const tenantId = currentTenantId() ?? params.tenantId
     let filtered = [...MEMORY_STORE]
+    if (tenantId && !isPlatformContext()) {
+      filtered = filtered.filter((r) => !r.tenantId || r.tenantId === tenantId)
+    }
     if (params.keyword) { const kw = params.keyword.toLowerCase(); filtered = filtered.filter((r) => r.reason.toLowerCase().includes(kw) || r.merchantOrderId.toLowerCase().includes(kw)) }
     if (params.status) filtered = filtered.filter((r) => r.status === params.status)
     filtered.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
@@ -36,7 +49,11 @@ export const PayRefundRepository = {
   },
 
   async findById(id: string): Promise<PayRefundRow | null> {
-    return MEMORY_STORE.find((r) => r.id === id) ?? null
+    const tenantId = currentTenantId()
+    const found = MEMORY_STORE.find((r) => r.id === id) ?? null
+    if (!found) return null
+    if (tenantId && found.tenantId && found.tenantId !== tenantId && !isPlatformContext()) return null
+    return found
   },
 }
 export const payRefundRepository = PayRefundRepository

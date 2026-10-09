@@ -3,6 +3,7 @@
  */
 
 import type { PageResult } from "@/modules/shared/backend/lib/database"
+import { getCurrentTenantId, isPlatformContext, isTenantRequired } from "@/modules/shared/backend/lib/biz-tenant"
 
 export type CrmCustomerRow = {
   id: string
@@ -18,26 +19,38 @@ export type CrmCustomerRow = {
   remark: string | null
   dealStatus: string // PENDING | DEALING | DONE | LOST
   contactLastTime: string | null
+  tenantId?: string | null
   createdAt: string
   updatedAt: string
 }
 
-export type CreateCustomerData = { name: string; phone?: string; email?: string; industry?: string; level?: string; source?: string; ownerUserId?: string; remark?: string }
+export type CreateCustomerData = { name: string; phone?: string; email?: string; industry?: string; level?: string; source?: string; ownerUserId?: string; remark?: string; tenantId?: string }
 export type UpdateCustomerData = Partial<CreateCustomerData> & { status?: string; dealStatus?: string }
-export type CustomerListParams = { page: number; pageSize: number; keyword?: string; level?: string; status?: string; ownerUserId?: string }
+export type CustomerListParams = { page: number; pageSize: number; keyword?: string; level?: string; status?: string; ownerUserId?: string; tenantId?: string }
+
+function currentTenantId(): string | undefined {
+  const tenantId = getCurrentTenantId()
+  if (tenantId) return tenantId
+  if (isTenantRequired() && !isPlatformContext()) throw new Error("客户数据访问缺少租户上下文")
+  return undefined
+}
 
 const MEMORY_STORE: CrmCustomerRow[] = [
-  { id: "1", name: "深圳腾讯科技", phone: "0755-12345678", email: "contact@tencent.test", industry: "互联网", level: "A", source: "官网注册", ownerUserId: "1", ownerUserName: "管理员", status: "ACTIVE", remark: null, dealStatus: "DEALING", contactLastTime: "2026-08-01T10:00:00.000Z", createdAt: "2026-01-15T08:00:00.000Z", updatedAt: "2026-08-01T10:00:00.000Z" },
-  { id: "2", name: "杭州阿里巴巴", phone: "0571-87654321", email: "biz@alibaba.test", industry: "电商", level: "A", source: "销售拜访", ownerUserId: "1", ownerUserName: "管理员", status: "ACTIVE", remark: "重点客户", dealStatus: "DONE", contactLastTime: "2026-07-20T14:00:00.000Z", createdAt: "2026-02-01T09:00:00.000Z", updatedAt: "2026-07-20T14:00:00.000Z" },
-  { id: "3", name: "北京字节跳动", phone: "010-88888888", email: null, industry: "互联网", level: "B", source: "转介绍", ownerUserId: "2", ownerUserName: "测试用户", status: "ACTIVE", remark: null, dealStatus: "PENDING", contactLastTime: null, createdAt: "2026-03-10T11:00:00.000Z", updatedAt: "2026-03-10T11:00:00.000Z" },
-  { id: "4", name: "上海华为技术", phone: null, email: "sales@huawei.test", industry: "通信", level: "A", source: "展会获客", ownerUserId: "1", ownerUserName: "管理员", status: "ACTIVE", remark: null, dealStatus: "DEALING", contactLastTime: "2026-07-28T09:30:00.000Z", createdAt: "2026-04-05T10:00:00.000Z", updatedAt: "2026-07-28T09:30:00.000Z" },
-  { id: "5", name: "成都小米科技", phone: "028-66666666", email: null, industry: "智能硬件", level: "C", source: "官网注册", ownerUserId: null, ownerUserName: null, status: "POOL", remark: "公海客户", dealStatus: "PENDING", contactLastTime: null, createdAt: "2026-05-20T15:00:00.000Z", updatedAt: "2026-05-20T15:00:00.000Z" },
+  { id: "1", name: "深圳腾讯科技", phone: "0755-12345678", email: "contact@tencent.test", industry: "互联网", level: "A", source: "官网注册", ownerUserId: "1", ownerUserName: "管理员", status: "ACTIVE", remark: null, dealStatus: "DEALING", contactLastTime: "2026-08-01T10:00:00.000Z", tenantId: "default", createdAt: "2026-01-15T08:00:00.000Z", updatedAt: "2026-08-01T10:00:00.000Z" },
+  { id: "2", name: "杭州阿里巴巴", phone: "0571-87654321", email: "biz@alibaba.test", industry: "电商", level: "A", source: "销售拜访", ownerUserId: "1", ownerUserName: "管理员", status: "ACTIVE", remark: "重点客户", dealStatus: "DONE", contactLastTime: "2026-07-20T14:00:00.000Z", tenantId: "default", createdAt: "2026-02-01T09:00:00.000Z", updatedAt: "2026-07-20T14:00:00.000Z" },
+  { id: "3", name: "北京字节跳动", phone: "010-88888888", email: null, industry: "互联网", level: "B", source: "转介绍", ownerUserId: "2", ownerUserName: "测试用户", status: "ACTIVE", remark: null, dealStatus: "PENDING", contactLastTime: null, tenantId: "default", createdAt: "2026-03-10T11:00:00.000Z", updatedAt: "2026-03-10T11:00:00.000Z" },
+  { id: "4", name: "上海华为技术", phone: null, email: "sales@huawei.test", industry: "通信", level: "A", source: "展会获客", ownerUserId: "1", ownerUserName: "管理员", status: "ACTIVE", remark: null, dealStatus: "DEALING", contactLastTime: "2026-07-28T09:30:00.000Z", tenantId: "default", createdAt: "2026-04-05T10:00:00.000Z", updatedAt: "2026-07-28T09:30:00.000Z" },
+  { id: "5", name: "成都小米科技", phone: "028-66666666", email: null, industry: "智能硬件", level: "C", source: "官网注册", ownerUserId: null, ownerUserName: null, status: "POOL", remark: "公海客户", dealStatus: "PENDING", contactLastTime: null, tenantId: "default", createdAt: "2026-05-20T15:00:00.000Z", updatedAt: "2026-05-20T15:00:00.000Z" },
 ]
 let memoryIdSeq = 100
 
 export const CrmCustomerRepository = {
   async findList(params: CustomerListParams): Promise<PageResult<CrmCustomerRow>> {
+    const tenantId = currentTenantId() ?? params.tenantId
     let filtered = [...MEMORY_STORE]
+    if (tenantId && !isPlatformContext()) {
+      filtered = filtered.filter((c) => !c.tenantId || c.tenantId === tenantId)
+    }
     if (params.keyword) { const kw = params.keyword.toLowerCase(); filtered = filtered.filter((c) => c.name.toLowerCase().includes(kw) || (c.phone ?? "").includes(kw)) }
     if (params.level) filtered = filtered.filter((c) => c.level === params.level)
     if (params.status) filtered = filtered.filter((c) => c.status === params.status)
@@ -49,12 +62,17 @@ export const CrmCustomerRepository = {
   },
 
   async findById(id: string): Promise<CrmCustomerRow | null> {
-    return MEMORY_STORE.find((c) => c.id === id) ?? null
+    const tenantId = currentTenantId()
+    const found = MEMORY_STORE.find((c) => c.id === id) ?? null
+    if (!found) return null
+    if (tenantId && found.tenantId && found.tenantId !== tenantId && !isPlatformContext()) return null
+    return found
   },
 
   async create(data: CreateCustomerData): Promise<CrmCustomerRow> {
+    const tenantId = currentTenantId() ?? data.tenantId ?? "default"
     const now = new Date().toISOString()
-    const row: CrmCustomerRow = { id: String(++memoryIdSeq), name: data.name, phone: data.phone ?? null, email: data.email ?? null, industry: data.industry ?? null, level: data.level ?? "C", source: data.source ?? null, ownerUserId: data.ownerUserId ?? null, ownerUserName: null, status: data.ownerUserId ? "ACTIVE" : "POOL", remark: data.remark ?? null, dealStatus: "PENDING", contactLastTime: null, createdAt: now, updatedAt: now }
+    const row: CrmCustomerRow = { id: String(++memoryIdSeq), name: data.name, phone: data.phone ?? null, email: data.email ?? null, industry: data.industry ?? null, level: data.level ?? "C", source: data.source ?? null, ownerUserId: data.ownerUserId ?? null, ownerUserName: null, status: data.ownerUserId ? "ACTIVE" : "POOL", remark: data.remark ?? null, dealStatus: "PENDING", contactLastTime: null, tenantId, createdAt: now, updatedAt: now }
     MEMORY_STORE.push(row)
     return row
   },

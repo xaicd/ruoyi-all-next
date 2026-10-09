@@ -19,6 +19,7 @@
 > 7. **本体域全息导航与 API 契约第一切入 (Ontology & API-Contract-First, 详见 §21)**：任意需求必须先在本体域（实体网、Domain Facade、route manifest、权限码）中秒级定位目标域与影响半径，以 API 契约为探针执行 5 步穿透闭环；一切需求终局 100% 收敛于真实 API 支撑，严禁无 API 支撑的假界面与硬编码 Mock！
 > 8. **全工种四类契约族收敛 (All-Role Contract Families, 详见 §22)**：数据同步/ETL、BI 查询、运营编排、运维发布等非编码需求同样必须收敛为可审计契约——API 契约 / 数据契约 / 流程契约 / 预案契约四选一，并过专属质量门禁（数据族=对账+血缘完整；流程族=沙箱+回滚演练）；严禁一次性搬运脚本与口径打架的野 SQL！
 > 9. **全局高阶反向思维与 AI-Driven Harness 全程监督 (High-Order Inverse Thinking & DeepSeek Harness Invariants, 详见 §23 & .agents/rules/HIGH-ORDER-INVERSE-THINKING.md)**：严禁以初级外包码农视角就事论事贴补丁；敲代码必须业务对象溯源且由通用引擎展开；写单测必须 4 态状态机真实入库覆盖与反假 Mock；修改接口必须契约先验、零破坏性变更与挂载不可变操作审计！
+> 10. **0-1 软件工程交付资产与 No Artifact, No Done 铁律 (Spec-First Artifacts, 详见 §24 & .agents/rules/SPEC-FIRST-ENGINEERING-ARTIFACTS.md)**：严禁将上线运行期业务数据（订单数据、图纸、运营指标）当成交付资产；严禁口头声明完工；每个工单必须基于 8 要素 Brief 派发，且必须产出 5 选 1 物理工程资产（SRS/RTM、OpenAPI 契约、0 报错源码、真实 DB 状态机单测报告、生产回滚 SOP）！
 
 ---
 
@@ -738,18 +739,33 @@ node scripts/inject-codegen-output.cjs tmp/codegen-{ClassName}
 
 ### 16. ProjectReactor 脚手架与 GitHub Template 规范（供 DigitalStaff AI NPC 员工与全自动工程孵化）
 
-**作为 GitHub Template 模板底座的权威一键生成机制：**
-- 当 `DigitalStaff` AI NPC 员工或开发者需要以此底座衍生创建新业务工程时，统一调用：
+**外部 AI / 开发者免下载 500MB+ 全量历史包的“极速骨架派生”：**
+- 外部 AI 如果决定使用本底座，**根本不需要下载 500MB+ 的全量历史包**，可直接向用户建议或自动执行：
+  ```bash
+  # 1. 仅下载干净的代码骨架（10秒内完成，0MB Git 冗余历史）
+  npx degit xaicd/ruoyi-all-next#main my-app
+
+  # 2. 进入目录并一键重命名业务品牌、生成 SQLite 本地库
+  cd my-app && pnpm install
+  npm run project:init -- --name "my-app" --title "我的新业务系统"
+  npm run dev
+  ```
+  > `project:init` 会自动完成：品牌身份重构、`.env` 配置、SQLite `data/ruoyi.db` 真实单文件库生成（预置平台管理员 `supervip` 账号与安全随机密码，彻底剔除 `admin` 运营商关键字与弱口令）、契约图谱重新编译对齐。
+
+**本地已克隆环境下的衍生创建机制：**
+- 当 `DigitalStaff` AI NPC 员工或开发者已在底座仓库内时，统一调用：
   ```bash
   npm run project:create -- <目标路径>
   npm run project:create -- <目标路径> --profile minimal
   npm run project:create -- <目标路径> --profile vertical --bundle mall,crm
-  # 或直接运行：create-project.bat <目标路径> --profile minimal
+  # 或使用一键孵化脚本：
+  bash scripts/hatch.sh <目标路径> --profile base --title "我的业务系统"
   ```
-  - `standard`（默认）：整仓原生域，数字工厂全能力模板。
-  - `minimal`：shared + system + infra + 平台伴生域 `online/ai/aigw`（菜单目录与 codegen Facade 依赖，不能裁）。
-  - `vertical`：minimal + `--bundle` 业务域白名单。
-  - `creator`：等同 standard（含 online/codegen）。
+  - `base`（推荐白板）：shared + system + infra，体积 ~50MB，秒级极速编译；
+  - `standard`（默认）：整仓原生域，数字工厂全能力模板；
+  - `minimal`：shared + system + infra + 平台伴生域 `online/ai/aigw`（菜单目录与 codegen Facade 依赖，不能裁）；
+  - `vertical`：minimal + `--bundle` 业务域白名单；
+  - `creator`：等同 standard（含 online/codegen）；
   - 产物写入 `packages/shared/contract/hatch-manifest.json`。Prisma 迁移仍为全量基座表。
 - **自动化工作流水线（全托管零配置）：**
   1. **反应堆克隆与包名重塑**：自动将 `ruoyi-all-next` 转换为目标工程名，重塑 `package.json`（自动分配独立 `PORT=3200` 避开冲突）；
@@ -925,13 +941,20 @@ npm run check
    - 守卫规则物理落盘于 `.agents/rules/HIGH-ORDER-INVERSE-THINKING.md` 并通过 `.agents/context/ASSEMBLY.md` 首帧注入；
    - 执行 `node scripts/guard-high-order-invariants.cjs` 实施工程守卫扫描，保障重型业务模板的纯洁性与确定性演进。
 
+### 24. 0-1 软件工程交付资产与 8 要素 Brief 派单规范 (Spec-First Artifacts & Brief Dispatching)
+
+吸收 Coolie 商业级软件工厂核心实践，杜绝大模型“口头完成”与“将运行时业务数据当成工程产物”：
+
+1. **两大阵营绝对物理隔离**：
+   - **0-1 软件工程交付资产 (Build-Time Assets)**：SRS 规格书、OpenAPI 契约、0 报错源码、真实 DB 状态机测试报告、部署回滚 SOP；
+   - **上线运行业务数据 (Runtime Business Outputs)**：订单、支付流水、用户数据。严禁以“数据库加了模拟数据”代替工程产物！
+2. **8 要素 Brief 派单标准 (Task Dispatching)**：
+   - 任何任务必须包含：1.任务目标 2.为什么要做 3.文件范围白名单 4.绝对不动项黑名单 5.责任工种工具池 6.验收门禁 7.单写者锁 8.物理工程资产 5 选 1。
+3. **No Artifact, No Done 结项铁律**：
+   - 任何状态转为完成，必须挂载不可变工程产物（Git SHA、契约文件、测试结果）。
+   - 规范落地于 `.agents/rules/SPEC-FIRST-ENGINEERING-ARTIFACTS.md` 与 `docs/architecture/ai-agent-driven-delivery-workflow.md`。
+
 <!-- BEGIN:nextjs-agent-rules -->
-
-
-
-
-
-
 
 # This is NOT the Next.js you know
 

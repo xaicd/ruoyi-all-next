@@ -61,17 +61,17 @@ describe('SpaceX Grade: Full-Stack E2E & Lifecycle Matrix Verification', () => {
     fs.unlinkSync(tmpDbPath);
   });
 
-  it('[Step 2] RBAC 鉴权引擎：admin/admin123 凭据验证与角色绑定闭环', async () => {
+  it('[Step 2] RBAC 鉴权引擎：supervip 凭据验证与角色绑定闭环', async () => {
     const user = await testDb.db
       .selectFrom('system_user')
       .selectAll()
-      .where('username', '=', 'admin')
+      .where('username', '=', 'supervip')
       .executeTakeFirst();
 
     expect(user).toBeDefined();
     expect(user.status).toBe('ACTIVE');
 
-    const inputHash = passwordHash('admin123', user.salt);
+    const inputHash = passwordHash('Test@SuperVip2026!', user.salt);
     expect(inputHash).toBe(user.password);
 
     // 验证用户与角色的多对多绑定
@@ -89,7 +89,7 @@ describe('SpaceX Grade: Full-Stack E2E & Lifecycle Matrix Verification', () => {
       .executeTakeFirst();
 
     expect(role).toBeDefined();
-    expect(role.code).toBe('admin');
+    expect(role.code).toBe('supervip');
     expect(role.data_scope).toBe('ALL');
   });
 

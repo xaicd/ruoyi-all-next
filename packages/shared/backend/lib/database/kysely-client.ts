@@ -37,6 +37,17 @@ async function createMysqlDialect(url: string) {
   })
 }
 
+function sanitizeSqliteParams(arg: any): any {
+  if (typeof arg === "boolean") return arg ? 1 : 0
+  if (Array.isArray(arg)) return arg.map(sanitizeSqliteParams)
+  if (arg && typeof arg === "object" && !(arg instanceof Buffer) && !(arg instanceof Uint8Array)) {
+    const copy: Record<string, any> = {}
+    for (const [k, v] of Object.entries(arg)) copy[k] = sanitizeSqliteParams(v)
+    return copy
+  }
+  return arg
+}
+
 async function createSqliteDialect(url: string) {
   const { SqliteDialect } = await import("kysely")
   const Database = (await import("better-sqlite3")).default
@@ -56,6 +67,24 @@ async function createSqliteDialect(url: string) {
   const db = new Database(dbPath)
   db.pragma("journal_mode = WAL")
   db.pragma("foreign_keys = ON")
+
+  // better-sqlite3 仅支持 number, string, bigint, buffer, null，不支持 JS boolean。
+  // 包装 prepare 自动将查询参数中的 boolean (true/false) 转为 SQLite 整型 (1/0)。
+  const origPrepare = db.prepare.bind(db)
+  db.prepare = function (sql: string) {
+    const stmt = origPrepare(sql)
+    const wrap = (fn: any) =>
+      function (this: any, ...args: any[]) {
+        const sanitized = args.map(sanitizeSqliteParams)
+        return fn.apply(stmt, sanitized)
+      }
+    stmt.all = wrap(stmt.all)
+    stmt.get = wrap(stmt.get)
+    stmt.run = wrap(stmt.run)
+    stmt.iterate = wrap(stmt.iterate)
+    return stmt
+  } as any
+
   return new SqliteDialect({ database: db })
 }
 

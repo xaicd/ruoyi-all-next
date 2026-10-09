@@ -6,7 +6,19 @@
   "engines": {
     "node": "^20.19.0 || ^22.12.0 || >=24.0.0"
   },
+  "agent": {
+    "profile": "agent-profile.json",
+    "compatManifest": "compat-manifest.json",
+    "llms": "llms.txt",
+    "wellKnown": ".well-known/agent.json",
+    "skills": ".agents/skills",
+    "mcp": "scripts/mcp/ruoyi-mcp-server.cjs"
+  },
   "scripts": {
+    "surface:sync": "node scripts/sync-agent-surface.cjs",
+    "surface:check": "node scripts/sync-agent-surface.cjs --check",
+    "project:hatch": "node scripts/clone-project-base.cjs",
+    "hatch": "bash ./scripts/hatch.sh",
     "quick-start": "node scripts/quick-start-runner.cjs",
     "quick-start:docker": "docker compose -f deploy/docker-compose.local.yml up --build",
     "quick-start:dev": "docker compose -f deploy/docker-compose.dev.yml up -d",
@@ -20,6 +32,8 @@
     "db:init:sql": "tsx scripts/build-v1-init-sql.ts",
     "build:init-sql": "tsx scripts/build-v1-init-sql.ts",
     "sql:build": "tsx scripts/build-v1-init-sql.ts",
+    "project:init": "node scripts/project-init.cjs",
+    "project:refactor": "node scripts/project-init.cjs",
     "project:clone": "node scripts/clone-project-base.cjs",
     "project:create": "node scripts/clone-project-base.cjs",
     "catalog:sync:ruoyi": "node scripts/extract-seed-from-sql.cjs",
@@ -53,7 +67,7 @@
     "domain:check": "node scripts/check-domain-pack.cjs",
     "harness:check": "node scripts/check-harness-bundle.cjs && node scripts/guard-high-order-invariants.cjs",
     "harness:high-order:check": "node scripts/guard-high-order-invariants.cjs",
-    "contracts:sync": "npm run domain:contracts && npm run domain:manifests && npm run domain:seams",
+    "contracts:sync": "npm run domain:contracts && npm run domain:manifests && npm run domain:seams && npm run surface:sync",
     "skills:sync": "node scripts/sync-skills.cjs",
     "skills:check": "node scripts/sync-skills.cjs --check",
     "compat:check": "node scripts/check-compat-manifest.cjs",
@@ -61,7 +75,7 @@
     "standards:baseline": "node scripts/check-engineering-standards.cjs --write-baseline",
     "evolution:backlog": "node scripts/build-evolution-backlog.cjs",
     "mcp:serve": "node scripts/mcp/ruoyi-mcp-server.cjs",
-    "check": "npm run domain:manifests:check && npm run contracts:sync && npm run rpc:actions:check && npm run domain:loaders:check && npm run domain:check && npm run microservice:check && npm run harness:check && npm run admin:routes:check && npm run admin:pages:check && npm run foundation:ontology:check && npm run skills:check && npm run compat:check && npm run standards:check && npm run agent:native:check && npm run agent:contracts:check && npm run agent:page-schemas:check && npm run handwritten:check && npm run evolution:backlog && node scripts/write-harness-trace.cjs && npm run delivery:hints",
+    "check": "npm run domain:manifests:check && npm run contracts:sync && npm run rpc:actions:check && npm run domain:loaders:check && npm run domain:check && npm run microservice:check && npm run harness:check && npm run admin:routes:check && npm run admin:pages:check && npm run foundation:ontology:check && npm run skills:check && npm run compat:check && npm run surface:check && npm run standards:check && npm run agent:native:check && npm run agent:contracts:check && npm run agent:page-schemas:check && npm run handwritten:check && npm run evolution:backlog && node scripts/write-harness-trace.cjs && npm run delivery:hints",
     "domain:dev": "node scripts/pack-domain.cjs --dev --materialize",
     "domain:build": "node scripts/pack-domain.cjs --build --materialize",
     "domain:up": "node scripts/domain-up.cjs",

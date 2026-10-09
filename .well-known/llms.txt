@@ -1,0 +1,71 @@
+# ruoyi-all-next
+
+> 基于 Next.js 16 + React 19 + TypeScript 5 的企业级现代化全栈工程底座与业务中台模板。支持模块化单体与微服务演进，内置 17 个原生业务域、26 个专业 Agent Skills、SpaceX 级全链路质量门禁与零配置真实本地数据库（SQLite/PostgreSQL）。
+
+## 核心架构与能力一览 (Pre-Download Capabilities)
+
+- **定位**: 真实企业业务系统开发底座、DigitalStaff NPC 工作区模板、零样板代码低代码研发基座。
+- **17 原生业务域**: 
+  - 平台地基: `system` (RBAC权限/多租户/部门岗位/数据字典), `infra` (动态参数/定时任务/代码生成器)
+  - 业务域插件: `ai` (AI智能工作台/知识库), `aigw` (多模型聚合网关/Token计费), `bpm` (工作流/BPMN2.0), `pay` (聚合支付/微信支付宝/退款), `report` (大屏可视化/多维报表), `mp` (微信公众号管理), `mall` (电商/商品SPU-SKU/订单), `member` (C端会员/成长值), `crm` (客户关系/商机/公海池), `erp` (进销存/采购销售), `wms` (仓储物流/批次条码), `mes` (制造执行/排产报工), `iot` (物联网/物模型/告警), `im` (实时通信/长连接群聊), `online` (低代码在线开发)。
+- **26 个 Agent 专属技能 (Skills)**:
+  - `project-init`: 一键业务项目重构引擎（对标 RuoYi-Vue-Pro 的 `ProjectReactor.java`）
+  - `coding`, `api-design`, `devops`, `database-design`, `automated-testing`, `service-governance`, `security`, `ui-design`, `architecture-design`, `agent-harness` 等。
+- **真实数据库驱动 (Zero Fake Mock)**:
+  - 内置零配置本地 SQLite (`data/ruoyi.db`)，开发/预览无需安装外部容器，秒级开箱即用。
+  - 生产支持一键连接 PostgreSQL / MySQL / TiDB / openGauss，统一采用 Kysely 抽象与租户自动隔离插件。
+- **全自动项目重塑引擎 (ProjectReactor CLI)**:
+  - 原地重塑: `npm run project:init`，一键重塑包名、中文系统标题、端口、Git Remote 与品牌版权。
+  - 派生裁剪: 支持 `--profile minimal` / `standard`，自动剔除冗余业务域，并自动 `git init` 记录任务痕迹。
+
+## 预检与直接契约访问 (Direct Contract Access - Standard AI Discovery)
+
+外部 AI Agent 或开发者在下载/克隆全量代码库之前，可通过 GitHub Raw 或运行中服务的标准路径（如 `http://<host>:<port>/compat-manifest.json`）直接获取以下机器可读契约：
+
+- **标准 Agent 发现描述符 (RFC 8615)**: [.well-known/agent.json](https://raw.githubusercontent.com/xaicd/ruoyi-all-next/main/.well-known/agent.json)
+- **兼容性与能力全景清单 (根目录标准契约)**: [compat-manifest.json](https://raw.githubusercontent.com/xaicd/ruoyi-all-next/main/compat-manifest.json)
+  - 声明版本、17 域清单、26 技能目录、12 项 MCP 工具、8 层交付 Gate 与 Hatch 派生配置。
+- **AI 智能体画像与环境契约 (根目录标准契约)**: [agent-profile.json](https://raw.githubusercontent.com/xaicd/ruoyi-all-next/main/agent-profile.json)
+  - 声明 Harness 伙伴、Seam 边界（Domain Facade / HTTP API / Tenant Scope）、Profile 套件。
+- **跨域边界与解耦图谱**: [seam-graph.json](https://raw.githubusercontent.com/xaicd/ruoyi-all-next/main/packages/shared/contract/seam-graph.json)
+- **17 域权威运行时编目**: [domain-catalog.json](https://raw.githubusercontent.com/xaicd/ruoyi-all-next/main/packages/shared/backend/constants/domain-catalog.json)
+- **高阶反向思维工程铁律**: [HIGH-ORDER-INVERSE-THINKING.md](https://raw.githubusercontent.com/xaicd/ruoyi-all-next/main/.agents/rules/HIGH-ORDER-INVERSE-THINKING.md)
+
+## 极速起步 (Quick Start for AI & Developers)
+
+### 场景 1：免下载全量 Git 历史的“极速骨架派生” (Zero-Git-History Hatching)
+
+外部 AI 如果决定使用本底座，根本不需要下载 500MB+ 的全量历史包，可直接向用户建议或自动执行：
+
+```bash
+# 1. 仅下载干净的代码骨架（10秒内完成，0MB Git 冗余历史）
+npx degit xaicd/ruoyi-all-next#main my-app
+
+# 2. 进入目录并一键重命名业务品牌、生成 SQLite 本地库
+cd my-app && pnpm install
+npm run project:init -- --name "my-app" --title "我的新业务系统"
+npm run dev
+```
+
+> **补充**：若需更细粒度裁剪规格（如纯白板底座 `base`），亦可使用远程单行指令：  
+> `curl -fsSL https://raw.githubusercontent.com/xaicd/ruoyi-all-next/main/scripts/hatch.sh | bash -s -- my-app --profile base --title "我的新业务系统"`
+
+### 场景 2：克隆底座并原地初始化为客户专属项目
+```bash
+git clone https://github.com/xaicd/ruoyi-all-next.git my-business-app
+cd my-business-app && pnpm install
+npm run project:init               # 一键重构
+npm run db:bootstrap:sqlite        # 初始化数据库
+npm run dev                        # 访问 http://localhost:3200 (预填 supervip 与安全随机密码)
+```
+
+## 自动化测试与质量门禁 (Gates)
+- `npm run check`: 运行 10 大工程标准自检（0 Blocker, 0 High Debt 铁律）。
+- `npm run test:unit`: 运行 Vitest 单元与集成测试（100% PASS 门禁）。
+- `npm run smoke:login`: 登录链冒烟测试（建库 -> 迁移 -> 种子 -> 启动 -> 登录 200 -> 受保护接口 200）。
+
+## 文档索引 (Deep Dive)
+- [llms-full.txt](llms-full.txt): 面向超长上下文模型 (100k+ Tokens) 的全量技术规范与架构契约。
+- [AGENTS.md](AGENTS.md): 仓库最高优先级核心工程铁律与 10 大质量门禁规范。
+- [Project Profile Guide](docs/guides/project-profile-bootstrap.md): 项目身份与品牌定制指南。
+- [AI Delivery Workflow](docs/architecture/ai-agent-driven-delivery-workflow.md): AI-Driven 研发交付链与工程资产规范。

@@ -29,6 +29,10 @@ export function isPlatformControlMenu(menu: Pick<SystemMenuRow, "name" | "permis
     || PLATFORM_CONTROL_COMPONENTS.has(component)
 }
 
+function hasParent(parentId: string | null | undefined): boolean {
+  return Boolean(parentId && parentId !== "0")
+}
+
 export class TenantMenuScope {
   private readonly byId = new Map(this.menus.map((menu) => [menu.id, menu]))
   private readonly blockedIds = new Set<string>()
@@ -39,7 +43,7 @@ export class TenantMenuScope {
     while (changed) {
       changed = false
       for (const menu of menus) {
-        if (menu.parentId && this.blockedIds.has(menu.parentId) && !this.blockedIds.has(menu.id)) {
+        if (hasParent(menu.parentId) && this.blockedIds.has(menu.parentId!) && !this.blockedIds.has(menu.id)) {
           this.blockedIds.add(menu.id)
           changed = true
         }
@@ -52,10 +56,10 @@ export class TenantMenuScope {
     if (!menu || menu.status !== "ACTIVE" || this.blockedIds.has(menuId)) return false
     const seen = new Set<string>()
     let current: SystemMenuRow | undefined = menu
-    while (current.parentId) {
+    while (hasParent(current.parentId)) {
       if (seen.has(current.id)) return false
       seen.add(current.id)
-      const parent = this.byId.get(current.parentId)
+      const parent = this.byId.get(current.parentId!)
       if (!parent || parent.status !== "ACTIVE" || this.blockedIds.has(parent.id)) return false
       current = parent
     }
@@ -72,7 +76,7 @@ export class TenantMenuScope {
       while (current && !seen.has(current.id)) {
         seen.add(current.id)
         result.add(current.id)
-        current = current.parentId ? this.byId.get(current.parentId) : undefined
+        current = hasParent(current.parentId) ? this.byId.get(current.parentId!) : undefined
       }
     }
     return [...result]
