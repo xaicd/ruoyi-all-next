@@ -2,3 +2,5 @@
 export { MemberAuthApi } from "./member/auth"
 export { MemberUserApi } from "./member/user"
 export { MetaApi } from "./meta/open"
+export { MallProductApi, type MallProductSpu, type MallProductSku } from "./mall/product"
+export { MallTradeOrderApi, type MallTradeOrder } from "./mall/trade-order"
