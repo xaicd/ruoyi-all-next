@@ -152,14 +152,14 @@ ruoyi-all-next / [基于底座衍生的客户商业项目]
 
 | CMMI 阶段 | 驱动技能 (Skills) | 物理工作产品路径 | 核心业务与技术要点 |
 |---|---|---|---|
-| **01_management** | `dar-decision-matrix` | `docs/01_management/dar/DAR-20261009-MESSAGE-BUS-PROTOCOL.md`<br/>`docs/01_management/project-charter.md`<br/>`docs/01_management/risk-register.md` | 自研 NATS 消息协议 vs Kafka/RabbitMQ 加权权衡矩阵、项目立项书、RSKM 风险登记册 |
-| **02_requirements** | `ears-spec-writer` | `docs/02_requirements/srs/SRS-EARS-MALL-ORDER-CAS.md`<br/>`docs/02_requirements/rtm-traceability-matrix.md` | IEEE 29148 / EARS 5态需求规格说明（商城下单与 CAS 原子预占）、需求双向跟踪矩阵 |
+| **01_management** | `dar-decision-matrix` | `docs/01_management/dar-decision-records/DAR-20261009-MESSAGE-BUS-PROTOCOL.md`<br/>`docs/01_management/project-charter.md`<br/>`docs/01_management/risk-register.md` | 自研 NATS 消息协议 vs Kafka/RabbitMQ 加权权衡矩阵、项目立项书、RSKM 风险登记册 |
+| **02_requirements** | `ears-spec-writer` | `docs/02_requirements/srs/SRS-EARS-MALL-ORDER-CAS.md`<br/>`docs/02_requirements/software-requirements.md` (指向 SRS)<br/>`docs/02_requirements/rtm-traceability-matrix.md` | IEEE 29148 / EARS 5态需求规格说明（商城下单与 CAS 原子预占）、需求双向跟踪矩阵 |
 | **03_design** | `adr-architect`<br/>`archify`<br/>`database-design` | `docs/03_design/adr/ADR-0001-MULTI-TENANT-KYSELY-AST.md`<br/>`docs/03_design/adr/ADR-0002-FIRST-PARTY-PLUGIN-ISOLATION.md`<br/>`docs/03_design/diagrams/ruoyi-architecture.arch.json`<br/>`docs/03_design/database-design-erd.md` | MADR 架构决策记录、Archify 交互式路径追踪架构图、8 大底座审计字段 ERD 规约 |
 | **05_verification** | `mutation-tester`<br/>`automated-testing` | `docs/05_verification/mutation/MUTATION-TESTING-REPORT-INVENTORY-CAS.md`<br/>`docs/05_verification/test-summary-report.md` | Stryker AST 变异测试打假报告（MSI 96.8%，击杀 120/124）、SpaceX 级真实数据库测试报告（416 用例全绿） |
-| **06_quality_assurance** | `compliance-auditor` | `docs/06_quality_assurance/audit/PCA-FCA-COMPLIANCE-AUDIT-v1.1.0.md`<br/>`docs/06_quality_assurance/gate-evidence-trace.json` | v1.1.0 功能配置审计 (FCA) 与物理配置审计 (PCA) 报告、20 道质量门禁数字凭证链 |
-| **07_release** | `devops` | `docs/07_release/RELEASE_NOTES_v1.1.0.md`<br/>`docs/07_release/system-deployment-sop.md`<br/>`docs/07_release/rollback-runbook.json` | v1.1.0 版本发布说明、生产安装部署割接 SOP、秒级自动回滚 Runbook |
-| **08_sre** | `sre-slo-manager`<br/>`postmortem-analyzer`<br/>`strix-penetration-testing` | `docs/08_sre/slo/SLO-SLI-ERROR-BUDGET-MATRIX.md`<br/>`docs/08_sre/postmortem/POSTMORTEM-20261009-INVENTORY-RACE-CONDITION.md`<br/>`docs/08_sre/security-reports/STRIX-PENTEST-POC-AUDIT.md` | Google SRE 99.95% SLO 矩阵与多燃烧率告警、无指责 5-Whys 根因复盘报告、Strix 60k★ 自主红队 PoC 审计 (Grade A+) |
-| **09_operations** | `financial-reconciliation-agent` | `docs/09_operations/reconciliation/DAILY-RECONCILIATION-REPORT-20261009.md`<br/>`docs/09_operations/inspection/SYSTEM-HEALTH-INSPECTION-20261009.md` | 银行级三方日终对账与复式记账平衡报告（$\sum\text{Debit}\equiv\sum\text{Credit}$）、全域 17 领域健康巡检报告 |
+| **06_quality_assurance** | `compliance-auditor` | `docs/06_quality_assurance/audit/PCA-FCA-COMPLIANCE-AUDIT-v1.1.0.md`<br/>`docs/06_quality_assurance/configuration-audit.md` (指向 FCA/PCA)<br/>`docs/06_quality_assurance/gate-evidence-trace.json` | v1.1.0 功能配置审计 (FCA) 与物理配置审计 (PCA) 报告、20 道质量门禁数字凭证链 |
+| **07_release** | `devops` | `docs/07_release/RELEASE_NOTES_v1.1.0.md`<br/>`docs/07_release/release-notes.md` (指向 v1.1.0)<br/>`docs/07_release/system-deployment-sop.md`<br/>`docs/07_release/rollback-runbook.json` | v1.1.0 版本发布说明、生产安装部署割接 SOP、秒级自动回滚 Runbook |
+| **08_sre** | `sre-slo-manager`<br/>`postmortem-analyzer`<br/>`strix-penetration-testing` | `docs/08_sre/01_slo_sli_metrics/SLO-SLI-ERROR-BUDGET-MATRIX.md`<br/>`docs/08_sre/06_incidents_postmortem/POSTMORTEM-20261009-INVENTORY-RACE-CONDITION.md`<br/>`docs/08_sre/security-reports/STRIX-PENTEST-POC-AUDIT.md` | Google SRE 99.95% SLO 矩阵与多燃烧率告警、无指责 5-Whys 根因复盘报告、Strix 60k★ 自主红队 PoC 审计 (Grade A+) |
+| **09_operations** | `financial-reconciliation-agent` | `docs/09_operations/02_data_ops/DAILY-RECONCILIATION-REPORT-20261009.md`<br/>`docs/09_operations/inspection/SYSTEM-HEALTH-INSPECTION-20261009.md` | 银行级三方日终对账与复式记账平衡报告（$\sum\text{Debit}\equiv\sum\text{Credit}$）、全域 17 领域健康巡检报告 |
 
 ---
 

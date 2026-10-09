@@ -5,7 +5,7 @@
 ## 一、 全生命周期九大阶段与工程基准工作产品
 
 1. **01_management (立项与决策)**：
-   - 决策分析与权衡记录：`docs/01_management/dar/DAR-20261009-MESSAGE-BUS-PROTOCOL.md` (dar-decision-matrix 技能)
+   - 决策分析与权衡记录：`docs/01_management/dar-decision-records/DAR-20261009-MESSAGE-BUS-PROTOCOL.md` (dar-decision-matrix 技能)
    - 项目立项与范围说明书：`docs/01_management/project-charter.md`
    - 风险登记册与缓解预案：`docs/01_management/risk-register.md`
 2. **02_requirements (需求工程)**：
@@ -30,11 +30,11 @@
    - 生产安装部署 SOP：`docs/07_release/system-deployment-sop.md`
    - 故障秒级回滚预案：`docs/07_release/rollback-runbook.json`
 8. **08_sre (站点可靠性与安全)**：
-   - 服务等级目标与错误预算：`docs/08_sre/slo/SLO-SLI-ERROR-BUDGET-MATRIX.md` (sre-slo-manager 技能)
-   - 事故免责复盘报告：`docs/08_sre/postmortem/POSTMORTEM-20261009-INVENTORY-RACE-CONDITION.md` (postmortem-analyzer 技能)
+   - 服务等级目标与错误预算：`docs/08_sre/01_slo_sli_metrics/SLO-SLI-ERROR-BUDGET-MATRIX.md` (sre-slo-manager 技能)
+   - 事故免责复盘报告：`docs/08_sre/06_incidents_postmortem/POSTMORTEM-20261009-INVENTORY-RACE-CONDITION.md` (postmortem-analyzer 技能)
    - Strix 60k★ 自主红队渗透报告：`docs/08_sre/security-reports/STRIX-PENTEST-POC-AUDIT.md` (strix-penetration-testing 技能)
 9. **09_operations (持续运营与平账)**：
-   - 全链路日终平账报告：`docs/09_operations/reconciliation/DAILY-RECONCILIATION-REPORT-20261009.md` (financial-reconciliation-agent 技能)
+   - 全链路日终平账报告：`docs/09_operations/02_data_ops/DAILY-RECONCILIATION-REPORT-20261009.md` (financial-reconciliation-agent 技能)
    - 系统全域健康巡检报告：`docs/09_operations/inspection/SYSTEM-HEALTH-INSPECTION-20261009.md`
 
 ## 二、 交付哲学：No Artifact, No Done
