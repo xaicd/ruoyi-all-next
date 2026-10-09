@@ -14,6 +14,13 @@ export type {
   SortOrder,
   WhereCondition,
   BaseRepository,
+  ReplicaNode,
+  ReplicaLoadBalancePolicy,
+  MasterReplicaConfig,
+  DataSourceContext,
+  ShardingStrategyType,
+  ShardingRule,
+  ShardingQueryResult,
 } from "./types"
 
 export {
@@ -27,9 +34,34 @@ export {
 
 export {
   getKyselyDb,
+  createKyselyInstance,
   hasRealDatabase,
   destroyKyselyDb,
 } from "./kysely-client"
+
+export {
+  ReadWriteRouter,
+  readWriteRouter,
+  ReplicaClusterManager,
+  replicaClusterManager,
+  runWithMaster,
+  runWithReplica,
+  runInTransaction,
+} from "./read-write-router"
+
+export {
+  MultiDataSourceManager,
+  multiDataSourceManager,
+  runWithDataSource,
+  getActiveDataSourceName,
+} from "./multi-datasource-manager"
+
+export {
+  ShardingEngine,
+  shardingEngine,
+  createHashModShardingRule,
+  createTimeMonthlyShardingRule,
+} from "./sharding-engine"
 
 export {
   sqlTable,
@@ -57,4 +89,5 @@ export {
   BaseService
 } from "./base-mapper"
 export type { QueryCondition, OrderItem, QueryOperator } from "./base-mapper"
+
 

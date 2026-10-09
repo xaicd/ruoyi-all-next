@@ -86,3 +86,47 @@ export interface BaseRepository<T, CreateInput, UpdateInput> {
 
   count(where?: WhereCondition[]): Promise<number>
 }
+
+// === 高可用与读写分离类型 ===
+export type ReplicaLoadBalancePolicy = "round_robin" | "weighted" | "random"
+
+export type ReplicaNode = {
+  name: string
+  url: string
+  driver?: DatabaseDriver
+  weight?: number
+  isHealthy?: boolean
+  latencyMs?: number
+  lastCheckedAt?: number
+}
+
+export type MasterReplicaConfig = {
+  master: DataSourceConfig
+  replicas: ReplicaNode[]
+  loadBalancePolicy?: ReplicaLoadBalancePolicy
+  healthCheckIntervalMs?: number
+}
+
+export type DataSourceContext = {
+  dataSourceName?: string
+  routingTarget?: "master" | "replica" | "auto"
+  inTransaction?: boolean
+}
+
+// === 分库分表 (Sharding) 类型 ===
+export type ShardingStrategyType = "hash_mod" | "time_range" | "tenant" | "custom"
+
+export type ShardingRule<T = any> = {
+  logicalTable: string
+  shardingKey: string
+  strategy: ShardingStrategyType
+  actualTables: string[]
+  resolveTable: (shardingValue: any) => string
+  resolveAllTables: () => string[]
+}
+
+export type ShardingQueryResult<T> = {
+  items: T[]
+  total: number
+}
+

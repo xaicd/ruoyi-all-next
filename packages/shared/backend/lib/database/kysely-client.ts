@@ -11,7 +11,8 @@ import { Kysely, DummyDriver, SqliteAdapter, SqliteIntrospector, SqliteQueryComp
 import { getDataSourceConfig, isMemoryMode } from "./datasource-manager"
 import { writeCompactError } from "../observability"
 import { tenantIsolationPlugin } from "./tenant-isolation-plugin"
-import type { DatabaseDriver } from "./types"
+import { multiDataSourceManager } from "./multi-datasource-manager"
+import type { DatabaseDriver, DataSourceConfig } from "./types"
 import type { DB } from "./schema"
 
 // === Dialect 工厂 ===
@@ -118,17 +119,10 @@ const DRIVER_FAMILY: Record<DatabaseDriver, "pg" | "mysql" | "sqlite" | "dummy">
 let _kyselyInstance: Kysely<DB> | null = null
 
 /**
- * 获取 Kysely 数据库实例（单例）
- *
- * 内存模式下使用 DummyDriver（查询不执行），
- * 业务数据通过 Repository 的内存实现提供。
+ * 根据数据源配置创建独立的 Kysely 实例
  */
-export async function getKyselyDb(): Promise<Kysely<DB>> {
-  if (_kyselyInstance) return _kyselyInstance
-
-  const config = getDataSourceConfig()
+export async function createKyselyInstance(config: DataSourceConfig): Promise<Kysely<DB>> {
   const family = DRIVER_FAMILY[config.driver] ?? "dummy"
-
   let dialect: any
 
   switch (family) {
@@ -145,9 +139,28 @@ export async function getKyselyDb(): Promise<Kysely<DB>> {
       dialect = createDummyDialect()
   }
 
-  // 全局单例挂载租户隔离插件（AGENTS.md §4.8 / L2）：
-  // 有租户上下文时自动注入 tenant_id 过滤/填充；平台上下文与无上下文场景零改动。
-  _kyselyInstance = new Kysely<DB>({ dialect, plugins: [tenantIsolationPlugin] })
+  return new Kysely<DB>({ dialect, plugins: [tenantIsolationPlugin] })
+}
+
+/**
+ * 获取 Kysely 数据库实例（单例与动态多数据源感知）
+ *
+ * 内存模式下使用 DummyDriver（查询不执行），
+ * 业务数据通过 Repository 的内存实现提供。
+ */
+export async function getKyselyDb(): Promise<Kysely<DB>> {
+  const activeDs = multiDataSourceManager.getActiveDataSourceName()
+  if (activeDs !== multiDataSourceManager.getDefaultSourceName() && multiDataSourceManager.hasDataSource(activeDs)) {
+    return multiDataSourceManager.getDataSource(activeDs)
+  }
+
+  if (_kyselyInstance) return _kyselyInstance
+
+  const config = getDataSourceConfig()
+  _kyselyInstance = await createKyselyInstance(config)
+  if (!multiDataSourceManager.hasDataSource("primary")) {
+    multiDataSourceManager.registerDataSource("primary", _kyselyInstance)
+  }
   return _kyselyInstance
 }
 
@@ -166,4 +179,6 @@ export async function destroyKyselyDb(): Promise<void> {
     await _kyselyInstance.destroy()
     _kyselyInstance = null
   }
+  await multiDataSourceManager.closeAllDataSources()
 }
+
