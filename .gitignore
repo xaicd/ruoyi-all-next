@@ -34,6 +34,17 @@ node_modules/
 /data/*.db-wal
 /data/*.db-shm
 
+# mobile / desktop client binaries & packages (严禁入库)
+*.apk
+*.aab
+*.ipa
+*.app
+*.dmg
+*.pkg
+*.exe
+*.msi
+.expo/
+
 # debug
 npm-debug.log*
 yarn-debug.log*
@@ -160,4 +171,5 @@ apps/ruoyi
 # 忽略 Axure 导出原型包中庞大的静态库资源，防止 Git 膨胀
 .kiro/specs/**/prototypes/axure/resources/
 docs/features/**/prototypes/axure/resources/
+docs/specs/**/prototypes/axure/resources/
 
