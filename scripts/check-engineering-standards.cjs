@@ -130,7 +130,7 @@ const RULES = [
   {
     id: "backend-no-console",
     section: "AGENTS.md §4.5",
-    mode: "ratchet",
+    mode: "enforce",
     description: "backend business code must not use console.* (logger impls and codegen templates exempt)",
     run() {
       const files = walkDomains((name) => /\.tsx?$/.test(name)).filter(

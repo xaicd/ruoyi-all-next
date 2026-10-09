@@ -2,6 +2,7 @@
 // Rule: Cross-domain callers must use createDomainFacade; never import this Service directly.
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 import { PayOrderRepository } from "../repositories/pay-order.repository"
+import { applyPaidCallback, applyClosedCallback, canTransition } from "./pay-order-lifecycle"
 import type {
   PayOrderCreateDTO,
   PayOrderPageQuery,
@@ -44,6 +45,118 @@ export class PayOrderService {
       domainLog.event("pay.payOrder.deleted", { id, actorId })
     }
     return ok
+  }
+
+  /**
+   * 提交支付：将订单绑定到指定支付通道并初始化支付状态
+   */
+  static async submit(id: string, channelCode: string, input?: { userIp?: string; channelUserId?: string }, actorId?: string, tenantId?: string) {
+    const order = await PayOrderRepository.findById(id, { actorId, tenantId })
+    if (!order) throw new Error(`支付订单不存在: id=${id}`)
+
+    const currentStatus = String(order.status || "WAITING")
+    if (currentStatus !== "WAITING" && !canTransition(currentStatus, "WAITING")) {
+      throw new Error(`当前订单状态不可提交支付: ${currentStatus}`)
+    }
+
+    const updated = await PayOrderRepository.update(id, {
+      channel_code: channelCode,
+      status: "WAITING",
+      user_ip: input?.userIp,
+      channel_user_id: input?.channelUserId,
+    }, { actorId, tenantId })
+
+    domainLog.event("pay.payOrder.submitted", { id, channelCode, actorId })
+    return updated
+  }
+
+  /**
+   * 支付成功回调：遵循源框架三大不变量（幂等处理、已成功不降级、状态机守卫）
+   */
+  static async notifyPaid(orderId: string, extension: { id: string; orderId: string; status?: string }, actorId?: string, tenantId?: string) {
+    const order = await PayOrderRepository.findById(orderId, { actorId, tenantId })
+    if (!order) throw new Error(`支付订单不存在: orderId=${orderId}`)
+
+    const lifecycleResult = applyPaidCallback(
+      { id: String(order.id), status: String(order.status || "WAITING"), price: Number(order.price || 0) },
+      { id: extension.id, orderId: extension.orderId, status: extension.status || "WAITING" }
+    )
+
+    // 不变量 1: 重复回调幂等返回，不重复写库与触发下游事件
+    if (lifecycleResult.duplicate) {
+      domainLog.event("pay.payOrder.paid.duplicate", { orderId, actorId })
+      return { order, duplicate: true, emitEvent: false }
+    }
+
+    const updated = await PayOrderRepository.update(orderId, {
+      status: "SUCCESS",
+      success_time: new Date().toISOString(),
+      extension_id: extension.id,
+    }, { actorId, tenantId })
+
+    domainLog.event("pay.payOrder.paid.success", { orderId, actorId })
+    return { order: updated, duplicate: false, emitEvent: true }
+  }
+
+  /**
+   * 订单关闭：支持超时关单或商户撤单，已支付订单绝不降级为关闭
+   */
+  static async close(orderId: string, extension: { id: string; orderId: string; status?: string }, reason?: string, actorId?: string, tenantId?: string) {
+    const order = await PayOrderRepository.findById(orderId, { actorId, tenantId })
+    if (!order) throw new Error(`支付订单不存在: orderId=${orderId}`)
+
+    const outcomeResult = applyClosedCallback(
+      { id: String(order.id), status: String(order.status || "WAITING") },
+      { id: extension.id, orderId: extension.orderId, status: extension.status || "WAITING" }
+    )
+
+    if (outcomeResult.outcome === "skipped-paid-no-downgrade") {
+      domainLog.event("pay.payOrder.close.skippedPaid", { orderId, actorId })
+      return { order, outcome: outcomeResult.outcome }
+    }
+
+    if (outcomeResult.outcome === "skipped-already-closed") {
+      return { order, outcome: outcomeResult.outcome }
+    }
+
+    const updated = await PayOrderRepository.update(orderId, {
+      status: "CLOSED",
+    }, { actorId, tenantId })
+
+    domainLog.event("pay.payOrder.closed", { orderId, reason, actorId })
+    return { order: updated, outcome: "closed" }
+  }
+
+  /**
+   * 退款处理：支持部分退款与全额退款，全额退款后状态迁移为 CLOSED
+   */
+  static async refund(orderId: string, refundPrice: number, reason?: string, actorId?: string, tenantId?: string) {
+    const order = await PayOrderRepository.findById(orderId, { actorId, tenantId })
+    if (!order) throw new Error(`支付订单不存在: orderId=${orderId}`)
+
+    const currentStatus = String(order.status || "")
+    if (currentStatus !== "SUCCESS") {
+      throw new Error(`只有支付成功的订单才能发起退款: 当前状态 ${currentStatus}`)
+    }
+
+    const totalPrice = Number(order.price || 0)
+    const currentRefunded = Number(order.refund_price || 0)
+    const newRefunded = currentRefunded + refundPrice
+
+    if (newRefunded > totalPrice) {
+      throw new Error(`退款金额超过订单支付总额: 可退 ${totalPrice - currentRefunded}, 申请 ${refundPrice}`)
+    }
+
+    const isFullRefund = newRefunded >= totalPrice
+    const newStatus = isFullRefund ? "CLOSED" : "SUCCESS"
+
+    const updated = await PayOrderRepository.update(orderId, {
+      refund_price: newRefunded,
+      status: newStatus,
+    }, { actorId, tenantId })
+
+    domainLog.event("pay.payOrder.refunded", { orderId, refundPrice, isFullRefund, actorId })
+    return updated
   }
 }
 

@@ -4,16 +4,7 @@
   "note": "Frozen engineering-standards debt. Ratchet rules fail on NEW debt only. Regenerate with `npm run standards:baseline` and review the delta.",
   "rules": {
     "backend-no-console": {
-      "accepted": {
-        "packages/plugins/plugin-aigw/backend/repositories/aigw-carrier.repository.ts": 2,
-        "packages/plugins/plugin-aigw/backend/repositories/aigw-enterprise.repository.ts": 3,
-        "packages/plugins/plugin-aigw/backend/repositories/aigw-ledger.repository.ts": 2,
-        "packages/plugins/plugin-aigw/backend/repositories/aigw-quota.repository.ts": 2,
-        "packages/plugins/plugin-aigw/backend/repositories/aigw-seat.repository.ts": 2,
-        "packages/plugins/plugin-aigw/backend/repositories/aigw-settlement.repository.ts": 1,
-        "packages/plugins/plugin-aigw/backend/repositories/aigw-split.repository.ts": 1,
-        "packages/plugins/plugin-aigw/backend/repositories/aigw-tariff.repository.ts": 1
-      }
+      "accepted": {}
     },
     "facade-method-dispatch-mapped": {
       "accepted": {}
