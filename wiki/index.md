@@ -40,7 +40,7 @@
 ## 🏛️ CMMI 01~09 全生命周期工程规范 (CMMI Standards)
 
 - [CMMI 01~09 全生命周期工程过程与 7 类交付物理资产](cmmi/cmmi-lifecycle.md)
-- [36 大工业级原生 Agent 技能矩阵与真源管理](architecture/skills-matrix.md)
+- [38 大工业级原生 Agent 技能矩阵与真源管理](architecture/skills-matrix.md)
 
 ---
 

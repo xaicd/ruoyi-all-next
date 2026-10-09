@@ -18,7 +18,7 @@ Skill 编写规范见 [skill-authoring/SKILL.md](./skill-authoring/SKILL.md)。
 |---|---|---|---|---|
 | **00** | 规范与元编程 | skill-authoring、skill-creator | 合法 SKILL.md、技能测评 | 乱写 Skill |
 | **01_management** | 决策分析与项目管理 | dar-decision-matrix、agent-harness、project-init | DAR 权衡矩阵、Brief 项目立项 | 拍脑袋盲目选型 |
-| **02_requirements** | 需求工程与规格 | ears-spec-writer、product-requirements | EARS 5态需求、brief.json、验收标准 | 口语化伪需求直接编码 |
+| **02_requirements** | 需求工程与规格 | ears-spec-writer、product-requirements、spec-driven-development | EARS 5态需求、Kiro 多类型规格包、验收标准 | 口语化伪需求直接编码 |
 | **03_design** | 架构设计与决策记录 | architecture-design、adr-architect、microservice-evolution、archify | MADR 架构决策记录、拓扑图、交互式架构全景 HTML、A/B/C演进图 | 跨域直接 import Service |
 | **03_design** | API 契约设计 | api-design | OpenAPI 3.1、RPC action 契约 | 先手写 Route |
 | **03_design** | 数据库与多租户 | database-design、database-compatibility | Prisma Schema、Kysely AST、Tier-A/B/C声明 | 手写无租户 Raw SQL |
@@ -40,6 +40,7 @@ Skill 编写规范见 [skill-authoring/SKILL.md](./skill-authoring/SKILL.md)。
 | 新增/修改/评审 Skill | skill-authoring、skill-creator |
 | 架构方案选型、竞品横评、技术路线决策打分 | dar-decision-matrix |
 | 编写需求规格、消除需求二义性、定义业务不变量 | ears-spec-writer、product-requirements |
+| Kiro 规范驱动开发 (SDD)、多类型规格创建 (feature/bugfix/enhancement/refactor/security)、任务波次编排 | spec-driven-development、ears-spec-writer |
 | 新业务项目孵化、DigitalStaff NPC 模板、DeepSeek Harness 进化 | agent-harness、project-init、product-requirements |
 | 新功能一站式交付（RBAC + 全动词 API + 页面 + 权限 + 测试） | new-feature |
 | 新业务域/新平台（起底座 -> 建表 -> codegen -> 注册插件 -> 编译/打包/预览） | new-business-plugin |
@@ -79,6 +80,7 @@ Skill 编写规范见 [skill-authoring/SKILL.md](./skill-authoring/SKILL.md)。
 
 | 文件 | 场景 |
 |---|---|
+| spec-driven-development/SKILL.md | CMMI 02 Kiro 规范驱动开发 (SDD) 与全类型规格创建 (feature/bugfix/enhancement/refactor/security) |
 | cmmi-asset-authoring/SKILL.md | CMMI 01~09 标准资产创作与生命周期脚手架治理 |
 | dar-decision-matrix/SKILL.md | CMMI 01 决策分析与加权权衡打分 |
 | ears-spec-writer/SKILL.md | CMMI 02 IEEE 29148 / EARS 5 态无歧义需求规格 |

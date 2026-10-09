@@ -73,7 +73,10 @@ files["requirements.md"] = `# Requirements: ${brief.title}
 ## 1. 目标与背景 (Introduction)
 
 ${brief.goal}
-${brief.type === "bugfix" ? `\n### 缺陷现象 (Symptom)\n\n${brief.symptom ?? "<!-- 待填 -->"}\n\n### 根因分析 (Root Cause)\n\n${brief.rootCause ?? "<!-- 待填 -->"}\n` : ""}
+${brief.type === "bugfix" ? `\n### 缺陷现象 (Symptom)\n\n${brief.symptom ?? "<!-- 待填 -->"}\n\n### 根因分析 (Root Cause)\n\n${brief.rootCause ?? "<!-- 待填 -->"}\n\n### 保持既有行为 (Preserved Behavior)\n\n${brief.preservedBehavior ?? "已有正常业务功能与数据保持严格兼容。"}\n` : ""}
+${brief.type === "refactor" ? `\n### 架构债务与异味分析 (Debt Analysis)\n\n${brief.debtAnalysis ?? "<!-- 待填 -->"}\n\n### 目标整洁架构形态 (Target Architecture)\n\n${brief.targetArchitecture ?? "<!-- 待填 -->"}\n` : ""}
+${brief.type === "enhancement" ? `\n### 性能基线与优化目标 (Baseline vs Target Metrics)\n\n- 当前基线 (Baseline): ${brief.baselineMetric ?? "未明确"}\n- 目标指标 (Target): ${brief.targetMetric ?? "未明确"}\n` : ""}
+${brief.type === "security" ? `\n### 漏洞评级与威胁攻击面 (Vulnerability Advisory & Attack Surface)\n\n- 漏洞概述与 PoC: ${brief.vulnerabilityAdvisory ?? "<!-- 待填 -->"}\n- 攻击面削减: ${brief.attackSurface ?? "<!-- 待填 -->"}\n` : ""}
 
 ## 2. 术语表 (Glossary)
 
@@ -115,6 +118,42 @@ ${(brief.constraints ?? []).map((item) => `* **THE system SHALL COMPLY WITH**: $
 ### 不包含范围 (Non-Goals)
 ${(brief.nonGoals ?? []).map((item) => `* ${item}`).join("\n")}
 `
+
+// 若为 bugfix 类型，额外输出 Kiro 原生标准的 bugfix.md 规格文档
+if (brief.type === "bugfix") {
+  files["bugfix.md"] = `# Bugfix: ${brief.title}
+
+状态：\`PLAN_APPROVED\`　类型：\`bugfix\`　特性：\`${name}\`　域名：\`${brief.domain}\`
+
+## 1. 缺陷概述 (Defect Overview)
+
+${brief.goal}
+
+## 2. 缺陷表现与复现步骤 (Symptom & Reproduction)
+
+${brief.symptom ?? "<!-- 待填 -->"}
+
+## 3. 根因分析 (Root Cause Analysis - 5-Whys)
+
+${brief.rootCause ?? "<!-- 待填 -->"}
+
+## 4. 必须保持的既有正常行为 (Preserved Behavior & Anti-Regression)
+
+${brief.preservedBehavior ?? "所有未受缺陷影响的已有核心业务流转、对外 API 契约与历史数据结构必须保持 100% 行为不变。"}
+
+## 5. 红绿修复与验收准则 (Red-to-Green Test Criteria)
+
+${(brief.acceptance ?? []).map((item, index) => `${index + 1}. **THE system SHALL** 验证：${item.check}`).join("\n")}
+
+## 6. 修补方案设计与防御不变量 (Patch Design & Invariants)
+
+${(brief.invariants ?? []).map((item, index) => `${index + 1}. **${item.name}** —— ${item.how}`).join("\n")}
+
+## 7. 约束与补丁边界 (Constraints & Non-Goals)
+
+${(brief.constraints ?? []).map((item) => `* **THE system SHALL COMPLY WITH**: ${item}`).join("\n")}
+`
+}
 
 files["design.md"] = `# Design: ${brief.title}
 

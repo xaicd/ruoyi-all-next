@@ -28,6 +28,7 @@ const checkOnly = process.argv.includes("--check");
 const catalogPath = path.join(ROOT, "packages/shared/backend/constants/domain-catalog.json");
 const seamPath = path.join(ROOT, "packages/shared/contract/seam-graph.json");
 const contractsPath = path.join(ROOT, "docs/agent/contracts.json");
+const compatPath = path.join(ROOT, "packages/shared/contract/compat-manifest.json");
 
 if (!fs.existsSync(catalogPath)) {
   console.error(`[openwiki] 错误: 找不到领域元数据 ${catalogPath}`);
@@ -37,6 +38,8 @@ if (!fs.existsSync(catalogPath)) {
 const catalog = JSON.parse(fs.readFileSync(catalogPath, "utf8"));
 const seamGraph = fs.existsSync(seamPath) ? JSON.parse(fs.readFileSync(seamPath, "utf8")) : { domains: [] };
 const agentRegistry = fs.existsSync(contractsPath) ? JSON.parse(fs.readFileSync(contractsPath, "utf8")) : { contracts: [] };
+const compatManifest = fs.existsSync(compatPath) ? JSON.parse(fs.readFileSync(compatPath, "utf8")) : null;
+const skillsCount = compatManifest?.consumptionSurface?.skills?.count || 38;
 
 // 建立索引
 const seamDomainMap = new Map();
@@ -100,7 +103,7 @@ ${domainRows}
 ## 🏛️ CMMI 01~09 全生命周期工程规范 (CMMI Standards)
 
 - [CMMI 01~09 全生命周期工程过程与 7 类交付物理资产](cmmi/cmmi-lifecycle.md)
-- [36 大工业级原生 Agent 技能矩阵与真源管理](architecture/skills-matrix.md)
+- [${skillsCount} 大工业级原生 Agent 技能矩阵与真源管理](architecture/skills-matrix.md)
 
 ---
 
@@ -373,12 +376,12 @@ await runUnitOfWork(async (uow) => {
 `.trim() + "\n");
 
   // 7) skills-matrix.md
-  generatedFiles.set("architecture/skills-matrix.md", `# 架构百科：36 大工业级原生 Agent 技能矩阵与单一真源
+  generatedFiles.set("architecture/skills-matrix.md", `# 架构百科：${skillsCount} 大工业级原生 Agent 技能矩阵与单一真源
 
 > 对应规则：AGENTS.md Rule 0.11 / .agents/skills/README.md
 
 ## 一、 单一真源铁律 (Single Source of Truth)
-- 全仓 36 个原生技能唯一真源收敛于 \`.agents/skills/<name>/SKILL.md\`；
+- 全仓 ${skillsCount} 个原生技能唯一真源收敛于 \`.agents/skills/<name>/SKILL.md\`；
 - 严禁在 \`docs/\` 等目录创建镜像或副本目录，杜绝代码与认知污染；
 - 下游兼容性清单 \`compat-manifest.json\` 自动校验技能数量与定义。
 
