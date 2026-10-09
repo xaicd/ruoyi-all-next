@@ -7,43 +7,19 @@ import { randomUUID } from "node:crypto"
 import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
 import type { PageResult } from "@/modules/shared/backend/lib/database"
 import { getCurrentTenantId, isPlatformContext, isTenantRequired } from "@/modules/shared/backend/lib/biz-tenant"
-import { SEED_ROLES } from "@prisma/data"
+import type { SystemRoleRow, CreateRoleData, UpdateRoleData, RoleListParams } from "./role.types"
+import {
+  findRoleListFromMemory,
+  findRoleByIdFromMemory,
+  findRoleByCodeFromMemory,
+  createRoleInMemory,
+  updateRoleInMemory,
+  deleteRoleInMemory,
+} from "./role-memory.store"
 
-export type SystemRoleRow = {
-  id: string
-  name: string
-  code: string
-  sort: number
-  status: string
-  dataScope: string
-  remark: string | null
-  tenantId: string | null
-  createdAt: string
-  updatedAt: string
-}
+export type { SystemRoleRow, CreateRoleData, UpdateRoleData, RoleListParams } from "./role.types"
 
-export type CreateRoleData = {
-  name: string
-  code: string
-  sort?: number
-  status?: string
-  dataScope?: string
-  remark?: string
-}
-
-export type UpdateRoleData = Partial<CreateRoleData>
-
-export type RoleListParams = {
-  page: number
-  pageSize: number
-  keyword?: string
-  status?: string
-}
-
-// === 内存存储 ===
 function currentTenantId(): string | undefined {
-  // Platform control-plane users may own a tenant for bootstrap purposes while
-  // still needing to resolve both tenant-local and global role templates.
   if (isPlatformContext()) return undefined
   const tenantId = getCurrentTenantId()
   if (tenantId) return tenantId
@@ -51,45 +27,41 @@ function currentTenantId(): string | undefined {
   return undefined
 }
 
-const MEMORY_STORE: SystemRoleRow[] = [...SEED_ROLES]
-
-let memoryIdSeq = 100
-
 export const SystemRoleRepository = {
   async findList(params: RoleListParams): Promise<PageResult<SystemRoleRow>> {
     const tenantId = currentTenantId()
     if (hasRealDatabase()) return findListFromDb(params, tenantId)
-    return findListFromMemory(params, tenantId)
+    return findRoleListFromMemory(params, tenantId)
   },
 
   async findById(id: string): Promise<SystemRoleRow | null> {
     const tenantId = currentTenantId()
     if (hasRealDatabase()) return findByIdFromDb(id, tenantId)
-    return MEMORY_STORE.find((r) => r.id === id && (!tenantId || r.tenantId === tenantId)) ?? null
+    return findRoleByIdFromMemory(id, tenantId)
   },
 
   async findByCode(code: string): Promise<SystemRoleRow | null> {
     const tenantId = currentTenantId()
     if (hasRealDatabase()) return findByCodeFromDb(code, tenantId)
-    return MEMORY_STORE.find((r) => r.code === code && (!tenantId || r.tenantId === tenantId)) ?? null
+    return findRoleByCodeFromMemory(code, tenantId)
   },
 
   async create(data: CreateRoleData): Promise<SystemRoleRow> {
     const tenantId = currentTenantId()
     if (hasRealDatabase()) return createInDb(data, tenantId)
-    return createInMemory(data, tenantId)
+    return createRoleInMemory(data, tenantId)
   },
 
   async update(id: string, data: UpdateRoleData): Promise<SystemRoleRow> {
     const tenantId = currentTenantId()
     if (hasRealDatabase()) return updateInDb(id, data, tenantId)
-    return updateInMemory(id, data, tenantId)
+    return updateRoleInMemory(id, data, tenantId)
   },
 
   async delete(id: string): Promise<void> {
     const tenantId = currentTenantId()
     if (hasRealDatabase()) return deleteInDb(id, tenantId)
-    return deleteInMemory(id, tenantId)
+    return deleteRoleInMemory(id, tenantId)
   },
 }
 
@@ -186,63 +158,4 @@ function mapDbRow(row: any): SystemRoleRow {
   }
 }
 
-// === 内存实现 ===
-
-function findListFromMemory(params: RoleListParams, tenantId?: string): PageResult<SystemRoleRow> {
-  let filtered = [...MEMORY_STORE]
-  if (tenantId) filtered = filtered.filter((r) => r.tenantId === tenantId)
-  if (params.keyword) {
-    const kw = params.keyword.toLowerCase()
-    filtered = filtered.filter((r) => r.name.toLowerCase().includes(kw) || r.code.toLowerCase().includes(kw))
-  }
-  if (params.status) filtered = filtered.filter((r) => r.status === params.status)
-  filtered.sort((a, b) => a.sort - b.sort)
-
-  const total = filtered.length
-  const start = (params.page - 1) * params.pageSize
-  return { items: filtered.slice(start, start + params.pageSize), total, page: params.page, pageSize: params.pageSize }
-}
-
-function createInMemory(data: CreateRoleData, tenantId?: string): SystemRoleRow {
-  const now = new Date().toISOString()
-  const row: SystemRoleRow = {
-    id: String(++memoryIdSeq),
-    name: data.name,
-    code: data.code,
-    sort: data.sort ?? 0,
-    status: data.status ?? "ACTIVE",
-    dataScope: data.dataScope ?? "ALL",
-    remark: data.remark ?? null,
-    tenantId: tenantId ?? null,
-    createdAt: now,
-    updatedAt: now,
-  }
-  MEMORY_STORE.push(row)
-  return row
-}
-
-function updateInMemory(id: string, data: UpdateRoleData, tenantId?: string): SystemRoleRow {
-  const idx = MEMORY_STORE.findIndex((r) => r.id === id && (!tenantId || r.tenantId === tenantId))
-  if (idx === -1) throw new Error(`角色不存在: ${id}`)
-  const role = MEMORY_STORE[idx]
-  const updated: SystemRoleRow = {
-    ...role,
-    name: data.name ?? role.name,
-    code: data.code ?? role.code,
-    sort: data.sort ?? role.sort,
-    status: data.status ?? role.status,
-    dataScope: data.dataScope ?? role.dataScope,
-    remark: data.remark !== undefined ? (data.remark ?? null) : role.remark,
-    updatedAt: new Date().toISOString(),
-  }
-  MEMORY_STORE[idx] = updated
-  return updated
-}
-
-function deleteInMemory(id: string, tenantId?: string): void {
-  const idx = MEMORY_STORE.findIndex((r) => r.id === id && (!tenantId || r.tenantId === tenantId))
-  if (idx === -1) throw new Error(`角色不存在: ${id}`)
-  if (MEMORY_STORE[idx].code === "super_admin") throw new Error("不允许删除超级管理员角色")
-  MEMORY_STORE.splice(idx, 1)
-}
 export const systemRoleRepository = SystemRoleRepository

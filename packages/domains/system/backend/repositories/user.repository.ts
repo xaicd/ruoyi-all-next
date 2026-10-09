@@ -8,67 +8,34 @@
  * Service 层不关心底层用什么数据库，只通过此接口操作数据。
  */
 
-import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/database"
+import { hasRealDatabase } from "@/modules/shared/backend/lib/database"
 import type { PageResult } from "@/modules/shared/backend/lib/database"
 import { getCurrentTenantId, isPlatformContext, isPlatformUsername, isTenantRequired } from "@/modules/shared/backend/lib/biz-tenant"
-import { overlayUserNickname } from "@/modules/shared/contract/project-profile-overlay"
-import { SEED_USERS } from "@prisma/data"
+import type { SystemUserRow, CreateUserData, UpdateUserData, UserListParams } from "./user.types"
+import {
+  findUserListFromMemory,
+  findUserByIdFromMemory,
+  findUserByUsernameFromMemory,
+  createUserDataInMemory,
+  updateUserDataInMemory,
+  deleteUserDataInMemory,
+  countUsersFromMemory,
+  getMemoryUserPostIds,
+  setMemoryUserPostIds,
+} from "./user-memory.store"
+import {
+  findListFromDb,
+  findByIdFromDb,
+  findByUsernameFromDb,
+  createInDb,
+  updateInDb,
+  deleteInDb,
+  countFromDb,
+  findPostIdsFromDb,
+  replacePostsInDb,
+} from "./user-db.queries"
 
-// === 数据结构 ===
-
-export type SystemUserRow = {
-  id: string
-  username: string
-  nickname: string
-  password: string
-  salt: string
-  phone: string | null
-  email: string | null
-  avatar: string | null
-  status: string
-  deptId: string | null
-  remark: string | null
-  tenantId: string | null
-  createdAt: string
-  updatedAt: string
-}
-
-export type CreateUserData = {
-  username: string
-  nickname: string
-  password: string
-  salt: string
-  phone?: string
-  email?: string
-  deptId?: string
-  status?: string
-  remark?: string
-  tenantId?: string
-}
-
-export type UpdateUserData = Partial<Omit<CreateUserData, "username">> & {
-  username?: string
-}
-
-export type UserListParams = {
-  page: number
-  pageSize: number
-  keyword?: string
-  status?: string
-  deptId?: string
-  tenantId?: string
-}
-
-// === 内存存储 ===
-
-const MEMORY_STORE: SystemUserRow[] = SEED_USERS.map((user) => ({ ...user, nickname: overlayUserNickname(user.username, user.nickname) }))
-const MEMORY_USER_POSTS = new Map<string, Set<string>>()
-
-let memoryIdSeq = 100
-
-function generateId(): string {
-  return String(++memoryIdSeq)
-}
+export type { SystemUserRow, CreateUserData, UpdateUserData, UserListParams } from "./user.types"
 
 /** Uses the verified request context. Explicit tenant IDs are only for pre-auth login lookup. */
 function currentTenantId(): string | undefined {
@@ -78,23 +45,20 @@ function currentTenantId(): string | undefined {
   return undefined
 }
 
-// === Repository 实现 ===
-
 export const SystemUserRepository = {
   /** 分页列表 */
   async findList(params: UserListParams): Promise<PageResult<SystemUserRow>> {
     const tenantId = currentTenantId()
     const scopedParams = { ...params, tenantId: tenantId ?? params.tenantId }
     if (hasRealDatabase()) return findListFromDb(scopedParams)
-    return findListFromMemory(scopedParams)
+    return findUserListFromMemory(scopedParams)
   },
 
   /** 按 ID 查找 */
   async findById(id: string): Promise<SystemUserRow | null> {
     const tenantId = currentTenantId()
     if (hasRealDatabase()) return findByIdFromDb(id, tenantId)
-    const row = MEMORY_STORE.find((u) => u.id === id && (!tenantId || u.tenantId === tenantId)) ?? null
-    return row
+    return findUserByIdFromMemory(id, tenantId)
   },
 
   /** Pre-auth login lookup. tenantId must come from the validated login request. */
@@ -103,7 +67,7 @@ export const SystemUserRepository = {
       throw new Error("登录必须指定 tenantId")
     }
     if (hasRealDatabase()) return findByUsernameFromDb(username, tenantId)
-    return MEMORY_STORE.find((u) => u.username === username && (!tenantId || u.tenantId === tenantId)) ?? null
+    return findUserByUsernameFromMemory(username, tenantId)
   },
 
   /** Business lookup scoped to the verified current tenant context. */
@@ -116,31 +80,29 @@ export const SystemUserRepository = {
     const tenantId = currentTenantId()
     const scopedData = { ...data, tenantId: tenantId ?? data.tenantId }
     if (hasRealDatabase()) return createInDb(scopedData)
-    return createInMemory(scopedData)
+    return createUserDataInMemory(scopedData)
   },
 
   /** 更新 */
   async update(id: string, data: UpdateUserData): Promise<SystemUserRow> {
     const tenantId = currentTenantId()
     if (hasRealDatabase()) return updateInDb(id, data, tenantId)
-    return updateInMemory(id, data, tenantId)
+    return updateUserDataInMemory(id, data, tenantId)
   },
 
   /** 删除（软删除） */
   async delete(id: string): Promise<void> {
     const tenantId = currentTenantId()
     if (hasRealDatabase()) return deleteInDb(id, tenantId)
-    return deleteInMemory(id, tenantId)
+    return deleteUserDataInMemory(id, tenantId)
   },
 
   /** 读取用户已分配的岗位。 */
   async findPostIdsByUserId(userId: string): Promise<string[]> {
     const user = await this.findById(userId)
     if (!user) throw new Error(`用户不存在: ${userId}`)
-    if (!hasRealDatabase()) return [...(MEMORY_USER_POSTS.get(userId) ?? [])]
-    const db = await getKyselyDb()
-    const rows = await db.selectFrom("system_user_post").innerJoin("system_post", "system_post.id", "system_user_post.post_id").select("system_user_post.post_id").where("system_user_post.user_id", "=", userId).where("system_post.deleted", "=", false).execute()
-    return rows.map((row) => row.post_id)
+    if (!hasRealDatabase()) return getMemoryUserPostIds(userId)
+    return findPostIdsFromDb(userId)
   },
 
   /** Replaces user-post relations atomically in the active tenant scope. */
@@ -149,14 +111,10 @@ export const SystemUserRepository = {
     if (!user) throw new Error(`用户不存在: ${userId}`)
     const uniquePostIds = [...new Set(postIds)]
     if (!hasRealDatabase()) {
-      MEMORY_USER_POSTS.set(userId, new Set(uniquePostIds))
+      setMemoryUserPostIds(userId, uniquePostIds)
       return
     }
-    const db = await getKyselyDb()
-    await db.transaction().execute(async (trx) => {
-      await trx.deleteFrom("system_user_post").where("user_id", "=", userId).execute()
-      if (uniquePostIds.length) await trx.insertInto("system_user_post").values(uniquePostIds.map((postId) => ({ id: crypto.randomUUID(), user_id: userId, post_id: postId }))).execute()
-    })
+    await replacePostsInDb(userId, uniquePostIds)
   },
 
   /** 统计 */
@@ -164,229 +122,8 @@ export const SystemUserRepository = {
     const tenantId = currentTenantId()
     const scopedParams = { ...params, tenantId: tenantId ?? params?.tenantId }
     if (hasRealDatabase()) return countFromDb(scopedParams)
-    let filtered = [...MEMORY_STORE]
-    if (scopedParams.status) filtered = filtered.filter((u) => u.status === scopedParams.status)
-    if (scopedParams.tenantId) filtered = filtered.filter((u) => u.tenantId === scopedParams.tenantId)
-    return filtered.length
+    return countUsersFromMemory(scopedParams)
   },
 }
 
-// === Kysely 真实 DB 实现 ===
-
-async function findListFromDb(params: UserListParams): Promise<PageResult<SystemUserRow>> {
-  const db = await getKyselyDb()
-  let query = db.selectFrom("system_user").where("deleted", "=", false)
-
-  if (params.keyword) {
-    const kw = `%${params.keyword}%`
-    query = query.where((eb) =>
-      eb.or([
-        eb("username", "like", kw),
-        eb("nickname", "like", kw),
-        eb("phone", "like", kw),
-      ]),
-    )
-  }
-  if (params.status) query = query.where("status", "=", params.status)
-  if (params.deptId) query = query.where("dept_id", "=", params.deptId)
-  if (params.tenantId) query = query.where("tenant_id", "=", params.tenantId)
-
-  const countResult = await query
-    .select((eb) => eb.fn.countAll<number>().as("count"))
-    .executeTakeFirst()
-  const total = Number(countResult?.count ?? 0)
-
-  const offset = (params.page - 1) * params.pageSize
-  const rows = await query
-    .selectAll()
-    .orderBy("created_at", "desc")
-    .offset(offset)
-    .limit(params.pageSize)
-    .execute()
-
-  return {
-    items: rows.map(mapDbRow),
-    total,
-    page: params.page,
-    pageSize: params.pageSize,
-  }
-}
-
-async function findByIdFromDb(id: string, tenantId?: string): Promise<SystemUserRow | null> {
-  const db = await getKyselyDb()
-  let query = db.selectFrom("system_user").selectAll().where("id", "=", id).where("deleted", "=", false)
-  if (tenantId) query = query.where("tenant_id", "=", tenantId)
-  const row = await query.executeTakeFirst()
-  return row ? mapDbRow(row) : null
-}
-
-async function findByUsernameFromDb(username: string, tenantId?: string): Promise<SystemUserRow | null> {
-  const db = await getKyselyDb()
-  let query = db.selectFrom("system_user").selectAll().where("username", "=", username).where("deleted", "=", false)
-  if (tenantId) query = query.where("tenant_id", "=", tenantId)
-  const row = await query.executeTakeFirst()
-  return row ? mapDbRow(row) : null
-}
-
-async function createInDb(data: CreateUserData): Promise<SystemUserRow> {
-  const db = await getKyselyDb()
-  const now = new Date()
-  const row = await db
-    .insertInto("system_user")
-    .values({
-      id: crypto.randomUUID(),
-      username: data.username,
-      nickname: data.nickname,
-      password: data.password,
-      salt: data.salt,
-      phone: data.phone ?? null,
-      email: data.email ?? null,
-      avatar: null,
-      status: data.status ?? "ACTIVE",
-      dept_id: data.deptId ?? null,
-      remark: data.remark ?? null,
-      tenant_id: data.tenantId ?? null,
-      created_at: now.toISOString(),
-      updated_at: now.toISOString(),
-      login_ip: "",
-      login_date: now.toISOString(),
-      deleted: false,
-    } as any)
-    .returningAll()
-    .executeTakeFirstOrThrow()
-  return mapDbRow(row)
-}
-
-async function updateInDb(id: string, data: UpdateUserData, tenantId?: string): Promise<SystemUserRow> {
-  const db = await getKyselyDb()
-  const updateData: Record<string, any> = { updated_at: new Date() }
-  if (data.username !== undefined) updateData.username = data.username
-  if (data.nickname !== undefined) updateData.nickname = data.nickname
-  if (data.password !== undefined) updateData.password = data.password
-  if (data.salt !== undefined) updateData.salt = data.salt
-  if (data.phone !== undefined) updateData.phone = data.phone
-  if (data.email !== undefined) updateData.email = data.email
-  if (data.deptId !== undefined) updateData.dept_id = data.deptId
-  if (data.status !== undefined) updateData.status = data.status
-  if (data.remark !== undefined) updateData.remark = data.remark
-
-  let query = db.updateTable("system_user").set(updateData).where("id", "=", id).where("deleted", "=", false)
-  if (tenantId) query = query.where("tenant_id", "=", tenantId)
-  const row = await query.returningAll().executeTakeFirstOrThrow()
-  return mapDbRow(row)
-}
-
-async function deleteInDb(id: string, tenantId?: string): Promise<void> {
-  const db = await getKyselyDb()
-  let query = db.updateTable("system_user").set({ deleted: true, updated_at: new Date() }).where("id", "=", id)
-  if (tenantId) query = query.where("tenant_id", "=", tenantId)
-  await query.execute()
-}
-
-async function countFromDb(params?: { status?: string; tenantId?: string }): Promise<number> {
-  const db = await getKyselyDb()
-  let query = db.selectFrom("system_user").where("deleted", "=", false)
-  if (params?.status) query = query.where("status", "=", params.status)
-  if (params?.tenantId) query = query.where("tenant_id", "=", params.tenantId)
-  const result = await query.select((eb) => eb.fn.countAll<number>().as("count")).executeTakeFirst()
-  return Number(result?.count ?? 0)
-}
-
-function mapDbRow(row: any): SystemUserRow {
-  return {
-    id: row.id,
-    username: row.username,
-    nickname: row.nickname,
-    password: row.password,
-    salt: row.salt,
-    phone: row.phone,
-    email: row.email,
-    avatar: row.avatar,
-    status: row.status,
-    deptId: row.dept_id,
-    remark: row.remark,
-    tenantId: row.tenant_id,
-    createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : String(row.created_at),
-    updatedAt: row.updated_at instanceof Date ? row.updated_at.toISOString() : String(row.updated_at),
-  }
-}
-
-// === 内存实现 ===
-
-function findListFromMemory(params: UserListParams): PageResult<SystemUserRow> {
-  let filtered = [...MEMORY_STORE]
-
-  if (params.keyword) {
-    const kw = params.keyword.toLowerCase()
-    filtered = filtered.filter(
-      (u) =>
-        u.username.toLowerCase().includes(kw) ||
-        u.nickname.toLowerCase().includes(kw) ||
-        (u.phone ?? "").includes(kw) ||
-        (u.email ?? "").toLowerCase().includes(kw),
-    )
-  }
-  if (params.status) filtered = filtered.filter((u) => u.status === params.status)
-  if (params.deptId) filtered = filtered.filter((u) => u.deptId === params.deptId)
-  if (params.tenantId) filtered = filtered.filter((u) => u.tenantId === params.tenantId)
-
-  filtered.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
-
-  const total = filtered.length
-  const start = (params.page - 1) * params.pageSize
-  const items = filtered.slice(start, start + params.pageSize)
-
-  return { items, total, page: params.page, pageSize: params.pageSize }
-}
-
-function createInMemory(data: CreateUserData): SystemUserRow {
-  const now = new Date().toISOString()
-  const row: SystemUserRow = {
-    id: generateId(),
-    username: data.username,
-    nickname: data.nickname,
-    password: data.password,
-    salt: data.salt,
-    phone: data.phone ?? null,
-    email: data.email ?? null,
-    avatar: null,
-    status: data.status ?? "ACTIVE",
-    deptId: data.deptId ?? null,
-    remark: data.remark ?? null,
-    tenantId: data.tenantId ?? null,
-    createdAt: now,
-    updatedAt: now,
-  }
-  MEMORY_STORE.push(row)
-  return row
-}
-
-function updateInMemory(id: string, data: UpdateUserData, tenantId?: string): SystemUserRow {
-  const idx = MEMORY_STORE.findIndex((u) => u.id === id && (!tenantId || u.tenantId === tenantId))
-  if (idx === -1) throw new Error(`用户不存在: ${id}`)
-
-  const user = MEMORY_STORE[idx]
-  const updated: SystemUserRow = {
-    ...user,
-    username: data.username ?? user.username,
-    nickname: data.nickname ?? user.nickname,
-    password: data.password ?? user.password,
-    salt: data.salt ?? user.salt,
-    phone: data.phone !== undefined ? (data.phone ?? null) : user.phone,
-    email: data.email !== undefined ? (data.email ?? null) : user.email,
-    deptId: data.deptId !== undefined ? (data.deptId ?? null) : user.deptId,
-    status: data.status ?? user.status,
-    remark: data.remark !== undefined ? (data.remark ?? null) : user.remark,
-    updatedAt: new Date().toISOString(),
-  }
-  MEMORY_STORE[idx] = updated
-  return updated
-}
-
-function deleteInMemory(id: string, tenantId?: string): void {
-  const idx = MEMORY_STORE.findIndex((u) => u.id === id && (!tenantId || u.tenantId === tenantId))
-  if (idx === -1) throw new Error(`用户不存在: ${id}`)
-  MEMORY_STORE.splice(idx, 1)
-  MEMORY_USER_POSTS.delete(id)
-}
 export const systemUserRepository = SystemUserRepository
