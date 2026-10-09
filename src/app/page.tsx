@@ -2,7 +2,7 @@
 
 import React, { useState } from "react"
 import Link from "next/link"
-import { projectProfile } from "@/modules/shared/contract/project-profile"
+import { projectProfile } from "@/shared/contract/project-profile"
 
 const coreDomains = [
   { id: "system", name: "系统管理", path: "/admin/system/users", desc: "用户、角色、菜单权限、部门岗位、数据字典与多租户隔离", tag: "System" },

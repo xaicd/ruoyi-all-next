@@ -3,10 +3,10 @@
 import React, { useState, useEffect, useMemo } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { BrandMark } from "@/modules/shared/frontend/components/brand-mark"
-import { request } from "@/modules/shared/frontend/lib/request"
-import { I18nProvider, useI18n } from "@/modules/shared/frontend/lib/i18n"
-import { LanguageSwitcher } from "@/modules/shared/frontend/components/language-switcher"
+import { BrandMark } from "@/shared/frontend/components/brand-mark"
+import { request } from "@/shared/frontend/lib/request"
+import { I18nProvider, useI18n } from "@/shared/frontend/lib/i18n"
+import { LanguageSwitcher } from "@/shared/frontend/components/language-switcher"
 
 type SidebarItem = { id: string; href: string | null; label: string; icon: string; children: SidebarItem[] }
 type SidebarGroup = { id: string; title: string; icon: string; children: SidebarItem[] }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { projectProfile } from "@/modules/shared/contract/project-profile"
+import { projectProfile } from "@/shared/contract/project-profile"
 import "./globals.css"
 
 export const metadata: Metadata = {

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse, type ProxyConfig } from "next/server"
-import { AuthenticationError, AuthorizationError } from "@/modules/shared/backend/auth/context"
-import { requireAdminAuth } from "@/modules/shared/backend/auth/guards"
-import { getAdminRoutePolicy } from "@/modules/shared/backend/lib/admin-route-policy"
-import { matchRemoteDomainUpstream } from "@/modules/shared/backend/lib/domain-pack"
+import { AuthenticationError, AuthorizationError } from "@/shared/backend/auth/context"
+import { requireAdminAuth } from "@/shared/backend/auth/guards"
+import { getAdminRoutePolicy } from "@/shared/backend/lib/admin-route-policy"
+import { matchRemoteDomainUpstream } from "@/shared/backend/lib/domain-pack"
 
 const STATIC_UPSTREAMS: Record<string, string | undefined> = {
   RUOYI_DOMAIN_SYSTEM_UPSTREAM: process.env.RUOYI_DOMAIN_SYSTEM_UPSTREAM,
