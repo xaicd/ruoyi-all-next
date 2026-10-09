@@ -25,9 +25,9 @@ const arg = (flag) => {
   const index = process.argv.indexOf(flag)
   return index >= 0 ? process.argv[index + 1] : undefined
 }
-const feature = arg("--feature")
+const feature = arg("--feature") ?? arg("--spec") ?? arg("--name")
 if (!feature) {
-  console.error("用法: node scripts/agent/run-runbook.cjs --feature <名> --check | --dry-run | --run")
+  console.error("用法: node scripts/agent/run-runbook.cjs --spec <名> --check | --dry-run | --run")
   process.exit(2)
 }
 

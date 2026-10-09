@@ -19,11 +19,11 @@ const arg = (flag) => {
   const index = process.argv.indexOf(flag)
   return index >= 0 ? process.argv[index + 1] : undefined
 }
-const feature = arg("--feature")
+const feature = arg("--feature") ?? arg("--spec") ?? arg("--name")
 const only = arg("--task")
 const commit = arg("--commit") ?? "HEAD"
 if (!feature) {
-  console.error("用法: node scripts/verify-task-commit.cjs --feature <名> [--task T1] [--commit HEAD]")
+  console.error("用法: node scripts/verify-task-commit.cjs --spec <名> [--task T1] [--commit HEAD]")
   process.exit(2)
 }
 

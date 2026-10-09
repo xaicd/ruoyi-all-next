@@ -37,25 +37,25 @@ const exists = fs.existsSync(path.join(dir, "brief.json"))
 console.log(`\n=== 交付链: ${name} ===\n`)
 if (!exists) {
   if (!domain) {
-    console.error("[deliver] 新特性需要 --domain（特性与域名不必同名）")
+    console.error("[deliver] 新规格需要 --domain（规格与域名不必同名）")
     process.exit(2)
   }
-  console.log("▶ 1/4 立特性（生成 brief.json —— 这是唯一需要人/模型写的东西）")
-  run("npx", ["tsx", "scripts/create-feature.ts", "--name", name, "--domain", domain, "--title", title])
+  console.log("▶ 1/4 立规格（生成 brief.json —— 这是唯一需要人/模型写的东西）")
+  run("npx", ["tsx", "scripts/spec-ops.ts", "new", "--name", name, "--domain", domain, "--title", title])
 } else {
-  console.log("▶ 1/4 特性已存在，跳过立特性")
+  console.log("▶ 1/4 规格已存在，跳过立项")
 }
 
 console.log("\n▶ 2/4 校验 brief 是否够展开文档")
-const briefOk = run("node", ["scripts/build-feature.cjs", "--name", name, "--check"])
+const briefOk = run("npx", ["tsx", "scripts/spec-ops.ts", "build", "--name", name, "--check"])
 
 if (briefOk) {
   console.log("\n▶ 3/4 展开文档（结构不可能缺）")
-  run("node", ["scripts/build-feature.cjs", "--name", name])
+  run("npx", ["tsx", "scripts/spec-ops.ts", "build", "--name", name])
 }
 
 console.log("\n▶ 4/4 交付状态")
-run("node", ["scripts/check-delivery.cjs", "--feature", name])
+run("node", ["scripts/check-delivery.cjs", "--spec", name])
 
 const featureJson = JSON.parse(fs.readFileSync(path.join(dir, "feature.json"), "utf8"))
 console.log(`\n=== 下一步 ===`)

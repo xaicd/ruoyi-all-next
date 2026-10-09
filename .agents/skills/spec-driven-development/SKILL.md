@@ -146,30 +146,38 @@ flowchart TD
 
 ---
 
-## 5. 命令行工具箱 (CLI Toolchain)
+## 5. 统一控制台与命令行工具箱 (Spec-Ops Engine: Unified CLI)
 
-Kiro SDD 在本工程中拥有完备的自动化脚本驱动，无需手动创建任何样板文件：
+Kiro SDD 在本工程中由统一引擎 `scripts/spec-ops.ts` 集中驱动，支持全生命周期闭环：
 
 ```bash
+# 0. 规格控制台总览与规格列表
+npx tsx scripts/spec-ops.ts list                # 查看全域活跃与归档规格状态
+npm run spec:ops                                # 查看完整帮助菜单
+
 # 1. 快速初始化任意类型的规格骨架
 npm run spec:new -- --name <name> --domain <domain> --title "<title>" [--type feature|bugfix|enhancement|refactor|security]
+# 等价于: npx tsx scripts/spec-ops.ts new --name <name> --domain <domain> --title "<title>" --type <type>
 
-# 2. 从 brief.json 编译展开生成完备 Markdown 规格资产
+# 2. 从 brief.json 编译展开生成完备 Markdown 规格资产与任务波次图
 npm run spec:build -- --name <name>
+# 等价于: npx tsx scripts/spec-ops.ts build --name <name>
 
 # 3. 实时检查规格完成度与质量卡点
-npm run spec:check -- --feature <name>
+npm run spec:check -- --spec <name>
+# 等价于: npx tsx scripts/spec-ops.ts check --spec <name>
 
 # 4. 从 Git 历史核验任务执行与白名单匹配度 (1 Task = 1 Commit)
-npm run task:verify -- --feature <name> --summary
+npm run task:verify -- --spec <name> --summary
 
 # 5. 上线割接与回滚 SOP 实操
-npm run runbook -- --feature <name> --check
-npm run runbook -- --feature <name> --dry-run
-npm run runbook -- --feature <name> --run
+npm run runbook -- --spec <name> --check
+npm run runbook -- --spec <name> --dry-run
+npm run runbook -- --spec <name> --run
 
 # 6. 割接完毕后一键归档，防止认知污染
 npm run spec:archive -- --name <name>
+# 等价于: npx tsx scripts/spec-ops.ts archive --name <name>
 ```
 
 ---

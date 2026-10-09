@@ -19,7 +19,9 @@ const ROOT = path.resolve(__dirname, "..")
 const MANIFEST = path.join(ROOT, "packages", "shared", "contract", "delivery-phases.json")
 const asJson = process.argv.includes("--json")
 const only = process.argv.includes("--phase") ? process.argv[process.argv.indexOf("--phase") + 1] : null
-const feature = process.argv.includes("--feature") ? process.argv[process.argv.indexOf("--feature") + 1] : null
+const feature = process.argv.includes("--feature")
+  ? process.argv[process.argv.indexOf("--feature") + 1]
+  : (process.argv.includes("--spec") ? process.argv[process.argv.indexOf("--spec") + 1] : null)
 const SKIP = new Set(["node_modules", ".git", ".next", ".next-ruoyi", "dist", "coverage"])
 
 /**
