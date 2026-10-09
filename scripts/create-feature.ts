@@ -117,4 +117,24 @@ fs.writeFileSync(
     2,
   ) + "\n",
 )
-console.log(`[feature] 已生成 docs/features/${name}/（brief.json + evidence.json + feature.json）`)
+// 创建原型资源目录 assets/ 与 prototypes/
+const assetsDir = path.join(dir, "assets")
+if (!fs.existsSync(assetsDir)) {
+  fs.mkdirSync(assetsDir, { recursive: true })
+  fs.writeFileSync(
+    path.join(assetsDir, "README.md"),
+    "# 原型视觉设计图与切图资源 (assets/)\n\n在此存放：\n- PNG / JPG 高保真设计图、界面截图、线框图\n- SVG 交互流程图与矢量图表\n- GIF 操作演示动图\n\n在 `../prototype.md` 中直接引用：`![原型截图](./assets/01-main.png)`\n",
+  )
+}
+
+const prototypesDir = path.join(dir, "prototypes")
+if (!fs.existsSync(prototypesDir)) {
+  fs.mkdirSync(prototypesDir, { recursive: true })
+  fs.writeFileSync(
+    path.join(prototypesDir, "README.md"),
+    "# 可交互 HTML 原型与站点包 (prototypes/)\n\n在此存放：\n- 单文件 HTML / Tailwind / Bootstrap 可交互演示原型\n- Axure 导出的 HTML 原型站点（可浏览器直接打开预览）\n\n在 `../prototype.md` 中提供本地相对链接或说明。\n",
+  )
+}
+
+console.log(`[feature] 已生成 docs/features/${name}/（brief.json + evidence.json + feature.json + assets/ + prototypes/）`)
+

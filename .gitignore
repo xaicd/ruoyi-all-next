@@ -156,3 +156,8 @@ apps/ruoyi
 # 运行期证据快照: 每次跑扫描/压测都会变，作为流水线产物而非源
 /docs/architecture/artifacts/security-scan-result.json
 /docs/architecture/artifacts/load-test-result.json
+
+# 忽略 Axure 导出原型包中庞大的静态库资源，防止 Git 膨胀
+.kiro/specs/**/prototypes/axure/resources/
+docs/features/**/prototypes/axure/resources/
+

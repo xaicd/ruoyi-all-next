@@ -12,4 +12,6 @@ inclusion: auto
 - 当前 `feature:generate` 不会自动写入这些后台运行态菜单/授权记录；交付功能前必须完成对应数据库配置与加载验收。
 - 生成的 Service 仅为可运行的空列表契约。交付前必须实现领域查询、数据权限、事务、日志、错误处理以及必要的审批/履约逻辑。
 - 新写接口、详情接口、审批和定时任务仍必须登记 `docs/api-routes.md`，并遵守 Route 薄层规范。
+- 新特性的需求、设计、原型 (HTML/PNG) 与任务归类标准，统一遵循 `.agents/rules/FEATURE-SPEC-AND-PROTOTYPE-STANDARD.md`，特性包统一置于 `.kiro/specs/<feature>/` 或 `docs/features/<feature>/`。
 - 完整的受控生成命令、回滚和安全边界见 `docs/guides/feature-codegen.md`；全流程门禁见 `.kiro/skills/feature-development-workflow/SKILL.md`。
+
