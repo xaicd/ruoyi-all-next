@@ -218,7 +218,7 @@ import {
   multiDataSourceManager,
   runWithDataSource,
   getKyselyDb
-} from "@/modules/shared/backend/lib/database"
+} from "@/shared/backend/lib/database"
 
 // 1. 动态注册多个业务库
 multiDataSourceManager.registerDataSource("pay_db", payDbKyselyInstance)
@@ -247,7 +247,7 @@ async function handleCrossDatabaseBiz() {
 
 ### 1. 声明哈希取模分表 (Hash Mod)
 ```ts
-import { shardingEngine, createHashModShardingRule } from "@/modules/shared/backend/lib/database"
+import { shardingEngine, createHashModShardingRule } from "@/shared/backend/lib/database"
 
 // 将订单表 t_trade_order 按 order_id 哈希分成 4 张物理表：t_trade_order_0 .. 3
 shardingEngine.registerRule(createHashModShardingRule({
@@ -259,7 +259,7 @@ shardingEngine.registerRule(createHashModShardingRule({
 
 ### 2. 声明时间范围分表 (Time Monthly)
 ```ts
-import { shardingEngine, createTimeMonthlyShardingRule } from "@/modules/shared/backend/lib/database"
+import { shardingEngine, createTimeMonthlyShardingRule } from "@/shared/backend/lib/database"
 
 // 将支付流水表 t_pay_record 按月分表
 shardingEngine.registerRule(createTimeMonthlyShardingRule({

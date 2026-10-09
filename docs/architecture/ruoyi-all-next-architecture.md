@@ -130,15 +130,15 @@ ruoyi-all-next/
 
 ```typescript
 // ❌ 严禁：跨域直接 import 其他域的 Service、Repository 或 Model
-import { PayOrderService } from "@/packages/plugins/plugin-pay/backend/services"
+import { PayOrderService } from "@/plugins/plugin-pay/backend/services"
 
 // ✅ 正确：走统一 Domain Facade（单体走内存 SDK，拆分走轻量 RPC）
-import { createDomainFacade } from "@/modules/shared/backend/lib/rpc-facade"
+import { createDomainFacade } from "@/shared/backend/lib/rpc-facade"
 const payFacade = createDomainFacade("pay", ["createOrder"] as const)
 await payFacade.createOrder({ amount: 9900 }, { caller: "mall.order" })
 
 // ✅ 正确：走发布订阅事件总线
-import { eventBus } from "@/modules/shared/backend/lib/event-bus"
+import { eventBus } from "@/shared/backend/lib/event-bus"
 await eventBus.publish({
   type: "mall.order.created",
   source: "mall",

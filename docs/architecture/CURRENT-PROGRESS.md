@@ -119,7 +119,7 @@
 - ✅ DictData Repository MEMORY_STORE 已接入种子数据（1036 条）
 - ✅ Role Repository MEMORY_STORE 已接入种子数据（5 条：超管/普通/CRM/租户/测试）
 - ✅ User Repository MEMORY_STORE 已接入种子数据（2 条：admin/test）
-- ✅ 统一 seed-data 架构：所有 Repository → import from @/modules/shared/backend/seed-data
+- ✅ 统一 seed-data 架构：所有 Repository → import from @/shared/backend/seed-data
 
 ### P2：其他域全量 Service 补全（已有脚本自动化）
 - ✅ 运行 scripts/fix-service-methods.cjs 补全 140 个 Service 的 CRUD 方法（392 stubs）

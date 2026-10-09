@@ -36,9 +36,9 @@ src/
 │       ├── api/{feature}.api.ts                  ← 过渡期 composition/export
 │       ├── components/{Feature}Form.tsx
 │       └── pages/{featureKebab}.page.tsx         ← export default function {Module}{Feature}Page()
-├── app/(admin-pages)/admin/{moduleKebab}/{featureKebab}/
-│   └── page.tsx                                  ← 桥接: export { default } from "@/modules/{moduleKebab}/frontend/pages/{featureKebab}.page"
-└── app/api/v1/admin/{moduleKebab}/{featureKebab}/
+├── app/(admin-pages)/admin/{domainKebab}/{featureKebab}/
+│   └── page.tsx                                  ← 桥接或派发: 引用各插件/域的 frontend/pages/{featureKebab}.page
+└── app/api/v1/admin/{domainKebab}/{featureKebab}/
     ├── route.ts                                  ← GET/POST 列表+创建
     └── [id]/route.ts                             ← GET/PUT/DELETE 详情+更新+删除
 ```
@@ -70,11 +70,11 @@ export { default } from "@/modules/{moduleKebab}/frontend/pages/{featureKebab}.p
 
 ### API route 引用（必须）
 
-API route 必须从 `@/modules/{module}/backend/services` 和 `@/modules/{module}/backend/validators` 导入：
+API route 建议从 `@/domains/{domain}/backend/services`（或 `@/plugins/plugin-{domain}/backend/services`）导入：
 
 ```ts
-import { SystemUserService } from "@/modules/system/backend/services"
-import { userListQuerySchema } from "@/modules/system/backend/validators"
+import { SystemUserService } from "@/domains/system/backend/services"
+import { userListQuerySchema } from "@/domains/system/backend/validators"
 ```
 
 ## services/index.ts 规范

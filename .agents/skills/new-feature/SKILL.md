@@ -67,7 +67,7 @@ flowchart TD
 3. **Repository 双导出规范**：文件与 `index.ts` 必须同时导出 `XxxRepository` (PascalCase) 与 `export const xxxRepository = XxxRepository` (camelCase) 别名；
 4. **Repository 落地**：必须实现 `findAll`、`findById`、`create`、`update`、`delete`，并在所有 SQL/Kysely 查询中强制限定租户隔离。**租户必须从全局上下文取，禁止显式 tenantId 参数透传**（透传断链=数据泄露，AGENTS.md §4.8 已实证）：
    ```ts
-   import { getCurrentTenantId, isTenantRequired, isPlatformContext } from "@/modules/shared/backend/lib/biz-tenant"
+   import { getCurrentTenantId, isTenantRequired, isPlatformContext } from "@/shared/backend/lib/biz-tenant"
 
    function currentTenantId(): string | undefined {
      const tenantId = getCurrentTenantId()

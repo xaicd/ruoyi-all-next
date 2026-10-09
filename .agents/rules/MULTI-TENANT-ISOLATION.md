@@ -3,7 +3,7 @@
 本规范定义跨域业务表与系统表的租户隔离权威原则。
 
 ## 1. 租户来源唯一权威
-- **全局上下文权威**: 租户唯一来源是 `getCurrentTenantId()`（`@/modules/shared/backend/lib/biz-tenant`），由 `withAdminRoute` 在请求入口自动注入 `runWithTenantContext`。
+- **全局上下文权威**: 租户唯一来源是 `getCurrentTenantId()`（`@/shared/backend/lib/biz-tenant`），由 `withAdminRoute` 在请求入口自动注入 `runWithTenantContext`。
 - **严禁显式参数透传**: 严禁在 Service/Repository 方法签名中层层透传 `tenantId` 参数。透传链条极易断裂导致严重数据越权与泄露！
 
 ## 2. 仓储层 (Repository) 隔离规范

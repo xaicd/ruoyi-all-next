@@ -60,7 +60,7 @@
 Facade **是强制的**。它就是 RPC 接口：
 
 ```ts
-import { createDomainFacade } from "@/modules/shared/backend/lib/rpc-facade"
+import { createDomainFacade } from "@/shared/backend/lib/rpc-facade"
 
 const pay = createDomainFacade("pay", ["ping", "createOrder"] as const)
 await pay.createOrder({ amount: 9900 }, { caller: "mall.order", idempotencyKey: "idem-1" })
@@ -89,7 +89,7 @@ await pay.createOrder({ amount: 9900 }, { caller: "mall.order", idempotencyKey: 
 ## 5. 双模切换规则
 
 ```ts
-import { broker } from "@/modules/shared/backend/lib/service-broker"
+import { broker } from "@/shared/backend/lib/service-broker"
 
 broker.start()                              // all-in-one：全域 SDK
 broker.start({ RUOYI_DOMAIN_PAY_UPSTREAM: "http://pay:3100" })  // BFF：pay 走 RPC

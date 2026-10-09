@@ -30,8 +30,8 @@ description: 从一句业务需求（如"做个电商平台"）到新业务域�
 **跨域必须走 Facade**（AGENTS §3.3）:
 
 ```ts
-import { wmsFacade } from "@/modules/wms/contract/wms.facade"      // 不 import 它的 Service
-import { defineStateMachine } from "@/modules/shared/backend/lib/state-machine"
+import { wmsFacade } from "@/plugins/plugin-wms/contract/wms.facade"      // 跨插件调用必须走 Facade，不 import 它的 Service
+import { defineStateMachine } from "@/shared/backend/lib/state-machine"
 ```
 
 三条落地要点（都有对应测试）:

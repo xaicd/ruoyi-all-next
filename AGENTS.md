@@ -131,14 +131,14 @@
    的独立部署照样工作（已实测）。
 
 3. `src/` 下只允许 `app/`（Next.js 路由 = BFF 层）与 `proxy.ts`。
-   **业务与基座代码一律在 `packages/` 下** —— `src/modules/` 是迁移遗留的空壳，已删除
-   （它与 `@/modules/*` 别名无关，见下）。禁止在 `src` 下重建 `modules/`。
+   **业务与基座代码一律在 `packages/` 下** —— `src/modules/` 是历史单体遗留的空壳，已彻底物理删除。严禁在 `src` 下重建 `modules/`。
 4. 禁止在 src 下新建 backend/、frontend/、components/、lib/ 等平铺目录。
 
-> **`@/modules/*` 别名 ≠ `src/modules/`**：别名指向 `packages/`（
-> `@/modules/shared`→`packages/shared`、`@/modules/pay`→`packages/plugins/plugin-pay`、
-> 其余未插件化域→`packages/domains/*`）。它只是一个**稳定的导入前缀**，
-> 与文件系统里的 `src/modules` 无关 —— 看到 `@/modules/` 不要去找 `src/modules/`。
+> **一等公民路径别名与包规范（强制，彻底清除 modules 遗留心智污染）**：
+> - **第一方业务插件（15 个业务域）**：`@/plugins/plugin-<domain>/*`（物理位于 `packages/plugins/plugin-*`）
+> - **平台地基（2 个平台域）**：`@/domains/<domain>/*`（`system`、`infra` 位于 `packages/domains/*`）
+> - **核心公共 SDK**：`@/shared/*`（位于 `packages/shared/*`）
+> - **历史兼容**：`tsconfig.json` 仅保留 `@/modules/*` 作为向后兼容过渡别名，**全局文档、AI 规范与新写代码严禁继续散播 `@/modules/*` 历史旧习惯**！
 5. 通用模板统一放 `packages/shared/frontend/templates`。
 6. **前端双轨页面规范（强制）**：
    - `packages/domains/<domain>/frontend/pages/` 专用于 **Admin 运营管理端页面**；
@@ -259,7 +259,7 @@
 
 1. **Repository 取租户（强制）**：所有业务表 Repository 在查询（select/update/delete）与写入（insert）时，一律从全局上下文取租户，禁止依赖调用方显式传 `tenantId` 参数。对齐 system 域先例（`user/role/post/dept.repository.ts` 的 `currentTenantId()` helper）：
    ```ts
-   import { getCurrentTenantId, isTenantRequired, isPlatformContext } from "@/modules/shared/backend/lib/biz-tenant"
+   import { getCurrentTenantId, isTenantRequired, isPlatformContext } from "@/shared/backend/lib/biz-tenant"
 
    function currentTenantId(): string | undefined {
      const tenantId = getCurrentTenantId()
@@ -693,11 +693,10 @@ src/app/
 
 ### 14.3 路径约束（强制）
 
-1. 后端文件必须在 `modules/{domain}/backend/` 下，禁止放 `modules/{domain}/services/` 平铺。
-2. 前端文件必须在 `modules/{domain}/frontend/` 下，api/components/pages 三级分离。
-3. API Route 路径：`src/app/api/v1/admin/{domain}/{kebab}/route.ts`。
-4. App 页面入口：`src/app/(admin-pages)/admin/{domain}/{kebab}/page.tsx`。
-5. 类型 import 使用 `@/modules/{domain}/backend/` 前缀，禁止相对路径跨层。
+1. 后端文件必须在 `packages/plugins/plugin-{domain}/backend/`（第一方插件）或 `packages/domains/{domain}/backend/`（平台地基）下，禁止平铺。
+2. 前端文件必须在 `packages/plugins/plugin-{domain}/frontend/`（第一方插件）或 `packages/domains/{domain}/frontend/`（平台地基）下，api/components/pages 三级分离。
+3. 插件 API 统一由 `/api/v1/plugins/[pluginKey]/api/*` 挂载分发，页面由 `admin-pages.json` 声明注册。
+4. 类型与组件 import 使用 `@/plugins/plugin-{domain}/...` 或 `@/domains/{domain}/...` 前缀，禁止相对路径跨层。
 
 ### 14.4 前端模板规范（对标 RuoYi Vue3）
 

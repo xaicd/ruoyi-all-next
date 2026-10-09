@@ -32,8 +32,8 @@ spec.json 定义:
   packages/domains/system/backend/services/user.service.ts     ← export class SystemUserService
   packages/domains/system/backend/validators/user.validators.ts ← export const userListQuerySchema
   packages/domains/system/frontend/pages/users.page.tsx        ← export default function SystemUsersPage()
-  src/app/(admin-pages)/admin/system/users/page.tsx       ← export { default } from "@/modules/system/frontend/pages/users.page"
-  src/app/api/v1/admin/system/users/route.ts              ← import { SystemUserService } from "@/modules/system/backend/services"
+  src/app/(admin-pages)/admin/system/users/page.tsx       ← export { default } from "@/domains/system/frontend/pages/users.page"
+  src/app/api/v1/admin/system/users/route.ts              ← import { SystemUserService } from "@/domains/system/backend/services"
 ```
 
 ---

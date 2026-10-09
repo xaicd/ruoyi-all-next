@@ -41,8 +41,8 @@
 ## 3. 调用约定
 
 ```ts
-import { broker } from "@/modules/shared/backend/lib/service-broker"
-import { createDomainFacade } from "@/modules/shared/backend/lib/rpc-facade"
+import { broker } from "@/shared/backend/lib/service-broker"
+import { createDomainFacade } from "@/shared/backend/lib/rpc-facade"
 
 await broker.start()
 await broker.waitForServices(["pay"])
