@@ -967,11 +967,20 @@ npm run check
    - 彻底摒弃以单纯 "Feature" 命名一切的局限思维，全面采用 **4 类规格演进类型**：`feature`（新特性）、`bugfix`（缺陷修复，必须携带 Symptom、Root Cause 与红灯复现用例 Red Test）、`enhancement`（增量增强）、`refactor`（架构重构）；
    - 施工区按域严格隔离于 `docs/specs/<domain>/<name>/`，原型资产按静态切图 `assets/` 与动态可点击 `prototypes/` 分离；
    - 投产后通过 `npm run spec:archive -- --name <name>` 统一沉淀归档至 `docs/specs/archive/<YYYY-Qx>/<domain>/<name>/`，保持施工区清爽。
-3. **CMMI 01~09 过程资产全生命周期库**：
-   - `docs/01_management/` ~ `07_release/` 支撑 0-1 研发全流程；
-   - `docs/08_sre/` 承载 IaaS/PaaS/应用三层指标、APM 链路追踪、业务日志脱敏、分布式定时任务排他锁、容灾演练与无指责复盘；
-   - `docs/09_operations/` 承载日终业务财务平账、统一指标语义层变更、租户准入与 BPM 审批流治理、AI 数字员工运营；
-   - 严格执行**三存三不存**：文本、Schema 契约与测试脚本入 Git；海量音视频、设计大源文件与盖章扫描件存对象存储/Wiki，Git 内仅存受控索引编号。
+3. **CMMI 01~09 过程资产全生命周期库与技能标准化作业 (SOP)**：
+   - 全生命周期 9 大阶段均有确定性专属 Skill 驱动专业作业（`.agents/skills/cmmi-asset-authoring/SKILL.md`）：
+     - `01_management`: `dar-decision-matrix`（立项、研发计划、风险台账、DAR 加权决策分析）
+     - `02_requirements`: `ears-spec-writer`（EARS 5 态需求规格、RTM 跟踪矩阵、NFR 非功能指标）
+     - `03_design`: `adr-architect`, `archify`, `database-design`（MADR 决策、8 大审计列、交互拓扑）
+     - `04_implementation`: `coding`, `plugin-authoring`（插件架构实现蓝图、代码审查清单、SBOM 物料）
+     - `05_verification`: `automated-testing`, `mutation-tester`（真实库测试大盘、变异测试打假、同行评审）
+     - `06_quality_assurance`: `compliance-auditor`（FCA/PCA 双基石审计、20 道质量门禁数字凭证）
+     - `07_release`: `devops`（6 步零停机割接 SOP、秒级自动回滚 Runbook、版本发布说明）
+     - `08_sre`: `sre-slo-manager`, `postmortem-analyzer`（SLO/SLI 矩阵、5-Whys 免责复盘、Strix 渗透演练）
+     - `09_operations`: `financial-reconciliation-agent`（日常资金轧差平账、AI 数字员工台账、健康巡检）
+   - **CLI 标准作业**: 统一通过 `npm run cmmi:asset new -- --phase <01~09> --type <type>` 展开，`npm run cmmi:asset list` 盘点，`npm run cmmi:asset:check` 合规巡检；
+   - **MCP 机器可读**: 提供 `ruoyi_cmmi_list` 工具，外部智能体（Claude Code/Cursor/DSH）可秒级查询 9 大阶段规范与资产状态；
+   - **三存三不存与反造假**: 文本、Schema 契约与测试脚本入 Git；事故复盘、资金对账与渗透演练必须带 `--real` 真实凭证，未发生时保留 `.gitkeep` 严格留空，坚守零假 Demo 铁律！
 
 <!-- BEGIN:nextjs-agent-rules -->
 

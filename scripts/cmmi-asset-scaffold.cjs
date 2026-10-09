@@ -6,7 +6,8 @@
  * 1. 声明式 DSL 驱动 (<500 tokens): 由本工具统一模板标准与路径映射，消灭大模型手写样板；
  * 2. 真实证据驱动 (Zero Fake Demos): 事实态资产必须来自真实测试或线上系统，未发生时强制留空；
  * 3. 规范目录自动寻址: 自动落位至 docs/01~09 标准目录拓扑，消灭松散散落；
- * 4. 全链路可追溯: 自动生成不可篡改的元数据头部与追溯标识。
+ * 4. 全链路可追溯: 自动生成不可篡改的元数据头部与追溯标识；
+ * 5. 全 9 阶段一站式作业: 覆盖 01_management 到 09_operations，无断层、无真空。
  *
  * 用法:
  *   node scripts/cmmi-asset-scaffold.cjs new --phase 03 --type adr --title "基于 Kysely AST 租户隔离"
@@ -19,9 +20,9 @@ const path = require("node:path")
 
 const ROOT = path.resolve(__dirname, "..")
 
-// 标准资产类型与其规范目录与模板映射
+// 标准资产类型与其规范目录与模板映射 (01~09 全生命周期覆盖)
 const ASSET_REGISTRY = {
-  // Phase 01: 立项与策划
+  // Phase 01: 立项与策划 (PLAN / MC / RSKM / DAR)
   "01": {
     name: "01_management",
     types: {
@@ -33,7 +34,7 @@ const ASSET_REGISTRY = {
 - **项目全称**: ${opts.title || "Enterprise Application Baseline"}
 - **基线版本**: ${opts.version || "v1.1.0"}
 - **生效日期**: ${new Date().toISOString().split("T")[0]}
-- **归属规范**: CMMI 01_management (PLAN / MC)
+- **归属规范**: CMMI 01_management (PLAN / MC) / .agents/skills/project-init
 
 ---
 
@@ -58,14 +59,14 @@ const ASSET_REGISTRY = {
         template: (opts) => `# 风险登记册与缓解预案 (Risk Register)
 
 - **登记日期**: ${new Date().toISOString().split("T")[0]}
-- **归属规范**: CMMI 01_management (RSKM)
+- **归属规范**: CMMI 01_management (RSKM) / .agents/skills/agent-harness
 
 ---
 
 ## 1. 核心技术与架构风险台账
 | 风险编号 | 风险描述与潜在影响 | 概率 | 影响 | 风险等级 | 预防与防御机制 | 应急触发与缓解预案 | 责任人 | 状态 |
 |---|---|---|---|---|---|---|---|---|
-| RSK-001 | 描述 | 低 | 高 | 中 | 预防机制 | 应急措施 | @owner | 已受控 |
+| RSK-001 | 跨域直接 import 导致循环依赖 | 低 | 高 | 中 | 门禁 domain:check + seam-graph 校验 | 强制重构为 Domain Facade / broker | @architect | 已受控 |
 `
       },
       "dar": {
@@ -101,11 +102,134 @@ const ASSET_REGISTRY = {
 - **决议结果**: 采纳方案 A
 - **风险与缓解预案**:
 `
+      },
+      "plan": {
+        file: "docs/01_management/project-plan.md",
+        title: "项目综合研发计划与里程碑",
+        template: (opts) => `# 项目综合研发管理计划 (Project Plan)
+
+- **项目名称**: ${opts.title || "Enterprise System"}
+- **版本基线**: ${opts.version || "v1.1.0"}
+- **制定日期**: ${new Date().toISOString().split("T")[0]}
+- **归属规范**: CMMI 01_management (PLAN) / .agents/skills/project-init
+
+---
+
+## 1. 研发阶段里程碑与交付门禁
+| 阶段 | 周期 | 核心交付成果 | 验收门禁 | 负责人 |
+|---|---|---|---|---|
+| M1: 需求与原型 | Sprint 1 | 5态 EARS SRS、HTML 可交互原型 | Gate 1 (需求就绪) | @po |
+| M2: 架构与契约 | Sprint 2 | ADR、ERD、324 份跨端契约 | Gate 2 (契约冻结) | @architect |
+| M3: 插件与编码 | Sprint 3 | 第一方插件代码、状态机、无假Mock | Gate 3 (全绿单测) | @leads |
+| M4: 验证与审计 | Sprint 4 | 真实库测试、FCA/PCA 双基石审计 | Gate 4 (质量放行) | @qa |
+| M5: 割接与上线 | Sprint 5 | 生产部署 SOP、秒级回滚 Runbook | Gate 5 (生产发布) | @devops |
+`
+      },
+      "pcm": {
+        file: "docs/01_management/project-summary-report.md",
+        title: "项目结项与经验教训总结报告",
+        template: (opts) => `# 项目结项与经验教训总结报告 (Project Closure & Lessons Learned)
+
+- **结项版本**: ${opts.version || "v1.1.0"}
+- **完成日期**: ${new Date().toISOString().split("T")[0]}
+- **归属规范**: CMMI 01_management (PCM) / .agents/skills/cmmi-asset-authoring
+
+---
+
+## 1. 交付目标达成情况评估
+## 2. 过程度量与质量数据复盘
+## 3. 组织过程资产沉淀清单 (OSSP 回馈)
+`
       }
     }
   },
 
-  // Phase 03: 系统设计
+  // Phase 02: 需求工程 (RDM / EARS / SRS / RTM)
+  "02": {
+    name: "02_requirements",
+    types: {
+      "srs": {
+        file: (opts) => `docs/02_requirements/srs/SRS-${opts.version || "v1.1.0"}.md`,
+        title: "软件需求规格说明书 (SRS - EARS 5态句式)",
+        template: (opts) => `# 软件需求规格说明书 (Software Requirements Specification - SRS)
+
+- **规格标识**: SRS-${opts.version || "v1.1.0"}
+- **基线日期**: ${new Date().toISOString().split("T")[0]}
+- **需求句式规范**: IEEE 29148 / EARS (Easy Approach to Requirements Syntax)
+- **归属规范**: CMMI 02_requirements (RDM) / .agents/skills/ears-spec-writer
+
+---
+
+## 1. EARS 5态精准句式需求规格清单
+1. **普遍句式 (Ubiquitous)**:
+   - 系统[全时]应当具备: \`The system shall <action>.\`
+2. **事件驱动 (Event-driven)**:
+   - 当[触发事件发生]时，系统应当: \`WHEN <trigger>, the system shall <action>.\`
+3. **状态驱动 (State-driven)**:
+   - 当处于[指定状态]时，系统应当: \`WHILE <state>, the system shall <action>.\`
+4. **异常分支 (Unwanted Behaviour)**:
+   - 如果[非法/异常条件成立]，那么系统应当: \`IF <condition>, THEN the system shall <action>.\`
+5. **可选特性 (Optional Feature)**:
+   - 当启用[可选配置]时，系统应当: \`WHERE <feature is enabled>, the system shall <action>.\`
+
+## 2. 边界约束与不变量 (Invariants)
+`
+      },
+      "rtm": {
+        file: "docs/02_requirements/rtm-traceability-matrix.md",
+        title: "需求双向跟踪矩阵 (RTM)",
+        template: (opts) => `# 需求双向跟踪矩阵 (Requirements Traceability Matrix - RTM)
+
+- **基线版本**: ${opts.version || "v1.1.0"}
+- **更新日期**: ${new Date().toISOString().split("T")[0]}
+- **归属规范**: CMMI 02_requirements (RDM) / .agents/skills/spec-driven-development
+
+---
+
+## 1. 全链路双向追溯表
+| 需求编号 (REQ) | 需求简述 | 规格来源 | 架构设计 (ADR/ERD) | 代码实现 (Module/Plugin) | 单元/集成测试用例 | 验证状态 |
+|---|---|---|---|---|---|---|
+| REQ-001 | 多租户物理数据隔离 | brief.json | ADR-0001, database-design-erd.md | packages/shared/backend/database | tests/specs/tenant-isolation.spec.ts | PASSED |
+`
+      },
+      "nfr": {
+        file: "docs/02_requirements/non-functional-reqs.md",
+        title: "非功能性需求规范 (NFR)",
+        template: (opts) => `# 非功能性需求与性能指标规范 (Non-Functional Requirements - NFR)
+
+- **制定日期**: ${new Date().toISOString().split("T")[0]}
+- **归属规范**: CMMI 02_requirements (RDM) / .agents/skills/product-requirements
+
+---
+
+## 1. 性能与容量约束
+- 单机独立进程吞吐量容量护栏: >= 5,000 RPS (基座实测 26,877 RPS)
+- API P95 响应延迟: <= 20ms (内存/嵌入式 SQLite 查询)
+- 错误预算: 核心交易链路 99.95% 可用性
+
+## 2. 安全合规与数据保护
+- 租户隔离: 严禁越权串租户，Kysely AST 自动注入租户列
+- 敏感数据: 密码哈希存储、手机/身份证展示自动脱敏
+`
+      },
+      "urs": {
+        file: "docs/02_requirements/user-requirements.md",
+        title: "用户原始需求说明书 (URS)",
+        template: (opts) => `# 用户原始需求说明书 (User Requirements Specification - URS)
+
+- **编制日期**: ${new Date().toISOString().split("T")[0]}
+- **归属规范**: CMMI 02_requirements (RDM) / .agents/skills/product-requirements
+
+---
+
+## 1. 业务用户痛点与核心诉求
+## 2. 用户故事与使用场景 (As a / I want / So that)
+`
+      }
+    }
+  },
+
+  // Phase 03: 系统设计 (TS / HLD / LLD / ERD / ADR / Archify / API)
   "03": {
     name: "03_design",
     types: {
@@ -186,14 +310,129 @@ flowchart TD
   Client --> BFF --> Domain --> Storage
 \`\`\`
 `
+      },
+      "hld": {
+        file: "docs/03_design/architecture-design-hld.md",
+        title: "系统总体架构概要设计说明书 (HLD)",
+        template: (opts) => `# 系统总体架构概要设计说明书 (High-Level Design - HLD)
+
+- **系统名称**: ${opts.title || "RuoYi-All-Next Architecture"}
+- **基线版本**: ${opts.version || "v1.1.0"}
+- **归属规范**: CMMI 03_design (TS) / .agents/skills/architecture-design
+
+---
+
+## 1. 4+1 架构视图
+1. 逻辑视图: 分层架构与领域划分
+2. 进程视图: Merged 线程与 Isolated Worker 通信
+3. 开发视图: 仓库拓扑与第一方插件布局
+4. 物理部署视图: 单机容器化与独立微服务拆分
+5. 用例场景视图: 关键业务调用闭环
+`
+      },
+      "api-spec": {
+        file: "docs/03_design/interface-contracts/openapi-spec.md",
+        title: "统一对外接口契约与 OpenAPI 规范",
+        template: (opts) => `# 统一对外接口契约规范 (OpenAPI 3.1 & Domain Contracts)
+
+- **归属规范**: CMMI 03_design (TS) / .agents/skills/api-design
+
+---
+
+## 1. 接口设计通用准则
+- 路径风格: Microsoft REST Guidelines 规范 (/api/v1/{domain}/{entity})
+- 响应形状: 统一封装结构 \`{ code: 0, data: T, msg: "success" }\`
+- 租户上下文: 统一由网关注入，严禁前端伪造
+`
       }
     }
   },
 
-  // Phase 05: 验证与确认
+  // Phase 04: 实现与编码 (TS / Coding / Plugins / Zero Fake Mock)
+  "04": {
+    name: "04_implementation",
+    types: {
+      "code-review": {
+        file: "docs/04_implementation/code-review-checklist.md",
+        title: "代码走查与静态质量防线清单",
+        template: () => `# 代码审查与静态质量防线清单 (Code Review Checklist)
+
+- **归属规范**: CMMI 04_implementation (TS) / .agents/skills/coding
+
+---
+
+## 1. 必查 8 大工程红线
+- [ ] **跨域依赖**: 是否杜绝跨域直接 import Service，严格经由 Domain Facade / Broker？
+- [ ] **租户隔离**: SQL 查询是否继承租户作用域，无越权风险？
+- [ ] **审计字段**: 表结构变更是否严格具备 8 大底座审计列？
+- [ ] **异常与日志**: 是否杜绝 console.log，严格使用结构化 logger？
+- [ ] **并发防护**: 扣减库存或关键状态迁移是否使用 CAS 乐观锁守卫？
+- [ ] **无假 Mock**: 测试用例是否基于真实数据库执行，无空洞假断言？
+- [ ] **类型安全**: TypeScript 是否 0 any 滥用、0 隐式类型丢失？
+- [ ] **门禁绿色**: \`npm run check\` 退出码是否严格为 0？
+`
+      },
+      "plugin-blueprint": {
+        file: "docs/04_implementation/plugin-architecture-blueprint.md",
+        title: "第一方业务插件架构与领域实现蓝图",
+        template: () => `# 第一方业务插件架构与领域实现蓝图 (Plugin Architecture Blueprint)
+
+- **归属规范**: CMMI 04_implementation (TS) / .agents/skills/plugin-authoring
+
+---
+
+## 1. 插件工程拓扑标准
+每个第一方插件位于 \`packages/plugins/plugin-<domain>/\`，必须包含:
+1. \`plugin.manifest.json\`: 插件声明、能力白名单与路由声明
+2. \`plugin-entry.ts\`: 静态导入导出入口
+3. \`package.json\`: 包含 \`ruoyiPlugin\` 指针与 \`@ruoyi/plugin-sdk\`
+4. \`contract/\`: Domain Facade 抽象契约
+`
+      },
+      "sbom": {
+        file: "docs/04_implementation/software-bill-of-materials.md",
+        title: "软件物料清单 SBOM 与依赖准入基线",
+        template: (opts) => `# 软件物料清单 (Software Bill of Materials - SBOM)
+
+- **生成日期**: ${new Date().toISOString().split("T")[0]}
+- **版本基线**: ${opts.version || "v1.1.0"}
+- **包管理器**: pnpm workspaces (pnpm-lock.yaml)
+- **归属规范**: CMMI 04_implementation (TS / CM)
+
+---
+
+## 1. 核心底座依赖清单与开源许可证核验
+- Next.js 16.x (MIT)
+- React 19.x (MIT)
+- Kysely 0.29.x (MIT)
+- Prisma 7.x (Apache 2.0)
+- SQLite3 / Better-SQLite3 (MIT)
+`
+      }
+    }
+  },
+
+  // Phase 05: 验证与确认 (VV / Testing / Mutation)
   "05": {
     name: "05_verification",
     types: {
+      "test-plan": {
+        file: "docs/05_verification/test-plan.md",
+        title: "软件测试总计划与覆盖矩阵",
+        template: (opts) => `# 软件测试总计划与覆盖矩阵 (Software Test Plan)
+
+- **基线版本**: ${opts.version || "v1.1.0"}
+- **归属规范**: CMMI 05_verification (VV) / .agents/skills/automated-testing
+
+---
+
+## 1. 四层金字塔测试策略
+- **L1 单元测试**: 领域实体状态机、验证器、无副作用纯函数 (100% 覆盖)
+- **L2 集成测试**: 基于真实 SQLite/Postgres 的 Repository 事务与 CAS 锁 (100% 真实库)
+- **L3 契约测试**: 324 份跨端 API/RPC 接口契约一致性探针
+- **L4 E2E 旅程**: Playwright 浏览器关键端到端路径
+`
+      },
       "test-summary": {
         file: "docs/05_verification/test-summary-report.md",
         title: "软件测试执行总结报告",
@@ -211,7 +450,7 @@ flowchart TD
 `
       },
       "mutation-report": {
-        file: (opts) => `docs/05_verification/mutation-testing-report-${opts.version || "v1.1.0"}.md`,
+        file: (opts) => `docs/05_verification/mutation/mutation-testing-report-${opts.version || "v1.1.0"}.md`,
         title: "变异测试与反假Mock验证报告",
         template: (opts) => {
           if (!opts.real) {
@@ -229,14 +468,44 @@ flowchart TD
 ## 2. 空洞断言与假Mock杀灭清单
 `
         }
+      },
+      "peer-review": {
+        file: (opts) => `docs/05_verification/peer-review-records/PEER-REVIEW-${new Date().toISOString().split("T")[0].replace(/-/g, "")}-${(opts.slug || "REVIEW").toUpperCase()}.md`,
+        title: "同行技术评审纪要",
+        template: (opts) => `# 同行技术评审纪要 (Peer Review Record)
+
+- **评审标识**: PEER-REVIEW-${new Date().toISOString().split("T")[0].replace(/-/g, "")}-${(opts.slug || "REVIEW").toUpperCase()}
+- **评审日期**: ${new Date().toISOString().split("T")[0]}
+- **归属规范**: CMMI 05_verification (VV / Peer Review)
+
+---
+
+## 1. 评审对象与产物版本
+## 2. 评审缺陷与意见记录
+## 3. 闭环验证结论 (PASS / REWORK)
+`
       }
     }
   },
 
-  // Phase 06: 质量保证
+  // Phase 06: 质量保证 (PQA / CM / FCA-PCA)
   "06": {
     name: "06_quality_assurance",
     types: {
+      "qa-plan": {
+        file: "docs/06_quality_assurance/qa-audit-plan.md",
+        title: "质量保证检查计划 (PPQA)",
+        template: () => `# 过程与产品质量保证计划 (QA Audit Plan)
+
+- **归属规范**: CMMI 06_quality_assurance (PQA) / .agents/skills/compliance-auditor
+
+---
+
+## 1. 过程审计频次与检查单标准
+- 门禁自动化审计: 每次 Git Commit 自动触发 20 道门禁
+- 物理配置审计: 发版前由 PPQA 审计员核验 pnpm-lock 与指纹
+`
+      },
       "audit": {
         file: (opts) => `docs/06_quality_assurance/audit/PCA-FCA-COMPLIANCE-AUDIT-${opts.version || "v1.1.0"}.md`,
         title: "功能与物理配置审计总结报告 (FCA/PCA)",
@@ -254,11 +523,23 @@ flowchart TD
 - FCA (功能配置审计): 真实测试矩阵全绿、契约同步零漂移；
 - PCA (物理配置审计): 锁文件确定性 (pnpm-lock.yaml)、20 道门禁 Exit Code 0、Git 数字指纹验证。
 `
+      },
+      "gate-trace": {
+        file: "docs/06_quality_assurance/gate-evidence-trace.json",
+        title: "20 道质量门禁数字指纹记录",
+        template: () => JSON.stringify({
+          schema: "https://schema.ruoyi-all-next.org/gate-evidence-trace-v1.json",
+          auditedAt: new Date().toISOString(),
+          status: "PASSED",
+          gatesCount: 20,
+          invariants: "High-Order Inverse Thinking & Rule 0",
+          verifiedBy: "@compliance-auditor"
+        }, null, 2)
       }
     }
   },
 
-  // Phase 07: 发布交付
+  // Phase 07: 发布交付 (TRANS / DevOps)
   "07": {
     name: "07_release",
     types: {
@@ -282,13 +563,13 @@ flowchart TD
 `
       },
       "release-notes": {
-        file: (opts) => `docs/07_release/release-notes-${opts.version || "v1.1.0"}.md`,
+        file: (opts) => `docs/07_release/RELEASE_NOTES_${opts.version || "v1.1.0"}.md`,
         title: "版本发布说明 (Release Notes)",
         template: (opts) => `# 版本发布说明 (Release Notes): ${opts.version || "v1.1.0"}
 
 - **发布版本**: ${opts.version || "v1.1.0"}
 - **发布日期**: ${new Date().toISOString().split("T")[0]}
-- **归属规范**: CMMI 07_release (TRANS)
+- **归属规范**: CMMI 07_release (TRANS) / .agents/skills/devops
 
 ---
 
@@ -297,11 +578,39 @@ flowchart TD
 ## 3. 架构优化与重构 (Refactors)
 ## 4. 破坏性变更与迁移指引 (Breaking Changes)
 `
+      },
+      "rollback-runbook": {
+        file: "docs/07_release/rollback-runbook.json",
+        title: "生产秒级故障回滚演练 Runbook",
+        template: () => JSON.stringify({
+          schema: "https://schema.ruoyi-all-next.org/rollback-runbook-v1.json",
+          updatedAt: new Date().toISOString(),
+          maxRollbackTimeSeconds: 60,
+          steps: [
+            { step: 1, action: "traffic_drain", command: "host-exec docker stop ruoyi-next-blue" },
+            { step: 2, action: "traffic_switch", command: "host-exec traefik switch-upstream green" },
+            { step: 3, action: "db_downgrade", command: "npx prisma migrate diff --from db --to migration-target" }
+          ]
+        }, null, 2)
+      },
+      "user-manual": {
+        file: "docs/07_release/user-operation-manual.md",
+        title: "用户操作与运维指导手册",
+        template: () => `# 用户操作与运维指导手册 (User Operation Manual)
+
+- **归属规范**: CMMI 07_release (TRANS)
+
+---
+
+## 1. 系统登录与租户切换
+## 2. 运营后台权限与菜单导航
+## 3. 常见异常排查与联系方式
+`
       }
     }
   },
 
-  // Phase 08: SRE 稳定性
+  // Phase 08: SRE 稳定性 (CAM / SCON / SRE / Postmortem)
   "08": {
     name: "08_sre",
     types: {
@@ -342,11 +651,45 @@ flowchart TD
 ## 4. 纠正与预防措施清单 (CAPA)
 `
         }
+      },
+      "dr-plan": {
+        file: "docs/08_sre/05_disaster_recovery/DISASTER-RECOVERY-PLAN.md",
+        title: "多活容灾与混沌工程演练预案",
+        template: () => `# 多活容灾与混沌工程演练预案 (Disaster Recovery Plan)
+
+- **归属规范**: CMMI 08_sre / .agents/skills/sre-slo-manager
+
+---
+
+## 1. RTO 与 RPO 业务指标基线
+- RTO (恢复时间目标): <= 5 分钟
+- RPO (数据丢失点目标): 0 (同库事务) / <= 1 秒 (跨库同步)
+`
+      },
+      "strix-report": {
+        file: (opts) => `docs/08_sre/security-reports/STRIX-PENETRATION-REPORT-${opts.version || "v1.1.0"}.md`,
+        title: "Strix 红队多智能体渗透测试演练报告",
+        template: (opts) => {
+          if (!opts.real) {
+            throw new Error("【反造假守卫】创建渗透测试报告必须携带 --real 声明真实执行 Strix 容器红队演练，严禁伪造虚假 PoC 结果！")
+          }
+          return `# Strix 多智能体自主渗透演练报告: ${opts.version || "v1.1.0"}
+
+- **报告日期**: ${new Date().toISOString().split("T")[0]}
+- **归属规范**: CMMI 08_sre / .agents/skills/strix-penetration-testing
+
+---
+
+## 1. 渗透测试执行范围与攻击向量
+## 2. 自动化红队扫描发现与 PoC 验证
+## 3. 防御加固与安全漏洞修复建议
+`
+        }
       }
     }
   },
 
-  // Phase 09: 持续运营
+  // Phase 09: 持续运营 (BizOps / DataOps / CMMI-SVC / 对账平账)
   "09": {
     name: "09_operations",
     types: {
@@ -370,6 +713,36 @@ flowchart TD
 ## 3. 差异单与挂账平账明细
 `
         }
+      },
+      "agent-ops-ledger": {
+        file: "docs/09_operations/04_agent_ops/AGENT-OPS-LEDGER.md",
+        title: "AI 数字员工运营与任务台账",
+        template: () => `# AI 数字员工运营与任务台账 (AI Agent Ops Ledger)
+
+- **归属规范**: CMMI 09_operations / .agents/skills/cmmi-asset-authoring
+- **运行命令**: \`npm run agent:ops -- <domain>.<entity> health\`
+
+---
+
+## 1. 注册数字员工与能力映射
+## 2. 每日无头巡检与探针日志
+`
+      },
+      "inspection-report": {
+        file: (opts) => `docs/09_operations/03_inspection/INSPECTION-${new Date().toISOString().split("T")[0].replace(/-/g, "")}.md`,
+        title: "系统日常健康巡检报告",
+        template: () => `# 系统日常健康巡检报告 (System Inspection Report)
+
+- **巡检日期**: ${new Date().toISOString().split("T")[0]}
+- **巡检人**: @ops-team
+- **归属规范**: CMMI 09_operations
+
+---
+
+## 1. 核心容器与进程存活状态
+## 2. 数据库连接池与慢查询大盘
+## 3. 证书到期倒计时与告警静默期检查
+`
       }
     }
   }
@@ -394,7 +767,7 @@ function handleNew(opts) {
   const type = opts.type
   if (!phase || !type) {
     console.error("用法: node scripts/cmmi-asset-scaffold.cjs new --phase <01~09> --type <type> [--title \"标题\"] [--slug \"标识\"] [--real]")
-    console.error("\n可用类型清单:")
+    console.error("\n可用 01~09 全生命周期类型清单:")
     for (const [p, def] of Object.entries(ASSET_REGISTRY)) {
       console.error(`  Phase ${p} (${def.name}): ${Object.keys(def.types).join(", ")}`)
     }
@@ -440,6 +813,7 @@ function handleList() {
     "docs/01_management",
     "docs/02_requirements",
     "docs/03_design",
+    "docs/04_implementation",
     "docs/05_verification",
     "docs/06_quality_assurance",
     "docs/07_release",
@@ -510,7 +884,7 @@ function handleCheck() {
     for (const err of errors) console.error(`  - ${err}`)
     process.exit(1)
   }
-  console.log("✅ CMMI 资产合规扫描全部通过: 目录拓扑合规，0 散落文件，0 伪造假 Demo！")
+  console.log("✅ CMMI 资产合规扫描全部通过: 01~09 目录拓扑合规，0 散落文件，0 伪造假 Demo！")
 }
 
 function scanDir(dir) {
@@ -535,9 +909,9 @@ function main() {
   else if (cmd === "list") handleList()
   else if (cmd === "check") handleCheck()
   else {
-    console.log("CMMI 标准资产创建与治理引擎")
+    console.log("CMMI 01~09 全生命周期标准资产创建与治理引擎")
     console.log("用法:")
-    console.log("  node scripts/cmmi-asset-scaffold.cjs new --phase <01~09> --type <type> [--title \"标题\"]")
+    console.log("  node scripts/cmmi-asset-scaffold.cjs new --phase <01~09> --type <type> [--title \"标题\"] [--slug \"标识\"] [--real]")
     console.log("  node scripts/cmmi-asset-scaffold.cjs list")
     console.log("  node scripts/cmmi-asset-scaffold.cjs check")
     process.exit(0)

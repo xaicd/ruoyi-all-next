@@ -415,6 +415,131 @@ const TOOLS = [
       return { count: filtered.length, specs: filtered }
     },
   },
+  {
+    name: "ruoyi_cmmi_list",
+    description:
+      "Query CMMI 01~09 lifecycle phases, designated skills, supported asset types, and current deliverable asset status across docs/01~09. Read-only query tool.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        phase: { type: "string", description: "Optional phase number, e.g. 01, 02, ..., 09" },
+      },
+      additionalProperties: false,
+    },
+    run(args) {
+      const PHASES = [
+        {
+          phase: "01",
+          dir: "docs/01_management",
+          name: "01_management",
+          title: "立项与策划 (Project Planning & Decision)",
+          practiceArea: "PLAN / MC / RSKM / DAR",
+          skill: "dar-decision-matrix",
+          types: ["charter", "plan", "risk", "dar", "pcm"],
+        },
+        {
+          phase: "02",
+          dir: "docs/02_requirements",
+          name: "02_requirements",
+          title: "需求工程 (Requirements Development)",
+          practiceArea: "RDM / EARS",
+          skill: "ears-spec-writer",
+          types: ["srs", "rtm", "nfr", "urs"],
+        },
+        {
+          phase: "03",
+          dir: "docs/03_design",
+          name: "03_design",
+          title: "系统设计与架构 (Technical Solution / Architecture)",
+          practiceArea: "TS / MADR / Archify",
+          skill: "adr-architect",
+          types: ["adr", "erd", "archify", "hld", "api-spec"],
+        },
+        {
+          phase: "04",
+          dir: "docs/04_implementation",
+          name: "04_implementation",
+          title: "实现与构造 (Construction / Engineering Blueprint)",
+          practiceArea: "TS / Coding / Plugins",
+          skill: "coding",
+          types: ["code-review", "plugin-blueprint", "sbom"],
+        },
+        {
+          phase: "05",
+          dir: "docs/05_verification",
+          name: "05_verification",
+          title: "验证与打假 (Verification & Validation / Mutation)",
+          practiceArea: "VV / Testing / Mutation",
+          skill: "automated-testing",
+          types: ["test-plan", "test-summary", "mutation-report", "peer-review"],
+        },
+        {
+          phase: "06",
+          dir: "docs/06_quality_assurance",
+          name: "06_quality_assurance",
+          title: "质保与配置审计 (Process & Product QA / Configuration)",
+          practiceArea: "PQA / CM / FCA-PCA",
+          skill: "compliance-auditor",
+          types: ["qa-plan", "audit", "gate-trace"],
+        },
+        {
+          phase: "07",
+          dir: "docs/07_release",
+          name: "07_release",
+          title: "发布与割接 (Transition / Deployment / Rollback)",
+          practiceArea: "TRANS / DevOps",
+          skill: "devops",
+          types: ["deployment-sop", "release-notes", "rollback-runbook", "user-manual"],
+        },
+        {
+          phase: "08",
+          dir: "docs/08_sre",
+          name: "08_sre",
+          title: "站点可靠性与安全 (Service Continuity / SRE / Postmortem)",
+          practiceArea: "SCON / CAM / SRE",
+          skill: "sre-slo-manager",
+          types: ["slo-matrix", "postmortem", "dr-plan", "strix-report"],
+        },
+        {
+          phase: "09",
+          dir: "docs/09_operations",
+          name: "09_operations",
+          title: "持续运营与平账 (Service Delivery / BizOps / DataOps)",
+          practiceArea: "CMMI-SVC / BizOps / DataOps",
+          skill: "financial-reconciliation-agent",
+          types: ["reconciliation", "agent-ops-ledger", "inspection-report"],
+        },
+      ]
+
+      function scan(dir) {
+        let results = []
+        if (!fs.existsSync(dir)) return results
+        for (const item of fs.readdirSync(dir, { withFileTypes: true })) {
+          const full = path.join(dir, item.name)
+          if (item.isSymbolicLink()) continue
+          if (item.isDirectory()) results = results.concat(scan(full))
+          else results.push(full)
+        }
+        return results
+      }
+
+      const selected = args.phase ? PHASES.filter((p) => p.phase === String(args.phase).padStart(2, "0")) : PHASES
+      const result = selected.map((p) => {
+        const fullDir = path.join(ROOT, p.dir)
+        const files = scan(fullDir)
+        const realFiles = files.filter((f) => !f.endsWith(".gitkeep")).map((f) => path.relative(ROOT, f))
+        const hasPlaceholder = files.some((f) => f.endsWith(".gitkeep"))
+        return {
+          ...p,
+          realAssetsCount: realFiles.length,
+          placeholderOnly: realFiles.length === 0 && hasPlaceholder,
+          realAssets: realFiles,
+        }
+      })
+
+      return { totalPhases: PHASES.length, returnedPhases: result.length, phases: result }
+    },
+  },
 ]
 
 const TOOL_NAMES = TOOLS.map((tool) => tool.name)

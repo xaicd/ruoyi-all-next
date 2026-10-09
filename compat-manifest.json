@@ -70,6 +70,7 @@
       ],
       "tools": [
         "ruoyi_action_lookup",
+        "ruoyi_cmmi_list",
         "ruoyi_codegen_targets",
         "ruoyi_compat_info",
         "ruoyi_delivery_status",
@@ -83,7 +84,7 @@
         "ruoyi_spec_list",
         "ruoyi_standards_report"
       ],
-      "count": 13
+      "count": 14
     },
     "evolution": {
       "traceArtifact": "docs/architecture/artifacts/harness-trace-latest.json",
