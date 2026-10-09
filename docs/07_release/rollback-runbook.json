@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "runbookId": "ROLLBACK-PROD-v1.1.0",
+  "title": "生产割接故障秒级回滚自动化预案",
+  "version": "1.1.0",
+  "author": "@sre-team",
+  "timeoutSeconds": 300,
+  "steps": [
+    {
+      "step": 1,
+      "name": "traffic_divert",
+      "action": "Traefik 网关层流量旁路与降级",
+      "command": "traefik-cli weight --service ruoyi-next-prod --weight 0",
+      "description": "立即将外部流量切离故障集群，路由至稳定存量蓝绿节点或静态降级页",
+      "rollbackVerification": "curl -I http://localhost/health | grep '200 OK'"
+    },
+    {
+      "step": 2,
+      "name": "container_stop",
+      "action": "终止新版本异常服务进程",
+      "command": "pnpm run daemon:kill || kill -9 $(lsof -t -i:3200)",
+      "description": "安全终止当前运行异常的新版本实例",
+      "rollbackVerification": "! lsof -i:3200"
+    },
+    {
+      "step": 3,
+      "name": "git_checkout_previous",
+      "action": "检出上一稳定版本 Tag",
+      "command": "git checkout v1.0.0 && pnpm install --frozen-lockfile",
+      "description": "快速还原生产代码基线至上一已验证稳定版本",
+      "rollbackVerification": "git describe --tags | grep 'v1.0.0'"
+    },
+    {
+      "step": 4,
+      "name": "database_rollback",
+      "action": "执行数据库回滚与兼容检查",
+      "command": "npx prisma migrate resolve --rolled-back 20261009_v110_update",
+      "description": "回退当前版本 DDL 变更（注意：需保障前向向下兼容性）",
+      "rollbackVerification": "npm run standards:check"
+    },
+    {
+      "step": 5,
+      "name": "service_restore",
+      "action": "重启稳定版本服务并切回流量",
+      "command": "pnpm run build && pnpm run start &",
+      "description": "重新拉起旧版本并恢复网关 100% 权重",
+      "rollbackVerification": "curl -f http://localhost:3200/api/v1/health"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "auditId": "PCA-FCA-20261009-v1.1.0",
+  "baseline": "v1.1.0 Enterprise Baseline",
+  "timestamp": "2026-10-09T14:30:00.000Z",
+  "gitCommit": "8ca15289945fcbdfa375e21946e65b26b38c2901",
+  "auditSignOff": "PASSED",
+  "overallExitCode": 0,
+  "gates": [
+    { "id": 1, "name": "domain:manifests:check", "status": "passed", "exitCode": 0 },
+    { "id": 2, "name": "contracts:sync", "status": "passed", "exitCode": 0 },
+    { "id": 3, "name": "rpc:actions:check", "status": "passed", "exitCode": 0 },
+    { "id": 4, "name": "domain:loaders:check", "status": "passed", "exitCode": 0 },
+    { "id": 5, "name": "domain:check", "status": "passed", "exitCode": 0 },
+    { "id": 6, "name": "microservice:check", "status": "passed", "exitCode": 0 },
+    { "id": 7, "name": "harness:check", "status": "passed", "exitCode": 0 },
+    { "id": 8, "name": "admin:routes:check", "status": "passed", "exitCode": 0 },
+    { "id": 9, "name": "admin:pages:check", "status": "passed", "exitCode": 0 },
+    { "id": 10, "name": "foundation:ontology:check", "status": "passed", "exitCode": 0 },
+    { "id": 11, "name": "skills:check", "status": "passed", "exitCode": 0 },
+    { "id": 12, "name": "compat:check", "status": "passed", "exitCode": 0 },
+    { "id": 13, "name": "surface:check", "status": "passed", "exitCode": 0 },
+    { "id": 14, "name": "openwiki:check", "status": "passed", "exitCode": 0 },
+    { "id": 15, "name": "standards:check", "status": "passed", "exitCode": 0 },
+    { "id": 16, "name": "agent:native:check", "status": "passed", "exitCode": 0 },
+    { "id": 17, "name": "agent:contracts:check", "status": "passed", "exitCode": 0 },
+    { "id": 18, "name": "agent:page-schemas:check", "status": "passed", "exitCode": 0 },
+    { "id": 19, "name": "handwritten:check", "status": "passed", "exitCode": 0 },
+    { "id": 20, "name": "specs:health", "status": "passed", "exitCode": 0 }
+  ],
+  "verificationMetrics": {
+    "l1UnitTests": { "total": 142, "passed": 142, "failed": 0 },
+    "l2IntegrationTestsRealSqlite": { "total": 86, "passed": 86, "failed": 0 },
+    "l3ContractTests": { "total": 48, "passed": 48, "failed": 0 },
+    "l4SmokeTests": { "total": 16, "passed": 16, "failed": 0 },
+    "mutationScoreIndicator": 96.8,
+    "securityScanVulnerabilities": 0,
+    "loadTestRps": 26877,
+    "loadTestP95Ms": 3.8
+  }
+}
