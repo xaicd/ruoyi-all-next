@@ -7,6 +7,7 @@ All engineering rules and architectural standards are unified in `.agents/rules/
 - **Mandatory Rule 0**: `.agents/rules/RULE-0-UNIVERSAL-DIRECTIVES.md`
 - **High-Order Inverse Thinking**: `.agents/rules/HIGH-ORDER-INVERSE-THINKING.md`
 - **Spec-First Engineering**: `.agents/rules/SPEC-FIRST-ENGINEERING-ARTIFACTS.md`
+- **Unified Spec & Prototype Standard**: `.agents/rules/FEATURE-SPEC-AND-PROTOTYPE-STANDARD.md`
 - **Project Refactor & Init**: `.agents/rules/PROJECT-INIT-AND-REFACTOR.md`
 - **Multi-Tenant Isolation**: `.agents/rules/MULTI-TENANT-ISOLATION.md`
 - **10 Quality Gates**: `AGENTS.md`
@@ -14,6 +15,11 @@ All engineering rules and architectural standards are unified in `.agents/rules/
 ## Key Developer Commands
 - **Check All Gates**: `npm run check` (Runs all 10 engineering standards, seam checks, compat checks, admin route audits)
 - **Run Unit Tests**: `npm run test:unit` (Runs Vitest suite)
+- **Spec-Driven Lifecycle**:
+  - `npm run spec:new -- --name <name> --domain <domain> --title "<title>" [--type feature|bugfix|enhancement|refactor]`
+  - `npm run spec:build -- --name <name>`
+  - `npm run spec:check -- --feature <name>`
+  - `npm run spec:archive -- --name <name>`
 - **Bootstrap Local SQLite DB**: `npm run db:bootstrap:sqlite` (Creates `data/ruoyi.db` with standard 8 audit columns, boots supervip user, and generates secure password)
 - **Start Dev Server**: `pnpm dev` (Runs on http://localhost:3200, credentials: `supervip` with password in `.env.local`)
 - **Project Refactor / Init**: `npm run project:init` (or `npm run project:refactor`)

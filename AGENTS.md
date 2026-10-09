@@ -162,26 +162,27 @@
 
 | 步骤 | 命令 | 产物 / 证据 |
 |---|---|---|
-| 1. 立特性 | `npm run feature:new -- --name <名> --domain <域> --title "<标题>"` | `brief.json`（**模型只写这一份**，约 500 token） |
-| 2. 填 brief | 编辑 `docs/features/<名>/brief.json` | 目标/角色/故事/约束/验收/不变量/表/任务(含归属与白名单) |
-| 3. 展开 | `npm run feature:build -- --name <名>` | 6 份文档 + `evidence.json` + `runbook.json`（**结构不可能缺**） |
-| 4. 看进度 | `npm run delivery:check -- --feature <名>` | 11 阶段 / 6 gate / 任务树 / 缺陷，逐条「还缺什么」 |
+| 1. 规格立项 | `npm run spec:new -- --name <名> --domain <域> --title "<标题>" [--type feature\|bugfix\|enhancement\|refactor]` | `brief.json` + `assets/` + `prototypes/`（**按域隔离于 docs/specs/<域>/<名>，模型只写 brief <500 token**） |
+| 2. 填 brief | 编辑 `docs/specs/<域>/<名>/brief.json` | 目标/角色/故事/约束/验收/不变量/表/任务（bugfix 特化 symptom/rootCause/RedTest） |
+| 3. 展开 | `npm run spec:build -- --name <名>` | 7 份文档 + `evidence.json` + `runbook.json`（**结构不可能缺**） |
+| 4. 看进度 | `npm run spec:check -- --feature <名>` | 11 阶段 / 6 gate / 任务树 / 缺陷，逐条「还缺什么」 |
 | 5. 建域 | `npm run domain:new <域>` | 建表迁移 + codegen + 注册插件（**按域，不按特性**） |
 | 6. 门禁 | `npm run check` / `build` / `domain:pack <域>` | **退出码** |
 | 7. 建库 | `npx prisma migrate deploy` + 种子 + `npm run plugins:register` | 表 / 菜单 / 授权 / **插件登记**（不登记则插件接口全 404） |
-| 8. 业务逻辑 | 写成 Service + 测试 | 复用既有原语（条件更新、状态机、幂等） |
+| 8. 业务逻辑 | 写成 Service + 测试 | 复用既有原语（条件更新、状态机、幂等、Red Test） |
 | 9. 追溯 | `npm run task:verify -- --feature <名> --summary` | **从 git 推导**完成度；单任务核对白名单（1 Task = 1 Commit） |
 | 10. 上线 | `npm run fingerprint` → `fingerprint:verify` | 确认上线的就是测试过的那份 |
 | 11. 实施 | `npm run runbook -- --feature <名> --check/--dry-run/--run` | 割接 + **失败自动回滚** + **实测**耗时 |
-| 12. 运营 | `npm run agent:ops -- <域>.<实体> health/seed-sample/purge-sample` | 接口体检 + 造数/清数 |
-| 13. 冒烟（**平台可用性**） | `npm run smoke:login` | 建库→迁移→种子→登记插件→起服务→**登录 200**→受保护接口 200。自管理环境，跑完清场 |
-| 14. **渗透** | `npm run security:scan` | 12 项: 未认证/伪造 token/伪造 tenant/插件挂载/不泄露栈/安全响应头/错误口令/两个**阴性对照**。接进 CI + G5 |
-| 15. **压测**（容量护栏） | `npm run load:test` | 打**生产产物**，出 rps/p95/失败率并对阈值。接进 CI + G5 |
+| 12. 归档防污染 | `npm run spec:archive -- --name <名>` | 移动至 `docs/specs/archive/<YYYY-Qx>/<域>/<名>/`，保持活跃区清爽 |
+| 13. 运营 | `npm run agent:ops -- <域>.<实体> health/seed-sample/purge-sample` | 接口体检 + 造数/清数 |
+| 14. 冒烟（**平台可用性**） | `npm run smoke:login` | 建库→迁移→种子→登记插件→起服务→**登录 200**→受保护接口 200。自管理环境，跑完清场 |
+| 15. **渗透** | `npm run security:scan` | 12 项: 未认证/伪造 token/伪造 tenant/插件挂载/不泄露栈/安全响应头/错误口令/两个**阴性对照**。接进 CI + G5 |
+| 16. **压测**（容量护栏） | `npm run load:test` | 打**生产产物**，出 rps/p95/失败率并对阈值。接进 CI + G5 |
 
 要点（都是实测踩出来的）:
 
-1. **特性是两半**: 规划链在 `docs/features/<名>/`，**实现在域目录**（`plugin-<域>/` 等）。
-   特性目录里**不该**有业务代码 —— 打包/拆分部署/边界门禁都按**域**工作。
+1. **规格包是两半**: 规划链在 `docs/specs/<域>/<名>/`（按域垂直隔离，含切图 `assets/` 与 HTML 原型 `prototypes/`，割接后归档；向下兼容 `docs/features/`，详见 `.agents/rules/FEATURE-SPEC-AND-PROTOTYPE-STANDARD.md`），**实现在域目录**（`packages/plugins/plugin-<域>/` 等）。
+   规格目录里**不该**有业务代码 —— 打包/拆分部署/边界门禁都按**域**工作。
 2. **定制业务不回写基座**（§17.3）。基座只建原生域；`shop`/`points` 这类落在**衍生工程**。
 3. **骨架不算完成**: 检查器认得出「还有 N 处 待填」，不会假绿。
 4. **孵化出的工程必须有 git 仓库** —— 任务痕迹与指纹都建立在 git 上（孵化器已自动 `git init`）。

@@ -30,6 +30,7 @@
 - **跨域边界与解耦图谱**: [seam-graph.json](https://raw.githubusercontent.com/xaicd/ruoyi-all-next/main/packages/shared/contract/seam-graph.json)
 - **17 域权威运行时编目**: [domain-catalog.json](https://raw.githubusercontent.com/xaicd/ruoyi-all-next/main/packages/shared/backend/constants/domain-catalog.json)
 - **高阶反向思维工程铁律**: [HIGH-ORDER-INVERSE-THINKING.md](https://raw.githubusercontent.com/xaicd/ruoyi-all-next/main/.agents/rules/HIGH-ORDER-INVERSE-THINKING.md)
+- **统一规格包 (Spec) 与原型工程标准**: [FEATURE-SPEC-AND-PROTOTYPE-STANDARD.md](https://raw.githubusercontent.com/xaicd/ruoyi-all-next/main/.agents/rules/FEATURE-SPEC-AND-PROTOTYPE-STANDARD.md)
 
 ## 极速起步 (Quick Start for AI & Developers)
 

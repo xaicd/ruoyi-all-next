@@ -8,4 +8,5 @@ This workspace is `ruoyi-all-next`, an enterprise-grade fullstack platform built
 - Multi-tenancy: Strictly obtain tenant scope from `getCurrentTenantId()`, never pass explicit tenantId across layers.
 - Project Initialization: Use `npm run project:init` to customize project names, titles, and remotes.
 - Quality Gates: Must pass `npm run check` and `npm run test:unit`.
-- Detailed Rules: Review `AGENTS.md` and `llms.txt`.
+- Spec-Driven Architecture: Review `.agents/rules/FEATURE-SPEC-AND-PROTOTYPE-STANDARD.md`. All features, bugfixes, enhancements, and refactors are governed by Spec Bundles in `docs/specs/<domain>/<name>` with `assets/` and `prototypes/`. Commands: `npm run spec:new`, `npm run spec:build`, `npm run spec:check`, `npm run spec:archive`.
+- Detailed Rules: Review `AGENTS.md`, `CLAUDE.md`, and `llms.txt`.
