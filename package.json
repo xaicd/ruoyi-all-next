@@ -130,6 +130,7 @@
     "feature:build": "node scripts/build-feature.cjs",
     "spec:build": "node scripts/build-feature.cjs",
     "spec:check": "node scripts/check-delivery.cjs",
+    "spec:archive": "node scripts/archive-spec.cjs",
     "runbook": "node scripts/agent/run-runbook.cjs",
     "deliver": "node scripts/deliver.cjs",
     "plugins:register": "npx tsx scripts/register-plugins.ts",

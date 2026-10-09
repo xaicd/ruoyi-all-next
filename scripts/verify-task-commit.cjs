@@ -27,7 +27,14 @@ if (!feature) {
   process.exit(2)
 }
 
-const tasksFile = path.join(ROOT, "docs", "features", feature, "tasks.md")
+const { resolveSpecDir } = require("./lib/spec-resolver.cjs")
+const specDir = resolveSpecDir(feature)
+if (!specDir) {
+  console.error(`[task] 找不到特性/规格: ${feature}（在 docs/specs 与 docs/features 中均未找到）`)
+  process.exit(2)
+}
+
+const tasksFile = path.join(specDir, "tasks.md")
 if (!fs.existsSync(tasksFile)) {
   console.error(`[task] 找不到 ${path.relative(ROOT, tasksFile)}`)
   process.exit(2)

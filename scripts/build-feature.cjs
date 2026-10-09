@@ -24,9 +24,16 @@ if (!name) {
   process.exit(2)
 }
 
-const briefPath = path.join(ROOT, "docs", "features", name, "brief.json")
+const { resolveSpecDir } = require("./lib/spec-resolver.cjs")
+
+const dir = resolveSpecDir(name)
+if (!dir) {
+  console.error(`[spec] 找不到规格 ${name} —— 先写 brief（npm run spec:new 会给骨架）`)
+  process.exit(2)
+}
+const briefPath = path.join(dir, "brief.json")
 if (!fs.existsSync(briefPath)) {
-  console.error(`[feature] 找不到 ${path.relative(ROOT, briefPath)} —— 先写 brief（npm run feature:new 会给骨架）`)
+  console.error(`[spec] 找不到 ${path.relative(ROOT, briefPath)} —— 先写 brief（npm run spec:new 会给骨架）`)
   process.exit(2)
 }
 
@@ -57,7 +64,6 @@ if (process.argv.includes("--check")) {
   process.exit(0)
 }
 
-const dir = path.join(ROOT, "docs", "features", name)
 const files = {}
 
 files["requirements.md"] = `# 需求：${brief.title}
@@ -238,12 +244,12 @@ files["runbook.json"] = JSON.stringify(
 ) + "\n"
 
 if (process.argv.includes("--dry-run")) {
-  console.log(`[feature] dry-run: 将展开 ${Object.keys(files).length} 份文档 -> docs/features/${name}/`)
+  console.log(`[spec] dry-run: 将展开 ${Object.keys(files).length} 份文档 -> ${path.relative(ROOT, dir)}/`)
   process.exit(0)
 }
 
 for (const [file, content] of Object.entries(files)) {
   fs.writeFileSync(path.join(dir, file), content)
 }
-console.log(`[feature] 已由 brief 展开 ${Object.keys(files).length} 份文档 -> docs/features/${name}/`)
-console.log(`[feature] 校验: node scripts/check-delivery.cjs --feature ${name}`)
+console.log(`[spec] 已由 brief 展开 ${Object.keys(files).length} 份文档 -> ${path.relative(ROOT, dir)}/`)
+console.log(`[spec] 校验: node scripts/check-delivery.cjs --feature ${name}`)

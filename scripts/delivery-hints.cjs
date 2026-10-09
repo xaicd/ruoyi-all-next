@@ -11,21 +11,15 @@ const path = require("node:path")
 const { execFileSync } = require("node:child_process")
 
 const ROOT = path.resolve(__dirname, "..")
-const featuresDir = path.join(ROOT, "docs", "features")
-if (!fs.existsSync(featuresDir)) {
-  console.log("[delivery] 尚无 docs/features/ 目录")
+const { listAllSpecs } = require("./lib/spec-resolver.cjs")
+
+const allSpecs = listAllSpecs().filter((s) => !s.isArchived)
+if (allSpecs.length === 0) {
+  console.log("[delivery] 尚未登记规格或特性（npm run spec:new -- --name <名> --domain <域>）")
   process.exit(0)
 }
 
-const features = fs
-  .readdirSync(featuresDir, { withFileTypes: true })
-  .filter((entry) => entry.isDirectory() && fs.existsSync(path.join(featuresDir, entry.name, "feature.json")))
-  .map((entry) => entry.name)
-
-if (features.length === 0) {
-  console.log("[delivery] 尚未登记特性（npm run feature:new -- --name <名> --domain <域>）")
-  process.exit(0)
-}
+const features = allSpecs.map((s) => s.name)
 
 for (const name of features) {
   let data

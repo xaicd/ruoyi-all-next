@@ -263,13 +263,23 @@ function main() {
   // 并**用 featureScopedArtifacts 取代**基座级模式 —— 否则 `packages/plugins/**`
   // 会把整个基座算进来，开发阶段永远是绿的（那是"假绿"，实测踩到）。
   let scoped = null
+  let specDir = null
   if (feature) {
-    let descriptor = path.join(ROOT, "docs", "features", feature, "feature.json")
+    const { resolveSpecDir } = require("./lib/spec-resolver.cjs")
+    specDir = resolveSpecDir(feature)
+    if (!specDir) {
+      console.error(`[delivery] 找不到特性/规格: ${feature}（已在 docs/specs 与 docs/features 中检索）`)
+      process.exit(2)
+    }
+    let descriptor = path.join(specDir, "spec.json")
     if (!fs.existsSync(descriptor)) {
-      descriptor = path.join(ROOT, "docs", "features", feature, "spec.json")
+      descriptor = path.join(specDir, "feature.json")
     }
     if (!fs.existsSync(descriptor)) {
-      console.error(`[delivery] 找不到特性/规格描述: docs/features/${feature}/feature.json 或 spec.json`)
+      descriptor = path.join(specDir, "brief.json")
+    }
+    if (!fs.existsSync(descriptor)) {
+      console.error(`[delivery] 找不到特性/规格描述文件: ${path.relative(ROOT, specDir)}/spec.json 或 feature.json`)
       process.exit(2)
     }
     let meta
@@ -289,11 +299,19 @@ function main() {
   for (const phase of phases) {
     const found = []
     const missing = []
-    const patterns = scoped && phase.featureScopedArtifacts
+    let patterns = scoped && phase.featureScopedArtifacts
       ? phase.featureScopedArtifacts.map((item) => item.replace(/\{domain\}/g, scoped.domain))
       : phase.artifacts
+    if (scoped && specDir) {
+      const relSpecDir = path.relative(ROOT, specDir).replace(/\\/g, "/")
+      patterns = patterns.map((p) => p.replace(/^docs\/features\/\*\*\//, `${relSpecDir}/`))
+    }
     for (const pattern of patterns) {
       const hits = expand(pattern)
+      if (!scoped && pattern.startsWith("docs/features/**/")) {
+        const specPattern = pattern.replace(/^docs\/features\/\*\*\//, "docs/specs/**/")
+        hits.push(...expand(specPattern))
+      }
       if (hits.length > 0) found.push({ pattern, count: hits.length, sample: path.relative(ROOT, hits[0]) })
       else missing.push(pattern)
     }
@@ -303,7 +321,7 @@ function main() {
       const docs = { requirement: ["requirements.md"], prototype: ["prototype.md"],
         "ui-design": ["design.md"], architecture: ["design.md"], implementation: ["tasks.md"] }[phase.id]
       if (docs) {
-        const checks = docs.map((doc) => ({ doc, ...inspectFeatureDocs(path.join(ROOT, "docs", "features", scoped.name), doc) }))
+        const checks = docs.map((doc) => ({ doc, ...inspectFeatureDocs(specDir, doc) }))
         const bad = checks.filter((item) => !item.ok)
         if (bad.length > 0) {
           skeleton = bad.map((item) => `${item.doc}: ${item.reason}`).join("; ")
@@ -327,11 +345,11 @@ function main() {
   const missingArtifacts = result.reduce((sum, phase) => sum + phase.missing.length, 0)
   let distinctTotal = missingArtifacts + distinctSkeletons.size
 
-  const bugs = scoped ? inspectBugs(path.join(ROOT, "docs", "features", scoped.name)) : null
-  const tasks = scoped ? inspectTasks(path.join(ROOT, "docs", "features", scoped.name)) : null
+  const bugs = scoped ? inspectBugs(specDir) : null
+  const tasks = scoped ? inspectTasks(specDir) : null
   const evidence = scoped
     ? inspectEvidence(
-        path.join(ROOT, "docs", "features", scoped.name),
+        specDir,
         // 去重: 多个阶段可能共用同一 gate（G4_DS 之于需求/运营/实施），
         // 不去重会把同一个问题报 3 次 —— 和 design.md 那次是同一类错。
         [...new Set(manifest.phases.map((phase) => phase.gate).filter(Boolean))],
@@ -357,8 +375,8 @@ function main() {
     const dirOf = path.join(ROOT, "packages", "plugins", `plugin-${scoped.domain}`)
     const legacy = path.join(ROOT, "packages", "domains", scoped.domain)
     const created = fs.existsSync(dirOf) ? dirOf : fs.existsSync(legacy) ? legacy : null
-    console.log(`\n[delivery] 特性的两半:`)
-    console.log(`   规划链  docs/features/${scoped.name}/   （四件套 + feature.json）`)
+    console.log(`\n[delivery] 规格/特性的两半:`)
+    console.log(`   规划链  ${path.relative(ROOT, specDir)}/   （四件套 + spec.json）`)
     console.log(
       created
         ? `   实现    ${path.relative(ROOT, created)}/   （域名 ${scoped.domain} —— 打包/拆分部署按域工作）`

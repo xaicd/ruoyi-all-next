@@ -4,7 +4,12 @@ import path from "node:path"
 import { afterAll, beforeAll, describe, expect, it } from "vitest"
 
 const ROOT = path.resolve(__dirname, "../..")
-const FIXTURE = path.join(ROOT, "docs", "features", "__skeleton_fixture__")
+const FIXTURE_SPECS = path.join(ROOT, "docs", "specs", "fixture", "__skeleton_fixture__")
+const FIXTURE_FEATURES = path.join(ROOT, "docs", "features", "__skeleton_fixture__")
+const cleanFixtures = () => {
+  fs.rmSync(FIXTURE_SPECS, { recursive: true, force: true })
+  fs.rmSync(FIXTURE_FEATURES, { recursive: true, force: true })
+}
 
 /**
  * 交付检查器必须**认得出骨架**。
@@ -17,13 +22,13 @@ describe("delivery 检查器的骨架判定", () => {
   beforeAll(() => {
     // 幂等: 夹具目录若残留（上次跑崩/被中断），create-feature 会**拒绝覆盖**而 exit 2，
     // 整个 beforeAll 抛错 → 这个文件的用例全被跳过。先清后建。
-    fs.rmSync(FIXTURE, { recursive: true, force: true })
+    cleanFixtures()
     // 新流程是两步: create-feature 只产 brief；build-feature 由 brief 展开文档。
     // 骨架 brief 里的占位符会被展开进文档 → 骨架判定应当照样拦住（不假绿）。
     execFileSync("npx", ["tsx", "scripts/create-feature.ts", "--name", "__skeleton_fixture__", "--domain", "fixture", "--title", "骨架夹具"], { cwd: ROOT, stdio: "ignore" })
     execFileSync("node", ["scripts/build-feature.cjs", "--name", "__skeleton_fixture__"], { cwd: ROOT, stdio: "ignore" })
   })
-  afterAll(() => fs.rmSync(FIXTURE, { recursive: true, force: true }))
+  afterAll(() => cleanFixtures())
 
   it("全新骨架被标记为未完成（不假绿）", () => {
     const out = execFileSync("node", ["scripts/check-delivery.cjs", "--feature", "__skeleton_fixture__", "--json"], { cwd: ROOT, encoding: "utf8" })

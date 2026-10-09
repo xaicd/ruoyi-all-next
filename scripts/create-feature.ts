@@ -28,7 +28,12 @@ if (!name || !domain) {
   process.exit(2)
 }
 
-const dir = path.join(ROOT, "docs", "features", name)
+const { getTargetSpecDir } = require("./lib/spec-resolver.cjs")
+
+const dir = process.argv.includes("--legacy")
+  ? path.join(ROOT, "docs", "features", name)
+  : getTargetSpecDir(name, domain)
+
 if (fs.existsSync(dir) && !process.argv.includes("--force")) {
   console.error(`[spec] ${path.relative(ROOT, dir)} 已存在（加 --force 覆盖骨架；已填内容会被覆盖，谨慎）`)
   process.exit(2)
@@ -153,9 +158,9 @@ fs.writeFileSync(
     2,
   ) + "\n",
 )
-console.log(`[feature] 已生成 docs/features/${name}/brief.json（一份声明，替代 7 份文档骨架）`)
-console.log(`[feature] 下一步: 填 brief（约 500 token），然后 node scripts/build-feature.cjs --name ${name}`)
-console.log(`[feature] 展开后校验: node scripts/check-delivery.cjs --feature ${name}`)
+console.log(`[spec] 已生成 ${path.relative(ROOT, dir)}/brief.json（一份声明，替代 7 份文档骨架）`)
+console.log(`[spec] 下一步: 填 brief（约 500 token），然后 node scripts/build-feature.cjs --name ${name}`)
+console.log(`[spec] 展开后校验: node scripts/check-delivery.cjs --feature ${name}`)
 fs.writeFileSync(
   path.join(dir, "feature.json"),
   JSON.stringify(
@@ -191,5 +196,5 @@ if (!fs.existsSync(prototypesDir)) {
   )
 }
 
-console.log(`[feature] 已生成 docs/features/${name}/（brief.json + evidence.json + feature.json + assets/ + prototypes/）`)
+console.log(`[spec] 已生成 ${path.relative(ROOT, dir)}/（brief.json + evidence.json + spec.json + assets/ + prototypes/）`)
 

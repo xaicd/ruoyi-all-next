@@ -26,14 +26,17 @@
 
 ## 二、 统一规格全息包 (Spec Bundle) 物理拓扑
 
-所有规格变更的过程资产统一封装在独立目录中（存储在 `docs/features/<spec-name>/`，历史兼容平滑演进）：
+所有规格变更的过程资产统一封装在独立目录中，物理拓扑遵循 **按领域隔离 (Domain Partitioning)** 与 **活跃/归档双轨制 (Active & Archive)**：
+
+- **活跃施工区**：`docs/specs/<domain>/<spec-name>/`（默认按域收敛，向下兼容旧版 `docs/features/<name>/`）；
+- **历史归档区**：`docs/specs/archive/<YYYY-Qx>/<domain>/<spec-name>/`（交付后一键归档，杜绝目录污染）；
 
 ```
                   【统一规格全息包 (Spec Bundle)】
 
-  docs/features/<spec-name>/
+  docs/specs/<domain>/<spec-name>/
   ├── brief.json                 # 【核心输入】<500 Tokens 极简声明式 Brief (含 type 声明)
-  ├── feature.json / spec.json   # 【元数据清单】名称、所属域、规格类型、上游溯源映射
+  ├── spec.json / feature.json   # 【元数据清单】名称、所属域、规格类型、上游溯源映射
   ├── requirements.md            # 【需求/规格】业务背景/缺陷根因、EARS 验收标准
   ├── design.md                  # 【设计】架构拓扑、领域实体、4 态状态机、关键不变量
   ├── prototype.md               # 【原型导读】文本线框、字段交互、四态规范、素材总索引
@@ -129,6 +132,13 @@ npm run spec:build -- --name fix-cart-race-condition
 - 对 Bugfix 必须坚持 **反假 Mock 铁律**：写出能在真实数据库/状态机下红灯挂掉的测试用例；
 - 每次提交关联任务：`git commit -m "fix(mall): [T1] 补充购物车并发超卖红灯复现单测"`；
 - 自动化门禁核查：`npm run spec:check -- --feature fix-cart-race-condition` 与 `npm run check`。
+
+### 5. 交付上线与规格归档 (Spec Archive)
+上线割接完成并验证通过后，执行一键归档：
+```bash
+npm run spec:archive -- --name fix-cart-race-condition
+```
+该规格包将自动从活跃施工区移动至 `docs/specs/archive/<YYYY-Qx>/<domain>/<name>/`，防止活跃目录随项目演进而膨胀污染；系统全息解析器依然保留对其全局可审计与双向追溯能力。
 
 ---
 

@@ -31,9 +31,16 @@ if (!feature) {
   process.exit(2)
 }
 
-const file = path.join(ROOT, "docs", "features", feature, "runbook.json")
+const { resolveSpecDir } = require("../lib/spec-resolver.cjs")
+const specDir = resolveSpecDir(feature)
+if (!specDir) {
+  console.error(`[runbook] 找不到特性/规格: ${feature}`)
+  process.exit(2)
+}
+
+const file = path.join(specDir, "runbook.json")
 if (!fs.existsSync(file)) {
-  console.error(`[runbook] 找不到 docs/features/${feature}/runbook.json（npm run feature:new 会给骨架）`)
+  console.error(`[runbook] 找不到 ${path.relative(ROOT, file)}（npm run spec:new 会给骨架）`)
   process.exit(2)
 }
 let runbook
@@ -106,7 +113,7 @@ const runOne = (step) => {
   return { ok: result.status === 0, elapsedMs: Date.now() - started, output: `${result.stdout ?? ""}${result.stderr ?? ""}` }
 }
 
-const RESULT_PATH = path.join(ROOT, "docs", "features", feature, "runbook-result.json")
+const RESULT_PATH = path.join(specDir, "runbook-result.json")
 const record = { feature, ranAt: new Date().toISOString(), windowMinutes: runbook.window?.minutes ?? null, steps: [], rolledBack: false, ok: false, totalMs: 0 }
 
 /** 把运行**事实**写进 runbook-result.json，并把指针追加进 evidence.json 的 G5 证据。
@@ -115,7 +122,7 @@ const record = { feature, ranAt: new Date().toISOString(), windowMinutes: runboo
 function persist(resultOk) {
   record.ok = resultOk
   fs.writeFileSync(RESULT_PATH, JSON.stringify(record, null, 2) + "\n")
-  const evidencePath = path.join(ROOT, "docs", "features", feature, "evidence.json")
+  const evidencePath = path.join(specDir, "evidence.json")
   if (!fs.existsSync(evidencePath)) return
   try {
     const ledger = JSON.parse(fs.readFileSync(evidencePath, "utf8"))
