@@ -22,28 +22,82 @@ export class ProductSkuService {
     )
   }
 
-  static async get(id: string, actorId?: string, tenantId?: string) {
+  static async get(id: string | number, actorId?: string, tenantId?: string) {
     return ProductSkuRepository.findById(id, { actorId, tenantId })
   }
 
   static async create(data: ProductSkuCreateDTO, actorId?: string, tenantId?: string) {
-    const row = await ProductSkuRepository.create(data as unknown as Record<string, unknown>, { actorId, tenantId })
+    const row = await ProductSkuRepository.create(
+      {
+        stock: 0,
+        sales_count: 0,
+        ...data,
+      } as unknown as Record<string, unknown>,
+      { actorId, tenantId }
+    )
     domainLog.event("mall.productSku.created", { id: row.id, actorId })
     return row
   }
 
-  static async update(id: string, data: ProductSkuUpdateDTO, actorId?: string, tenantId?: string) {
+  static async update(id: string | number, data: ProductSkuUpdateDTO, actorId?: string, tenantId?: string) {
     const row = await ProductSkuRepository.update(id, data as unknown as Record<string, unknown>, { actorId, tenantId })
     domainLog.event("mall.productSku.updated", { id, actorId })
     return row
   }
 
-  static async delete(id: string, actorId?: string, tenantId?: string) {
+  static async delete(id: string | number, actorId?: string, tenantId?: string) {
     const ok = await ProductSkuRepository.delete(id, { actorId, tenantId })
     if (ok) {
       domainLog.event("mall.productSku.deleted", { id, actorId })
     }
     return ok
+  }
+
+  /**
+   * 扣减商品 SKU 库存（防超卖守卫）
+   */
+  static async deductStock(id: string | number, count: number, actorId?: string, tenantId?: string) {
+    if (count <= 0) throw new Error("扣减库存数量必须大于0")
+    const sku = await this.get(id, actorId, tenantId)
+    if (!sku) throw new Error(`商品规格不存在: ${id}`)
+
+    const currentStock = sku.stock ?? 0
+    if (currentStock < count) {
+      throw new Error(`商品库存不足，当前库存为 ${currentStock}，无法扣减 ${count}`)
+    }
+
+    const updated = await this.update(
+      id,
+      {
+        stock: currentStock - count,
+        sales_count: (sku.sales_count ?? 0) + count,
+      } as any,
+      actorId,
+      tenantId,
+    )
+    domainLog.audit("mall.sku.stockDeducted", { skuId: id, deductCount: count, remainingStock: updated.stock, actorId })
+    return updated
+  }
+
+  /**
+   * 回退商品 SKU 库存（订单取消/售后归还）
+   */
+  static async restoreStock(id: string | number, count: number, actorId?: string, tenantId?: string) {
+    if (count <= 0) throw new Error("回退库存数量必须大于0")
+    const sku = await this.get(id, actorId, tenantId)
+    if (!sku) throw new Error(`商品规格不存在: ${id}`)
+
+    const updated = await this.update(
+      id,
+      {
+        stock: (sku.stock ?? 0) + count,
+        sales_count: Math.max(0, (sku.sales_count ?? 0) - count),
+      } as any,
+      actorId,
+      tenantId,
+    )
+    domainLog.audit("mall.sku.stockRestored", { skuId: id, restoredCount: count, totalStock: updated.stock, actorId })
+    return updated
   }
 }
 

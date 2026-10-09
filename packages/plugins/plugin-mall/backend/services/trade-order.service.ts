@@ -8,6 +8,14 @@ import type {
   TradeOrderUpdateDTO,
 } from "../types/trade-order.types"
 
+export const TRADE_ORDER_STATUS = {
+  UNPAID: 0,
+  PAID: 10,
+  SHIPPED: 20,
+  COMPLETED: 30,
+  CANCELLED: 40,
+} as const
+
 export class TradeOrderService {
   static async page(query: TradeOrderPageQuery, actorId?: string, tenantId?: string) {
     const page = query.page ?? 1
@@ -22,28 +30,170 @@ export class TradeOrderService {
     )
   }
 
-  static async get(id: string, actorId?: string, tenantId?: string) {
+  static async get(id: string | number, actorId?: string, tenantId?: string) {
     return TradeOrderRepository.findById(id, { actorId, tenantId })
   }
 
   static async create(data: TradeOrderCreateDTO, actorId?: string, tenantId?: string) {
-    const row = await TradeOrderRepository.create(data as unknown as Record<string, unknown>, { actorId, tenantId })
+    const row = await TradeOrderRepository.create(
+      {
+        status: TRADE_ORDER_STATUS.UNPAID,
+        pay_status: false,
+        comment_status: false,
+        ...data,
+      } as unknown as Record<string, unknown>,
+      { actorId, tenantId }
+    )
     domainLog.event("mall.tradeOrder.created", { id: row.id, actorId })
     return row
   }
 
-  static async update(id: string, data: TradeOrderUpdateDTO, actorId?: string, tenantId?: string) {
+  static async update(id: string | number, data: TradeOrderUpdateDTO, actorId?: string, tenantId?: string) {
     const row = await TradeOrderRepository.update(id, data as unknown as Record<string, unknown>, { actorId, tenantId })
     domainLog.event("mall.tradeOrder.updated", { id, actorId })
     return row
   }
 
-  static async delete(id: string, actorId?: string, tenantId?: string) {
+  static async delete(id: string | number, actorId?: string, tenantId?: string) {
     const ok = await TradeOrderRepository.delete(id, { actorId, tenantId })
     if (ok) {
       domainLog.event("mall.tradeOrder.deleted", { id, actorId })
     }
     return ok
+  }
+
+  /**
+   * 支付成功通知（支持幂等回调）
+   */
+  static async notifyPaid(
+    orderId: string | number,
+    payOrderId: number,
+    channelCode = "wallet",
+    actorId?: string,
+    tenantId?: string,
+  ) {
+    const order = await this.get(orderId, actorId, tenantId)
+    if (!order) throw new Error(`订单不存在: ${orderId}`)
+
+    // 幂等守卫：已处于支付状态或更高状态，直接返回现有记录
+    if (order.status && order.status >= TRADE_ORDER_STATUS.PAID && order.status !== TRADE_ORDER_STATUS.CANCELLED) {
+      return order
+    }
+
+    if (order.status === TRADE_ORDER_STATUS.CANCELLED) {
+      throw new Error("订单已取消，禁止支付")
+    }
+
+    const now = new Date().toISOString()
+    const updated = await this.update(
+      orderId,
+      {
+        status: TRADE_ORDER_STATUS.PAID,
+        pay_status: true,
+        pay_time: now,
+        pay_order_id: payOrderId,
+        pay_channel_code: channelCode,
+      } as any,
+      actorId,
+      tenantId,
+    )
+    domainLog.audit("mall.order.paid", { orderId, payOrderId, channelCode, actorId })
+    return updated
+  }
+
+  /**
+   * 订单发货
+   */
+  static async ship(
+    orderId: string | number,
+    deliveryInfo: { logisticsNo: string; logisticsId?: number },
+    actorId?: string,
+    tenantId?: string,
+  ) {
+    const order = await this.get(orderId, actorId, tenantId)
+    if (!order) throw new Error(`订单不存在: ${orderId}`)
+
+    if (order.status === TRADE_ORDER_STATUS.UNPAID) {
+      throw new Error("订单尚未支付，无法发货")
+    }
+    if (order.status && order.status >= TRADE_ORDER_STATUS.SHIPPED) {
+      throw new Error("订单已发货或已完成，禁止重复发货")
+    }
+    if (order.status === TRADE_ORDER_STATUS.CANCELLED) {
+      throw new Error("订单已取消，无法发货")
+    }
+
+    const now = new Date().toISOString()
+    const updated = await this.update(
+      orderId,
+      {
+        status: TRADE_ORDER_STATUS.SHIPPED,
+        delivery_time: now,
+        logistics_no: deliveryInfo.logisticsNo,
+        logistics_id: deliveryInfo.logisticsId,
+      } as any,
+      actorId,
+      tenantId,
+    )
+    domainLog.audit("mall.order.shipped", { orderId, logisticsNo: deliveryInfo.logisticsNo, actorId })
+    return updated
+  }
+
+  /**
+   * 确认收货 / 完成订单
+   */
+  static async receive(orderId: string | number, actorId?: string, tenantId?: string) {
+    const order = await this.get(orderId, actorId, tenantId)
+    if (!order) throw new Error(`订单不存在: ${orderId}`)
+
+    if (order.status !== TRADE_ORDER_STATUS.SHIPPED) {
+      throw new Error("只有已发货的订单才能确认收货")
+    }
+
+    const now = new Date().toISOString()
+    const updated = await this.update(
+      orderId,
+      {
+        status: TRADE_ORDER_STATUS.COMPLETED,
+        receive_time: now,
+        finish_time: now,
+      } as any,
+      actorId,
+      tenantId,
+    )
+    domainLog.audit("mall.order.received", { orderId, actorId })
+    return updated
+  }
+
+  /**
+   * 取消订单
+   */
+  static async cancel(orderId: string | number, reason?: string, actorId?: string, tenantId?: string) {
+    const order = await this.get(orderId, actorId, tenantId)
+    if (!order) throw new Error(`订单不存在: ${orderId}`)
+
+    if (order.status === TRADE_ORDER_STATUS.CANCELLED) {
+      return order
+    }
+
+    if (order.status === TRADE_ORDER_STATUS.SHIPPED || order.status === TRADE_ORDER_STATUS.COMPLETED) {
+      throw new Error("已发货或已完成的订单无法直接取消，请发起售后退款申请")
+    }
+
+    const now = new Date().toISOString()
+    const updated = await this.update(
+      orderId,
+      {
+        status: TRADE_ORDER_STATUS.CANCELLED,
+        cancel_time: now,
+        cancel_type: 1,
+        remark: reason ?? order.remark,
+      } as any,
+      actorId,
+      tenantId,
+    )
+    domainLog.audit("mall.order.cancelled", { orderId, reason, actorId })
+    return updated
   }
 }
 
