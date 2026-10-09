@@ -45,6 +45,25 @@ node_modules/
 *.msi
 .expo/
 
+# compressed archives & Java packages (严禁入库)
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+*.jar
+*.war
+*.ear
+
+# heavy media files (严禁入库，建议上传对象存储/CDN)
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.iso
+
+
 # debug
 npm-debug.log*
 yarn-debug.log*
