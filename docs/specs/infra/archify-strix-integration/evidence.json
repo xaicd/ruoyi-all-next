@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "feature": "archify-strix-integration",
+  "note": "每个 gate 的独立证据。证据不可跨角色借用；not_applicable 必须给理由；passed 必须有证据。",
+  "gates": {
+    "G0_DAR": {
+      "status": "pending",
+      "owner": "-",
+      "evidence": [],
+      "summary": ""
+    },
+    "G1_FDA": {
+      "status": "pending",
+      "owner": "-",
+      "evidence": [],
+      "summary": ""
+    },
+    "G2_CoreSWE": {
+      "status": "pending",
+      "owner": "-",
+      "evidence": [],
+      "summary": ""
+    },
+    "G3_FDSE": {
+      "status": "pending",
+      "owner": "-",
+      "evidence": [],
+      "summary": ""
+    },
+    "G4_DS": {
+      "status": "pending",
+      "owner": "-",
+      "evidence": [],
+      "summary": ""
+    },
+    "G5_PRE": {
+      "status": "pending",
+      "owner": "-",
+      "evidence": [],
+      "summary": ""
+    }
+  }
+}
