@@ -182,3 +182,45 @@ ruoyi-all-next / [基于底座衍生的客户商业项目]
 1. **先建目录，后提代码**：启动大型项目或全新业务系统时，严格按上述 `docs/` 目录组织资产，严禁各模块文档乱飞；
 2. **轻量自动化，重在可核验**：不追求文档的篇幅冗长，追求每份文档有结构、有版本、有责任人、有 Git Commit 关联；
 3. **真实证据沉淀**：每次门禁检查产生的数据（如 `evidence.json`、测试覆盖率、安全扫描结果）统一沉淀为过程质量凭证，随时可迎检外部 CMMI 机构审核或甲方工程验收。
+
+---
+
+## 八、 制品分发矩阵：Git 源码库与 GitHub / Gitee Releases 的协同分工
+
+解决“二进制/安装包/压缩归档严禁入 Git，但用户又需要下载”的唯一工业标准解法，就是**将 Git 代码库与 Release 发行版严格解耦分工**：
+
+```
+┌──────────────────────────────────────────────────────────┐
+│                   ruoyi-all-next 工程总矩阵              │
+└─────────────┬──────────────────────────────┬─────────────┘
+              │                              │
+     【纯文本源资产】 (Git Tracked)        【二进制分发资产】 (Release Assets)
+              │                              │
+     ├── 业务与框架源码 (TS/Next.js/React)   ├── 移动端安装包 (*.apk, *.ipa, *.aab)
+     ├── Schema/DSL/Prisma Migrations        ├── 离线脱机骨架包 (*-skeleton.tar.gz)
+     ├── CMMI 01~09 过程规范文档             ├── 预填充演示/压测数据库快照 (*.db.zip)
+     └── 轻量原型线框/切图 (assets/prototypes)├── OpenAPI 契约全景包 (openapi.json)
+                                             └── 完整性哈希清单 (SHA256SUMS.txt)
+                                                     │
+                                   ┌─────────────────┴─────────────────┐
+                                   ▼                                   ▼
+                           【GitHub Releases】                  【Gitee Releases】
+                         (全球开发者/CI/CD生态)               (国内网络直连/政企内网加速)
+```
+
+### 1. 为什么必须同时利用 GitHub Releases 与 Gitee Releases？
+1. **GitHub Releases（全球开源与 AI 生态）**：
+   - 全球开发者、跨国企业与 Cursor/Claude/Cline Agent 默认调用的首选下载点；
+   - 深度集成 GitHub Actions 流水线（`.github/workflows/release.yml`），打 Tag 即自动构建发布并生成 Release Notes。
+2. **Gitee Releases（国内极速直连与政企客户）**：
+   - RuoYi 是 Gitee 最顶级的现象级开源项目（数十万 Star），拥有极其庞大的国内企业开发者群体；
+   - 国内开发者与政企内网访问 GitHub 经常出现网络断流、404、5KB/s 龟速。通过 Gitee Releases 分发 APK、SQL 离线包与骨架压缩包，国内用户**百兆光纤免翻墙极速下载**，体验质感直接拉满！
+
+### 2. 自动化发布流水线联动 (Release Pipeline)
+- 开发者或产品负责人在主分支打版本标签（如 `git tag v1.0.0 && git push origin v1.0.0`）；
+- 触发 `.github/workflows/release.yml`，全自动完成：
+  1. 运行 19 项门禁自检与 40 项单元测试（100% PASS 门禁）；
+  2. 构建生产应用并打包离线纯净骨架包（自动剔除 `.git`、`node_modules`、运行时 `data/*.db`）；
+  3. 生成 SHA256 校验和并上传至 **GitHub Releases**；
+  4. 同步 Tag 至 Gitee 仓库镜像，将安装包挂载至 **Gitee 发行版 (Release)**。
+
