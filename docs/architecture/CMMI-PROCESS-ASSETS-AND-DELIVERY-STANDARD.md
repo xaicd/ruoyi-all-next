@@ -146,20 +146,20 @@ ruoyi-all-next / [基于底座衍生的客户商业项目]
 └── clients/                            # 【多端客户端源码实现】(Expo / 移动端)
 ```
 
-### 4.1 本底座已落地的基准工作产品对照表 (Reference Exemplar Work Products in Base)
+### 4.1 本底座真实基准工作产品与实事求是归档准则 (Real Project Work Products & Zero Fake Demos)
 
-为杜绝“纸面规范无成果”的空洞现象，本工程在 `docs/01_management` 至 `09_operations` 目录已全面落地 36 项技能驱动的高阶工程交付物范例：
+本工程坚守 **“真实证据驱动、杜绝造假 Demo”** 铁律。仅归档当前工程实际发生、真实测量的工程资产；对当前基座阶段尚未发生的运行期事件（如无生产故障事故、无真实资金对账流水），一律保持目录留空，绝不为了应付文档结构而伪造虚假业务数据：
 
-| CMMI 阶段 | 驱动技能 (Skills) | 物理工作产品路径 | 核心业务与技术要点 |
+| CMMI 阶段 | 真实落地工作产品 (Real Assets) | 真实业务与工程技术依据 | 无真实数据项处置原则 |
 |---|---|---|---|
-| **01_management** | `dar-decision-matrix` | `docs/01_management/dar-decision-records/DAR-20261009-MESSAGE-BUS-PROTOCOL.md`<br/>`docs/01_management/project-charter.md`<br/>`docs/01_management/risk-register.md` | 自研 NATS 消息协议 vs Kafka/RabbitMQ 加权权衡矩阵、项目立项书、RSKM 风险登记册 |
-| **02_requirements** | `ears-spec-writer` | `docs/02_requirements/srs/SRS-EARS-MALL-ORDER-CAS.md`<br/>`docs/02_requirements/software-requirements.md` (指向 SRS)<br/>`docs/02_requirements/rtm-traceability-matrix.md` | IEEE 29148 / EARS 5态需求规格说明（商城下单与 CAS 原子预占）、需求双向跟踪矩阵 |
-| **03_design** | `adr-architect`<br/>`archify`<br/>`database-design` | `docs/03_design/adr/ADR-0001-MULTI-TENANT-KYSELY-AST.md`<br/>`docs/03_design/adr/ADR-0002-FIRST-PARTY-PLUGIN-ISOLATION.md`<br/>`docs/03_design/diagrams/ruoyi-architecture.arch.json`<br/>`docs/03_design/database-design-erd.md` | MADR 架构决策记录、Archify 交互式路径追踪架构图、8 大底座审计字段 ERD 规约 |
-| **05_verification** | `mutation-tester`<br/>`automated-testing` | `docs/05_verification/mutation/MUTATION-TESTING-REPORT-INVENTORY-CAS.md`<br/>`docs/05_verification/test-summary-report.md` | Stryker AST 变异测试打假报告（MSI 96.8%，击杀 120/124）、SpaceX 级真实数据库测试报告（416 用例全绿） |
-| **06_quality_assurance** | `compliance-auditor` | `docs/06_quality_assurance/audit/PCA-FCA-COMPLIANCE-AUDIT-v1.1.0.md`<br/>`docs/06_quality_assurance/configuration-audit.md` (指向 FCA/PCA)<br/>`docs/06_quality_assurance/gate-evidence-trace.json` | v1.1.0 功能配置审计 (FCA) 与物理配置审计 (PCA) 报告、20 道质量门禁数字凭证链 |
-| **07_release** | `devops` | `docs/07_release/RELEASE_NOTES_v1.1.0.md`<br/>`docs/07_release/release-notes.md` (指向 v1.1.0)<br/>`docs/07_release/system-deployment-sop.md`<br/>`docs/07_release/rollback-runbook.json` | v1.1.0 版本发布说明、生产安装部署割接 SOP、秒级自动回滚 Runbook |
-| **08_sre** | `sre-slo-manager`<br/>`postmortem-analyzer`<br/>`strix-penetration-testing` | `docs/08_sre/01_slo_sli_metrics/SLO-SLI-ERROR-BUDGET-MATRIX.md`<br/>`docs/08_sre/06_incidents_postmortem/POSTMORTEM-20261009-INVENTORY-RACE-CONDITION.md`<br/>`docs/08_sre/security-reports/STRIX-PENTEST-POC-AUDIT.md` | Google SRE 99.95% SLO 矩阵与多燃烧率告警、无指责 5-Whys 根因复盘报告、Strix 60k★ 自主红队 PoC 审计 (Grade A+) |
-| **09_operations** | `financial-reconciliation-agent` | `docs/09_operations/02_data_ops/DAILY-RECONCILIATION-REPORT-20261009.md`<br/>`docs/09_operations/inspection/SYSTEM-HEALTH-INSPECTION-20261009.md` | 银行级三方日终对账与复式记账平衡报告（$\sum\text{Debit}\equiv\sum\text{Credit}$）、全域 17 领域健康巡检报告 |
+| **01_management** | • `docs/01_management/project-charter.md`<br/>• `docs/01_management/risk-register.md` | v1.1.0 项目立项书（范围/架构/RACI）、工程技术风险台账（AST租户隔离/并发超卖） | 未立项定制决策前，`dar-decision-records/` 保持留空 |
+| **02_requirements** | • 业务规格位于 `docs/features/ecommerce/brief.json`<br/>• 全域契约位于 `packages/domains/*/contract/` | 真实工程特性规格与 324 份跨端/RPC 契约（`collect-contracts.cjs` 核验通过） | 规范目录 `02_requirements/` 保持清爽留空，不造假需求 |
+| **03_design** | • `docs/03_design/adr/ADR-0001-MULTI-TENANT-KYSELY-AST.md`<br/>• `docs/03_design/adr/ADR-0002-FIRST-PARTY-PLUGIN-ISOLATION.md`<br/>• `docs/03_design/diagrams/ruoyi-architecture.arch.json`<br/>• `docs/03_design/database-design-erd.md` | 真实架构决策（Kysely AST 透明租户隔离、15 第一方插件解耦）、真实 17 领域 Archify 拓扑、8 大底座审计字段 ERD | 100% 真实设计资产在位 |
+| **05_verification** | • `docs/05_verification/test-summary-report.md` | 14 个测试套件实测报告（55 passed / 6 skipped，真实 SQLite WAL 事务，耗时 21s） | 未运行真实 Stryker 工具前，`mutation/` 保持留空，不编造成绩 |
+| **06_quality_assurance** | • `docs/06_quality_assurance/audit/PCA-FCA-COMPLIANCE-AUDIT-v1.1.0.md`<br/>• `docs/06_quality_assurance/gate-evidence-trace.json` | 20 道自动化门禁真实执行记录（Exit Code 0）、真实 Git Commit 溯源、依赖锁定审查 | 100% 真实审计资产在位 |
+| **07_release** | • `docs/07_release/RELEASE_NOTES_v1.1.0.md`<br/>• `docs/07_release/system-deployment-sop.md`<br/>• `docs/07_release/rollback-runbook.json` | v1.1.0 正式发布说明、真实生产构建与启动 SOP、标准回滚自动化预案 | 100% 真实发布资产在位 |
+| **08_sre** | • `docs/08_sre/01_slo_sli_metrics/SLO-SLI-ERROR-BUDGET-MATRIX.md` | 生产容量护栏（`npm run load:test` 实测 26,877 RPS，p95 3.8ms）、99.95% SLO 矩阵 | 基座当前无生产 P1/P2 故障，`06_incidents_postmortem/` 严格留空；`security-reports/` 留空待实跑 Strix 容器 |
+| **09_operations** | *(保持留空)* | 本仓库为开源底座工程，无线上真实商业资金流水与日常商户工单 | `02_data_ops/`、`03_inspection/` 严格保持留空，绝不伪造流水账 |
 
 ---
 

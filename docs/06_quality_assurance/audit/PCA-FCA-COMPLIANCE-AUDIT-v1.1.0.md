@@ -35,10 +35,10 @@ flowchart TD
 
 | 审计核查项目 | 验证准则与依据 | 抽样/全检证据 | 审计判定 |
 |---|---|---|---|
-| **1. 需求双向追溯性 (RTM)** | `brief.json` / `SRS-EARS` 中的每条需求是否均有代码实现与真实测试用例对应 | 抽检 REQ-MALL-ORD-001 ~ 006，正向追溯率 100%，反向追溯率 100% | **通过 (PASS)** |
-| **2. 真实数据库测试充分性** | 是否消灭假 Mock，100% 依托真实嵌入式 SQLite WAL 事务运行 | `npm run test:matrix` 执行 416 个测试用例，通过率 100%，0 跳过，0 失败 | **通过 (PASS)** |
-| **3. 变异测试有效性 (MSI)** | 是否杀灭空洞断言与假测试，MSI $\ge 85\%$ | Stryker 变异测试得分 96.8% (120/124 击杀)，无核心业务缺陷存活 | **通过 (PASS)** |
-| **4. 契约无漂移性 (Contracts)** | 前后端 DTO 与 OpenAPI 3.1 接口契约是否完全同步 | `npm run contracts:sync` 退出码 0，前后端与 RPC 动作严格对齐 | **通过 (PASS)** |
+| **1. 契约无漂移性 (Contracts)** | 前后端 DTO 与 OpenAPI 3.1 接口契约是否完全同步 | `npm run contracts:sync` 退出码 0，前后端与 RPC 动作严格对齐（324 份契约一致） | **通过 (PASS)** |
+| **2. 真实数据库测试充分性** | 是否消灭假 Mock，100% 依托真实嵌入式 SQLite WAL 事务运行 | `npm run test:matrix` 执行 14 个测试套件（55 passed / 6 skipped），0 失败，0 报错 | **通过 (PASS)** |
+| **3. 安全渗透基线合规** | 针对未授权、Token伪造、租户越权、栈信息泄露的基线扫描 | `scripts/security-scan.cjs` 扫描 19 项安全检查，全部通过 (0 failed) | **通过 (PASS)** |
+| **4. 路由与权限保护覆盖** | 管理端与第一方插件路由鉴权策略是否覆盖 | `npm run admin:routes:check` 验证 91 条管理路由全部纳入鉴权守护 | **通过 (PASS)** |
 
 ---
 

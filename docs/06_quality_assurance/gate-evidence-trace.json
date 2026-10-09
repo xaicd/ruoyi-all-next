@@ -2,8 +2,8 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "auditId": "PCA-FCA-20261009-v1.1.0",
   "baseline": "v1.1.0 Enterprise Baseline",
-  "timestamp": "2026-10-09T14:30:00.000Z",
-  "gitCommit": "8ca15289945fcbdfa375e21946e65b26b38c2901",
+  "timestamp": "2026-10-09T14:45:00.000Z",
+  "gitCommit": "db40bc6505eb396fae8be56c205510667ec3db04",
   "auditSignOff": "PASSED",
   "overallExitCode": 0,
   "gates": [
@@ -29,13 +29,10 @@
     { "id": 20, "name": "specs:health", "status": "passed", "exitCode": 0 }
   ],
   "verificationMetrics": {
-    "l1UnitTests": { "total": 142, "passed": 142, "failed": 0 },
-    "l2IntegrationTestsRealSqlite": { "total": 86, "passed": 86, "failed": 0 },
-    "l3ContractTests": { "total": 48, "passed": 48, "failed": 0 },
-    "l4SmokeTests": { "total": 16, "passed": 16, "failed": 0 },
-    "mutationScoreIndicator": 96.8,
-    "securityScanVulnerabilities": 0,
-    "loadTestRps": 26877,
-    "loadTestP95Ms": 3.8
+    "testFiles": { "total": 14, "passed": 13, "skipped": 1 },
+    "tests": { "total": 61, "passed": 55, "failed": 0, "skipped": 6 },
+    "securityScan": { "totalChecks": 19, "passed": 19, "failed": 0 },
+    "standaloneLoadBenchmarkRps": 26877,
+    "standaloneLoadBenchmarkP95Ms": 3.8
   }
 }
