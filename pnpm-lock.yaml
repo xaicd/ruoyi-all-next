@@ -261,6 +261,9 @@ importers:
 
   clients/expo:
     dependencies:
+      '@babel/runtime':
+        specifier: ^7.25.0
+        version: 7.29.7
       '@expo/metro-runtime':
         specifier: ~4.0.1
         version: 4.0.1(react-native@0.76.5(@babel/core@7.29.7(supports-color@8.1.1))(@babel/preset-env@7.29.7(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.3.0)(react@18.3.1)(supports-color@8.1.1))
@@ -399,6 +402,10 @@ importers:
         version: link:../sdk
 
   packages/plugins/sdk: {}
+
+  packages/tools/create-ruoyi-app: {}
+
+  packages/tools/mcp-server: {}
 
 packages:
 

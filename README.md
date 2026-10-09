@@ -11,16 +11,13 @@
 外部 AI Agent 或开发者在接入或使用本底座时，**无需下载 500MB+ 全量历史提交包**，可在 10 秒内直接派生一个干净、合规、零外部依赖的全新客户业务工程：
 
 ```bash
-# 1. 极速拉取干净代码骨架（10秒内完成，0MB 历史提交）
+# 方案 A: 官方专属 CLI 极速派生 (推荐，自动完成初始化与本地库创建)
+npx create-ruoyi-app my-app
+
+# 方案 B: degit 骨架拉取 (10秒内完成，0MB 历史提交)
 npx degit xaicd/ruoyi-all-next#main my-app
-
-# 2. 进入工程目录、安装工作区依赖
 cd my-app && pnpm install
-
-# 3. 一键品牌重构、生成真实 SQLite 本地库与高熵超级管理员
 npm run project:init -- --name "my-app" --title "我的新业务系统"
-
-# 4. 启动本地开发服务 (http://localhost:3200)
 npm run dev
 ```
 
@@ -28,8 +25,25 @@ npm run dev
 > - ⚡ **秒级骨架派生**：彻底规避几百兆历史提交与 packfile 下载；
 > - 🏷️ **业务身份重构**：`project:init` 自动重构包名、中文标题、版权与环境配置；
 > - 🗄️ **真实本地数据库自动就绪**：基于真实 SQLite 数据库驱动（`data/ruoyi.db`），零外部容器即可立即运行全部业务；
+> - 🌐 **原生四国语言 (i18n)**：开箱即用支持 🇨🇳 中文 (`zh-CN`)、🇺🇸 英文 (`en-US`)、🇯🇵 日文 (`ja-JP`)、🇰🇷 韩文 (`ko-KR`)；
 > - 🔐 **废除弱口令与 admin 凭据**：平台唯一引导管理员升级为 `supervip`，随机生成 16 位高熵加密密码并自动持久化写入 `.env.local`，杜绝任何弱口令泄露；
 > - 🛡️ **SpaceX 级全链路门禁**：执行 `npm run check` 自动核验 10 大工程标准，立享 100% 绿灯质量护栏。
+
+### 🔌 一键接入主流 AI Agent (MCP Server)
+
+Cursor、Windsurf、Claude Code、Cline 或任何 MCP 兼容客户端，可在其配置中直接引入本底座的 MCP 服务，赋能 AI 智能体秒级掌握本体图谱与工程门禁：
+
+```json
+{
+  "mcpServers": {
+    "ruoyi-all-next": {
+      "command": "npx",
+      "args": ["-y", "@ruoyi/mcp-server"]
+    }
+  }
+}
+```
+*(在本地工作区内开发时，亦可直接执行 `node scripts/mcp/ruoyi-mcp-server.cjs` 启动 stdio 通道)*
 
 ---
 
@@ -172,6 +186,8 @@ AI Agent 在本工程施工时，严禁使用“就事论事打补丁”的外�
 - [开发工作手册 (Universal Directives)](AGENTS.md)
 - [多数据库兼容与方言隔离](docs/architecture/ruoyi-all-next-database-compatibility.md)
 - [多端渠道能力标准](docs/architecture/ruoyi-all-next-client-channels.md)
+- [i18n 国际化多语言使用指南](docs/guides/i18n-guide.md)
+- [GEO 生成式引擎与 Agent 原生指南](docs/architecture/GEO-AGENT-NATIVE-ONBOARDING-GUIDE.md)
 - [业务项目身份初始化指南](docs/guides/project-profile-bootstrap.md)
 
 ---
