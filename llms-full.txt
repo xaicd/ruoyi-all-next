@@ -25,7 +25,11 @@
 6. **High-Order Inverse Thinking & DeepSeek Harness (高阶反向思维与 Harness 约束)**:
    - 严禁初级外包码农视角就事论事贴补丁；写代码必须业务对象溯源，写单测必须覆盖 4 态状态机（成功、冲突、回滚、幂等），修改接口必须契约先验与零破坏性变更。
 7. **No Artifact, No Done (工单物理资产交付闭环)**:
-   - 严禁口头声明完工；每个工单必须基于 8 要素 Brief 派发，且必须产出 5 选 1 物理工程资产（源码提交、OpenAPI 契约、真实 DB 状态机单测报告、回滚 Runbook、安全扫描报告）。
+   - 严禁口头声明完工；每个工单必须基于 8 要素 Brief 派发，且必须产出 7 类物理工程资产之一（SRS/RTM、OpenAPI 契约、0 报错源码、真实 DB 状态机单测报告、生产回滚 SOP、SRE 稳定性基线、持续运营对账单）。
+8. **Single Source of Truth & Process Asset Anti-Pollution (单一真源与全生命周期防污染)**:
+   - 技能唯一真源为 `.agents/skills/<name>/SKILL.md`，严禁在其它路径创建重复副本。
+   - 业务规格按域垂直隔离于 `docs/specs/<domain>/<name>/`（支持 `feature`, `bugfix`, `enhancement`, `refactor` 四态），支持自动归档。
+   - 过程资产收敛于 `docs/01_management` ~ `09_operations`（含 08_sre 全栈保障与 09_operations 持续运营），执行三存三不存法则，杜绝 Git 仓库被二进制撑爆与认知污染。
 
 ---
 
@@ -66,8 +70,8 @@ ruoyi-all-next/
 │   └── proxy.ts                      # 反向代理与微服务上游调度网关
 │
 ├── clients/expo/                     # 跨端移动应用渠道
-├── docs/                             # 架构方案、8 要素 Brief、交付资产规范
-├── scripts/                          # 脚手架与门禁（scaffold, project-init, check, hatch）
+├── docs/                             # 规范与过程资产（01_management~09_operations, specs/<domain>/<name>）
+├── scripts/                          # 脚手架与门禁（scaffold, project-init, check, hatch, mcp）
 └── data/                             # 真实本地数据库存储（data/ruoyi.db）
 ```
 

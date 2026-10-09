@@ -4,16 +4,25 @@
 
 ## 核心架构与能力一览 (Pre-Download Capabilities)
 
-- **定位**: 真实企业业务系统开发底座、DigitalStaff NPC 工作区模板、零样板代码低代码研发基座。
+- **定位**: 真实企业业务系统开发底座、DigitalStaff NPC 工作区模板、零样板代码低代码研发基座、AI Agent 友好型工程底座。
 - **17 原生业务域**: 
   - 平台地基: `system` (RBAC权限/多租户/部门岗位/数据字典), `infra` (动态参数/定时任务/代码生成器)
   - 业务域插件: `ai` (AI智能工作台/知识库), `aigw` (多模型聚合网关/Token计费), `bpm` (工作流/BPMN2.0), `pay` (聚合支付/微信支付宝/退款), `report` (大屏可视化/多维报表), `mp` (微信公众号管理), `mall` (电商/商品SPU-SKU/订单), `member` (C端会员/成长值), `crm` (客户关系/商机/公海池), `erp` (进销存/采购销售), `wms` (仓储物流/批次条码), `mes` (制造执行/排产报工), `iot` (物联网/物模型/告警), `im` (实时通信/长连接群聊), `online` (低代码在线开发)。
-- **26 个 Agent 专属技能 (Skills)**:
+- **26 个 Agent 专属技能 (Skills - 单一真源 .agents/skills)**:
   - `project-init`: 一键业务项目重构引擎（对标 RuoYi-Vue-Pro 的 `ProjectReactor.java`）
   - `coding`, `api-design`, `devops`, `database-design`, `automated-testing`, `service-governance`, `security`, `ui-design`, `architecture-design`, `agent-harness` 等。
+- **CMMI 01~09 全生命周期工程过程资产**:
+  - `01_management` (立项/工单) ~ `07_release` (割接发布)
+  - `08_sre` (IaaS/PaaS/App 三层可观测性、APM 分布式追踪、脱敏日志、定时任务分布式锁、容灾演练、无指责复盘)
+  - `09_operations` (日终财务与订单对账、业务指标口径、多租户开通、BPM 流程动态调优、AI 智能体设备运维)
+- **4 态业务规格包 (Spec-Driven Development)**:
+  - 按域垂直隔离于 `docs/specs/<domain>/<name>/`（支持 `feature`, `bugfix`, `enhancement`, `refactor` 四态）
+  - 机器输入只需 <500 Token `brief.json`，自动展开 7 类规范文档与 G0~G7 质量门禁。
 - **真实数据库驱动 (Zero Fake Mock)**:
   - 内置零配置本地 SQLite (`data/ruoyi.db`)，开发/预览无需安装外部容器，秒级开箱即用。
   - 生产支持一键连接 PostgreSQL / MySQL / TiDB / openGauss，统一采用 Kysely 抽象与租户自动隔离插件。
+- **MCP 原生支持 (Model Context Protocol)**:
+  - 内置 `scripts/mcp/ruoyi-mcp-server.cjs`（提供 `ruoyi_domain_list`, `ruoyi_action_lookup`, `ruoyi_gate_run` 等 12+ 确定性工具），消除全库扫描 Token 浪费。
 - **全自动项目重塑引擎 (ProjectReactor CLI)**:
   - 原地重塑: `npm run project:init`，一键重塑包名、中文系统标题、端口、Git Remote 与品牌版权。
   - 派生裁剪: 支持 `--profile minimal` / `standard`，自动剔除冗余业务域，并自动 `git init` 记录任务痕迹。
