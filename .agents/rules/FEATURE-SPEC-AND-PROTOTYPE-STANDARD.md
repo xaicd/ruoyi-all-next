@@ -6,22 +6,22 @@
 
 ---
 
-## 一、 顶层设计原则：全息内聚工作区
+## 一、 顶层设计原则：特性全息内聚工作区 (Feature Spec Bundle)
 
-在 `ruoyi-all-next` 体系中，一个业务特性（Feature）从需求到交付，**所有过程资产全部收敛在同一个特性目录内**：
+在 `ruoyi-all-next` 与基于本底座衍生的业务工程中，一个业务特性（Feature）从需求到交付，**所有过程资产全部收敛在同一个特性目录内**：
 
-- 标准物理路径：`docs/features/<feature-name>/`（亦原生兼容 `.kiro/specs/<feature-name>/`）；
+- 标准物理路径：`docs/features/<feature-name>/`；
 - 严禁将原型图扔在外网云盘、需求写在聊天记录、任务记在口头、代码随意乱提。
 
 ```
-                【特性专属全息规格包 (Feature Spec Bundle)】
+                【特性全息规格包 (Feature Spec Bundle)】
 
-  .kiro/specs/<feature-name>/  或  docs/features/<feature-name>/
-  ├── brief.json                 # 【输入源】<500 Tokens 极简 DSL 声明
+  docs/features/<feature-name>/
+  ├── brief.json                 # 【输入源】<500 Tokens 极简声明式 Brief
   ├── requirements.md            # 【需求】业务背景、角色故事、EARS 验收标准
-  ├── design.md                  # 【设计】架构拓扑、领域模型、4 态状态机、不变量
-  ├── prototype.md               # 【原型导读】文本线框、交互规范、四态定义
-  ├── assets/                    # 【原型切图】PNG / SVG / JPG 视觉稿、Figma 导图
+  ├── design.md                  # 【设计】架构拓扑、领域实体、4 态状态机、关键不变量
+  ├── prototype.md               # 【原型导读】文本线框、字段交互、四态规范、素材总索引
+  ├── assets/                    # 【原型切图目录】PNG / SVG / JPG 视觉稿、设计导图
   │   ├── wireframe-desktop.png  #    PC 管理端界面截图
   │   ├── wireframe-mobile.png   #    移动端 App 界面截图
   │   └── flow-interaction.svg   #    交互时序流程图
@@ -55,7 +55,6 @@
   - 为防止 Git 仓库因 Axure 冗余资源膨胀，必须在根目录 `.gitignore` 补充忽略规则：
     ```gitignore
     # 忽略 Axure 导出包中巨大且无语义的静态库
-    .kiro/specs/**/prototypes/axure/resources/
     docs/features/**/prototypes/axure/resources/
     ```
 - **本地预览**：在编辑器中右键 `Open with Live Server` 或双击浏览器打开直接交互测试。
