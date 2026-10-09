@@ -6,6 +6,7 @@
 packages:
   - "packages/plugins/*"
   - "packages/plugins/examples/*"
+  - "packages/tools/*"
   - "clients/expo"
 
 # 允许执行构建脚本的原生/工具依赖。

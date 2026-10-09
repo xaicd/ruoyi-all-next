@@ -61,10 +61,15 @@ jobs:
           tar --exclude='./.git' \
               --exclude='./node_modules' \
               --exclude='./.next' \
+              --exclude='./.next-ruoyi' \
+              --exclude='./*.tsbuildinfo' \
+              --exclude='./.turbo' \
+              --exclude='./.cache' \
               --exclude='./data/*.db' \
               --exclude='./data/*.db-wal' \
               --exclude='./data/*.db-shm' \
               --exclude='./backups' \
+              --exclude='./dist' \
               -czf "dist/release-assets/ruoyi-all-next-${TAG}-skeleton.tar.gz" .
 
           # 2. 导出 OpenAPI 契约规范与架构说明

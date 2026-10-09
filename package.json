@@ -36,6 +36,7 @@
     "project:refactor": "node scripts/project-init.cjs",
     "project:clone": "node scripts/clone-project-base.cjs",
     "project:create": "node scripts/clone-project-base.cjs",
+    "release:package": "node scripts/build-release-assets.cjs",
     "catalog:sync:ruoyi": "node scripts/extract-seed-from-sql.cjs",
     "health-check": "bash ./scripts/health-check.sh",
     "admin:routes:manifest": "node scripts/generate-admin-route-manifest.cjs",

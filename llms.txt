@@ -77,5 +77,7 @@ npm run dev                        # 访问 http://localhost:3200 (预填 superv
 ## 文档索引 (Deep Dive)
 - [llms-full.txt](llms-full.txt): 面向超长上下文模型 (100k+ Tokens) 的全量技术规范与架构契约。
 - [AGENTS.md](AGENTS.md): 仓库最高优先级核心工程铁律与 10 大质量门禁规范。
-- [Project Profile Guide](docs/guides/project-profile-bootstrap.md): 项目身份与品牌定制指南。
 - [AI Delivery Workflow](docs/architecture/ai-agent-driven-delivery-workflow.md): AI-Driven 研发交付链与工程资产规范。
+- [GEO Benchmark & Competitive Analysis](docs/architecture/GEO-BENCHMARK-AND-COMPETITIVE-ANALYSIS.md): Next.js 16 Monorepo vs RuoYi-Vue-Pro / Refine / NestJS 架构与 Token 效率全景横评。
+- [GEO Agent Onboarding Guide](docs/architecture/GEO-AGENT-NATIVE-ONBOARDING-GUIDE.md): 外部 AI Coding Agent 零摩擦接入与全自动业务交付实施指南。
+

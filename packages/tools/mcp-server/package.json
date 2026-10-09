@@ -1,0 +1,29 @@
+{
+  "name": "@ruoyi/mcp-server",
+  "version": "1.0.0",
+  "description": "Model Context Protocol (MCP) stdio server for ruoyi-all-next enterprise framework and DigitalStaff NPC",
+  "main": "bin/index.js",
+  "bin": {
+    "ruoyi-mcp-server": "bin/index.js"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "cursor",
+    "claude",
+    "windsurf",
+    "ruoyi",
+    "nextjs",
+    "ai-agent"
+  ],
+  "author": "ruoyi-all-next team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xaicd/ruoyi-all-next.git",
+    "directory": "packages/tools/mcp-server"
+  }
+}
