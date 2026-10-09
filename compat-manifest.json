@@ -5,8 +5,8 @@
   "framework": {
     "name": "ruoyi-all-next",
     "role": "workspace-bundle",
-    "templateVersion": "1.0.0",
-    "releasedAt": "2026-09-18",
+    "templateVersion": "1.1.0",
+    "releasedAt": "2026-10-09",
     "note": "templateVersion tracks the TEMPLATE, not the hatched project. package.json version is the project's own and is deliberately not compared."
   },
   "toolchain": {
