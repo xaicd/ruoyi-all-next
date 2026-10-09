@@ -80,9 +80,10 @@
         "ruoyi_gate_run",
         "ruoyi_plugin_list",
         "ruoyi_skills_list",
+        "ruoyi_spec_list",
         "ruoyi_standards_report"
       ],
-      "count": 12
+      "count": 13
     },
     "evolution": {
       "traceArtifact": "docs/architecture/artifacts/harness-trace-latest.json",
