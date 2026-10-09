@@ -5,6 +5,8 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { BrandMark } from "@/modules/shared/frontend/components/brand-mark"
 import { request } from "@/modules/shared/frontend/lib/request"
+import { I18nProvider, useI18n } from "@/modules/shared/frontend/lib/i18n"
+import { LanguageSwitcher } from "@/modules/shared/frontend/components/language-switcher"
 
 type SidebarItem = { id: string; href: string | null; label: string; icon: string; children: SidebarItem[] }
 type SidebarGroup = { id: string; title: string; icon: string; children: SidebarItem[] }
@@ -18,7 +20,8 @@ type FlatMenuItem = {
   parentLabel?: string
 }
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+function AdminLayoutInner({ children }: { children: React.ReactNode }) {
+  const { t } = useI18n()
   const pathname = usePathname()
   const [collapsed, setCollapsed] = useState(false)
   const [isLocked, setIsLocked] = useState(true)
@@ -227,7 +230,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="搜索菜单 (Ctrl+K)..."
+                placeholder={t("nav.searchMenu", "搜索菜单 (Ctrl+K)...")}
                 className="h-8 w-full rounded-xl border border-slate-800 bg-slate-900/80 pl-8 pr-7 text-xs text-slate-100 placeholder-slate-500 outline-none transition focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30"
               />
               {searchQuery && (
@@ -291,7 +294,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               {!collapsed && favoriteMenus.length > 0 && (
                 <div className="mb-2 pb-2 border-b border-slate-800/60">
                   <div className="px-2 py-1 text-[10px] uppercase font-bold text-slate-400 tracking-wider">
-                    ★ 常用置顶菜单
+                    ★ {t("nav.pinnedMenus", "常用置顶菜单")}
                   </div>
                   <div className="space-y-0.5">
                     {favoriteMenus.map((fav) => (
@@ -342,12 +345,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <button
             onClick={() => setCollapsed(!collapsed)}
             className="flex-1 flex items-center justify-center rounded-xl py-1.5 text-slate-400 transition hover:bg-slate-800 hover:text-white text-xs font-medium"
-            title={collapsed ? "展开侧边栏" : "收起侧边栏"}
+            title={collapsed ? t("nav.expandSidebar", "展开侧栏") : t("nav.collapseSidebar", "收起侧栏")}
           >
             <svg className={`h-4 w-4 transition-transform ${collapsed ? "rotate-180 text-blue-400" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
             </svg>
-            {!collapsed && <span className="ml-1.5">收起侧栏</span>}
+            {!collapsed && <span className="ml-1.5">{t("nav.collapseSidebar", "收起侧栏")}</span>}
           </button>
         </div>
       </aside>
@@ -357,12 +360,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Top Navbar */}
         <header className="flex h-14 items-center justify-between border-b border-slate-200/80 bg-white/95 backdrop-blur-md px-6 shadow-xs">
           <div className="flex items-center gap-2 text-xs text-slate-500">
-            <Link href="/" className="hover:text-blue-600 transition font-medium">门户首页</Link>
+            <Link href="/" className="hover:text-blue-600 transition font-medium">{t("nav.portalHome", "门户首页")}</Link>
             <span className="text-slate-300">/</span>
             <span className="font-bold text-slate-900">{getPageTitle(pathname, menuGroups)}</span>
           </div>
 
           <div className="flex items-center gap-3">
+            <LanguageSwitcher />
+
             <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1">
               <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white shadow-sm">
                 {username.charAt(0).toUpperCase()}
@@ -374,7 +379,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               onClick={handleLogout}
               className="rounded-xl border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600 shadow-2xs"
             >
-              🚪 退出
+              🚪 {t("nav.logout", "退出")}
             </button>
           </div>
         </header>
@@ -387,6 +392,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     </div>
   )
 }
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <I18nProvider>
+      <AdminLayoutInner>{children}</AdminLayoutInner>
+    </I18nProvider>
+  )
+}
+
 
 function isActive(item: SidebarItem, pathname: string): boolean {
   return Boolean(item.href && (pathname === item.href || pathname.startsWith(item.href + "/")))
