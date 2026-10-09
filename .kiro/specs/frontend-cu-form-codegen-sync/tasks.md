@@ -18,7 +18,7 @@
 ## Tasks
 
 - [ ] 1. 冻结规范与迁移基线
-  - [ ] 1.1 更新 `.kiro/steering/module-structure.md`，加入 `frontend/api`、`frontend/components/<PascalEntity>Form.tsx`、`frontend/pages/<entity>-list.page.tsx`，与 `AGENTS.md` §14 一致。
+  - [ ] 1.1 更新 `.kiro/steering/plugin-domain-structure.md`，加入 `frontend/api`、`frontend/components/<PascalEntity>Form.tsx`、`frontend/pages/<entity>-list.page.tsx`，与 `AGENTS.md` §14 一致。
   - [ ] 1.2 扫描 frontend pages，记录真实 C/U、只读/占位、特殊流，建立可审计覆盖清单；登录或单一 POST 不计入标准 CRUD。
   - [ ] 1.3 写出 API/Form/Page typed contract 和迁移检查清单，覆盖 payload、不可变键、候选、权限、tenant scope。
 

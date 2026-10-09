@@ -4,7 +4,7 @@
 本设计把每个标准后台 CRUD 的 API client、C/U Form 和列表页固定为 modules-first 三层结构。它先让生成契约成为唯一事实来源，再分批迁移真实页面，避免“手写已拆、生成器仍产出 page 内表单”的回归。
 
 ## Architecture
-以 `AGENTS.md` §14.2 为权威，并同步 `.kiro/steering/module-structure.md`：
+以 `AGENTS.md` §14.2 为权威，并同步 `.kiro/steering/plugin-domain-structure.md`：
 ```text
 packages/domains/{domain}[/{subModule}]/frontend/
 ├── api/{entity}.api.ts

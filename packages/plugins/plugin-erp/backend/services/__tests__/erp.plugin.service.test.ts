@@ -9,7 +9,7 @@ import { ErpService } from ".."
  */
 const asTenant = <T>(work: () => Promise<T>) => runWithTenantContext({ tenantId: "1" }, work)
 
-describe("ErpService module baseline", () => {
+describe("ErpService plugin baseline", () => {
   it("listProducts 返回分页结果", () => asTenant(async () => {
     const result = await ErpService.listProducts({ page: 1, pageSize: 20 })
     expect(result.total).toBeGreaterThan(0)

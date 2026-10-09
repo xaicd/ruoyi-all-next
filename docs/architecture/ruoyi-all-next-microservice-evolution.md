@@ -22,7 +22,7 @@
 4. 模块具备独立配置、独立打包与独立进程运行
 5. BFF 可按 route manifest / `RUOYI_DOMAIN_*_UPSTREAM` 把单域 API 切到独立镜像
 
-独立打包命令与切流约定见 `docs/architecture/ruoyi-all-next-domain-pack.md`。跨域命令/事件约束见 `docs/architecture/ruoyi-all-next-messaging-constraints.md`。模块分层与 SDK/RPC 双模见 `docs/architecture/ruoyi-all-next-module-rpc.md`。
+独立打包命令与切流约定见 `docs/architecture/ruoyi-all-next-domain-pack.md`。跨域命令/事件约束见 `docs/architecture/ruoyi-all-next-messaging-constraints.md`。模块分层与 SDK/RPC 双模见 `docs/architecture/ruoyi-all-next-plugin-rpc.md`。
 
 ## 2.3 阶段 C：微服务化
 

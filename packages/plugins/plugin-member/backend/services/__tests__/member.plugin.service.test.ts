@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { MemberService } from ".."
 
-describe("MemberService module baseline", () => {
+describe("MemberService plugin baseline", () => {
   it("listUsers 返回分页结果", async () => {
     const result = await MemberService.listUsers({ page: 1, pageSize: 20 })
     expect(result.total).toBeGreaterThan(0)

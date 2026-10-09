@@ -652,7 +652,7 @@ decimal，`createdAt: string` 语义上是 timestamp）。草稿从仓储的 `*R
 13. docs/architecture/ruoyi-all-next-domain-pack.md
 14. docs/architecture/ruoyi-all-next-messaging-constraints.md
 15. docs/architecture/ruoyi-all-next-microservice-governance.md
-16. docs/architecture/ruoyi-all-next-module-rpc.md
+16. docs/architecture/ruoyi-all-next-plugin-rpc.md
 17. deploy/README.md
 18. docs/architecture/ruoyi-all-next-client-channels.md
 19. docs/guides/project-profile-bootstrap.md

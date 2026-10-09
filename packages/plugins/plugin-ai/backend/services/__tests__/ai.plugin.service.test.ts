@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { AiService } from ".."
 
-describe("AiService module baseline", () => {
+describe("AiService plugin baseline", () => {
   it("listModels 返回分页结果", async () => {
     const result = await AiService.listModels({ page: 1, pageSize: 20 })
     expect(result.total).toBeGreaterThan(0)

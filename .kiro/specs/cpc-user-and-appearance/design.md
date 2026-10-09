@@ -5,7 +5,7 @@
 
 ---
 
-## 1. 架构总览（遵循 module-structure.md）
+## 1. 架构总览（遵循 plugin-domain-structure.md）
 
 ```
 packages/domains/member/                      # C 端用户（复用现有模块，新增 app 侧能力，不动 admin CRUD）

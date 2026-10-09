@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { IotService } from ".."
 
-describe("IotService module baseline", () => {
+describe("IotService plugin baseline", () => {
   it("listDevices 返回分页结果", async () => {
     const result = await IotService.listDevices({ page: 1, pageSize: 20 })
     expect(result.total).toBeGreaterThan(0)

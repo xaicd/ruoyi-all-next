@@ -50,4 +50,4 @@
 6. Broker 与治理清单：`docs/architecture/ruoyi-all-next-microservice-governance.md`
 7. 自研 NATS 语义：`packages/shared/backend/lib/nats-fabric.ts`、`nats-stream.ts`
 8. 可靠事件：`packages/shared/backend/lib/transactional-outbox.ts`、`outbox-store.ts`、`outbox-kysely-store.ts`
-9. 模块分层与 SDK/RPC 双模：`docs/architecture/ruoyi-all-next-module-rpc.md`
+9. 模块分层与 SDK/RPC 双模：`docs/architecture/ruoyi-all-next-plugin-rpc.md`

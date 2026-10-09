@@ -22,7 +22,7 @@ Next.js 16 (App Router) + React 19 + TypeScript + **Kysely**（运行时数据�
 | `scripts/` | ~50 构建/脚手架/治理脚本。关键：`bootstrap-sqlite.ts`(零配置建库)、`scaffold-feature.ts`(域脚手架)、`pack-domain.cjs`/`domain-up.cjs`(域打包/拆分运行)。 |
 | `docs/` | `architecture/`(40+ 架构文档 + 本页) · `skills/ruoyi-all-next/`(SKILL 镜像) · `features/` · `guides/` · `operations/` · `spec(s)/`。 |
 | `.agents/` | `context/`(`IDENTITY.md`/`SOUL.md`/`ASSEMBLY.md` 分段装配顺序) + `skills/`(16 个可执行 SKILL.md)。 |
-| `.kiro/` | `steering/`(`module-structure.md` 权威模块布局、`coding-standards.md`、`feature-scaffold.md`、`ui-*`) + `specs/`。 |
+| `.kiro/` | `steering/`(`plugin-domain-structure.md` 权威模块布局、`coding-standards.md`、`feature-scaffold.md`、`ui-*`) + `specs/`。 |
 | `prisma/` | `schema.prisma`(含 `member_user.extra_fields Json?`) + migrations。 |
 | `sql/` `deploy/` `test/` `public/` | init SQL · docker-compose(local/dev) · 测试根(`test/{unit,integration,e2e,agent}`) · 静态资源。 |
 | 根文件 | `AGENTS.md` · `README.md` · `CURRENT.md` · `project-status.md` · `.env.example` · `next.config.mjs` · `vitest.config.ts` · `playwright.config.ts`。 |
@@ -55,7 +55,7 @@ Next.js 16 (App Router) + React 19 + TypeScript + **Kysely**（运行时数据�
 | **report** | business | 报表 / BI | |
 | **ai / aigw** | business | AI 能力 / AI 网关（new-api 式） | |
 
-> 布局与命名的**权威**定义见 `.kiro/steering/module-structure.md`（六边形分层 Ports/Adapters/Application、`page.tsx` 纯桥接）与 `packages/domains/README.md`（module-first：新业务只落 `packages/domains/<domain>/`，旧路径仅 re-export）。
+> 布局与命名的**权威**定义见 `.kiro/steering/plugin-domain-structure.md`（六边形分层 Ports/Adapters/Application、`page.tsx` 纯桥接）与 `packages/domains/README.md`（module-first：新业务只落 `packages/domains/<domain>/`，旧路径仅 re-export）。
 
 ---
 

@@ -99,7 +99,7 @@
 
 ## 5. 非功能需求
 - **NFR1（安全）**：密码只存加盐哈希；登录失败不区分账号/密码；C 端 JWT 与 admin JWT 隔离（`type` 区分，已有）。
-- **NFR2（架构一致）**：遵循 `.kiro/steering/module-structure.md`——service/repository/validators/route 分层，桥接约定；配置放 infra 模块。
+- **NFR2（架构一致）**：遵循 `.kiro/steering/plugin-domain-structure.md`——service/repository/validators/route 分层，桥接约定；配置放 infra 模块。
 - **NFR3（真实数据）**：新 service 走 `ruoyiPrisma`/Repository，禁止 mock。
 - **NFR4（测试）**：service 层单测（注册去重/登录成败/资料读写/配置读写默认值）。
 - **NFR5（零破坏）**：不改 admin 端登录与 member admin CRUD 现有行为。

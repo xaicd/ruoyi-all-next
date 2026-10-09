@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { MallService } from ".."
 
-describe("MallService module baseline", () => {
+describe("MallService plugin baseline", () => {
   it("listProducts 返回分页结果", async () => {
     const result = await MallService.listProducts({ page: 1, pageSize: 20 })
     expect(result.total).toBeGreaterThan(0)

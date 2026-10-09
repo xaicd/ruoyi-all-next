@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { PayService } from ".."
 
-describe("PayService module baseline", () => {
+describe("PayService plugin baseline", () => {
   it("listOrders 返回分页结果", async () => {
     const result = await PayService.listOrders({ page: 1, pageSize: 20 })
     expect(result.total).toBeGreaterThan(0)

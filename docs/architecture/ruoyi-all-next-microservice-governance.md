@@ -35,7 +35,7 @@
 | generated actions | generated message patterns | 低代码模板 / codegen ZIP 输出 Facade + `*.rpc.ts` |
 
 权威清单：`packages/shared/backend/constants/microservice-governance.json`  
-分层与协议：`docs/architecture/ruoyi-all-next-module-rpc.md`  
+分层与协议：`docs/architecture/ruoyi-all-next-plugin-rpc.md`  
 门禁：`npm run microservice:check`
 
 ## 3. 调用约定

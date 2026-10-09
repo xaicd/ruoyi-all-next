@@ -55,7 +55,7 @@ T7 权限码/契约  T8 单测  T9 SQLite 端到端预览(A7)  T10 门禁(tsc/li
 
 ## T8 — 单测
 - MemberAuthService（注册去重 R2 / 登录成败 R4 / 哈希校验）、MemberProfileService（读写）、AppearanceService（默认 merge / 序列化往返）。
-- 参照现有 `member.module.service.test.ts` / `infra-services.test.ts`。
+- 参照现有 `member.plugin.service.test.ts` / `infra-services.test.ts`。
 
 ## T8b — 🆕 C 端 Web 入口 `/portal`（R16/A8）+ 双端同源预览
 - 新建 C 端路由组：`src/app/(portal-pages)/portal/page.tsx`（落地/首页）、`.../portal/login/page.tsx`（登录）、`.../portal/profile/page.tsx`（用户中心，消费 profile API + appearance 主题）。

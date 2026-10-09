@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { CrmService } from ".."
 
-describe("CrmService module baseline", () => {
+describe("CrmService plugin baseline", () => {
   it("listCustomers 返回分页结果", async () => {
     const result = await CrmService.listCustomers({ page: 1, pageSize: 20 })
     expect(result.total).toBeGreaterThan(0)
