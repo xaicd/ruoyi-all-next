@@ -7,45 +7,15 @@ import { projectProfile } from "@/modules/shared/contract/project-profile"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 import { comparePasswordMD5 } from "@/modules/shared/backend/lib/crypto"
 import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
-import { readSettingList, writeSettingList } from "./oauth2-setting-store"
-
-type Oauth2ClientItem = {
-  id: string
-  clientId: string
-  clientSecret: string
-  name: string
-  status: "ACTIVE" | "DISABLED"
-}
-
-type Oauth2TokenItem = {
-  id: string
-  clientId: string
-  userId: string
-  username: string
-  accessToken: string
-  refreshToken: string
-  expiresAt: string
-}
-
-const DEFAULT_CLIENTS: Oauth2ClientItem[] = [
-  {
-    id: "oc-001",
-    clientId: "admin-web",
-    clientSecret: "admin-web-secret",
-    name: `${projectProfile.shortName}管理后台`,
-    status: "ACTIVE",
-  },
-  {
-    id: "oc-002",
-    clientId: "merchant-h5",
-    clientSecret: "merchant-h5-secret",
-    name: "商户 H5",
-    status: "ACTIVE",
-  },
-]
-
-const CLIENTS_SETTING_KEY = "system.oauth2.clients"
-const TOKENS_SETTING_KEY = "system.oauth2.tokens"
+import {
+  readSettingList,
+  writeSettingList,
+  type Oauth2ClientItem,
+  type Oauth2TokenItem,
+  DEFAULT_CLIENTS,
+  CLIENTS_SETTING_KEY,
+  TOKENS_SETTING_KEY,
+} from "./oauth2-setting-store"
 
 function verifyStoredPassword(password: string, storedHash: string, salt?: string | null) {
   return comparePasswordMD5(password, storedHash, salt ?? undefined)

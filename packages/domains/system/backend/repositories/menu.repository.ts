@@ -7,49 +7,14 @@ import { hasRealDatabase, getKyselyDb } from "@/modules/shared/backend/lib/datab
 import { withCompanionMenuCatalogs, withCompanionPackageMenuIds } from "@/modules/shared/backend/constants/companion-menu"
 import { SEED_MENUS } from "@prisma/data"
 
-export type SystemMenuRow = {
-  id: string
-  name: string
-  permission: string | null
-  type: string // DIR | MENU | BUTTON
-  parentId: string | null
-  path: string | null
-  component: string | null
-  icon: string | null
-  sort: number
-  status: string
-  visible: boolean
-  keepAlive: boolean
-  createdAt: string
-  updatedAt: string
-}
+import {
+  type SystemMenuRow,
+  type CreateMenuData,
+  type UpdateMenuData,
+  LEGACY_PURGE_IDS,
+} from "./menu.types"
 
-export type CreateMenuData = {
-  name: string
-  permission?: string
-  type: string
-  parentId?: string | null
-  path?: string
-  component?: string
-  icon?: string
-  sort?: number
-  status?: string
-  visible?: boolean
-  keepAlive?: boolean
-}
-
-export type UpdateMenuData = Partial<CreateMenuData>
-
-// 历史废弃旧菜单 ID 物理隔离黑名单（彻底防御真实数据库或内存遗留）
-const LEGACY_PURGE_IDS = new Set([
-  "2758", "2759", "2760", "2783", "2792", "2796", "2798", "2915", "5000",
-  "9000", "9001", "9002", "9003", "9004", "9005",
-  "9100", "9101", "9102", "9103", "9104",
-  "9200", "9201", "9202", "9203",
-  "9300", "9301",
-  "9400", "9401", "9402", "9403",
-  "ai-gateway-dir",
-])
+export type { SystemMenuRow, CreateMenuData, UpdateMenuData }
 
 // === 内存存储（由 RuoYi 原始 SQL 全量生成 + Online 扩展 + AIGW 模型中台 + AI 应用） ===
 const MEMORY_STORE: SystemMenuRow[] = withCompanionMenuCatalogs(SEED_MENUS)
