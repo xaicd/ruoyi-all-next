@@ -20,6 +20,7 @@
 > 8. **全工种四类契约族收敛 (All-Role Contract Families, 详见 §22)**：数据同步/ETL、BI 查询、运营编排、运维发布等非编码需求同样必须收敛为可审计契约——API 契约 / 数据契约 / 流程契约 / 预案契约四选一，并过专属质量门禁（数据族=对账+血缘完整；流程族=沙箱+回滚演练）；严禁一次性搬运脚本与口径打架的野 SQL！
 > 9. **全局高阶反向思维与 AI-Driven Harness 全程监督 (High-Order Inverse Thinking & DeepSeek Harness Invariants, 详见 §23 & .agents/rules/HIGH-ORDER-INVERSE-THINKING.md)**：严禁以初级外包码农视角就事论事贴补丁；敲代码必须业务对象溯源且由通用引擎展开；写单测必须 4 态状态机真实入库覆盖与反假 Mock；修改接口必须契约先验、零破坏性变更与挂载不可变操作审计！
 > 10. **0-1 软件工程交付资产与 No Artifact, No Done 铁律 (Spec-First Artifacts, 详见 §24 & .agents/rules/SPEC-FIRST-ENGINEERING-ARTIFACTS.md)**：严禁将上线运行期业务数据（订单数据、图纸、运营指标）当成交付资产；严禁口头声明完工；每个工单必须基于 8 要素 Brief 派发，且必须产出 7 类物理工程资产之一（SRS/RTM、OpenAPI 契约、0 报错源码、真实 DB 状态机单测报告、生产回滚 SOP、SRE 稳定性基线、持续运营对账单）！
+> 11. **单一真源与全生命周期过程资产防污染铁律 (Single Source of Truth & Anti-Pollution, 详见 §25 & docs/architecture/CMMI-PROCESS-ASSETS-AND-DELIVERY-STANDARD.md)**：技能唯一真源为 `.agents/skills/<name>/SKILL.md`，严禁在 `docs/skills` 等建立任何重复副本；业务规格按域隔离于 `docs/specs/<domain>/<name>/`（支持 feature/bugfix/enhancement/refactor 四态）并支持自动归档；过程资产收敛于 `docs/01_management` ~ `09_operations`（含 08_sre 全栈保障与 09_operations 持续运营），执行三存三不存法则，杜绝 Git 仓库被二进制撑爆与认知污染！
 
 ---
 
@@ -954,6 +955,22 @@ npm run check
 3. **No Artifact, No Done 结项铁律**：
    - 任何状态转为完成，必须挂载不可变工程产物（Git SHA、契约文件、测试结果、SRE 巡检台账、对账平账单）。
    - 规范落地于 `.agents/rules/SPEC-FIRST-ENGINEERING-ARTIFACTS.md` 与 `docs/architecture/CMMI-PROCESS-ASSETS-AND-DELIVERY-STANDARD.md`。
+
+### 25. 单一真源与全生命周期过程资产防污染规范 (Single Source of Truth & Process Asset Anti-Pollution)
+
+1. **技能单一真源法则**：
+   - 全仓技能有且仅有唯一真源：`.agents/skills/<name>/SKILL.md`（共 26 个技能），严禁在 `docs/skills/` 等建立任何镜像或重复目录；
+   - 技能注册表统一维护于 `.agents/skills/README.md`，上游开源许可溯源落位 `.agents/skills/UPSTREAM-NOTICE.md`；
+   - 门禁脚本 `sync-skills.cjs` 与 `check-specs-health.cjs` 实时强制拦截重复目录。
+2. **统一规格 (Spec) 与生命周期管理**：
+   - 彻底摒弃以单纯 "Feature" 命名一切的局限思维，全面采用 **4 类规格演进类型**：`feature`（新特性）、`bugfix`（缺陷修复，必须携带 Symptom、Root Cause 与红灯复现用例 Red Test）、`enhancement`（增量增强）、`refactor`（架构重构）；
+   - 施工区按域严格隔离于 `docs/specs/<domain>/<name>/`，原型资产按静态切图 `assets/` 与动态可点击 `prototypes/` 分离；
+   - 投产后通过 `npm run spec:archive -- --name <name>` 统一沉淀归档至 `docs/specs/archive/<YYYY-Qx>/<domain>/<name>/`，保持施工区清爽。
+3. **CMMI 01~09 过程资产全生命周期库**：
+   - `docs/01_management/` ~ `07_release/` 支撑 0-1 研发全流程；
+   - `docs/08_sre/` 承载 IaaS/PaaS/应用三层指标、APM 链路追踪、业务日志脱敏、分布式定时任务排他锁、容灾演练与无指责复盘；
+   - `docs/09_operations/` 承载日终业务财务平账、统一指标语义层变更、租户准入与 BPM 审批流治理、AI 数字员工运营；
+   - 严格执行**三存三不存**：文本、Schema 契约与测试脚本入 Git；海量音视频、设计大源文件与盖章扫描件存对象存储/Wiki，Git 内仅存受控索引编号。
 
 <!-- BEGIN:nextjs-agent-rules -->
 

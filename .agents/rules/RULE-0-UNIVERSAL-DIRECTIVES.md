@@ -33,5 +33,13 @@
 ## 9. 全局高阶反向思维与 AI-Driven Harness 全程监督
 - 严禁以初级外包码农视角就事论事贴补丁；敲代码必须业务对象溯源且由通用引擎展开；写单测必须状态机真实入库覆盖与反假 Mock；修改接口必须契约先验、零破坏性变更与挂载不可变操作审计！
 
-## 10. 0-1 软件工程交付资产与 No Artifact, No Done 铁律
-- 严禁将上线运行期业务数据当成交付资产；严禁口头声明完工；每个工单必须基于 8 要素 Brief 派发，且必须产出物理工程资产（SRS/RTM、OpenAPI 契约、0 报错源码、真实 DB 状态机单测报告、生产回滚 SOP）！
+## 10. 0-1 软件工程交付资产与 No Artifact, No Done 铁律 (Spec-First Artifacts)
+- 严禁将上线运行期业务数据（订单数据、流水、日志）当成交付资产；严禁口头声明完工。
+- 每个工单必须基于 8 要素 Brief 派发，且必须产出 7 类物理工程资产之一（SRS/RTM、OpenAPI 契约、0 报错源码、真实 DB 状态机单测报告、生产回滚 SOP、SRE 稳定性基线、持续运营对账平账单）！
+
+## 11. 单一真源与全生命周期过程资产防污染铁律 (Single Source of Truth & Anti-Pollution)
+- **技能唯一真源**：全仓唯一技能目录为 `.agents/skills/<name>/SKILL.md`，严禁在 `docs/skills` 等任何位置设立副本、镜像或重复目录！
+- **规格按域垂直隔离与归档**：规格资产统一封装在 `docs/specs/<domain>/<name>/`（支持 feature/bugfix/enhancement/refactor 四态），割接后自动归档至 `docs/specs/archive/`，杜绝根目录散落与认知污染。
+- **CMMI 01~09 资产标准化管理**：
+  - 过程资产严格收敛于 `docs/01_management` ~ `09_operations`（涵盖 `08_sre` IaaS/PaaS/应用全栈可观测与 `09_operations` 业务持续运营对账）；
+  - **三存三不存法则**：文本、Schema 契约与测试入 Git；海量二进制（大设计源文件、录音录像、盖章扫描件）存对象存储/Wiki，Git 内仅存受控索引编号与哈希。
