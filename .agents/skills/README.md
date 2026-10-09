@@ -10,27 +10,25 @@ Skill 编写规范见 [skill-authoring/SKILL.md](./skill-authoring/SKILL.md)。
 
 ---
 
-## 1. 交付管道
+## 1. 交付管道与 CMMI 01~09 全生命周期
 
 按阶段推进，不允许跳过门禁宣称完成。
 
-| 序 | 阶段 | Skill | 产物 | 未过门禁不得进入 |
+| CMMI 阶段 | 交付阶段 | 核心 Skill | 产物 | 未过门禁不得进入 |
 |---|---|---|---|---|
-| 0 | 写法与启用 | skill-authoring | 合法 SKILL.md | 乱写 Skill |
-| 1 | 需求原型 | product-requirements | 问题、范围、验收、非目标 | UI/API 实现 |
-| 2 | UI 设计 | ui-design | 渠道、信息架构、状态、token | 堆页面 |
-| 3 | API 设计 | api-design | 面、路径、DTO、错误码、权限 | 先写 Route |
-| 4 | 数据库设计 | database-design | 表归属、租户、兼容等级 | 手写跨库 SQL |
-| 5 | 架构设计 | architecture-design | 单体/拆分、网关、调用面 | 默认上微服务 |
-| 6 | 服务治理 | service-governance | 超时重试熔断限流追踪 | 无超时的跨域调用 |
-| 7 | 编码 | coding | 分层落地 | 跳过 Validator |
-| 8 | 自动化测试 | automated-testing | 关键路径 + 拒绝/回滚 | 标 DONE |
-| 9 | 安全 | security | 鉴权、注入、扫描、风控 | 生产发布 |
-| 10 | 发布交付 | devops | 部署、域名、证书、更新 | 手改生产 |
-| 11 | 站点可靠性保障 (SRE) | devops、service-governance | 三层指标、APM链路、定时任务锁、容灾演练 | 盲目裸跑发版 |
-| 12 | 持续运营 (Operations) | new-business-plugin | 财务业务平账凭据、审批流治理、数字员工流水 | 账实不符/违规开通 |
-
-六要素（API / Service / Validator / Page / Permission / Log+Test）嵌在 3、7、8，不另起炉灶。
+| **00** | 规范与元编程 | skill-authoring、skill-creator | 合法 SKILL.md、技能测评 | 乱写 Skill |
+| **01_management** | 决策分析与项目管理 | dar-decision-matrix、agent-harness、project-init | DAR 权衡矩阵、Brief 项目立项 | 拍脑袋盲目选型 |
+| **02_requirements** | 需求工程与规格 | ears-spec-writer、product-requirements | EARS 5态需求、brief.json、验收标准 | 口语化伪需求直接编码 |
+| **03_design** | 架构设计与决策记录 | architecture-design、adr-architect、microservice-evolution | MADR 架构决策记录、拓扑图、A/B/C演进图 | 跨域直接 import Service |
+| **03_design** | API 契约设计 | api-design | OpenAPI 3.1、RPC action 契约 | 先手写 Route |
+| **03_design** | 数据库与多租户 | database-design、database-compatibility | Prisma Schema、Kysely AST、Tier-A/B/C声明 | 手写无租户 Raw SQL |
+| **03_design** | UI 与多端设计 | ui-design、ui-framework-governance、frontend-design、canvas-design、theme-factory、brand-guidelines | 响应式后台原型、页面模板、设计 Token | 杂乱拼凑 UI |
+| **04_implementation** | 编码实现与插件化 | coding、new-feature、new-business-plugin、plugin-authoring、mcp-builder | 第一方业务插件、BaseMapper CRUD、RPC 路由 | 跳过 Validator 直调 |
+| **05_verification** | 变异测试与反假Mock | automated-testing、mutation-tester、webapp-testing | 变异杀灭报告(MSI>=85%)、真实数据库测试矩阵 | 假 Mock、空断言绿牌 |
+| **06_quality_assurance** | 质量门禁与配置审计 | compliance-auditor | 20道门禁0债务通过、FCA/PCA 审计单、RTM | 门禁未跑通声明完工 |
+| **07_release** | 容器交付与网关发布 | devops | Traefik 网关配置、Docker 镜像、自动回滚预案 | 手改生产容器与配置 |
+| **08_sre** | 可靠性与事故复盘 | sre-slo-manager、postmortem-analyzer、service-governance、security | SLI/SLO矩阵、多燃烧率告警、免责5-Whys复盘 | 盲目裸跑发版、事故甩锅 |
+| **09_operations** | 持续运营与对账平账 | financial-reconciliation-agent | 三方对账单、长短款平账凭据、轧差流水 | 账实不符/违规提现抹账 |
 
 ---
 
@@ -38,26 +36,30 @@ Skill 编写规范见 [skill-authoring/SKILL.md](./skill-authoring/SKILL.md)。
 
 | 用户在做 | 必开 |
 |---|---|
-| 新增/修改 Skill | skill-authoring |
+| 新增/修改/评审 Skill | skill-authoring、skill-creator |
+| 架构方案选型、竞品横评、技术路线决策打分 | dar-decision-matrix |
+| 编写需求规格、消除需求二义性、定义业务不变量 | ears-spec-writer、product-requirements |
 | 新业务项目孵化、DigitalStaff NPC 模板、DeepSeek Harness 进化 | agent-harness、project-init、product-requirements |
-| 新功能、客户端、业务项目初始化 | product-requirements、project-init |
 | 新功能一站式交付（RBAC + 全动词 API + 页面 + 权限 + 测试） | new-feature |
 | 新业务域/新平台（起底座 -> 建表 -> codegen -> 注册插件 -> 编译/打包/预览） | new-business-plugin |
-| 管理端/C 端页面或视觉 | ui-design、ui-framework-governance、frontend-design |
-| 新 HTTP/RPC、改 DTO | api-design |
-| 表、迁移、多数据库 | database-design、database-compatibility |
-| 拆分、网关、BFF、前后端边界 | architecture-design、microservice-evolution |
-| 熔断、限流、追踪、高可用、SRE 稳定性 | service-governance、devops |
-| SRE 站点可靠性、APM 链路追踪、分布式定时任务与容灾 | devops、service-governance、security |
-| 业务持续运营、财务对账平账、租户与审批流治理 | new-business-plugin |
-| 写业务代码 | coding |
-| 补测、CI | automated-testing、webapp-testing |
-| 鉴权、注入、扫描、风控 | security |
-| 部署、域名、证书、发版 | devops |
-| MCP 服务器开发 | mcp-builder |
-| 品牌规范与设计资产 | brand-guidelines、canvas-design、theme-factory |
-| 技能演化评估与自研 | skill-creator |
-| 可插拔第一方/第三方插件开发 | plugin-authoring |
+| 架构设计、ADR 决策记录撰写、破坏性变更评估 | adr-architect、architecture-design |
+| 模块化单体向插件/微服务演进（A/B/C 阶段） | microservice-evolution、architecture-design |
+| 新 HTTP/RPC 接口设计、改 DTO 契约 | api-design |
+| 表结构、迁移、多租户隔离、多数据库兼容 | database-design、database-compatibility |
+| 管理端/C 端页面、信息架构与视觉交互 | ui-design、ui-framework-governance、frontend-design |
+| 品牌规范、视觉设计稿、主题生成 | brand-guidelines、canvas-design、theme-factory |
+| 写业务代码、分层落地、事务状态机 | coding |
+| 第一方插件开发、manifest 契约、worker stdio 协议 | plugin-authoring |
+| MCP 服务器与协议工具开发 | mcp-builder |
+| 编写测试用例、CI 测试、端到端测试 | automated-testing、webapp-testing |
+| 验证测试充分性、杀灭假 Mock、变异测试打假 | mutation-tester |
+| 质量门禁体检、CMMI 合规审计、FCA/PCA 配置审计 | compliance-auditor |
+| 身份鉴权、SQL 防注入、脱敏、限流防刷、安全渗透 | security |
+| 服务熔断、超时重试、舱壁隔离、链路追踪 | service-governance |
+| SRE 稳定性设计、SLO/SLI 目标制定、错误预算、压测护栏 | sre-slo-manager、devops |
+| 线上故障免责复盘、5-Whys 根因分析、CAPA 改进措施 | postmortem-analyzer |
+| 容器编排、Traefik 边缘网关、SSL 证书自动签发轮换、发版实施 | devops |
+| 财务业务对账、资金轧差平账、长短款差错处置、日终结算 | financial-reconciliation-agent |
 
 ---
 
@@ -69,16 +71,24 @@ Skill 编写规范见 [skill-authoring/SKILL.md](./skill-authoring/SKILL.md)。
 
 ---
 
-## 4. 已有治理 Skill（保持）
+## 4. 已有治理与原生 Skill（保持）
 
 | 文件 | 场景 |
 |---|---|
-| database-compatibility/SKILL.md | 数据库兼容等级 |
-| ui-framework-governance/SKILL.md | 管理端模板结构 |
-| microservice-evolution/SKILL.md | A/B/C 拆分 |
+| dar-decision-matrix/SKILL.md | CMMI 01 决策分析与加权权衡打分 |
+| ears-spec-writer/SKILL.md | CMMI 02 IEEE 29148 / EARS 5 态无歧义需求规格 |
+| adr-architect/SKILL.md | CMMI 03 MADR 架构决策记录与生命周期追踪 |
+| database-compatibility/SKILL.md | 数据库兼容等级 (Tier-A/B/C) 与降级 |
+| ui-framework-governance/SKILL.md | 管理端模板结构与四区交互治理 |
+| microservice-evolution/SKILL.md | A/B/C 拆分演进判定 |
 | plugin-authoring/SKILL.md | 可安装插件：包结构 / manifest / capability / worker 协议 |
 | agent-harness/SKILL.md | NPC 工作区模板与 Harness 思想进化 |
 | project-init/SKILL.md | 业务项目初始化与原地重构（对标 ProjectReactor.java） |
+| mutation-tester/SKILL.md | CMMI 05 变异测试反假 Mock (Stryker/PIT/SpaceX) |
+| compliance-auditor/SKILL.md | CMMI 06 过程质量审计、FCA/PCA 配置审计 |
+| sre-slo-manager/SKILL.md | CMMI 08 Google SRE SLI/SLO 与多窗口燃烧率告警 |
+| postmortem-analyzer/SKILL.md | CMMI 08 免责 5-Whys 故障复盘与 CAPA 闭环 |
+| financial-reconciliation-agent/SKILL.md | CMMI 09 持续运营财务业务三方对账与轧差平账 |
 
 ---
 
@@ -113,9 +123,6 @@ H5 / uni-app / Flutter / desktop-pc 走同一管道。渠道契约：`packages/s
 
 ## 7. 压测与渗透
 
-**尚无技能。** 曾引入 5 个（8 / 14 星来源），**已按 star > 20k 的标准撤回**。
-来源评审与 >20k 仓库清单见 [./UPSTREAM-NOTICE.md](./UPSTREAM-NOTICE.md)。
-
-执行层的现状:
-* 渗透 —— `npm run security:scan` 已有工具（已接进门禁）
-* 压测 —— `npm run load:test`
+执行层的现状与技能联动:
+* **渗透扫描** —— `npm run security:scan` 已接进 CI + G5，安全规约遵循 `security/SKILL.md`。
+* **压测护栏** —— `npm run load:test` 容量回归护栏，与 `sre-slo-manager/SKILL.md` 联动对齐。

@@ -59,7 +59,7 @@
     },
     "skills": {
       "sourceDir": ".agents/skills",
-      "count": 26
+      "count": 34
     },
     "mcp": {
       "server": "scripts/mcp/ruoyi-mcp-server.cjs",
