@@ -34,8 +34,7 @@ dsh 口号是 **Everything is a Plugin / Every run is traceable**。对应到本
 | Profile + Bundle + Patch | `project-profile.json` + `domain-catalog.json` + ProjectReactor | `project:create --profile/--bundle` 按需叠域 |
 | Prompt Section Assembly | `.agents/context/*` + Skill 注册表 + AGENTS.md | DigitalStaff 按 order 组装，禁止把 AGENTS.md 当唯一大字符串 |
 | Scoped tools | 权限码 + 租户上下文 + Admin/CPC/Open 三面 | NPC 角色只加载对应 Skill / 域白名单 |
-| Every run is traceable | sprint-prod 追加、audit、matrix/governance 证据 | Agent 动作与门禁结果可回放，不改业务审计语义 |
-| Skills as plugins | `.agents/skills` + `docs/skills/ruoyi-all-next` | Skill 声明 `inject` 依赖，未满足不启用 |
+| Skills as plugins | `.agents/skills`（唯一真源） | Skill 声明 `inject` 依赖，未满足不启用 |
 
 ## 3. 明确不引入
 
@@ -147,7 +146,7 @@ NPC 角色与 Skill 映射（DigitalStaff L0–L8 对基座 Skill；真源在本
 1. [ ] 用户原始输入已写入 `docs/features/sprint-prod/{MMDD}.md`。
 2. [ ] 未把 Cordis / Agent Loop 引入 `src/`。
 3. [ ] 新域仍登记 `domain-catalog.json`，并出现在 seam 发现面。
-4. [ ] 新 Skill 已注册（`docs/skills/ruoyi-all-next/README.md` + AGENTS.md §6.1）。
+4. [ ] 新 Skill 已注册（`.agents/skills/README.md` + AGENTS.md §6.1）。
 5. [ ] 业务项目身份只改 `project-profile.json`，不改契约真源。
 6. [ ] 孵化/反哺后执行 `npm run check`。
 
@@ -155,7 +154,7 @@ NPC 角色与 Skill 映射（DigitalStaff L0–L8 对基座 Skill；真源在本
 
 - 机器契约：`packages/shared/contract/agent-profile.json`
 - 提示分段：`.agents/context/`
-- Skill：`docs/skills/ruoyi-all-next/agent-harness.SKILL.md`
+- Skill：`.agents/skills/agent-harness/SKILL.md`
 - 孵化：AGENTS.md §16、`scripts/clone-project-base.cjs`
 - 域真源：`packages/shared/backend/constants/domain-catalog.json`
 - 参考实现（Harness 侧，勿复制进本仓）：DigitalStaff `docs/design/deepseek_harness_analysis.md`

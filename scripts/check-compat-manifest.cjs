@@ -96,8 +96,11 @@ const skillCount = fs
 if (surface.skills?.count !== skillCount) {
   fail(`consumptionSurface.skills.count is ${surface.skills?.count} but found ${skillCount} skills in ${skillsDir}`)
 }
-if (!fs.existsSync(abs(surface.skills?.mirrorDir || ""))) {
-  fail(`consumptionSurface.skills.mirrorDir missing: ${surface.skills?.mirrorDir}`)
+if (surface.skills?.mirrorDir) {
+  fail("consumptionSurface.skills must not declare mirrorDir; .agents/skills is the single source of truth")
+}
+if (fs.existsSync(abs("docs/skills"))) {
+  fail("duplicate skills directory docs/skills must not exist")
 }
 
 const mcp = surface.mcp || {}

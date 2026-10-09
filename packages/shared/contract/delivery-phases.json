@@ -98,7 +98,7 @@
       "artifacts": [
         "deploy/**",
         "Dockerfile",
-        "docs/skills/**/devops*"
+        ".agents/skills/devops/**"
       ],
       "skill": "devops",
       "gate": "G2_CoreSWE",

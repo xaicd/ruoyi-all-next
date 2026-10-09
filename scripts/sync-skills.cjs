@@ -1,42 +1,19 @@
 /**
- * Skills single source of truth.
+ * Skills single source of truth and integrity validator.
  *
- *   .agents/skills/<name>/SKILL.md              source (hand-edited, declared by agent-profile.json npc.skillsDir)
- *   docs/skills/ruoyi-all-next/<name>.SKILL.md  generated mirror (byte-identical, do not hand-edit)
+ *   .agents/skills/<name>/SKILL.md    authoritative source (hand-edited, declared by agent-profile.json npc.skillsDir)
+ *   .agents/skills/README.md          skill registry & matrix
  *
- * The docs/skills mirror previously drifted: 4 bodies were stale shorter copies
- * and `new-feature` was missing entirely. Run `npm run skills:sync` after editing
- * a skill; `npm run check` fails on drift.
+ * Duplicate directories (e.g. docs/skills/ mirror) are strictly forbidden
+ * to eliminate drift, cognitive pollution, and maintenance overhead.
  */
 
 const fs = require("fs")
 const path = require("path")
 const { ROOT } = require("./lib/domain-catalog.cjs")
 
-/**
- * 定位技能镜像目录 `docs/skills/<项目名>/`。
- *
- * **不要写死项目名** —— 孵化（project:create）只重写内容、不改目录名，
- * 写死会让孵化出的工程一上来就因"技能目录缺失"而门禁失败（实测）。
- * 解析顺序: 先按 package.json 的 name，退化为 docs/skills 下唯一存在的目录。
- */
-function resolveSkillsMirrorDir(root) {
-  try {
-    const pkg = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"))
-    const byName = path.join("docs", "skills", String(pkg.name || "").replace(/^@[^/]+\//, ""))
-    if (fs.existsSync(path.join(root, byName))) return byName
-  } catch {
-    // 读不到 package.json 就退化到扫描
-  }
-  const base = path.join(root, "docs", "skills")
-  if (!fs.existsSync(base)) return "docs/skills"
-  const dirs = fs.readdirSync(base, { withFileTypes: true }).filter((e) => e.isDirectory()).map((e) => e.name)
-  return dirs.length === 1 ? path.join("docs", "skills", dirs[0]) : "docs/skills"
-}
-
 const SOURCE_DIR = ".agents/skills"
-const MIRROR_DIR = resolveSkillsMirrorDir(path.resolve(__dirname, ".."))
-const README_REL = `${MIRROR_DIR}/README.md`
+const README_REL = `${SOURCE_DIR}/README.md`
 const SKILL_FILE = "SKILL.md"
 
 const checkOnly = process.argv.includes("--check")
@@ -54,12 +31,12 @@ function listSkillNames() {
   if (!fs.existsSync(sourceRoot)) fail(`missing ${SOURCE_DIR} (declared as agent-profile.json npc.skillsDir)`)
   return fs
     .readdirSync(sourceRoot, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
+    .filter((entry) => entry.isDirectory() && fs.existsSync(path.join(sourceRoot, entry.name, SKILL_FILE)))
     .map((entry) => entry.name)
     .sort()
 }
 
-function readSkill(name) {
+function validateSkill(name) {
   const rel = `${SOURCE_DIR}/${name}/${SKILL_FILE}`
   const full = abs(rel)
   if (!fs.existsSync(full)) fail(`${rel} is missing`)
@@ -78,79 +55,52 @@ function readSkill(name) {
   return body
 }
 
-function mirrorRel(name) {
-  return `${MIRROR_DIR}/${name}.SKILL.md`
+function checkNoDuplicateSkillsDir() {
+  const duplicateDirs = [
+    abs("docs/skills"),
+    abs("docs/spec/skills"),
+    abs("packages/shared/skills"),
+  ]
+
+  for (const dir of duplicateDirs) {
+    if (fs.existsSync(dir)) {
+      if (checkOnly) {
+        fail(`duplicate/mirror skills directory detected at "${path.relative(ROOT, dir)}"! .agents/skills is the sole source of truth. Remove duplicate directories.`)
+      } else {
+        console.log(`[skills] Purging forbidden duplicate skills directory: ${path.relative(ROOT, dir)}`)
+        fs.rmSync(dir, { recursive: true, force: true })
+      }
+    }
+  }
 }
 
 function main() {
+  // 1. 确保没有重复的 skills 目录
+  checkNoDuplicateSkillsDir()
+
+  // 2. 校验所有技能的结构与 Frontmatter
   const names = listSkillNames()
   if (names.length === 0) fail(`no skills found in ${SOURCE_DIR}`)
 
-  const drifted = []
-  const written = []
-
   for (const name of names) {
-    const body = readSkill(name)
-    const rel = mirrorRel(name)
-    const full = abs(rel)
-    const current = fs.existsSync(full) ? fs.readFileSync(full, "utf8") : null
-
-    if (current === body) continue
-
-    if (checkOnly) {
-      drifted.push(current === null ? `${rel} (missing)` : `${rel} (stale)`)
-      continue
-    }
-
-    fs.mkdirSync(path.dirname(full), { recursive: true })
-    fs.writeFileSync(full, body)
-    written.push(rel)
+    validateSkill(name)
   }
 
-  const known = new Set(names)
-  const orphaned = fs
-    .readdirSync(abs(MIRROR_DIR))
-    .filter((entry) => entry.endsWith(".SKILL.md"))
-    .map((entry) => entry.slice(0, -".SKILL.md".length))
-    .filter((name) => !known.has(name))
-    .sort()
-
-  if (orphaned.length > 0) {
-    drifted.push(...orphaned.map((name) => `${mirrorRel(name)} (no source skill)`))
-  }
-  // 写模式下**删掉孤儿镜像** —— 此前只报告不删除，导致源技能被移除后
-  // 镜像一直留着，check 永远红（实测: 撤掉 5 个技能后镜像仍 30 个）。
-  const removed = []
-  if (!checkOnly) {
-    for (const name of orphaned) {
-      const full = abs(mirrorRel(name))
-      if (fs.existsSync(full)) { fs.rmSync(full); removed.push(mirrorRel(name)) }
-    }
-  }
-
+  // 3. 校验 README.md 登记完整性
   const readmeFull = abs(README_REL)
   if (!fs.existsSync(readmeFull)) fail(`missing ${README_REL}`)
   const readme = fs.readFileSync(readmeFull, "utf8")
   const unregistered = names.filter((name) => !readme.includes(name))
 
-  if (checkOnly) {
-    const problems = [...drifted]
-    if (unregistered.length > 0) {
-      problems.push(`${README_REL} does not reference: ${unregistered.join(", ")}`)
+  if (unregistered.length > 0) {
+    if (checkOnly) {
+      fail(`${README_REL} does not reference skills: ${unregistered.join(", ")}`)
+    } else {
+      console.log(`[skills] WARN: ${README_REL} does not reference: ${unregistered.join(", ")}`)
     }
-    if (problems.length > 0) {
-      fail(`drift detected, run "npm run skills:sync":\n  - ${problems.join("\n  - ")}`)
-    }
-    console.log(`[skills] PASS: ${names.length} skills mirrored from .agents/skills`)
-    return
   }
 
-  if (unregistered.length > 0) {
-    console.log(`[skills] WARN: ${README_REL} does not reference: ${unregistered.join(", ")}`)
-  }
-  for (const rel of removed) console.log(`  - removed ${rel}`)
-  console.log(`[skills] synced ${written.length} mirror(s) from .agents/skills (${names.length} total)${removed.length ? `, removed ${removed.length} orphan(s)` : ""}`)
-  for (const rel of written) console.log(`  - ${rel}`)
+  console.log(`[skills] PASS: ${names.length} skills verified in ${SOURCE_DIR} (single source of truth, 0 duplicate dirs)`)
 }
 
 main()

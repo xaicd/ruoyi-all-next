@@ -71,9 +71,8 @@
     },
     "skills": {
       "source": ".agents/skills",
-      "mirror": "docs/skills/ruoyi-all-next",
-      "sync": "npm run skills:sync",
-      "generated": true
+      "check": "npm run skills:check",
+      "sync": "npm run skills:sync"
     }
   },
   "seams": [

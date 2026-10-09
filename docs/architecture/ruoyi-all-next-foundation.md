@@ -140,4 +140,4 @@ apps/ruoyi/ruoyi-all-next/
 ### 10.4 Agent Skill 制度
 
 1. 重要核心能力必须有独立 Skill 记录，供 Agent 自动执行。
-2. Skill 索引目录：docs/skills/ruoyi-all-next
+2. Skill 索引目录：.agents/skills

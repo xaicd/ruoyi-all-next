@@ -72,6 +72,12 @@ function checkHealth() {
     }
   }
 
+  // 5. 检查是否存在重复的 skills 目录（原则：全仓只有 .agents/skills，严禁 docs/skills 镜像或副本）
+  const duplicateSkills = path.join(ROOT, "docs", "skills")
+  if (fs.existsSync(duplicateSkills)) {
+    errors.push(`发现重复/镜像 skills 目录: docs/skills/ —— 铁律要求唯一真源为 .agents/skills/，严禁多份目录造成认知与维护污染`)
+  }
+
   return { errors, warnings, specCount: allSpecs.length }
 }
 

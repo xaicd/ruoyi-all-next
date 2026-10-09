@@ -589,7 +589,7 @@ function applyHatchPatches(destRoot, plan, sourceCatalog, targetName) {
   fs.writeFileSync(hatchPath, `${JSON.stringify(buildHatchManifest(plan), null, 2)}\n`, "utf8")
   writeSeamGraph({ root: destRoot, catalog: destCatalog, rpcActions: destRpc })
   // 路径级重命名: 内容里的项目名被替换了，但**目录/文件名**还叫旧名 ——
-  // 于是契约清单里写着 docs/skills/<新名>，磁盘上却是 docs/skills/<旧名>，门禁当场对不上（实测）。
+  // 必须把路径中含旧项目名的目录/文件一并更新，避免与契约清单脱节。
   renamePathSegments(destRoot, targetName)
   pruneDomainReferenceLists(destRoot, plan)
 

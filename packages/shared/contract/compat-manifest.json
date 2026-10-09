@@ -59,7 +59,6 @@
     },
     "skills": {
       "sourceDir": ".agents/skills",
-      "mirrorDir": "docs/skills/ruoyi-all-next",
       "count": 26
     },
     "mcp": {

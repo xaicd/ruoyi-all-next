@@ -180,7 +180,6 @@ const TOOLS = [
       const profile = readJson(`${CONTRACT_DIR}/agent-profile.json`)
       return {
         sourceDir: profile.npc?.skillsDir || ".agents/skills",
-        mirrorDir: "docs/skills/ruoyi-all-next",
         skills: readSkillIndex(),
         npcLayers: profile.npc?.layers || {},
       }

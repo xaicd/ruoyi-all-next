@@ -430,9 +430,9 @@ npm run check                 # 门禁产出证据 + 轨迹
 以下 Skill 为 all-next 的治理必备项，AGENTS 必须注册并在对应场景启用：
 
 1. new-feature：.agents/skills/new-feature/SKILL.md
-2. database-compatibility：docs/skills/ruoyi-all-next/database-compatibility.SKILL.md
-3. ui-framework-governance：docs/skills/ruoyi-all-next/ui-framework-governance.SKILL.md
-4. microservice-evolution：docs/skills/ruoyi-all-next/microservice-evolution.SKILL.md
+2. database-compatibility：.agents/skills/database-compatibility/SKILL.md
+3. ui-framework-governance：.agents/skills/ui-framework-governance/SKILL.md
+4. microservice-evolution：.agents/skills/microservice-evolution/SKILL.md
 5. ui-ux-pro-max：.kiro/steering/ui-ux-pro-max/SKILL.md
 6. agent-harness：.agents/skills/agent-harness/SKILL.md
 7. plugin-authoring：.agents/skills/plugin-authoring/SKILL.md
@@ -916,7 +916,7 @@ npm run check
    ① **API 契约**：`Command`/`Query`/`Event`/`Stream`（开发工种，详见 §21）；
    ② **数据契约 (Data Contract)**：Source/Transform/Sink Schema + 增量水位 + 幂等主键 + 质量规则 + 血缘（数据同步/ETL/数仓/BI 工种，落位 `report` 域与数据同步管道）；
    ③ **流程契约 (Process Contract)**：状态机/BPMN/DAG + 事件/定时/API/人工四类触发器 + 补偿回滚路径（运营编排/审批流/工单工种，落位 `bpm` 域）；
-   ④ **预案契约 (Runbook Contract)**：变更步骤 + 校验点 + 回滚脚本 + 演练记录（DevOps/SRE/DBA 运维工种，对齐 `docs/skills/ruoyi-all-next/devops.SKILL.md`）。
+   ④ **预案契约 (Runbook Contract)**：变更步骤 + 校验点 + 回滚脚本 + 演练记录（DevOps/SRE/DBA 运维工种，对齐 `.agents/skills/devops/SKILL.md`）。
 2. **IT 全工种工作内容矩阵**：产品（需求契约，`product-requirements.SKILL.md`）、设计（设计契约，`ui-design.SKILL.md`/组件复用）、开发（API 契约/5 步穿透）、数据（数据契约/管道 DSL + 指标语义层，`database-design.SKILL.md`）、测试（测试契约/4 层金字塔，`automated-testing.SKILL.md`）、运维（预案契约/Runbook + 灰度回滚，`devops.SKILL.md`）、运营编排（流程契约/状态机 + HITL 人工节点）、安全（安全基线/威胁建模，`security.SKILL.md`）；每族明确契约真源、执行范式与低代码/开源工具优先清单。
 3. **数据同步/ETL 五大铁律**：① 严禁一次性搬运脚本入库；② 必须幂等可重放（按主键/版本 upsert）；③ 必须断点续传（checkpoint/增量水位）；④ 血缘自动登记本体域；⑤ 对账报告即验收（行数/空值/唯一性对账通过才算交付）。工具决策顺序：内置管道 DSL ➔ 开源成熟方案（SeaTunnel/DataX 批量、Flink CDC 实时）➔ 才允许自写代码。
 4. **BI 查询与指标语义层范式**：指标口径定义一次（口径/维度/过滤）、处处复用，严禁各报表各写 SQL 口径打架；即席查询三防线（行级权限 ➔ 超时/限行/只读副本资源隔离 ➔ 全量审计）；AI NL-to-SQL 只允许生成绑定语义层白名单指标的查询，严禁裸拼 SQL。

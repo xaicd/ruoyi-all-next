@@ -1,11 +1,14 @@
 # ruoyi-all-next Skill 注册表
 
 权威入口。Agent 接到跨阶段需求时先读本文件，再只加载相关阶段 Skill。  
-Skill 写法见 [skill-authoring.SKILL.md](./skill-authoring.SKILL.md)。
+Skill 编写规范见 [skill-authoring/SKILL.md](./skill-authoring/SKILL.md)。
 
 冲突时：**本仓库 Skill + AGENTS.md + 本仓库文档 > 外部 GitHub Skill**。
 
-真源：`.agents/skills/<name>/SKILL.md`（`agent-profile.json` 的 `npc.skillsDir`）。本目录下的 `*.SKILL.md` 是 `npm run skills:sync` 生成的逐字节镜像，**禁止手改**，`npm run check` 会拦下漂移。
+真源：`.agents/skills/<name>/SKILL.md`（`agent-profile.json` 的 `npc.skillsDir`）。
+**本目录为全仓唯一真源，严禁在 `docs/` 或其他位置建立重复、镜像或副本目录！**
+
+---
 
 ## 1. 交付管道
 
@@ -27,6 +30,8 @@ Skill 写法见 [skill-authoring.SKILL.md](./skill-authoring.SKILL.md)。
 
 六要素（API / Service / Validator / Page / Permission / Log+Test）嵌在 3、7、8，不另起炉灶。
 
+---
+
 ## 2. 启用矩阵
 
 | 用户在做 | 必开 |
@@ -36,15 +41,21 @@ Skill 写法见 [skill-authoring.SKILL.md](./skill-authoring.SKILL.md)。
 | 新功能、客户端、业务项目初始化 | product-requirements、project-init |
 | 新功能一站式交付（RBAC + 全动词 API + 页面 + 权限 + 测试） | new-feature |
 | 新业务域/新平台（起底座 -> 建表 -> codegen -> 注册插件 -> 编译/打包/预览） | new-business-plugin |
-| 管理端/C 端页面或视觉 | ui-design、ui-framework-governance、ui-ux-pro-max |
+| 管理端/C 端页面或视觉 | ui-design、ui-framework-governance、frontend-design |
 | 新 HTTP/RPC、改 DTO | api-design |
 | 表、迁移、多数据库 | database-design、database-compatibility |
 | 拆分、网关、BFF、前后端边界 | architecture-design、microservice-evolution |
 | 熔断、限流、追踪、高可用 | service-governance |
 | 写业务代码 | coding |
-| 补测、CI | automated-testing |
+| 补测、CI | automated-testing、webapp-testing |
 | 鉴权、注入、扫描、风控 | security |
 | 部署、域名、证书、发版 | devops |
+| MCP 服务器开发 | mcp-builder |
+| 品牌规范与设计资产 | brand-guidelines、canvas-design、theme-factory |
+| 技能演化评估与自研 | skill-creator |
+| 可插拔第一方/第三方插件开发 | plugin-authoring |
+
+---
 
 ## 3. 分层
 
@@ -52,24 +63,29 @@ Skill 写法见 [skill-authoring.SKILL.md](./skill-authoring.SKILL.md)。
 2. **项目层（强制）**：本目录 + `AGENTS.md` + `docs/guides` + `docs/architecture`。
 3. **证据层**：扫描产物、测试、`npm run check`。未落地不得标 DONE。
 
+---
+
 ## 4. 已有治理 Skill（保持）
 
 | 文件 | 场景 |
 |---|---|
-| database-compatibility.SKILL.md | 数据库兼容等级 |
-| ui-framework-governance.SKILL.md | 管理端模板结构 |
-| microservice-evolution.SKILL.md | A/B/C 拆分 |
-| plugin-authoring.SKILL.md | 可安装插件：包结构 / manifest / capability / worker 协议 |
-| agent-harness.SKILL.md | NPC 工作区模板与 Harness 思想进化 |
-| project-init.SKILL.md | 业务项目初始化与原地重构（对标 ProjectReactor.java） |
-| ../../../.kiro/steering/ui-ux-pro-max/SKILL.md | 视觉/UX 检索 |
+| database-compatibility/SKILL.md | 数据库兼容等级 |
+| ui-framework-governance/SKILL.md | 管理端模板结构 |
+| microservice-evolution/SKILL.md | A/B/C 拆分 |
+| plugin-authoring/SKILL.md | 可安装插件：包结构 / manifest / capability / worker 协议 |
+| agent-harness/SKILL.md | NPC 工作区模板与 Harness 思想进化 |
+| project-init/SKILL.md | 业务项目初始化与原地重构（对标 ProjectReactor.java） |
+
+---
 
 ## 5. 客户端
 
 H5 / uni-app / Flutter / desktop-pc 走同一管道。渠道契约：`packages/shared/contract/client-channels.json`。  
 目录：`clients/<channel>/{app,shared,modules/<domain>}`。禁止为客户端另开 API 前缀。
 
-## 引入的上游 Skill（Anthropic 官方，Apache-2.0）
+---
+
+## 6. 引入的上游 Skill（Anthropic 官方，Apache-2.0）
 
 来源 `github.com/anthropics/skills`。**从属于本仓库规范**：本 README 开头那句
 「本仓库 Skill + AGENTS.md + 本仓库文档 > 外部 GitHub Skill」对它们同样适用 —— 冲突时以本仓为准。
@@ -86,14 +102,16 @@ H5 / uni-app / Flutter / desktop-pc 走同一管道。渠道契约：`packages/s
 
 **未引入**（不是开源，或未声明许可）：`docx` / `pdf` / `pptx` / `xlsx`（Proprietary，
 © Anthropic PBC, All rights reserved）、`doc-coauthoring`（无 LICENSE.txt）。
-判据与记录见 [../upstream/NOTICE.md](../upstream/NOTICE.md) —— 逐个读 LICENSE.txt 得出，
+判据与记录见 [./UPSTREAM-NOTICE.md](./UPSTREAM-NOTICE.md) —— 逐个读 LICENSE.txt 得出，
 不靠仓库首页「Many skills are Apache 2.0」那句话推断。
 
-## 压测与渗透
+---
+
+## 7. 压测与渗透
 
 **尚无技能。** 曾引入 5 个（8 / 14 星来源），**已按 star > 20k 的标准撤回**。
-来源评审与 >20k 仓库清单见 [../upstream/NOTICE.md](../upstream/NOTICE.md)。
+来源评审与 >20k 仓库清单见 [./UPSTREAM-NOTICE.md](./UPSTREAM-NOTICE.md)。
 
 执行层的现状:
-* 渗透 —— `npm run security:scan` 已有工具（尚未接进门禁）
-* 压测 —— **无工具、无技能**
+* 渗透 —— `npm run security:scan` 已有工具（已接进门禁）
+* 压测 —— `npm run load:test`

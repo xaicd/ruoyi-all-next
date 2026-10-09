@@ -152,7 +152,7 @@ DATABASE_URL=file:./data/ruoyi.db DB_DRIVER=sqlite npm run dev   # next dev -p 3
 
 ## 7. Skills 索引（`.agents/skills/`，16 个可执行 SKILL.md）
 
-任务匹配时经 `loadSkill` 按需加载（**勿一次全塞**）：`agent-harness` · `api-design` · `architecture-design` · `automated-testing` · `coding` · `database-compatibility` · `database-design` · `devops` · `microservice-evolution` · `new-feature` · `product-requirements` · `security` · `service-governance` · `skill-authoring` · `ui-design` · `ui-framework-governance`。（`docs/skills/ruoyi-all-next/` 有镜像）
+任务匹配时经 `loadSkill` 按需加载（**勿一次全塞**）：`agent-harness` · `api-design` · `architecture-design` · `automated-testing` · `coding` · `database-compatibility` · `database-design` · `devops` · `microservice-evolution` · `new-feature` · `product-requirements` · `security` · `service-governance` · `skill-authoring` · `ui-design` · `ui-framework-governance`。（`.agents/skills/` 为全仓唯一真源）
 
 **常用映射**：加字段/新页面→`new-feature`；换库/国产库→`database-compatibility`；拆域/RPC→`microservice-evolution`+`service-governance`；测试→`automated-testing`；UI→`ui-design`+`ui-framework-governance`。
 
