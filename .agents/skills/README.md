@@ -29,6 +29,7 @@ Skill 编写规范见 [skill-authoring/SKILL.md](./skill-authoring/SKILL.md)。
 | **07_release** | 容器交付与网关发布 | devops | Traefik 网关配置、Docker 镜像、自动回滚预案 | 手改生产容器与配置 |
 | **08_sre** | 可靠性与事故复盘 | sre-slo-manager、postmortem-analyzer、service-governance、security、strix-penetration-testing | SLI/SLO矩阵、多燃烧率告警、免责5-Whys复盘、自主红队 PoC 渗透报告 | 盲目裸跑发版、事故甩锅 |
 | **09_operations** | 持续运营与对账平账 | financial-reconciliation-agent | 三方对账单、长短款平账凭据、轧差流水 | 账实不符/违规提现抹账 |
+| **01~09** | CMMI 标准资产创建与治理 | cmmi-asset-authoring | 标准 01~09 过程资产、合规防造假扫描 | 散落孤儿文档、造假 Demo |
 
 ---
 
@@ -62,6 +63,7 @@ Skill 编写规范见 [skill-authoring/SKILL.md](./skill-authoring/SKILL.md)。
 | 线上故障免责复盘、5-Whys 根因分析、CAPA 改进措施 | postmortem-analyzer |
 | 容器编排、Traefik 边缘网关、SSL 证书自动签发轮换、发版实施 | devops |
 | 财务业务对账、资金轧差平账、长短款差错处置、日终结算 | financial-reconciliation-agent |
+| CMMI 01~09 全生命周期标准资产创建、过程资产脚手架、健康合规防造假扫描 | cmmi-asset-authoring |
 
 ---
 
@@ -77,6 +79,7 @@ Skill 编写规范见 [skill-authoring/SKILL.md](./skill-authoring/SKILL.md)。
 
 | 文件 | 场景 |
 |---|---|
+| cmmi-asset-authoring/SKILL.md | CMMI 01~09 标准资产创作与生命周期脚手架治理 |
 | dar-decision-matrix/SKILL.md | CMMI 01 决策分析与加权权衡打分 |
 | ears-spec-writer/SKILL.md | CMMI 02 IEEE 29148 / EARS 5 态无歧义需求规格 |
 | adr-architect/SKILL.md | CMMI 03 MADR 架构决策记录与生命周期追踪 |

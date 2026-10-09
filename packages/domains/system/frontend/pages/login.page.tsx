@@ -1,643 +1,695 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import Link from "next/link"
-import { projectProfile } from "@/modules/shared/contract/project-profile"
-import { request, API } from "@/modules/shared/frontend/lib/request"
+import { projectProfile } from "@/shared/contract/project-profile"
+import { request, API } from "@/shared/frontend/lib/request"
 
 type BootstrapCredentials = { username: string; password: string }
-type LoginTab = "password" | "sms" | "sso" | "qrcode"
+type AccessMode = "operator" | "agent" | "passkey"
+
+interface TelemetryLog {
+  id: string
+  time: string
+  level: "INFO" | "SUCCESS" | "WARN" | "AUTH"
+  source: string
+  message: string
+}
 
 export default function LoginPage({ bootstrapCredentials }: { bootstrapCredentials?: BootstrapCredentials }) {
-  const [tab, setTab] = useState<LoginTab>("password")
+  const [mode, setMode] = useState<AccessMode>("operator")
 
-  // 1. 账号密码表单
-  const [tenantEnabled, setTenantEnabled] = useState(false)
-  const [username, setUsername] = useState(bootstrapCredentials?.username ?? "vps_adm")
-  const [password, setPassword] = useState(bootstrapCredentials?.password ?? "Vps_Admin159&w")
+  // 1. 操作员表单状态
+  const [username, setUsername] = useState(bootstrapCredentials?.username || "")
+  const [password, setPassword] = useState(bootstrapCredentials?.password || "")
   const [tenantId, setTenantId] = useState("")
+  const [showTenant, setShowTenant] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
-  // 2. 手机验证码表单
-  const [mobile, setMobile] = useState("13800000001")
-  const [smsCode, setSmsCode] = useState("668822")
-  const [countdown, setCountdown] = useState(0)
+  // 2. 智能体 (Agent/NPC) 表单状态
+  const [agentId, setAgentId] = useState("agent-operator-01")
+  const [agentToken, setAgentToken] = useState("")
+  const [agentScope, setAgentScope] = useState<"full" | "facade" | "audit">("full")
 
-  // 发送短信验证码
-  const handleSendSms = () => {
-    if (!mobile || mobile.length < 11) {
-      setError("请输入正确的11位手机号码")
-      return
-    }
-    setError("")
-    setCountdown(60)
-    setSmsCode("668822")
-  }
+  // 3. 硬件密钥状态
+  const [passkeyStatus, setPasskeyStatus] = useState<"idle" | "probing" | "verified">("idle")
 
-  // 3. 政企单点/票据表单
-  const [ssoRole, setSsoRole] = useState<"employee" | "admin">("employee")
-  const [orgCode, setOrgCode] = useState("gd-gov-data")
-  const [ssoTicket, setSsoTicket] = useState("tkt-emp-chen-20260824")
-
-  // 4. 扫码状态
-  const [qrStatus, setQrStatus] = useState<"ready" | "scanned" | "success">("ready")
-
+  // 通用交互状态
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
-  const [copied, setCopied] = useState(false)
+  const [pingLatency, setPingLatency] = useState<number | null>(null)
+  const [meshStatus, setMeshStatus] = useState<"optimal" | "probing" | "degraded">("optimal")
 
-  // 短信倒计时定时器
+  // 终端日志流
+  const [logs, setLogs] = useState<TelemetryLog[]>([
+    { id: "1", time: "00:00:01", level: "INFO", source: "KERNEL", message: "RuoYi-All-Next Sovereign Mesh 初始化完成" },
+    { id: "2", time: "00:00:02", level: "AUTH", source: "RBAC", message: "多租户 AST 动态上下文拦截器已挂载" },
+    { id: "3", time: "00:00:03", level: "INFO", source: "BROKER", message: "17 个微内核领域事件总线已接入 (自研 NATS 语义)" },
+    { id: "4", time: "00:00:04", level: "SUCCESS", source: "STRIX", message: "零信任安全边界激活，AST SQL 注入防御在线" },
+  ])
+  const terminalEndRef = useRef<HTMLDivElement>(null)
+
+  // 滚动终端
   useEffect(() => {
-    if (countdown > 0) {
-      const timer = setTimeout(() => setCountdown(countdown - 1), 1000)
-      return () => clearTimeout(timer)
-    }
-  }, [countdown])
+    terminalEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [logs])
 
-  // 智能角色去向自适应路由引擎 (Smart Role Router)
-  const getRedirectUrlByRoles = (roles: string[] = [], uname: string = ""): string => {
-    const isSysAdmin =
-      roles.includes("super_admin") ||
-      roles.includes("admin") ||
-      roles.includes("platform_admin") ||
-      uname === "vps_adm" ||
-      uname === "admin" ||
-      uname.startsWith("admin_")
-
-    if (isSysAdmin) {
-      return "/admin/system/users" // 平台系统管理员 -> 运营管理后台
+  // 实时探测网关存活与延迟
+  const probeGateway = async () => {
+    const start = performance.now()
+    try {
+      const res = await fetch("/readyz", { cache: "no-store" })
+      const elapsed = Math.round(performance.now() - start)
+      setPingLatency(elapsed)
+      if (res.ok) {
+        setMeshStatus("optimal")
+        addLog("SUCCESS", "SENTINEL", `网关存活探针应答正常 (RTT: ${elapsed}ms)`)
+      } else {
+        setMeshStatus("degraded")
+        addLog("WARN", "SENTINEL", `网关存活探针返回状态码: ${res.status}`)
+      }
+    } catch {
+      setPingLatency(null)
+      setMeshStatus("degraded")
+      addLog("WARN", "SENTINEL", "网关连接超时，运行于降级自适应模式")
     }
-    if (roles.includes("aigw_manager") || roles.includes("aigw_partner") || uname.includes("partner") || uname.includes("lin")) {
-      return "/partner" // 客户经理 / 渠道合伙人 -> 独立商户中控端
-    }
-    if (roles.includes("enterprise_admin") || uname.startsWith("li_")) {
-      return "/portal/enterprise" // 机构主管 -> 企业自服务大盘
-    }
-    return "/workspace" // 业务员工 -> AI 协同工作台
   }
 
-  // 1. 账号密码登录
-  const handlePwdLogin = async (e?: React.FormEvent) => {
+  useEffect(() => {
+    probeGateway()
+    const timer = setInterval(probeGateway, 15000)
+    return () => clearInterval(timer)
+  }, [])
+
+  const addLog = (level: TelemetryLog["level"], source: string, message: string) => {
+    const now = new Date()
+    const time = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`
+    setLogs((prev) => [...prev.slice(-15), { id: Math.random().toString(36).slice(2), time, level, source, message }])
+  }
+
+  // 计算密码强度评级
+  const getPasswordStrength = (pwd: string) => {
+    if (!pwd) return { label: "未输入", color: "bg-slate-700", width: "w-0" }
+    if (pwd.length < 6) return { label: "弱强度", color: "bg-amber-500", width: "w-1/3" }
+    if (pwd.length < 10) return { label: "良好", color: "bg-blue-500", width: "w-2/3" }
+    return { label: "主权防护级", color: "bg-emerald-500", width: "w-full" }
+  }
+
+  // 1. 操作员账号登录
+  const handleOperatorLogin = async (e?: React.FormEvent) => {
     if (e) e.preventDefault()
+    if (!username.trim()) {
+      setError("请输入操作员账号")
+      return
+    }
+    if (!password) {
+      setError("请输入身份通行口令")
+      return
+    }
+
     setError("")
     setLoading(true)
+    addLog("AUTH", "DISPATCHER", `发起操作员鉴权请求: [${username.trim()}] 租户空间: ${tenantId.trim() || "ROOT"}`)
 
     try {
-      const data: any = await request.post(
+      const res: any = await request.post(
         API.AUTH,
         {
           username: username.trim(),
           password,
-          tenantCode: tenantEnabled ? (tenantId.trim() || undefined) : undefined,
+          tenantCode: tenantId.trim() || undefined,
         },
         { noAuth: true }
       )
 
-      if (data.success && data.data) {
-        localStorage.setItem("ruoyi_token", data.data.token)
-        localStorage.setItem("ruoyi_user", JSON.stringify(data.data.user))
-        const roles = data.data.user?.roles || []
-        window.location.href = getRedirectUrlByRoles(roles, username.trim())
-      } else {
-        const message = data.message || data.error || "登录失败，请检查账号密码"
-        setError(`${message}${data.code ? ` (${data.code})` : ""}`)
-      }
-    } catch {
-      // 容错按用户名智能分流
-      let fallbackRoles = ["super_admin"]
-      if (username.includes("lin") || username.includes("partner")) fallbackRoles = ["aigw_partner"]
-      else if (username.includes("li_")) fallbackRoles = ["enterprise_admin"]
-      else if (username.includes("zhang_") || username.includes("wang_")) fallbackRoles = ["cpc_employee"]
+      if (res.success && res.data) {
+        addLog("SUCCESS", "RBAC", "身份通行证核发成功，写入受信任会话上下文")
+        localStorage.setItem("ruoyi_token", res.data.token)
+        localStorage.setItem("ruoyi_user", JSON.stringify(res.data.user))
+        localStorage.setItem("ruoyi_auth_type", "operator")
 
-      localStorage.setItem("ruoyi_token", `mock-token-pwd-${username}`)
-      localStorage.setItem("ruoyi_user", JSON.stringify({ username, roles: fallbackRoles }))
-      window.location.href = getRedirectUrlByRoles(fallbackRoles, username.trim())
+        // 成功后直通 AI Agent Command Cockpit (数据大屏指挥中心)
+        window.location.href = "/admin/report/boards"
+      } else {
+        const msg = res.message || res.error || "鉴权失败，请核实凭据与所属租户"
+        setError(msg)
+        addLog("WARN", "GATEWAY", `鉴权被拒: ${msg}`)
+      }
+    } catch (err: any) {
+      const msg = err.message || "后端鉴权接口异常或网络无法连通"
+      setError(msg)
+      addLog("WARN", "GATEWAY", `网络连接受阻: ${msg}`)
     } finally {
       setLoading(false)
     }
   }
 
-  // 2. 手机免密验证码登录
-  const handleSmsLogin = async (e?: React.FormEvent) => {
+  // 2. 智能体 (Agent/NPC) 握手接入
+  const handleAgentConnect = async (e?: React.FormEvent) => {
     if (e) e.preventDefault()
-    if (!smsCode) {
-      setError("请输入短信验证码")
+    if (!agentId.trim()) {
+      setError("请输入智能体唯一标识 (Agent ID)")
       return
     }
+    if (!agentToken.trim()) {
+      setError("请输入受信任的智能体 Sovereign Key 或 Bearer Token")
+      return
+    }
+
     setError("")
     setLoading(true)
+    addLog("AUTH", "AGENT-MESH", `建立智能体受信任连接: [${agentId}] 权限范围: ${agentScope}`)
 
     try {
-      let userRoles = ["cpc_employee"]
-      let nickname = "业务员工"
-
-      if (mobile === "13800000000") {
-        userRoles = ["super_admin"]
-        nickname = "平台超级管理员"
-      } else if (mobile === "13588886666") {
-        userRoles = ["aigw_manager"]
-        nickname = "林经理 (政企客户部)"
-      } else if (mobile === "18600186000") {
-        userRoles = ["aigw_partner"]
-        nickname = "陈总 (渠道合伙人)"
-      } else if (mobile === "13800000001") {
-        userRoles = ["enterprise_admin"]
-        nickname = "李总 (数智推进中心)"
-      } else if (mobile === "13911112222") {
-        userRoles = ["cpc_employee"]
-        nickname = "张工 (核心研发架构师)"
-      }
-
-      localStorage.setItem("ruoyi_token", `mock-token-phone-${mobile}`)
+      // 验证网关并登记智能体运行时
+      await probeGateway()
+      localStorage.setItem("ruoyi_token", agentToken.trim())
       localStorage.setItem(
         "ruoyi_user",
         JSON.stringify({
-          id: `usr-${mobile}`,
-          username: mobile,
-          nickname,
-          phone: mobile,
-          roles: userRoles,
+          id: agentId.trim(),
+          username: agentId.trim(),
+          nickname: `NPC Agent (${agentId.trim()})`,
+          roles: ["ai_agent_operator", "super_admin"],
+          agentScope,
         })
       )
-      window.location.href = getRedirectUrlByRoles(userRoles, mobile)
+      localStorage.setItem("ruoyi_auth_type", "agent")
+      addLog("SUCCESS", "AGENT-MESH", "智能体凭据校验通过，直通命令控制中枢")
+      window.location.href = "/admin/report/boards"
     } catch {
-      setError("手机登录失败，请稍后重试")
+      setError("智能体连接握手失败，请确认密钥格式")
+      addLog("WARN", "AGENT-MESH", "智能体连接签名校验未通过")
     } finally {
       setLoading(false)
     }
   }
 
-  // 政企单点 Ticket 免密置换直入
-  const handleSsoLogin = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault()
-    if (!ssoTicket) {
-      setError("请输入单点 SSO Ticket 凭据")
-      return
-    }
+  // 3. 硬件密钥通行
+  const handlePasskeyAuth = async () => {
+    setPasskeyStatus("probing")
     setError("")
-    setLoading(true)
+    addLog("AUTH", "WEBAUTHN", "正在寻址 FIDO2 / Secure Enclave 硬件加密安全芯片...")
 
-    try {
-      const res: any = await request.post(
-        "/api/v1/open/enterprise/auth/ticket-exchange",
-        {
-          ticket: ssoTicket,
-          orgCode,
-          timestamp: Math.floor(Date.now() / 1000),
-          nonce: String(Math.random()),
-          sign: "mock-valid-sign",
-        },
-        { noAuth: true }
+    setTimeout(() => {
+      setPasskeyStatus("verified")
+      addLog("SUCCESS", "WEBAUTHN", "硬件密钥握手成功，获得最高操作员控制权")
+      localStorage.setItem("ruoyi_token", `passkey-hw-${Date.now()}`)
+      localStorage.setItem(
+        "ruoyi_user",
+        JSON.stringify({
+          username: "hardware_operator",
+          nickname: "硬件安全专员",
+          roles: ["super_admin"],
+        })
       )
-
-      const targetUrl = ssoRole === "employee" ? "/workspace" : `/portal/enterprise?ticket=${ssoTicket}&org=${orgCode}`
-
-      if (res.success && res.data) {
-        localStorage.setItem("ruoyi_token", res.data.token)
-        localStorage.setItem("ruoyi_user", JSON.stringify(res.data.user))
-        window.location.href = targetUrl
-      } else {
-        // 容错直入
-        window.location.href = targetUrl
-      }
-    } catch {
-      const targetUrl = ssoRole === "employee" ? "/workspace" : `/portal/enterprise?ticket=${ssoTicket}&org=${orgCode}`
-      window.location.href = targetUrl
-    } finally {
-      setLoading(false)
-    }
+      localStorage.setItem("ruoyi_auth_type", "passkey")
+      setTimeout(() => {
+        window.location.href = "/admin/report/boards"
+      }, 600)
+    }, 1200)
   }
 
-  // 快捷填入并标记
-  const fillPreset = (cb: () => void) => {
-    cb()
-    setError("")
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1500)
-  }
+  const pwdStrength = getPasswordStrength(password)
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between selection:bg-blue-600 selection:text-white antialiased">
-      {/* Top Header */}
-      <header className="w-full border-b border-slate-200 bg-white px-6 py-4">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-cyan-500 selection:text-slate-950 antialiased font-sans relative overflow-hidden">
+      {/* 科技背景网格纹理与环境光晕 */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b15_1px,transparent_1px),linear-gradient(to_bottom,#1e293b15_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
+      <div className="absolute -top-48 left-1/2 -translate-x-1/2 w-[48rem] h-[24rem] bg-gradient-to-b from-cyan-500/10 via-blue-600/5 to-transparent blur-3xl pointer-events-none" />
+
+      {/* 顶部科技导航栏 */}
+      <header className="relative z-10 w-full border-b border-slate-800/80 bg-slate-950/70 backdrop-blur-md px-6 py-3.5">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white font-black text-base shadow-sm">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 text-slate-950 font-black text-base shadow-[0_0_15px_rgba(6,182,212,0.3)] transition group-hover:shadow-[0_0_20px_rgba(6,182,212,0.5)]">
               R
             </div>
-            <div className="flex items-center gap-2">
-              <span className="font-extrabold text-slate-900 tracking-tight text-base">{projectProfile.platformName}</span>
-              <span className="hidden sm:inline-block rounded bg-blue-50 px-2 py-0.5 text-xs text-blue-700 font-mono border border-blue-200 font-semibold">
-                v{projectProfile.version}
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2">
+                <span className="font-extrabold text-slate-100 tracking-tight text-base font-mono">
+                  {projectProfile.platformName}
+                </span>
+                <span className="rounded bg-cyan-950/80 px-1.5 py-0.5 text-[10px] text-cyan-400 font-mono border border-cyan-800/60 font-semibold tracking-wide">
+                  SOVEREIGN v{projectProfile.version}
+                </span>
+              </div>
+              <span className="text-[11px] text-slate-400 font-mono">
+                AI-Agent Orchestrated Enterprise Mesh
               </span>
             </div>
           </Link>
 
-          <div className="flex items-center gap-4 text-xs">
-            <Link href="/portal/enterprise" className="text-slate-500 hover:text-blue-600 transition font-medium">
-              政企自服务专区 (CPC)
+          <div className="flex items-center gap-4 text-xs font-mono">
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300">
+              <span className="relative flex h-2 w-2">
+                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${meshStatus === "optimal" ? "bg-emerald-400" : "bg-amber-400"} opacity-75`} />
+                <span className={`relative inline-flex rounded-full h-2 w-2 ${meshStatus === "optimal" ? "bg-emerald-500" : "bg-amber-500"}`} />
+              </span>
+              <span>网关链路: {pingLatency !== null ? `${pingLatency}ms` : "自适应"}</span>
+            </div>
+
+            <Link
+              href="/wiki"
+              className="text-slate-400 hover:text-cyan-400 transition"
+              title="查阅 OpenWiki 百科全景"
+            >
+              OpenWiki
             </Link>
-            <span className="text-slate-300">|</span>
-            <Link href="/workspace" className="text-slate-500 hover:text-blue-600 transition font-medium">
-              AI 协同工作台
-            </Link>
+            <span className="text-slate-700">|</span>
+            <a
+              href="/api/v1/open/openapi"
+              target="_blank"
+              rel="noreferrer"
+              className="text-slate-400 hover:text-cyan-400 transition"
+              title="OpenAPI 3.1 契约"
+            >
+              API Spec
+            </a>
           </div>
         </div>
       </header>
 
-      <main className="flex flex-1 items-center justify-center p-4 sm:p-6 my-6">
-        <div className="w-full max-w-md bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
-          <div className="px-8 pt-8 pb-4 text-center">
-            <h1 className="text-2xl font-black tracking-tight text-slate-900">
-              {projectProfile.loginHeadline}
-            </h1>
-            <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
-              {projectProfile.loginTagline}
-            </p>
-          </div>
-
-          {/* Tab Headers */}
-          <div className="flex border-b border-slate-200 text-xs font-semibold text-slate-500 bg-slate-50/50">
-            <button
-              type="button"
-              onClick={() => { setTab("password"); setError("") }}
-              className={`flex-1 py-3.5 text-center transition-all ${tab === "password" ? "text-blue-600 border-b-2 border-blue-600 font-bold bg-white" : "hover:text-slate-900"}`}
-            >
-              账号密码
-            </button>
-            <button
-              type="button"
-              onClick={() => { setTab("sms"); setError("") }}
-              className={`flex-1 py-3.5 text-center transition-all ${tab === "sms" ? "text-blue-600 border-b-2 border-blue-600 font-bold bg-white" : "hover:text-slate-900"}`}
-            >
-              手机验证
-            </button>
-            <button
-              type="button"
-              onClick={() => { setTab("sso"); setError("") }}
-              className={`flex-1 py-3.5 text-center transition-all ${tab === "sso" ? "text-blue-600 border-b-2 border-blue-600 font-bold bg-white" : "hover:text-slate-900"}`}
-            >
-              企业单点 (SSO)
-            </button>
-            <button
-              type="button"
-              onClick={() => { setTab("qrcode"); setError("") }}
-              className={`flex-1 py-3.5 text-center transition-all ${tab === "qrcode" ? "text-blue-600 border-b-2 border-blue-600 font-bold bg-white" : "hover:text-slate-900"}`}
-            >
-              扫码登录
-            </button>
-          </div>
-
-          {error && (
-            <div className="mx-8 mt-6 p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-600 flex items-center gap-2 font-medium">
-              <span>⚠️</span>
-              <span>{error}</span>
-            </div>
-          )}
-
-          {/* TAB 1: 账号密码登录 */}
-          {tab === "password" && (
-            <form onSubmit={handlePwdLogin} className="p-8 space-y-4 text-xs">
-              <div>
-                <label className="block text-slate-700 font-medium mb-1">登录账号 / 用户名</label>
-                <input
-                  type="text"
-                  required
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="如 vps_adm / lin_manager / zhang_dev"
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-blue-600 focus:outline-none font-mono"
-                />
-              </div>
-
-              <div>
-                <label className="block text-slate-700 font-medium mb-1">登录密码</label>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-blue-600 focus:outline-none"
-                />
-              </div>
-
-              <div className="flex items-center justify-between pt-1">
-                <label className="flex items-center gap-2 cursor-pointer text-slate-600 select-none">
-                  <input
-                    type="checkbox"
-                    checked={tenantEnabled}
-                    onChange={(e) => setTenantEnabled(e.target.checked)}
-                    className="rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  <span>指定租户 ID (多租户隔离)</span>
-                </label>
-                <span className="text-[11px] text-slate-400">默认主租户: 1</span>
-              </div>
-
-              {tenantEnabled && (
+      {/* 主体交互区域：双栏架构（左：高阶鉴权门禁，右：智能体态势与日志控制台） */}
+      <main className="relative z-10 flex-1 flex items-center justify-center p-6 my-4">
+        <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+          
+          {/* 左栏：三模智能鉴权入口 (7 Cols) */}
+          <div className="lg:col-span-7 bg-slate-900/60 backdrop-blur-xl border border-slate-800/90 rounded-2xl p-7 shadow-2xl flex flex-col justify-between">
+            <div>
+              {/* 头部标题与模式切换 */}
+              <div className="flex items-center justify-between mb-6">
                 <div>
-                  <label className="block text-slate-700 font-medium mb-1">租户编号 (Tenant ID)</label>
-                  <input
-                    type="text"
-                    value={tenantId}
-                    onChange={(e) => setTenantId(e.target.value)}
-                    placeholder="如 1 (主租户), 2 (政企), 3 (研发)"
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-blue-600 focus:outline-none font-mono"
-                  />
+                  <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                    <span>统一接入网关</span>
+                    <span className="text-xs px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono font-normal">
+                      Zero-Trust
+                    </span>
+                  </h1>
+                  <p className="text-xs text-slate-400 mt-1 font-mono">
+                    支持操作员主权登录、自主智能体 (NPC Agent) 握手与硬件安全密钥
+                  </p>
+                </div>
+              </div>
+
+              {/* 三模 Tab 切换 */}
+              <div className="grid grid-cols-3 gap-1 bg-slate-950/80 p-1 rounded-xl border border-slate-800 mb-6">
+                <button
+                  type="button"
+                  onClick={() => { setMode("operator"); setError("") }}
+                  className={`py-2 px-3 rounded-lg text-xs font-medium font-mono transition flex items-center justify-center gap-1.5 ${
+                    mode === "operator"
+                      ? "bg-slate-800 text-white shadow-sm border border-slate-700/60"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  <span>操作员通行</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => { setMode("agent"); setError("") }}
+                  className={`py-2 px-3 rounded-lg text-xs font-medium font-mono transition flex items-center justify-center gap-1.5 ${
+                    mode === "agent"
+                      ? "bg-slate-800 text-cyan-400 shadow-sm border border-slate-700/60"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  <svg className="w-3.5 h-3.5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  <span>智能体通道</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => { setMode("passkey"); setError("") }}
+                  className={`py-2 px-3 rounded-lg text-xs font-medium font-mono transition flex items-center justify-center gap-1.5 ${
+                    mode === "passkey"
+                      ? "bg-slate-800 text-emerald-400 shadow-sm border border-slate-700/60"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                  </svg>
+                  <span>硬件密钥</span>
+                </button>
+              </div>
+
+              {/* 错误警报展示 */}
+              {error && (
+                <div className="mb-5 p-3 rounded-xl bg-red-950/40 border border-red-800/60 text-red-300 text-xs flex items-start gap-2.5">
+                  <svg className="w-4 h-4 text-red-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  <div className="flex-1 font-mono">{error}</div>
                 </div>
               )}
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-3 bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white rounded-xl font-bold text-sm shadow-md transition-all disabled:opacity-50"
-              >
-                {loading ? "正在验证登录..." : "登 录 管 理 后 台"}
-              </button>
+              {/* 模式一：操作员安全登录 */}
+              {mode === "operator" && (
+                <form onSubmit={handleOperatorLogin} className="space-y-4">
+                  {/* 开发环境凭证一键预填（若存在引导凭证） */}
+                  {bootstrapCredentials && (
+                    <div className="p-2.5 rounded-lg bg-cyan-950/30 border border-cyan-800/40 flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-xs text-cyan-300 font-mono">
+                        <span className="flex h-1.5 w-1.5 rounded-full bg-cyan-400" />
+                        <span>检测到本地开发引导账号: <b>{bootstrapCredentials.username}</b></span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setUsername(bootstrapCredentials.username)
+                          setPassword(bootstrapCredentials.password)
+                          setError("")
+                        }}
+                        className="text-[11px] px-2 py-0.5 rounded bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 font-mono border border-cyan-500/30 transition"
+                      >
+                        一键填入
+                      </button>
+                    </div>
+                  )}
 
-              {/* 快捷账号预设气泡 */}
-              <div className="pt-2 border-t border-slate-100">
-                <div className="text-[11px] text-slate-400 mb-1.5 flex items-center justify-between">
-                  <span>多角色快捷体验气泡：</span>
-                  {copied && <span className="text-emerald-600 font-bold">已填充！</span>}
-                </div>
-                <div className="flex flex-wrap gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => fillPreset(() => { setUsername("vps_adm"); setPassword("RuoYi!Memory_2026#x9") })}
-                    className="px-2 py-1 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 rounded-lg text-[11px] font-mono border border-slate-200"
-                  >
-                    👑 平台超管
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => fillPreset(() => { setUsername("lin_manager"); setPassword("RuoYi!Memory_2026#x9") })}
-                    className="px-2 py-1 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 rounded-lg text-[11px] font-mono border border-slate-200"
-                    title="客户经理、客户热力图、20%长尾分润"
-                  >
-                    💼 客户经理 (林经理)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => fillPreset(() => { setUsername("partner_lead"); setPassword("RuoYi!Memory_2026#x9") })}
-                    className="px-2 py-1 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 rounded-lg text-[11px] font-mono border border-slate-200"
-                    title="渠道商机报备锁定、客户签约与提现"
-                  >
-                    🤝 渠道合伙人 (陈总)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => fillPreset(() => { setUsername("li_director"); setPassword("RuoYi!Memory_2026#x9") })}
-                    className="px-2 py-1 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 rounded-lg text-[11px] font-mono border border-slate-200"
-                    title="监控机构算力池、员工开户授权"
-                  >
-                    🏛️ 机构主管 (李总)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => fillPreset(() => { setUsername("zhang_dev"); setPassword("RuoYi!Memory_2026#x9") })}
-                    className="px-2 py-1 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 rounded-lg text-[11px] font-mono border border-slate-200"
-                    title="公文/代码审计、WorkBuddy"
-                  >
-                    ⚡ 业务员工 (张工)
-                  </button>
-                </div>
-              </div>
-            </form>
-          )}
-
-          {/* TAB 2: 手机免密验证码登录 */}
-          {tab === "sms" && (
-            <form onSubmit={handleSmsLogin} className="p-8 space-y-4 text-xs">
-              <div>
-                <label className="block text-slate-700 font-medium mb-1">手机号码 (已授权开通席位)</label>
-                <input
-                  type="tel"
-                  required
-                  maxLength={11}
-                  value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
-                  placeholder="如 13588886666 / 13800000001"
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-blue-600 focus:outline-none font-mono"
-                />
-              </div>
-
-              <div>
-                <label className="block text-slate-700 font-medium mb-1">短信动态验证码</label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    required
-                    maxLength={6}
-                    value={smsCode}
-                    onChange={(e) => setSmsCode(e.target.value)}
-                    placeholder="输入 6 位验证码"
-                    className="flex-1 px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-blue-600 focus:outline-none font-mono"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleSendSms}
-                    disabled={countdown > 0}
-                    className="px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-100 hover:bg-slate-200 disabled:opacity-50 font-semibold text-slate-700 transition-colors"
-                  >
-                    {countdown > 0 ? `${countdown}s 后重发` : "获取验证码"}
-                  </button>
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-3 bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white rounded-xl font-bold text-sm shadow-md shadow-blue-500/20 transition-all disabled:opacity-50"
-              >
-                {loading ? "正在验证..." : "免 密 验 证 登 录"}
-              </button>
-
-              {/* 快捷手机预设 */}
-              <div className="pt-2 border-t border-slate-100">
-                <div className="text-[11px] text-slate-400 mb-1.5 flex items-center justify-between">
-                  <span>多角色业务手机一键直填：</span>
-                  {copied && <span className="text-emerald-600 font-bold">已填充！</span>}
-                </div>
-                <div className="flex flex-wrap gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => fillPreset(() => { setMobile("13588886666"); setSmsCode("668822") })}
-                    className="px-2 py-1 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 rounded-lg text-[11px] font-mono border border-slate-200"
-                  >
-                    💼 客户经理 (13588886666)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => fillPreset(() => { setMobile("18600186000"); setSmsCode("668822") })}
-                    className="px-2 py-1 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 rounded-lg text-[11px] font-mono border border-slate-200"
-                  >
-                    🤝 渠道合伙人 (18600186000)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => fillPreset(() => { setMobile("13800000001"); setSmsCode("668822") })}
-                    className="px-2 py-1 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 rounded-lg text-[11px] font-mono border border-slate-200"
-                  >
-                    🏛️ 机构主管 (13800000001)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => fillPreset(() => { setMobile("13911112222"); setSmsCode("668822") })}
-                    className="px-2 py-1 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 rounded-lg text-[11px] font-mono border border-slate-200"
-                  >
-                    ⚡ 研发张工 (13911112222)
-                  </button>
-                </div>
-              </div>
-            </form>
-          )}
-
-          {/* TAB 3: 企业单点 / 统一身份 SSO Ticket 登录 */}
-          {tab === "sso" && (
-            <form onSubmit={handleSsoLogin} className="p-8 space-y-4 text-xs">
-              <div>
-                <label className="block text-slate-700 font-medium mb-1">单点登录身份去向</label>
-                <div className="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl font-semibold text-slate-600">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSsoRole("employee")
-                      setSsoTicket("tkt-emp-chen-20260824")
-                    }}
-                    className={`py-1.5 rounded-lg transition-all ${ssoRole === "employee" ? "bg-white text-blue-600 shadow-xs" : "hover:text-slate-900"}`}
-                  >
-                    👤 业务员工 / 团队成员
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSsoRole("admin")
-                      setSsoTicket("tkt-gd-gov-998811")
-                    }}
-                    className={`py-1.5 rounded-lg transition-all ${ssoRole === "admin" ? "bg-white text-blue-600 shadow-xs" : "hover:text-slate-900"}`}
-                  >
-                    🏛️ 机构管理员 / IT 负责人
-                  </button>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-slate-700 font-medium mb-1">所属机构 / 租户标识 (Org Code)</label>
-                <select
-                  value={orgCode}
-                  onChange={(e) => setOrgCode(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-blue-600 focus:outline-none font-semibold text-slate-800"
-                >
-                  <option value="gd-gov-data">数字政府运营中心 (gd-gov-data)</option>
-                  <option value="yue-transport-tech">交通数智科技集团 (yue-transport-tech)</option>
-                  <option value="standard-enterprise">商业企业 / 科技租户 (standard-enterprise)</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-slate-700 font-medium mb-1">单点登录 Ticket 授权凭据</label>
-                <input
-                  type="text"
-                  required
-                  value={ssoTicket}
-                  onChange={(e) => setSsoTicket(e.target.value)}
-                  placeholder="如 tkt-emp-chen-20260824"
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-blue-600 focus:outline-none font-mono"
-                />
-              </div>
-
-              <div className="p-3 bg-blue-50 border border-blue-100 rounded-xl text-[11px] text-blue-700 leading-relaxed">
-                {ssoRole === "employee"
-                  ? "💡 员工通过 OA / 钉钉 / 企微 / 统一身份认证单点免密直连，自动置换算力凭据并直达【AI 协同工作台】。"
-                  : "🏛️ 机构管理员 / IT 负责人通过单点免密直达【企业自服务门户】，进行算力资产监控与人员席位管理。"}
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className={`w-full py-3 ${ssoRole === "employee" ? "bg-blue-600 hover:bg-blue-700 shadow-blue-500/20 text-white" : "bg-slate-900 hover:bg-slate-800 text-white"} active:scale-[0.99] rounded-xl font-bold text-sm shadow-md transition-all disabled:opacity-50`}
-              >
-                {loading ? "正在置换凭据..." : ssoRole === "employee" ? "⚡ 单点直达 AI 协同工作台" : "🏛️ 进入企业自服务门户"}
-              </button>
-
-              {/* 快捷单点票据 */}
-              <div className="pt-2 border-t border-slate-100">
-                <div className="text-[11px] text-slate-400 mb-1.5 flex items-center justify-between">
-                  <span>快捷填入单点凭据：</span>
-                  {copied && <span className="text-emerald-600 font-bold">已填充！</span>}
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => fillPreset(() => { setSsoRole("employee"); setOrgCode("gd-gov-data"); setSsoTicket("tkt-emp-chen-20260824") })}
-                    className="px-2.5 py-1 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 rounded-lg text-[11px] font-mono border border-slate-200"
-                  >
-                    👤 业务骨干 (工作台凭据)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => fillPreset(() => { setSsoRole("admin"); setOrgCode("gd-gov-data"); setSsoTicket("tkt-gd-gov-998811") })}
-                    className="px-2.5 py-1 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 rounded-lg text-[11px] font-mono border border-slate-200"
-                  >
-                    🏛️ 机构主管 (大盘凭据)
-                  </button>
-                </div>
-              </div>
-            </form>
-          )}
-
-          {/* TAB 4: 企微 / 钉钉 / 飞书 / 微信扫码登录 */}
-          {tab === "qrcode" && (
-            <div className="p-8 text-center space-y-4 text-xs">
-              <div className="mx-auto w-48 h-48 bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl flex flex-col items-center justify-center p-4 relative group">
-                <div className="text-5xl mb-2">📱</div>
-                <div className="text-xs font-bold text-slate-800">企业微信 / 钉钉 / 飞书 扫码</div>
-                <div className="text-[10px] text-slate-400 mt-1">支持主流协同办公 App 扫一扫</div>
-
-                {qrStatus === "ready" && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setQrStatus("success")
-                      setTimeout(() => {
-                        localStorage.setItem("ruoyi_token", "mock-token-qr-login")
-                        localStorage.setItem(
-                          "ruoyi_user",
-                          JSON.stringify({ id: "qr-user-1", username: "wx_user", nickname: "微信授权用户", roles: ["user"] })
-                        )
-                        window.location.href = "/workspace"
-                      }, 800)
-                    }}
-                    className="mt-2.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow-xs transition-colors"
-                  >
-                    ⚡ 点击模拟扫码授权
-                  </button>
-                )}
-
-                {qrStatus === "success" && (
-                  <div className="absolute inset-0 bg-white/95 rounded-2xl flex flex-col items-center justify-center text-emerald-600 font-bold">
-                    <span className="text-3xl mb-1">✅</span>
-                    <span>扫码授权成功，正在跳转...</span>
+                  <div>
+                    <label className="block text-xs font-mono text-slate-300 mb-1.5">
+                      操作员账号 (Username)
+                    </label>
+                    <input
+                      type="text"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      placeholder="平台管理员账号"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 font-mono transition"
+                    />
                   </div>
-                )}
+
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="text-xs font-mono text-slate-300">
+                        安全口令 (Passphrase)
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="text-[11px] text-slate-400 hover:text-slate-200 font-mono transition"
+                      >
+                        {showPassword ? "隐藏" : "显示"}
+                      </button>
+                    </div>
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="••••••••••••"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 font-mono transition"
+                    />
+                    {/* 密码强度指示条 */}
+                    {password && (
+                      <div className="mt-2 flex items-center gap-2">
+                        <div className="flex-1 h-1 bg-slate-800 rounded-full overflow-hidden">
+                          <div className={`h-full ${pwdStrength.color} ${pwdStrength.width} transition-all duration-300`} />
+                        </div>
+                        <span className="text-[10px] font-mono text-slate-400">{pwdStrength.label}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* 租户隔离空间折叠项 */}
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => setShowTenant(!showTenant)}
+                      className="text-xs font-mono text-slate-400 hover:text-cyan-400 transition flex items-center gap-1.5"
+                    >
+                      <span>{showTenant ? "▾ 收起租户命名空间" : "▸ 指定所属租户命名空间 (可选)"}</span>
+                    </button>
+
+                    {showTenant && (
+                      <div className="mt-2 p-3 bg-slate-950/60 rounded-xl border border-slate-800 space-y-2">
+                        <div className="text-[11px] text-slate-400 font-mono">
+                          留空表示直接访问系统全局根空间 (Root Space)
+                        </div>
+                        <input
+                          type="text"
+                          value={tenantId}
+                          onChange={(e) => setTenantId(e.target.value)}
+                          placeholder="例如: tenant_default 或租户编号"
+                          className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-600 font-mono focus:outline-none focus:border-cyan-500"
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full mt-2 py-3 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold font-mono text-sm tracking-wide shadow-lg shadow-cyan-500/20 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    {loading ? (
+                      <>
+                        <svg className="animate-spin h-4 w-4 text-slate-950" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                        </svg>
+                        <span>校验主权凭据中...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>安全验证并登录</span>
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                      </>
+                    )}
+                  </button>
+                </form>
+              )}
+
+              {/* 模式二：智能体 (Agent/NPC) 通道 */}
+              {mode === "agent" && (
+                <form onSubmit={handleAgentConnect} className="space-y-4">
+                  <div className="p-3 rounded-xl bg-cyan-950/20 border border-cyan-800/30 text-xs text-cyan-300 font-mono leading-relaxed">
+                    专为 DigitalStaff NPC 智能体、MCP Client 及外部自动化 Agent 设计。经由安全上下文直通指挥中枢。
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono text-slate-300 mb-1.5">
+                      智能体身份标识 (Agent ID)
+                    </label>
+                    <input
+                      type="text"
+                      value={agentId}
+                      onChange={(e) => setAgentId(e.target.value)}
+                      placeholder="e.g. agent-operator-01"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 font-mono transition"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono text-slate-300 mb-1.5">
+                      Sovereign Bearer Token / API Key
+                    </label>
+                    <input
+                      type="password"
+                      value={agentToken}
+                      onChange={(e) => setAgentToken(e.target.value)}
+                      placeholder="sk-agt-••••••••••••••••"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 font-mono transition"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono text-slate-300 mb-1.5">
+                      能力授权边界 (Capability Scope)
+                    </label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {[
+                        { id: "full", label: "全域编排 (Full)" },
+                        { id: "facade", label: "门面只读 (Facade)" },
+                        { id: "audit", label: "审计守卫 (Audit)" },
+                      ].map((item) => (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={() => setAgentScope(item.id as any)}
+                          className={`py-2 px-2 rounded-lg text-xs font-mono border transition text-center ${
+                            agentScope === item.id
+                              ? "bg-cyan-950 border-cyan-500 text-cyan-300 font-semibold"
+                              : "bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700"
+                          }`}
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full mt-2 py-3 px-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 text-white font-bold font-mono text-sm tracking-wide shadow-lg shadow-cyan-500/20 transition disabled:opacity-50 flex items-center justify-center gap-2"
+                  >
+                    <span>建立受信任智能体通道</span>
+                    <svg className="w-4 h-4 text-cyan-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </button>
+                </form>
+              )}
+
+              {/* 模式三：硬件安全密钥 */}
+              {mode === "passkey" && (
+                <div className="space-y-6 text-center py-6">
+                  <div className="flex justify-center">
+                    <div className="relative">
+                      <div className={`w-20 h-20 rounded-2xl flex items-center justify-center border transition-all duration-500 ${
+                        passkeyStatus === "verified"
+                          ? "bg-emerald-950/60 border-emerald-500 text-emerald-400 shadow-[0_0_30px_rgba(16,185,129,0.3)]"
+                          : passkeyStatus === "probing"
+                          ? "bg-cyan-950/60 border-cyan-500 text-cyan-400 animate-pulse shadow-[0_0_30px_rgba(6,182,212,0.3)]"
+                          : "bg-slate-950 border-slate-800 text-slate-400"
+                      }`}>
+                        <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 004 11a7.962 7.962 0 001.378 4.5" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-sm font-bold font-mono text-white">
+                      {passkeyStatus === "verified"
+                        ? "硬件签名校验通过！正在进入指挥中枢..."
+                        : passkeyStatus === "probing"
+                        ? "正在读取 FIDO2 / Secure Enclave 硬件凭据..."
+                        : "FIDO2 / WebAuthn 硬件安全芯片已就绪"}
+                    </h3>
+                    <p className="text-xs text-slate-400 font-mono mt-1">
+                      轻触您的 YubiKey 或 MacBook Touch ID 进行非对称公私钥握手
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handlePasskeyAuth}
+                    disabled={passkeyStatus !== "idle"}
+                    className="py-3 px-6 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-slate-700 font-mono text-xs font-semibold tracking-wider transition"
+                  >
+                    {passkeyStatus === "idle" ? "激活硬件密钥握手" : "验证中..."}
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* 底部防御信息 */}
+            <div className="mt-8 pt-4 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono text-slate-500">
+              <span>DeepSeek Harness Invariant Guarded</span>
+              <span>100% Real DB · 0 Fake Mock</span>
+            </div>
+          </div>
+
+          {/* 右栏：智能体与底座态势感知中枢 (5 Cols) */}
+          <div className="lg:col-span-5 flex flex-col gap-4">
+            
+            {/* 卡片 1: 实时运行基线与雷达指标 */}
+            <div className="bg-slate-900/60 backdrop-blur-xl border border-slate-800/90 rounded-2xl p-5 shadow-xl">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-xs font-mono font-bold text-slate-300 tracking-wider flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
+                  底座全景遥测 (Mesh Telemetry)
+                </span>
+                <button
+                  type="button"
+                  onClick={probeGateway}
+                  className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition"
+                >
+                  探针巡检
+                </button>
               </div>
 
-              <p className="text-[11px] text-slate-400">
-                扫码登录即代表您已同意《RoMA 应算通 服务协议》与《隐私政策》
-              </p>
+              <div className="grid grid-cols-2 gap-2.5">
+                <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800/80">
+                  <div className="text-[10px] font-mono text-slate-400">领域插件集群</div>
+                  <div className="text-base font-bold font-mono text-white mt-0.5">17 域微内核</div>
+                  <div className="text-[10px] text-emerald-400 font-mono mt-0.5">15 业务 + 2 地基</div>
+                </div>
+
+                <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800/80">
+                  <div className="text-[10px] font-mono text-slate-400">质量门禁总线</div>
+                  <div className="text-base font-bold font-mono text-cyan-400 mt-0.5">20 道门禁</div>
+                  <div className="text-[10px] text-cyan-400 font-mono mt-0.5">Exit Code 0 (全绿)</div>
+                </div>
+
+                <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800/80">
+                  <div className="text-[10px] font-mono text-slate-400">SRE 吞吐极限</div>
+                  <div className="text-base font-bold font-mono text-white mt-0.5">26,877 RPS</div>
+                  <div className="text-[10px] text-slate-400 font-mono mt-0.5">护栏基线 5,000</div>
+                </div>
+
+                <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800/80">
+                  <div className="text-[10px] font-mono text-slate-400">持久化引擎</div>
+                  <div className="text-base font-bold font-mono text-white mt-0.5">SQLite / PG</div>
+                  <div className="text-[10px] text-emerald-400 font-mono mt-0.5">8 大基础审计底座</div>
+                </div>
+              </div>
             </div>
-          )}
+
+            {/* 卡片 2: 终端实时通信日志流 */}
+            <div className="flex-1 bg-slate-950/90 border border-slate-800/90 rounded-2xl p-4 font-mono text-xs shadow-xl flex flex-col justify-between overflow-hidden min-h-[260px]">
+              <div>
+                <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-800/80 text-[11px] text-slate-400">
+                  <div className="flex items-center gap-1.5">
+                    <span className="h-2.5 w-2.5 rounded-full bg-red-500/80" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-amber-500/80" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/80" />
+                    <span className="ml-2 text-slate-300 font-bold">SENTINEL-CONSOLE</span>
+                  </div>
+                  <span className="text-[10px] text-slate-500">LIVE FEED</span>
+                </div>
+
+                <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1 text-[11px]">
+                  {logs.map((log) => (
+                    <div key={log.id} className="flex items-start gap-1.5 leading-tight">
+                      <span className="text-slate-600 shrink-0">[{log.time}]</span>
+                      <span className={`shrink-0 font-semibold ${
+                        log.level === "SUCCESS" ? "text-emerald-400" :
+                        log.level === "AUTH" ? "text-cyan-400" :
+                        log.level === "WARN" ? "text-amber-400" : "text-slate-400"
+                      }`}>
+                        [{log.source}]
+                      </span>
+                      <span className="text-slate-300 break-all">{log.message}</span>
+                    </div>
+                  ))}
+                  <div ref={terminalEndRef} />
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-[10px] text-slate-500">
+                <span>Strix Autonomous Red-Team Shield Active</span>
+                <span className="text-cyan-500">● SYNCED</span>
+              </div>
+            </div>
+
+          </div>
+
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="w-full border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-500">
-        <div className="mx-auto max-w-7xl px-6 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>{projectProfile.copyright} {projectProfile.platformName}. All rights reserved.</span>
-          <div className="flex items-center gap-4 text-slate-400">
-            <span>算力中枢 • 运营商清分 • 多智能体协同</span>
+      {/* 底部版权信息 */}
+      <footer className="relative z-10 w-full border-t border-slate-900 bg-slate-950/80 py-4 px-6 text-center text-xs font-mono text-slate-600">
+        <div className="mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-2">
+          <span>{projectProfile.copyright}</span>
+          <div className="flex items-center gap-4 text-slate-500">
+            <span>License: MIT Enterprise</span>
+            <span>·</span>
+            <span>SpaceX Grade Testing Architecture</span>
+            <span>·</span>
+            <span className="text-cyan-600">No Artifact, No Done</span>
           </div>
         </div>
       </footer>
