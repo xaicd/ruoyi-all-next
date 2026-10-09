@@ -14,6 +14,10 @@ describe("AI Agent 驱动的 Spec 闭环与防污染生命周期验证", () => {
     // 清理活跃区与归档区
     const activeDir = path.join(ROOT, "docs", "specs", DOMAIN, SPEC_NAME)
     fs.rmSync(activeDir, { recursive: true, force: true })
+    const domainDir = path.join(ROOT, "docs", "specs", DOMAIN)
+    if (fs.existsSync(domainDir) && fs.readdirSync(domainDir).length === 0) {
+      fs.rmdirSync(domainDir)
+    }
 
     // 清理归档区
     const archiveRoot = path.join(ROOT, "docs", "specs", "archive")
@@ -21,7 +25,12 @@ describe("AI Agent 驱动的 Spec 闭环与防污染生命周期验证", () => {
       for (const q of fs.readdirSync(archiveRoot)) {
         const candidate = path.join(archiveRoot, q, DOMAIN, SPEC_NAME)
         fs.rmSync(candidate, { recursive: true, force: true })
+        const dDir = path.join(archiveRoot, q, DOMAIN)
+        if (fs.existsSync(dDir) && fs.readdirSync(dDir).length === 0) fs.rmdirSync(dDir)
+        const qDir = path.join(archiveRoot, q)
+        if (fs.existsSync(qDir) && fs.readdirSync(qDir).length === 0) fs.rmdirSync(qDir)
       }
+      if (fs.readdirSync(archiveRoot).length === 0) fs.rmdirSync(archiveRoot)
     }
   }
 

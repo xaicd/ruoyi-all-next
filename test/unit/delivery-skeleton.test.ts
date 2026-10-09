@@ -9,6 +9,10 @@ const FIXTURE_FEATURES = path.join(ROOT, "docs", "features", "__skeleton_fixture
 const cleanFixtures = () => {
   fs.rmSync(FIXTURE_SPECS, { recursive: true, force: true })
   fs.rmSync(FIXTURE_FEATURES, { recursive: true, force: true })
+  const fixtureParent = path.dirname(FIXTURE_SPECS)
+  if (fs.existsSync(fixtureParent) && fs.readdirSync(fixtureParent).length === 0) {
+    fs.rmdirSync(fixtureParent)
+  }
 }
 
 /**

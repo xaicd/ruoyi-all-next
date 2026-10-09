@@ -14,7 +14,7 @@ description: 身份鉴权、SQL 防注入、敏感脱敏、防重放、接口限
 - `AGENTS.md` §4.4 (权限码规范，禁止硬编码角色)
 - `AGENTS.md` §4.5 (日志脱敏与审计要求)
 - `AGENTS.md` §12 (常见安全禁止项)
-- `docs/specs/api-security-persistence-spec.md`
+- `docs/architecture/api-security-persistence-spec.md`
 - `packages/shared/backend/auth/`
 
 ## 3. 核心安全防御矩阵
