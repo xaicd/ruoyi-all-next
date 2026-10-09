@@ -125,13 +125,13 @@
     "layers": {
       "L0": { "role": "code-maintain", "skills": ["coding", "automated-testing", "agent-harness", "project-init"] },
       "L1": { "role": "service-governance", "skills": ["service-governance", "microservice-evolution", "sre-slo-manager", "postmortem-analyzer"] },
-      "L2": { "role": "api-contract", "skills": ["api-design", "architecture-design", "adr-architect"] },
-      "L3": { "role": "observability", "skills": ["devops", "security", "sre-slo-manager"] },
+      "L2": { "role": "api-contract", "skills": ["api-design", "architecture-design", "adr-architect", "archify"] },
+      "L3": { "role": "observability", "skills": ["devops", "security", "sre-slo-manager", "strix-penetration-testing"] },
       "L4": { "role": "deploy", "skills": ["devops"] },
       "L5": { "role": "docs", "skills": ["product-requirements", "ears-spec-writer", "dar-decision-matrix"] },
       "L6": { "role": "database", "skills": ["database-design", "database-compatibility"] },
-      "L7": { "role": "ui", "skills": ["ui-design", "ui-framework-governance", "frontend-design"] },
-      "L8": { "role": "test", "skills": ["automated-testing", "mutation-tester", "compliance-auditor", "webapp-testing"] },
+      "L7": { "role": "ui", "skills": ["ui-design", "ui-framework-governance", "frontend-design", "archify"] },
+      "L8": { "role": "test", "skills": ["automated-testing", "mutation-tester", "compliance-auditor", "webapp-testing", "strix-penetration-testing"] },
       "business": { "role": "full-delivery", "skills": ["product-requirements", "new-feature", "new-business-plugin", "financial-reconciliation-agent"] }
     },
     "portBack": ["packages/domains/{domain}/", "src/app/api/v1/admin/{domain}/", "src/app/(admin-pages)/admin/{domain}/", "prisma/migrations/", "permissions.ts", "domain-catalog.json"]

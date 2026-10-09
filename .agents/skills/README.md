@@ -19,7 +19,7 @@ Skill 编写规范见 [skill-authoring/SKILL.md](./skill-authoring/SKILL.md)。
 | **00** | 规范与元编程 | skill-authoring、skill-creator | 合法 SKILL.md、技能测评 | 乱写 Skill |
 | **01_management** | 决策分析与项目管理 | dar-decision-matrix、agent-harness、project-init | DAR 权衡矩阵、Brief 项目立项 | 拍脑袋盲目选型 |
 | **02_requirements** | 需求工程与规格 | ears-spec-writer、product-requirements | EARS 5态需求、brief.json、验收标准 | 口语化伪需求直接编码 |
-| **03_design** | 架构设计与决策记录 | architecture-design、adr-architect、microservice-evolution | MADR 架构决策记录、拓扑图、A/B/C演进图 | 跨域直接 import Service |
+| **03_design** | 架构设计与决策记录 | architecture-design、adr-architect、microservice-evolution、archify | MADR 架构决策记录、拓扑图、交互式架构全景 HTML、A/B/C演进图 | 跨域直接 import Service |
 | **03_design** | API 契约设计 | api-design | OpenAPI 3.1、RPC action 契约 | 先手写 Route |
 | **03_design** | 数据库与多租户 | database-design、database-compatibility | Prisma Schema、Kysely AST、Tier-A/B/C声明 | 手写无租户 Raw SQL |
 | **03_design** | UI 与多端设计 | ui-design、ui-framework-governance、frontend-design、canvas-design、theme-factory、brand-guidelines | 响应式后台原型、页面模板、设计 Token | 杂乱拼凑 UI |
@@ -27,7 +27,7 @@ Skill 编写规范见 [skill-authoring/SKILL.md](./skill-authoring/SKILL.md)。
 | **05_verification** | 变异测试与反假Mock | automated-testing、mutation-tester、webapp-testing | 变异杀灭报告(MSI>=85%)、真实数据库测试矩阵 | 假 Mock、空断言绿牌 |
 | **06_quality_assurance** | 质量门禁与配置审计 | compliance-auditor | 20道门禁0债务通过、FCA/PCA 审计单、RTM | 门禁未跑通声明完工 |
 | **07_release** | 容器交付与网关发布 | devops | Traefik 网关配置、Docker 镜像、自动回滚预案 | 手改生产容器与配置 |
-| **08_sre** | 可靠性与事故复盘 | sre-slo-manager、postmortem-analyzer、service-governance、security | SLI/SLO矩阵、多燃烧率告警、免责5-Whys复盘 | 盲目裸跑发版、事故甩锅 |
+| **08_sre** | 可靠性与事故复盘 | sre-slo-manager、postmortem-analyzer、service-governance、security、strix-penetration-testing | SLI/SLO矩阵、多燃烧率告警、免责5-Whys复盘、自主红队 PoC 渗透报告 | 盲目裸跑发版、事故甩锅 |
 | **09_operations** | 持续运营与对账平账 | financial-reconciliation-agent | 三方对账单、长短款平账凭据、轧差流水 | 账实不符/违规提现抹账 |
 
 ---
@@ -43,6 +43,7 @@ Skill 编写规范见 [skill-authoring/SKILL.md](./skill-authoring/SKILL.md)。
 | 新功能一站式交付（RBAC + 全动词 API + 页面 + 权限 + 测试） | new-feature |
 | 新业务域/新平台（起底座 -> 建表 -> codegen -> 注册插件 -> 编译/打包/预览） | new-business-plugin |
 | 架构设计、ADR 决策记录撰写、破坏性变更评估 | adr-architect、architecture-design |
+| 绘制交互式架构图、时序图、BPM流程图、状态机图、全景可视化 | archify、architecture-design |
 | 模块化单体向插件/微服务演进（A/B/C 阶段） | microservice-evolution、architecture-design |
 | 新 HTTP/RPC 接口设计、改 DTO 契约 | api-design |
 | 表结构、迁移、多租户隔离、多数据库兼容 | database-design、database-compatibility |
@@ -54,7 +55,8 @@ Skill 编写规范见 [skill-authoring/SKILL.md](./skill-authoring/SKILL.md)。
 | 编写测试用例、CI 测试、端到端测试 | automated-testing、webapp-testing |
 | 验证测试充分性、杀灭假 Mock、变异测试打假 | mutation-tester |
 | 质量门禁体检、CMMI 合规审计、FCA/PCA 配置审计 | compliance-auditor |
-| 身份鉴权、SQL 防注入、脱敏、限流防刷、安全渗透 | security |
+| 身份鉴权、SQL 防注入、脱敏、限流防刷、安全防护 | security |
+| 自主红队渗透测试、真实漏洞 PoC 验证、安全补丁修复 | strix-penetration-testing、security |
 | 服务熔断、超时重试、舱壁隔离、链路追踪 | service-governance |
 | SRE 稳定性设计、SLO/SLI 目标制定、错误预算、压测护栏 | sre-slo-manager、devops |
 | 线上故障免责复盘、5-Whys 根因分析、CAPA 改进措施 | postmortem-analyzer |
@@ -78,6 +80,7 @@ Skill 编写规范见 [skill-authoring/SKILL.md](./skill-authoring/SKILL.md)。
 | dar-decision-matrix/SKILL.md | CMMI 01 决策分析与加权权衡打分 |
 | ears-spec-writer/SKILL.md | CMMI 02 IEEE 29148 / EARS 5 态无歧义需求规格 |
 | adr-architect/SKILL.md | CMMI 03 MADR 架构决策记录与生命周期追踪 |
+| archify/SKILL.md | CMMI 03 可交互、可验证架构图生成 (tt-a1i/archify 47k★) |
 | database-compatibility/SKILL.md | 数据库兼容等级 (Tier-A/B/C) 与降级 |
 | ui-framework-governance/SKILL.md | 管理端模板结构与四区交互治理 |
 | microservice-evolution/SKILL.md | A/B/C 拆分演进判定 |
@@ -88,6 +91,7 @@ Skill 编写规范见 [skill-authoring/SKILL.md](./skill-authoring/SKILL.md)。
 | compliance-auditor/SKILL.md | CMMI 06 过程质量审计、FCA/PCA 配置审计 |
 | sre-slo-manager/SKILL.md | CMMI 08 Google SRE SLI/SLO 与多窗口燃烧率告警 |
 | postmortem-analyzer/SKILL.md | CMMI 08 免责 5-Whys 故障复盘与 CAPA 闭环 |
+| strix-penetration-testing/SKILL.md | CMMI 08 多智能体自主红队渗透与 PoC 验证 (usestrix/strix 60k★) |
 | financial-reconciliation-agent/SKILL.md | CMMI 09 持续运营财务业务三方对账与轧差平账 |
 
 ---
@@ -124,5 +128,5 @@ H5 / uni-app / Flutter / desktop-pc 走同一管道。渠道契约：`packages/s
 ## 7. 压测与渗透
 
 执行层的现状与技能联动:
-* **渗透扫描** —— `npm run security:scan` 已接进 CI + G5，安全规约遵循 `security/SKILL.md`。
+* **渗透扫描** —— `npm run security:scan`（12 项自动化基础安全基线扫描，接进 CI + G5），高阶自主红队渗透演练遵循 `strix-penetration-testing/SKILL.md`（60k★ usestrix/strix 多智能体验证 PoC 确证与自动修补）。
 * **压测护栏** —— `npm run load:test` 容量回归护栏，与 `sre-slo-manager/SKILL.md` 联动对齐。
