@@ -22,28 +22,115 @@ export class CrmCustomerService {
     )
   }
 
-  static async get(id: string, actorId?: string, tenantId?: string) {
+  static async get(id: string | number, actorId?: string, tenantId?: string) {
     return CrmCustomerRepository.findById(id, { actorId, tenantId })
   }
 
   static async create(data: CrmCustomerCreateDTO, actorId?: string, tenantId?: string) {
-    const row = await CrmCustomerRepository.create(data as unknown as Record<string, unknown>, { actorId, tenantId })
+    const row = await CrmCustomerRepository.create(
+      {
+        lock_status: false,
+        deal_status: false,
+        follow_up_status: false,
+        ...data,
+      } as unknown as Record<string, unknown>,
+      { actorId, tenantId }
+    )
     domainLog.event("crm.crmCustomer.created", { id: row.id, actorId })
     return row
   }
 
-  static async update(id: string, data: CrmCustomerUpdateDTO, actorId?: string, tenantId?: string) {
+  static async update(id: string | number, data: CrmCustomerUpdateDTO, actorId?: string, tenantId?: string) {
     const row = await CrmCustomerRepository.update(id, data as unknown as Record<string, unknown>, { actorId, tenantId })
     domainLog.event("crm.crmCustomer.updated", { id, actorId })
     return row
   }
 
-  static async delete(id: string, actorId?: string, tenantId?: string) {
+  static async delete(id: string | number, actorId?: string, tenantId?: string) {
     const ok = await CrmCustomerRepository.delete(id, { actorId, tenantId })
     if (ok) {
       domainLog.event("crm.crmCustomer.deleted", { id, actorId })
     }
     return ok
+  }
+
+  /**
+   * 锁定/解锁客户（锁定后禁止系统自动划入公海池）
+   */
+  static async setLock(id: string | number, locked: boolean, actorId?: string, tenantId?: string) {
+    const customer = await this.get(id, actorId, tenantId)
+    if (!customer) throw new Error(`客户不存在: ${id}`)
+
+    const updated = await this.update(id, { lock_status: locked } as any, actorId, tenantId)
+    domainLog.audit(locked ? "crm.customer.locked" : "crm.customer.unlocked", { customerId: id, actorId })
+    return updated
+  }
+
+  /**
+   * 转移客户负责人
+   */
+  static async transfer(id: string | number, newOwnerUserId: number, actorId?: string, tenantId?: string) {
+    const customer = await this.get(id, actorId, tenantId)
+    if (!customer) throw new Error(`客户不存在: ${id}`)
+
+    const oldOwner = customer.owner_user_id
+    const updated = await this.update(
+      id,
+      {
+        owner_user_id: newOwnerUserId,
+        owner_time: new Date().toISOString(),
+      } as any,
+      actorId,
+      tenantId,
+    )
+    domainLog.audit("crm.customer.transferred", { customerId: id, oldOwner, newOwner: newOwnerUserId, actorId })
+    return updated
+  }
+
+  /**
+   * 移入公海池
+   */
+  static async putToPool(id: string | number, actorId?: string, tenantId?: string) {
+    const customer = await this.get(id, actorId, tenantId)
+    if (!customer) throw new Error(`客户不存在: ${id}`)
+    if (customer.lock_status) {
+      throw new Error("客户已被锁定，禁止移入公海池")
+    }
+
+    const updated = await this.update(
+      id,
+      {
+        owner_user_id: null,
+        owner_time: null,
+      } as any,
+      actorId,
+      tenantId,
+    )
+    domainLog.audit("crm.customer.putToPool", { customerId: id, previousOwner: customer.owner_user_id, actorId })
+    return updated
+  }
+
+  /**
+   * 从公海池领取客户
+   */
+  static async receiveFromPool(id: string | number, newOwnerUserId: number, actorId?: string, tenantId?: string) {
+    const customer = await this.get(id, actorId, tenantId)
+    if (!customer) throw new Error(`客户不存在: ${id}`)
+    if (customer.owner_user_id) {
+      throw new Error("该客户已有负责人，非公海池客户")
+    }
+
+    const updated = await this.update(
+      id,
+      {
+        owner_user_id: newOwnerUserId,
+        owner_time: new Date().toISOString(),
+      } as any,
+      actorId,
+      tenantId,
+    )
+    domainLog.audit("crm.customer.receiveFromPool", { customerId: id, newOwner: newOwnerUserId, actorId })
+    return updated
   }
 }
 

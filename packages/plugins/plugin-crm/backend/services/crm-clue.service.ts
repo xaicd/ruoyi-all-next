@@ -2,6 +2,7 @@
 // Rule: Cross-domain callers must use createDomainFacade; never import this Service directly.
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 import { CrmClueRepository } from "../repositories/crm-clue.repository"
+import { CrmCustomerRepository } from "../repositories/crm-customer.repository"
 import type {
   CrmClueCreateDTO,
   CrmCluePageQuery,
@@ -22,28 +23,115 @@ export class CrmClueService {
     )
   }
 
-  static async get(id: string, actorId?: string, tenantId?: string) {
+  static async get(id: string | number, actorId?: string, tenantId?: string) {
     return CrmClueRepository.findById(id, { actorId, tenantId })
   }
 
   static async create(data: CrmClueCreateDTO, actorId?: string, tenantId?: string) {
-    const row = await CrmClueRepository.create(data as unknown as Record<string, unknown>, { actorId, tenantId })
+    const row = await CrmClueRepository.create(
+      {
+        follow_up_status: false,
+        transform_status: false,
+        ...data,
+      } as unknown as Record<string, unknown>,
+      { actorId, tenantId }
+    )
     domainLog.event("crm.crmClue.created", { id: row.id, actorId })
     return row
   }
 
-  static async update(id: string, data: CrmClueUpdateDTO, actorId?: string, tenantId?: string) {
+  static async update(id: string | number, data: CrmClueUpdateDTO, actorId?: string, tenantId?: string) {
     const row = await CrmClueRepository.update(id, data as unknown as Record<string, unknown>, { actorId, tenantId })
     domainLog.event("crm.crmClue.updated", { id, actorId })
     return row
   }
 
-  static async delete(id: string, actorId?: string, tenantId?: string) {
+  static async delete(id: string | number, actorId?: string, tenantId?: string) {
     const ok = await CrmClueRepository.delete(id, { actorId, tenantId })
     if (ok) {
       domainLog.event("crm.crmClue.deleted", { id, actorId })
     }
     return ok
+  }
+
+  /**
+   * 记录跟进记录
+   */
+  static async recordFollowUp(
+    id: string | number,
+    input: { content: string; nextTime?: string },
+    actorId?: string,
+    tenantId?: string,
+  ) {
+    const clue = await this.get(id, actorId, tenantId)
+    if (!clue) throw new Error(`线索不存在: ${id}`)
+
+    const now = new Date().toISOString()
+    const updated = await this.update(
+      id,
+      {
+        follow_up_status: true,
+        contact_last_time: now,
+        contact_last_content: input.content,
+        contact_next_time: input.nextTime ?? clue.contact_next_time,
+      } as any,
+      actorId,
+      tenantId,
+    )
+    domainLog.event("crm.clue.followed", { id, actorId, content: input.content })
+    return updated
+  }
+
+  /**
+   * 线索转化为客户
+   */
+  static async transformToCustomer(id: string | number, actorId?: string, tenantId?: string) {
+    const clue = await this.get(id, actorId, tenantId)
+    if (!clue) throw new Error(`线索不存在: ${id}`)
+    if (clue.transform_status) throw new Error("该线索已被转化，不可重复转化")
+
+    // 建立新客户
+    const customer = await CrmCustomerRepository.create(
+      {
+        name: clue.name || `客户_${clue.mobile || clue.id}`,
+        mobile: clue.mobile,
+        telephone: clue.telephone,
+        email: clue.email,
+        wechat: clue.wechat,
+        qq: clue.qq,
+        area_id: clue.area_id,
+        detail_address: clue.detail_address,
+        industry_id: clue.industry_id,
+        level: clue.level,
+        source: clue.source,
+        owner_user_id: clue.owner_user_id ?? (actorId ? Number(actorId) : undefined),
+        owner_time: new Date().toISOString(),
+        lock_status: false,
+        deal_status: false,
+        follow_up_status: clue.follow_up_status ?? false,
+        contact_last_time: clue.contact_last_time,
+        contact_last_content: clue.contact_last_content,
+        remark: clue.remark ? `[线索转化] ${clue.remark}` : "[线索转化]",
+      } as any,
+      { actorId, tenantId }
+    )
+
+    // 更新线索状态
+    const updatedClue = await this.update(
+      id,
+      {
+        transform_status: true,
+        customer_id: customer.id,
+      } as any,
+      actorId,
+      tenantId,
+    )
+
+    domainLog.audit("crm.clue.transformed", { clueId: clue.id, customerId: customer.id, actorId })
+    return {
+      clue: updatedClue,
+      customer,
+    }
   }
 }
 
