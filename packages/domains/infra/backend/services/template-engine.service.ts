@@ -4,117 +4,29 @@ import type {
 } from "@/modules/infra/backend/validators"
 import { domainLog } from "@/modules/shared/backend/lib/domain-log"
 import { readSettingList, writeSettingList } from "./infra-setting-store"
-import { DEFAULT_NEXT_REACT_TEMPLATE_PRESETS } from "./template-engine-presets"
+import type {
+  InfraTemplateRecord,
+  TemplatePreviewInput,
+  TemplateScaffoldResult,
+} from "./template-engine.types"
+import {
+  TEMPLATES_SETTING_KEY,
+  readTemplateCatalog,
+  renderTemplate,
+  renderTemplatePath,
+  expandSelectedTemplates,
+} from "./template-engine-renderer"
 
-type TemplateCategory = "CRUD" | "TREE" | "SINGLETON" | "WORKFLOW" | "DOMAIN" | "FOUNDATION"
-type TemplateType = "BACKEND" | "FRONTEND" | "API" | "SQL"
-type TemplateEngine = "handlebars" | "mustache" | "ejs" | "json-template"
-type TemplateStatus = "ACTIVE" | "DISABLED"
-
-export type InfraTemplateRecord = {
-  id: string
-  code: string
-  name: string
-  category: TemplateCategory
-  templateType: TemplateType
-  engine: TemplateEngine
-  content: string
-  status: TemplateStatus
-  description?: string
-  options?: Record<string, unknown>
-  updatedAt: string
-}
-
-export type TemplatePreviewInput = {
-  templateCode: string
-  variables: Record<string, string | number | boolean | null | undefined>
-}
-
-export type TemplateScaffoldFile = {
-  templateCode: string
-  path: string
-  content: string
-  engine: TemplateEngine
-  category: TemplateCategory
-  templateType: TemplateType
-}
-
-export type TemplateScaffoldResult = {
-  stack: string
-  generatedAt: string
-  files: TemplateScaffoldFile[]
-}
-
-const TEMPLATES_SETTING_KEY = "infra.template-engine.templates"
-
-function mergeTemplates(stored: InfraTemplateRecord[]) {
-  const merged = new Map<string, InfraTemplateRecord>()
-  for (const preset of DEFAULT_NEXT_REACT_TEMPLATE_PRESETS) {
-    merged.set(preset.code, preset)
-  }
-  for (const item of stored) {
-    merged.set(item.code, item)
-  }
-  return [...merged.values()]
-}
-
-async function readTemplateCatalog() {
-  const stored = await readSettingList<InfraTemplateRecord>(TEMPLATES_SETTING_KEY)
-  return mergeTemplates(stored)
-}
-
-function deriveTemplateVariables(variables: Record<string, string | number | boolean | null | undefined> = {}) {
-  const modulePath = String(variables.modulePath ?? variables.moduleName ?? "").replace(/^\/+|\/+$/g, "")
-  const moduleName = String(variables.moduleName ?? modulePath.split("/")[0] ?? "")
-  const featureKebab = String(variables.featureKebab ?? (modulePath.split("/").slice(1).join("-") || moduleName))
-  const apiBase = String(variables.apiBase ?? (modulePath ? `/api/v1/admin/${modulePath}` : "/api/v1/admin"))
-  return { ...variables, modulePath, moduleName, featureKebab, apiBase }
-}
-
-function renderTemplate(content: string, variables: TemplatePreviewInput["variables"]) {
-  const resolved = deriveTemplateVariables(variables)
-  return content.replace(/\{\{\s*([\w.-]+)\s*\}\}/g, (_, key: string) => {
-    const value = resolved[key]
-    if (value === null || value === undefined) return ""
-    return String(value)
-  })
-}
-
-function renderTemplatePath(path: string, variables: TemplatePreviewInput["variables"]) {
-  return renderTemplate(path, variables)
-}
-
-function expandSelectedTemplates(
-  selected: InfraTemplateRecord[],
-  candidates: InfraTemplateRecord[],
-) {
-  const candidateMap = new Map(candidates.map((item) => [item.code, item]))
-  const expanded: InfraTemplateRecord[] = []
-  const seen = new Set<string>()
-
-  for (const template of selected) {
-    const bundleTemplateCodes = Array.isArray(template.options?.bundleTemplateCodes)
-      ? (template.options?.bundleTemplateCodes as string[])
-      : []
-
-    if (bundleTemplateCodes.length === 0) {
-      if (!seen.has(template.code)) {
-        expanded.push(template)
-        seen.add(template.code)
-      }
-      continue
-    }
-
-    for (const code of bundleTemplateCodes) {
-      const bundledTemplate = candidateMap.get(code)
-      if (!bundledTemplate || seen.has(bundledTemplate.code)) continue
-      expanded.push(bundledTemplate)
-      seen.add(bundledTemplate.code)
-    }
-  }
-
-  return expanded
-}
+export type {
+  TemplateCategory,
+  TemplateType,
+  TemplateEngine,
+  TemplateStatus,
+  InfraTemplateRecord,
+  TemplatePreviewInput,
+  TemplateScaffoldFile,
+  TemplateScaffoldResult,
+} from "./template-engine.types"
 
 export class InfraTemplateEngineService {
   static async list(input: InfraPageQueryInput) {
@@ -243,3 +155,5 @@ export class InfraTemplateEngineService {
     return templates.find((item) => item.code === templateCode) ?? null
   }
 }
+
+export const infraTemplateEngineService = InfraTemplateEngineService
