@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ruoyi-all-next 架构全景 (Archify Verifiable & Interactive Diagram)</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.2);
+      --highlight: #22c55e;
+    }
+    html.light {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #cbd5e1;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --accent: #0284c7;
+      --accent-glow: rgba(2, 132, 199, 0.15);
+      --highlight: #16a34a;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--card-bg);
+      z-index: 10;
+    }
+    .title-group h1 {
+      margin: 0;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .badge {
+      font-size: 0.75rem;
+      background: var(--accent-glow);
+      color: var(--accent);
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      border: 1px solid var(--accent);
+    }
+    .controls {
+      display: flex;
+      gap: 0.75rem;
+    }
+    button {
+      background: var(--card-bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.4rem 0.8rem;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all 0.2s;
+    }
+    button:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    #viewport {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      cursor: grab;
+    }
+    #viewport:active {
+      cursor: grabbing;
+    }
+    svg#canvas {
+      width: 100%;
+      height: 100%;
+      transform-origin: 0 0;
+    }
+    .boundary {
+      fill: var(--card-bg);
+      stroke: var(--border);
+      stroke-width: 1.5;
+      rx: 12;
+      opacity: 0.7;
+    }
+    .boundary-title {
+      font-size: 13px;
+      font-weight: 600;
+      fill: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+    .node {
+      fill: var(--bg);
+      stroke: var(--accent);
+      stroke-width: 1.5;
+      rx: 8;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .node:hover {
+      stroke-width: 2.5;
+      filter: drop-shadow(0 0 8px var(--accent-glow));
+    }
+    .node-text {
+      font-size: 13px;
+      font-weight: 600;
+      fill: var(--text);
+      text-anchor: middle;
+      pointer-events: none;
+    }
+    .node-subtext {
+      font-size: 10px;
+      fill: var(--text-muted);
+      text-anchor: middle;
+      pointer-events: none;
+    }
+    .edge {
+      stroke: var(--border);
+      stroke-width: 2;
+      fill: none;
+      transition: stroke 0.3s;
+    }
+    .edge.active {
+      stroke: var(--highlight);
+      stroke-width: 3;
+      filter: drop-shadow(0 0 6px rgba(34, 197, 94, 0.4));
+    }
+    .edge-label {
+      font-size: 11px;
+      fill: var(--text-muted);
+      text-anchor: middle;
+    }
+    .pulse-dot {
+      fill: var(--highlight);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="title-group">
+      <h1>ruoyi-all-next 架构全景交互图谱</h1>
+      <span class="badge">Archify Verifiable IR v1.0</span>
+    </div>
+    <div class="controls">
+      <button id="traceBtn">▶ 模拟请求路径流动 (Path Tracing)</button>
+      <button id="resetZoomBtn">重置视角</button>
+      <button id="themeBtn">🌓 切换主题</button>
+    </div>
+  </header>
+
+  <div id="viewport">
+    <svg id="canvas" viewBox="0 0 1100 650">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 9 5 L 0 9 z" fill="context-stroke" />
+        </marker>
+        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+      </defs>
+
+      <!-- 1. Client Layer -->
+      <g>
+        <rect class="boundary" x="40" y="30" width="300" height="120" />
+        <text class="boundary-title" x="55" y="55">1. CLIENT SURFACE (终端暴露面)</text>
+        <g class="node-group" transform="translate(60, 75)">
+          <rect class="node" width="120" height="50" />
+          <text class="node-text" x="60" y="24">Web Admin</text>
+          <text class="node-subtext" x="60" y="40">React 19 / i18n</text>
+        </g>
+        <g class="node-group" transform="translate(200, 75)">
+          <rect class="node" width="120" height="50" />
+          <text class="node-text" x="60" y="24">AI Agents</text>
+          <text class="node-subtext" x="60" y="40">MCP / stdio</text>
+        </g>
+      </g>
+
+      <!-- 2. Gateway Layer -->
+      <g>
+        <rect class="boundary" x="400" y="30" width="280" height="120" />
+        <text class="boundary-title" x="415" y="55">2. EDGE GATEWAY (流量网关)</text>
+        <g class="node-group" transform="translate(440, 75)">
+          <rect class="node" width="200" height="50" />
+          <text class="node-text" x="100" y="24">Traefik Edge Gateway</text>
+          <text class="node-subtext" x="100" y="40">Reverse Proxy / SSL / RateLimit</text>
+        </g>
+      </g>
+
+      <!-- 3. Next.js BFF Layer -->
+      <g>
+        <rect class="boundary" x="740" y="30" width="320" height="120" />
+        <text class="boundary-title" x="755" y="55">3. APP BFF (薄接入层)</text>
+        <g class="node-group" transform="translate(770, 75)">
+          <rect class="node" width="260" height="50" />
+          <text class="node-text" x="130" y="24">Next.js API Route Handlers</text>
+          <text class="node-subtext" x="130" y="40">withAdminRoute / Zod Validator</text>
+        </g>
+      </g>
+
+      <!-- 4. First-Party Plugins & Platform Ground -->
+      <g>
+        <rect class="boundary" x="150" y="220" width="800" height="180" />
+        <text class="boundary-title" x="170" y="245">4. FIRST-PARTY BUSINESS PLUGINS (第一方业务插件 & 平台地基)</text>
+        
+        <g class="node-group" transform="translate(180, 270)">
+          <rect class="node" width="160" height="60" />
+          <text class="node-text" x="80" y="28">system / infra</text>
+          <text class="node-subtext" x="80" y="46">Platform Ground (地基)</text>
+        </g>
+
+        <g class="node-group" transform="translate(380, 270)">
+          <rect class="node" width="160" height="60" />
+          <text class="node-text" x="80" y="28">plugin-mall</text>
+          <text class="node-subtext" x="80" y="46">BaseService / CAS 乐观锁</text>
+        </g>
+
+        <g class="node-group" transform="translate(580, 270)">
+          <rect class="node" width="160" height="60" />
+          <text class="node-text" x="80" y="28">plugin-pay</text>
+          <text class="node-subtext" x="80" y="46">Domain Facade / 复式记账</text>
+        </g>
+
+        <g class="node-group" transform="translate(770, 270)">
+          <rect class="node" width="150" height="60" />
+          <text class="node-text" x="75" y="28">bpm / erp / wms</text>
+          <text class="node-subtext" x="75" y="46">15 业务插件物理隔离</text>
+        </g>
+      </g>
+
+      <!-- 5. Real Database Storage -->
+      <g>
+        <rect class="boundary" x="250" y="460" width="600" height="150" />
+        <text class="boundary-title" x="270" y="485">5. STORAGE ENGINES (SpaceX-Grade Real Database)</text>
+
+        <g class="node-group" transform="translate(300, 515)">
+          <rect class="node" width="220" height="65" />
+          <text class="node-text" x="110" y="28">Embedded SQLite (WAL)</text>
+          <text class="node-subtext" x="110" y="48">better-sqlite3 / Tier-A 零配置</text>
+        </g>
+
+        <g class="node-group" transform="translate(580, 515)">
+          <rect class="node" width="230" height="65" />
+          <text class="node-text" x="115" y="28">PostgreSQL / MySQL</text>
+          <text class="node-subtext" x="115" y="48">Kysely AST / 8 大审计底座字段</text>
+        </g>
+      </g>
+
+      <!-- Connections / Flow Edges -->
+      <g id="edges">
+        <path id="e1" class="edge" d="M 120 125 L 120 145 L 440 100" marker-end="url(#arrow)" />
+        <path id="e2" class="edge" d="M 640 100 L 770 100" marker-end="url(#arrow)" />
+        <path id="e3" class="edge" d="M 870 125 L 870 190 L 460 270" marker-end="url(#arrow)" />
+        <path id="e4" class="edge" d="M 540 300 L 580 300" marker-end="url(#arrow)" />
+        <path id="e5" class="edge" d="M 460 330 L 410 515" marker-end="url(#arrow)" />
+      </g>
+
+      <!-- Animated Pulse Dot for Path Tracing -->
+      <circle id="pulse" class="pulse-dot" r="6" cx="0" cy="0" style="display:none;" />
+    </svg>
+  </div>
+
+  <script>
+    // Theme toggle
+    const themeBtn = document.getElementById('themeBtn');
+    themeBtn.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      document.documentElement.classList.toggle('light');
+    });
+
+    // Path tracing simulation
+    const traceBtn = document.getElementById('traceBtn');
+    const pulse = document.getElementById('pulse');
+    const pathIds = ['e1', 'e2', 'e3', 'e4', 'e5'];
+    let tracing = false;
+
+    traceBtn.addEventListener('click', async () => {
+      if (tracing) return;
+      tracing = true;
+      traceBtn.disabled = true;
+      pulse.style.display = 'block';
+
+      for (const id of pathIds) {
+        const edge = document.getElementById(id);
+        edge.classList.add('active');
+        const length = edge.getTotalLength();
+        
+        await new Promise(resolve => {
+          let start = null;
+          function step(timestamp) {
+            if (!start) start = timestamp;
+            const progress = Math.min((timestamp - start) / 600, 1);
+            const point = edge.getPointAtLength(progress * length);
+            pulse.setAttribute('cx', point.x);
+            pulse.setAttribute('cy', point.y);
+
+            if (progress < 1) {
+              requestAnimationFrame(step);
+            } else {
+              setTimeout(resolve, 150);
+            }
+          }
+          requestAnimationFrame(step);
+        });
+      }
+
+      setTimeout(() => {
+        pathIds.forEach(id => document.getElementById(id).classList.remove('active'));
+        pulse.style.display = 'none';
+        tracing = false;
+        traceBtn.disabled = false;
+      }, 500);
+    });
+
+    // Reset Zoom
+    const resetZoomBtn = document.getElementById('resetZoomBtn');
+    resetZoomBtn.addEventListener('click', () => {
+      document.getElementById('canvas').setAttribute('viewBox', '0 0 1100 650');
+    });
+  </script>
+</body>
+</html>

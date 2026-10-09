@@ -37,6 +37,13 @@
 
 ---
 
+## 🏛️ CMMI 01~09 全生命周期工程规范 (CMMI Standards)
+
+- [CMMI 01~09 全生命周期工程过程与 7 类交付物理资产](cmmi/cmmi-lifecycle.md)
+- [36 大工业级原生 Agent 技能矩阵与真源管理](architecture/skills-matrix.md)
+
+---
+
 ## 📚 架构百科词条 (Architecture Pillars)
 
 - [第一方插件体系与包结构规范](architecture/modular-plugin-system.md)
@@ -44,6 +51,7 @@
 - [Kysely AST 语法树级全局多租户隔离](architecture/tenant-isolation-ast.md)
 - [事务性发件箱 (Transactional Outbox) 与 ACID 回滚](architecture/transactional-outbox.md)
 - [微服务通信、跨域治理与 Facade 契约](architecture/service-governance.md)
+- [Archify (47k★) 可机器验证与交互式架构图生成](architecture/archify-visualization.md)
 
 ---
 
@@ -51,8 +59,11 @@
 
 - [四层金字塔测试体系 (L1 单测 ~ L4 Agent E2E)](testing/testing-pyramid.md)
 - [嵌入式 SQLite 真实 C 引擎与并发 CAS 防超卖](testing/real-database-testing.md)
+- [变异测试 (Mutation Testing) 反假 Mock 与测试充分性打假](testing/mutation-testing.md)
 - [Agent 契约驱动 UI 探针与无头接口运营 (agent-device / agent-browser)](testing/agent-browser-and-device.md)
+- [Strix (60k★) 多智能体自主红队渗透测试与真实 PoC 验证](testing/strix-autonomous-pentest.md)
 - [安全渗透扫描 (12项红线) 与容量压测护栏](testing/security-and-load-testing.md)
+- [K6 真实并发压测基准与容量回归护栏](testing/k6-load-benchmark.md)
 
 ---
 

@@ -97,6 +97,13 @@ function buildIndexMd() {
 ${domainRows}
 ---
 
+## 🏛️ CMMI 01~09 全生命周期工程规范 (CMMI Standards)
+
+- [CMMI 01~09 全生命周期工程过程与 7 类交付物理资产](cmmi/cmmi-lifecycle.md)
+- [36 大工业级原生 Agent 技能矩阵与真源管理](architecture/skills-matrix.md)
+
+---
+
 ## 📚 架构百科词条 (Architecture Pillars)
 
 - [第一方插件体系与包结构规范](architecture/modular-plugin-system.md)
@@ -104,6 +111,7 @@ ${domainRows}
 - [Kysely AST 语法树级全局多租户隔离](architecture/tenant-isolation-ast.md)
 - [事务性发件箱 (Transactional Outbox) 与 ACID 回滚](architecture/transactional-outbox.md)
 - [微服务通信、跨域治理与 Facade 契约](architecture/service-governance.md)
+- [Archify (47k★) 可机器验证与交互式架构图生成](architecture/archify-visualization.md)
 
 ---
 
@@ -111,8 +119,11 @@ ${domainRows}
 
 - [四层金字塔测试体系 (L1 单测 ~ L4 Agent E2E)](testing/testing-pyramid.md)
 - [嵌入式 SQLite 真实 C 引擎与并发 CAS 防超卖](testing/real-database-testing.md)
+- [变异测试 (Mutation Testing) 反假 Mock 与测试充分性打假](testing/mutation-testing.md)
 - [Agent 契约驱动 UI 探针与无头接口运营 (agent-device / agent-browser)](testing/agent-browser-and-device.md)
+- [Strix (60k★) 多智能体自主红队渗透测试与真实 PoC 验证](testing/strix-autonomous-pentest.md)
 - [安全渗透扫描 (12项红线) 与容量压测护栏](testing/security-and-load-testing.md)
+- [K6 真实并发压测基准与容量回归护栏](testing/k6-load-benchmark.md)
 
 ---
 
@@ -342,6 +353,39 @@ await runUnitOfWork(async (uow) => {
 - **熔断降级**：服务降级时提供安全的默认值或内存兜底；
 - **追踪传递**：所有内部调用必须透传 \`traceId\`、\`tenantId\` 与 \`actorId\` 上下文。
 `.trim() + "\n");
+
+  // 6) archify-visualization.md
+  generatedFiles.set("architecture/archify-visualization.md", `# 架构百科：Archify 可机器验证与交互式架构图生成
+
+> 对应规则：AGENTS.md §3 / .agents/skills/archify/SKILL.md (对标 tt-a1i/archify 47,000+★, MIT)
+
+## 一、 核心痛点与 Validate-Preview-Deliver 范式
+- 传统手绘图（Draw.io/Excalidraw）无法被 AI 机器验证，且随着代码演进而迅速失效漂移；
+- 静态文本图（纯 Mermaid）在大规模微服务拓扑中经常因布局错乱、文字折行或 AI 幻觉导致“死连线”。
+- **Archify 契约闭环**：
+  1. **类型化 JSON Schema 结构化定义**：严格声明 \`boundaries\`、\`components\` 与 \`connections\`；
+  2. **原子连线与边界校验**：严禁悬空未声明节点连线，杜绝 AI 架构幻觉；
+  3. **编译输出交互式 HTML 制品**：支持缩放平移、暗黑模式切换与**全链路流动请求路径追踪 (Path Tracing)**。
+
+## 二、 规范制品存放路径
+- Schema 契约资产：\`docs/03_design/diagrams/<name>.arch.json\`
+- 交互式 HTML 制品：\`docs/03_design/diagrams/<name>.arch.html\`
+`.trim() + "\n");
+
+  // 7) skills-matrix.md
+  generatedFiles.set("architecture/skills-matrix.md", `# 架构百科：36 大工业级原生 Agent 技能矩阵与单一真源
+
+> 对应规则：AGENTS.md Rule 0.11 / .agents/skills/README.md
+
+## 一、 单一真源铁律 (Single Source of Truth)
+- 全仓 36 个原生技能唯一真源收敛于 \`.agents/skills/<name>/SKILL.md\`；
+- 严禁在 \`docs/\` 等目录创建镜像或副本目录，杜绝代码与认知污染；
+- 下游兼容性清单 \`compat-manifest.json\` 自动校验技能数量与定义。
+
+## 二、 深度吸收的两大全球顶流项目
+1. **Archify (47,000+★, MIT)**：\`archify/SKILL.md\` 驱动可机器验证与交互式架构全景；
+2. **Strix (60,000+★, Apache-2.0)**：\`strix-penetration-testing/SKILL.md\` 驱动多智能体自主红队渗透测试与真实生效 PoC 验证。
+`.trim() + "\n");
 }
 
 // ==========================================
@@ -421,6 +465,82 @@ RETURNING id;
 - 统计 RPS、P95 延迟与失败率；
 - **铁律**：必须针对生产 standalone 产物进行压测，严禁对开发热更新进程跑压测！
 `.trim() + "\n");
+
+  // 5) mutation-testing.md
+  generatedFiles.set("testing/mutation-testing.md", `# 测试百科：变异测试 (Mutation Testing) 反假 Mock 与有效性打假
+
+> 对应规则：AGENTS.md Rule 0.6 / .agents/skills/mutation-tester/SKILL.md (对标 Stryker / PIT / SpaceX 标准)
+
+## 一、 为什么行覆盖率有欺骗性？
+只写执行语句而不写深度断言，或者在单测中把被测核心逻辑自身全部 Mock 掉，行覆盖率依然可以达到 100%。
+
+## 二、 变异测试原理 (Fault Injection)
+- 向 AST 注入变异算子：
+  - 边界偏移：\`x > 0\` $\to$ \`x >= 0\`
+  - 逻辑反转：\`status === 'PAID'\` $\to$ \`status !== 'PAID'\`
+  - 租户旁路：删除 \`where tenant_id = ?\` 过滤
+  - CAS 旁路：删除 \`where version = ?\` 乐观锁
+- **测试有效性判据**：
+  - **Mutant Killed (击杀)**：测试套件因故障变异而红牌报错（单测有效）；
+  - **Mutant Survived (存活)**：注入故障后测试依然全绿 ➔ **证明存在空断言或假 Mock，必须立即补测击杀！**
+  - **变异得分要求**：核心业务状态机 MSI $\ge 85\%$。
+`.trim() + "\n");
+
+  // 6) strix-autonomous-pentest.md
+  generatedFiles.set("testing/strix-autonomous-pentest.md", `# 测试百科：Strix 多智能体自主红队渗透测试与 PoC 验证
+
+> 对应规则：AGENTS.md §3.4 / .agents/skills/strix-penetration-testing/SKILL.md (对标 usestrix/strix 60,000+★, Apache-2.0)
+
+## 一、 核心工作原理
+传统安全扫描只做静态正则匹配，产生海量误报。Strix 扮演真实世界的白帽黑客：
+1. **沙箱环境自主渗透**：在隔离 Docker 沙箱中自主测绘攻击面并制定攻击链；
+2. **可执行 PoC 验证 (0 误报)**：必须构造出真实生效的利用载荷（PoC）打穿防御，才确认漏洞成立；
+3. **自动生成修复补丁**：根据 PoC 失败原因直接给出防御代码补丁与回归测试。
+
+## 二、 本工程核心防御底座靶标
+- **跨租户越权穿透**：验证 Kysely AST 租户过滤器无法被外部篡改参数绕过；
+- **RBAC 鉴权旁路**：验证未经授权或伪造 Token 无法调用内部接口；
+- **CAS 乐观锁并发超卖**：验证高并发秒杀扣减不会发生数据脏写。
+`.trim() + "\n");
+
+  // 7) k6-load-benchmark.md
+  generatedFiles.set("testing/k6-load-benchmark.md", `# 测试百科：K6 真实并发压测场景与容量回归护栏
+
+> 对应规则：AGENTS.md §3.3 / packages/shared/contract/load-baseline.json / test/load/k6-load-benchmark.js
+
+## 一、 压测场景与阶梯并发
+- 场景定义脚本：\`test/load/k6-load-benchmark.js\`
+- 执行阶梯加压：10 VUs $\to$ 50 VUs (加压 15s) ➔ 保持 50 VUs 高负载 30s ➔ 平滑降压 15s。
+
+## 二、 SRE 容量护栏底线
+- \`http_req_failed\`: 失败率严格 $< 0.1\%$；
+- \`http_req_duration\`: p95 响应时间 $\le 20\text{ms}$ (健康检查/契约接口)；
+- \`http_reqs\`: 单机吞吐量 $\ge 2,000\text{ RPS}$。
+`.trim() + "\n");
+}
+
+// ==========================================
+// 4.5 生成 CMMI 百科词条 (CMMI Standards)
+// ==========================================
+function buildCmmiMds() {
+  generatedFiles.set("cmmi/cmmi-lifecycle.md", `# CMMI 百科：01~09 全生命周期工程规范与 7 类物理交付资产
+
+> 对应标准：CMMI V2.0 / V3.0 (DEV + SVC 模型) / docs/architecture/CMMI-PROCESS-ASSETS-AND-DELIVERY-STANDARD.md
+
+## 一、 全生命周期九大阶段
+1. **01_management (立项与决策)**：DAR 加权权衡矩阵、Brief 任务立项、估算模型；
+2. **02_requirements (需求工程)**：IEEE 29148 / EARS 5态无歧义需求规格说明 (SRS/RTM)；
+3. **03_design (系统与架构设计)**：MADR 架构决策记录、Archify 交互式架构图谱、OpenAPI 3.1 契约；
+4. **04_implementation (构造与编码)**：第一方业务插件隔离、BaseMapper 泛型引擎、1 Task = 1 Commit；
+5. **05_verification (验证与打假)**：SpaceX 级真实数据库驱动测试、Stryker 变异测试打假 (MSI $\ge 85\%$)；
+6. **06_quality_assurance (质量与配置审计)**：20 道自动化门禁全绿、CMMI PPQA、FCA/PCA 配置审计；
+7. **07_release (发布与网关)**：Traefik 边缘网关、Docker 容器编排、自动回滚 Runbook；
+8. **08_sre (站点可靠性与安全)**：Google SRE SLI/SLO 矩阵、多燃烧率告警、Strix 60k★ 自主红队渗透；
+9. **09_operations (持续运营与平账)**：复式记账守卫 ($\sum\text{Debit}\equiv\sum\text{Credit}$)、三方对账与长短款差错冲正。
+
+## 二、 交付哲学：No Artifact, No Done
+严禁口头声明完工，每个任务必须落地 7 类物理资产之一，并附带退出码为 0 的可核验凭证。
+`.trim() + "\n");
 }
 
 // ==========================================
@@ -468,6 +588,7 @@ function buildGotchasMds() {
 function main() {
   buildIndexMd();
   buildDomainMds();
+  buildCmmiMds();
   buildArchitectureMds();
   buildTestingMds();
   buildGotchasMds();

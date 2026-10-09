@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "ruoyi-all-next 现代化分层与微服务双模演进架构全景",
+    "author": "Antigravity & ruoyi-all-next Core Team",
+    "theme": "auto",
+    "export": ["svg", "png"]
+  },
+  "boundaries": [
+    { "id": "client-layer", "label": "Client Surface (终端展示面)", "type": "container" },
+    { "id": "gateway-layer", "label": "Traefik Edge Gateway (边缘流量接入网关)", "type": "container" },
+    { "id": "bff-layer", "label": "Next.js App BFF (薄路由参数校验与鉴权)", "type": "container" },
+    { "id": "platform-layer", "label": "Platform Ground (平台基础设施域)", "type": "container" },
+    { "id": "plugin-layer", "label": "First-Party Business Plugins (第一方可插拔业务域)", "type": "container" },
+    { "id": "storage-layer", "label": "Storage Engine (真实多数据库持久层)", "type": "container" }
+  ],
+  "components": [
+    { "id": "comp-web", "boundary": "client-layer", "label": "Admin Dashboard", "tech": "React 19 / Tailwind / i18n" },
+    { "id": "comp-mobile", "boundary": "client-layer", "label": "Expo Client", "tech": "React Native / Expo" },
+    { "id": "comp-mcp", "boundary": "client-layer", "label": "AI Agents (Cursor/Claude)", "tech": "Model Context Protocol (MCP)" },
+    { "id": "comp-traefik", "boundary": "gateway-layer", "label": "Traefik Gateway", "tech": "Reverse Proxy / SSL / RateLimit" },
+    { "id": "comp-bff", "boundary": "bff-layer", "label": "Next.js Route Handlers", "tech": "withAdminRoute / Zod Validator" },
+    { "id": "comp-sys", "boundary": "platform-layer", "label": "System Domain", "tech": "RBAC / Tenant / Dict / Audit" },
+    { "id": "comp-infra", "boundary": "platform-layer", "label": "Infra Domain", "tech": "Codegen / Job / Storage / Config" },
+    { "id": "comp-mall", "boundary": "plugin-layer", "label": "Mall Plugin", "tech": "BaseService / CAS Anti-Overselling" },
+    { "id": "comp-pay", "boundary": "plugin-layer", "label": "Pay Plugin", "tech": "Domain Facade / Double-Entry" },
+    { "id": "comp-wms", "boundary": "plugin-layer", "label": "WMS / ERP / MES", "tech": "Inventory / Production Workflow" },
+    { "id": "comp-sqlite", "boundary": "storage-layer", "label": "Embedded SQLite (WAL)", "tech": "better-sqlite3 / Tier-A Local DB" },
+    { "id": "comp-pg", "boundary": "storage-layer", "label": "PostgreSQL / MySQL", "tech": "Kysely AST / 8 Base Audit Columns" }
+  ],
+  "connections": [
+    { "from": "comp-web", "to": "comp-traefik", "label": "HTTPS / TLS", "protocol": "http" },
+    { "from": "comp-mobile", "to": "comp-traefik", "label": "REST API v1", "protocol": "http" },
+    { "from": "comp-mcp", "to": "comp-bff", "label": "JSON-RPC / stdio", "protocol": "rpc" },
+    { "from": "comp-traefik", "to": "comp-bff", "label": "/api/v1/admin/*", "protocol": "http" },
+    { "from": "comp-bff", "to": "comp-mall", "label": "withAdminRoute Guard", "protocol": "internal" },
+    { "from": "comp-bff", "to": "comp-sys", "label": "resolveTenantEntitlement", "protocol": "facade" },
+    { "from": "comp-mall", "to": "comp-pay", "label": "payPublicFacade.createOrder()", "protocol": "facade" },
+    { "from": "comp-mall", "to": "comp-sqlite", "label": "WHERE tenant_id = ? (Dev/CI)", "protocol": "sql" },
+    { "from": "comp-mall", "to": "comp-pg", "label": "CAS Atomic Update (Prod)", "protocol": "sql" }
+  ]
+}
