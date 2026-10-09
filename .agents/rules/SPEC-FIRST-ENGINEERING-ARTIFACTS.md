@@ -3,7 +3,8 @@
 
 > **生效对象**：所有接入 `ruoyi-all-next` 重型业务模板的 AI Agent、IDE 编程助手（Antigravity、Claude Code、Cursor、Copilot）及数字员工  
 > **制定背景**：吸收 Coolie 核心工程教训——「CMMI 是项目交付过程管理，是这个项目从 0-1 的建设交付过程产物、文档、代码；不是项目上线运行后系统内容产物！」「任务、过程如果没有有效高质量的工程产物出现，还不如 Spec 驱动的结果！」  
-> **核心宗旨**：彻底消灭大模型自动生成的套话废文档与形式主义假交付，全面推行 **`No Artifact, No Done`** 结项铁律。
+> **核心宗旨**：彻底消灭大模型自动生成的套话废文档与形式主义假交付，全面推行 **`No Artifact, No Done`** 结项铁律。  
+> **配套标准**：项目级与组织级 CMMI 过程资产目录划分与物理归档规范，详见 [docs/architecture/CMMI-PROCESS-ASSETS-AND-DELIVERY-STANDARD.md](file:///host-workspace/xaicd/ruoyi-all-next/docs/architecture/CMMI-PROCESS-ASSETS-AND-DELIVERY-STANDARD.md)。
 
 ---
 
