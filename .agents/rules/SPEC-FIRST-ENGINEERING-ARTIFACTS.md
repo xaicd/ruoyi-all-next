@@ -73,12 +73,28 @@
 * **《用户与运维操作手册》**：
   * 面向系统管理员的操作指引与故障排查 Runbook。
 
+### 6. G6 站点可靠性工程基线 (SRE & Reliability Baseline)
+* **《IaaS/PaaS/应用全栈可观测性与 APM 规约》**：
+  * OpenTelemetry 全链路 TraceID/SpanID 跨域穿透拓扑（`apm-tracing-topology.md`）；
+  * 结构化业务日志 JSON 与不可变审计脱敏标准（`business-log-standards.md`）。
+* **《分布式定时任务与容灾演练台账》**：
+  * 定时任务排他锁机制、漏批补偿预案（`batch-job-registry.md`）；
+  * 混沌工程与多活容灾切换演练记录、生产无指责故障根因复盘报告（`postmortem-reports/`）。
+
+### 7. G7 持续业务运营基线 (Operations & Continuity Baseline)
+* **《核心财务与业务对账平账报告》**：
+  * 日终/月终长款短款清算对账凭据、统一指标语义层变更台账（`daily-reconciliation-ledger.md`）。
+* **《租户准入与审批流治理台账》**：
+  * 租户配额变更审批、BPM 审批流拓扑与 HITL 人工节点调整记录（`bpm-workflow-adjustments.md`）。
+* **《AI 数字员工运营调度流水》**：
+  * 数字员工自动化任务 Trace 流水与造数清数审计记录（`task-execution-records.jsonl`）。
+
 ---
 
 ## 三、 可验证结项准则：No Artifact, No Done
 
 1. **无物理产物严禁关闭任务**：
-   * 任何工单或阶段任务更新为完成状态时，必须挂载上述 5 类工程资产之一（Git Commit SHA、契约定义文件、测试报告结果、部署 Runbook）。
+   * 任何工单或阶段任务更新为完成状态时，必须挂载上述 7 类工程资产之一（Git Commit SHA、契约定义文件、测试报告结果、部署 Runbook、SRE 巡检台账、对账平账单）。
    * 严禁任何形式的口头宣称“开发完毕”、“已调通”。
 2. **门禁自动化核验**：
    * 提交前必须通过 `npm run check`，10 项工程标准、契约同步、手写文件基线全部保持通过。

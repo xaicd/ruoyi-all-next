@@ -122,11 +122,25 @@ ruoyi-all-next / [基于底座衍生的客户商业项目]
 │   │   ├── configuration-audit.md      #    物理与功能配置审计报告 (PCA/FCA)
 │   │   └── gate-evidence-trace.json    #    自动化门禁执行与数字指纹证据链
 │   │
-│   └── 07_release/                     # 【7. 发布、部署与交付类工作产品 (TRANS)】
-│       ├── release-notes.md            #    产品版本发布说明书
-│       ├── user-operation-manual.md    #    用户操作与培训手册
-│       ├── system-deployment-sop.md    #    生产环境安装部署与配置手册
-│       └── rollback-runbook.json       #    生产割接故障秒级回滚 SOP 预案
+│   ├── 07_release/                     # 【7. 发布、部署与交付类工作产品 (TRANS)】
+│   │   ├── release-notes.md            #    产品版本发布说明书
+│   │   ├── user-operation-manual.md    #    用户操作与培训手册
+│   │   ├── system-deployment-sop.md    #    生产环境安装部署与配置手册
+│   │   └── rollback-runbook.json       #    生产割接故障秒级回滚 SOP 预案
+│   │
+│   ├── 08_sre/                         # 【8. 站点可靠性工程与稳定性保障 (SRE / CAM / SCON)】
+│   │   ├── 01_slo_sli_metrics/         #    SLO/SLI 矩阵、错误预算策略、P1~P4 告警阈值路由
+│   │   ├── 02_observability_apm/       #    APM 分布式链路追踪、业务日志 JSON 与不可变审计脱敏规约
+│   │   ├── 03_iaas_paas_infra/         #    IaaS 算力网络存储与 PaaS (K8s/DB/Redis/NATS) 拓扑台账
+│   │   ├── 04_scheduled_tasks/         #    分布式定时任务注册台账、排他锁设计与漏跑补偿预案
+│   │   ├── 05_disaster_recovery/       #    多活容灾双活架构、混沌工程注入用例与演练记录 (RTO/RPO)
+│   │   └── 06_incidents_postmortem/    #    7x24 On-Call 排班、1-5-10 应急 SOP 与无指责复盘报告 (5-Whys)
+│   │
+│   └── 09_operations/                  # 【9. 业务持续运营与服务交付 (BizOps / DataOps / CMMI-SVC)】
+│       ├── 01_biz_ops/                 #    租户开通审批、业务活动营销配置 SOP、BPM 审批流治理
+│       ├── 02_data_ops/                #    日终/月终财务与业务对账平账台账、指标语义层变更台账
+│       ├── 03_inspection/              #    日常系统健康巡检报告 (对齐 npm run agent:ops health)
+│       └── 04_agent_ops/               #    AI 数字员工运营台账、自动化造数与清数凭据 (seed/purge)
 │
 ├── packages/plugins/                   # 【领域工程源码实现】(遵循模块化与第一方插件)
 └── clients/                            # 【多端客户端源码实现】(Expo / 移动端)
@@ -158,6 +172,8 @@ ruoyi-all-next / [基于底座衍生的客户商业项目]
 | **P4. 构造与编码 (TS/CM)** | 代码实现、分支合流 | • 业务源码（遵循单函数 <50 行，单文件 <200 行）<br/>• Commit 带 `[T1]` 任务标签<br/>• `tasks.md` 任务推进表 | G3：代码编译 0 报错，静态分析 `npm run check` PASS |
 | **P5. 验证与确认 (VV/PQA)** | 零缺陷漏网、状态机收敛 | • `test-summary-report.md` (测试总结报告)<br/>• 自动化单测/集成测试用例 (100% 真实库)<br/>• 同行评审记录单 | G4：全量单测通过，0 Blocker/0 High 遗留缺陷 |
 | **P6. 验收与交付 (TRANS/PCM)** | 部署就绪、回滚可控 | • `release-notes.md` (发布说明)<br/>• `system-deployment-sop.md` (部署指南)<br/>• `rollback-runbook.json` (一键回滚 SOP) | G5：安全扫描无高危，压测达标，回滚演练通过 |
+| **P7. 站点可靠性保障 (SRE / CAM / SCON)** | 系统稳定、全维可观测、故障可愈 | • `sli-slo-matrix.md` + 错误预算<br/>• `apm-tracing-topology.md` (Trace透传规约)<br/>• `iaas-paas-inventory.md` (三层资产台账)<br/>• `batch-job-registry.md` (定时任务排他锁台账)<br/>• `postmortem-reports/` (无指责复盘报告) | G6_SRE：三层黄金指标覆盖率 100%，APM 链路注入率 100%，容灾演练 RTO 达标 |
+| **P8. 持续运营与对账 (BizOps / DataOps / CMMI-SVC)** | 业务顺畅、平账对齐、审批闭环 | • `daily-reconciliation-ledger.md` (平账凭证)<br/>• `tenant-onboarding-ledger.md` (租户台账)<br/>• `bpm-workflow-adjustments.md` (HITL人工节点记录)<br/>• `task-execution-records.jsonl` (数字员工流水) | G7_OPS：对账无长款短款、核心审批流程回滚演练通过、数字员工造数清数通过 |
 
 ---
 

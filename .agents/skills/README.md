@@ -26,7 +26,9 @@ Skill 编写规范见 [skill-authoring/SKILL.md](./skill-authoring/SKILL.md)。
 | 7 | 编码 | coding | 分层落地 | 跳过 Validator |
 | 8 | 自动化测试 | automated-testing | 关键路径 + 拒绝/回滚 | 标 DONE |
 | 9 | 安全 | security | 鉴权、注入、扫描、风控 | 生产发布 |
-| 10 | 发布运维 | devops | 部署、域名、证书、更新 | 手改生产 |
+| 10 | 发布交付 | devops | 部署、域名、证书、更新 | 手改生产 |
+| 11 | 站点可靠性保障 (SRE) | devops、service-governance | 三层指标、APM链路、定时任务锁、容灾演练 | 盲目裸跑发版 |
+| 12 | 持续运营 (Operations) | new-business-plugin | 财务业务平账凭据、审批流治理、数字员工流水 | 账实不符/违规开通 |
 
 六要素（API / Service / Validator / Page / Permission / Log+Test）嵌在 3、7、8，不另起炉灶。
 
@@ -45,7 +47,9 @@ Skill 编写规范见 [skill-authoring/SKILL.md](./skill-authoring/SKILL.md)。
 | 新 HTTP/RPC、改 DTO | api-design |
 | 表、迁移、多数据库 | database-design、database-compatibility |
 | 拆分、网关、BFF、前后端边界 | architecture-design、microservice-evolution |
-| 熔断、限流、追踪、高可用 | service-governance |
+| 熔断、限流、追踪、高可用、SRE 稳定性 | service-governance、devops |
+| SRE 站点可靠性、APM 链路追踪、分布式定时任务与容灾 | devops、service-governance、security |
+| 业务持续运营、财务对账平账、租户与审批流治理 | new-business-plugin |
 | 写业务代码 | coding |
 | 补测、CI | automated-testing、webapp-testing |
 | 鉴权、注入、扫描、风控 | security |

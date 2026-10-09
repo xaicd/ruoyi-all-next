@@ -94,7 +94,7 @@
     },
     {
       "id": "ops",
-      "name": "运维",
+      "name": "运维与 SRE",
       "artifacts": [
         "deploy/**",
         "Dockerfile",
@@ -102,11 +102,11 @@
       ],
       "skill": "devops",
       "gate": "G2_CoreSWE",
-      "owner": "开发"
+      "owner": "SRE/运维"
     },
     {
       "id": "operations",
-      "name": "运营",
+      "name": "业务持续运营",
       "artifacts": [
         "docs/agent/contracts.json",
         "scripts/agent/run-ops.cjs"

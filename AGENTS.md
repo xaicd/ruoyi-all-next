@@ -19,7 +19,7 @@
 > 7. **本体域全息导航与 API 契约第一切入 (Ontology & API-Contract-First, 详见 §21)**：任意需求必须先在本体域（实体网、Domain Facade、route manifest、权限码）中秒级定位目标域与影响半径，以 API 契约为探针执行 5 步穿透闭环；一切需求终局 100% 收敛于真实 API 支撑，严禁无 API 支撑的假界面与硬编码 Mock！
 > 8. **全工种四类契约族收敛 (All-Role Contract Families, 详见 §22)**：数据同步/ETL、BI 查询、运营编排、运维发布等非编码需求同样必须收敛为可审计契约——API 契约 / 数据契约 / 流程契约 / 预案契约四选一，并过专属质量门禁（数据族=对账+血缘完整；流程族=沙箱+回滚演练）；严禁一次性搬运脚本与口径打架的野 SQL！
 > 9. **全局高阶反向思维与 AI-Driven Harness 全程监督 (High-Order Inverse Thinking & DeepSeek Harness Invariants, 详见 §23 & .agents/rules/HIGH-ORDER-INVERSE-THINKING.md)**：严禁以初级外包码农视角就事论事贴补丁；敲代码必须业务对象溯源且由通用引擎展开；写单测必须 4 态状态机真实入库覆盖与反假 Mock；修改接口必须契约先验、零破坏性变更与挂载不可变操作审计！
-> 10. **0-1 软件工程交付资产与 No Artifact, No Done 铁律 (Spec-First Artifacts, 详见 §24 & .agents/rules/SPEC-FIRST-ENGINEERING-ARTIFACTS.md)**：严禁将上线运行期业务数据（订单数据、图纸、运营指标）当成交付资产；严禁口头声明完工；每个工单必须基于 8 要素 Brief 派发，且必须产出 5 选 1 物理工程资产（SRS/RTM、OpenAPI 契约、0 报错源码、真实 DB 状态机单测报告、生产回滚 SOP）！
+> 10. **0-1 软件工程交付资产与 No Artifact, No Done 铁律 (Spec-First Artifacts, 详见 §24 & .agents/rules/SPEC-FIRST-ENGINEERING-ARTIFACTS.md)**：严禁将上线运行期业务数据（订单数据、图纸、运营指标）当成交付资产；严禁口头声明完工；每个工单必须基于 8 要素 Brief 派发，且必须产出 7 类物理工程资产之一（SRS/RTM、OpenAPI 契约、0 报错源码、真实 DB 状态机单测报告、生产回滚 SOP、SRE 稳定性基线、持续运营对账单）！
 
 ---
 
@@ -914,9 +914,9 @@ npm run check
 
 1. **四类契约族统一理论**：
    ① **API 契约**：`Command`/`Query`/`Event`/`Stream`（开发工种，详见 §21）；
-   ② **数据契约 (Data Contract)**：Source/Transform/Sink Schema + 增量水位 + 幂等主键 + 质量规则 + 血缘（数据同步/ETL/数仓/BI 工种，落位 `report` 域与数据同步管道）；
-   ③ **流程契约 (Process Contract)**：状态机/BPMN/DAG + 事件/定时/API/人工四类触发器 + 补偿回滚路径（运营编排/审批流/工单工种，落位 `bpm` 域）；
-   ④ **预案契约 (Runbook Contract)**：变更步骤 + 校验点 + 回滚脚本 + 演练记录（DevOps/SRE/DBA 运维工种，对齐 `.agents/skills/devops/SKILL.md`）。
+   ② **数据契约 (Data Contract)**：Source/Transform/Sink Schema + 增量水位 + 幂等主键 + 质量规则 + 血缘 + 业务平账对账单（数据同步/ETL/数仓/BI/持续运营工种，落位 `report` 域与 `docs/09_operations/02_data_ops/`）；
+   ③ **流程契约 (Process Contract)**：状态机/BPMN/DAG + 事件/定时/API/人工四类触发器 + 补偿回滚路径 + 租户审批流治理（运营编排/审批流/工单工种，落位 `bpm` 域与 `docs/09_operations/01_biz_ops/`）；
+   ④ **预案契约 (Runbook Contract)**：变更步骤 + 校验点 + 回滚脚本 + 演练记录 + SRE 全栈保障（涵盖 IaaS/PaaS/应用三层指标、APM 链路穿透、业务日志脱敏、分布式定时任务排他锁治理与无指责复盘，落位 `docs/08_sre/` 与 `.agents/skills/devops/SKILL.md`）。
 2. **IT 全工种工作内容矩阵**：产品（需求契约，`product-requirements.SKILL.md`）、设计（设计契约，`ui-design.SKILL.md`/组件复用）、开发（API 契约/5 步穿透）、数据（数据契约/管道 DSL + 指标语义层，`database-design.SKILL.md`）、测试（测试契约/4 层金字塔，`automated-testing.SKILL.md`）、运维（预案契约/Runbook + 灰度回滚，`devops.SKILL.md`）、运营编排（流程契约/状态机 + HITL 人工节点）、安全（安全基线/威胁建模，`security.SKILL.md`）；每族明确契约真源、执行范式与低代码/开源工具优先清单。
 3. **数据同步/ETL 五大铁律**：① 严禁一次性搬运脚本入库；② 必须幂等可重放（按主键/版本 upsert）；③ 必须断点续传（checkpoint/增量水位）；④ 血缘自动登记本体域；⑤ 对账报告即验收（行数/空值/唯一性对账通过才算交付）。工具决策顺序：内置管道 DSL ➔ 开源成熟方案（SeaTunnel/DataX 批量、Flink CDC 实时）➔ 才允许自写代码。
 4. **BI 查询与指标语义层范式**：指标口径定义一次（口径/维度/过滤）、处处复用，严禁各报表各写 SQL 口径打架；即席查询三防线（行级权限 ➔ 超时/限行/只读副本资源隔离 ➔ 全量审计）；AI NL-to-SQL 只允许生成绑定语义层白名单指标的查询，严禁裸拼 SQL。
@@ -947,13 +947,13 @@ npm run check
 吸收 Coolie 商业级软件工厂核心实践，杜绝大模型“口头完成”与“将运行时业务数据当成工程产物”：
 
 1. **两大阵营绝对物理隔离**：
-   - **0-1 软件工程交付资产 (Build-Time Assets)**：SRS 规格书、OpenAPI 契约、0 报错源码、真实 DB 状态机测试报告、部署回滚 SOP；
+   - **0-1 软件工程交付资产 (Build-Time Assets)**：SRS 规格书、OpenAPI 契约、0 报错源码、真实 DB 状态机测试报告、部署回滚 SOP、SRE 全栈可观测台账、持续运营对账平账单；
    - **上线运行业务数据 (Runtime Business Outputs)**：订单、支付流水、用户数据。严禁以“数据库加了模拟数据”代替工程产物！
 2. **8 要素 Brief 派单标准 (Task Dispatching)**：
-   - 任何任务必须包含：1.任务目标 2.为什么要做 3.文件范围白名单 4.绝对不动项黑名单 5.责任工种工具池 6.验收门禁 7.单写者锁 8.物理工程资产 5 选 1。
+   - 任何任务必须包含：1.任务目标 2.为什么要做 3.文件范围白名单 4.绝对不动项黑名单 5.责任工种工具池 6.验收门禁 7.单写者锁 8.物理工程资产 7 选 1。
 3. **No Artifact, No Done 结项铁律**：
-   - 任何状态转为完成，必须挂载不可变工程产物（Git SHA、契约文件、测试结果）。
-   - 规范落地于 `.agents/rules/SPEC-FIRST-ENGINEERING-ARTIFACTS.md` 与 `docs/architecture/ai-agent-driven-delivery-workflow.md`。
+   - 任何状态转为完成，必须挂载不可变工程产物（Git SHA、契约文件、测试结果、SRE 巡检台账、对账平账单）。
+   - 规范落地于 `.agents/rules/SPEC-FIRST-ENGINEERING-ARTIFACTS.md` 与 `docs/architecture/CMMI-PROCESS-ASSETS-AND-DELIVERY-STANDARD.md`。
 
 <!-- BEGIN:nextjs-agent-rules -->
 
