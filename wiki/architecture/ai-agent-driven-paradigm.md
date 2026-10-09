@@ -20,5 +20,5 @@
 
 ## 三、 三位一体协同机制：Skills + MCP + CLI
 1. **Skills (.agents/skills/)**：指导 Agent “怎么做”（方法论、EARS 句式、5-Whys、红绿测试准则，全仓 38 个原生技能）；
-2. **MCP (scripts/mcp/ruoyi-mcp-server.cjs)**：为外部 Agent 提供 “查什么”（只读反射查询 13 大工具，严禁副作用写入）；
+2. **MCP (scripts/mcp/ruoyi-mcp-server.cjs)**：为外部 Agent 提供 “查什么”（只读反射查询 14 大工具，严禁副作用写入）；
 3. **CLI (scripts/spec-ops.ts 等)**：确定性落地 “谁来执行”（工具引擎自动执行、编译与门禁）。

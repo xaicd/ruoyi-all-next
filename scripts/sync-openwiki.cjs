@@ -110,6 +110,7 @@ ${domainRows}
 ## 📚 架构百科词条 (Architecture Pillars)
 
 - [全能力 AI Agent 驱动架构与闭环执行法则](architecture/ai-agent-driven-paradigm.md)
+- [对标顶级开源项目差距深度分析与持续演进大典](architecture/benchmark-and-evolution.md)
 - [第一方插件体系与包结构规范](architecture/modular-plugin-system.md)
 - [BaseMapper 通用持久化与 QueryWrapper 链式语法](architecture/base-mapper-and-queries.md)
 - [Kysely AST 语法树级全局多租户隔离](architecture/tenant-isolation-ast.md)
@@ -414,8 +415,37 @@ await runUnitOfWork(async (uow) => {
 
 ## 三、 三位一体协同机制：Skills + MCP + CLI
 1. **Skills (.agents/skills/)**：指导 Agent “怎么做”（方法论、EARS 句式、5-Whys、红绿测试准则，全仓 38 个原生技能）；
-2. **MCP (scripts/mcp/ruoyi-mcp-server.cjs)**：为外部 Agent 提供 “查什么”（只读反射查询 13 大工具，严禁副作用写入）；
+2. **MCP (scripts/mcp/ruoyi-mcp-server.cjs)**：为外部 Agent 提供 “查什么”（只读反射查询 14 大工具，严禁副作用写入）；
 3. **CLI (scripts/spec-ops.ts 等)**：确定性落地 “谁来执行”（工具引擎自动执行、编译与门禁）。
+`.trim() + "\n");
+
+  // 9) benchmark-and-evolution.md
+  generatedFiles.set("architecture/benchmark-and-evolution.md", `# 架构百科：对标顶级开源项目差距深度分析与持续演进大典
+
+> 对应规则：AGENTS.md §23 / docs/architecture/BENCHMARK-GAP-ANALYSIS-AND-CONTINUOUS-IMPROVEMENT.md
+
+## 一、 对标全球顶尖项目矩阵
+1. **Supabase (80k★)**: 极致的本地开发体验、Realtime CDC 变更广播、原生 pgvector 向量检索；
+2. **MedusaJS v2 (27k★)**: TypeScript 原生可逆 DAG 工作流 (@medusajs/workflows-sdk) 与补偿长事务 (Saga)；
+3. **ruoyi-vue-pro (25k★)**: 17 领域工业级模型、Flowable BPMN 2.0 审批流设计器、严密的 @DataPermission 部门数据范围；
+4. **Directus (30k★) / Refine (29k★)**: 可视化 Low-Code 表单设计、TanStack Table v8 结合虚拟滚动支撑十万级数据；
+5. **Strix (60k★)**: 多智能体自主红队渗透测试平台与真实 PoC 验证。
+
+## 二、 核心差距与 7 大改进方向
+- **差距 1：长流程编排**：缺少轻量级 TypeScript 原生 Saga / Workflow 工作流引擎与 BPMN 可视化设计；
+- **差距 2：数据权限**：尚未在 Kysely AST 层面落地部门级/层级细粒度数据范围注入 (Data Scope ABAC)；
+- **差距 3：前端交互**：缺少可视化 Low-Code 动态 Schema 设计面板，大表格缺少虚拟滚动；
+- **差距 4：APM 可观测性**：应用缺少标准 OpenTelemetry (OTel) 链路跟踪与 Prometheus /api/metrics 探针；
+- **差距 5：AI 知识库**：系统内部缺乏针对租户文档的多租户 RAG 向量检索与私有知识库问答；
+- **差距 6：实时长连接**：缺少轻量级 Server-Sent Events (SSE) 实时通道，目前多采用短轮询；
+- **差距 7：API 沙箱**：缺少类似 FastAPI / Scalar 在线可交互调试控制台 (/api/docs)。
+
+## 三、 三阶段演进路线 (Phase A / B / C)
+- **Phase A (短期必修)**: Kysely AST 数据权限插件、交互式 OpenAPI Scalar 调试沙箱 (/api/docs)、OpenTelemetry 自动埋点；
+- **Phase B (中期突破)**: TS 原生可逆 Saga/Workflow 引擎、可视化 Low-Code Schema 设计器、SSE 实时流、TanStack 虚拟滚动；
+- **Phase C (长期生态)**: 内置多租户 RAG 向量知识库 (sqlite-vec/pgvector)、动态第三方插件 WASM/Worker 沙箱、Expo 离线优先同步。
+
+完整技术方案请参阅：[BENCHMARK-GAP-ANALYSIS-AND-CONTINUOUS-IMPROVEMENT.md](../../docs/architecture/BENCHMARK-GAP-ANALYSIS-AND-CONTINUOUS-IMPROVEMENT.md)
 `.trim() + "\n");
 }
 

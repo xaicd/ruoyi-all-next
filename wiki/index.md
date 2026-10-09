@@ -47,6 +47,7 @@
 ## 📚 架构百科词条 (Architecture Pillars)
 
 - [全能力 AI Agent 驱动架构与闭环执行法则](architecture/ai-agent-driven-paradigm.md)
+- [对标顶级开源项目差距深度分析与持续演进大典](architecture/benchmark-and-evolution.md)
 - [第一方插件体系与包结构规范](architecture/modular-plugin-system.md)
 - [BaseMapper 通用持久化与 QueryWrapper 链式语法](architecture/base-mapper-and-queries.md)
 - [Kysely AST 语法树级全局多租户隔离](architecture/tenant-isolation-ast.md)
