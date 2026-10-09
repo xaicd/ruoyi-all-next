@@ -30,6 +30,12 @@
       "@/shared/*": [
         "packages/shared/*"
       ],
+      "@/plugins/*": [
+        "packages/plugins/*"
+      ],
+      "@/domains/*": [
+        "packages/domains/*"
+      ],
       "@prisma/*": [
         "prisma/*"
       ],
