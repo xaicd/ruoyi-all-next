@@ -62,11 +62,12 @@ const files = {}
 
 files["requirements.md"] = `# 需求：${brief.title}
 
-状态：\`PLAN_APPROVED\`　特性：\`${name}\`　域名：\`${brief.domain}\`
+状态：\`PLAN_APPROVED\`　类型：\`${brief.type ?? "feature"}\`　特性：\`${name}\`　域名：\`${brief.domain}\`
 
 ## 1. 目标
 
 ${brief.goal}
+${brief.type === "bugfix" ? `\n## 缺陷现象 (Symptom)\n\n${brief.symptom ?? "<!-- 待填 -->"}\n\n## 根因分析 (Root Cause)\n\n${brief.rootCause ?? "<!-- 待填 -->"}\n` : ""}
 
 ## 2. 角色
 

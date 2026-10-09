@@ -264,9 +264,12 @@ function main() {
   // 会把整个基座算进来，开发阶段永远是绿的（那是"假绿"，实测踩到）。
   let scoped = null
   if (feature) {
-    const descriptor = path.join(ROOT, "docs", "features", feature, "feature.json")
+    let descriptor = path.join(ROOT, "docs", "features", feature, "feature.json")
     if (!fs.existsSync(descriptor)) {
-      console.error(`[delivery] 找不到特性描述: docs/features/${feature}/feature.json`)
+      descriptor = path.join(ROOT, "docs", "features", feature, "spec.json")
+    }
+    if (!fs.existsSync(descriptor)) {
+      console.error(`[delivery] 找不到特性/规格描述: docs/features/${feature}/feature.json 或 spec.json`)
       process.exit(2)
     }
     let meta
