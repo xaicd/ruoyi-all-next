@@ -71,6 +71,8 @@
     "skills:sync": "node scripts/sync-skills.cjs",
     "skills:check": "node scripts/sync-skills.cjs --check",
     "compat:check": "node scripts/check-compat-manifest.cjs",
+    "upstream:radar": "node scripts/upstream-radar.cjs",
+    "upstream:audit": "node scripts/upstream-radar.cjs --audit",
     "standards:check": "node scripts/check-engineering-standards.cjs",
     "standards:baseline": "node scripts/check-engineering-standards.cjs --write-baseline",
     "evolution:backlog": "node scripts/build-evolution-backlog.cjs",
