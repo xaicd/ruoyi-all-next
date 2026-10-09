@@ -20,11 +20,11 @@ describe('L2 Integration: SQLite RBAC Database Flow', () => {
     const user = await dbContext.db
       .selectFrom('system_user' as any)
       .selectAll()
-      .where('username', '=', 'admin')
+      .where('username', '=', 'supervip')
       .executeTakeFirst();
 
     expect(user).toBeDefined();
-    expect((user as any)?.nickname).toBe('系统超级管理员');
+    expect((user as any)?.nickname).toBe('平台超级管理员');
     expect((user as any)?.status).toBe('ACTIVE');
   });
 

@@ -10,9 +10,9 @@
  */
 import { describe, it, expect, beforeAll, afterAll } from "vitest"
 
-const hasRealDb = Boolean(process.env.DATABASE_URL) && process.env.DB_DRIVER === "postgresql"
+const isPostgres = Boolean(process.env.DATABASE_URL) && process.env.DB_DRIVER === "postgresql"
 
-describe.skipIf(!hasRealDb)("L2 集成: 库存原子变更（真实库）", () => {
+describe("L2 集成: 库存原子变更（真实库）", () => {
   let pool: { query: (text: string, values?: unknown[]) => Promise<{ rows: Array<Record<string, unknown>>; rowCount: number | null }>; end: () => Promise<void> }
   let mutateColumnAtomic: typeof import("@/modules/shared/backend/lib/database").mutateColumnAtomic
   let sqlBuilders: typeof import("@/modules/shared/backend/lib/database")
@@ -20,11 +20,42 @@ describe.skipIf(!hasRealDb)("L2 集成: 库存原子变更（真实库）", () =
   beforeAll(async () => {
     sqlBuilders = await import("@/modules/shared/backend/lib/database")
     mutateColumnAtomic = sqlBuilders.mutateColumnAtomic
-    const { Client } = await import("pg")
-    const client = new Client({ connectionString: process.env.DATABASE_URL })
-    await client.connect()
-    // pg 的 Client 与 Pool 在本用例里用法一致
-    pool = client as unknown as typeof pool
+
+    if (isPostgres) {
+      const { Client } = await import("pg")
+      const client = new Client({ connectionString: process.env.DATABASE_URL })
+      await client.connect()
+      pool = client as unknown as typeof pool
+    } else {
+      const Database = (await import("better-sqlite3")).default
+      const os = await import("os")
+      const path = await import("path")
+      const fs = await import("fs")
+      const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "inv-atomic-test-"))
+      const dbPath = path.join(tmpDir, "inv.db")
+      process.env.DB_DRIVER = "sqlite"
+      process.env.DATABASE_URL = `file:${dbPath}`
+      const sqlite = new Database(dbPath)
+      sqlite.pragma("journal_mode = WAL")
+      pool = {
+        query: async (text: string, values: unknown[] = []) => {
+          const sql = text.replace(/\$(\d+)/g, "?")
+          if (sql.trim().toUpperCase().startsWith("SELECT")) {
+            const rows = sqlite.prepare(sql).all(...values) as Array<Record<string, unknown>>
+            return { rows, rowCount: rows.length }
+          }
+          const info = sqlite.prepare(sql).run(...values)
+          return { rows: [], rowCount: info.changes }
+        },
+        end: async () => {
+          sqlite.close()
+          if (fs.existsSync(tmpDir)) {
+            fs.rmSync(tmpDir, { recursive: true, force: true })
+          }
+        },
+      }
+    }
+
     await pool.query(`CREATE TABLE IF NOT EXISTS inv_atomic_probe (
       id text PRIMARY KEY, qty integer NOT NULL, locked_qty integer NOT NULL DEFAULT 0, tenant_id text NOT NULL
     )`)
