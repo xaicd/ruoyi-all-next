@@ -66,71 +66,117 @@ if (process.argv.includes("--check")) {
 
 const files = {}
 
-files["requirements.md"] = `# 需求：${brief.title}
+files["requirements.md"] = `# Requirements: ${brief.title}
 
 状态：\`PLAN_APPROVED\`　类型：\`${brief.type ?? "feature"}\`　特性：\`${name}\`　域名：\`${brief.domain}\`
 
-## 1. 目标
+## 1. 目标与背景 (Introduction)
 
 ${brief.goal}
-${brief.type === "bugfix" ? `\n## 缺陷现象 (Symptom)\n\n${brief.symptom ?? "<!-- 待填 -->"}\n\n## 根因分析 (Root Cause)\n\n${brief.rootCause ?? "<!-- 待填 -->"}\n` : ""}
+${brief.type === "bugfix" ? `\n### 缺陷现象 (Symptom)\n\n${brief.symptom ?? "<!-- 待填 -->"}\n\n### 根因分析 (Root Cause)\n\n${brief.rootCause ?? "<!-- 待填 -->"}\n` : ""}
 
-## 2. 角色
+## 2. 术语表 (Glossary)
 
-| 角色 | 能力 |
+| 术语 | 定义说明 |
+|---|---|
+| **${brief.title}** | 当前特性的核心业务领域与交付边界 |
+| **Tenant Scope** | 租户隔离上下文，操作严格携带并过滤 tenant_id |
+| **Domain Facade** | 跨域调用的唯一权威门面通道，严禁直接 import 外部 Service |
+| **Base Audit Columns** | 8 大核心审计列：id, tenant_id, created_by, created_at, updated_by, updated_at, deleted_at, version |
+
+## 3. 角色矩阵 (Actors)
+
+| 角色 | 核心能力与职责 |
 |---|---|
 ${(brief.roles ?? []).map((item) => `| ${item.role} | ${item.can} |`).join("\n")}
 
-## 3. 用户故事（按优先级）
+## 4. 用户故事与需求定义 (User Stories & Requirements)
 
-${(brief.stories ?? []).map((item, index) => `${index + 1}. **${item.priority}** ${item.text}`).join("\n")}
+${(brief.stories ?? []).map((item, index) => `### Requirement ${index + 1}: ${item.text}
+**User Story:** 作为 ${(brief.roles?.[index % (brief.roles?.length || 1)]?.role || "操作员")}，我希望 ${item.text}，以便于达成业务目标。
 
-## 4. 约束
+#### 优先级: \`${item.priority}\`
 
-${(brief.constraints ?? []).map((item) => `* ${item}`).join("\n")}
+#### 验收标准 (EARS 规范 Acceptance Criteria)
+1. **THE system SHALL** 确保操作在已验签的租户上下文内执行，严禁跨租户越权。
+2. **WHEN** 触发该业务操作 **THEN** 系统必须验证参数有效性并记录结构化审计日志。
+3. **IF** 参数非法或校验失败 **THEN** 系统必须拒绝并返回 400 统一错误契约。
+`).join("\n")}
 
-## 5. 验收标准
+## 5. 核心验收准则 (Acceptance Criteria)
 
-${(brief.acceptance ?? []).map((item, index) => `${index + 1}. ${item.check}`).join("\n")}
+${(brief.acceptance ?? []).map((item, index) => `${index + 1}. **THE system SHALL** 验证：${item.check}`).join("\n")}
 
-## 6. 不做什么
+## 6. 约束与边界 (Constraints & Non-Goals)
 
+### 约束条件
+${(brief.constraints ?? []).map((item) => `* **THE system SHALL COMPLY WITH**: ${item}`).join("\n")}
+
+### 不包含范围 (Non-Goals)
 ${(brief.nonGoals ?? []).map((item) => `* ${item}`).join("\n")}
 `
 
-files["design.md"] = `# 设计：${brief.title}
+files["design.md"] = `# Design: ${brief.title}
 
-上游：\`docs/features/${name}/requirements.md\`（本文件不得反向修改需求）
+上游：\`requirements.md\`（本设计严格支撑需求，不得反向修改需求定义）
 
-## 1. 架构
+## 1. 架构总览与组件边界 (Architecture & Component Boundaries)
 
-${brief.architecture ?? "（由 brief 未提供，需补）"}
+\`\`\`mermaid
+flowchart TD
+  subgraph Client["多端接入层"]
+    UI["Web 运营后台 / 移动端"]
+  end
+  subgraph BFF["BFF 网关与鉴权层"]
+    Route["Route Handler (/api/v1/${brief.domain}/**)"]
+    Validator["Zod Validator"]
+  end
+  subgraph Domain["领域服务核心 (Domain Core)"]
+    Service["${brief.domain} Domain Service"]
+    Facade["Domain Facade (公开跨域接口)"]
+  end
+  subgraph Storage["持久化与底座引擎"]
+    DB[("PostgreSQL / SQLite WAL")]
+  end
+  UI --> Route --> Validator --> Service --> DB
+  Facade -.-> Service
+\`\`\`
 
-## 2. 数据
+${brief.architecture ?? "（遵循 Hexagonal 架构：Route -> Validator -> Service -> Repository -> Kysely/Prisma）"}
 
-| 表 | 说明 |
-|---|---|
-${(brief.entities ?? []).map((item) => `| \`${item.table}\` | ${item.note ?? ""} |`).join("\n")}
+## 2. 数据模型 (Data Models)
 
-表定义真源 = 低代码元数据（AGENTS §9.5），不手写 DDL。
+| 表名 | 说明 | 租户隔离策略 | 审计底座 |
+|---|---|---|---|
+${(brief.entities ?? []).map((item) => `| \`${item.table}\` | ${item.note ?? "业务持久化实体"} | Strict tenant_id | 8 大审计列在位 |`).join("\n")}
 
-## 3. 关键不变量
+> **表定义真源**：低代码元数据与 Prisma Migrations（AGENTS §9.5），不手写破坏性 DDL。
+
+## 3. 关键不变量与状态机守卫 (Invariants & State Guards)
 
 ${(brief.invariants ?? []).map((item, index) => `${index + 1}. **${item.name}** —— ${item.how}`).join("\n")}
 
-## 4. UI
+## 4. 接口契约与错误语义 (API Contracts & Error Semantics)
+
+- **成功响应**：统一返回 \`{ success: true, data: T }\`
+- **400 Bad Request**：参数缺失或 Zod Schema 校验不通过
+- **401 Unauthorized**：未认证或 Token 过期失效
+- **403 Forbidden**：缺乏对应权限码 (Permission Code)
+- **409 Conflict**：并发乐观锁版本冲突 (\`version\` 漂移)
+
+## 5. UI 与交互要点 (UI & Interactions)
 
 ${(brief.ui ?? []).map((item) => `* ${item}`).join("\n")}
 
-## 5. 运维与运营
+## 6. SRE 与运维保障 (SRE & Operations)
 
 ${(brief.ops ?? []).map((item) => `* ${item}`).join("\n")}
 
-## 6. 风险
+## 7. 风险评估与缓解对策 (Risks & Mitigations)
 
-| 风险 | 处理 |
-|---|---|
-${(brief.risks ?? []).map((item) => `| ${item.risk} | ${item.mitigation} |`).join("\n")}
+| 风险描述 | 严重等级 | 缓解机制与应急预案 |
+|---|---|---|
+${(brief.risks ?? []).map((item) => `| ${item.risk} | 高 | ${item.mitigation} |`).join("\n")}
 `
 
 files["prototype.md"] = `# 原型：${brief.title}
@@ -164,9 +210,31 @@ ${(brief.interactions ?? []).map((item) => `* ${item}`).join("\n")}
 ${(brief.states ?? []).map((item) => `* ${item}`).join("\n")}
 `
 
-files["tasks.md"] = `# 任务：${brief.title}
+files["tasks.md"] = `# Tasks: ${brief.title}
 
 上游：\`design.md\`。规格变化必须退回规划阶段（§6.1）。
+
+## 1. 任务依赖波次图 (Task Dependency Graph - Kiro Waves)
+
+\`\`\`json
+{
+  "waves": [
+    { "id": "wave-1", "title": "地基与契约准备", "tasks": ["T1"], "dependsOn": [] },
+    { "id": "wave-2", "title": "核心服务与数据流落地", "tasks": ["T2"], "dependsOn": ["wave-1"] },
+    { "id": "wave-3", "title": "端到端测试与集成验证", "tasks": ["T3"], "dependsOn": ["wave-2"] }
+  ]
+}
+\`\`\`
+
+## 2. 交互式任务清单 (Interactive Execution Tasks)
+
+${(brief.tasks ?? []).map((item) => `- [ ] **${item.id}**: ${item.title}
+  - 归属: \`${item.parent}\`
+  - 文件白名单: \`${(item.files ?? ["-"]).join(", ")}\`
+  - 验收要求: 必须携带提交标识 \`[${item.id}]\` 并附带真实测试验证
+`).join("\n")}
+
+## 3. CMMI 双向追溯与 Git 提交核实矩阵 (RTM & Git Trace)
 
 > **两条硬规矩**（对齐 CMMI「主线-支线任务树」与「1 Task = 1 Commit」）:
 > 1. **归属**必须写 \`main\`（主线）或某个已存在的任务 ID —— **不允许孤儿任务**
@@ -179,11 +247,11 @@ files["tasks.md"] = `# 任务：${brief.title}
 |---|---|---|---|---|
 ${(brief.tasks ?? []).map((item) => `| ${item.id} | ${item.parent} | ${item.title} | ${(item.files ?? ["-"]).join(", ")} | 未开始 |`).join("\n")}
 
-## 依赖
+## 4. 依赖说明
 
-${brief.dependencies ?? ""}
+${brief.dependencies ?? "无外部阻断性依赖"}
 
-## 阶段状态
+## 5. 阶段状态
 
 * 规划：\`PLAN_APPROVED\`（由 brief 展开）
 * 开发：待开始
