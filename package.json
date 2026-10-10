@@ -131,6 +131,7 @@
     "handwritten:baseline": "node scripts/check-handwritten-files.cjs --update-baseline",
     "delivery:check": "node scripts/check-delivery.cjs",
     "delivery:status": "node scripts/check-delivery.cjs --json",
+    "specify": "npx tsx scripts/spec-ops.ts",
     "spec:ops": "npx tsx scripts/spec-ops.ts",
     "spec:new": "npx tsx scripts/spec-ops.ts new",
     "spec:build": "npx tsx scripts/spec-ops.ts build",
