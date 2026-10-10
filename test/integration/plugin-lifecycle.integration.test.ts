@@ -14,13 +14,12 @@ import fs from "node:fs"
 import path from "node:path"
 import { afterAll, beforeAll, describe, expect, it } from "vitest"
 
-import { pluginRegistryService } from "@/modules/shared/backend/plugins/plugin-registry.service"
-import { pluginRuntimeManager } from "@/modules/shared/backend/plugins/runtime-manager"
+import { pluginRegistryService } from "@/shared/backend/plugins/plugin-registry.service"
+import { pluginRuntimeManager } from "@/shared/backend/plugins/runtime-manager"
 import { listPluginCatalog } from "@/app/api/v1/admin/plugins/_lib/plugin-catalog"
-import { pluginSchemaName, runPluginMigrations } from "@/modules/shared/backend/plugins/plugin-migrations"
-import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
-import { PluginRepository } from "@/modules/shared/backend/plugins/plugin.repository"
-import { ruoyiPrisma } from "@/modules/shared/backend/prisma"
+import { pluginSchemaName, runPluginMigrations } from "@/shared/backend/plugins/plugin-migrations"
+import { ruoyiPrisma } from "@/shared/backend/prisma"
+import { PluginRepository } from "@/shared/backend/plugins/plugin.repository"
 
 const HAS_DB = Boolean(process.env.DATABASE_URL?.trim())
 

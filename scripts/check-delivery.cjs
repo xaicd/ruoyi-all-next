@@ -302,7 +302,11 @@ function main() {
     const found = []
     const missing = []
     let patterns = scoped && phase.featureScopedArtifacts
-      ? phase.featureScopedArtifacts.map((item) => item.replace(/\{domain\}/g, scoped.domain))
+      ? phase.featureScopedArtifacts.map((item) => {
+          const { domainDirOf } = require("./lib/domain-catalog.cjs")
+          const dDir = domainDirOf(ROOT, scoped.domain)
+          return item.replace(/packages\/plugins\/plugin-\{domain\}/g, dDir).replace(/\{domain\}/g, scoped.domain)
+        })
       : phase.artifacts
     if (scoped && specDir) {
       const relSpecDir = path.relative(ROOT, specDir).replace(/\\/g, "/")
@@ -374,14 +378,15 @@ function main() {
   }
   if (scoped) {
     // 特性目录**只有规划链**；代码落在**域**的目录里（这是故意的: 打包与拆分部署按域工作）
-    const dirOf = path.join(ROOT, "packages", "plugins", `plugin-${scoped.domain}`)
-    const legacy = path.join(ROOT, "packages", "domains", scoped.domain)
-    const created = fs.existsSync(dirOf) ? dirOf : fs.existsSync(legacy) ? legacy : null
+    const { domainDirOf } = require("./lib/domain-catalog.cjs")
+    const dDir = domainDirOf(ROOT, scoped.domain)
+    const fullDomainDir = path.join(ROOT, dDir)
+    const created = fs.existsSync(fullDomainDir) ? fullDomainDir : null
     console.log(`\n[delivery] 规格/特性的两半:`)
     console.log(`   规划链  ${path.relative(ROOT, specDir)}/   （四件套 + spec.json）`)
     console.log(
       created
-        ? `   实现    ${path.relative(ROOT, created)}/   （域名 ${scoped.domain} —— 打包/拆分部署按域工作）`
+        ? `   实现    ${dDir}/   （域名 ${scoped.domain} —— 打包/拆分部署按域工作）`
         : `   实现    尚未创建（域名 ${scoped.domain}）—— npm run domain:new ${scoped.domain}`,
     )
     console.log(`   元数据  scripts/data/${scoped.domain}-tables.ts（表定义真源，AGENTS §9.5）`)
