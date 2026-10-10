@@ -17,24 +17,28 @@
       "type": "step",
       "id": "diagnose",
       "agent": "wf-planner",
+      "dependsOn": ["scaffold"],
       "prompt": "In docs/specs/{{inputs.domain}}/{{inputs.name}}/brief.json, complete: 1) Symptom & exact reproduction steps; 2) 5-Whys Root Cause Analysis; 3) Preserved Behavior (must not break existing normal flows). Run `npm run spec:build -- --name {{inputs.name}}`."
     },
     {
       "type": "step",
       "id": "red-test",
       "agent": "wf-tester",
+      "dependsOn": ["diagnose"],
       "prompt": "Wave 1: Write an automated reproduction unit/integration test using real database in packages/plugins/plugin-{{inputs.domain}}/tests/. Run the test to confirm it stably FAILS (Red Test). Commit with [T1]."
     },
     {
       "type": "step",
       "id": "patch",
       "agent": "wf-coder",
+      "dependsOn": ["red-test"],
       "prompt": "Wave 2: Apply the minimal, non-breaking patch to the service/repository. Run the test to confirm it now PASSES (Green Test), and verify Preserved Behaviors remain intact. Commit with [T2]."
     },
     {
       "type": "step",
       "id": "verify-gate",
       "agent": "wf-reviewer",
+      "dependsOn": ["patch"],
       "prompt": "Wave 3: Run `npm run check && npm run test:matrix`. Verify task commits with `npm run task:verify -- --spec {{inputs.name}} --summary`. Ensure zero regression and zero fake mocks."
     }
   ]

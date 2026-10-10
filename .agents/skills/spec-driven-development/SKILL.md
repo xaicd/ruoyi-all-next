@@ -80,6 +80,27 @@ flowchart TD
 | 🏛️ **`architecture-refactor.workflow.json`** | 架构债务消除与演进 | `scaffold` ➔ `debt-analysis` ➔ `parity-tests` ➔ `refactor-execution` ➔ `regression-audit` | `@wf-planner`<br>`@wf-architect`<br>`@wf-tester`<br>`@wf-coder` |
 | 🛡️ **`security-patch.workflow.json`** | 安全加固与漏洞拦截 | `scaffold` ➔ `threat-model` ➔ `poc-red-test` ➔ `hardening` ➔ `strix-audit` | `@wf-planner`<br>`@wf-security`<br>`@wf-tester`<br>`@wf-coder` |
 
+### 4.3 工作流标准工具链与 CLI 引擎 (`scripts/workflow-engine.ts`)
+
+为了支持人类开发者、Antigravity CLI、DeepSeek Harness 以及无头 CI 闭环驱动工作流，工程提供了统一的 `workflow:*` 标准指令集：
+
+```bash
+# 1. 查看全量工作流配方清单与参数
+npm run workflow:list
+
+# 2. 静态语法、DAG 依赖无环性与 Agent 角色合法性门禁检查 (已接入 npm run check)
+npm run workflow:check
+
+# 3. 模拟展开：变量代换预览、输出 Mermaid DAG 编排图与各 Agent 指令
+npm run workflow:dry-run -- --recipe <recipe> --name <spec> --domain <domain> --title "<title>"
+
+# 4. 驱动执行：自动执行脚手架并落盘工作流执行记录
+npm run workflow:run -- --recipe <recipe> --name <spec> --domain <domain> --title "<title>"
+
+# 5. 快速生成新的工作流配方模板
+npm run workflow:new -- --name <recipe-name> --description "<desc>"
+```
+
 ---
 
 ## 5. 关键产物规范与标准

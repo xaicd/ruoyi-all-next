@@ -17,24 +17,28 @@
       "type": "step",
       "id": "debt-analysis",
       "agent": "wf-architect",
+      "dependsOn": ["scaffold"],
       "prompt": "Identify code smell, coupling, or boundary violations. Define Strangler Fig migration pattern and business parity invariants in brief.json, then run `npm run spec:build -- --name {{inputs.name}}`."
     },
     {
       "type": "step",
       "id": "parity-tests",
       "agent": "wf-tester",
+      "dependsOn": ["debt-analysis"],
       "prompt": "Wave 1: Establish comprehensive baseline parity tests covering existing behavior before touching production code. Commit with [T1]."
     },
     {
       "type": "step",
       "id": "refactor-execution",
       "agent": "wf-coder",
+      "dependsOn": ["parity-tests"],
       "prompt": "Wave 2: Execute refactoring incrementally. Replace legacy paths with clean abstractions/facades without breaking external contract DTOs. Commit with [T2]."
     },
     {
       "type": "step",
       "id": "regression-audit",
       "agent": "wf-reviewer",
+      "dependsOn": ["refactor-execution"],
       "prompt": "Wave 3: Verify parity tests 100% pass. Run `npm run check && npm run test:matrix` and check architecture boundary compliance."
     }
   ]

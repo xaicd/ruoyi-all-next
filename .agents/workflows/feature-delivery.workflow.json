@@ -17,30 +17,35 @@
       "type": "step",
       "id": "requirements",
       "agent": "wf-planner",
+      "dependsOn": ["scaffold"],
       "prompt": "Refine docs/specs/{{inputs.domain}}/{{inputs.name}}/brief.json. Formulate strict EARS 5-state requirements (Ubiquitous, Event, State, Unwanted, Optional) without ambiguity. Run `npm run spec:build -- --name {{inputs.name}}`."
     },
     {
       "type": "step",
       "id": "design",
       "agent": "wf-architect",
+      "dependsOn": ["requirements"],
       "prompt": "Review and enhance docs/specs/{{inputs.domain}}/{{inputs.name}}/design.md. Verify domain boundary in packages/plugins/plugin-{{inputs.domain}}, ensure 8 audit columns, multi-tenant isolation, and define cross-domain Domain Facade contracts."
     },
     {
       "type": "step",
       "id": "plan-waves",
       "agent": "wf-planner",
+      "dependsOn": ["design"],
       "prompt": "Review tasks.md dependency graph. Ensure tasks are organized into Kiro Waves (Wave 1: Contracts/Tables/RedTest, Wave 2: Service Implementation, Wave 3: Verification & Gates). White-list exact files per task."
     },
     {
       "type": "step",
       "id": "implement",
       "agent": "wf-coder",
+      "dependsOn": ["plan-waves"],
       "prompt": "Implement the waves sequentially following 1 Task = 1 Commit. Reuse BaseMapper<T> and QueryWrapper, strictly zero console.log and zero duplicate CRUD."
     },
     {
       "type": "step",
       "id": "verify",
       "agent": "wf-tester",
+      "dependsOn": ["implement"],
       "prompt": "Run full test matrix and quality gates. Verify with `npm run check && npm run test:matrix`. Confirm 0 lint errors, 0 fake mocks, and 100% exit code 0."
     }
   ]
