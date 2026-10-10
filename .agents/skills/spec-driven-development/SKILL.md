@@ -25,7 +25,7 @@ description: 遵循 Kiro 原生规范驱动开发 (Spec-Driven Development, SDD)
 
 ## 2. 五大规格类型矩阵 (Spec Types Taxonomy)
 
-根据需求本质，严格选择对应的规格类型。运行 `npm run spec:new -- --name <name> --domain <domain> --title "<title>" --type <type>` 自动初始化对应骨架：
+根据需求本质，严格选择对应的规格类型。运行 `npm run speckit:new -- --name <name> --domain <domain> --title "<title>" --type <type>` 自动初始化对应骨架：
 
 | 规格类型 | 核心关注点 | 核心规格产物 | 专属不变量与验收门槛 |
 |---|---|---|---|
@@ -42,8 +42,8 @@ description: 遵循 Kiro 原生规范驱动开发 (Spec-Driven Development, SDD)
 ```mermaid
 flowchart TD
     subgraph Phase1["阶段一：规格定义 (Requirements / Bugfix Analysis)"]
-        A["1. spec:new 初始化"] --> B["2. 填充 brief.json (<500 Tokens)"]
-        B --> C["3. spec:build 引擎展开生成 Markdown"]
+        A["1. speckit:new 初始化"] --> B["2. 填充 brief.json (<500 Tokens)"]
+        B --> C["3. speckit:build 引擎展开生成 Markdown"]
     end
 
     subgraph Phase2["阶段二：系统设计 (Architecture & Boundary Design)"]
@@ -54,8 +54,8 @@ flowchart TD
     subgraph Phase3["阶段三：任务分解与实施 (Tasks Breakdown & Verification)"]
         E --> F["6. tasks.md Kiro 波次依赖图 (Wave Graph)"]
         F --> G["7. 原子任务执行 (1 Task = 1 Commit)"]
-        G --> H["8. task:verify & spec:check 质量门禁验证"]
-        H --> I["9. spec:archive 生产割接后归档"]
+        G --> H["8. speckit:tasks & speckit:check 质量门禁验证"]
+        H --> I["9. speckit:archive 生产割接后归档"]
     end
 ```
 
@@ -188,30 +188,31 @@ npm run workflow:new -- --name <recipe-name> --description "<desc>"
 
 ---
 
-## 6. 统一控制台与命令行工具箱 (Spec-Ops Engine: Unified CLI)
+## 6. 统一控制台与命令行工具箱 (Spec-Kit SDD Engine: Unified CLI)
 
 Kiro SDD 在本工程中由统一引擎 `scripts/speckit.ts` 集中驱动，支持全生命周期闭环：
 
 ```bash
 # 0. 规格控制台总览与规格列表
 npx tsx scripts/speckit.ts list                # 查看全域活跃与归档规格状态
-npm run spec:ops                                # 查看完整帮助菜单
-npm run spec:workflows                          # 检视全量 Kiro 工作流配方与步骤链
+npm run speckit                                 # 查看完整帮助菜单
+npm run speckit:workflows                       # 检视全量 Kiro 工作流配方与步骤链
 
 # 1. 快速初始化任意类型的规格骨架
-npm run spec:new -- --name <name> --domain <domain> --title "<title>" [--type feature|bugfix|enhancement|refactor|security]
+npm run speckit:new -- --name <name> --domain <domain> --title "<title>" [--type feature|bugfix|enhancement|refactor|security]
 # 等价于: npx tsx scripts/speckit.ts new --name <name> --domain <domain> --title "<title>" --type <type>
 
 # 2. 从 brief.json 编译展开生成完备 Markdown 规格资产与任务波次图
-npm run spec:build -- --name <name>
+npm run speckit:build -- --name <name>
 # 等价于: npx tsx scripts/speckit.ts build --name <name>
 
 # 3. 实时检查规格完成度与质量卡点
-npm run spec:check -- --spec <name>
+npm run speckit:check -- --spec <name>
 # 等价于: npx tsx scripts/speckit.ts check --spec <name>
 
-# 4. 从 Git 历史核验任务执行与白名单匹配度 (1 Task = 1 Commit)
-npm run task:verify -- --spec <name> --summary
+# 4. 从 Git 历史核验任务大盘与白名单匹配度 (1 Task = 1 Commit)
+npm run speckit:tasks -- --spec <name>
+npm run speckit:tasks -- --spec <name> --task T1
 
 # 5. 上线割接与回滚 SOP 实操
 npm run runbook -- --spec <name> --check
@@ -219,7 +220,7 @@ npm run runbook -- --spec <name> --dry-run
 npm run runbook -- --spec <name> --run
 
 # 6. 割接完毕后一键归档，防止认知污染
-npm run spec:archive -- --name <name>
+npm run speckit:archive -- --name <name>
 # 等价于: npx tsx scripts/speckit.ts archive --name <name>
 ```
 
@@ -227,8 +228,8 @@ npm run spec:archive -- --name <name>
 
 ## 7. 避坑指南与红线
 
-1. ❌ **严禁人肉手写重复文档**：永远先编辑 `brief.json`，运行 `npm run spec:build` 自动渲染展开，保持架构与工程一致性。
+1. ❌ **严禁人肉手写重复文档**：永远先编辑 `brief.json`，运行 `npm run speckit:build` 自动渲染展开，保持架构与工程一致性。
 2. ❌ **严禁跳过 Red Test 直接修复 Bug**：对于 `bugfix` 类型，必须先写复现单测见红（Red），修复后见绿（Green），方可提交代码。
 3. ❌ **严禁破坏 Preserved Behavior**：修补缺陷时严禁随意变更既有接口字段定义、响应结构或成功路径业务流转。
 4. ❌ **严禁随意使用伪 Mock**：集成测试与契约测试必须基于真实 SQLite 数据库运行，杜绝测试空洞与假绿。
-5. ❌ **严禁未归档遗留死文档**：功能交付发布后，必须执行 `npm run spec:archive` 归档至对应季度目录。
+5. ❌ **严禁未归档遗留死文档**：功能交付发布后，必须执行 `npm run speckit:archive` 归档至对应季度目录。

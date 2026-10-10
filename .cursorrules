@@ -5,16 +5,18 @@
 - High-Order Inverse Thinking: `.agents/rules/HIGH-ORDER-INVERSE-THINKING.md`
 - Engineering Deliverables: `.agents/rules/SPEC-FIRST-ENGINEERING-ARTIFACTS.md`
 - Spec & Prototype Standard: `.agents/rules/FEATURE-SPEC-AND-PROTOTYPE-STANDARD.md`
-- Spec Commands (Slash Commands):
-  - `/spec-ops.new`: 规格立项与需求初始化 (npm run spec:new)
-  - `/spec-ops.build`: 展开编译 7 份标准化资产与任务波次图 (npm run spec:build)
-  - `/spec-ops.check`: 11 阶段与门禁健康扫描 (npm run spec:check)
-  - `/spec-ops.tasks`: 原子任务树与 Git 提交核对 (npm run task:verify)
-  - `/spec-ops.socratic`: 6 阶哲学反问与激进减法 (npm run socratic:inquire)
-  - `/spec-ops.archive`: 生产割接完毕后防污染归档 (npm run spec:archive)
-  - `/spec-ops.gate`: 21 道 CMMI 全仓质量总门禁 (npm run check)
-  - `/spec-ops.ops`: 全域 326 契约无头运营体检 (npm run agent:ops:suite)
-  - `/spec-ops.verify`: SpaceX 级真实数据库驱动测试 (npm run verify:real-db)
+- Spec Commands (Slash Commands - /speckit.*):
+  - `/speckit.specify`: 规格立项与需求初始化 (npm run speckit:new)
+  - `/speckit.plan`: 展开编译 15 份标准化资产与任务波次图 (npm run speckit:build)
+  - `/speckit.tasks`: 原子任务树与 Git 提交核对 (npm run speckit:tasks)
+  - `/speckit.checklist`: 11 阶段与门禁健康扫描 (npm run speckit:check)
+  - `/speckit.constitution`: 项目工程宪法与零造假铁律 (npm run speckit:constitution)
+  - `/speckit.eval`: 6 阶哲学反问与激进减法 (npm run socratic:inquire)
+  - `/speckit.implement`: SpaceX 级真实数据库驱动测试 (npm run verify:real-db)
+  - `/speckit.gate`: 23 道 CMMI 全仓质量总门禁 (npm run check)
+  - `/speckit.ops`: 全域 326 契约无头运营体检 (npm run agent:ops:suite)
+  - `/speckit.cmmi`: CMMI 01~09 过程资产创建与健康守卫 (npm run speckit:cmmi)
+  - `/speckit.archive`: 生产割接完毕后防污染归档 (npm run speckit:archive)
 - Project Initialization: `.agents/rules/PROJECT-INIT-AND-REFACTOR.md`
 - Multi-Tenant Isolation: `.agents/rules/MULTI-TENANT-ISOLATION.md`
 - Engineering Gates: `AGENTS.md`

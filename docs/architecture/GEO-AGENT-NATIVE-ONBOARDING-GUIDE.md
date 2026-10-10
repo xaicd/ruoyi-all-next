@@ -21,13 +21,13 @@
     npx -y @ruoyi/mcp-server (精准检索 17 域与 RPC 契约，Token 消耗 <500)
                                     │
     【3. 极简声明式规格展开】      ▼
-    npm run spec:new -> 填写 brief.json -> npm run spec:build (展开 7 类规范)
+    npm run speckit:new -> 填写 brief.json -> npm run speckit:build (展开 10~15 类规范)
                                     │
     【4. 业务数据流与真实数据库】    ▼
     继承 BaseMapper<T> / BaseService<T>，由 SQLite/Kysely 跑通 4 态状态机
                                     │
     【5. 自动化质量门禁与发布】    ▼
-    npm run check (19 项门禁全绿) -> npm run release:package (生成 6.8MB 骨架与契约)
+    npm run check (23 项门禁全绿) -> npm run release:package (生成 6.8MB 骨架与契约)
 ```
 
 ---
@@ -83,7 +83,7 @@ npm run dev
 
 1. **立项规格**：
    ```bash
-   npm run spec:new -- --name ticket --domain bpm --title "工单审批系统"
+   npm run speckit:new -- --name ticket --domain bpm --title "工单审批系统"
    ```
 2. **只填写极简 Brief**（修改 `docs/specs/bpm/ticket/brief.json`，<500 Tokens）：
    - 目标角色 (Role)
@@ -92,7 +92,7 @@ npm run dev
    - 约束与验收不变量
 3. **驱动生成引擎全自动展开**：
    ```bash
-   npm run spec:build -- --name ticket
+   npm run speckit:build -- --name ticket
    ```
    底层工具将自动产出 SRS 需求说明书、OpenAPI 契约、回滚 Runbook 与测试用例。
 

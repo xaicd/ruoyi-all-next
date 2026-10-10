@@ -175,20 +175,20 @@ ruoyi-all-next/
        【一句话业务诉求】
               │
               ▼
-   Step 1. 规格立项 (npm run spec:new -- --name <名> --domain <域>)
+   Step 1. 规格立项 (npm run speckit:new -- --name <名> --domain <域>)
               │   └─ 编辑 docs/specs/<域>/<名>/brief.json (仅约 500 Token)
               ▼
-   Step 2. 自动展开 (npm run spec:build -- --name <名>)
-              │   └─ 自动生成 7 份工程文档、evidence.json 与 runbook.json
+   Step 2. 自动展开 (npm run speckit:build -- --name <名>)
+              │   └─ 自动展开 10~15 份标准工程资产、evidence.json 与 runbook.json
               ▼
    Step 3. 域与代码生成 (npm run domain:new <域>)
               │   └─ 基于 Schema 自动展开 CRUD、Service、Validator 与单测
               ▼
    Step 4. 自动化门禁 (npm run check && npm run test:matrix)
-              │   └─ 20 道工程门禁与真实数据库测试全绿保障
+              │   └─ 23 道工程门禁与真实数据库测试全绿保障
               ▼
-   Step 5. 任务痕迹验证 (npm run task:verify -- --feature <名> --summary)
-              │   └─ 从 Git 提交推导任务完备度 (1 Task = 1 Commit)
+   Step 5. 任务与波次核验 (npm run speckit:tasks -- --spec <名> [--summary|--task T1])
+              │   └─ 从 Git 提交历史反推任务完备度 (1 Task = 1 Commit & 白名单)
               ▼
    Step 6. 平台级真实穿透 (npm run smoke:login && npm run security:scan)
               │   └─ 真实数据库登录 200 + 12 项安全穿透扫描
@@ -200,6 +200,8 @@ ruoyi-all-next/
 ### 常用核心命令速查表：
 
 | 任务类型 | 执行命令 | 产物 / 质量门禁说明 |
+|---|---|---|
+| **Spec-Kit 规格管理** | `npm run speckit` | 统一 SDD 控制台 (new / build / tasks / check / list / archive) |
 |---|---|---|
 | **工程初始化** | `npm run project:init` | 交互式/参数化重构品牌、初始化真实本地 SQLite 数据库 |
 | **契约同步** | `npm run contracts:sync` | 自动同步 `compat-manifest.json`、`agent-profile.json` 等端点 |

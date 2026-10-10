@@ -45,7 +45,7 @@ flowchart TD
 2. **EARS 格式化**：逐条将业务逻辑拆分为可原子验证的 EARS 规则，每条需求均具备唯一编号（如 `REQ-SYS-001`）。
 3. **负向与容错矩阵补齐**：针对每个正常操作（Happy Path），强制补充至少 2 条 Unwanted Behavior 规则（如参数非法、权限不足、并发冲突）。
 4. **生成交付 Brief**：
-   - 运行命令建立规格：`npm run spec:new -- --name <feature> --domain <domain> --title "<标题>"`
+   - 运行命令建立规格：`npm run speckit:new -- --name <feature> --domain <domain> --title "<标题>"`
    - 将 EARS 规则填入 `docs/specs/<domain>/<feature>/brief.json` 的 `invariants` 与 `acceptanceCriteria`。
 
 ---

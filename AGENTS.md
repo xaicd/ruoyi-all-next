@@ -167,13 +167,13 @@
 |---|---|---|
 | 1. 规格立项 | `npm run speckit:new -- --name <名> --domain <域> --title "<标题>" [--type feature\|bugfix\|enhancement\|refactor\|security]` | `brief.json` + `assets/` + `prototypes/`（**按域隔离于 docs/specs/<域>/<名>，由 Spec-Kit 原生引擎 scripts/speckit.ts 统一驱动**） |
 | 2. 填 brief | 编辑 `docs/specs/<域>/<名>/brief.json` | 目标/角色/故事/约束/验收/不变量/表/任务（bugfix 特化 symptom/rootCause/RedTest） |
-| 3. 展开 | `npm run speckit:build -- --name <名>` | 7~8 份文档 + `evidence.json` + `runbook.json`（**由 Spec-Kit 引擎 scripts/speckit.ts 展开，结构不可能缺**） |
+| 3. 展开 | `npm run speckit:build -- --name <名>` | 10~15 份标准资产 + `evidence.json` + `runbook.json`（**由 Spec-Kit 引擎 scripts/speckit.ts 展开，结构不可能缺**） |
 | 4. 看进度 | `npm run speckit:check -- --spec <名>` | 11 阶段 / 6 gate / 任务树 / 缺陷，逐条「还缺什么」 |
 | 5. 建域 | `npm run domain:new <域>` | 建表迁移 + codegen + 注册插件（**按域，不按特性**） |
 | 6. 门禁 | `npm run check` / `build` / `domain:pack <域>` | **退出码** |
 | 7. 建库 | `npx prisma migrate deploy` + 种子 + `npm run plugins:register` | 表 / 菜单 / 授权 / **插件登记**（不登记则插件接口全 404） |
 | 8. 业务逻辑 | 写成 Service + 测试 | 复用既有原语（条件更新、状态机、幂等、Red Test） |
-| 9. 追溯 | `npm run task:verify -- --feature <名> --summary` | **从 git 推导**完成度；单任务核对白名单（1 Task = 1 Commit） |
+| 9. 任务追溯 | `npm run speckit:tasks -- --spec <名> [--summary\|--task T1]` | **从 git 历史推导**真实完成度；核验原子提交 `[T<ID>]` 与文件白名单（1 Task = 1 Commit） |
 | 10. 上线 | `npm run fingerprint` → `fingerprint:verify` | 确认上线的就是测试过的那份 |
 | 11. 实施 | `npm run runbook -- --feature <名> --check/--dry-run/--run` | 割接 + **失败自动回滚** + **实测**耗时 |
 | 12. 归档防污染 | `npm run speckit:archive -- --name <名>` | 移动至 `docs/specs/archive/<YYYY-Qx>/<域>/<名>/`，保持活跃区清爽 |
