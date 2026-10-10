@@ -130,6 +130,7 @@
     "spec:check": "node scripts/check-delivery.cjs",
     "spec:list": "npx tsx scripts/spec-ops.ts list",
     "spec:archive": "node scripts/archive-spec.cjs",
+    "spec:workflows": "npx tsx scripts/spec-ops.ts workflows",
     "feature:new": "npx tsx scripts/spec-ops.ts new",
     "feature:build": "npx tsx scripts/spec-ops.ts build",
     "delivery:hints": "node scripts/delivery-hints.cjs",

@@ -1,0 +1,41 @@
+{
+  "name": "bugfix",
+  "description": "Kiro SDD bugfix workflow: symptom capture, 5-whys root cause analysis, preserved behavior check, red-to-green testing, and patch verification",
+  "inputs": {
+    "name": "prompt",
+    "domain": "prompt",
+    "title": "prompt"
+  },
+  "steps": [
+    {
+      "type": "step",
+      "id": "scaffold",
+      "agent": "wf-planner",
+      "prompt": "Scaffold bugfix specification for '{{inputs.name}}' in domain '{{inputs.domain}}'. Run `npm run spec:new -- --name {{inputs.name}} --domain {{inputs.domain}} --title \"{{inputs.title}}\" --type bugfix`."
+    },
+    {
+      "type": "step",
+      "id": "diagnose",
+      "agent": "wf-planner",
+      "prompt": "In docs/specs/{{inputs.domain}}/{{inputs.name}}/brief.json, complete: 1) Symptom & exact reproduction steps; 2) 5-Whys Root Cause Analysis; 3) Preserved Behavior (must not break existing normal flows). Run `npm run spec:build -- --name {{inputs.name}}`."
+    },
+    {
+      "type": "step",
+      "id": "red-test",
+      "agent": "wf-tester",
+      "prompt": "Wave 1: Write an automated reproduction unit/integration test using real database in packages/plugins/plugin-{{inputs.domain}}/tests/. Run the test to confirm it stably FAILS (Red Test). Commit with [T1]."
+    },
+    {
+      "type": "step",
+      "id": "patch",
+      "agent": "wf-coder",
+      "prompt": "Wave 2: Apply the minimal, non-breaking patch to the service/repository. Run the test to confirm it now PASSES (Green Test), and verify Preserved Behaviors remain intact. Commit with [T2]."
+    },
+    {
+      "type": "step",
+      "id": "verify-gate",
+      "agent": "wf-reviewer",
+      "prompt": "Wave 3: Run `npm run check && npm run test:matrix`. Verify task commits with `npm run task:verify -- --spec {{inputs.name}} --summary`. Ensure zero regression and zero fake mocks."
+    }
+  ]
+}

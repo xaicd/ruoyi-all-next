@@ -700,19 +700,50 @@ function handleHealth() {
 }
 
 // ============================================================================
-// 7. 帮助菜单 (Help Menu)
+// 7. 命令：spec-ops workflows (Kiro 工作流配方管理)
+// ============================================================================
+function handleWorkflows() {
+  const workflowsDir = path.join(ROOT, ".kiro", "workflows")
+  if (!fs.existsSync(workflowsDir)) {
+    console.log("未找到 .kiro/workflows/ 目录")
+    process.exit(0)
+  }
+  console.log("=== Kiro SDD 原生工作流配方清单 (Workflow Recipes) ===")
+  const files = fs.readdirSync(workflowsDir).filter(f => f.endsWith(".workflow.json") || f.endsWith(".workflow.yaml"))
+  for (const f of files) {
+    try {
+      const full = path.join(workflowsDir, f)
+      const data = JSON.parse(fs.readFileSync(full, "utf8"))
+      console.log(`\n📋 [Recipe] ${data.name} (${f})`)
+      console.log(`   描述: ${data.description}`)
+      console.log(`   入参: ${Object.keys(data.inputs || {}).join(", ")}`)
+      console.log(`   步骤链 (${(data.steps || []).length} 步):`)
+      for (const [idx, step] of (data.steps || []).entries()) {
+        const preview = (step.prompt || "").split("\n")[0].slice(0, 70)
+        console.log(`     ${idx + 1}. [${step.id}] Agent: @${step.agent} -> "${preview}..."`)
+      }
+    } catch (err: any) {
+      console.error(`   ❌ 解析错误 ${f}: ${err.message}`)
+    }
+  }
+  console.log(`\n总计 ${files.length} 个工作流配方就绪。可由 Kiro IDE、CLI (/workflow run) 或 Antigravity 编排器直接执行。`)
+}
+
+// ============================================================================
+// 8. 帮助菜单 (Help Menu)
 // ============================================================================
 function handleHelp() {
   console.log(`
 🧭 Kiro 规范驱动开发控制台 (Spec-Ops Engine: Unified SDD CLI)
 
 命令列表:
-  new       创建新规格骨架 (feature | bugfix | enhancement | refactor | security)
-  build     从 brief.json 展开编译生成完备 Markdown 规格与任务波次图
-  check     检查规格交付进度与门禁完成度
-  list      列出全域所有规格状态与路径
-  archive   将交付完毕的规格移动到季度历史归档区
-  health    扫描全域规格健康度与防认知污染规则
+  new         创建新规格骨架 (feature | bugfix | enhancement | refactor | security)
+  build       从 brief.json 展开编译生成完备 Markdown 规格与任务波次图
+  check       检查规格交付进度与门禁完成度
+  list        列出全域所有规格状态与路径
+  archive     将交付完毕的规格移动到季度历史归档区
+  health      扫描全域规格健康度与防认知污染规则
+  workflows   查看与校验 Kiro 原生工作流配方 (.kiro/workflows/)
 
 示例:
   npx tsx scripts/spec-ops.ts new --name fix-pay-lock --domain pay --title "修复支付回调重放" --type bugfix
@@ -720,6 +751,7 @@ function handleHelp() {
   npx tsx scripts/spec-ops.ts check --spec fix-pay-lock
   npx tsx scripts/spec-ops.ts list
   npx tsx scripts/spec-ops.ts archive --name fix-pay-lock
+  npx tsx scripts/spec-ops.ts workflows
 `)
 }
 
@@ -744,6 +776,10 @@ switch (command) {
     break
   case "health":
     handleHealth()
+    break
+  case "workflows":
+  case "workflow":
+    handleWorkflows()
     break
   case "help":
   default:

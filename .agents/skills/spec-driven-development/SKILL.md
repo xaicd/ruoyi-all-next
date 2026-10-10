@@ -61,7 +61,28 @@ flowchart TD
 
 ---
 
-## 4. 关键产物规范与标准
+## 4. Kiro 原生工作流编排机制 (Kiro Workflows & Recipes)
+
+在 Kiro 官方架构中，**工作流 (Workflows)** 是将 SDD 从“静态文档规范”推向“多智能体后台自主执行”的**核心运行引擎**：
+
+### 4.1 核心机制与架构优势
+1. **多智能体编排图 (Agent Orchestration Graph)**：工作流将复杂任务拆解为树状/图状步骤链，每个步骤（`step`）在独立的上下文（Fresh Session）中运行。例如代码审查智能体（`wf-reviewer`）拥有干净的上下文，绝不继承编码智能体（`wf-coder`）的代码自辩偏见！
+2. **声明式配方文件 (Declarative Recipes)**：所有可复用工作流保存在 `.kiro/workflows/*.workflow.json`（或 `.workflow.yaml`），声明根入参（`inputs`）与步骤执行树（`steps`）。
+3. **数据管道自动透传**：后续步骤可通过 `{{previous.output}}` 或 `{{inputs.<param>}}` 顺畅消费上游产物。
+4. **人工卡点与交互确认 (Human-in-the-Loop)**：步骤可配置交互等待条件，在进入下一阶段前由人类工程师或审计员确认。
+
+### 4.2 本工程内置的 4 大 Kiro 原生工作流配方 (`.kiro/workflows/`)
+
+| 配方文件 (`.kiro/workflows/`) | 适用场景 | 步骤链编排 (Step Pipeline) | 驱动智能体角色 |
+|---|---|---|---|
+| 📦 **`feature-delivery.workflow.json`** | 全生命周期新特性交付 | `scaffold` ➔ `requirements` ➔ `design` ➔ `plan-waves` ➔ `implement` ➔ `verify` | `@wf-planner`<br>`@wf-architect`<br>`@wf-coder`<br>`@wf-tester` |
+| 🐛 **`bugfix.workflow.json`** | 缺陷排查与红绿验证 | `scaffold` ➔ `diagnose` (5-Whys) ➔ `red-test` ➔ `patch` ➔ `verify-gate` | `@wf-planner`<br>`@wf-tester`<br>`@wf-coder`<br>`@wf-reviewer` |
+| 🏛️ **`architecture-refactor.workflow.json`** | 架构债务消除与演进 | `scaffold` ➔ `debt-analysis` ➔ `parity-tests` ➔ `refactor-execution` ➔ `regression-audit` | `@wf-planner`<br>`@wf-architect`<br>`@wf-tester`<br>`@wf-coder` |
+| 🛡️ **`security-patch.workflow.json`** | 安全加固与漏洞拦截 | `scaffold` ➔ `threat-model` ➔ `poc-red-test` ➔ `hardening` ➔ `strix-audit` | `@wf-planner`<br>`@wf-security`<br>`@wf-tester`<br>`@wf-coder` |
+
+---
+
+## 5. 关键产物规范与标准
 
 ### 4.1 `requirements.md` / `bugfix.md` 规范
 
@@ -146,7 +167,7 @@ flowchart TD
 
 ---
 
-## 5. 统一控制台与命令行工具箱 (Spec-Ops Engine: Unified CLI)
+## 6. 统一控制台与命令行工具箱 (Spec-Ops Engine: Unified CLI)
 
 Kiro SDD 在本工程中由统一引擎 `scripts/spec-ops.ts` 集中驱动，支持全生命周期闭环：
 
@@ -154,6 +175,7 @@ Kiro SDD 在本工程中由统一引擎 `scripts/spec-ops.ts` 集中驱动，支
 # 0. 规格控制台总览与规格列表
 npx tsx scripts/spec-ops.ts list                # 查看全域活跃与归档规格状态
 npm run spec:ops                                # 查看完整帮助菜单
+npm run spec:workflows                          # 检视全量 Kiro 工作流配方与步骤链
 
 # 1. 快速初始化任意类型的规格骨架
 npm run spec:new -- --name <name> --domain <domain> --title "<title>" [--type feature|bugfix|enhancement|refactor|security]
@@ -182,7 +204,7 @@ npm run spec:archive -- --name <name>
 
 ---
 
-## 6. 避坑指南与红线
+## 7. 避坑指南与红线
 
 1. ❌ **严禁人肉手写重复文档**：永远先编辑 `brief.json`，运行 `npm run spec:build` 自动渲染展开，保持架构与工程一致性。
 2. ❌ **严禁跳过 Red Test 直接修复 Bug**：对于 `bugfix` 类型，必须先写复现单测见红（Red），修复后见绿（Green），方可提交代码。

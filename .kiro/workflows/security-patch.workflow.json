@@ -1,0 +1,41 @@
+{
+  "name": "security-patch",
+  "description": "Kiro SDD security workflow: PoC attack reproduction, defense-in-depth AST guard implementation, and Strix autonomous penetration verification",
+  "inputs": {
+    "name": "prompt",
+    "domain": "prompt",
+    "title": "prompt"
+  },
+  "steps": [
+    {
+      "type": "step",
+      "id": "scaffold",
+      "agent": "wf-planner",
+      "prompt": "Scaffold security specification: `npm run spec:new -- --name {{inputs.name}} --domain {{inputs.domain}} --title \"{{inputs.title}}\" --type security`."
+    },
+    {
+      "type": "step",
+      "id": "threat-model",
+      "agent": "wf-security",
+      "prompt": "Document vulnerability vector, CVSS score, attack surface, and zero-trust invariants in brief.json. Run `npm run spec:build -- --name {{inputs.name}}`."
+    },
+    {
+      "type": "step",
+      "id": "poc-red-test",
+      "agent": "wf-tester",
+      "prompt": "Wave 1: Construct safe PoC reproduction test demonstrating exploit vulnerability. Confirm test fails. Commit with [T1]."
+    },
+    {
+      "type": "step",
+      "id": "hardening",
+      "agent": "wf-coder",
+      "prompt": "Wave 2: Implement defense-in-depth security controls (input validation, SQL AST guard, tenant isolation, rate limiting). Confirm PoC is blocked. Commit with [T2]."
+    },
+    {
+      "type": "step",
+      "id": "strix-audit",
+      "agent": "wf-security",
+      "prompt": "Wave 3: Run `npm run security:scan` and Strix autonomous penetration test. Verify 12 security red lines pass with 0 vulnerabilities."
+    }
+  ]
+}
