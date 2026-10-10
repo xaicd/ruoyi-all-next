@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { projectProfile } from "@/shared/contract/project-profile"
+import { ActionDecisionHub } from "@/shared/frontend/components/action-decision-hub"
 
 // 17 个微内核原生领域元数据
 const DOMAIN_MESH = [
@@ -47,6 +48,8 @@ interface BusEvent {
 }
 
 export default function ReportBoardsPage() {
+  const [activeTab, setActiveTab] = useState<"cockpit" | "actions">("cockpit")
+  const [showActionHub, setShowActionHub] = useState(true)
   const [currentTime, setCurrentTime] = useState("")
   const [refreshInterval, setRefreshInterval] = useState<number>(5)
   const [isFullscreen, setIsFullscreen] = useState(false)
@@ -240,6 +243,33 @@ export default function ReportBoardsPage() {
             <span>{isFullscreen ? "退出全屏" : "全屏大屏"}</span>
           </button>
 
+          {/* 模式切换器 */}
+          <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-mono">
+            <button
+              type="button"
+              onClick={() => setActiveTab("cockpit")}
+              className={`px-3 py-1 rounded-lg transition ${
+                activeTab === "cockpit"
+                  ? "bg-slate-800 text-cyan-300 font-bold shadow-xs"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              全息大盘
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("actions")}
+              className={`px-3 py-1 rounded-lg transition flex items-center gap-1.5 ${
+                activeTab === "actions"
+                  ? "bg-cyan-950 border border-cyan-500/50 text-cyan-300 font-bold shadow-xs"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              <span>⚡</span>
+              <span>智能行动中枢</span>
+            </button>
+          </div>
+
           {/* 返回标准管理视图 */}
           <Link
             href="/admin/system/users"
@@ -250,7 +280,14 @@ export default function ReportBoardsPage() {
         </div>
       </header>
 
-      {/* 2. 核心大屏指标条 (6 大关键态势瞬时指标) */}
+      {/* 2. 智能行动卡片中枢 (独占全视图模式) */}
+      {activeTab === "actions" && (
+        <section className="relative z-10 my-4 animate-fadeIn">
+          <ActionDecisionHub />
+        </section>
+      )}
+
+      {/* 2.1 核心大屏指标条 (6 大关键态势瞬时指标) */}
       <section className="relative z-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5 mb-5">
         
         {/* 指标 1: 领域插件网格 */}
@@ -344,6 +381,26 @@ export default function ReportBoardsPage() {
         </div>
 
       </section>
+
+      {/* 2.5 智能行动卡片横幅折叠区 (全息大盘模式下常驻提供主动自愈能力) */}
+      {activeTab === "cockpit" && (
+        <section className="relative z-10 mb-5">
+          <div className="flex items-center justify-between mb-2">
+            <button
+              type="button"
+              onClick={() => setShowActionHub(!showActionHub)}
+              className="flex items-center gap-2 text-xs font-mono text-cyan-300 hover:text-cyan-200 transition font-bold"
+            >
+              <span>{showActionHub ? "▼" : "▶"}</span>
+              <span>⚡ 智能行动卡片中枢 (实时异常诊断与 2-字符决策自愈)</span>
+            </button>
+            <span className="text-[11px] font-mono text-slate-500">
+              自主探针 24/7 守护中
+            </span>
+          </div>
+          {showActionHub && <ActionDecisionHub />}
+        </section>
+      )}
 
       {/* 3. 中间核心大屏布局：三栏联动 (左: 17 领域全息微内核网格, 中: 智能体事件流与 CMMI 资产雷达, 右: 稳定性探针与终端交互) */}
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-5 flex-1 items-stretch">
