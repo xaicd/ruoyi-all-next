@@ -703,12 +703,14 @@ function handleHealth() {
 // 7. 命令：spec-ops workflows (Kiro 工作流配方管理)
 // ============================================================================
 function handleWorkflows() {
-  const workflowsDir = path.join(ROOT, ".kiro", "workflows")
+  const primaryDir = path.join(ROOT, ".agents", "workflows")
+  const fallbackDir = path.join(ROOT, ".kiro", "workflows")
+  const workflowsDir = fs.existsSync(primaryDir) ? primaryDir : fallbackDir
   if (!fs.existsSync(workflowsDir)) {
-    console.log("未找到 .kiro/workflows/ 目录")
+    console.log("未找到 .agents/workflows/ 或 .kiro/workflows/ 目录")
     process.exit(0)
   }
-  console.log("=== Kiro SDD 原生工作流配方清单 (Workflow Recipes) ===")
+  console.log("=== SDD 原生多智能体工作流配方清单 (Workflow Recipes: .agents/workflows) ===")
   const files = fs.readdirSync(workflowsDir).filter(f => f.endsWith(".workflow.json") || f.endsWith(".workflow.yaml"))
   for (const f of files) {
     try {
@@ -726,7 +728,7 @@ function handleWorkflows() {
       console.error(`   ❌ 解析错误 ${f}: ${err.message}`)
     }
   }
-  console.log(`\n总计 ${files.length} 个工作流配方就绪。可由 Kiro IDE、CLI (/workflow run) 或 Antigravity 编排器直接执行。`)
+  console.log(`\n总计 ${files.length} 个工作流配方就绪。单一真源保存在 .agents/workflows/，软链接兼容 .kiro/workflows/。可由 Antigravity、Kiro IDE、CLI (/workflow run) 或多智能体编排器直接执行。`)
 }
 
 // ============================================================================

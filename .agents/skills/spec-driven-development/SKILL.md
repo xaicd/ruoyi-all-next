@@ -67,13 +67,13 @@ flowchart TD
 
 ### 4.1 核心机制与架构优势
 1. **多智能体编排图 (Agent Orchestration Graph)**：工作流将复杂任务拆解为树状/图状步骤链，每个步骤（`step`）在独立的上下文（Fresh Session）中运行。例如代码审查智能体（`wf-reviewer`）拥有干净的上下文，绝不继承编码智能体（`wf-coder`）的代码自辩偏见！
-2. **声明式配方文件 (Declarative Recipes)**：所有可复用工作流保存在 `.kiro/workflows/*.workflow.json`（或 `.workflow.yaml`），声明根入参（`inputs`）与步骤执行树（`steps`）。
+2. **声明式配方文件 (Declarative Recipes)**：所有可复用工作流的物理单一真源存放在 `.agents/workflows/*.workflow.json`（同时由根目录 `.kiro/workflows` 软链接无缝桥接，确保 Kiro IDE 原生识别与 Antigravity / 跨 Agent 平台统一标准）。声明根入参（`inputs`）与步骤执行树（`steps`）。
 3. **数据管道自动透传**：后续步骤可通过 `{{previous.output}}` 或 `{{inputs.<param>}}` 顺畅消费上游产物。
 4. **人工卡点与交互确认 (Human-in-the-Loop)**：步骤可配置交互等待条件，在进入下一阶段前由人类工程师或审计员确认。
 
-### 4.2 本工程内置的 4 大 Kiro 原生工作流配方 (`.kiro/workflows/`)
+### 4.2 本工程内置的 4 大 SDD 原生工作流配方 (`.agents/workflows/`)
 
-| 配方文件 (`.kiro/workflows/`) | 适用场景 | 步骤链编排 (Step Pipeline) | 驱动智能体角色 |
+| 配方文件 (`.agents/workflows/`) | 适用场景 | 步骤链编排 (Step Pipeline) | 驱动智能体角色 |
 |---|---|---|---|
 | 📦 **`feature-delivery.workflow.json`** | 全生命周期新特性交付 | `scaffold` ➔ `requirements` ➔ `design` ➔ `plan-waves` ➔ `implement` ➔ `verify` | `@wf-planner`<br>`@wf-architect`<br>`@wf-coder`<br>`@wf-tester` |
 | 🐛 **`bugfix.workflow.json`** | 缺陷排查与红绿验证 | `scaffold` ➔ `diagnose` (5-Whys) ➔ `red-test` ➔ `patch` ➔ `verify-gate` | `@wf-planner`<br>`@wf-tester`<br>`@wf-coder`<br>`@wf-reviewer` |
