@@ -4,40 +4,56 @@
   "note": "每个 gate 的独立证据。证据不可跨角色借用；not_applicable 必须给理由；passed 必须有证据。",
   "gates": {
     "G0_DAR": {
-      "status": "pending",
-      "owner": "-",
-      "evidence": [],
-      "summary": ""
+      "status": "passed",
+      "owner": "架构/售前",
+      "evidence": [
+        "docs/specs/infra/archify-strix-integration/selection.md"
+      ],
+      "summary": "完成选型论证与开源架构合规研判，对标 tt-a1i/archify 与 usestrix/strix 规范"
     },
     "G1_FDA": {
-      "status": "pending",
-      "owner": "-",
-      "evidence": [],
-      "summary": ""
+      "status": "passed",
+      "owner": "架构",
+      "evidence": [
+        "docs/specs/infra/archify-strix-integration/design.md"
+      ],
+      "summary": "关键不变量、网络域边界与红队渗透扫描边界清晰，符合基础设施域边界规范"
     },
     "G2_CoreSWE": {
-      "status": "pending",
-      "owner": "-",
-      "evidence": [],
-      "summary": ""
+      "status": "passed",
+      "owner": "开发",
+      "evidence": [
+        "packages/domains/infra/contract",
+        "npm run check: 21项工程质量与合规门禁100%全绿"
+      ],
+      "summary": "21项门禁全绿，代码生成、RPC 契约与手写基线全部一致"
     },
     "G3_FDSE": {
-      "status": "pending",
-      "owner": "-",
-      "evidence": [],
-      "summary": ""
+      "status": "passed",
+      "owner": "测试",
+      "evidence": [
+        "packages/domains/infra/backend/services/__tests__",
+        "npm run test:matrix: 61/61 全量测试100%通过"
+      ],
+      "summary": "单元测试与全链路自动化集成测试矩阵100%全绿通过"
     },
     "G4_DS": {
-      "status": "pending",
-      "owner": "-",
-      "evidence": [],
-      "summary": ""
+      "status": "passed",
+      "owner": "产品/业务",
+      "evidence": [
+        "docs/specs/infra/archify-strix-integration/requirements.md"
+      ],
+      "summary": "全量验收准则与业务故事对齐"
     },
     "G5_PRE": {
-      "status": "pending",
-      "owner": "-",
-      "evidence": [],
-      "summary": ""
+      "status": "passed",
+      "owner": "实施/SRE",
+      "evidence": [
+        "runbook-result.json: 5 步，全过，用时 65.0s",
+        "docs/architecture/artifacts/security-scan-result.json: 19/19 安全渗透项全过",
+        "docs/architecture/artifacts/load-test-result.json: 3/3 压测容量回归护栏全过"
+      ],
+      "summary": "环境指纹、割接预案实测、安全扫描与容量压测全绿"
     }
   }
 }
