@@ -7,6 +7,7 @@
 export type AdminPageEntry =
   | { kind: "page"; load: () => Promise<unknown> }
   | { kind: "redirect"; target: string }
+  | { kind: "canvas"; entity: string; domain?: string }
 
 export const ADMIN_PAGE_REGISTRY: Record<string, AdminPageEntry> = {
   "ai/ai-api-key": { kind: "page", load: () => import("@/modules/ai/frontend/pages/ai-api-key-list.page").then((m) => m.AiApiKeyListPage) },
@@ -484,4 +485,5 @@ export const ADMIN_PAGE_REGISTRY: Record<string, AdminPageEntry> = {
   "infra/online-definitions/[code]/test": { kind: "redirect", target: "/admin/infra/online-runtime/${encodeURIComponent(code)}" },
   "infra/page-builder": { kind: "redirect", target: "/admin/infra/online-definitions" },
   "infra/pages/[slug]": { kind: "redirect", target: "/admin/infra/online-definitions" },
+
 }

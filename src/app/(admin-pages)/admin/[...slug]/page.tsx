@@ -4,6 +4,8 @@ import type React from "react"
 import { redirect } from "next/navigation"
 
 import { ADMIN_PAGE_REGISTRY } from "../_generated/admin-page-registry"
+import { UniversalSchemaCanvas } from "@/shared/frontend/components/universal-schema-canvas"
+import { GENERATED_PAGE_SCHEMAS } from "@/shared/contract/page-schemas.generated"
 
 /**
  * **必须显式声明已知路由，并关掉"未知参数也匹配"。**
@@ -16,7 +18,9 @@ import { ADMIN_PAGE_REGISTRY } from "../_generated/admin-page-registry"
 export const dynamicParams = false
 
 export function generateStaticParams() {
-  return Object.keys(ADMIN_PAGE_REGISTRY).map((slug) => ({ slug: slug.split("/") }))
+  const standardSlugs = Object.keys(ADMIN_PAGE_REGISTRY).map((slug) => ({ slug: slug.split("/") }))
+  const canvasSlugs = Object.keys(GENERATED_PAGE_SCHEMAS).map((entity) => ({ slug: ["canvas", entity] }))
+  return [...standardSlugs, ...canvasSlugs]
 }
 
 /**
@@ -26,14 +30,39 @@ export function generateStaticParams() {
  * 页面面就是这一个文件 + 一张生成的映射表（而不是 476 个硬编码薄壳）。
  * 页面实现仍在各域包里（`@/modules/<域>/frontend/pages/*`），这里只负责按 slug 找到它。
  */
-export default async function AdminPage({ params }: { params: Promise<{ slug: string[] }> }) {
+export default async function AdminPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string[] }>
+  searchParams?: Promise<{ mode?: string }>
+}) {
   const { slug } = await params
+  const { mode } = (await searchParams) ?? {}
   const key = slug.join("/")
+
+  // 1. 动态本体画布路由: /admin/canvas/[entity]
+  if (slug[0] === "canvas" && slug.length >= 2) {
+    const entity = slug[1]
+    const domain = slug.length >= 3 ? slug[2] : undefined
+    return <UniversalSchemaCanvas entity={entity} domain={domain} />
+  }
+
   const entry = ADMIN_PAGE_REGISTRY[key]
   // 走到这里 key 一定在表里（unknown slug 在路由层就被 dynamicParams=false 挡掉）；
   // 保底一句，避免表被改坏时静默渲染空页。
   if (!entry) redirect("/admin")
   if (entry.kind === "redirect") redirect(entry.target)
+
+  if (entry.kind === "canvas") {
+    return <UniversalSchemaCanvas entity={entry.entity} domain={entry.domain} />
+  }
+
+  // 2. 支持查询参数 ?mode=canvas 无缝切换至通用本体画布
+  if (mode === "canvas") {
+    const possibleEntity = slug[slug.length - 1].replace(/-/g, "_")
+    return <UniversalSchemaCanvas entity={possibleEntity} domain={slug[0]} />
+  }
 
   const Component = (await entry.load()) as React.ComponentType
   // **必须当 JSX 渲染，不能当函数调用**: 业务页面多是客户端组件（"use client"），
