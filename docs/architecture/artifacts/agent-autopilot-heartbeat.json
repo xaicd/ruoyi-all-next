@@ -1,19 +1,19 @@
 {
-  "timestamp": "2026-10-10T10:56:42.642Z",
-  "durationMs": 21,
-  "healthScore": 100,
+  "timestamp": "2026-10-10T11:04:01.798Z",
+  "durationMs": 348,
+  "healthScore": 95,
   "status": "optimal",
   "system": {
     "hostname": "6c14ee1ad1d7",
     "nodeVersion": "v22.23.2",
     "platform": "linux",
-    "memoryUsageMb": 113,
+    "memoryUsageMb": 130,
     "uptimeSec": 1
   },
   "database": {
-    "hasRealDb": false,
-    "driver": "memory",
-    "latencyMs": 1,
+    "hasRealDb": true,
+    "driver": "postgresql",
+    "latencyMs": 324,
     "connected": true
   },
   "outbox": {

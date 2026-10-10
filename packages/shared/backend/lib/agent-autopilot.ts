@@ -81,7 +81,6 @@ export async function probeDatabase(): Promise<DatabaseProbeResult> {
   const start = Date.now()
   const isReal = hasRealDatabase()
   try {
-    const db = getKyselyDb()
     if (!isReal) {
       return {
         hasRealDb: false,
@@ -91,6 +90,7 @@ export async function probeDatabase(): Promise<DatabaseProbeResult> {
       }
     }
 
+    const db = await getKyselyDb()
     // 执行真实数据库探针
     await sql`SELECT 1 as ping`.execute(db)
     const latencyMs = Date.now() - start
