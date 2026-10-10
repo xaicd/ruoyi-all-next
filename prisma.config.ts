@@ -1,17 +1,28 @@
-import "dotenv/config"
+import { config as dotenvConfig } from "dotenv"
+import fs from "node:fs"
+import path from "node:path"
 import { defineConfig } from "prisma/config"
 
 // Prisma ORM v7 起, datasource 的 url 不再允许写在 schema.prisma 中, 统一由本文件承载。
-// 这里刻意使用 process.env 而非 prisma/config 的 env() 助手: env() 在变量缺失时会抛错,
-// 而 prisma generate 并不需要数据库连接串 —— 本地与 CI 均在无 DATABASE_URL 下执行 generate,
-// 用 env() 会让这些流程直接失败。仅在真正需要连接的 migrate/db 命令上才要求该变量。
+// 遵循 12-factor 准则：仅在环境变量未显式传入时，才从 .env.local / .env 加载默认配置
+if (!process.env.DATABASE_URL) {
+  const envLocal = path.resolve(process.cwd(), ".env.local")
+  if (fs.existsSync(envLocal)) {
+    dotenvConfig({ path: envLocal })
+  }
+  dotenvConfig()
+}
+
+const pgHost = process.env.PGHOST || (fs.existsSync("/host-workspace") ? "172.19.0.1" : "localhost")
+const defaultDbUrl = `postgresql://ruoyi:ruoyi123@${pgHost}:5433/ruoyi?schema=public`
+
 export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env.DATABASE_URL ?? "",
+    url: process.env.DATABASE_URL || defaultDbUrl,
     // 仅 `prisma migrate diff --to-migrations` 需要（它要重放迁移到影子库）。
     // 注意**必须条件式带上**：Prisma 会校验该字段不能为空字符串，
     // 写成 `shadowDatabaseUrl: process.env.SHADOW_DATABASE_URL ?? ""` 会让

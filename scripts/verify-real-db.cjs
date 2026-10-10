@@ -25,6 +25,7 @@ const VERIFY_DB = "ruoyi_verify" // 只有这个名字允许被本脚本重建
 const DB_USER = process.env.VERIFY_DB_USER || "ruoyi"
 const DB_PASSWORD = process.env.VERIFY_DB_PASSWORD || "ruoyi123"
 const DB_PORT = process.env.VERIFY_DB_PORT || "5433"
+const PG_HOST = process.env.PGHOST || (require("node:fs").existsSync("/host-workspace") ? "172.19.0.1" : "localhost")
 
 /** 跨平台同步等待（不用 sleep —— Unix-only，且不该靠外部命令计时）。 */
 function waitMs(ms) {
@@ -35,7 +36,21 @@ const argv = process.argv.slice(2)
 const keep = argv.includes("--keep")
 const reuse = argv.includes("--reuse")
 
+const hasDocker = spawnSync("which", ["docker"]).status === 0
+const hasHostExec = spawnSync("which", ["host-exec"]).status === 0
+
 function run(command, args, options = {}) {
+  if (command === "docker" && !hasDocker && hasHostExec) {
+    const cmd = args.map((a) => `'${String(a).replace(/'/g, "'\\''")}'`).join(" ")
+    const result = spawnSync("host-exec", [`docker ${cmd}`], {
+      cwd: ROOT,
+      stdio: options.capture ? "pipe" : "inherit",
+      encoding: "utf8",
+      env: { ...process.env, ...options.env },
+    })
+    if (options.capture) return (result.stdout || "").trim()
+    return result.status
+  }
   const result = spawnSync(command, args, {
     cwd: ROOT,
     stdio: options.capture ? "pipe" : "inherit",
@@ -80,21 +95,26 @@ function psql(container, database, sql) {
 
 function main() {
   console.log("[verify:real-db] 启动 postgres …")
-  if (run("pnpm", ["run", "db:up"]) !== 0) fail("db:up 失败：请确认 Docker 在运行")
+  if (hasDocker) {
+    if (run("pnpm", ["run", "db:up"]) !== 0) fail("db:up 失败：请确认 Docker 在运行")
+  } else if (hasHostExec) {
+    if (run("docker", ["compose", "-f", COMPOSE_FILE, "up", "-d", "postgres"]) !== 0) fail("db:up 失败：请确认 Docker 在运行")
+  }
 
   const container = findContainer()
   if (!container) fail("找不到运行中的 postgres 容器")
   if (!waitHealthy(container)) fail("postgres 未在预期时间内变为 healthy")
 
-  if (!reuse) {
+  const exists = psql(container, "postgres", `SELECT 1 FROM pg_database WHERE datname='${VERIFY_DB}'`).includes("1")
+  if (!reuse || !exists) {
     // 只允许重建本脚本自己的验证库 —— 名字不符就拒绝，绝不误伤开发库。
     if (VERIFY_DB !== "ruoyi_verify") fail(`拒绝重建非验证库: ${VERIFY_DB}`)
-    console.log(`[verify:real-db] 重建验证库 ${VERIFY_DB}（--reuse 可跳过）…`)
-    psql(container, "postgres", `DROP DATABASE IF EXISTS ${VERIFY_DB}`)
+    console.log(`[verify:real-db] ${exists ? "重建" : "创建"}验证库 ${VERIFY_DB}…`)
+    psql(container, "postgres", `DROP DATABASE IF EXISTS ${VERIFY_DB} WITH (FORCE);`)
     psql(container, "postgres", `CREATE DATABASE ${VERIFY_DB} OWNER ${DB_USER}`)
   }
 
-  const databaseUrl = `postgresql://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${VERIFY_DB}?schema=public`
+  const databaseUrl = `postgresql://${DB_USER}:${DB_PASSWORD}@${PG_HOST}:${DB_PORT}/${VERIFY_DB}?schema=public`
   // 必须**显式**传: shell 里若已存在 DATABASE_URL，其优先级高于 .env，
   // 会让迁移与测试悄悄跑到另一个库上（本仓踩过）。
   const env = { DATABASE_URL: databaseUrl, DB_DRIVER: "postgresql" }
@@ -121,12 +141,18 @@ function main() {
     console.warn("[verify:real-db] ⚠ 种子失败 —— 后续失败里会混入「环境缺数据」项，判读时留意")
   }
 
-  console.log("[verify:real-db] 跑全量测试（真实库）…\n")
-  const status = run("npx", ["vitest", "run"], { env })
+  const extraArgs = argv.filter((a) => !["--keep", "--reuse"].includes(a))
+  const vitestArgs = extraArgs.length > 0 ? extraArgs : ["test/unit", "test/integration"]
+  console.log(`[verify:real-db] 跑测试（真实库）: ${vitestArgs.join(" ")}…\n`)
+  const status = run("npx", ["vitest", "run", ...vitestArgs], { env })
 
   if (!keep) {
     console.log("\n[verify:real-db] 收尾: 停止 postgres …")
-    run("pnpm", ["run", "db:down"])
+    if (hasDocker) {
+      run("pnpm", ["run", "db:down"])
+    } else if (hasHostExec) {
+      run("docker", ["compose", "-f", COMPOSE_FILE, "stop", "postgres"])
+    }
   } else {
     console.log(`\n[verify:real-db] 保留: 容器 ${container} / 库 ${VERIFY_DB}`)
   }
