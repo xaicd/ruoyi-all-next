@@ -144,6 +144,7 @@
     "speckit:archive": "node scripts/archive-spec.cjs",
     "speckit:health": "node scripts/check-specs-health.cjs",
     "speckit:workflows": "npx tsx scripts/speckit.ts workflows",
+    "speckit:cmmi": "npx tsx scripts/speckit.ts cmmi",
     "specify": "npx tsx scripts/speckit.ts",
     "workflow:list": "npx tsx scripts/workflow-engine.ts list",
     "workflow:check": "npx tsx scripts/workflow-engine.ts check",

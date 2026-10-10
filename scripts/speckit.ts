@@ -429,167 +429,170 @@ function handleBuild() {
     process.exit(0)
   }
 
-  const files: Record<string, string> = {}
-
-  // 1. requirements.md
-  files["requirements.md"] = `# Requirements: ${brief.title}
-
-状态：\`PLAN_APPROVED\`　类型：\`${brief.type || "feature"}\`　特性：\`${name}\`　域名：\`${brief.domain}\`
-上游：一句话立项需求。任何范围调整必须先改本文件（§6.1）。
-
-## 1. 目标与背景 (Introduction)
-
-${brief.goal}
-${brief.type === "bugfix" ? `\n### 缺陷现象 (Symptom)\n\n${brief.symptom ?? "<!-- 待填 -->"}\n\n### 根因分析 (Root Cause)\n\n${brief.rootCause ?? "<!-- 待填 -->"}\n\n### 保持既有行为 (Preserved Behavior)\n\n${brief.preservedBehavior ?? "已有正常业务功能与数据保持严格兼容。"}\n` : ""}
-${brief.type === "refactor" ? `\n### 架构债务与异味分析 (Debt Analysis)\n\n${brief.debtAnalysis ?? "<!-- 待填 -->"}\n\n### 目标整洁架构形态 (Target Architecture)\n\n${brief.targetArchitecture ?? "<!-- 待填 -->"}\n` : ""}
-${brief.type === "enhancement" ? `\n### 性能基线与优化目标 (Baseline vs Target Metrics)\n\n- 当前基线 (Baseline): ${brief.baselineMetric ?? "未明确"}\n- 目标指标 (Target): ${brief.targetMetric ?? "未明确"}\n` : ""}
-${brief.type === "security" ? `\n### 漏洞评级与威胁攻击面 (Vulnerability Advisory & Attack Surface)\n\n- 漏洞概述与 PoC: ${brief.vulnerabilityAdvisory ?? "<!-- 待填 -->"}\n- 攻击面削减: ${brief.attackSurface ?? "<!-- 待填 -->"}\n` : ""}
-
-## 2. 术语表 (Glossary)
-
-| 术语 | 英文 | 定义 |
-|---|---|---|
-| ${brief.title} | ${name} | 本规格所交付的业务与技术上下文 |
-
-## 3. 用户故事 (User Stories)
-
-${(brief.stories ?? []).map((s: any, idx: number) => `### US-${String(idx + 1).padStart(3, "0")}: 作为${brief.roles?.[0]?.role ?? "用户"}
-- **优先级**: \`${s.priority ?? "P1"}\`
-- **内容**: ${s.text}
-`).join("\n")}
-
-## 4. 关键业务不变量 (Invariants)
-
-${(brief.invariants ?? []).map((item: any, index: number) => `${index + 1}. **${item.name}** —— ${item.how}`).join("\n")}
-
-## 5. 验收标准 (Acceptance Criteria)
-
-${(brief.acceptance ?? []).map((item: any, index: number) => `${index + 1}. **THE system SHALL** 验证：${item.check}`).join("\n")}
-
-## 6. 约束与边界 (Constraints & Non-Goals)
-
-${(brief.constraints ?? []).map((item: any) => `* **THE system SHALL COMPLY WITH**: ${item}`).join("\n")}
-
-### 明确不做 (Non-Goals)
-${(brief.nonGoals ?? []).map((item: any) => `* ${item}`).join("\n")}
-`
-
-  // 2. 若为 bugfix 类型，额外输出 Kiro 原生标准的 bugfix.md
-  if (brief.type === "bugfix") {
-    files["bugfix.md"] = `# Bugfix: ${brief.title}
-
-状态：\`PLAN_APPROVED\`　类型：\`bugfix\`　特性：\`${name}\`　域名：\`${brief.domain}\`
-
-## 1. 缺陷概述 (Defect Overview)
-
-${brief.goal}
-
-## 2. 缺陷表现与复现步骤 (Symptom & Reproduction)
-
-${brief.symptom ?? "<!-- 待填 -->"}
-
-## 3. 根因分析 (Root Cause Analysis - 5-Whys)
-
-${brief.rootCause ?? "<!-- 待填 -->"}
-
-## 4. 必须保持的既有正常行为 (Preserved Behavior & Anti-Regression)
-
-${brief.preservedBehavior ?? "所有未受缺陷影响的已有核心业务流转、对外 API 契约与历史数据结构必须保持 100% 行为不变。"}
-
-## 5. 红绿修复与验收准则 (Red-to-Green Test Criteria)
-
-${(brief.acceptance ?? []).map((item: any, index: number) => `${index + 1}. **THE system SHALL** 验证：${item.check}`).join("\n")}
-
-## 6. 修补方案设计与防御不变量 (Patch Design & Invariants)
-
-${(brief.invariants ?? []).map((item: any, index: number) => `${index + 1}. **${item.name}** —— ${item.how}`).join("\n")}
-
-## 7. 约束与补丁边界 (Constraints & Non-Goals)
-
-${(brief.constraints ?? []).map((item: any) => `* **THE system SHALL COMPLY WITH**: ${item}`).join("\n")}
-`
+  const templateDir = path.join(ROOT, ".specify", "templates")
+  const loadTemplate = (filename: string): string => {
+    const full = path.join(templateDir, filename)
+    return fs.existsSync(full) ? fs.readFileSync(full, "utf8") : ""
   }
 
-  // 3. design.md
-  files["design.md"] = `# Design: ${brief.title}
+  const render = (templateStr: string, vars: Record<string, string>): string => {
+    let res = templateStr
+    for (const [k, v] of Object.entries(vars)) {
+      res = res.split(`{{${k}}}`).join(v)
+    }
+    return res
+  }
 
-上游：\`requirements.md\`（本设计严格支撑需求，不得反向修改需求定义）
+  // 构建统一数据上下文
+  const userStoriesText = (brief.stories ?? []).map((s: any, idx: number) => 
+    `${idx + 1}. **${s.priority ?? "P1"}** [作为${brief.roles?.[0]?.role ?? "用户"}] ${s.text}`
+  ).join("\n\n")
 
-## 1. 架构总览与拓扑边界
+  const invariantsText = (brief.invariants ?? []).map((item: any, index: number) => 
+    `${index + 1}. **${item.name}** —— ${item.how}`
+  ).join("\n")
 
-${brief.architecture}
+  const acceptanceText = (brief.acceptance ?? []).map((item: any, index: number) => 
+    `${index + 1}. **THE system SHALL** 验证：${item.check}`
+  ).join("\n")
 
-\`\`\`mermaid
-flowchart TD
-  Client["客户端 / BFF"] --> Facade["${brief.domain} Domain Facade"]
-  Facade --> Service["${name} 核心服务"]
-  Service --> Repo["${name} 仓储 (BaseMapper)"]
-  Repo --> DB[("真实数据库 (SQLite / PG / MySQL)")]
-\`\`\`
+  const constraintsText = (brief.constraints ?? []).map((item: any) => 
+    `* **THE system SHALL COMPLY WITH**: ${item}`
+  ).join("\n")
 
-## 2. 数据模型与持久化契约
+  const nonGoalsText = (brief.nonGoals ?? []).map((item: any) => 
+    `* ${item}`
+  ).join("\n")
 
-${(brief.entities ?? []).map((e: any) => `- **${e.table}**: ${e.note}`).join("\n")}
+  const entitiesText = (brief.entities ?? []).map((e: any) => 
+    `- **${e.table}**: ${e.note}`
+  ).join("\n")
 
-## 3. 交互与状态机流转
+  const statesText = (brief.states ?? []).map((st: any) => 
+    `- ${st}`
+  ).join("\n")
 
-${(brief.states ?? []).map((st: any) => `- ${st}`).join("\n")}
+  const risksText = (brief.risks ?? []).map((r: any) => 
+    `- **风险**: ${r.risk} -> **缓释策略**: ${r.mitigation}`
+  ).join("\n")
 
-## 4. 容错与防御设计
-
-${(brief.risks ?? []).map((r: any) => `- **风险**: ${r.risk} -> **缓释策略**: ${r.mitigation}`).join("\n")}
-`
-
-  // 4. tasks.md (含 Kiro 波次图 Waves JSON)
   const taskWaves = [
     { id: "wave-1", title: "地基与契约准备", tasks: ["T1"], dependsOn: [] },
     { id: "wave-2", title: "核心服务与数据流落地", tasks: ["T2"], dependsOn: ["wave-1"] },
     { id: "wave-3", title: "端到端测试与集成验证", tasks: ["T3"], dependsOn: ["wave-2"] },
   ]
 
-  files["tasks.md"] = `# Tasks: ${brief.title}
-
-上游：\`design.md\`。规格变化必须退回规划阶段（§6.1）。
-
-## 1. 任务依赖波次图 (Task Dependency Graph - Kiro Waves)
-
-\`\`\`json
-${JSON.stringify({ waves: taskWaves }, null, 2)}
-\`\`\`
-
-## 2. 交互式任务清单 (Interactive Execution Tasks)
-
-${(brief.tasks ?? []).map((t: any) => `- [ ] **${t.id}**: ${t.title}
+  const tasksChecklistText = (brief.tasks ?? []).map((t: any) => `- [ ] **${t.id}**: ${t.title}
   - 归属: \`${t.parent ?? "main"}\`
   - 文件白名单: \`${(t.files ?? []).join(", ")}\`
   - 验收要求: 必须携带提交标识 \`[${t.id}]\` 并附带真实测试验证
-`).join("\n")}
+`).join("\n")
 
-## 3. CMMI 双向追溯与 Git 提交核实矩阵 (RTM & Git Trace)
+  const tasksRtmText = (brief.tasks ?? []).map((t: any) => 
+    `| ${t.id} | ${t.parent ?? "main"} | ${t.title} | ${(t.files ?? []).join(", ")} | 未开始 |`
+  ).join("\n")
 
-> **两条硬规矩**（对齐 CMMI「主线-支线任务树」与「1 Task = 1 Commit」）:
-> 1. **归属**必须写 \`main\`（主线）或某个已存在的任务 ID —— **不允许孤儿任务**
-> 2. **文件白名单**必填（逗号分隔）；\`-\` 表示该任务不改文件（纯验证类）
->
-> 完成度**不看"状态"列**，而是从 git 推导: commit message 带 \`[T<ID>]\`
-> 且改动文件落在白名单内，才算这条任务真的做了（\`npm run task:verify\`）。
+  const screensText = (brief.screens ?? [])
+    .map((s: any) => `### ${s.name}\n\n\`\`\`\n${s.wireframe}\n\`\`\``)
+    .join("\n\n")
 
-| ID | 归属 | 任务 | 文件白名单 | 状态 |
-|---|---|---|---|---|
-${(brief.tasks ?? []).map((t: any) => `| ${t.id} | ${t.parent ?? "main"} | ${t.title} | ${(t.files ?? []).join(", ")} | 未开始 |`).join("\n")}
+  const interactionsText = (brief.interactions ?? []).map((i: string) => `* ${i}`).join("\n")
 
-## 4. 依赖说明
+  let subtypeSection = ""
+  if (brief.type === "bugfix") {
+    subtypeSection = `\n### 缺陷现象 (Symptom)\n\n${brief.symptom ?? "待通过红测复现"}\n\n### 根因分析 (Root Cause - 5-Whys)\n\n${brief.rootCause ?? "待排查定位"}\n\n### 保持既有行为 (Preserved Behavior)\n\n${brief.preservedBehavior ?? "已有正常业务功能与数据保持严格兼容。"}\n`
+  } else if (brief.type === "refactor") {
+    subtypeSection = `\n### 架构债务与异味分析 (Debt Analysis)\n\n${brief.debtAnalysis ?? "消除重复耦合代码"}\n\n### 目标整洁架构形态 (Target Architecture)\n\n${brief.targetArchitecture ?? "整洁分层与 Facade 隔离"}\n`
+  } else if (brief.type === "enhancement") {
+    subtypeSection = `\n### 性能基线与优化目标 (Baseline vs Target Metrics)\n\n- 当前基线 (Baseline): ${brief.baselineMetric ?? "未明确"}\n- 目标指标 (Target): ${brief.targetMetric ?? "未明确"}\n`
+  } else if (brief.type === "security") {
+    subtypeSection = `\n### 漏洞评级与威胁攻击面 (Vulnerability Advisory & Attack Surface)\n\n- 漏洞概述与 PoC: ${brief.vulnerabilityAdvisory ?? "安全防御加固"}\n- 攻击面削减: ${brief.attackSurface ?? "最小权限原则"}\n`
+  }
 
-${brief.dependencies ?? "T1 → T2 → T3"}
+  const templateVars: Record<string, string> = {
+    TITLE: brief.title,
+    NAME: name,
+    DOMAIN: brief.domain,
+    TYPE: brief.type || "feature",
+    GOAL: brief.goal || "",
+    SUBTYPE_SECTION: subtypeSection,
+    USER_STORIES: userStoriesText,
+    INVARIANTS: invariantsText,
+    INVARIANTS_SECTION: invariantsText,
+    ACCEPTANCE_CRITERIA: acceptanceText,
+    CONSTRAINTS: constraintsText,
+    NON_GOALS: nonGoalsText,
+    ARCHITECTURE_OVERVIEW: brief.architecture ?? "采用分层整洁架构与领域门面隔离",
+    ENTITIES_SECTION: entitiesText,
+    API_CONTRACTS_SECTION: `- **HTTP 路由**: \`POST /api/v1/admin/${brief.domain}/${name}\`\n- **权限标识**: \`${brief.domain}:${name}:query\`, \`${brief.domain}:${name}:manage\``,
+    STATES_SECTION: statesText,
+    RISKS_SECTION: risksText,
+    SCREENS_SECTION: screensText,
+    INTERACTIONS_SECTION: interactionsText,
+    WAVES_JSON: JSON.stringify({ waves: taskWaves }, null, 2),
+    TASKS_CHECKLIST: tasksChecklistText,
+    TASKS_RTM_TABLE: tasksRtmText,
+    DEPENDENCIES_NOTE: brief.dependencies ?? "T1 → T2 → T3",
+    ACCEPTANCE_CHECKLIST: (brief.acceptance ?? []).map((a: any) => `- [ ] ${a.check}`).join("\n"),
+    RESEARCH_BACKGROUND: brief.goal || "",
+    LICENSE_CONCLUSION: brief.licenseConclusion ?? "无引入外部第三方库风险，开源许可与底座完全兼容",
+    WINDOW_MINUTES: String(brief.windowMinutes ?? 15),
+    TIMESTAMP: new Date().toISOString(),
+    PHASE: "PLAN_APPROVED",
+  }
 
-## 5. 阶段状态
+  const files: Record<string, string> = {}
 
-* 规划：\`PLAN_APPROVED\`（由 brief 展开）
-* 开发：待开始
-* 独立测试：待开始
-`
+  // 1. 规格需求说明书 (Spec-Kit Native: spec.md + requirements.md)
+  const specTpl = loadTemplate("spec-template.md")
+  const specContent = specTpl ? render(specTpl, templateVars) : ""
+  files["spec.md"] = specContent
+  files["requirements.md"] = specContent
 
-  // 5. feature.json / spec.json 元数据
+  // 2. 架构技术方案 (Spec-Kit Native: plan.md + design.md)
+  const planTpl = loadTemplate("plan-template.md")
+  const planContent = planTpl ? render(planTpl, templateVars) : ""
+  files["plan.md"] = planContent
+  files["design.md"] = planContent
+
+  // 3. 任务分解清单 (Spec-Kit Native: tasks.md)
+  const tasksTpl = loadTemplate("tasks-template.md")
+  const tasksContent = tasksTpl ? render(tasksTpl, templateVars) : ""
+  files["tasks.md"] = tasksContent
+
+  // 4. 质量自检清单 (Spec-Kit Native: checklist.md)
+  const checklistTpl = loadTemplate("checklist-template.md")
+  const checklistContent = checklistTpl ? render(checklistTpl, templateVars) : ""
+  files["checklist.md"] = checklistContent
+
+  // 5. 选型研判分析 (Spec-Kit Native: research.md + selection.md)
+  const researchTpl = loadTemplate("research-template.md")
+  const researchContent = researchTpl ? render(researchTpl, templateVars) : ""
+  files["research.md"] = researchContent
+  files["selection.md"] = researchContent
+
+  // 6. 实施轨回滚预案 (Spec-Kit Native: runbook.json)
+  const runbookTpl = loadTemplate("runbook-template.json")
+  files["runbook.json"] = runbookTpl ? render(runbookTpl, templateVars) : ""
+
+  // 7. 门禁证据账本 (Spec-Kit Native: evidence.json)
+  const evidenceTpl = loadTemplate("evidence-template.json")
+  files["evidence.json"] = evidenceTpl ? render(evidenceTpl, templateVars) : ""
+
+  // 8. 实施网络策略 (Spec-Kit Native: deployment.md)
+  const deployTpl = loadTemplate("deployment-template.md")
+  files["deployment.md"] = deployTpl ? render(deployTpl, templateVars) : ""
+
+  // 9. 缺陷台账 (Spec-Kit Native: bugs.md)
+  const bugsTpl = loadTemplate("bugs-template.md")
+  files["bugs.md"] = bugsTpl ? render(bugsTpl, templateVars) : ""
+
+  // 10. 原型与交互规范 (Spec-Kit Native: prototype.md)
+  const prototypeTpl = loadTemplate("prototype-template.md")
+  const prototypeContent = prototypeTpl ? render(prototypeTpl, templateVars) : ""
+  files["prototype.md"] = prototypeContent
+
+  // 10. 规格元数据 (Spec-Kit Native: spec.json + feature.json)
   const specJson = {
     name,
     domain: brief.domain,
@@ -605,77 +608,10 @@ ${brief.dependencies ?? "T1 → T2 → T3"}
   files["spec.json"] = JSON.stringify(specJson, null, 2) + "\n"
   files["feature.json"] = files["spec.json"]
 
-  // 6. runbook.json (实施轨标准可执行割接与回滚预案，对齐 AGENTS §3.4 与 G5_PRE)
-  const runbook = {
-    feature: name,
-    domain: brief.domain,
-    type: brief.type || "feature",
-    window: { minutes: brief.windowMinutes ?? 15 },
-    steps: [
-      { id: "S1", name: "预检: 环境指纹核验", command: "npm run fingerprint:verify", timeoutMs: 60000 },
-      { id: "S2", name: "预检: 21项工程门禁全绿", command: "npm run check", timeoutMs: 600000 },
-      { id: "S3", name: "业务冒烟与平台可用性探活", command: "npm run smoke:login", timeoutMs: 120000 },
-      { id: "S4", name: "数据库迁移发布", command: "npx prisma migrate deploy", timeoutMs: 600000, irreversible: true },
-      { id: "S5", name: "实施与全链路自动化测试矩阵", command: "npm run test:matrix", timeoutMs: 600000 },
-    ],
-    rollback: [
-      { id: "R1", name: "回退代码与工作区至稳定版本", command: "git checkout -- .", timeoutMs: 60000 },
-      { id: "R2", name: "环境指纹自愈核验", command: "npm run fingerprint:verify", timeoutMs: 60000 },
-      { id: "R3", name: "数据库一致性核实与防污染验证", command: "npm run verify:real-db -- --reuse", timeoutMs: 300000 },
-    ],
+  // 11. 特化类型支持
+  if (brief.type === "bugfix") {
+    files["bugfix.md"] = `# Bugfix: ${brief.title}\n\n状态：\`PLAN_APPROVED\`\n\n## 1. 现象 (Symptom)\n${brief.symptom ?? "待测试复现"}\n\n## 2. 根因 (Root Cause)\n${brief.rootCause ?? "待排查"}\n\n## 3. 防御不变量 (Invariants)\n${invariantsText}\n`
   }
-  files["runbook.json"] = JSON.stringify(runbook, null, 2) + "\n"
-
-  // 7. 辅助文档
-  files["bugs.md"] = `# 缺陷清单: ${brief.title}\n\n| ID | 严重级 | 现象 | 状态 |\n|---|---|---|---|\n`
-  files["selection.md"] = `# 选型论证: ${brief.title}\n\n结论：${brief.licenseConclusion ?? "通过"}\n`
-  files["prototype.md"] = `# 原型与界面规范: ${brief.title}\n\n${(brief.screens ?? []).map((s: any) => `### ${s.name}\n\`\`\`\n${s.wireframe}\n\`\`\``).join("\n\n")}\n`
-
-  // 8. 实施轨：基础设施与网络策略 (G5_PRE 门禁规范产物)
-  files["deployment.md"] = `# 实施轨：基础设施与网络策略（G5）：${brief.title}
-
-## 1. 端口策略矩阵（Port Matrix）
-
-| 源域 | 目的域 | 端口/协议 | 用途 | 审批状态 |
-|---|---|---|---|---|
-| DMZ | 应用域 | 443/tcp（入） | 对外 HTTPS / API 统一网关 | 生产基准在位 |
-| 应用域 | 数据库域 | 5432/tcp | PostgreSQL 持久化连接 | 生产基准在位 |
-| 应用域 | 缓存域 | 6379/tcp | Redis 会话与热点缓存 | 生产基准在位 |
-| 运维域 | 应用域 | 22/tcp（跳板） | 堡垒机纳管与安全运维 | 生产基准在位 |
-
-## 2. 网络域规划与拓扑隔离
-
-DMZ 边界（仅暴露 443 端口与 Traefik 反向代理）/ 应用容器域（仅内网互通，禁止公网直通）/ 数据持久化域（仅接收应用后端专用连接）/ 运维管理域（经 4A 堡垒机鉴权审计接入）。
-
-## 3. 接入与加固准则
-
-- 4A 纳管: 统一账号鉴权、统一会话审计、单点登录接入
-- 等保三级基线: 强制双重口令防弱密、全链路审计日志留存 180 天、多租户行级物理隔离
-- 密钥安全规范: 严禁代码硬编码密钥，100% 由宿主机环境安全注入与 KMS 轮转
-
-## 4. 割接方案
-
-| 步骤 | 动作 | 验证点 |
-|---|---|---|
-| 1 | 停写（置只读维护态） | 阻断外部非幂等写流量 |
-| 2 | 执行数据库迁移 | \`prisma migrate deploy\` exit=0 |
-| 3 | 起服务与健康探活 | \`/api/health\` 与域接口 200 响应 |
-| 4 | 灰度放量 10% → 100% | 错误率与 P95 延迟对齐基线 |
-| 5 | 四方会签割接完成 | 运维、研发、测试、业务会签单归档 |
-
-## 5. 回滚预案（Runbook）
-
-**触发条件**: 割接后 10 分钟内错误率 > 基线 3 倍，或核心接口 5xx 持续 1 分钟。
-
-| 步骤 | 动作 | 预计耗时 |
-|---|---|---|
-| 1 | 回退容器镜像至上一稳定指纹版本 | 2 分钟 |
-| 2 | 健康探活与无头探针自检 | 1 分钟 |
-| 3 | 校验数据库一致性与幂等数据防污染 | 3 分钟 |
-| 4 | 恢复全量流量调度 | 2 分钟 |
-
-**合计约 8 分钟**（预留 10 分钟 RTO 窗口）。验证命令: \`npm run verify:real-db -- --reuse\`
-`
 
   // 批量写入
   let count = 0
@@ -838,6 +774,7 @@ Spec-Kit 原生与企业扩展命令:
   list        列出全域所有规格状态与路径
   archive     将交付完毕的规格移动到季度历史归档区
   health      扫描全域规格健康度与防认知污染规则
+  cmmi        CMMI 01~09 全生命周期过程资产创建与健康守卫 (new | list | check)
   workflows   查看与校验 Kiro 原生工作流配方 (.kiro/workflows/)
 
 示例:
@@ -846,6 +783,7 @@ Spec-Kit 原生与企业扩展命令:
   npx tsx scripts/speckit.ts new --name fix-pay-lock --domain pay --title "修复支付回调重放" --type bugfix
   npx tsx scripts/speckit.ts build --name fix-pay-lock
   npx tsx scripts/speckit.ts check --spec fix-pay-lock
+  npx tsx scripts/speckit.ts cmmi check
 `)
 }
 
@@ -879,6 +817,13 @@ switch (command) {
   case "health":
     handleHealth()
     break
+  case "cmmi": {
+    const cmmiScript = path.join(__dirname, "cmmi-asset-scaffold.cjs")
+    const cmmiArgs = process.argv.slice(3)
+    const res = spawnSync(process.execPath, [cmmiScript, ...cmmiArgs], { stdio: "inherit" })
+    process.exit(res.status ?? 0)
+    break
+  }
   case "workflows":
   case "workflow":
     handleWorkflows()

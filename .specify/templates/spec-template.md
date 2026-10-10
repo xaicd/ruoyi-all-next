@@ -1,28 +1,42 @@
-# Feature Specification: [FEATURE_TITLE]
+# Requirements Specification: {{TITLE}}
 
-> **Spec-Kit 标准需求规格说明书 (SRS)**
-> 遵循 IEEE 29148 与 EARS (Easy Approach to Requirements Syntax) 严谨语法。
-> 所属领域：`[DOMAIN]` | 规格标识：`[SPEC_NAME]` | 规格类型：`[TYPE: feature|bugfix|enhancement|refactor|security]`
+> **Spec-Kit 标准需求规格说明书 (SRS: Software Requirements Specification)**
+> 遵循 IEEE 29148 与 EARS (Easy Approach to Requirements Syntax) 严谨需求工程标准。
+> 状态：`PLAN_APPROVED` | 规格类型：`{{TYPE}}` | 所属领域：`{{DOMAIN}}` | 规格标识：`{{NAME}}`
+> 对应项目宪法：`.specify/memory/constitution.md` (Rule 0 ~ 13 项不可动摇工程铁律)
 
 ---
 
-## 1. 业务目标与愿景 (Goal & Vision)
-- **核心目标**：[一句话说明实现什么价值或解决什么业务痛点]
-- **非目标 (Non-Goals)**：[明确本次迭代不涉及的内容，划定严格边界]
+## 1. 业务目标与愿景 (Introduction & Business Goal)
 
-## 2. 参与角色与用户故事 (User Stories)
-| 角色 (Persona) | 优先级 | 用户故事 (As a ... I want to ... So that ...) |
+{{GOAL}}
+
+{{SUBTYPE_SECTION}}
+
+## 2. 术语定义与领域边界 (Glossary & Domain Scope)
+
+| 术语 / 概念 | 英文标识 | 领域定义与所属模块 |
 |---|---|---|
-| 终端用户 | P0 | 作为终端用户，我希望能够...以便于... |
-| 运营管理员 | P0 | 作为运营管理员，我希望能够...以便于... |
-| 系统/SRE | P1 | 作为系统/SRE，我希望能够...以便于... |
+| {{TITLE}} | {{NAME}} | 本规格所交付的业务与技术上下文，严格收敛于 `{{DOMAIN}}` 领域边界 |
+| 行级租户隔离 | Multi-Tenant AST | 基于 Kysely AST 自动在 SQL 注入 `tenant_id` 过滤条件，严禁跨租户越权 |
+| 审计底座字段 | Audit Base Columns | 实体必须自动继承 8 大审计字段，严禁业务层手工更新审计元数据 |
 
-## 3. 核心约束与不变量 (Constraints & Invariants)
-- **数据不变量**：[如：并发 CAS 防超卖，库存与余额严禁负数]
-- **架构约束**：[如：跨域调用必须走 Domain Facade，严禁跨域直接 import Service]
-- **租户隔离**：[如：全局行级租户隔离由 BaseMapper 自动注入]
+## 3. 用户故事与角色矩阵 (User Stories & Personas)
 
-## 4. 验收标准 (Acceptance Criteria)
-- [ ] AC-1: 执行 `npm run check` 退出码必须为 0
-- [ ] AC-2: 核心业务链路完成真实数据库 (PostgreSQL/SQLite) 4 态状态机测试
-- [ ] AC-3: 100% 具备无头 Agent 机器可读契约
+{{USER_STORIES}}
+
+## 4. 关键业务不变量 (Key Business Invariants)
+
+{{INVARIANTS}}
+
+## 5. 验收标准清单 (Acceptance Criteria)
+
+{{ACCEPTANCE_CRITERIA}}
+
+## 6. 约束条件与技术边界 (Constraints & Non-Goals)
+
+### 系统必须满足的架构约束 (The System SHALL Comply With)
+{{CONSTRAINTS}}
+
+### 明确不做与负向范围 (Non-Goals)
+{{NON_GOALS}}

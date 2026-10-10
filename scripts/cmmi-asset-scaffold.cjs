@@ -795,11 +795,26 @@ function handleNew(opts) {
   }
 
   let content
-  try {
-    content = typeDef.template(opts)
-  } catch (err) {
-    console.error(`[cmmi-asset] 资产生成受阻: ${err.message}`)
-    process.exit(1)
+  const customTplPath = path.join(ROOT, ".specify", "templates", "cmmi", `${type}-template.md`)
+  if (fs.existsSync(customTplPath)) {
+    try {
+      const rawTpl = fs.readFileSync(customTplPath, "utf8")
+      content = rawTpl
+        .replace(/\{\{TITLE\}\}/g, opts.title || "标准交付资产")
+        .replace(/\{\{VERSION\}\}/g, opts.version || "v1.1.0")
+        .replace(/\{\{DATE\}\}/g, new Date().toISOString().split("T")[0])
+        .replace(/\{\{SLUG\}\}/g, (opts.slug || "ASSET").toUpperCase())
+    } catch (err) {
+      console.warn(`[cmmi-asset] 读取自定义模板受阻，回退内置: ${err.message}`)
+      content = typeDef.template(opts)
+    }
+  } else {
+    try {
+      content = typeDef.template(opts)
+    } catch (err) {
+      console.error(`[cmmi-asset] 资产生成受阻: ${err.message}`)
+      process.exit(1)
+    }
   }
 
   fs.mkdirSync(path.dirname(targetAbs), { recursive: true })
