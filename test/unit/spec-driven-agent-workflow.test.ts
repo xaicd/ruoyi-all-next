@@ -42,7 +42,8 @@ describe("AI Agent 驱动的 Spec 闭环与防污染生命周期验证", () => {
       "npx",
       [
         "tsx",
-        "scripts/create-feature.ts",
+        "scripts/spec-ops.ts",
+        "new",
         "--name",
         SPEC_NAME,
         "--domain",
@@ -76,7 +77,7 @@ describe("AI Agent 驱动的 Spec 闭环与防污染生命周期验证", () => {
   })
 
   it("2. Agent 声明式展开: 由 brief 自动展开全套文档，无任何遗漏且具备缺陷特化章节", () => {
-    execFileSync("node", ["scripts/build-feature.cjs", "--name", SPEC_NAME], {
+    execFileSync("npx", ["tsx", "scripts/spec-ops.ts", "build", "--name", SPEC_NAME], {
       cwd: ROOT,
       stdio: "ignore",
     })
@@ -116,7 +117,7 @@ describe("AI Agent 驱动的 Spec 闭环与防污染生命周期验证", () => {
   })
 
   it("5. 施工完毕后归档: spec:archive 将完成的规格移入按季度隔离的归档区，且仍支持全生命周期追溯", () => {
-    execFileSync("node", ["scripts/archive-spec.cjs", "--name", SPEC_NAME], {
+    execFileSync("npx", ["tsx", "scripts/spec-ops.ts", "archive", "--name", SPEC_NAME], {
       cwd: ROOT,
       stdio: "ignore",
     })
