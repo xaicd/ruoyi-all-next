@@ -68,6 +68,7 @@
     "domain:check": "node scripts/check-domain-pack.cjs",
     "harness:check": "node scripts/check-harness-bundle.cjs && node scripts/guard-high-order-invariants.cjs",
     "harness:high-order:check": "node scripts/guard-high-order-invariants.cjs",
+    "socratic:inquire": "npx tsx scripts/socratic-inquiry-engine.ts",
     "openwiki:sync": "node scripts/sync-openwiki.cjs --write",
     "openwiki:check": "node scripts/sync-openwiki.cjs --check",
     "contracts:sync": "npm run domain:contracts && npm run domain:manifests && npm run domain:seams && npm run surface:sync && npm run openwiki:sync",

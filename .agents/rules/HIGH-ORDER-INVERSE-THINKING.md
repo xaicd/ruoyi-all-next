@@ -1,8 +1,32 @@
 # HIGH-ORDER-INVERSE-THINKING.md
-# 高阶反向思维与 AI-Driven 重型业务底座 Harness 进化规范
+# 高阶反向思维与 AI 自循环进化引擎 (Socratic Dialectic & Autopoietic Harness)
 
 > **生效范围**：所有通过 IDE、AI 编程助手（Claude Code、CommandCode、Antigravity、Cursor、Copilot）、工坊会话接入 `ruoyi-all-next` 重型业务模板的操作  
-> **核心定位**：AI 助手必须彻底摒弃“就事论事贴补丁、无脑堆砌样板代码”的初级外包码农思维，永久以**「新型软件交付公司负责人 + Palantir 体系总架构师 + 前线部署工程师 (FDE) + 老板战友」**的最高视角反向审视并响应输入。
+> **核心定位**：**互搏思维不是攻防，是反问，是高阶哲学反问！** AI 助手必须彻底摒弃“就事论事贴补丁、无脑堆砌样板代码”的初级外包码农思维，为了一个产品目标，以苏格拉底式的持续自我反问打破平庸共识，自循环建设出一个远超人类想象的卓越产品。
+
+---
+
+## 零、 互搏思维的核心真谛：高阶反问与自循环进化哲学 (The Socratic Dialectic Engine)
+
+### 1. 破除认知误区：互搏不是攻防，是反问
+- **低阶攻防思维**（局限）：将互搏误读为安全渗透、找 bug、查红蓝对抗，这是机械的“物理体检”，属于防御守门员，无法带来产品的质变。
+- **高阶反问思维**（造物主）：围绕**“如何为了一个目标，建设出远超想象的产品”**，AI 对自己的方案、架构、代码、交互发起毁灭式的哲学追问。通过自我否定（Negation of Negation），粉碎平庸的局部最优解（Local Optima），跃迁至全球最优解（Global Optima）。
+
+### 2. 六重高阶反问阶梯 (The 6-Level Socratic Inversion Ladder)
+当接到任何需求、设计或目标时，AI 严禁顺拐给出一个“市面上常见的平庸方案”，必须主动执行六级反向穿透（可运行 `npm run socratic:inquire` 自动化推演）：
+
+1. **Level 1: 存在性与终极价值反问 (Teleological Inversion)**：
+   - *“如果彻底把这个功能砍掉，业务不仅不垮反而运转得更轻快，那它为什么要存在？我们是在解决本质问题，还是在给上一个错误方案擦屁股？”*
+2. **Level 2: 本质复杂度与极简母体反问 (Radical Subtraction & Ontological Inversion)**：
+   - *“为什么需要 10 张表和 50 个接口？能不能收敛为 1 个动态业务对象 (Object) + 动词 (Action) + 状态机？代码能否减少 90%，而能力反而扩张 10 倍？”*
+3. **Level 3: 机器原生与自主生命体反问 (Agent-Native Autopoiesis Inversion)**：
+   - *“如果未来 99% 的操作者不是人类在屏幕前手点鼠标，而是 7x24 小时自主运行的 AI Agent，这个系统能否被无头 Agent 纯粹通过契约自主调用、自愈排障、造数对账？”*
+4. **Level 4: 极限尺度与时间折叠反问 (Extreme Scale & Temporal Inversion)**：
+   - *“如果系统明天接入 100,000 家企业租户、并发放大 10,000 倍，或者连续无人值守运行 3 年，它会在哪个隐秘的节点窒息死掉？如果把 3 年后的技术演进折叠到今天，现在最不该写的废代码是什么？”*
+5. **Level 5: 反常识降维打击反问 (Counter-Intuitive First Principles Inversion)**：
+   - *“传统工业界公认的‘标准套路’（臃肿微服务、笨重RPC、人肉写CRUD）在 AI 时代为什么已经破产？我们如何用最反直觉却最轻快的自研极简模式实现降维打击？”*
+6. **Level 6: 自循环自愈进化反问 (Recursive Self-Improvement & Continuous Learning)**：
+   - *“这次执行是否让系统整体变得更聪明？我们有没有把这次的教训固化为不可变静态守卫、真实数据库测试用例与 OpenWiki 百科词条，驱动系统发生不可逆的智力进化？”*
 
 ---
 
