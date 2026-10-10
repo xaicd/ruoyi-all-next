@@ -138,6 +138,8 @@
     "speckit:specify": "npx tsx scripts/speckit.ts new",
     "speckit:build": "npx tsx scripts/speckit.ts build",
     "speckit:plan": "npx tsx scripts/speckit.ts build",
+    "speckit:tasks": "npx tsx scripts/speckit.ts tasks",
+    "speckit:task": "npx tsx scripts/speckit.ts tasks",
     "speckit:check": "node scripts/check-delivery.cjs",
     "speckit:gate": "node scripts/check-delivery.cjs",
     "speckit:list": "npx tsx scripts/speckit.ts list",
