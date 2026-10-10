@@ -30,7 +30,8 @@ const PORT = process.env.SMOKE_PORT || "3200"
 const BASE = `http://localhost:${PORT}`
 const PASSWORD = "Smoke@123456"
 const SALT = "smoke-salt"
-const URL = `postgresql://ruoyi:ruoyi123@localhost:5433/${DB}?schema=public`
+const PG_HOST = process.env.PGHOST || (fs.existsSync("/host-workspace") ? "172.19.0.1" : "localhost")
+const URL = `postgresql://ruoyi:ruoyi123@${PG_HOST}:5433/${DB}?schema=public`
 const CONTAINER = "ruoyi-dev-postgres-1"
 
 const results = []
@@ -44,7 +45,37 @@ const sh = (command, args, env = {}) => {
   })
   return { ok: result.status === 0, out: `${result.stdout ?? ""}${result.stderr ?? ""}` }
 }
-const psql = (database, sql) => sh("docker", ["exec", CONTAINER, "psql", "-U", "ruoyi", "-d", database, "-t", "-A", "-c", sql])
+
+function dockerExec(args) {
+  const hasDocker = require("node:child_process").spawnSync("which", ["docker"]).status === 0
+  if (hasDocker) {
+    const r = require("node:child_process").spawnSync("docker", args, { cwd: ROOT, encoding: "utf8" })
+    return { ok: r.status === 0, out: `${r.stdout ?? ""}${r.stderr ?? ""}` }
+  }
+  const hasHostExec = require("node:child_process").spawnSync("which", ["host-exec"]).status === 0
+  if (hasHostExec) {
+    const cmd = args.map((a) => `'${String(a).replace(/'/g, "'\\''")}'`).join(" ")
+    const r = require("node:child_process").spawnSync("host-exec", [`docker ${cmd}`], { cwd: ROOT, encoding: "utf8" })
+    return { ok: r.status === 0, out: `${r.stdout ?? ""}${r.stderr ?? ""}` }
+  }
+  return { ok: false, out: "docker and host-exec not found" }
+}
+
+function psql(database, sql) {
+  const hasDocker = require("node:child_process").spawnSync("which", ["docker"]).status === 0
+  if (hasDocker) {
+    const r = require("node:child_process").spawnSync("docker", ["exec", CONTAINER, "psql", "-U", "ruoyi", "-d", database, "-t", "-A", "-c", sql], { cwd: ROOT, encoding: "utf8" })
+    return { ok: r.status === 0, out: `${r.stdout ?? ""}${r.stderr ?? ""}` }
+  }
+  const hasHostExec = require("node:child_process").spawnSync("which", ["host-exec"]).status === 0
+  if (hasHostExec) {
+    const escapedSql = sql.replace(/'/g, "'\\''")
+    const cmd = `docker exec ${CONTAINER} psql -U ruoyi -d ${database} -t -A -c '${escapedSql}'`
+    const r = require("node:child_process").spawnSync("host-exec", [cmd], { cwd: ROOT, encoding: "utf8" })
+    return { ok: r.status === 0, out: `${r.stdout ?? ""}${r.stderr ?? ""}` }
+  }
+  return { ok: false, out: "docker and host-exec not found" }
+}
 
 let app = null
 let smokeEnvLocalBackup = null
@@ -59,28 +90,37 @@ const cleanup = async () => {
     if (smokeEnvLocalBackup.content === null) fs.rmSync(smokeEnvLocalBackup.file, { force: true })
     else fs.writeFileSync(smokeEnvLocalBackup.file, smokeEnvLocalBackup.content)
   }
-  psql("postgres", `DROP DATABASE IF EXISTS ${DB}`)
+  psql("postgres", `DROP DATABASE IF EXISTS ${DB} WITH (FORCE)`)
   // **只在本次是自己起的 postgres 时才停它** —— 否则会把使用者正在用的库停掉
   // （实测: 上一次冒烟清场停了 postgres，紧接着的诊断全部连不上）
-  if (startedPostgres) sh("pnpm", ["run", "db:down"])
+  if (startedPostgres) {
+    const hasDocker = require("node:child_process").spawnSync("which", ["docker"]).status === 0
+    if (hasDocker) sh("pnpm", ["run", "db:down"])
+    else require("node:child_process").spawnSync("host-exec", ["docker", "compose", "-f", "deploy/docker-compose.dev.yml", "stop", "postgres"], { cwd: ROOT, encoding: "utf8" })
+  }
 }
 
 async function main() {
   console.log(`\n=== 登录冒烟（库 ${DB} / 端口 ${PORT}）===\n`)
 
-  const alreadyUp = sh("docker", ["inspect", "--format={{.State.Health.Status}}", CONTAINER]).out.trim() === "healthy"
+  const alreadyUp = dockerExec(["inspect", "--format={{.State.Health.Status}}", CONTAINER]).out.trim() === "healthy"
   if (!alreadyUp) {
     startedPostgres = true
-    if (!sh("pnpm", ["run", "db:up"]).ok) { step("起 postgres", false); return }
+    const hasDocker = require("node:child_process").spawnSync("which", ["docker"]).status === 0
+    if (hasDocker) {
+      if (!sh("pnpm", ["run", "db:up"]).ok) { step("起 postgres", false); return }
+    } else {
+      require("node:child_process").spawnSync("host-exec", ["docker", "compose", "-f", "deploy/docker-compose.dev.yml", "up", "-d", "postgres"], { cwd: ROOT, encoding: "utf8" })
+    }
   }
   for (let i = 0; i < 20; i += 1) {
-    const health = sh("docker", ["inspect", "--format={{.State.Health.Status}}", CONTAINER])
+    const health = dockerExec(["inspect", "--format={{.State.Health.Status}}", CONTAINER])
     if (health.out.trim() === "healthy") break
-    await new Promise((r) => setTimeout(r, 3000))
+    await new Promise((r) => setTimeout(r, 2000))
   }
   step("起 postgres 并等健康", true)
 
-  psql("postgres", `DROP DATABASE IF EXISTS ${DB}`)
+  psql("postgres", `DROP DATABASE IF EXISTS ${DB} WITH (FORCE)`)
   step("建库", psql("postgres", `CREATE DATABASE ${DB}`).ok)
 
   step("迁移", sh("npx", ["prisma", "migrate", "deploy"], { DATABASE_URL: URL }).ok)

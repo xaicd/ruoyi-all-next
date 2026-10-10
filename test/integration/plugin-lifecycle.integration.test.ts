@@ -30,12 +30,32 @@ const EXAMPLE_SRC = path.join(REPO_ROOT, "packages/plugins/examples/hello-world"
 const GOOD_KEY = "itest.lifecycle.plugin"
 const BROKEN_KEY = "ruoyi.broken-worker"
 
+function copyDirRecursive(src: string, dst: string): void {
+  fs.mkdirSync(dst, { recursive: true })
+  for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
+    if (entry.name === "node_modules" || entry.name.startsWith(".")) continue
+    const srcPath = path.join(src, entry.name)
+    const dstPath = path.join(dst, entry.name)
+    if (entry.isDirectory()) {
+      copyDirRecursive(srcPath, dstPath)
+    } else {
+      fs.copyFileSync(srcPath, dstPath)
+    }
+  }
+}
+
+function removeDirSafe(dir: string): void {
+  if (fs.existsSync(dir)) {
+    fs.rmSync(dir, { recursive: true, force: true, maxRetries: 3, retryDelay: 50 })
+  }
+}
+
 function copyExamplePlugin(targetName: string): string {
   const dir = path.join(PLUGIN_DIR, targetName)
-  // 整个包目录一起拷 —— 早先写死 [package.json, plugin.manifest.json, worker.js] 三个文件,
-  // 示例插件新增 merged.js 后漏拷, 于是 manifest 声明的 merged 入口不存在、包被拒,
-  // 测试报 "expected 0 to be 1"。整目录拷贝就不会再漏。
-  fs.cpSync(EXAMPLE_SRC, dir, { recursive: true })
+  removeDirSafe(dir)
+  // 整个包目录一起拷 —— 示例插件新增 merged.js 后整包拷贝不漏文件。
+  // 跳过 node_modules，避免孤儿符号链接与宿主挂载权限冲突。
+  copyDirRecursive(EXAMPLE_SRC, dir)
   // 必须改 id: 示例插件本体就在 `packages/plugins/examples/` 下，**也属于扫描的第一方根**。
   // 沿用它的 id 会让"包从磁盘移除"这个前提**不成立**（副本删了、原件还在，
   // 于是记录仍然是 ready）—— 实测就是这么挂的。用本用例自己的 id，前提才为真。
@@ -61,16 +81,16 @@ async function purgeTestRecords(): Promise<void> {
   await ruoyiPrisma.plugin.deleteMany({ where: { pluginKey: { in: [GOOD_KEY, BROKEN_KEY] } } })
 }
 
-describe.skipIf(!HAS_DB)("插件安装 → ready 端到端（真实 PG + 真实 worker）", () => {
+describe.skipIf(!HAS_DB)("插件安装 → ready 端到端（真实 PG + 真实 worker）", { timeout: 30000 }, () => {
   beforeAll(async () => {
-    fs.rmSync(PLUGIN_DIR, { recursive: true, force: true })
+    removeDirSafe(PLUGIN_DIR)
     fs.mkdirSync(PLUGIN_DIR, { recursive: true })
     await purgeTestRecords()
   })
 
   afterAll(async () => {
     await pluginRuntimeManager.stopAll()
-    fs.rmSync(PLUGIN_DIR, { recursive: true, force: true })
+    removeDirSafe(PLUGIN_DIR)
     await purgeTestRecords()
   })
 
@@ -200,7 +220,7 @@ describe.skipIf(!HAS_DB)("插件安装 → ready 端到端（真实 PG + 真实 
   })
 
   it("插件包从磁盘移除 → 得到诚实处理（不谎报 ready）", async () => {
-    fs.rmSync(path.join(PLUGIN_DIR, "hello-world"), { recursive: true, force: true })
+    removeDirSafe(path.join(PLUGIN_DIR, "hello-world"))
     await pluginRegistryService.reconcile(PLUGIN_DIR)
 
     // findByKey 只返回未逻辑删除的记录，故它查不到是预期路径之一

@@ -171,7 +171,8 @@
     "pg": "^8.13.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "zod": "^4.6.5"
+    "zod": "^4.6.5",
+    "@ruoyi/plugin-sdk": "workspace:*"
   },
   "optionalDependencies": {
     "@aws-sdk/client-s3": "^3.1141.0",

@@ -29,7 +29,8 @@ const KEEP = process.argv.includes("--keep")
 const arg = (flag) => { const i = process.argv.indexOf(flag); return i >= 0 ? process.argv[i + 1] : undefined }
 const BASE = arg("--base") || "http://localhost:3200"
 const DB = "ruoyi_secscan"
-const URL = `postgresql://ruoyi:ruoyi123@localhost:5433/${DB}?schema=public`
+const PG_HOST = process.env.PGHOST || (fs.existsSync("/host-workspace") ? "172.19.0.1" : "localhost")
+const URL = `postgresql://ruoyi:ruoyi123@${PG_HOST}:5433/${DB}?schema=public`
 const PASSWORD = "SecScan@123456"
 const SALT = "secscan-salt"
 
@@ -39,7 +40,32 @@ const step = (name, ok, detail = "") => {
   console.log(`  ${ok ? "✓" : "✗"} ${name}${detail ? `  ${detail}` : ""}`)
 }
 const sh = (cmd, args, env = {}) => spawnSync(cmd, args, { cwd: ROOT, encoding: "utf8", env: { ...process.env, ...env } })
-const psql = (db, sql) => sh("docker", ["exec", "ruoyi-dev-postgres-1", "psql", "-U", "ruoyi", "-d", db, "-t", "-A", "-c", sql])
+
+function dockerExec(args) {
+  const hasDocker = spawnSync("which", ["docker"]).status === 0
+  if (hasDocker) {
+    return spawnSync("docker", args, { cwd: ROOT, encoding: "utf8" })
+  }
+  const hasHostExec = spawnSync("which", ["host-exec"]).status === 0
+  if (hasHostExec) {
+    return spawnSync("host-exec", ["docker", ...args], { cwd: ROOT, encoding: "utf8" })
+  }
+  return { status: 127, stdout: "", stderr: "docker and host-exec not found" }
+}
+
+function psql(db, sql) {
+  const hasDocker = spawnSync("which", ["docker"]).status === 0
+  if (hasDocker) {
+    return spawnSync("docker", ["exec", "ruoyi-dev-postgres-1", "psql", "-U", "ruoyi", "-d", db, "-t", "-A", "-c", sql], { cwd: ROOT, encoding: "utf8" })
+  }
+  const hasHostExec = spawnSync("which", ["host-exec"]).status === 0
+  if (hasHostExec) {
+    const escapedSql = sql.replace(/'/g, "'\\''")
+    const cmd = `docker exec ruoyi-dev-postgres-1 psql -U ruoyi -d ${db} -t -A -c '${escapedSql}'`
+    return spawnSync("host-exec", [cmd], { cwd: ROOT, encoding: "utf8" })
+  }
+  return { status: 127, stdout: "", stderr: "docker and host-exec not found" }
+}
 
 let app = null
 let startedPostgres = false
@@ -51,8 +77,12 @@ const cleanup = async () => {
   const envLocal = path.join(ROOT, ".env.local")
   if (envLocalBackup === null) fs.rmSync(envLocal, { force: true })
   else fs.writeFileSync(envLocal, envLocalBackup)
-  psql("postgres", `DROP DATABASE IF EXISTS ${DB}`)
-  if (startedPostgres) sh("pnpm", ["run", "db:down"])
+  psql("postgres", `DROP DATABASE IF EXISTS ${DB} WITH (FORCE)`)
+  if (startedPostgres) {
+    const hasDocker = spawnSync("which", ["docker"]).status === 0
+    if (hasDocker) sh("pnpm", ["run", "db:down"])
+    else spawnSync("host-exec", ["docker", "compose", "-f", "deploy/docker-compose.dev.yml", "stop", "postgres"], { cwd: ROOT, encoding: "utf8" })
+  }
 }
 
 /** 发一个请求，返回 {status, body, headers}。 */
@@ -66,13 +96,18 @@ async function main() {
   console.log(`\n=== 安全扫描（${BASE}）===\n`)
 
   if (!arg("--base")) {
-    const healthy = sh("docker", ["inspect", "--format={{.State.Health.Status}}", "ruoyi-dev-postgres-1"]).stdout?.trim() === "healthy"
-    if (!healthy) { startedPostgres = true; sh("pnpm", ["run", "db:up"]) }
-    for (let i = 0; i < 20; i += 1) {
-      if (sh("docker", ["inspect", "--format={{.State.Health.Status}}", "ruoyi-dev-postgres-1"]).stdout?.trim() === "healthy") break
-      await new Promise((r) => setTimeout(r, 3000))
+    const healthy = dockerExec(["inspect", "--format={{.State.Health.Status}}", "ruoyi-dev-postgres-1"]).stdout?.trim() === "healthy"
+    if (!healthy) {
+      startedPostgres = true
+      const hasDocker = spawnSync("which", ["docker"]).status === 0
+      if (hasDocker) sh("pnpm", ["run", "db:up"])
+      else spawnSync("host-exec", ["docker", "compose", "-f", "deploy/docker-compose.dev.yml", "up", "-d", "postgres"], { cwd: ROOT, encoding: "utf8" })
     }
-    psql("postgres", `DROP DATABASE IF EXISTS ${DB}`)
+    for (let i = 0; i < 20; i += 1) {
+      if (dockerExec(["inspect", "--format={{.State.Health.Status}}", "ruoyi-dev-postgres-1"]).stdout?.trim() === "healthy") break
+      await new Promise((r) => setTimeout(r, 2000))
+    }
+    psql("postgres", `DROP DATABASE IF EXISTS ${DB} WITH (FORCE)`)
     psql("postgres", `CREATE DATABASE ${DB}`)
     sh("npx", ["prisma", "migrate", "deploy"], { DATABASE_URL: URL })
     // **必须检查种子自己的退出码** —— 它可能建完 admin 之后才失败，
@@ -102,7 +137,7 @@ async function main() {
     }
     if (!ready) { step("起服务", false); console.log(fs.readFileSync(logFile, "utf8").slice(-600)); return }
     // 先确认种子真的建了 admin —— 否则 401 时无从判断是种子失败还是鉴权失败
-    const seeded = psql("ruoyi_secscan", "SELECT count(*) FROM \"system_user\" WHERE username='admin'")
+    const seeded = psql(DB, "SELECT count(*) FROM \"system_user\" WHERE username='admin'")
     step("种子建出 admin（表名须加引号：system_user 是保留字）", seeded.stdout?.trim() === "1", `count=${seeded.stdout?.trim()}`)
     step("起服务", true, BASE)
   }

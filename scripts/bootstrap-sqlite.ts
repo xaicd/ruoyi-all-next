@@ -320,14 +320,16 @@ export async function bootstrapSqlite(targetPath = DB_PATH, options?: { username
   const plainPassword = options?.password || process.env.ADMIN_BOOTSTRAP_PASSWORD || generateSecurePassword(16);
   const pwd = passwordHash(plainPassword, salt);
 
-  // 清除旧的 admin 默认账号与角色（规避运营商关键字审计阻断）
-  db.prepare("DELETE FROM system_user WHERE username = 'admin'").run();
-  db.prepare("DELETE FROM system_user_role WHERE user_id = 'user-admin-01'").run();
-  db.prepare("DELETE FROM system_role WHERE code = 'admin'").run();
-  db.prepare("DELETE FROM system_role_menu WHERE role_id = 'role-admin-01'").run();
+  // 如果指定了非 admin 账号，清除遗留的 admin 账号避免混淆
+  if (bootstrapUsername !== 'admin') {
+    db.prepare("DELETE FROM system_user WHERE username = 'admin'").run();
+    db.prepare("DELETE FROM system_user_role WHERE user_id = 'user-admin-01'").run();
+    db.prepare("DELETE FROM system_role WHERE code = 'admin'").run();
+    db.prepare("DELETE FROM system_role_menu WHERE role_id = 'role-admin-01'").run();
+  }
 
-  const supervipUser = db.prepare('SELECT id FROM system_user WHERE username = ?').get(bootstrapUsername) as { id: string } | undefined;
-  if (!supervipUser) {
+  const existingUser = db.prepare('SELECT id FROM system_user WHERE username = ? OR id = ?').get(bootstrapUsername, 'user-supervip-01') as { id: string } | undefined;
+  if (!existingUser) {
     console.log(`[Bootstrap-SQLite] 注入系统平台超级管理员账号 (${bootstrapUsername})...`);
 
     const insertUser = db.prepare(`
@@ -347,6 +349,14 @@ export async function bootstrapSqlite(targetPath = DB_PATH, options?: { username
       VALUES (?, ?, ?, 'default', 'system', CURRENT_TIMESTAMP)
     `);
     insertUserRole.run('ur-supervip-01', 'user-supervip-01', 'role-supervip-01');
+  } else {
+    console.log(`[Bootstrap-SQLite] 同步更新系统平台超级管理员账号 (${bootstrapUsername}) 凭据...`);
+    db.prepare(`
+      UPDATE system_user
+      SET username = ?, password = ?, salt = ?, status = 'ACTIVE', updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `).run(bootstrapUsername, pwd, salt, existingUser.id);
+  }
 
     // 注入核心系统菜单
     const insertMenu = db.prepare(`
@@ -401,7 +411,6 @@ export async function bootstrapSqlite(targetPath = DB_PATH, options?: { username
    随机密码: ${plainPassword}
 ================================================================
 `);
-  }
 
   return { success: true, dbPath: targetPath, isNewDb };
 }
