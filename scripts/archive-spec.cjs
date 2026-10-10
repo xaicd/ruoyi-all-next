@@ -64,6 +64,14 @@ fs.mkdirSync(path.dirname(targetDir), { recursive: true })
 // 执行归档移动
 fs.renameSync(currentDir, targetDir)
 
+// 若原父级域目录为空，自动清理防止产生空目录
+const parentDir = path.dirname(currentDir)
+if (fs.existsSync(parentDir) && parentDir !== path.join(ROOT, "docs", "specs") && fs.readdirSync(parentDir).length === 0) {
+  try {
+    fs.rmdirSync(parentDir)
+  } catch {}
+}
+
 // 写入归档标记
 const targetSpecJson = path.join(targetDir, "spec.json")
 let specData = {}
