@@ -11,14 +11,14 @@
       "type": "step",
       "id": "scaffold",
       "agent": "wf-planner",
-      "prompt": "Scaffold bugfix specification for '{{inputs.name}}' in domain '{{inputs.domain}}'. Run `npm run spec:new -- --name {{inputs.name}} --domain {{inputs.domain}} --title \"{{inputs.title}}\" --type bugfix`."
+      "prompt": "Scaffold bugfix specification for '{{inputs.name}}' in domain '{{inputs.domain}}'. Run `npm run speckit:new -- --name {{inputs.name}} --domain {{inputs.domain}} --title \"{{inputs.title}}\" --type bugfix`."
     },
     {
       "type": "step",
       "id": "diagnose",
       "agent": "wf-planner",
       "dependsOn": ["scaffold"],
-      "prompt": "In docs/specs/{{inputs.domain}}/{{inputs.name}}/brief.json, complete: 1) Symptom & exact reproduction steps; 2) 5-Whys Root Cause Analysis; 3) Preserved Behavior (must not break existing normal flows). Run `npm run spec:build -- --name {{inputs.name}}`."
+      "prompt": "In docs/specs/{{inputs.domain}}/{{inputs.name}}/brief.json, complete: 1) Symptom & exact reproduction steps; 2) 5-Whys Root Cause Analysis; 3) Preserved Behavior (must not break existing normal flows). Run `npm run speckit:build -- --name {{inputs.name}}`."
     },
     {
       "type": "step",

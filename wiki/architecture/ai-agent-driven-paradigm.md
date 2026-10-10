@@ -10,7 +10,7 @@
 
 | 层次 | 载体与真源 | AI Agent 驱动方式 | 杜绝的低阶人工行为 |
 |---|---|---|---|
-| **1. 规格立项层 (SDD)** | `scripts/spec-ops.ts`<br>`brief.json` | Agent 仅需 `<500 Tokens` 声明 `brief.json`，由引擎自动展开为 Kiro 规范规格包（需求、设计、波次任务图、Runbook）。 | 严禁人工手写千行重复文档，严禁无规格直接写代码。 |
+| **1. 规格立项层 (SDD)** | `scripts/speckit.ts`<br>`brief.json` | Agent 仅需 `<500 Tokens` 声明 `brief.json`，由引擎自动展开为 Kiro 规范规格包（需求、设计、波次任务图、Runbook）。 | 严禁人工手写千行重复文档，严禁无规格直接写代码。 |
 | **2. 代码实现层 (Coding)** | `BaseMapper<T>`<br>`QueryWrapper<T>`<br>`BaseService<T>` | Agent 以 DSL/Schema 驱动通用引擎自动展开，100% 继承多租户、逻辑删除与 8 大审计底座字段。 | 严禁大模型人肉生成几百行千篇一律的重复 CRUD。 |
 | **3. 契约通信层 (Contracts)** | `docs/agent/contracts.json`<br>`seam-graph.json`<br>`rpc-actions.json` | 324 份全域契约、OpenAPI 3.1、自研 NATS 异步事件流与 Domain Facade，供 Agent 毫秒级定位调用。 | 严禁跨域私自 import Service，严禁无契约野路由。 |
 | **4. 前端交互层 (Agent-Native UI)** | `agent-page-schemas.generated.json`<br>主权网关与指挥大屏 | 324 个实体的机器可读 Schema、主权网关与驾驶舱，支持 `agent-device` 与 `agent-browser` (Playwright) 无头探针自动化操作。 | 严禁仅能人类肉眼查看的死报表与死界面。 |
@@ -21,4 +21,4 @@
 ## 三、 三位一体协同机制：Skills + MCP + CLI
 1. **Skills (.agents/skills/)**：指导 Agent “怎么做”（方法论、EARS 句式、5-Whys、红绿测试准则，全仓 38 个原生技能）；
 2. **MCP (scripts/mcp/ruoyi-mcp-server.cjs)**：为外部 Agent 提供 “查什么”（只读反射查询 14 大工具，严禁副作用写入）；
-3. **CLI (scripts/spec-ops.ts 等)**：确定性落地 “谁来执行”（工具引擎自动执行、编译与门禁）。
+3. **CLI (scripts/speckit.ts 等)**：确定性落地 “谁来执行”（工具引擎自动执行、编译与门禁）。

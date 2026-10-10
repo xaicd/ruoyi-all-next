@@ -165,10 +165,10 @@
 
 | 步骤 | 命令 | 产物 / 证据 |
 |---|---|---|
-| 1. 规格立项 | `npm run spec:new -- --name <名> --domain <域> --title "<标题>" [--type feature\|bugfix\|enhancement\|refactor\|security]` | `brief.json` + `assets/` + `prototypes/`（**按域隔离于 docs/specs/<域>/<名>，由 scripts/spec-ops.ts 统一驱动**） |
+| 1. 规格立项 | `npm run speckit:new -- --name <名> --domain <域> --title "<标题>" [--type feature\|bugfix\|enhancement\|refactor\|security]` | `brief.json` + `assets/` + `prototypes/`（**按域隔离于 docs/specs/<域>/<名>，由 Spec-Kit 原生引擎 scripts/speckit.ts 统一驱动**） |
 | 2. 填 brief | 编辑 `docs/specs/<域>/<名>/brief.json` | 目标/角色/故事/约束/验收/不变量/表/任务（bugfix 特化 symptom/rootCause/RedTest） |
-| 3. 展开 | `npm run spec:build -- --name <名>` | 7~8 份文档 + `evidence.json` + `runbook.json`（**由 scripts/spec-ops.ts 展开，结构不可能缺**） |
-| 4. 看进度 | `npm run spec:check -- --spec <名>` | 11 阶段 / 6 gate / 任务树 / 缺陷，逐条「还缺什么」 |
+| 3. 展开 | `npm run speckit:build -- --name <名>` | 7~8 份文档 + `evidence.json` + `runbook.json`（**由 Spec-Kit 引擎 scripts/speckit.ts 展开，结构不可能缺**） |
+| 4. 看进度 | `npm run speckit:check -- --spec <名>` | 11 阶段 / 6 gate / 任务树 / 缺陷，逐条「还缺什么」 |
 | 5. 建域 | `npm run domain:new <域>` | 建表迁移 + codegen + 注册插件（**按域，不按特性**） |
 | 6. 门禁 | `npm run check` / `build` / `domain:pack <域>` | **退出码** |
 | 7. 建库 | `npx prisma migrate deploy` + 种子 + `npm run plugins:register` | 表 / 菜单 / 授权 / **插件登记**（不登记则插件接口全 404） |
@@ -176,7 +176,7 @@
 | 9. 追溯 | `npm run task:verify -- --feature <名> --summary` | **从 git 推导**完成度；单任务核对白名单（1 Task = 1 Commit） |
 | 10. 上线 | `npm run fingerprint` → `fingerprint:verify` | 确认上线的就是测试过的那份 |
 | 11. 实施 | `npm run runbook -- --feature <名> --check/--dry-run/--run` | 割接 + **失败自动回滚** + **实测**耗时 |
-| 12. 归档防污染 | `npm run spec:archive -- --name <名>` | 移动至 `docs/specs/archive/<YYYY-Qx>/<域>/<名>/`，保持活跃区清爽 |
+| 12. 归档防污染 | `npm run speckit:archive -- --name <名>` | 移动至 `docs/specs/archive/<YYYY-Qx>/<域>/<名>/`，保持活跃区清爽 |
 | 13. 运营 | `npm run agent:ops -- <域>.<实体> health/seed-sample/purge-sample` | 接口体检 + 造数/清数 |
 | 14. 冒烟（**平台可用性**） | `npm run smoke:login` | 建库→迁移→种子→登记插件→起服务→**登录 200**→受保护接口 200。自管理环境，跑完清场 |
 | 15. **渗透** | `npm run security:scan` | 12 项: 未认证/伪造 token/伪造 tenant/插件挂载/不泄露栈/安全响应头/错误口令/两个**阴性对照**。接进 CI + G5 |
@@ -966,7 +966,7 @@ npm run check
 2. **统一规格 (Spec) 与生命周期管理**：
    - 彻底摒弃以单纯 "Feature" 命名一切的局限思维，全面采用 **4 类规格演进类型**：`feature`（新特性）、`bugfix`（缺陷修复，必须携带 Symptom、Root Cause 与红灯复现用例 Red Test）、`enhancement`（增量增强）、`refactor`（架构重构）；
    - 施工区按域严格隔离于 `docs/specs/<domain>/<name>/`，原型资产按静态切图 `assets/` 与动态可点击 `prototypes/` 分离；
-   - 投产后通过 `npm run spec:archive -- --name <name>` 统一沉淀归档至 `docs/specs/archive/<YYYY-Qx>/<domain>/<name>/`，保持施工区清爽。
+   - 投产后通过 `npm run speckit:archive -- --name <name>` 统一沉淀归档至 `docs/specs/archive/<YYYY-Qx>/<domain>/<name>/`，保持施工区清爽。
 3. **CMMI 01~09 过程资产全生命周期库与技能标准化作业 (SOP)**：
    - 全生命周期 9 大阶段均有确定性专属 Skill 驱动专业作业（`.agents/skills/cmmi-asset-authoring/SKILL.md`）：
      - `01_management`: `dar-decision-matrix`（立项、研发计划、风险台账、DAR 加权决策分析）

@@ -121,7 +121,7 @@ ${domainRows}
 - [事务性发件箱 (Transactional Outbox) 与 ACID 回滚](architecture/transactional-outbox.md)
 - [微服务通信、跨域治理与 Facade 契约](architecture/service-governance.md)
 - [Archify (47k★) 可机器验证与交互式架构图生成](architecture/archify-visualization.md)
-- [SSOT 斜杠指令体系与 SpecKit 兼容矩阵 (/spec-ops.*)](architecture/spec-ops-slash-commands.md)
+- [GitHub Spec-Kit 企业级扩展与 10 大斜杠指令矩阵 (/speckit.*)](architecture/speckit-slash-commands.md)
 
 ---
 
@@ -410,7 +410,7 @@ await runUnitOfWork(async (uow) => {
 
 | 层次 | 载体与真源 | AI Agent 驱动方式 | 杜绝的低阶人工行为 |
 |---|---|---|---|
-| **1. 规格立项层 (SDD)** | \`scripts/spec-ops.ts\`<br>\`brief.json\` | Agent 仅需 \`<500 Tokens\` 声明 \`brief.json\`，由引擎自动展开为 Kiro 规范规格包（需求、设计、波次任务图、Runbook）。 | 严禁人工手写千行重复文档，严禁无规格直接写代码。 |
+| **1. 规格立项层 (SDD)** | \`scripts/speckit.ts\`<br>\`brief.json\` | Agent 仅需 \`<500 Tokens\` 声明 \`brief.json\`，由引擎自动展开为 Kiro 规范规格包（需求、设计、波次任务图、Runbook）。 | 严禁人工手写千行重复文档，严禁无规格直接写代码。 |
 | **2. 代码实现层 (Coding)** | \`BaseMapper<T>\`<br>\`QueryWrapper<T>\`<br>\`BaseService<T>\` | Agent 以 DSL/Schema 驱动通用引擎自动展开，100% 继承多租户、逻辑删除与 8 大审计底座字段。 | 严禁大模型人肉生成几百行千篇一律的重复 CRUD。 |
 | **3. 契约通信层 (Contracts)** | \`docs/agent/contracts.json\`<br>\`seam-graph.json\`<br>\`rpc-actions.json\` | 324 份全域契约、OpenAPI 3.1、自研 NATS 异步事件流与 Domain Facade，供 Agent 毫秒级定位调用。 | 严禁跨域私自 import Service，严禁无契约野路由。 |
 | **4. 前端交互层 (Agent-Native UI)** | \`agent-page-schemas.generated.json\`<br>主权网关与指挥大屏 | 324 个实体的机器可读 Schema、主权网关与驾驶舱，支持 \`agent-device\` 与 \`agent-browser\` (Playwright) 无头探针自动化操作。 | 严禁仅能人类肉眼查看的死报表与死界面。 |
@@ -421,7 +421,7 @@ await runUnitOfWork(async (uow) => {
 ## 三、 三位一体协同机制：Skills + MCP + CLI
 1. **Skills (.agents/skills/)**：指导 Agent “怎么做”（方法论、EARS 句式、5-Whys、红绿测试准则，全仓 38 个原生技能）；
 2. **MCP (scripts/mcp/ruoyi-mcp-server.cjs)**：为外部 Agent 提供 “查什么”（只读反射查询 14 大工具，严禁副作用写入）；
-3. **CLI (scripts/spec-ops.ts 等)**：确定性落地 “谁来执行”（工具引擎自动执行、编译与门禁）。
+3. **CLI (scripts/speckit.ts 等)**：确定性落地 “谁来执行”（工具引擎自动执行、编译与门禁）。
 `.trim() + "\n");
 
   // 9) benchmark-and-evolution.md
@@ -529,37 +529,39 @@ await runUnitOfWork(async (uow) => {
 - CI 自动化校验：\`npm run socratic:check\`（挂载在 \`npm run harness:check\` 与 \`npm run check\` 之中，任何破坏 6 阶反思的行为直接中断构建并退出报错）。
 `.trim() + "\n");
 
-  // 14) spec-ops-slash-commands.md
-  generatedFiles.set("architecture/spec-ops-slash-commands.md", `# 架构百科：SSOT 斜杠指令体系与 SpecKit 兼容矩阵 (/spec-ops.*)
+  // 14) speckit-slash-commands.md
+  generatedFiles.set("architecture/speckit-slash-commands.md", `# 架构百科：GitHub Spec-Kit 企业级扩展与 10 大斜杠指令矩阵 (/speckit.*)
 
-> 对应规则：AGENTS.md Rule 0.9 & Rule 0.10 / .agents/rules/SPEC-FIRST-ENGINEERING-ARTIFACTS.md / .agents/commands/
+> 对应规则：AGENTS.md Rule 0.9 & Rule 0.10 / .agents/rules/SPEC-FIRST-ENGINEERING-ARTIFACTS.md / .specify/
 
-## 一、 为什么必须采用 .agents/commands 作为单一真源 (SSOT)？
-传统 AI 编码工具习惯将斜杠指令（Slash Commands）散落在工具特异性目录中（如 Claude Code 的 \`.claude/commands/\`、Cursor 的 \`.cursor/commands/\` 等）。
-这种做法直接违背了 **Rule 0: 单一真源与零重复配置** 铁律：
-1. **防止工具绑定与心智割裂**：无论研发使用 Cursor、Claude Code、Windsurf、Agy 还是 DigitalStaff 无头 Agent，底座工程的指令集必须完全统一。
-2. **符号链接 (Symlink) 适配器模式**：\`.agents/commands/\` 作为物理权威目录，工具特有路径通过软链接透明指向真源（如 \`.claude/commands -> ../.agents/commands\`）。
+## 一、 为什么基于 GitHub Spec-Kit 进行全量升级与扩展？
+Spec-Driven Development (SDD) 已由 GitHub Spec-Kit 与腾讯 CodeBuddy 发展为业界通用的 AI 编程工程规范。
+本项目已**全量升级并拥抱 GitHub Spec-Kit 开源标准**，将原有的私有 \`spec-ops\` 全面收敛升级为 **Enterprise Spec-Kit**：
+1. **拓扑标准遵从**：建立 \`.specify/memory/constitution.md\` 作为项目唯一最高宪法，包含 Rule 0、13 项通用铁律与 6 阶苏格拉底反思；
+2. **顶层路径透传**：\`specs/ -> docs/specs/\` 顶层软链接，与所有原生 Spec-Kit 自动化工具 100% 互通；
+3. **原生跨平台驱动**：通过 \`npm run speckit\` / \`npm run specify\` 提供零额外环境依赖的 TypeScript 原生引擎，告别 Python/uv 工具链负担；
+4. **唯一真源指令化**：\`.agents/commands/speckit.*\` 作为唯一物理实体真源，直接面向各类智能体与开发者交付。
 
-## 二、 9 大 /spec-ops.* 核心斜杠指令矩阵
-| 斜杠指令 | 底层执行引擎 | 功能说明 | 核心产物 / 验收标准 |
+## 二、 10 大 /speckit.* 核心斜杠指令矩阵
+| 斜杠指令 | 底层执行引擎 | 功能分类 | 核心产物 / 验收标准 |
 |---|---|---|---|
-| \`/spec-ops.new\` | \`npm run spec:new\` | 交互式规格立项 | 生成 \`brief.json\`、\`assets/\` 与 \`prototypes/\` 骨架 |
-| \`/spec-ops.build\` | \`npm run spec:build\` | 规格资产自动展开 | 生成 8 份标准工程文档、\`evidence.json\` 与 \`runbook.json\` |
-| \`/spec-ops.check\` | \`npm run spec:check\` | 11 阶段 / 6 Gate 门禁扫描 | 输出规格完备度报告，扫描假绿与未完成项 |
-| \`/spec-ops.tasks\` | \`scripts/spec-ops.ts tasks\` | 原子任务树提取 | 输出白名单任务树，严格贯彻 1 Task = 1 Commit |
-| \`/spec-ops.socratic\` | \`npm run socratic:inquire\` | 6 阶苏格拉底高阶反向辩证 | 穿透物理存在、真实执行、极端不变量反思 |
-| \`/spec-ops.archive\` | \`npm run spec:archive\` | 规格生命周期归档 | 移入 \`docs/specs/archive/<YYYY-Qx>/<domain>/<name>/\` |
-| \`/spec-ops.gate\` | \`scripts/spec-ops.ts gate\` | CMMI Gate 1~6 物理裁决 | 校验测试覆盖、渗透扫描、容量压测与回滚演练证据 |
-| \`/spec-ops.ops\` | \`npm run agent:ops\` | 无头 Agent 契约运营 | 接口自动化体检、仿真造数与敏感清数 |
-| \`/spec-ops.verify\` | \`npm run task:verify\` | Git 提交真实完成度核验 | 从 Git 历史核对白名单与任务完成度，严禁口头完工 |
+| \`/speckit.eval\` | \`dar-decision-matrix\` | **[Idea Assessment]** 概念评估 | 需求立项前进行可行性、必要性与 DAR 投资回报率论证 |
+| \`/speckit.constitution\` | \`npm run socratic:inquire\` | **[Constitution]** 核心宪法 | 审查底座宪法并执行 6 阶苏格拉底高阶反问与辩证 |
+| \`/speckit.specify\` | \`npm run speckit:new\` | **[Specification]** 规格立项 | 交互式立项，生成 \`brief.json\`、\`assets/\` 与 \`prototypes/\` 骨架 |
+| \`/speckit.plan\` | \`npm run speckit:build\` | **[Architecture]** 架构展开 | 极简 DSL 自动编译展开 8 份标准工程文档与时序图 |
+| \`/speckit.tasks\` | \`scripts/speckit.ts tasks\` | **[Task Breakdown]** 任务拆解 | 提取波次任务树，严格贯彻 1 Task = 1 Commit |
+| \`/speckit.implement\` | \`npm run task:verify\` | **[Implementation]** 实施落地 | 真实入库编码，核对 Git 提交白名单，杜绝口头完工 |
+| \`/speckit.checklist\` | \`npm run speckit:check\` | **[Quality Checklist]** 验收清单 | 逐项核验验收标准与 11 阶段交付合规性 |
+| \`/speckit.gate\` | \`scripts/speckit.ts gate\` | **[SpaceX Gate]** 物理门禁 | CMMI Gate 1~6 物理门禁扫描，100% 真实数据库测试驱动 |
+| \`/speckit.ops\` | \`npm run agent:ops\` | **[Agent Operations]** 无头运营 | 326 份机器契约接口自动化体检、仿真造数与敏感清数 |
+| \`/speckit.archive\` | \`npm run speckit:archive\` | **[Lifecycle Archive]** 归档防污 | 移入 \`docs/specs/archive/<YYYY-Qx>/<domain>/<name>/\`，保持施工区整洁 |
 
-## 三、 GitHub SpecKit / Tencent CodeBuddy 兼容矩阵
-为了让习惯使用开源 \`spec-kit\` (\`specify-cli\`) 的 Agent 或开发者无缝过渡，底座建立了物理别名软链接：
-- \`/speckit.specify\` ➔ \`/spec-ops.new\` (立项规格)
-- \`/speckit.plan\` ➔ \`/spec-ops.build\` (架构与资产展开)
-- \`/speckit.tasks\` ➔ \`/spec-ops.tasks\` (任务拆解)
-- \`/speckit.constitution\` ➔ \`/spec-ops.socratic\` (宪法级辩证反思)
-- \`/speckit.implement\` ➔ \`/spec-ops.verify\` (落地实施与完成度核验)
+## 三、 全面收敛统一 (Full Unification)
+历史定制过渡层已全部退役清除，所有流程 100% 统一为 Spec-Kit 原生规范：
+- 规格立项与编译：统一使用 \`npm run speckit:new\` / \`speckit:build\`；
+- 工作流配方 (Workflows)：\`.agents/workflows/\` 全部收敛为 Spec-Kit 标准步骤；
+- CMMI 01~09 过程资产：全面挂载 Spec-Kit 模板与交付门禁；
+- 斜杠指令：全部收敛为 \`/speckit.*\` 10 大指令矩阵。
 `.trim() + "\n");
 }
 

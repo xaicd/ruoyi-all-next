@@ -354,11 +354,11 @@ function handleRun(flags: Record<string, string>, positional: string[]) {
     }))
   }
 
-  // 执行 Step 1: 如果是脚手架，自动调用本地 spec-ops new
+  // 执行 Step 1: 如果是脚手架，自动调用本地 speckit new
   const firstStep = recipe.steps[0]
-  if (firstStep && (firstStep.id === "scaffold" || firstStep.prompt.includes("npm run spec:new"))) {
+  if (firstStep && (firstStep.id === "scaffold" || firstStep.prompt.includes("speckit:new") || firstStep.prompt.includes("spec:new"))) {
     console.log(`\n⚡ [自动执行第 1 步: 脚手架生成] -> @${firstStep.agent}`)
-    const cmd = `npx tsx scripts/spec-ops.ts new --name ${vars.name} --domain ${vars.domain} --title "${vars.title}" --type ${vars.type}`
+    const cmd = `npx tsx scripts/speckit.ts new --name ${vars.name} --domain ${vars.domain} --title "${vars.title}" --type ${vars.type}`
     console.log(`$ ${cmd}`)
     try {
       execSync(cmd, { cwd: ROOT, stdio: "inherit" })

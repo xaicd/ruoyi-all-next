@@ -11,14 +11,14 @@
       "type": "step",
       "id": "scaffold",
       "agent": "wf-planner",
-      "prompt": "Scaffold feature specification for '{{inputs.name}}' in domain '{{inputs.domain}}' with title '{{inputs.title}}'. Run `npm run spec:new -- --name {{inputs.name}} --domain {{inputs.domain}} --title \"{{inputs.title}}\" --type feature`."
+      "prompt": "Scaffold feature specification for '{{inputs.name}}' in domain '{{inputs.domain}}' with title '{{inputs.title}}'. Run `npm run speckit:new -- --name {{inputs.name}} --domain {{inputs.domain}} --title \"{{inputs.title}}\" --type feature`."
     },
     {
       "type": "step",
       "id": "requirements",
       "agent": "wf-planner",
       "dependsOn": ["scaffold"],
-      "prompt": "Refine docs/specs/{{inputs.domain}}/{{inputs.name}}/brief.json. Formulate strict EARS 5-state requirements (Ubiquitous, Event, State, Unwanted, Optional) without ambiguity. Run `npm run spec:build -- --name {{inputs.name}}`."
+      "prompt": "Refine docs/specs/{{inputs.domain}}/{{inputs.name}}/brief.json. Formulate strict EARS 5-state requirements (Ubiquitous, Event, State, Unwanted, Optional) without ambiguity. Run `npm run speckit:build -- --name {{inputs.name}}`."
     },
     {
       "type": "step",

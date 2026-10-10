@@ -11,14 +11,14 @@
       "type": "step",
       "id": "scaffold",
       "agent": "wf-planner",
-      "prompt": "Scaffold security specification: `npm run spec:new -- --name {{inputs.name}} --domain {{inputs.domain}} --title \"{{inputs.title}}\" --type security`."
+      "prompt": "Scaffold security specification: `npm run speckit:new -- --name {{inputs.name}} --domain {{inputs.domain}} --title \"{{inputs.title}}\" --type security`."
     },
     {
       "type": "step",
       "id": "threat-model",
       "agent": "wf-security",
       "dependsOn": ["scaffold"],
-      "prompt": "Document vulnerability vector, CVSS score, attack surface, and zero-trust invariants in brief.json. Run `npm run spec:build -- --name {{inputs.name}}`."
+      "prompt": "Document vulnerability vector, CVSS score, attack surface, and zero-trust invariants in brief.json. Run `npm run speckit:build -- --name {{inputs.name}}`."
     },
     {
       "type": "step",

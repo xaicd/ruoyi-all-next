@@ -1,13 +1,13 @@
 #!/usr/bin/env npx tsx
 /**
- * 历史别名转发器 (Deprecated Shim -> scripts/spec-ops.ts)
- * 推荐直接使用: npx tsx scripts/spec-ops.ts new ... 或 npm run spec:new -- ...
+ * 历史别名转发器 (Deprecated Shim -> scripts/speckit.ts)
+ * 推荐直接使用: npx tsx scripts/speckit.ts new ... 或 npm run speckit:new -- ...
  */
 import { spawnSync } from "node:child_process"
 import path from "node:path"
 
 const args = process.argv.slice(2)
-const result = spawnSync("npx", ["tsx", path.join(__dirname, "spec-ops.ts"), "new", ...args], {
+const result = spawnSync("npx", ["tsx", path.join(__dirname, "speckit.ts"), "new", ...args], {
   stdio: "inherit",
   cwd: path.resolve(__dirname, ".."),
 })

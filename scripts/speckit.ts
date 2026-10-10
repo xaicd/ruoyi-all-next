@@ -1,32 +1,36 @@
 #!/usr/bin/env npx tsx
 /**
  * ============================================================================
- * Kiro 规范驱动开发控制台 (Spec-Ops Engine: Unified SDD CLI)
+ * Spec-Kit Enterprise 控制台 (Spec-Kit SDD Engine: Unified CLI)
+ * 基于 GitHub Spec-Kit (SDD) 开源标准构建并扩展
  * ============================================================================
  *
  * 核心目的：
  * 统一收敛所有规格生命周期操作（创建、编译展开、交付门禁检查、归档与健康扫描），
- * 替代原散落的 create-feature / build-feature 命令，彻底消除“所有事务皆 Feature”
- * 的低阶思维，全面赋能 feature / bugfix / enhancement / refactor / security 全类型规格。
+ * 全面赋能 feature / bugfix / enhancement / refactor / security 全类型规格。
  *
  * 用法 (CLI Usage):
+ *   # 0. 初始化与环境检查
+ *   npm run speckit:init
+ *   npm run speckit:constitution
+ *
  *   # 1. 创建任意类型的规格骨架
- *   npx tsx scripts/spec-ops.ts new --name <名> --domain <域> --title "<标题>" [--type feature|bugfix|enhancement|refactor|security]
+ *   npm run speckit:new -- --name <名> --domain <域> --title "<标题>" [--type feature|bugfix|enhancement|refactor|security]
  *
  *   # 2. 从 brief.json 展开编译生成 7~8 份完备 Markdown 规格与任务波次图
- *   npx tsx scripts/spec-ops.ts build --name <名> [--check]
+ *   npm run speckit:build -- --name <名> [--check]
  *
  *   # 3. 校验规格交付状态与门禁
- *   npx tsx scripts/spec-ops.ts check [--spec <名>] [--phase <阶段>]
+ *   npm run speckit:check -- --spec <名>
  *
  *   # 4. 列出全域活跃与归档规格
- *   npx tsx scripts/spec-ops.ts list [--domain <域>]
+ *   npm run speckit:list [--domain <域>]
  *
  *   # 5. 上线后一键防污染归档
- *   npx tsx scripts/spec-ops.ts archive --name <名>
+ *   npm run speckit:archive -- --name <名>
  *
  *   # 6. 规格健康与防污染扫描
- *   npx tsx scripts/spec-ops.ts health
+ *   npm run speckit:health
  */
 
 import fs from "node:fs"
@@ -66,7 +70,7 @@ const getArg = (flag: string): string | undefined => {
 const hasFlag = (flag: string): boolean => args.includes(flag)
 
 // ============================================================================
-// 1. 命令：spec-ops new (创建规格骨架)
+// 1. 命令：speckit new (创建规格骨架)
 // ============================================================================
 function handleNew() {
   const name = getArg("--name")
@@ -77,7 +81,7 @@ function handleNew() {
   const isLegacy = hasFlag("--legacy")
 
   if (!name || !domain) {
-    console.error("❌ 用法错误: npx tsx scripts/spec-ops.ts new --name <名称> --domain <域名> --title \"<标题>\" [--type feature|bugfix|enhancement|refactor|security]")
+    console.error("❌ 用法错误: npx tsx scripts/speckit.ts new --name <名称> --domain <域名> --title \"<标题>\" [--type feature|bugfix|enhancement|refactor|security]")
     process.exit(2)
   }
 
@@ -86,7 +90,7 @@ function handleNew() {
     : getTargetSpecDir(name, domain)
 
   if (fs.existsSync(dir) && !isForce) {
-    console.error(`❌ [spec-ops] 规格目录已存在: ${path.relative(ROOT, dir)}（使用 --force 覆盖骨架，注意已填内容会被覆盖）`)
+    console.error(`❌ [speckit] 规格目录已存在: ${path.relative(ROOT, dir)}（使用 --force 覆盖骨架，注意已填内容会被覆盖）`)
     process.exit(2)
   }
 
@@ -366,33 +370,33 @@ function handleNew() {
   fs.mkdirSync(path.join(dir, "assets"), { recursive: true })
   fs.mkdirSync(path.join(dir, "prototypes"), { recursive: true })
 
-  console.log(`\n✨ [spec-ops] 成功创建 ${specType} 规格骨架: ${path.relative(ROOT, dir)}/`)
+  console.log(`\n✨ [speckit] 成功创建 ${specType} 规格骨架: ${path.relative(ROOT, dir)}/`)
   console.log(`   📄 声明真源: ${path.relative(ROOT, path.join(dir, "brief.json"))} (<500 Tokens，防样板浪费)`)
   console.log(`   🚀 下一步: 编辑 brief.json，然后执行:`)
-  console.log(`      npx tsx scripts/spec-ops.ts build --name ${name}`)
+  console.log(`      npx tsx scripts/speckit.ts build --name ${name}`)
 }
 
 // ============================================================================
-// 2. 命令：spec-ops build (展开生成规格文档)
+// 2. 命令：speckit build (展开生成规格文档)
 // ============================================================================
 function handleBuild() {
   const name = getArg("--name") || getArg("--spec")
   const checkOnly = hasFlag("--check")
 
   if (!name) {
-    console.error("❌ 用法错误: npx tsx scripts/spec-ops.ts build --name <规格名> [--check]")
+    console.error("❌ 用法错误: npx tsx scripts/speckit.ts build --name <规格名> [--check]")
     process.exit(2)
   }
 
   const dir = resolveSpecDir(name)
   if (!dir) {
-    console.error(`❌ [spec-ops] 找不到规格: ${name}（请先运行 npx tsx scripts/spec-ops.ts new 创建）`)
+    console.error(`❌ [speckit] 找不到规格: ${name}（请先运行 npx tsx scripts/speckit.ts new 创建）`)
     process.exit(2)
   }
 
   const briefPath = path.join(dir, "brief.json")
   if (!fs.existsSync(briefPath)) {
-    console.error(`❌ [spec-ops] 找不到 ${path.relative(ROOT, briefPath)}`)
+    console.error(`❌ [speckit] 找不到 ${path.relative(ROOT, briefPath)}`)
     process.exit(2)
   }
 
@@ -400,7 +404,7 @@ function handleBuild() {
   try {
     brief = JSON.parse(fs.readFileSync(briefPath, "utf8"))
   } catch (err: any) {
-    console.error(`❌ [spec-ops] brief.json 不是合法 JSON: ${err.message}`)
+    console.error(`❌ [speckit] brief.json 不是合法 JSON: ${err.message}`)
     process.exit(2)
   }
 
@@ -416,12 +420,12 @@ function handleBuild() {
   if ((brief.tasks ?? []).length < 3) missing.push("tasks（至少 3 条任务）")
 
   if (missing.length > 0) {
-    console.error(`❌ [spec-ops] brief.json 关键字段缺失: ${missing.join("、")}`)
+    console.error(`❌ [speckit] brief.json 关键字段缺失: ${missing.join("、")}`)
     process.exit(2)
   }
 
   if (checkOnly) {
-    console.log(`✅ [spec-ops] brief.json 完备（${brief.stories.length} 故事 / ${brief.acceptance.length} 验收 / ${brief.tasks.length} 任务）`)
+    console.log(`✅ [speckit] brief.json 完备（${brief.stories.length} 故事 / ${brief.acceptance.length} 验收 / ${brief.tasks.length} 任务）`)
     process.exit(0)
   }
 
@@ -680,13 +684,13 @@ DMZ 边界（仅暴露 443 端口与 Traefik 反向代理）/ 应用容器域（
     count++
   }
 
-  console.log(`\n✅ [spec-ops] 规格展开编译成功: 共生成 ${count} 份工程文档 -> ${path.relative(ROOT, dir)}/`)
+  console.log(`\n✅ [speckit] 规格展开编译成功: 共生成 ${count} 份工程文档 -> ${path.relative(ROOT, dir)}/`)
   console.log(`   📋 包含: ${Object.keys(files).join(", ")}`)
-  console.log(`   🔍 进度检查: npx tsx scripts/spec-ops.ts check --spec ${name}`)
+  console.log(`   🔍 进度检查: npx tsx scripts/speckit.ts check --spec ${name}`)
 }
 
 // ============================================================================
-// 3. 命令：spec-ops list (列出所有规格)
+// 3. 命令：speckit list (列出所有规格)
 // ============================================================================
 function handleList() {
   const domainFilter = getArg("--domain")
@@ -706,12 +710,12 @@ function handleList() {
 }
 
 // ============================================================================
-// 4. 命令：spec-ops archive (归档规格)
+// 4. 命令：speckit archive (归档规格)
 // ============================================================================
 function handleArchive() {
   const name = getArg("--name") || getArg("--spec")
   if (!name) {
-    console.error("❌ 用法错误: npx tsx scripts/spec-ops.ts archive --name <规格名>")
+    console.error("❌ 用法错误: npx tsx scripts/speckit.ts archive --name <规格名>")
     process.exit(2)
   }
   const result = spawnSync("node", [path.join(ROOT, "scripts", "archive-spec.cjs"), "--name", name], {
@@ -722,7 +726,7 @@ function handleArchive() {
 }
 
 // ============================================================================
-// 5. 命令：spec-ops check (交付状态检查)
+// 5. 命令：speckit check (交付状态检查)
 // ============================================================================
 function handleCheck() {
   const specName = getArg("--spec") || getArg("--name") || getArg("--feature")
@@ -742,7 +746,7 @@ function handleCheck() {
 }
 
 // ============================================================================
-// 6. 命令：spec-ops health (规格健康扫描)
+// 6. 命令：speckit health (规格健康扫描)
 // ============================================================================
 function handleHealth() {
   const result = spawnSync("node", [path.join(ROOT, "scripts", "check-specs-health.cjs")], {
@@ -753,7 +757,7 @@ function handleHealth() {
 }
 
 // ============================================================================
-// 7. 命令：spec-ops workflows (Kiro 工作流配方管理)
+// 7. 命令：speckit workflows (Kiro 工作流配方管理)
 // ============================================================================
 function handleWorkflows() {
   const primaryDir = path.join(ROOT, ".agents", "workflows")
@@ -788,7 +792,7 @@ function handleWorkflows() {
 // 8. 帮助菜单 (Help Menu)
 // ============================================================================
 // ============================================================================
-// 8. 命令：spec-ops init & constitution (Spec-Kit 原生集成支持)
+// 8. 命令：speckit init & constitution (Spec-Kit 原生集成支持)
 // ============================================================================
 function handleInit() {
   console.log("=== Spec-Kit Enterprise (SDD + CMMI) 初始化与环境检查 ===")
@@ -837,11 +841,11 @@ Spec-Kit 原生与企业扩展命令:
   workflows   查看与校验 Kiro 原生工作流配方 (.kiro/workflows/)
 
 示例:
-  npx tsx scripts/spec-ops.ts init
-  npx tsx scripts/spec-ops.ts constitution
-  npx tsx scripts/spec-ops.ts new --name fix-pay-lock --domain pay --title "修复支付回调重放" --type bugfix
-  npx tsx scripts/spec-ops.ts build --name fix-pay-lock
-  npx tsx scripts/spec-ops.ts check --spec fix-pay-lock
+  npx tsx scripts/speckit.ts init
+  npx tsx scripts/speckit.ts constitution
+  npx tsx scripts/speckit.ts new --name fix-pay-lock --domain pay --title "修复支付回调重放" --type bugfix
+  npx tsx scripts/speckit.ts build --name fix-pay-lock
+  npx tsx scripts/speckit.ts check --spec fix-pay-lock
 `)
 }
 
