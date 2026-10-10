@@ -72,10 +72,11 @@
             "productionGuard": "assertProductionDataSourceConfiguration()"
           },
           "stability": "stable",
-          "fanIn": 3,
+          "fanIn": 4,
           "state": "load-bearing",
           "changeRisk": "高：全库方言 + 71 扇入，改方言映射需回归国产库",
           "dependents": [
+            "packages/shared/backend/lib/agent-autopilot.ts",
             "packages/shared/backend/lib/api-log-persistence.ts",
             "packages/shared/backend/lib/outbox-kysely-store.ts",
             "packages/shared/backend/lib/outbox-store.ts"
@@ -270,10 +271,11 @@
           "swappable": false,
           "fallback": "kysely outbox 表",
           "stability": "stable",
-          "fanIn": 4,
+          "fanIn": 5,
           "state": "load-bearing",
           "changeRisk": "中：可靠事件(publishReliable)的落地，依赖 database + messaging-protocol",
           "dependents": [
+            "packages/shared/backend/lib/agent-autopilot.ts",
             "packages/shared/backend/lib/event-bus.ts",
             "packages/shared/backend/lib/outbox-kysely-store.ts",
             "packages/shared/backend/lib/outbox-store.ts",
