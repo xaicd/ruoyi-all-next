@@ -611,6 +611,15 @@ export const GENERATED_PAGE_SCHEMAS: Record<string, GeneratedPageSchema> = {
       { code: "end_time", label: "结束时间（成团时间/失败时间）", type: "text" },
     ],
   },
+  "config": {
+    entity: "config",
+    title: "系统参数设置",
+    fields: [
+      { code: "name", label: "参数名称", type: "text", required: true },
+      { code: "configKey", label: "参数键名", type: "text", required: true },
+      { code: "value", label: "参数键值", type: "text", required: true },
+    ],
+  },
   "coupon": {
     entity: "coupon",
     title: "优惠劵",
@@ -5100,6 +5109,15 @@ export const GENERATED_PAGE_SCHEMAS: Record<string, GeneratedPageSchema> = {
       { code: "recharge_pay_price", label: "充值金额，单位：分", type: "number" },
       { code: "recharge_refund_count", label: "充值退款订单数", type: "number" },
       { code: "recharge_refund_price", label: "充值退款金额，单位：分", type: "number" },
+    ],
+  },
+  "user": {
+    entity: "user",
+    title: "用户管理",
+    fields: [
+      { code: "username", label: "用户名称", type: "text", required: true },
+      { code: "nickname", label: "用户昵称", type: "text", required: true },
+      { code: "status", label: "状态", type: "text", required: true },
     ],
   },
 }

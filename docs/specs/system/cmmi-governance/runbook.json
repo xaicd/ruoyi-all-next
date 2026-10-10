@@ -1,60 +1,61 @@
 {
   "feature": "cmmi-governance",
-  "note": "实施轨的可执行割接方案。不可逆步骤**必须**有 rollback，否则 --check 会拦下。",
+  "domain": "system",
+  "type": "enhancement",
   "window": {
     "minutes": 15
   },
   "steps": [
     {
       "id": "S1",
-      "name": "预检: 环境指纹一致（测试过的 == 要上线的）",
+      "name": "预检: 环境指纹核验",
       "command": "npm run fingerprint:verify",
       "timeoutMs": 60000
     },
     {
       "id": "S2",
-      "name": "停写（置只读）",
-      "command": "echo '置只读 —— 换成真实的只读开关命令'",
-      "timeoutMs": 60000
+      "name": "预检: 21项工程门禁全绿",
+      "command": "npm run check",
+      "timeoutMs": 600000
     },
     {
       "id": "S3",
-      "name": "执行迁移",
-      "command": "npx prisma migrate deploy",
-      "timeoutMs": 300000,
-      "irreversible": true
+      "name": "业务冒烟与平台可用性探活",
+      "command": "npm run smoke:login",
+      "timeoutMs": 120000
     },
     {
       "id": "S4",
-      "name": "健康检查: 插件接口可达",
-      "command": "node scripts/agent/run-ops.cjs system.- health",
-      "timeoutMs": 60000
+      "name": "数据库迁移发布",
+      "command": "npx prisma migrate deploy",
+      "timeoutMs": 600000,
+      "irreversible": true
     },
     {
       "id": "S5",
-      "name": "业务冒烟: 关键路径",
-      "command": "npm run test:agent -- --grep @smoke",
-      "timeoutMs": 300000
+      "name": "实施与全链路自动化测试矩阵",
+      "command": "npm run test:matrix",
+      "timeoutMs": 600000
     }
   ],
   "rollback": [
     {
       "id": "R1",
-      "name": "回退到上一指纹版本",
-      "command": "echo '换成真实的回退命令（如切换镜像 tag）'",
-      "timeoutMs": 120000
+      "name": "回退代码与工作区至稳定版本",
+      "command": "git checkout -- .",
+      "timeoutMs": 60000
     },
     {
       "id": "R2",
-      "name": "健康检查通过",
+      "name": "环境指纹自愈核验",
       "command": "npm run fingerprint:verify",
       "timeoutMs": 60000
     },
     {
       "id": "R3",
-      "name": "核实数据未被破坏",
+      "name": "数据库一致性核实与防污染验证",
       "command": "npm run verify:real-db -- --reuse",
-      "timeoutMs": 600000
+      "timeoutMs": 300000
     }
   ]
 }

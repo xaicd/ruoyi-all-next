@@ -1,0 +1,189 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "system",
+  "entity": "User",
+  "kebab": "user",
+  "businessName": "用户管理",
+  "permissionPrefix": "system:user",
+  "page": {
+    "route": "/admin/system/users",
+    "title": "用户管理",
+    "titleSelector": "[data-testid=\"user-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/admin/system",
+    "bffMount": "/api/v1/admin/system",
+    "resource": "users",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/users",
+        "query": [
+          "page",
+          "pageSize",
+          "username",
+          "phone",
+          "status",
+          "deptId"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/users/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/users"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/users/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/users/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"user-title\"]",
+    "refresh": "[data-testid=\"user-refresh\"]",
+    "createButton": "[data-testid=\"user-create\"]",
+    "searchForm": "[data-testid=\"user-search\"]",
+    "searchSubmit": "[data-testid=\"user-search-submit\"]",
+    "searchReset": "[data-testid=\"user-search-reset\"]",
+    "total": "[data-testid=\"user-total\"]",
+    "table": "[data-testid=\"user-table\"]",
+    "row": "[data-testid=\"user-row\"]",
+    "editButton": "[data-testid=\"user-edit\"]",
+    "deleteButton": "[data-testid=\"user-delete\"]",
+    "form": "[data-testid=\"user-form\"]",
+    "formError": "[data-testid=\"user-form-error\"]",
+    "formSubmit": "[data-testid=\"user-form-submit\"]",
+    "formCancel": "[data-testid=\"user-form-cancel\"]",
+    "formClose": "[data-testid=\"user-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "用户管理列表",
+    "dialogLabel": {
+      "create": "新增用户",
+      "edit": "修改用户"
+    },
+    "searchFields": [
+      {
+        "name": "username",
+        "label": "用户名称",
+        "testId": "search-username",
+        "selector": "[data-testid=\"search-username\"]"
+      }
+    ],
+    "fields": [
+      {
+        "name": "username",
+        "label": "用户名称",
+        "type": "string",
+        "required": true,
+        "testId": "field-username",
+        "selector": "[data-testid=\"field-username\"]"
+      },
+      {
+        "name": "nickname",
+        "label": "用户昵称",
+        "type": "string",
+        "required": true,
+        "testId": "field-nickname",
+        "selector": "[data-testid=\"field-nickname\"]"
+      },
+      {
+        "name": "status",
+        "label": "状态",
+        "type": "string",
+        "required": true,
+        "testId": "field-status",
+        "selector": "[data-testid=\"field-status\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "user",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"user\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "updating",
+        "deleting",
+        "error"
+      ]
+    },
+    "error": {
+      "page": "[data-agent-page-error]",
+      "toast": "[data-agent-toast-error]",
+      "field": "[data-agent-field-error=\"{fieldName}\"]"
+    },
+    "lifecycle": {
+      "modalState": "[data-agent-modal-state]",
+      "lastAction": "[data-agent-last-action]",
+      "mutationStatus": "[data-agent-mutation-status]"
+    }
+  },
+  "journey": {
+    "summary": "登录系统 -> 打开用户管理 -> 检索/新增/编辑/分配角色",
+    "steps": [
+      {
+        "action": "open",
+        "target": "/admin/system/users",
+        "assert": {
+          "selector": "[data-testid=\"user-title\"]",
+          "visible": true
+        }
+      },
+      {
+        "action": "read",
+        "target": "table",
+        "assert": {
+          "selector": "[data-testid=\"user-table\"]",
+          "visible": true
+        }
+      }
+    ]
+  },
+  "operations": {
+    "health": {
+      "description": "健康检查：探测系统用户接口可访问性",
+      "method": "list",
+      "params": {
+        "page": 1,
+        "pageSize": 1
+      },
+      "expectStatus": 200
+    }
+  }
+}

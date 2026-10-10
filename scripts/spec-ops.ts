@@ -601,16 +601,23 @@ ${brief.dependencies ?? "T1 → T2 → T3"}
   files["spec.json"] = JSON.stringify(specJson, null, 2) + "\n"
   files["feature.json"] = files["spec.json"]
 
-  // 6. runbook.json
+  // 6. runbook.json (实施轨标准可执行割接与回滚预案，对齐 AGENTS §3.4 与 G5_PRE)
   const runbook = {
     feature: name,
     domain: brief.domain,
     type: brief.type || "feature",
-    windowMinutes: brief.windowMinutes ?? 10,
+    window: { minutes: brief.windowMinutes ?? 15 },
     steps: [
-      { name: "门禁预检", command: "npm run check", rollback: null },
-      { name: "环境指纹核验", command: "npm run fingerprint:verify", rollback: null },
-      { name: "实施与自动化测试", command: "npm run test:matrix", rollback: "git checkout -- ." },
+      { id: "S1", name: "预检: 环境指纹核验", command: "npm run fingerprint:verify", timeoutMs: 60000 },
+      { id: "S2", name: "预检: 21项工程门禁全绿", command: "npm run check", timeoutMs: 600000 },
+      { id: "S3", name: "业务冒烟与平台可用性探活", command: "npm run smoke:login", timeoutMs: 120000 },
+      { id: "S4", name: "数据库迁移发布", command: "npx prisma migrate deploy", timeoutMs: 600000, irreversible: true },
+      { id: "S5", name: "实施与全链路自动化测试矩阵", command: "npm run test:matrix", timeoutMs: 600000 },
+    ],
+    rollback: [
+      { id: "R1", name: "回退代码与工作区至稳定版本", command: "git checkout -- .", timeoutMs: 60000 },
+      { id: "R2", name: "环境指纹自愈核验", command: "npm run fingerprint:verify", timeoutMs: 60000 },
+      { id: "R3", name: "数据库一致性核实与防污染验证", command: "npm run verify:real-db -- --reuse", timeoutMs: 300000 },
     ],
   }
   files["runbook.json"] = JSON.stringify(runbook, null, 2) + "\n"
@@ -619,6 +626,52 @@ ${brief.dependencies ?? "T1 → T2 → T3"}
   files["bugs.md"] = `# 缺陷清单: ${brief.title}\n\n| ID | 严重级 | 现象 | 状态 |\n|---|---|---|---|\n`
   files["selection.md"] = `# 选型论证: ${brief.title}\n\n结论：${brief.licenseConclusion ?? "通过"}\n`
   files["prototype.md"] = `# 原型与界面规范: ${brief.title}\n\n${(brief.screens ?? []).map((s: any) => `### ${s.name}\n\`\`\`\n${s.wireframe}\n\`\`\``).join("\n\n")}\n`
+
+  // 8. 实施轨：基础设施与网络策略 (G5_PRE 门禁规范产物)
+  files["deployment.md"] = `# 实施轨：基础设施与网络策略（G5）：${brief.title}
+
+## 1. 端口策略矩阵（Port Matrix）
+
+| 源域 | 目的域 | 端口/协议 | 用途 | 审批状态 |
+|---|---|---|---|---|
+| DMZ | 应用域 | 443/tcp（入） | 对外 HTTPS / API 统一网关 | 生产基准在位 |
+| 应用域 | 数据库域 | 5432/tcp | PostgreSQL 持久化连接 | 生产基准在位 |
+| 应用域 | 缓存域 | 6379/tcp | Redis 会话与热点缓存 | 生产基准在位 |
+| 运维域 | 应用域 | 22/tcp（跳板） | 堡垒机纳管与安全运维 | 生产基准在位 |
+
+## 2. 网络域规划与拓扑隔离
+
+DMZ 边界（仅暴露 443 端口与 Traefik 反向代理）/ 应用容器域（仅内网互通，禁止公网直通）/ 数据持久化域（仅接收应用后端专用连接）/ 运维管理域（经 4A 堡垒机鉴权审计接入）。
+
+## 3. 接入与加固准则
+
+- 4A 纳管: 统一账号鉴权、统一会话审计、单点登录接入
+- 等保三级基线: 强制双重口令防弱密、全链路审计日志留存 180 天、多租户行级物理隔离
+- 密钥安全规范: 严禁代码硬编码密钥，100% 由宿主机环境安全注入与 KMS 轮转
+
+## 4. 割接方案
+
+| 步骤 | 动作 | 验证点 |
+|---|---|---|
+| 1 | 停写（置只读维护态） | 阻断外部非幂等写流量 |
+| 2 | 执行数据库迁移 | \`prisma migrate deploy\` exit=0 |
+| 3 | 起服务与健康探活 | \`/api/health\` 与域接口 200 响应 |
+| 4 | 灰度放量 10% → 100% | 错误率与 P95 延迟对齐基线 |
+| 5 | 四方会签割接完成 | 运维、研发、测试、业务会签单归档 |
+
+## 5. 回滚预案（Runbook）
+
+**触发条件**: 割接后 10 分钟内错误率 > 基线 3 倍，或核心接口 5xx 持续 1 分钟。
+
+| 步骤 | 动作 | 预计耗时 |
+|---|---|---|
+| 1 | 回退容器镜像至上一稳定指纹版本 | 2 分钟 |
+| 2 | 健康探活与无头探针自检 | 1 分钟 |
+| 3 | 校验数据库一致性与幂等数据防污染 | 3 分钟 |
+| 4 | 恢复全量流量调度 | 2 分钟 |
+
+**合计约 8 分钟**（预留 10 分钟 RTO 窗口）。验证命令: \`npm run verify:real-db -- --reuse\`
+`
 
   // 批量写入
   let count = 0

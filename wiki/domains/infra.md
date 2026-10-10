@@ -79,11 +79,14 @@
 
 ---
 
-## 三、 Agent 自动化实体与契约清单 (0 个)
+## 三、 Agent 自动化实体与契约清单 (1 个)
 
 本领域随代码生成器同源产出的机器可读契约，支持 `agent-device` (接口自动化运营) 与 `agent-browser` (Playwright 真实 UI 探针)：
 
-*暂无独立生成的 Agent 契约（地基服务或纯跨域 RPC 面）*
+| 实体名 (Entity) | 业务名称 | 运营页面路由 | 权限码前缀 | 契约文件 |
+|---|---|---|---|---|
+| `Config` | 系统参数设置 | `/admin/infra/configs` | `infra:config` | [`config.agent.json`](../../packages/domains/infra/agent/config.agent.json) |
+
 
 ---
 

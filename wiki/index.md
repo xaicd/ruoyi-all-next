@@ -9,7 +9,7 @@
 1. **零 Token 浪费 & Schema 驱动**：严禁人肉手写几百行重复 CRUD。必须复用 `BaseMapper<T>`、`QueryWrapper<T>` 与 `BaseService<T>`，自动继承 8 大审计字段与行级租户隔离。
 2. **第一方插件规范 (First-Party Plugins)**：业务域一律落在 `packages/plugins/plugin-<domain>/`，平台地基落在 `packages/domains/{system,infra}/`。严禁在 `src/` 堆放平铺代码。
 3. **真实数据库驱动 (Zero Fake Mock)**：测试 100% 由嵌入式 SQLite (`better-sqlite3`) 或真实 PostgreSQL 驱动，严禁前端伪造 Mock。
-4. **全链路 Agent 契约闭环**：全仓已收敛 **324 份机器可读契约**，由 `agent-device` (接口运营/造数) 与 `agent-browser` (Playwright 探针) 统一驱动。
+4. **全链路 Agent 契约闭环**：全仓已收敛 **326 份机器可读契约**，由 `agent-device` (接口运营/造数) 与 `agent-browser` (Playwright 探针) 统一驱动。
 
 ---
 
@@ -17,8 +17,8 @@
 
 | 领域 (Domain) | 架构分层 | 演进阶段 | 独立端口 | Agent 实体数 | Facade 方法数 | 公开 API 前缀 |
 |---|---|---|---|---|---|---|
-| [system](domains/system.md) | 🏛️ 平台地基 | 阶段 A | 3210 | 0 | 119 | `/api/v1/admin/system` |
-| [infra](domains/infra.md) | 🏛️ 平台地基 | 阶段 A | 3211 | 0 | 47 | `/api/v1/admin/infra` |
+| [system](domains/system.md) | 🏛️ 平台地基 | 阶段 A | 3210 | 1 | 119 | `/api/v1/admin/system` |
+| [infra](domains/infra.md) | 🏛️ 平台地基 | 阶段 A | 3211 | 1 | 47 | `/api/v1/admin/infra` |
 | [online](domains/online.md) | 🧩 第一方插件 | 阶段 B | 3212 | 0 | 9 | `/api/v1/admin/online` |
 | [bpm](domains/bpm.md) | 🧩 第一方插件 | 阶段 A | 3213 | 8 | 4 | `/api/v1/admin/bpm` |
 | [pay](domains/pay.md) | 🧩 第一方插件 | 阶段 B | 3214 | 14 | 5 | `/api/v1/admin/pay`, `/api/v1/app/pay`, `/api/v1/open/pay` |

@@ -19,7 +19,7 @@
       "name": "需求",
       "artifacts": [
         "docs/features/**/requirements.md",
-        "docs/features/**/sprint-prod/*.md"
+        "docs/features/sprint-prod/*.md"
       ],
       "skill": "product-requirements",
       "gate": "G4_DS",

@@ -1,0 +1,187 @@
+{
+  "$schema": "ruoyi.agent.contract/v1",
+  "domain": "infra",
+  "entity": "Config",
+  "kebab": "config",
+  "businessName": "系统参数设置",
+  "permissionPrefix": "infra:config",
+  "page": {
+    "route": "/admin/infra/configs",
+    "title": "参数设置",
+    "titleSelector": "[data-testid=\"config-title\"]"
+  },
+  "api": {
+    "pluginMount": "/api/v1/admin/infra",
+    "bffMount": "/api/v1/admin/infra",
+    "resource": "configs",
+    "methods": {
+      "list": {
+        "http": "GET",
+        "path": "/configs",
+        "query": [
+          "page",
+          "pageSize",
+          "key",
+          "category"
+        ]
+      },
+      "get": {
+        "http": "GET",
+        "path": "/configs/:id"
+      },
+      "create": {
+        "http": "POST",
+        "path": "/configs"
+      },
+      "update": {
+        "http": "PUT",
+        "path": "/configs/:id"
+      },
+      "delete": {
+        "http": "DELETE",
+        "path": "/configs/:id"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "http": "POST",
+      "path": "/api/v1/admin/system/auth",
+      "payload": {
+        "username": "$RUOYI_AGENT_USERNAME",
+        "password": "$RUOYI_AGENT_PASSWORD"
+      }
+    },
+    "tokenField": "data.token",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "selectors": {
+    "title": "[data-testid=\"config-title\"]",
+    "refresh": "[data-testid=\"config-refresh\"]",
+    "createButton": "[data-testid=\"config-create\"]",
+    "searchForm": "[data-testid=\"config-search\"]",
+    "searchSubmit": "[data-testid=\"config-search-submit\"]",
+    "searchReset": "[data-testid=\"config-search-reset\"]",
+    "total": "[data-testid=\"config-total\"]",
+    "table": "[data-testid=\"config-table\"]",
+    "row": "[data-testid=\"config-row\"]",
+    "editButton": "[data-testid=\"config-edit\"]",
+    "deleteButton": "[data-testid=\"config-delete\"]",
+    "form": "[data-testid=\"config-form\"]",
+    "formError": "[data-testid=\"config-form-error\"]",
+    "formSubmit": "[data-testid=\"config-form-submit\"]",
+    "formCancel": "[data-testid=\"config-form-cancel\"]",
+    "formClose": "[data-testid=\"config-form-close\"]"
+  },
+  "accessibility": {
+    "tableLabel": "参数设置列表",
+    "dialogLabel": {
+      "create": "新增参数",
+      "edit": "修改参数"
+    },
+    "searchFields": [
+      {
+        "name": "configKey",
+        "label": "参数键名",
+        "testId": "search-configKey",
+        "selector": "[data-testid=\"search-configKey\"]"
+      }
+    ],
+    "fields": [
+      {
+        "name": "name",
+        "label": "参数名称",
+        "type": "string",
+        "required": true,
+        "testId": "field-name",
+        "selector": "[data-testid=\"field-name\"]"
+      },
+      {
+        "name": "configKey",
+        "label": "参数键名",
+        "type": "string",
+        "required": true,
+        "testId": "field-configKey",
+        "selector": "[data-testid=\"field-configKey\"]"
+      },
+      {
+        "name": "value",
+        "label": "参数键值",
+        "type": "string",
+        "required": true,
+        "testId": "field-value",
+        "selector": "[data-testid=\"field-value\"]"
+      }
+    ]
+  },
+  "agentNative": {
+    "scheme": "ruoyi.agent.native/v1",
+    "scope": "config",
+    "readiness": {
+      "attribute": "data-agent-page-ready",
+      "readySelector": "[data-agent-scope=\"config\"][data-agent-page-ready=\"true\"]",
+      "states": [
+        "true",
+        "false"
+      ]
+    },
+    "state": {
+      "attribute": "data-agent-state",
+      "page": [
+        "loading",
+        "modal-open",
+        "empty",
+        "ready"
+      ],
+      "row": [
+        "idle",
+        "updating",
+        "deleting",
+        "error"
+      ]
+    },
+    "error": {
+      "page": "[data-agent-page-error]",
+      "toast": "[data-agent-toast-error]",
+      "field": "[data-agent-field-error=\"{fieldName}\"]"
+    },
+    "lifecycle": {
+      "modalState": "[data-agent-modal-state]",
+      "lastAction": "[data-agent-last-action]",
+      "mutationStatus": "[data-agent-mutation-status]"
+    }
+  },
+  "journey": {
+    "summary": "登录系统 -> 打开参数设置 -> 检索/新增/编辑/删除系统配置项",
+    "steps": [
+      {
+        "action": "open",
+        "target": "/admin/infra/configs",
+        "assert": {
+          "selector": "[data-testid=\"config-title\"]",
+          "visible": true
+        }
+      },
+      {
+        "action": "read",
+        "target": "table",
+        "assert": {
+          "selector": "[data-testid=\"config-table\"]",
+          "visible": true
+        }
+      }
+    ]
+  },
+  "operations": {
+    "health": {
+      "description": "健康检查：探测参数设置接口可访问性",
+      "method": "list",
+      "params": {
+        "page": 1,
+        "pageSize": 1
+      },
+      "expectStatus": 200
+    }
+  }
+}

@@ -7,9 +7,34 @@
 ```json
 {
   "waves": [
-    { "id": "wave-1", "title": "地基与契约准备", "tasks": ["T1"], "dependsOn": [] },
-    { "id": "wave-2", "title": "核心服务与数据流落地", "tasks": ["T2"], "dependsOn": ["wave-1"] },
-    { "id": "wave-3", "title": "端到端测试与集成验证", "tasks": ["T3"], "dependsOn": ["wave-2"] }
+    {
+      "id": "wave-1",
+      "title": "地基与契约准备",
+      "tasks": [
+        "T1"
+      ],
+      "dependsOn": []
+    },
+    {
+      "id": "wave-2",
+      "title": "核心服务与数据流落地",
+      "tasks": [
+        "T2"
+      ],
+      "dependsOn": [
+        "wave-1"
+      ]
+    },
+    {
+      "id": "wave-3",
+      "title": "端到端测试与集成验证",
+      "tasks": [
+        "T3"
+      ],
+      "dependsOn": [
+        "wave-2"
+      ]
+    }
   ]
 }
 ```
@@ -38,7 +63,7 @@
 > 1. **归属**必须写 `main`（主线）或某个已存在的任务 ID —— **不允许孤儿任务**
 > 2. **文件白名单**必填（逗号分隔）；`-` 表示该任务不改文件（纯验证类）
 >
-> 完成度**不看"状态"列**，而是从 git 推导: commit message 带 `[T<ID>]`（方括号，避免误匹配）
+> 完成度**不看"状态"列**，而是从 git 推导: commit message 带 `[T<ID>]`
 > 且改动文件落在白名单内，才算这条任务真的做了（`npm run task:verify`）。
 
 | ID | 归属 | 任务 | 文件白名单 | 状态 |
