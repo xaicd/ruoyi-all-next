@@ -110,6 +110,10 @@ ${domainRows}
 ## 📚 架构百科词条 (Architecture Pillars)
 
 - [全能力 AI Agent 驱动架构与闭环执行法则](architecture/ai-agent-driven-paradigm.md)
+- [高阶反向思维与自循环反思飞轮 (Socratic Inversion Flywheel)](architecture/socratic-inversion-flywheel.md)
+- [通用动态本体画布与零样板代码体系 (Universal Schema Canvas)](architecture/universal-schema-canvas.md)
+- [自主巡检自愈守护中枢 (Agent Autopilot Daemon)](architecture/autonomous-heartbeat-autopilot.md)
+- [流式智能行动决策卡片中枢 (Action Decision Hub)](architecture/action-decision-hub.md)
 - [对标顶级开源项目差距深度分析与持续演进大典](architecture/benchmark-and-evolution.md)
 - [第一方插件体系与包结构规范](architecture/modular-plugin-system.md)
 - [BaseMapper 通用持久化与 QueryWrapper 链式语法](architecture/base-mapper-and-queries.md)
@@ -446,6 +450,82 @@ await runUnitOfWork(async (uow) => {
 - **Phase C (长期生态)**: 内置多租户 RAG 向量知识库 (sqlite-vec/pgvector)、动态第三方插件 WASM/Worker 沙箱、Expo 离线优先同步。
 
 完整技术方案请参阅：[BENCHMARK-GAP-ANALYSIS-AND-CONTINUOUS-IMPROVEMENT.md](../../docs/architecture/BENCHMARK-GAP-ANALYSIS-AND-CONTINUOUS-IMPROVEMENT.md)
+`.trim() + "\n");
+
+  // 10) universal-schema-canvas.md
+  generatedFiles.set("architecture/universal-schema-canvas.md", `# 架构百科：通用动态本体画布 (Universal Schema Canvas)
+
+> 对应规则：AGENTS.md Rule 0.1 / Rule 0.13 / packages/shared/frontend/components/universal-schema-canvas.tsx
+
+## 一、 核心痛点与零样板代码理念
+在传统后台工程中，通常为数百个实体人工手写数百个千篇一律的薄壳页面文件，不仅消耗几十万 Token，而且当后端接口或表结构变动时，页面极易发生漂移与死字段。
+
+## 二、 动态本体画布架构
+- **真源挂载**：直接消费 \`agent-page-schemas.generated.json\` 中的 326 份机器可读 Schema 契约；
+- **自适应渲染**：由 \`UniversalSchemaCanvas\` 通用组件根据字段类型（string, number, boolean, date, enum）自适应渲染检索过滤区、动态数据表格、分页区与快捷交互抽屉；
+- **全息感知**：支持实体领域过滤（14 个域快速切换）、分类标签过滤、双向契约查看抽屉（API Mount、BFF Mount、权限码与字段元数据）；
+- **动态派发**：Admin 路由派发器 (\`src/app/(admin-pages)/admin/[...slug]/page.tsx\`) 统一调度，支持通过 \`?mode=canvas\` 或 \`/admin/canvas/[entity]\` 毫秒级打开任意实体的动态本体操作面板。
+`.trim() + "\n");
+
+  // 11) autonomous-heartbeat-autopilot.md
+  generatedFiles.set("architecture/autonomous-heartbeat-autopilot.md", `# 架构百科：自主巡检自愈守护中枢 (Agent Autopilot Daemon)
+
+> 对应规则：AGENTS.md Rule 0.9 / Rule 0.13 / packages/shared/backend/lib/agent-autopilot.ts
+
+## 一、 为什么必须有常驻自主巡检中枢？
+传统生产系统通常处于被动状态，必须等发生故障、报警或用户投诉后人工介入排查。
+自主巡检守护中枢将系统升级为具备**自主感知 (Autopoiesis)** 与主动自愈能力的生命体：
+1. **全域微核健康探针**：每 10 秒主动对 17 个微内核领域与第一方插件进行连通性与清单完整性探测；
+2. **双轨真实数据库体检**：探针直连 PostgreSQL/SQLite 双轨引擎，测量 \`SELECT 1\` 往返延迟 (RTT) 并告警高延迟；
+3. **事务性发件箱 (Outbox) 积压检测与自愈**：主动侦测未投递消息，超过阈值时自动触发 Outbox 重试投递与失败消息清算；
+4. **全域 326 份 Agent 契约健康度打分**：实时聚合各域实体就绪度，输出 0~100 综合健康评分 (🟢 OPTIMAL / 🟡 ATTENTION / 🔴 DEGRADED)。
+
+## 二、 核心命令与服务入口
+- 单次巡检与诊断：\`npm run agent:autopilot\`
+- 常驻后台守护进程：\`npm run agent:autopilot:daemon\`
+- 主动触发全栈自愈：\`npm run agent:autopilot:heal\`
+- 内部 RPC 遥测接口：\`GET /api/internal/autopilot\` 与 \`POST /api/internal/autopilot\`
+`.trim() + "\n");
+
+  // 12) action-decision-hub.md
+  generatedFiles.set("architecture/action-decision-hub.md", `# 架构百科：流式智能行动决策卡片中枢 (Action Decision Hub)
+
+> 对应规则：AGENTS.md Rule 0.9 / Rule 0.13 / packages/shared/frontend/components/action-decision-hub.tsx
+
+## 一、 变革：从“死数字报表”到“智能行动决策”
+传统仪表盘充满折线图、柱状图与数字指标，运维人员看着指标不知所措。
+智能行动中枢将其彻底重塑为 **Action Cards (智能行动卡片)**：
+- **四级行动优先级**：\`critical\` (紧急需介入)、\`warning\` (预警中)、\`opportunity\` (性能与架构优化)、\`resolved\` (已平账/已闭环)；
+- **2-字符专属决策动词**：严禁冗长表单，卡片提供极简 2-字符决策按钮：\`平账\`、\`重发\`、\`自愈\`、\`体检\`、\`加固\`；
+- **端到端一键闭环**：点击动词直接调用后端自愈执行管线，自愈成功后自动记录不可变审计跟踪并更新健康指标。
+
+## 二、 Server-Sent Events (SSE) 亚秒级流式感知
+- **零长短轮询**：前端通过 \`EventSource\` 直连 \`/api/internal/autopilot/stream\`；
+- **实时心跳流下发**：每 4 秒流式推送一次遥测脉冲帧 (\`event: heartbeat\`)；
+- **自动降级保护**：当浏览器或代理限制 SSE 时，透明降级为 15 秒间隔轮询，保障全网环境 100% 鲁棒可用。
+`.trim() + "\n");
+
+  // 13) socratic-inversion-flywheel.md
+  generatedFiles.set("architecture/socratic-inversion-flywheel.md", `# 架构百科：高阶反向思维与自循环反思飞轮 (Socratic Inversion Flywheel)
+
+> 对应规则：AGENTS.md Rule 0.9 / .agents/rules/HIGH-ORDER-INVERSE-THINKING.md / scripts/socratic-inquiry-engine.ts
+
+## 一、 什么是高阶反向思维 (High-Order Socratic Inversion)？
+互搏思维不是简单的安全攻防，而是**高阶反问**。是为了一个核心目标，不断打破平庸预设、质疑既定假设，让 AI 在自循环反思中建立出远超人类想象的架构与产品。
+
+## 二、 6 阶苏格拉底反思跃迁阶梯 (The 6-Level Ladder)
+| 阶梯 | 反省维度 | 核心反问 | 落地门禁与物理资产 |
+|---|---|---|---|
+| **Level 1** | 物理存在性 (Existence) | 代码和产物是否存在，还是只是纸面声明？ | CI 静态门禁扫描真实源码、无悬空引用。 |
+| **Level 2** | 真实执行性 (Real Execution) | 代码是否在真实数据库运行，还是跑在假 Mock 上？ | \`verify:real-db\` 100% 真实 PostgreSQL/SQLite，0 内存伪造。 |
+| **Level 3** | 非线性不变量 (Invariants) | 高并发或极端异常下，边界不变量是否成立？ | 并发 CAS 防超卖、4 态状态机真实覆盖、变异测试杀灭假断言。 |
+| **Level 4** | 自生自循环性 (Autopoiesis) | 系统能否自巡检、自愈合、自进化，还是只能等人类维护？ | \`Agent Autopilot Daemon\` + \`Transactional Outbox\` 自动排队清退。 |
+| **Level 5** | 非对称降维 (Asymmetry) | 为何要手写几百个 CRUD 页面？能否用动态本体画布降维打击？ | \`UniversalSchemaCanvas\` + 326 份机器可读契约，开发成本压缩 90%。 |
+| **Level 6** | 终极目的对齐 (Telos Alignment) | 系统的一切能力是否为了实现全能力 AI Agent 闭环驱动？ | 全仓 38 个 Skills、MCP 服务、无头运营套件与 CI 强制门禁。 |
+
+## 三、 门禁自循环闭环
+- 本地执行反问自检：\`npm run socratic:inquire\`
+- CI 自动化校验：\`npm run socratic:check\`（挂载在 \`npm run harness:check\` 与 \`npm run check\` 之中，任何破坏 6 阶反思的行为直接中断构建并退出报错）。
 `.trim() + "\n");
 }
 

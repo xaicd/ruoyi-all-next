@@ -47,6 +47,10 @@
 ## 📚 架构百科词条 (Architecture Pillars)
 
 - [全能力 AI Agent 驱动架构与闭环执行法则](architecture/ai-agent-driven-paradigm.md)
+- [高阶反向思维与自循环反思飞轮 (Socratic Inversion Flywheel)](architecture/socratic-inversion-flywheel.md)
+- [通用动态本体画布与零样板代码体系 (Universal Schema Canvas)](architecture/universal-schema-canvas.md)
+- [自主巡检自愈守护中枢 (Agent Autopilot Daemon)](architecture/autonomous-heartbeat-autopilot.md)
+- [流式智能行动决策卡片中枢 (Action Decision Hub)](architecture/action-decision-hub.md)
 - [对标顶级开源项目差距深度分析与持续演进大典](architecture/benchmark-and-evolution.md)
 - [第一方插件体系与包结构规范](architecture/modular-plugin-system.md)
 - [BaseMapper 通用持久化与 QueryWrapper 链式语法](architecture/base-mapper-and-queries.md)

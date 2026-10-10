@@ -291,6 +291,13 @@ function main() {
       console.error(`[delivery] ${path.relative(ROOT, descriptor)} 不是合法 JSON —— ${error.message}`)
       process.exit(2)
     }
+    if ((!meta.domain || !meta.name) && fs.existsSync(path.join(specDir, "brief.json"))) {
+      try {
+        const brief = JSON.parse(fs.readFileSync(path.join(specDir, "brief.json"), "utf8"))
+        meta.domain = meta.domain || brief.domain
+        meta.name = meta.name || brief.name
+      } catch {}
+    }
     if (!meta.domain || !meta.name) {
       console.error(`[delivery] ${path.relative(ROOT, descriptor)} 缺少 name 或 domain`)
       process.exit(2)

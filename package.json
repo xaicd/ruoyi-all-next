@@ -112,6 +112,8 @@
     "agent:contracts:check": "node scripts/agent/collect-contracts.cjs --check",
     "agent:ops": "node scripts/agent/run-ops.cjs",
     "agent:ops:health": "node scripts/agent/run-ops.cjs health",
+    "agent:ops:suite": "npx tsx scripts/agent/agent-ops-suite.ts",
+    "agent:ops:suite:check": "npx tsx scripts/agent/agent-ops-suite.ts --check",
     "agent:autopilot": "npx tsx scripts/agent-autopilot-daemon.ts",
     "agent:autopilot:daemon": "npx tsx scripts/agent-autopilot-daemon.ts --daemon",
     "agent:autopilot:heal": "npx tsx scripts/agent-autopilot-daemon.ts --heal",

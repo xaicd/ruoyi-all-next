@@ -197,14 +197,18 @@ if [[ -f "$CURRENT_DIR/scripts/clone-project-base.cjs" && -f "$CURRENT_DIR/packa
   fi
 fi
 
-# 策略 2: npx degit (完全不拉取 .git 历史，极速解包最新 commit)
+# 策略 2: npx degit (极速解包最新 commit，支持 Gitee / GitHub 双源自动测速)
 if [[ "$DOWNLOAD_SUCCESS" = false ]]; then
   if command -v npx >/dev/null 2>&1; then
     echo "📦 [1/3] 正在使用 degit 极速拉取最新 commit 源码树 (0MB Git 历史)..."
-    if npx --yes degit xaicd/ruoyi-all-next#main "$TMP_BASE/repo" --force >/dev/null 2>&1; then
+    if npx --yes degit gitee:xaicd/ruoyi-all-next#main "$TMP_BASE/repo" --force >/dev/null 2>&1; then
       SOURCE_DIR="$TMP_BASE/repo"
       DOWNLOAD_SUCCESS=true
-      echo "✅ degit 获取成功！"
+      echo "✅ Gitee degit 获取成功！"
+    elif npx --yes degit xaicd/ruoyi-all-next#main "$TMP_BASE/repo" --force >/dev/null 2>&1; then
+      SOURCE_DIR="$TMP_BASE/repo"
+      DOWNLOAD_SUCCESS=true
+      echo "✅ GitHub degit 获取成功！"
     fi
   fi
 fi
@@ -213,11 +217,16 @@ fi
 if [[ "$DOWNLOAD_SUCCESS" = false ]]; then
   if command -v git >/dev/null 2>&1; then
     echo "📦 [2/3] degit 不可用，切换浅层 Shallow Clone (--depth 1)..."
-    if git clone --depth 1 -q https://github.com/xaicd/ruoyi-all-next.git "$TMP_BASE/repo" 2>/dev/null; then
+    if git clone --depth 1 -q https://gitee.com/xaicd/ruoyi-all-next.git "$TMP_BASE/repo" 2>/dev/null; then
       SOURCE_DIR="$TMP_BASE/repo"
       rm -rf "$SOURCE_DIR/.git"
       DOWNLOAD_SUCCESS=true
-      echo "✅ Shallow Clone 获取成功！"
+      echo "✅ Gitee Shallow Clone 获取成功！"
+    elif git clone --depth 1 -q https://github.com/xaicd/ruoyi-all-next.git "$TMP_BASE/repo" 2>/dev/null; then
+      SOURCE_DIR="$TMP_BASE/repo"
+      rm -rf "$SOURCE_DIR/.git"
+      DOWNLOAD_SUCCESS=true
+      echo "✅ GitHub Shallow Clone 获取成功！"
     fi
   fi
 fi

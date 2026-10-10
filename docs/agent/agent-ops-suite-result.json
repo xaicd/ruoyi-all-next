@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-10-10T13:05:42.049Z",
+  "mode": "contract-audit",
+  "totalContracts": 326,
+  "totalDomains": 14,
+  "overallScore": 100,
+  "passed": true,
+  "domainBreakdown": [],
+  "staticAudit": {
+    "validCount": 326,
+    "issues": []
+  }
+}

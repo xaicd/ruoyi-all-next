@@ -26,7 +26,10 @@ export function ActionDecisionHub() {
   const [actionNotice, setActionNotice] = useState<string | null>(null)
   const [filterPriority, setFilterPriority] = useState<string>("all")
 
-  // 获取真实自治巡检遥测数据
+  const [streamMode, setStreamMode] = useState<"sse" | "polling" | "connecting">("connecting")
+  const [pulseCount, setPulseCount] = useState<number>(0)
+
+  // 获取真实自治巡检遥测数据（单次拉取）
   const fetchTelemetry = useCallback(async () => {
     setLoading(true)
     try {
@@ -44,10 +47,52 @@ export function ActionDecisionHub() {
     }
   }, [])
 
+  // 建立 Server-Sent Events (SSE) 实时流连接，断开时降级为轮询
   useEffect(() => {
     fetchTelemetry()
-    const timer = setInterval(fetchTelemetry, 15000)
-    return () => clearInterval(timer)
+
+    let es: EventSource | null = null
+    let pollTimer: NodeJS.Timeout | null = null
+
+    if (typeof window !== "undefined" && typeof EventSource !== "undefined") {
+      try {
+        es = new EventSource("/api/internal/autopilot/stream")
+
+        es.onopen = () => {
+          setStreamMode("sse")
+        }
+
+        es.addEventListener("heartbeat", (event) => {
+          try {
+            const data = JSON.parse(event.data)
+            if (data) {
+              setTelemetry(data)
+              setPulseCount((prev) => prev + 1)
+              setStreamMode("sse")
+            }
+          } catch {}
+        })
+
+        es.onerror = () => {
+          // SSE 出现错误时降级为定时轮询
+          setStreamMode("polling")
+          if (!pollTimer) {
+            pollTimer = setInterval(fetchTelemetry, 15000)
+          }
+        }
+      } catch {
+        setStreamMode("polling")
+        pollTimer = setInterval(fetchTelemetry, 15000)
+      }
+    } else {
+      setStreamMode("polling")
+      pollTimer = setInterval(fetchTelemetry, 15000)
+    }
+
+    return () => {
+      if (es) es.close()
+      if (pollTimer) clearInterval(pollTimer)
+    }
   }, [fetchTelemetry])
 
   // 执行自愈动作
@@ -225,6 +270,17 @@ export function ActionDecisionHub() {
               <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-950 text-cyan-400 border border-cyan-800/50">
                 PROACTIVE AI
               </span>
+              {streamMode === "sse" && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950/80 text-emerald-400 border border-emerald-800/50 font-mono">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse inline-block" />
+                  SSE 实时流 ({pulseCount})
+                </span>
+              )}
+              {streamMode === "polling" && (
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-950/80 text-amber-400 border border-amber-800/50 font-mono">
+                  轮询降级 (15s)
+                </span>
+              )}
             </div>
             <p className="text-[11px] text-slate-400 mt-0.5">
               高阶反向思维驱动 · 变被动告警为人机协同极简 2-字符决策调度

@@ -72,6 +72,8 @@ if (fs.existsSync(targetSpecJson)) {
     specData = JSON.parse(fs.readFileSync(targetSpecJson, "utf8"))
   } catch {}
 }
+specData.name = name
+specData.domain = domain
 specData.archived = true
 specData.archivedAt = now.toISOString()
 specData.archiveQuarter = quarterTag
