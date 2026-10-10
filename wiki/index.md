@@ -58,6 +58,7 @@
 - [事务性发件箱 (Transactional Outbox) 与 ACID 回滚](architecture/transactional-outbox.md)
 - [微服务通信、跨域治理与 Facade 契约](architecture/service-governance.md)
 - [Archify (47k★) 可机器验证与交互式架构图生成](architecture/archify-visualization.md)
+- [SSOT 斜杠指令体系与 SpecKit 兼容矩阵 (/spec-ops.*)](architecture/spec-ops-slash-commands.md)
 
 ---
 
